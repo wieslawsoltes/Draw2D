@@ -121,6 +121,30 @@
     <Compile Include="Views\Style\DrawStyleView.xaml.cs">
       <DependentUpon>DrawStyleView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Tools\Settings\EllipseToolSettingsView.xaml.cs">
+      <DependentUpon>EllipseToolSettingsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Tools\Settings\GuideToolSettingsView.xaml.cs">
+      <DependentUpon>GuideToolSettingsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Tools\Settings\LineToolSettingsView.xaml.cs">
+      <DependentUpon>LineToolSettingsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Tools\Settings\NoneToolSettingsView.xaml.cs">
+      <DependentUpon>NoneToolSettingsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Tools\Settings\PointToolSettingsView.xaml.cs">
+      <DependentUpon>PointToolSettingsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Tools\Settings\PolyLineToolSettingsView.xaml.cs">
+      <DependentUpon>PolyLineToolSettingsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Tools\Settings\RectangleToolSettingsView.xaml.cs">
+      <DependentUpon>RectangleToolSettingsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Tools\Settings\SelectionToolSettingsView.xaml.cs">
+      <DependentUpon>SelectionToolSettingsView.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Page Include="Views\MainView.xaml">
@@ -131,6 +155,38 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Style\DrawStyleView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Tools\Settings\EllipseToolSettingsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Tools\Settings\GuideToolSettingsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Tools\Settings\LineToolSettingsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Tools\Settings\NoneToolSettingsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Tools\Settings\PointToolSettingsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Tools\Settings\PolyLineToolSettingsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Tools\Settings\RectangleToolSettingsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Tools\Settings\SelectionToolSettingsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
