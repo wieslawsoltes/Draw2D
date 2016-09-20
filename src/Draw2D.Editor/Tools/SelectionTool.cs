@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Diagnostics;
+using Draw2D.Editor.Selection;
 using Draw2D.Models.Shapes;
 using Draw2D.Spatial;
 
@@ -33,75 +33,16 @@ namespace Draw2D.Editor.Tools
                         //Filters.Any(f => f.Process(context, ref _startX, ref _startY));
 
                         var target = new Point2(x, y);
-
-                        var shapePoint = 
-                            Settings.Mode.HasFlag(SelectionToolMode.Point) 
-                            && Settings.Targets.HasFlag(SelectionToolTargets.Shapes) ?
-                            context.HitTest.TryToGetPoint(context.Container.Shapes, target, Settings.HitTestRadius) : null;
-
-                        var shape = 
-                            Settings.Mode.HasFlag(SelectionToolMode.Shape) 
-                            && Settings.Targets.HasFlag(SelectionToolTargets.Shapes) ?
-                            context.HitTest.TryToGetShape(context.Container.Shapes, target, Settings.HitTestRadius) : null;
-
-                        var guidePoint = 
-                            Settings.Mode.HasFlag(SelectionToolMode.Point) 
-                            && Settings.Targets.HasFlag(SelectionToolTargets.Guides) ?
-                            context.HitTest.TryToGetPoint(context.Container.Guides, target, Settings.HitTestRadius) : null;
-
-                        var guide = 
-                            Settings.Mode.HasFlag(SelectionToolMode.Shape) 
-                            && Settings.Targets.HasFlag(SelectionToolTargets.Guides) ?
-                            context.HitTest.TryToGetShape(context.Container.Guides, target, Settings.HitTestRadius) : null;
-
-                        if (shapePoint != null || shape != null || guidePoint != null || guide != null)
+                        var result = SelectionHelper.TryToSelect(
+                            context,
+                            Settings.Mode, 
+                            Settings.Targets, 
+                            target, 
+                            Settings.HitTestRadius);
+                        if (result)
                         {
-                            bool haveNewSelection = 
-                                (shapePoint != null && !context.Renderer.Selected.Contains(shapePoint))
-                                || (shape != null && !context.Renderer.Selected.Contains(shape))
-                                || (guidePoint != null && !context.Renderer.Selected.Contains(guidePoint))
-                                || (guide != null && !context.Renderer.Selected.Contains(guide));
-
-                            if (context.Renderer.Selected.Count >= 1 && !haveNewSelection)
-                            {
-                                _haveSelection = true;
-                                _state = State.Move;
-                            }
-                            else
-                            {
-                                if (shapePoint != null)
-                                {
-                                    _haveSelection = true;
-                                    context.Renderer.Selected.Clear();
-                                    Debug.WriteLine("Selected Shape Point: {0}", shapePoint.GetType());
-                                    shapePoint.Select(context.Renderer.Selected);
-                                    _state = State.Move;
-                                }
-                                else if (shape != null)
-                                {
-                                    _haveSelection = true;
-                                    context.Renderer.Selected.Clear();
-                                    Debug.WriteLine("Selected Shape: {0}", shape.GetType());
-                                    shape.Select(context.Renderer.Selected);
-                                    _state = State.Move;
-                                }
-                                else if (guidePoint != null)
-                                {
-                                    _haveSelection = true;
-                                    context.Renderer.Selected.Clear();
-                                    Debug.WriteLine("Selected Guide Point: {0}", guidePoint.GetType());
-                                    guidePoint.Select(context.Renderer.Selected);
-                                    _state = State.Move;
-                                }
-                                else if (guide != null)
-                                {
-                                    _haveSelection = true;
-                                    context.Renderer.Selected.Clear();
-                                    Debug.WriteLine("Selected Guide: {0}", guide.GetType());
-                                    guide.Select(context.Renderer.Selected);
-                                    _state = State.Move;
-                                }
-                            }
+                            _haveSelection = true;
+                            _state = State.Move;
                         }
                         else
                         {
@@ -143,43 +84,19 @@ namespace Draw2D.Editor.Tools
                 case State.BottomRight:
                     {
                         var target = Rect2.FromPoints(
-                            _rectangle.TopLeft.X, 
-                            _rectangle.TopLeft.Y, 
-                            _rectangle.BottomRight.X, 
+                            _rectangle.TopLeft.X,
+                            _rectangle.TopLeft.Y,
+                            _rectangle.BottomRight.X,
                             _rectangle.BottomRight.Y);
-
-                        var shapes = 
-                            Settings.Mode.HasFlag(SelectionToolMode.Shape) 
-                            && Settings.Targets.HasFlag(SelectionToolTargets.Shapes) ?
-                            context.HitTest.TryToGetShapes(context.Container.Shapes, target, Settings.HitTestRadius) : null;
-
-                        var guides = 
-                            Settings.Mode.HasFlag(SelectionToolMode.Shape) 
-                            && Settings.Targets.HasFlag(SelectionToolTargets.Guides) ?
-                            context.HitTest.TryToGetShapes(context.Container.Guides, target, Settings.HitTestRadius) : null;
-
-                        if (shapes != null || guides != null)
+                        var result = SelectionHelper.TryToSelect(
+                            context, 
+                            Settings.Mode, 
+                            Settings.Targets, 
+                            target, 
+                            Settings.HitTestRadius);
+                        if (result)
                         {
-                            if (shapes != null)
-                            {
-                                Debug.WriteLine("Selected Shapes: {0}", shapes != null ? shapes.Count : 0);
-                                context.Renderer.Selected.Clear();
-                                foreach (var shape in shapes)
-                                {
-                                    shape.Select(context.Renderer.Selected);
-                                }
-                                _haveSelection = true;
-                            }
-                            else if (guides != null)
-                            {
-                                Debug.WriteLine("Selected Guides: {0}", guides != null ? guides.Count : 0);
-                                context.Renderer.Selected.Clear();
-                                foreach (var guide in guides)
-                                {
-                                    guide.Select(context.Renderer.Selected);
-                                }
-                                _haveSelection = true;
-                            }
+                            _haveSelection = true;
                         }
 
                         context.WorkingContainer.Shapes.Remove(_rectangle);
@@ -226,7 +143,13 @@ namespace Draw2D.Editor.Tools
                     {
                         if (!_haveSelection)
                         {
-                            Hover(context, new Point2(x, y));
+                            var target = new Point2(x, y);
+                            SelectionHelper.TryToHover(
+                                context, 
+                                Settings.Mode, 
+                                Settings.Targets, 
+                                target, 
+                                Settings.HitTestRadius);
                         }
                     }
                     break;
@@ -252,62 +175,6 @@ namespace Draw2D.Editor.Tools
                         }
                     }
                     break;
-            }
-        }
-
-        private void Hover(IToolContext context, Point2 target)
-        {
-            var shapePoint = 
-                Settings.Mode.HasFlag(SelectionToolMode.Point) 
-                && Settings.Targets.HasFlag(SelectionToolTargets.Shapes) ?
-                context.HitTest.TryToGetPoint(context.Container.Shapes, target, Settings.HitTestRadius) : null;
-
-            var shape = 
-                Settings.Mode.HasFlag(SelectionToolMode.Shape) 
-                && Settings.Targets.HasFlag(SelectionToolTargets.Shapes) ?
-                context.HitTest.TryToGetShape(context.Container.Shapes, target, Settings.HitTestRadius) : null;
-
-            var guidePoint = 
-                Settings.Mode.HasFlag(SelectionToolMode.Point) 
-                && Settings.Targets.HasFlag(SelectionToolTargets.Guides) ?
-                context.HitTest.TryToGetPoint(context.Container.Guides, target, Settings.HitTestRadius) : null;
-
-            var guide = 
-                Settings.Mode.HasFlag(SelectionToolMode.Shape)
-                && Settings.Targets.HasFlag(SelectionToolTargets.Guides) ?
-                context.HitTest.TryToGetShape(context.Container.Guides, target, Settings.HitTestRadius) : null;
-
-            if (shapePoint != null || shape != null || guide != null)
-            {
-                if (shapePoint != null)
-                {
-                    Debug.WriteLine("Hover Shape Point: {0}", shapePoint.GetType());
-                    context.Renderer.Selected.Clear();
-                    shapePoint.Select(context.Renderer.Selected);
-                }
-                else if (shape != null)
-                {
-                    Debug.WriteLine("Hover Shape: {0}", shape.GetType());
-                    context.Renderer.Selected.Clear();
-                    shape.Select(context.Renderer.Selected);
-                }
-                else if (guidePoint != null)
-                {
-                    Debug.WriteLine("Hover Guide Point: {0}", guidePoint.GetType());
-                    context.Renderer.Selected.Clear();
-                    guidePoint.Select(context.Renderer.Selected);
-                }
-                else if (guide != null)
-                {
-                    Debug.WriteLine("Hover Guide: {0}", guide.GetType());
-                    context.Renderer.Selected.Clear();
-                    guide.Select(context.Renderer.Selected);
-                }
-            }
-            else
-            {
-                Debug.WriteLine("No Hover");
-                context.Renderer.Selected.Clear();
             }
         }
 

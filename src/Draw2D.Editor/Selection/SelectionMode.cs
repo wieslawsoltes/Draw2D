@@ -1,9 +1,9 @@
 ﻿using System;
 
-namespace Draw2D.Editor.Tools
+namespace Draw2D.Editor.Selection
 {
     [Flags]
-    public enum SelectionToolMode
+    public enum SelectionMode
     {
         None = 0,
         Point = 1,

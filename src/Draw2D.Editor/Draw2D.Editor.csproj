@@ -110,6 +110,7 @@
     <Compile Include="PointIntersection.cs" />
     <Compile Include="PointFilter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Selection\SelectionHelper.cs" />
     <Compile Include="SettingsBase.cs" />
     <Compile Include="Spatial\Extensions\EllipseShapeExtensions.cs" />
     <Compile Include="Spatial\Extensions\LineShapeExtensions.cs" />
@@ -132,9 +133,9 @@
     <Compile Include="Tools\RectangleTool.cs" />
     <Compile Include="Tools\RectangleToolSettings.cs" />
     <Compile Include="Tools\SelectionTool.cs" />
-    <Compile Include="Tools\SelectionToolMode.cs" />
+    <Compile Include="Selection\SelectionMode.cs" />
     <Compile Include="Tools\SelectionToolSettings.cs" />
-    <Compile Include="Tools\SelectionToolTargets.cs" />
+    <Compile Include="Selection\SelectionTargets.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Draw2D.Models\Draw2D.Models.csproj">

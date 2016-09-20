@@ -1,16 +1,17 @@
 ﻿using System;
+using Draw2D.Editor.Selection;
 using Draw2D.Models.Style;
 
 namespace Draw2D.Editor.Tools
 {
     public class SelectionToolSettings : SettingsBase
     {
-        private SelectionToolMode _mode;
-        private SelectionToolTargets _targets;
+        private SelectionMode _mode;
+        private SelectionTargets _targets;
         private DrawStyle _selectionStyle;
         private double _hitTestRadius;
 
-        public SelectionToolMode Mode
+        public SelectionMode Mode
         {
             get { return _mode; }
             set
@@ -23,7 +24,7 @@ namespace Draw2D.Editor.Tools
             }
         }
 
-        public SelectionToolTargets Targets
+        public SelectionTargets Targets
         {
             get { return _targets; }
             set

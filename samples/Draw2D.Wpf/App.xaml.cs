@@ -8,6 +8,7 @@ using Draw2D.Editor.Bounds;
 using Draw2D.Editor.Bounds.Shapes;
 using Draw2D.Editor.Filters;
 using Draw2D.Editor.Intersections.Line;
+using Draw2D.Editor.Selection;
 using Draw2D.Editor.Tools;
 using Draw2D.Models.Containers;
 using Draw2D.Models.Shapes;
@@ -79,8 +80,8 @@ namespace Draw2D.Wpf
                 },
                 Settings = new SelectionToolSettings()
                 {
-                    Mode = SelectionToolMode.Point | SelectionToolMode.Shape,
-                    Targets = SelectionToolTargets.Shapes | SelectionToolTargets.Guides,
+                    Mode = SelectionMode.Point | SelectionMode.Shape,
+                    Targets = SelectionTargets.Shapes | SelectionTargets.Guides,
                     SelectionStyle = new DrawStyle(new DrawColor(128, 0, 0, 255), new DrawColor(80, 0, 0, 255), 2.0, true, true),
                     HitTestRadius = 7.0
                 }
