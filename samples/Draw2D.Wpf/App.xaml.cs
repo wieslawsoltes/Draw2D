@@ -70,7 +70,10 @@ namespace Draw2D.Wpf
 
             var tools = new ObservableCollection<ToolBase>();
 
-            var noneTool = new NoneTool();
+            var noneTool = new NoneTool()
+            {
+                Settings = new NoneToolSettings()
+            };
 
             var selectionTool = new SelectionTool()
             {
