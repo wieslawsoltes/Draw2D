@@ -1,0 +1,17 @@
+﻿<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>Draw2D.Spatial</id>
+    <version>$version$</version>
+    <authors>wieslaw.soltes</authors>
+    <owners>wieslaw.soltes</owners>
+    <licenseUrl>https://opensource.org/licenses/MIT</licenseUrl>
+    <projectUrl>https://github.com/wieslawsoltes/Draw2D</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>A 2D vector diagram editor.</description>
+    <copyright>Copyright 2016</copyright>
+    <tags>2D Matrix Vector Polygon Rectangle Rect Point Line Size Math Geometry Spatial ConvexHull MonotoneChain SeparatingAxisTheorem SAT</tags>
+    <dependencies>
+    </dependencies>
+  </metadata>
+</package>

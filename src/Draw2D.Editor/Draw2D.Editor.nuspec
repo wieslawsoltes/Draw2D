@@ -1,0 +1,19 @@
+﻿<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>Draw2D.Editor</id>
+    <version>$version$</version>
+    <authors>wieslaw.soltes</authors>
+    <owners>wieslaw.soltes</owners>
+    <licenseUrl>https://opensource.org/licenses/MIT</licenseUrl>
+    <projectUrl>https://github.com/wieslawsoltes/Draw2D</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>A 2D vector diagram editor.</description>
+    <copyright>Copyright 2016</copyright>
+    <tags>Draw Drawing 2D Graphics Graph Diagram Vector Editor</tags>
+    <dependencies>
+      <dependency id="Draw2D.Spatial" version="$version$" />
+      <dependency id="Draw2D.Models" version="$version$" />
+    </dependencies>
+  </metadata>
+</package>

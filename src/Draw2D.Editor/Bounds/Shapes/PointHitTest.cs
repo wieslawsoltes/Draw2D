@@ -1,0 +1,45 @@
+﻿using System;
+using System.Collections.Generic;
+using Draw2D.Models;
+using Draw2D.Models.Shapes;
+using Draw2D.Spatial;
+
+namespace Draw2D.Editor.Bounds.Shapes
+{
+    public class PointHitTest : HitTestBase
+    {
+        public override Type TargetType { get { return typeof(PointShape); } }
+
+        public override PointShape TryToGetPoint(BaseShape shape, Point2 target, double radius, IDictionary<Type, HitTestBase> registered)
+        {
+            var point = shape as PointShape;
+            if (point == null)
+                throw new ArgumentNullException("shape");
+
+            if (Point2.FromXY(point.X, point.Y).ExpandToRect(radius).Contains(target.X, target.Y))
+            {
+                return point;
+            }
+
+            return null;
+        }
+
+        public override bool Contains(BaseShape shape, Point2 target, double radius, IDictionary<Type, HitTestBase> registered)
+        {
+            var point = shape as PointShape;
+            if (point == null)
+                throw new ArgumentNullException("shape");
+
+            return Point2.FromXY(point.X, point.Y).ExpandToRect(radius).Contains(target.X, target.Y);
+        }
+
+        public override bool Overlaps(BaseShape shape, Rect2 target, double radius, IDictionary<Type, HitTestBase> registered)
+        {
+            var point = shape as PointShape;
+            if (point == null)
+                throw new ArgumentNullException("shape");
+
+            return Point2.FromXY(point.X, point.Y).ExpandToRect(radius).IntersectsWith(target);
+        }
+    }
+}
