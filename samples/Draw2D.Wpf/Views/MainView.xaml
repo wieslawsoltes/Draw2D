@@ -38,14 +38,22 @@
                 <RowDefinition Height="50*"/>
                 <RowDefinition Height="50*"/>
             </Grid.RowDefinitions>
-            <ListBox Grid.Row="0" ItemsSource="{Binding Tools}" SelectedItem="{Binding CurrentTool}">
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <TextBlock Text="{Binding Name}"/>
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>
-            <style:DrawStyleView Grid.Row="1" DataContext="{Binding Style}"/>
+            <TabControl Grid.Row="0">
+                <TabItem Header="Tools">
+                    <ListBox ItemsSource="{Binding Tools}" SelectedItem="{Binding CurrentTool}">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Name}"/>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </TabItem>
+            </TabControl>
+            <TabControl Grid.Row="1">
+                <TabItem Header="Style">
+                    <style:DrawStyleView Grid.Row="1" DataContext="{Binding Style}"/>
+                </TabItem>
+            </TabControl>
         </Grid>
         <controls:ShapesContainerInputView Grid.Row="2" Grid.Column="1" Background="Transparent" ClipToBounds="True">
             <controls:ShapesContainerRenderView Width="{Binding Container.Width}" Height="{Binding Container.Height}" Background="SlateGray" VerticalAlignment="Center" HorizontalAlignment="Center"/>
@@ -74,14 +82,27 @@
                         </ListBox.ItemTemplate>
                     </ListBox>
                 </TabItem>
+                <TabItem Header="Working">
+                    <ListBox ItemsSource="{Binding WorkingContainer.Shapes}">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding}"/>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </TabItem>
             </TabControl>
-            <ListBox Grid.Row="1" ItemsSource="{Binding WorkingContainer.Shapes}">
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <TextBlock Text="{Binding}"/>
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>
+            <TabControl Grid.Row="1">
+                <TabItem Header="Settings">
+                    <ContentControl Content="{Binding CurrentTool.Settings}"/>
+                </TabItem>
+                <TabItem Header="Intersections">
+                    <!-- TODO -->
+                </TabItem>
+                <TabItem Header="Filters">
+                    <!-- TODO -->
+                </TabItem>
+            </TabControl>
         </Grid>
     </Grid>
 </Window>
