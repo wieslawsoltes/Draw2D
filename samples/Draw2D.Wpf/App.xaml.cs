@@ -79,7 +79,17 @@ namespace Draw2D.Wpf
             {
                 Filters = new List<PointFilter>
                 {
-                    gridSnapPointFilter
+                    new GridSnapPointFilter()
+                    {
+                        Settings = new GridSnapSettings()
+                        {
+                            EnableGuides = false,
+                            Mode = GridSnapMode.Horizontal | GridSnapMode.Vertical,
+                            GridSizeX = 15.0,
+                            GridSizeY = 15.0,
+                            GuideStyle = null
+                        }
+                    }
                 },
                 Settings = new SelectionToolSettings()
                 {
