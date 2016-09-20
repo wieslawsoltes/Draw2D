@@ -7,12 +7,33 @@
         WindowStartupLocation="CenterScreen"
         UseLayoutRounding="True" SnapsToDevicePixels="True" TextOptions.TextFormattingMode="Display">
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="5"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="250"/>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="250"/>
         </Grid.ColumnDefinitions>
-        <Grid Grid.Column="0">
+        <Menu Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Background="Transparent">
+            <MenuItem Header="_File">
+                <MenuItem Header="_Open..."/>
+                <Separator/>
+                <MenuItem Header="Save _As..."/>
+                <Separator/>
+                <MenuItem Header="E_xit"/>
+            </MenuItem>
+            <MenuItem Header="_Tool" ItemsSource="{Binding Tools}">
+                <MenuItem.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Name}"/>
+                    </DataTemplate>
+                </MenuItem.ItemTemplate>
+            </MenuItem>
+        </Menu>
+        <Grid Grid.Row="2" Grid.Column="0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="50*"/>
                 <RowDefinition Height="50*"/>
@@ -26,10 +47,10 @@
             </ListBox>
             <style:DrawStyleView Grid.Row="1" DataContext="{Binding Style}"/>
         </Grid>
-        <controls:ShapesContainerInputView Grid.Column="1" Background="Transparent" ClipToBounds="True">
+        <controls:ShapesContainerInputView Grid.Row="2" Grid.Column="1" Background="Transparent" ClipToBounds="True">
             <controls:ShapesContainerRenderView Width="{Binding Container.Width}" Height="{Binding Container.Height}" Background="SlateGray" VerticalAlignment="Center" HorizontalAlignment="Center"/>
         </controls:ShapesContainerInputView>
-        <Grid Grid.Column="2">
+        <Grid Grid.Row="2" Grid.Column="2">
             <Grid.RowDefinitions>
                 <RowDefinition Height="50*"/>
                 <RowDefinition Height="50*"/>
