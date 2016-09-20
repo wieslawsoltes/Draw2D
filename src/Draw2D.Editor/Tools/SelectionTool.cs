@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Draw2D.Editor.Selection;
 using Draw2D.Models.Shapes;
 using Draw2D.Spatial;
@@ -30,7 +31,7 @@ namespace Draw2D.Editor.Tools
                         _startY = y;
 
                         Filters.ForEach(f => f.Clear(context));
-                        //Filters.Any(f => f.Process(context, ref _startX, ref _startY));
+                        Filters.Any(f => f.Process(context, ref _startX, ref _startY));
 
                         var target = new Point2(x, y);
                         var result = SelectionHelper.TryToSelect(
@@ -162,7 +163,7 @@ namespace Draw2D.Editor.Tools
                 case State.Move:
                     {
                         Filters.ForEach(f => f.Clear(context));
-                        //Filters.Any(f => f.Process(context, ref x, ref y));
+                        Filters.Any(f => f.Process(context, ref x, ref y));
 
                         double dx = x - _startX;
                         double dy = y - _startY;
