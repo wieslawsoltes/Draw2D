@@ -1,0 +1,66 @@
+﻿<Window x:Class="Draw2D.Wpf.Views.MainView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:controls="clr-namespace:Draw2D.Wpf.Controls"
+        xmlns:style="clr-namespace:Draw2D.Wpf.Views.Style"
+        Title="Draw2D" Height="700" Width="1300"
+        WindowStartupLocation="CenterScreen"
+        UseLayoutRounding="True" SnapsToDevicePixels="True" TextOptions.TextFormattingMode="Display">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="250"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="250"/>
+        </Grid.ColumnDefinitions>
+        <Grid Grid.Column="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50*"/>
+                <RowDefinition Height="50*"/>
+            </Grid.RowDefinitions>
+            <ListBox Grid.Row="0" ItemsSource="{Binding Tools}" SelectedItem="{Binding CurrentTool}">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Name}"/>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+            <style:DrawStyleView Grid.Row="1" DataContext="{Binding Style}"/>
+        </Grid>
+        <controls:ShapesContainerInputView Grid.Column="1" Background="Transparent" ClipToBounds="True">
+            <controls:ShapesContainerRenderView Width="{Binding Container.Width}" Height="{Binding Container.Height}" Background="SlateGray" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+        </controls:ShapesContainerInputView>
+        <Grid Grid.Column="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50*"/>
+                <RowDefinition Height="50*"/>
+            </Grid.RowDefinitions>
+            <TabControl Grid.Row="0">
+                <TabItem Header="Shapes">
+                    <ListBox ItemsSource="{Binding Container.Shapes}">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding}"/>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </TabItem>
+                <TabItem Header="Guides">
+                    <ListBox ItemsSource="{Binding Container.Guides}">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding}"/>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </TabItem>
+            </TabControl>
+            <ListBox Grid.Row="1" ItemsSource="{Binding WorkingContainer.Shapes}">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding}"/>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </Grid>
+    </Grid>
+</Window>
