@@ -9,11 +9,16 @@ namespace Draw2D.Editor.Intersections.Line
 {
     public class EllipseLineIntersection : PointIntersection
     {
+        public EllipseLineSettings Settings { get; set; }
+
         public override void Find(IToolContext context, BaseShape shape)
         {
             var line = shape as LineShape;
             if (line == null)
                 throw new ArgumentNullException("shape");
+
+            if (!Settings.IsEnabled)
+                return;
 
             var ellipses = context.Container.Shapes.OfType<EllipseShape>();
             if (ellipses.Any())

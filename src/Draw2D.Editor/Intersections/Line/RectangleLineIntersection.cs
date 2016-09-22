@@ -8,11 +8,16 @@ namespace Draw2D.Editor.Intersections.Line
 {
     public class RectangleLineIntersection : PointIntersection
     {
+        public RectangleLineSettings Settings { get; set; }
+
         public override void Find(IToolContext context, BaseShape shape)
         {
             var line = shape as LineShape;
             if (line == null)
                 throw new ArgumentNullException("shape");
+
+            if (!Settings.IsEnabled)
+                return;
 
             var rectangles = context.Container.Shapes.OfType<RectangleShape>();
             if (rectangles.Any())

@@ -127,9 +127,27 @@ namespace Draw2D.Wpf
             {
                 Intersections = new List<PointIntersection>
                 {
-                    new LineLineIntersection(),
-                    new RectangleLineIntersection(),
+                    new LineLineIntersection()
+                    {
+                        Settings = new LineLineSettings()
+                        {
+                            IsEnabled = true
+                        }
+                    },
+                    new RectangleLineIntersection()
+                    {
+                        Settings = new RectangleLineSettings()
+                        {
+                            IsEnabled = true
+                        }
+                    },
                     new EllipseLineIntersection()
+                    {
+                        Settings = new EllipseLineSettings()
+                        {
+                            IsEnabled = true
+                        }
+                    }
                 },
                 Filters = new List<PointFilter>
                 {
@@ -148,9 +166,27 @@ namespace Draw2D.Wpf
             {
                 Intersections = new List<PointIntersection>
                 {
-                    new LineLineIntersection(),
-                    new RectangleLineIntersection(),
+                    new LineLineIntersection()
+                    {
+                        Settings = new LineLineSettings()
+                        {
+                            IsEnabled = true
+                        }
+                    },
+                    new RectangleLineIntersection()
+                    {
+                        Settings = new RectangleLineSettings()
+                        {
+                            IsEnabled = true
+                        }
+                    },
                     new EllipseLineIntersection()
+                    {
+                        Settings = new EllipseLineSettings()
+                        {
+                            IsEnabled = true
+                        }
+                    }
                 },
                 Filters = new List<PointFilter>
                 {
