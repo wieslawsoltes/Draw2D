@@ -38,7 +38,7 @@ namespace Draw2D.Editor.Filters
             {
                 Point2 snap;
                 LineSnapMode mode;
-                var result = SnapLines(lines, Settings.Mode, Settings.Treshold, new Point2(x, y), out snap, out mode);
+                var result = SnapLines(lines, Settings.Mode, Settings.Threshold, new Point2(x, y), out snap, out mode);
                 if (result)
                 {
                     x = snap.X;
@@ -80,7 +80,7 @@ namespace Draw2D.Editor.Filters
             context.Renderer.Selected.Add(vertical);
         }
 
-        public static bool SnapLinesToPoint(IEnumerable<LineShape> lines, double treshold, Point2 point, out Point2 snap, out LineSnapMode result)
+        public static bool SnapLinesToPoint(IEnumerable<LineShape> lines, double threshold, Point2 point, out Point2 snap, out LineSnapMode result)
         {
             snap = default(Point2);
             result = default(LineSnapMode);
@@ -88,14 +88,14 @@ namespace Draw2D.Editor.Filters
             foreach (var line in lines)
             {
                 var distance0 = line.Start.ToPoint2().DistanceTo(point);
-                if (distance0 < treshold)
+                if (distance0 < threshold)
                 {
                     snap = new Point2(line.Start.X, line.Start.Y);
                     result = LineSnapMode.Point;
                     return true;
                 }
                 var distance1 = line.End.ToPoint2().DistanceTo(point);
-                if (distance1 < treshold)
+                if (distance1 < threshold)
                 {
                     snap = new Point2(line.End.X, line.End.Y);
                     result = LineSnapMode.Point;
@@ -105,7 +105,7 @@ namespace Draw2D.Editor.Filters
             return false;
         }
 
-        public static bool SnapLineToMiddle(IEnumerable<LineShape> lines, double treshold, Point2 point, out Point2 snap, out LineSnapMode result)
+        public static bool SnapLineToMiddle(IEnumerable<LineShape> lines, double threshold, Point2 point, out Point2 snap, out LineSnapMode result)
         {
             snap = default(Point2);
             result = default(LineSnapMode);
@@ -114,7 +114,7 @@ namespace Draw2D.Editor.Filters
             {
                 var middle = Line2.Middle(line.Start.ToPoint2(), line.End.ToPoint2());
                 var distance = middle.DistanceTo(point);
-                if (distance < treshold)
+                if (distance < threshold)
                 {
                     snap = middle;
                     result = LineSnapMode.Middle;
@@ -124,7 +124,7 @@ namespace Draw2D.Editor.Filters
             return false;
         }
 
-        public static bool SnapLineToIntersection(IEnumerable<LineShape> lines, double treshold, Point2 point, out Point2 snap, out LineSnapMode result)
+        public static bool SnapLineToIntersection(IEnumerable<LineShape> lines, double threshold, Point2 point, out Point2 snap, out LineSnapMode result)
         {
             snap = default(Point2);
             result = default(LineSnapMode);
@@ -139,7 +139,7 @@ namespace Draw2D.Editor.Filters
                     if (Line2.LineIntersectWithLine(line0.Start.ToPoint2(), line0.End.ToPoint2(), line1.Start.ToPoint2(), line1.End.ToPoint2(), out clip))
                     {
                         var distance = clip.DistanceTo(point);
-                        if (distance < treshold)
+                        if (distance < threshold)
                         {
                             snap = clip;
                             result = LineSnapMode.Intersection;
@@ -151,7 +151,7 @@ namespace Draw2D.Editor.Filters
             return false;
         }
 
-        public static bool SnapLineToHorizontal(IEnumerable<LineShape> lines, double treshold, Point2 point, out Point2 snap, out LineSnapMode result, out double horizontal)
+        public static bool SnapLineToHorizontal(IEnumerable<LineShape> lines, double threshold, Point2 point, out Point2 snap, out LineSnapMode result, out double horizontal)
         {
             snap = default(Point2);
             result = default(LineSnapMode);
@@ -159,14 +159,14 @@ namespace Draw2D.Editor.Filters
             
             foreach (var line in lines)
             {
-                if (point.Y >= line.Start.Y - treshold && point.Y <= line.Start.Y + treshold)
+                if (point.Y >= line.Start.Y - threshold && point.Y <= line.Start.Y + threshold)
                 {
                     snap = new Point2(point.X, line.Start.Y);
                     result |= LineSnapMode.Horizontal;
                     horizontal = line.Start.Y;
                     return true;
                 }
-                if (point.Y >= line.End.Y - treshold && point.Y <= line.End.Y + treshold)
+                if (point.Y >= line.End.Y - threshold && point.Y <= line.End.Y + threshold)
                 {
                     snap = new Point2(point.X, line.Start.Y);
                     result |= LineSnapMode.Horizontal;
@@ -177,7 +177,7 @@ namespace Draw2D.Editor.Filters
             return false;
         }
 
-        public static bool SnapLinesToVertical(IEnumerable<LineShape> lines, double treshold, Point2 point, out Point2 snap, out LineSnapMode result, out double vertical)
+        public static bool SnapLinesToVertical(IEnumerable<LineShape> lines, double threshold, Point2 point, out Point2 snap, out LineSnapMode result, out double vertical)
         {
             snap = default(Point2);
             result = default(LineSnapMode);
@@ -185,14 +185,14 @@ namespace Draw2D.Editor.Filters
             
             foreach (var line in lines)
             {
-                if (point.X >= line.Start.X - treshold && point.X <= line.Start.X + treshold)
+                if (point.X >= line.Start.X - threshold && point.X <= line.Start.X + threshold)
                 {
                     snap = new Point2(line.Start.X, point.Y);
                     result |= LineSnapMode.Vertical;
                     vertical = line.Start.X;
                     return true;
                 }
-                if (point.X >= line.End.X - treshold && point.X <= line.End.X + treshold)
+                if (point.X >= line.End.X - threshold && point.X <= line.End.X + threshold)
                 {
                     snap = new Point2(line.End.X, point.Y);
                     result |= LineSnapMode.Vertical;
@@ -203,7 +203,7 @@ namespace Draw2D.Editor.Filters
             return false;
         }
 
-        public static bool SnapLinesToNearest(IEnumerable<LineShape> lines, double treshold, Point2 point, out Point2 snap, out LineSnapMode result)
+        public static bool SnapLinesToNearest(IEnumerable<LineShape> lines, double threshold, Point2 point, out Point2 snap, out LineSnapMode result)
         {
             snap = default(Point2);
             result = default(LineSnapMode);
@@ -212,7 +212,7 @@ namespace Draw2D.Editor.Filters
             {
                 var nearest = point.NearestOnLine(line.Start.ToPoint2(), line.End.ToPoint2());
                 var distance = nearest.DistanceTo(point);
-                if (distance < treshold)
+                if (distance < threshold)
                 {
                     snap = nearest;
                     result = LineSnapMode.Nearest;
@@ -222,14 +222,14 @@ namespace Draw2D.Editor.Filters
             return false;
         }
 
-        public static bool SnapLines(IEnumerable<LineShape> lines, LineSnapMode mode, double treshold, Point2 point, out Point2 snap, out LineSnapMode result)
+        public static bool SnapLines(IEnumerable<LineShape> lines, LineSnapMode mode, double threshold, Point2 point, out Point2 snap, out LineSnapMode result)
         {
             snap = default(Point2);
             result = default(LineSnapMode);
 
             if (mode.HasFlag(LineSnapMode.Point))
             {
-                if (SnapLinesToPoint(lines, treshold, point, out snap, out result))
+                if (SnapLinesToPoint(lines, threshold, point, out snap, out result))
                 {
                     return true;
                 }
@@ -237,7 +237,7 @@ namespace Draw2D.Editor.Filters
 
             if (mode.HasFlag(LineSnapMode.Middle))
             {
-                if (SnapLineToMiddle(lines, treshold, point, out snap, out result))
+                if (SnapLineToMiddle(lines, threshold, point, out snap, out result))
                 {
                     return true;
                 }
@@ -245,7 +245,7 @@ namespace Draw2D.Editor.Filters
 
             if (mode.HasFlag(LineSnapMode.Intersection))
             {
-                if (SnapLineToIntersection(lines, treshold, point, out snap, out result))
+                if (SnapLineToIntersection(lines, threshold, point, out snap, out result))
                 {
                     return true;
                 }
@@ -256,12 +256,12 @@ namespace Draw2D.Editor.Filters
 
             if (mode.HasFlag(LineSnapMode.Horizontal))
             {
-                SnapLineToHorizontal(lines, treshold, point, out snap, out result, out horizontal);
+                SnapLineToHorizontal(lines, threshold, point, out snap, out result, out horizontal);
             }
 
             if (mode.HasFlag(LineSnapMode.Vertical))
             {
-                SnapLinesToVertical(lines, treshold, point, out snap, out result, out vertical);
+                SnapLinesToVertical(lines, threshold, point, out snap, out result, out vertical);
             }
 
             if (result.HasFlag(LineSnapMode.Horizontal) || result.HasFlag(LineSnapMode.Vertical))
@@ -277,7 +277,7 @@ namespace Draw2D.Editor.Filters
 
             if (mode.HasFlag(LineSnapMode.Nearest))
             {
-                if (SnapLinesToNearest(lines, treshold, point, out snap, out result))
+                if (SnapLinesToNearest(lines, threshold, point, out snap, out result))
                 {
                     return true;
                 }

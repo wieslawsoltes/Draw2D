@@ -8,7 +8,7 @@ namespace Draw2D.Editor.Filters
         private bool _enableGuides;
         private LineSnapMode _mode;
         private LineSnapTarget _target;
-        private double _treshold;
+        private double _threshold;
         private DrawStyle _guideStyle;
 
         public bool EnableGuides
@@ -50,15 +50,15 @@ namespace Draw2D.Editor.Filters
             }
         }
 
-        public double Treshold
+        public double Threshold
         {
-            get { return _treshold; }
+            get { return _threshold; }
             set
             {
-                if (value != _treshold)
+                if (value != _threshold)
                 {
-                    _treshold = value;
-                    Notify("Treshold");
+                    _threshold = value;
+                    Notify("Threshold");
                 }
             }
         }

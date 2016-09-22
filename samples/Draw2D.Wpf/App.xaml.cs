@@ -61,7 +61,7 @@ namespace Draw2D.Wpf
                     | LineSnapMode.Intersection
                     | LineSnapMode.Horizontal
                     | LineSnapMode.Vertical,
-                    Treshold = 10.0,
+                    Threshold = 10.0,
                     GuideStyle = new DrawStyle(new DrawColor(128, 0, 255, 255), new DrawColor(128, 0, 255, 255), 2.0, true, true)
                 }
             };
