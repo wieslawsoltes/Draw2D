@@ -93,11 +93,6 @@ namespace Draw2D.Editor.Tools
             {
                 case State.End:
                     {
-                        context.WorkingContainer.Shapes.Remove(_line);
-                        context.Renderer.Selected.Remove(_line.Start);
-                        context.Renderer.Selected.Remove(_line.End);
-                        _line = null;
-                        _state = State.Start;
                         this.Clean(context);
                     }
                     break;
@@ -127,8 +122,19 @@ namespace Draw2D.Editor.Tools
         public override void Clean(IToolContext context)
         {
             base.Clean(context);
+
+            _state = State.Start;
+
             Intersections.ForEach(i => i.Clear(context));
             Filters.ForEach(f => f.Clear(context));
+
+            if (_line != null)
+            {
+                context.WorkingContainer.Shapes.Remove(_line);
+                context.Renderer.Selected.Remove(_line.Start);
+                context.Renderer.Selected.Remove(_line.End);
+                _line = null;
+            }
         }
 
         public static void SplitByIntersections(IToolContext context, IEnumerable<PointIntersection> intersections, LineShape target)
@@ -137,7 +143,6 @@ namespace Draw2D.Editor.Tools
             points.Insert(0, target.Start);
             points.Insert(points.Count, target.End);
 
-            // Order points from Start to End and take only unique positions.
             var unique = points
                 .Select(p => new Point2(p.X, p.Y)).Distinct().OrderBy(p => p)
                 .Select(p => new PointShape(p.X, p.Y, context.PointShape)).ToList();

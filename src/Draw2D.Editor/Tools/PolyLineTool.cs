@@ -52,7 +52,9 @@ namespace Draw2D.Editor.Tools
                         _points.Add(_line.End);
                         context.WorkingContainer.Shapes.Add(_line);
                         context.Renderer.Selected.Add(_line.End);
-                        this.Clean(context);
+
+                        Intersections.ForEach(i => i.Clear(context));
+                        Filters.ForEach(f => f.Clear(context));
                     }
                     break;
             }
@@ -66,11 +68,6 @@ namespace Draw2D.Editor.Tools
             {
                 case State.End:
                     {
-                        context.WorkingContainer.Shapes.Remove(_line);
-                        _points.ForEach(point => context.Renderer.Selected.Remove(point));
-                        _line = null;
-                        _points = null;
-                        _state = State.Start;
                         this.Clean(context);
                     }
                     break;
@@ -100,8 +97,23 @@ namespace Draw2D.Editor.Tools
         public override void Clean(IToolContext context)
         {
             base.Clean(context);
+
+            _state = State.Start;
+
             Intersections.ForEach(i => i.Clear(context));
             Filters.ForEach(f => f.Clear(context));
+
+            if (_line != null)
+            {
+                context.WorkingContainer.Shapes.Remove(_line);
+                _line = null;
+            }
+
+            if (_points != null)
+            {
+                _points.ForEach(point => context.Renderer.Selected.Remove(point));
+                _points = null;
+            }
         }
     }
 }

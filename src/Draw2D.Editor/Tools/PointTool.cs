@@ -32,6 +32,7 @@ namespace Draw2D.Editor.Tools
         public override void Clean(IToolContext context)
         {
             base.Clean(context);
+
             Filters.ForEach(f => f.Clear(context));
 
             // TODO: Implement PointTool.Clean().

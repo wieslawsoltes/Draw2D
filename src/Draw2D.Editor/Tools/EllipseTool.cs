@@ -57,11 +57,7 @@ namespace Draw2D.Editor.Tools
             {
                 case State.BottomRight:
                     {
-                        context.WorkingContainer.Shapes.Remove(_ellipse);
-                        context.Renderer.Selected.Remove(_ellipse.TopLeft);
-                        context.Renderer.Selected.Remove(_ellipse.BottomRight);
-                        _ellipse = null;
-                        _state = State.TopLeft;
+                        this.Clean(context);
                     }
                     break;
             }
@@ -88,7 +84,18 @@ namespace Draw2D.Editor.Tools
         public override void Clean(IToolContext context)
         {
             base.Clean(context);
+
+            _state = State.TopLeft;
+
             Filters.ForEach(f => f.Clear(context));
+
+            if (_ellipse != null)
+            {
+                context.WorkingContainer.Shapes.Remove(_ellipse);
+                context.Renderer.Selected.Remove(_ellipse.TopLeft);
+                context.Renderer.Selected.Remove(_ellipse.BottomRight);
+                _ellipse = null;
+            }
         }
     }
 }

@@ -53,9 +53,6 @@ namespace Draw2D.Editor.Tools
             {
                 case State.End:
                     {
-                        context.WorkingContainer.Shapes.Remove(_line);
-                        _line = null;
-                        _state = State.Start;
                         this.Clean(context);
                     }
                     break;
@@ -83,7 +80,16 @@ namespace Draw2D.Editor.Tools
         public override void Clean(IToolContext context)
         {
             base.Clean(context);
+
+            _state = State.Start;
+
             Filters.ForEach(f => f.Clear(context));
+
+            if (_line != null)
+            {
+                context.WorkingContainer.Shapes.Remove(_line);
+                _line = null;
+            }
         }
     }
 }

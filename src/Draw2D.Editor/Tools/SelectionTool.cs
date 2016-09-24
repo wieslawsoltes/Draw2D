@@ -121,9 +121,7 @@ namespace Draw2D.Editor.Tools
             {
                 case State.BottomRight:
                     {
-                        context.WorkingContainer.Shapes.Remove(_rectangle);
-                        _rectangle = null;
-                        _state = State.TopLeft;
+                        this.Clean(context);
                     }
                     break;
                 case State.Move:
@@ -182,9 +180,18 @@ namespace Draw2D.Editor.Tools
         public override void Clean(IToolContext context)
         {
             base.Clean(context);
+
+            _state = State.TopLeft;
             _haveSelection = false;
-            context.WorkingContainer.Shapes.Remove(_rectangle);
+
+            if (_rectangle != null)
+            {
+                context.WorkingContainer.Shapes.Remove(_rectangle);
+                _rectangle = null; 
+            }
+
             context.Renderer.Selected.Clear();
+
             Filters.ForEach(f => f.Clear(context));
         }
     }
