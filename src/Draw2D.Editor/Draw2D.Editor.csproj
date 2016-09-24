@@ -103,6 +103,7 @@
     <Compile Include="Filters\LineSnapPointFilter.cs" />
     <Compile Include="Filters\LineSnapSettings.cs" />
     <Compile Include="Filters\LineSnapTarget.cs" />
+    <Compile Include="Intersections\LineHelper.cs" />
     <Compile Include="Intersections\Line\EllipseLineIntersection.cs" />
     <Compile Include="Intersections\Line\EllipseLineSettings.cs" />
     <Compile Include="Intersections\Line\LineLineIntersection.cs" />
