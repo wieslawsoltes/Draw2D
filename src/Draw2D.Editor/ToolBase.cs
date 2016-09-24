@@ -26,32 +26,32 @@ namespace Draw2D.Editor
 
         public virtual void LeftDown(IToolContext context, double x, double y)
         {
-            Debug.WriteLine("[{0}] LeftDown X={1} Y={2}", Name, x, y);
+            Debug.WriteLine(string.Format("[{0}] LeftDown X={1} Y={2}", Name, x, y));
         }
 
         public virtual void LeftUp(IToolContext context, double x, double y)
         {
-            Debug.WriteLine("[{0}] LeftUp X={1} Y={2}", Name, x, y);
+            Debug.WriteLine(string.Format("[{0}] LeftUp X={1} Y={2}", Name, x, y));
         }
 
         public virtual void RightDown(IToolContext context, double x, double y)
         {
-            Debug.WriteLine("[{0}] RightDown X={1} Y={2}", Name, x, y);
+            Debug.WriteLine(string.Format("[{0}] RightDown X={1} Y={2}", Name, x, y));
         }
 
         public virtual void RightUp(IToolContext context, double x, double y)
         {
-            Debug.WriteLine("[{0}] RightUp X={1} Y={2}", Name, x, y);
+            Debug.WriteLine(string.Format("[{0}] RightUp X={1} Y={2}", Name, x, y));
         }
 
         public virtual void Move(IToolContext context, double x, double y)
         {
-            Debug.WriteLine("[{0}] Move X={1} Y={2}", Name, x, y);
+            Debug.WriteLine(string.Format("[{0}] Move X={1} Y={2}", Name, x, y));
         }
 
         public virtual void Clean(IToolContext context)
         {
-            Debug.WriteLine("[{0}] Clean", Name);
+            Debug.WriteLine(string.Format("[{0}] Clean", Name));
         }
     }
 }

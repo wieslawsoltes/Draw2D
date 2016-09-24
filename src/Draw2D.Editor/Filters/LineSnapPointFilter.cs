@@ -51,7 +51,7 @@ namespace Draw2D.Editor.Filters
                         PointGuides(context, x, y);
                     }
 
-                    Debug.WriteLine("Line Snap {0} ({1})", mode, Settings.Target);
+                    Debug.WriteLine(string.Format("Line Snap {0} ({1})", mode, Settings.Target));
                     return true;
                 }
                 Clear(context);
