@@ -65,7 +65,7 @@ namespace Draw2D.Editor.Selection
             return false;
         }
 
-        public static bool TryToSelect(IToolContext context, SelectionMode mode, SelectionTargets targets, Point2 point, double radius)
+        public static bool TryToSelect(IToolContext context, SelectionMode mode, SelectionTargets targets, Point2 point, double radius, Modifier modifier)
         {
             var shapePoint =
                 mode.HasFlag(SelectionMode.Point)
@@ -95,7 +95,9 @@ namespace Draw2D.Editor.Selection
                     || (guidePoint != null && !context.Renderer.Selected.Contains(guidePoint))
                     || (guide != null && !context.Renderer.Selected.Contains(guide));
 
-                if (context.Renderer.Selected.Count >= 1 && !haveNewSelection)
+                if (context.Renderer.Selected.Count >= 1 
+                    && !haveNewSelection 
+                    && !modifier.HasFlag(Modifier.Control))
                 {
                     return true;
                 }
@@ -103,31 +105,99 @@ namespace Draw2D.Editor.Selection
                 {
                     if (shapePoint != null)
                     {
-                        context.Renderer.Selected.Clear();
-                        Debug.WriteLine(string.Format("Selected Shape Point: {0}", shapePoint.GetType()));
-                        shapePoint.Select(context.Renderer.Selected);
-                        return true;
+                        if (modifier.HasFlag(Modifier.Control))
+                        {
+                            if (context.Renderer.Selected.Contains(shapePoint))
+                            {
+                                Debug.WriteLine(string.Format("Deselected Shape Point: {0}", shapePoint.GetType()));
+                                shapePoint.Deselect(context.Renderer.Selected);
+                            }
+                            else
+                            {
+                                Debug.WriteLine(string.Format("Selected Shape Point: {0}", shapePoint.GetType()));
+                                shapePoint.Select(context.Renderer.Selected);
+                            }
+                            return context.Renderer.Selected.Count > 0;
+                        }
+                        else
+                        {
+                            context.Renderer.Selected.Clear();
+                            Debug.WriteLine(string.Format("Selected Shape Point: {0}", shapePoint.GetType()));
+                            shapePoint.Select(context.Renderer.Selected);
+                            return true;
+                        }
                     }
                     else if (shape != null)
                     {
-                        context.Renderer.Selected.Clear();
-                        Debug.WriteLine(string.Format("Selected Shape: {0}", shape.GetType()));
-                        shape.Select(context.Renderer.Selected);
-                        return true;
+                        if (modifier.HasFlag(Modifier.Control))
+                        {
+                            if (context.Renderer.Selected.Contains(shape))
+                            {
+                                Debug.WriteLine(string.Format("Deselected Shape: {0}", shape.GetType()));
+                                shape.Deselect(context.Renderer.Selected);
+                            }
+                            else
+                            {
+                                Debug.WriteLine(string.Format("Selected Shape: {0}", shape.GetType()));
+                                shape.Select(context.Renderer.Selected);
+                            }
+                            return context.Renderer.Selected.Count > 0;
+                        }
+                        else
+                        {
+                            context.Renderer.Selected.Clear();
+                            Debug.WriteLine(string.Format("Selected Shape: {0}", shape.GetType()));
+                            shape.Select(context.Renderer.Selected);
+                            return true;
+                        }
                     }
                     else if (guidePoint != null)
                     {
-                        context.Renderer.Selected.Clear();
-                        Debug.WriteLine(string.Format("Selected Guide Point: {0}", guidePoint.GetType()));
-                        guidePoint.Select(context.Renderer.Selected);
-                        return true;
+                        if (modifier.HasFlag(Modifier.Control))
+                        {
+                            if (context.Renderer.Selected.Contains(guidePoint))
+                            {
+                                Debug.WriteLine(string.Format("Deselected Guide Point: {0}", guidePoint.GetType()));
+                                guidePoint.Deselect(context.Renderer.Selected);
+                            }
+                            else
+                            {
+                                Debug.WriteLine(string.Format("Selected Guide Point: {0}", guidePoint.GetType()));
+                                guidePoint.Select(context.Renderer.Selected);
+                            }
+                            return context.Renderer.Selected.Count > 0;
+                        }
+                        else
+                        {
+                            context.Renderer.Selected.Clear();
+                            Debug.WriteLine(string.Format("Selected Guide Point: {0}", guidePoint.GetType()));
+                            guidePoint.Select(context.Renderer.Selected);
+                            return true;
+                        }
                     }
                     else if (guide != null)
                     {
-                        context.Renderer.Selected.Clear();
-                        Debug.WriteLine(string.Format("Selected Guide: {0}", guide.GetType()));
-                        guide.Select(context.Renderer.Selected);
-                        return true;
+                        if (modifier.HasFlag(Modifier.Control))
+                        {
+                            if (context.Renderer.Selected.Contains(guide))
+                            {
+                                Debug.WriteLine(string.Format("Deselected Guide: {0}", guide.GetType()));
+                                guide.Deselect(context.Renderer.Selected);
+                            }
+                            else
+                            {
+                                Debug.WriteLine(string.Format("Selected Guide: {0}", guide.GetType()));
+                                guide.Select(context.Renderer.Selected);
+                            }
+                            return context.Renderer.Selected.Count > 0;
+                        }
+                        else
+                        {
+                            context.Renderer.Selected.Clear();
+                            Debug.WriteLine(string.Format("Selected Guide: {0}", guide.GetType()));
+                            guide.Select(context.Renderer.Selected);
+                            return true;
+                        }
                     }
                 }
             }
@@ -135,7 +205,7 @@ namespace Draw2D.Editor.Selection
             return false;
         }
 
-        public static bool TryToSelect(IToolContext context, SelectionMode mode, SelectionTargets targets, Rect2 rect, double radius)
+        public static bool TryToSelect(IToolContext context, SelectionMode mode, SelectionTargets targets, Rect2 rect, double radius, Modifier modifier)
         {
             var shapes =
                 mode.HasFlag(SelectionMode.Shape)
@@ -151,23 +221,63 @@ namespace Draw2D.Editor.Selection
             {
                 if (shapes != null)
                 {
-                    Debug.WriteLine(string.Format("Selected Shapes: {0}", shapes != null ? shapes.Count : 0));
-                    context.Renderer.Selected.Clear();
-                    foreach (var shape in shapes)
+                    if (modifier.HasFlag(Modifier.Control))
                     {
-                        shape.Select(context.Renderer.Selected);
+                        foreach (var shape in shapes)
+                        {
+                            if (context.Renderer.Selected.Contains(shape))
+                            {
+                                Debug.WriteLine(string.Format("Deselected Shape: {0}", shape.GetType()));
+                                shape.Deselect(context.Renderer.Selected);
+                            }
+                            else
+                            {
+                                Debug.WriteLine(string.Format("Selected Shape: {0}", shape.GetType()));
+                                shape.Select(context.Renderer.Selected);
+                            }
+                        }
+                        return context.Renderer.Selected.Count > 0;
                     }
-                    return true;
+                    else
+                    {
+                        Debug.WriteLine(string.Format("Selected Shapes: {0}", shapes != null ? shapes.Count : 0));
+                        context.Renderer.Selected.Clear();
+                        foreach (var shape in shapes)
+                        {
+                            shape.Select(context.Renderer.Selected);
+                        }
+                        return true;
+                    }
                 }
                 else if (guides != null)
                 {
-                    Debug.WriteLine(string.Format("Selected Guides: {0}", guides != null ? guides.Count : 0));
-                    context.Renderer.Selected.Clear();
-                    foreach (var guide in guides)
+                    if (modifier.HasFlag(Modifier.Control))
                     {
-                        guide.Select(context.Renderer.Selected);
+                        foreach (var guide in guides)
+                        {
+                            if (context.Renderer.Selected.Contains(guide))
+                            {
+                                Debug.WriteLine(string.Format("Deselected Guide: {0}", guide.GetType()));
+                                guide.Deselect(context.Renderer.Selected);
+                            }
+                            else
+                            {
+                                Debug.WriteLine(string.Format("Selected Guide: {0}", guide.GetType()));
+                                guide.Select(context.Renderer.Selected);
+                            }
+                        }
+                        return context.Renderer.Selected.Count > 0;
                     }
-                    return true;
+                    else
+                    {
+                        Debug.WriteLine(string.Format("Selected Guides: {0}", guides != null ? guides.Count : 0));
+                        context.Renderer.Selected.Clear();
+                        foreach (var guide in guides)
+                        {
+                            guide.Select(context.Renderer.Selected);
+                        }
+                        return true; 
+                    }
                 }
             }
 

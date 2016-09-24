@@ -40,7 +40,7 @@ namespace Draw2D.Editor.Tools
                         _previousY = _originY;
 
                         var target = new Point2(x, y);
-                        var result = SelectionHelper.TryToSelect(context, Settings.Mode, Settings.Targets, target, Settings.HitTestRadius);
+                        var result = SelectionHelper.TryToSelect(context, Settings.Mode, Settings.Targets, target, Settings.HitTestRadius, modifier);
                         if (result)
                         {
                             _haveSelection = true;
@@ -49,7 +49,11 @@ namespace Draw2D.Editor.Tools
                         else
                         {
                             _haveSelection = false;
-                            context.Renderer.Selected.Clear();
+
+                            if (!modifier.HasFlag(Modifier.Control))
+                            {
+                                context.Renderer.Selected.Clear();
+                            }
 
                             if (_rectangle == null)
                             {
@@ -86,7 +90,7 @@ namespace Draw2D.Editor.Tools
                 case State.BottomRight:
                     {
                         var target = _rectangle.ToRect2();
-                        var result = SelectionHelper.TryToSelect(context, Settings.Mode, Settings.Targets, target, Settings.HitTestRadius);
+                        var result = SelectionHelper.TryToSelect(context, Settings.Mode, Settings.Targets, target, Settings.HitTestRadius, modifier);
                         if (result)
                         {
                             _haveSelection = true;
