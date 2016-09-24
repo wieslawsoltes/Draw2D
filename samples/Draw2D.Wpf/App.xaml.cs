@@ -87,7 +87,7 @@ namespace Draw2D.Wpf
                             Mode = GridSnapMode.Horizontal | GridSnapMode.Vertical,
                             GridSizeX = 15.0,
                             GridSizeY = 15.0,
-                            GuideStyle = null
+                            GuideStyle = new DrawStyle(new DrawColor(128, 0, 255, 255), new DrawColor(128, 0, 255, 255), 2.0, true, true)
                         }
                     }
                 },
