@@ -10,6 +10,10 @@ namespace Draw2D.Editor.Tools
         private SelectionTargets _targets;
         private DrawStyle _selectionStyle;
         private double _hitTestRadius;
+        private bool _connectPoints;
+        private bool _disconnectPoints;
+        private double _connectTestRadius;
+        private double _disconnectTestRadius;
 
         public SelectionMode Mode
         {
@@ -59,6 +63,58 @@ namespace Draw2D.Editor.Tools
                 {
                     _hitTestRadius = value;
                     Notify("HitTestRadius");
+                }
+            }
+        }
+
+        public bool ConnectPoints
+        {
+            get { return _connectPoints; }
+            set
+            {
+                if (value != _connectPoints)
+                {
+                    _connectPoints = value;
+                    Notify("ConnectPoints");
+                }
+            }
+        }
+
+        public double ConnectTestRadius
+        {
+            get { return _connectTestRadius; }
+            set
+            {
+                if (value != _connectTestRadius)
+                {
+                    _connectTestRadius = value;
+                    Notify("ConnectTestRadius");
+                }
+            }
+        }
+
+        public bool DisconnectPoints
+        {
+            get { return _disconnectPoints; }
+            set
+            {
+                if (value != _disconnectPoints)
+                {
+                    _disconnectPoints = value;
+                    Notify("DisconnectPoints");
+                }
+            }
+        }
+
+        public double DisconnectTestRadius
+        {
+            get { return _disconnectTestRadius; }
+            set
+            {
+                if (value != _disconnectTestRadius)
+                {
+                    _disconnectTestRadius = value;
+                    Notify("DisconnectTestRadius");
                 }
             }
         }

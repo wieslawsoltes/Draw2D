@@ -95,8 +95,12 @@ namespace Draw2D.Wpf
                 {
                     Mode = SelectionMode.Point | SelectionMode.Shape,
                     Targets = SelectionTargets.Shapes | SelectionTargets.Guides,
-                    SelectionStyle = new DrawStyle(new DrawColor(128, 0, 0, 255), new DrawColor(80, 0, 0, 255), 2.0, true, true),
-                    HitTestRadius = 7.0
+                    SelectionStyle = new DrawStyle(new DrawColor(255, 0, 120, 215), new DrawColor(60, 170, 204, 238), 2.0, true, true),
+                    HitTestRadius = 7.0,
+                    ConnectPoints = false,
+                    ConnectTestRadius = 10.0,
+                    DisconnectPoints = false,
+                    DisconnectTestRadius = 10.0
                 }
             };
 

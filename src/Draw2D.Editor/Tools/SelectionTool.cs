@@ -11,8 +11,10 @@ namespace Draw2D.Editor.Tools
         private enum State { TopLeft, BottomRight, Move };
         private State _state = State.TopLeft;
         private RectangleShape _rectangle;
-        private double _startX;
-        private double _startY;
+        private double _originX;
+        private double _originY;
+        private double _previousX;
+        private double _previousY;
         private bool _haveSelection;
 
         public override string Name { get { return "Selection"; } }
@@ -27,18 +29,22 @@ namespace Draw2D.Editor.Tools
             {
                 case State.TopLeft:
                     {
-                        _startX = x;
-                        _startY = y;
+                        _originX = x;
+                        _originY = y;
+                        _previousX = x;
+                        _previousY = y;
 
                         Filters.ForEach(f => f.Clear(context));
-                        Filters.Any(f => f.Process(context, ref _startX, ref _startY));
+                        Filters.Any(f => f.Process(context, ref _originX, ref _originY));
+                        _previousX = _originX;
+                        _previousY = _originY;
 
                         var target = new Point2(x, y);
                         var result = SelectionHelper.TryToSelect(
                             context,
-                            Settings.Mode, 
-                            Settings.Targets, 
-                            target, 
+                            Settings.Mode,
+                            Settings.Targets,
+                            target,
                             Settings.HitTestRadius);
                         if (result)
                         {
@@ -90,10 +96,10 @@ namespace Draw2D.Editor.Tools
                             _rectangle.BottomRight.X,
                             _rectangle.BottomRight.Y);
                         var result = SelectionHelper.TryToSelect(
-                            context, 
-                            Settings.Mode, 
-                            Settings.Targets, 
-                            target, 
+                            context,
+                            Settings.Mode,
+                            Settings.Targets,
+                            target,
                             Settings.HitTestRadius);
                         if (result)
                         {
@@ -144,10 +150,10 @@ namespace Draw2D.Editor.Tools
                         {
                             var target = new Point2(x, y);
                             SelectionHelper.TryToHover(
-                                context, 
-                                Settings.Mode, 
-                                Settings.Targets, 
-                                target, 
+                                context,
+                                Settings.Mode,
+                                Settings.Targets,
+                                target,
                                 Settings.HitTestRadius);
                         }
                     }
@@ -163,14 +169,46 @@ namespace Draw2D.Editor.Tools
                         Filters.ForEach(f => f.Clear(context));
                         Filters.Any(f => f.Process(context, ref x, ref y));
 
-                        double dx = x - _startX;
-                        double dy = y - _startY;
-                        _startX = x;
-                        _startY = y;
+                        double dx = x - _previousX;
+                        double dy = y - _previousY;
+                        _previousX = x;
+                        _previousY = y;
 
-                        foreach (var shape in context.Renderer.Selected)
+                        if (context.Renderer.Selected.Count == 1)
                         {
+                            var shape = context.Renderer.Selected.FirstOrDefault();
+
                             shape.Move(context.Renderer.Selected, dx, dy);
+
+                            if (shape.GetType() == typeof(PointShape))
+                            {
+                                var point = shape as PointShape;
+
+                                if (Settings.ConnectPoints)
+                                {
+                                    PointShape result = context.HitTest.TryToGetPoint(context.Container.Shapes, new Point2(point.X, point.Y), Settings.ConnectTestRadius);
+                                    if (result != point)
+                                    {
+                                        // TODO: Connect point.
+                                    }
+                                }
+
+                                if (Settings.DisconnectPoints)
+                                {
+                                    if ((Math.Abs(_originX - point.X) > Settings.DisconnectTestRadius)
+                                        || (Math.Abs(_originY - point.Y) > Settings.DisconnectTestRadius))
+                                    {
+                                        // TODO: Disconnect point.
+                                    }
+                                }
+                            }
+                        }
+                        else
+                        {
+                            foreach (var shape in context.Renderer.Selected)
+                            {
+                                shape.Move(context.Renderer.Selected, dx, dy);
+                            }
                         }
                     }
                     break;
@@ -187,7 +225,7 @@ namespace Draw2D.Editor.Tools
             if (_rectangle != null)
             {
                 context.WorkingContainer.Shapes.Remove(_rectangle);
-                _rectangle = null; 
+                _rectangle = null;
             }
 
             context.Renderer.Selected.Clear();

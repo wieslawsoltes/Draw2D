@@ -4,9 +4,42 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Draw2D.Wpf.Views.Tools.Settings"
+             xmlns:ViewsStyle="clr-namespace:Draw2D.Wpf.Views.Style"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
-            
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="50"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <!-- TODO: Mode -->
+        <!-- TODO: Targets -->
+        <Expander Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="2" Header="SelectionStyle" IsExpanded="False">
+            <ViewsStyle:DrawStyleView DataContext="{Binding SelectionStyle}"/>
+        </Expander>
+        <TextBlock Grid.Column="0" Grid.Row="3" Text="HitTestRadius"/>
+        <Slider Grid.Column="1" Grid.Row="3" Value="{Binding HitTestRadius}" Minimum="0" Maximum="32" SmallChange="0.1" LargeChange="1" IsSnapToTickEnabled="True" TickFrequency="0.1"/>
+        <TextBox Grid.Column="2" Grid.Row="3" Text="{Binding HitTestRadius, UpdateSourceTrigger=PropertyChanged}"/>
+        <TextBlock Grid.Column="0" Grid.Row="4" Text="ConnectPoints"/>
+        <CheckBox Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="4" IsChecked="{Binding ConnectPoints, UpdateSourceTrigger=PropertyChanged}"/>
+        <TextBlock Grid.Column="0" Grid.Row="5" Text="ConnectTestRadius"/>
+        <Slider Grid.Column="1" Grid.Row="5" Value="{Binding ConnectTestRadius}" Minimum="0" Maximum="32" SmallChange="0.1" LargeChange="1" IsSnapToTickEnabled="True" TickFrequency="0.1"/>
+        <TextBox Grid.Column="2" Grid.Row="5" Text="{Binding ConnectTestRadius, UpdateSourceTrigger=PropertyChanged}"/>
+        <TextBlock Grid.Column="0" Grid.Row="6" Text="DisconnectPoints"/>
+        <CheckBox Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="6" IsChecked="{Binding DisconnectPoints, UpdateSourceTrigger=PropertyChanged}"/>
+        <TextBlock Grid.Column="0" Grid.Row="7" Text="DisconnectTestRadius"/>
+        <Slider Grid.Column="1" Grid.Row="7" Value="{Binding DisconnectTestRadius}" Minimum="0" Maximum="32" SmallChange="0.1" LargeChange="1" IsSnapToTickEnabled="True" TickFrequency="0.1"/>
+        <TextBox Grid.Column="2" Grid.Row="7" Text="{Binding DisconnectTestRadius, UpdateSourceTrigger=PropertyChanged}"/>
     </Grid>
 </UserControl>
