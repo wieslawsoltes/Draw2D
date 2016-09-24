@@ -7,6 +7,7 @@ namespace Draw2D.Editor
 {
     public abstract class PointIntersection
     {
+        public abstract string Name { get; }
         public List<PointShape> Intersections { get; set; }
 
         protected PointIntersection()

@@ -8,6 +8,7 @@ namespace Draw2D.Editor.Intersections.Line
 {
     public class RectangleLineIntersection : PointIntersection
     {
+        public override string Name { get { return "Rectangle-Line"; } }
         public RectangleLineSettings Settings { get; set; }
 
         public override void Find(IToolContext context, BaseShape shape)

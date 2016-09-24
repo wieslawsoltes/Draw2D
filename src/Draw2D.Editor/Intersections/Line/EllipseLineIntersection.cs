@@ -9,6 +9,7 @@ namespace Draw2D.Editor.Intersections.Line
 {
     public class EllipseLineIntersection : PointIntersection
     {
+        public override string Name { get { return "Ellipse-Line"; } }
         public EllipseLineSettings Settings { get; set; }
 
         public override void Find(IToolContext context, BaseShape shape)

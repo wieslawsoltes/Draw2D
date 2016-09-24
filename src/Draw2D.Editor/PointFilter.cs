@@ -6,6 +6,7 @@ namespace Draw2D.Editor
 {
     public abstract class PointFilter
     {
+        public abstract string Name { get; }
         public List<BaseShape> Guides { get; set; }
 
         protected PointFilter()
