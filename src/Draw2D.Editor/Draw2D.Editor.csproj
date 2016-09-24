@@ -122,6 +122,7 @@
     <Compile Include="Spatial\Extensions\PointShapeExtensions.cs" />
     <Compile Include="Spatial\Extensions\RectangleShapeExtensions.cs" />
     <Compile Include="ToolBase.cs" />
+    <Compile Include="Modifier.cs" />
     <Compile Include="Tools\EllipseTool.cs" />
     <Compile Include="Tools\EllipseToolSettings.cs" />
     <Compile Include="Tools\GuideTool.cs" />

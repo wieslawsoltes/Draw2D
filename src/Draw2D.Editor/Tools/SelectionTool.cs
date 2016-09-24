@@ -21,9 +21,9 @@ namespace Draw2D.Editor.Tools
 
         public SelectionToolSettings Settings { get; set; }
 
-        public override void LeftDown(IToolContext context, double x, double y)
+        public override void LeftDown(IToolContext context, double x, double y, Modifier modifier)
         {
-            base.LeftDown(context, x, y);
+            base.LeftDown(context, x, y, modifier);
 
             switch (_state)
             {
@@ -40,12 +40,7 @@ namespace Draw2D.Editor.Tools
                         _previousY = _originY;
 
                         var target = new Point2(x, y);
-                        var result = SelectionHelper.TryToSelect(
-                            context,
-                            Settings.Mode,
-                            Settings.Targets,
-                            target,
-                            Settings.HitTestRadius);
+                        var result = SelectionHelper.TryToSelect(context, Settings.Mode, Settings.Targets, target, Settings.HitTestRadius);
                         if (result)
                         {
                             _haveSelection = true;
@@ -80,9 +75,9 @@ namespace Draw2D.Editor.Tools
             }
         }
 
-        public override void LeftUp(IToolContext context, double x, double y)
+        public override void LeftUp(IToolContext context, double x, double y, Modifier modifier)
         {
-            base.LeftUp(context, x, y);
+            base.LeftUp(context, x, y, modifier);
 
             Filters.ForEach(f => f.Clear(context));
 
@@ -90,17 +85,8 @@ namespace Draw2D.Editor.Tools
             {
                 case State.BottomRight:
                     {
-                        var target = Rect2.FromPoints(
-                            _rectangle.TopLeft.X,
-                            _rectangle.TopLeft.Y,
-                            _rectangle.BottomRight.X,
-                            _rectangle.BottomRight.Y);
-                        var result = SelectionHelper.TryToSelect(
-                            context,
-                            Settings.Mode,
-                            Settings.Targets,
-                            target,
-                            Settings.HitTestRadius);
+                        var target = _rectangle.ToRect2();
+                        var result = SelectionHelper.TryToSelect(context, Settings.Mode, Settings.Targets, target, Settings.HitTestRadius);
                         if (result)
                         {
                             _haveSelection = true;
@@ -119,9 +105,9 @@ namespace Draw2D.Editor.Tools
             }
         }
 
-        public override void RightDown(IToolContext context, double x, double y)
+        public override void RightDown(IToolContext context, double x, double y, Modifier modifier)
         {
-            base.RightDown(context, x, y);
+            base.RightDown(context, x, y, modifier);
 
             switch (_state)
             {
@@ -138,9 +124,9 @@ namespace Draw2D.Editor.Tools
             }
         }
 
-        public override void Move(IToolContext context, double x, double y)
+        public override void Move(IToolContext context, double x, double y, Modifier modifier)
         {
-            base.Move(context, x, y);
+            base.Move(context, x, y, modifier);
 
             switch (_state)
             {
@@ -149,12 +135,7 @@ namespace Draw2D.Editor.Tools
                         if (!_haveSelection)
                         {
                             var target = new Point2(x, y);
-                            SelectionHelper.TryToHover(
-                                context,
-                                Settings.Mode,
-                                Settings.Targets,
-                                target,
-                                Settings.HitTestRadius);
+                            SelectionHelper.TryToHover(context, Settings.Mode, Settings.Targets, target, Settings.HitTestRadius);
                         }
                     }
                     break;

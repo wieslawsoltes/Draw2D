@@ -16,9 +16,9 @@ namespace Draw2D.Editor.Tools
 
         public LineToolSettings Settings { get; set; }
 
-        public override void LeftDown(IToolContext context, double x, double y)
+        public override void LeftDown(IToolContext context, double x, double y, Modifier modifier)
         {
-            base.LeftDown(context, x, y);
+            base.LeftDown(context, x, y, modifier);
 
             Filters.Any(f => f.Process(context, ref x, ref y));
 
@@ -85,9 +85,9 @@ namespace Draw2D.Editor.Tools
             }
         }
 
-        public override void RightDown(IToolContext context, double x, double y)
+        public override void RightDown(IToolContext context, double x, double y, Modifier modifier)
         {
-            base.RightDown(context, x, y);
+            base.RightDown(context, x, y, modifier);
 
             switch (_state)
             {
@@ -99,9 +99,9 @@ namespace Draw2D.Editor.Tools
             }
         }
 
-        public override void Move(IToolContext context, double x, double y)
+        public override void Move(IToolContext context, double x, double y, Modifier modifier)
         {
-            base.Move(context, x, y);
+            base.Move(context, x, y, modifier);
 
             Filters.ForEach(f => f.Clear(context));
             Filters.Any(f => f.Process(context, ref x, ref y));
