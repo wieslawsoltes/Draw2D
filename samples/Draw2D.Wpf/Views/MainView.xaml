@@ -4,7 +4,11 @@
         xmlns:Controls="clr-namespace:Draw2D.Wpf.Controls"
         xmlns:ViewsStyle="clr-namespace:Draw2D.Wpf.Views.Style"
         xmlns:ViewsToolsSettings="clr-namespace:Draw2D.Wpf.Views.Tools.Settings"
+        xmlns:ViewsIntersectionsLineSettings="clr-namespace:Draw2D.Wpf.Views.Intersections.Line.Settings"
+        xmlns:ViewsFiltersSettings="clr-namespace:Draw2D.Wpf.Views.Filters.Settings"
         xmlns:EditorTools="clr-namespace:Draw2D.Editor.Tools;assembly=Draw2D.Editor"
+        xmlns:EditorIntersectionsLine="clr-namespace:Draw2D.Editor.Intersections.Line;assembly=Draw2D.Editor"
+        xmlns:EditorFilters="clr-namespace:Draw2D.Editor.Filters;assembly=Draw2D.Editor"
         Title="Draw2D" Height="700" Width="1300"
         WindowStartupLocation="CenterScreen"
         UseLayoutRounding="True" SnapsToDevicePixels="True" TextOptions.TextFormattingMode="Display">
@@ -126,10 +130,57 @@
                     </ContentControl>
                 </TabItem>
                 <TabItem Header="Intersections">
-                    <!-- TODO -->
+                    <Grid Grid.Row="2" Grid.Column="2">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <ComboBox Grid.Row="0" x:Name="Intersections" ItemsSource="{Binding CurrentTool.Intersections}" SelectedIndex="0">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Name}"/>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+                        <ContentControl Grid.Row="1" Content="{Binding ElementName=Intersections, Path=SelectedItem.Settings}">
+                            <ContentControl.Resources>
+                                <DataTemplate DataType="{x:Type EditorIntersectionsLine:LineLineSettings}">
+                                    <ViewsIntersectionsLineSettings:LineLineSettingsView/>
+                                </DataTemplate>
+                                <DataTemplate DataType="{x:Type EditorIntersectionsLine:RectangleLineSettings}">
+                                    <ViewsIntersectionsLineSettings:RectangleLineSettingsView/>
+                                </DataTemplate>
+                                <DataTemplate DataType="{x:Type EditorIntersectionsLine:EllipseLineSettings}">
+                                    <ViewsIntersectionsLineSettings:EllipseLineSettingsView/>
+                                </DataTemplate>
+                            </ContentControl.Resources>
+                        </ContentControl>
+                    </Grid>
                 </TabItem>
                 <TabItem Header="Filters">
-                    <!-- TODO -->
+                    <Grid Grid.Row="2" Grid.Column="2">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <ComboBox Grid.Row="0" x:Name="Filters" ItemsSource="{Binding CurrentTool.Filters}" SelectedIndex="0">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Name}"/>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+                        <ContentControl Grid.Row="1" Content="{Binding ElementName=Filters, Path=SelectedItem.Settings}">
+                            <ContentControl.Resources>
+                                <DataTemplate DataType="{x:Type EditorFilters:LineSnapSettings}">
+                                    <ViewsFiltersSettings:LineSnapSettingsView/>
+                                </DataTemplate>
+                                <DataTemplate DataType="{x:Type EditorFilters:GridSnapSettings}">
+                                    <ViewsFiltersSettings:GridSnapSettingsView/>
+                                </DataTemplate>
+                            </ContentControl.Resources>
+                        </ContentControl>
+                    </Grid>
                 </TabItem>
             </TabControl>
         </Grid>
