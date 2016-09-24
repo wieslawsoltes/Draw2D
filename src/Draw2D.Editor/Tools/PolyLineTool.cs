@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Draw2D.Models.Shapes;
+using Draw2D.Spatial;
 
 namespace Draw2D.Editor.Tools
 {
@@ -27,8 +28,15 @@ namespace Draw2D.Editor.Tools
                 case State.Start:
                     {
                         _points = new List<PointShape>();
+
+                        PointShape point = null;
+                        if (Settings.ConnectPoints)
+                        {
+                            point = context.HitTest.TryToGetPoint(context.Container.Shapes, new Point2(x, y), Settings.HitTestRadius);
+                        }
+
                         _line = new LineShape(
-                            new PointShape(x, y, context.PointShape),
+                            point ?? new PointShape(x, y, context.PointShape),
                             new PointShape(x, y, context.PointShape));
                         _line.Style = context.Style;
                         _points.Add(_line.Start);
@@ -41,10 +49,31 @@ namespace Draw2D.Editor.Tools
                     break;
                 case State.End:
                     {
-                        _line.End.X = x;
-                        _line.End.Y = y;
+                        PointShape point = null;
+                        if (Settings.ConnectPoints)
+                        {
+                            point = context.HitTest.TryToGetPoint(context.Container.Shapes, new Point2(x, y), Settings.HitTestRadius);
+                        }
+
+                        if (point != null)
+                        {
+                            _line.End = point;
+
+                            _points[_points.Count - 1] = _line.End;
+                            if (!context.Renderer.Selected.Contains(_line.End))
+                            {
+                                context.Renderer.Selected.Add(_line.End);
+                            }
+                        }
+                        else
+                        {
+                            _line.End.X = x;
+                            _line.End.Y = y;
+                        }
+
                         context.WorkingContainer.Shapes.Remove(_line);
                         context.Container.Shapes.Add(_line);
+
                         _line = new LineShape(
                             _points.Last(),
                             new PointShape(x, y, context.PointShape));

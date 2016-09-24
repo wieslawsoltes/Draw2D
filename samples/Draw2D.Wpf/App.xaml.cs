@@ -194,6 +194,10 @@ namespace Draw2D.Wpf
                     gridSnapPointFilter
                 },
                 Settings = new PolyLineToolSettings()
+                {
+                    ConnectPoints = true,
+                    HitTestRadius = 7.0
+                }
             };
 
             var rectangleTool = new RectangleTool()
