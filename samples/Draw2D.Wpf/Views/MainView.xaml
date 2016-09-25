@@ -25,12 +25,15 @@
         </Grid.ColumnDefinitions>
         <Menu Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Background="Transparent">
             <MenuItem Header="_File">
-                <MenuItem Header="_Open..."/>
+                <MenuItem Header="New" x:Name="FileNew" Click="FileNew_Click"/>
                 <Separator/>
-                <MenuItem Header="Save _As..."/>
+                <MenuItem Header="_Open..." x:Name="FileOpen" Click="FileOpen_Click"/>
                 <Separator/>
-                <MenuItem Header="E_xit"/>
+                <MenuItem Header="Save _As..." x:Name="FileSaveAs" Click="FileSaveAs_Click"/>
+                <Separator/>
+                <MenuItem Header="E_xit" x:Name="FileExit" Click="FileExit_Click"/>
             </MenuItem>
+            <!--
             <MenuItem Header="_Tool" ItemsSource="{Binding Tools}">
                 <MenuItem.ItemTemplate>
                     <DataTemplate>
@@ -38,6 +41,7 @@
                     </DataTemplate>
                 </MenuItem.ItemTemplate>
             </MenuItem>
+            -->
         </Menu>
         <Grid Grid.Row="2" Grid.Column="0">
             <Grid.RowDefinitions>
@@ -61,8 +65,8 @@
                 </TabItem>
             </TabControl>
         </Grid>
-        <Controls:ShapesContainerInputView Grid.Row="2" Grid.Column="1" Background="Transparent" ClipToBounds="True">
-            <Controls:ShapesContainerRenderView Width="{Binding Container.Width}" Height="{Binding Container.Height}" Background="SlateGray" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+        <Controls:ShapesContainerInputView x:Name="InputView" Grid.Row="2" Grid.Column="1" Background="Transparent" ClipToBounds="True">
+            <Controls:ShapesContainerRenderView x:Name="RendererView" Width="{Binding Container.Width}" Height="{Binding Container.Height}" Background="SlateGray" VerticalAlignment="Center" HorizontalAlignment="Center"/>
         </Controls:ShapesContainerInputView>
         <Grid Grid.Row="2" Grid.Column="2">
             <Grid.RowDefinitions>
