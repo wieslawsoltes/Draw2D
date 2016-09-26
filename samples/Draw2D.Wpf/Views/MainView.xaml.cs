@@ -119,6 +119,7 @@ namespace Draw2D.Wpf.Views
             using (var writer = new StringWriter())
             {
                 var builder = new SerializerBuilder()
+                    .EmitDefaults()
                     .EnsureRoundtrip()
                     .WithNamingConvention(new NullNamingConvention());
                 var serializer = builder.Build();
