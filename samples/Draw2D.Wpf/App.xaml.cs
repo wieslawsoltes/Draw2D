@@ -245,11 +245,18 @@ namespace Draw2D.Wpf
 
             var workingContainer = new ShapesContainer();
 
-            var style = new DrawStyle(new DrawColor(255, 0, 255, 0), new DrawColor(80, 0, 255, 0), 2.0, true, true);
+            var style = new DrawStyle(new DrawColor(255, 0, 255, 0), new DrawColor(80, 0, 255, 0), 2.0, true, true)
+            {
+                Id = Guid.NewGuid()
+            };
 
             var pointShape = new EllipseShape(new PointShape(-4, -4, null), new PointShape(4, 4, null))
             {
+                Id = Guid.NewGuid(),
                 Style = new DrawStyle(new DrawColor(0, 0, 0, 0), new DrawColor(255, 255, 255, 0), 2.0, false, true)
+                {
+                    Id = Guid.NewGuid()
+                }
             };
 
             // DEMOS

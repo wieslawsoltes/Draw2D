@@ -16,7 +16,21 @@ namespace Draw2D.Models
             }
         }
 
+        private Guid _id;
         private string _name;
+
+        public Guid Id
+        {
+            get { return _id; }
+            set
+            {
+                if (value != _id)
+                {
+                    _id = value;
+                    Notify("Id");
+                }
+            }
+        }
 
         public string Name
         {
