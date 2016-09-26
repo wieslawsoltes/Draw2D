@@ -5,9 +5,8 @@ using System.Windows;
 using Draw2D.Models;
 using Draw2D.Models.Containers;
 using Draw2D.ViewModels.Containers;
+using Draw2D.Wpf.Utilities;
 using Microsoft.Win32;
-using YamlDotNet.Serialization;
-using YamlDotNet.Serialization.NamingConventions;
 
 namespace Draw2D.Wpf.Views
 {
@@ -114,32 +113,6 @@ namespace Draw2D.Wpf.Views
             }
         }
 
-        private static string ToYaml(object graph)
-        {
-            using (var writer = new StringWriter())
-            {
-                var builder = new SerializerBuilder()
-                    .EmitDefaults()
-                    .EnsureRoundtrip()
-                    .WithNamingConvention(new NullNamingConvention());
-                var serializer = builder.Build();
-                serializer.Serialize(writer, graph);
-                return writer.ToString();
-            }
-        }
-
-        private static T FromYaml<T>(string yaml)
-        {
-            using (var reader = new StringReader(yaml))
-            {
-                var builder = new DeserializerBuilder()
-                    .IgnoreUnmatchedProperties()
-                    .WithNamingConvention(new NullNamingConvention());
-                var deserializer = builder.Build();
-                return deserializer.Deserialize<T>(reader);
-            }
-        }
-
         private void New(ShapesContainerViewModel vm)
         {
             vm.CurrentTool.Clean(vm);
@@ -157,7 +130,7 @@ namespace Draw2D.Wpf.Views
         private void Open(string path, ShapesContainerViewModel vm)
         {
             var yaml = File.ReadAllText(path);
-            var container = FromYaml<ShapesContainer>(yaml);
+            var container = YamlHelper.FromYaml<ShapesContainer>(yaml);
             var workingContainer = new ShapesContainer();
             vm.CurrentTool.Clean(vm);
             vm.Renderer.Selected.Clear();
@@ -167,7 +140,7 @@ namespace Draw2D.Wpf.Views
 
         private void Save(string path, ShapesContainerViewModel vm)
         {
-            var yaml = ToYaml(vm.Container);
+            var yaml = YamlHelper.ToYaml(vm.Container);
             File.WriteAllText(path, yaml);
         }
 
@@ -188,7 +161,7 @@ namespace Draw2D.Wpf.Views
                     shapes.Add(shape);
                 }
             }
-            var yaml = ToYaml(shapes);
+            var yaml = YamlHelper.ToYaml(shapes);
             Clipboard.SetText(yaml);
         }
 
@@ -197,7 +170,7 @@ namespace Draw2D.Wpf.Views
             if (Clipboard.ContainsText())
             {
                 var yaml = Clipboard.GetText();
-                var shapes = FromYaml<List<BaseShape>>(yaml);
+                var shapes = YamlHelper.FromYaml<List<BaseShape>>(yaml);
                 // TODO: Update styles and templates using Id.
                 vm.Renderer.Selected.Clear();
                 foreach (var shape in shapes)
