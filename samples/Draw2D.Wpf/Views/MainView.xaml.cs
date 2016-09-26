@@ -197,6 +197,7 @@ namespace Draw2D.Wpf.Views
             {
                 var yaml = Clipboard.GetText();
                 var shapes = FromYaml<List<BaseShape>>(yaml);
+                // TODO: Update styles and templates using Id.
                 vm.Renderer.Selected.Clear();
                 foreach (var shape in shapes)
                 {
