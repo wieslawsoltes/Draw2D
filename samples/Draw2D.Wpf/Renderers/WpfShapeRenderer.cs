@@ -48,6 +48,7 @@ namespace Draw2D.Wpf.Renderers
             if (!_brushCache.TryGetValue(style, out cache))
             {
                 _brushCache[style] = WpfBrushCache.FromDrawStyle(style);
+                return _brushCache[style];
             }
             return cache;
         }
