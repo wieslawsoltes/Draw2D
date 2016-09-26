@@ -33,6 +33,12 @@
                 <Separator/>
                 <MenuItem Header="E_xit" x:Name="FileExit" Click="FileExit_Click"/>
             </MenuItem>
+            <MenuItem Header="_Edit">
+                <MenuItem Header="Cut" x:Name="EditCut" Click="EditCut_Click"/>
+                <MenuItem Header="Copy" x:Name="EditCopy" Click="EditCopy_Click"/>
+                <MenuItem Header="Paste" x:Name="EditPaste" Click="EditPaste_Click"/>
+                <MenuItem Header="Delete" x:Name="EditDelete" Click="EditDelete_Click"/>
+            </MenuItem>
             <!--
             <MenuItem Header="_Tool" ItemsSource="{Binding Tools}">
                 <MenuItem.ItemTemplate>
