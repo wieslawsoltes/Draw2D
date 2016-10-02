@@ -91,6 +91,7 @@
     <Compile Include="Arc\GdiArc.cs" />
     <Compile Include="Arc\WpfArc.cs" />
     <Compile Include="ConvexHull\MonotoneChain.cs" />
+    <Compile Include="DouglasPeucker\RDP.cs" />
     <Compile Include="Line2.cs" />
     <Compile Include="Matrix2.cs" />
     <Compile Include="Point2.cs" />
