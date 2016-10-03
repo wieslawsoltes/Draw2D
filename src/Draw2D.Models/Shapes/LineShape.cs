@@ -51,7 +51,7 @@ namespace Draw2D.Models.Shapes
         {
             base.BeginTransform(dc, r);
 
-            r.DrawLine(dc, _start.X, _start.Y, _end.X, _end.Y, Style, dx, dy);
+            r.DrawLine(dc, this, Style, dx, dy);
 
             _start.Draw(dc, r, dx, dy); 
             _end.Draw(dc, r, dx, dy);

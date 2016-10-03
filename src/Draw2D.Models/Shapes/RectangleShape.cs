@@ -51,7 +51,7 @@ namespace Draw2D.Models.Shapes
         {
             base.BeginTransform(dc, r);
 
-            r.DrawRectangle(dc, _topLeft.X, _topLeft.Y, _bottomRight.X, _bottomRight.Y, Style, dx, dy);
+            r.DrawRectangle(dc, this, Style, dx, dy);
 
             _topLeft.Draw(dc, r, dx, dy);
             _bottomRight.Draw(dc, r, dx, dy);
