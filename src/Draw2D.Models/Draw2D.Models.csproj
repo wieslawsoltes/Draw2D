@@ -99,6 +99,7 @@
     <Compile Include="Shapes\GroupShape.cs" />
     <Compile Include="Shapes\LineShape.cs" />
     <Compile Include="Shapes\PointShape.cs" />
+    <Compile Include="Shapes\ScribbleShape.cs" />
     <Compile Include="Shapes\RectangleShape.cs" />
     <Compile Include="Style\DrawColor.cs" />
     <Compile Include="Style\DrawStyle.cs" />

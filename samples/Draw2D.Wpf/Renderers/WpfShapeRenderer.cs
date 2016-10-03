@@ -39,6 +39,17 @@ namespace Draw2D.Wpf.Renderers
             return new Point(point.X + dx, point.Y + dy);
         }
 
+        public static List<Point> FromPoints(IList<PointShape> points, double dx, double dy)
+        {
+            var result = new List<Point>(points.Count);
+            for (int i = 0; i < points.Count; i++)
+            {
+                var point = points[i];
+                result.Add(new Point(point.X + dx, point.Y + dy));
+            }
+            return result;
+        }
+
         private Rect FromPoints(double x1, double y1, double x2, double y2, double dx, double dy)
         {
             double x = Math.Min(x1 + dx, x2 + dx);
@@ -82,8 +93,8 @@ namespace Draw2D.Wpf.Renderers
         private MatrixTransform ToMatrixTransform(MatrixObject matrix)
         {
             return new MatrixTransform(
-                matrix.M11, matrix.M12, 
-                matrix.M21, matrix.M22, 
+                matrix.M11, matrix.M12,
+                matrix.M21, matrix.M22,
                 matrix.OffsetX, matrix.OffsetY);
         }
 
@@ -104,6 +115,19 @@ namespace Draw2D.Wpf.Renderers
             var cache = GetOrCreateCache(style);
             var _dc = dc as DrawingContext;
             _dc.DrawLine(style.IsStroked ? cache.StrokePen : null, FromPoint(line.Start, dx, dy), FromPoint(line.End, dx, dy));
+        }
+
+        public override void DrawPolyLine(object dc, PointShape start, IList<PointShape> points, DrawStyle style, double dx, double dy)
+        {
+            var cache = GetOrCreateCache(style);
+            var _dc = dc as DrawingContext;
+            var geometry = new StreamGeometry();
+            using (var context = geometry.Open())
+            {
+                context.BeginFigure(FromPoint(start, dx, dy), false, false);
+                context.PolyLineTo(FromPoints(points, dx, dy), true, false);
+            }
+            _dc.DrawGeometry(style.IsFilled ? cache.Fill : null, style.IsStroked ? cache.StrokePen : null, geometry);
         }
 
         public override void DrawRectangle(object dc, RectangleShape rectangle, DrawStyle style, double dx, double dy)

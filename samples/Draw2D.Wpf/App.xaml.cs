@@ -31,6 +31,7 @@ namespace Draw2D.Wpf
             
             hitTest.Register(new PointHitTest());
             hitTest.Register(new LineHitTest());
+            hitTest.Register(new ScribbleHitTest());
             hitTest.Register(new RectangleHitTest());
             hitTest.Register(new EllipseHitTest());
             hitTest.Register(new GroupHitTest());
@@ -204,6 +205,18 @@ namespace Draw2D.Wpf
                 }
             };
 
+            var scribbleTool = new ScribbleTool()
+            {
+                Filters = new List<PointFilter>
+                {
+                },
+                Settings = new ScribbleToolSettings()
+                {
+                    Simplify = true,
+                    Epsilon = 1.0
+                }
+            };
+
             var rectangleTool = new RectangleTool()
             {
                 Filters = new List<PointFilter>
@@ -230,6 +243,7 @@ namespace Draw2D.Wpf
             tools.Add(pointTool);
             tools.Add(lineTool);
             tools.Add(polyLineTool);
+            tools.Add(scribbleTool);
             tools.Add(rectangleTool);
             tools.Add(ellipseTool);
 

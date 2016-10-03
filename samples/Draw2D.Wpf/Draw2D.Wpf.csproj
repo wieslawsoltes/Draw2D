@@ -162,6 +162,9 @@
     <Compile Include="Views\Tools\Settings\RectangleToolSettingsView.xaml.cs">
       <DependentUpon>RectangleToolSettingsView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Tools\Settings\ScribbleToolSettingsView.xaml.cs">
+      <DependentUpon>ScribbleToolSettingsView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Tools\Settings\SelectionToolSettingsView.xaml.cs">
       <DependentUpon>SelectionToolSettingsView.xaml</DependentUpon>
     </Compile>
@@ -223,6 +226,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Tools\Settings\RectangleToolSettingsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Tools\Settings\ScribbleToolSettingsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

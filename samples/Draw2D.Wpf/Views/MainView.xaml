@@ -130,6 +130,9 @@
                             <DataTemplate DataType="{x:Type EditorTools:PolyLineToolSettings}">
                                 <ViewsToolsSettings:PolyLineToolSettingsView/>
                             </DataTemplate>
+                            <DataTemplate DataType="{x:Type EditorTools:ScribbleToolSettings}">
+                                <ViewsToolsSettings:ScribbleToolSettingsView/>
+                            </DataTemplate>
                             <DataTemplate DataType="{x:Type EditorTools:RectangleToolSettings}">
                                 <ViewsToolsSettings:RectangleToolSettingsView/>
                             </DataTemplate>

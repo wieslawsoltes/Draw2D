@@ -96,6 +96,7 @@
     <Compile Include="Bounds\Shapes\LineHitTest.cs" />
     <Compile Include="Bounds\Shapes\PointHitTest.cs" />
     <Compile Include="Bounds\Shapes\RectangleHitTest.cs" />
+    <Compile Include="Bounds\Shapes\ScribbleHitTest.cs" />
     <Compile Include="Filters\GridSnapMode.cs" />
     <Compile Include="Filters\GridSnapPointFilter.cs" />
     <Compile Include="Filters\GridSnapSettings.cs" />
@@ -137,6 +138,8 @@
     <Compile Include="Tools\PolyLineToolSettings.cs" />
     <Compile Include="Tools\RectangleTool.cs" />
     <Compile Include="Tools\RectangleToolSettings.cs" />
+    <Compile Include="Tools\ScribbleTool.cs" />
+    <Compile Include="Tools\ScribbleToolSettings.cs" />
     <Compile Include="Tools\SelectionTool.cs" />
     <Compile Include="Selection\SelectionMode.cs" />
     <Compile Include="Tools\SelectionToolSettings.cs" />
