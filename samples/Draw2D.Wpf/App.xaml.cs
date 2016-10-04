@@ -28,7 +28,7 @@ namespace Draw2D.Wpf
             // HITTEST
 
             var hitTest = new HitTest();
-            
+
             hitTest.Register(new PointHitTest());
             hitTest.Register(new LineHitTest());
             hitTest.Register(new ScribbleHitTest());
@@ -205,6 +205,36 @@ namespace Draw2D.Wpf
                 }
             };
 
+            var cubicBezierTool = new CubicBezierTool()
+            {
+                Filters = new List<PointFilter>
+                {
+                    lineSnapPointFilter,
+                    gridSnapPointFilter
+                },
+                Settings = new CubicBezierToolSettings()
+            };
+
+            var quadraticBezierTool = new QuadraticBezierTool()
+            {
+                Filters = new List<PointFilter>
+                {
+                    lineSnapPointFilter,
+                    gridSnapPointFilter
+                },
+                Settings = new QuadraticBezierToolSettings()
+            };
+
+            var pathTool = new PathTool()
+            {
+                Filters = new List<PointFilter>
+                {
+                    lineSnapPointFilter,
+                    gridSnapPointFilter
+                },
+                Settings = new PathToolSettings()
+            };
+
             var scribbleTool = new ScribbleTool()
             {
                 Filters = new List<PointFilter>
@@ -243,6 +273,9 @@ namespace Draw2D.Wpf
             tools.Add(pointTool);
             tools.Add(lineTool);
             tools.Add(polyLineTool);
+            tools.Add(cubicBezierTool);
+            tools.Add(quadraticBezierTool);
+            tools.Add(pathTool);
             tools.Add(scribbleTool);
             tools.Add(rectangleTool);
             tools.Add(ellipseTool);

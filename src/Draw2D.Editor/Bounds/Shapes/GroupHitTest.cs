@@ -26,10 +26,10 @@ namespace Draw2D.Editor.Bounds.Shapes
                 }
             }
 
-            //foreach (var groupShape in group.Shapes)
+            //foreach (var groupSegment in group.Segments)
             //{
-            //    var hitTest = registered[groupShape.GetType()];
-            //    var result = hitTest.TryToGetPoint(groupShape, target, radius, registered);
+            //    var hitTest = registered[groupSegment.GetType()];
+            //    var result = hitTest.TryToGetPoint(groupSegment, target, radius, registered);
             //    if (result != null)
             //    {
             //        return result;

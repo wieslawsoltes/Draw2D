@@ -141,6 +141,9 @@
     <Compile Include="Views\Style\DrawStyleView.xaml.cs">
       <DependentUpon>DrawStyleView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Tools\Settings\CubicBezierToolSettingsView.xaml.cs">
+      <DependentUpon>CubicBezierToolSettingsView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Tools\Settings\EllipseToolSettingsView.xaml.cs">
       <DependentUpon>EllipseToolSettingsView.xaml</DependentUpon>
     </Compile>
@@ -150,14 +153,23 @@
     <Compile Include="Views\Tools\Settings\LineToolSettingsView.xaml.cs">
       <DependentUpon>LineToolSettingsView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Tools\Settings\MoveToolSettingsView.xaml.cs">
+      <DependentUpon>MoveToolSettingsView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Tools\Settings\NoneToolSettingsView.xaml.cs">
       <DependentUpon>NoneToolSettingsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Tools\Settings\PathToolSettingsView.xaml.cs">
+      <DependentUpon>PathToolSettingsView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Tools\Settings\PointToolSettingsView.xaml.cs">
       <DependentUpon>PointToolSettingsView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Tools\Settings\PolyLineToolSettingsView.xaml.cs">
       <DependentUpon>PolyLineToolSettingsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Tools\Settings\QuadraticBezierToolSettingsView.xaml.cs">
+      <DependentUpon>QuadraticBezierToolSettingsView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Tools\Settings\RectangleToolSettingsView.xaml.cs">
       <DependentUpon>RectangleToolSettingsView.xaml</DependentUpon>
@@ -201,6 +213,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\Tools\Settings\CubicBezierToolSettingsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\Tools\Settings\EllipseToolSettingsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -213,7 +229,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\Tools\Settings\MoveToolSettingsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\Tools\Settings\NoneToolSettingsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Tools\Settings\PathToolSettingsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -222,6 +246,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Tools\Settings\PolyLineToolSettingsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Tools\Settings\QuadraticBezierToolSettingsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
