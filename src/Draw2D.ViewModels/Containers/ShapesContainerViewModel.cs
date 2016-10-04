@@ -13,8 +13,8 @@ namespace Draw2D.ViewModels.Containers
     {
         private ObservableCollection<ToolBase> _tools;
         private ToolBase _currentTool;
-        private ShapesContainer _container;
-        private ShapesContainer _workingContainer;
+        private IShapesContainer _container;
+        private IShapesContainer _workingContainer;
         private DrawStyle _style;
         private BaseShape _pointShape;
         private ShapeRenderer _renderer;
@@ -50,7 +50,7 @@ namespace Draw2D.ViewModels.Containers
             }
         }
 
-        public ShapesContainer Container
+        public IShapesContainer Container
         {
             get { return _container; }
             set
@@ -63,7 +63,7 @@ namespace Draw2D.ViewModels.Containers
             }
         }
 
-        public ShapesContainer WorkingContainer
+        public IShapesContainer WorkingContainer
         {
             get { return _workingContainer; }
             set
@@ -114,7 +114,7 @@ namespace Draw2D.ViewModels.Containers
                 }
             }
         }
-        
+
         public HitTest HitTest
         {
             get { return _hitTest; }

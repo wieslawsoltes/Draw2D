@@ -4,7 +4,7 @@ using Draw2D.Models.Shapes;
 
 namespace Draw2D.Models.Containers
 {
-    public class ShapesContainer : BaseObject
+    public class ShapesContainer : BaseObject, IShapesContainer
     {
         private double _width;
         private double _height;

@@ -9,8 +9,8 @@ namespace Draw2D.Editor
 {
     public interface IToolContext
     {
-        ShapesContainer Container { get; set; }
-        ShapesContainer WorkingContainer { get; set; }
+        IShapesContainer Container { get; set; }
+        IShapesContainer WorkingContainer { get; set; }
         DrawStyle Style { get; set; }
         BaseShape PointShape { get; set; }
         ShapeRenderer Renderer { get; set; }

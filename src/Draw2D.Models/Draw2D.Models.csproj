@@ -90,6 +90,7 @@
     </Compile>
     <Compile Include="BaseObject.cs" />
     <Compile Include="BaseShape.cs" />
+    <Compile Include="Containers\IShapesContainer.cs" />
     <Compile Include="Containers\ShapesContainer.cs" />
     <Compile Include="MatrixObject.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
