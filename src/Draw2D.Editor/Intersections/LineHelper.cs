@@ -11,8 +11,8 @@ namespace Draw2D.Editor.Intersections
         public static IList<LineShape> SplitByIntersections(IToolContext context, IEnumerable<PointIntersection> intersections, LineShape target)
         {
             var points = intersections.SelectMany(i => i.Intersections).ToList();
-            points.Insert(0, target.Start);
-            points.Insert(points.Count, target.End);
+            points.Insert(0, target.StartPoint);
+            points.Insert(points.Count, target.Point);
 
             var unique = points
                 .Select(p => new Point2(p.X, p.Y)).Distinct().OrderBy(p => p)

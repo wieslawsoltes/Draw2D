@@ -8,8 +8,8 @@ namespace Draw2D.Editor.Tools
 {
     public class LineTool : ToolBase
     {
-        private enum State { Start, End };
-        private State _state = State.Start;
+        private enum State { StartPoint, Point };
+        private State _state = State.StartPoint;
         private LineShape _line = null;
 
         public override string Name { get { return "Line"; } }
@@ -24,7 +24,7 @@ namespace Draw2D.Editor.Tools
 
             switch (_state)
             {
-                case State.Start:
+                case State.StartPoint:
                     {
                         PointShape point = null;
                         if (Settings.ConnectPoints)
@@ -37,14 +37,14 @@ namespace Draw2D.Editor.Tools
                             new PointShape(x, y, context.PointShape));
                         _line.Style = context.Style;
                         context.WorkingContainer.Shapes.Add(_line);
-                        context.Selected.Add(_line.Start);
-                        context.Selected.Add(_line.End);
-                        _state = State.End;
+                        context.Selected.Add(_line.StartPoint);
+                        context.Selected.Add(_line.Point);
+                        _state = State.Point;
                     }
                     break;
-                case State.End:
+                case State.Point:
                     {
-                        _state = State.Start;
+                        _state = State.StartPoint;
 
                         PointShape point = null;
                         if (Settings.ConnectPoints)
@@ -54,17 +54,17 @@ namespace Draw2D.Editor.Tools
 
                         if (point != null)
                         {
-                            _line.End = point;
+                            _line.Point = point;
                         }
                         else
                         {
-                            _line.End.X = x;
-                            _line.End.Y = y;
+                            _line.Point.X = x;
+                            _line.Point.Y = y;
                         }
 
                         context.WorkingContainer.Shapes.Remove(_line);
-                        context.Selected.Remove(_line.Start);
-                        context.Selected.Remove(_line.End);
+                        context.Selected.Remove(_line.StartPoint);
+                        context.Selected.Remove(_line.Point);
 
                         Intersections.ForEach(i => i.Clear(context));
                         Intersections.ForEach(i => i.Find(context, _line));
@@ -91,7 +91,7 @@ namespace Draw2D.Editor.Tools
 
             switch (_state)
             {
-                case State.End:
+                case State.Point:
                     {
                         this.Clean(context);
                     }
@@ -108,10 +108,10 @@ namespace Draw2D.Editor.Tools
 
             switch (_state)
             {
-                case State.End:
+                case State.Point:
                     {
-                        _line.End.X = x;
-                        _line.End.Y = y;
+                        _line.Point.X = x;
+                        _line.Point.Y = y;
                         Intersections.ForEach(i => i.Clear(context));
                         Intersections.ForEach(i => i.Find(context, _line));
                     }
@@ -123,7 +123,7 @@ namespace Draw2D.Editor.Tools
         {
             base.Clean(context);
 
-            _state = State.Start;
+            _state = State.StartPoint;
 
             Intersections.ForEach(i => i.Clear(context));
             Filters.ForEach(f => f.Clear(context));
@@ -131,8 +131,8 @@ namespace Draw2D.Editor.Tools
             if (_line != null)
             {
                 context.WorkingContainer.Shapes.Remove(_line);
-                context.Selected.Remove(_line.Start);
-                context.Selected.Remove(_line.End);
+                context.Selected.Remove(_line.StartPoint);
+                context.Selected.Remove(_line.Point);
                 _line = null;
             }
         }

@@ -96,10 +96,15 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Renderers\ShapeRenderer.cs" />
     <Compile Include="Shapes\ConnectableShape.cs" />
+    <Compile Include="Shapes\CubicBezierShape.cs" />
     <Compile Include="Shapes\EllipseShape.cs" />
+    <Compile Include="Shapes\FigureShape.cs" />
     <Compile Include="Shapes\GroupShape.cs" />
     <Compile Include="Shapes\LineShape.cs" />
+    <Compile Include="Shapes\PathFillRule.cs" />
+    <Compile Include="Shapes\PathShape.cs" />
     <Compile Include="Shapes\PointShape.cs" />
+    <Compile Include="Shapes\QuadraticBezierShape.cs" />
     <Compile Include="Shapes\ScribbleShape.cs" />
     <Compile Include="Shapes\RectangleShape.cs" />
     <Compile Include="Style\DrawColor.cs" />

@@ -79,6 +79,64 @@ namespace Draw2D.Wpf.Renderers
                 dx, dy);
         }
 
+        private Geometry ToGeometry(PathShape path, double dx, double dy)
+        {
+            var geometry = new StreamGeometry()
+            {
+                FillRule = path.FillRule == PathFillRule.EvenOdd ? FillRule.EvenOdd : FillRule.Nonzero
+            };
+
+            using (var context = geometry.Open())
+            {
+                foreach (var figure in path.Figures)
+                {
+                    bool isFirstSegment = true;
+                    foreach (var segment in figure.Segments)
+                    {
+                        if (segment is LineShape)
+                        {
+                            var line = segment as LineShape;
+                            if (isFirstSegment)
+                            {
+                                context.BeginFigure(FromPoint(line.StartPoint, dx, dy), figure.IsFilled, figure.IsClosed);
+                                isFirstSegment = false;
+                            }
+                            context.LineTo(FromPoint(line.Point, dx, dy), true, false);
+                        }
+                        else if (segment is CubicBezierShape)
+                        {
+                            var cubicBezier = segment as CubicBezierShape;
+                            if (isFirstSegment)
+                            {
+                                context.BeginFigure(FromPoint(cubicBezier.StartPoint, dx, dy), figure.IsFilled, figure.IsClosed);
+                                isFirstSegment = false;
+                            }
+                            context.BezierTo(
+                                FromPoint(cubicBezier.Point1, dx, dy),
+                                FromPoint(cubicBezier.Point2, dx, dy),
+                                FromPoint(cubicBezier.Point3, dx, dy),
+                                true, false);
+                        }
+                        else if (segment is QuadraticBezierShape)
+                        {
+                            var quadraticBezier = segment as QuadraticBezierShape;
+                            if (isFirstSegment)
+                            {
+                                context.BeginFigure(FromPoint(quadraticBezier.StartPoint, dx, dy), figure.IsFilled, figure.IsClosed);
+                                isFirstSegment = false;
+                            }
+                            context.QuadraticBezierTo(
+                                FromPoint(quadraticBezier.Point1, dx, dy),
+                                FromPoint(quadraticBezier.Point2, dx, dy),
+                                true, false);
+                        }
+                    }
+                }
+            }
+
+            return geometry;
+        }
+
         private WpfBrushCache GetOrCreateCache(DrawStyle style)
         {
             WpfBrushCache cache;
@@ -114,7 +172,7 @@ namespace Draw2D.Wpf.Renderers
         {
             var cache = GetOrCreateCache(style);
             var _dc = dc as DrawingContext;
-            _dc.DrawLine(style.IsStroked ? cache.StrokePen : null, FromPoint(line.Start, dx, dy), FromPoint(line.End, dx, dy));
+            _dc.DrawLine(style.IsStroked ? cache.StrokePen : null, FromPoint(line.StartPoint, dx, dy), FromPoint(line.Point, dx, dy));
         }
 
         public override void DrawPolyLine(object dc, PointShape start, IList<PointShape> points, DrawStyle style, double dx, double dy)
@@ -127,6 +185,47 @@ namespace Draw2D.Wpf.Renderers
                 context.BeginFigure(FromPoint(start, dx, dy), false, false);
                 context.PolyLineTo(FromPoints(points, dx, dy), true, false);
             }
+            _dc.DrawGeometry(style.IsFilled ? cache.Fill : null, style.IsStroked ? cache.StrokePen : null, geometry);
+        }
+
+        public override void DrawCubicBezier(object dc, CubicBezierShape cubicBezier, DrawStyle style, double dx, double dy)
+        {
+            var cache = GetOrCreateCache(style);
+            var _dc = dc as DrawingContext;
+            var geometry = new StreamGeometry();
+            using (var context = geometry.Open())
+            {
+                context.BeginFigure(FromPoint(cubicBezier.StartPoint, dx, dy), false, false);
+                context.BezierTo(
+                    FromPoint(cubicBezier.Point1, dx, dy),
+                    FromPoint(cubicBezier.Point2, dx, dy),
+                    FromPoint(cubicBezier.Point3, dx, dy),
+                    true, false);
+            }
+            _dc.DrawGeometry(style.IsFilled ? cache.Fill : null, style.IsStroked ? cache.StrokePen : null, geometry);
+        }
+
+        public override void DrawQuadraticBezier(object dc, QuadraticBezierShape quadraticBezier, DrawStyle style, double dx, double dy)
+        {
+            var cache = GetOrCreateCache(style);
+            var _dc = dc as DrawingContext;
+            var geometry = new StreamGeometry();
+            using (var context = geometry.Open())
+            {
+                context.BeginFigure(FromPoint(quadraticBezier.StartPoint, dx, dy), false, false);
+                context.QuadraticBezierTo(
+                    FromPoint(quadraticBezier.Point1, dx, dy),
+                    FromPoint(quadraticBezier.Point2, dx, dy),
+                    true, false);
+            }
+            _dc.DrawGeometry(style.IsFilled ? cache.Fill : null, style.IsStroked ? cache.StrokePen : null, geometry);
+        }
+
+        public override void DrawPath(object dc, PathShape path, DrawStyle style, double dx, double dy)
+        {
+            var cache = GetOrCreateCache(style);
+            var _dc = dc as DrawingContext;
+            var geometry = ToGeometry(path, dx, dy);
             _dc.DrawGeometry(style.IsFilled ? cache.Fill : null, style.IsStroked ? cache.StrokePen : null, geometry);
         }
 

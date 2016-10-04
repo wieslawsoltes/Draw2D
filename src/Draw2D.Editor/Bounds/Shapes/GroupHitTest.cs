@@ -45,7 +45,7 @@ namespace Draw2D.Editor.Bounds.Shapes
             if (group == null)
                 throw new ArgumentNullException("shape");
 
-            foreach (var groupShape in group.Shapes)
+            foreach (var groupShape in group.Segments)
             {
                 var hitTest = registered[groupShape.GetType()];
                 var result = hitTest.Contains(groupShape, target, radius, registered);
@@ -63,7 +63,7 @@ namespace Draw2D.Editor.Bounds.Shapes
             if (group == null)
                 throw new ArgumentNullException("shape");
 
-            foreach (var groupShape in group.Shapes)
+            foreach (var groupShape in group.Segments)
             {
                 var hitTest = registered[groupShape.GetType()];
                 var result = hitTest.Overlaps(groupShape, target, radius, registered);

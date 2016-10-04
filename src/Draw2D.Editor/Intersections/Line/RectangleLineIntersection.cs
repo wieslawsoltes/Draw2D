@@ -26,8 +26,8 @@ namespace Draw2D.Editor.Intersections.Line
                 foreach (var rectangle in rectangles)
                 {
                     var rect = Rect2.FromPoints(rectangle.TopLeft.ToPoint2(), rectangle.BottomRight.ToPoint2());
-                    var p1 = line.Start.ToPoint2();
-                    var p2 = line.End.ToPoint2();
+                    var p1 = line.StartPoint.ToPoint2();
+                    var p2 = line.Point.ToPoint2();
                     double x0clip;
                     double y0clip;
                     double x1clip;

@@ -18,14 +18,14 @@ namespace Draw2D.Editor.Bounds.Shapes
 
             var pointHitTest = registered[typeof(PointShape)];
 
-            if (pointHitTest.TryToGetPoint(line.Start, target, radius, registered) != null)
+            if (pointHitTest.TryToGetPoint(line.StartPoint, target, radius, registered) != null)
             {
-                return line.Start;
+                return line.StartPoint;
             }
 
-            if (pointHitTest.TryToGetPoint(line.End, target, radius, registered) != null)
+            if (pointHitTest.TryToGetPoint(line.Point, target, radius, registered) != null)
             {
-                return line.End;
+                return line.Point;
             }
 
             foreach (var point in line.Points)
@@ -45,8 +45,8 @@ namespace Draw2D.Editor.Bounds.Shapes
             if (line == null)
                 throw new ArgumentNullException("shape");
 
-            var a = new Point2(line.Start.X, line.Start.Y);
-            var b = new Point2(line.End.X, line.End.Y);
+            var a = new Point2(line.StartPoint.X, line.StartPoint.Y);
+            var b = new Point2(line.Point.X, line.Point.Y);
             var nearest = target.NearestOnLine(a, b);
             double distance = target.DistanceTo(nearest);
             return distance < radius;
@@ -58,8 +58,8 @@ namespace Draw2D.Editor.Bounds.Shapes
             if (line == null)
                 throw new ArgumentNullException("shape");
 
-            var a = new Point2(line.Start.X, line.Start.Y);
-            var b = new Point2(line.End.X, line.End.Y);
+            var a = new Point2(line.StartPoint.X, line.StartPoint.Y);
+            var b = new Point2(line.Point.X, line.Point.Y);
             double x0clip;
             double y0clip;
             double x1clip;

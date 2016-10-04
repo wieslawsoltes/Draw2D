@@ -4,10 +4,11 @@ using Draw2D.Models.Renderers;
 
 namespace Draw2D.Models.Shapes
 {
-    public class LineShape : ConnectableShape
+    public class QuadraticBezierShape : ConnectableShape
     {
         private PointShape _startPoint;
-        private PointShape _point;
+        private PointShape _point1;
+        private PointShape _point2;
 
         public PointShape StartPoint
         {
@@ -22,39 +23,54 @@ namespace Draw2D.Models.Shapes
             }
         }
 
-        public PointShape Point
+        public PointShape Point1
         {
-            get { return _point; }
+            get { return _point1; }
             set
             {
-                if (value != _point)
+                if (value != _point1)
                 {
-                    _point = value;
-                    Notify("Point");
+                    _point1 = value;
+                    Notify("Point1");
                 }
             }
         }
 
-        public LineShape()
+        public PointShape Point2
+        {
+            get { return _point2; }
+            set
+            {
+                if (value != _point2)
+                {
+                    _point2 = value;
+                    Notify("Point2");
+                }
+            }
+        }
+
+        public QuadraticBezierShape()
             : base()
         {
         }
 
-        public LineShape(PointShape startPoint, PointShape point)
+        public QuadraticBezierShape(PointShape startPoint, PointShape point1, PointShape point2)
             : base()
         {
             this.StartPoint = startPoint;
-            this.Point = point;
+            this.Point1 = point1;
+            this.Point2 = point2;
         }
 
         public override void Draw(object dc, ShapeRenderer r, double dx, double dy)
         {
             base.BeginTransform(dc, r);
 
-            r.DrawLine(dc, this, Style, dx, dy);
+            r.DrawQuadraticBezier(dc, this, Style, dx, dy);
 
-            _startPoint.Draw(dc, r, dx, dy); 
-            _point.Draw(dc, r, dx, dy);
+            _startPoint.Draw(dc, r, dx, dy);
+            _point1.Draw(dc, r, dx, dy);
+            _point2.Draw(dc, r, dx, dy);
 
             base.Draw(dc, r, dx, dy);
             base.EndTransform(dc, r);
@@ -67,9 +83,14 @@ namespace Draw2D.Models.Shapes
                 _startPoint.Move(selected, dx, dy);
             }
 
-            if (!selected.Contains(_point))
+            if (!selected.Contains(_point1))
             {
-                _point.Move(selected, dx, dy);
+                _point1.Move(selected, dx, dy);
+            }
+
+            if (!selected.Contains(_point2))
+            {
+                _point2.Move(selected, dx, dy);
             }
 
             base.Move(selected, dx, dy);
@@ -79,14 +100,16 @@ namespace Draw2D.Models.Shapes
         {
             base.Select(selected);
             StartPoint.Select(selected);
-            Point.Select(selected);
+            Point1.Select(selected);
+            Point2.Select(selected);
         }
 
         public override void Deselect(ISet<BaseShape> selected)
         {
             base.Deselect(selected);
             StartPoint.Deselect(selected);
-            Point.Deselect(selected);
+            Point1.Deselect(selected);
+            Point2.Deselect(selected);
         }
     }
 }

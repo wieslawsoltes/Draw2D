@@ -88,17 +88,17 @@ namespace Draw2D.Editor.Filters
         
             foreach (var line in lines)
             {
-                var distance0 = line.Start.ToPoint2().DistanceTo(point);
+                var distance0 = line.StartPoint.ToPoint2().DistanceTo(point);
                 if (distance0 < threshold)
                 {
-                    snap = new Point2(line.Start.X, line.Start.Y);
+                    snap = new Point2(line.StartPoint.X, line.StartPoint.Y);
                     result = LineSnapMode.Point;
                     return true;
                 }
-                var distance1 = line.End.ToPoint2().DistanceTo(point);
+                var distance1 = line.Point.ToPoint2().DistanceTo(point);
                 if (distance1 < threshold)
                 {
-                    snap = new Point2(line.End.X, line.End.Y);
+                    snap = new Point2(line.Point.X, line.Point.Y);
                     result = LineSnapMode.Point;
                     return true;
                 }
@@ -113,7 +113,7 @@ namespace Draw2D.Editor.Filters
         
             foreach (var line in lines)
             {
-                var middle = Line2.Middle(line.Start.ToPoint2(), line.End.ToPoint2());
+                var middle = Line2.Middle(line.StartPoint.ToPoint2(), line.Point.ToPoint2());
                 var distance = middle.DistanceTo(point);
                 if (distance < threshold)
                 {
@@ -137,7 +137,7 @@ namespace Draw2D.Editor.Filters
                     if (line0 == line1)
                         continue;
                     Point2 clip;
-                    if (Line2.LineIntersectWithLine(line0.Start.ToPoint2(), line0.End.ToPoint2(), line1.Start.ToPoint2(), line1.End.ToPoint2(), out clip))
+                    if (Line2.LineIntersectWithLine(line0.StartPoint.ToPoint2(), line0.Point.ToPoint2(), line1.StartPoint.ToPoint2(), line1.Point.ToPoint2(), out clip))
                     {
                         var distance = clip.DistanceTo(point);
                         if (distance < threshold)
@@ -160,18 +160,18 @@ namespace Draw2D.Editor.Filters
             
             foreach (var line in lines)
             {
-                if (point.Y >= line.Start.Y - threshold && point.Y <= line.Start.Y + threshold)
+                if (point.Y >= line.StartPoint.Y - threshold && point.Y <= line.StartPoint.Y + threshold)
                 {
-                    snap = new Point2(point.X, line.Start.Y);
+                    snap = new Point2(point.X, line.StartPoint.Y);
                     result |= LineSnapMode.Horizontal;
-                    horizontal = line.Start.Y;
+                    horizontal = line.StartPoint.Y;
                     return true;
                 }
-                if (point.Y >= line.End.Y - threshold && point.Y <= line.End.Y + threshold)
+                if (point.Y >= line.Point.Y - threshold && point.Y <= line.Point.Y + threshold)
                 {
-                    snap = new Point2(point.X, line.Start.Y);
+                    snap = new Point2(point.X, line.StartPoint.Y);
                     result |= LineSnapMode.Horizontal;
-                    horizontal = line.End.Y;
+                    horizontal = line.Point.Y;
                     return true;
                 }
             }
@@ -186,18 +186,18 @@ namespace Draw2D.Editor.Filters
             
             foreach (var line in lines)
             {
-                if (point.X >= line.Start.X - threshold && point.X <= line.Start.X + threshold)
+                if (point.X >= line.StartPoint.X - threshold && point.X <= line.StartPoint.X + threshold)
                 {
-                    snap = new Point2(line.Start.X, point.Y);
+                    snap = new Point2(line.StartPoint.X, point.Y);
                     result |= LineSnapMode.Vertical;
-                    vertical = line.Start.X;
+                    vertical = line.StartPoint.X;
                     return true;
                 }
-                if (point.X >= line.End.X - threshold && point.X <= line.End.X + threshold)
+                if (point.X >= line.Point.X - threshold && point.X <= line.Point.X + threshold)
                 {
-                    snap = new Point2(line.End.X, point.Y);
+                    snap = new Point2(line.Point.X, point.Y);
                     result |= LineSnapMode.Vertical;
-                    vertical = line.End.X;
+                    vertical = line.Point.X;
                     return true;
                 }
             }
@@ -211,7 +211,7 @@ namespace Draw2D.Editor.Filters
             
             foreach (var line in lines)
             {
-                var nearest = point.NearestOnLine(line.Start.ToPoint2(), line.End.ToPoint2());
+                var nearest = point.NearestOnLine(line.StartPoint.ToPoint2(), line.Point.ToPoint2());
                 var distance = nearest.DistanceTo(point);
                 if (distance < threshold)
                 {

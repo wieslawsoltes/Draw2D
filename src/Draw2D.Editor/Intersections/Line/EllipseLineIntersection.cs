@@ -27,8 +27,8 @@ namespace Draw2D.Editor.Intersections.Line
                 foreach (var ellipse in ellipses)
                 {
                     var rect = Rect2.FromPoints(ellipse.TopLeft.ToPoint2(), ellipse.BottomRight.ToPoint2());
-                    var p1 = line.Start.ToPoint2();
-                    var p2 = line.End.ToPoint2();
+                    var p1 = line.StartPoint.ToPoint2();
+                    var p2 = line.Point.ToPoint2();
                     IList<Point2> intersections;
                     Line2.LineIntersectsWithEllipse(p1, p2, rect, true, out intersections);
                     if (intersections != null && intersections.Any())

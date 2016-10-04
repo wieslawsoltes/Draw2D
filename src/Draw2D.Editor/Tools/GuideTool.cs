@@ -35,8 +35,8 @@ namespace Draw2D.Editor.Tools
                 case State.End:
                     {
                         _state = State.Start;
-                        _line.End.X = x;
-                        _line.End.Y = y;
+                        _line.Point.X = x;
+                        _line.Point.Y = y;
                         context.WorkingContainer.Shapes.Remove(_line);
                         context.CurrentContainer.Guides.Add(_line);
                         _line = null;
@@ -70,8 +70,8 @@ namespace Draw2D.Editor.Tools
             {
                 case State.End:
                     {
-                        _line.End.X = x;
-                        _line.End.Y = y;
+                        _line.Point.X = x;
+                        _line.Point.Y = y;
                     }
                     break;
             }

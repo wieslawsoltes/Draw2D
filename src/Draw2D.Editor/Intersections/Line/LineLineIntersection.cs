@@ -23,12 +23,12 @@ namespace Draw2D.Editor.Intersections.Line
             var lines = context.CurrentContainer.Shapes.OfType<LineShape>();
             if (lines.Any())
             {
-                var a0 = line.Start.ToPoint2();
-                var b0 = line.End.ToPoint2();
+                var a0 = line.StartPoint.ToPoint2();
+                var b0 = line.Point.ToPoint2();
                 foreach (var l in lines)
                 {
-                    var a1 = l.Start.ToPoint2();
-                    var b1 = l.End.ToPoint2();
+                    var a1 = l.StartPoint.ToPoint2();
+                    var b1 = l.Point.ToPoint2();
                     Point2 clip;
                     var intersection = Line2.LineIntersectWithLine(a0, b0, a1, b1, out clip);
                     if (intersection)

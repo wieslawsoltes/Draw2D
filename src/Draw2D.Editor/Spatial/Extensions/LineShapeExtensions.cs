@@ -8,8 +8,8 @@ namespace Draw2D.Models.Shapes
         public static Line2 ToLine2(this LineShape line, double dx = 0.0, double dy = 0.0)
         {
             return Line2.FromPoints(
-                line.Start.X, line.Start.Y,
-                line.End.X, line.End.Y,
+                line.StartPoint.X, line.StartPoint.Y,
+                line.Point.X, line.Point.Y,
                 dx, dy);
         }
 

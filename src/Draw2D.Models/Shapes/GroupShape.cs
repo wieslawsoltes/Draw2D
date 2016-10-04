@@ -7,17 +7,17 @@ namespace Draw2D.Models.Shapes
 {
     public class GroupShape : ConnectableShape
     {
-        private ObservableCollection<BaseShape> _shapes;
+        private ObservableCollection<BaseShape> _segments;
 
-        public ObservableCollection<BaseShape> Shapes
+        public ObservableCollection<BaseShape> Segments
         {
-            get { return _shapes; }
+            get { return _segments; }
             set
             {
-                if (value != _shapes)
+                if (value != _segments)
                 {
-                    _shapes = value;
-                    Notify("Shapes");
+                    _segments = value;
+                    Notify("Segments");
                 }
             }
         }
@@ -25,13 +25,13 @@ namespace Draw2D.Models.Shapes
         public GroupShape()
             : base()
         {
-            _shapes = new ObservableCollection<BaseShape>();
+            _segments = new ObservableCollection<BaseShape>();
         }
 
-        public GroupShape(ObservableCollection<BaseShape> shapes)
+        public GroupShape(ObservableCollection<BaseShape> segments)
             : base()
         {
-            this.Shapes = shapes;
+            this.Segments = segments;
         }
 
         public GroupShape(string name)
@@ -40,20 +40,20 @@ namespace Draw2D.Models.Shapes
             this.Name = name;
         }
 
-        public GroupShape(string name, ObservableCollection<BaseShape> shapes)
+        public GroupShape(string name, ObservableCollection<BaseShape> segments)
             : base()
         {
             this.Name = name;
-            this.Shapes = shapes;
+            this.Segments = segments;
         }
 
         public override void Draw(object dc, ShapeRenderer r, double dx, double dy)
         {
             base.BeginTransform(dc, r);
 
-            foreach (var shape in Shapes)
+            foreach (var segment in Segments)
             {
-                shape.Draw(dc, r, dx, dy);
+                segment.Draw(dc, r, dx, dy);
             }
 
             base.Draw(dc, r, dx, dy);
@@ -62,11 +62,11 @@ namespace Draw2D.Models.Shapes
 
         public override void Move(ISet<BaseShape> selected, double dx, double dy)
         {
-            foreach (var shape in Shapes)
+            foreach (var segment in Segments)
             {
-                if (!selected.Contains(shape))
+                if (!selected.Contains(segment))
                 {
-                    shape.Move(selected, dx, dy);
+                    segment.Move(selected, dx, dy);
                 }
             }
 
