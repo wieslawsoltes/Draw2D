@@ -123,7 +123,7 @@ namespace Draw2D.Wpf.Views
                 Height = 630
             };
             var workingContainer = new ShapesContainer();
-            vm.Container = container;
+            vm.CurrentContainer = container;
             vm.WorkingContainer = new ShapesContainer();
         }
 
@@ -134,13 +134,13 @@ namespace Draw2D.Wpf.Views
             var workingContainer = new ShapesContainer();
             vm.CurrentTool.Clean(vm);
             vm.Renderer.Selected.Clear();
-            vm.Container = container;
+            vm.CurrentContainer = container;
             vm.WorkingContainer = workingContainer;
         }
 
         private void Save(string path, ShapesContainerViewModel vm)
         {
-            var yaml = YamlHelper.ToYaml(vm.Container);
+            var yaml = YamlHelper.ToYaml(vm.CurrentContainer);
             File.WriteAllText(path, yaml);
         }
 
@@ -156,7 +156,7 @@ namespace Draw2D.Wpf.Views
             var shapes = new List<BaseShape>();
             foreach (var shape in selected)
             {
-                if (vm.Container.Shapes.Contains(shape))
+                if (vm.CurrentContainer.Shapes.Contains(shape))
                 {
                     shapes.Add(shape);
                 }
@@ -175,7 +175,7 @@ namespace Draw2D.Wpf.Views
                 vm.Renderer.Selected.Clear();
                 foreach (var shape in shapes)
                 {
-                    vm.Container.Shapes.Add(shape);
+                    vm.CurrentContainer.Shapes.Add(shape);
                     shape.Select(vm.Renderer.Selected);
                 }
             }
@@ -186,9 +186,9 @@ namespace Draw2D.Wpf.Views
             var selected = vm.Renderer.Selected;
             foreach (var shape in selected)
             {
-                if (vm.Container.Shapes.Contains(shape))
+                if (vm.CurrentContainer.Shapes.Contains(shape))
                 {
-                    vm.Container.Shapes.Remove(shape);
+                    vm.CurrentContainer.Shapes.Remove(shape);
                 }
             }
             vm.Renderer.Selected.Clear();

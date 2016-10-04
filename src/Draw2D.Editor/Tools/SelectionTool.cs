@@ -171,7 +171,7 @@ namespace Draw2D.Editor.Tools
 
                                 if (Settings.ConnectPoints)
                                 {
-                                    PointShape result = context.HitTest.TryToGetPoint(context.Container.Shapes, new Point2(point.X, point.Y), Settings.ConnectTestRadius);
+                                    PointShape result = context.HitTest.TryToGetPoint(context.CurrentContainer.Shapes, new Point2(point.X, point.Y), Settings.ConnectTestRadius);
                                     if (result != point)
                                     {
                                         // TODO: Connect point.

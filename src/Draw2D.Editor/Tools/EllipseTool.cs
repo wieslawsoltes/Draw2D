@@ -42,7 +42,7 @@ namespace Draw2D.Editor.Tools
                         context.WorkingContainer.Shapes.Remove(_ellipse);
                         context.Renderer.Selected.Remove(_ellipse.TopLeft);
                         context.Renderer.Selected.Remove(_ellipse.BottomRight);
-                        context.Container.Shapes.Add(_ellipse);
+                        context.CurrentContainer.Shapes.Add(_ellipse);
                         _ellipse = null;
                     }
                     break;

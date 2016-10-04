@@ -20,7 +20,7 @@ namespace Draw2D.Editor.Intersections.Line
             if (!Settings.IsEnabled)
                 return;
 
-            var lines = context.Container.Shapes.OfType<LineShape>();
+            var lines = context.CurrentContainer.Shapes.OfType<LineShape>();
             if (lines.Any())
             {
                 var a0 = line.Start.ToPoint2();

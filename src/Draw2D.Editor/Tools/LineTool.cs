@@ -29,7 +29,7 @@ namespace Draw2D.Editor.Tools
                         PointShape point = null;
                         if (Settings.ConnectPoints)
                         {
-                            point = context.HitTest.TryToGetPoint(context.Container.Shapes, new Point2(x, y), Settings.HitTestRadius);
+                            point = context.HitTest.TryToGetPoint(context.CurrentContainer.Shapes, new Point2(x, y), Settings.HitTestRadius);
                         }
 
                         _line = new LineShape(
@@ -49,7 +49,7 @@ namespace Draw2D.Editor.Tools
                         PointShape point = null;
                         if (Settings.ConnectPoints)
                         {
-                            point = context.HitTest.TryToGetPoint(context.Container.Shapes, new Point2(x, y), Settings.HitTestRadius);
+                            point = context.HitTest.TryToGetPoint(context.CurrentContainer.Shapes, new Point2(x, y), Settings.HitTestRadius);
                         }
 
                         if (point != null)
@@ -75,7 +75,7 @@ namespace Draw2D.Editor.Tools
                         }
                         else
                         {
-                            context.Container.Shapes.Add(_line);
+                            context.CurrentContainer.Shapes.Add(_line);
                         }
 
                         _line = null;

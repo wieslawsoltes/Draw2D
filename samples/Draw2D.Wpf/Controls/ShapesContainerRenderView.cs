@@ -14,12 +14,12 @@ namespace Draw2D.Wpf.Controls
             var vm = this.DataContext as ShapesContainerViewModel;
             if (vm != null)
             {
-                foreach (var shape in vm.Container.Guides)
+                foreach (var shape in vm.CurrentContainer.Guides)
                 {
                     shape.Draw(dc, vm.Renderer, 0.0, 0.0);
                 }
 
-                foreach (var shape in vm.Container.Shapes)
+                foreach (var shape in vm.CurrentContainer.Shapes)
                 {
                     shape.Draw(dc, vm.Renderer, 0.0, 0.0);
                 }

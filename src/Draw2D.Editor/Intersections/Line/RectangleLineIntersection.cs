@@ -20,7 +20,7 @@ namespace Draw2D.Editor.Intersections.Line
             if (!Settings.IsEnabled)
                 return;
 
-            var rectangles = context.Container.Shapes.OfType<RectangleShape>();
+            var rectangles = context.CurrentContainer.Shapes.OfType<RectangleShape>();
             if (rectangles.Any())
             {
                 foreach (var rectangle in rectangles)

@@ -42,7 +42,7 @@ namespace Draw2D.Editor.Tools
                         context.WorkingContainer.Shapes.Remove(_rectangle);
                         context.Renderer.Selected.Remove(_rectangle.TopLeft);
                         context.Renderer.Selected.Remove(_rectangle.BottomRight);
-                        context.Container.Shapes.Add(_rectangle);
+                        context.CurrentContainer.Shapes.Add(_rectangle);
                         _rectangle = null;
                     }
                     break;

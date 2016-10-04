@@ -38,7 +38,7 @@ namespace Draw2D.Editor.Tools
                         _line.End.X = x;
                         _line.End.Y = y;
                         context.WorkingContainer.Shapes.Remove(_line);
-                        context.Container.Guides.Add(_line);
+                        context.CurrentContainer.Guides.Add(_line);
                         _line = null;
                     }
                     break;

@@ -21,7 +21,7 @@ namespace Draw2D.Editor.Intersections.Line
             if (!Settings.IsEnabled)
                 return;
 
-            var ellipses = context.Container.Shapes.OfType<EllipseShape>();
+            var ellipses = context.CurrentContainer.Shapes.OfType<EllipseShape>();
             if (ellipses.Any())
             {
                 foreach (var ellipse in ellipses)

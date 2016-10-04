@@ -24,7 +24,7 @@ namespace Draw2D.Editor.Intersections
                 var line = new LineShape(unique[i], unique[i + 1]);
                 line.Style = context.Style;
 
-                context.Container.Shapes.Add(line);
+                context.CurrentContainer.Shapes.Add(line);
                 lines.Add(line);
             }
 

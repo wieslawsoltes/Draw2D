@@ -16,7 +16,7 @@ namespace Draw2D.Editor.Filters
         {
             if (Settings.Target.HasFlag(LineSnapTarget.Guides))
             {
-                if (Process(context, ref x, ref y, context.Container.Guides))
+                if (Process(context, ref x, ref y, context.CurrentContainer.Guides))
                 {
                     return true;
                 }
@@ -24,7 +24,7 @@ namespace Draw2D.Editor.Filters
 
             if (Settings.Target.HasFlag(LineSnapTarget.Shapes))
             {
-                if (Process(context, ref x, ref y, context.Container.Shapes.OfType<LineShape>()))
+                if (Process(context, ref x, ref y, context.CurrentContainer.Shapes.OfType<LineShape>()))
                 {
                     return true;
                 }
@@ -64,12 +64,12 @@ namespace Draw2D.Editor.Filters
         {
             var horizontal = new LineShape(
                 new PointShape(0, y, null),
-                new PointShape(context.Container.Width, y, null));
+                new PointShape(context.CurrentContainer.Width, y, null));
             horizontal.Style = Settings.GuideStyle;
 
             var vertical = new LineShape(
                 new PointShape(x, 0, null),
-                new PointShape(x, context.Container.Height, null));
+                new PointShape(x, context.CurrentContainer.Height, null));
             vertical.Style = Settings.GuideStyle;
 
             Guides.Add(horizontal);

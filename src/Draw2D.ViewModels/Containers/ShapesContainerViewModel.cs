@@ -50,7 +50,7 @@ namespace Draw2D.ViewModels.Containers
             }
         }
 
-        public IShapesContainer Container
+        public IShapesContainer CurrentContainer
         {
             get { return _container; }
             set

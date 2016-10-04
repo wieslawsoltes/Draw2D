@@ -293,7 +293,7 @@ namespace Draw2D.Wpf
             {
                 Tools = tools,
                 CurrentTool = currentTool,
-                Container = container,
+                CurrentContainer = container,
                 WorkingContainer = workingContainer,
                 Style = style,
                 PointShape = pointShape,

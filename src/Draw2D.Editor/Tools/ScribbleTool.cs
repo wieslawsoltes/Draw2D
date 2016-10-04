@@ -66,7 +66,7 @@ namespace Draw2D.Editor.Tools
                             }
                         }
                         context.WorkingContainer.Shapes.Remove(_scribble);
-                        context.Container.Shapes.Add(_scribble);
+                        context.CurrentContainer.Shapes.Add(_scribble);
                         _scribble = null;
                     }
                     break;
