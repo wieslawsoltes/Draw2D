@@ -42,8 +42,8 @@ namespace Draw2D.Editor.Tools
                         _points.Add(_line.Start);
                         _points.Add(_line.End);
                         context.WorkingContainer.Shapes.Add(_line);
-                        context.Renderer.Selected.Add(_line.Start);
-                        context.Renderer.Selected.Add(_line.End);
+                        context.Selected.Add(_line.Start);
+                        context.Selected.Add(_line.End);
                         _state = State.End;
                     }
                     break;
@@ -60,9 +60,9 @@ namespace Draw2D.Editor.Tools
                             _line.End = point;
 
                             _points[_points.Count - 1] = _line.End;
-                            if (!context.Renderer.Selected.Contains(_line.End))
+                            if (!context.Selected.Contains(_line.End))
                             {
-                                context.Renderer.Selected.Add(_line.End);
+                                context.Selected.Add(_line.End);
                             }
                         }
                         else
@@ -80,7 +80,7 @@ namespace Draw2D.Editor.Tools
                         _line.Style = context.Style;
                         _points.Add(_line.End);
                         context.WorkingContainer.Shapes.Add(_line);
-                        context.Renderer.Selected.Add(_line.End);
+                        context.Selected.Add(_line.End);
 
                         Intersections.ForEach(i => i.Clear(context));
                         Filters.ForEach(f => f.Clear(context));
@@ -140,7 +140,7 @@ namespace Draw2D.Editor.Tools
 
             if (_points != null)
             {
-                _points.ForEach(point => context.Renderer.Selected.Remove(point));
+                _points.ForEach(point => context.Selected.Remove(point));
                 _points = null;
             }
         }

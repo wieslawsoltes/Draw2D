@@ -29,8 +29,8 @@ namespace Draw2D.Editor.Tools
                             new PointShape(x, y, context.PointShape));
                         _rectangle.Style = context.Style;
                         context.WorkingContainer.Shapes.Add(_rectangle);
-                        context.Renderer.Selected.Add(_rectangle.TopLeft);
-                        context.Renderer.Selected.Add(_rectangle.BottomRight);
+                        context.Selected.Add(_rectangle.TopLeft);
+                        context.Selected.Add(_rectangle.BottomRight);
                         _state = State.BottomRight;
                     }
                     break;
@@ -40,8 +40,8 @@ namespace Draw2D.Editor.Tools
                         _rectangle.BottomRight.X = x;
                         _rectangle.BottomRight.Y = y;
                         context.WorkingContainer.Shapes.Remove(_rectangle);
-                        context.Renderer.Selected.Remove(_rectangle.TopLeft);
-                        context.Renderer.Selected.Remove(_rectangle.BottomRight);
+                        context.Selected.Remove(_rectangle.TopLeft);
+                        context.Selected.Remove(_rectangle.BottomRight);
                         context.CurrentContainer.Shapes.Add(_rectangle);
                         _rectangle = null;
                     }
@@ -92,8 +92,8 @@ namespace Draw2D.Editor.Tools
             if (_rectangle != null)
             {
                 context.WorkingContainer.Shapes.Remove(_rectangle);
-                context.Renderer.Selected.Remove(_rectangle.TopLeft);
-                context.Renderer.Selected.Remove(_rectangle.BottomRight);
+                context.Selected.Remove(_rectangle.TopLeft);
+                context.Selected.Remove(_rectangle.BottomRight);
                 _rectangle = null;
             }
         }

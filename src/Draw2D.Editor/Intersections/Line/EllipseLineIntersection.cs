@@ -38,7 +38,7 @@ namespace Draw2D.Editor.Intersections.Line
                             var point = new PointShape(p.X, p.Y, context.PointShape);
                             Intersections.Add(point);
                             context.WorkingContainer.Shapes.Add(point);
-                            context.Renderer.Selected.Add(point);
+                            context.Selected.Add(point);
                         }
                     }
                 }

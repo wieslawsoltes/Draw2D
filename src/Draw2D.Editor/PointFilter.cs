@@ -21,7 +21,7 @@ namespace Draw2D.Editor
             foreach (var guide in Guides)
             {
                 context.WorkingContainer.Shapes.Remove(guide);
-                context.Renderer.Selected.Remove(guide);
+                context.Selected.Remove(guide);
             }
             Guides.Clear();
         }

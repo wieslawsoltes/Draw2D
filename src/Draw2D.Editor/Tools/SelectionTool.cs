@@ -52,7 +52,7 @@ namespace Draw2D.Editor.Tools
 
                             if (!modifier.HasFlag(Modifier.Control))
                             {
-                                context.Renderer.Selected.Clear();
+                                context.Selected.Clear();
                             }
 
                             if (_rectangle == null)
@@ -159,11 +159,11 @@ namespace Draw2D.Editor.Tools
                         _previousX = x;
                         _previousY = y;
 
-                        if (context.Renderer.Selected.Count == 1)
+                        if (context.Selected.Count == 1)
                         {
-                            var shape = context.Renderer.Selected.FirstOrDefault();
+                            var shape = context.Selected.FirstOrDefault();
 
-                            shape.Move(context.Renderer.Selected, dx, dy);
+                            shape.Move(context.Selected, dx, dy);
 
                             if (shape.GetType() == typeof(PointShape))
                             {
@@ -190,9 +190,9 @@ namespace Draw2D.Editor.Tools
                         }
                         else
                         {
-                            foreach (var shape in context.Renderer.Selected)
+                            foreach (var shape in context.Selected)
                             {
-                                shape.Move(context.Renderer.Selected, dx, dy);
+                                shape.Move(context.Selected, dx, dy);
                             }
                         }
                     }
@@ -213,7 +213,7 @@ namespace Draw2D.Editor.Tools
                 _rectangle = null;
             }
 
-            context.Renderer.Selected.Clear();
+            context.Selected.Clear();
 
             Filters.ForEach(f => f.Clear(context));
         }

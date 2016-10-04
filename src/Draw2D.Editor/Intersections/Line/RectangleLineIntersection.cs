@@ -38,12 +38,12 @@ namespace Draw2D.Editor.Intersections.Line
                         var point1 = new PointShape(x0clip, y0clip, context.PointShape);
                         Intersections.Add(point1);
                         context.WorkingContainer.Shapes.Add(point1);
-                        context.Renderer.Selected.Add(point1);
+                        context.Selected.Add(point1);
 
                         var point2 = new PointShape(x1clip, y1clip, context.PointShape);
                         Intersections.Add(point2);
                         context.WorkingContainer.Shapes.Add(point2);
-                        context.Renderer.Selected.Add(point2);
+                        context.Selected.Add(point2);
                     }
                 }
             }

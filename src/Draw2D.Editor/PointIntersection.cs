@@ -22,7 +22,7 @@ namespace Draw2D.Editor
             foreach (var point in Intersections)
             {
                 context.WorkingContainer.Shapes.Remove(point);
-                context.Renderer.Selected.Remove(point);
+                context.Selected.Remove(point);
             }
             Intersections.Clear();
         }

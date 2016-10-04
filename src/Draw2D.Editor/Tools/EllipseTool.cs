@@ -29,8 +29,8 @@ namespace Draw2D.Editor.Tools
                             new PointShape(x, y, context.PointShape));
                         _ellipse.Style = context.Style;
                         context.WorkingContainer.Shapes.Add(_ellipse);
-                        context.Renderer.Selected.Add(_ellipse.TopLeft);
-                        context.Renderer.Selected.Add(_ellipse.BottomRight);
+                        context.Selected.Add(_ellipse.TopLeft);
+                        context.Selected.Add(_ellipse.BottomRight);
                         _state = State.BottomRight;
                     }
                     break;
@@ -40,8 +40,8 @@ namespace Draw2D.Editor.Tools
                         _ellipse.BottomRight.X = x;
                         _ellipse.BottomRight.Y = y;
                         context.WorkingContainer.Shapes.Remove(_ellipse);
-                        context.Renderer.Selected.Remove(_ellipse.TopLeft);
-                        context.Renderer.Selected.Remove(_ellipse.BottomRight);
+                        context.Selected.Remove(_ellipse.TopLeft);
+                        context.Selected.Remove(_ellipse.BottomRight);
                         context.CurrentContainer.Shapes.Add(_ellipse);
                         _ellipse = null;
                     }
@@ -92,8 +92,8 @@ namespace Draw2D.Editor.Tools
             if (_ellipse != null)
             {
                 context.WorkingContainer.Shapes.Remove(_ellipse);
-                context.Renderer.Selected.Remove(_ellipse.TopLeft);
-                context.Renderer.Selected.Remove(_ellipse.BottomRight);
+                context.Selected.Remove(_ellipse.TopLeft);
+                context.Selected.Remove(_ellipse.BottomRight);
                 _ellipse = null;
             }
         }

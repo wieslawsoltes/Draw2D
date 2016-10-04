@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Draw2D.Editor;
 using Draw2D.Editor.Bounds;
@@ -13,11 +14,12 @@ namespace Draw2D.ViewModels.Containers
     {
         private ObservableCollection<ToolBase> _tools;
         private ToolBase _currentTool;
-        private IShapesContainer _container;
+        private ShapeRenderer _renderer;
+        private HashSet<BaseShape> _selected;
+        private IShapesContainer _currentContainer;
         private IShapesContainer _workingContainer;
         private DrawStyle _style;
         private BaseShape _pointShape;
-        private ShapeRenderer _renderer;
         private HitTest _hitTest;
 
         public ObservableCollection<ToolBase> Tools
@@ -50,14 +52,40 @@ namespace Draw2D.ViewModels.Containers
             }
         }
 
-        public IShapesContainer CurrentContainer
+        public ShapeRenderer Renderer
         {
-            get { return _container; }
+            get { return _renderer; }
             set
             {
-                if (value != _container)
+                if (value != _renderer)
                 {
-                    _container = value;
+                    _renderer = value;
+                    Notify("Renderer");
+                }
+            }
+        }
+
+        public HashSet<BaseShape> Selected
+        {
+            get { return _selected; }
+            set
+            {
+                if (value != _selected)
+                {
+                    _selected = value;
+                    Notify("Selected");
+                }
+            }
+        }
+
+        public IShapesContainer CurrentContainer
+        {
+            get { return _currentContainer; }
+            set
+            {
+                if (value != _currentContainer)
+                {
+                    _currentContainer = value;
                     Notify("Container");
                 }
             }
@@ -98,19 +126,6 @@ namespace Draw2D.ViewModels.Containers
                 {
                     _pointShape = value;
                     Notify("PointShape");
-                }
-            }
-        }
-
-        public ShapeRenderer Renderer
-        {
-            get { return _renderer; }
-            set
-            {
-                if (value != _renderer)
-                {
-                    _renderer = value;
-                    Notify("Renderer");
                 }
             }
         }

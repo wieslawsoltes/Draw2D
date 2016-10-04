@@ -74,11 +74,11 @@ namespace Draw2D.Editor.Filters
 
             Guides.Add(horizontal);
             context.WorkingContainer.Shapes.Add(horizontal);
-            context.Renderer.Selected.Add(horizontal);
+            context.Selected.Add(horizontal);
 
             Guides.Add(vertical);
             context.WorkingContainer.Shapes.Add(vertical);
-            context.Renderer.Selected.Add(vertical);
+            context.Selected.Add(vertical);
         }
 
         public static bool SnapLinesToPoint(IEnumerable<LineShape> lines, double threshold, Point2 point, out Point2 snap, out LineSnapMode result)

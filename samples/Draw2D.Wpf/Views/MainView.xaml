@@ -72,7 +72,7 @@
             </TabControl>
         </Grid>
         <Controls:ShapesContainerInputView x:Name="InputView" Grid.Row="2" Grid.Column="1" Background="Transparent" ClipToBounds="True">
-            <Controls:ShapesContainerRenderView x:Name="RendererView" Width="{Binding Container.Width}" Height="{Binding Container.Height}" Background="SlateGray" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            <Controls:ShapesContainerRenderView x:Name="RendererView" Width="{Binding CurrentContainer.Width}" Height="{Binding CurrentContainer.Height}" Background="SlateGray" VerticalAlignment="Center" HorizontalAlignment="Center"/>
         </Controls:ShapesContainerInputView>
         <Grid Grid.Row="2" Grid.Column="2">
             <Grid.RowDefinitions>
@@ -81,7 +81,7 @@
             </Grid.RowDefinitions>
             <TabControl Grid.Row="0">
                 <TabItem Header="Shapes">
-                    <ListBox ItemsSource="{Binding Container.Shapes}">
+                    <ListBox ItemsSource="{Binding CurrentContainer.Shapes}">
                         <ListBox.ItemTemplate>
                             <DataTemplate>
                                 <TextBlock Text="{Binding}"/>
@@ -90,7 +90,7 @@
                     </ListBox>
                 </TabItem>
                 <TabItem Header="Guides">
-                    <ListBox ItemsSource="{Binding Container.Guides}">
+                    <ListBox ItemsSource="{Binding CurrentContainer.Guides}">
                         <ListBox.ItemTemplate>
                             <DataTemplate>
                                 <TextBlock Text="{Binding}"/>
