@@ -1,0 +1,91 @@
+﻿<UserControl x:Class="Core2D.Views.EditorView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:vm="clr-namespace:Core2D.ViewModels"
+             xmlns:project="clr-namespace:Core2D.Views.Project"
+             Focusable="True"
+             mc:Ignorable="d" 
+             d:DesignHeight="400" d:DesignWidth="600">
+    <UserControl.Resources>
+        <DataTemplate DataType="{x:Type vm:PropertyViewModel}">
+            <project:PropertyView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:ShapeViewModel}">
+            <project:ShapeView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:LayerViewModel}">
+            <project:LayerView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:PageViewModel}">
+            <project:PageView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:DocumentViewModel}">
+            <project:DocumentView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:ProjectViewModel}">
+            <project:ProjectView/>
+        </DataTemplate>
+    </UserControl.Resources>
+    <UserControl.InputBindings>
+        <KeyBinding Command="{Binding UndoHistoryCommand}" Gesture="Ctrl+Z"/>
+        <KeyBinding Command="{Binding RedoHistoryCommand}" Gesture="Ctrl+Y"/>
+    </UserControl.InputBindings>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="150"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="5"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Menu Grid.Column="0" Grid.Row="0" Background="Transparent">
+            <MenuItem Header="_File">
+                <MenuItem Header="New" Command="{Binding NewProjectCommand}"/>
+                <Separator/>
+                <MenuItem Header="Open..." Command="{Binding OpenProjectCommand}"/>
+                <Separator/>
+                <MenuItem Header="Close" Command="{Binding CloseProjectCommand}"/>
+                <Separator/>
+                <MenuItem Header="Save..." Command="{Binding SaveProjectCommand}"/>
+            </MenuItem>
+            <MenuItem Header="_Edit">
+                <MenuItem Header="Undo" Command="{Binding UndoHistoryCommand}" InputGestureText="Ctrl+Z"/>
+                <MenuItem Header="Redo" Command="{Binding RedoHistoryCommand}" InputGestureText="Ctrl+Y"/>
+                <Separator/>
+                <MenuItem Header="Clear History" Command="{Binding ClearHistoryCommand}"/>
+            </MenuItem>
+        </Menu>
+        <ContentControl Grid.Column="0" Grid.Row="2" Content="{Binding Project}"/>
+        <Grid Grid.Column="1" Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="50*"/>
+                <ColumnDefinition Width="50*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="50*"/>
+                <RowDefinition Height="50*"/>
+            </Grid.RowDefinitions>
+            <Button Grid.Column="0" Grid.Row="0" Content="Undo" Command="{Binding UndoHistoryCommand}"/>
+            <Button Grid.Column="1" Grid.Row="0" Content="Redo" Command="{Binding RedoHistoryCommand}"/>
+            <ListBox Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="1" ItemsSource="{Binding History.UndoStates}" HorizontalContentAlignment="Stretch">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Name}"/>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+            <ListBox Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="2" ItemsSource="{Binding History.RedoStates}" HorizontalContentAlignment="Stretch">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Name}"/>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </Grid>
+    </Grid>
+</UserControl>

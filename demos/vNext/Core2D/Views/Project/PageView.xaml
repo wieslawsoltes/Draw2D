@@ -1,0 +1,58 @@
+﻿<UserControl x:Class="Core2D.Views.Project.PageView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <TextBox Grid.Row="0" Text="{Binding Page.Name, UpdateSourceTrigger=PropertyChanged}"/>
+        <Button Grid.Row="1" Content="-" Command="{Binding RemoveSelfCommand}"/>
+        <Menu Grid.Row="2" Background="Transparent" HorizontalAlignment="Right">
+            <MenuItem Header="-" Command="{Binding RemoveLayerCommand}" CommandParameter="{Binding ElementName=layers, Path=SelectedItem}"/>
+            <MenuItem Header="+[" Command="{Binding NewLayerBeforeCommand}" CommandParameter="{Binding ElementName=layers, Path=SelectedItem}"/>
+            <MenuItem Header="]+" Command="{Binding NewLayerAfterCommand}" CommandParameter="{Binding ElementName=layers, Path=SelectedItem}"/>
+            <MenuItem Header="+" Command="{Binding NewLayerCommand}"/>
+        </Menu>
+        <ListBox Grid.Row="3" x:Name="layers" ItemsSource="{Binding Layers}" SelectedValue="{Binding Selected, Mode=TwoWay}" HorizontalContentAlignment="Stretch">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding Layer.Name}">
+                        <TextBlock.InputBindings>
+                            <KeyBinding Command="{Binding NewShapeCommand}" Gesture="Insert"/>
+                            <KeyBinding Command="{Binding RemoveSelfCommand}" Gesture="Del"/>
+                            <KeyBinding Command="{Binding Owner.CutLayerCommand}" CommandParameter="{Binding}" Gesture="Ctrl+X"/>
+                            <KeyBinding Command="{Binding Owner.CopyLayerCommand}" CommandParameter="{Binding}" Gesture="Ctrl+C"/>
+                            <KeyBinding Command="{Binding Owner.PasteLayerCommand}" CommandParameter="{Binding}" Gesture="Ctrl+V"/>
+                        </TextBlock.InputBindings>
+                        <TextBlock.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Header="Add Shape" Command="{Binding NewShapeCommand}" InputGestureText="Insert"/>
+                                <Separator/>
+                                <MenuItem Header="Add Layer" Command="{Binding Owner.NewLayerCommand}"/>
+                                <Separator/>
+                                <MenuItem Header="Insert Layer Before" Command="{Binding Owner.NewLayerBeforeCommand}" CommandParameter="{Binding}"/>
+                                <Separator/>
+                                <MenuItem Header="Insert Layer After" Command="{Binding Owner.NewLayerAfterCommand}" CommandParameter="{Binding}"/>
+                                <Separator/>
+                                <MenuItem Header="Remove Layer" Command="{Binding RemoveSelfCommand}" InputGestureText="Del"/>
+                                <Separator/>
+                                <MenuItem Header="Cut" Command="{Binding Owner.CutLayerCommand}" CommandParameter="{Binding}" InputGestureText="Ctrl+X"/>
+                                <MenuItem Header="Copy" Command="{Binding Owner.CopyLayerCommand}" CommandParameter="{Binding}" InputGestureText="Ctrl+C"/>
+                                <MenuItem Header="Paste" Command="{Binding Owner.PasteLayerCommand}" CommandParameter="{Binding}" InputGestureText="Ctrl+V"/>
+                            </ContextMenu>
+                        </TextBlock.ContextMenu>
+                    </TextBlock>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+        <TextBox Grid.Row="4" Text="{Binding ElementName=layers, Path=SelectedItem.Layer.Name, UpdateSourceTrigger=PropertyChanged}"/>
+    </Grid>
+</UserControl>
