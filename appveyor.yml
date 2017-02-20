@@ -1,0 +1,11 @@
+version: '{build}'
+image: Visual Studio 2015
+configuration:
+- Debug
+- Release
+platform: Any CPU
+build:
+  project: Draw2D.sln
+  verbosity: minimal
+test: off
+deploy: off
