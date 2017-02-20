@@ -9,5 +9,3 @@ before_build:
 build:
   project: Draw2D.sln
   verbosity: minimal
-test: off
-deploy: off
