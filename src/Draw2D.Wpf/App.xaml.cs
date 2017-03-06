@@ -306,6 +306,12 @@ namespace Draw2D.Wpf
                 }
             };
 
+            // STYLES
+
+            container.Styles.Add(guideTool.Settings.GuideStyle);
+            container.Styles.Add(pointShape.Style);
+            container.Styles.Add(style);
+
             // DEMOS
 
             /*

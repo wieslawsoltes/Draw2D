@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using Draw2D.Models.Shapes;
+using Draw2D.Models.Style;
 
 namespace Draw2D.Models.Containers
 {
@@ -8,6 +9,7 @@ namespace Draw2D.Models.Containers
     {
         double Width { get; set; }
         double Height { get; set; }
+        ObservableCollection<DrawStyle> Styles { get; set; }
         ObservableCollection<LineShape> Guides { get; set; }
         ObservableCollection<BaseShape> Shapes { get; set; }
     }

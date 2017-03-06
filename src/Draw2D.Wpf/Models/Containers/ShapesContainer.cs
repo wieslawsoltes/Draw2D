@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using Draw2D.Models.Shapes;
+using Draw2D.Models.Style;
 
 namespace Draw2D.Models.Containers
 {
@@ -8,6 +9,7 @@ namespace Draw2D.Models.Containers
     {
         private double _width;
         private double _height;
+        private ObservableCollection<DrawStyle> _styles;
         private ObservableCollection<LineShape> _guides;
         private ObservableCollection<BaseShape> _shapes;
 
@@ -33,6 +35,19 @@ namespace Draw2D.Models.Containers
                 {
                     _height = value;
                     Notify("Height");
+                }
+            }
+        }
+
+        public ObservableCollection<DrawStyle> Styles
+        {
+            get { return _styles; }
+            set
+            {
+                if (value != _styles)
+                {
+                    _styles = value;
+                    Notify("Styles");
                 }
             }
         }
@@ -65,12 +80,14 @@ namespace Draw2D.Models.Containers
 
         public ShapesContainer()
         {
+            _styles = new ObservableCollection<DrawStyle>();
             _guides = new ObservableCollection<LineShape>();
             _shapes = new ObservableCollection<BaseShape>();
         }
 
         public ShapesContainer(ObservableCollection<BaseShape> shapes)
         {
+            this.Styles = new ObservableCollection<DrawStyle>();
             this.Guides = new ObservableCollection<LineShape>();
             this.Shapes = shapes;
         }
@@ -84,6 +101,7 @@ namespace Draw2D.Models.Containers
         public ShapesContainer(string name, ObservableCollection<BaseShape> shapes)
         {
             this.Name = name;
+            this.Styles = new ObservableCollection<DrawStyle>();
             this.Guides = new ObservableCollection<LineShape>();
             this.Shapes = shapes;
         }
@@ -91,6 +109,15 @@ namespace Draw2D.Models.Containers
         public ShapesContainer(string name, ObservableCollection<LineShape> guides, ObservableCollection<BaseShape> shapes)
         {
             this.Name = name;
+            this.Styles = new ObservableCollection<DrawStyle>();
+            this.Guides = guides;
+            this.Shapes = shapes;
+        }
+
+        public ShapesContainer(string name, ObservableCollection<DrawStyle> styles, ObservableCollection<LineShape> guides, ObservableCollection<BaseShape> shapes)
+        {
+            this.Name = name;
+            this.Styles = styles;
             this.Guides = guides;
             this.Shapes = shapes;
         }
