@@ -130,7 +130,7 @@ namespace Draw2D.Wpf.Views
         private void Open(string path, ShapesContainerViewModel vm)
         {
             var yaml = File.ReadAllText(path);
-            var container = YamlHelper.FromYaml<ShapesContainer>(yaml);
+            var container = YamlDotNetSerializer.FromYaml<ShapesContainer>(yaml, YamlDraw2DTagMappings.TagMappings);
             var workingContainer = new ShapesContainer();
             vm.CurrentTool.Clean(vm);
             vm.Renderer.Selected.Clear();
@@ -140,7 +140,7 @@ namespace Draw2D.Wpf.Views
 
         private void Save(string path, ShapesContainerViewModel vm)
         {
-            var yaml = YamlHelper.ToYaml(vm.CurrentContainer);
+            var yaml = YamlDotNetSerializer.ToYaml(vm.CurrentContainer, YamlDraw2DTagMappings.TagMappings);
             File.WriteAllText(path, yaml);
         }
 
@@ -161,7 +161,7 @@ namespace Draw2D.Wpf.Views
                     shapes.Add(shape);
                 }
             }
-            var yaml = YamlHelper.ToYaml(shapes);
+            var yaml = YamlDotNetSerializer.ToYaml(shapes, YamlDraw2DTagMappings.TagMappings);
             Clipboard.SetText(yaml);
         }
 
@@ -170,7 +170,7 @@ namespace Draw2D.Wpf.Views
             if (Clipboard.ContainsText())
             {
                 var yaml = Clipboard.GetText();
-                var shapes = YamlHelper.FromYaml<List<BaseShape>>(yaml);
+                var shapes = YamlDotNetSerializer.FromYaml<List<BaseShape>>(yaml, YamlDraw2DTagMappings.TagMappings);
                 // TODO: Update styles and templates using Id.
                 vm.Renderer.Selected.Clear();
                 foreach (var shape in shapes)

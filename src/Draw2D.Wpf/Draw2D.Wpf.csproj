@@ -205,7 +205,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\SharedAssemblyInfo.cs" />
     <Compile Include="Renderers\WpfBrushCache.cs" />
-    <Compile Include="Utilities\YamlHelper.cs" />
+    <Compile Include="Utilities\YamlDotNetSerializeBuilderExtensions.cs" />
+    <Compile Include="Utilities\YamlDotNetSerializer.cs" />
+    <Compile Include="Utilities\YamlDraw2DTagMappings.cs" />
     <Compile Include="ViewModels\Containers\ShapesContainerViewModel.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />
     <Compile Include="Views\Filters\Settings\GridSnapSettingsView.xaml.cs">
