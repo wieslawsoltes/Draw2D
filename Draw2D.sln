@@ -13,7 +13,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DrawDemo", "src\DrawDemo\Dr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PathDemo", "src\PathDemo\PathDemo.csproj", "{0D35A46C-B718-40C1-9D01-CF097FB681A9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestDemo", "src\TestDemo\TestDemo.csproj", "{EF0D1F7E-EBB5-41D6-88A6-1650B067EF65}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArcDemo", "src\ArcDemo\ArcDemo.csproj", "{EF0D1F7E-EBB5-41D6-88A6-1650B067EF65}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

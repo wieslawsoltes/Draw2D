@@ -1,7 +1,7 @@
-﻿<Window x:Class="TestDemo.Window1"
+﻿<Window x:Class="ArcDemo.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:local="clr-namespace:TestDemo"
+        xmlns:local="clr-namespace:ArcDemo"
         Title="TestDemo" Height="700" Width="1000"
         WindowStartupLocation="CenterScreen" UseLayoutRounding="True" SnapsToDevicePixels="True" TextOptions.TextFormattingMode="Display">
     <Grid>
