@@ -15,7 +15,7 @@ namespace Draw2D.ViewModels.Containers
         private ObservableCollection<ToolBase> _tools;
         private ToolBase _currentTool;
         private ShapeRenderer _renderer;
-        private HashSet<BaseShape> _selected;
+        private ISet<BaseShape> _selected;
         private IShapesContainer _currentContainer;
         private IShapesContainer _workingContainer;
         private DrawStyle _style;
@@ -65,7 +65,7 @@ namespace Draw2D.ViewModels.Containers
             }
         }
 
-        public HashSet<BaseShape> Selected
+        public ISet<BaseShape> Selected
         {
             get { return _selected; }
             set

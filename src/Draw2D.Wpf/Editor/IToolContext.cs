@@ -9,7 +9,7 @@ namespace Draw2D.Editor
 {
     public interface IToolContext
     {
-        HashSet<BaseShape> Selected { get; set; }
+        ISet<BaseShape> Selected { get; set; }
         IShapesContainer CurrentContainer { get; set; }
         IShapesContainer WorkingContainer { get; set; }
         DrawStyle Style { get; set; }
