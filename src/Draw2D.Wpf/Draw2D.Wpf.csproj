@@ -105,6 +105,7 @@
       <SubType>Code</SubType>
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\DrawCanvas.cs" />
     <Compile Include="Models\BaseObject.cs" />
     <Compile Include="Models\BaseShape.cs" />
     <Compile Include="Models\Containers\IShapesContainer.cs" />

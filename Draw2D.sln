@@ -1,15 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.26228.9
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Draw2D.Wpf", "src\Draw2D.Wpf\Draw2D.Wpf.csproj", "{41A7B9BA-A69C-46D4-997E-F2E12ACE58D6}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BezierDemo", "src\BezierDemo\BezierDemo.csproj", "{818162E3-1929-4F55-9FAC-AFEA4CF31F6D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core2D.vNext", "src\Core2D.vNext\Core2D.vNext.csproj", "{E5C1A80C-3F2A-4B8B-A4B6-D97327B7413E}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DrawDemo", "src\DrawDemo\DrawDemo.csproj", "{D85FF0FF-CD36-4B02-A1B2-3EEB723CA6BE}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PathDemo", "src\PathDemo\PathDemo.csproj", "{0D35A46C-B718-40C1-9D01-CF097FB681A9}"
 EndProject
@@ -61,18 +59,6 @@ Global
 		{E5C1A80C-3F2A-4B8B-A4B6-D97327B7413E}.Release|x64.Build.0 = Release|x64
 		{E5C1A80C-3F2A-4B8B-A4B6-D97327B7413E}.Release|x86.ActiveCfg = Release|x86
 		{E5C1A80C-3F2A-4B8B-A4B6-D97327B7413E}.Release|x86.Build.0 = Release|x86
-		{D85FF0FF-CD36-4B02-A1B2-3EEB723CA6BE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D85FF0FF-CD36-4B02-A1B2-3EEB723CA6BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D85FF0FF-CD36-4B02-A1B2-3EEB723CA6BE}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{D85FF0FF-CD36-4B02-A1B2-3EEB723CA6BE}.Debug|x64.Build.0 = Debug|Any CPU
-		{D85FF0FF-CD36-4B02-A1B2-3EEB723CA6BE}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{D85FF0FF-CD36-4B02-A1B2-3EEB723CA6BE}.Debug|x86.Build.0 = Debug|Any CPU
-		{D85FF0FF-CD36-4B02-A1B2-3EEB723CA6BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D85FF0FF-CD36-4B02-A1B2-3EEB723CA6BE}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D85FF0FF-CD36-4B02-A1B2-3EEB723CA6BE}.Release|x64.ActiveCfg = Release|Any CPU
-		{D85FF0FF-CD36-4B02-A1B2-3EEB723CA6BE}.Release|x64.Build.0 = Release|Any CPU
-		{D85FF0FF-CD36-4B02-A1B2-3EEB723CA6BE}.Release|x86.ActiveCfg = Release|Any CPU
-		{D85FF0FF-CD36-4B02-A1B2-3EEB723CA6BE}.Release|x86.Build.0 = Release|Any CPU
 		{0D35A46C-B718-40C1-9D01-CF097FB681A9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{0D35A46C-B718-40C1-9D01-CF097FB681A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0D35A46C-B718-40C1-9D01-CF097FB681A9}.Debug|x64.ActiveCfg = Debug|Any CPU

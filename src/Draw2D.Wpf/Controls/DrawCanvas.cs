@@ -3,7 +3,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 
-namespace DrawDemo
+namespace Draw2D.Wpf
 {
     public class DrawCanvas : Canvas
     {
