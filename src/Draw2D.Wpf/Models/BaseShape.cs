@@ -5,35 +5,21 @@ using Draw2D.Models.Style;
 
 namespace Draw2D.Models
 {
-    public abstract class BaseShape : BaseObject
+    public abstract class BaseShape : IdObject
     {
         private DrawStyle _style;
         private MatrixObject _transform;
 
         public DrawStyle Style
         {
-            get { return _style; }
-            set
-            {
-                if (value != _style)
-                {
-                    _style = value;
-                    Notify("Style");
-                }
-            }
+            get => _style;
+            set => Update(ref _style, value);
         }
 
         public MatrixObject Transform
         {
-            get { return _transform; }
-            set
-            {
-                if (value != _transform)
-                {
-                    _transform = value;
-                    Notify("Transform");
-                }
-            }
+            get => _transform;
+            set => Update(ref _transform, value);
         }
 
         public abstract void Draw(object dc, ShapeRenderer r, double dx, double dy);

@@ -13,54 +13,26 @@ namespace Draw2D.Models.Shapes
 
         public PointShape StartPoint
         {
-            get { return _startPoint; }
-            set
-            {
-                if (value != _startPoint)
-                {
-                    _startPoint = value;
-                    Notify("StartPoint");
-                }
-            }
+            get => _startPoint;
+            set => Update(ref _startPoint, value);
         }
 
         public PointShape Point1
         {
-            get { return _point1; }
-            set
-            {
-                if (value != _point1)
-                {
-                    _point1 = value;
-                    Notify("Point1");
-                }
-            }
+            get => _point1;
+            set => Update(ref _point1, value);
         }
 
         public PointShape Point2
         {
-            get { return _point2; }
-            set
-            {
-                if (value != _point2)
-                {
-                    _point2 = value;
-                    Notify("Point2");
-                }
-            }
+            get => _point2;
+            set => Update(ref _point2, value);
         }
 
         public PointShape Point3
         {
-            get { return _point3; }
-            set
-            {
-                if (value != _point3)
-                {
-                    _point3 = value;
-                    Notify("Point3");
-                }
-            }
+            get => _point3;
+            set => Update(ref _point3, value);
         }
 
         public CubicBezierShape()

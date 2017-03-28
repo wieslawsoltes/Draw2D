@@ -5,7 +5,7 @@ using Draw2D.Models.Style;
 
 namespace Draw2D.Models.Containers
 {
-    public class ShapesContainer : BaseObject, IShapesContainer
+    public class ShapesContainer : IdObject, IShapesContainer
     {
         private double _width;
         private double _height;
@@ -15,67 +15,32 @@ namespace Draw2D.Models.Containers
 
         public double Width
         {
-            get { return _width; }
-            set
-            {
-                if (value != _width)
-                {
-                    _width = value;
-                    Notify("Width");
-                }
-            }
+            get => _width;
+            set => Update(ref _width, value);
         }
 
         public double Height
         {
-            get { return _height; }
-            set
-            {
-                if (value != _height)
-                {
-                    _height = value;
-                    Notify("Height");
-                }
-            }
+            get => _height;
+            set => Update(ref _height, value);
         }
 
         public ObservableCollection<DrawStyle> Styles
         {
-            get { return _styles; }
-            set
-            {
-                if (value != _styles)
-                {
-                    _styles = value;
-                    Notify("Styles");
-                }
-            }
+            get => _styles;
+            set => Update(ref _styles, value);
         }
 
         public ObservableCollection<LineShape> Guides
         {
-            get { return _guides; }
-            set
-            {
-                if (value != _guides)
-                {
-                    _guides = value;
-                    Notify("Guides");
-                }
-            }
+            get => _guides;
+            set => Update(ref _guides, value);
         }
 
         public ObservableCollection<BaseShape> Shapes
         {
-            get { return _shapes; }
-            set
-            {
-                if (value != _shapes)
-                {
-                    _shapes = value;
-                    Notify("Shapes");
-                }
-            }
+            get => _shapes;
+            set => Update(ref _shapes, value);
         }
 
         public ShapesContainer()

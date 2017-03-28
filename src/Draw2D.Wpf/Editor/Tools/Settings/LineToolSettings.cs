@@ -10,41 +10,20 @@ namespace Draw2D.Editor.Tools
 
         public bool ConnectPoints
         {
-            get { return _connectPoints; }
-            set
-            {
-                if (value != _connectPoints)
-                {
-                    _connectPoints = value;
-                    Notify("ConnectPoints");
-                }
-            }
+            get => _connectPoints;
+            set => Update(ref _connectPoints, value);
         }
 
         public double HitTestRadius
         {
-            get { return _hitTestRadius; }
-            set
-            {
-                if (value != _hitTestRadius)
-                {
-                    _hitTestRadius = value;
-                    Notify("HitTestRadius");
-                }
-            }
+            get => _hitTestRadius;
+            set => Update(ref _hitTestRadius, value);
         }
 
         public bool SplitIntersections
         {
-            get { return _splitIntersections; }
-            set
-            {
-                if (value != _splitIntersections)
-                {
-                    _splitIntersections = value;
-                    Notify("SplitIntersections");
-                }
-            }
+            get => _splitIntersections;
+            set => Update(ref _splitIntersections, value);
         }
     }
 }

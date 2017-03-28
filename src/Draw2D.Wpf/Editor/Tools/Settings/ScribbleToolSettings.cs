@@ -9,28 +9,14 @@ namespace Draw2D.Editor.Tools
 
         public bool Simplify
         {
-            get { return _simplify; }
-            set
-            {
-                if (value != _simplify)
-                {
-                    _simplify = value;
-                    Notify("Simplify");
-                }
-            }
+            get => _simplify;
+            set => Update(ref _simplify, value);
         }
 
         public double Epsilon
         {
-            get { return _epsilon; }
-            set
-            {
-                if (value != _epsilon)
-                {
-                    _epsilon = value;
-                    Notify("Epsilon");
-                }
-            }
+            get => _epsilon;
+            set => Update(ref _epsilon, value);
         }
     }
 }

@@ -13,67 +13,32 @@ namespace Draw2D.Editor.Filters
 
         public bool EnableGuides
         {
-            get { return _enableGuides; }
-            set
-            {
-                if (value != _enableGuides)
-                {
-                    _enableGuides = value;
-                    Notify("EnableGuides");
-                }
-            }
+            get => _enableGuides;
+            set => Update(ref _enableGuides, value);
         }
 
         public LineSnapMode Mode
         {
-            get { return _mode; }
-            set
-            {
-                if (value != _mode)
-                {
-                    _mode = value;
-                    Notify("Mode");
-                }
-            }
+            get => _mode;
+            set => Update(ref _mode, value);
         }
 
         public LineSnapTarget Target
         {
-            get { return _target; }
-            set
-            {
-                if (value != _target)
-                {
-                    _target = value;
-                    Notify("Target");
-                }
-            }
+            get => _target;
+            set => Update(ref _target, value);
         }
 
         public double Threshold
         {
-            get { return _threshold; }
-            set
-            {
-                if (value != _threshold)
-                {
-                    _threshold = value;
-                    Notify("Threshold");
-                }
-            }
+            get => _threshold;
+            set => Update(ref _threshold, value);
         }
 
         public DrawStyle GuideStyle
         {
-            get { return _guideStyle; }
-            set
-            {
-                if (value != _guideStyle)
-                {
-                    _guideStyle = value;
-                    Notify("GuideStyle");
-                }
-            }
+            get => _guideStyle;
+            set => Update(ref _guideStyle, value);
         }
     }
 }

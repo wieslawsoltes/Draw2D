@@ -12,28 +12,14 @@ namespace Draw2D.Models.Shapes
 
         public PointShape Start
         {
-            get { return _start; }
-            set
-            {
-                if (value != _start)
-                {
-                    _start = value;
-                    Notify("Start");
-                }
-            }
+            get => _start;
+            set => Update(ref _start, value);
         }
 
         public ObservableCollection<PointShape> Points
         {
-            get { return _points; }
-            set
-            {
-                if (value != _points)
-                {
-                    _points = value;
-                    Notify("Points");
-                }
-            }
+            get => _points;
+            set => Update(ref _points, value);
         }
 
         public ScribbleShape()

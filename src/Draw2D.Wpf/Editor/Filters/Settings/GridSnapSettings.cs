@@ -13,67 +13,32 @@ namespace Draw2D.Editor.Filters
 
         public bool EnableGuides
         {
-            get { return _enableGuides; }
-            set
-            {
-                if (value != _enableGuides)
-                {
-                    _enableGuides = value;
-                    Notify("EnableGuides");
-                }
-            }
+            get => _enableGuides;
+            set => Update(ref _enableGuides, value);
         }
 
         public GridSnapMode Mode
         {
-            get { return _mode; }
-            set
-            {
-                if (value != _mode)
-                {
-                    _mode = value;
-                    Notify("Mode");
-                }
-            }
+            get => _mode;
+            set => Update(ref _mode, value);
         }
 
         public double GridSizeX
         {
-            get { return _gridSizeX; }
-            set
-            {
-                if (value != _gridSizeX)
-                {
-                    _gridSizeX = value;
-                    Notify("GridSizeX");
-                }
-            }
+            get => _gridSizeX;
+            set => Update(ref _gridSizeX, value);
         }
 
         public double GridSizeY
         {
-            get { return _gridSizeY; }
-            set
-            {
-                if (value != _gridSizeY)
-                {
-                    _gridSizeY = value;
-                    Notify("GridSizeY");
-                }
-            }
+            get => _gridSizeY;
+            set => Update(ref _gridSizeY, value);
         }
 
         public DrawStyle GuideStyle
         {
-            get { return _guideStyle; }
-            set
-            {
-                if (value != _guideStyle)
-                {
-                    _guideStyle = value;
-                    Notify("GuideStyle");
-                }
-            }
+            get => _guideStyle;
+            set => Update(ref _guideStyle, value);
         }
     }
 }

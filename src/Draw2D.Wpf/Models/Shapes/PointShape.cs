@@ -12,41 +12,20 @@ namespace Draw2D.Models.Shapes
 
         public double X
         {
-            get { return _x; }
-            set
-            {
-                if (value != _x)
-                {
-                    _x = value;
-                    Notify("X");
-                }
-            }
+            get => _x;
+            set => Update(ref _x, value);
         }
 
         public double Y
         {
-            get { return _y; }
-            set
-            {
-                if (value != _y)
-                {
-                    _y = value;
-                    Notify("Y");
-                }
-            }
+            get => _y;
+            set => Update(ref _y, value);
         }
 
         public BaseShape Template
         {
-            get { return _template; }
-            set
-            {
-                if (value != _template)
-                {
-                    _template = value;
-                    Notify("Template");
-                }
-            }
+            get => _template;
+            set => Update(ref _template, value);
         }
 
         public PointShape()

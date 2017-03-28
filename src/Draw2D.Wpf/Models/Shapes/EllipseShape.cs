@@ -11,28 +11,14 @@ namespace Draw2D.Models.Shapes
 
         public PointShape TopLeft
         {
-            get { return _topLeft; }
-            set
-            {
-                if (value != _topLeft)
-                {
-                    _topLeft = value;
-                    Notify("TopLeft");
-                }
-            }
+            get => _topLeft;
+            set => Update(ref _topLeft, value);
         }
 
         public PointShape BottomRight
         {
-            get { return _bottomRight; }
-            set
-            {
-                if (value != _bottomRight)
-                {
-                    _bottomRight = value;
-                    Notify("BottomRight");
-                }
-            }
+            get => _bottomRight;
+            set => Update(ref _bottomRight, value);
         }
 
         public EllipseShape()

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Runtime.CompilerServices;
 
 namespace Draw2D.ViewModels
 {
@@ -7,28 +8,28 @@ namespace Draw2D.ViewModels
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public void Notify(string propertyName)
+        public void Notify([CallerMemberName] string propertyName = null)
         {
-            var handler = PropertyChanged;
-            if (handler != null)
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        public bool Update<T>(ref T field, T value, [CallerMemberName] string propertyName = null)
+        {
+            if (!Equals(field, value))
             {
-                handler(this, new PropertyChangedEventArgs(propertyName));
+                field = value;
+                Notify(propertyName);
+                return true;
             }
+            return false;
         }
 
         private string _name;
 
         public string Name
         {
-            get { return _name; }
-            set
-            {
-                if (value != _name)
-                {
-                    _name = value;
-                    Notify("Name");
-                }
-            }
+            get => _name;
+            set => Update(ref _name, value);
         }
     }
 }

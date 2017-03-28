@@ -9,15 +9,8 @@ namespace Draw2D.Editor.Tools
         
         public DrawStyle GuideStyle
         {
-            get { return _guideStyle; }
-            set
-            {
-                if (value != _guideStyle)
-                {
-                    _guideStyle = value;
-                    Notify("GuideStyle");
-                }
-            }
+            get => _guideStyle;
+            set => Update(ref _guideStyle, value);
         }
     }
 }

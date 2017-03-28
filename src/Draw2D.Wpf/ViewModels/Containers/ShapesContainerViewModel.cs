@@ -24,123 +24,60 @@ namespace Draw2D.ViewModels.Containers
 
         public ObservableCollection<ToolBase> Tools
         {
-            get { return _tools; }
-            set
-            {
-                if (value != _tools)
-                {
-                    _tools = value;
-                    Notify("Tools");
-                }
-            }
+            get => _tools;
+            set => Update(ref _tools, value);
         }
 
         public ToolBase CurrentTool
         {
-            get { return _currentTool; }
+            get => _currentTool;
             set
             {
-                if (value != _currentTool)
-                {
-                    if (_currentTool != null)
-                    {
-                        _currentTool.Clean(this);
-                    }
-                    _currentTool = value;
-                    Notify("CurrentTool");
-                }
+                _currentTool?.Clean(this);
+                Update(ref _currentTool, value);
             }
         }
 
         public ShapeRenderer Renderer
         {
-            get { return _renderer; }
-            set
-            {
-                if (value != _renderer)
-                {
-                    _renderer = value;
-                    Notify("Renderer");
-                }
-            }
+            get => _renderer;
+            set => Update(ref _renderer, value);
         }
 
         public ISet<BaseShape> Selected
         {
-            get { return _selected; }
-            set
-            {
-                if (value != _selected)
-                {
-                    _selected = value;
-                    Notify("Selected");
-                }
-            }
+            get => _selected;
+            set => Update(ref _selected, value);
         }
 
         public IShapesContainer CurrentContainer
         {
-            get { return _currentContainer; }
-            set
-            {
-                if (value != _currentContainer)
-                {
-                    _currentContainer = value;
-                    Notify("Container");
-                }
-            }
+            get => _currentContainer;
+            set => Update(ref _currentContainer, value);
         }
 
         public IShapesContainer WorkingContainer
         {
-            get { return _workingContainer; }
-            set
-            {
-                if (value != _workingContainer)
-                {
-                    _workingContainer = value;
-                    Notify("WorkingContainer");
-                }
-            }
+            get => _workingContainer;
+            set => Update(ref _workingContainer, value);
         }
 
         public DrawStyle Style
         {
-            get { return _style; }
-            set
-            {
-                if (value != _style)
-                {
-                    _style = value;
-                    Notify("Style");
-                }
-            }
+            get => _style;
+            set => Update(ref _style, value);
         }
 
         public BaseShape PointShape
         {
-            get { return _pointShape; }
-            set
-            {
-                if (value != _pointShape)
-                {
-                    _pointShape = value;
-                    Notify("PointShape");
-                }
-            }
+            get => _pointShape;
+            set => Update(ref _pointShape, value);
         }
 
         public HitTest HitTest
         {
-            get { return _hitTest; }
-            set
-            {
-                if (value != _hitTest)
-                {
-                    _hitTest = value;
-                    Notify("HitTest");
-                }
-            }
+            get => _hitTest;
+            set => Update(ref _hitTest, value);
         }
     }
 }

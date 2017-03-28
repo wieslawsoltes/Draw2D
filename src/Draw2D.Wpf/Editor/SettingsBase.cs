@@ -1,19 +1,9 @@
 ﻿using System;
-using System.ComponentModel;
+using Draw2D.Models;
 
 namespace Draw2D.Editor
 {
-    public abstract class SettingsBase : INotifyPropertyChanged
+    public abstract class SettingsBase : BaseObject
     {
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        public void Notify(string propertyName)
-        {
-            var handler = PropertyChanged;
-            if (handler != null)
-            {
-                handler(this, new PropertyChangedEventArgs(propertyName));
-            }
-        }
     }
 }

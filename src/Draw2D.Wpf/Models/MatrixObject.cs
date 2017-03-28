@@ -13,83 +13,41 @@ namespace Draw2D.Models
 
         public double M11
         {
-            get { return _m11; }
-            set
-            {
-                if (value != _m11)
-                {
-                    _m11 = value;
-                    Notify("M11");
-                }
-            }
+            get => _m11;
+            set => Update(ref _m11, value);
         }
 
         public double M12
         {
-            get { return _m12; }
-            set
-            {
-                if (value != _m12)
-                {
-                    _m12 = value;
-                    Notify("M12");
-                }
-            }
+            get => _m12;
+            set => Update(ref _m12, value);
         }
 
         public double M21
         {
-            get { return _m21; }
-            set
-            {
-                if (value != _m21)
-                {
-                    _m21 = value;
-                    Notify("M21");
-                }
-            }
+            get => _m21;
+            set => Update(ref _m21, value);
         }
 
         public double M22
         {
-            get { return _m22; }
-            set
-            {
-                if (value != _m22)
-                {
-                    _m22 = value;
-                    Notify("M22");
-                }
-            }
+            get => _m22;
+            set => Update(ref _m22, value);
         }
 
         public double OffsetX
         {
-            get { return _offsetX; }
-            set
-            {
-                if (value != _offsetX)
-                {
-                    _offsetX = value;
-                    Notify("OffsetX");
-                }
-            }
+            get => _offsetX;
+            set => Update(ref _offsetX, value);
         }
 
         public double OffsetY
         {
-            get { return _offsetY; }
-            set
-            {
-                if (value != _offsetY)
-                {
-                    _offsetY = value;
-                    Notify("OffsetY");
-                }
-            }
+            get => _offsetY;
+            set => Update(ref _offsetY, value);
         }
 
-        public static readonly MatrixObject Identity = new MatrixObject(1.0, 0.0, 0.0, 1.0, 0.0, 0.0);
+        public static MatrixObject Identity => new MatrixObject(1.0, 0.0, 0.0, 1.0, 0.0, 0.0);
 
         public MatrixObject()
             : base()

@@ -8,15 +8,8 @@ namespace Draw2D.Editor.Intersections.Line
 
         public bool IsEnabled
         {
-            get { return _isEnabled; }
-            set
-            {
-                if (value != _isEnabled)
-                {
-                    _isEnabled = value;
-                    Notify("IsEnabled");
-                }
-            }
+            get => _isEnabled;
+            set => Update(ref _isEnabled, value);
         }
     }
 }

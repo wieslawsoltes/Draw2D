@@ -175,6 +175,7 @@
     <Compile Include="Editor\Tools\Settings\ScribbleToolSettings.cs" />
     <Compile Include="Editor\Tools\SelectionTool.cs" />
     <Compile Include="Editor\Tools\Settings\SelectionToolSettings.cs" />
+    <Compile Include="Models\IdObject.cs" />
     <Compile Include="Models\MatrixObject.cs" />
     <Compile Include="Models\Renderers\ShapeRenderer.cs" />
     <Compile Include="Models\Shapes\ConnectableShape.cs" />

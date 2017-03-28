@@ -11,15 +11,8 @@ namespace Draw2D.Models.Shapes
 
         public ObservableCollection<PointShape> Points
         {
-            get { return _points; }
-            set
-            {
-                if (value != _points)
-                {
-                    _points = value;
-                    Notify("Points");
-                }
-            }
+            get => _points;
+            set => Update(ref _points, value);
         }
 
         public ConnectableShape()

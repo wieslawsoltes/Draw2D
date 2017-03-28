@@ -10,28 +10,14 @@ namespace Draw2D.Models.Shapes
 
         public bool IsFilled
         {
-            get { return _isFilled; }
-            set
-            {
-                if (value != _isFilled)
-                {
-                    _isFilled = value;
-                    Notify("IsFilled");
-                }
-            }
+            get => _isFilled;
+            set => Update(ref _isFilled, value);
         }
 
         public bool IsClosed
         {
-            get { return _isClosed; }
-            set
-            {
-                if (value != _isClosed)
-                {
-                    _isClosed = value;
-                    Notify("IsClosed");
-                }
-            }
+            get => _isClosed;
+            set => Update(ref _isClosed, value);
         }
 
         public FigureShape()

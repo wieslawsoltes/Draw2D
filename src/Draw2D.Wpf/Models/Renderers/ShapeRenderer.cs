@@ -7,7 +7,7 @@ namespace Draw2D.Models.Renderers
 {
     public abstract class ShapeRenderer : BaseObject
     {
-        public abstract HashSet<BaseShape> Selected { get; set; }
+        public abstract ISet<BaseShape> Selected { get; set; }
         public abstract void PushMatrix(object dc, MatrixObject matrix);
         public abstract void PopMatrix(object dc);
         public abstract void DrawLine(object dc, LineShape line, DrawStyle style, double dx, double dy);

@@ -13,19 +13,12 @@ namespace Draw2D.Wpf.Renderers
     {
         private readonly IDictionary<DrawStyle, WpfBrushCache> _brushCache;
 
-        private HashSet<BaseShape> _selected;
+        private ISet<BaseShape> _selected;
 
-        public override HashSet<BaseShape> Selected
+        public override ISet<BaseShape> Selected
         {
-            get { return _selected; }
-            set
-            {
-                if (value != _selected)
-                {
-                    _selected = value;
-                    Notify("Selected");
-                }
-            }
+            get => _selected;
+            set => Update(ref _selected, value);
         }
 
         public WpfShapeRenderer()

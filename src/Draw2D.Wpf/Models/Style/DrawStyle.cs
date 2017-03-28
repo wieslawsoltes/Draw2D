@@ -2,7 +2,7 @@
 
 namespace Draw2D.Models.Style
 {
-    public class DrawStyle : BaseObject
+    public class DrawStyle : IdObject
     {
         private DrawColor _stroke;
         private DrawColor _fill;
@@ -12,67 +12,32 @@ namespace Draw2D.Models.Style
 
         public DrawColor Stroke
         {
-            get { return _stroke; }
-            set
-            {
-                if (value != _stroke)
-                {
-                    _stroke = value;
-                    Notify("Stroke");
-                }
-            }
+            get => _stroke;
+            set => Update(ref _stroke, value);
         }
 
         public DrawColor Fill
         {
-            get { return _fill; }
-            set
-            {
-                if (value != _fill)
-                {
-                    _fill = value;
-                    Notify("Fill");
-                }
-            }
+            get => _fill;
+            set => Update(ref _fill, value);
         }
 
         public double Thickness
         {
-            get { return _thickness; }
-            set
-            {
-                if (value != _thickness)
-                {
-                    _thickness = value;
-                    Notify("Thickness");
-                }
-            }
+            get => _thickness;
+            set => Update(ref _thickness, value);
         }
 
         public bool IsStroked
         {
-            get { return _isStroked; }
-            set
-            {
-                if (value != _isStroked)
-                {
-                    _isStroked = value;
-                    Notify("IsStroked");
-                }
-            }
+            get => _isStroked;
+            set => Update(ref _isStroked, value);
         }
 
         public bool IsFilled
         {
-            get { return _isFilled; }
-            set
-            {
-                if (value != _isFilled)
-                {
-                    _isFilled = value;
-                    Notify("IsFilled");
-                }
-            }
+            get => _isFilled;
+            set => Update(ref _isFilled, value);
         }
 
         public DrawStyle()

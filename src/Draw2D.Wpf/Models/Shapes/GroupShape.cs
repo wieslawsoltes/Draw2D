@@ -11,15 +11,8 @@ namespace Draw2D.Models.Shapes
 
         public ObservableCollection<BaseShape> Segments
         {
-            get { return _segments; }
-            set
-            {
-                if (value != _segments)
-                {
-                    _segments = value;
-                    Notify("Segments");
-                }
-            }
+            get => _segments;
+            set => Update(ref _segments, value);
         }
 
         public GroupShape()

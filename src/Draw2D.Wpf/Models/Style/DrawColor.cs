@@ -11,54 +11,26 @@ namespace Draw2D.Models.Style
 
         public byte A
         {
-            get { return _a; }
-            set
-            {
-                if (value != _a)
-                {
-                    _a = value;
-                    Notify("A");
-                }
-            }
+            get => _a;
+            set => Update(ref _a, value);
         }
 
         public byte R
         {
-            get { return _r; }
-            set
-            {
-                if (value != _r)
-                {
-                    _r = value;
-                    Notify("R");
-                }
-            }
+            get => _r;
+            set => Update(ref _r, value);
         }
 
         public byte G
         {
-            get { return _g; }
-            set
-            {
-                if (value != _g)
-                {
-                    _g = value;
-                    Notify("G");
-                }
-            }
+            get => _g;
+            set => Update(ref _g, value);
         }
 
         public byte B
         {
-            get { return _b; }
-            set
-            {
-                if (value != _b)
-                {
-                    _b = value;
-                    Notify("B");
-                }
-            }
+            get => _b;
+            set => Update(ref _b, value);
         }
 
         public DrawColor()

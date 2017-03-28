@@ -1,23 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Diagnostics;
+using Draw2D.Models;
 
 namespace Draw2D.Editor
 {
-    public abstract class ToolBase : INotifyPropertyChanged
+    public abstract class ToolBase : BaseObject
     {
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        public void Notify(string propertyName)
-        {
-            var handler = PropertyChanged;
-            if (handler != null)
-            {
-                handler(this, new PropertyChangedEventArgs(propertyName));
-            }
-        }
-
         public abstract string Name { get; }
 
         public List<PointIntersection> Intersections { get; set; }

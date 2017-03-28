@@ -11,28 +11,14 @@ namespace Draw2D.Models.Shapes
 
         public PointShape StartPoint
         {
-            get { return _startPoint; }
-            set
-            {
-                if (value != _startPoint)
-                {
-                    _startPoint = value;
-                    Notify("StartPoint");
-                }
-            }
+            get => _startPoint;
+            set => Update(ref _startPoint, value);
         }
 
         public PointShape Point
         {
-            get { return _point; }
-            set
-            {
-                if (value != _point)
-                {
-                    _point = value;
-                    Notify("Point");
-                }
-            }
+            get => _point;
+            set => Update(ref _point, value);
         }
 
         public LineShape()

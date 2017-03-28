@@ -12,28 +12,14 @@ namespace Draw2D.Models.Shapes
 
         public ObservableCollection<FigureShape> Figures
         {
-            get { return _figures; }
-            set
-            {
-                if (value != _figures)
-                {
-                    _figures = value;
-                    Notify("Figures");
-                }
-            }
+            get => _figures;
+            set => Update(ref _figures, value);
         }
 
         public PathFillRule FillRule
         {
-            get { return _fillRule; }
-            set
-            {
-                if (value != _fillRule)
-                {
-                    _fillRule = value;
-                    Notify("FillRule");
-                }
-            }
+            get => _fillRule;
+            set => Update(ref _fillRule, value);
         }
 
         public PathShape()
