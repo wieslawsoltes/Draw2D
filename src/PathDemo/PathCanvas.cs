@@ -8,7 +8,7 @@ using System.Windows.Media;
 
 namespace PathDemo
 {
-    public class RenderCanvas : Canvas, IToolContext
+    public class PathCanvas : Canvas, IToolContext
     {
         public ObservableCollection<ShapeBase> Shapes { get; set; }
         public HashSet<ShapeBase> Selected { get; set; }
@@ -16,7 +16,7 @@ namespace PathDemo
         public ObservableCollection<ToolBase> Tools { get; set; }
         public ToolBase CurrentTool { get; set; }
 
-        public RenderCanvas()
+        public PathCanvas()
         {
             Shapes = new ObservableCollection<ShapeBase>();
             Selected = new HashSet<ShapeBase>();

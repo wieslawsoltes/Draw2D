@@ -17,6 +17,6 @@
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
-        <local:RenderCanvas x:Name="canvas" Grid.Column="1" Width="500" Height="500" Background="LightSlateGray"/>
+        <local:PathCanvas x:Name="canvas" Grid.Column="1" Width="500" Height="500" Background="LightSlateGray"/>
     </Grid>
 </Window>

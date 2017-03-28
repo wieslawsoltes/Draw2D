@@ -69,7 +69,7 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RenderCanvas.cs" />
+    <Compile Include="PathCanvas.cs" />
     <Compile Include="Shapes\CubicBezierShape.cs" />
     <Compile Include="Shapes\FigureShape.cs" />
     <Compile Include="Shapes\LineShape.cs" />
