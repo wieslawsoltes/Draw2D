@@ -7,8 +7,8 @@ namespace DrawDemo
 {
     public class DrawCanvas : Canvas
     {
-        bool _draw = false;
-        Point _point;
+        private bool _draw = false;
+        private Point _point;
 
         protected override void OnMouseEnter(MouseEventArgs e)
         {
