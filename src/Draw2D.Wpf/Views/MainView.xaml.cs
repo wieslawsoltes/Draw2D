@@ -153,7 +153,7 @@ namespace Draw2D.Wpf.Views
         private void Copy(ShapesContainerViewModel vm)
         {
             var selected = vm.Renderer.Selected;
-            var shapes = new List<BaseShape>();
+            var shapes = new List<ShapeObject>();
             foreach (var shape in selected)
             {
                 if (vm.CurrentContainer.Shapes.Contains(shape))
@@ -170,7 +170,7 @@ namespace Draw2D.Wpf.Views
             if (Clipboard.ContainsText())
             {
                 var yaml = Clipboard.GetText();
-                var shapes = YamlDotNetSerializer.FromYaml<List<BaseShape>>(yaml, YamlDraw2DTagMappings.TagMappings);
+                var shapes = YamlDotNetSerializer.FromYaml<List<ShapeObject>>(yaml, YamlDraw2DTagMappings.TagMappings);
                 // TODO: Update styles and templates using Id.
                 vm.Renderer.Selected.Clear();
                 foreach (var shape in shapes)

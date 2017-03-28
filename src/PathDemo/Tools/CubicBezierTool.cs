@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows;
+using Draw2D.Models.Shapes;
 
 namespace PathDemo
 {
@@ -18,9 +19,9 @@ namespace PathDemo
                     CubicBezier = new CubicBezierShape()
                     {
                         StartPoint = next,
-                        Point1 = PointShape.FromPoint(PointShape.ToPoint(next)),
-                        Point2 = PointShape.FromPoint(PointShape.ToPoint(next)),
-                        Point3 = PointShape.FromPoint(PointShape.ToPoint(next))
+                        Point1 = next.Clone(),
+                        Point2 = next.Clone(),
+                        Point3 = next.Clone()
                     };
                     context.Shapes.Add(CubicBezier);
                     context.Selected.Add(CubicBezier);

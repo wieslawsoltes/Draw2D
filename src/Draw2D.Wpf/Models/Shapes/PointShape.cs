@@ -4,11 +4,11 @@ using Draw2D.Models.Renderers;
 
 namespace Draw2D.Models.Shapes
 {
-    public class PointShape : BaseShape
+    public class PointShape : ShapeObject
     {
         private double _x;
         private double _y;
-        private BaseShape _template;
+        private ShapeObject _template;
 
         public double X
         {
@@ -22,7 +22,7 @@ namespace Draw2D.Models.Shapes
             set => Update(ref _y, value);
         }
 
-        public BaseShape Template
+        public ShapeObject Template
         {
             get => _template;
             set => Update(ref _template, value);
@@ -32,7 +32,7 @@ namespace Draw2D.Models.Shapes
         {
         }
 
-        public PointShape(double x, double y, BaseShape template)
+        public PointShape(double x, double y, ShapeObject template)
         {
             this.X = x;
             this.Y = y;
@@ -51,7 +51,7 @@ namespace Draw2D.Models.Shapes
             }
         }
 
-        public override void Move(ISet<BaseShape> selected, double dx, double dy)
+        public override void Move(ISet<ShapeObject> selected, double dx, double dy)
         {
             X += dx;
             Y += dy;

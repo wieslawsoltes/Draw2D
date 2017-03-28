@@ -64,7 +64,7 @@ namespace Draw2D.Models.Shapes
             base.EndTransform(dc, renderer);
         }
 
-        public override void Move(ISet<BaseShape> selected, double dx, double dy)
+        public override void Move(ISet<ShapeObject> selected, double dx, double dy)
         {
             if (!selected.Contains(_startPoint))
             {
@@ -89,7 +89,7 @@ namespace Draw2D.Models.Shapes
             base.Move(selected, dx, dy);
         }
 
-        public override void Select(ISet<BaseShape> selected)
+        public override void Select(ISet<ShapeObject> selected)
         {
             base.Select(selected);
             StartPoint.Select(selected);
@@ -98,7 +98,7 @@ namespace Draw2D.Models.Shapes
             Point3.Select(selected);
         }
 
-        public override void Deselect(ISet<BaseShape> selected)
+        public override void Deselect(ISet<ShapeObject> selected)
         {
             base.Deselect(selected);
             StartPoint.Deselect(selected);

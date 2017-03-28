@@ -5,21 +5,23 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using Draw2D.Models;
+using Draw2D.Models.Shapes;
 
 namespace PathDemo
 {
     public class PathCanvas : Canvas, IToolContext
     {
-        public ObservableCollection<ShapeBase> Shapes { get; set; }
-        public HashSet<ShapeBase> Selected { get; set; }
+        public ISet<ShapeObject> Selected { get; set; }
+        public ObservableCollection<ShapeObject> Shapes { get; set; }
 
         public ObservableCollection<ToolBase> Tools { get; set; }
         public ToolBase CurrentTool { get; set; }
 
         public PathCanvas()
         {
-            Shapes = new ObservableCollection<ShapeBase>();
-            Selected = new HashSet<ShapeBase>();
+            Shapes = new ObservableCollection<ShapeObject>();
+            Selected = new HashSet<ShapeObject>();
 
             Tools = new ObservableCollection<ToolBase>();
             Tools.Add(new LineTool() { Name = "Line" });
@@ -31,7 +33,7 @@ namespace PathDemo
 
         public PointShape GetNextPoint(Point point)
         {
-            return PointShape.FromPoint(point);
+            return new PointShape() { X = point.X, Y = point.Y };
         }
 
         public void Capture()
@@ -91,8 +93,8 @@ namespace PathDemo
             var geometry = new StreamGeometry();
             using (var context = geometry.Open())
             {
-                context.BeginFigure(line.StartPoint, false, false);
-                context.LineTo(line.Point, true, false);
+                context.BeginFigure(line.StartPoint.AsPoint(), false, false);
+                context.LineTo(line.Point.AsPoint(), true, false);
             }
             dc.DrawGeometry(null, penStroke, geometry);
         }
@@ -100,8 +102,8 @@ namespace PathDemo
         private void DrawLineHelpers(DrawingContext dc, LineShape line)
         {
             var brushPoints = Brushes.Yellow;
-            dc.DrawEllipse(brushPoints, null, line.StartPoint, 4, 4);
-            dc.DrawEllipse(brushPoints, null, line.Point, 4, 4);
+            dc.DrawEllipse(brushPoints, null, line.StartPoint.AsPoint(), 4, 4);
+            dc.DrawEllipse(brushPoints, null, line.Point.AsPoint(), 4, 4);
         }
 
         private void DrawCubicBezier(DrawingContext dc, CubicBezierShape cubicBezier)
@@ -111,8 +113,8 @@ namespace PathDemo
             var geometry = new StreamGeometry();
             using (var context = geometry.Open())
             {
-                context.BeginFigure(cubicBezier.StartPoint, false, false);
-                context.BezierTo(cubicBezier.Point1, cubicBezier.Point2, cubicBezier.Point3, true, false);
+                context.BeginFigure(cubicBezier.StartPoint.AsPoint(), false, false);
+                context.BezierTo(cubicBezier.Point1.AsPoint(), cubicBezier.Point2.AsPoint(), cubicBezier.Point3.AsPoint(), true, false);
             }
             dc.DrawGeometry(null, penStroke, geometry);
         }
@@ -122,13 +124,13 @@ namespace PathDemo
             var brushLines = Brushes.Cyan;
             var penLines = new Pen(brushLines, 2.0);
             var brushPoints = Brushes.Yellow;
-            dc.DrawLine(penLines, cubicBezier.StartPoint, cubicBezier.Point1);
-            dc.DrawLine(penLines, cubicBezier.Point3, cubicBezier.Point2);
-            dc.DrawLine(penLines, cubicBezier.Point1, cubicBezier.Point2);
-            dc.DrawEllipse(brushPoints, null, cubicBezier.StartPoint, 4, 4);
-            dc.DrawEllipse(brushPoints, null, cubicBezier.Point1, 4, 4);
-            dc.DrawEllipse(brushPoints, null, cubicBezier.Point2, 4, 4);
-            dc.DrawEllipse(brushPoints, null, cubicBezier.Point3, 4, 4);
+            dc.DrawLine(penLines, cubicBezier.StartPoint.AsPoint(), cubicBezier.Point1.AsPoint());
+            dc.DrawLine(penLines, cubicBezier.Point3.AsPoint(), cubicBezier.Point2.AsPoint());
+            dc.DrawLine(penLines, cubicBezier.Point1.AsPoint(), cubicBezier.Point2.AsPoint());
+            dc.DrawEllipse(brushPoints, null, cubicBezier.StartPoint.AsPoint(), 4, 4);
+            dc.DrawEllipse(brushPoints, null, cubicBezier.Point1.AsPoint(), 4, 4);
+            dc.DrawEllipse(brushPoints, null, cubicBezier.Point2.AsPoint(), 4, 4);
+            dc.DrawEllipse(brushPoints, null, cubicBezier.Point3.AsPoint(), 4, 4);
         }
 
         private void DrawQuadraticBezier(DrawingContext dc, QuadraticBezierShape quadraticBezier)
@@ -138,8 +140,8 @@ namespace PathDemo
             var geometry = new StreamGeometry();
             using (var context = geometry.Open())
             {
-                context.BeginFigure(quadraticBezier.StartPoint, false, false);
-                context.QuadraticBezierTo(quadraticBezier.Point1, quadraticBezier.Point2, true, false);
+                context.BeginFigure(quadraticBezier.StartPoint.AsPoint(), false, false);
+                context.QuadraticBezierTo(quadraticBezier.Point1.AsPoint(), quadraticBezier.Point2.AsPoint(), true, false);
             }
             dc.DrawGeometry(null, penStroke, geometry);
         }
@@ -149,11 +151,11 @@ namespace PathDemo
             var brushLines = Brushes.Cyan;
             var penLines = new Pen(brushLines, 2.0);
             var brushPoints = Brushes.Yellow;
-            dc.DrawLine(penLines, quadraticBezier.StartPoint, quadraticBezier.Point1);
-            dc.DrawLine(penLines, quadraticBezier.Point1, quadraticBezier.Point2);
-            dc.DrawEllipse(brushPoints, null, quadraticBezier.StartPoint, 4, 4);
-            dc.DrawEllipse(brushPoints, null, quadraticBezier.Point1, 4, 4);
-            dc.DrawEllipse(brushPoints, null, quadraticBezier.Point2, 4, 4);
+            dc.DrawLine(penLines, quadraticBezier.StartPoint.AsPoint(), quadraticBezier.Point1.AsPoint());
+            dc.DrawLine(penLines, quadraticBezier.Point1.AsPoint(), quadraticBezier.Point2.AsPoint());
+            dc.DrawEllipse(brushPoints, null, quadraticBezier.StartPoint.AsPoint(), 4, 4);
+            dc.DrawEllipse(brushPoints, null, quadraticBezier.Point1.AsPoint(), 4, 4);
+            dc.DrawEllipse(brushPoints, null, quadraticBezier.Point2.AsPoint(), 4, 4);
         }
 
         private Geometry ToGeometry(PathShape path)
@@ -175,30 +177,30 @@ namespace PathDemo
                             var line = segment as LineShape;
                             if (isFirstSegment)
                             {
-                                context.BeginFigure(line.StartPoint, figure.IsFilled, figure.IsClosed);
+                                context.BeginFigure(line.StartPoint.AsPoint(), figure.IsFilled, figure.IsClosed);
                                 isFirstSegment = false;
                             }
-                            context.LineTo(line.Point, true, false);
+                            context.LineTo(line.Point.AsPoint(), true, false);
                         }
                         else if (segment is CubicBezierShape)
                         {
                             var cubicBezier = segment as CubicBezierShape;
                             if (isFirstSegment)
                             {
-                                context.BeginFigure(cubicBezier.StartPoint, figure.IsFilled, figure.IsClosed);
+                                context.BeginFigure(cubicBezier.StartPoint.AsPoint(), figure.IsFilled, figure.IsClosed);
                                 isFirstSegment = false;
                             }
-                            context.BezierTo(cubicBezier.Point1, cubicBezier.Point2, cubicBezier.Point3, true, false);
+                            context.BezierTo(cubicBezier.Point1.AsPoint(), cubicBezier.Point2.AsPoint(), cubicBezier.Point3.AsPoint(), true, false);
                         }
                         else if (segment is QuadraticBezierShape)
                         {
                             var quadraticBezier = segment as QuadraticBezierShape;
                             if (isFirstSegment)
                             {
-                                context.BeginFigure(quadraticBezier.StartPoint, figure.IsFilled, figure.IsClosed);
+                                context.BeginFigure(quadraticBezier.StartPoint.AsPoint(), figure.IsFilled, figure.IsClosed);
                                 isFirstSegment = false;
                             }
-                            context.QuadraticBezierTo(quadraticBezier.Point1, quadraticBezier.Point2, true, false);
+                            context.QuadraticBezierTo(quadraticBezier.Point1.AsPoint(), quadraticBezier.Point2.AsPoint(), true, false);
                         }
                     }
                 }

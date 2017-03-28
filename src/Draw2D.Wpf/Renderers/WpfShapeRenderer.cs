@@ -13,9 +13,9 @@ namespace Draw2D.Wpf.Renderers
     {
         private readonly IDictionary<DrawStyle, WpfBrushCache> _brushCache;
 
-        private ISet<BaseShape> _selected;
+        private ISet<ShapeObject> _selected;
 
-        public override ISet<BaseShape> Selected
+        public override ISet<ShapeObject> Selected
         {
             get => _selected;
             set => Update(ref _selected, value);
@@ -24,7 +24,7 @@ namespace Draw2D.Wpf.Renderers
         public WpfShapeRenderer()
         {
             _brushCache = new Dictionary<DrawStyle, WpfBrushCache>();
-            _selected = new HashSet<BaseShape>();
+            _selected = new HashSet<ShapeObject>();
         }
 
         private Point FromPoint(PointShape point, double dx, double dy)

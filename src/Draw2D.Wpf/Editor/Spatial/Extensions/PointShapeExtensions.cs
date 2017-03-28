@@ -10,7 +10,7 @@ namespace Draw2D.Models.Shapes
             return new Point2(point.X, point.Y);
         }
 
-        public static PointShape FromPoint2(this Point2 point, BaseShape template = null)
+        public static PointShape FromPoint2(this Point2 point, ShapeObject template = null)
         {
             return new PointShape(point.X, point.Y, template);
         }

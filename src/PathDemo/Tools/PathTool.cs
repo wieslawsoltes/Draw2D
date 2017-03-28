@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows;
+using Draw2D.Models;
+using Draw2D.Models.Shapes;
 
 namespace PathDemo
 {
@@ -9,7 +11,33 @@ namespace PathDemo
     {
         private IToolContext _context;
 
-        public ObservableCollection<ShapeBase> Shapes
+        public ISet<ShapeObject> Selected
+        {
+            get
+            {
+                if (_context != null)
+                {
+                    return _context.Selected;
+                }
+                else
+                {
+                    throw new Exception("Context is not set.");
+                }
+            }
+            set
+            {
+                if (_context != null)
+                {
+                    _context.Selected = value;
+                }
+                else
+                {
+                    throw new Exception("Context is not set.");
+                }
+            }
+        }
+
+        public ObservableCollection<ShapeObject> Shapes
         {
             get
             {
@@ -42,32 +70,6 @@ namespace PathDemo
             }
         }
 
-        public HashSet<ShapeBase> Selected
-        {
-            get
-            {
-                if (_context != null)
-                {
-                    return _context.Selected;
-                }
-                else
-                {
-                    throw new Exception("Context is not set.");
-                }
-            }
-            set
-            {
-                if (_context != null)
-                {
-                    _context.Selected = value;
-                }
-                else
-                {
-                    throw new Exception("Context is not set.");
-                }
-            }
-        }
-
         public ObservableCollection<ToolBase> SubTools { get; set; }
 
         private ToolBase _currentSubTool;
@@ -92,11 +94,13 @@ namespace PathDemo
 
         public PathTool()
         {
-            SubTools = new ObservableCollection<ToolBase>();
-            SubTools.Add(new LineTool() { Name = "Line" });
-            SubTools.Add(new CubicBezierTool() { Name = "CubicBezier" });
-            SubTools.Add(new QuadraticBezierTool() { Name = "QuadraticBezier" });
-            SubTools.Add(new MoveTool(this) { Name = "Move" });
+            SubTools = new ObservableCollection<ToolBase>
+            {
+                new LineTool() { Name = "Line" },
+                new CubicBezierTool() { Name = "CubicBezier" },
+                new QuadraticBezierTool() { Name = "QuadraticBezier" },
+                new MoveTool(this) { Name = "Move" }
+            };
             CurrentSubTool = SubTools[0];
         }
 
@@ -186,7 +190,7 @@ namespace PathDemo
         {
             Figure = new FigureShape()
             {
-                Segments = new ObservableCollection<ShapeBase>(),
+                Segments = new ObservableCollection<ShapeObject>(),
                 IsFilled = true,
                 IsClosed = true
             };

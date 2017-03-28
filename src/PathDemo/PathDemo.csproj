@@ -68,16 +68,9 @@
       <SubType>Code</SubType>
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="PointShapeExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PathCanvas.cs" />
-    <Compile Include="Shapes\CubicBezierShape.cs" />
-    <Compile Include="Shapes\FigureShape.cs" />
-    <Compile Include="Shapes\LineShape.cs" />
-    <Compile Include="Shapes\PathFillRule.cs" />
-    <Compile Include="Shapes\PathShape.cs" />
-    <Compile Include="Shapes\PointShape.cs" />
-    <Compile Include="Shapes\QuadraticBezierShape.cs" />
-    <Compile Include="Shapes\ShapeBase.cs" />
     <Compile Include="Tools\CubicBezierTool.cs" />
     <Compile Include="Tools\IToolContext.cs" />
     <Compile Include="Tools\LineTool.cs" />
@@ -98,6 +91,11 @@
   <ItemGroup>
     <None Include="app.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\Draw2D.Wpf\Draw2D.Wpf.csproj">
+      <Project>{41a7b9ba-a69c-46d4-997e-f2e12ace58d6}</Project>
+      <Name>Draw2D.Wpf</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

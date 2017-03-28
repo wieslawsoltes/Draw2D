@@ -5,7 +5,7 @@ using Draw2D.Models.Renderers;
 
 namespace Draw2D.Models.Shapes
 {
-    public class ScribbleShape : BaseShape
+    public class ScribbleShape : ShapeObject
     {
         private PointShape _start;
         private ObservableCollection<PointShape> _points;
@@ -53,7 +53,7 @@ namespace Draw2D.Models.Shapes
             base.EndTransform(dc, r);
         }
 
-        public override void Move(ISet<BaseShape> selected, double dx, double dy)
+        public override void Move(ISet<ShapeObject> selected, double dx, double dy)
         {
             if (!selected.Contains(_start))
             {
@@ -69,7 +69,7 @@ namespace Draw2D.Models.Shapes
             }
         }
 
-        public override void Select(ISet<BaseShape> selected)
+        public override void Select(ISet<ShapeObject> selected)
         {
             base.Select(selected);
 
@@ -81,7 +81,7 @@ namespace Draw2D.Models.Shapes
             }
         }
 
-        public override void Deselect(ISet<BaseShape> selected)
+        public override void Deselect(ISet<ShapeObject> selected)
         {
             base.Deselect(selected);
 

@@ -57,7 +57,7 @@ namespace Draw2D.Models.Shapes
             base.EndTransform(dc, r);
         }
 
-        public override void Move(ISet<BaseShape> selected, double dx, double dy)
+        public override void Move(ISet<ShapeObject> selected, double dx, double dy)
         {
             foreach (var figure in Figures)
             {

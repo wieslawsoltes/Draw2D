@@ -5,9 +5,15 @@ namespace Draw2D.Models.Shapes
 {
     public static class PointShapeExtensionsWindows
     {
-        public static Point ToPoint(this PointShape point)
+        public static Point AsPoint(this PointShape point)
         {
             return new Point(point.X, point.Y);
+        }
+
+        public static void Update(this PointShape target, Point source)
+        {
+            target.X = source.X;
+            target.Y = source.Y;
         }
     }
 }

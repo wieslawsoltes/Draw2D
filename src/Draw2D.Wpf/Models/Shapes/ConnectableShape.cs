@@ -5,7 +5,7 @@ using Draw2D.Models.Renderers;
 
 namespace Draw2D.Models.Shapes
 {
-    public abstract class ConnectableShape : BaseShape
+    public abstract class ConnectableShape : ShapeObject
     {
         private ObservableCollection<PointShape> _points;
 
@@ -33,7 +33,7 @@ namespace Draw2D.Models.Shapes
             }
         }
 
-        public override void Move(ISet<BaseShape> selected, double dx, double dy)
+        public override void Move(ISet<ShapeObject> selected, double dx, double dy)
         {
             foreach (var point in Points)
             {
@@ -44,7 +44,7 @@ namespace Draw2D.Models.Shapes
             }
         }
 
-        public override void Select(ISet<BaseShape> selected)
+        public override void Select(ISet<ShapeObject> selected)
         {
             base.Select(selected);
 
@@ -54,7 +54,7 @@ namespace Draw2D.Models.Shapes
             }
         }
 
-        public override void Deselect(ISet<BaseShape> selected)
+        public override void Deselect(ISet<ShapeObject> selected)
         {
             base.Deselect(selected);
 

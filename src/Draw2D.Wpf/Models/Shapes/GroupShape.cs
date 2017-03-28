@@ -7,9 +7,9 @@ namespace Draw2D.Models.Shapes
 {
     public class GroupShape : ConnectableShape
     {
-        private ObservableCollection<BaseShape> _segments;
+        private ObservableCollection<ShapeObject> _segments;
 
-        public ObservableCollection<BaseShape> Segments
+        public ObservableCollection<ShapeObject> Segments
         {
             get => _segments;
             set => Update(ref _segments, value);
@@ -18,10 +18,10 @@ namespace Draw2D.Models.Shapes
         public GroupShape()
             : base()
         {
-            _segments = new ObservableCollection<BaseShape>();
+            _segments = new ObservableCollection<ShapeObject>();
         }
 
-        public GroupShape(ObservableCollection<BaseShape> segments)
+        public GroupShape(ObservableCollection<ShapeObject> segments)
             : base()
         {
             this.Segments = segments;
@@ -33,7 +33,7 @@ namespace Draw2D.Models.Shapes
             this.Name = name;
         }
 
-        public GroupShape(string name, ObservableCollection<BaseShape> segments)
+        public GroupShape(string name, ObservableCollection<ShapeObject> segments)
             : base()
         {
             this.Name = name;
@@ -53,7 +53,7 @@ namespace Draw2D.Models.Shapes
             base.EndTransform(dc, r);
         }
 
-        public override void Move(ISet<BaseShape> selected, double dx, double dy)
+        public override void Move(ISet<ShapeObject> selected, double dx, double dy)
         {
             foreach (var segment in Segments)
             {

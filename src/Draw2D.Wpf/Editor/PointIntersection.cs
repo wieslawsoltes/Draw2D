@@ -15,7 +15,7 @@ namespace Draw2D.Editor
             Intersections = new List<PointShape>();
         }
 
-        public abstract void Find(IToolContext context, BaseShape shape);
+        public abstract void Find(IToolContext context, ShapeObject shape);
 
         public virtual void Clear(IToolContext context)
         {

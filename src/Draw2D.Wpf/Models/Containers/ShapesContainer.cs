@@ -11,7 +11,7 @@ namespace Draw2D.Models.Containers
         private double _height;
         private ObservableCollection<DrawStyle> _styles;
         private ObservableCollection<LineShape> _guides;
-        private ObservableCollection<BaseShape> _shapes;
+        private ObservableCollection<ShapeObject> _shapes;
 
         public double Width
         {
@@ -37,7 +37,7 @@ namespace Draw2D.Models.Containers
             set => Update(ref _guides, value);
         }
 
-        public ObservableCollection<BaseShape> Shapes
+        public ObservableCollection<ShapeObject> Shapes
         {
             get => _shapes;
             set => Update(ref _shapes, value);
@@ -47,10 +47,10 @@ namespace Draw2D.Models.Containers
         {
             _styles = new ObservableCollection<DrawStyle>();
             _guides = new ObservableCollection<LineShape>();
-            _shapes = new ObservableCollection<BaseShape>();
+            _shapes = new ObservableCollection<ShapeObject>();
         }
 
-        public ShapesContainer(ObservableCollection<BaseShape> shapes)
+        public ShapesContainer(ObservableCollection<ShapeObject> shapes)
         {
             this.Styles = new ObservableCollection<DrawStyle>();
             this.Guides = new ObservableCollection<LineShape>();
@@ -63,7 +63,7 @@ namespace Draw2D.Models.Containers
             this.Name = name;
         }
 
-        public ShapesContainer(string name, ObservableCollection<BaseShape> shapes)
+        public ShapesContainer(string name, ObservableCollection<ShapeObject> shapes)
         {
             this.Name = name;
             this.Styles = new ObservableCollection<DrawStyle>();
@@ -71,7 +71,7 @@ namespace Draw2D.Models.Containers
             this.Shapes = shapes;
         }
 
-        public ShapesContainer(string name, ObservableCollection<LineShape> guides, ObservableCollection<BaseShape> shapes)
+        public ShapesContainer(string name, ObservableCollection<LineShape> guides, ObservableCollection<ShapeObject> shapes)
         {
             this.Name = name;
             this.Styles = new ObservableCollection<DrawStyle>();
@@ -79,7 +79,7 @@ namespace Draw2D.Models.Containers
             this.Shapes = shapes;
         }
 
-        public ShapesContainer(string name, ObservableCollection<DrawStyle> styles, ObservableCollection<LineShape> guides, ObservableCollection<BaseShape> shapes)
+        public ShapesContainer(string name, ObservableCollection<DrawStyle> styles, ObservableCollection<LineShape> guides, ObservableCollection<ShapeObject> shapes)
         {
             this.Name = name;
             this.Styles = styles;

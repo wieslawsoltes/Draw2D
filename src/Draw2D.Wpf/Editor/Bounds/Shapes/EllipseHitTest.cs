@@ -10,7 +10,7 @@ namespace Draw2D.Editor.Bounds.Shapes
     {
         public override Type TargetType { get { return typeof(EllipseShape); } }
 
-        public override PointShape TryToGetPoint(BaseShape shape, Point2 target, double radius, IDictionary<Type, HitTestBase> registered)
+        public override PointShape TryToGetPoint(ShapeObject shape, Point2 target, double radius, IDictionary<Type, HitTestBase> registered)
         {
             var ellipse = shape as EllipseShape;
             if (ellipse == null)
@@ -39,7 +39,7 @@ namespace Draw2D.Editor.Bounds.Shapes
             return null;
         }
 
-        public override bool Contains(BaseShape shape, Point2 target, double radius, IDictionary<Type, HitTestBase> registered)
+        public override bool Contains(ShapeObject shape, Point2 target, double radius, IDictionary<Type, HitTestBase> registered)
         {
             var ellipse = shape as EllipseShape;
             if (ellipse == null)
@@ -52,7 +52,7 @@ namespace Draw2D.Editor.Bounds.Shapes
                 ellipse.BottomRight.Y).Contains(target);
         }
 
-        public override bool Overlaps(BaseShape shape, Rect2 target, double radius, IDictionary<Type, HitTestBase> registered)
+        public override bool Overlaps(ShapeObject shape, Rect2 target, double radius, IDictionary<Type, HitTestBase> registered)
         {
             var ellipse = shape as EllipseShape;
             if (ellipse == null)

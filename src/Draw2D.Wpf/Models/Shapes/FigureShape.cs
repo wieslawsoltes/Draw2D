@@ -25,7 +25,7 @@ namespace Draw2D.Models.Shapes
         {
         }
 
-        public FigureShape(ObservableCollection<BaseShape> shapes)
+        public FigureShape(ObservableCollection<ShapeObject> shapes)
             : base()
         {
             this.Segments = shapes;
@@ -37,7 +37,7 @@ namespace Draw2D.Models.Shapes
             this.Name = name;
         }
 
-        public FigureShape(string name, ObservableCollection<BaseShape> shapes)
+        public FigureShape(string name, ObservableCollection<ShapeObject> shapes)
             : base()
         {
             this.Name = name;

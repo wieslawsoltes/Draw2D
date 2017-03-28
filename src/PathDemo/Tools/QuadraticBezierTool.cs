@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows;
+using Draw2D.Models.Shapes;
 
 namespace PathDemo
 {
@@ -18,8 +19,8 @@ namespace PathDemo
                     QuadraticBezier = new QuadraticBezierShape()
                     {
                         StartPoint = next,
-                        Point1 = PointShape.FromPoint(PointShape.ToPoint(next)),
-                        Point2 = PointShape.FromPoint(PointShape.ToPoint(next))
+                        Point1 = next.Clone(),
+                        Point2 = next.Clone()
                     };
                     context.Shapes.Add(QuadraticBezier);
                     context.Selected.Add(QuadraticBezier);

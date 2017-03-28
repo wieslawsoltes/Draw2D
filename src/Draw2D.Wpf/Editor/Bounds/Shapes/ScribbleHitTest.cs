@@ -10,7 +10,7 @@ namespace Draw2D.Editor.Bounds.Shapes
     {
         public override Type TargetType { get { return typeof(ScribbleShape); } }
 
-        public override PointShape TryToGetPoint(BaseShape shape, Point2 target, double radius, IDictionary<Type, HitTestBase> registered)
+        public override PointShape TryToGetPoint(ShapeObject shape, Point2 target, double radius, IDictionary<Type, HitTestBase> registered)
         {
             var scribble = shape as ScribbleShape;
             if (scribble == null)
@@ -34,7 +34,7 @@ namespace Draw2D.Editor.Bounds.Shapes
             return null;
         }
 
-        public override bool Contains(BaseShape shape, Point2 target, double radius, IDictionary<Type, HitTestBase> registered)
+        public override bool Contains(ShapeObject shape, Point2 target, double radius, IDictionary<Type, HitTestBase> registered)
         {
             var scribble = shape as ScribbleShape;
             if (scribble == null)
@@ -58,7 +58,7 @@ namespace Draw2D.Editor.Bounds.Shapes
             return false;
         }
 
-        public override bool Overlaps(BaseShape shape, Rect2 target, double radius, IDictionary<Type, HitTestBase> registered)
+        public override bool Overlaps(ShapeObject shape, Rect2 target, double radius, IDictionary<Type, HitTestBase> registered)
         {
             var scribble = shape as ScribbleShape;
             if (scribble == null)

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows;
+using Draw2D.Models.Shapes;
 
 namespace PathDemo
 {
@@ -18,7 +19,7 @@ namespace PathDemo
                     Line = new LineShape()
                     {
                         StartPoint = context.GetNextPoint(point),
-                        Point = PointShape.FromPoint(PointShape.ToPoint(next))
+                        Point = next.Clone()
                     };
                     context.Shapes.Add(Line);
                     context.Selected.Add(Line);

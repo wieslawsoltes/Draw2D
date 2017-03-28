@@ -5,7 +5,7 @@ using Draw2D.Models.Style;
 
 namespace Draw2D.Models
 {
-    public abstract class BaseShape : IdObject
+    public abstract class ShapeObject : IdObject
     {
         private DrawStyle _style;
         private MatrixObject _transform;
@@ -24,9 +24,9 @@ namespace Draw2D.Models
 
         public abstract void Draw(object dc, ShapeRenderer r, double dx, double dy);
 
-        public abstract void Move(ISet<BaseShape> selected, double dx, double dy);
+        public abstract void Move(ISet<ShapeObject> selected, double dx, double dy);
 
-        public virtual void Select(ISet<BaseShape> selected)
+        public virtual void Select(ISet<ShapeObject> selected)
         {
             if (!selected.Contains(this))
             {
@@ -34,7 +34,7 @@ namespace Draw2D.Models
             }
         }
 
-        public virtual void Deselect(ISet<BaseShape> selected)
+        public virtual void Deselect(ISet<ShapeObject> selected)
         {
             if (selected.Contains(this))
             {

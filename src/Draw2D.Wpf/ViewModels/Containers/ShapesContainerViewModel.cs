@@ -15,11 +15,11 @@ namespace Draw2D.ViewModels.Containers
         private ObservableCollection<ToolBase> _tools;
         private ToolBase _currentTool;
         private ShapeRenderer _renderer;
-        private ISet<BaseShape> _selected;
+        private ISet<ShapeObject> _selected;
         private IShapesContainer _currentContainer;
         private IShapesContainer _workingContainer;
         private DrawStyle _style;
-        private BaseShape _pointShape;
+        private ShapeObject _pointShape;
         private HitTest _hitTest;
 
         public ObservableCollection<ToolBase> Tools
@@ -44,7 +44,7 @@ namespace Draw2D.ViewModels.Containers
             set => Update(ref _renderer, value);
         }
 
-        public ISet<BaseShape> Selected
+        public ISet<ShapeObject> Selected
         {
             get => _selected;
             set => Update(ref _selected, value);
@@ -68,7 +68,7 @@ namespace Draw2D.ViewModels.Containers
             set => Update(ref _style, value);
         }
 
-        public BaseShape PointShape
+        public ShapeObject PointShape
         {
             get => _pointShape;
             set => Update(ref _pointShape, value);

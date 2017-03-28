@@ -11,6 +11,6 @@ namespace Draw2D.Models.Containers
         double Height { get; set; }
         ObservableCollection<DrawStyle> Styles { get; set; }
         ObservableCollection<LineShape> Guides { get; set; }
-        ObservableCollection<BaseShape> Shapes { get; set; }
+        ObservableCollection<ShapeObject> Shapes { get; set; }
     }
 }

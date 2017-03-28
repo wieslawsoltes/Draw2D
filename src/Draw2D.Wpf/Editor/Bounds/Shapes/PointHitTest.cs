@@ -10,7 +10,7 @@ namespace Draw2D.Editor.Bounds.Shapes
     {
         public override Type TargetType { get { return typeof(PointShape); } }
 
-        public override PointShape TryToGetPoint(BaseShape shape, Point2 target, double radius, IDictionary<Type, HitTestBase> registered)
+        public override PointShape TryToGetPoint(ShapeObject shape, Point2 target, double radius, IDictionary<Type, HitTestBase> registered)
         {
             var point = shape as PointShape;
             if (point == null)
@@ -24,7 +24,7 @@ namespace Draw2D.Editor.Bounds.Shapes
             return null;
         }
 
-        public override bool Contains(BaseShape shape, Point2 target, double radius, IDictionary<Type, HitTestBase> registered)
+        public override bool Contains(ShapeObject shape, Point2 target, double radius, IDictionary<Type, HitTestBase> registered)
         {
             var point = shape as PointShape;
             if (point == null)
@@ -33,7 +33,7 @@ namespace Draw2D.Editor.Bounds.Shapes
             return Point2.FromXY(point.X, point.Y).ExpandToRect(radius).Contains(target.X, target.Y);
         }
 
-        public override bool Overlaps(BaseShape shape, Rect2 target, double radius, IDictionary<Type, HitTestBase> registered)
+        public override bool Overlaps(ShapeObject shape, Rect2 target, double radius, IDictionary<Type, HitTestBase> registered)
         {
             var point = shape as PointShape;
             if (point == null)

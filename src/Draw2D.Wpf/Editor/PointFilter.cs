@@ -7,11 +7,11 @@ namespace Draw2D.Editor
     public abstract class PointFilter
     {
         public abstract string Name { get; }
-        public List<BaseShape> Guides { get; set; }
+        public List<ShapeObject> Guides { get; set; }
 
         protected PointFilter()
         {
-            Guides = new List<BaseShape>();
+            Guides = new List<ShapeObject>();
         }
 
         public abstract bool Process(IToolContext context, ref double x, ref double y);
