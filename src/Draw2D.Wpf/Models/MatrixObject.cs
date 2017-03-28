@@ -2,7 +2,7 @@
 
 namespace Draw2D.Models
 {
-    public class MatrixObject : BaseObject
+    public class MatrixObject : ObservableObject
     {
         private double _m11;
         private double _m12;

@@ -5,7 +5,7 @@ using Draw2D.Models.Style;
 
 namespace Draw2D.Models.Renderers
 {
-    public abstract class ShapeRenderer : BaseObject
+    public abstract class ShapeRenderer : ObservableObject
     {
         public abstract ISet<BaseShape> Selected { get; set; }
         public abstract void PushMatrix(object dc, MatrixObject matrix);

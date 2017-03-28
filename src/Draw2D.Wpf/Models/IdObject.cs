@@ -2,7 +2,7 @@
 
 namespace Draw2D.Models
 {
-    public abstract class IdObject : BaseObject
+    public abstract class IdObject : ObservableObject
     {
         private Guid _id;
         private string _name;

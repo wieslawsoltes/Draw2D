@@ -108,7 +108,7 @@
     <Compile Include="Demos\ArcDemo\Arc.cs" />
     <Compile Include="Demos\ArcDemo\ArcCanvas.cs" />
     <Compile Include="Demos\GuideDemo\GuideCanvas.cs" />
-    <Compile Include="Models\BaseObject.cs" />
+    <Compile Include="Models\ObservableObject.cs" />
     <Compile Include="Models\BaseShape.cs" />
     <Compile Include="Models\Containers\IShapesContainer.cs" />
     <Compile Include="Models\Containers\ShapesContainer.cs" />

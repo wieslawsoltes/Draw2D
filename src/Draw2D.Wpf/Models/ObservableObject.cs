@@ -4,7 +4,7 @@ using System.Runtime.CompilerServices;
 
 namespace Draw2D.Models
 {
-    public abstract class BaseObject : INotifyPropertyChanged
+    public abstract class ObservableObject : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
 

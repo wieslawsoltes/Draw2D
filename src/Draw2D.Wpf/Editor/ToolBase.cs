@@ -5,7 +5,7 @@ using Draw2D.Models;
 
 namespace Draw2D.Editor
 {
-    public abstract class ToolBase : BaseObject
+    public abstract class ToolBase : ObservableObject
     {
         public abstract string Name { get; }
 

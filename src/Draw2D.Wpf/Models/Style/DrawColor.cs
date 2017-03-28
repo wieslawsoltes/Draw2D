@@ -2,7 +2,7 @@
 
 namespace Draw2D.Models.Style
 {
-    public class DrawColor : BaseObject
+    public class DrawColor : ObservableObject
     {
         private byte _a;
         private byte _r;
