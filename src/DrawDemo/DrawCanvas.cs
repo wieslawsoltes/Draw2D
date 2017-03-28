@@ -13,19 +13,15 @@ namespace DrawDemo
         protected override void OnMouseEnter(MouseEventArgs e)
         {
             base.OnMouseEnter(e);
-            //Debug.WriteLine("Enter");
             _point = e.GetPosition(this);
             _draw = true;
-            //Cursor = Cursors.None;
             this.InvalidateVisual();
         }
 
         protected override void OnMouseLeave(MouseEventArgs e)
         {
             base.OnMouseLeave(e);
-            //Debug.WriteLine("Leave");
             _draw = false;
-            //Cursor = Cursors.Arrow;
             this.InvalidateVisual();
         }
 
@@ -37,7 +33,6 @@ namespace DrawDemo
         protected override void OnPreviewMouseMove(MouseEventArgs e)
         {
             base.OnPreviewMouseMove(e);
-            //Debug.WriteLine("Move");
             _point = e.GetPosition(this);
             this.InvalidateVisual();
         }
@@ -48,7 +43,6 @@ namespace DrawDemo
 
             if (_draw)
             {
-                //Debug.WriteLine("Draw");
                 var pen = new Pen(Brushes.Cyan, 2);
 
                 var a0 = new Point(0, _point.Y);
@@ -59,7 +53,7 @@ namespace DrawDemo
                 dc.DrawLine(pen, a0, b0);
                 dc.DrawLine(pen, a1, b1);
 
-                //dc.DrawEllipse(Brushes.Yellow, null, _point, 5, 5);
+                dc.DrawEllipse(Brushes.Yellow, null, _point, 5, 5);
 
             }
         }
