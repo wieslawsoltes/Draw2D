@@ -3,9 +3,9 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 
-namespace Draw2D.Wpf
+namespace GuideDemo
 {
-    public class DrawCanvas : Canvas
+    public class GuideCanvas : Canvas
     {
         private bool _draw = false;
         private Point _point;
