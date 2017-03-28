@@ -80,7 +80,7 @@
       <SubType>Code</SubType>
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\RenderCanvas.cs" />
+    <Compile Include="Controls\ArcCanvas.cs" />
   </ItemGroup>
   <ItemGroup>
     <Page Include="MainWindow.xaml">

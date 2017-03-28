@@ -6,6 +6,6 @@
         WindowStartupLocation="CenterScreen" 
         UseLayoutRounding="True" SnapsToDevicePixels="True" TextOptions.TextFormattingMode="Display">
     <Grid>
-        <local:RenderCanvas Width="500" Height="500" Background="LightGray"/>
+        <local:ArcCanvas Width="500" Height="500" Background="LightGray"/>
     </Grid>
 </Window>

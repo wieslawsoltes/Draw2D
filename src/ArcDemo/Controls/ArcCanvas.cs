@@ -7,14 +7,14 @@ using System.Windows.Media;
 
 namespace ArcDemo
 {
-    public class RenderCanvas : Canvas
+    public class ArcCanvas : Canvas
     {
         enum State { StartPoint, Point }
         State _state;
         Arc _arc;
         List<Arc> Arcs;
 
-        public RenderCanvas()
+        public ArcCanvas()
         {
             Arcs = new List<Arc>();
         }
