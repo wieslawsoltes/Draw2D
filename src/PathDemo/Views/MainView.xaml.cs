@@ -10,65 +10,76 @@ namespace PathDemo.Views
         public MainView()
         {
             InitializeComponent();
-            KeyDown += MainWindow_KeyDown;
+            KeyDown += MainView_KeyDown;
         }
 
-        private void MainWindow_KeyDown(object sender, KeyEventArgs e)
+        public void SetLineTool()
+        {
+            if (canvas.CurrentTool is PathTool pathTool)
+            {
+                pathTool.CurrentSubTool = pathTool.SubTools.Where(t => t.Name == "Line").FirstOrDefault();
+            }
+            else
+            {
+                canvas.CurrentTool = canvas.Tools.Where(t => t.Name == "Line").FirstOrDefault();
+            }
+        }
+
+        public void SetCubicBezierTool()
+        {
+            if (canvas.CurrentTool is PathTool pathTool)
+            {
+                pathTool.CurrentSubTool = pathTool.SubTools.Where(t => t.Name == "CubicBezier").FirstOrDefault();
+            }
+            else
+            {
+                canvas.CurrentTool = canvas.Tools.Where(t => t.Name == "CubicBezier").FirstOrDefault();
+            }
+        }
+
+        public void SetQuadraticBezierTool()
+        {
+            if (canvas.CurrentTool is PathTool pathTool)
+            {
+                pathTool.CurrentSubTool = pathTool.SubTools.Where(t => t.Name == "QuadraticBezier").FirstOrDefault();
+            }
+            else
+            {
+                canvas.CurrentTool = canvas.Tools.Where(t => t.Name == "QuadraticBezier").FirstOrDefault();
+            }
+        }
+
+        public void SetPathTool()
+        {
+            canvas.CurrentTool = canvas.Tools.Where(t => t.Name == "Path").FirstOrDefault();
+        }
+
+        public void SetMoveTool()
+        {
+            if (canvas.CurrentTool is PathTool pathTool)
+            {
+                pathTool.CurrentSubTool = pathTool.SubTools.Where(t => t.Name == "Move").FirstOrDefault();
+            }
+        }
+
+        private void MainView_KeyDown(object sender, KeyEventArgs e)
         {
             switch (e.Key)
             {
                 case Key.L:
-                    {
-                        if (canvas.CurrentTool.Name == "Path")
-                        {
-                            var pathTool = canvas.CurrentTool as PathTool;
-                            pathTool.CurrentSubTool = pathTool.SubTools.Where(t => t.Name == "Line").FirstOrDefault();
-                        }
-                        else
-                        {
-                            canvas.CurrentTool = canvas.Tools.Where(t => t.Name == "Line").FirstOrDefault();
-                        }
-                    }
+                    SetLineTool();
                     break;
                 case Key.C:
-                    {
-                        if (canvas.CurrentTool.Name == "Path")
-                        {
-                            var pathTool = canvas.CurrentTool as PathTool;
-                            pathTool.CurrentSubTool = pathTool.SubTools.Where(t => t.Name == "CubicBezier").FirstOrDefault();
-                        }
-                        else
-                        {
-                            canvas.CurrentTool = canvas.Tools.Where(t => t.Name == "CubicBezier").FirstOrDefault();
-                        }
-                    }
+                    SetCubicBezierTool();
                     break;
                 case Key.Q:
-                    {
-                        if (canvas.CurrentTool.Name == "Path")
-                        {
-                            var pathTool = canvas.CurrentTool as PathTool;
-                            pathTool.CurrentSubTool = pathTool.SubTools.Where(t => t.Name == "QuadraticBezier").FirstOrDefault();
-                        }
-                        else
-                        {
-                            canvas.CurrentTool = canvas.Tools.Where(t => t.Name == "QuadraticBezier").FirstOrDefault();
-                        }
-                    }
+                    SetQuadraticBezierTool();
                     break;
                 case Key.H:
-                    {
-                        canvas.CurrentTool = canvas.Tools.Where(t => t.Name == "Path").FirstOrDefault();
-                    }
+                    SetPathTool();
                     break;
                 case Key.M:
-                    {
-                        if (canvas.CurrentTool.Name == "Path")
-                        {
-                            var pathTool = canvas.CurrentTool as PathTool;
-                            pathTool.CurrentSubTool = pathTool.SubTools.Where(t => t.Name == "Move").FirstOrDefault();
-                        }
-                    }
+                    SetMoveTool();
                     break;
             }
         }
