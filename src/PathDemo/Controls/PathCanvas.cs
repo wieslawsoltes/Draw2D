@@ -55,7 +55,7 @@ namespace PathDemo.Controls
 
     public class PathHelper
     {
-        public static void Draw(DrawingContext dc, PathShape path)
+        public static void Draw(DrawingContext dc, PathShape path, ISet<ShapeObject> selected)
         {
             foreach (var figure in path.Figures)
             {
@@ -63,21 +63,21 @@ namespace PathDemo.Controls
                 {
                     if (segment is LineShape line)
                     {
-                        if (Selected.Contains(line))
+                        if (selected.Contains(line))
                         {
                             LineHelper.Draw(dc, line);
                         }
                     }
                     else if (segment is CubicBezierShape cubicBezier)
                     {
-                        if (Selected.Contains(cubicBezier))
+                        if (selected.Contains(cubicBezier))
                         {
                             CubiceBezierHelper.Draw(dc, cubicBezier);
                         }
                     }
                     else if (segment is QuadraticBezierShape quadraticBezier)
                     {
-                        if (Selected.Contains(quadraticBezier))
+                        if (selected.Contains(quadraticBezier))
                         {
                             QuadraticBezierHelper.Draw(dc, quadraticBezier);
                         }
@@ -87,7 +87,7 @@ namespace PathDemo.Controls
         }
     }
 
-    public class ShapeRenderer
+    public class GeometryConverter
     {
         public static Geometry ToGeometry(PathShape path)
         {
@@ -136,7 +136,10 @@ namespace PathDemo.Controls
 
             return geometry;
         }
+    }
 
+    public class ShapeRenderer
+    {
         public static void DrawLine(DrawingContext dc, LineShape line)
         {
             var brushPen = Brushes.Yellow;
@@ -180,7 +183,7 @@ namespace PathDemo.Controls
         {
             var brushPen = Brushes.Yellow;
             var penStroke = new Pen(brushPen, 2);
-            var geometry = ToGeometry(path);
+            var geometry = GeometryConverter.ToGeometry(path);
             dc.DrawGeometry(null, penStroke, geometry);
         }
     }
@@ -279,7 +282,7 @@ namespace PathDemo.Controls
                     ShapeRenderer.DrawPath(dc, path);
                     if (Selected.Contains(path))
                     {
-                        PathHelper.Draw(dc, path);
+                        PathHelper.Draw(dc, path, Selected);
                     }
                 }
             }
