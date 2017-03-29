@@ -37,7 +37,7 @@
     </Compile>
     <Compile Include="PointShapeExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="PathCanvas.cs" />
+    <Compile Include="Controls\PathCanvas.cs" />
     <Compile Include="Tools\CubicBezierTool.cs" />
     <Compile Include="Tools\IToolContext.cs" />
     <Compile Include="Tools\LineTool.cs" />
