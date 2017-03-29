@@ -2,7 +2,7 @@
 using System.Windows;
 using System.Windows.Input;
 
-namespace PathDemo
+namespace PathDemo.Views
 {
     public partial class MainView : Window
     {
