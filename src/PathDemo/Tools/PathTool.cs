@@ -14,13 +14,13 @@ namespace PathDemo.Tools
         public ISet<ShapeObject> Selected
         {
             get => _context?.Selected;
-            set => _context?.Selected = value ?? throw new Exception("Context is not set.");
+            set => _context?.Selected = value;
         }
 
         public ObservableCollection<ShapeObject> Shapes
         {
             get => Figure?.Segments ?? _context?.Shapes;
-            set => Figure?.Segments = value ?? _context?.Shapes = value ?? throw new Exception("Context is not set.");
+            set => Figure?.Segments = value ?? _context?.Shapes = value;
         }
 
         public ObservableCollection<ToolBase> SubTools { get; set; }
@@ -57,32 +57,13 @@ namespace PathDemo.Tools
             CurrentSubTool = SubTools[0];
         }
 
-        public PointShape GetNextPoint(Point point)
-        {
-            if (_context != null)
-            {
-                return NextPoint ?? _context.GetNextPoint(point);
-            }
-            else
-            {
-                throw new Exception("Context is not set.");
-            }
-        }
+        public PointShape GetNextPoint(Point point) => NextPoint ?? _context?.GetNextPoint(point);
 
-        public void Capture()
-        {
-            _context?.Capture() ?? throw new Exception("Context is not set.");
-        }
+        public void Capture() => _context?.Capture();
 
-        public void Release()
-        {
-            _context?.Release() ?? throw new Exception("Context is not set.");
-        }
+        public void Release() => _context?.Release();
 
-        public void Invalidate()
-        {
-            _context?.Invalidate() ?? throw new Exception("Context is not set.");
-        }
+        public void Invalidate() => _context?.Invalidate();
 
         private PointShape GetLastPoint()
         {
