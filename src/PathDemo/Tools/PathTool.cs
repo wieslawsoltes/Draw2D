@@ -13,61 +13,14 @@ namespace PathDemo.Tools
 
         public ISet<ShapeObject> Selected
         {
-            get
-            {
-                if (_context != null)
-                {
-                    return _context.Selected;
-                }
-                else
-                {
-                    throw new Exception("Context is not set.");
-                }
-            }
-            set
-            {
-                if (_context != null)
-                {
-                    _context.Selected = value;
-                }
-                else
-                {
-                    throw new Exception("Context is not set.");
-                }
-            }
+            get => _context?.Selected;
+            set => _context?.Selected = value ?? throw new Exception("Context is not set.");
         }
 
         public ObservableCollection<ShapeObject> Shapes
         {
-            get
-            {
-                if (_context != null)
-                {
-                    return Figure != null ? Figure.Segments : _context.Shapes;
-                }
-                else
-                {
-                    throw new Exception("Context is not set.");
-                }
-            }
-            set
-            {
-                if (_context != null)
-                {
-                    if (Figure != null)
-                    {
-                        Figure.Segments = value;
-                    }
-                    else
-                    {
-                        _context.Shapes = value;
-                    }
-                }
-                else
-                {
-                    throw new Exception("Context is not set.");
-                }
-            }
+            get => return Figure != null ? Figure.Segments : _context?.Shapes;
+            set => Figure?.Segments = value ?? _context?.Shapes = value ?? throw new Exception("Context is not set.");
         }
 
         public ObservableCollection<ToolBase> SubTools { get; set; }
@@ -118,57 +71,33 @@ namespace PathDemo.Tools
 
         public void Capture()
         {
-            if (_context != null)
-            {
-                _context.Capture();
-            }
-            else
-            {
-                throw new Exception("Context is not set.");
-            }
+            _context?.Capture() ?? throw new Exception("Context is not set.");
         }
 
         public void Release()
         {
-            if (_context != null)
-            {
-                _context.Release();
-            }
-            else
-            {
-                throw new Exception("Context is not set.");
-            }
+            _context?.Release() ?? throw new Exception("Context is not set.")
         }
 
         public void Invalidate()
         {
-            if (_context != null)
-            {
-                _context.Invalidate();
-            }
-            else
-            {
-                throw new Exception("Context is not set.");
-            }
+            _context?.Invalidate() ?? throw new Exception("Context is not set.");
         }
 
         private PointShape GetLastPoint()
         {
             var segments = Path.Figures[Path.Figures.Count - 1].Segments;
             var lastSegment = segments[segments.Count - 1];
-            if (lastSegment is LineShape)
+            if (lastSegment is LineShape line)
             {
-                var line = lastSegment as LineShape;
                 return line.Point;
             }
-            else if (lastSegment is CubicBezierShape)
+            else if (lastSegment is CubicBezierShape cubicBezier)
             {
-                var cubicBezier = lastSegment as CubicBezierShape;
                 return cubicBezier.Point3;
             }
-            else if (lastSegment is QuadraticBezierShape)
+            else if (lastSegment is QuadraticBezierShape quadraticBezier)
             {
-                var quadraticBezier = lastSegment as QuadraticBezierShape;
                 return quadraticBezier.Point2;
             }
             throw new Exception("Could not find last path point.");
@@ -210,9 +139,8 @@ namespace PathDemo.Tools
 
             CurrentSubTool.LeftDown(this, point);
 
-            if (CurrentSubTool is LineTool)
+            if (CurrentSubTool is LineTool lineTool)
             {
-                var lineTool = CurrentSubTool as LineTool;
                 if (lineTool.CurrentState == LineTool.LineToolState.StartPoint)
                 {
                     NextPoint = GetLastPoint();
@@ -220,9 +148,8 @@ namespace PathDemo.Tools
                     NextPoint = null;
                 }
             }
-            else if (CurrentSubTool is CubicBezierTool)
+            else if (CurrentSubTool is CubicBezierTool cubicBezierTool)
             {
-                var cubicBezierTool = CurrentSubTool as CubicBezierTool;
                 if (cubicBezierTool.CurrentState == CubicBezierTool.CubicBezierToolState.StartPoint)
                 {
                     NextPoint = GetLastPoint();
@@ -230,9 +157,8 @@ namespace PathDemo.Tools
                     NextPoint = null;
                 }
             }
-            else if (CurrentSubTool is QuadraticBezierTool)
+            else if (CurrentSubTool is QuadraticBezierTool quadraticBezierTool)
             {
-                var quadraticBezierTool = CurrentSubTool as QuadraticBezierTool;
                 if (quadraticBezierTool.CurrentState == QuadraticBezierTool.QuadraticBezierToolState.StartPoint)
                 {
                     NextPoint = GetLastPoint();
