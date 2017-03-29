@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Media;
+using Draw2D.Editor;
 using Draw2D.Models.Shapes;
-using PathDemo.Tools;
 
 namespace PathDemo.Controls
 {
@@ -56,7 +56,7 @@ namespace PathDemo.Controls
 
         public void Draw(DrawingContext dc, IToolContext context)
         {
-            foreach (var shape in context.Shapes)
+            foreach (var shape in context.CurrentContainer.Shapes)
             {
                 if (shape is LineShape line)
                 {

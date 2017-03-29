@@ -1,14 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Windows;
+using Draw2D.Editor;
+using Draw2D.Editor.Bounds;
 using Draw2D.Models;
+using Draw2D.Models.Containers;
 using Draw2D.Models.Shapes;
+using Draw2D.Models.Style;
 
 namespace PathDemo.Tools
 {
     public class PathTool : ToolBase, IToolContext
     {
+        public override string Name { get { return "Path"; } }
+
         private ToolBase _currentSubTool;
 
         public ISet<ShapeObject> Selected
@@ -23,6 +28,20 @@ namespace PathDemo.Tools
             }
         }
 
+        public IShapesContainer CurrentContainer
+        {
+            get => Figure;
+            set => throw new InvalidCastException("Can't cast current container as a figure.");
+        }
+
+        public IShapesContainer WorkingContainer { get; set; }
+
+        public DrawStyle CurrentStyle { get; set; }
+
+        public ShapeObject PointShape { get; set; }
+
+        public HitTest HitTest { get; set; }
+
         public PointShape GetNextPoint(double x, double y) => NextPoint ?? Context?.GetNextPoint(x, y);
 
         public Action Capture { get; set; }
@@ -30,22 +49,6 @@ namespace PathDemo.Tools
         public Action Release { get; set; }
 
         public Action Invalidate { get; set; }
-
-        public ObservableCollection<ShapeObject> Shapes
-        {
-            get => Figure?.Segments ?? Context?.Shapes;
-            set
-            {
-                if (Figure != null)
-                {
-                    Figure.Segments = value;
-                }
-                else if (Context != null)
-                {
-                    Context.Shapes = value;
-                }
-            }
-        }
 
         public ObservableCollection<ToolBase> SubTools { get; set; }
 
@@ -80,10 +83,10 @@ namespace PathDemo.Tools
 
             SubTools = new ObservableCollection<ToolBase>
             {
-                new LineTool() { Name = "Line" },
-                new CubicBezierTool() { Name = "CubicBezier" },
-                new QuadraticBezierTool() { Name = "QuadraticBezier" },
-                new MoveTool(this) { Name = "Move" }
+                new LineTool(),
+                new CubicBezierTool(),
+                new QuadraticBezierTool(),
+                new MoveTool(this)
             };
 
             CurrentSubTool = SubTools[0];
@@ -91,21 +94,28 @@ namespace PathDemo.Tools
 
         private PointShape GetLastPoint()
         {
-            var segments = Path.Figures[Path.Figures.Count - 1].Segments;
-            var lastSegment = segments[segments.Count - 1];
-            if (lastSegment is LineShape line)
+            if (Path.Figures.Count > 0)
             {
-                return line.Point;
+                var shapes = Path.Figures[Path.Figures.Count - 1].Shapes;
+                if (shapes.Count > 0)
+                {
+                    var shape = shapes[shapes.Count - 1];
+                    if (shape is LineShape line)
+                    {
+                        return line.Point;
+                    }
+                    else if (shape is CubicBezierShape cubicBezier)
+                    {
+                        return cubicBezier.Point3;
+                    }
+                    else if (shape is QuadraticBezierShape quadraticBezier)
+                    {
+                        return quadraticBezier.Point2;
+                    }
+                    throw new Exception("Could not find last path point.");
+                } 
             }
-            else if (lastSegment is CubicBezierShape cubicBezier)
-            {
-                return cubicBezier.Point3;
-            }
-            else if (lastSegment is QuadraticBezierShape quadraticBezier)
-            {
-                return quadraticBezier.Point2;
-            }
-            throw new Exception("Could not find last path point.");
+            return null;
         }
 
         public void NewPath(IToolContext context)
@@ -115,7 +125,7 @@ namespace PathDemo.Tools
                 Figures = new ObservableCollection<FigureShape>(),
                 FillRule = PathFillRule.EvenOdd
             };
-            context.Shapes.Add(Path);
+            context.CurrentContainer.Shapes.Add(Path);
             context.Selected.Add(Path);
         }
 
@@ -123,7 +133,7 @@ namespace PathDemo.Tools
         {
             Figure = new FigureShape()
             {
-                Segments = new ObservableCollection<ShapeObject>(),
+                Shapes = new ObservableCollection<ShapeObject>(),
                 IsFilled = true,
                 IsClosed = true
             };
@@ -132,7 +142,7 @@ namespace PathDemo.Tools
 
         private void SetCurrentContext(IToolContext context) => Context = context;
 
-        public override void LeftDown(IToolContext context, Point point)
+        public override void LeftDown(IToolContext context, double x, double y, Modifier modifier)
         {
             if (Path == null)
             {
@@ -142,14 +152,14 @@ namespace PathDemo.Tools
 
             SetCurrentContext(context);
 
-            CurrentSubTool.LeftDown(this, point);
+            CurrentSubTool.LeftDown(this, x, y, modifier);
 
             if (CurrentSubTool is LineTool lineTool)
             {
                 if (lineTool.CurrentState == LineTool.LineToolState.StartPoint)
                 {
                     NextPoint = GetLastPoint();
-                    CurrentSubTool.LeftDown(this, point);
+                    CurrentSubTool.LeftDown(this, x, y, modifier);
                     NextPoint = null;
                 }
             }
@@ -158,7 +168,7 @@ namespace PathDemo.Tools
                 if (cubicBezierTool.CurrentState == CubicBezierTool.CubicBezierToolState.StartPoint)
                 {
                     NextPoint = GetLastPoint();
-                    CurrentSubTool.LeftDown(this, point);
+                    CurrentSubTool.LeftDown(this, x, y, modifier);
                     NextPoint = null;
                 }
             }
@@ -167,7 +177,7 @@ namespace PathDemo.Tools
                 if (quadraticBezierTool.CurrentState == QuadraticBezierTool.QuadraticBezierToolState.StartPoint)
                 {
                     NextPoint = GetLastPoint();
-                    CurrentSubTool.LeftDown(this, point);
+                    CurrentSubTool.LeftDown(this, x, y, modifier);
                     NextPoint = null;
                 }
             }
@@ -175,20 +185,20 @@ namespace PathDemo.Tools
             SetCurrentContext(null);
         }
 
-        public override void RightDown(IToolContext context, Point point)
+        public override void RightDown(IToolContext context, double x, double y, Modifier modifier)
         {
             SetCurrentContext(context);
-            CurrentSubTool.RightDown(this, point);
+            CurrentSubTool.RightDown(this, x, y, modifier);
             SetCurrentContext(null);
             context.Selected.Remove(Path);
             Path = null;
             Figure = null;
         }
 
-        public override void Move(IToolContext context, Point point)
+        public override void Move(IToolContext context, double x, double y, Modifier modifier)
         {
             SetCurrentContext(context);
-            CurrentSubTool.Move(this, point);
+            CurrentSubTool.Move(this, x, y, modifier);
             SetCurrentContext(null);
         }
     }

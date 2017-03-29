@@ -13,7 +13,7 @@ namespace Draw2D.Editor
         ISet<ShapeObject> Selected { get; set; }
         IShapesContainer CurrentContainer { get; set; }
         IShapesContainer WorkingContainer { get; set; }
-        DrawStyle Style { get; set; }
+        DrawStyle CurrentStyle { get; set; }
         ShapeObject PointShape { get; set; }
         HitTest HitTest { get; set; }
         PointShape GetNextPoint(double x, double y);

@@ -27,7 +27,7 @@ namespace Draw2D.Editor.Tools
                         _rectangle = new RectangleShape(
                             new PointShape(x, y, context.PointShape),
                             new PointShape(x, y, context.PointShape));
-                        _rectangle.Style = context.Style;
+                        _rectangle.Style = context.CurrentStyle;
                         context.WorkingContainer.Shapes.Add(_rectangle);
                         context.Selected.Add(_rectangle.TopLeft);
                         context.Selected.Add(_rectangle.BottomRight);

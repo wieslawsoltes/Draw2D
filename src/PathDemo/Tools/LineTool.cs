@@ -1,34 +1,36 @@
 ﻿using System;
 using System.Windows;
+using Draw2D.Editor;
 using Draw2D.Models.Shapes;
 
 namespace PathDemo.Tools
 {
     public class LineTool : ToolBase
     {
+        public override string Name { get { return "Line"; } }
         public enum LineToolState { StartPoint, Point }
         public LineToolState CurrentState = LineToolState.StartPoint;
         public LineShape Line;
 
-        public override void LeftDown(IToolContext context, Point point)
+        public override void LeftDown(IToolContext context, double x, double y, Modifier modifier)
         {
             switch (CurrentState)
             {
                 case LineToolState.StartPoint:
-                    var next = context.GetNextPoint(point.X, point.Y);
+                    var next = context.GetNextPoint(x, y);
                     Line = new LineShape()
                     {
-                        StartPoint = context.GetNextPoint(point.X, point.Y),
+                        StartPoint = context.GetNextPoint(x, y),
                         Point = next.Clone()
                     };
-                    context.Shapes.Add(Line);
+                    context.CurrentContainer.Shapes.Add(Line);
                     context.Selected.Add(Line);
                     context.Capture();
                     context.Invalidate();
                     CurrentState = LineToolState.Point;
                     break;
                 case LineToolState.Point:
-                    Line.Point = context.GetNextPoint(point.X, point.Y);
+                    Line.Point = context.GetNextPoint(x, y);
                     CurrentState = LineToolState.StartPoint;
                     context.Selected.Remove(Line);
                     Line = null;
@@ -38,13 +40,13 @@ namespace PathDemo.Tools
             }
         }
 
-        public override void RightDown(IToolContext context, Point point)
+        public override void RightDown(IToolContext context, double x, double y, Modifier modifier)
         {
             switch (CurrentState)
             {
                 case LineToolState.Point:
                     CurrentState = LineToolState.StartPoint;
-                    context.Shapes.Remove(Line);
+                    context.CurrentContainer.Shapes.Remove(Line);
                     context.Selected.Remove(Line);
                     Line = null;
                     context.Release();
@@ -53,12 +55,13 @@ namespace PathDemo.Tools
             }
         }
 
-        public override void Move(IToolContext context, Point point)
+        public override void Move(IToolContext context, double x, double y, Modifier modifier)
         {
             switch (CurrentState)
             {
                 case LineToolState.Point:
-                    Line.Point.Update(point);
+                    Line.Point.X = x;
+                    Line.Point.Y = y;
                     context.Invalidate();
                     break;
             }

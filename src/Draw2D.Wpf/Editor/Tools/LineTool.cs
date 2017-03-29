@@ -35,7 +35,7 @@ namespace Draw2D.Editor.Tools
                         _line = new LineShape(
                             point ?? new PointShape(x, y, context.PointShape),
                             new PointShape(x, y, context.PointShape));
-                        _line.Style = context.Style;
+                        _line.Style = context.CurrentStyle;
                         context.WorkingContainer.Shapes.Add(_line);
                         context.Selected.Add(_line.StartPoint);
                         context.Selected.Add(_line.Point);

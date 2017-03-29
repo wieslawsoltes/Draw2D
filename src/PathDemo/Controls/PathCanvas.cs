@@ -4,8 +4,12 @@ using System.Collections.ObjectModel;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using Draw2D.Editor;
+using Draw2D.Editor.Bounds;
 using Draw2D.Models;
+using Draw2D.Models.Containers;
 using Draw2D.Models.Shapes;
+using Draw2D.Models.Style;
 using PathDemo.Tools;
 
 namespace PathDemo.Controls
@@ -14,6 +18,16 @@ namespace PathDemo.Controls
     {
         public ISet<ShapeObject> Selected { get; set; }
 
+        public IShapesContainer CurrentContainer { get; set; }
+
+        public IShapesContainer WorkingContainer { get; set; }
+
+        public DrawStyle CurrentStyle { get; set; }
+
+        public ShapeObject PointShape { get; set; }
+
+        public HitTest HitTest { get; set; }
+
         public PointShape GetNextPoint(double x, double y) => new PointShape() { X = x, Y = y };
 
         public Action Capture { get; set; }
@@ -21,8 +35,6 @@ namespace PathDemo.Controls
         public Action Release { get; set; }
 
         public Action Invalidate { get; set; }
-
-        public ObservableCollection<ShapeObject> Shapes { get; set; }
 
         public ObservableCollection<ToolBase> Tools { get; set; }
 
@@ -33,19 +45,18 @@ namespace PathDemo.Controls
         public PathCanvas()
         {
             Selected = new HashSet<ShapeObject>();
+            CurrentContainer = new ShapesContainer();
 
             Capture = () => this.CaptureMouse();
             Release = () => this.ReleaseMouseCapture();
             Invalidate = () => this.InvalidateVisual();
 
-            Shapes = new ObservableCollection<ShapeObject>();
-
             Tools = new ObservableCollection<ToolBase>
             {
-                new LineTool() { Name = "Line" },
-                new CubicBezierTool() { Name = "CubicBezier" },
-                new QuadraticBezierTool() { Name = "QuadraticBezier" },
-                new PathTool() { Name = "Path" }
+                new LineTool(),
+                new CubicBezierTool(),
+                new QuadraticBezierTool(),
+                new PathTool()
             };
 
             CurrentTool = Tools[0];
@@ -56,31 +67,36 @@ namespace PathDemo.Controls
         protected override void OnPreviewMouseLeftButtonDown(MouseButtonEventArgs e)
         {
             base.OnPreviewMouseLeftButtonDown(e);
-            CurrentTool.LeftDown(this, e.GetPosition(this));
+            var point = e.GetPosition(this);
+            CurrentTool.LeftDown(this, point.X, point.Y, Modifier.None);
         }
 
         protected override void OnPreviewMouseLeftButtonUp(MouseButtonEventArgs e)
         {
             base.OnPreviewMouseLeftButtonUp(e);
-            CurrentTool.LeftUp(this, e.GetPosition(this));
+            var point = e.GetPosition(this);
+            CurrentTool.LeftUp(this, point.X, point.Y, Modifier.None);
         }
 
         protected override void OnPreviewMouseRightButtonDown(MouseButtonEventArgs e)
         {
             base.OnPreviewMouseRightButtonDown(e);
-            CurrentTool.RightDown(this, e.GetPosition(this));
+            var point = e.GetPosition(this);
+            CurrentTool.RightDown(this, point.X, point.Y, Modifier.None);
         }
 
         protected override void OnPreviewMouseRightButtonUp(MouseButtonEventArgs e)
         {
             base.OnPreviewMouseRightButtonUp(e);
-            CurrentTool.RightUp(this, e.GetPosition(this));
+            var point = e.GetPosition(this);
+            CurrentTool.RightUp(this, point.X, point.Y, Modifier.None);
         }
 
         protected override void OnPreviewMouseMove(MouseEventArgs e)
         {
             base.OnPreviewMouseMove(e);
-            CurrentTool.Move(this, e.GetPosition(this));
+            var point = e.GetPosition(this);
+            CurrentTool.Move(this, point.X, point.Y, Modifier.None);
         }
 
         protected override void OnRender(DrawingContext dc)

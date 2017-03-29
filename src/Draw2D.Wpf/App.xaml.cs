@@ -336,7 +336,7 @@ namespace Draw2D.Wpf
                 Selected = renderer.Selected,
                 CurrentContainer = container,
                 WorkingContainer = workingContainer,
-                Style = style,
+                CurrentStyle = style,
                 PointShape = pointShape,
                 HitTest = hitTest
             };

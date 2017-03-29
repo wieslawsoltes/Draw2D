@@ -27,7 +27,7 @@ namespace Draw2D.Editor.Tools
                         _ellipse = new EllipseShape(
                             new PointShape(x, y, context.PointShape),
                             new PointShape(x, y, context.PointShape));
-                        _ellipse.Style = context.Style;
+                        _ellipse.Style = context.CurrentStyle;
                         context.WorkingContainer.Shapes.Add(_ellipse);
                         context.Selected.Add(_ellipse.TopLeft);
                         context.Selected.Add(_ellipse.BottomRight);

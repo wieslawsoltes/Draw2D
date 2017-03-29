@@ -22,7 +22,7 @@ namespace Draw2D.Editor.Intersections
             for (int i = 0; i < unique.Count - 1; i++)
             {
                 var line = new LineShape(unique[i], unique[i + 1]);
-                line.Style = context.Style;
+                line.Style = context.CurrentStyle;
 
                 context.CurrentContainer.Shapes.Add(line);
                 lines.Add(line);

@@ -38,7 +38,7 @@ namespace Draw2D.Editor.Tools
                         _line = new LineShape(
                             point ?? new PointShape(x, y, context.PointShape),
                             new PointShape(x, y, context.PointShape));
-                        _line.Style = context.Style;
+                        _line.Style = context.CurrentStyle;
                         _points.Add(_line.StartPoint);
                         _points.Add(_line.Point);
                         context.WorkingContainer.Shapes.Add(_line);
@@ -77,7 +77,7 @@ namespace Draw2D.Editor.Tools
                         _line = new LineShape(
                             _points.Last(),
                             new PointShape(x, y, context.PointShape));
-                        _line.Style = context.Style;
+                        _line.Style = context.CurrentStyle;
                         _points.Add(_line.Point);
                         context.WorkingContainer.Shapes.Add(_line);
                         context.Selected.Add(_line.Point);

@@ -84,7 +84,7 @@ namespace Draw2D.Wpf.Renderers
                 foreach (var figure in path.Figures)
                 {
                     bool isFirstSegment = true;
-                    foreach (var segment in figure.Segments)
+                    foreach (var segment in figure.Shapes)
                     {
                         if (segment is LineShape)
                         {

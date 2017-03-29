@@ -32,7 +32,7 @@ namespace Draw2D.Editor.Tools
                         _scribble = new ScribbleShape(
                             new PointShape(x, y, context.PointShape),
                             new ObservableCollection<PointShape>());
-                        _scribble.Style = context.Style;
+                        _scribble.Style = context.CurrentStyle;
                         context.WorkingContainer.Shapes.Add(_scribble);
                         _state = State.Points;
                     }

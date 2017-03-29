@@ -63,7 +63,7 @@ namespace Draw2D.ViewModels.Containers
             set => Update(ref _workingContainer, value);
         }
 
-        public DrawStyle Style
+        public DrawStyle CurrentStyle
         {
             get => _style;
             set => Update(ref _style, value);

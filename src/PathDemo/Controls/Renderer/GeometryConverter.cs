@@ -16,33 +16,33 @@ namespace PathDemo.Controls
             {
                 foreach (var figure in path.Figures)
                 {
-                    bool isFirstSegment = true;
-                    foreach (var segment in figure.Segments)
+                    bool isFirstShape = true;
+                    foreach (var shape in figure.Shapes)
                     {
-                        if (segment is LineShape line)
+                        if (shape is LineShape line)
                         {
-                            if (isFirstSegment)
+                            if (isFirstShape)
                             {
                                 context.BeginFigure(line.StartPoint.AsPoint(), figure.IsFilled, figure.IsClosed);
-                                isFirstSegment = false;
+                                isFirstShape = false;
                             }
                             context.LineTo(line.Point.AsPoint(), true, false);
                         }
-                        else if (segment is CubicBezierShape cubicBezier)
+                        else if (shape is CubicBezierShape cubicBezier)
                         {
-                            if (isFirstSegment)
+                            if (isFirstShape)
                             {
                                 context.BeginFigure(cubicBezier.StartPoint.AsPoint(), figure.IsFilled, figure.IsClosed);
-                                isFirstSegment = false;
+                                isFirstShape = false;
                             }
                             context.BezierTo(cubicBezier.Point1.AsPoint(), cubicBezier.Point2.AsPoint(), cubicBezier.Point3.AsPoint(), true, false);
                         }
-                        else if (segment is QuadraticBezierShape quadraticBezier)
+                        else if (shape is QuadraticBezierShape quadraticBezier)
                         {
-                            if (isFirstSegment)
+                            if (isFirstShape)
                             {
                                 context.BeginFigure(quadraticBezier.StartPoint.AsPoint(), figure.IsFilled, figure.IsClosed);
-                                isFirstSegment = false;
+                                isFirstShape = false;
                             }
                             context.QuadraticBezierTo(quadraticBezier.Point1.AsPoint(), quadraticBezier.Point2.AsPoint(), true, false);
                         }
