@@ -14,7 +14,7 @@ namespace PathDemo.Tools
         public ISet<ShapeObject> Selected
         {
             get => _context?.Selected;
-            set => _context?.Selected = value;
+            set => if (_context != null) _context.Selected = value;
         }
 
         public ObservableCollection<ShapeObject> Shapes
@@ -29,7 +29,7 @@ namespace PathDemo.Tools
 
         public ToolBase CurrentSubTool
         {
-            get { return _currentSubTool; }
+            get => _currentSubTool;
             set
             {
                 if (_currentSubTool is MoveTool)
