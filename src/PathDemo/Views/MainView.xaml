@@ -1,4 +1,4 @@
-﻿<Window x:Class="PathDemo.MainWindow"
+﻿<Window x:Class="PathDemo.MainView"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:local="clr-namespace:PathDemo"
