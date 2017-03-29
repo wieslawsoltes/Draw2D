@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows;
 
-namespace PathDemo
+namespace PathDemo.Tools
 {
     public class MoveTool : ToolBase
     {
