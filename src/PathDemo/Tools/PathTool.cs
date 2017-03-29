@@ -9,39 +9,37 @@ namespace PathDemo.Tools
 {
     public class PathTool : ToolBase, IToolContext
     {
-        private IToolContext _context;
+        private ToolBase _currentSubTool;
 
         public ISet<ShapeObject> Selected
         {
-            get => _context?.Selected;
+            get => Context?.Selected;
             set
             { 
-                if (_context != null) 
+                if (Context != null) 
                 {
-                    _context.Selected = value;
+                    Context.Selected = value;
                 }
             }
         }
 
         public ObservableCollection<ShapeObject> Shapes
         {
-            get => Figure?.Segments ?? _context?.Shapes;
+            get => Figure?.Segments ?? Context?.Shapes;
             set
             { 
                 if (Figure != null) 
                 {
                     Figure.Segments = value;
                 }
-                else if (_context != null)
+                else if (Context != null)
                 {
-                    _context.Shapes = value;
+                    Context.Shapes = value;
                 }
             }
         }
 
         public ObservableCollection<ToolBase> SubTools { get; set; }
-
-        private ToolBase _currentSubTool;
 
         public ToolBase CurrentSubTool
         {
@@ -56,10 +54,15 @@ namespace PathDemo.Tools
             }
         }
 
-        public ToolBase PreviousSubTool;
-        public PointShape NextPoint;
-        public PathShape Path;
-        public FigureShape Figure;
+        public ToolBase PreviousSubTool { get; set; }
+
+        public PointShape NextPoint { get; set; }
+
+        public PathShape Path { get; set; }
+
+        public FigureShape Figure { get; set; }
+
+        private IToolContext Context { get; set; }
 
         public PathTool()
         {
@@ -73,13 +76,13 @@ namespace PathDemo.Tools
             CurrentSubTool = SubTools[0];
         }
 
-        public PointShape GetNextPoint(Point point) => NextPoint ?? _context?.GetNextPoint(point);
+        public PointShape GetNextPoint(Point point) => NextPoint ?? Context?.GetNextPoint(point);
 
-        public void Capture() => _context?.Capture();
+        public void Capture() => Context?.Capture();
 
-        public void Release() => _context?.Release();
+        public void Release() => Context?.Release();
 
-        public void Invalidate() => _context?.Invalidate();
+        public void Invalidate() => Context?.Invalidate();
 
         private PointShape GetLastPoint()
         {
@@ -107,7 +110,6 @@ namespace PathDemo.Tools
                 Figures = new ObservableCollection<FigureShape>(),
                 FillRule = PathFillRule.EvenOdd
             };
-
             context.Shapes.Add(Path);
             context.Selected.Add(Path);
         }
@@ -120,9 +122,10 @@ namespace PathDemo.Tools
                 IsFilled = true,
                 IsClosed = true
             };
-
             Path.Figures.Add(Figure);
         }
+
+        private void SetCurrentContext(IToolContext context) => Context = context;
 
         public override void LeftDown(IToolContext context, Point point)
         {
@@ -132,7 +135,7 @@ namespace PathDemo.Tools
                 NewFigure();
             }
 
-            _context = context;
+            SetCurrentContext(context);
 
             CurrentSubTool.LeftDown(this, point);
 
@@ -164,17 +167,14 @@ namespace PathDemo.Tools
                 }
             }
 
-            _context = null;
+            SetCurrentContext(null);
         }
 
         public override void RightDown(IToolContext context, Point point)
         {
-            _context = context;
-
+            SetCurrentContext(context);
             CurrentSubTool.RightDown(this, point);
-
-            _context = null;
-
+            SetCurrentContext(null);
             context.Selected.Remove(Path);
             Path = null;
             Figure = null;
@@ -182,11 +182,9 @@ namespace PathDemo.Tools
 
         public override void Move(IToolContext context, Point point)
         {
-            _context = context;
-
+            SetCurrentContext(context);
             CurrentSubTool.Move(this, point);
-
-            _context = null;
+            SetCurrentContext(null);
         }
     }
 }
