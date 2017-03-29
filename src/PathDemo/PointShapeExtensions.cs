@@ -12,7 +12,7 @@ namespace PathDemo
             return new PointShape() { X = point.X, Y = point.Y };
         }
 
-        public static IList<Point> Clone(IList<PointShape> points)
+        public static IList<Point> AsPoints(IList<PointShape> points)
         {
             var result = new List<Point>(points.Count);
             for (int i = 0; i < points.Count; i++)
