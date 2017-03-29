@@ -15,10 +15,10 @@ namespace PathDemo.Tools
             switch (CurrentState)
             {
                 case LineToolState.StartPoint:
-                    var next = context.GetNextPoint(point);
+                    var next = context.GetNextPoint(point.X, point.Y);
                     Line = new LineShape()
                     {
-                        StartPoint = context.GetNextPoint(point),
+                        StartPoint = context.GetNextPoint(point.X, point.Y),
                         Point = next.Clone()
                     };
                     context.Shapes.Add(Line);
@@ -28,7 +28,7 @@ namespace PathDemo.Tools
                     CurrentState = LineToolState.Point;
                     break;
                 case LineToolState.Point:
-                    Line.Point = context.GetNextPoint(point);
+                    Line.Point = context.GetNextPoint(point.X, point.Y);
                     CurrentState = LineToolState.StartPoint;
                     context.Selected.Remove(Line);
                     Line = null;

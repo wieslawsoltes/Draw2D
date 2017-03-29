@@ -15,7 +15,7 @@ namespace PathDemo.Tools
             switch (CurrentState)
             {
                 case CubicBezierToolState.StartPoint:
-                    var next = context.GetNextPoint(point);
+                    var next = context.GetNextPoint(point.X, point.Y);
                     CubicBezier = new CubicBezierShape()
                     {
                         StartPoint = next,
@@ -30,7 +30,7 @@ namespace PathDemo.Tools
                     CurrentState = CubicBezierToolState.Point3;
                     break;
                 case CubicBezierToolState.Point1:
-                    CubicBezier.Point1 = context.GetNextPoint(point);
+                    CubicBezier.Point1 = context.GetNextPoint(point.X, point.Y);
                     CurrentState = CubicBezierToolState.StartPoint;
                     context.Selected.Remove(CubicBezier);
                     CubicBezier = null;
@@ -39,13 +39,13 @@ namespace PathDemo.Tools
                     break;
                 case CubicBezierToolState.Point2:
                     CubicBezier.Point1.Update(point);
-                    CubicBezier.Point2 = context.GetNextPoint(point);
+                    CubicBezier.Point2 = context.GetNextPoint(point.X, point.Y);
                     CurrentState = CubicBezierToolState.Point1;
                     context.Invalidate();
                     break;
                 case CubicBezierToolState.Point3:
                     CubicBezier.Point2.Update(point);
-                    CubicBezier.Point3 = context.GetNextPoint(point);
+                    CubicBezier.Point3 = context.GetNextPoint(point.X, point.Y);
                     CurrentState = CubicBezierToolState.Point2;
                     context.Invalidate();
                     break;

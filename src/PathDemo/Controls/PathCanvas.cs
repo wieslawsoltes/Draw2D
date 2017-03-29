@@ -34,7 +34,7 @@ namespace PathDemo.Controls
             Renderer = new ShapeRenderer();
         }
 
-        public PointShape GetNextPoint(Point point) => new PointShape() { X = point.X, Y = point.Y };
+        public PointShape GetNextPoint(double x, double y) => new PointShape() { X = x, Y = y };
 
         public void Capture() => this.CaptureMouse();
 

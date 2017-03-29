@@ -15,7 +15,7 @@ namespace PathDemo.Tools
             switch (CurrentState)
             {
                 case QuadraticBezierToolState.StartPoint:
-                    var next = context.GetNextPoint(point);
+                    var next = context.GetNextPoint(point.X, point.Y);
                     QuadraticBezier = new QuadraticBezierShape()
                     {
                         StartPoint = next,
@@ -29,7 +29,7 @@ namespace PathDemo.Tools
                     CurrentState = QuadraticBezierToolState.Point2;
                     break;
                 case QuadraticBezierToolState.Point1:
-                    QuadraticBezier.Point1 = context.GetNextPoint(point);
+                    QuadraticBezier.Point1 = context.GetNextPoint(point.X, point.Y);
                     CurrentState = QuadraticBezierToolState.StartPoint;
                     context.Selected.Remove(QuadraticBezier);
                     QuadraticBezier = null;
@@ -38,7 +38,7 @@ namespace PathDemo.Tools
                     break;
                 case QuadraticBezierToolState.Point2:
                     QuadraticBezier.Point1.Update(point);
-                    QuadraticBezier.Point2 = context.GetNextPoint(point);
+                    QuadraticBezier.Point2 = context.GetNextPoint(point.X, point.Y);
                     CurrentState = QuadraticBezierToolState.Point1;
                     context.Invalidate();
                     break;

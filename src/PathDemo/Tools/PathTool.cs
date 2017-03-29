@@ -76,7 +76,7 @@ namespace PathDemo.Tools
             CurrentSubTool = SubTools[0];
         }
 
-        public PointShape GetNextPoint(Point point) => NextPoint ?? Context?.GetNextPoint(point);
+        public PointShape GetNextPoint(double x, double y) => NextPoint ?? Context?.GetNextPoint(x, y);
 
         public void Capture() => Context?.Capture();
 
