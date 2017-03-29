@@ -7,8 +7,10 @@ before_build:
 build:
   project: Draw2D.sln
   verbosity: minimal
+test: off
 artifacts:
 - path: src\Draw2D.Wpf\bin\Release\AnyCPU
   name: Draw2D.Wpf-build$(appveyor_build_version)
-- path: src\PathDemo\bin\Release
+- path: src\PathDemo\bin\Release\AnyCPU
   name: PathDemo-build$(appveyor_build_version)
+deploy: off
