@@ -5,7 +5,7 @@ using System.Windows;
 using Draw2D.Models;
 using Draw2D.Models.Shapes;
 
-namespace PathDemo
+namespace PathDemo.Tools
 {
     public class PathTool : ToolBase, IToolContext
     {
