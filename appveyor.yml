@@ -1,10 +1,14 @@
 version: '{build}'
 image: Visual Studio 2017
-configuration:
-- Release
+configuration: Release
 platform: Any CPU
 before_build:
 - cmd: nuget restore
 build:
   project: Draw2D.sln
   verbosity: minimal
+artifacts:
+- path: src\Draw2D.Wpf\bin\Release\AnyCPU
+  name: Draw2D.Wpf-build{build}
+- path: src\PathDemo\bin\Release
+  name: PathDemo-build{build}
