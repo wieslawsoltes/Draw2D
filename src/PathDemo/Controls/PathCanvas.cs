@@ -7,6 +7,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using Draw2D.Models;
 using Draw2D.Models.Shapes;
+using PathDemo.Tools;
 
 namespace PathDemo.Controls
 {
