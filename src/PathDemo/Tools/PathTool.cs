@@ -76,7 +76,7 @@ namespace PathDemo.Tools
 
         public void Release()
         {
-            _context?.Release() ?? throw new Exception("Context is not set.")
+            _context?.Release() ?? throw new Exception("Context is not set.");
         }
 
         public void Invalidate()
