@@ -4,9 +4,9 @@ using System.Windows.Input;
 
 namespace PathDemo
 {
-    public partial class MainWindow : Window
+    public partial class MainView : Window
     {
-        public MainWindow()
+        public MainView()
         {
             InitializeComponent();
             KeyDown += MainWindow_KeyDown;
