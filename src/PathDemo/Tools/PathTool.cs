@@ -19,7 +19,7 @@ namespace PathDemo.Tools
 
         public ObservableCollection<ShapeObject> Shapes
         {
-            get => return Figure != null ? Figure.Segments : _context?.Shapes;
+            get => Figure?.Segments ?? _context?.Shapes;
             set => Figure?.Segments = value ?? _context?.Shapes = value ?? throw new Exception("Context is not set.");
         }
 
