@@ -10,18 +10,6 @@
     <AssemblyName>Draw2D.Wpf</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <TargetFrameworkProfile />
-    <NoWin32Manifest>False</NoWin32Manifest>
-    <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
-    <NoStdLib>False</NoStdLib>
-    <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
-    <WarningLevel>4</WarningLevel>
-    <ErrorReport>prompt</ErrorReport>
-    <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
-    <BaseAddress>4194304</BaseAddress>
-    <FileAlignment>4096</FileAlignment>
-    <RegisterForComInterop>False</RegisterForComInterop>
-    <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
     <OutputPath>bin\$(Configuration)\$(Platform)</OutputPath>
     <IntermediateOutputPath>obj\$(Configuration)\$(Platform)</IntermediateOutputPath>
   </PropertyGroup>
