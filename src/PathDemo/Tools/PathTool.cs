@@ -14,13 +14,29 @@ namespace PathDemo.Tools
         public ISet<ShapeObject> Selected
         {
             get => _context?.Selected;
-            set => if (_context != null) _context.Selected = value;
+            set
+            { 
+                if (_context != null) 
+                {
+                    _context.Selected = value;
+                }
+            }
         }
 
         public ObservableCollection<ShapeObject> Shapes
         {
             get => Figure?.Segments ?? _context?.Shapes;
-            set => Figure?.Segments = value ?? _context?.Shapes = value;
+            set
+            { 
+                if (Figure != null) 
+                {
+                    Figure.Segments = value;
+                }
+                else if (_context != null)
+                {
+                    _context.Shapes = value
+                }
+            }
         }
 
         public ObservableCollection<ToolBase> SubTools { get; set; }
