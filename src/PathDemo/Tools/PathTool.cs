@@ -34,7 +34,7 @@ namespace PathDemo.Tools
                 }
                 else if (_context != null)
                 {
-                    _context.Shapes = value
+                    _context.Shapes = value;
                 }
             }
         }
