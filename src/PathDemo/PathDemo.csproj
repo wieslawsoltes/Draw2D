@@ -45,13 +45,13 @@
     <Compile Include="Tools\PathTool.cs" />
     <Compile Include="Tools\QuadraticBezierTool.cs" />
     <Compile Include="Tools\ToolBase.cs" />
-    <Compile Include="MainWindow.xaml.cs">
+    <Compile Include="Views\MainView.xaml.cs">
       <SubType>Code</SubType>
-      <DependentUpon>MainWindow.xaml</DependentUpon>
+      <DependentUpon>MainView.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Page Include="MainWindow.xaml">
+    <Page Include="Views\MainView.xaml">
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
