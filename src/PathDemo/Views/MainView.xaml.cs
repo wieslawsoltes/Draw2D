@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using System.Windows;
 using System.Windows.Input;
+using PathDemo.Tools;
 
 namespace PathDemo.Views
 {
