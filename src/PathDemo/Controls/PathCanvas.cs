@@ -8,7 +8,7 @@ using System.Windows.Media;
 using Draw2D.Models;
 using Draw2D.Models.Shapes;
 
-namespace PathDemo
+namespace PathDemo.Controls
 {
     public class PathCanvas : Canvas, IToolContext
     {
