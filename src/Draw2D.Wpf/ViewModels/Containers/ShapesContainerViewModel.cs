@@ -6,6 +6,7 @@ using Draw2D.Editor.Bounds;
 using Draw2D.Models;
 using Draw2D.Models.Containers;
 using Draw2D.Models.Renderers;
+using Draw2D.Models.Shapes;
 using Draw2D.Models.Style;
 
 namespace Draw2D.ViewModels.Containers
@@ -78,6 +79,21 @@ namespace Draw2D.ViewModels.Containers
         {
             get => _hitTest;
             set => Update(ref _hitTest, value);
+        }
+
+        public PointShape GetNextPoint(double x, double y) => new PointShape() { X = x, Y = y };
+
+        public Action Capture { get; set; }
+
+        public Action Release { get; set; }
+
+        public Action Invalidate { get; set; }
+
+        public ShapesContainerViewModel()
+        {
+            this.Capture = () => { };
+            this.Release = () => { };
+            this.Invalidate = () => { };
         }
     }
 }

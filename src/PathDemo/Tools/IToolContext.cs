@@ -11,8 +11,8 @@ namespace PathDemo.Tools
         ISet<ShapeObject> Selected { get; set; }
         ObservableCollection<ShapeObject> Shapes { get; set; }
         PointShape GetNextPoint(double x, double y);
-        void Capture();
-        void Release();
-        void Invalidate();
+        Action Capture { get; set; }
+        Action Release { get; set; }
+        Action Invalidate { get; set; }
     }
 }

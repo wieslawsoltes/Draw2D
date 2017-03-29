@@ -15,20 +15,28 @@ namespace PathDemo.Tools
         {
             get => Context?.Selected;
             set
-            { 
-                if (Context != null) 
+            {
+                if (Context != null)
                 {
                     Context.Selected = value;
                 }
             }
         }
 
+        public PointShape GetNextPoint(double x, double y) => NextPoint ?? Context?.GetNextPoint(x, y);
+
+        public Action Capture { get; set; }
+
+        public Action Release { get; set; }
+
+        public Action Invalidate { get; set; }
+
         public ObservableCollection<ShapeObject> Shapes
         {
             get => Figure?.Segments ?? Context?.Shapes;
             set
-            { 
-                if (Figure != null) 
+            {
+                if (Figure != null)
                 {
                     Figure.Segments = value;
                 }
@@ -66,6 +74,10 @@ namespace PathDemo.Tools
 
         public PathTool()
         {
+            Capture = () => Context?.Capture();
+            Release = () => Context?.Release();
+            Invalidate = () => Context?.Invalidate();
+
             SubTools = new ObservableCollection<ToolBase>
             {
                 new LineTool() { Name = "Line" },
@@ -73,16 +85,9 @@ namespace PathDemo.Tools
                 new QuadraticBezierTool() { Name = "QuadraticBezier" },
                 new MoveTool(this) { Name = "Move" }
             };
+
             CurrentSubTool = SubTools[0];
         }
-
-        public PointShape GetNextPoint(double x, double y) => NextPoint ?? Context?.GetNextPoint(x, y);
-
-        public void Capture() => Context?.Capture();
-
-        public void Release() => Context?.Release();
-
-        public void Invalidate() => Context?.Invalidate();
 
         private PointShape GetLastPoint()
         {

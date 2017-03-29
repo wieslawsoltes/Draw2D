@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Draw2D.Editor.Bounds;
 using Draw2D.Models;
 using Draw2D.Models.Containers;
+using Draw2D.Models.Shapes;
 using Draw2D.Models.Style;
 
 namespace Draw2D.Editor
@@ -15,5 +16,9 @@ namespace Draw2D.Editor
         DrawStyle Style { get; set; }
         ShapeObject PointShape { get; set; }
         HitTest HitTest { get; set; }
+        PointShape GetNextPoint(double x, double y);
+        Action Capture { get; set; }
+        Action Release { get; set; }
+        Action Invalidate { get; set; }
     }
 }

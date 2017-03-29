@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -14,15 +13,33 @@ namespace PathDemo.Controls
     public class PathCanvas : Canvas, IToolContext
     {
         public ISet<ShapeObject> Selected { get; set; }
+
+        public PointShape GetNextPoint(double x, double y) => new PointShape() { X = x, Y = y };
+
+        public Action Capture { get; set; }
+
+        public Action Release { get; set; }
+
+        public Action Invalidate { get; set; }
+
         public ObservableCollection<ShapeObject> Shapes { get; set; }
+
         public ObservableCollection<ToolBase> Tools { get; set; }
+
         public ToolBase CurrentTool { get; set; }
+
         public ShapeRenderer Renderer { get; set; }
 
         public PathCanvas()
         {
-            Shapes = new ObservableCollection<ShapeObject>();
             Selected = new HashSet<ShapeObject>();
+
+            Capture = () => this.CaptureMouse();
+            Release = () => this.ReleaseMouseCapture();
+            Invalidate = () => this.InvalidateVisual();
+
+            Shapes = new ObservableCollection<ShapeObject>();
+
             Tools = new ObservableCollection<ToolBase>
             {
                 new LineTool() { Name = "Line" },
@@ -30,17 +47,11 @@ namespace PathDemo.Controls
                 new QuadraticBezierTool() { Name = "QuadraticBezier" },
                 new PathTool() { Name = "Path" }
             };
+
             CurrentTool = Tools[0];
+
             Renderer = new ShapeRenderer();
         }
-
-        public PointShape GetNextPoint(double x, double y) => new PointShape() { X = x, Y = y };
-
-        public void Capture() => this.CaptureMouse();
-
-        public void Release() => this.ReleaseMouseCapture();
-
-        public void Invalidate() => this.InvalidateVisual();
 
         protected override void OnPreviewMouseLeftButtonDown(MouseButtonEventArgs e)
         {
