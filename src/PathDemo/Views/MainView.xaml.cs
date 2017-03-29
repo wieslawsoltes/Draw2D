@@ -15,48 +15,48 @@ namespace PathDemo.Views
 
         public void SetLineTool()
         {
-            if (canvas.CurrentTool is PathTool pathTool)
+            if (canvas.ViewModel.CurrentTool is PathTool pathTool)
             {
                 pathTool.CurrentSubTool = pathTool.SubTools.Where(t => t.Name == "Line").FirstOrDefault();
             }
             else
             {
-                canvas.CurrentTool = canvas.Tools.Where(t => t.Name == "Line").FirstOrDefault();
+                canvas.ViewModel.CurrentTool = canvas.ViewModel.Tools.Where(t => t.Name == "Line").FirstOrDefault();
             }
         }
 
         public void SetCubicBezierTool()
         {
-            if (canvas.CurrentTool is PathTool pathTool)
+            if (canvas.ViewModel.CurrentTool is PathTool pathTool)
             {
                 pathTool.CurrentSubTool = pathTool.SubTools.Where(t => t.Name == "CubicBezier").FirstOrDefault();
             }
             else
             {
-                canvas.CurrentTool = canvas.Tools.Where(t => t.Name == "CubicBezier").FirstOrDefault();
+                canvas.ViewModel.CurrentTool = canvas.ViewModel.Tools.Where(t => t.Name == "CubicBezier").FirstOrDefault();
             }
         }
 
         public void SetQuadraticBezierTool()
         {
-            if (canvas.CurrentTool is PathTool pathTool)
+            if (canvas.ViewModel.CurrentTool is PathTool pathTool)
             {
                 pathTool.CurrentSubTool = pathTool.SubTools.Where(t => t.Name == "QuadraticBezier").FirstOrDefault();
             }
             else
             {
-                canvas.CurrentTool = canvas.Tools.Where(t => t.Name == "QuadraticBezier").FirstOrDefault();
+                canvas.ViewModel.CurrentTool = canvas.ViewModel.Tools.Where(t => t.Name == "QuadraticBezier").FirstOrDefault();
             }
         }
 
         public void SetPathTool()
         {
-            canvas.CurrentTool = canvas.Tools.Where(t => t.Name == "Path").FirstOrDefault();
+            canvas.ViewModel.CurrentTool = canvas.ViewModel.Tools.Where(t => t.Name == "Path").FirstOrDefault();
         }
 
         public void SetMoveTool()
         {
-            if (canvas.CurrentTool is PathTool pathTool)
+            if (canvas.ViewModel.CurrentTool is PathTool pathTool)
             {
                 pathTool.CurrentSubTool = pathTool.SubTools.Where(t => t.Name == "Move").FirstOrDefault();
             }

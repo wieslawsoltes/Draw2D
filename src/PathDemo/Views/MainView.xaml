@@ -10,7 +10,7 @@
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <ListBox Grid.Column="0" ItemsSource="{Binding ElementName=canvas, Path=Tools}" SelectedItem="{Binding ElementName=canvas, Path=CurrentTool}" HorizontalContentAlignment="Stretch">
+        <ListBox Grid.Column="0" ItemsSource="{Binding ElementName=canvas, Path=ViewModel.Tools}" SelectedItem="{Binding ElementName=canvas, Path=ViewModel.CurrentTool}" HorizontalContentAlignment="Stretch">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <TextBlock Text="{Binding Name}" Margin="2"/>

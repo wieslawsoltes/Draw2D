@@ -56,5 +56,15 @@ namespace Draw2D.Models.Shapes
             X += dx;
             Y += dy;
         }
+
+        public PointShape Clone()
+        {
+            return new PointShape()
+            {
+                X = this.X,
+                Y = this.Y,
+                Template = this.Template
+            };
+        }
     }
 }

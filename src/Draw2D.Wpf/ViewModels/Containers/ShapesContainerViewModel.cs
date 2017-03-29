@@ -88,12 +88,5 @@ namespace Draw2D.ViewModels.Containers
         public Action Release { get; set; }
 
         public Action Invalidate { get; set; }
-
-        public ShapesContainerViewModel()
-        {
-            this.Capture = () => { };
-            this.Release = () => { };
-            this.Invalidate = () => { };
-        }
     }
 }

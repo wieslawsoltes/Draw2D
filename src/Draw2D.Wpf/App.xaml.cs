@@ -338,7 +338,10 @@ namespace Draw2D.Wpf
                 WorkingContainer = workingContainer,
                 CurrentStyle = style,
                 PointShape = pointShape,
-                HitTest = hitTest
+                HitTest = hitTest,
+                Capture = () => { },
+                Release = () => { },
+                Invalidate = () => { }
             };
 
             // VIEWS
