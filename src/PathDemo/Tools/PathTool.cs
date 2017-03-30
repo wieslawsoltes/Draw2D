@@ -123,7 +123,8 @@ namespace PathDemo.Tools
             Path = new PathShape()
             {
                 Figures = new ObservableCollection<FigureShape>(),
-                FillRule = PathFillRule.EvenOdd
+                FillRule = PathFillRule.EvenOdd,
+                Style = context.CurrentStyle
             };
             context.CurrentContainer.Shapes.Add(Path);
             context.Selected.Add(Path);
