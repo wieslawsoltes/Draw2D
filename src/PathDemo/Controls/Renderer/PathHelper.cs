@@ -7,7 +7,7 @@ namespace PathDemo.Controls
 {
     public class PathHelper
     {
-        public static void Draw(DrawingContext dc, PathShape path, IToolContext context)
+        public static void Draw(DrawingContext dc, ShapeRenderer r, PathShape path, IToolContext context)
         {
             foreach (var figure in path.Figures)
             {

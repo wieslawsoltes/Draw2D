@@ -3,13 +3,29 @@ using Draw2D.Models.Shapes;
 
 namespace PathDemo.Controls
 {
-    public class LineHelper
+    public class CommonHelper
     {
-        public static void Draw(DrawingContext dc, LineShape line)
+        public static Ellipse = new EllipseShape(new PointShape(-4, -4, null), new PointShape(4, 4, null))
         {
-            var brushPoints = Brushes.Yellow;
-            dc.DrawEllipse(brushPoints, null, line.StartPoint.AsPoint(), 4, 4);
-            dc.DrawEllipse(brushPoints, null, line.Point.AsPoint(), 4, 4);
+            Style = new DrawStyle(new DrawColor(255, 255, 255, 0), new DrawColor(0, 0, 0, 0), 2.0, false, true)
+        };
+
+        public static void DrawEllipseAt(object dc, ShapeRenderer r, PointShape s, double radius)
+        {
+            Ellipse.TopLeft.X = s.X - radius;
+            Ellipse.TopLeft.X = s.Y - radius;
+            Ellipse.BottomRight.X = s.X + radius;
+            Ellipse.BottomRight.X = s.Y + radius;
+            Ellipse.Draw(dc, r, 0.0, 0.0);
+        }
+    }
+
+    public class LineHelper : CommonHelper
+    {
+        public static void Draw(object dc, ShapeRenderer r, LineShape line)
+        {
+            DrawEllipseAt(dc, r, line.StartPoint, 2.0);
+            DrawEllipseAt(dc, r, line.Point, 2.0);
         }
     }
 }
