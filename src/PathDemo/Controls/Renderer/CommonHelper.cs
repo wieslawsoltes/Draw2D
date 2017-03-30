@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Draw2D.Models.Renderers;
 using Draw2D.Models.Shapes;
 using Draw2D.Models.Style;
@@ -7,37 +8,41 @@ namespace PathDemo.Controls
 {
     public class CommonHelper
     {
-        public DrawStyle FillStyle;
-        public DrawStyle StrokeStyle;
-        public EllipseShape Ellipse;
-        public LineShape LineShape Line;
+        private DrawColor _stroke;
+        private DrawColor _fill;
+        private DrawStyle _strokeStyle;
+        private DrawStyle _fillStyle;
+        private LineShape _line;
+        private EllipseShape _ellipse;
 
         public CommonHelper()
         {
-            FillStyle = new DrawStyle(new DrawColor(255, 0, 255, 255), new DrawColor(255, 0, 255, 255), 2.0, false, true);
-            StrokeStyle = new DrawStyle(new DrawColor(255, 0, 255, 255), new DrawColor(255, 0, 255, 255), 2.0, true, false);
-            Ellipse = new EllipseShape(new PointShape(0, 0, null), new PointShape(0, 0, null));
-            Line = new LineShape(new PointShape(0, 0, null), new PointShape(0, 0, null));
+            _stroke = new DrawColor(255, 0, 255, 255);
+            _fill = new DrawColor(255, 0, 255, 255);
+            _strokeStyle = new DrawStyle(_stroke, _fill, 2.0, true, false);
+            _fillStyle = new DrawStyle(_stroke, _fill, 2.0, false, true);
+            _line = new LineShape(new PointShape(0, 0, null), new PointShape(0, 0, null));
+            _ellipse = new EllipseShape(new PointShape(0, 0, null), new PointShape(0, 0, null));
         }
 
-        public void DrawEllipseAt(object dc, ShapeRenderer r, PointShape s, double radius)
+        public void DrawLine(object dc, ShapeRenderer r, PointShape a, PointShape b)
         {
-            Ellipse.Style = FillStyle;
-            Ellipse.TopLeft.X = s.X - radius;
-            Ellipse.TopLeft.Y = s.Y - radius;
-            Ellipse.BottomRight.X = s.X + radius;
-            Ellipse.BottomRight.Y = s.Y + radius;
-            Ellipse.Draw(dc, r, 0.0, 0.0);
+            _line.Style = _strokeStyle;
+            _line.StartPoint.X = a.X;
+            _line.StartPoint.Y = a.Y;
+            _line.Point.X = b.X;
+            _line.Point.Y = b.Y;
+            _line.Draw(dc, r, 0.0, 0.0);
         }
 
-        public void DrawLineAt(object dc, ShapeRenderer r, PointShape a, PointShape b)
+        public void DrawEllipse(object dc, ShapeRenderer r, PointShape s, double radius)
         {
-            Line.Style = StrokeStyle;
-            Line.StartPoint.X = a.X;
-            Line.StartPoint.Y = a.Y;
-            Line.Point.X = b.X;
-            Line.Point.Y = b.Y;
-            Line.Draw(dc, r, 0.0, 0.0);
+            _ellipse.Style = _fillStyle;
+            _ellipse.TopLeft.X = s.X - radius;
+            _ellipse.TopLeft.Y = s.Y - radius;
+            _ellipse.BottomRight.X = s.X + radius;
+            _ellipse.BottomRight.Y = s.Y + radius;
+            _ellipse.Draw(dc, r, 0.0, 0.0);
         }
     }
 }

@@ -57,7 +57,7 @@ namespace PathDemo.Controls
             ViewModel.CurrentTool = ViewModel.Tools[0];
         }
 
-        private void Draw(DrawingContext dc, ShapesContainerViewModel vm)
+        private void Draw(object dc, ShapesContainerViewModel vm)
         {
             foreach (var shape in vm.CurrentContainer.Guides)
             {
@@ -75,36 +75,36 @@ namespace PathDemo.Controls
             }
         }
 
-        private void DrawHelpers(DrawingContext dc, ShapesContainerViewModel vm)
+        private void DrawHelpers(object dc, ShapeRenderer r, IList<ShapeObject> shapes, ISet<ShapeObject> selected)
         {
-            foreach (var shape in vm.CurrentContainer.Shapes)
+            foreach (var shape in shapes)
             {
                 if (shape is LineShape line)
                 {
-                    if (vm.Selected.Contains(line))
+                    if (selected.Contains(line))
                     {
-                        _lineHelper.Draw(dc, vm.Renderer, line);
+                        _lineHelper.Draw(dc, r, line);
                     }
                 }
                 else if (shape is CubicBezierShape cubicBezier)
                 {
-                    if (vm.Selected.Contains(cubicBezier))
+                    if (selected.Contains(cubicBezier))
                     {
-                        _cubiceBezierHelper.Draw(dc, vm.Renderer, cubicBezier);
+                        _cubiceBezierHelper.Draw(dc, r, cubicBezier);
                     }
                 }
                 else if (shape is QuadraticBezierShape quadraticBezier)
                 {
-                    if (vm.Selected.Contains(quadraticBezier))
+                    if (selected.Contains(quadraticBezier))
                     {
-                        _quadraticBezierHelper.Draw(dc, vm.Renderer, quadraticBezier);
+                        _quadraticBezierHelper.Draw(dc, r, quadraticBezier);
                     }
                 }
                 else if (shape is PathShape path)
                 {
-                    if (vm.Selected.Contains(path))
+                    if (selected.Contains(path))
                     {
-                        _pathHelper.Draw(dc, vm.Renderer, path, vm);
+                        _pathHelper.Draw(dc, r, path, selected);
                     }
                 }
             }
@@ -149,7 +149,7 @@ namespace PathDemo.Controls
         {
             base.OnRender(dc);
             Draw(dc, ViewModel);
-            DrawHelpers(dc, ViewModel);
+            DrawHelpers(dc, ViewModel.Renderer, ViewModel.CurrentContainer.Shapes, ViewModel.Selected);
         }
     }
 }

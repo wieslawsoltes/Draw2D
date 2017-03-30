@@ -7,7 +7,7 @@ namespace Draw2D.Wpf.Controls
 {
     public class ShapesContainerRenderView : Canvas
     {
-        private void Draw(DrawingContext dc, ShapesContainerViewModel vm)
+        private void Draw(object dc, ShapesContainerViewModel vm)
         {
             foreach (var shape in vm.CurrentContainer.Guides)
             {

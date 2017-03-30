@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Draw2D.Editor;
 using Draw2D.Models.Renderers;
 using Draw2D.Models.Shapes;
@@ -19,44 +20,44 @@ namespace PathDemo.Controls
             _quadraticBezierHelper = new QuadraticBezierHelper();
         }
 
-        public void DrawShape(object dc, ShapeRenderer r, ShapeObject shape, IToolContext context)
+        public void DrawShape(object dc, ShapeRenderer r, ShapeObject shape, ISet<ShapeObject> selected)
         {
             if (shape is LineShape line)
             {
-                if (context.Selected.Contains(line))
+                if (selected.Contains(line))
                 {
                     _lineHelper.Draw(dc, r, line);
                 }
             }
             else if (shape is CubicBezierShape cubicBezier)
             {
-                if (context.Selected.Contains(cubicBezier))
+                if (selected.Contains(cubicBezier))
                 {
                     _cubiceBezierHelper.Draw(dc, r, cubicBezier);
                 }
             }
             else if (shape is QuadraticBezierShape quadraticBezier)
             {
-                if (context.Selected.Contains(quadraticBezier))
+                if (selected.Contains(quadraticBezier))
                 {
                     _quadraticBezierHelper.Draw(dc, r, quadraticBezier);
                 }
             }
         }
 
-        public void DrawFigure(object dc, ShapeRenderer r, FigureShape figure, IToolContext context)
+        public void DrawFigure(object dc, ShapeRenderer r, FigureShape figure, ISet<ShapeObject> selected)
         {
             foreach (var shape in figure.Shapes)
             {
-                DrawShape(dc, r, shape, context);
+                DrawShape(dc, r, shape, selected);
             }
         }
 
-        public void Draw(object dc, ShapeRenderer r, PathShape path, IToolContext context)
+        public void Draw(object dc, ShapeRenderer r, PathShape path, ISet<ShapeObject> selected)
         {
             foreach (var figure in path.Figures)
             {
-                DrawFigure(dc, r, figure, context);
+                DrawFigure(dc, r, figure, selected);
             }
         }
     }
