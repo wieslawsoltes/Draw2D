@@ -1,6 +1,6 @@
 ﻿using System.Windows.Media;
+using Draw2D.Models.Renderers;
 using Draw2D.Models.Shapes;
-using Draw2D.Wpf.Renderers;
 
 namespace PathDemo.Controls
 {
