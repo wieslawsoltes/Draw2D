@@ -7,6 +7,7 @@ using System.Windows.Media;
 using Draw2D.Editor;
 using Draw2D.Models;
 using Draw2D.Models.Containers;
+using Draw2D.Models.Shapes;
 using Draw2D.Models.Style;
 using Draw2D.ViewModels.Containers;
 using Draw2D.Wpf.Renderers;
