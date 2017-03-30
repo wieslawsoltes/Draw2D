@@ -35,6 +35,7 @@
       <SubType>Code</SubType>
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\Renderer\CommonHelper.cs" />
     <Compile Include="Controls\Renderer\CubiceBezierHelper.cs" />
     <Compile Include="Controls\Renderer\LineHelper.cs" />
     <Compile Include="Controls\Renderer\PathHelper.cs" />
