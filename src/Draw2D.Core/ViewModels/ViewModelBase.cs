@@ -1,7 +1,4 @@
-﻿using System;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
-using Draw2D.Models;
+﻿using Draw2D.Models;
 
 namespace Draw2D.ViewModels
 {

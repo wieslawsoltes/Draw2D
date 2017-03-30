@@ -1,5 +1,4 @@
-﻿using System;
-using System.Windows.Media;
+﻿using System.Windows.Media;
 using Draw2D.Models.Style;
 
 namespace Draw2D.Wpf.Renderers

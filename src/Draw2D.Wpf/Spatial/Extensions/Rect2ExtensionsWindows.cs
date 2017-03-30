@@ -1,5 +1,4 @@
-﻿using System;
-using System.Windows;
+﻿using System.Windows;
 using Draw2D.Spatial;
 
 namespace Draw2D.Models.Shapes

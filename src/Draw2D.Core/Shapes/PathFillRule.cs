@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Draw2D.Models.Shapes
+﻿namespace Draw2D.Models.Shapes
 {
     public enum PathFillRule
     {

@@ -1,7 +1,4 @@
-﻿using System;
-using Draw2D.Models.Shapes;
-
-namespace Draw2D.Editor.Tools
+﻿namespace Draw2D.Editor.Tools
 {
     public class CubicBezierTool : ToolBase
     {

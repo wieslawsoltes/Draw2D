@@ -1,5 +1,4 @@
-﻿using System;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using Draw2D.Spatial;
 
 namespace Draw2D.Editor.Selection

@@ -1,5 +1,4 @@
-﻿using System;
-using Draw2D.Editor;
+﻿using Draw2D.Editor;
 using Draw2D.Models.Shapes;
 
 namespace PathDemo.Tools

@@ -1,5 +1,4 @@
-﻿using System;
-using Draw2D.Models.Style;
+﻿using Draw2D.Models.Style;
 
 namespace Draw2D.Editor.Tools
 {

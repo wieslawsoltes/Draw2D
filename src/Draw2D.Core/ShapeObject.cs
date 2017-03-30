@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Draw2D.Models.Renderers;
 using Draw2D.Models.Style;
 

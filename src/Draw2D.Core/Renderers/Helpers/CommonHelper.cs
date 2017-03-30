@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Draw2D.Models;
-using Draw2D.Models.Renderers;
-using Draw2D.Models.Shapes;
+﻿using Draw2D.Models.Shapes;
 using Draw2D.Models.Style;
 
 namespace Draw2D.Models.Renderers.Helpers

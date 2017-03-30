@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Draw2D.Spatial.Sat
+﻿namespace Draw2D.Spatial.Sat
 {
     public struct MinimumTranslationVector
     {

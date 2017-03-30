@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Draw2D.Editor.Intersections.Line
+﻿namespace Draw2D.Editor.Intersections.Line
 {
     public class LineLineSettings : SettingsBase
     {

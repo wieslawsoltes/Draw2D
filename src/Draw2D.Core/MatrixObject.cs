@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Draw2D.Models
+﻿namespace Draw2D.Models
 {
     public class MatrixObject : ObservableObject
     {

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Draw2D.Spatial
+﻿namespace Draw2D.Spatial
 {
     public struct Size2
     {

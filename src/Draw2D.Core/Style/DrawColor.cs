@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Draw2D.Models.Style
+﻿namespace Draw2D.Models.Style
 {
     public class DrawColor : ObservableObject
     {

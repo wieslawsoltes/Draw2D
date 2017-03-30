@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using Draw2D.Models.Shapes;
 
 namespace Draw2D.Editor.Tools
