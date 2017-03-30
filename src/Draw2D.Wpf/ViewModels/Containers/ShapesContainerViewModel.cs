@@ -88,5 +88,23 @@ namespace Draw2D.ViewModels.Containers
         public Action Release { get; set; }
 
         public Action Invalidate { get; set; }
+
+        public void Draw(object dc)
+        {
+            foreach (var shape in CurrentContainer.Guides)
+            {
+                shape.Draw(dc, Renderer, 0.0, 0.0);
+            }
+
+            foreach (var shape in CurrentContainer.Shapes)
+            {
+                shape.Draw(dc, Renderer, 0.0, 0.0);
+            }
+
+            foreach (var shape in WorkingContainer.Shapes)
+            {
+                shape.Draw(dc, Renderer, 0.0, 0.0);
+            }
+        }
     }
 }

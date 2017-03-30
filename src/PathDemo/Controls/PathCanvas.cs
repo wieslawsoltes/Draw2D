@@ -58,22 +58,39 @@ namespace PathDemo.Controls
             ViewModel.CurrentTool = ViewModel.Tools[0];
         }
 
-        private void Draw(object dc, ShapesContainerViewModel vm)
+        protected override void OnPreviewMouseLeftButtonDown(MouseButtonEventArgs e)
         {
-            foreach (var shape in vm.CurrentContainer.Guides)
-            {
-                shape.Draw(dc, vm.Renderer, 0.0, 0.0);
-            }
+            base.OnPreviewMouseLeftButtonDown(e);
+            var point = e.GetPosition(this);
+            ViewModel.CurrentTool.LeftDown(ViewModel, point.X, point.Y, Modifier.None);
+        }
 
-            foreach (var shape in vm.CurrentContainer.Shapes)
-            {
-                shape.Draw(dc, vm.Renderer, 0.0, 0.0);
-            }
+        protected override void OnPreviewMouseLeftButtonUp(MouseButtonEventArgs e)
+        {
+            base.OnPreviewMouseLeftButtonUp(e);
+            var point = e.GetPosition(this);
+            ViewModel.CurrentTool.LeftUp(ViewModel, point.X, point.Y, Modifier.None);
+        }
 
-            foreach (var shape in vm.WorkingContainer.Shapes)
-            {
-                shape.Draw(dc, vm.Renderer, 0.0, 0.0);
-            }
+        protected override void OnPreviewMouseRightButtonDown(MouseButtonEventArgs e)
+        {
+            base.OnPreviewMouseRightButtonDown(e);
+            var point = e.GetPosition(this);
+            ViewModel.CurrentTool.RightDown(ViewModel, point.X, point.Y, Modifier.None);
+        }
+
+        protected override void OnPreviewMouseRightButtonUp(MouseButtonEventArgs e)
+        {
+            base.OnPreviewMouseRightButtonUp(e);
+            var point = e.GetPosition(this);
+            ViewModel.CurrentTool.RightUp(ViewModel, point.X, point.Y, Modifier.None);
+        }
+
+        protected override void OnPreviewMouseMove(MouseEventArgs e)
+        {
+            base.OnPreviewMouseMove(e);
+            var point = e.GetPosition(this);
+            ViewModel.CurrentTool.Move(ViewModel, point.X, point.Y, Modifier.None);
         }
 
         private void DrawHelpers(object dc, ShapeRenderer r, IList<ShapeObject> shapes, ISet<ShapeObject> selected)
@@ -111,45 +128,10 @@ namespace PathDemo.Controls
             }
         }
 
-        protected override void OnPreviewMouseLeftButtonDown(MouseButtonEventArgs e)
-        {
-            base.OnPreviewMouseLeftButtonDown(e);
-            var point = e.GetPosition(this);
-            ViewModel.CurrentTool.LeftDown(ViewModel, point.X, point.Y, Modifier.None);
-        }
-
-        protected override void OnPreviewMouseLeftButtonUp(MouseButtonEventArgs e)
-        {
-            base.OnPreviewMouseLeftButtonUp(e);
-            var point = e.GetPosition(this);
-            ViewModel.CurrentTool.LeftUp(ViewModel, point.X, point.Y, Modifier.None);
-        }
-
-        protected override void OnPreviewMouseRightButtonDown(MouseButtonEventArgs e)
-        {
-            base.OnPreviewMouseRightButtonDown(e);
-            var point = e.GetPosition(this);
-            ViewModel.CurrentTool.RightDown(ViewModel, point.X, point.Y, Modifier.None);
-        }
-
-        protected override void OnPreviewMouseRightButtonUp(MouseButtonEventArgs e)
-        {
-            base.OnPreviewMouseRightButtonUp(e);
-            var point = e.GetPosition(this);
-            ViewModel.CurrentTool.RightUp(ViewModel, point.X, point.Y, Modifier.None);
-        }
-
-        protected override void OnPreviewMouseMove(MouseEventArgs e)
-        {
-            base.OnPreviewMouseMove(e);
-            var point = e.GetPosition(this);
-            ViewModel.CurrentTool.Move(ViewModel, point.X, point.Y, Modifier.None);
-        }
-
         protected override void OnRender(DrawingContext dc)
         {
             base.OnRender(dc);
-            Draw(dc, ViewModel);
+            ViewModel.Draw(dc);
             DrawHelpers(dc, ViewModel.Renderer, ViewModel.CurrentContainer.Shapes, ViewModel.Selected);
         }
     }
