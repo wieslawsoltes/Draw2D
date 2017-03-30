@@ -5,7 +5,7 @@ namespace PathDemo.Controls
 {
     public class CommonHelper
     {
-        public static Ellipse = new EllipseShape(new PointShape(-4, -4, null), new PointShape(4, 4, null))
+        public static EllipseShape Ellipse = new EllipseShape(new PointShape(-4, -4, null), new PointShape(4, 4, null))
         {
             Style = new DrawStyle(new DrawColor(255, 255, 255, 0), new DrawColor(0, 0, 0, 0), 2.0, false, true)
         };
