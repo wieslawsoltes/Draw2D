@@ -86,7 +86,8 @@ namespace PathDemo.Controls
         {
             base.OnRender(dc);
 
-            // Container
+            // Containers
+
             foreach (var shape in ViewModel.CurrentContainer.Guides)
             {
                 shape.Draw(dc, ViewModel.Renderer, 0.0, 0.0);
@@ -103,6 +104,7 @@ namespace PathDemo.Controls
             }
 
             // Helpers
+
             foreach (var shape in ViewModel.CurrentContainer.Shapes)
             {
                 if (shape is LineShape line)

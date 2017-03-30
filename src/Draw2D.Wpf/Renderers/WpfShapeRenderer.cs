@@ -83,26 +83,24 @@ namespace Draw2D.Wpf.Renderers
             {
                 foreach (var figure in path.Figures)
                 {
-                    bool isFirstSegment = true;
-                    foreach (var segment in figure.Shapes)
+                    bool isFirstShape = true;
+                    foreach (var shape in figure.Shapes)
                     {
-                        if (segment is LineShape)
+                        if (shape is LineShape line)
                         {
-                            var line = segment as LineShape;
-                            if (isFirstSegment)
+                            if (isFirstShape)
                             {
                                 context.BeginFigure(FromPoint(line.StartPoint, dx, dy), figure.IsFilled, figure.IsClosed);
-                                isFirstSegment = false;
+                                isFirstShape = false;
                             }
                             context.LineTo(FromPoint(line.Point, dx, dy), true, false);
                         }
-                        else if (segment is CubicBezierShape)
+                        else if (shape is CubicBezierShape cubicBezier)
                         {
-                            var cubicBezier = segment as CubicBezierShape;
-                            if (isFirstSegment)
+                            if (isFirstShape)
                             {
                                 context.BeginFigure(FromPoint(cubicBezier.StartPoint, dx, dy), figure.IsFilled, figure.IsClosed);
-                                isFirstSegment = false;
+                                isFirstShape = false;
                             }
                             context.BezierTo(
                                 FromPoint(cubicBezier.Point1, dx, dy),
@@ -110,13 +108,12 @@ namespace Draw2D.Wpf.Renderers
                                 FromPoint(cubicBezier.Point3, dx, dy),
                                 true, false);
                         }
-                        else if (segment is QuadraticBezierShape)
+                        else if (shape is QuadraticBezierShape quadraticBezier)
                         {
-                            var quadraticBezier = segment as QuadraticBezierShape;
-                            if (isFirstSegment)
+                            if (isFirstShape)
                             {
                                 context.BeginFigure(FromPoint(quadraticBezier.StartPoint, dx, dy), figure.IsFilled, figure.IsClosed);
-                                isFirstSegment = false;
+                                isFirstShape = false;
                             }
                             context.QuadraticBezierTo(
                                 FromPoint(quadraticBezier.Point1, dx, dy),
