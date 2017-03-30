@@ -7,7 +7,7 @@ namespace PathDemo.Controls
 {
     public class QuadraticBezierHelper : CommonHelper
     {
-        public static void Draw(object dc, ShapeRenderer r, QuadraticBezierShape quadraticBezier)
+        public void Draw(object dc, ShapeRenderer r, QuadraticBezierShape quadraticBezier)
         {
             DrawLineAt(dc, r, quadraticBezier.StartPoint, quadraticBezier.Point1);
             DrawLineAt(dc, r, quadraticBezier.Point1, quadraticBezier.Point2);

@@ -7,7 +7,7 @@ namespace PathDemo.Controls
 {
     public class LineHelper : CommonHelper
     {
-        public static void Draw(object dc, ShapeRenderer r, LineShape line)
+        public void Draw(object dc, ShapeRenderer r, LineShape line)
         {
             DrawEllipseAt(dc, r, line.StartPoint, 4.0);
             DrawEllipseAt(dc, r, line.Point, 4.0);

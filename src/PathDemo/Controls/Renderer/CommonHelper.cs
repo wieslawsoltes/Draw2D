@@ -7,13 +7,20 @@ namespace PathDemo.Controls
 {
     public class CommonHelper
     {
-        public static DrawStyle FillStyle = new DrawStyle(new DrawColor(255, 0, 255, 255), new DrawColor(255, 0, 255, 255), 2.0, false, true);
-        public static DrawStyle StrokeStyle = new DrawStyle(new DrawColor(255, 0, 255, 255), new DrawColor(255, 0, 255, 255), 2.0, true, false);
+        public DrawStyle FillStyle;
+        public DrawStyle StrokeStyle;
+        public EllipseShape Ellipse;
+        public LineShape LineShape Line;
 
-        public static EllipseShape Ellipse = new EllipseShape(new PointShape(0, 0, null), new PointShape(0, 0, null));
-        public static LineShape Line = new LineShape(new PointShape(0, 0, null), new PointShape(0, 0, null));
+        public CommonHelper()
+        {
+            FillStyle = new DrawStyle(new DrawColor(255, 0, 255, 255), new DrawColor(255, 0, 255, 255), 2.0, false, true);
+            StrokeStyle = new DrawStyle(new DrawColor(255, 0, 255, 255), new DrawColor(255, 0, 255, 255), 2.0, true, false);
+            Ellipse = new EllipseShape(new PointShape(0, 0, null), new PointShape(0, 0, null));
+            Line = new LineShape(new PointShape(0, 0, null), new PointShape(0, 0, null));
+        }
 
-        public static void DrawEllipseAt(object dc, ShapeRenderer r, PointShape s, double radius)
+        public void DrawEllipseAt(object dc, ShapeRenderer r, PointShape s, double radius)
         {
             Ellipse.Style = FillStyle;
             Ellipse.TopLeft.X = s.X - radius;
@@ -23,7 +30,7 @@ namespace PathDemo.Controls
             Ellipse.Draw(dc, r, 0.0, 0.0);
         }
 
-        public static void DrawLineAt(object dc, ShapeRenderer r, PointShape a, PointShape b)
+        public void DrawLineAt(object dc, ShapeRenderer r, PointShape a, PointShape b)
         {
             Line.Style = StrokeStyle;
             Line.StartPoint.X = a.X;

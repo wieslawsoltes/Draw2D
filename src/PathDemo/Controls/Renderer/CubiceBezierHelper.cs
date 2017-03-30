@@ -7,7 +7,7 @@ namespace PathDemo.Controls
 {
     public class CubiceBezierHelper : CommonHelper
     {
-        public static void Draw(object dc, ShapeRenderer r, CubicBezierShape cubicBezier)
+        public void Draw(object dc, ShapeRenderer r, CubicBezierShape cubicBezier)
         {
             DrawLineAt(dc, r, cubicBezier.StartPoint, cubicBezier.Point1);
             DrawLineAt(dc, r, cubicBezier.Point3, cubicBezier.Point2);

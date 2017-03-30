@@ -17,10 +17,20 @@ namespace PathDemo.Controls
 {
     public class PathCanvas : Canvas
     {
+        private LineHelper _lineHelper;
+        private CubiceBezierHelper _cubiceBezierHelper;
+        private QuadraticBezierHelper _quadraticBezierHelper;
+        private PathHelper _pathHelper;
+
         public ShapesContainerViewModel ViewModel { get; set; }
 
         public PathCanvas()
         {
+            _lineHelper = new LineHelper();
+            _cubiceBezierHelper = new CubiceBezierHelper();
+            _quadraticBezierHelper = new QuadraticBezierHelper();
+            _pathHelper = new PathHelper();
+            
             ViewModel = new ShapesContainerViewModel()
             {
                 Selected = new HashSet<ShapeObject>(),
@@ -73,28 +83,28 @@ namespace PathDemo.Controls
                 {
                     if (vm.Selected.Contains(line))
                     {
-                        LineHelper.Draw(dc, vm.Renderer, line);
+                        _lineHelper.Draw(dc, vm.Renderer, line);
                     }
                 }
                 else if (shape is CubicBezierShape cubicBezier)
                 {
                     if (vm.Selected.Contains(cubicBezier))
                     {
-                        CubiceBezierHelper.Draw(dc, vm.Renderer, cubicBezier);
+                        _cubiceBezierHelper.Draw(dc, vm.Renderer, cubicBezier);
                     }
                 }
                 else if (shape is QuadraticBezierShape quadraticBezier)
                 {
                     if (vm.Selected.Contains(quadraticBezier))
                     {
-                        QuadraticBezierHelper.Draw(dc, vm.Renderer, quadraticBezier);
+                        _quadraticBezierHelper.Draw(dc, vm.Renderer, quadraticBezier);
                     }
                 }
                 else if (shape is PathShape path)
                 {
                     if (vm.Selected.Contains(path))
                     {
-                        PathHelper.Draw(dc, vm.Renderer, path, vm);
+                        _pathHelper.Draw(dc, vm.Renderer, path, vm);
                     }
                 }
             }
