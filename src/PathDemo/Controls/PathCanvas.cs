@@ -8,6 +8,7 @@ using Draw2D.Editor;
 using Draw2D.Models;
 using Draw2D.Models.Containers;
 using Draw2D.ViewModels.Containers;
+using Draw2D.Wpf.Renderers;
 using PathDemo.Tools;
 
 namespace PathDemo.Controls
