@@ -15,9 +15,9 @@ namespace PathDemo.Controls
         public static void DrawEllipseAt(object dc, ShapeRenderer r, PointShape s, double radius)
         {
             Ellipse.TopLeft.X = s.X - radius;
-            Ellipse.TopLeft.X = s.Y - radius;
+            Ellipse.TopLeft.Y = s.Y - radius;
             Ellipse.BottomRight.X = s.X + radius;
-            Ellipse.BottomRight.X = s.Y + radius;
+            Ellipse.BottomRight.Y = s.Y + radius;
             Ellipse.Draw(dc, r, 0.0, 0.0);
         }
     }
