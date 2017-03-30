@@ -3,6 +3,7 @@ using System.Windows.Media;
 using Draw2D.Editor;
 using Draw2D.Models.Renderers;
 using Draw2D.Models.Shapes;
+using Draw2D.Models.Style;
 
 namespace PathDemo.Controls
 {
@@ -18,7 +19,7 @@ namespace PathDemo.Controls
                     {
                         if (context.Selected.Contains(line))
                         {
-                            LineHelper.Draw(dc, line);
+                            LineHelper.Draw(dc, r, line);
                         }
                     }
                     else if (shape is CubicBezierShape cubicBezier)

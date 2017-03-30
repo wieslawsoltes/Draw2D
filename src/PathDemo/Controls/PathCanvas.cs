@@ -111,7 +111,7 @@ namespace PathDemo.Controls
                 {
                     if (ViewModel.Selected.Contains(line))
                     {
-                        LineHelper.Draw(dc, line, ViewModel.Renderer);
+                        LineHelper.Draw(dc, ViewModel.Renderer, line);
                     }
                 }
                 else if (shape is CubicBezierShape cubicBezier)
