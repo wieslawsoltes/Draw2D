@@ -25,6 +25,7 @@ namespace PathDemo.Controls
             {
                 Selected = new HashSet<ShapeObject>(),
                 CurrentContainer = new ShapesContainer(),
+                WorkingContainer = new ShapesContainer(),
                 Capture = () => this.CaptureMouse(),
                 Release = () => this.ReleaseMouseCapture(),
                 Invalidate = () => this.InvalidateVisual(),
