@@ -7,8 +7,8 @@ namespace PathDemo.Controls
 {
     public class CommonHelper
     {
-        public static FillStyle = new DrawStyle(new DrawColor(255, 0, 255, 255), new DrawColor(255, 0, 255, 255), 2.0, false, true);
-        public static StrokeStyle = new DrawStyle(new DrawColor(255, 0, 255, 255), new DrawColor(255, 0, 255, 255), 2.0, true, false);
+        public static DrawStyle FillStyle = new DrawStyle(new DrawColor(255, 0, 255, 255), new DrawColor(255, 0, 255, 255), 2.0, false, true);
+        public static DrawStyle StrokeStyle = new DrawStyle(new DrawColor(255, 0, 255, 255), new DrawColor(255, 0, 255, 255), 2.0, true, false);
 
         public static EllipseShape Ellipse = new EllipseShape(new PointShape(0, 0, null), new PointShape(0, 0, null));
         public static LineShape Line = new LineShape(new PointShape(0, 0, null), new PointShape(0, 0, null));
