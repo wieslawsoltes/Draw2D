@@ -17,8 +17,6 @@ namespace PathDemo.Controls
     {
         public ShapesContainerViewModel ViewModel { get; set; }
 
-        public ShapeRenderer Renderer { get; set; }
-
         public PathCanvas()
         {
             ViewModel = new ShapesContainerViewModel()
@@ -35,12 +33,15 @@ namespace PathDemo.Controls
                     new QuadraticBezierTool(),
                     new PathTool()
                 },
-                Renderer = new WpfShapeRenderer()
+                Renderer = new WpfShapeRenderer(),
+                CurrentStyle = new DrawStyle(new DrawColor(255, 0, 255, 0), new DrawColor(80, 0, 255, 0), 2.0, true, true),
+                PointShape = new EllipseShape(new PointShape(-4, -4, null), new PointShape(4, 4, null))
+                {
+                    Style = new DrawStyle(new DrawColor(0, 0, 0, 0), new DrawColor(255, 255, 255, 0), 2.0, false, true)
+                }
             };
 
             ViewModel.CurrentTool = ViewModel.Tools[0];
-
-            Renderer = new ShapeRenderer();
         }
 
         protected override void OnPreviewMouseLeftButtonDown(MouseButtonEventArgs e)
@@ -81,7 +82,56 @@ namespace PathDemo.Controls
         protected override void OnRender(DrawingContext dc)
         {
             base.OnRender(dc);
-            Renderer.Draw(dc, ViewModel);
+
+            // Container
+            foreach (var shape in ViewModel.CurrentContainer.Guides)
+            {
+                shape.Draw(dc, ViewModel.Renderer, 0.0, 0.0);
+            }
+
+            foreach (var shape in ViewModel.CurrentContainer.Shapes)
+            {
+                shape.Draw(dc, ViewModel.Renderer, 0.0, 0.0);
+            }
+
+            foreach (var shape in ViewModel.WorkingContainer.Shapes)
+            {
+                shape.Draw(dc, ViewModel.Renderer, 0.0, 0.0);
+            }
+
+            // Helpers
+            foreach (var shape in ViewModel.CurrentContainer.Shapes)
+            {
+                if (shape is LineShape line)
+                {
+                    if (ViewModel.Selected.Contains(line))
+                    {
+                        LineHelper.Draw(dc, line);
+                    }
+                }
+                else if (shape is CubicBezierShape cubicBezier)
+                {
+                    if (ViewModel.Selected.Contains(cubicBezier))
+                    {
+                        CubiceBezierHelper.Draw(dc, cubicBezier);
+                    }
+                }
+                else if (shape is QuadraticBezierShape quadraticBezier)
+                {
+                    if (ViewModel.Selected.Contains(quadraticBezier))
+                    {
+                        QuadraticBezierHelper.Draw(dc, quadraticBezier);
+                    }
+                }
+                else if (shape is PathShape path)
+                {
+                    if (ViewModel.Selected.Contains(path))
+                    {
+                        PathHelper.Draw(dc, path, ViewModel);
+                    }
+                }
+            }
+            
         }
     }
 }

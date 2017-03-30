@@ -81,7 +81,7 @@ namespace Draw2D.ViewModels.Containers
             set => Update(ref _hitTest, value);
         }
 
-        public PointShape GetNextPoint(double x, double y) => new PointShape() { X = x, Y = y };
+        public PointShape GetNextPoint(double x, double y) => new PointShape(x, y, PointShape);
 
         public Action Capture { get; set; }
 

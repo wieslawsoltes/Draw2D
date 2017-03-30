@@ -21,7 +21,8 @@ namespace PathDemo.Tools
                     {
                         StartPoint = next,
                         Point1 = next.Clone(),
-                        Point2 = next.Clone()
+                        Point2 = next.Clone(),
+                        Style = context.CurrentStyle
                     };
                     context.CurrentContainer.Shapes.Add(QuadraticBezier);
                     context.Selected.Add(QuadraticBezier);

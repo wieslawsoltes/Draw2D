@@ -22,7 +22,8 @@ namespace PathDemo.Tools
                         StartPoint = next,
                         Point1 = next.Clone(),
                         Point2 = next.Clone(),
-                        Point3 = next.Clone()
+                        Point3 = next.Clone(),
+                        Style = context.CurrentStyle
                     };
                     context.CurrentContainer.Shapes.Add(CubicBezier);
                     context.Selected.Add(CubicBezier);

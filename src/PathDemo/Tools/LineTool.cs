@@ -21,7 +21,8 @@ namespace PathDemo.Tools
                     Line = new LineShape()
                     {
                         StartPoint = context.GetNextPoint(x, y),
-                        Point = next.Clone()
+                        Point = next.Clone(),
+                        Style = context.CurrentStyle
                     };
                     context.CurrentContainer.Shapes.Add(Line);
                     context.Selected.Add(Line);
