@@ -6,6 +6,7 @@ using Draw2D.Editor.Bounds;
 using Draw2D.Models;
 using Draw2D.Models.Containers;
 using Draw2D.Models.Renderers;
+using Draw2D.Models.Renderers.Helpers;
 using Draw2D.Models.Shapes;
 using Draw2D.Models.Style;
 
@@ -13,6 +14,11 @@ namespace Draw2D.ViewModels.Containers
 {
     public class ShapesContainerViewModel : ViewModelBase, IToolContext
     {
+        private LineHelper _lineHelper;
+        private CubiceBezierHelper _cubiceBezierHelper;
+        private QuadraticBezierHelper _quadraticBezierHelper;
+        private PathHelper _pathHelper;
+
         private ObservableCollection<ToolBase> _tools;
         private ToolBase _currentTool;
         private ShapeRenderer _renderer;
@@ -89,6 +95,14 @@ namespace Draw2D.ViewModels.Containers
 
         public Action Invalidate { get; set; }
 
+        public ShapesContainerViewModel()
+        {
+            _lineHelper = new LineHelper();
+            _cubiceBezierHelper = new CubiceBezierHelper();
+            _quadraticBezierHelper = new QuadraticBezierHelper();
+            _pathHelper = new PathHelper();
+        }
+
         public void Draw(object dc)
         {
             foreach (var shape in CurrentContainer.Guides)
@@ -104,6 +118,41 @@ namespace Draw2D.ViewModels.Containers
             foreach (var shape in WorkingContainer.Shapes)
             {
                 shape.Draw(dc, Renderer, 0.0, 0.0);
+            }
+        }
+
+        public void DrawHelpers(object dc)
+        {
+            foreach (var shape in CurrentContainer.Shapes)
+            {
+                if (shape is LineShape line)
+                {
+                    if (Selected.Contains(line))
+                    {
+                        _lineHelper.Draw(dc, Renderer, line);
+                    }
+                }
+                else if (shape is CubicBezierShape cubicBezier)
+                {
+                    if (Selected.Contains(cubicBezier))
+                    {
+                        _cubiceBezierHelper.Draw(dc, Renderer, cubicBezier);
+                    }
+                }
+                else if (shape is QuadraticBezierShape quadraticBezier)
+                {
+                    if (Selected.Contains(quadraticBezier))
+                    {
+                        _quadraticBezierHelper.Draw(dc, Renderer, quadraticBezier);
+                    }
+                }
+                else if (shape is PathShape path)
+                {
+                    if (Selected.Contains(path))
+                    {
+                        _pathHelper.Draw(dc, Renderer, path, Selected);
+                    }
+                }
             }
         }
     }

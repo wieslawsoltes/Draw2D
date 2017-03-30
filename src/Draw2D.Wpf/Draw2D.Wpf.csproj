@@ -39,6 +39,11 @@
     <Compile Include="Demos\ArcDemo\ArcCanvas.cs" />
     <Compile Include="Demos\GuideDemo\GuideCanvas.cs" />
     <Compile Include="Models\ObservableObject.cs" />
+    <Compile Include="Models\Renderers\Helpers\CommonHelper.cs" />
+    <Compile Include="Models\Renderers\Helpers\CubiceBezierHelper.cs" />
+    <Compile Include="Models\Renderers\Helpers\LineHelper.cs" />
+    <Compile Include="Models\Renderers\Helpers\PathHelper.cs" />
+    <Compile Include="Models\Renderers\Helpers\QuadraticBezierHelper.cs" />
     <Compile Include="Models\ShapeObject.cs" />
     <Compile Include="Models\Containers\IShapesContainer.cs" />
     <Compile Include="Models\Containers\ShapesContainer.cs" />

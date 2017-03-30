@@ -18,20 +18,10 @@ namespace PathDemo.Controls
 {
     public class PathCanvas : Canvas
     {
-        private LineHelper _lineHelper;
-        private CubiceBezierHelper _cubiceBezierHelper;
-        private QuadraticBezierHelper _quadraticBezierHelper;
-        private PathHelper _pathHelper;
-
         public ShapesContainerViewModel ViewModel { get; set; }
 
         public PathCanvas()
         {
-            _lineHelper = new LineHelper();
-            _cubiceBezierHelper = new CubiceBezierHelper();
-            _quadraticBezierHelper = new QuadraticBezierHelper();
-            _pathHelper = new PathHelper();
-            
             ViewModel = new ShapesContainerViewModel()
             {
                 Selected = new HashSet<ShapeObject>(),
@@ -93,46 +83,11 @@ namespace PathDemo.Controls
             ViewModel.CurrentTool.Move(ViewModel, point.X, point.Y, Modifier.None);
         }
 
-        private void DrawHelpers(object dc, ShapeRenderer r, IList<ShapeObject> shapes, ISet<ShapeObject> selected)
-        {
-            foreach (var shape in shapes)
-            {
-                if (shape is LineShape line)
-                {
-                    if (selected.Contains(line))
-                    {
-                        _lineHelper.Draw(dc, r, line);
-                    }
-                }
-                else if (shape is CubicBezierShape cubicBezier)
-                {
-                    if (selected.Contains(cubicBezier))
-                    {
-                        _cubiceBezierHelper.Draw(dc, r, cubicBezier);
-                    }
-                }
-                else if (shape is QuadraticBezierShape quadraticBezier)
-                {
-                    if (selected.Contains(quadraticBezier))
-                    {
-                        _quadraticBezierHelper.Draw(dc, r, quadraticBezier);
-                    }
-                }
-                else if (shape is PathShape path)
-                {
-                    if (selected.Contains(path))
-                    {
-                        _pathHelper.Draw(dc, r, path, selected);
-                    }
-                }
-            }
-        }
-
         protected override void OnRender(DrawingContext dc)
         {
             base.OnRender(dc);
             ViewModel.Draw(dc);
-            DrawHelpers(dc, ViewModel.Renderer, ViewModel.CurrentContainer.Shapes, ViewModel.Selected);
+            ViewModel.DrawHelpers(dc);
         }
     }
 }

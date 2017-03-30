@@ -6,7 +6,7 @@ using Draw2D.Models.Renderers;
 using Draw2D.Models.Shapes;
 using Draw2D.Models.Style;
 
-namespace PathDemo.Controls
+namespace Draw2D.Models.Renderers.Helpers
 {
     public class PathHelper : CommonHelper
     {
