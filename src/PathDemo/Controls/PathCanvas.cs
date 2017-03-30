@@ -47,6 +47,59 @@ namespace PathDemo.Controls
             ViewModel.CurrentTool = ViewModel.Tools[0];
         }
 
+        private void Draw(DrawingContext dc, ShapesContainerViewModel vm)
+        {
+            foreach (var shape in vm.CurrentContainer.Guides)
+            {
+                shape.Draw(dc, vm.Renderer, 0.0, 0.0);
+            }
+
+            foreach (var shape in vm.CurrentContainer.Shapes)
+            {
+                shape.Draw(dc, vm.Renderer, 0.0, 0.0);
+            }
+
+            foreach (var shape in vm.WorkingContainer.Shapes)
+            {
+                shape.Draw(dc, vm.Renderer, 0.0, 0.0);
+            }
+        }
+
+        private void DrawHelpers(DrawingContext dc, ShapesContainerViewModel vm)
+        {
+            foreach (var shape in vm.CurrentContainer.Shapes)
+            {
+                if (shape is LineShape line)
+                {
+                    if (vm.Selected.Contains(line))
+                    {
+                        LineHelper.Draw(dc, vm.Renderer, line);
+                    }
+                }
+                else if (shape is CubicBezierShape cubicBezier)
+                {
+                    if (vm.Selected.Contains(cubicBezier))
+                    {
+                        CubiceBezierHelper.Draw(dc, vm.Renderer, cubicBezier);
+                    }
+                }
+                else if (shape is QuadraticBezierShape quadraticBezier)
+                {
+                    if (vm.Selected.Contains(quadraticBezier))
+                    {
+                        QuadraticBezierHelper.Draw(dc, vm.Renderer, quadraticBezier);
+                    }
+                }
+                else if (shape is PathShape path)
+                {
+                    if (vm.Selected.Contains(path))
+                    {
+                        PathHelper.Draw(dc, vm.Renderer, path, vm);
+                    }
+                }
+            }
+        }
+
         protected override void OnPreviewMouseLeftButtonDown(MouseButtonEventArgs e)
         {
             base.OnPreviewMouseLeftButtonDown(e);
@@ -85,58 +138,8 @@ namespace PathDemo.Controls
         protected override void OnRender(DrawingContext dc)
         {
             base.OnRender(dc);
-
-            // Containers
-
-            foreach (var shape in ViewModel.CurrentContainer.Guides)
-            {
-                shape.Draw(dc, ViewModel.Renderer, 0.0, 0.0);
-            }
-
-            foreach (var shape in ViewModel.CurrentContainer.Shapes)
-            {
-                shape.Draw(dc, ViewModel.Renderer, 0.0, 0.0);
-            }
-
-            foreach (var shape in ViewModel.WorkingContainer.Shapes)
-            {
-                shape.Draw(dc, ViewModel.Renderer, 0.0, 0.0);
-            }
-
-            // Helpers
-
-            foreach (var shape in ViewModel.CurrentContainer.Shapes)
-            {
-                if (shape is LineShape line)
-                {
-                    if (ViewModel.Selected.Contains(line))
-                    {
-                        LineHelper.Draw(dc, ViewModel.Renderer, line);
-                    }
-                }
-                else if (shape is CubicBezierShape cubicBezier)
-                {
-                    if (ViewModel.Selected.Contains(cubicBezier))
-                    {
-                        CubiceBezierHelper.Draw(dc, ViewModel.Renderer, cubicBezier);
-                    }
-                }
-                else if (shape is QuadraticBezierShape quadraticBezier)
-                {
-                    if (ViewModel.Selected.Contains(quadraticBezier))
-                    {
-                        QuadraticBezierHelper.Draw(dc, ViewModel.Renderer, quadraticBezier);
-                    }
-                }
-                else if (shape is PathShape path)
-                {
-                    if (ViewModel.Selected.Contains(path))
-                    {
-                        PathHelper.Draw(dc, ViewModel.Renderer, path, ViewModel);
-                    }
-                }
-            }
-            
+            Draw(dc, ViewModel);
+            DrawHelpers(dc, ViewModel);
         }
     }
 }

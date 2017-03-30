@@ -7,27 +7,31 @@ namespace Draw2D.Wpf.Controls
 {
     public class ShapesContainerRenderView : Canvas
     {
+        private void Draw(DrawingContext dc, ShapesContainerViewModel vm)
+        {
+            foreach (var shape in vm.CurrentContainer.Guides)
+            {
+                shape.Draw(dc, vm.Renderer, 0.0, 0.0);
+            }
+
+            foreach (var shape in vm.CurrentContainer.Shapes)
+            {
+                shape.Draw(dc, vm.Renderer, 0.0, 0.0);
+            }
+
+            foreach (var shape in vm.WorkingContainer.Shapes)
+            {
+                shape.Draw(dc, vm.Renderer, 0.0, 0.0);
+            }
+        }
+
         protected override void OnRender(DrawingContext dc)
         {
             base.OnRender(dc);
 
-            var vm = this.DataContext as ShapesContainerViewModel;
-            if (vm != null)
+            if (this.DataContext is ShapesContainerViewModel vm)
             {
-                foreach (var shape in vm.CurrentContainer.Guides)
-                {
-                    shape.Draw(dc, vm.Renderer, 0.0, 0.0);
-                }
-
-                foreach (var shape in vm.CurrentContainer.Shapes)
-                {
-                    shape.Draw(dc, vm.Renderer, 0.0, 0.0);
-                }
-
-                foreach (var shape in vm.WorkingContainer.Shapes)
-                {
-                    shape.Draw(dc, vm.Renderer, 0.0, 0.0);
-                }
+                Draw(dc, vm);
             }
         }
     }
