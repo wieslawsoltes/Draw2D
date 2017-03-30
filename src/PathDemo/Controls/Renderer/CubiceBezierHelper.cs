@@ -1,24 +1,21 @@
-﻿using System.Windows.Media;
+﻿using System;
 using Draw2D.Models.Renderers;
 using Draw2D.Models.Shapes;
 using Draw2D.Models.Style;
 
 namespace PathDemo.Controls
 {
-    public class CubiceBezierHelper
+    public class CubiceBezierHelper : CommonHelper
     {
-        public static void Draw(DrawingContext dc, CubicBezierShape cubicBezier)
+        public static void Draw(object dc, ShapeRenderer r, CubicBezierShape cubicBezier)
         {
-            var brushLines = Brushes.Cyan;
-            var penLines = new Pen(brushLines, 2.0);
-            var brushPoints = Brushes.Yellow;
-            dc.DrawLine(penLines, cubicBezier.StartPoint.AsPoint(), cubicBezier.Point1.AsPoint());
-            dc.DrawLine(penLines, cubicBezier.Point3.AsPoint(), cubicBezier.Point2.AsPoint());
-            dc.DrawLine(penLines, cubicBezier.Point1.AsPoint(), cubicBezier.Point2.AsPoint());
-            dc.DrawEllipse(brushPoints, null, cubicBezier.StartPoint.AsPoint(), 4, 4);
-            dc.DrawEllipse(brushPoints, null, cubicBezier.Point1.AsPoint(), 4, 4);
-            dc.DrawEllipse(brushPoints, null, cubicBezier.Point2.AsPoint(), 4, 4);
-            dc.DrawEllipse(brushPoints, null, cubicBezier.Point3.AsPoint(), 4, 4);
+            DrawLineAt(dc, r, cubicBezier.StartPoint, cubicBezier.Point1);
+            DrawLineAt(dc, r, cubicBezier.Point3, cubicBezier.Point2);
+            DrawLineAt(dc, r, cubicBezier.Point1, cubicBezier.Point2);
+            DrawEllipseAt(dc, r, cubicBezier.StartPoint, 4.0);
+            DrawEllipseAt(dc, r, cubicBezier.Point1, 4.0);
+            DrawEllipseAt(dc, r, cubicBezier.Point2, 4.0);
+            DrawEllipseAt(dc, r, cubicBezier.Point3, 4.0);
         }
     }
 }

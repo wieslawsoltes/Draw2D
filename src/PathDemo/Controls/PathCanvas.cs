@@ -118,14 +118,14 @@ namespace PathDemo.Controls
                 {
                     if (ViewModel.Selected.Contains(cubicBezier))
                     {
-                        CubiceBezierHelper.Draw(dc, cubicBezier);
+                        CubiceBezierHelper.Draw(dc, ViewModel.Renderer, cubicBezier);
                     }
                 }
                 else if (shape is QuadraticBezierShape quadraticBezier)
                 {
                     if (ViewModel.Selected.Contains(quadraticBezier))
                     {
-                        QuadraticBezierHelper.Draw(dc, quadraticBezier);
+                        QuadraticBezierHelper.Draw(dc, ViewModel.Renderer, quadraticBezier);
                     }
                 }
                 else if (shape is PathShape path)

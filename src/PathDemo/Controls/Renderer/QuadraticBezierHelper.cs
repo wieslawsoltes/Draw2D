@@ -1,22 +1,19 @@
-﻿using System.Windows.Media;
+﻿using System;
 using Draw2D.Models.Renderers;
 using Draw2D.Models.Shapes;
 using Draw2D.Models.Style;
 
 namespace PathDemo.Controls
 {
-    public class QuadraticBezierHelper
+    public class QuadraticBezierHelper : CommonHelper
     {
-        public static void Draw(DrawingContext dc, QuadraticBezierShape quadraticBezier)
+        public static void Draw(object dc, ShapeRenderer r, QuadraticBezierShape quadraticBezier)
         {
-            var brushLines = Brushes.Cyan;
-            var penLines = new Pen(brushLines, 2.0);
-            var brushPoints = Brushes.Yellow;
-            dc.DrawLine(penLines, quadraticBezier.StartPoint.AsPoint(), quadraticBezier.Point1.AsPoint());
-            dc.DrawLine(penLines, quadraticBezier.Point1.AsPoint(), quadraticBezier.Point2.AsPoint());
-            dc.DrawEllipse(brushPoints, null, quadraticBezier.StartPoint.AsPoint(), 4, 4);
-            dc.DrawEllipse(brushPoints, null, quadraticBezier.Point1.AsPoint(), 4, 4);
-            dc.DrawEllipse(brushPoints, null, quadraticBezier.Point2.AsPoint(), 4, 4);
+            DrawLineAt(dc, r, quadraticBezier.StartPoint, quadraticBezier.Point1);
+            DrawLineAt(dc, r, quadraticBezier.Point1, quadraticBezier.Point2);
+            DrawEllipseAt(dc, r, quadraticBezier.StartPoint, 4.0);
+            DrawEllipseAt(dc, r, quadraticBezier.Point1, 4.0);
+            DrawEllipseAt(dc, r, quadraticBezier.Point2, 4.0);
         }
     }
 }
