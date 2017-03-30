@@ -40,7 +40,6 @@
     <Compile Include="Controls\Renderer\LineHelper.cs" />
     <Compile Include="Controls\Renderer\PathHelper.cs" />
     <Compile Include="Controls\Renderer\QuadraticBezierHelper.cs" />
-    <Compile Include="Controls\Renderer\ShapeRenderer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Controls\PathCanvas.cs" />
     <Compile Include="Tools\CubicBezierTool.cs" />
