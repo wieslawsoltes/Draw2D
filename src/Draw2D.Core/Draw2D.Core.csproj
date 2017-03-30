@@ -1,7 +1,137 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
-
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
-    <TargetFrameworks>netstandard1.1;net45</TargetFrameworks>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{AA6ED03B-E669-4139-9DCF-D337860510B2}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>Draw2D.Core</RootNamespace>
+    <AssemblyName>Draw2D.Core</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <OutputPath>bin\$(Configuration)\$(Platform)</OutputPath>
+    <IntermediateOutputPath>obj\$(Configuration)\$(Platform)</IntermediateOutputPath>
   </PropertyGroup>
-
+  <Import Project="Draw2D.Core.props" />
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Containers\IShapesContainer.cs" />
+    <Compile Include="Containers\ShapesContainer.cs" />
+    <Compile Include="Editor\Bounds\HitTest.cs" />
+    <Compile Include="Editor\Bounds\HitTestBase.cs" />
+    <Compile Include="Editor\Bounds\HitTestHelper.cs" />
+    <Compile Include="Editor\Bounds\Shapes\EllipseHitTest.cs" />
+    <Compile Include="Editor\Bounds\Shapes\GroupHitTest.cs" />
+    <Compile Include="Editor\Bounds\Shapes\LineHitTest.cs" />
+    <Compile Include="Editor\Bounds\Shapes\PointHitTest.cs" />
+    <Compile Include="Editor\Bounds\Shapes\RectangleHitTest.cs" />
+    <Compile Include="Editor\Bounds\Shapes\ScribbleHitTest.cs" />
+    <Compile Include="Editor\Filters\GridSnapMode.cs" />
+    <Compile Include="Editor\Filters\GridSnapPointFilter.cs" />
+    <Compile Include="Editor\Filters\LineSnapMode.cs" />
+    <Compile Include="Editor\Filters\LineSnapPointFilter.cs" />
+    <Compile Include="Editor\Filters\LineSnapTarget.cs" />
+    <Compile Include="Editor\Filters\Settings\GridSnapSettings.cs" />
+    <Compile Include="Editor\Filters\Settings\LineSnapSettings.cs" />
+    <Compile Include="Editor\Intersections\LineHelper.cs" />
+    <Compile Include="Editor\Intersections\Line\EllipseLineIntersection.cs" />
+    <Compile Include="Editor\Intersections\Line\LineLineIntersection.cs" />
+    <Compile Include="Editor\Intersections\Line\RectangleLineIntersection.cs" />
+    <Compile Include="Editor\Intersections\Line\Settings\EllipseLineSettings.cs" />
+    <Compile Include="Editor\Intersections\Line\Settings\LineLineSettings.cs" />
+    <Compile Include="Editor\Intersections\Line\Settings\RectangleLineSettings.cs" />
+    <Compile Include="Editor\IToolContext.cs" />
+    <Compile Include="Editor\Modifier.cs" />
+    <Compile Include="Editor\PointFilter.cs" />
+    <Compile Include="Editor\PointIntersection.cs" />
+    <Compile Include="Editor\Selection\SelectionHelper.cs" />
+    <Compile Include="Editor\Selection\SelectionMode.cs" />
+    <Compile Include="Editor\Selection\SelectionTargets.cs" />
+    <Compile Include="Editor\SettingsBase.cs" />
+    <Compile Include="Editor\Spatial\Extensions\EllipseShapeExtensions.cs" />
+    <Compile Include="Editor\Spatial\Extensions\LineShapeExtensions.cs" />
+    <Compile Include="Editor\Spatial\Extensions\MatrixObjectExtensions.cs" />
+    <Compile Include="Editor\Spatial\Extensions\PointShapeExtensions.cs" />
+    <Compile Include="Editor\Spatial\Extensions\RectangleShapeExtensions.cs" />
+    <Compile Include="Editor\ToolBase.cs" />
+    <Compile Include="Editor\Tools\CubicBezierTool.cs" />
+    <Compile Include="Editor\Tools\EllipseTool.cs" />
+    <Compile Include="Editor\Tools\GuideTool.cs" />
+    <Compile Include="Editor\Tools\LineTool.cs" />
+    <Compile Include="Editor\Tools\MoveTool.cs" />
+    <Compile Include="Editor\Tools\NoneTool.cs" />
+    <Compile Include="Editor\Tools\PathTool.cs" />
+    <Compile Include="Editor\Tools\PointTool.cs" />
+    <Compile Include="Editor\Tools\PolyLineTool.cs" />
+    <Compile Include="Editor\Tools\QuadraticBezierTool.cs" />
+    <Compile Include="Editor\Tools\RectangleTool.cs" />
+    <Compile Include="Editor\Tools\ScribbleTool.cs" />
+    <Compile Include="Editor\Tools\SelectionTool.cs" />
+    <Compile Include="Editor\Tools\Settings\CubicBezierToolSettings.cs" />
+    <Compile Include="Editor\Tools\Settings\EllipseToolSettings.cs" />
+    <Compile Include="Editor\Tools\Settings\GuideToolSettings.cs" />
+    <Compile Include="Editor\Tools\Settings\LineToolSettings.cs" />
+    <Compile Include="Editor\Tools\Settings\MoveToolSettings.cs" />
+    <Compile Include="Editor\Tools\Settings\NoneToolSettings.cs" />
+    <Compile Include="Editor\Tools\Settings\PathToolSettings.cs" />
+    <Compile Include="Editor\Tools\Settings\PointToolSettings.cs" />
+    <Compile Include="Editor\Tools\Settings\PolyLineToolSettings.cs" />
+    <Compile Include="Editor\Tools\Settings\QuadraticBezierToolSettings.cs" />
+    <Compile Include="Editor\Tools\Settings\RectangleToolSettings.cs" />
+    <Compile Include="Editor\Tools\Settings\ScribbleToolSettings.cs" />
+    <Compile Include="Editor\Tools\Settings\SelectionToolSettings.cs" />
+    <Compile Include="ForEachExtension.cs" />
+    <Compile Include="IdObject.cs" />
+    <Compile Include="MatrixObject.cs" />
+    <Compile Include="ObservableObject.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Renderers\Helpers\CommonHelper.cs" />
+    <Compile Include="Renderers\Helpers\CubiceBezierHelper.cs" />
+    <Compile Include="Renderers\Helpers\LineHelper.cs" />
+    <Compile Include="Renderers\Helpers\PathHelper.cs" />
+    <Compile Include="Renderers\Helpers\QuadraticBezierHelper.cs" />
+    <Compile Include="Renderers\ShapeRenderer.cs" />
+    <Compile Include="ShapeObject.cs" />
+    <Compile Include="Shapes\ConnectableShape.cs" />
+    <Compile Include="Shapes\CubicBezierShape.cs" />
+    <Compile Include="Shapes\EllipseShape.cs" />
+    <Compile Include="Shapes\FigureShape.cs" />
+    <Compile Include="Shapes\GroupShape.cs" />
+    <Compile Include="Shapes\LineShape.cs" />
+    <Compile Include="Shapes\PathFillRule.cs" />
+    <Compile Include="Shapes\PathShape.cs" />
+    <Compile Include="Shapes\PointShape.cs" />
+    <Compile Include="Shapes\QuadraticBezierShape.cs" />
+    <Compile Include="Shapes\RectangleShape.cs" />
+    <Compile Include="Shapes\ScribbleShape.cs" />
+    <Compile Include="Spatial\Arc\GdiArc.cs" />
+    <Compile Include="Spatial\Arc\WpfArc.cs" />
+    <Compile Include="Spatial\ConvexHull\MonotoneChain.cs" />
+    <Compile Include="Spatial\DouglasPeucker\RDP.cs" />
+    <Compile Include="Spatial\Line2.cs" />
+    <Compile Include="Spatial\Matrix2.cs" />
+    <Compile Include="Spatial\Point2.cs" />
+    <Compile Include="Spatial\Polygon2.cs" />
+    <Compile Include="Spatial\Rect2.cs" />
+    <Compile Include="Spatial\Sat\MinimumTranslationVector.cs" />
+    <Compile Include="Spatial\Sat\Projection.cs" />
+    <Compile Include="Spatial\Sat\SeparatingAxisTheorem.cs" />
+    <Compile Include="Spatial\Size2.cs" />
+    <Compile Include="Spatial\Vector2.cs" />
+    <Compile Include="Style\DrawColor.cs" />
+    <Compile Include="Style\DrawStyle.cs" />
+    <Compile Include="ViewModels\Containers\ShapesContainerViewModel.cs" />
+    <Compile Include="ViewModels\ViewModelBase.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

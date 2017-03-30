@@ -206,7 +206,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Draw2D.Core\Draw2D.Core.csproj">
-      <Project>{e86e673d-c157-4441-b1b8-fea9d192cb7a}</Project>
+      <Project>{aa6ed03b-e669-4139-9dcf-d337860510b2}</Project>
       <Name>Draw2D.Core</Name>
     </ProjectReference>
   </ItemGroup>
