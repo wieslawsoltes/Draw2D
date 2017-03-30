@@ -6,9 +6,9 @@
         xmlns:ViewsToolsSettings="clr-namespace:Draw2D.Wpf.Views.Tools.Settings"
         xmlns:ViewsIntersectionsLineSettings="clr-namespace:Draw2D.Wpf.Views.Intersections.Line.Settings"
         xmlns:ViewsFiltersSettings="clr-namespace:Draw2D.Wpf.Views.Filters.Settings"
-        xmlns:EditorTools="clr-namespace:Draw2D.Editor.Tools"
-        xmlns:EditorIntersectionsLine="clr-namespace:Draw2D.Editor.Intersections.Line"
-        xmlns:EditorFilters="clr-namespace:Draw2D.Editor.Filters"
+        xmlns:EditorTools="clr-namespace:Draw2D.Editor.Tools;assembly=Draw2D.Core"
+        xmlns:EditorIntersectionsLine="clr-namespace:Draw2D.Editor.Intersections.Line;assembly=Draw2D.Core"
+        xmlns:EditorFilters="clr-namespace:Draw2D.Editor.Filters;assembly=Draw2D.Core"
         Title="Draw2D" Height="700" Width="1300"
         WindowStartupLocation="CenterScreen"
         UseLayoutRounding="True" SnapsToDevicePixels="True" TextOptions.TextFormattingMode="Display">

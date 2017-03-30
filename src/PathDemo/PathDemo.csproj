@@ -31,6 +31,12 @@
     <ApplicationDefinition Include="App.xaml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\Draw2D.Wpf\Renderers\WpfBrushCache.cs">
+      <Link>Renderers\WpfBrushCache.cs</Link>
+    </Compile>
+    <Compile Include="..\Draw2D.Wpf\Renderers\WpfShapeRenderer.cs">
+      <Link>Renderers\WpfShapeRenderer.cs</Link>
+    </Compile>
     <Compile Include="App.xaml.cs">
       <SubType>Code</SubType>
       <DependentUpon>App.xaml</DependentUpon>
@@ -56,9 +62,9 @@
     <None Include="app.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Draw2D.Wpf\Draw2D.Wpf.csproj">
-      <Project>{41a7b9ba-a69c-46d4-997e-f2e12ace58d6}</Project>
-      <Name>Draw2D.Wpf</Name>
+    <ProjectReference Include="..\Draw2D.Core\Draw2D.Core.csproj">
+      <Project>{e86e673d-c157-4441-b1b8-fea9d192cb7a}</Project>
+      <Name>Draw2D.Core</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
