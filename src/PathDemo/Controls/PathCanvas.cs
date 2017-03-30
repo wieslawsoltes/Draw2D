@@ -33,7 +33,8 @@ namespace PathDemo.Controls
                     new CubicBezierTool(),
                     new QuadraticBezierTool(),
                     new PathTool()
-                }
+                },
+                Renderer = new WpfShapeRenderer()
             };
 
             ViewModel.CurrentTool = ViewModel.Tools[0];
