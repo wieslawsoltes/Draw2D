@@ -24,8 +24,8 @@ namespace Draw2D.Editor.Tools
                 case State.TopLeft:
                     {
                         _ellipse = new EllipseShape(
-                            new PointShape(x, y, context.PointShape),
-                            new PointShape(x, y, context.PointShape));
+                            context.GetNextPoint(x, y, Settings.ConnectPoints, Settings.HitTestRadius),
+                            context.GetNextPoint(x, y));
                         _ellipse.Style = context.CurrentStyle;
                         context.WorkingContainer.Shapes.Add(_ellipse);
                         context.Selected.Add(_ellipse.TopLeft);
@@ -36,11 +36,10 @@ namespace Draw2D.Editor.Tools
                 case State.BottomRight:
                     {
                         _state = State.TopLeft;
-                        _ellipse.BottomRight.X = x;
-                        _ellipse.BottomRight.Y = y;
+                        context.Selected.Remove(_ellipse.BottomRight);
+                        _ellipse.BottomRight = context.GetNextPoint(x, y, Settings.ConnectPoints, Settings.HitTestRadius);
                         context.WorkingContainer.Shapes.Remove(_ellipse);
                         context.Selected.Remove(_ellipse.TopLeft);
-                        context.Selected.Remove(_ellipse.BottomRight);
                         context.CurrentContainer.Shapes.Add(_ellipse);
                         _ellipse = null;
                     }

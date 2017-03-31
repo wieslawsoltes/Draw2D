@@ -42,7 +42,10 @@ namespace Draw2D.PathDemo.Tools
 
         public HitTest HitTest { get; set; }
 
-        public PointShape GetNextPoint(double x, double y) => NextPoint ?? Context?.GetNextPoint(x, y);
+        public PointShape GetNextPoint(double x, double y, bool connect = false, bool radius = 7.0) 
+        {
+            return NextPoint ?? Context?.GetNextPoint(x, y, connect, radius);
+        }
 
         public Action Capture { get; set; }
 

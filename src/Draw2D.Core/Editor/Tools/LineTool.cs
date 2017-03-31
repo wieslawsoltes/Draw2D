@@ -25,15 +25,9 @@ namespace Draw2D.Editor.Tools
             {
                 case State.StartPoint:
                     {
-                        PointShape point = null;
-                        if (Settings.ConnectPoints)
-                        {
-                            point = context.HitTest.TryToGetPoint(context.CurrentContainer.Shapes, new Point2(x, y), Settings.HitTestRadius);
-                        }
-
                         _line = new LineShape(
-                            point ?? new PointShape(x, y, context.PointShape),
-                            new PointShape(x, y, context.PointShape));
+                            context.GetNextPoint(x, y, Settings.ConnectPoints, Settings.HitTestRadius),
+                            context.GetNextPoint(x, y));
                         _line.Style = context.CurrentStyle;
                         context.WorkingContainer.Shapes.Add(_line);
                         context.Selected.Add(_line.StartPoint);
@@ -45,21 +39,8 @@ namespace Draw2D.Editor.Tools
                     {
                         _state = State.StartPoint;
 
-                        PointShape point = null;
-                        if (Settings.ConnectPoints)
-                        {
-                            point = context.HitTest.TryToGetPoint(context.CurrentContainer.Shapes, new Point2(x, y), Settings.HitTestRadius);
-                        }
-
-                        if (point != null)
-                        {
-                            _line.Point = point;
-                        }
-                        else
-                        {
-                            _line.Point.X = x;
-                            _line.Point.Y = y;
-                        }
+                        context.Selected.Remove(_line.Point);
+                        _line.Point = context.GetNextPoint(x, y, Settings.ConnectPoints, Settings.HitTestRadius);
 
                         context.WorkingContainer.Shapes.Remove(_line);
                         context.Selected.Remove(_line.StartPoint);

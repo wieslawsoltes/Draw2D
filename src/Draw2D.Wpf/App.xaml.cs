@@ -213,6 +213,10 @@ namespace Draw2D.Wpf
                     gridSnapPointFilter
                 },
                 Settings = new CubicBezierToolSettings()
+                {
+                    ConnectPoints = true,
+                    HitTestRadius = 7.0
+                }
             };
 
             var quadraticBezierTool = new QuadraticBezierTool()
@@ -223,6 +227,10 @@ namespace Draw2D.Wpf
                     gridSnapPointFilter
                 },
                 Settings = new QuadraticBezierToolSettings()
+                {
+                    ConnectPoints = true,
+                    HitTestRadius = 7.0
+                }
             };
 
             var pathTool = new PathTool()
@@ -233,6 +241,10 @@ namespace Draw2D.Wpf
                     gridSnapPointFilter
                 },
                 Settings = new PathToolSettings()
+                {
+                    ConnectPoints = true,
+                    HitTestRadius = 7.0
+                }
             };
 
             var scribbleTool = new ScribbleTool()
@@ -265,6 +277,10 @@ namespace Draw2D.Wpf
                     gridSnapPointFilter
                 },
                 Settings = new EllipseToolSettings()
+                {
+                    ConnectPoints = true,
+                    HitTestRadius = 7.0
+                }
             };
 
             tools.Add(noneTool);

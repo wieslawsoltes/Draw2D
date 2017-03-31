@@ -27,16 +27,9 @@ namespace Draw2D.Editor.Tools
                 case State.Start:
                     {
                         _points = new List<PointShape>();
-
-                        PointShape point = null;
-                        if (Settings.ConnectPoints)
-                        {
-                            point = context.HitTest.TryToGetPoint(context.CurrentContainer.Shapes, new Point2(x, y), Settings.HitTestRadius);
-                        }
-
                         _line = new LineShape(
-                            point ?? new PointShape(x, y, context.PointShape),
-                            new PointShape(x, y, context.PointShape));
+                            context.GetNextPoint(x, y, Settings.ConnectPoints, Settings.HitTestRadius),
+                            context.GetNextPoint(x, y));
                         _line.Style = context.CurrentStyle;
                         _points.Add(_line.StartPoint);
                         _points.Add(_line.Point);
@@ -48,26 +41,13 @@ namespace Draw2D.Editor.Tools
                     break;
                 case State.End:
                     {
-                        PointShape point = null;
-                        if (Settings.ConnectPoints)
-                        {
-                            point = context.HitTest.TryToGetPoint(context.CurrentContainer.Shapes, new Point2(x, y), Settings.HitTestRadius);
-                        }
+                        context.Selected.Remove(_line.Point);
+                        _line.Point = context.GetNextPoint(x, y, Settings.ConnectPoints, Settings.HitTestRadius);
+                        _points[_points.Count - 1] = _line.Point;
 
-                        if (point != null)
+                        if (!context.Selected.Contains(_line.Point))
                         {
-                            _line.Point = point;
-
-                            _points[_points.Count - 1] = _line.Point;
-                            if (!context.Selected.Contains(_line.Point))
-                            {
-                                context.Selected.Add(_line.Point);
-                            }
-                        }
-                        else
-                        {
-                            _line.Point.X = x;
-                            _line.Point.Y = y;
+                            context.Selected.Add(_line.Point);
                         }
 
                         context.WorkingContainer.Shapes.Remove(_line);
@@ -75,7 +55,7 @@ namespace Draw2D.Editor.Tools
 
                         _line = new LineShape(
                             _points.Last(),
-                            new PointShape(x, y, context.PointShape));
+                            context.GetNextPoint(x, y));
                         _line.Style = context.CurrentStyle;
                         _points.Add(_line.Point);
                         context.WorkingContainer.Shapes.Add(_line);

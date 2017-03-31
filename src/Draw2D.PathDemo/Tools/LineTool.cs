@@ -18,7 +18,7 @@ namespace Draw2D.PathDemo.Tools
                     var next = context.GetNextPoint(x, y);
                     Line = new LineShape()
                     {
-                        StartPoint = context.GetNextPoint(x, y),
+                        StartPoint = next,
                         Point = next.Clone(),
                         Style = context.CurrentStyle
                     };

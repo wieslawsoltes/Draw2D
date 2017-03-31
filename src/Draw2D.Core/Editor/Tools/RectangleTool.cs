@@ -24,8 +24,8 @@ namespace Draw2D.Editor.Tools
                 case State.TopLeft:
                     {
                         _rectangle = new RectangleShape(
-                            new PointShape(x, y, context.PointShape),
-                            new PointShape(x, y, context.PointShape));
+                            context.GetNextPoint(x, y, Settings.ConnectPoints, Settings.HitTestRadius),
+                            context.GetNextPoint(x, y));
                         _rectangle.Style = context.CurrentStyle;
                         context.WorkingContainer.Shapes.Add(_rectangle);
                         context.Selected.Add(_rectangle.TopLeft);
@@ -36,11 +36,11 @@ namespace Draw2D.Editor.Tools
                 case State.BottomRight:
                     {
                         _state = State.TopLeft;
-                        _rectangle.BottomRight.X = x;
+                        context.Selected.Remove(_rectangle.BottomRight);
+                        _rectangle.BottomRight = context.GetNextPoint(x, y, Settings.ConnectPoints, Settings.HitTestRadius);
                         _rectangle.BottomRight.Y = y;
                         context.WorkingContainer.Shapes.Remove(_rectangle);
                         context.Selected.Remove(_rectangle.TopLeft);
-                        context.Selected.Remove(_rectangle.BottomRight);
                         context.CurrentContainer.Shapes.Add(_rectangle);
                         _rectangle = null;
                     }
