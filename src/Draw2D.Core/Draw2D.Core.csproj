@@ -13,7 +13,7 @@
     <OutputPath>bin\$(Configuration)\$(Platform)</OutputPath>
     <IntermediateOutputPath>obj\$(Configuration)\$(Platform)</IntermediateOutputPath>
   </PropertyGroup>
-  <Import Project="Draw2D.Core.props" />
+  <Import Project="..\Common.props" />
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
