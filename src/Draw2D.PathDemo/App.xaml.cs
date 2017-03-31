@@ -11,10 +11,10 @@ using Draw2D.Models.Shapes;
 using Draw2D.Models.Style;
 using Draw2D.ViewModels.Containers;
 using Draw2D.Wpf.Renderers;
-using PathDemo.Tools;
-using PathDemo.Views;
+using Draw2D.PathDemo.Tools;
+using Draw2D.PathDemo.Views;
 
-namespace PathDemo
+namespace Draw2D.PathDemo
 {
     public partial class App : Application
     {

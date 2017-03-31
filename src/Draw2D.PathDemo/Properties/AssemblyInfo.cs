@@ -2,11 +2,11 @@
 using System.Runtime.InteropServices;
 using System.Windows;
 
-[assembly: AssemblyTitle("PathDemo")]
+[assembly: AssemblyTitle("Draw2D.PathDemo")]
 [assembly: AssemblyDescription("A 2D vector diagram editor.")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Wiesław Šoltés")]
-[assembly: AssemblyProduct("PathDemo")]
+[assembly: AssemblyProduct("Draw2D.PathDemo")]
 [assembly: AssemblyCopyright("Copyright © Wiesław Šoltés 2017")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

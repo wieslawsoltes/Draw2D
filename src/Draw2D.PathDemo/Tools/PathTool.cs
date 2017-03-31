@@ -8,7 +8,7 @@ using Draw2D.Models.Containers;
 using Draw2D.Models.Shapes;
 using Draw2D.Models.Style;
 
-namespace PathDemo.Tools
+namespace Draw2D.PathDemo.Tools
 {
     public class PathTool : ToolBase, IToolContext
     {

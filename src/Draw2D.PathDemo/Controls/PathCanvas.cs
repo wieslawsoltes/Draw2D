@@ -10,9 +10,9 @@ using Draw2D.Models.Shapes;
 using Draw2D.Models.Style;
 using Draw2D.ViewModels.Containers;
 using Draw2D.Wpf.Renderers;
-using PathDemo.Tools;
+using Draw2D.PathDemo.Tools;
 
-namespace PathDemo.Controls
+namespace Draw2D.PathDemo.Controls
 {
     public class PathCanvas : Canvas
     {

@@ -5,7 +5,7 @@ VisualStudioVersion = 15.0.26228.10
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Draw2D.Wpf", "src\Draw2D.Wpf\Draw2D.Wpf.csproj", "{41A7B9BA-A69C-46D4-997E-F2E12ACE58D6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PathDemo", "src\PathDemo\PathDemo.csproj", "{0D35A46C-B718-40C1-9D01-CF097FB681A9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Draw2D.PathDemo", "src\Draw2D.PathDemo\Draw2D.PathDemo.csproj", "{0D35A46C-B718-40C1-9D01-CF097FB681A9}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Draw2D.Core", "src\Draw2D.Core\Draw2D.Core.csproj", "{AA6ED03B-E669-4139-9DCF-D337860510B2}"
 EndProject

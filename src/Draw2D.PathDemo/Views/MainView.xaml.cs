@@ -2,9 +2,9 @@
 using System.Windows;
 using System.Windows.Input;
 using Draw2D.ViewModels.Containers;
-using PathDemo.Tools;
+using Draw2D.PathDemo.Tools;
 
-namespace PathDemo.Views
+namespace Draw2D.PathDemo.Views
 {
     public partial class MainView : Window
     {

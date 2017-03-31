@@ -1,6 +1,6 @@
 ﻿using Draw2D.Editor;
 
-namespace PathDemo.Tools
+namespace Draw2D.PathDemo.Tools
 {
     public class MoveTool : ToolBase
     {
