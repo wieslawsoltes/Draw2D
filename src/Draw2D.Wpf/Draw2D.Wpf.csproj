@@ -13,7 +13,7 @@
     <OutputPath>bin\$(Configuration)\$(Platform)</OutputPath>
     <IntermediateOutputPath>obj\$(Configuration)\$(Platform)</IntermediateOutputPath>
   </PropertyGroup>
-  <Import Project="Draw2D.Wpf.props" />
+  <Import Project="..\Common.props" />
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="PresentationCore" />
