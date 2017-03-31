@@ -9,6 +9,14 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Draw2D.PathDemo", "src\Draw
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Draw2D.Core", "src\Draw2D.Core\Draw2D.Core.csproj", "{AA6ED03B-E669-4139-9DCF-D337860510B2}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{BCC81FA3-A696-4ACB-9E19-442D4998D8B6}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "shared", "shared", "{9EF49694-CD6D-4467-B99F-58B8FE875DB9}"
+	ProjectSection(SolutionItems) = preProject
+		src\Common.props = src\Common.props
+		src\CommonAssemblyInfo.cs = src\CommonAssemblyInfo.cs
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -58,5 +66,10 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{41A7B9BA-A69C-46D4-997E-F2E12ACE58D6} = {BCC81FA3-A696-4ACB-9E19-442D4998D8B6}
+		{0D35A46C-B718-40C1-9D01-CF097FB681A9} = {BCC81FA3-A696-4ACB-9E19-442D4998D8B6}
+		{AA6ED03B-E669-4139-9DCF-D337860510B2} = {BCC81FA3-A696-4ACB-9E19-442D4998D8B6}
 	EndGlobalSection
 EndGlobal

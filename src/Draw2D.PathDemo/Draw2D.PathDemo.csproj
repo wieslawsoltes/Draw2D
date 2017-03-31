@@ -31,6 +31,9 @@
     <ApplicationDefinition Include="App.xaml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\CommonAssemblyInfo.cs">
+      <Link>Properties\CommonAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="..\Draw2D.Wpf\Renderers\WpfBrushCache.cs">
       <Link>Renderers\WpfBrushCache.cs</Link>
     </Compile>
