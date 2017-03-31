@@ -346,9 +346,10 @@ namespace Draw2D.Wpf
 
             // VIEWS
 
-            var window = new MainView();
-            window.DataContext = vm;
-            window.ShowDialog();
+            var mainView = new MainView();
+
+            mainView.DataContext = vm;
+            mainView.ShowDialog();
         }
     }
 }

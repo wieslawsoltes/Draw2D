@@ -16,76 +16,86 @@ namespace PathDemo.Controls
 {
     public class PathCanvas : Canvas
     {
-        public ShapesContainerViewModel ViewModel { get; set; }
-
-        public PathCanvas()
+        private Modifier GetModifier()
         {
-            ViewModel = new ShapesContainerViewModel()
-            {
-                Selected = new HashSet<ShapeObject>(),
-                CurrentContainer = new ShapesContainer(),
-                WorkingContainer = new ShapesContainer(),
-                Capture = () => this.CaptureMouse(),
-                Release = () => this.ReleaseMouseCapture(),
-                Invalidate = () => this.InvalidateVisual(),
-                Tools = new ObservableCollection<ToolBase>
-                {
-                    new LineTool(),
-                    new CubicBezierTool(),
-                    new QuadraticBezierTool(),
-                    new PathTool()
-                },
-                Renderer = new WpfShapeRenderer(),
-                CurrentStyle = new DrawStyle(new DrawColor(255, 0, 255, 0), new DrawColor(80, 0, 255, 0), 2.0, true, true),
-                PointShape = new EllipseShape(new PointShape(-4, -4, null), new PointShape(4, 4, null))
-                {
-                    Style = new DrawStyle(new DrawColor(0, 0, 0, 0), new DrawColor(255, 255, 255, 0), 2.0, false, true)
-                }
-            };
+            Modifier modifier = Modifier.None;
 
-            ViewModel.CurrentTool = ViewModel.Tools[0];
+            if (Keyboard.Modifiers.HasFlag(ModifierKeys.Alt))
+                modifier |= Modifier.Alt;
+
+            if (Keyboard.Modifiers.HasFlag(ModifierKeys.Control))
+                modifier |= Modifier.Control;
+
+            if (Keyboard.Modifiers.HasFlag(ModifierKeys.Shift))
+                modifier |= Modifier.Shift;
+
+            return modifier;
         }
 
         protected override void OnPreviewMouseLeftButtonDown(MouseButtonEventArgs e)
         {
             base.OnPreviewMouseLeftButtonDown(e);
-            var point = e.GetPosition(this);
-            ViewModel.CurrentTool.LeftDown(ViewModel, point.X, point.Y, Modifier.None);
+
+            if (this.DataContext is ShapesContainerViewModel vm)
+            {
+                var point = e.GetPosition(this);
+                vm.CurrentTool.LeftDown(vm, point.X, point.Y, GetModifier());
+            }
         }
 
         protected override void OnPreviewMouseLeftButtonUp(MouseButtonEventArgs e)
         {
             base.OnPreviewMouseLeftButtonUp(e);
-            var point = e.GetPosition(this);
-            ViewModel.CurrentTool.LeftUp(ViewModel, point.X, point.Y, Modifier.None);
+
+            if (this.DataContext is ShapesContainerViewModel vm)
+            {
+                var point = e.GetPosition(this);
+                vm.CurrentTool.LeftUp(vm, point.X, point.Y, GetModifier());
+            }
         }
 
         protected override void OnPreviewMouseRightButtonDown(MouseButtonEventArgs e)
         {
             base.OnPreviewMouseRightButtonDown(e);
-            var point = e.GetPosition(this);
-            ViewModel.CurrentTool.RightDown(ViewModel, point.X, point.Y, Modifier.None);
+
+            if (this.DataContext is ShapesContainerViewModel vm)
+            {
+                var point = e.GetPosition(this);
+                vm.CurrentTool.RightDown(vm, point.X, point.Y, GetModifier());
+            }
         }
 
         protected override void OnPreviewMouseRightButtonUp(MouseButtonEventArgs e)
         {
             base.OnPreviewMouseRightButtonUp(e);
-            var point = e.GetPosition(this);
-            ViewModel.CurrentTool.RightUp(ViewModel, point.X, point.Y, Modifier.None);
+
+            if (this.DataContext is ShapesContainerViewModel vm)
+            {
+                var point = e.GetPosition(this);
+                vm.CurrentTool.RightUp(vm, point.X, point.Y, GetModifier());
+            }
         }
 
         protected override void OnPreviewMouseMove(MouseEventArgs e)
         {
             base.OnPreviewMouseMove(e);
-            var point = e.GetPosition(this);
-            ViewModel.CurrentTool.Move(ViewModel, point.X, point.Y, Modifier.None);
+
+            if (this.DataContext is ShapesContainerViewModel vm)
+            {
+                var point = e.GetPosition(this);
+                vm.CurrentTool.Move(vm, point.X, point.Y, GetModifier());
+            }
         }
 
         protected override void OnRender(DrawingContext dc)
         {
             base.OnRender(dc);
-            ViewModel.Draw(dc);
-            ViewModel.DrawHelpers(dc);
+
+            if (this.DataContext is ShapesContainerViewModel vm)
+            {
+                vm.Draw(dc);
+                vm.DrawHelpers(dc);
+            }
         }
     }
 }

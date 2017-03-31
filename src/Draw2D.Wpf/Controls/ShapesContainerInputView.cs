@@ -27,10 +27,9 @@ namespace Draw2D.Wpf.Controls
         {
             base.OnPreviewMouseLeftButtonDown(e);
 
-            var point = e.GetPosition(Child);
-            var vm = this.DataContext as ShapesContainerViewModel;
-            if (vm != null)
+            if (this.DataContext is ShapesContainerViewModel vm)
             {
+                var point = e.GetPosition(Child);
                 vm.CurrentTool.LeftDown(vm, point.X, point.Y, GetModifier());
                 Child.InvalidateVisual();
             }
@@ -40,10 +39,9 @@ namespace Draw2D.Wpf.Controls
         {
             base.OnPreviewMouseLeftButtonUp(e);
 
-            var point = e.GetPosition(Child);
-            var vm = this.DataContext as ShapesContainerViewModel;
-            if (vm != null)
+            if (this.DataContext is ShapesContainerViewModel vm)
             {
+                var point = e.GetPosition(Child);
                 vm.CurrentTool.LeftUp(vm, point.X, point.Y, GetModifier());
                 Child.InvalidateVisual();
             }
@@ -53,10 +51,9 @@ namespace Draw2D.Wpf.Controls
         {
             base.OnPreviewMouseRightButtonDown(e);
 
-            var point = e.GetPosition(Child);
-            var vm = this.DataContext as ShapesContainerViewModel;
-            if (vm != null)
+            if (this.DataContext is ShapesContainerViewModel vm)
             {
+                var point = e.GetPosition(Child);
                 vm.CurrentTool.RightDown(vm, point.X, point.Y, GetModifier());
                 Child.InvalidateVisual();
             }
@@ -66,10 +63,9 @@ namespace Draw2D.Wpf.Controls
         {
             base.OnPreviewMouseRightButtonUp(e);
 
-            var point = e.GetPosition(Child);
-            var vm = this.DataContext as ShapesContainerViewModel;
-            if (vm != null)
+            if (this.DataContext is ShapesContainerViewModel vm)
             {
+                var point = e.GetPosition(Child);
                 vm.CurrentTool.RightUp(vm, point.X, point.Y, GetModifier());
                 Child.InvalidateVisual();
             }
@@ -79,10 +75,9 @@ namespace Draw2D.Wpf.Controls
         {
             base.OnPreviewMouseMove(e);
 
-            var point = e.GetPosition(Child);
-            var vm = this.DataContext as ShapesContainerViewModel;
-            if (vm != null)
+            if (this.DataContext is ShapesContainerViewModel vm)
             {
+                var point = e.GetPosition(Child);
                 vm.CurrentTool.Move(vm, point.X, point.Y, GetModifier());
                 Child.InvalidateVisual();
             }
