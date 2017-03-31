@@ -55,7 +55,7 @@ namespace Draw2D.Editor.Tools
 
                         _line = new LineShape(
                             _points.Last(),
-                            context.GetNextPoint(x, y));
+                            context.GetNextPoint(x, y, false, 0.0));
                         _line.Style = context.CurrentStyle;
                         _points.Add(_line.Point);
                         context.WorkingContainer.Shapes.Add(_line);

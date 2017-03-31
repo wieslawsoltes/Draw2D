@@ -9,6 +9,7 @@ using Draw2D.Models.Renderers;
 using Draw2D.Models.Renderers.Helpers;
 using Draw2D.Models.Shapes;
 using Draw2D.Models.Style;
+using Draw2D.Spatial;
 
 namespace Draw2D.ViewModels.Containers
 {
