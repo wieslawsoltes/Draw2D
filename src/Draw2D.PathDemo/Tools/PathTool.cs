@@ -60,15 +60,12 @@ namespace Draw2D.PathDemo.Tools
             get => _currentSubTool;
             set
             {
-                if (_currentSubTool is MoveTool)
-                {
-                    PreviousSubTool = _currentSubTool;
-                }
+                PreviousSubTool = _currentSubTool;
                 _currentSubTool = value;
             }
         }
 
-        private ToolBase PreviousSubTool { get; set; }
+        public ToolBase PreviousSubTool { get; set; }
 
         private PointShape NextPoint { get; set; }
 

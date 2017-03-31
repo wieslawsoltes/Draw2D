@@ -16,6 +16,7 @@ namespace Draw2D.PathDemo.Tools
         public override void LeftDown(IToolContext context, double x, double y, Modifier modifier)
         {
             _pathTool.NewFigure();
+            _pathTool.CurrentSubTool = _pathTool.PreviousSubTool;
         }
     }
 }
