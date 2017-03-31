@@ -15,7 +15,7 @@ namespace Draw2D.PathDemo.Tools
             switch (CurrentState)
             {
                 case LineToolState.StartPoint:
-                    var next = context.GetNextPoint(x, y);
+                    var next = context.GetNextPoint(x, y, false, 0.0);
                     Line = new LineShape()
                     {
                         StartPoint = next,
@@ -29,7 +29,7 @@ namespace Draw2D.PathDemo.Tools
                     CurrentState = LineToolState.Point;
                     break;
                 case LineToolState.Point:
-                    Line.Point = context.GetNextPoint(x, y);
+                    Line.Point = context.GetNextPoint(x, y, false, 0.0);
                     CurrentState = LineToolState.StartPoint;
                     context.Selected.Remove(Line);
                     Line = null;

@@ -87,7 +87,7 @@ namespace Draw2D.ViewModels.Containers
             set => Update(ref _hitTest, value);
         }
 
-        public PointShape GetNextPoint(double x, double y, bool connect = false, double radius = 7.0) 
+        public PointShape GetNextPoint(double x, double y, bool connect, double radius) 
         {
             if (connect == true)
             {

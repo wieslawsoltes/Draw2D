@@ -25,7 +25,7 @@ namespace Draw2D.Editor.Tools
                     {
                         _rectangle = new RectangleShape(
                             context.GetNextPoint(x, y, Settings.ConnectPoints, Settings.HitTestRadius),
-                            context.GetNextPoint(x, y));
+                            context.GetNextPoint(x, y, false, 0.0));
                         _rectangle.Style = context.CurrentStyle;
                         context.WorkingContainer.Shapes.Add(_rectangle);
                         context.Selected.Add(_rectangle.TopLeft);

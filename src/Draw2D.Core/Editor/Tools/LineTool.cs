@@ -27,7 +27,7 @@ namespace Draw2D.Editor.Tools
                     {
                         _line = new LineShape(
                             context.GetNextPoint(x, y, Settings.ConnectPoints, Settings.HitTestRadius),
-                            context.GetNextPoint(x, y));
+                            context.GetNextPoint(x, y, false, 0.0));
                         _line.Style = context.CurrentStyle;
                         context.WorkingContainer.Shapes.Add(_line);
                         context.Selected.Add(_line.StartPoint);

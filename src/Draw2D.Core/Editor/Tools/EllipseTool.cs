@@ -25,7 +25,7 @@ namespace Draw2D.Editor.Tools
                     {
                         _ellipse = new EllipseShape(
                             context.GetNextPoint(x, y, Settings.ConnectPoints, Settings.HitTestRadius),
-                            context.GetNextPoint(x, y));
+                            context.GetNextPoint(x, y, false, 0.0));
                         _ellipse.Style = context.CurrentStyle;
                         context.WorkingContainer.Shapes.Add(_ellipse);
                         context.Selected.Add(_ellipse.TopLeft);

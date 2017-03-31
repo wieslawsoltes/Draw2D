@@ -29,7 +29,7 @@ namespace Draw2D.Editor.Tools
                         _points = new List<PointShape>();
                         _line = new LineShape(
                             context.GetNextPoint(x, y, Settings.ConnectPoints, Settings.HitTestRadius),
-                            context.GetNextPoint(x, y));
+                            context.GetNextPoint(x, y, false, 0.0));
                         _line.Style = context.CurrentStyle;
                         _points.Add(_line.StartPoint);
                         _points.Add(_line.Point);
