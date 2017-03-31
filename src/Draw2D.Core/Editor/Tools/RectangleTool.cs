@@ -5,9 +5,10 @@ namespace Draw2D.Editor.Tools
 {
     public class RectangleTool : ToolBase
     {
-        private enum State { TopLeft, BottomRight };
-        private State _state = State.TopLeft;
         private RectangleShape _rectangle = null;
+
+        public enum State { TopLeft, BottomRight };
+        public State CurrentState = State.TopLeft;
 
         public override string Name { get { return "Rectangle"; } }
 
@@ -19,7 +20,7 @@ namespace Draw2D.Editor.Tools
 
             Filters.Any(f => f.Process(context, ref x, ref y));
 
-            switch (_state)
+            switch (CurrentState)
             {
                 case State.TopLeft:
                     {
@@ -30,12 +31,12 @@ namespace Draw2D.Editor.Tools
                         context.WorkingContainer.Shapes.Add(_rectangle);
                         context.Selected.Add(_rectangle.TopLeft);
                         context.Selected.Add(_rectangle.BottomRight);
-                        _state = State.BottomRight;
+                        CurrentState = State.BottomRight;
                     }
                     break;
                 case State.BottomRight:
                     {
-                        _state = State.TopLeft;
+                        CurrentState = State.TopLeft;
                         context.Selected.Remove(_rectangle.BottomRight);
                         _rectangle.BottomRight = context.GetNextPoint(x, y, Settings.ConnectPoints, Settings.HitTestRadius);
                         _rectangle.BottomRight.Y = y;
@@ -52,7 +53,7 @@ namespace Draw2D.Editor.Tools
         {
             base.RightDown(context, x, y, modifier);
 
-            switch (_state)
+            switch (CurrentState)
             {
                 case State.BottomRight:
                     {
@@ -69,7 +70,7 @@ namespace Draw2D.Editor.Tools
             Filters.ForEach(f => f.Clear(context));
             Filters.Any(f => f.Process(context, ref x, ref y));
 
-            switch (_state)
+            switch (CurrentState)
             {
                 case State.BottomRight:
                     {
@@ -84,7 +85,7 @@ namespace Draw2D.Editor.Tools
         {
             base.Clean(context);
 
-            _state = State.TopLeft;
+            CurrentState = State.TopLeft;
 
             Filters.ForEach(f => f.Clear(context));
 

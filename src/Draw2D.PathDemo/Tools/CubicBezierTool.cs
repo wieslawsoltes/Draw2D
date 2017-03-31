@@ -5,10 +5,12 @@ namespace Draw2D.PathDemo.Tools
 {
     public class CubicBezierTool : ToolBase
     {
-        public override string Name { get { return "CubicBezier"; } }
+        private CubicBezierShape _cubicBezier = null;
+
         public enum CubicBezierToolState { StartPoint, Point1, Point2, Point3 }
         public CubicBezierToolState CurrentState = CubicBezierToolState.StartPoint;
-        public CubicBezierShape CubicBezier;
+
+        public override string Name { get { return "CubicBezier"; } }
 
         public override void LeftDown(IToolContext context, double x, double y, Modifier modifier)
         {
@@ -16,7 +18,7 @@ namespace Draw2D.PathDemo.Tools
             {
                 case CubicBezierToolState.StartPoint:
                     var next = context.GetNextPoint(x, y, false, 0.0);
-                    CubicBezier = new CubicBezierShape()
+                    _cubicBezier = new CubicBezierShape()
                     {
                         StartPoint = next,
                         Point1 = next.Clone(),
@@ -24,31 +26,31 @@ namespace Draw2D.PathDemo.Tools
                         Point3 = next.Clone(),
                         Style = context.CurrentStyle
                     };
-                    context.CurrentContainer.Shapes.Add(CubicBezier);
-                    context.Selected.Add(CubicBezier);
+                    context.CurrentContainer.Shapes.Add(_cubicBezier);
+                    context.Selected.Add(_cubicBezier);
                     context.Capture();
                     context.Invalidate();
                     CurrentState = CubicBezierToolState.Point3;
                     break;
                 case CubicBezierToolState.Point1:
-                    CubicBezier.Point1 = context.GetNextPoint(x, y, false, 0.0);
+                    _cubicBezier.Point1 = context.GetNextPoint(x, y, false, 0.0);
                     CurrentState = CubicBezierToolState.StartPoint;
-                    context.Selected.Remove(CubicBezier);
-                    CubicBezier = null;
+                    context.Selected.Remove(_cubicBezier);
+                    _cubicBezier = null;
                     context.Release();
                     context.Invalidate();
                     break;
                 case CubicBezierToolState.Point2:
-                    CubicBezier.Point1.X = x;
-                    CubicBezier.Point1.Y = y;
-                    CubicBezier.Point2 = context.GetNextPoint(x, y, false, 0.0);
+                    _cubicBezier.Point1.X = x;
+                    _cubicBezier.Point1.Y = y;
+                    _cubicBezier.Point2 = context.GetNextPoint(x, y, false, 0.0);
                     CurrentState = CubicBezierToolState.Point1;
                     context.Invalidate();
                     break;
                 case CubicBezierToolState.Point3:
-                    CubicBezier.Point2.X = x;
-                    CubicBezier.Point2.Y = y;
-                    CubicBezier.Point3 = context.GetNextPoint(x, y, false, 0.0);
+                    _cubicBezier.Point2.X = x;
+                    _cubicBezier.Point2.Y = y;
+                    _cubicBezier.Point3 = context.GetNextPoint(x, y, false, 0.0);
                     CurrentState = CubicBezierToolState.Point2;
                     context.Invalidate();
                     break;
@@ -63,9 +65,9 @@ namespace Draw2D.PathDemo.Tools
                 case CubicBezierToolState.Point2:
                 case CubicBezierToolState.Point3:
                     CurrentState = CubicBezierToolState.StartPoint;
-                    context.CurrentContainer.Shapes.Remove(CubicBezier);
-                    context.Selected.Remove(CubicBezier);
-                    CubicBezier = null;
+                    context.CurrentContainer.Shapes.Remove(_cubicBezier);
+                    context.Selected.Remove(_cubicBezier);
+                    _cubicBezier = null;
                     context.Release();
                     context.Invalidate();
                     break;
@@ -77,22 +79,22 @@ namespace Draw2D.PathDemo.Tools
             switch (CurrentState)
             {
                 case CubicBezierToolState.Point1:
-                    CubicBezier.Point1.X = x;
-                    CubicBezier.Point1.Y = y;
+                    _cubicBezier.Point1.X = x;
+                    _cubicBezier.Point1.Y = y;
                     context.Invalidate();
                     break;
                 case CubicBezierToolState.Point2:
-                    CubicBezier.Point1.X = x;
-                    CubicBezier.Point1.Y = y;
-                    CubicBezier.Point2.X = x;
-                    CubicBezier.Point2.Y = y;
+                    _cubicBezier.Point1.X = x;
+                    _cubicBezier.Point1.Y = y;
+                    _cubicBezier.Point2.X = x;
+                    _cubicBezier.Point2.Y = y;
                     context.Invalidate();
                     break;
                 case CubicBezierToolState.Point3:
-                    CubicBezier.Point2.X = x;
-                    CubicBezier.Point2.Y = y;
-                    CubicBezier.Point3.X = x;
-                    CubicBezier.Point3.Y = y;
+                    _cubicBezier.Point2.X = x;
+                    _cubicBezier.Point2.Y = y;
+                    _cubicBezier.Point3.X = x;
+                    _cubicBezier.Point3.Y = y;
                     context.Invalidate();
                     break;
             }

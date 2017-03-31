@@ -7,10 +7,11 @@ namespace Draw2D.Editor.Tools
 {
     public class PolyLineTool : ToolBase
     {
-        private enum State { Start, End };
-        private State _state = State.Start;
         private LineShape _line = null;
         private List<PointShape> _points = null;
+
+        public enum State { Start, End };
+        public State CurrentState = State.Start;
 
         public override string Name { get { return "PolyLine"; } }
 
@@ -22,7 +23,7 @@ namespace Draw2D.Editor.Tools
 
             Filters.Any(f => f.Process(context, ref x, ref y));
 
-            switch (_state)
+            switch (CurrentState)
             {
                 case State.Start:
                     {
@@ -36,7 +37,7 @@ namespace Draw2D.Editor.Tools
                         context.WorkingContainer.Shapes.Add(_line);
                         context.Selected.Add(_line.StartPoint);
                         context.Selected.Add(_line.Point);
-                        _state = State.End;
+                        CurrentState = State.End;
                     }
                     break;
                 case State.End:
@@ -72,7 +73,7 @@ namespace Draw2D.Editor.Tools
         {
             base.RightDown(context, x, y, modifier);
 
-            switch (_state)
+            switch (CurrentState)
             {
                 case State.End:
                     {
@@ -89,7 +90,7 @@ namespace Draw2D.Editor.Tools
             Filters.ForEach(f => f.Clear(context));
             Filters.Any(f => f.Process(context, ref x, ref y));
 
-            switch (_state)
+            switch (CurrentState)
             {
                 case State.End:
                     {
@@ -106,7 +107,7 @@ namespace Draw2D.Editor.Tools
         {
             base.Clean(context);
 
-            _state = State.Start;
+            CurrentState = State.Start;
 
             Intersections.ForEach(i => i.Clear(context));
             Filters.ForEach(f => f.Clear(context));

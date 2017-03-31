@@ -7,9 +7,10 @@ namespace Draw2D.Editor.Tools
 {
     public class LineTool : ToolBase
     {
-        private enum State { StartPoint, Point };
-        private State _state = State.StartPoint;
         private LineShape _line = null;
+
+        public enum State { StartPoint, Point };
+        public State CurrentState = State.StartPoint;
 
         public override string Name { get { return "Line"; } }
 
@@ -21,7 +22,7 @@ namespace Draw2D.Editor.Tools
 
             Filters.Any(f => f.Process(context, ref x, ref y));
 
-            switch (_state)
+            switch (CurrentState)
             {
                 case State.StartPoint:
                     {
@@ -32,12 +33,12 @@ namespace Draw2D.Editor.Tools
                         context.WorkingContainer.Shapes.Add(_line);
                         context.Selected.Add(_line.StartPoint);
                         context.Selected.Add(_line.Point);
-                        _state = State.Point;
+                        CurrentState = State.Point;
                     }
                     break;
                 case State.Point:
                     {
-                        _state = State.StartPoint;
+                        CurrentState = State.StartPoint;
 
                         context.Selected.Remove(_line.Point);
                         _line.Point = context.GetNextPoint(x, y, Settings.ConnectPoints, Settings.HitTestRadius);
@@ -69,7 +70,7 @@ namespace Draw2D.Editor.Tools
         {
             base.RightDown(context, x, y, modifier);
 
-            switch (_state)
+            switch (CurrentState)
             {
                 case State.Point:
                     {
@@ -86,7 +87,7 @@ namespace Draw2D.Editor.Tools
             Filters.ForEach(f => f.Clear(context));
             Filters.Any(f => f.Process(context, ref x, ref y));
 
-            switch (_state)
+            switch (CurrentState)
             {
                 case State.Point:
                     {
@@ -103,7 +104,7 @@ namespace Draw2D.Editor.Tools
         {
             base.Clean(context);
 
-            _state = State.StartPoint;
+            CurrentState = State.StartPoint;
 
             Intersections.ForEach(i => i.Clear(context));
             Filters.ForEach(f => f.Clear(context));

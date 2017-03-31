@@ -12,9 +12,9 @@ namespace Draw2D.PathDemo.Tools
 {
     public class PathTool : ToolBase, IToolContext
     {
-        public override string Name { get { return "Path"; } }
-
         private ToolBase _currentSubTool;
+        
+        public override string Name { get { return "Path"; } }
 
         public ISet<ShapeObject> Selected
         {
@@ -68,13 +68,13 @@ namespace Draw2D.PathDemo.Tools
             }
         }
 
-        public ToolBase PreviousSubTool { get; set; }
+        private ToolBase PreviousSubTool { get; set; }
 
-        public PointShape NextPoint { get; set; }
+        private PointShape NextPoint { get; set; }
 
-        public PathShape Path { get; set; }
+        private PathShape Path { get; set; }
 
-        public FigureShape Figure { get; set; }
+        private FigureShape Figure { get; set; }
 
         private IToolContext Context { get; set; }
 

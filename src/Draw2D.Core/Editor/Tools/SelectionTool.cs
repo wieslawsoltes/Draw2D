@@ -8,14 +8,15 @@ namespace Draw2D.Editor.Tools
 {
     public class SelectionTool : ToolBase
     {
-        private enum State { TopLeft, BottomRight, Move };
-        private State _state = State.TopLeft;
         private RectangleShape _rectangle;
         private double _originX;
         private double _originY;
         private double _previousX;
         private double _previousY;
         private bool _haveSelection;
+
+        public enum State { TopLeft, BottomRight, Move };
+        public State CurrentState = State.TopLeft;
 
         public override string Name { get { return "Selection"; } }
 
@@ -25,7 +26,7 @@ namespace Draw2D.Editor.Tools
         {
             base.LeftDown(context, x, y, modifier);
 
-            switch (_state)
+            switch (CurrentState)
             {
                 case State.TopLeft:
                     {
@@ -44,7 +45,7 @@ namespace Draw2D.Editor.Tools
                         if (result)
                         {
                             _haveSelection = true;
-                            _state = State.Move;
+                            CurrentState = State.Move;
                         }
                         else
                         {
@@ -65,13 +66,13 @@ namespace Draw2D.Editor.Tools
                             _rectangle.BottomRight.Y = y;
                             _rectangle.Style = Settings.SelectionStyle;
                             context.WorkingContainer.Shapes.Add(_rectangle);
-                            _state = State.BottomRight;
+                            CurrentState = State.BottomRight;
                         }
                     }
                     break;
                 case State.BottomRight:
                     {
-                        _state = State.TopLeft;
+                        CurrentState = State.TopLeft;
                         _rectangle.BottomRight.X = x;
                         _rectangle.BottomRight.Y = y;
                     }
@@ -85,7 +86,7 @@ namespace Draw2D.Editor.Tools
 
             Filters.ForEach(f => f.Clear(context));
 
-            switch (_state)
+            switch (CurrentState)
             {
                 case State.BottomRight:
                     {
@@ -98,12 +99,12 @@ namespace Draw2D.Editor.Tools
 
                         context.WorkingContainer.Shapes.Remove(_rectangle);
                         _rectangle = null;
-                        _state = State.TopLeft;
+                        CurrentState = State.TopLeft;
                     }
                     break;
                 case State.Move:
                     {
-                        _state = State.TopLeft;
+                        CurrentState = State.TopLeft;
                     }
                     break;
             }
@@ -113,7 +114,7 @@ namespace Draw2D.Editor.Tools
         {
             base.RightDown(context, x, y, modifier);
 
-            switch (_state)
+            switch (CurrentState)
             {
                 case State.BottomRight:
                     {
@@ -122,7 +123,7 @@ namespace Draw2D.Editor.Tools
                     break;
                 case State.Move:
                     {
-                        _state = State.TopLeft;
+                        CurrentState = State.TopLeft;
                     }
                     break;
             }
@@ -132,7 +133,7 @@ namespace Draw2D.Editor.Tools
         {
             base.Move(context, x, y, modifier);
 
-            switch (_state)
+            switch (CurrentState)
             {
                 case State.TopLeft:
                     {
@@ -204,7 +205,7 @@ namespace Draw2D.Editor.Tools
         {
             base.Clean(context);
 
-            _state = State.TopLeft;
+            CurrentState = State.TopLeft;
             _haveSelection = false;
 
             if (_rectangle != null)

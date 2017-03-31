@@ -10,9 +10,10 @@ namespace Draw2D.Editor.Tools
 {
     public class ScribbleTool : ToolBase
     {
-        private enum State { Start, Points };
-        private State _state = State.Start;
         private ScribbleShape _scribble = null;
+
+        public enum State { Start, Points };
+        public State CurrentState = State.Start;
 
         public override string Name { get { return "Scribble"; } }
 
@@ -24,7 +25,7 @@ namespace Draw2D.Editor.Tools
 
             Filters.Any(f => f.Process(context, ref x, ref y));
 
-            switch (_state)
+            switch (CurrentState)
             {
                 case State.Start:
                     {
@@ -33,7 +34,7 @@ namespace Draw2D.Editor.Tools
                             new ObservableCollection<PointShape>());
                         _scribble.Style = context.CurrentStyle;
                         context.WorkingContainer.Shapes.Add(_scribble);
-                        _state = State.Points;
+                        CurrentState = State.Points;
                     }
                     break;
             }
@@ -43,11 +44,11 @@ namespace Draw2D.Editor.Tools
         {
             base.LeftDown(context, x, y, modifier);
 
-            switch (_state)
+            switch (CurrentState)
             {
                 case State.Points:
                     {
-                        _state = State.Start;
+                        CurrentState = State.Start;
                         if (Settings.Simplify)
                         {
                             List<Vector2> points = _scribble.Points.Select(p => new Vector2((float)p.X, (float)p.Y)).ToList();
@@ -76,7 +77,7 @@ namespace Draw2D.Editor.Tools
         {
             base.RightDown(context, x, y, modifier);
 
-            switch (_state)
+            switch (CurrentState)
             {
                 case State.Points:
                     {
@@ -93,7 +94,7 @@ namespace Draw2D.Editor.Tools
             Filters.ForEach(f => f.Clear(context));
             Filters.Any(f => f.Process(context, ref x, ref y));
 
-            switch (_state)
+            switch (CurrentState)
             {
                 case State.Points:
                     {
@@ -107,7 +108,7 @@ namespace Draw2D.Editor.Tools
         {
             base.Clean(context);
 
-            _state = State.Start;
+            CurrentState = State.Start;
 
             Filters.ForEach(f => f.Clear(context));
 
