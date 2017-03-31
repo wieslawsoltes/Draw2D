@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using System.Windows;
 using System.Windows.Input;
+using Draw2D.ViewModels.Containers;
 using PathDemo.Tools;
 
 namespace PathDemo.Views
@@ -15,50 +16,65 @@ namespace PathDemo.Views
 
         public void SetLineTool()
         {
-            if (canvas.ViewModel.CurrentTool is PathTool pathTool)
+            if (this.DataContext is ShapesContainerViewModel vm)
             {
-                pathTool.CurrentSubTool = pathTool.SubTools.Where(t => t.Name == "Line").FirstOrDefault();
-            }
-            else
-            {
-                canvas.ViewModel.CurrentTool = canvas.ViewModel.Tools.Where(t => t.Name == "Line").FirstOrDefault();
+                if (vm.CurrentTool is PathTool pathTool)
+                {
+                    pathTool.CurrentSubTool = pathTool.SubTools.Where(t => t.Name == "Line").FirstOrDefault();
+                }
+                else
+                {
+                    vm.CurrentTool = vm.Tools.Where(t => t.Name == "Line").FirstOrDefault();
+                }
             }
         }
 
         public void SetCubicBezierTool()
         {
-            if (canvas.ViewModel.CurrentTool is PathTool pathTool)
+            if (this.DataContext is ShapesContainerViewModel vm)
             {
-                pathTool.CurrentSubTool = pathTool.SubTools.Where(t => t.Name == "CubicBezier").FirstOrDefault();
-            }
-            else
-            {
-                canvas.ViewModel.CurrentTool = canvas.ViewModel.Tools.Where(t => t.Name == "CubicBezier").FirstOrDefault();
+                if (vm.CurrentTool is PathTool pathTool)
+                {
+                    pathTool.CurrentSubTool = pathTool.SubTools.Where(t => t.Name == "CubicBezier").FirstOrDefault();
+                }
+                else
+                {
+                    vm.CurrentTool = vm.Tools.Where(t => t.Name == "CubicBezier").FirstOrDefault();
+                }
             }
         }
 
         public void SetQuadraticBezierTool()
         {
-            if (canvas.ViewModel.CurrentTool is PathTool pathTool)
+            if (this.DataContext is ShapesContainerViewModel vm)
             {
-                pathTool.CurrentSubTool = pathTool.SubTools.Where(t => t.Name == "QuadraticBezier").FirstOrDefault();
-            }
-            else
-            {
-                canvas.ViewModel.CurrentTool = canvas.ViewModel.Tools.Where(t => t.Name == "QuadraticBezier").FirstOrDefault();
+                if (vm.CurrentTool is PathTool pathTool)
+                {
+                    pathTool.CurrentSubTool = pathTool.SubTools.Where(t => t.Name == "QuadraticBezier").FirstOrDefault();
+                }
+                else
+                {
+                    vm.CurrentTool = vm.Tools.Where(t => t.Name == "QuadraticBezier").FirstOrDefault();
+                }
             }
         }
 
         public void SetPathTool()
         {
-            canvas.ViewModel.CurrentTool = canvas.ViewModel.Tools.Where(t => t.Name == "Path").FirstOrDefault();
+            if (this.DataContext is ShapesContainerViewModel vm)
+            {
+                vm.CurrentTool = vm.Tools.Where(t => t.Name == "Path").FirstOrDefault();
+            }
         }
 
         public void SetMoveTool()
         {
-            if (canvas.ViewModel.CurrentTool is PathTool pathTool)
+            if (this.DataContext is ShapesContainerViewModel vm)
             {
-                pathTool.CurrentSubTool = pathTool.SubTools.Where(t => t.Name == "Move").FirstOrDefault();
+                if (vm.CurrentTool is PathTool pathTool)
+                {
+                    pathTool.CurrentSubTool = pathTool.SubTools.Where(t => t.Name == "Move").FirstOrDefault();
+                }
             }
         }
 
