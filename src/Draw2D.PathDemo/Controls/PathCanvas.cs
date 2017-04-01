@@ -1,16 +1,8 @@
-﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Windows.Controls;
+﻿using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using Draw2D.Editor;
-using Draw2D.Models;
-using Draw2D.Models.Containers;
-using Draw2D.Models.Shapes;
-using Draw2D.Models.Style;
 using Draw2D.ViewModels.Containers;
-using Draw2D.Wpf.Renderers;
-using Draw2D.PathDemo.Tools;
 
 namespace Draw2D.PathDemo.Controls
 {
