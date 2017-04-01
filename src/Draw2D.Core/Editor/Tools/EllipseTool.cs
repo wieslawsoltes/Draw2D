@@ -24,10 +24,12 @@ namespace Draw2D.Editor.Tools
             {
                 case State.TopLeft:
                     {
-                        _ellipse = new EllipseShape(
-                            context.GetNextPoint(x, y, Settings.ConnectPoints, Settings.HitTestRadius),
-                            context.GetNextPoint(x, y, false, 0.0));
-                        _ellipse.Style = context.CurrentStyle;
+                        _ellipse = new EllipseShape()
+                        {
+                            TopLeft = context.GetNextPoint(x, y, Settings.ConnectPoints, Settings.HitTestRadius),
+                            BottomRight = context.GetNextPoint(x, y, false, 0.0),
+                            Style = context.CurrentStyle
+                        };
                         context.WorkingContainer.Shapes.Add(_ellipse);
                         context.Selected.Add(_ellipse.TopLeft);
                         context.Selected.Add(_ellipse.BottomRight);

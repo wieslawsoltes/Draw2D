@@ -58,7 +58,11 @@ namespace Draw2D.Editor.Tools
 
                             if (_rectangle == null)
                             {
-                                _rectangle = new RectangleShape(new PointShape(), new PointShape());
+                                _rectangle = new RectangleShape()
+                                {
+                                    TopLeft = new PointShape(),
+                                    BottomRight = new PointShape()
+                                };
                             }
                             _rectangle.TopLeft.X = x;
                             _rectangle.TopLeft.Y = y;

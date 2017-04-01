@@ -42,11 +42,17 @@ namespace Draw2D.Models.Shapes
                 r.DrawPolyLine(dc, _start, _points, Style, dx, dy);
             }
 
-            _start.Draw(dc, r, dx, dy);
+            if (r.Selected.Contains(_start))
+            {
+                _start.Draw(dc, r, dx, dy);
+            }
 
             foreach (var point in _points)
             {
-                point.Draw(dc, r, dx, dy);
+                if (r.Selected.Contains(point))
+                {
+                    point.Draw(dc, r, dx, dy);
+                }
             }
 
             base.EndTransform(dc, r);

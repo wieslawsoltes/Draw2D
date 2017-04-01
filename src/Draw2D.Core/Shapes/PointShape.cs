@@ -40,7 +40,7 @@ namespace Draw2D.Models.Shapes
 
         public override void Draw(object dc, ShapeRenderer r, double dx, double dy)
         {
-            if (_template != null && r.Selected.Contains(this))
+            if (_template != null)
             {
                 base.BeginTransform(dc, r);
 

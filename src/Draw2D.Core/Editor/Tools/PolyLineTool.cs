@@ -27,10 +27,12 @@ namespace Draw2D.Editor.Tools
                 case State.Start:
                     {
                         _points = new List<PointShape>();
-                        _line = new LineShape(
-                            context.GetNextPoint(x, y, Settings.ConnectPoints, Settings.HitTestRadius),
-                            context.GetNextPoint(x, y, false, 0.0));
-                        _line.Style = context.CurrentStyle;
+                        _line = new LineShape()
+                        {
+                            StartPoint = context.GetNextPoint(x, y, Settings.ConnectPoints, Settings.HitTestRadius),
+                            Point = context.GetNextPoint(x, y, false, 0.0),
+                            Style = context.CurrentStyle
+                        };
                         _points.Add(_line.StartPoint);
                         _points.Add(_line.Point);
                         context.WorkingContainer.Shapes.Add(_line);
@@ -53,10 +55,12 @@ namespace Draw2D.Editor.Tools
                         context.WorkingContainer.Shapes.Remove(_line);
                         context.CurrentContainer.Shapes.Add(_line);
 
-                        _line = new LineShape(
-                            _points.Last(),
-                            context.GetNextPoint(x, y, false, 0.0));
-                        _line.Style = context.CurrentStyle;
+                        _line = new LineShape()
+                        {
+                            StartPoint = _points.Last(),
+                            Point = context.GetNextPoint(x, y, false, 0.0),
+                            Style = context.CurrentStyle
+                        };
                         _points.Add(_line.Point);
                         context.WorkingContainer.Shapes.Add(_line);
                         context.Selected.Add(_line.Point);

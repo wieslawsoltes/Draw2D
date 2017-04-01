@@ -48,19 +48,34 @@ namespace Draw2D.Models.Shapes
             this.Point3 = point3;
         }
 
-        public override void Draw(object dc, ShapeRenderer renderer, double dx, double dy)
+        public override void Draw(object dc, ShapeRenderer r, double dx, double dy)
         {
-            base.BeginTransform(dc, renderer);
+            base.BeginTransform(dc, r);
 
-            renderer.DrawCubicBezier(dc, this, Style, dx, dy);
+            r.DrawCubicBezier(dc, this, Style, dx, dy);
 
-            _startPoint.Draw(dc, renderer, dx, dy);
-            _point1.Draw(dc, renderer, dx, dy);
-            _point2.Draw(dc, renderer, dx, dy);
-            _point3.Draw(dc, renderer, dx, dy);
+            if (r.Selected.Contains(_startPoint))
+            {
+                _startPoint.Draw(dc, r, dx, dy); 
+            }
 
-            base.Draw(dc, renderer, dx, dy);
-            base.EndTransform(dc, renderer);
+            if (r.Selected.Contains(_point1))
+            {
+                _point1.Draw(dc, r, dx, dy); 
+            }
+
+            if (r.Selected.Contains(_point2))
+            {
+                _point2.Draw(dc, r, dx, dy); 
+            }
+
+            if (r.Selected.Contains(_point3))
+            {
+                _point3.Draw(dc, r, dx, dy); 
+            }
+
+            base.Draw(dc, r, dx, dy);
+            base.EndTransform(dc, r);
         }
 
         public override void Move(ISet<ShapeObject> selected, double dx, double dy)

@@ -28,7 +28,10 @@ namespace Draw2D.Models.Shapes
         {
             foreach (var point in Points)
             {
-                point.Draw(dc, r, dx, dy);
+                if (r.Selected.Contains(point))
+                {
+                    point.Draw(dc, r, dx, dy);
+                }
             }
         }
 

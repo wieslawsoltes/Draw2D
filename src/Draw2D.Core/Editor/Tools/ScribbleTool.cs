@@ -29,10 +29,12 @@ namespace Draw2D.Editor.Tools
             {
                 case State.Start:
                     {
-                        _scribble = new ScribbleShape(
-                            new PointShape(x, y, context.PointShape),
-                            new ObservableCollection<PointShape>());
-                        _scribble.Style = context.CurrentStyle;
+                        _scribble = new ScribbleShape()
+                        {
+                            Start = new PointShape(x, y, context.PointShape),
+                            Points = new ObservableCollection<PointShape>(),
+                            Style = context.CurrentStyle
+                        };
                         context.WorkingContainer.Shapes.Add(_scribble);
                         CurrentState = State.Points;
                     }

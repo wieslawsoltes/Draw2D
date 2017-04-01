@@ -126,6 +126,10 @@ namespace Draw2D.Wpf
                     gridSnapPointFilter
                 },
                 Settings = new PointToolSettings()
+                {
+                    ConnectPoints = true,
+                    HitTestRadius = 7.0
+                }
             };
 
             var lineTool = new LineTool()

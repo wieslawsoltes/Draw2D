@@ -38,8 +38,15 @@ namespace Draw2D.Models.Shapes
 
             r.DrawRectangle(dc, this, Style, dx, dy);
 
-            _topLeft.Draw(dc, r, dx, dy);
-            _bottomRight.Draw(dc, r, dx, dy);
+            if (r.Selected.Contains(_topLeft))
+            {
+                _topLeft.Draw(dc, r, dx, dy);
+            }
+
+            if (r.Selected.Contains(_bottomRight))
+            {
+                _bottomRight.Draw(dc, r, dx, dy);
+            }
 
             base.Draw(dc, r, dx, dy);
             base.EndTransform(dc, r);

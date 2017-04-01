@@ -46,9 +46,20 @@ namespace Draw2D.Models.Shapes
 
             r.DrawQuadraticBezier(dc, this, Style, dx, dy);
 
-            _startPoint.Draw(dc, r, dx, dy);
-            _point1.Draw(dc, r, dx, dy);
-            _point2.Draw(dc, r, dx, dy);
+            if (r.Selected.Contains(_startPoint))
+            {
+                _startPoint.Draw(dc, r, dx, dy);
+            }
+
+            if (r.Selected.Contains(_point1))
+            {
+                _point1.Draw(dc, r, dx, dy);
+            }
+
+            if (r.Selected.Contains(_point2))
+            {
+                _point2.Draw(dc, r, dx, dy);
+            }
 
             base.Draw(dc, r, dx, dy);
             base.EndTransform(dc, r);

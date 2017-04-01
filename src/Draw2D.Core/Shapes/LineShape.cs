@@ -38,8 +38,15 @@ namespace Draw2D.Models.Shapes
 
             r.DrawLine(dc, this, Style, dx, dy);
 
-            _startPoint.Draw(dc, r, dx, dy); 
-            _point.Draw(dc, r, dx, dy);
+            if (r.Selected.Contains(_startPoint))
+            {
+                _startPoint.Draw(dc, r, dx, dy);
+            }
+
+            if (r.Selected.Contains(_point))
+            {
+                _point.Draw(dc, r, dx, dy);
+            }
 
             base.Draw(dc, r, dx, dy);
             base.EndTransform(dc, r);

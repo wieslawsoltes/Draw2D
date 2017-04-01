@@ -24,10 +24,12 @@ namespace Draw2D.Editor.Tools
             {
                 case State.Start:
                     {
-                        _line = new LineShape(
-                            new PointShape(x, y, null),
-                            new PointShape(x, y, null));
-                        _line.Style = Settings.GuideStyle;
+                        _line = new LineShape()
+                        {
+                            StartPoint = new PointShape(x, y, null),
+                            Point = new PointShape(x, y, null),
+                            Style = Settings.GuideStyle
+                        };
                         context.WorkingContainer.Shapes.Add(_line);
                         CurrentState = State.End;
                     }

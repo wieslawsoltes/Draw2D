@@ -1,4 +1,6 @@
 ﻿using System.Linq;
+using Draw2D.Models.Shapes;
+using Draw2D.Spatial;
 
 namespace Draw2D.Editor.Tools
 {
@@ -15,7 +17,20 @@ namespace Draw2D.Editor.Tools
             Filters.ForEach(f => f.Clear(context));
             Filters.Any(f => f.Process(context, ref x, ref y));
 
-            // TODO: Implement PointTool.LeftDown().
+            var point = new PointShape(x, y, context.PointShape);
+
+            var shape = context.HitTest.TryToGetShape(context.CurrentContainer.Shapes, new Point2(x, y), Settings.HitTestRadius);
+            if (shape != null && Settings.ConnectPoints)
+            {
+                if (shape is ConnectableShape connectable)
+                {
+                    connectable.Points.Add(point);
+                }
+            }
+            else
+            {
+                context.CurrentContainer.Shapes.Add(point);
+            }
         }
 
         public override void Move(IToolContext context, double x, double y, Modifier modifier)
@@ -24,8 +39,6 @@ namespace Draw2D.Editor.Tools
 
             Filters.ForEach(f => f.Clear(context));
             Filters.Any(f => f.Process(context, ref x, ref y));
-
-            // TODO: Implement PointTool.Move().
         }
 
         public override void Clean(IToolContext context)
@@ -33,8 +46,6 @@ namespace Draw2D.Editor.Tools
             base.Clean(context);
 
             Filters.ForEach(f => f.Clear(context));
-
-            // TODO: Implement PointTool.Clean().
         }
     }
 }

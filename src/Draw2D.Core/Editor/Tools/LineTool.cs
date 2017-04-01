@@ -25,10 +25,12 @@ namespace Draw2D.Editor.Tools
             {
                 case State.StartPoint:
                     {
-                        _line = new LineShape(
-                            context.GetNextPoint(x, y, Settings.ConnectPoints, Settings.HitTestRadius),
-                            context.GetNextPoint(x, y, false, 0.0));
-                        _line.Style = context.CurrentStyle;
+                        _line = new LineShape()
+                        {
+                            StartPoint = context.GetNextPoint(x, y, Settings.ConnectPoints, Settings.HitTestRadius),
+                            Point = context.GetNextPoint(x, y, false, 0.0),
+                            Style = context.CurrentStyle
+                        };
                         context.WorkingContainer.Shapes.Add(_line);
                         context.Selected.Add(_line.StartPoint);
                         context.Selected.Add(_line.Point);

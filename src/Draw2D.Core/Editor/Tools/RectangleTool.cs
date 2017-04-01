@@ -24,10 +24,12 @@ namespace Draw2D.Editor.Tools
             {
                 case State.TopLeft:
                     {
-                        _rectangle = new RectangleShape(
-                            context.GetNextPoint(x, y, Settings.ConnectPoints, Settings.HitTestRadius),
-                            context.GetNextPoint(x, y, false, 0.0));
-                        _rectangle.Style = context.CurrentStyle;
+                        _rectangle = new RectangleShape()
+                        {
+                            TopLeft = context.GetNextPoint(x, y, Settings.ConnectPoints, Settings.HitTestRadius),
+                            BottomRight = context.GetNextPoint(x, y, false, 0.0),
+                            Style = context.CurrentStyle
+                        };
                         context.WorkingContainer.Shapes.Add(_rectangle);
                         context.Selected.Add(_rectangle.TopLeft);
                         context.Selected.Add(_rectangle.BottomRight);
