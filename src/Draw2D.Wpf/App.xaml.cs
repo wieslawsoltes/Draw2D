@@ -25,8 +25,15 @@ namespace Draw2D.Wpf
         {
             base.OnStartup(e);
 
-            // HITTEST
+            var vm = CreateViewModel();
+            var mainView = new MainView();
 
+            mainView.DataContext = vm;
+            mainView.ShowDialog();
+        }
+
+        private ShapesContainerViewModel CreateViewModel()
+        {
             var hitTest = new HitTest();
 
             hitTest.Register(new PointHitTest());
@@ -35,8 +42,6 @@ namespace Draw2D.Wpf
             hitTest.Register(new RectangleHitTest());
             hitTest.Register(new EllipseHitTest());
             hitTest.Register(new GroupHitTest());
-
-            // FILTERS
 
             var gridSnapPointFilter = new GridSnapPointFilter()
             {
@@ -66,8 +71,6 @@ namespace Draw2D.Wpf
                     GuideStyle = new DrawStyle(new DrawColor(128, 0, 255, 255), new DrawColor(128, 0, 255, 255), 2.0, true, true)
                 }
             };
-
-            // TOOLS
 
             var tools = new ObservableCollection<ToolBase>();
 
@@ -302,8 +305,6 @@ namespace Draw2D.Wpf
 
             var currentTool = tools.FirstOrDefault(t => t.Name == "Selection");
 
-            // MODELS
-
             var container = new ShapesContainer()
             {
                 Width = 720,
@@ -326,25 +327,17 @@ namespace Draw2D.Wpf
                 }
             };
 
-            // STYLES
-
             container.Styles.Add(guideTool.Settings.GuideStyle);
             container.Styles.Add(pointShape.Style);
             container.Styles.Add(style);
 
-            // DEMOS
-
-            /*
-            var group = new GroupShape();
-            group.Segments.Add(new RectangleShape(new PointShape(30, 30, pointShape), new PointShape(60, 60, pointShape)) { Style = style });
-            group.Points.Add(new PointShape(45, 30, pointShape));
-            group.Points.Add(new PointShape(45, 60, pointShape));
-            group.Points.Add(new PointShape(30, 45, pointShape));
-            group.Points.Add(new PointShape(60, 45, pointShape));
-            container.Shapes.Add(group);
-            */
-
-            // VIEW MODELS
+            //var group = new GroupShape();
+            //group.Segments.Add(new RectangleShape(new PointShape(30, 30, pointShape), new PointShape(60, 60, pointShape)) { Style = style });
+            //group.Points.Add(new PointShape(45, 30, pointShape));
+            //group.Points.Add(new PointShape(45, 60, pointShape));
+            //group.Points.Add(new PointShape(30, 45, pointShape));
+            //group.Points.Add(new PointShape(60, 45, pointShape));
+            //container.Shapes.Add(group);
 
             var renderer = new WpfShapeRenderer();
 
@@ -364,12 +357,7 @@ namespace Draw2D.Wpf
                 Invalidate = () => { }
             };
 
-            // VIEWS
-
-            var mainView = new MainView();
-
-            mainView.DataContext = vm;
-            mainView.ShowDialog();
+            return vm;
         }
     }
 }

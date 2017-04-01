@@ -20,6 +20,20 @@ namespace Draw2D.PathDemo
         {
             base.OnStartup(e);
 
+            var vm = CreateViewModel();
+            var mainView = new MainView();
+            var rendererView = mainView.RendererView;
+
+            vm.Capture = () => rendererView.CaptureMouse();
+            vm.Release = () => rendererView.ReleaseMouseCapture();
+            vm.Invalidate = () => rendererView.InvalidateVisual();
+
+            mainView.DataContext = vm;
+            mainView.ShowDialog();
+        }
+
+        private ShapesContainerViewModel CreateViewModel()
+        {
             var vm = new ShapesContainerViewModel()
             {
                 Selected = new HashSet<ShapeObject>(),
@@ -42,15 +56,7 @@ namespace Draw2D.PathDemo
 
             vm.CurrentTool = vm.Tools.Where(t => t.Name == "Path").FirstOrDefault();
 
-            var mainView = new MainView();
-            var rendererView = mainView.RendererView;
-
-            vm.Capture = () => rendererView.CaptureMouse();
-            vm.Release = () => rendererView.ReleaseMouseCapture();
-            vm.Invalidate = () => rendererView.InvalidateVisual();
-
-            mainView.DataContext = vm;
-            mainView.ShowDialog();
+            return vm;
         }
     }
 }
