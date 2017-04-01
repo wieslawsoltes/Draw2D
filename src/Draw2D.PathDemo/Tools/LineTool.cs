@@ -46,12 +46,9 @@ namespace Draw2D.PathDemo.Tools
             switch (CurrentState)
             {
                 case LineToolState.Point:
-                    CurrentState = LineToolState.StartPoint;
-                    context.CurrentContainer.Shapes.Remove(_line);
-                    context.Selected.Remove(_line);
-                    _line = null;
-                    context.Release();
-                    context.Invalidate();
+                    {
+                        this.Clean(context);
+                    }
                     break;
             }
         }
@@ -66,6 +63,21 @@ namespace Draw2D.PathDemo.Tools
                     context.Invalidate();
                     break;
             }
+        }
+
+        public override void Clean(IToolContext context)
+        {
+            base.Clean(context);
+
+            CurrentState = LineToolState.StartPoint;
+            if (_line != null)
+            {
+                context.CurrentContainer.Shapes.Remove(_line);
+                context.Selected.Remove(_line); 
+            }
+            _line = null;
+            context.Release();
+            context.Invalidate();
         }
     }
 }

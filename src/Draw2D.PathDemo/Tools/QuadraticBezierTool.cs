@@ -55,12 +55,9 @@ namespace Draw2D.PathDemo.Tools
             {
                 case QuadraticBezierToolState.Point1:
                 case QuadraticBezierToolState.Point2:
-                    CurrentState = QuadraticBezierToolState.StartPoint;
-                    context.CurrentContainer.Shapes.Remove(_quadraticBezier);
-                    context.Selected.Remove(_quadraticBezier);
-                    _quadraticBezier = null;
-                    context.Release();
-                    context.Invalidate();
+                    {
+                        this.Clean(context);
+                    }
                     break;
             }
         }
@@ -82,6 +79,21 @@ namespace Draw2D.PathDemo.Tools
                     context.Invalidate();
                     break;
             }
+        }
+
+        public override void Clean(IToolContext context)
+        {
+            base.Clean(context);
+
+            CurrentState = QuadraticBezierToolState.StartPoint;
+            if (_quadraticBezier != null)
+            {
+                context.CurrentContainer.Shapes.Remove(_quadraticBezier);
+                context.Selected.Remove(_quadraticBezier); 
+            }
+            _quadraticBezier = null;
+            context.Release();
+            context.Invalidate();
         }
     }
 }

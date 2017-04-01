@@ -64,12 +64,9 @@ namespace Draw2D.PathDemo.Tools
                 case CubicBezierToolState.Point1:
                 case CubicBezierToolState.Point2:
                 case CubicBezierToolState.Point3:
-                    CurrentState = CubicBezierToolState.StartPoint;
-                    context.CurrentContainer.Shapes.Remove(_cubicBezier);
-                    context.Selected.Remove(_cubicBezier);
-                    _cubicBezier = null;
-                    context.Release();
-                    context.Invalidate();
+                    {
+                        this.Clean(context);
+                    }
                     break;
             }
         }
@@ -98,6 +95,21 @@ namespace Draw2D.PathDemo.Tools
                     context.Invalidate();
                     break;
             }
+        }
+
+        public override void Clean(IToolContext context)
+        {
+            base.Clean(context);
+
+            CurrentState = CubicBezierToolState.StartPoint;
+            if (_cubicBezier != null)
+            {
+                context.CurrentContainer.Shapes.Remove(_cubicBezier);
+                context.Selected.Remove(_cubicBezier); 
+            }
+            _cubicBezier = null;
+            context.Release();
+            context.Invalidate();
         }
     }
 }
