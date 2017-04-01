@@ -10,6 +10,7 @@ using Draw2D.ViewModels.Containers;
 using Draw2D.Wpf.Renderers;
 using Draw2D.PathDemo.Tools;
 using Draw2D.PathDemo.Views;
+using System.Linq;
 
 namespace Draw2D.PathDemo
 {
@@ -39,7 +40,7 @@ namespace Draw2D.PathDemo
                 }
             };
 
-            vm.CurrentTool = vm.Tools[0];
+            vm.CurrentTool = vm.Tools.Where(t => t.Name == "Path").FirstOrDefault();
 
             var mainView = new MainView();
             var rendererView = mainView.RendererView;
