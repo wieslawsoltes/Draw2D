@@ -1,12 +1,15 @@
 ﻿using Draw2D.Editor;
+using Draw2D.Editor.Tools;
 
 namespace Draw2D.PathDemo.Tools
 {
     public class MoveTool : ToolBase
     {
+        private readonly PathTool _pathTool;
+
         public override string Name { get { return "Move"; } }
 
-        private readonly PathTool _pathTool;
+        public MoveToolSettings Settings { get; set; }
 
         public MoveTool(PathTool pathTool)
         {

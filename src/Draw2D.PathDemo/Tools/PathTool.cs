@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Draw2D.Editor;
 using Draw2D.Editor.Bounds;
+using Draw2D.Editor.Tools;
 using Draw2D.Models;
 using Draw2D.Models.Containers;
 using Draw2D.Models.Shapes;
@@ -10,12 +11,8 @@ using Draw2D.Models.Style;
 
 namespace Draw2D.PathDemo.Tools
 {
-    public class PathTool : ToolBase, IToolContext
+    public partial class PathTool : IToolContext
     {
-        private ToolBase _currentSubTool;
-
-        public override string Name { get { return "Path"; } }
-
         public ISet<ShapeObject> Selected
         {
             get => Context?.Selected;
@@ -52,6 +49,15 @@ namespace Draw2D.PathDemo.Tools
         public Action Release { get; set; }
 
         public Action Invalidate { get; set; }
+    }
+
+    public partial class PathTool : ToolBase
+    {
+        private ToolBase _currentSubTool;
+
+        public override string Name { get { return "Path"; } }
+
+        public PathToolSettings Settings { get; set; }
 
         public ObservableCollection<ToolBase> SubTools { get; set; }
 
@@ -65,15 +71,15 @@ namespace Draw2D.PathDemo.Tools
             }
         }
 
-        public ToolBase PreviousSubTool { get; set; }
+        private ToolBase PreviousSubTool { get; set; }
 
         private PointShape NextPoint { get; set; }
+
+        private IToolContext Context { get; set; }
 
         private PathShape Path { get; set; }
 
         private FigureShape Figure { get; set; }
-
-        private IToolContext Context { get; set; }
 
         public PathTool()
         {

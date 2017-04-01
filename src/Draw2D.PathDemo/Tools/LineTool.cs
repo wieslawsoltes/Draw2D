@@ -1,4 +1,5 @@
 ﻿using Draw2D.Editor;
+using Draw2D.Editor.Tools;
 using Draw2D.Models.Shapes;
 
 namespace Draw2D.PathDemo.Tools
@@ -11,6 +12,8 @@ namespace Draw2D.PathDemo.Tools
         public State CurrentState = State.StartPoint;
 
         public override string Name { get { return "Line"; } }
+
+        public LineToolSettings Settings { get; set; }
 
         public override void LeftDown(IToolContext context, double x, double y, Modifier modifier)
         {
