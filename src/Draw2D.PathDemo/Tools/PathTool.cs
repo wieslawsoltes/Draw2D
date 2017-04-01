@@ -141,6 +141,12 @@ namespace Draw2D.PathDemo.Tools
             Path.Figures.Add(Figure);
         }
 
+        public void Move()
+        {
+            NewFigure();
+            CurrentSubTool = PreviousSubTool;
+        }
+
         public void SetCurrentContext(IToolContext context) => Context = context;
 
         public override void LeftDown(IToolContext context, double x, double y, Modifier modifier)
