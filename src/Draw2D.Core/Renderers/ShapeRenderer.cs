@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
-using Draw2D.Models.Shapes;
-using Draw2D.Models.Style;
+using Draw2D.Core.Shapes;
+using Draw2D.Core.Style;
 
-namespace Draw2D.Models.Renderers
+namespace Draw2D.Core.Renderers
 {
     public abstract class ShapeRenderer : ObservableObject
     {

@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using Draw2D.Models.Containers;
-using Draw2D.Models.Renderers;
-using Draw2D.Models.Style;
+using Draw2D.Core.Containers;
+using Draw2D.Core.Renderers;
+using Draw2D.Core.Style;
 
-namespace Draw2D.Models.Shapes
+namespace Draw2D.Core.Shapes
 {
     public class GroupShape : ConnectableShape, IShapesContainer
     {

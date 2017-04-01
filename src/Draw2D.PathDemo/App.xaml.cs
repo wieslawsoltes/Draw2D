@@ -2,15 +2,19 @@
 using System.Collections.ObjectModel;
 using System.Windows;
 using Draw2D.Editor;
-using Draw2D.Models;
-using Draw2D.Models.Containers;
-using Draw2D.Models.Shapes;
-using Draw2D.Models.Style;
+using Draw2D.Core;
+using Draw2D.Core.Containers;
+using Draw2D.Core.Shapes;
+using Draw2D.Core.Style;
 using Draw2D.ViewModels.Containers;
 using Draw2D.Wpf.Renderers;
 using Draw2D.PathDemo.Tools;
 using Draw2D.PathDemo.Views;
 using System.Linq;
+using Draw2D.Core.Presenters;
+using System;
+using Draw2D.Core.Renderers;
+using Draw2D.Core.Renderers.Helpers;
 
 namespace Draw2D.PathDemo
 {
@@ -51,6 +55,18 @@ namespace Draw2D.PathDemo
                 PointShape = new EllipseShape(new PointShape(-4, -4, null), new PointShape(4, 4, null))
                 {
                     Style = new DrawStyle(new DrawColor(0, 0, 0, 0), new DrawColor(255, 255, 255, 0), 2.0, false, true)
+                },
+                Presenter = new DefaultShapePresenter()
+                {
+                    Helpers = new Dictionary<Type, ShapeHelper>
+                    {
+                        { typeof(LineShape), new LineHelper() },
+                        { typeof(CubicBezierShape), new CubicBezierHelper() },
+                        { typeof(QuadraticBezierShape), new QuadraticBezierHelper() },
+                        { typeof(PathShape), new PathHelper() },
+                        { typeof(RectangleShape), new RectangleHelper() },
+                        { typeof(EllipseShape), new EllipseHelper() }
+                    }
                 }
             };
 

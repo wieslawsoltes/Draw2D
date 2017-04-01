@@ -1,4 +1,4 @@
-﻿namespace Draw2D.Models
+﻿namespace Draw2D.Core
 {
     public class MatrixObject : ObservableObject
     {

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Draw2D.Models.Shapes;
+using Draw2D.Core.Shapes;
 using Draw2D.Spatial;
 using Draw2D.Spatial.ConvexHull;
 using Draw2D.Spatial.Sat;

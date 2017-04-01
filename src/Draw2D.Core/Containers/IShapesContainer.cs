@@ -1,8 +1,8 @@
 ﻿using System.Collections.ObjectModel;
-using Draw2D.Models.Shapes;
-using Draw2D.Models.Style;
+using Draw2D.Core.Shapes;
+using Draw2D.Core.Style;
 
-namespace Draw2D.Models.Containers
+namespace Draw2D.Core.Containers
 {
     public interface IShapesContainer
     {

@@ -3,23 +3,18 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Draw2D.Editor;
 using Draw2D.Editor.Bounds;
-using Draw2D.Models;
-using Draw2D.Models.Containers;
-using Draw2D.Models.Renderers;
-using Draw2D.Models.Renderers.Helpers;
-using Draw2D.Models.Shapes;
-using Draw2D.Models.Style;
+using Draw2D.Core;
+using Draw2D.Core.Containers;
+using Draw2D.Core.Presenters;
+using Draw2D.Core.Renderers;
+using Draw2D.Core.Shapes;
+using Draw2D.Core.Style;
 using Draw2D.Spatial;
 
 namespace Draw2D.ViewModels.Containers
 {
     public class ShapesContainerViewModel : ViewModelBase, IToolContext
     {
-        private LineHelper _lineHelper;
-        private CubiceBezierHelper _cubiceBezierHelper;
-        private QuadraticBezierHelper _quadraticBezierHelper;
-        private PathHelper _pathHelper;
-
         private ObservableCollection<ToolBase> _tools;
         private ToolBase _currentTool;
         private ShapeRenderer _renderer;
@@ -29,6 +24,7 @@ namespace Draw2D.ViewModels.Containers
         private DrawStyle _style;
         private ShapeObject _pointShape;
         private HitTest _hitTest;
+        private ShapePresenter _presenter;
 
         public ObservableCollection<ToolBase> Tools
         {
@@ -88,7 +84,7 @@ namespace Draw2D.ViewModels.Containers
             set => Update(ref _hitTest, value);
         }
 
-        public PointShape GetNextPoint(double x, double y, bool connect, double radius) 
+        public PointShape GetNextPoint(double x, double y, bool connect, double radius)
         {
             if (connect == true)
             {
@@ -107,65 +103,10 @@ namespace Draw2D.ViewModels.Containers
 
         public Action Invalidate { get; set; }
 
-        public ShapesContainerViewModel()
+        public ShapePresenter Presenter
         {
-            _lineHelper = new LineHelper();
-            _cubiceBezierHelper = new CubiceBezierHelper();
-            _quadraticBezierHelper = new QuadraticBezierHelper();
-            _pathHelper = new PathHelper();
-        }
-
-        public void Draw(object dc)
-        {
-            foreach (var shape in CurrentContainer.Guides)
-            {
-                shape.Draw(dc, Renderer, 0.0, 0.0);
-            }
-
-            foreach (var shape in CurrentContainer.Shapes)
-            {
-                shape.Draw(dc, Renderer, 0.0, 0.0);
-            }
-
-            foreach (var shape in WorkingContainer.Shapes)
-            {
-                shape.Draw(dc, Renderer, 0.0, 0.0);
-            }
-        }
-
-        public void DrawHelpers(object dc)
-        {
-            foreach (var shape in CurrentContainer.Shapes)
-            {
-                if (shape is LineShape line)
-                {
-                    if (Selected.Contains(line))
-                    {
-                        _lineHelper.Draw(dc, Renderer, line);
-                    }
-                }
-                else if (shape is CubicBezierShape cubicBezier)
-                {
-                    if (Selected.Contains(cubicBezier))
-                    {
-                        _cubiceBezierHelper.Draw(dc, Renderer, cubicBezier);
-                    }
-                }
-                else if (shape is QuadraticBezierShape quadraticBezier)
-                {
-                    if (Selected.Contains(quadraticBezier))
-                    {
-                        _quadraticBezierHelper.Draw(dc, Renderer, quadraticBezier);
-                    }
-                }
-                else if (shape is PathShape path)
-                {
-                    if (Selected.Contains(path))
-                    {
-                        _pathHelper.Draw(dc, Renderer, path, Selected);
-                    }
-                }
-            }
+            get => _presenter;
+            set => Update(ref _presenter, value);
         }
     }
 }

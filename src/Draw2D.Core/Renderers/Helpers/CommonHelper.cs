@@ -1,9 +1,9 @@
-﻿using Draw2D.Models.Shapes;
-using Draw2D.Models.Style;
+﻿using Draw2D.Core.Shapes;
+using Draw2D.Core.Style;
 
-namespace Draw2D.Models.Renderers.Helpers
+namespace Draw2D.Core.Renderers.Helpers
 {
-    public class CommonHelper
+    public abstract class CommonHelper : ShapeHelper
     {
         private DrawColor _stroke;
         private DrawColor _fill;

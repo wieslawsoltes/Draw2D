@@ -1,4 +1,4 @@
-﻿using Draw2D.Models.Style;
+﻿using Draw2D.Core.Style;
 
 namespace Draw2D.Editor.Filters
 {

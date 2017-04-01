@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Draw2D.Models
+namespace Draw2D.Core
 {
     public abstract class IdObject : ObservableObject
     {

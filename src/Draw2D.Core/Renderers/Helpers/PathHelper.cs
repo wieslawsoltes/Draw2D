@@ -1,18 +1,18 @@
 ﻿using System.Collections.Generic;
-using Draw2D.Models.Shapes;
+using Draw2D.Core.Shapes;
 
-namespace Draw2D.Models.Renderers.Helpers
+namespace Draw2D.Core.Renderers.Helpers
 {
     public class PathHelper : CommonHelper
     {
         private LineHelper _lineHelper;
-        private CubiceBezierHelper _cubiceBezierHelper;
+        private CubicBezierHelper _cubiceBezierHelper;
         private QuadraticBezierHelper _quadraticBezierHelper;
 
         public PathHelper()
         {
             _lineHelper = new LineHelper();
-            _cubiceBezierHelper = new CubiceBezierHelper();
+            _cubiceBezierHelper = new CubicBezierHelper();
             _quadraticBezierHelper = new QuadraticBezierHelper();
         }
 
@@ -54,6 +54,14 @@ namespace Draw2D.Models.Renderers.Helpers
             foreach (var figure in path.Figures)
             {
                 DrawFigure(dc, r, figure, selected);
+            }
+        }
+
+        public override void Draw(object dc, ShapeRenderer r, ShapeObject shape, ISet<ShapeObject> selected)
+        {
+            if (shape is PathShape path)
+            {
+                Draw(dc, r, path, selected);
             }
         }
     }

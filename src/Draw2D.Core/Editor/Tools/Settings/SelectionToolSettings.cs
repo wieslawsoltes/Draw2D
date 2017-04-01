@@ -1,5 +1,5 @@
 ﻿using Draw2D.Editor.Selection;
-using Draw2D.Models.Style;
+using Draw2D.Core.Style;
 
 namespace Draw2D.Editor.Tools
 {

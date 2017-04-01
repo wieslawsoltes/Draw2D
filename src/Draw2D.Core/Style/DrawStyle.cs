@@ -1,4 +1,4 @@
-﻿namespace Draw2D.Models.Style
+﻿namespace Draw2D.Core.Style
 {
     public class DrawStyle : IdObject
     {

@@ -10,12 +10,15 @@ using Draw2D.Editor.Filters;
 using Draw2D.Editor.Intersections.Line;
 using Draw2D.Editor.Selection;
 using Draw2D.Editor.Tools;
-using Draw2D.Models.Containers;
-using Draw2D.Models.Shapes;
-using Draw2D.Models.Style;
+using Draw2D.Core.Containers;
+using Draw2D.Core.Presenters;
+using Draw2D.Core.Shapes;
+using Draw2D.Core.Style;
 using Draw2D.ViewModels.Containers;
 using Draw2D.Wpf.Renderers;
 using Draw2D.Wpf.Views;
+using Draw2D.Core.Renderers;
+using Draw2D.Core.Renderers.Helpers;
 
 namespace Draw2D.Wpf
 {
@@ -341,6 +344,19 @@ namespace Draw2D.Wpf
 
             var renderer = new WpfShapeRenderer();
 
+            var presenter = new DefaultShapePresenter()
+            {
+                Helpers = new Dictionary<Type, ShapeHelper>
+                {
+                    { typeof(LineShape), new LineHelper() },
+                    { typeof(CubicBezierShape), new CubicBezierHelper() },
+                    { typeof(QuadraticBezierShape), new QuadraticBezierHelper() },
+                    { typeof(PathShape), new PathHelper() },
+                    { typeof(RectangleShape), new RectangleHelper() },
+                    { typeof(EllipseShape), new EllipseHelper() }
+                }
+            };
+
             var vm = new ShapesContainerViewModel()
             {
                 Tools = tools,
@@ -354,7 +370,8 @@ namespace Draw2D.Wpf
                 HitTest = hitTest,
                 Capture = () => { },
                 Release = () => { },
-                Invalidate = () => { }
+                Invalidate = () => { },
+                Presenter = presenter
             };
 
             return vm;

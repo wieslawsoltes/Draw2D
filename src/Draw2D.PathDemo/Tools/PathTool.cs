@@ -4,15 +4,28 @@ using System.Collections.ObjectModel;
 using Draw2D.Editor;
 using Draw2D.Editor.Bounds;
 using Draw2D.Editor.Tools;
-using Draw2D.Models;
-using Draw2D.Models.Containers;
-using Draw2D.Models.Shapes;
-using Draw2D.Models.Style;
+using Draw2D.Core;
+using Draw2D.Core.Containers;
+using Draw2D.Core.Renderers;
+using Draw2D.Core.Shapes;
+using Draw2D.Core.Style;
 
 namespace Draw2D.PathDemo.Tools
 {
     public partial class PathTool : IToolContext
     {
+        public ShapeRenderer Renderer
+        {
+            get => Context?.Renderer;
+            set
+            {
+                if (Context != null)
+                {
+                    Context.Renderer = value;
+                }
+            }
+        }
+
         public ISet<ShapeObject> Selected
         {
             get => Context?.Selected;
@@ -31,7 +44,11 @@ namespace Draw2D.PathDemo.Tools
             set => throw new InvalidCastException("Can't cast current container as a figure.");
         }
 
-        public IShapesContainer WorkingContainer { get; set; }
+        public IShapesContainer WorkingContainer
+        {
+            get => Figure;
+            set => throw new InvalidCastException("Can't cast current container as a figure.");
+        }
 
         public DrawStyle CurrentStyle { get; set; }
 
@@ -105,20 +122,17 @@ namespace Draw2D.PathDemo.Tools
                 var shapes = Path.Figures[Path.Figures.Count - 1].Shapes;
                 if (shapes.Count > 0)
                 {
-                    var shape = shapes[shapes.Count - 1];
-                    if (shape is LineShape line)
+                    switch (shapes[shapes.Count - 1])
                     {
-                        return line.Point;
+                        case LineShape line:
+                            return line.Point;
+                        case CubicBezierShape cubicBezier:
+                            return cubicBezier.Point3;
+                        case QuadraticBezierShape quadraticBezier:
+                            return quadraticBezier.Point2;
+                        default:
+                            throw new Exception("Could not find last path point.");
                     }
-                    else if (shape is CubicBezierShape cubicBezier)
-                    {
-                        return cubicBezier.Point3;
-                    }
-                    else if (shape is QuadraticBezierShape quadraticBezier)
-                    {
-                        return quadraticBezier.Point2;
-                    }
-                    throw new Exception("Could not find last path point.");
                 }
             }
             return null;
@@ -157,6 +171,8 @@ namespace Draw2D.PathDemo.Tools
 
         public override void LeftDown(IToolContext context, double x, double y, Modifier modifier)
         {
+            base.LeftDown(context, x, y, modifier);
+
             if (Path == null)
             {
                 Create(context);
@@ -205,11 +221,15 @@ namespace Draw2D.PathDemo.Tools
 
         public override void RightDown(IToolContext context, double x, double y, Modifier modifier)
         {
+            base.RightDown(context, x, y, modifier);
+
             Clean(context);
         }
 
         public override void Move(IToolContext context, double x, double y, Modifier modifier)
         {
+            base.Move(context, x, y, modifier);
+
             SetCurrentContext(context);
             CurrentSubTool.Move(this, x, y, modifier);
             SetCurrentContext(null);

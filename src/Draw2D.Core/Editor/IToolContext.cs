@@ -1,15 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using Draw2D.Editor.Bounds;
-using Draw2D.Models;
-using Draw2D.Models.Containers;
-using Draw2D.Models.Shapes;
-using Draw2D.Models.Style;
+using Draw2D.Core;
+using Draw2D.Core.Containers;
+using Draw2D.Core.Renderers;
+using Draw2D.Core.Shapes;
+using Draw2D.Core.Style;
 
 namespace Draw2D.Editor
 {
     public interface IToolContext
     {
+        ShapeRenderer Renderer { get; set; }
         ISet<ShapeObject> Selected { get; set; }
         IShapesContainer CurrentContainer { get; set; }
         IShapesContainer WorkingContainer { get; set; }

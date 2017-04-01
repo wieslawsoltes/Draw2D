@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 using Draw2D.Editor.Intersections;
-using Draw2D.Models.Shapes;
+using Draw2D.Core.Shapes;
 
 namespace Draw2D.Editor.Tools
 {
@@ -32,8 +32,9 @@ namespace Draw2D.Editor.Tools
                             Style = context.CurrentStyle
                         };
                         context.WorkingContainer.Shapes.Add(_line);
-                        context.Selected.Add(_line.StartPoint);
-                        context.Selected.Add(_line.Point);
+                        context.Selected.Add(_line);
+                        //context.Selected.Add(_line.StartPoint);
+                        //context.Selected.Add(_line.Point);
                         CurrentState = State.Point;
                     }
                     break;
@@ -41,12 +42,13 @@ namespace Draw2D.Editor.Tools
                     {
                         CurrentState = State.StartPoint;
 
-                        context.Selected.Remove(_line.Point);
+                        //context.Selected.Remove(_line.Point);
                         _line.Point = context.GetNextPoint(x, y, Settings.ConnectPoints, Settings.HitTestRadius);
 
                         context.WorkingContainer.Shapes.Remove(_line);
-                        context.Selected.Remove(_line.StartPoint);
-                        context.Selected.Remove(_line.Point);
+                        context.Selected.Remove(_line);
+                        //context.Selected.Remove(_line.StartPoint);
+                        //context.Selected.Remove(_line.Point);
 
                         Intersections.ForEach(i => i.Clear(context));
                         Intersections.ForEach(i => i.Find(context, _line));

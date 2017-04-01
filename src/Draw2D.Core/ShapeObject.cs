@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
-using Draw2D.Models.Renderers;
-using Draw2D.Models.Style;
+using Draw2D.Core.Renderers;
+using Draw2D.Core.Style;
 
-namespace Draw2D.Models
+namespace Draw2D.Core
 {
     public abstract class ShapeObject : IdObject
     {

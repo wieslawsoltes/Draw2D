@@ -1,6 +1,6 @@
 ﻿using Draw2D.Editor;
 using Draw2D.Editor.Tools;
-using Draw2D.Models.Shapes;
+using Draw2D.Core.Shapes;
 
 namespace Draw2D.PathDemo.Tools
 {
@@ -17,6 +17,8 @@ namespace Draw2D.PathDemo.Tools
 
         public override void LeftDown(IToolContext context, double x, double y, Modifier modifier)
         {
+            base.LeftDown(context, x, y, modifier);
+
             switch (CurrentState)
             {
                 case State.StartPoint:
@@ -50,6 +52,8 @@ namespace Draw2D.PathDemo.Tools
 
         public override void RightDown(IToolContext context, double x, double y, Modifier modifier)
         {
+            base.RightDown(context, x, y, modifier);
+
             switch (CurrentState)
             {
                 case State.Point:
@@ -62,6 +66,8 @@ namespace Draw2D.PathDemo.Tools
 
         public override void Move(IToolContext context, double x, double y, Modifier modifier)
         {
+            base.Move(context, x, y, modifier);
+
             switch (CurrentState)
             {
                 case State.Point:
@@ -82,7 +88,7 @@ namespace Draw2D.PathDemo.Tools
             if (_line != null)
             {
                 context.CurrentContainer.Shapes.Remove(_line);
-                context.Selected.Remove(_line); 
+                context.Selected.Remove(_line);
             }
             _line = null;
             context.Release();

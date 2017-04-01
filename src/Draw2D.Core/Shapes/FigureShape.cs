@@ -1,6 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 
-namespace Draw2D.Models.Shapes
+namespace Draw2D.Core.Shapes
 {
     public class FigureShape : GroupShape
     {

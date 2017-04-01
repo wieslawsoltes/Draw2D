@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using Draw2D.Models.Renderers;
+using Draw2D.Core.Renderers;
 
-namespace Draw2D.Models.Shapes
+namespace Draw2D.Core.Shapes
 {
     public class ScribbleShape : ShapeObject
     {

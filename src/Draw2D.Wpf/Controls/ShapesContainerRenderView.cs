@@ -12,7 +12,8 @@ namespace Draw2D.Wpf.Controls
 
             if (this.DataContext is ShapesContainerViewModel vm)
             {
-                vm.Draw(dc);
+                vm.Presenter.Draw(dc, vm);
+                vm.Presenter.DrawHelpers(dc, vm);
             }
         }
     }

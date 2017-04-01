@@ -1,7 +1,7 @@
 ﻿using System.Windows;
 using Draw2D.Spatial;
 
-namespace Draw2D.Models.Shapes
+namespace Draw2D.Core.Shapes
 {
     public static class Rect2ExtensionsWindows
     {

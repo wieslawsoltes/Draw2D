@@ -18,6 +18,8 @@ namespace Draw2D.PathDemo.Tools
 
         public override void LeftDown(IToolContext context, double x, double y, Modifier modifier)
         {
+            base.LeftDown(context, x, y, modifier);
+
             _pathTool.Move();
         }
     }

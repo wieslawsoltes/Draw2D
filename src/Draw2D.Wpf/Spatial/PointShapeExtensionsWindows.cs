@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace Draw2D.Models.Shapes
+namespace Draw2D.Core.Shapes
 {
     public static class PointShapeExtensionsWindows
     {

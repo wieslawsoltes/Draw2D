@@ -85,8 +85,8 @@ namespace Draw2D.PathDemo.Controls
 
             if (this.DataContext is ShapesContainerViewModel vm)
             {
-                vm.Draw(dc);
-                vm.DrawHelpers(dc);
+                vm.Presenter.Draw(dc, vm);
+                vm.Presenter.DrawHelpers(dc, vm);
             }
         }
     }

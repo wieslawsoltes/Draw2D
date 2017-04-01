@@ -1,5 +1,5 @@
 ﻿using System.Diagnostics;
-using Draw2D.Models.Shapes;
+using Draw2D.Core.Shapes;
 
 namespace Draw2D.Editor.Filters
 {
@@ -40,23 +40,25 @@ namespace Draw2D.Editor.Filters
 
         private void PointGuides(IToolContext context, double x, double y)
         {
-            var horizontal = new LineShape(
-                new PointShape(0, y, null),
-                new PointShape(context.CurrentContainer.Width, y, null));
-            horizontal.Style = Settings.GuideStyle;
+            var horizontal = new LineShape()
+            {
+                StartPoint = new PointShape(0, y, null),
+                Point = new PointShape(context.CurrentContainer.Width, y, null),
+                Style = Settings.GuideStyle
+            };
 
-            var vertical = new LineShape(
-                new PointShape(x, 0, null),
-                new PointShape(x, context.CurrentContainer.Height, null));
-            vertical.Style = Settings.GuideStyle;
+            var vertical = new LineShape()
+            {
+                StartPoint = new PointShape(x, 0, null),
+                Point = new PointShape(x, context.CurrentContainer.Height, null),
+                Style = Settings.GuideStyle
+            };
 
             Guides.Add(horizontal);
-            context.WorkingContainer.Shapes.Add(horizontal);
-            context.Selected.Add(horizontal);
-
             Guides.Add(vertical);
+
+            context.WorkingContainer.Shapes.Add(horizontal);
             context.WorkingContainer.Shapes.Add(vertical);
-            context.Selected.Add(vertical);
         }
 
         public static double SnapGrid(double value, double size)

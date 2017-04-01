@@ -1,6 +1,7 @@
-﻿using Draw2D.Models.Shapes;
+﻿using System.Collections.Generic;
+using Draw2D.Core.Shapes;
 
-namespace Draw2D.Models.Renderers.Helpers
+namespace Draw2D.Core.Renderers.Helpers
 {
     public class LineHelper : CommonHelper
     {
@@ -8,6 +9,14 @@ namespace Draw2D.Models.Renderers.Helpers
         {
             DrawEllipse(dc, r, line.StartPoint, 4.0);
             DrawEllipse(dc, r, line.Point, 4.0);
+        }
+
+        public override void Draw(object dc, ShapeRenderer r, ShapeObject shape, ISet<ShapeObject> selected)
+        {
+            if (shape is LineShape line)
+            {
+                Draw(dc, r, line);
+            }
         }
     }
 }
