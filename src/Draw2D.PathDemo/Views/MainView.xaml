@@ -1,7 +1,7 @@
 ﻿<Window x:Class="Draw2D.PathDemo.Views.MainView"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:Controls="clr-namespace:Draw2D.PathDemo.Controls"
+        xmlns:Controls="clr-namespace:Draw2D.Wpf.Controls"
         Title="Draw2D.PathDemo" Height="700" Width="1000"
         WindowStartupLocation="CenterScreen"
         UseLayoutRounding="True" SnapsToDevicePixels="True" TextOptions.TextFormattingMode="Display">
@@ -17,6 +17,8 @@
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
-        <Controls:PathCanvas x:Name="RendererView" Grid.Column="1" Width="800" Height="600" Background="LightSlateGray"/>
+        <Controls:ShapesContainerInputView x:Name="InputView" Grid.Column="1" Background="Transparent" ClipToBounds="True">
+            <Controls:ShapesContainerRenderView x:Name="RendererView" Width="{Binding CurrentContainer.Width}" Height="{Binding CurrentContainer.Height}" Background="LightSlateGray" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+        </Controls:ShapesContainerInputView>
     </Grid>
 </Window>

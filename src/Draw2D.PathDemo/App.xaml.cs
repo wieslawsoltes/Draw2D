@@ -41,8 +41,16 @@ namespace Draw2D.PathDemo
             var vm = new ShapesContainerViewModel()
             {
                 Selected = new HashSet<ShapeObject>(),
-                CurrentContainer = new ShapesContainer(),
-                WorkingContainer = new ShapesContainer(),
+                CurrentContainer = new ShapesContainer()
+                {
+                    Width = 720,
+                    Height = 630
+                },
+                WorkingContainer = new ShapesContainer()
+                {
+                    Width = 720,
+                    Height = 630
+                },
                 Tools = new ObservableCollection<ToolBase>
                 {
                     new LineTool(),
