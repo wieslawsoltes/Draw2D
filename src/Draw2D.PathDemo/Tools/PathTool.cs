@@ -13,7 +13,7 @@ namespace Draw2D.PathDemo.Tools
     public class PathTool : ToolBase, IToolContext
     {
         private ToolBase _currentSubTool;
-        
+
         public override string Name { get { return "Path"; } }
 
         public ISet<ShapeObject> Selected
@@ -42,7 +42,7 @@ namespace Draw2D.PathDemo.Tools
 
         public HitTest HitTest { get; set; }
 
-        public PointShape GetNextPoint(double x, double y, bool connect, double radius) 
+        public PointShape GetNextPoint(double x, double y, bool connect, double radius)
         {
             return NextPoint ?? Context?.GetNextPoint(x, y, connect, radius);
         }
@@ -113,7 +113,7 @@ namespace Draw2D.PathDemo.Tools
                         return quadraticBezier.Point2;
                     }
                     throw new Exception("Could not find last path point.");
-                } 
+                }
             }
             return null;
         }
@@ -141,7 +141,7 @@ namespace Draw2D.PathDemo.Tools
             Path.Figures.Add(Figure);
         }
 
-        private void SetCurrentContext(IToolContext context) => Context = context;
+        public void SetCurrentContext(IToolContext context) => Context = context;
 
         public override void LeftDown(IToolContext context, double x, double y, Modifier modifier)
         {
@@ -188,12 +188,7 @@ namespace Draw2D.PathDemo.Tools
 
         public override void RightDown(IToolContext context, double x, double y, Modifier modifier)
         {
-            SetCurrentContext(context);
-            CurrentSubTool.RightDown(this, x, y, modifier);
-            SetCurrentContext(null);
-            context.Selected.Remove(Path);
-            Path = null;
-            Figure = null;
+            Clean(context);
         }
 
         public override void Move(IToolContext context, double x, double y, Modifier modifier)
@@ -201,6 +196,23 @@ namespace Draw2D.PathDemo.Tools
             SetCurrentContext(context);
             CurrentSubTool.Move(this, x, y, modifier);
             SetCurrentContext(null);
+        }
+
+        public void CleanSubTool(IToolContext context)
+        {
+            SetCurrentContext(context);
+            CurrentSubTool.Clean(this);
+            SetCurrentContext(null);
+        }
+
+        public override void Clean(IToolContext context)
+        {
+            base.Clean(context);
+
+            CleanSubTool(context);
+            context.Selected.Remove(Path);
+            Path = null;
+            Figure = null;
         }
     }
 }
