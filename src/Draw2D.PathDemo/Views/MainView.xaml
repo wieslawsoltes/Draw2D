@@ -17,6 +17,6 @@
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
-        <Controls:PathCanvas x:Name="RendererView" Grid.Column="1" Width="500" Height="500" Background="LightSlateGray"/>
+        <Controls:PathCanvas x:Name="RendererView" Grid.Column="1" Width="800" Height="600" Background="LightSlateGray"/>
     </Grid>
 </Window>
