@@ -7,8 +7,8 @@ namespace Draw2D.PathDemo.Tools
     {
         private LineShape _line = null;
 
-        public enum LineToolState { StartPoint, Point }
-        public LineToolState CurrentState = LineToolState.StartPoint;
+        public enum State { StartPoint, Point }
+        public State CurrentState = State.StartPoint;
 
         public override string Name { get { return "Line"; } }
 
@@ -16,27 +16,31 @@ namespace Draw2D.PathDemo.Tools
         {
             switch (CurrentState)
             {
-                case LineToolState.StartPoint:
-                    var next = context.GetNextPoint(x, y, false, 0.0);
-                    _line = new LineShape()
+                case State.StartPoint:
                     {
-                        StartPoint = next,
-                        Point = next.Clone(),
-                        Style = context.CurrentStyle
-                    };
-                    context.CurrentContainer.Shapes.Add(_line);
-                    context.Selected.Add(_line);
-                    context.Capture();
-                    context.Invalidate();
-                    CurrentState = LineToolState.Point;
+                        var next = context.GetNextPoint(x, y, false, 0.0);
+                        _line = new LineShape()
+                        {
+                            StartPoint = next,
+                            Point = next.Clone(),
+                            Style = context.CurrentStyle
+                        };
+                        context.CurrentContainer.Shapes.Add(_line);
+                        context.Selected.Add(_line);
+                        context.Capture();
+                        context.Invalidate();
+                        CurrentState = State.Point;
+                    }
                     break;
-                case LineToolState.Point:
-                    _line.Point = context.GetNextPoint(x, y, false, 0.0);
-                    CurrentState = LineToolState.StartPoint;
-                    context.Selected.Remove(_line);
-                    _line = null;
-                    context.Release();
-                    context.Invalidate();
+                case State.Point:
+                    {
+                        _line.Point = context.GetNextPoint(x, y, false, 0.0);
+                        CurrentState = State.StartPoint;
+                        context.Selected.Remove(_line);
+                        _line = null;
+                        context.Release();
+                        context.Invalidate();
+                    }
                     break;
             }
         }
@@ -45,7 +49,7 @@ namespace Draw2D.PathDemo.Tools
         {
             switch (CurrentState)
             {
-                case LineToolState.Point:
+                case State.Point:
                     {
                         this.Clean(context);
                     }
@@ -57,10 +61,12 @@ namespace Draw2D.PathDemo.Tools
         {
             switch (CurrentState)
             {
-                case LineToolState.Point:
-                    _line.Point.X = x;
-                    _line.Point.Y = y;
-                    context.Invalidate();
+                case State.Point:
+                    {
+                        _line.Point.X = x;
+                        _line.Point.Y = y;
+                        context.Invalidate();
+                    }
                     break;
             }
         }
@@ -69,7 +75,7 @@ namespace Draw2D.PathDemo.Tools
         {
             base.Clean(context);
 
-            CurrentState = LineToolState.StartPoint;
+            CurrentState = State.StartPoint;
             if (_line != null)
             {
                 context.CurrentContainer.Shapes.Remove(_line);

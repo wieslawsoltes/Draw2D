@@ -118,7 +118,7 @@ namespace Draw2D.PathDemo.Tools
             return null;
         }
 
-        public void NewPath(IToolContext context)
+        public void Create(IToolContext context)
         {
             Path = new PathShape()
             {
@@ -126,11 +126,12 @@ namespace Draw2D.PathDemo.Tools
                 FillRule = PathFillRule.EvenOdd,
                 Style = context.CurrentStyle
             };
+
             context.CurrentContainer.Shapes.Add(Path);
             context.Selected.Add(Path);
         }
 
-        public void NewFigure()
+        public void Move()
         {
             Figure = new FigureShape()
             {
@@ -139,12 +140,11 @@ namespace Draw2D.PathDemo.Tools
                 IsClosed = true
             };
             Path.Figures.Add(Figure);
-        }
 
-        public void Move()
-        {
-            NewFigure();
-            CurrentSubTool = PreviousSubTool;
+            if (PreviousSubTool != null)
+            {
+                CurrentSubTool = PreviousSubTool;
+            }
         }
 
         public void SetCurrentContext(IToolContext context) => Context = context;
@@ -153,40 +153,45 @@ namespace Draw2D.PathDemo.Tools
         {
             if (Path == null)
             {
-                NewPath(context);
-                NewFigure();
+                Create(context);
+                Move();
             }
 
             SetCurrentContext(context);
-
             CurrentSubTool.LeftDown(this, x, y, modifier);
 
-            if (CurrentSubTool is LineTool lineTool)
+            switch (CurrentSubTool)
             {
-                if (lineTool.CurrentState == LineTool.LineToolState.StartPoint)
-                {
-                    NextPoint = GetLastPoint();
-                    CurrentSubTool.LeftDown(this, x, y, modifier);
-                    NextPoint = null;
-                }
-            }
-            else if (CurrentSubTool is CubicBezierTool cubicBezierTool)
-            {
-                if (cubicBezierTool.CurrentState == CubicBezierTool.CubicBezierToolState.StartPoint)
-                {
-                    NextPoint = GetLastPoint();
-                    CurrentSubTool.LeftDown(this, x, y, modifier);
-                    NextPoint = null;
-                }
-            }
-            else if (CurrentSubTool is QuadraticBezierTool quadraticBezierTool)
-            {
-                if (quadraticBezierTool.CurrentState == QuadraticBezierTool.QuadraticBezierToolState.StartPoint)
-                {
-                    NextPoint = GetLastPoint();
-                    CurrentSubTool.LeftDown(this, x, y, modifier);
-                    NextPoint = null;
-                }
+                case LineTool lineTool:
+                    {
+                        if (lineTool.CurrentState == LineTool.State.StartPoint)
+                        {
+                            NextPoint = GetLastPoint();
+                            CurrentSubTool.LeftDown(this, x, y, modifier);
+                            NextPoint = null;
+                        }
+                    }
+                    break;
+                case CubicBezierTool cubicBezierTool:
+                    {
+                        if (cubicBezierTool.CurrentState == CubicBezierTool.State.StartPoint)
+                        {
+                            NextPoint = GetLastPoint();
+                            CurrentSubTool.LeftDown(this, x, y, modifier);
+                            NextPoint = null;
+                        }
+                    }
+                    break;
+                case QuadraticBezierTool quadraticBezierTool:
+                    {
+                        if (quadraticBezierTool.CurrentState == QuadraticBezierTool.State.StartPoint)
+                        {
+                            NextPoint = GetLastPoint();
+                            CurrentSubTool.LeftDown(this, x, y, modifier);
+                            NextPoint = null;
+                        }
+                    }
+                    break;
             }
 
             SetCurrentContext(null);
