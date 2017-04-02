@@ -18,7 +18,7 @@ namespace Draw2D.Editor.Tools
         {
             base.LeftDown(context, x, y, modifier);
 
-            Filters.Any(f => f.Process(context, ref x, ref y));
+            Filters?.Any(f => f.Process(context, ref x, ref y));
 
             switch (CurrentState)
             {
@@ -28,7 +28,7 @@ namespace Draw2D.Editor.Tools
                         {
                             StartPoint = new PointShape(x, y, null),
                             Point = new PointShape(x, y, null),
-                            Style = Settings.GuideStyle
+                            Style = Settings?.GuideStyle
                         };
                         context.WorkingContainer.Shapes.Add(_line);
                         CurrentState = State.End;
@@ -65,8 +65,8 @@ namespace Draw2D.Editor.Tools
         {
             base.Move(context, x, y, modifier);
 
-            Filters.ForEach(f => f.Clear(context));
-            Filters.Any(f => f.Process(context, ref x, ref y));
+            Filters?.ForEach(f => f.Clear(context));
+            Filters?.Any(f => f.Process(context, ref x, ref y));
 
             switch (CurrentState)
             {
@@ -85,7 +85,7 @@ namespace Draw2D.Editor.Tools
 
             CurrentState = State.Start;
 
-            Filters.ForEach(f => f.Clear(context));
+            Filters?.ForEach(f => f.Clear(context));
 
             if (_line != null)
             {

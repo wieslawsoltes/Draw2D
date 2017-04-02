@@ -23,7 +23,7 @@ namespace Draw2D.Editor.Tools
         {
             base.LeftDown(context, x, y, modifier);
 
-            Filters.Any(f => f.Process(context, ref x, ref y));
+            Filters?.Any(f => f.Process(context, ref x, ref y));
 
             switch (CurrentState)
             {
@@ -51,12 +51,12 @@ namespace Draw2D.Editor.Tools
                 case State.Points:
                     {
                         CurrentState = State.Start;
-                        if (Settings.Simplify)
+                        if (Settings?.Simplify ?? true)
                         {
                             List<Vector2> points = _scribble.Points.Select(p => new Vector2((float)p.X, (float)p.Y)).ToList();
                             int count = _scribble.Points.Count;
                             RDP rdp = new RDP();
-                            BitArray accepted = rdp.DouglasPeucker(points, 0, count - 1, Settings.Epsilon);
+                            BitArray accepted = rdp.DouglasPeucker(points, 0, count - 1, Settings?.Epsilon ?? 1.0);
                             int removed = 0;
                             for (int i = 0; i <= count - 1; ++i)
                             {
@@ -93,8 +93,8 @@ namespace Draw2D.Editor.Tools
         {
             base.Move(context, x, y, modifier);
 
-            Filters.ForEach(f => f.Clear(context));
-            Filters.Any(f => f.Process(context, ref x, ref y));
+            Filters?.ForEach(f => f.Clear(context));
+            Filters?.Any(f => f.Process(context, ref x, ref y));
 
             switch (CurrentState)
             {
@@ -112,7 +112,7 @@ namespace Draw2D.Editor.Tools
 
             CurrentState = State.Start;
 
-            Filters.ForEach(f => f.Clear(context));
+            Filters?.ForEach(f => f.Clear(context));
 
             if (_scribble != null)
             {

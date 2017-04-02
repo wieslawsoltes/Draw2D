@@ -36,6 +36,7 @@
     <Compile Include="Editor\Bounds\Shapes\EllipseHitTest.cs" />
     <Compile Include="Editor\Bounds\Shapes\GroupHitTest.cs" />
     <Compile Include="Editor\Bounds\Shapes\LineHitTest.cs" />
+    <Compile Include="Editor\Bounds\Shapes\PathHitTest.cs" />
     <Compile Include="Editor\Bounds\Shapes\PointHitTest.cs" />
     <Compile Include="Editor\Bounds\Shapes\RectangleHitTest.cs" />
     <Compile Include="Editor\Bounds\Shapes\ScribbleHitTest.cs" />

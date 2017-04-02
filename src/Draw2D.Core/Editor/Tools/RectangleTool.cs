@@ -18,7 +18,7 @@ namespace Draw2D.Editor.Tools
         {
             base.LeftDown(context, x, y, modifier);
 
-            Filters.Any(f => f.Process(context, ref x, ref y));
+            Filters?.Any(f => f.Process(context, ref x, ref y));
 
             switch (CurrentState)
             {
@@ -26,7 +26,7 @@ namespace Draw2D.Editor.Tools
                     {
                         _rectangle = new RectangleShape()
                         {
-                            TopLeft = context.GetNextPoint(x, y, Settings.ConnectPoints, Settings.HitTestRadius),
+                            TopLeft = context.GetNextPoint(x, y, Settings?.ConnectPoints ?? false, Settings?.HitTestRadius ?? 7.0),
                             BottomRight = context.GetNextPoint(x, y, false, 0.0),
                             Style = context.CurrentStyle
                         };
@@ -40,7 +40,7 @@ namespace Draw2D.Editor.Tools
                     {
                         CurrentState = State.TopLeft;
                         context.Selected.Remove(_rectangle.BottomRight);
-                        _rectangle.BottomRight = context.GetNextPoint(x, y, Settings.ConnectPoints, Settings.HitTestRadius);
+                        _rectangle.BottomRight = context.GetNextPoint(x, y, Settings?.ConnectPoints ?? false, Settings?.HitTestRadius ?? 7.0);
                         _rectangle.BottomRight.Y = y;
                         context.WorkingContainer.Shapes.Remove(_rectangle);
                         context.Selected.Remove(_rectangle.TopLeft);
@@ -69,8 +69,8 @@ namespace Draw2D.Editor.Tools
         {
             base.Move(context, x, y, modifier);
 
-            Filters.ForEach(f => f.Clear(context));
-            Filters.Any(f => f.Process(context, ref x, ref y));
+            Filters?.ForEach(f => f.Clear(context));
+            Filters?.Any(f => f.Process(context, ref x, ref y));
 
             switch (CurrentState)
             {
@@ -89,7 +89,7 @@ namespace Draw2D.Editor.Tools
 
             CurrentState = State.TopLeft;
 
-            Filters.ForEach(f => f.Clear(context));
+            Filters?.ForEach(f => f.Clear(context));
 
             if (_rectangle != null)
             {

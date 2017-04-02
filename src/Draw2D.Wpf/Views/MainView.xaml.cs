@@ -1,8 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Windows;
+using System.Windows.Input;
 using Draw2D.Core;
 using Draw2D.Core.Containers;
+using Draw2D.Editor.Tools;
 using Draw2D.ViewModels.Containers;
 using Draw2D.Wpf.Utilities;
 using Microsoft.Win32;
@@ -14,12 +17,102 @@ namespace Draw2D.Wpf.Views
         public MainView()
         {
             InitializeComponent();
+            KeyDown += MainView_KeyDown;
+        }
+
+        public void SetLineTool()
+        {
+            if (this.DataContext is ShapesContainerViewModel vm)
+            {
+                if (vm.CurrentTool is PathTool pathTool)
+                {
+                    pathTool.CleanSubTool(vm);
+                    pathTool.CurrentSubTool = pathTool.SubTools.Where(t => t.Name == "Line").FirstOrDefault();
+                }
+                else
+                {
+                    vm.CurrentTool = vm.Tools.Where(t => t.Name == "Line").FirstOrDefault();
+                }
+            }
+        }
+
+        public void SetCubicBezierTool()
+        {
+            if (this.DataContext is ShapesContainerViewModel vm)
+            {
+                if (vm.CurrentTool is PathTool pathTool)
+                {
+                    pathTool.CleanSubTool(vm);
+                    pathTool.CurrentSubTool = pathTool.SubTools.Where(t => t.Name == "CubicBezier").FirstOrDefault();
+                }
+                else
+                {
+                    vm.CurrentTool = vm.Tools.Where(t => t.Name == "CubicBezier").FirstOrDefault();
+                }
+            }
+        }
+
+        public void SetQuadraticBezierTool()
+        {
+            if (this.DataContext is ShapesContainerViewModel vm)
+            {
+                if (vm.CurrentTool is PathTool pathTool)
+                {
+                    pathTool.CleanSubTool(vm);
+                    pathTool.CurrentSubTool = pathTool.SubTools.Where(t => t.Name == "QuadraticBezier").FirstOrDefault();
+                }
+                else
+                {
+                    vm.CurrentTool = vm.Tools.Where(t => t.Name == "QuadraticBezier").FirstOrDefault();
+                }
+            }
+        }
+
+        public void SetPathTool()
+        {
+            if (this.DataContext is ShapesContainerViewModel vm)
+            {
+                vm.CurrentTool = vm.Tools.Where(t => t.Name == "Path").FirstOrDefault();
+            }
+        }
+
+        public void SetMoveTool()
+        {
+            if (this.DataContext is ShapesContainerViewModel vm)
+            {
+                if (vm.CurrentTool is PathTool pathTool)
+                {
+                    pathTool.CleanSubTool(vm);
+                    pathTool.CurrentSubTool = pathTool.SubTools.Where(t => t.Name == "Move").FirstOrDefault();
+                }
+            }
+        }
+
+        private void MainView_KeyDown(object sender, KeyEventArgs e)
+        {
+            switch (e.Key)
+            {
+                case Key.L:
+                    SetLineTool();
+                    break;
+                case Key.C:
+                    SetCubicBezierTool();
+                    break;
+                case Key.Q:
+                    SetQuadraticBezierTool();
+                    break;
+                case Key.H:
+                    SetPathTool();
+                    break;
+                case Key.M:
+                    SetMoveTool();
+                    break;
+            }
         }
 
         private void FileNew_Click(object sender, RoutedEventArgs e)
         {
-            var vm = this.DataContext as ShapesContainerViewModel;
-            if (vm != null)
+            if (this.DataContext is ShapesContainerViewModel vm)
             {
                 New(vm);
                 RendererView.InvalidateVisual();
@@ -38,8 +131,7 @@ namespace Draw2D.Wpf.Views
             if (result == true)
             {
                 var path = dlg.FileName;
-                var vm = this.DataContext as ShapesContainerViewModel;
-                if (vm != null)
+                if (this.DataContext is ShapesContainerViewModel vm)
                 {
                     Open(path, vm);
                     RendererView.InvalidateVisual();
@@ -60,8 +152,7 @@ namespace Draw2D.Wpf.Views
             if (result == true)
             {
                 var path = dlg.FileName;
-                var vm = this.DataContext as ShapesContainerViewModel;
-                if (vm != null)
+                if (this.DataContext is ShapesContainerViewModel vm)
                 {
                     Save(path, vm);
                 }
@@ -75,8 +166,7 @@ namespace Draw2D.Wpf.Views
 
         private void EditCut_Click(object sender, RoutedEventArgs e)
         {
-            var vm = this.DataContext as ShapesContainerViewModel;
-            if (vm != null)
+            if (this.DataContext is ShapesContainerViewModel vm)
             {
                 Cut(vm);
                 RendererView.InvalidateVisual();
@@ -85,8 +175,7 @@ namespace Draw2D.Wpf.Views
 
         private void EditCopy_Click(object sender, RoutedEventArgs e)
         {
-            var vm = this.DataContext as ShapesContainerViewModel;
-            if (vm != null)
+            if (this.DataContext is ShapesContainerViewModel vm)
             {
                 Copy(vm);
             }
@@ -94,8 +183,7 @@ namespace Draw2D.Wpf.Views
 
         private void EditPaste_Click(object sender, RoutedEventArgs e)
         {
-            var vm = this.DataContext as ShapesContainerViewModel;
-            if (vm != null)
+            if (this.DataContext is ShapesContainerViewModel vm)
             {
                 Paste(vm);
                 RendererView.InvalidateVisual();
@@ -104,8 +192,7 @@ namespace Draw2D.Wpf.Views
 
         private void EditDelete_Click(object sender, RoutedEventArgs e)
         {
-            var vm = this.DataContext as ShapesContainerViewModel;
-            if (vm != null)
+            if (this.DataContext is ShapesContainerViewModel vm)
             {
                 Delete(vm);
                 RendererView.InvalidateVisual();

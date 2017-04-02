@@ -127,10 +127,13 @@ namespace Draw2D.Wpf.Renderers
             return geometry;
         }
 
-        private WpfBrushCache GetOrCreateCache(DrawStyle style)
+        private WpfBrushCache? GetOrCreateCache(DrawStyle style)
         {
-            WpfBrushCache cache;
-            if (!_brushCache.TryGetValue(style, out cache))
+            if (style == null)
+            {
+                return null;
+            }
+            if (!_brushCache.TryGetValue(style, out var cache))
             {
                 _brushCache[style] = WpfBrushCache.FromDrawStyle(style);
                 return _brushCache[style];
@@ -162,7 +165,7 @@ namespace Draw2D.Wpf.Renderers
         {
             var cache = GetOrCreateCache(style);
             var _dc = dc as DrawingContext;
-            _dc.DrawLine(style.IsStroked ? cache.StrokePen : null, FromPoint(line.StartPoint, dx, dy), FromPoint(line.Point, dx, dy));
+            _dc.DrawLine(style.IsStroked ? cache?.StrokePen : null, FromPoint(line.StartPoint, dx, dy), FromPoint(line.Point, dx, dy));
         }
 
         public override void DrawPolyLine(object dc, PointShape start, IList<PointShape> points, DrawStyle style, double dx, double dy)
@@ -175,7 +178,7 @@ namespace Draw2D.Wpf.Renderers
                 context.BeginFigure(FromPoint(start, dx, dy), false, false);
                 context.PolyLineTo(FromPoints(points, dx, dy), true, false);
             }
-            _dc.DrawGeometry(style.IsFilled ? cache.Fill : null, style.IsStroked ? cache.StrokePen : null, geometry);
+            _dc.DrawGeometry(style.IsFilled ? cache?.Fill : null, style.IsStroked ? cache?.StrokePen : null, geometry);
         }
 
         public override void DrawCubicBezier(object dc, CubicBezierShape cubicBezier, DrawStyle style, double dx, double dy)
@@ -192,7 +195,7 @@ namespace Draw2D.Wpf.Renderers
                     FromPoint(cubicBezier.Point3, dx, dy),
                     true, false);
             }
-            _dc.DrawGeometry(style.IsFilled ? cache.Fill : null, style.IsStroked ? cache.StrokePen : null, geometry);
+            _dc.DrawGeometry(style.IsFilled ? cache?.Fill : null, style.IsStroked ? cache?.StrokePen : null, geometry);
         }
 
         public override void DrawQuadraticBezier(object dc, QuadraticBezierShape quadraticBezier, DrawStyle style, double dx, double dy)
@@ -208,7 +211,7 @@ namespace Draw2D.Wpf.Renderers
                     FromPoint(quadraticBezier.Point2, dx, dy),
                     true, false);
             }
-            _dc.DrawGeometry(style.IsFilled ? cache.Fill : null, style.IsStroked ? cache.StrokePen : null, geometry);
+            _dc.DrawGeometry(style.IsFilled ? cache?.Fill : null, style.IsStroked ? cache?.StrokePen : null, geometry);
         }
 
         public override void DrawPath(object dc, PathShape path, DrawStyle style, double dx, double dy)
@@ -216,7 +219,7 @@ namespace Draw2D.Wpf.Renderers
             var cache = GetOrCreateCache(style);
             var _dc = dc as DrawingContext;
             var geometry = ToGeometry(path, dx, dy);
-            _dc.DrawGeometry(style.IsFilled ? cache.Fill : null, style.IsStroked ? cache.StrokePen : null, geometry);
+            _dc.DrawGeometry(style.IsFilled ? cache?.Fill : null, style.IsStroked ? cache?.StrokePen : null, geometry);
         }
 
         public override void DrawRectangle(object dc, RectangleShape rectangle, DrawStyle style, double dx, double dy)
@@ -224,7 +227,7 @@ namespace Draw2D.Wpf.Renderers
             var cache = GetOrCreateCache(style);
             var _dc = dc as DrawingContext;
             var rect = FromRectnagle(rectangle, dx, dy);
-            _dc.DrawRectangle(style.IsFilled ? cache.Fill : null, style.IsStroked ? cache.StrokePen : null, rect);
+            _dc.DrawRectangle(style.IsFilled ? cache?.Fill : null, style.IsStroked ? cache?.StrokePen : null, rect);
         }
 
         public override void DrawEllipse(object dc, EllipseShape ellipse, DrawStyle style, double dx, double dy)
@@ -236,7 +239,7 @@ namespace Draw2D.Wpf.Renderers
             var radiusY = rect.Height / 2;
             var center = new Point(rect.TopLeft.X, rect.TopLeft.Y);
             center.Offset(radiusX, radiusY);
-            _dc.DrawEllipse(style.IsFilled ? cache.Fill : null, style.IsStroked ? cache.StrokePen : null, center, radiusX, radiusY);
+            _dc.DrawEllipse(style.IsFilled ? cache?.Fill : null, style.IsStroked ? cache?.StrokePen : null, center, radiusX, radiusY);
         }
     }
 }

@@ -14,13 +14,16 @@ namespace Draw2D.Editor.Tools
         {
             base.LeftDown(context, x, y, modifier);
 
-            Filters.ForEach(f => f.Clear(context));
-            Filters.Any(f => f.Process(context, ref x, ref y));
+            Filters?.ForEach(f => f.Clear(context));
+            Filters?.Any(f => f.Process(context, ref x, ref y));
 
             var point = new PointShape(x, y, context.PointShape);
 
-            var shape = context.HitTest.TryToGetShape(context.CurrentContainer.Shapes, new Point2(x, y), Settings.HitTestRadius);
-            if (shape != null && Settings.ConnectPoints)
+            var shape = context.HitTest?.TryToGetShape(
+                context.CurrentContainer.Shapes, 
+                new Point2(x, y),
+                Settings?.HitTestRadius ?? 7.0);
+            if (shape != null && (Settings?.ConnectPoints ?? false))
             {
                 if (shape is ConnectableShape connectable)
                 {
@@ -37,15 +40,15 @@ namespace Draw2D.Editor.Tools
         {
             base.Move(context, x, y, modifier);
 
-            Filters.ForEach(f => f.Clear(context));
-            Filters.Any(f => f.Process(context, ref x, ref y));
+            Filters?.ForEach(f => f.Clear(context));
+            Filters?.Any(f => f.Process(context, ref x, ref y));
         }
 
         public override void Clean(IToolContext context)
         {
             base.Clean(context);
 
-            Filters.ForEach(f => f.Clear(context));
+            Filters?.ForEach(f => f.Clear(context));
         }
     }
 }

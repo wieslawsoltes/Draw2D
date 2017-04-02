@@ -30,6 +30,11 @@ namespace Draw2D.Wpf
 
             var vm = CreateViewModel();
             var mainView = new MainView();
+            var rendererView = mainView.RendererView;
+
+            vm.Capture = () => rendererView.CaptureMouse();
+            vm.Release = () => rendererView.ReleaseMouseCapture();
+            vm.Invalidate = () => rendererView.InvalidateVisual();
 
             mainView.DataContext = vm;
             mainView.ShowDialog();
@@ -45,6 +50,7 @@ namespace Draw2D.Wpf
             hitTest.Register(new RectangleHitTest());
             hitTest.Register(new EllipseHitTest());
             hitTest.Register(new GroupHitTest());
+            hitTest.Register(new PathHitTest());
 
             var gridSnapPointFilter = new GridSnapPointFilter()
             {

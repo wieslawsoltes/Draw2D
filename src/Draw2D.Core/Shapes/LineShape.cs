@@ -36,7 +36,10 @@ namespace Draw2D.Core.Shapes
         {
             base.BeginTransform(dc, r);
 
-            r.DrawLine(dc, this, Style, dx, dy);
+            if (Style != null)
+            {
+                r.DrawLine(dc, this, Style, dx, dy); 
+            }
 
             if (r.Selected.Contains(_startPoint))
             {

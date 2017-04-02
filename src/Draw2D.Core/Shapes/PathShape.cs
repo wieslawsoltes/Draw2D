@@ -50,7 +50,10 @@ namespace Draw2D.Core.Shapes
         {
             base.BeginTransform(dc, r);
 
-            r.DrawPath(dc, this, Style, dx, dy);
+            if (Style != null)
+            {
+                r.DrawPath(dc, this, Style, dx, dy); 
+            }
 
             base.Draw(dc, r, dx, dy);
             base.EndTransform(dc, r);

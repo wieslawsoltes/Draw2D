@@ -37,7 +37,7 @@ namespace Draw2D.Core.Shapes
         {
             base.BeginTransform(dc, r);
 
-            if (_points.Count >= 1)
+            if (_points.Count >= 1 && Style != null)
             {
                 r.DrawPolyLine(dc, _start, _points, Style, dx, dy);
             }

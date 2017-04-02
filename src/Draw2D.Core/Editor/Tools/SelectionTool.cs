@@ -35,13 +35,19 @@ namespace Draw2D.Editor.Tools
                         _previousX = x;
                         _previousY = y;
 
-                        Filters.ForEach(f => f.Clear(context));
-                        Filters.Any(f => f.Process(context, ref _originX, ref _originY));
+                        Filters?.ForEach(f => f.Clear(context));
+                        Filters?.Any(f => f.Process(context, ref _originX, ref _originY));
                         _previousX = _originX;
                         _previousY = _originY;
 
                         var target = new Point2(x, y);
-                        var result = SelectionHelper.TryToSelect(context, Settings.Mode, Settings.Targets, target, Settings.HitTestRadius, modifier);
+                        var result = SelectionHelper.TryToSelect(
+                            context,
+                            Settings?.Mode ?? SelectionMode.Shape,
+                            Settings?.Targets ?? SelectionTargets.Shapes,
+                            target,
+                            Settings?.HitTestRadius ?? 7.0,
+                            modifier);
                         if (result)
                         {
                             _haveSelection = true;
@@ -68,7 +74,7 @@ namespace Draw2D.Editor.Tools
                             _rectangle.TopLeft.Y = y;
                             _rectangle.BottomRight.X = x;
                             _rectangle.BottomRight.Y = y;
-                            _rectangle.Style = Settings.SelectionStyle;
+                            _rectangle.Style = Settings?.SelectionStyle;
                             context.WorkingContainer.Shapes.Add(_rectangle);
                             CurrentState = State.BottomRight;
                         }
@@ -88,14 +94,20 @@ namespace Draw2D.Editor.Tools
         {
             base.LeftUp(context, x, y, modifier);
 
-            Filters.ForEach(f => f.Clear(context));
+            Filters?.ForEach(f => f.Clear(context));
 
             switch (CurrentState)
             {
                 case State.BottomRight:
                     {
                         var target = _rectangle.ToRect2();
-                        var result = SelectionHelper.TryToSelect(context, Settings.Mode, Settings.Targets, target, Settings.HitTestRadius, modifier);
+                        var result = SelectionHelper.TryToSelect(
+                            context,
+                            Settings?.Mode ?? SelectionMode.Shape,
+                            Settings?.Targets ?? SelectionTargets.Shapes,
+                            target,
+                            Settings?.HitTestRadius ?? 7.0,
+                            modifier);
                         if (result)
                         {
                             _haveSelection = true;
@@ -144,7 +156,12 @@ namespace Draw2D.Editor.Tools
                         if (!_haveSelection)
                         {
                             var target = new Point2(x, y);
-                            SelectionHelper.TryToHover(context, Settings.Mode, Settings.Targets, target, Settings.HitTestRadius);
+                            SelectionHelper.TryToHover(
+                                context, 
+                                Settings?.Mode ?? SelectionMode.Shape, 
+                                Settings?.Targets ?? SelectionTargets.Shapes, 
+                                target, 
+                                Settings?.HitTestRadius ?? 7.0);
                         }
                     }
                     break;
@@ -156,8 +173,8 @@ namespace Draw2D.Editor.Tools
                     break;
                 case State.Move:
                     {
-                        Filters.ForEach(f => f.Clear(context));
-                        Filters.Any(f => f.Process(context, ref x, ref y));
+                        Filters?.ForEach(f => f.Clear(context));
+                        Filters?.Any(f => f.Process(context, ref x, ref y));
 
                         double dx = x - _previousX;
                         double dy = y - _previousY;
@@ -176,7 +193,10 @@ namespace Draw2D.Editor.Tools
 
                                 if (Settings.ConnectPoints)
                                 {
-                                    PointShape result = context.HitTest.TryToGetPoint(context.CurrentContainer.Shapes, new Point2(point.X, point.Y), Settings.ConnectTestRadius);
+                                    PointShape result = context.HitTest.TryToGetPoint(
+                                        context.CurrentContainer.Shapes, 
+                                        new Point2(point.X, point.Y), 
+                                        Settings?.ConnectTestRadius ?? 7.0);
                                     if (result != point)
                                     {
                                         // TODO: Connect point.
@@ -220,7 +240,7 @@ namespace Draw2D.Editor.Tools
 
             context.Selected.Clear();
 
-            Filters.ForEach(f => f.Clear(context));
+            Filters?.ForEach(f => f.Clear(context));
         }
     }
 }

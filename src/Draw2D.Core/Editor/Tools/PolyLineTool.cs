@@ -20,7 +20,7 @@ namespace Draw2D.Editor.Tools
         {
             base.LeftDown(context, x, y, modifier);
 
-            Filters.Any(f => f.Process(context, ref x, ref y));
+            Filters?.Any(f => f.Process(context, ref x, ref y));
 
             switch (CurrentState)
             {
@@ -29,9 +29,9 @@ namespace Draw2D.Editor.Tools
                         _points = new List<PointShape>();
                         _line = new LineShape()
                         {
-                            StartPoint = context.GetNextPoint(x, y, Settings.ConnectPoints, Settings.HitTestRadius),
+                            StartPoint = context.GetNextPoint(x, y, Settings?.ConnectPoints ?? false, Settings?.HitTestRadius ?? 7.0),
                             Point = context.GetNextPoint(x, y, false, 0.0),
-                            Style = context.CurrentStyle
+                            Style = context?.CurrentStyle
                         };
                         _points.Add(_line.StartPoint);
                         _points.Add(_line.Point);
@@ -44,7 +44,7 @@ namespace Draw2D.Editor.Tools
                 case State.End:
                     {
                         context.Selected.Remove(_line.Point);
-                        _line.Point = context.GetNextPoint(x, y, Settings.ConnectPoints, Settings.HitTestRadius);
+                        _line.Point = context.GetNextPoint(x, y, Settings?.ConnectPoints ?? false, Settings?.HitTestRadius ?? 7.0);
                         _points[_points.Count - 1] = _line.Point;
 
                         if (!context.Selected.Contains(_line.Point))
@@ -65,8 +65,8 @@ namespace Draw2D.Editor.Tools
                         context.WorkingContainer.Shapes.Add(_line);
                         context.Selected.Add(_line.Point);
 
-                        Intersections.ForEach(i => i.Clear(context));
-                        Filters.ForEach(f => f.Clear(context));
+                        Intersections?.ForEach(i => i.Clear(context));
+                        Filters?.ForEach(f => f.Clear(context));
                     }
                     break;
             }
@@ -90,8 +90,8 @@ namespace Draw2D.Editor.Tools
         {
             base.Move(context, x, y, modifier);
 
-            Filters.ForEach(f => f.Clear(context));
-            Filters.Any(f => f.Process(context, ref x, ref y));
+            Filters?.ForEach(f => f.Clear(context));
+            Filters?.Any(f => f.Process(context, ref x, ref y));
 
             switch (CurrentState)
             {
@@ -99,8 +99,8 @@ namespace Draw2D.Editor.Tools
                     {
                         _line.Point.X = x;
                         _line.Point.Y = y;
-                        Intersections.ForEach(i => i.Clear(context));
-                        Intersections.ForEach(i => i.Find(context, _line));
+                        Intersections?.ForEach(i => i.Clear(context));
+                        Intersections?.ForEach(i => i.Find(context, _line));
                     }
                     break;
             }
@@ -112,8 +112,8 @@ namespace Draw2D.Editor.Tools
 
             CurrentState = State.Start;
 
-            Intersections.ForEach(i => i.Clear(context));
-            Filters.ForEach(f => f.Clear(context));
+            Intersections?.ForEach(i => i.Clear(context));
+            Filters?.ForEach(f => f.Clear(context));
 
             if (_line != null)
             {

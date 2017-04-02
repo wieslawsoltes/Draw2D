@@ -44,7 +44,10 @@ namespace Draw2D.Core.Shapes
         {
             base.BeginTransform(dc, r);
 
-            r.DrawQuadraticBezier(dc, this, Style, dx, dy);
+            if (Style != null)
+            {
+                r.DrawQuadraticBezier(dc, this, Style, dx, dy); 
+            }
 
             if (r.Selected.Contains(_startPoint))
             {
