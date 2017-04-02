@@ -21,7 +21,7 @@ namespace Draw2D.ViewModels.Containers
         private ISet<ShapeObject> _selected;
         private IShapesContainer _currentContainer;
         private IShapesContainer _workingContainer;
-        private DrawStyle _style;
+        private DrawStyle _currentStyle;
         private ShapeObject _pointShape;
         private HitTest _hitTest;
         private ShapePresenter _presenter;
@@ -68,8 +68,8 @@ namespace Draw2D.ViewModels.Containers
 
         public DrawStyle CurrentStyle
         {
-            get => _style;
-            set => Update(ref _style, value);
+            get => _currentStyle;
+            set => Update(ref _currentStyle, value);
         }
 
         public ShapeObject PointShape
