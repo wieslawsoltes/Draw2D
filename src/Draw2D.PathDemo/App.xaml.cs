@@ -8,13 +8,13 @@ using Draw2D.Core.Shapes;
 using Draw2D.Core.Style;
 using Draw2D.ViewModels.Containers;
 using Draw2D.Wpf.Renderers;
-using Draw2D.PathDemo.Tools;
 using Draw2D.PathDemo.Views;
 using System.Linq;
 using Draw2D.Core.Presenters;
 using System;
 using Draw2D.Core.Renderers;
 using Draw2D.Core.Renderers.Helpers;
+using Draw2D.Editor.Tools;
 
 namespace Draw2D.PathDemo
 {
@@ -53,10 +53,18 @@ namespace Draw2D.PathDemo
                 },
                 Tools = new ObservableCollection<ToolBase>
                 {
+                    new NoneTool(),
+                    new SelectionTool(),
+                    new GuideTool(),
+                    new PointTool(),
                     new LineTool(),
+                    new PolyLineTool(),
                     new CubicBezierTool(),
                     new QuadraticBezierTool(),
-                    new PathTool()
+                    new PathTool(),
+                    new ScribbleTool(),
+                    new RectangleTool(),
+                    new EllipseTool()
                 },
                 Renderer = new WpfShapeRenderer(),
                 CurrentStyle = new DrawStyle(new DrawColor(255, 0, 255, 0), new DrawColor(80, 0, 255, 0), 2.0, true, true),
