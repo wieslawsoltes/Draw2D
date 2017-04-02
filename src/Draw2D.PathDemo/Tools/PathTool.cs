@@ -16,37 +16,37 @@ namespace Draw2D.PathDemo.Tools
     {
         public ShapeRenderer Renderer
         {
-            get => Context?.Renderer;
+            get => _context?.Renderer;
             set
             {
-                if (Context != null)
+                if (_context != null)
                 {
-                    Context.Renderer = value;
+                    _context.Renderer = value;
                 }
             }
         }
 
         public ISet<ShapeObject> Selected
         {
-            get => Context?.Selected;
+            get => _context?.Selected;
             set
             {
-                if (Context != null)
+                if (_context != null)
                 {
-                    Context.Selected = value;
+                    _context.Selected = value;
                 }
             }
         }
 
         public IShapesContainer CurrentContainer
         {
-            get => Figure;
+            get => _figure;
             set => throw new InvalidCastException("Can't cast current container as a figure.");
         }
 
         public IShapesContainer WorkingContainer
         {
-            get => Figure;
+            get => _figure;
             set => throw new InvalidCastException("Can't cast current container as a figure.");
         }
 
@@ -58,7 +58,7 @@ namespace Draw2D.PathDemo.Tools
 
         public PointShape GetNextPoint(double x, double y, bool connect, double radius)
         {
-            return NextPoint ?? Context?.GetNextPoint(x, y, connect, radius);
+            return _nextPoint ?? _context?.GetNextPoint(x, y, connect, radius);
         }
 
         public Action Capture { get; set; }
@@ -71,6 +71,11 @@ namespace Draw2D.PathDemo.Tools
     public partial class PathTool : ToolBase
     {
         private ToolBase _currentSubTool;
+        private ToolBase _previousSubTool;
+        private PointShape _nextPoint;
+        private IToolContext _context;
+        private PathShape _path;
+        private FigureShape _figure;
 
         public override string Name { get { return "Path"; } }
 
@@ -83,26 +88,16 @@ namespace Draw2D.PathDemo.Tools
             get => _currentSubTool;
             set
             {
-                PreviousSubTool = _currentSubTool;
+                _previousSubTool = _currentSubTool;
                 _currentSubTool = value;
             }
         }
 
-        private ToolBase PreviousSubTool { get; set; }
-
-        private PointShape NextPoint { get; set; }
-
-        private IToolContext Context { get; set; }
-
-        private PathShape Path { get; set; }
-
-        private FigureShape Figure { get; set; }
-
         public PathTool()
         {
-            Capture = () => Context?.Capture();
-            Release = () => Context?.Release();
-            Invalidate = () => Context?.Invalidate();
+            Capture = () => _context?.Capture();
+            Release = () => _context?.Release();
+            Invalidate = () => _context?.Invalidate();
 
             SubTools = new ObservableCollection<ToolBase>
             {
@@ -115,11 +110,11 @@ namespace Draw2D.PathDemo.Tools
             CurrentSubTool = SubTools[0];
         }
 
-        private PointShape GetLastPoint()
+        public PointShape GetLastPoint()
         {
-            if (Path.Figures.Count > 0)
+            if (_path.Figures.Count > 0)
             {
-                var shapes = Path.Figures[Path.Figures.Count - 1].Shapes;
+                var shapes = _path.Figures[_path.Figures.Count - 1].Shapes;
                 if (shapes.Count > 0)
                 {
                     switch (shapes[shapes.Count - 1])
@@ -140,40 +135,40 @@ namespace Draw2D.PathDemo.Tools
 
         public void Create(IToolContext context)
         {
-            Path = new PathShape()
+            _path = new PathShape()
             {
                 Figures = new ObservableCollection<FigureShape>(),
                 FillRule = PathFillRule.EvenOdd,
                 Style = context.CurrentStyle
             };
 
-            context.CurrentContainer.Shapes.Add(Path);
-            context.Selected.Add(Path);
+            context.CurrentContainer.Shapes.Add(_path);
+            context.Selected.Add(_path);
         }
 
         public void Move()
         {
-            Figure = new FigureShape()
+            _figure = new FigureShape()
             {
                 Shapes = new ObservableCollection<ShapeObject>(),
                 IsFilled = true,
                 IsClosed = true
             };
-            Path.Figures.Add(Figure);
+            _path.Figures.Add(_figure);
 
-            if (PreviousSubTool != null)
+            if (_previousSubTool != null)
             {
-                CurrentSubTool = PreviousSubTool;
+                CurrentSubTool = _previousSubTool;
             }
         }
 
-        public void SetCurrentContext(IToolContext context) => Context = context;
+        private void SetCurrentContext(IToolContext context) => _context = context;
 
         public override void LeftDown(IToolContext context, double x, double y, Modifier modifier)
         {
             base.LeftDown(context, x, y, modifier);
 
-            if (Path == null)
+            if (_path == null)
             {
                 Create(context);
                 Move();
@@ -188,9 +183,9 @@ namespace Draw2D.PathDemo.Tools
                     {
                         if (lineTool.CurrentState == LineTool.State.StartPoint)
                         {
-                            NextPoint = GetLastPoint();
+                            _nextPoint = GetLastPoint();
                             CurrentSubTool.LeftDown(this, x, y, modifier);
-                            NextPoint = null;
+                            _nextPoint = null;
                         }
                     }
                     break;
@@ -198,9 +193,9 @@ namespace Draw2D.PathDemo.Tools
                     {
                         if (cubicBezierTool.CurrentState == CubicBezierTool.State.StartPoint)
                         {
-                            NextPoint = GetLastPoint();
+                            _nextPoint = GetLastPoint();
                             CurrentSubTool.LeftDown(this, x, y, modifier);
-                            NextPoint = null;
+                            _nextPoint = null;
                         }
                     }
                     break;
@@ -208,9 +203,9 @@ namespace Draw2D.PathDemo.Tools
                     {
                         if (quadraticBezierTool.CurrentState == QuadraticBezierTool.State.StartPoint)
                         {
-                            NextPoint = GetLastPoint();
+                            _nextPoint = GetLastPoint();
                             CurrentSubTool.LeftDown(this, x, y, modifier);
-                            NextPoint = null;
+                            _nextPoint = null;
                         }
                     }
                     break;
@@ -247,9 +242,17 @@ namespace Draw2D.PathDemo.Tools
             base.Clean(context);
 
             CleanSubTool(context);
-            context.Selected.Remove(Path);
-            Path = null;
-            Figure = null;
+
+            if (_path != null)
+            {
+                context.WorkingContainer.Shapes.Remove(_path);
+                context.Selected.Remove(_path);
+                _previousSubTool = null;
+                _nextPoint = null;
+                _context = null;
+                _path = null;
+                _figure = null;
+            }
         }
     }
 }

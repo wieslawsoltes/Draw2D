@@ -32,7 +32,7 @@ namespace Draw2D.PathDemo.Tools
                             Point3 = next.Clone(),
                             Style = context.CurrentStyle
                         };
-                        context.CurrentContainer.Shapes.Add(_cubicBezier);
+                        context.WorkingContainer.Shapes.Add(_cubicBezier);
                         context.Selected.Add(_cubicBezier);
                         context.Capture();
                         context.Invalidate();
@@ -41,9 +41,15 @@ namespace Draw2D.PathDemo.Tools
                     break;
                 case State.Point1:
                     {
-                        _cubicBezier.Point1 = context.GetNextPoint(x, y, false, 0.0);
                         CurrentState = State.StartPoint;
+
+                        _cubicBezier.Point1 = context.GetNextPoint(x, y, false, 0.0);
+
+                        context.WorkingContainer.Shapes.Remove(_cubicBezier);
                         context.Selected.Remove(_cubicBezier);
+
+                        context.CurrentContainer.Shapes.Add(_cubicBezier);
+
                         _cubicBezier = null;
                         context.Release();
                         context.Invalidate();
@@ -125,12 +131,14 @@ namespace Draw2D.PathDemo.Tools
             base.Clean(context);
 
             CurrentState = State.StartPoint;
+
             if (_cubicBezier != null)
             {
-                context.CurrentContainer.Shapes.Remove(_cubicBezier);
+                context.WorkingContainer.Shapes.Remove(_cubicBezier);
                 context.Selected.Remove(_cubicBezier);
+                _cubicBezier = null;
             }
-            _cubicBezier = null;
+
             context.Release();
             context.Invalidate();
         }

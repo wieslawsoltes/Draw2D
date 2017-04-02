@@ -115,8 +115,9 @@ namespace Draw2D.Editor.Tools
             if (_line != null)
             {
                 context.WorkingContainer.Shapes.Remove(_line);
-                context.Selected.Remove(_line.StartPoint);
-                context.Selected.Remove(_line.Point);
+                context.Selected.Remove(_line);
+                //context.Selected.Remove(_line.StartPoint);
+                //context.Selected.Remove(_line.Point);
                 _line = null;
             }
         }

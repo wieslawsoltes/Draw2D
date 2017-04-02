@@ -30,7 +30,7 @@ namespace Draw2D.PathDemo.Tools
                             Point = next.Clone(),
                             Style = context.CurrentStyle
                         };
-                        context.CurrentContainer.Shapes.Add(_line);
+                        context.WorkingContainer.Shapes.Add(_line);
                         context.Selected.Add(_line);
                         context.Capture();
                         context.Invalidate();
@@ -39,9 +39,15 @@ namespace Draw2D.PathDemo.Tools
                     break;
                 case State.Point:
                     {
-                        _line.Point = context.GetNextPoint(x, y, false, 0.0);
                         CurrentState = State.StartPoint;
+
+                        _line.Point = context.GetNextPoint(x, y, false, 0.0);
+
+                        context.WorkingContainer.Shapes.Remove(_line);
                         context.Selected.Remove(_line);
+
+                        context.CurrentContainer.Shapes.Add(_line);
+
                         _line = null;
                         context.Release();
                         context.Invalidate();
@@ -85,12 +91,14 @@ namespace Draw2D.PathDemo.Tools
             base.Clean(context);
 
             CurrentState = State.StartPoint;
+
             if (_line != null)
             {
-                context.CurrentContainer.Shapes.Remove(_line);
+                context.WorkingContainer.Shapes.Remove(_line);
                 context.Selected.Remove(_line);
+                _line = null;
             }
-            _line = null;
+
             context.Release();
             context.Invalidate();
         }

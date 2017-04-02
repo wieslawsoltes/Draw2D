@@ -31,7 +31,7 @@ namespace Draw2D.PathDemo.Tools
                             Point2 = next.Clone(),
                             Style = context.CurrentStyle
                         };
-                        context.CurrentContainer.Shapes.Add(_quadraticBezier);
+                        context.WorkingContainer.Shapes.Add(_quadraticBezier);
                         context.Selected.Add(_quadraticBezier);
                         context.Capture();
                         context.Invalidate();
@@ -40,9 +40,15 @@ namespace Draw2D.PathDemo.Tools
                     break;
                 case State.Point1:
                     {
-                        _quadraticBezier.Point1 = context.GetNextPoint(x, y, false, 0.0);
                         CurrentState = State.StartPoint;
+
+                        _quadraticBezier.Point1 = context.GetNextPoint(x, y, false, 0.0);
+
+                        context.WorkingContainer.Shapes.Remove(_quadraticBezier);
                         context.Selected.Remove(_quadraticBezier);
+
+                        context.CurrentContainer.Shapes.Add(_quadraticBezier);
+
                         _quadraticBezier = null;
                         context.Release();
                         context.Invalidate();
@@ -105,12 +111,14 @@ namespace Draw2D.PathDemo.Tools
             base.Clean(context);
 
             CurrentState = State.StartPoint;
+
             if (_quadraticBezier != null)
             {
-                context.CurrentContainer.Shapes.Remove(_quadraticBezier);
+                context.WorkingContainer.Shapes.Remove(_quadraticBezier);
                 context.Selected.Remove(_quadraticBezier);
+                _quadraticBezier = null;
             }
-            _quadraticBezier = null;
+
             context.Release();
             context.Invalidate();
         }
