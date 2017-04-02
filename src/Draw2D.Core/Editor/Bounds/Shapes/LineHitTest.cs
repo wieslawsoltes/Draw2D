@@ -60,11 +60,7 @@ namespace Draw2D.Editor.Bounds.Shapes
 
             var a = new Point2(line.StartPoint.X, line.StartPoint.Y);
             var b = new Point2(line.Point.X, line.Point.Y);
-            double x0clip;
-            double y0clip;
-            double x1clip;
-            double y1clip;
-            return Line2.LineIntersectsWithRect(a, b, target, out x0clip, out y0clip, out x1clip, out y1clip);
+            return Line2.LineIntersectsWithRect(a, b, target, out double x0clip, out double y0clip, out double x1clip, out double y1clip);
         }
     }
 }

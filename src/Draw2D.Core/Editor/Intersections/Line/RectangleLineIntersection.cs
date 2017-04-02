@@ -28,11 +28,7 @@ namespace Draw2D.Editor.Intersections.Line
                     var rect = Rect2.FromPoints(rectangle.TopLeft.ToPoint2(), rectangle.BottomRight.ToPoint2());
                     var p1 = line.StartPoint.ToPoint2();
                     var p2 = line.Point.ToPoint2();
-                    double x0clip;
-                    double y0clip;
-                    double x1clip;
-                    double y1clip;
-                    var intersections = Line2.LineIntersectsWithRect(p1, p2, rect, out x0clip, out y0clip, out x1clip, out y1clip);
+                    var intersections = Line2.LineIntersectsWithRect(p1, p2, rect, out double x0clip, out double y0clip, out double x1clip, out double y1clip);
                     if (intersections)
                     {
                         var point1 = new PointShape(x0clip, y0clip, context.PointShape);
