@@ -20,6 +20,14 @@ namespace Draw2D.Wpf.Views
             KeyDown += MainView_KeyDown;
         }
 
+        public void SetSelectionTool()
+        {
+            if (this.DataContext is ShapesContainerViewModel vm)
+            {
+                vm.CurrentTool = vm.Tools.Where(t => t.Name == "Selection").FirstOrDefault();
+            }
+        }
+
         public void SetLineTool()
         {
             if (this.DataContext is ShapesContainerViewModel vm)
@@ -90,27 +98,100 @@ namespace Draw2D.Wpf.Views
 
         private void MainView_KeyDown(object sender, KeyEventArgs e)
         {
-            switch (e.Key)
+            if (Keyboard.Modifiers == ModifierKeys.Control)
             {
-                case Key.L:
-                    SetLineTool();
-                    break;
-                case Key.C:
-                    SetCubicBezierTool();
-                    break;
-                case Key.Q:
-                    SetQuadraticBezierTool();
-                    break;
-                case Key.H:
-                    SetPathTool();
-                    break;
-                case Key.M:
-                    SetMoveTool();
-                    break;
+                switch (e.Key)
+                {
+                    case Key.N:
+                        New();
+                        break;
+                    case Key.O:
+                        Open();
+                        break;
+                    case Key.S:
+                        SaveAs();
+                        break;
+                    case Key.X:
+                        Cut();
+                        break;
+                    case Key.C:
+                        Copy();
+                        break;
+                    case Key.V:
+                        Paste();
+                        break;
+                }
+            }
+            else if (Keyboard.Modifiers == ModifierKeys.None)
+            {
+                switch (e.Key)
+                {
+                    case Key.S:
+                        SetSelectionTool();
+                        break;
+                    case Key.L:
+                        SetLineTool();
+                        break;
+                    case Key.C:
+                        SetCubicBezierTool();
+                        break;
+                    case Key.Q:
+                        SetQuadraticBezierTool();
+                        break;
+                    case Key.H:
+                        SetPathTool();
+                        break;
+                    case Key.M:
+                        SetMoveTool();
+                        break;
+                    case Key.Delete:
+                        Delete();
+                        break;
+                }
             }
         }
 
         private void FileNew_Click(object sender, RoutedEventArgs e)
+        {
+            New();
+        }
+
+        private void FileOpen_Click(object sender, RoutedEventArgs e)
+        {
+            Open();
+        }
+
+        private void FileSaveAs_Click(object sender, RoutedEventArgs e)
+        {
+            SaveAs();
+        }
+
+        private void FileExit_Click(object sender, RoutedEventArgs e)
+        {
+            App.Current.Windows[0].Close();
+        }
+
+        private void EditCut_Click(object sender, RoutedEventArgs e)
+        {
+            Cut();
+        }
+
+        private void EditCopy_Click(object sender, RoutedEventArgs e)
+        {
+            Copy();
+        }
+
+        private void EditPaste_Click(object sender, RoutedEventArgs e)
+        {
+            Paste();
+        }
+
+        private void EditDelete_Click(object sender, RoutedEventArgs e)
+        {
+            Delete();
+        }
+
+        private void New()
         {
             if (this.DataContext is ShapesContainerViewModel vm)
             {
@@ -119,7 +200,7 @@ namespace Draw2D.Wpf.Views
             }
         }
 
-        private void FileOpen_Click(object sender, RoutedEventArgs e)
+        private void Open()
         {
             var dlg = new OpenFileDialog()
             {
@@ -139,7 +220,7 @@ namespace Draw2D.Wpf.Views
             }
         }
 
-        private void FileSaveAs_Click(object sender, RoutedEventArgs e)
+        private void SaveAs()
         {
             var dlg = new SaveFileDialog()
             {
@@ -159,12 +240,7 @@ namespace Draw2D.Wpf.Views
             }
         }
 
-        private void FileExit_Click(object sender, RoutedEventArgs e)
-        {
-            App.Current.Windows[0].Close();
-        }
-
-        private void EditCut_Click(object sender, RoutedEventArgs e)
+        private void Cut()
         {
             if (this.DataContext is ShapesContainerViewModel vm)
             {
@@ -173,7 +249,7 @@ namespace Draw2D.Wpf.Views
             }
         }
 
-        private void EditCopy_Click(object sender, RoutedEventArgs e)
+        private void Copy()
         {
             if (this.DataContext is ShapesContainerViewModel vm)
             {
@@ -181,7 +257,7 @@ namespace Draw2D.Wpf.Views
             }
         }
 
-        private void EditPaste_Click(object sender, RoutedEventArgs e)
+        private void Paste()
         {
             if (this.DataContext is ShapesContainerViewModel vm)
             {
@@ -190,7 +266,7 @@ namespace Draw2D.Wpf.Views
             }
         }
 
-        private void EditDelete_Click(object sender, RoutedEventArgs e)
+        private void Delete()
         {
             if (this.DataContext is ShapesContainerViewModel vm)
             {
@@ -269,8 +345,7 @@ namespace Draw2D.Wpf.Views
 
         private void Delete(ShapesContainerViewModel vm)
         {
-            var selected = vm.Renderer.Selected;
-            foreach (var shape in selected)
+            foreach (var shape in vm.Renderer.Selected)
             {
                 if (vm.CurrentContainer.Shapes.Contains(shape))
                 {
