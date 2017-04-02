@@ -67,7 +67,7 @@
             </TabControl>
             <TabControl Grid.Row="1">
                 <TabItem Header="Style">
-                    <ViewsStyle:DrawStyleView Grid.Row="1" DataContext="{Binding Style}"/>
+                    <ViewsStyle:DrawStyleView Grid.Row="1" DataContext="{Binding CurrentStyle}"/>
                 </TabItem>
             </TabControl>
         </Grid>
