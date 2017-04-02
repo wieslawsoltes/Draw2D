@@ -130,6 +130,15 @@
                             <DataTemplate DataType="{x:Type EditorTools:PolyLineToolSettings}">
                                 <ViewsToolsSettings:PolyLineToolSettingsView/>
                             </DataTemplate>
+                            <DataTemplate DataType="{x:Type EditorTools:CubicBezierToolSettings}">
+                                <ViewsToolsSettings:CubicBezierToolSettingsView/>
+                            </DataTemplate>
+                            <DataTemplate DataType="{x:Type EditorTools:QuadraticBezierToolSettings}">
+                                <ViewsToolsSettings:QuadraticBezierToolSettingsView/>
+                            </DataTemplate>
+                            <DataTemplate DataType="{x:Type EditorTools:PathToolSettings}">
+                                <ViewsToolsSettings:PathToolSettingsView/>
+                            </DataTemplate>
                             <DataTemplate DataType="{x:Type EditorTools:ScribbleToolSettings}">
                                 <ViewsToolsSettings:ScribbleToolSettingsView/>
                             </DataTemplate>
