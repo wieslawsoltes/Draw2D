@@ -1,0 +1,357 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ProjectGuid>{41A7B9BA-A69C-46D4-997E-F2E12ACE58D6}</ProjectGuid>
+    <ProjectTypeGuids>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>Draw2D</RootNamespace>
+    <AssemblyName>Draw2D</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <OutputPath>bin\$(Configuration)\$(Platform)</OutputPath>
+    <IntermediateOutputPath>obj\$(Configuration)\$(Platform)</IntermediateOutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <DefineConstants>TRACE</DefineConstants>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>Full</DebugType>
+    <Optimize>False</Optimize>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <PlatformTarget>x86</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <DebugType>PdbOnly</DebugType>
+    <Optimize>True</Optimize>
+    <DefineConstants>TRACE</DefineConstants>
+    <PlatformTarget>x86</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>Full</DebugType>
+    <Optimize>False</Optimize>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <PlatformTarget>x64</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x64' ">
+    <DebugType>PdbOnly</DebugType>
+    <Optimize>True</Optimize>
+    <DefineConstants>TRACE</DefineConstants>
+    <PlatformTarget>x64</PlatformTarget>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Xaml" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="WindowsBase" />
+    <Reference Include="YamlDotNet, Version=4.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\YamlDotNet.4.1.0\lib\net35\YamlDotNet.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <ApplicationDefinition Include="App.xaml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="App.xaml.cs">
+      <SubType>Code</SubType>
+      <DependentUpon>App.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Core\Containers\IShapesContainer.cs" />
+    <Compile Include="Core\Containers\ShapesContainer.cs" />
+    <Compile Include="Core\Editor\Bounds\HitTest.cs" />
+    <Compile Include="Core\Editor\Bounds\HitTestBase.cs" />
+    <Compile Include="Core\Editor\Bounds\HitTestHelper.cs" />
+    <Compile Include="Core\Editor\Bounds\Shapes\EllipseHitTest.cs" />
+    <Compile Include="Core\Editor\Bounds\Shapes\GroupHitTest.cs" />
+    <Compile Include="Core\Editor\Bounds\Shapes\LineHitTest.cs" />
+    <Compile Include="Core\Editor\Bounds\Shapes\PathHitTest.cs" />
+    <Compile Include="Core\Editor\Bounds\Shapes\PointHitTest.cs" />
+    <Compile Include="Core\Editor\Bounds\Shapes\RectangleHitTest.cs" />
+    <Compile Include="Core\Editor\Bounds\Shapes\ScribbleHitTest.cs" />
+    <Compile Include="Core\Editor\Filters\GridSnapMode.cs" />
+    <Compile Include="Core\Editor\Filters\GridSnapPointFilter.cs" />
+    <Compile Include="Core\Editor\Filters\LineSnapMode.cs" />
+    <Compile Include="Core\Editor\Filters\LineSnapPointFilter.cs" />
+    <Compile Include="Core\Editor\Filters\LineSnapTarget.cs" />
+    <Compile Include="Core\Editor\Filters\Settings\GridSnapSettings.cs" />
+    <Compile Include="Core\Editor\Filters\Settings\LineSnapSettings.cs" />
+    <Compile Include="Core\Editor\Intersections\LineHelper.cs" />
+    <Compile Include="Core\Editor\Intersections\Line\EllipseLineIntersection.cs" />
+    <Compile Include="Core\Editor\Intersections\Line\LineLineIntersection.cs" />
+    <Compile Include="Core\Editor\Intersections\Line\RectangleLineIntersection.cs" />
+    <Compile Include="Core\Editor\Intersections\Line\Settings\EllipseLineSettings.cs" />
+    <Compile Include="Core\Editor\Intersections\Line\Settings\LineLineSettings.cs" />
+    <Compile Include="Core\Editor\Intersections\Line\Settings\RectangleLineSettings.cs" />
+    <Compile Include="Core\Editor\IToolContext.cs" />
+    <Compile Include="Core\Editor\Modifier.cs" />
+    <Compile Include="Core\Editor\PointFilter.cs" />
+    <Compile Include="Core\Editor\PointIntersection.cs" />
+    <Compile Include="Core\Editor\Selection\SelectionHelper.cs" />
+    <Compile Include="Core\Editor\Selection\SelectionMode.cs" />
+    <Compile Include="Core\Editor\Selection\SelectionTargets.cs" />
+    <Compile Include="Core\Editor\SettingsBase.cs" />
+    <Compile Include="Core\Editor\Spatial\Extensions\EllipseShapeExtensions.cs" />
+    <Compile Include="Core\Editor\Spatial\Extensions\LineShapeExtensions.cs" />
+    <Compile Include="Core\Editor\Spatial\Extensions\MatrixObjectExtensions.cs" />
+    <Compile Include="Core\Editor\Spatial\Extensions\PointShapeExtensions.cs" />
+    <Compile Include="Core\Editor\Spatial\Extensions\RectangleShapeExtensions.cs" />
+    <Compile Include="Core\Editor\ToolBase.cs" />
+    <Compile Include="Core\Editor\Tools\CubicBezierTool.cs" />
+    <Compile Include="Core\Editor\Tools\EllipseTool.cs" />
+    <Compile Include="Core\Editor\Tools\GuideTool.cs" />
+    <Compile Include="Core\Editor\Tools\LineTool.cs" />
+    <Compile Include="Core\Editor\Tools\MoveTool.cs" />
+    <Compile Include="Core\Editor\Tools\NoneTool.cs" />
+    <Compile Include="Core\Editor\Tools\PathTool.cs" />
+    <Compile Include="Core\Editor\Tools\PointTool.cs" />
+    <Compile Include="Core\Editor\Tools\PolyLineTool.cs" />
+    <Compile Include="Core\Editor\Tools\QuadraticBezierTool.cs" />
+    <Compile Include="Core\Editor\Tools\RectangleTool.cs" />
+    <Compile Include="Core\Editor\Tools\ScribbleTool.cs" />
+    <Compile Include="Core\Editor\Tools\SelectionTool.cs" />
+    <Compile Include="Core\Editor\Tools\Settings\CubicBezierToolSettings.cs" />
+    <Compile Include="Core\Editor\Tools\Settings\EllipseToolSettings.cs" />
+    <Compile Include="Core\Editor\Tools\Settings\GuideToolSettings.cs" />
+    <Compile Include="Core\Editor\Tools\Settings\LineToolSettings.cs" />
+    <Compile Include="Core\Editor\Tools\Settings\MoveToolSettings.cs" />
+    <Compile Include="Core\Editor\Tools\Settings\NoneToolSettings.cs" />
+    <Compile Include="Core\Editor\Tools\Settings\PathToolSettings.cs" />
+    <Compile Include="Core\Editor\Tools\Settings\PointToolSettings.cs" />
+    <Compile Include="Core\Editor\Tools\Settings\PolyLineToolSettings.cs" />
+    <Compile Include="Core\Editor\Tools\Settings\QuadraticBezierToolSettings.cs" />
+    <Compile Include="Core\Editor\Tools\Settings\RectangleToolSettings.cs" />
+    <Compile Include="Core\Editor\Tools\Settings\ScribbleToolSettings.cs" />
+    <Compile Include="Core\Editor\Tools\Settings\SelectionToolSettings.cs" />
+    <Compile Include="Core\ForEachExtension.cs" />
+    <Compile Include="Core\IdObject.cs" />
+    <Compile Include="Core\MatrixObject.cs" />
+    <Compile Include="Core\ObservableObject.cs" />
+    <Compile Include="Core\Presenters\DefaultShapePresenter.cs" />
+    <Compile Include="Core\Presenters\ShapePresenter.cs" />
+    <Compile Include="Core\Renderers\Helpers\CommonHelper.cs" />
+    <Compile Include="Core\Renderers\Helpers\CubicBezierHelper.cs" />
+    <Compile Include="Core\Renderers\Helpers\EllipseHelper.cs" />
+    <Compile Include="Core\Renderers\Helpers\LineHelper.cs" />
+    <Compile Include="Core\Renderers\Helpers\PathHelper.cs" />
+    <Compile Include="Core\Renderers\Helpers\QuadraticBezierHelper.cs" />
+    <Compile Include="Core\Renderers\Helpers\RectangleHelper.cs" />
+    <Compile Include="Core\Renderers\ShapeHelper.cs" />
+    <Compile Include="Core\Renderers\ShapeRenderer.cs" />
+    <Compile Include="Core\ShapeObject.cs" />
+    <Compile Include="Core\Shapes\ConnectableShape.cs" />
+    <Compile Include="Core\Shapes\CubicBezierShape.cs" />
+    <Compile Include="Core\Shapes\EllipseShape.cs" />
+    <Compile Include="Core\Shapes\FigureShape.cs" />
+    <Compile Include="Core\Shapes\GroupShape.cs" />
+    <Compile Include="Core\Shapes\LineShape.cs" />
+    <Compile Include="Core\Shapes\PathFillRule.cs" />
+    <Compile Include="Core\Shapes\PathShape.cs" />
+    <Compile Include="Core\Shapes\PointShape.cs" />
+    <Compile Include="Core\Shapes\QuadraticBezierShape.cs" />
+    <Compile Include="Core\Shapes\RectangleShape.cs" />
+    <Compile Include="Core\Shapes\ScribbleShape.cs" />
+    <Compile Include="Core\Spatial\Arc\GdiArc.cs" />
+    <Compile Include="Core\Spatial\Arc\WpfArc.cs" />
+    <Compile Include="Core\Spatial\ConvexHull\MonotoneChain.cs" />
+    <Compile Include="Core\Spatial\DouglasPeucker\RDP.cs" />
+    <Compile Include="Core\Spatial\Line2.cs" />
+    <Compile Include="Core\Spatial\Matrix2.cs" />
+    <Compile Include="Core\Spatial\Point2.cs" />
+    <Compile Include="Core\Spatial\Polygon2.cs" />
+    <Compile Include="Core\Spatial\Rect2.cs" />
+    <Compile Include="Core\Spatial\Sat\MinimumTranslationVector.cs" />
+    <Compile Include="Core\Spatial\Sat\Projection.cs" />
+    <Compile Include="Core\Spatial\Sat\SeparatingAxisTheorem.cs" />
+    <Compile Include="Core\Spatial\Size2.cs" />
+    <Compile Include="Core\Spatial\Vector2.cs" />
+    <Compile Include="Core\Style\DrawColor.cs" />
+    <Compile Include="Core\Style\DrawStyle.cs" />
+    <Compile Include="Core\ViewModels\Containers\ShapesContainerViewModel.cs" />
+    <Compile Include="Core\ViewModels\ViewModelBase.cs" />
+    <Compile Include="Demos\ArcDemo\Arc.cs" />
+    <Compile Include="Demos\ArcDemo\ArcCanvas.cs" />
+    <Compile Include="Demos\GuideDemo\GuideCanvas.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Renderers\WpfBrushCache.cs" />
+    <Compile Include="Utilities\YamlDotNetSerializeBuilderExtensions.cs" />
+    <Compile Include="Utilities\YamlDotNetSerializer.cs" />
+    <Compile Include="Utilities\YamlDraw2DTagMappings.cs" />
+    <Compile Include="Views\Filters\GridSnapSettingsView.xaml.cs">
+      <DependentUpon>GridSnapSettingsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Filters\LineSnapSettingsView.xaml.cs">
+      <DependentUpon>LineSnapSettingsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Intersections\EllipseLineSettingsView.xaml.cs">
+      <DependentUpon>EllipseLineSettingsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Intersections\LineLineSettingsView.xaml.cs">
+      <DependentUpon>LineLineSettingsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Intersections\RectangleLineSettingsView.xaml.cs">
+      <DependentUpon>RectangleLineSettingsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MainView.xaml.cs">
+      <SubType>Code</SubType>
+      <DependentUpon>MainView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Renderers\WpfShapeRenderer.cs" />
+    <Compile Include="Controls\ShapesContainerInputView.cs" />
+    <Compile Include="Controls\ShapesContainerRenderView.cs" />
+    <Compile Include="Views\Style\DrawColorView.xaml.cs">
+      <DependentUpon>DrawColorView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Style\DrawStyleView.xaml.cs">
+      <DependentUpon>DrawStyleView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Tools\CubicBezierToolSettingsView.xaml.cs">
+      <DependentUpon>CubicBezierToolSettingsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Tools\EllipseToolSettingsView.xaml.cs">
+      <DependentUpon>EllipseToolSettingsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Tools\GuideToolSettingsView.xaml.cs">
+      <DependentUpon>GuideToolSettingsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Tools\LineToolSettingsView.xaml.cs">
+      <DependentUpon>LineToolSettingsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Tools\MoveToolSettingsView.xaml.cs">
+      <DependentUpon>MoveToolSettingsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Tools\NoneToolSettingsView.xaml.cs">
+      <DependentUpon>NoneToolSettingsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Tools\PathToolSettingsView.xaml.cs">
+      <DependentUpon>PathToolSettingsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Tools\PointToolSettingsView.xaml.cs">
+      <DependentUpon>PointToolSettingsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Tools\PolyLineToolSettingsView.xaml.cs">
+      <DependentUpon>PolyLineToolSettingsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Tools\QuadraticBezierToolSettingsView.xaml.cs">
+      <DependentUpon>QuadraticBezierToolSettingsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Tools\RectangleToolSettingsView.xaml.cs">
+      <DependentUpon>RectangleToolSettingsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Tools\ScribbleToolSettingsView.xaml.cs">
+      <DependentUpon>ScribbleToolSettingsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Tools\SelectionToolSettingsView.xaml.cs">
+      <DependentUpon>SelectionToolSettingsView.xaml</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="Views\Filters\GridSnapSettingsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Filters\LineSnapSettingsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Intersections\EllipseLineSettingsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Intersections\LineLineSettingsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Intersections\RectangleLineSettingsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\MainView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Style\DrawColorView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Style\DrawStyleView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Tools\CubicBezierToolSettingsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Tools\EllipseToolSettingsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Tools\GuideToolSettingsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Tools\LineToolSettingsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Tools\MoveToolSettingsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Tools\NoneToolSettingsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Tools\PathToolSettingsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Tools\PointToolSettingsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Tools\PolyLineToolSettingsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Tools\QuadraticBezierToolSettingsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Tools\RectangleToolSettingsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Tools\ScribbleToolSettingsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Tools\SelectionToolSettingsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
