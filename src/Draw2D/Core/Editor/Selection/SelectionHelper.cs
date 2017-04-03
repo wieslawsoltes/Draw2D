@@ -3,7 +3,7 @@
 using System.Diagnostics;
 using Draw2D.Spatial;
 
-namespace Draw2D.Editor.Selection
+namespace Draw2D.Core.Editor.Selection
 {
     public static class SelectionHelper
     {

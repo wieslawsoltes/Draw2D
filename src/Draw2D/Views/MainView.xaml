@@ -1,16 +1,16 @@
 ﻿<!-- Copyright (c) Wiesław Šoltés. All rights reserved. -->
 <!-- Licensed under the MIT license. See LICENSE file in the project root for full license information. -->
-<Window x:Class="Draw2D.Wpf.Views.MainView"
+<Window x:Class="Draw2D.Views.MainView"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:Controls="clr-namespace:Draw2D.Wpf.Controls"
-        xmlns:ViewsStyle="clr-namespace:Draw2D.Wpf.Views.Style"
-        xmlns:ViewsToolsSettings="clr-namespace:Draw2D.Wpf.Views.Tools.Settings"
-        xmlns:ViewsIntersectionsLineSettings="clr-namespace:Draw2D.Wpf.Views.Intersections.Line.Settings"
-        xmlns:ViewsFiltersSettings="clr-namespace:Draw2D.Wpf.Views.Filters.Settings"
-        xmlns:EditorTools="clr-namespace:Draw2D.Editor.Tools"
-        xmlns:EditorIntersectionsLine="clr-namespace:Draw2D.Editor.Intersections.Line"
-        xmlns:EditorFilters="clr-namespace:Draw2D.Editor.Filters"
+        xmlns:Controls="clr-namespace:Draw2D.Controls"
+        xmlns:ViewsStyle="clr-namespace:Draw2D.Views.Style"
+        xmlns:ViewsToolsSettings="clr-namespace:Draw2D.Views.Tools.Settings"
+        xmlns:ViewsIntersectionsLineSettings="clr-namespace:Draw2D.Views.Intersections.Line.Settings"
+        xmlns:ViewsFiltersSettings="clr-namespace:Draw2D.Views.Filters.Settings"
+        xmlns:EditorTools="clr-namespace:Draw2D.Core.Editor.Tools"
+        xmlns:EditorIntersectionsLine="clr-namespace:Draw2D.Core.Editor.Intersections.Line"
+        xmlns:EditorFilters="clr-namespace:Draw2D.Core.Editor.Filters"
         Title="Draw2D" Height="700" Width="1300"
         WindowStartupLocation="CenterScreen"
         UseLayoutRounding="True" SnapsToDevicePixels="True" TextOptions.TextFormattingMode="Display">
@@ -41,15 +41,6 @@
                 <MenuItem Header="Paste" x:Name="EditPaste" Click="EditPaste_Click"/>
                 <MenuItem Header="Delete" x:Name="EditDelete" Click="EditDelete_Click"/>
             </MenuItem>
-            <!--
-            <MenuItem Header="_Tool" ItemsSource="{Binding Tools}">
-                <MenuItem.ItemTemplate>
-                    <DataTemplate>
-                        <TextBlock Text="{Binding Name}"/>
-                    </DataTemplate>
-                </MenuItem.ItemTemplate>
-            </MenuItem>
-            -->
         </Menu>
         <Grid Grid.Row="2" Grid.Column="0">
             <Grid.RowDefinitions>

@@ -1,7 +1,7 @@
 ﻿// Copyright (c) Wiesław Šoltés. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-namespace Draw2D.Editor.Tools
+namespace Draw2D.Core.Editor.Tools
 {
     public class NoneTool : ToolBase
     {

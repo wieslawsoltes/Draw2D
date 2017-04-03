@@ -2,10 +2,10 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using System.Windows.Controls;
 using System.Windows.Input;
-using Draw2D.Editor;
+using Draw2D.Core.Editor;
 using Draw2D.ViewModels.Containers;
 
-namespace Draw2D.Wpf.Controls
+namespace Draw2D.Controls
 {
     public class ShapesContainerInputView : Border
     {

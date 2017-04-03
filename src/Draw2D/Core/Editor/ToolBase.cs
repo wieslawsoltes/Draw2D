@@ -2,9 +2,8 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using System.Collections.Generic;
 using System.Diagnostics;
-using Draw2D.Core;
 
-namespace Draw2D.Editor
+namespace Draw2D.Core.Editor
 {
     public abstract class ToolBase : ObservableObject
     {

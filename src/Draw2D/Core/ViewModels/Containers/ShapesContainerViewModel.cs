@@ -3,8 +3,8 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using Draw2D.Editor;
-using Draw2D.Editor.Bounds;
+using Draw2D.Core.Editor;
+using Draw2D.Core.Editor.Bounds;
 using Draw2D.Core;
 using Draw2D.Core.Containers;
 using Draw2D.Core.Presenters;

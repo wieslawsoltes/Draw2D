@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Draw2D.Core.Shapes;
 
-namespace Draw2D.Editor.Tools
+namespace Draw2D.Core.Editor.Tools
 {
     public class PolyLineTool : ToolBase
     {

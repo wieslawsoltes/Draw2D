@@ -9,7 +9,7 @@ using Draw2D.Core.Renderers;
 using Draw2D.Core.Shapes;
 using Draw2D.Core.Style;
 
-namespace Draw2D.Wpf.Renderers
+namespace Draw2D.Renderers
 {
     public class WpfShapeRenderer : ShapeRenderer
     {

@@ -7,7 +7,7 @@ using Draw2D.Spatial;
 using Draw2D.Spatial.ConvexHull;
 using Draw2D.Spatial.Sat;
 
-namespace Draw2D.Editor.Bounds
+namespace Draw2D.Core.Editor.Bounds
 {
     public static class HitTestHelper
     {

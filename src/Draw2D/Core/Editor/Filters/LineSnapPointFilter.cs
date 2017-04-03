@@ -6,7 +6,7 @@ using System.Linq;
 using Draw2D.Core.Shapes;
 using Draw2D.Spatial;
 
-namespace Draw2D.Editor.Filters
+namespace Draw2D.Core.Editor.Filters
 {
     public class LineSnapPointFilter : PointFilter
     {

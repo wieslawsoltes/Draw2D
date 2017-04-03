@@ -7,7 +7,7 @@ using Draw2D.Core.Containers;
 using Draw2D.Core.Shapes;
 using Draw2D.Core.Style;
 
-namespace Draw2D.Wpf.Utilities
+namespace Draw2D.Utilities
 {
     public class YamlDraw2DTagMappings
     {

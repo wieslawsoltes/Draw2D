@@ -4,7 +4,7 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using Draw2D.ViewModels.Containers;
 
-namespace Draw2D.Wpf.Controls
+namespace Draw2D.Controls
 {
     public class ShapesContainerRenderView : Canvas
     {

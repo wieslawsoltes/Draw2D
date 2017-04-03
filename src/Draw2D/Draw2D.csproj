@@ -76,6 +76,7 @@
       <SubType>Code</SubType>
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Bootstrapper.cs" />
     <Compile Include="Core\Containers\IShapesContainer.cs" />
     <Compile Include="Core\Containers\ShapesContainer.cs" />
     <Compile Include="Core\Editor\Bounds\HitTest.cs" />

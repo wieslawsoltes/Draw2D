@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using YamlDotNet.Serialization;
 
-namespace Draw2D.Wpf.Utilities
+namespace Draw2D.Utilities
 {
     public static class YamlDotNetSerializeBuilderExtensions
     {

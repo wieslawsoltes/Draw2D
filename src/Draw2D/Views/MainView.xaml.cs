@@ -7,12 +7,12 @@ using System.Windows;
 using System.Windows.Input;
 using Draw2D.Core;
 using Draw2D.Core.Containers;
-using Draw2D.Editor.Tools;
+using Draw2D.Core.Editor.Tools;
 using Draw2D.ViewModels.Containers;
-using Draw2D.Wpf.Utilities;
+using Draw2D.Utilities;
 using Microsoft.Win32;
 
-namespace Draw2D.Wpf.Views
+namespace Draw2D.Views
 {
     public partial class MainView : Window
     {

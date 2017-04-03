@@ -6,7 +6,7 @@ using System.IO;
 using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.NamingConventions;
 
-namespace Draw2D.Wpf.Utilities
+namespace Draw2D.Utilities
 {
     public class YamlDotNetSerializer
     {
