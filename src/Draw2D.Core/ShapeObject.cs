@@ -55,7 +55,7 @@ namespace Draw2D.Core
         {
             if (Transform != null)
             {
-                r.PopMatrix(dc);
+                r.PopMatrix(dc, null);
             }
         }
     }
