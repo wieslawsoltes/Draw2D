@@ -14,9 +14,11 @@ namespace Draw2D.NetCore
         {
             InitializeLogging();
 
-            AppBuilder.Configure<App>()
+            var app = new App();
+            AppBuilder.Configure(app)
                 .UsePlatformDetect()
-                .Start<MainWindow>();
+                .SetupWithoutStarting();
+            app.Start();
         }
 
         static void InitializeLogging()
