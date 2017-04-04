@@ -3,7 +3,6 @@
 using System.Windows;
 using Draw2D.Core;
 using Draw2D.Wpf.Renderers;
-using Draw2D.Wpf.Views;
 
 namespace Draw2D.Wpf
 {
@@ -13,8 +12,9 @@ namespace Draw2D.Wpf
         {
             base.OnStartup(e);
 
-            var mainView = new MainView();
-            var rendererView = mainView.RendererView;
+            var window = new MainWindow();
+            var mainView = window.mainView;
+            var rendererView = mainView.rendererView;
 
             var vm = new Bootstrapper().CreateViewModel();
 
@@ -24,8 +24,9 @@ namespace Draw2D.Wpf
             vm.Release = () => rendererView.ReleaseMouseCapture();
             vm.Invalidate = () => rendererView.InvalidateVisual();
 
-            mainView.DataContext = vm;
-            mainView.ShowDialog();
+            window.DataContext = vm;
+            window.Loaded += (sender, args) => mainView.Focus();
+            window.ShowDialog();
         }
     }
 }

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using Draw2D.Core;
 using Draw2D.Core.Containers;
@@ -14,7 +15,7 @@ using Microsoft.Win32;
 
 namespace Draw2D.Wpf.Views
 {
-    public partial class MainView : Window
+    public partial class MainView : UserControl
     {
         public MainView()
         {
@@ -198,7 +199,7 @@ namespace Draw2D.Wpf.Views
             if (this.DataContext is ShapesContainerViewModel vm)
             {
                 New(vm);
-                RendererView.InvalidateVisual();
+                rendererView.InvalidateVisual();
             }
         }
 
@@ -217,7 +218,7 @@ namespace Draw2D.Wpf.Views
                 if (this.DataContext is ShapesContainerViewModel vm)
                 {
                     Open(path, vm);
-                    RendererView.InvalidateVisual();
+                    rendererView.InvalidateVisual();
                 }
             }
         }
@@ -247,7 +248,7 @@ namespace Draw2D.Wpf.Views
             if (this.DataContext is ShapesContainerViewModel vm)
             {
                 Cut(vm);
-                RendererView.InvalidateVisual();
+                rendererView.InvalidateVisual();
             }
         }
 
@@ -264,7 +265,7 @@ namespace Draw2D.Wpf.Views
             if (this.DataContext is ShapesContainerViewModel vm)
             {
                 Paste(vm);
-                RendererView.InvalidateVisual();
+                rendererView.InvalidateVisual();
             }
         }
 
@@ -273,7 +274,7 @@ namespace Draw2D.Wpf.Views
             if (this.DataContext is ShapesContainerViewModel vm)
             {
                 Delete(vm);
-                RendererView.InvalidateVisual();
+                rendererView.InvalidateVisual();
             }
         }
 
