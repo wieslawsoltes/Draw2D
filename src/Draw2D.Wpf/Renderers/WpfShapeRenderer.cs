@@ -151,13 +151,14 @@ namespace Draw2D.Wpf.Renderers
                 matrix.OffsetX, matrix.OffsetY);
         }
 
-        public override void PushMatrix(object dc, MatrixObject matrix)
+        public override object PushMatrix(object dc, MatrixObject matrix)
         {
             var _dc = dc as DrawingContext;
             _dc.PushTransform(ToMatrixTransform(matrix));
+            return null;
         }
 
-        public override void PopMatrix(object dc)
+        public override void PopMatrix(object dc, object state)
         {
             var _dc = dc as DrawingContext;
             _dc.Pop();
@@ -177,8 +178,8 @@ namespace Draw2D.Wpf.Renderers
             var geometry = new StreamGeometry();
             using (var context = geometry.Open())
             {
-                context.BeginFigure(FromPoint(start, dx, dy), false, false);
-                context.PolyLineTo(FromPoints(points, dx, dy), true, false);
+                context.BeginFigure(FromPoint(start, dx, dy), style.IsFilled, false);
+                context.PolyLineTo(FromPoints(points, dx, dy), style.IsStroked, false);
             }
             _dc.DrawGeometry(style.IsFilled ? cache?.Fill : null, style.IsStroked ? cache?.StrokePen : null, geometry);
         }
@@ -190,12 +191,12 @@ namespace Draw2D.Wpf.Renderers
             var geometry = new StreamGeometry();
             using (var context = geometry.Open())
             {
-                context.BeginFigure(FromPoint(cubicBezier.StartPoint, dx, dy), false, false);
+                context.BeginFigure(FromPoint(cubicBezier.StartPoint, dx, dy), style.IsFilled, false);
                 context.BezierTo(
                     FromPoint(cubicBezier.Point1, dx, dy),
                     FromPoint(cubicBezier.Point2, dx, dy),
                     FromPoint(cubicBezier.Point3, dx, dy),
-                    true, false);
+                    style.IsStroked, false);
             }
             _dc.DrawGeometry(style.IsFilled ? cache?.Fill : null, style.IsStroked ? cache?.StrokePen : null, geometry);
         }
@@ -207,11 +208,11 @@ namespace Draw2D.Wpf.Renderers
             var geometry = new StreamGeometry();
             using (var context = geometry.Open())
             {
-                context.BeginFigure(FromPoint(quadraticBezier.StartPoint, dx, dy), false, false);
+                context.BeginFigure(FromPoint(quadraticBezier.StartPoint, dx, dy), style.IsFilled, false);
                 context.QuadraticBezierTo(
                     FromPoint(quadraticBezier.Point1, dx, dy),
                     FromPoint(quadraticBezier.Point2, dx, dy),
-                    true, false);
+                    style.IsStroked, false);
             }
             _dc.DrawGeometry(style.IsFilled ? cache?.Fill : null, style.IsStroked ? cache?.StrokePen : null, geometry);
         }
