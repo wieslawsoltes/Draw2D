@@ -8,6 +8,6 @@ mono:
   - latest
 dotnet: 1.0.1
 script:
-  - cd src/Draw2D/Core
+  - cd src/Draw2D.Core
   - dotnet restore
   - dotnet build
