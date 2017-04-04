@@ -7,6 +7,8 @@ before_build:
 build:
   project: Draw2D.sln
   verbosity: minimal
+after_build:
+- ps: NetCore-Publish.ps1
 test: off
 artifacts:
 - path: src\Draw2D\bin\Release\AnyCPU
