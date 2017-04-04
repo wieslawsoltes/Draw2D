@@ -6,7 +6,7 @@ using Avalonia;
 using Avalonia.Logging.Serilog;
 using Serilog;
 
-namespace Core2D.Avalonia.NetCore
+namespace Draw2D.NetCore
 {
     class Program
     {
