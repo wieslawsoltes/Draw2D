@@ -13,7 +13,20 @@
     <TargetFramework>netcoreapp1.1</TargetFramework>
     <RuntimeIdentifiers>win7-x64;win7-x86;ubuntu.14.04-x64;ubuntu.16.10-x64;osx.10.12-x64</RuntimeIdentifiers>
     <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
+    <EnableDefaultCompileItems>False</EnableDefaultCompileItems>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="**\*.cs" Exclude="obj\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="**\*.xaml.cs">
+      <DependentUpon>%(Filename)</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <EmbeddedResource Include="**\*.xaml" />
+  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Draw2D\Core\Draw2D.Core.csproj" />
