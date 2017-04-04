@@ -2,15 +2,18 @@ version: '{build}'
 image: Visual Studio 2017
 configuration: Release
 platform: Any CPU
-before_build:
-- cmd: nuget restore
-build:
-  project: Draw2D.sln
-  verbosity: minimal
-after_build:
+build_script:
 - ps: .\NetCore-Publish.ps1
 test: off
 artifacts:
-- path: src\Draw2D\bin\Release\AnyCPU
-  name: Draw2D-build$(appveyor_build_version)
+- path: src\Draw2D.NetCore\bin\Any CPU\Release\netcoreapp1.1\win7-x64\
+  name: Draw2D.NetCore-win7-x64-build$(appveyor_build_version)
+- path: src\Draw2D.NetCore\bin\Any CPU\Release\netcoreapp1.1\win7-x86
+  name: Draw2D.NetCore-win7-x86-build$(appveyor_build_version)
+- path: src\Draw2D.NetCore\bin\Any CPU\Release\netcoreapp1.1\ubuntu.14.04-x64
+  name: Draw2D.NetCore-ubuntu.14.04-x64-build$(appveyor_build_version)
+- path: src\Draw2D.NetCore\bin\Any CPU\Release\netcoreapp1.1\ubuntu.16.10-x64
+  name: Draw2D.NetCore-ubuntu.16.10-x64-build$(appveyor_build_version)
+- path: src\Draw2D.NetCore\bin\Any CPU\Release\netcoreapp1.1\osx.10.12-x64
+  name: Draw2D.NetCore-osx.10.12-x64-build$(appveyor_build_version)
 deploy: off
