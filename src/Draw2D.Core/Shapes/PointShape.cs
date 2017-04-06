@@ -63,7 +63,7 @@ namespace Draw2D.Core.Shapes
             Y += dy;
         }
 
-        public PointShape Clone()
+        public PointShape Copy()
         {
             return new PointShape()
             {
