@@ -27,8 +27,8 @@ namespace Draw2D.Core.Editor.Tools
                         _quadraticBezier = new QuadraticBezierShape()
                         {
                             StartPoint = next,
-                            Point1 = next.Clone(),
-                            Point2 = next.Clone(),
+                            Point1 = next.Copy(),
+                            Point2 = next.Copy(),
                             Style = context.CurrentStyle
                         };
                         context.WorkingContainer.Shapes.Add(_quadraticBezier);
