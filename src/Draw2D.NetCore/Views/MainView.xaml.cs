@@ -130,6 +130,9 @@ namespace Draw2D.NetCore.Views
                     case Key.V:
                         Paste();
                         break;
+                    case Key.G:
+                        Group();
+                        break;
                 }
             }
             else if (e.Modifiers == InputModifiers.None)
@@ -184,8 +187,10 @@ namespace Draw2D.NetCore.Views
         {
             if (this.DataContext is ShapesContainerViewModel vm)
             {
-                Cut(vm);
-                rendererView.InvalidateVisual();
+                if (vm.CurrentTool is SelectionTool selectionTool)
+                {
+                    selectionTool.Cut(vm);
+                }
             }
         }
 
@@ -193,7 +198,10 @@ namespace Draw2D.NetCore.Views
         {
             if (this.DataContext is ShapesContainerViewModel vm)
             {
-                Copy(vm);
+                if (vm.CurrentTool is SelectionTool selectionTool)
+                {
+                    selectionTool.Copy(vm);
+                }
             }
         }
 
@@ -201,8 +209,10 @@ namespace Draw2D.NetCore.Views
         {
             if (this.DataContext is ShapesContainerViewModel vm)
             {
-                Paste(vm);
-                rendererView.InvalidateVisual();
+                if (vm.CurrentTool is SelectionTool selectionTool)
+                {
+                    selectionTool.Paste(vm);
+                }
             }
         }
 
@@ -210,8 +220,21 @@ namespace Draw2D.NetCore.Views
         {
             if (this.DataContext is ShapesContainerViewModel vm)
             {
-                Delete(vm);
-                rendererView.InvalidateVisual();
+                if (vm.CurrentTool is SelectionTool selectionTool)
+                {
+                    selectionTool.Delete(vm);
+                }
+            }
+        }
+
+        private void Group()
+        {
+            if (this.DataContext is ShapesContainerViewModel vm)
+            {
+                if (vm.CurrentTool is SelectionTool selectionTool)
+                {
+                    selectionTool.Group(vm);
+                }
             }
         }
 
@@ -237,33 +260,6 @@ namespace Draw2D.NetCore.Views
         private void Save(string path, ShapesContainerViewModel vm)
         {
             // TODO:
-        }
-
-        private void Cut(ShapesContainerViewModel vm)
-        {
-            // TODO:
-        }
-
-        private void Copy(ShapesContainerViewModel vm)
-        {
-            // TODO:
-        }
-
-        private void Paste(ShapesContainerViewModel vm)
-        {
-            // TODO:
-        }
-
-        private void Delete(ShapesContainerViewModel vm)
-        {
-            foreach (var shape in vm.Renderer.Selected)
-            {
-                if (vm.CurrentContainer.Shapes.Contains(shape))
-                {
-                    vm.CurrentContainer.Shapes.Remove(shape);
-                }
-            }
-            vm.Renderer.Selected.Clear();
         }
     }
 }
