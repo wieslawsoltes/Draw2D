@@ -1,12 +1,10 @@
 ﻿// Copyright (c) Wiesław Šoltés. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using Draw2D.Core;
 using Draw2D.Core.Containers;
 using Draw2D.Core.Editor.Tools;
 using Draw2D.Core.ViewModels.Containers;
@@ -123,6 +121,9 @@ namespace Draw2D.Wpf.Views
                     case Key.V:
                         Paste();
                         break;
+                    case Key.G:
+                        Group();
+                        break;
                 }
             }
             else if (Keyboard.Modifiers == ModifierKeys.None)
@@ -194,6 +195,11 @@ namespace Draw2D.Wpf.Views
             Delete();
         }
 
+        private void EditGroup_Click(object sender, RoutedEventArgs e)
+        {
+            Group();
+        }
+
         private void New()
         {
             if (this.DataContext is ShapesContainerViewModel vm)
@@ -247,8 +253,10 @@ namespace Draw2D.Wpf.Views
         {
             if (this.DataContext is ShapesContainerViewModel vm)
             {
-                Cut(vm);
-                rendererView.InvalidateVisual();
+                if (vm.CurrentTool is SelectionTool selectionTool)
+                {
+                    selectionTool.Cut(vm);
+                }
             }
         }
 
@@ -256,7 +264,10 @@ namespace Draw2D.Wpf.Views
         {
             if (this.DataContext is ShapesContainerViewModel vm)
             {
-                Copy(vm);
+                if (vm.CurrentTool is SelectionTool selectionTool)
+                {
+                    selectionTool.Copy(vm);
+                }
             }
         }
 
@@ -264,8 +275,10 @@ namespace Draw2D.Wpf.Views
         {
             if (this.DataContext is ShapesContainerViewModel vm)
             {
-                Paste(vm);
-                rendererView.InvalidateVisual();
+                if (vm.CurrentTool is SelectionTool selectionTool)
+                {
+                    selectionTool.Paste(vm);
+                }
             }
         }
 
@@ -273,8 +286,21 @@ namespace Draw2D.Wpf.Views
         {
             if (this.DataContext is ShapesContainerViewModel vm)
             {
-                Delete(vm);
-                rendererView.InvalidateVisual();
+                if (vm.CurrentTool is SelectionTool selectionTool)
+                {
+                    selectionTool.Delete(vm);
+                }
+            }
+        }
+
+        private void Group()
+        {
+            if (this.DataContext is ShapesContainerViewModel vm)
+            {
+                if (vm.CurrentTool is SelectionTool selectionTool)
+                {
+                    selectionTool.Group(vm);
+                }
             }
         }
 
@@ -307,55 +333,6 @@ namespace Draw2D.Wpf.Views
         {
             var yaml = YamlDotNetSerializer.ToYaml(vm.CurrentContainer, YamlDraw2DTagMappings.TagMappings);
             File.WriteAllText(path, yaml);
-        }
-
-        private void Cut(ShapesContainerViewModel vm)
-        {
-            Copy(vm);
-            Delete(vm);
-        }
-
-        private void Copy(ShapesContainerViewModel vm)
-        {
-            var selected = vm.Renderer.Selected;
-            var shapes = new List<ShapeObject>();
-            foreach (var shape in selected)
-            {
-                if (vm.CurrentContainer.Shapes.Contains(shape))
-                {
-                    shapes.Add(shape);
-                }
-            }
-            var yaml = YamlDotNetSerializer.ToYaml(shapes, YamlDraw2DTagMappings.TagMappings);
-            Clipboard.SetText(yaml);
-        }
-
-        private void Paste(ShapesContainerViewModel vm)
-        {
-            if (Clipboard.ContainsText())
-            {
-                var yaml = Clipboard.GetText();
-                var shapes = YamlDotNetSerializer.FromYaml<List<ShapeObject>>(yaml, YamlDraw2DTagMappings.TagMappings);
-                // TODO: Update styles and templates using Id.
-                vm.Renderer.Selected.Clear();
-                foreach (var shape in shapes)
-                {
-                    vm.CurrentContainer.Shapes.Add(shape);
-                    shape.Select(vm.Renderer.Selected);
-                }
-            }
-        }
-
-        private void Delete(ShapesContainerViewModel vm)
-        {
-            foreach (var shape in vm.Renderer.Selected)
-            {
-                if (vm.CurrentContainer.Shapes.Contains(shape))
-                {
-                    vm.CurrentContainer.Shapes.Remove(shape);
-                }
-            }
-            vm.Renderer.Selected.Clear();
         }
     }
 }

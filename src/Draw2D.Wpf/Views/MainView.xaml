@@ -39,6 +39,8 @@
                 <MenuItem Header="Copy" x:Name="EditCopy" Click="EditCopy_Click"/>
                 <MenuItem Header="Paste" x:Name="EditPaste" Click="EditPaste_Click"/>
                 <MenuItem Header="Delete" x:Name="EditDelete" Click="EditDelete_Click"/>
+                <Separator/>
+                <MenuItem Header="Group" x:Name="EditGroup" Click="EditGroup_Click"/>
             </MenuItem>
         </Menu>
         <Grid Grid.Row="2" Grid.Column="0">
