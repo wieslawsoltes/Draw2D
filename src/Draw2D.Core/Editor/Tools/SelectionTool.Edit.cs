@@ -150,7 +150,7 @@ namespace Draw2D.Core.Editor.Tools
                     foreach (var shape in _shapesToCopy)
                     {
                         var copy = CopyShape(shape, distinctPointsCopy);
-                        if (!(copy is PointShape))
+                        if (copy != null && !(copy is PointShape))
                         {
                             copy.Select(context.Renderer.Selected);
                             context.CurrentContainer.Shapes.Add(copy);
