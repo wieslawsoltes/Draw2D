@@ -3,43 +3,13 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using Draw2D.Core.Containers;
 using Draw2D.Core.Renderers;
-using Draw2D.Core.Style;
 
 namespace Draw2D.Core.Shapes
 {
-    public class GroupShape : ConnectableShape, IShapesContainer, ICopyable<GroupShape>
+    public class GroupShape : ConnectableShape, ICopyable<GroupShape>
     {
-        private double _width;
-        private double _height;
-        private ObservableCollection<DrawStyle> _styles;
-        private ObservableCollection<LineShape> _guides;
         private ObservableCollection<ShapeObject> _shapes;
-
-        public double Width
-        {
-            get => _width;
-            set => Update(ref _width, value);
-        }
-
-        public double Height
-        {
-            get => _height;
-            set => Update(ref _height, value);
-        }
-
-        public ObservableCollection<DrawStyle> Styles
-        {
-            get => _styles;
-            set => Update(ref _styles, value);
-        }
-
-        public ObservableCollection<LineShape> Guides
-        {
-            get => _guides;
-            set => Update(ref _guides, value);
-        }
 
         public ObservableCollection<ShapeObject> Shapes
         {
