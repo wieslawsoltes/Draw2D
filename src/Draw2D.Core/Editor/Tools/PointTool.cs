@@ -30,6 +30,7 @@ namespace Draw2D.Core.Editor.Tools
                 if (shape is ConnectableShape connectable)
                 {
                     connectable.Points.Add(point);
+                    context.Selected.Add(point);
                 }
             }
             else
