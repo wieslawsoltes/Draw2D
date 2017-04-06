@@ -1,7 +1,6 @@
 ﻿// Copyright (c) Wiesław Šoltés. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using System;
-using System.Collections.Generic;
 using Draw2D.Core.Shapes;
 using Draw2D.Spatial;
 
@@ -11,27 +10,27 @@ namespace Draw2D.Core.Editor.Bounds.Shapes
     {
         public override Type TargetType { get { return typeof(RectangleShape); } }
 
-        public override PointShape TryToGetPoint(ShapeObject shape, Point2 target, double radius, IDictionary<Type, HitTestBase> registered)
+        public override PointShape TryToGetPoint(ShapeObject shape, Point2 target, double radius, IHitTest hitTest)
         {
             var rectangle = shape as RectangleShape;
             if (rectangle == null)
                 throw new ArgumentNullException("shape");
 
-            var pointHitTest = registered[typeof(PointShape)];
+            var pointHitTest = hitTest.Registered[typeof(PointShape)];
 
-            if (pointHitTest.TryToGetPoint(rectangle.TopLeft, target, radius, registered) != null)
+            if (pointHitTest.TryToGetPoint(rectangle.TopLeft, target, radius, hitTest) != null)
             {
                 return rectangle.TopLeft;
             }
 
-            if (pointHitTest.TryToGetPoint(rectangle.BottomRight, target, radius, registered) != null)
+            if (pointHitTest.TryToGetPoint(rectangle.BottomRight, target, radius, hitTest) != null)
             {
                 return rectangle.BottomRight;
             }
 
             foreach (var point in rectangle.Points)
             {
-                if (pointHitTest.TryToGetPoint(point, target, radius, registered) != null)
+                if (pointHitTest.TryToGetPoint(point, target, radius, hitTest) != null)
                 {
                     return point;
                 }
@@ -40,7 +39,7 @@ namespace Draw2D.Core.Editor.Bounds.Shapes
             return null;
         }
 
-        public override bool Contains(ShapeObject shape, Point2 target, double radius, IDictionary<Type, HitTestBase> registered)
+        public override bool Contains(ShapeObject shape, Point2 target, double radius, IHitTest hitTest)
         {
             var rectangle = shape as RectangleShape;
             if (rectangle == null)
@@ -53,7 +52,7 @@ namespace Draw2D.Core.Editor.Bounds.Shapes
                 rectangle.BottomRight.Y).Contains(target);
         }
 
-        public override bool Overlaps(ShapeObject shape, Rect2 target, double radius, IDictionary<Type, HitTestBase> registered)
+        public override bool Overlaps(ShapeObject shape, Rect2 target, double radius, IHitTest hitTest)
         {
             var rectangle = shape as RectangleShape;
             if (rectangle == null)

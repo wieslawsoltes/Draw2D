@@ -18,7 +18,7 @@ namespace Draw2D.Core.Editor
         IShapesContainer WorkingContainer { get; set; }
         DrawStyle CurrentStyle { get; set; }
         ShapeObject PointShape { get; set; }
-        HitTest HitTest { get; set; }
+        IHitTest HitTest { get; set; }
         PointShape GetNextPoint(double x, double y, bool connect, double radius);
         Action Capture { get; set; }
         Action Release { get; set; }

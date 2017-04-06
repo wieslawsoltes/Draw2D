@@ -33,6 +33,7 @@ namespace Draw2D.Core.Editor.Tools
                             Style = context.CurrentStyle
                         };
                         context.WorkingContainer.Shapes.Add(_cubicBezier);
+                        context.Selected.Add(_cubicBezier);
                         context.Selected.Add(_cubicBezier.StartPoint);
                         context.Selected.Add(_cubicBezier.Point1);
                         context.Selected.Add(_cubicBezier.Point2);
@@ -46,6 +47,7 @@ namespace Draw2D.Core.Editor.Tools
                     {
                         CurrentState = State.StartPoint;
 
+                        context.Selected.Remove(_cubicBezier);
                         context.Selected.Remove(_cubicBezier.StartPoint);
                         context.Selected.Remove(_cubicBezier.Point1);
                         context.Selected.Remove(_cubicBezier.Point2);
@@ -149,6 +151,7 @@ namespace Draw2D.Core.Editor.Tools
             if (_cubicBezier != null)
             {
                 context.WorkingContainer.Shapes.Remove(_cubicBezier);
+                context.Selected.Remove(_cubicBezier);
                 context.Selected.Remove(_cubicBezier.StartPoint);
                 context.Selected.Remove(_cubicBezier.Point1);
                 context.Selected.Remove(_cubicBezier.Point2);

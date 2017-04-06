@@ -32,6 +32,7 @@ namespace Draw2D.Core.Editor.Tools
                             Style = context.CurrentStyle
                         };
                         context.WorkingContainer.Shapes.Add(_quadraticBezier);
+                        context.Selected.Add(_quadraticBezier);
                         context.Selected.Add(_quadraticBezier.StartPoint);
                         context.Selected.Add(_quadraticBezier.Point1);
                         context.Selected.Add(_quadraticBezier.Point2);
@@ -44,6 +45,7 @@ namespace Draw2D.Core.Editor.Tools
                     {
                         CurrentState = State.StartPoint;
 
+                        context.Selected.Remove(_quadraticBezier);
                         context.Selected.Remove(_quadraticBezier.StartPoint);
                         context.Selected.Remove(_quadraticBezier.Point1);
                         context.Selected.Remove(_quadraticBezier.Point2);
@@ -123,6 +125,7 @@ namespace Draw2D.Core.Editor.Tools
             if (_quadraticBezier != null)
             {
                 context.WorkingContainer.Shapes.Remove(_quadraticBezier);
+                context.Selected.Remove(_quadraticBezier);
                 context.Selected.Remove(_quadraticBezier.StartPoint);
                 context.Selected.Remove(_quadraticBezier.Point1);
                 context.Selected.Remove(_quadraticBezier.Point2);

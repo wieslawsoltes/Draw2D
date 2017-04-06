@@ -5,7 +5,7 @@ using Draw2D.Core.Renderers;
 
 namespace Draw2D.Core.Editor.Tools.Helpers
 {
-    public class RectangleHelper : CommonHelper
+    public class ScribbleHelper : CommonHelper
     {
         public override void Draw(object dc, ShapeRenderer r, ShapeObject shape, ISet<ShapeObject> selected)
         {

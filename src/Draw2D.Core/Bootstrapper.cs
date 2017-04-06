@@ -29,11 +29,13 @@ namespace Draw2D.Core
 
             hitTest.Register(new PointHitTest());
             hitTest.Register(new LineHitTest());
+            hitTest.Register(new CubicBezierHitTest());
+            hitTest.Register(new QuadraticBezierHitTest());
+            hitTest.Register(new GroupHitTest());
+            hitTest.Register(new PathHitTest());
             hitTest.Register(new ScribbleHitTest());
             hitTest.Register(new RectangleHitTest());
             hitTest.Register(new EllipseHitTest());
-            hitTest.Register(new GroupHitTest());
-            hitTest.Register(new PathHitTest());
 
             var gridSnapPointFilter = new GridSnapPointFilter()
             {
@@ -335,10 +337,12 @@ namespace Draw2D.Core
             {
                 Helpers = new Dictionary<Type, ShapeHelper>
                 {
+                    { typeof(PointShape), new PointHelper() },
                     { typeof(LineShape), new LineHelper() },
                     { typeof(CubicBezierShape), new CubicBezierHelper() },
                     { typeof(QuadraticBezierShape), new QuadraticBezierHelper() },
                     { typeof(PathShape), new PathHelper() },
+                    { typeof(ScribbleShape), new ScribbleHelper() },
                     { typeof(RectangleShape), new RectangleHelper() },
                     { typeof(EllipseShape), new EllipseHelper() }
                 }

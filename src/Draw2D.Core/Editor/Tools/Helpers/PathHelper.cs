@@ -25,21 +25,21 @@ namespace Draw2D.Core.Editor.Tools.Helpers
             {
                 if (selected.Contains(line))
                 {
-                    _lineHelper.Draw(dc, r, line);
+                    _lineHelper.Draw(dc, r, line, selected);
                 }
             }
             else if (shape is CubicBezierShape cubicBezier)
             {
                 if (selected.Contains(cubicBezier))
                 {
-                    _cubiceBezierHelper.Draw(dc, r, cubicBezier);
+                    _cubiceBezierHelper.Draw(dc, r, cubicBezier, selected);
                 }
             }
             else if (shape is QuadraticBezierShape quadraticBezier)
             {
                 if (selected.Contains(quadraticBezier))
                 {
-                    _quadraticBezierHelper.Draw(dc, r, quadraticBezier);
+                    _quadraticBezierHelper.Draw(dc, r, quadraticBezier, selected);
                 }
             }
         }

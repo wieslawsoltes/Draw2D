@@ -53,7 +53,7 @@ namespace Draw2D.Core.Editor.Tools
 
         public ShapeObject PointShape { get; set; }
 
-        public HitTest HitTest { get; set; }
+        public IHitTest HitTest { get; set; }
 
         public PointShape GetNextPoint(double x, double y, bool connect, double radius)
         {

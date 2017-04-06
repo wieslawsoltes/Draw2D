@@ -1,7 +1,6 @@
 ﻿// Copyright (c) Wiesław Šoltés. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using System;
-using System.Collections.Generic;
 using Draw2D.Core.Shapes;
 using Draw2D.Spatial;
 
@@ -11,22 +10,22 @@ namespace Draw2D.Core.Editor.Bounds.Shapes
     {
         public override Type TargetType { get { return typeof(ScribbleShape); } }
 
-        public override PointShape TryToGetPoint(ShapeObject shape, Point2 target, double radius, IDictionary<Type, HitTestBase> registered)
+        public override PointShape TryToGetPoint(ShapeObject shape, Point2 target, double radius, IHitTest hitTest)
         {
             var scribble = shape as ScribbleShape;
             if (scribble == null)
                 throw new ArgumentNullException("shape");
 
-            var pointHitTest = registered[typeof(PointShape)];
+            var pointHitTest = hitTest.Registered[typeof(PointShape)];
 
-            if (pointHitTest.TryToGetPoint(scribble.Start, target, radius, registered) != null)
+            if (pointHitTest.TryToGetPoint(scribble.Start, target, radius, hitTest) != null)
             {
                 return scribble.Start;
             }
 
             foreach (var point in scribble.Points)
             {
-                if (pointHitTest.TryToGetPoint(point, target, radius, registered) != null)
+                if (pointHitTest.TryToGetPoint(point, target, radius, hitTest) != null)
                 {
                     return point;
                 }
@@ -35,22 +34,22 @@ namespace Draw2D.Core.Editor.Bounds.Shapes
             return null;
         }
 
-        public override bool Contains(ShapeObject shape, Point2 target, double radius, IDictionary<Type, HitTestBase> registered)
+        public override bool Contains(ShapeObject shape, Point2 target, double radius, IHitTest hitTest)
         {
             var scribble = shape as ScribbleShape;
             if (scribble == null)
                 throw new ArgumentNullException("shape");
 
-            var pointHitTest = registered[typeof(PointShape)];
+            var pointHitTest = hitTest.Registered[typeof(PointShape)];
 
-            if (pointHitTest.Contains(scribble.Start, target, radius, registered))
+            if (pointHitTest.Contains(scribble.Start, target, radius, hitTest))
             {
                 return true;
             }
 
             foreach (var point in scribble.Points)
             {
-                if (pointHitTest.Contains(point, target, radius, registered))
+                if (pointHitTest.Contains(point, target, radius, hitTest))
                 {
                     return true;
                 }
@@ -59,22 +58,22 @@ namespace Draw2D.Core.Editor.Bounds.Shapes
             return false;
         }
 
-        public override bool Overlaps(ShapeObject shape, Rect2 target, double radius, IDictionary<Type, HitTestBase> registered)
+        public override bool Overlaps(ShapeObject shape, Rect2 target, double radius, IHitTest hitTest)
         {
             var scribble = shape as ScribbleShape;
             if (scribble == null)
                 throw new ArgumentNullException("shape");
 
-            var pointHitTest = registered[typeof(PointShape)];
+            var pointHitTest = hitTest.Registered[typeof(PointShape)];
 
-            if (pointHitTest.Overlaps(scribble.Start, target, radius, registered))
+            if (pointHitTest.Overlaps(scribble.Start, target, radius, hitTest))
             {
                 return true;
             }
 
             foreach (var point in scribble.Points)
             {
-                if (pointHitTest.Overlaps(point, target, radius, registered))
+                if (pointHitTest.Overlaps(point, target, radius, hitTest))
                 {
                     return true;
                 }

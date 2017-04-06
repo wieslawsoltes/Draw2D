@@ -13,10 +13,6 @@ namespace Draw2D.Core.Editor.Tools.Helpers
             DrawLine(dc, r, cubicBezier.StartPoint, cubicBezier.Point1);
             DrawLine(dc, r, cubicBezier.Point3, cubicBezier.Point2);
             DrawLine(dc, r, cubicBezier.Point1, cubicBezier.Point2);
-            DrawEllipse(dc, r, cubicBezier.StartPoint, 4.0);
-            DrawEllipse(dc, r, cubicBezier.Point1, 4.0);
-            DrawEllipse(dc, r, cubicBezier.Point2, 4.0);
-            DrawEllipse(dc, r, cubicBezier.Point3, 4.0);
         }
 
         public override void Draw(object dc, ShapeRenderer r, ShapeObject shape, ISet<ShapeObject> selected)

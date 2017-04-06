@@ -12,9 +12,6 @@ namespace Draw2D.Core.Editor.Tools.Helpers
         {
             DrawLine(dc, r, quadraticBezier.StartPoint, quadraticBezier.Point1);
             DrawLine(dc, r, quadraticBezier.Point1, quadraticBezier.Point2);
-            DrawEllipse(dc, r, quadraticBezier.StartPoint, 4.0);
-            DrawEllipse(dc, r, quadraticBezier.Point1, 4.0);
-            DrawEllipse(dc, r, quadraticBezier.Point2, 4.0);
         }
 
         public override void Draw(object dc, ShapeRenderer r, ShapeObject shape, ISet<ShapeObject> selected)

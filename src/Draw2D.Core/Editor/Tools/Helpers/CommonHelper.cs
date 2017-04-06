@@ -35,9 +35,19 @@ namespace Draw2D.Core.Editor.Tools.Helpers
             _line.Draw(dc, r, 0.0, 0.0);
         }
 
-        public void DrawEllipse(object dc, ShapeRenderer r, PointShape s, double radius)
+        public void FillEllipse(object dc, ShapeRenderer r, PointShape s, double radius)
         {
             _ellipse.Style = _fillStyle;
+            _ellipse.TopLeft.X = s.X - radius;
+            _ellipse.TopLeft.Y = s.Y - radius;
+            _ellipse.BottomRight.X = s.X + radius;
+            _ellipse.BottomRight.Y = s.Y + radius;
+            _ellipse.Draw(dc, r, 0.0, 0.0);
+        }
+
+        public void DrawEllipse(object dc, ShapeRenderer r, PointShape s, double radius)
+        {
+            _ellipse.Style = _strokeStyle;
             _ellipse.TopLeft.X = s.X - radius;
             _ellipse.TopLeft.Y = s.Y - radius;
             _ellipse.BottomRight.X = s.X + radius;

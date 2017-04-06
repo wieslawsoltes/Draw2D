@@ -24,7 +24,7 @@ namespace Draw2D.Core.ViewModels.Containers
         private IShapesContainer _workingContainer;
         private DrawStyle _currentStyle;
         private ShapeObject _pointShape;
-        private HitTest _hitTest;
+        private IHitTest _hitTest;
         private ShapePresenter _presenter;
 
         public ObservableCollection<ToolBase> Tools
@@ -79,7 +79,7 @@ namespace Draw2D.Core.ViewModels.Containers
             set => Update(ref _pointShape, value);
         }
 
-        public HitTest HitTest
+        public IHitTest HitTest
         {
             get => _hitTest;
             set => Update(ref _hitTest, value);
