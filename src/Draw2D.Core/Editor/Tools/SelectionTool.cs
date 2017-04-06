@@ -240,7 +240,7 @@ namespace Draw2D.Core.Editor.Tools
                 _rectangle = null;
             }
 
-            context.Selected.Clear();
+            //context.Selected.Clear();
 
             Filters?.ForEach(f => f.Clear(context));
         }
