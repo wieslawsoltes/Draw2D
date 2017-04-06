@@ -8,7 +8,7 @@ using Draw2D.Spatial;
 
 namespace Draw2D.Core.Editor.Tools
 {
-    public class SelectionTool : ToolBase
+    public partial class SelectionTool : ToolBase
     {
         private RectangleShape _rectangle;
         private double _originX;
