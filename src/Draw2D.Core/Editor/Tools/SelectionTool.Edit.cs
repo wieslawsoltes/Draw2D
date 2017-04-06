@@ -6,7 +6,7 @@ using Draw2D.Core.Shapes;
 
 namespace Draw2D.Core.Editor.Tools
 {
-    public partial class SelectionTool
+    public partial class SelectionTool : IEdit
     {
         private IList<ShapeObject> _shapesToCopy = null;
 
