@@ -56,6 +56,7 @@ namespace Draw2D.Core.Shapes
         public FigureShape()
             : base()
         {
+            _shapes = new ObservableCollection<ShapeObject>();
         }
 
         public FigureShape(ObservableCollection<ShapeObject> shapes)

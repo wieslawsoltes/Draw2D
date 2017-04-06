@@ -34,7 +34,6 @@ namespace Draw2D.Core.Editor.Tools
                         _scribble = new ScribbleShape()
                         {
                             Start = new PointShape(x, y, context.PointShape),
-                            Points = new ObservableCollection<PointShape>(),
                             Style = context.CurrentStyle
                         };
                         context.WorkingContainer.Shapes.Add(_scribble);

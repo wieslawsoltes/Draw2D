@@ -136,7 +136,6 @@ namespace Draw2D.Core.Editor.Tools
         {
             _path = new PathShape()
             {
-                Figures = new ObservableCollection<FigureShape>(),
                 FillRule = PathFillRule.EvenOdd,
                 Style = context.CurrentStyle
             };
@@ -149,7 +148,6 @@ namespace Draw2D.Core.Editor.Tools
         {
             _figure = new FigureShape()
             {
-                Shapes = new ObservableCollection<ShapeObject>(),
                 IsFilled = true,
                 IsClosed = true
             };

@@ -26,6 +26,7 @@ namespace Draw2D.Core.Shapes
         public ScribbleShape()
             : base()
         {
+            _points = new ObservableCollection<PointShape>();
         }
 
         public ScribbleShape(PointShape start, ObservableCollection<PointShape> points)
