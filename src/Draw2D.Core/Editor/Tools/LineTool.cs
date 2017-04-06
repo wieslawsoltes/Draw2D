@@ -35,11 +35,10 @@ namespace Draw2D.Core.Editor.Tools
                             Style = context.CurrentStyle
                         };
                         context.WorkingContainer.Shapes.Add(_line);
-                        context.Selected.Add(_line);
                         context.Capture();
                         context.Invalidate();
-                        //context.Selected.Add(_line.StartPoint);
-                        //context.Selected.Add(_line.Point);
+                        context.Selected.Add(_line.StartPoint);
+                        context.Selected.Add(_line.Point);
                         CurrentState = State.Point;
                     }
                     break;
@@ -47,13 +46,11 @@ namespace Draw2D.Core.Editor.Tools
                     {
                         CurrentState = State.StartPoint;
 
-                        //context.Selected.Remove(_line.Point);
-                        _line.Point = context.GetNextPoint(x, y, Settings?.ConnectPoints ?? false, Settings?.HitTestRadius ?? 0.0);
-
+                        context.Selected.Remove(_line.StartPoint);
+                        context.Selected.Remove(_line.Point);
                         context.WorkingContainer.Shapes.Remove(_line);
-                        context.Selected.Remove(_line);
-                        //context.Selected.Remove(_line.StartPoint);
-                        //context.Selected.Remove(_line.Point);
+
+                        _line.Point = context.GetNextPoint(x, y, Settings?.ConnectPoints ?? false, Settings?.HitTestRadius ?? 0.0);
 
                         Intersections?.ForEach(i => i.Clear(context));
                         Intersections?.ForEach(i => i.Find(context, _line));
@@ -123,9 +120,8 @@ namespace Draw2D.Core.Editor.Tools
             if (_line != null)
             {
                 context.WorkingContainer.Shapes.Remove(_line);
-                context.Selected.Remove(_line);
-                //context.Selected.Remove(_line.StartPoint);
-                //context.Selected.Remove(_line.Point);
+                context.Selected.Remove(_line.StartPoint);
+                context.Selected.Remove(_line.Point);
                 _line = null;
             }
 
