@@ -67,6 +67,8 @@ namespace Draw2D.Core.Shapes
         {
             return new PointShape()
             {
+                Style = this.Style,
+                Transform = this.Transform,
                 X = this.X,
                 Y = this.Y,
                 Template = this.Template
