@@ -33,7 +33,10 @@ namespace Draw2D.Core.Editor.Tools
                             Style = context.CurrentStyle
                         };
                         context.WorkingContainer.Shapes.Add(_cubicBezier);
-                        context.Selected.Add(_cubicBezier);
+                        context.Selected.Add(_cubicBezier.StartPoint);
+                        context.Selected.Add(_cubicBezier.Point1);
+                        context.Selected.Add(_cubicBezier.Point2);
+                        context.Selected.Add(_cubicBezier.Point3);
                         context.Capture();
                         context.Invalidate();
                         CurrentState = State.Point3;
@@ -43,10 +46,13 @@ namespace Draw2D.Core.Editor.Tools
                     {
                         CurrentState = State.StartPoint;
 
-                        _cubicBezier.Point1 = context.GetNextPoint(x, y, false, 0.0);
-
+                        context.Selected.Remove(_cubicBezier.StartPoint);
+                        context.Selected.Remove(_cubicBezier.Point1);
+                        context.Selected.Remove(_cubicBezier.Point2);
+                        context.Selected.Remove(_cubicBezier.Point3);
                         context.WorkingContainer.Shapes.Remove(_cubicBezier);
-                        context.Selected.Remove(_cubicBezier);
+
+                        _cubicBezier.Point1 = context.GetNextPoint(x, y, false, 0.0);
 
                         context.CurrentContainer.Shapes.Add(_cubicBezier);
 
@@ -59,7 +65,11 @@ namespace Draw2D.Core.Editor.Tools
                     {
                         _cubicBezier.Point1.X = x;
                         _cubicBezier.Point1.Y = y;
+
+                        context.Selected.Remove(_cubicBezier.Point2);
                         _cubicBezier.Point2 = context.GetNextPoint(x, y, false, 0.0);
+                        context.Selected.Add(_cubicBezier.Point2);
+
                         CurrentState = State.Point1;
                         context.Invalidate();
                     }
@@ -68,7 +78,11 @@ namespace Draw2D.Core.Editor.Tools
                     {
                         _cubicBezier.Point2.X = x;
                         _cubicBezier.Point2.Y = y;
+
+                        context.Selected.Remove(_cubicBezier.Point3);
                         _cubicBezier.Point3 = context.GetNextPoint(x, y, false, 0.0);
+                        context.Selected.Add(_cubicBezier.Point3);
+
                         CurrentState = State.Point2;
                         context.Invalidate();
                     }
@@ -135,7 +149,10 @@ namespace Draw2D.Core.Editor.Tools
             if (_cubicBezier != null)
             {
                 context.WorkingContainer.Shapes.Remove(_cubicBezier);
-                context.Selected.Remove(_cubicBezier);
+                context.Selected.Remove(_cubicBezier.StartPoint);
+                context.Selected.Remove(_cubicBezier.Point1);
+                context.Selected.Remove(_cubicBezier.Point2);
+                context.Selected.Remove(_cubicBezier.Point3);
                 _cubicBezier = null;
             }
 

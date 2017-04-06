@@ -35,10 +35,10 @@ namespace Draw2D.Core.Editor.Tools
                             Style = context.CurrentStyle
                         };
                         context.WorkingContainer.Shapes.Add(_line);
-                        context.Capture();
-                        context.Invalidate();
                         context.Selected.Add(_line.StartPoint);
                         context.Selected.Add(_line.Point);
+                        context.Capture();
+                        context.Invalidate();
                         CurrentState = State.Point;
                     }
                     break;
