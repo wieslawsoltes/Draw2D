@@ -50,30 +50,22 @@ namespace Draw2D.Core.Editor.Bounds.Shapes
             return null;
         }
 
-        private IEnumerable<PointShape> GetPoints(CubicBezierShape cubicBezier)
-        {
-            yield return cubicBezier.StartPoint;
-            yield return cubicBezier.Point1;
-            yield return cubicBezier.Point2;
-            yield return cubicBezier.Point3;
-        }
-
-        public override bool Contains(ShapeObject shape, Point2 target, double radius, IHitTest hitTest)
+        public override ShapeObject Contains(ShapeObject shape, Point2 target, double radius, IHitTest hitTest)
         {
             var cubicBezier = shape as CubicBezierShape;
             if (cubicBezier == null)
                 throw new ArgumentNullException("shape");
 
-            return HitTestHelper.Contains(GetPoints(cubicBezier), target);
+            return HitTestHelper.Contains(cubicBezier.GetPoints(), target) ? shape : null;
         }
 
-        public override bool Overlaps(ShapeObject shape, Rect2 target, double radius, IHitTest hitTest)
+        public override ShapeObject Overlaps(ShapeObject shape, Rect2 target, double radius, IHitTest hitTest)
         {
             var cubicBezier = shape as CubicBezierShape;
             if (cubicBezier == null)
                 throw new ArgumentNullException("shape");
 
-            return HitTestHelper.Overlap(GetPoints(cubicBezier), target);
+            return HitTestHelper.Overlap(cubicBezier.GetPoints(), target) ? shape : null;
         }
     }
 }

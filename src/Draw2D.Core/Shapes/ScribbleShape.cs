@@ -1,5 +1,6 @@
 ﻿// Copyright (c) Wiesław Šoltés. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Draw2D.Core.Renderers;
@@ -33,6 +34,15 @@ namespace Draw2D.Core.Shapes
         {
             this.Start = start;
             this.Points = points;
+        }
+
+        public override IEnumerable<PointShape> GetPoints()
+        {
+            yield return Start;
+            foreach (var point in Points)
+            {
+                yield return point;
+            }
         }
 
         public override void Draw(object dc, ShapeRenderer r, double dx, double dy)

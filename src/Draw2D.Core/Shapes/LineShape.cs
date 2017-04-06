@@ -34,13 +34,23 @@ namespace Draw2D.Core.Shapes
             this.Point = point;
         }
 
+        public override IEnumerable<PointShape> GetPoints()
+        {
+            yield return StartPoint;
+            yield return Point;
+            foreach (var point in Points)
+            {
+                yield return point;
+            }
+        }
+
         public override void Draw(object dc, ShapeRenderer r, double dx, double dy)
         {
             base.BeginTransform(dc, r);
 
             if (Style != null)
             {
-                r.DrawLine(dc, this, Style, dx, dy); 
+                r.DrawLine(dc, this, Style, dx, dy);
             }
 
             if (r.Selected.Contains(_startPoint))

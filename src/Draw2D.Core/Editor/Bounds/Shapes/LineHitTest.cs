@@ -39,7 +39,7 @@ namespace Draw2D.Core.Editor.Bounds.Shapes
             return null;
         }
 
-        public override bool Contains(ShapeObject shape, Point2 target, double radius, IHitTest hitTest)
+        public override ShapeObject Contains(ShapeObject shape, Point2 target, double radius, IHitTest hitTest)
         {
             var line = shape as LineShape;
             if (line == null)
@@ -49,10 +49,10 @@ namespace Draw2D.Core.Editor.Bounds.Shapes
             var b = new Point2(line.Point.X, line.Point.Y);
             var nearest = target.NearestOnLine(a, b);
             double distance = target.DistanceTo(nearest);
-            return distance < radius;
+            return distance < radius ? shape : null;
         }
 
-        public override bool Overlaps(ShapeObject shape, Rect2 target, double radius, IHitTest hitTest)
+        public override ShapeObject Overlaps(ShapeObject shape, Rect2 target, double radius, IHitTest hitTest)
         {
             var line = shape as LineShape;
             if (line == null)
@@ -60,7 +60,11 @@ namespace Draw2D.Core.Editor.Bounds.Shapes
 
             var a = new Point2(line.StartPoint.X, line.StartPoint.Y);
             var b = new Point2(line.Point.X, line.Point.Y);
-            return Line2.LineIntersectsWithRect(a, b, target, out double x0clip, out double y0clip, out double x1clip, out double y1clip);
+            return Line2.LineIntersectsWithRect(
+                a, b,
+                target,
+                out double x0clip, out double y0clip,
+                out double x1clip, out double y1clip) ? shape : null;
         }
     }
 }

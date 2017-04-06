@@ -28,7 +28,6 @@ namespace Draw2D.Core.Editor.Bounds
 
         public PointShape TryToGetPoint(ShapeObject shape, Point2 target, double radius)
         {
-
             return GetHitTest(shape)?.TryToGetPoint(shape, target, radius, this);
         }
 
@@ -50,9 +49,9 @@ namespace Draw2D.Core.Editor.Bounds
             foreach (var shape in shapes)
             {
                 var result = GetHitTest(shape)?.Contains(shape, target, radius, this);
-                if (result == true)
+                if (result != null)
                 {
-                    return shape;
+                    return result;
                 }
             }
             return null;
@@ -64,7 +63,7 @@ namespace Draw2D.Core.Editor.Bounds
             foreach (var shape in shapes)
             {
                 var result = GetHitTest(shape)?.Overlaps(shape, target, radius, this);
-                if (result == true)
+                if (result != null)
                 {
                     selected.Add(shape);
                 }

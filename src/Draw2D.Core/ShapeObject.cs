@@ -2,6 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using System.Collections.Generic;
 using Draw2D.Core.Renderers;
+using Draw2D.Core.Shapes;
 using Draw2D.Core.Style;
 
 namespace Draw2D.Core
@@ -22,6 +23,8 @@ namespace Draw2D.Core
             get => _transform;
             set => Update(ref _transform, value);
         }
+
+        public abstract IEnumerable<PointShape> GetPoints();
 
         public abstract void Draw(object dc, ShapeRenderer r, double dx, double dy);
 

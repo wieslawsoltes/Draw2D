@@ -2,6 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using Draw2D.Core.Containers;
 using Draw2D.Core.Renderers;
 using Draw2D.Core.Style;
@@ -71,6 +72,22 @@ namespace Draw2D.Core.Shapes
             this.Shapes = shapes;
         }
 
+        public override IEnumerable<PointShape> GetPoints()
+        {
+            foreach (var point in Points)
+            {
+                yield return point;
+            }
+
+            foreach (var shape in Shapes)
+            {
+                foreach (var point in shape.GetPoints())
+                {
+                    yield return point;
+                }
+            }
+        }
+
         public override void Draw(object dc, ShapeRenderer r, double dx, double dy)
         {
             base.BeginTransform(dc, r);
@@ -86,11 +103,13 @@ namespace Draw2D.Core.Shapes
 
         public override void Move(ISet<ShapeObject> selected, double dx, double dy)
         {
-            foreach (var shape in Shapes)
+            var points = GetPoints().Distinct();
+
+            foreach (var point in points)
             {
-                if (!selected.Contains(shape))
+                if (!selected.Contains(point))
                 {
-                    shape.Move(selected, dx, dy);
+                    point.Move(selected, dx, dy);
                 }
             }
 

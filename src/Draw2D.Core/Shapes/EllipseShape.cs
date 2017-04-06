@@ -34,23 +34,33 @@ namespace Draw2D.Core.Shapes
             this.BottomRight = bottomRight;
         }
 
+        public override IEnumerable<PointShape> GetPoints()
+        {
+            yield return TopLeft;
+            yield return BottomRight;
+            foreach (var point in Points)
+            {
+                yield return point;
+            }
+        }
+
         public override void Draw(object dc, ShapeRenderer r, double dx, double dy)
         {
             base.BeginTransform(dc, r);
 
             if (Style != null)
             {
-                r.DrawEllipse(dc, this, Style, dx, dy); 
+                r.DrawEllipse(dc, this, Style, dx, dy);
             }
 
             if (r.Selected.Contains(_topLeft))
             {
-                _topLeft.Draw(dc, r, dx, dy); 
+                _topLeft.Draw(dc, r, dx, dy);
             }
 
             if (r.Selected.Contains(_bottomRight))
             {
-                _bottomRight.Draw(dc, r, dx, dy); 
+                _bottomRight.Draw(dc, r, dx, dy);
             }
 
             base.Draw(dc, r, dx, dy);

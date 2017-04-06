@@ -40,6 +40,11 @@ namespace Draw2D.Core.Shapes
             this.Template = template;
         }
 
+        public override IEnumerable<PointShape> GetPoints()
+        {
+            yield return this;
+        }
+
         public override void Draw(object dc, ShapeRenderer r, double dx, double dy)
         {
             if (_template != null)

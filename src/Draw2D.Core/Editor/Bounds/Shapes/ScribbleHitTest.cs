@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Wiesław Šoltés. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using System;
+using System.Collections.Generic;
 using Draw2D.Core.Shapes;
 using Draw2D.Spatial;
 
@@ -34,52 +35,46 @@ namespace Draw2D.Core.Editor.Bounds.Shapes
             return null;
         }
 
-        public override bool Contains(ShapeObject shape, Point2 target, double radius, IHitTest hitTest)
+        public override ShapeObject Contains(ShapeObject shape, Point2 target, double radius, IHitTest hitTest)
         {
             var scribble = shape as ScribbleShape;
             if (scribble == null)
                 throw new ArgumentNullException("shape");
 
             var pointHitTest = hitTest.Registered[typeof(PointShape)];
+            var points = scribble.GetPoints();
 
-            if (pointHitTest.Contains(scribble.Start, target, radius, hitTest))
+            foreach (var point in points)
             {
-                return true;
-            }
-
-            foreach (var point in scribble.Points)
-            {
-                if (pointHitTest.Contains(point, target, radius, hitTest))
+                var result = pointHitTest.Contains(point, target, radius, hitTest);
+                if (result != null)
                 {
-                    return true;
+                    return result;
                 }
             }
 
-            return false;
+            return HitTestHelper.Contains(points, target) ? shape : null;
         }
 
-        public override bool Overlaps(ShapeObject shape, Rect2 target, double radius, IHitTest hitTest)
+        public override ShapeObject Overlaps(ShapeObject shape, Rect2 target, double radius, IHitTest hitTest)
         {
             var scribble = shape as ScribbleShape;
             if (scribble == null)
                 throw new ArgumentNullException("shape");
 
             var pointHitTest = hitTest.Registered[typeof(PointShape)];
+            var points = scribble.GetPoints();
 
-            if (pointHitTest.Overlaps(scribble.Start, target, radius, hitTest))
+            foreach (var point in points)
             {
-                return true;
-            }
-
-            foreach (var point in scribble.Points)
-            {
-                if (pointHitTest.Overlaps(point, target, radius, hitTest))
+                var pointResult = pointHitTest.Overlaps(point, target, radius, hitTest);
+                if (pointResult != null)
                 {
-                    return true;
+                    return pointResult;
                 }
             }
 
-            return false;
+            return HitTestHelper.Overlap(points, target) ? shape : null;
         }
     }
 }

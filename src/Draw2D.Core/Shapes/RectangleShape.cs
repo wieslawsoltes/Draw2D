@@ -34,6 +34,16 @@ namespace Draw2D.Core.Shapes
             this.BottomRight = bottomRight;
         }
 
+        public override IEnumerable<PointShape> GetPoints()
+        {
+            yield return TopLeft;
+            yield return BottomRight;
+            foreach (var point in Points)
+            {
+                yield return point;
+            }
+        }
+
         public override void Draw(object dc, ShapeRenderer r, double dx, double dy)
         {
             base.BeginTransform(dc, r);

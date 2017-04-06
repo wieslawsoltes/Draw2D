@@ -18,11 +18,11 @@ namespace Draw2D.Core.Editor.Bounds.Shapes
 
             var pointHitTest = hitTest.Registered[typeof(PointShape)];
 
-            foreach (var groupPoint in path.Points)
+            foreach (var pathPoint in path.Points)
             {
-                if (pointHitTest.TryToGetPoint(groupPoint, target, radius, hitTest) != null)
+                if (pointHitTest.TryToGetPoint(pathPoint, target, radius, hitTest) != null)
                 {
-                    return groupPoint;
+                    return pathPoint;
                 }
             }
 
@@ -42,7 +42,7 @@ namespace Draw2D.Core.Editor.Bounds.Shapes
             return null;
         }
 
-        public override bool Contains(ShapeObject shape, Point2 target, double radius, IHitTest hitTest)
+        public override ShapeObject Contains(ShapeObject shape, Point2 target, double radius, IHitTest hitTest)
         {
             var path = shape as PathShape;
             if (path == null)
@@ -54,16 +54,17 @@ namespace Draw2D.Core.Editor.Bounds.Shapes
                 {
                     var figureHitTest = hitTest.Registered[figureShape.GetType()];
                     var result = figureHitTest.Contains(figureShape, target, radius, hitTest);
-                    if (result == true)
+                    if (result != null)
                     {
-                        return true;
+                        return result;
                     }
                 }
             }
-            return false;
+
+            return HitTestHelper.Contains(path.GetPoints(), target) ? shape : null;
         }
 
-        public override bool Overlaps(ShapeObject shape, Rect2 target, double radius, IHitTest hitTest)
+        public override ShapeObject Overlaps(ShapeObject shape, Rect2 target, double radius, IHitTest hitTest)
         {
             var path = shape as PathShape;
             if (path == null)
@@ -75,13 +76,14 @@ namespace Draw2D.Core.Editor.Bounds.Shapes
                 {
                     var figureHitTest = hitTest.Registered[figureShape.GetType()];
                     var result = figureHitTest.Overlaps(figureShape, target, radius, hitTest);
-                    if (result == true)
+                    if (result != null)
                     {
-                        return true;
+                        return result;
                     }
                 }
             }
-            return false;
+
+            return HitTestHelper.Overlap(path.GetPoints(), target) ? shape : null;
         }
     }
 }

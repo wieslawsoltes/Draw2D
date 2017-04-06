@@ -9,7 +9,7 @@ namespace Draw2D.Core.Editor.Bounds.Shapes
     public class GroupHitTest : HitTestBase
     {
         public override Type TargetType { get { return typeof(GroupShape); } }
-        
+
         public override PointShape TryToGetPoint(ShapeObject shape, Point2 target, double radius, IHitTest hitTest)
         {
             var group = shape as GroupShape;
@@ -17,7 +17,7 @@ namespace Draw2D.Core.Editor.Bounds.Shapes
                 throw new ArgumentNullException("shape");
 
             var pointHitTest = hitTest.Registered[typeof(PointShape)];
-            
+
             foreach (var groupPoint in group.Points)
             {
                 if (pointHitTest.TryToGetPoint(groupPoint, target, radius, hitTest) != null)
@@ -39,7 +39,7 @@ namespace Draw2D.Core.Editor.Bounds.Shapes
             return null;
         }
 
-        public override bool Contains(ShapeObject shape, Point2 target, double radius, IHitTest hitTest)
+        public override ShapeObject Contains(ShapeObject shape, Point2 target, double radius, IHitTest hitTest)
         {
             var group = shape as GroupShape;
             if (group == null)
@@ -49,15 +49,15 @@ namespace Draw2D.Core.Editor.Bounds.Shapes
             {
                 var groupHitTest = hitTest.Registered[groupShape.GetType()];
                 var result = groupHitTest.Contains(groupShape, target, radius, hitTest);
-                if (result == true)
+                if (result != null)
                 {
-                    return true;
+                    return group;
                 }
             }
-            return false;
+            return null;
         }
-        
-        public override bool Overlaps(ShapeObject shape, Rect2 target, double radius, IHitTest hitTest)
+
+        public override ShapeObject Overlaps(ShapeObject shape, Rect2 target, double radius, IHitTest hitTest)
         {
             var group = shape as GroupShape;
             if (group == null)
@@ -67,12 +67,12 @@ namespace Draw2D.Core.Editor.Bounds.Shapes
             {
                 var groupHitTest = hitTest.Registered[groupShape.GetType()];
                 var result = groupHitTest.Overlaps(groupShape, target, radius, hitTest);
-                if (result == true)
+                if (result != null)
                 {
-                    return true;
+                    return group;
                 }
             }
-            return false;
+            return null;
         }
     }
 }

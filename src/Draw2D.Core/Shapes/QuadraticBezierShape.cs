@@ -42,13 +42,24 @@ namespace Draw2D.Core.Shapes
             this.Point2 = point2;
         }
 
+        public override IEnumerable<PointShape> GetPoints()
+        {
+            yield return StartPoint;
+            yield return Point1;
+            yield return Point2;
+            foreach (var point in Points)
+            {
+                yield return point;
+            }
+        }
+
         public override void Draw(object dc, ShapeRenderer r, double dx, double dy)
         {
             base.BeginTransform(dc, r);
 
             if (Style != null)
             {
-                r.DrawQuadraticBezier(dc, this, Style, dx, dy); 
+                r.DrawQuadraticBezier(dc, this, Style, dx, dy);
             }
 
             if (r.Selected.Contains(_startPoint))

@@ -10,7 +10,7 @@ namespace Draw2D.Core.Editor.Bounds
     {
         public abstract Type TargetType { get; }
         public abstract PointShape TryToGetPoint(ShapeObject shape, Point2 target, double radius, IHitTest hitTest);
-        public abstract bool Contains(ShapeObject shape, Point2 target, double radius, IHitTest hitTest);
-        public abstract bool Overlaps(ShapeObject shape, Rect2 target, double radius, IHitTest hitTest);
+        public abstract ShapeObject Contains(ShapeObject shape, Point2 target, double radius, IHitTest hitTest);
+        public abstract ShapeObject Overlaps(ShapeObject shape, Rect2 target, double radius, IHitTest hitTest);
     }
 }

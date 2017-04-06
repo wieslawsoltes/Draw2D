@@ -50,33 +50,45 @@ namespace Draw2D.Core.Shapes
             this.Point3 = point3;
         }
 
+        public override IEnumerable<PointShape> GetPoints()
+        {
+            yield return StartPoint;
+            yield return Point1;
+            yield return Point2;
+            yield return Point3;
+            foreach (var point in Points)
+            {
+                yield return point;
+            }
+        }
+
         public override void Draw(object dc, ShapeRenderer r, double dx, double dy)
         {
             base.BeginTransform(dc, r);
 
             if (Style != null)
             {
-                r.DrawCubicBezier(dc, this, Style, dx, dy); 
+                r.DrawCubicBezier(dc, this, Style, dx, dy);
             }
 
             if (r.Selected.Contains(_startPoint))
             {
-                _startPoint.Draw(dc, r, dx, dy); 
+                _startPoint.Draw(dc, r, dx, dy);
             }
 
             if (r.Selected.Contains(_point1))
             {
-                _point1.Draw(dc, r, dx, dy); 
+                _point1.Draw(dc, r, dx, dy);
             }
 
             if (r.Selected.Contains(_point2))
             {
-                _point2.Draw(dc, r, dx, dy); 
+                _point2.Draw(dc, r, dx, dy);
             }
 
             if (r.Selected.Contains(_point3))
             {
-                _point3.Draw(dc, r, dx, dy); 
+                _point3.Draw(dc, r, dx, dy);
             }
 
             base.Draw(dc, r, dx, dy);

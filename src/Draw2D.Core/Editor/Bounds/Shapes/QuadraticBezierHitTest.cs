@@ -45,30 +45,22 @@ namespace Draw2D.Core.Editor.Bounds.Shapes
             return null;
         }
 
-        private IEnumerable<PointShape> GetPoints(QuadraticBezierShape quadraticBezier)
-        {
-            yield return quadraticBezier.StartPoint;
-            yield return quadraticBezier.Point1;
-            yield return quadraticBezier.Point2;
-        }
-
-        public override bool Contains(ShapeObject shape, Point2 target, double radius, IHitTest hitTest)
+        public override ShapeObject Contains(ShapeObject shape, Point2 target, double radius, IHitTest hitTest)
         {
             var quadraticBezier = shape as QuadraticBezierShape;
             if (quadraticBezier == null)
                 throw new ArgumentNullException("shape");
 
-            return HitTestHelper.Contains(GetPoints(quadraticBezier), target);
+            return HitTestHelper.Contains(quadraticBezier.GetPoints(), target) ? shape : null;
         }
 
-        public override bool Overlaps(ShapeObject shape, Rect2 target, double radius, IHitTest hitTest)
+        public override ShapeObject Overlaps(ShapeObject shape, Rect2 target, double radius, IHitTest hitTest)
         {
             var quadraticBezier = shape as QuadraticBezierShape;
             if (quadraticBezier == null)
                 throw new ArgumentNullException("shape");
 
-
-           return HitTestHelper.Overlap(GetPoints(quadraticBezier), target);
+            return HitTestHelper.Overlap(quadraticBezier.GetPoints(), target) ? shape : null;
         }
     }
 }

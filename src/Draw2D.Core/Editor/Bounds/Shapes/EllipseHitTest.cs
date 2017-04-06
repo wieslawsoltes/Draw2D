@@ -39,7 +39,7 @@ namespace Draw2D.Core.Editor.Bounds.Shapes
             return null;
         }
 
-        public override bool Contains(ShapeObject shape, Point2 target, double radius, IHitTest hitTest)
+        public override ShapeObject Contains(ShapeObject shape, Point2 target, double radius, IHitTest hitTest)
         {
             var ellipse = shape as EllipseShape;
             if (ellipse == null)
@@ -49,10 +49,10 @@ namespace Draw2D.Core.Editor.Bounds.Shapes
                 ellipse.TopLeft.X,
                 ellipse.TopLeft.Y,
                 ellipse.BottomRight.X,
-                ellipse.BottomRight.Y).Contains(target);
+                ellipse.BottomRight.Y).Contains(target) ? shape : null;
         }
 
-        public override bool Overlaps(ShapeObject shape, Rect2 target, double radius, IHitTest hitTest)
+        public override ShapeObject Overlaps(ShapeObject shape, Rect2 target, double radius, IHitTest hitTest)
         {
             var ellipse = shape as EllipseShape;
             if (ellipse == null)
@@ -62,7 +62,7 @@ namespace Draw2D.Core.Editor.Bounds.Shapes
                 ellipse.TopLeft.X,
                 ellipse.TopLeft.Y,
                 ellipse.BottomRight.X,
-                ellipse.BottomRight.Y).IntersectsWith(target);
+                ellipse.BottomRight.Y).IntersectsWith(target) ? shape : null;
         }
     }
 }
