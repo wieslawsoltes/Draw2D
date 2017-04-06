@@ -15,14 +15,14 @@ namespace Draw2D.Core.Editor.Tools
         private double _originY;
         private double _previousX;
         private double _previousY;
-        private bool _haveSelection;
 
-        public enum State { TopLeft, BottomRight, Move };
-        public State CurrentState = State.TopLeft;
+        public enum State { None, Selection, Move };
+        public State CurrentState = State.None;
 
         public override string Name { get { return "Selection"; } }
 
         public SelectionToolSettings Settings { get; set; }
+        public bool HaveSelection { get; set; }
 
         public override void LeftDown(IToolContext context, double x, double y, Modifier modifier)
         {
@@ -30,7 +30,7 @@ namespace Draw2D.Core.Editor.Tools
 
             switch (CurrentState)
             {
-                case State.TopLeft:
+                case State.None:
                     {
                         _originX = x;
                         _originY = y;
@@ -52,12 +52,12 @@ namespace Draw2D.Core.Editor.Tools
                             modifier);
                         if (result)
                         {
-                            _haveSelection = true;
+                            HaveSelection = true;
                             CurrentState = State.Move;
                         }
                         else
                         {
-                            _haveSelection = false;
+                            HaveSelection = false;
 
                             if (!modifier.HasFlag(Modifier.Control))
                             {
@@ -78,13 +78,13 @@ namespace Draw2D.Core.Editor.Tools
                             _rectangle.BottomRight.Y = y;
                             _rectangle.Style = Settings?.SelectionStyle;
                             context.WorkingContainer.Shapes.Add(_rectangle);
-                            CurrentState = State.BottomRight;
+                            CurrentState = State.Selection;
                         }
                     }
                     break;
-                case State.BottomRight:
+                case State.Selection:
                     {
-                        CurrentState = State.TopLeft;
+                        CurrentState = State.None;
                         _rectangle.BottomRight.X = x;
                         _rectangle.BottomRight.Y = y;
                     }
@@ -100,7 +100,7 @@ namespace Draw2D.Core.Editor.Tools
 
             switch (CurrentState)
             {
-                case State.BottomRight:
+                case State.Selection:
                     {
                         var target = _rectangle.ToRect2();
                         var result = SelectionHelper.TryToSelect(
@@ -112,17 +112,17 @@ namespace Draw2D.Core.Editor.Tools
                             modifier);
                         if (result)
                         {
-                            _haveSelection = true;
+                            HaveSelection = true;
                         }
 
                         context.WorkingContainer.Shapes.Remove(_rectangle);
                         _rectangle = null;
-                        CurrentState = State.TopLeft;
+                        CurrentState = State.None;
                     }
                     break;
                 case State.Move:
                     {
-                        CurrentState = State.TopLeft;
+                        CurrentState = State.None;
                     }
                     break;
             }
@@ -134,14 +134,14 @@ namespace Draw2D.Core.Editor.Tools
 
             switch (CurrentState)
             {
-                case State.BottomRight:
+                case State.Selection:
                     {
                         this.Clean(context);
                     }
                     break;
                 case State.Move:
                     {
-                        CurrentState = State.TopLeft;
+                        CurrentState = State.None;
                     }
                     break;
             }
@@ -153,21 +153,24 @@ namespace Draw2D.Core.Editor.Tools
 
             switch (CurrentState)
             {
-                case State.TopLeft:
+                case State.None:
                     {
-                        if (!_haveSelection)
+                        if (!HaveSelection)
                         {
-                            var target = new Point2(x, y);
-                            SelectionHelper.TryToHover(
-                                context, 
-                                Settings?.Mode ?? SelectionMode.Shape, 
-                                Settings?.Targets ?? SelectionTargets.Shapes, 
-                                target, 
-                                Settings?.HitTestRadius ?? 7.0);
+                            lock (context.Selected)
+                            {
+                                var target = new Point2(x, y);
+                                SelectionHelper.TryToHover(
+                                    context,
+                                    Settings?.Mode ?? SelectionMode.Shape,
+                                    Settings?.Targets ?? SelectionTargets.Shapes,
+                                    target,
+                                    Settings?.HitTestRadius ?? 7.0);
+                            }
                         }
                     }
                     break;
-                case State.BottomRight:
+                case State.Selection:
                     {
                         _rectangle.BottomRight.X = x;
                         _rectangle.BottomRight.Y = y;
@@ -231,8 +234,8 @@ namespace Draw2D.Core.Editor.Tools
         {
             base.Clean(context);
 
-            CurrentState = State.TopLeft;
-            _haveSelection = false;
+            CurrentState = State.None;
+            HaveSelection = false;
 
             if (_rectangle != null)
             {
