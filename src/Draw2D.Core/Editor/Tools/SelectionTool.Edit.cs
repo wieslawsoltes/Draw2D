@@ -75,6 +75,10 @@ namespace Draw2D.Core.Editor.Tools
                         var copy = rectangle.Copy();
                         copy.TopLeft = distinctPointsCopy[rectangle.TopLeft];
                         copy.BottomRight = distinctPointsCopy[rectangle.BottomRight];
+                        foreach (var point in rectangle.Points)
+                        {
+                            copy.Points.Add(distinctPointsCopy[point]);
+                        }
                         return copy;
                     }
                 case EllipseShape ellipse:
@@ -82,6 +86,10 @@ namespace Draw2D.Core.Editor.Tools
                         var copy = ellipse.Copy();
                         copy.TopLeft = distinctPointsCopy[ellipse.TopLeft];
                         copy.BottomRight = distinctPointsCopy[ellipse.BottomRight];
+                        foreach (var point in ellipse.Points)
+                        {
+                            copy.Points.Add(distinctPointsCopy[point]);
+                        }
                         return copy;
                     }
             }
