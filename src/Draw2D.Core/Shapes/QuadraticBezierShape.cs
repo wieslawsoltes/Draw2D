@@ -122,7 +122,7 @@ namespace Draw2D.Core.Shapes
             return new QuadraticBezierShape()
             {
                 Style = this.Style,
-                Transform = this.Transform,
+                Transform = this.Transform?.Copy(),
             };
         }
     }

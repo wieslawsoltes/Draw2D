@@ -121,7 +121,7 @@ namespace Draw2D.Core.Shapes
             return new GroupShape()
             {
                 Style = this.Style,
-                Transform = this.Transform
+                Transform = this.Transform?.Copy()
             };
         }
     }

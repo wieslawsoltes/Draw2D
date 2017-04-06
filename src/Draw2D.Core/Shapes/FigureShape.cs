@@ -50,7 +50,7 @@ namespace Draw2D.Core.Shapes
             return new FigureShape()
             {
                 Style = this.Style,
-                Transform = this.Transform
+                Transform = this.Transform?.Copy()
             };
         }
     }
