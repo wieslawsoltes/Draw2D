@@ -21,9 +21,15 @@ namespace Draw2D.Core.Editor.Bounds
             Registered.Add(hitTest.TargetType, hitTest);
         }
 
+        private HitTestBase GetHitTest(object target)
+        {
+            return Registered.TryGetValue(target?.GetType(), out var hitTest) ? hitTest : null;
+        }
+
         public PointShape TryToGetPoint(ShapeObject shape, Point2 target, double radius)
         {
-            return Registered[shape.GetType()].TryToGetPoint(shape,  target, radius, Registered);
+
+            return GetHitTest(shape)?.TryToGetPoint(shape, target, radius, Registered);
         }
 
         public PointShape TryToGetPoint(IEnumerable<ShapeObject> shapes, Point2 target, double radius)
@@ -43,7 +49,7 @@ namespace Draw2D.Core.Editor.Bounds
         {
             foreach (var shape in shapes)
             {
-                var result = Registered[shape.GetType()].Contains(shape, target, radius, Registered);
+                var result = GetHitTest(shape)?.Contains(shape, target, radius, Registered);
                 if (result == true)
                 {
                     return shape;
@@ -57,7 +63,7 @@ namespace Draw2D.Core.Editor.Bounds
             var selected = new HashSet<ShapeObject>();
             foreach (var shape in shapes)
             {
-                var result = Registered[shape.GetType()].Overlaps(shape, target, radius, Registered);
+                var result = GetHitTest(shape)?.Overlaps(shape, target, radius, Registered);
                 if (result == true)
                 {
                     selected.Add(shape);
