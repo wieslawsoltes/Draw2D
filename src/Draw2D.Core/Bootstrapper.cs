@@ -325,13 +325,13 @@ namespace Draw2D.Core
             container.Styles.Add(pointShape.Style);
             container.Styles.Add(style);
 
-            var group = new GroupShape();
-            group.Shapes.Add(new RectangleShape(new PointShape(30, 30, pointShape), new PointShape(60, 60, pointShape)) { Style = style });
-            group.Points.Add(new PointShape(45, 30, pointShape));
-            group.Points.Add(new PointShape(45, 60, pointShape));
-            group.Points.Add(new PointShape(30, 45, pointShape));
-            group.Points.Add(new PointShape(60, 45, pointShape));
-            container.Shapes.Add(group);
+            //var group = new GroupShape();
+            //group.Shapes.Add(new RectangleShape(new PointShape(30, 30, pointShape), new PointShape(60, 60, pointShape)) { Style = style });
+            //group.Points.Add(new PointShape(45, 30, pointShape));
+            //group.Points.Add(new PointShape(45, 60, pointShape));
+            //group.Points.Add(new PointShape(30, 45, pointShape));
+            //group.Points.Add(new PointShape(60, 45, pointShape));
+            //container.Shapes.Add(group);
 
             var presenter = new DefaultShapePresenter()
             {
