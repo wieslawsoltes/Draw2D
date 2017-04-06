@@ -33,10 +33,10 @@ namespace Draw2D.Core.Editor.Tools
                     context.Selected.Add(point);
                 }
             }
-            else
-            {
-                context.CurrentContainer.Shapes.Add(point);
-            }
+            //else
+            //{
+            //    context.CurrentContainer.Shapes.Add(point);
+            //}
         }
 
         public override void Move(IToolContext context, double x, double y, Modifier modifier)
