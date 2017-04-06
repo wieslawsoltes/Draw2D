@@ -1,12 +1,13 @@
 ﻿// Copyright (c) Wiesław Šoltés. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
+using System;
 using System.Collections.ObjectModel;
 using Draw2D.Core.Shapes;
 using Draw2D.Core.Style;
 
 namespace Draw2D.Core.Containers
 {
-    public class ShapesContainer : IdObject, IShapesContainer
+    public class ShapesContainer : IdObject, IShapesContainer, ICopyable<ShapesContainer>
     {
         private double _width;
         private double _height;
@@ -86,6 +87,15 @@ namespace Draw2D.Core.Containers
             this.Styles = styles;
             this.Guides = guides;
             this.Shapes = shapes;
+        }
+
+        public ShapesContainer Copy()
+        {
+            return new ShapesContainer()
+            {
+                Id = Guid.NewGuid(),
+                Name = this.Name
+            };
         }
     }
 }

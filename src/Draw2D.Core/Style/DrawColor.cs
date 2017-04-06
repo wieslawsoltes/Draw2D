@@ -3,7 +3,7 @@
 
 namespace Draw2D.Core.Style
 {
-    public class DrawColor : ObservableObject
+    public class DrawColor : ObservableObject, ICopyable<DrawColor>
     {
         private byte _a;
         private byte _r;
@@ -44,6 +44,17 @@ namespace Draw2D.Core.Style
             this.R = r;
             this.G = g;
             this.B = b;
+        }
+
+        public DrawColor Copy()
+        {
+            return new DrawColor()
+            {
+                A = this.A,
+                R = this.R,
+                G = this.G,
+                B = this.B
+            };
         }
     }
 }

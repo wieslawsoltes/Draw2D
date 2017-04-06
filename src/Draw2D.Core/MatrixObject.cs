@@ -3,7 +3,7 @@
 
 namespace Draw2D.Core
 {
-    public class MatrixObject : ObservableObject
+    public class MatrixObject : ObservableObject, ICopyable<MatrixObject>
     {
         private double _m11;
         private double _m12;
@@ -64,6 +64,19 @@ namespace Draw2D.Core
             this.M22 = m22;
             this.OffsetX = offsetX;
             this.OffsetY = offsetY;
+        }
+
+        public MatrixObject Copy()
+        {
+            return new MatrixObject()
+            {
+                M11 = this.M11,
+                M12 = this.M12,
+                M21 = this.M21,
+                M22 = this.M22,
+                OffsetX = this.OffsetX,
+                OffsetY = this.OffsetY
+            };
         }
     }
 }

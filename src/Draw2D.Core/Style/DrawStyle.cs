@@ -1,9 +1,10 @@
 ﻿// Copyright (c) Wiesław Šoltés. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
+using System;
 
 namespace Draw2D.Core.Style
 {
-    public class DrawStyle : IdObject
+    public class DrawStyle : IdObject, ICopyable<DrawStyle>
     {
         private DrawColor _stroke;
         private DrawColor _fill;
@@ -52,6 +53,20 @@ namespace Draw2D.Core.Style
             this.Thickness = thickness;
             this.IsStroked = isStroked;
             this.IsFilled = isFilled;
+        }
+
+        public DrawStyle Copy()
+        {
+            return new DrawStyle()
+            {
+                Id = Guid.NewGuid(),
+                Name = this.Name,
+                Stroke = this.Stroke.Copy(),
+                Fill = this.Fill.Copy(),
+                Thickness = this.Thickness,
+                IsStroked = this.IsStroked,
+                IsFilled = this.IsFilled
+            };
         }
     }
 }
