@@ -42,14 +42,29 @@ namespace Draw2D.Core.Editor.Tools
                     }
                 case CubicBezierShape cubic:
                     {
-                        // TODO: 
+                        var copy = cubic.Copy();
+                        copy.StartPoint = distinctPointsCopy[cubic.StartPoint];
+                        copy.Point1 = distinctPointsCopy[cubic.Point1];
+                        copy.Point2 = distinctPointsCopy[cubic.Point2];
+                        copy.Point3 = distinctPointsCopy[cubic.Point3];
+                        foreach (var point in cubic.Points)
+                        {
+                            copy.Points.Add(distinctPointsCopy[point]);
+                        }
+                        return copy;
                     }
-                    break;
                 case QuadraticBezierShape quadratic:
                     {
-                        // TODO: 
+                        var copy = quadratic.Copy();
+                        copy.StartPoint = distinctPointsCopy[quadratic.StartPoint];
+                        copy.Point1 = distinctPointsCopy[quadratic.Point1];
+                        copy.Point2 = distinctPointsCopy[quadratic.Point2];
+                        foreach (var point in quadratic.Points)
+                        {
+                            copy.Points.Add(distinctPointsCopy[point]);
+                        }
+                        return copy;
                     }
-                    break;
                 case FigureShape figure:
                     {
                         // TODO: 
@@ -67,9 +82,14 @@ namespace Draw2D.Core.Editor.Tools
                     break;
                 case ScribbleShape scribble:
                     {
-                        // TODO: 
+                        var copy = scribble.Copy();
+                        copy.Start = distinctPointsCopy[scribble.Start];
+                        foreach (var point in scribble.Points)
+                        {
+                            copy.Points.Add(distinctPointsCopy[point]);
+                        }
+                        return copy;
                     }
-                    break;
                 case RectangleShape rectangle:
                     {
                         var copy = rectangle.Copy();
