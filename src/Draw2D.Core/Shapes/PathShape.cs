@@ -194,7 +194,8 @@ namespace Draw2D.Core.Shapes
             return new PathShape()
             {
                 Style = this.Style,
-                Transform = this.Transform?.Copy()
+                Transform = this.Transform?.Copy(),
+                FillRule = this.FillRule
             };
         }
     }

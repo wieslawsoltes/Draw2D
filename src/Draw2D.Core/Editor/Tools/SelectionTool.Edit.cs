@@ -67,19 +67,41 @@ namespace Draw2D.Core.Editor.Tools
                     }
                 case FigureShape figure:
                     {
-                        // TODO: 
+                        var copy = figure.Copy();
+                        foreach (var figureShape in figure.Shapes)
+                        {
+                            copy.Shapes.Add(CopyShape(figureShape, distinctPointsCopy));
+                        }
+                        return copy;
                     }
-                    break;
                 case PathShape path:
                     {
-                        // TODO: 
+                        var copy = path.Copy();
+
+                        foreach (var figure in path.Figures)
+                        {
+                            var figureCopy = figure.Copy();
+                            foreach (var figureShape in figure.Shapes)
+                            {
+                                figureCopy.Shapes.Add(CopyShape(figureShape, distinctPointsCopy));
+                            }
+                            copy.Figures.Add(figureCopy);
+                        }
+                        return copy;
                     }
-                    break;
                 case GroupShape group:
                     {
-                        // TODO: 
+                        var copy = group.Copy();
+                        foreach (var point in group.Points)
+                        {
+                            copy.Points.Add(distinctPointsCopy[point]);
+                        }
+                        foreach (var groupShape in group.Shapes)
+                        {
+                            copy.Shapes.Add(CopyShape(groupShape, distinctPointsCopy));
+                        }
+                        return copy;
                     }
-                    break;
                 case ScribbleShape scribble:
                     {
                         var copy = scribble.Copy();
@@ -177,6 +199,10 @@ namespace Draw2D.Core.Editor.Tools
                     }
                 }
                 context.Renderer.Selected.Clear();
+                context.Invalidate();
+
+                this.HaveSelection = false;
+                this.CurrentState = SelectionTool.State.None;
             }
         }
 

@@ -119,7 +119,11 @@ namespace Draw2D.Core.Shapes
             return new FigureShape()
             {
                 Style = this.Style,
-                Transform = this.Transform?.Copy()
+                Transform = this.Transform?.Copy(),
+                Width = this.Width,
+                Height = this.Height,
+                IsFilled = this.IsFilled,
+                IsClosed = this.IsClosed
             };
         }
     }
