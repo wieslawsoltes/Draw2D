@@ -1,13 +1,12 @@
 ﻿// Copyright (c) Wiesław Šoltés. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
-using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Draw2D.Core.Renderers;
 
 namespace Draw2D.Core.Shapes
 {
-    public class ScribbleShape : ShapeObject
+    public class ScribbleShape : ShapeObject, ICopyable<ScribbleShape>
     {
         private PointShape _start;
         private ObservableCollection<PointShape> _points;
@@ -108,6 +107,15 @@ namespace Draw2D.Core.Shapes
             {
                 point.Deselect(selected);
             }
+        }
+
+        public ScribbleShape Copy()
+        {
+            return new ScribbleShape()
+            {
+                Style = this.Style,
+                Transform = this.Transform
+            };
         }
     }
 }

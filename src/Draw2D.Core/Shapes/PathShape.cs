@@ -7,7 +7,7 @@ using Draw2D.Core.Renderers;
 
 namespace Draw2D.Core.Shapes
 {
-    public class PathShape : ConnectableShape
+    public class PathShape : ConnectableShape, ICopyable<PathShape>
     {
         private ObservableCollection<FigureShape> _figures;
         private PathFillRule _fillRule;
@@ -187,6 +187,15 @@ namespace Draw2D.Core.Shapes
             }
 
             base.Move(selected, dx, dy);
+        }
+
+        public PathShape Copy()
+        {
+            return new PathShape()
+            {
+                Style = this.Style,
+                Transform = this.Transform
+            };
         }
     }
 }

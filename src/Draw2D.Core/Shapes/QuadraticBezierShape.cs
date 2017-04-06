@@ -5,7 +5,7 @@ using Draw2D.Core.Renderers;
 
 namespace Draw2D.Core.Shapes
 {
-    public class QuadraticBezierShape : ConnectableShape
+    public class QuadraticBezierShape : ConnectableShape, ICopyable<QuadraticBezierShape>
     {
         private PointShape _startPoint;
         private PointShape _point1;
@@ -115,6 +115,15 @@ namespace Draw2D.Core.Shapes
             StartPoint.Deselect(selected);
             Point1.Deselect(selected);
             Point2.Deselect(selected);
+        }
+
+        public QuadraticBezierShape Copy()
+        {
+            return new QuadraticBezierShape()
+            {
+                Style = this.Style,
+                Transform = this.Transform,
+            };
         }
     }
 }

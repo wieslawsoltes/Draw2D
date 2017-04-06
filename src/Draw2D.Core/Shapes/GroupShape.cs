@@ -9,7 +9,7 @@ using Draw2D.Core.Style;
 
 namespace Draw2D.Core.Shapes
 {
-    public class GroupShape : ConnectableShape, IShapesContainer
+    public class GroupShape : ConnectableShape, IShapesContainer, ICopyable<GroupShape>
     {
         private double _width;
         private double _height;
@@ -114,6 +114,15 @@ namespace Draw2D.Core.Shapes
             }
 
             base.Move(selected, dx, dy);
+        }
+
+        public GroupShape Copy()
+        {
+            return new GroupShape()
+            {
+                Style = this.Style,
+                Transform = this.Transform
+            };
         }
     }
 }

@@ -5,7 +5,7 @@ using Draw2D.Core.Renderers;
 
 namespace Draw2D.Core.Shapes
 {
-    public class PointShape : ShapeObject
+    public class PointShape : ShapeObject, ICopyable<PointShape>
     {
         private double _x;
         private double _y;

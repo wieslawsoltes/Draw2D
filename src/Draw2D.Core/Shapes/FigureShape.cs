@@ -4,7 +4,7 @@ using System.Collections.ObjectModel;
 
 namespace Draw2D.Core.Shapes
 {
-    public class FigureShape : GroupShape
+    public class FigureShape : GroupShape, ICopyable<FigureShape>
     {
         private bool _isFilled;
         private bool _isClosed;
@@ -43,6 +43,15 @@ namespace Draw2D.Core.Shapes
         {
             this.Name = name;
             this.Shapes = shapes;
+        }
+
+        public new FigureShape Copy()
+        {
+            return new FigureShape()
+            {
+                Style = this.Style,
+                Transform = this.Transform
+            };
         }
     }
 }

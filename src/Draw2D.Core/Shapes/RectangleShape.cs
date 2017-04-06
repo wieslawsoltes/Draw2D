@@ -5,7 +5,7 @@ using Draw2D.Core.Renderers;
 
 namespace Draw2D.Core.Shapes
 {
-    public class RectangleShape : ConnectableShape
+    public class RectangleShape : ConnectableShape, ICopyable<RectangleShape>
     {
         private PointShape _topLeft;
         private PointShape _bottomRight;
@@ -94,6 +94,15 @@ namespace Draw2D.Core.Shapes
             base.Deselect(selected);
             TopLeft.Deselect(selected);
             BottomRight.Deselect(selected);
+        }
+
+        public RectangleShape Copy()
+        {
+            return new RectangleShape()
+            {
+                Style = this.Style,
+                Transform = this.Transform
+            };
         }
     }
 }

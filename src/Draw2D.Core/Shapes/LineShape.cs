@@ -5,7 +5,7 @@ using Draw2D.Core.Renderers;
 
 namespace Draw2D.Core.Shapes
 {
-    public class LineShape : ConnectableShape
+    public class LineShape : ConnectableShape, ICopyable<LineShape>
     {
         private PointShape _startPoint;
         private PointShape _point;
@@ -94,6 +94,15 @@ namespace Draw2D.Core.Shapes
             base.Deselect(selected);
             StartPoint.Deselect(selected);
             Point.Deselect(selected);
+        }
+
+        public LineShape Copy()
+        {
+            return new LineShape()
+            {
+                Style = this.Style,
+                Transform = this.Transform
+            };
         }
     }
 }

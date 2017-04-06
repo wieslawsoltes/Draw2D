@@ -5,7 +5,7 @@ using Draw2D.Core.Renderers;
 
 namespace Draw2D.Core.Shapes
 {
-    public class CubicBezierShape : ConnectableShape
+    public class CubicBezierShape : ConnectableShape, ICopyable<CubicBezierShape>
     {
         private PointShape _startPoint;
         private PointShape _point1;
@@ -136,6 +136,15 @@ namespace Draw2D.Core.Shapes
             Point1.Deselect(selected);
             Point2.Deselect(selected);
             Point3.Deselect(selected);
+        }
+
+        public CubicBezierShape Copy()
+        {
+            return new CubicBezierShape()
+            {
+                Style = this.Style,
+                Transform = this.Transform
+            };
         }
     }
 }
