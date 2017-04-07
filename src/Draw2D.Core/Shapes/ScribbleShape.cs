@@ -6,39 +6,21 @@ using Draw2D.Core.Renderers;
 
 namespace Draw2D.Core.Shapes
 {
-    public class ScribbleShape : ShapeObject, ICopyable<ScribbleShape>
+    public class ScribbleShape : ConnectableShape, ICopyable<ScribbleShape>
     {
-        private PointShape _start;
-        private ObservableCollection<PointShape> _points;
-
-        public PointShape Start
-        {
-            get => _start;
-            set => Update(ref _start, value);
-        }
-
-        public ObservableCollection<PointShape> Points
-        {
-            get => _points;
-            set => Update(ref _points, value);
-        }
-
         public ScribbleShape()
             : base()
         {
-            _points = new ObservableCollection<PointShape>();
         }
 
-        public ScribbleShape(PointShape start, ObservableCollection<PointShape> points)
+        public ScribbleShape(ObservableCollection<PointShape> points)
             : base()
         {
-            this.Start = start;
             this.Points = points;
         }
 
         public override IEnumerable<PointShape> GetPoints()
         {
-            yield return Start;
             foreach (var point in Points)
             {
                 yield return point;
@@ -49,14 +31,9 @@ namespace Draw2D.Core.Shapes
         {
             base.BeginTransform(dc, r);
 
-            if (_points.Count >= 1 && Style != null)
+            if (_points.Count >= 2 && Style != null)
             {
-                r.DrawPolyLine(dc, _start, _points, Style, dx, dy);
-            }
-
-            if (r.Selected.Contains(_start))
-            {
-                _start.Draw(dc, r, dx, dy);
+                r.DrawPolyLine(dc, _points, Style, dx, dy);
             }
 
             foreach (var point in _points)
@@ -83,30 +60,6 @@ namespace Draw2D.Core.Shapes
                 {
                     point.Move(selected, dx, dy);
                 }
-            }
-        }
-
-        public override void Select(ISet<ShapeObject> selected)
-        {
-            base.Select(selected);
-
-            Start.Select(selected);
-
-            foreach (var point in Points)
-            {
-                point.Select(selected);
-            }
-        }
-
-        public override void Deselect(ISet<ShapeObject> selected)
-        {
-            base.Deselect(selected);
-
-            Start.Deselect(selected);
-
-            foreach (var point in Points)
-            {
-                point.Deselect(selected);
             }
         }
 
