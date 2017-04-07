@@ -33,9 +33,9 @@ namespace Draw2D.Core.Editor.Tools
                     {
                         _scribble = new ScribbleShape()
                         {
-                            Start = new PointShape(x, y, context.PointShape),
                             Style = context.CurrentStyle
                         };
+                        _scribble.Points.Add(new PointShape(x, y, context.PointShape));
                         context.WorkingContainer.Shapes.Add(_scribble);
                         CurrentState = State.Points;
                     }
