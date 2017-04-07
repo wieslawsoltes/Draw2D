@@ -4,8 +4,6 @@ os:
   - osx
 dist: trusty
 sudo: required
-mono:
-  - latest
 dotnet: 1.0.1
 script:
   - cd src/Draw2D.NetCore
