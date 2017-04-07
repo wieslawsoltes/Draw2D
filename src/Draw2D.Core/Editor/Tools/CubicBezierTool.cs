@@ -1,5 +1,6 @@
 ﻿// Copyright (c) Wiesław Šoltés. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
+using System.Linq;
 using Draw2D.Core.Shapes;
 
 namespace Draw2D.Core.Editor.Tools
@@ -18,6 +19,8 @@ namespace Draw2D.Core.Editor.Tools
         public override void LeftDown(IToolContext context, double x, double y, Modifier modifier)
         {
             base.LeftDown(context, x, y, modifier);
+
+            Filters?.Any(f => f.Process(context, ref x, ref y));
 
             switch (CurrentState)
             {
@@ -112,6 +115,9 @@ namespace Draw2D.Core.Editor.Tools
         {
             base.Move(context, x, y, modifier);
 
+            Filters?.ForEach(f => f.Clear(context));
+            Filters?.Any(f => f.Process(context, ref x, ref y));
+
             switch (CurrentState)
             {
                 case State.Point1:
@@ -147,6 +153,8 @@ namespace Draw2D.Core.Editor.Tools
             base.Clean(context);
 
             CurrentState = State.StartPoint;
+
+            Filters?.ForEach(f => f.Clear(context));
 
             if (_cubicBezier != null)
             {

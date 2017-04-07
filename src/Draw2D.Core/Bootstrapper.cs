@@ -252,6 +252,8 @@ namespace Draw2D.Core
             {
                 Filters = new List<PointFilter>
                 {
+                    //lineSnapPointFilter,
+                    //gridSnapPointFilter
                 },
                 Settings = new ScribbleToolSettings()
                 {

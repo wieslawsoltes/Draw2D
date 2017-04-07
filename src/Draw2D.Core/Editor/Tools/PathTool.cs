@@ -3,8 +3,9 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using Draw2D.Core.Editor.Bounds;
+using System.Linq;
 using Draw2D.Core.Containers;
+using Draw2D.Core.Editor.Bounds;
 using Draw2D.Core.Renderers;
 using Draw2D.Core.Shapes;
 using Draw2D.Core.Style;
@@ -165,6 +166,8 @@ namespace Draw2D.Core.Editor.Tools
         {
             base.LeftDown(context, x, y, modifier);
 
+            Filters?.Any(f => f.Process(context, ref x, ref y));
+
             if (_path == null)
             {
                 Create(context);
@@ -222,6 +225,9 @@ namespace Draw2D.Core.Editor.Tools
         {
             base.Move(context, x, y, modifier);
 
+            Filters?.ForEach(f => f.Clear(context));
+            Filters?.Any(f => f.Process(context, ref x, ref y));
+
             SetCurrentContext(context);
             CurrentSubTool.Move(this, x, y, modifier);
             SetCurrentContext(null);
@@ -239,6 +245,8 @@ namespace Draw2D.Core.Editor.Tools
             base.Clean(context);
 
             CleanSubTool(context);
+
+            Filters?.ForEach(f => f.Clear(context));
 
             if (_path != null)
             {
