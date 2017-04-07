@@ -30,6 +30,14 @@ namespace Draw2D.NetCore.Views
             rendererView = this.FindControl<ShapesContainerRenderView>("rendererView");
         }
 
+        public void SetNoneTool()
+        {
+            if (this.DataContext is ShapesContainerViewModel vm)
+            {
+                vm.CurrentTool = vm.Tools.Where(t => t.Name == "None").FirstOrDefault();
+            }
+        }
+
         public void SetSelectionTool()
         {
             if (this.DataContext is ShapesContainerViewModel vm)
@@ -51,6 +59,14 @@ namespace Draw2D.NetCore.Views
                 {
                     vm.CurrentTool = vm.Tools.Where(t => t.Name == "Line").FirstOrDefault();
                 }
+            }
+        }
+
+        public void SetPointTool()
+        {
+            if (this.DataContext is ShapesContainerViewModel vm)
+            {
+                vm.CurrentTool = vm.Tools.Where(t => t.Name == "Point").FirstOrDefault();
             }
         }
 
@@ -106,6 +122,22 @@ namespace Draw2D.NetCore.Views
             }
         }
 
+        public void SetRectangleTool()
+        {
+            if (this.DataContext is ShapesContainerViewModel vm)
+            {
+                vm.CurrentTool = vm.Tools.Where(t => t.Name == "Rectangle").FirstOrDefault();
+            }
+        }
+
+        public void SetEllipseTool()
+        {
+            if (this.DataContext is ShapesContainerViewModel vm)
+            {
+                vm.CurrentTool = vm.Tools.Where(t => t.Name == "Ellipse").FirstOrDefault();
+            }
+        }
+
         private void MainView_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Modifiers == InputModifiers.Control)
@@ -142,11 +174,17 @@ namespace Draw2D.NetCore.Views
             {
                 switch (e.Key)
                 {
+                    case Key.N:
+                        SetNoneTool();
+                        break;
                     case Key.S:
                         SetSelectionTool();
                         break;
                     case Key.L:
                         SetLineTool();
+                        break;
+                    case Key.P:
+                        SetPointTool();
                         break;
                     case Key.C:
                         SetCubicBezierTool();
@@ -159,6 +197,12 @@ namespace Draw2D.NetCore.Views
                         break;
                     case Key.M:
                         SetMoveTool();
+                        break;
+                    case Key.R:
+                        SetRectangleTool();
+                        break;
+                    case Key.E:
+                        SetEllipseTool();
                         break;
                     case Key.Delete:
                         Delete();

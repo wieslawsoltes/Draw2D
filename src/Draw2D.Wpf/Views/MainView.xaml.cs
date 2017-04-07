@@ -21,6 +21,14 @@ namespace Draw2D.Wpf.Views
             KeyDown += MainView_KeyDown;
         }
 
+        public void SetNoneTool()
+        {
+            if (this.DataContext is ShapesContainerViewModel vm)
+            {
+                vm.CurrentTool = vm.Tools.Where(t => t.Name == "None").FirstOrDefault();
+            }
+        }
+
         public void SetSelectionTool()
         {
             if (this.DataContext is ShapesContainerViewModel vm)
@@ -42,6 +50,14 @@ namespace Draw2D.Wpf.Views
                 {
                     vm.CurrentTool = vm.Tools.Where(t => t.Name == "Line").FirstOrDefault();
                 }
+            }
+        }
+
+        public void SetPointTool()
+        {
+            if (this.DataContext is ShapesContainerViewModel vm)
+            {
+                vm.CurrentTool = vm.Tools.Where(t => t.Name == "Point").FirstOrDefault();
             }
         }
 
@@ -97,6 +113,22 @@ namespace Draw2D.Wpf.Views
             }
         }
 
+        public void SetRectangleTool()
+        {
+            if (this.DataContext is ShapesContainerViewModel vm)
+            {
+                vm.CurrentTool = vm.Tools.Where(t => t.Name == "Rectangle").FirstOrDefault();
+            }
+        }
+
+        public void SetEllipseTool()
+        {
+            if (this.DataContext is ShapesContainerViewModel vm)
+            {
+                vm.CurrentTool = vm.Tools.Where(t => t.Name == "Ellipse").FirstOrDefault();
+            }
+        }
+
         private void MainView_KeyDown(object sender, KeyEventArgs e)
         {
             if (Keyboard.Modifiers == ModifierKeys.Control)
@@ -133,11 +165,17 @@ namespace Draw2D.Wpf.Views
             {
                 switch (e.Key)
                 {
+                    case Key.N:
+                        SetNoneTool();
+                        break;
                     case Key.S:
                         SetSelectionTool();
                         break;
                     case Key.L:
                         SetLineTool();
+                        break;
+                    case Key.P:
+                        SetPointTool();
                         break;
                     case Key.C:
                         SetCubicBezierTool();
@@ -150,6 +188,12 @@ namespace Draw2D.Wpf.Views
                         break;
                     case Key.M:
                         SetMoveTool();
+                        break;
+                    case Key.R:
+                        SetRectangleTool();
+                        break;
+                    case Key.E:
+                        SetEllipseTool();
                         break;
                     case Key.Delete:
                         Delete();
