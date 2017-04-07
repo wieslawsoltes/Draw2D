@@ -177,7 +177,7 @@ namespace Draw2D.NetCore.Renderers
                     context.BeginFigure(result[0], style.IsFilled);
                     for (int i = 1; i < points.Count; i++)
                     {
-                        context.LineTo(points[i]);
+                        context.LineTo(result[i]);
                     }
                 }
                 _dc.DrawGeometry(style.IsFilled ? cache?.Fill : null, style.IsStroked ? cache?.StrokePen : null, geometry);
