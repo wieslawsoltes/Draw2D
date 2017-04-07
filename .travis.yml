@@ -8,9 +8,10 @@ mono:
   - latest
 dotnet: 1.0.1
 script:
-  - dotnet restore ./src/Draw2D.NetCore
-  - dotnet publish ./src/Draw2D.NetCore/Draw2D.NetCore.csproj -c Release -r win7-x64 -o bin/win7-x64
-  - dotnet publish ./src/Draw2D.NetCore/Draw2D.NetCore.csproj -c Release -r win7-x86 -o bin/win7-x86
-  - dotnet publish ./src/Draw2D.NetCore/Draw2D.NetCore.csproj -c Release -r ubuntu.14.04-x64 -o bin/ubuntu.14.04-x64
-  - dotnet publish ./src/Draw2D.NetCore/Draw2D.NetCore.csproj -c Release -r ubuntu.16.10-x64 -o bin/ubuntu.16.10-x64
-  - dotnet publish ./src/Draw2D.NetCore/Draw2D.NetCore.csproj -c Release -r osx.10.12-x64 -o bin/osx.10.12-x64
+  - cd src/Draw2D.NetCore
+  - dotnet restore
+  - dotnet publish -c Release -r win7-x64 -o bin/win7-x64
+  - dotnet publish -c Release -r win7-x86 -o bin/win7-x86
+  - dotnet publish -c Release -r ubuntu.14.04-x64 -o bin/ubuntu.14.04-x64
+  - dotnet publish -c Release -r ubuntu.16.10-x64 -o bin/ubuntu.16.10-x64
+  - dotnet publish -c Release -r osx.10.12-x64 -o bin/osx.10.12-x64
