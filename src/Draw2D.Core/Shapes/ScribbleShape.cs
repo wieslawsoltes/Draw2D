@@ -31,12 +31,12 @@ namespace Draw2D.Core.Shapes
         {
             base.BeginTransform(dc, r);
 
-            if (_points.Count >= 2 && Style != null)
+            if (Points.Count >= 2 && Style != null)
             {
-                r.DrawPolyLine(dc, _points, Style, dx, dy);
+                r.DrawPolyLine(dc, Points, Style, dx, dy);
             }
 
-            foreach (var point in _points)
+            foreach (var point in Points)
             {
                 if (r.Selected.Contains(point))
                 {
@@ -49,11 +49,6 @@ namespace Draw2D.Core.Shapes
 
         public override void Move(ISet<ShapeObject> selected, double dx, double dy)
         {
-            if (!selected.Contains(_start))
-            {
-                _start.Move(selected, dx, dy);
-            }
-
             foreach (var point in Points)
             {
                 if (!selected.Contains(point))
