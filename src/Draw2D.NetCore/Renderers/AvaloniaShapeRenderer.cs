@@ -34,15 +34,9 @@ namespace Draw2D.NetCore.Renderers
             return new Point(point.X + dx, point.Y + dy);
         }
 
-        public static List<Point> FromPoints(IList<PointShape> points, double dx, double dy)
+        public static IEnumerable<Point> FromPoints(IEnumerable<PointShape> points, double dx, double dy)
         {
-            var result = new List<Point>(points.Count);
-            for (int i = 0; i < points.Count; i++)
-            {
-                var point = points[i];
-                result.Add(new Point(point.X + dx, point.Y + dy));
-            }
-            return result;
+            return points.Select(point => new Point(point.X + dx, point.Y + dy));
         }
 
         private Rect FromPoints(double x1, double y1, double x2, double y2, double dx, double dy)
@@ -169,27 +163,24 @@ namespace Draw2D.NetCore.Renderers
             _dc.DrawLine(style.IsStroked ? cache?.StrokePen : null, FromPoint(line.StartPoint, dx, dy), FromPoint(line.Point, dx, dy));
         }
 
-        public override void DrawPolyLine(object dc, PointShape start, IList<PointShape> points, DrawStyle style, double dx, double dy)
+        public override void DrawPolyLine(object dc, IList<PointShape> points, DrawStyle style, double dx, double dy)
         {
             var cache = GetOrCreateCache(style);
             var _dc = dc as DrawingContext;
             var geometry = new StreamGeometry();
-            using (var context = geometry.Open())
+            var result = FromPoints(points, dx, dy).ToList();
+            if (result.Count >= 2)
             {
-                context.BeginFigure(FromPoint(start, dx, dy), style.IsFilled);
-                if (points.Count >= 1)
+                using (var context = geometry.Open())
                 {
-                    context.LineTo(FromPoint(points[0], dx, dy));
-                }
-                if (points.Count > 1)
-                {
+                    context.BeginFigure(result[0], style.IsFilled);
                     for (int i = 1; i < points.Count; i++)
                     {
-                        context.LineTo(FromPoint(points[i], dx, dy));
+                        context.LineTo(points[i]);
                     }
                 }
+                _dc.DrawGeometry(style.IsFilled ? cache?.Fill : null, style.IsStroked ? cache?.StrokePen : null, geometry);
             }
-            _dc.DrawGeometry(style.IsFilled ? cache?.Fill : null, style.IsStroked ? cache?.StrokePen : null, geometry);
         }
 
         public override void DrawCubicBezier(object dc, CubicBezierShape cubicBezier, DrawStyle style, double dx, double dy)
