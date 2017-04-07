@@ -18,11 +18,6 @@ namespace Draw2D.Core.Editor.Bounds.Shapes
 
             var pointHitTest = hitTest.Registered[typeof(PointShape)];
 
-            if (pointHitTest.TryToGetPoint(scribble.Start, target, radius, hitTest) != null)
-            {
-                return scribble.Start;
-            }
-
             foreach (var point in scribble.Points)
             {
                 if (pointHitTest.TryToGetPoint(point, target, radius, hitTest) != null)
