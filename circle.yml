@@ -1,7 +1,7 @@
 version: 2
 jobs:
   build:
-    working_directory: ~/Draw2D
+    working_directory: ~/
     docker:
       - image: microsoft/dotnet:sdk
     environment:
@@ -9,6 +9,6 @@ jobs:
       DOTNET_CLI_TELEMETRY_OPTOUT: 1
     steps:
       - checkout
-      - run: cd src/Draw2D.NetCore
+      - run: cd Draw2D/src/Draw2D.NetCore
       - run: dotnet restore
       - run: dotnet build
