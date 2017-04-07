@@ -1,6 +1,7 @@
 version: 2
 jobs:
   build:
+    working_directory: ~/Draw2D
     docker:
       - image: microsoft/dotnet:sdk
     environment:
