@@ -124,6 +124,9 @@ namespace Draw2D.Wpf.Views
                     case Key.G:
                         Group();
                         break;
+                    case Key.A:
+                        SelectAll();
+                        break;
                 }
             }
             else if (Keyboard.Modifiers == ModifierKeys.None)
@@ -198,6 +201,11 @@ namespace Draw2D.Wpf.Views
         private void EditGroup_Click(object sender, RoutedEventArgs e)
         {
             Group();
+        }
+
+        private void EditSelectAll_Click(object sender, RoutedEventArgs e)
+        {
+            SelectAll();
         }
 
         private void New()
@@ -300,6 +308,17 @@ namespace Draw2D.Wpf.Views
                 if (vm.CurrentTool is SelectionTool selectionTool)
                 {
                     selectionTool.Group(vm);
+                }
+            }
+        }
+
+        private void SelectAll()
+        {
+            if (this.DataContext is ShapesContainerViewModel vm)
+            {
+                if (vm.CurrentTool is SelectionTool selectionTool)
+                {
+                    selectionTool.SelectAll(vm);
                 }
             }
         }

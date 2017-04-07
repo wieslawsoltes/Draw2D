@@ -41,6 +41,8 @@
                 <MenuItem Header="Delete" x:Name="EditDelete" Click="EditDelete_Click"/>
                 <Separator/>
                 <MenuItem Header="Group" x:Name="EditGroup" Click="EditGroup_Click"/>
+                <Separator/>
+                <MenuItem Header="Select All" x:Name="EditSelectAll" Click="EditSelectAll_Click"/>
             </MenuItem>
         </Menu>
         <Grid Grid.Row="2" Grid.Column="0">

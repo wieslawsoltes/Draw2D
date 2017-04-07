@@ -133,6 +133,9 @@ namespace Draw2D.NetCore.Views
                     case Key.G:
                         Group();
                         break;
+                    case Key.A:
+                        SelectAll();
+                        break;
                 }
             }
             else if (e.Modifiers == InputModifiers.None)
@@ -234,6 +237,17 @@ namespace Draw2D.NetCore.Views
                 if (vm.CurrentTool is SelectionTool selectionTool)
                 {
                     selectionTool.Group(vm);
+                }
+            }
+        }
+
+        private void SelectAll()
+        {
+            if (this.DataContext is ShapesContainerViewModel vm)
+            {
+                if (vm.CurrentTool is SelectionTool selectionTool)
+                {
+                    selectionTool.SelectAll(vm);
                 }
             }
         }

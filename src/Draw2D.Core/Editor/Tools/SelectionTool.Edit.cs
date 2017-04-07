@@ -240,5 +240,23 @@ namespace Draw2D.Core.Editor.Tools
                 this.CurrentState = State.None;
             }
         }
+
+        public void SelectAll(IToolContext context)
+        {
+            lock (context.Renderer.Selected)
+            {
+                context.Renderer.Selected.Clear();
+
+                foreach (var shape in context.CurrentContainer.Shapes)
+                {
+                    shape.Select(context.Renderer.Selected);
+                }
+
+                context.Invalidate();
+
+                this.HaveSelection = true;
+                this.CurrentState = SelectionTool.State.None;
+            }
+        }
     }
 }
