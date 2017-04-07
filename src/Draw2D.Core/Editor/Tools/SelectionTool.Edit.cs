@@ -105,7 +105,6 @@ namespace Draw2D.Core.Editor.Tools
                 case ScribbleShape scribble:
                     {
                         var copy = scribble.Copy();
-                        copy.Start = distinctPointsCopy[scribble.Start];
                         foreach (var point in scribble.Points)
                         {
                             copy.Points.Add(distinctPointsCopy[point]);
