@@ -1,9 +1,7 @@
-language: csharp
 os:
   - linux
   - osx
 dist: trusty
-sudo: required
 dotnet: 1.0.1
 script:
   - cd src/Draw2D.NetCore
