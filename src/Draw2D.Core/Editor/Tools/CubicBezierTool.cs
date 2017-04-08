@@ -16,80 +16,177 @@ namespace Draw2D.Core.Editor.Tools
 
         public CubicBezierToolSettings Settings { get; set; }
 
+        private void StartPointInternal(IToolContext context, double x, double y, Modifier modifier)
+        {
+            Filters?.Any(f => f.Process(context, ref x, ref y));
+
+            var next = context.GetNextPoint(x, y, false, 0.0);
+            _cubicBezier = new CubicBezierShape()
+            {
+                StartPoint = next,
+                Point1 = next.Copy(),
+                Point2 = next.Copy(),
+                Point3 = next.Copy(),
+                Style = context.CurrentStyle
+            };
+            context.WorkingContainer.Shapes.Add(_cubicBezier);
+            context.Selected.Add(_cubicBezier);
+            context.Selected.Add(_cubicBezier.StartPoint);
+            context.Selected.Add(_cubicBezier.Point1);
+            context.Selected.Add(_cubicBezier.Point2);
+            context.Selected.Add(_cubicBezier.Point3);
+
+            context.Capture();
+            context.Invalidate();
+
+            CurrentState = State.Point3;
+        }
+
+        private void Point1Internal(IToolContext context, double x, double y, Modifier modifier)
+        {
+            Filters?.Any(f => f.Process(context, ref x, ref y));
+
+            CurrentState = State.StartPoint;
+
+            context.Selected.Remove(_cubicBezier);
+            context.Selected.Remove(_cubicBezier.StartPoint);
+            context.Selected.Remove(_cubicBezier.Point1);
+            context.Selected.Remove(_cubicBezier.Point2);
+            context.Selected.Remove(_cubicBezier.Point3);
+            context.WorkingContainer.Shapes.Remove(_cubicBezier);
+
+            _cubicBezier.Point1 = context.GetNextPoint(x, y, false, 0.0);
+            context.CurrentContainer.Shapes.Add(_cubicBezier);
+            _cubicBezier = null;
+
+            Filters?.ForEach(f => f.Clear(context));
+
+            context.Release();
+            context.Invalidate();
+        }
+
+        private void Point2Internal(IToolContext context, double x, double y, Modifier modifier)
+        {
+            Filters?.Any(f => f.Process(context, ref x, ref y));
+
+            _cubicBezier.Point1.X = x;
+            _cubicBezier.Point1.Y = y;
+
+            context.Selected.Remove(_cubicBezier.Point2);
+            _cubicBezier.Point2 = context.GetNextPoint(x, y, false, 0.0);
+            context.Selected.Add(_cubicBezier.Point2);
+
+            CurrentState = State.Point1;
+
+            context.Invalidate();
+        }
+
+        private void Point3Internal(IToolContext context, double x, double y, Modifier modifier)
+        {
+            Filters?.Any(f => f.Process(context, ref x, ref y));
+
+            _cubicBezier.Point2.X = x;
+            _cubicBezier.Point2.Y = y;
+
+            context.Selected.Remove(_cubicBezier.Point3);
+            _cubicBezier.Point3 = context.GetNextPoint(x, y, false, 0.0);
+            context.Selected.Add(_cubicBezier.Point3);
+
+            CurrentState = State.Point2;
+
+            context.Invalidate();
+        }
+
+        private void MoveStartPointInternal(IToolContext context, double x, double y, Modifier modifier)
+        {
+            Filters?.ForEach(f => f.Clear(context));
+            Filters?.Any(f => f.Process(context, ref x, ref y));
+
+            context.Invalidate();
+        }
+
+        private void MovePoint1Internal(IToolContext context, double x, double y, Modifier modifier)
+        {
+            Filters?.ForEach(f => f.Clear(context));
+            Filters?.Any(f => f.Process(context, ref x, ref y));
+
+            _cubicBezier.Point1.X = x;
+            _cubicBezier.Point1.Y = y;
+
+            context.Invalidate();
+        }
+
+        private void MovePoint2Internal(IToolContext context, double x, double y, Modifier modifier)
+        {
+            Filters?.ForEach(f => f.Clear(context));
+            Filters?.Any(f => f.Process(context, ref x, ref y));
+
+            _cubicBezier.Point1.X = x;
+            _cubicBezier.Point1.Y = y;
+            _cubicBezier.Point2.X = x;
+            _cubicBezier.Point2.Y = y;
+
+            context.Invalidate();
+        }
+
+        private void MovePoint3Internal(IToolContext context, double x, double y, Modifier modifier)
+        {
+            Filters?.ForEach(f => f.Clear(context));
+            Filters?.Any(f => f.Process(context, ref x, ref y));
+
+            _cubicBezier.Point2.X = x;
+            _cubicBezier.Point2.Y = y;
+            _cubicBezier.Point3.X = x;
+            _cubicBezier.Point3.Y = y;
+
+            context.Invalidate();
+        }
+
+        private void CleanInternal(IToolContext context)
+        {
+            Filters?.ForEach(f => f.Clear(context));
+
+            CurrentState = State.StartPoint;
+
+            if (_cubicBezier != null)
+            {
+                context.WorkingContainer.Shapes.Remove(_cubicBezier);
+                context.Selected.Remove(_cubicBezier);
+                context.Selected.Remove(_cubicBezier.StartPoint);
+                context.Selected.Remove(_cubicBezier.Point1);
+                context.Selected.Remove(_cubicBezier.Point2);
+                context.Selected.Remove(_cubicBezier.Point3);
+                _cubicBezier = null;
+            }
+
+            context.Release();
+            context.Invalidate();
+        }
+
         public override void LeftDown(IToolContext context, double x, double y, Modifier modifier)
         {
             base.LeftDown(context, x, y, modifier);
-
-            Filters?.Any(f => f.Process(context, ref x, ref y));
 
             switch (CurrentState)
             {
                 case State.StartPoint:
                     {
-                        var next = context.GetNextPoint(x, y, false, 0.0);
-                        _cubicBezier = new CubicBezierShape()
-                        {
-                            StartPoint = next,
-                            Point1 = next.Copy(),
-                            Point2 = next.Copy(),
-                            Point3 = next.Copy(),
-                            Style = context.CurrentStyle
-                        };
-                        context.WorkingContainer.Shapes.Add(_cubicBezier);
-                        context.Selected.Add(_cubicBezier);
-                        context.Selected.Add(_cubicBezier.StartPoint);
-                        context.Selected.Add(_cubicBezier.Point1);
-                        context.Selected.Add(_cubicBezier.Point2);
-                        context.Selected.Add(_cubicBezier.Point3);
-                        context.Capture();
-                        context.Invalidate();
-                        CurrentState = State.Point3;
+                        StartPointInternal(context, x, y, modifier);
                     }
                     break;
                 case State.Point1:
                     {
-                        CurrentState = State.StartPoint;
-
-                        context.Selected.Remove(_cubicBezier);
-                        context.Selected.Remove(_cubicBezier.StartPoint);
-                        context.Selected.Remove(_cubicBezier.Point1);
-                        context.Selected.Remove(_cubicBezier.Point2);
-                        context.Selected.Remove(_cubicBezier.Point3);
-                        context.WorkingContainer.Shapes.Remove(_cubicBezier);
-
-                        _cubicBezier.Point1 = context.GetNextPoint(x, y, false, 0.0);
-
-                        context.CurrentContainer.Shapes.Add(_cubicBezier);
-
-                        _cubicBezier = null;
-                        context.Release();
-                        context.Invalidate();
+                        Point1Internal(context, x, y, modifier);
                     }
                     break;
                 case State.Point2:
                     {
-                        _cubicBezier.Point1.X = x;
-                        _cubicBezier.Point1.Y = y;
-
-                        context.Selected.Remove(_cubicBezier.Point2);
-                        _cubicBezier.Point2 = context.GetNextPoint(x, y, false, 0.0);
-                        context.Selected.Add(_cubicBezier.Point2);
-
-                        CurrentState = State.Point1;
-                        context.Invalidate();
+                        Point2Internal(context, x, y, modifier);
                     }
                     break;
                 case State.Point3:
                     {
-                        _cubicBezier.Point2.X = x;
-                        _cubicBezier.Point2.Y = y;
-
-                        context.Selected.Remove(_cubicBezier.Point3);
-                        _cubicBezier.Point3 = context.GetNextPoint(x, y, false, 0.0);
-                        context.Selected.Add(_cubicBezier.Point3);
-
-                        CurrentState = State.Point2;
-                        context.Invalidate();
+                        Point3Internal(context, x, y, modifier);
                     }
                     break;
             }
@@ -115,34 +212,26 @@ namespace Draw2D.Core.Editor.Tools
         {
             base.Move(context, x, y, modifier);
 
-            Filters?.ForEach(f => f.Clear(context));
-            Filters?.Any(f => f.Process(context, ref x, ref y));
-
             switch (CurrentState)
             {
+                case State.StartPoint:
+                    {
+                        MoveStartPointInternal(context, x, y, modifier);
+                    }
+                    break;
                 case State.Point1:
                     {
-                        _cubicBezier.Point1.X = x;
-                        _cubicBezier.Point1.Y = y;
-                        context.Invalidate();
+                        MovePoint1Internal(context, x, y, modifier);
                     }
                     break;
                 case State.Point2:
                     {
-                        _cubicBezier.Point1.X = x;
-                        _cubicBezier.Point1.Y = y;
-                        _cubicBezier.Point2.X = x;
-                        _cubicBezier.Point2.Y = y;
-                        context.Invalidate();
+                        MovePoint2Internal(context, x, y, modifier);
                     }
                     break;
                 case State.Point3:
                     {
-                        _cubicBezier.Point2.X = x;
-                        _cubicBezier.Point2.Y = y;
-                        _cubicBezier.Point3.X = x;
-                        _cubicBezier.Point3.Y = y;
-                        context.Invalidate();
+                        MovePoint3Internal(context, x, y, modifier);
                     }
                     break;
             }
@@ -152,23 +241,7 @@ namespace Draw2D.Core.Editor.Tools
         {
             base.Clean(context);
 
-            CurrentState = State.StartPoint;
-
-            Filters?.ForEach(f => f.Clear(context));
-
-            if (_cubicBezier != null)
-            {
-                context.WorkingContainer.Shapes.Remove(_cubicBezier);
-                context.Selected.Remove(_cubicBezier);
-                context.Selected.Remove(_cubicBezier.StartPoint);
-                context.Selected.Remove(_cubicBezier.Point1);
-                context.Selected.Remove(_cubicBezier.Point2);
-                context.Selected.Remove(_cubicBezier.Point3);
-                _cubicBezier = null;
-            }
-
-            context.Release();
-            context.Invalidate();
+            CleanInternal(context);
         }
     }
 }
