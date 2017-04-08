@@ -231,7 +231,18 @@ namespace Draw2D.Core.Editor.Tools
             }
             else
             {
-                foreach (var shape in context.Selected)
+                foreach (var shape in context.Selected.ToList())
+                {
+                    if (Settings.DisconnectPoints && modifier.HasFlag(Modifier.Shift))
+                    {
+                        if (!(shape is PointShape) && _disconnected == false)
+                        {
+                            Disconnect(context, shape);
+                        }
+                    }
+                }
+
+                foreach (var shape in context.Selected.ToList())
                 {
                     shape.Move(context.Selected, dx, dy);
                 }
@@ -281,6 +292,16 @@ namespace Draw2D.Core.Editor.Tools
                         break;
                     }
                 }
+            }
+        }
+
+        private void Disconnect(IToolContext context, ShapeObject shape)
+        {
+            if (shape is ConnectableShape connectable)
+            {
+                connectable.Deselect(context.Selected);
+                _disconnected = connectable.Disconnect();
+                connectable.Select(context.Selected);
             }
         }
 

@@ -104,7 +104,7 @@ namespace Draw2D.Core.Shapes
                 return true;
             }
             else if (StartPoint != point && Point != point)
-            { 
+            {
                 if (StartPoint == target)
                 {
                     Debug.WriteLine($"LineShape Connected to StartPoint");
@@ -143,6 +143,27 @@ namespace Draw2D.Core.Shapes
             }
             result = null;
             return false;
+        }
+
+        public override bool Disconnect()
+        {
+            bool result = base.Disconnect();
+
+            if (this.StartPoint != null)
+            {
+                Debug.WriteLine($"LineShape Disconnected from StartPoint");
+                this.StartPoint = this.StartPoint.Copy();
+                result = true;
+            }
+
+            if (this.Point != null)
+            {
+                Debug.WriteLine($"LineShape Disconnected from Point");
+                this.Point = this.Point.Copy();
+                result = true;
+            }
+
+            return result;
         }
 
         public LineShape Copy()

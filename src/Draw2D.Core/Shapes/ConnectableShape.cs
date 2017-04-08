@@ -92,5 +92,19 @@ namespace Draw2D.Core.Shapes
             result = null;
             return false;
         }
+
+        public virtual bool Disconnect()
+        {
+            bool result = false;
+
+            for (int i = 0; i < _points.Count; i++)
+            {
+                Debug.WriteLine($"ConnectableShape Disconnected Point {i}");
+                _points[i] = _points[i].Copy();
+                result = true;
+            }
+
+            return result;
+        }
     }
 }
