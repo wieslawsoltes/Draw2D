@@ -9,88 +9,71 @@ namespace Draw2D.Core.Editor.Tools
     {
         private LineShape _line = null;
 
-        public enum State { Start, End };
-        public State CurrentState = State.Start;
+        public enum State { StartPoint, Point };
+        public State CurrentState = State.StartPoint;
 
         public override string Name { get { return "Guide"; } }
 
         public GuideToolSettings Settings { get; set; }
 
-        public override void LeftDown(IToolContext context, double x, double y, Modifier modifier)
+        private void StartPointInternal(IToolContext context, double x, double y, Modifier modifier)
         {
-            base.LeftDown(context, x, y, modifier);
-
             Filters?.Any(f => f.Process(context, ref x, ref y));
 
-            switch (CurrentState)
+            _line = new LineShape()
             {
-                case State.Start:
-                    {
-                        _line = new LineShape()
-                        {
-                            StartPoint = new PointShape(x, y, null),
-                            Point = new PointShape(x, y, null),
-                            Style = Settings?.GuideStyle
-                        };
-                        context.WorkingContainer.Shapes.Add(_line);
-                        context.Capture();
-                        context.Invalidate();
-                        CurrentState = State.End;
-                    }
-                    break;
-                case State.End:
-                    {
-                        CurrentState = State.Start;
-                        _line.Point.X = x;
-                        _line.Point.Y = y;
-                        context.WorkingContainer.Shapes.Remove(_line);
-                        context.CurrentContainer.Guides.Add(_line);
-                        _line = null;
-                        context.Release();
-                        context.Invalidate();
-                    }
-                    break;
-            }
+                StartPoint = new PointShape(x, y, null),
+                Point = new PointShape(x, y, null),
+                Style = Settings?.GuideStyle
+            };
+            context.WorkingContainer.Shapes.Add(_line);
+
+            context.Capture();
+            context.Invalidate();
+
+            CurrentState = State.Point;
         }
 
-        public override void RightDown(IToolContext context, double x, double y, Modifier modifier)
+        private void PointInternal(IToolContext context, double x, double y, Modifier modifier)
         {
-            base.RightDown(context, x, y, modifier);
+            Filters?.Any(f => f.Process(context, ref x, ref y));
 
-            switch (CurrentState)
-            {
-                case State.End:
-                    {
-                        this.Clean(context);
-                    }
-                    break;
-            }
+            CurrentState = State.StartPoint;
+
+            _line.Point.X = x;
+            _line.Point.Y = y;
+            context.WorkingContainer.Shapes.Remove(_line);
+            context.CurrentContainer.Guides.Add(_line);
+            _line = null;
+
+            Filters?.ForEach(f => f.Clear(context));
+
+            context.Release();
+            context.Invalidate();
         }
 
-        public override void Move(IToolContext context, double x, double y, Modifier modifier)
+        private void MoveStratPointInternal(IToolContext context, double x, double y, Modifier modifier)
         {
-            base.Move(context, x, y, modifier);
-
             Filters?.ForEach(f => f.Clear(context));
             Filters?.Any(f => f.Process(context, ref x, ref y));
 
-            switch (CurrentState)
-            {
-                case State.End:
-                    {
-                        _line.Point.X = x;
-                        _line.Point.Y = y;
-                        context.Invalidate();
-                    }
-                    break;
-            }
+            context.Invalidate();
         }
 
-        public override void Clean(IToolContext context)
+        private void MovePointInternal(IToolContext context, double x, double y, Modifier modifier)
         {
-            base.Clean(context);
+            Filters?.ForEach(f => f.Clear(context));
+            Filters?.Any(f => f.Process(context, ref x, ref y));
 
-            CurrentState = State.Start;
+            _line.Point.X = x;
+            _line.Point.Y = y;
+
+            context.Invalidate();
+        }
+
+        private void CleanInternal(IToolContext context)
+        {
+            CurrentState = State.StartPoint;
 
             Filters?.ForEach(f => f.Clear(context));
 
@@ -102,6 +85,65 @@ namespace Draw2D.Core.Editor.Tools
 
             context.Release();
             context.Invalidate();
+        }
+
+        public override void LeftDown(IToolContext context, double x, double y, Modifier modifier)
+        {
+            base.LeftDown(context, x, y, modifier);
+
+            switch (CurrentState)
+            {
+                case State.StartPoint:
+                    {
+                        StartPointInternal(context, x, y, modifier);
+                    }
+                    break;
+                case State.Point:
+                    {
+                        PointInternal(context, x, y, modifier);
+                    }
+                    break;
+            }
+        }
+
+        public override void RightDown(IToolContext context, double x, double y, Modifier modifier)
+        {
+            base.RightDown(context, x, y, modifier);
+
+            switch (CurrentState)
+            {
+                case State.Point:
+                    {
+                        this.Clean(context);
+                    }
+                    break;
+            }
+        }
+
+        public override void Move(IToolContext context, double x, double y, Modifier modifier)
+        {
+            base.Move(context, x, y, modifier);
+
+            switch (CurrentState)
+            {
+                case State.StartPoint:
+                    {
+                        MoveStratPointInternal(context, x, y, modifier);
+                    }
+                    break;
+                case State.Point:
+                    {
+                        MovePointInternal(context, x, y, modifier);
+                    }
+                    break;
+            }
+        }
+
+        public override void Clean(IToolContext context)
+        {
+            base.Clean(context);
+
+            CleanInternal(context);
         }
     }
 }
