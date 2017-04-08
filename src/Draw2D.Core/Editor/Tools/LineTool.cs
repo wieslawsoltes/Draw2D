@@ -65,12 +65,21 @@ namespace Draw2D.Core.Editor.Tools
             _line = null;
 
             Intersections?.ForEach(i => i.Clear(context));
+            Filters?.ForEach(f => f.Clear(context));
 
             context.Release();
             context.Invalidate();
         }
 
-        private void MoveInternal(IToolContext context, double x, double y, Modifier modifier)
+        private void MoveStartPointInternal(IToolContext context, double x, double y, Modifier modifier)
+        {
+            Filters?.ForEach(f => f.Clear(context));
+            Filters?.Any(f => f.Process(context, ref x, ref y));
+
+            context.Invalidate();
+        }
+
+        private void MovePointInternal(IToolContext context, double x, double y, Modifier modifier)
         {
             Filters?.ForEach(f => f.Clear(context));
             Filters?.Any(f => f.Process(context, ref x, ref y));
@@ -142,9 +151,14 @@ namespace Draw2D.Core.Editor.Tools
 
             switch (CurrentState)
             {
+                case State.StartPoint:
+                    {
+                        MoveStartPointInternal(context, x, y, modifier);
+                    }
+                    break;
                 case State.Point:
                     {
-                        MoveInternal(context, x, y, modifier);
+                        MovePointInternal(context, x, y, modifier);
                     }
                     break;
             }
