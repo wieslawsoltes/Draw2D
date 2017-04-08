@@ -7,7 +7,7 @@ namespace Draw2D.Core.Editor.Selection
 {
     public static class SelectionHelper
     {
-        public static bool TryToHover(IToolContext context, SelectionMode mode, SelectionTargets targets, Point2 target, double radius)
+        public static ShapeObject TryToHover(IToolContext context, SelectionMode mode, SelectionTargets targets, Point2 target, double radius)
         {
             var shapePoint =
                 mode.HasFlag(SelectionMode.Point)
@@ -34,36 +34,27 @@ namespace Draw2D.Core.Editor.Selection
                 if (shapePoint != null)
                 {
                     Debug.WriteLine(string.Format("Hover Shape Point: {0}", shapePoint.GetType()));
-                    context.Selected.Clear();
-                    shapePoint.Select(context.Selected);
-                    return true;
+                    return shapePoint;
                 }
                 else if (shape != null)
                 {
                     Debug.WriteLine(string.Format("Hover Shape: {0}", shape.GetType()));
-                    context.Selected.Clear();
-                    shape.Select(context.Selected);
-                    return true;
+                    return shape;
                 }
                 else if (guidePoint != null)
                 {
                     Debug.WriteLine(string.Format("Hover Guide Point: {0}", guidePoint.GetType()));
-                    context.Selected.Clear();
-                    guidePoint.Select(context.Selected);
-                    return true;
+                    return guidePoint;
                 }
                 else if (guide != null)
                 {
                     Debug.WriteLine(string.Format("Hover Guide: {0}", guide.GetType()));
-                    context.Selected.Clear();
-                    guide.Select(context.Selected);
-                    return true;
+                    return guide;
                 }
             }
 
             Debug.WriteLine(string.Format("No Hover"));
-            context.Selected.Clear();
-            return false;
+            return null;
         }
 
         public static bool TryToSelect(IToolContext context, SelectionMode mode, SelectionTargets targets, Point2 point, double radius, Modifier modifier)
@@ -96,8 +87,8 @@ namespace Draw2D.Core.Editor.Selection
                     || (guidePoint != null && !context.Selected.Contains(guidePoint))
                     || (guide != null && !context.Selected.Contains(guide));
 
-                if (context.Selected.Count >= 1 
-                    && !haveNewSelection 
+                if (context.Selected.Count >= 1
+                    && !haveNewSelection
                     && !modifier.HasFlag(Modifier.Control))
                 {
                     return true;
@@ -277,7 +268,7 @@ namespace Draw2D.Core.Editor.Selection
                         {
                             guide.Select(context.Selected);
                         }
-                        return true; 
+                        return true;
                     }
                 }
             }

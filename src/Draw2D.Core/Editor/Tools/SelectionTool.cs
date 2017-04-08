@@ -11,6 +11,7 @@ namespace Draw2D.Core.Editor.Tools
     public partial class SelectionTool : ToolBase
     {
         private RectangleShape _rectangle;
+        private ShapeObject _hover;
         private double _originX;
         private double _originY;
         private double _previousX;
@@ -22,7 +23,24 @@ namespace Draw2D.Core.Editor.Tools
         public override string Name { get { return "Selection"; } }
 
         public SelectionToolSettings Settings { get; set; }
-        public bool HaveSelection { get; set; }
+
+        private void HoverShape(IToolContext context, ShapeObject shape)
+        {
+            if (shape != null)
+            {
+                _hover = shape;
+                _hover.Select(context.Selected);
+            }
+        }
+
+        private void DeHoverShape(IToolContext context)
+        {
+            if (_hover != null)
+            {
+                _hover.Deselect(context.Selected);
+                _hover = null;
+            }
+        }
 
         private void LeftDownNoneInternal(IToolContext context, double x, double y, Modifier modifier)
         {
@@ -37,6 +55,8 @@ namespace Draw2D.Core.Editor.Tools
             _previousX = _originX;
             _previousY = _originY;
 
+            DeHoverShape(context);
+
             var target = new Point2(x, y);
             var result = SelectionHelper.TryToSelect(
                 context,
@@ -47,13 +67,10 @@ namespace Draw2D.Core.Editor.Tools
                 modifier);
             if (result)
             {
-                HaveSelection = true;
                 CurrentState = State.Move;
             }
             else
             {
-                HaveSelection = false;
-
                 if (!modifier.HasFlag(Modifier.Control))
                 {
                     context.Selected.Clear();
@@ -97,6 +114,8 @@ namespace Draw2D.Core.Editor.Tools
         {
             Filters?.ForEach(f => f.Clear(context));
 
+            DeHoverShape(context);
+
             var target = _rectangle.ToRect2();
             var result = SelectionHelper.TryToSelect(
                 context,
@@ -107,7 +126,7 @@ namespace Draw2D.Core.Editor.Tools
                 modifier);
             if (result)
             {
-                HaveSelection = true;
+
             }
 
             context.WorkingContainer.Shapes.Remove(_rectangle);
@@ -133,20 +152,32 @@ namespace Draw2D.Core.Editor.Tools
 
         private void MoveNoneInternal(IToolContext context, double x, double y, Modifier modifier)
         {
-            if (!HaveSelection)
+            if (!(_hover == null && context.Selected.Count > 0))
             {
                 lock (context.Selected)
                 {
+                    var previous = _hover;
+
+                    DeHoverShape(context);
+
                     var target = new Point2(x, y);
-                    bool result = SelectionHelper.TryToHover(
+                    var result = SelectionHelper.TryToHover(
                         context,
                         Settings?.Mode ?? SelectionMode.Shape,
                         Settings?.Targets ?? SelectionTargets.Shapes,
                         target,
                         Settings?.HitTestRadius ?? 7.0);
-                    if (result == true)
+                    if (result != null)
                     {
+                        HoverShape(context, result);
                         context.Invalidate();
+                    }
+                    else
+                    {
+                        if (previous != null)
+                        {
+                            context.Invalidate();
+                        }
                     }
                 }
             }
@@ -216,7 +247,8 @@ namespace Draw2D.Core.Editor.Tools
         private void CleanInternal(IToolContext context)
         {
             CurrentState = State.None;
-            HaveSelection = false;
+
+            DeHoverShape(context);
 
             if (_rectangle != null)
             {

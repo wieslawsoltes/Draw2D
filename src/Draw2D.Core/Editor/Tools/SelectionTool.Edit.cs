@@ -158,6 +158,7 @@ namespace Draw2D.Core.Editor.Tools
             {
                 lock (context.Renderer.Selected)
                 {
+                    this.DeHoverShape(context);
                     context.Renderer.Selected.Clear();
 
                     var distinctPoints = GetPoints(_shapesToCopy).Distinct();
@@ -180,7 +181,6 @@ namespace Draw2D.Core.Editor.Tools
 
                     context.Invalidate();
 
-                    this.HaveSelection = true;
                     this.CurrentState = SelectionTool.State.None;
                 }
             }
@@ -196,11 +196,20 @@ namespace Draw2D.Core.Editor.Tools
                     {
                         context.CurrentContainer.Shapes.Remove(shape);
                     }
+                    else if (context.CurrentContainer.Guides.Contains(shape))
+                    {
+                        if (shape is LineShape guide)
+                        {
+                            context.CurrentContainer.Guides.Remove(guide);
+                        }
+                    }
                 }
+
+                this.DeHoverShape(context);
                 context.Renderer.Selected.Clear();
+
                 context.Invalidate();
 
-                this.HaveSelection = false;
                 this.CurrentState = SelectionTool.State.None;
             }
         }
@@ -209,6 +218,8 @@ namespace Draw2D.Core.Editor.Tools
         {
             lock (context.Renderer.Selected)
             {
+                this.DeHoverShape(context);
+
                 var shapes = context.Renderer.Selected.ToList();
 
                 Delete(context);
@@ -236,7 +247,6 @@ namespace Draw2D.Core.Editor.Tools
 
                 context.Invalidate();
 
-                this.HaveSelection = true;
                 this.CurrentState = State.None;
             }
         }
@@ -245,6 +255,7 @@ namespace Draw2D.Core.Editor.Tools
         {
             lock (context.Renderer.Selected)
             {
+                this.DeHoverShape(context);
                 context.Renderer.Selected.Clear();
 
                 foreach (var shape in context.CurrentContainer.Shapes)
@@ -254,7 +265,6 @@ namespace Draw2D.Core.Editor.Tools
 
                 context.Invalidate();
 
-                this.HaveSelection = true;
                 this.CurrentState = SelectionTool.State.None;
             }
         }
