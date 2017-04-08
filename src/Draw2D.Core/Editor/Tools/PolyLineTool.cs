@@ -40,6 +40,8 @@ namespace Draw2D.Core.Editor.Tools
                         context.WorkingContainer.Shapes.Add(_line);
                         context.Selected.Add(_line.StartPoint);
                         context.Selected.Add(_line.Point);
+                        context.Capture();
+                        context.Invalidate();
                         CurrentState = State.End;
                     }
                     break;
@@ -69,6 +71,8 @@ namespace Draw2D.Core.Editor.Tools
 
                         Intersections?.ForEach(i => i.Clear(context));
                         Filters?.ForEach(f => f.Clear(context));
+
+                        context.Invalidate();
                     }
                     break;
             }
@@ -103,6 +107,7 @@ namespace Draw2D.Core.Editor.Tools
                         _line.Point.Y = y;
                         Intersections?.ForEach(i => i.Clear(context));
                         Intersections?.ForEach(i => i.Find(context, _line));
+                        context.Invalidate();
                     }
                     break;
             }
@@ -128,6 +133,9 @@ namespace Draw2D.Core.Editor.Tools
                 _points.ForEach(point => context.Selected.Remove(point));
                 _points = null;
             }
+
+            context.Release();
+            context.Invalidate();
         }
     }
 }

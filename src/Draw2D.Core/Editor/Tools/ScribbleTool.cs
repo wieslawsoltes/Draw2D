@@ -37,6 +37,8 @@ namespace Draw2D.Core.Editor.Tools
                         };
                         _scribble.Points.Add(new PointShape(x, y, context.PointShape));
                         context.WorkingContainer.Shapes.Add(_scribble);
+                        context.Capture();
+                        context.Invalidate();
                         CurrentState = State.Points;
                     }
                     break;
@@ -71,6 +73,8 @@ namespace Draw2D.Core.Editor.Tools
                         context.WorkingContainer.Shapes.Remove(_scribble);
                         context.CurrentContainer.Shapes.Add(_scribble);
                         _scribble = null;
+                        context.Release();
+                        context.Invalidate();
                     }
                     break;
             }
@@ -102,6 +106,7 @@ namespace Draw2D.Core.Editor.Tools
                 case State.Points:
                     {
                         _scribble.Points.Add(new PointShape(x, y, context.PointShape));
+                        context.Invalidate();
                     }
                     break;
             }
@@ -120,6 +125,9 @@ namespace Draw2D.Core.Editor.Tools
                 context.WorkingContainer.Shapes.Remove(_scribble);
                 _scribble = null;
             }
+
+            context.Release();
+            context.Invalidate();
         }
     }
 }

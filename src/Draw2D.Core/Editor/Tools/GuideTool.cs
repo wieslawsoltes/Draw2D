@@ -33,6 +33,8 @@ namespace Draw2D.Core.Editor.Tools
                             Style = Settings?.GuideStyle
                         };
                         context.WorkingContainer.Shapes.Add(_line);
+                        context.Capture();
+                        context.Invalidate();
                         CurrentState = State.End;
                     }
                     break;
@@ -44,6 +46,8 @@ namespace Draw2D.Core.Editor.Tools
                         context.WorkingContainer.Shapes.Remove(_line);
                         context.CurrentContainer.Guides.Add(_line);
                         _line = null;
+                        context.Release();
+                        context.Invalidate();
                     }
                     break;
             }
@@ -76,6 +80,7 @@ namespace Draw2D.Core.Editor.Tools
                     {
                         _line.Point.X = x;
                         _line.Point.Y = y;
+                        context.Invalidate();
                     }
                     break;
             }
@@ -94,6 +99,9 @@ namespace Draw2D.Core.Editor.Tools
                 context.WorkingContainer.Shapes.Remove(_line);
                 _line = null;
             }
+
+            context.Release();
+            context.Invalidate();
         }
     }
 }

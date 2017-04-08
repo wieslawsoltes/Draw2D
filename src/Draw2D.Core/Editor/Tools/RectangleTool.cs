@@ -35,6 +35,8 @@ namespace Draw2D.Core.Editor.Tools
                         context.WorkingContainer.Shapes.Add(_rectangle);
                         context.Selected.Add(_rectangle.TopLeft);
                         context.Selected.Add(_rectangle.BottomRight);
+                        context.Capture();
+                        context.Invalidate();
                         CurrentState = State.BottomRight;
                     }
                     break;
@@ -48,6 +50,8 @@ namespace Draw2D.Core.Editor.Tools
                         context.Selected.Remove(_rectangle.TopLeft);
                         context.CurrentContainer.Shapes.Add(_rectangle);
                         _rectangle = null;
+                        context.Release();
+                        context.Invalidate();
                     }
                     break;
             }
@@ -80,6 +84,7 @@ namespace Draw2D.Core.Editor.Tools
                     {
                         _rectangle.BottomRight.X = x;
                         _rectangle.BottomRight.Y = y;
+                        context.Invalidate();
                     }
                     break;
             }
@@ -100,6 +105,9 @@ namespace Draw2D.Core.Editor.Tools
                 context.Selected.Remove(_rectangle.BottomRight);
                 _rectangle = null;
             }
+
+            context.Release();
+            context.Invalidate();
         }
     }
 }

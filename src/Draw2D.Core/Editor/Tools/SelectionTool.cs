@@ -78,6 +78,8 @@ namespace Draw2D.Core.Editor.Tools
                             _rectangle.BottomRight.Y = y;
                             _rectangle.Style = Settings?.SelectionStyle;
                             context.WorkingContainer.Shapes.Add(_rectangle);
+                            context.Capture();
+                            context.Invalidate();
                             CurrentState = State.Selection;
                         }
                     }
@@ -87,6 +89,9 @@ namespace Draw2D.Core.Editor.Tools
                         CurrentState = State.None;
                         _rectangle.BottomRight.X = x;
                         _rectangle.BottomRight.Y = y;
+
+                        context.Release();
+                        context.Invalidate();
                     }
                     break;
             }
@@ -118,6 +123,8 @@ namespace Draw2D.Core.Editor.Tools
                         context.WorkingContainer.Shapes.Remove(_rectangle);
                         _rectangle = null;
                         CurrentState = State.None;
+                        context.Release();
+                        context.Invalidate();
                     }
                     break;
                 case State.Move:
@@ -160,12 +167,16 @@ namespace Draw2D.Core.Editor.Tools
                             lock (context.Selected)
                             {
                                 var target = new Point2(x, y);
-                                SelectionHelper.TryToHover(
+                                bool result = SelectionHelper.TryToHover(
                                     context,
                                     Settings?.Mode ?? SelectionMode.Shape,
                                     Settings?.Targets ?? SelectionTargets.Shapes,
                                     target,
                                     Settings?.HitTestRadius ?? 7.0);
+                                if (result == true)
+                                {
+                                    context.Invalidate();
+                                }
                             }
                         }
                     }
@@ -174,6 +185,7 @@ namespace Draw2D.Core.Editor.Tools
                     {
                         _rectangle.BottomRight.X = x;
                         _rectangle.BottomRight.Y = y;
+                        context.Invalidate();
                     }
                     break;
                 case State.Move:
@@ -225,6 +237,8 @@ namespace Draw2D.Core.Editor.Tools
                                 shape.Move(context.Selected, dx, dy);
                             }
                         }
+
+                        context.Invalidate();
                     }
                     break;
             }
@@ -246,6 +260,9 @@ namespace Draw2D.Core.Editor.Tools
             //context.Selected.Clear();
 
             Filters?.ForEach(f => f.Clear(context));
+
+            context.Release();
+            context.Invalidate();
         }
     }
 }

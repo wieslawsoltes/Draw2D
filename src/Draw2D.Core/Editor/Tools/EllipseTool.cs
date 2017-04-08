@@ -35,6 +35,8 @@ namespace Draw2D.Core.Editor.Tools
                         context.WorkingContainer.Shapes.Add(_ellipse);
                         context.Selected.Add(_ellipse.TopLeft);
                         context.Selected.Add(_ellipse.BottomRight);
+                        context.Capture();
+                        context.Invalidate();
                         CurrentState = State.BottomRight;
                     }
                     break;
@@ -47,6 +49,8 @@ namespace Draw2D.Core.Editor.Tools
                         context.Selected.Remove(_ellipse.TopLeft);
                         context.CurrentContainer.Shapes.Add(_ellipse);
                         _ellipse = null;
+                        context.Release();
+                        context.Invalidate();
                     }
                     break;
             }
@@ -79,6 +83,7 @@ namespace Draw2D.Core.Editor.Tools
                     {
                         _ellipse.BottomRight.X = x;
                         _ellipse.BottomRight.Y = y;
+                        context.Invalidate();
                     }
                     break;
             }
@@ -99,6 +104,9 @@ namespace Draw2D.Core.Editor.Tools
                 context.Selected.Remove(_ellipse.BottomRight);
                 _ellipse = null;
             }
+
+            context.Release();
+            context.Invalidate();
         }
     }
 }

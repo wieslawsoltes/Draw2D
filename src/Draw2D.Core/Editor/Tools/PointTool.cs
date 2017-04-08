@@ -31,11 +31,13 @@ namespace Draw2D.Core.Editor.Tools
                 {
                     connectable.Points.Add(point);
                     context.Selected.Add(point);
+                    context.Invalidate();
                 }
             }
             //else
             //{
             //    context.CurrentContainer.Shapes.Add(point);
+            //    context.Invalidate();
             //}
         }
 
