@@ -1,79 +1,16 @@
 ﻿// Copyright (c) Wiesław Šoltés. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using Draw2D.Core.Containers;
-using Draw2D.Core.Editor.Bounds;
-using Draw2D.Core.Renderers;
 using Draw2D.Core.Shapes;
-using Draw2D.Core.Style;
 
 namespace Draw2D.Core.Editor.Tools
 {
-    public partial class PathTool : IToolContext
-    {
-        public ShapeRenderer Renderer
-        {
-            get => _context?.Renderer;
-            set
-            {
-                if (_context != null)
-                {
-                    _context.Renderer = value;
-                }
-            }
-        }
-
-        public ISet<ShapeObject> Selected
-        {
-            get => _context?.Selected;
-            set
-            {
-                if (_context != null)
-                {
-                    _context.Selected = value;
-                }
-            }
-        }
-
-        public IShapesContainer CurrentContainer
-        {
-            get => _figure;
-            set => throw new InvalidCastException("Can't cast current container as a figure.");
-        }
-
-        public IShapesContainer WorkingContainer
-        {
-            get => _figure;
-            set => throw new InvalidCastException("Can't cast current container as a figure.");
-        }
-
-        public DrawStyle CurrentStyle { get; set; }
-
-        public ShapeObject PointShape { get; set; }
-
-        public IHitTest HitTest { get; set; }
-
-        public PointShape GetNextPoint(double x, double y, bool connect, double radius)
-        {
-            return _nextPoint ?? _context?.GetNextPoint(x, y, connect, radius);
-        }
-
-        public Action Capture { get; set; }
-
-        public Action Release { get; set; }
-
-        public Action Invalidate { get; set; }
-    }
-
     public partial class PathTool : ToolBase
     {
         private ToolBase _currentSubTool;
         private ToolBase _previousSubTool;
-        private PointShape _nextPoint;
-        private IToolContext _context;
         private PathShape _path;
         private FigureShape _figure;
 
@@ -88,9 +25,15 @@ namespace Draw2D.Core.Editor.Tools
             get => _currentSubTool;
             set
             {
-                _previousSubTool = _currentSubTool;
-                _currentSubTool = value;
+                PreviousSubTool = _currentSubTool;
+                Update(ref _currentSubTool, value);
             }
+        }
+
+        public ToolBase PreviousSubTool
+        {
+            get => _previousSubTool;
+            set => Update(ref _previousSubTool, value);
         }
 
         public PathTool()
@@ -112,7 +55,7 @@ namespace Draw2D.Core.Editor.Tools
 
         public PointShape GetLastPoint()
         {
-            if (_path.Figures.Count > 0)
+            if (_path?.Figures.Count > 0)
             {
                 var shapes = _path.Figures[_path.Figures.Count - 1].Shapes;
                 if (shapes.Count > 0)
@@ -154,18 +97,21 @@ namespace Draw2D.Core.Editor.Tools
             };
             _path.Figures.Add(_figure);
 
-            if (_previousSubTool != null)
+            if (PreviousSubTool != null)
             {
-                CurrentSubTool = _previousSubTool;
+                CurrentSubTool = PreviousSubTool;
             }
         }
 
-        private void SetCurrentContext(IToolContext context) => _context = context;
-
-        public override void LeftDown(IToolContext context, double x, double y, Modifier modifier)
+        public void CleanSubTool(IToolContext context)
         {
-            base.LeftDown(context, x, y, modifier);
+            SetContext(context);
+            CurrentSubTool?.Clean(this);
+            SetContext(null);
+        }
 
+        private void DownInternal(IToolContext context, double x, double y, Modifier modifier)
+        {
             Filters?.Any(f => f.Process(context, ref x, ref y));
 
             if (_path == null)
@@ -174,8 +120,8 @@ namespace Draw2D.Core.Editor.Tools
                 Move();
             }
 
-            SetCurrentContext(context);
-            CurrentSubTool.LeftDown(this, x, y, modifier);
+            SetContext(context);
+            CurrentSubTool?.LeftDown(this, x, y, modifier);
 
             switch (CurrentSubTool)
             {
@@ -183,9 +129,9 @@ namespace Draw2D.Core.Editor.Tools
                     {
                         if (lineTool.CurrentState == LineTool.State.StartPoint)
                         {
-                            _nextPoint = GetLastPoint();
-                            CurrentSubTool.LeftDown(this, x, y, modifier);
-                            _nextPoint = null;
+                            SetNextPoint(GetLastPoint());
+                            CurrentSubTool?.LeftDown(this, x, y, modifier);
+                            SetNextPoint(null);
                         }
                     }
                     break;
@@ -193,9 +139,9 @@ namespace Draw2D.Core.Editor.Tools
                     {
                         if (cubicBezierTool.CurrentState == CubicBezierTool.State.StartPoint)
                         {
-                            _nextPoint = GetLastPoint();
-                            CurrentSubTool.LeftDown(this, x, y, modifier);
-                            _nextPoint = null;
+                            SetNextPoint(GetLastPoint());
+                            CurrentSubTool?.LeftDown(this, x, y, modifier);
+                            SetNextPoint(null);
                         }
                     }
                     break;
@@ -203,47 +149,29 @@ namespace Draw2D.Core.Editor.Tools
                     {
                         if (quadraticBezierTool.CurrentState == QuadraticBezierTool.State.StartPoint)
                         {
-                            _nextPoint = GetLastPoint();
-                            CurrentSubTool.LeftDown(this, x, y, modifier);
-                            _nextPoint = null;
+                            SetNextPoint(GetLastPoint());
+                            CurrentSubTool?.LeftDown(this, x, y, modifier);
+                            SetNextPoint(null);
                         }
                     }
                     break;
             }
 
-            SetCurrentContext(null);
+            SetContext(null);
         }
 
-        public override void RightDown(IToolContext context, double x, double y, Modifier modifier)
+        private void MoveInternal(IToolContext context, double x, double y, Modifier modifier)
         {
-            base.RightDown(context, x, y, modifier);
-
-            Clean(context);
-        }
-
-        public override void Move(IToolContext context, double x, double y, Modifier modifier)
-        {
-            base.Move(context, x, y, modifier);
-
             Filters?.ForEach(f => f.Clear(context));
             Filters?.Any(f => f.Process(context, ref x, ref y));
 
-            SetCurrentContext(context);
+            SetContext(context);
             CurrentSubTool.Move(this, x, y, modifier);
-            SetCurrentContext(null);
+            SetContext(null);
         }
 
-        public void CleanSubTool(IToolContext context)
+        private void CleanInternal(IToolContext context)
         {
-            SetCurrentContext(context);
-            CurrentSubTool.Clean(this);
-            SetCurrentContext(null);
-        }
-
-        public override void Clean(IToolContext context)
-        {
-            base.Clean(context);
-
             CleanSubTool(context);
 
             Filters?.ForEach(f => f.Clear(context));
@@ -252,12 +180,40 @@ namespace Draw2D.Core.Editor.Tools
             {
                 context.WorkingContainer.Shapes.Remove(_path);
                 context.Selected.Remove(_path);
-                _previousSubTool = null;
-                _nextPoint = null;
-                _context = null;
+                PreviousSubTool = null;
+                SetNextPoint(null);
+                SetContext(null);
                 _path = null;
                 _figure = null;
             }
+        }
+
+        public override void LeftDown(IToolContext context, double x, double y, Modifier modifier)
+        {
+            base.LeftDown(context, x, y, modifier);
+
+            DownInternal(context, x, y, modifier);
+        }
+
+        public override void RightDown(IToolContext context, double x, double y, Modifier modifier)
+        {
+            base.RightDown(context, x, y, modifier);
+
+            this.Clean(context);
+        }
+
+        public override void Move(IToolContext context, double x, double y, Modifier modifier)
+        {
+            base.Move(context, x, y, modifier);
+
+            MoveInternal(context, x, y, modifier);
+        }
+
+        public override void Clean(IToolContext context)
+        {
+            base.Clean(context);
+
+            CleanInternal(context);
         }
     }
 }
