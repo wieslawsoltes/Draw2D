@@ -224,7 +224,10 @@ namespace Draw2D.Core.Editor.Tools
                 _rectangle = null;
             }
 
-            //context.Selected.Clear();
+            if (Settings?.ClearSelectionOnClean == true)
+            {
+                context.Selected.Clear();
+            }
 
             Filters?.ForEach(f => f.Clear(context));
 

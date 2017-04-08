@@ -94,6 +94,7 @@ namespace Draw2D.Core
                     Mode = SelectionMode.Point | SelectionMode.Shape,
                     Targets = SelectionTargets.Shapes | SelectionTargets.Guides,
                     SelectionStyle = new DrawStyle(new DrawColor(255, 0, 120, 215), new DrawColor(60, 170, 204, 238), 2.0, true, true),
+                    ClearSelectionOnClean = false,
                     HitTestRadius = 7.0,
                     ConnectPoints = false,
                     ConnectTestRadius = 10.0,

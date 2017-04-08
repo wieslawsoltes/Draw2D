@@ -10,6 +10,7 @@ namespace Draw2D.Core.Editor.Tools
         private SelectionMode _mode;
         private SelectionTargets _targets;
         private DrawStyle _selectionStyle;
+        private bool _clearSelectionOnClean;
         private double _hitTestRadius;
         private bool _connectPoints;
         private double _connectTestRadius;
@@ -32,6 +33,12 @@ namespace Draw2D.Core.Editor.Tools
         {
             get => _selectionStyle;
             set => Update(ref _selectionStyle, value);
+        }
+
+        public bool ClearSelectionOnClean
+        {
+            get => _clearSelectionOnClean;
+            set => Update(ref _clearSelectionOnClean, value);
         }
 
         public double HitTestRadius
