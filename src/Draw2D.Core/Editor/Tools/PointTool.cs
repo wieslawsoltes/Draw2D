@@ -12,17 +12,15 @@ namespace Draw2D.Core.Editor.Tools
 
         public PointToolSettings Settings { get; set; }
 
-        public override void LeftDown(IToolContext context, double x, double y, Modifier modifier)
+        private void PointInternal(IToolContext context, double x, double y, Modifier modifier)
         {
-            base.LeftDown(context, x, y, modifier);
-
             Filters?.ForEach(f => f.Clear(context));
             Filters?.Any(f => f.Process(context, ref x, ref y));
 
             var point = new PointShape(x, y, context.PointShape);
 
             var shape = context.HitTest?.TryToGetShape(
-                context.CurrentContainer.Shapes, 
+                context.CurrentContainer.Shapes,
                 new Point2(x, y),
                 Settings?.HitTestRadius ?? 7.0);
             if (shape != null && (Settings?.ConnectPoints ?? false))
@@ -41,19 +39,38 @@ namespace Draw2D.Core.Editor.Tools
             //}
         }
 
+        private void MoveInternal(IToolContext context, double x, double y, Modifier modifier)
+        {
+            Filters?.ForEach(f => f.Clear(context));
+            Filters?.Any(f => f.Process(context, ref x, ref y));
+
+            context.Invalidate();
+        }
+
+        private void CleanInternal(IToolContext context)
+        {
+            Filters?.ForEach(f => f.Clear(context));
+        }
+
+        public override void LeftDown(IToolContext context, double x, double y, Modifier modifier)
+        {
+            base.LeftDown(context, x, y, modifier);
+
+            PointInternal(context, x, y, modifier);
+        }
+
         public override void Move(IToolContext context, double x, double y, Modifier modifier)
         {
             base.Move(context, x, y, modifier);
 
-            Filters?.ForEach(f => f.Clear(context));
-            Filters?.Any(f => f.Process(context, ref x, ref y));
+            MoveInternal(context, x, y, modifier);
         }
 
         public override void Clean(IToolContext context)
         {
             base.Clean(context);
 
-            Filters?.ForEach(f => f.Clear(context));
+            CleanInternal(context);
         }
     }
 }
