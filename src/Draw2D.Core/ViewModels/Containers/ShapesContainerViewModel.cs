@@ -89,7 +89,7 @@ namespace Draw2D.Core.ViewModels.Containers
         {
             if (connect == true)
             {
-                PointShape point = HitTest.TryToGetPoint(CurrentContainer.Shapes, new Point2(x, y), radius);
+                PointShape point = HitTest.TryToGetPoint(CurrentContainer.Shapes, new Point2(x, y), radius, null);
                 if (point != null)
                 {
                     return point;

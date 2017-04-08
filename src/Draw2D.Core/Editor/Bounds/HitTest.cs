@@ -32,12 +32,12 @@ namespace Draw2D.Core.Editor.Bounds
             return GetHitTest(shape)?.TryToGetPoint(shape, target, radius, this);
         }
 
-        public PointShape TryToGetPoint(IEnumerable<ShapeObject> shapes, Point2 target, double radius)
+        public PointShape TryToGetPoint(IEnumerable<ShapeObject> shapes, Point2 target, double radius, PointShape exclude)
         {
             foreach (var shape in shapes.Reverse())
             {
                 var result = TryToGetPoint(shape, target, radius);
-                if (result != null)
+                if (result != null && result != exclude)
                 {
                     return result;
                 }

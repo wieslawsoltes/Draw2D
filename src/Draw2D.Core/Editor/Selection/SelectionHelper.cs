@@ -12,7 +12,7 @@ namespace Draw2D.Core.Editor.Selection
             var shapePoint =
                 mode.HasFlag(SelectionMode.Point)
                 && targets.HasFlag(SelectionTargets.Shapes) ?
-                context.HitTest?.TryToGetPoint(context.CurrentContainer.Shapes, target, radius) : null;
+                context.HitTest?.TryToGetPoint(context.CurrentContainer.Shapes, target, radius, null) : null;
 
             var shape =
                 mode.HasFlag(SelectionMode.Shape)
@@ -22,7 +22,7 @@ namespace Draw2D.Core.Editor.Selection
             var guidePoint =
                 mode.HasFlag(SelectionMode.Point)
                 && targets.HasFlag(SelectionTargets.Guides) ?
-                context.HitTest?.TryToGetPoint(context.CurrentContainer.Guides, target, radius) : null;
+                context.HitTest?.TryToGetPoint(context.CurrentContainer.Guides, target, radius, null) : null;
 
             var guide =
                 mode.HasFlag(SelectionMode.Shape)
@@ -62,7 +62,7 @@ namespace Draw2D.Core.Editor.Selection
             var shapePoint =
                 mode.HasFlag(SelectionMode.Point)
                 && targets.HasFlag(SelectionTargets.Shapes) ?
-                context.HitTest?.TryToGetPoint(context.CurrentContainer.Shapes, point, radius) : null;
+                context.HitTest?.TryToGetPoint(context.CurrentContainer.Shapes, point, radius, null) : null;
 
             var shape =
                 mode.HasFlag(SelectionMode.Shape)
@@ -72,7 +72,7 @@ namespace Draw2D.Core.Editor.Selection
             var guidePoint =
                 mode.HasFlag(SelectionMode.Point)
                 && targets.HasFlag(SelectionTargets.Guides) ?
-                context.HitTest?.TryToGetPoint(context.CurrentContainer.Guides, point, radius) : null;
+                context.HitTest?.TryToGetPoint(context.CurrentContainer.Guides, point, radius, null) : null;
 
             var guide =
                 mode.HasFlag(SelectionMode.Shape)

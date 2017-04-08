@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Wiesław Šoltés. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using System.Collections.Generic;
+using System.Diagnostics;
 using Draw2D.Core.Renderers;
 
 namespace Draw2D.Core.Shapes
@@ -94,6 +95,54 @@ namespace Draw2D.Core.Shapes
             base.Deselect(selected);
             StartPoint.Deselect(selected);
             Point.Deselect(selected);
+        }
+
+        public override bool Connect(PointShape source, PointShape target)
+        {
+            if (base.Connect(source, target))
+            {
+                return true;
+            }
+            else if (StartPoint != source && Point != source)
+            { 
+                if (StartPoint == target)
+                {
+                    Debug.WriteLine($"LineShape Connected to StartPoint");
+                    this.StartPoint = source;
+                    return true;
+                }
+                else if (Point == target)
+                {
+                    Debug.WriteLine($"LineShape Connected to Point");
+                    this.Point = source;
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public override bool Disconnect(PointShape source, out PointShape copy)
+        {
+            if (base.Disconnect(source, out copy))
+            {
+                return true;
+            }
+            else if (StartPoint == source)
+            {
+                Debug.WriteLine($"LineShape Disconnected from StartPoint");
+                copy = source.Copy();
+                this.StartPoint = copy;
+                return true;
+            }
+            else if (Point == source)
+            {
+                Debug.WriteLine($"LineShape Disconnected from Point");
+                copy = source.Copy();
+                this.Point = copy;
+                return true;
+            }
+            copy = null;
+            return false;
         }
 
         public LineShape Copy()

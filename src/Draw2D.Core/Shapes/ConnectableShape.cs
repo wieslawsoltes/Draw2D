@@ -1,5 +1,6 @@
 ﻿// Copyright (c) Wiesław Šoltés. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
+using System.Diagnostics;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Draw2D.Core.Renderers;
@@ -66,6 +67,30 @@ namespace Draw2D.Core.Shapes
             {
                 point.Deselect(selected);
             }
+        }
+
+        public virtual bool Connect(PointShape source, PointShape target)
+        {
+            if (_points.Contains(source) == true)
+            {
+                return false;
+            }
+
+            int index = _points.IndexOf(target);
+            if (index >= 0)
+            {
+                Debug.WriteLine($"ConnectableShape Connected to Points");
+                _points[index] = source;
+                return true;
+            }
+
+            return false;
+        }
+
+        public virtual bool Disconnect(PointShape source, out PointShape copy)
+        {
+            copy = null;
+            return false;
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Wiesław Šoltés. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using System;
+using System.Diagnostics;
 using System.Linq;
 using Draw2D.Core.Editor.Selection;
 using Draw2D.Core.Shapes;
@@ -12,6 +13,7 @@ namespace Draw2D.Core.Editor.Tools
     {
         private RectangleShape _rectangle;
         private ShapeObject _hover;
+        private bool _disconnected;
         private double _originX;
         private double _originY;
         private double _previousX;
@@ -44,6 +46,8 @@ namespace Draw2D.Core.Editor.Tools
 
         private void LeftDownNoneInternal(IToolContext context, double x, double y, Modifier modifier)
         {
+            _disconnected = false;
+
             _originX = x;
             _originY = y;
             _previousX = x;
@@ -203,26 +207,55 @@ namespace Draw2D.Core.Editor.Tools
 
                 shape.Move(context.Selected, dx, dy);
 
-                if (shape is PointShape point)
+                if (shape is PointShape source)
                 {
-                    if (Settings.ConnectPoints)
+                    if (Settings.ConnectPoints && modifier.HasFlag(Modifier.Shift))
                     {
-                        var result = context.HitTest.TryToGetPoint(
+                        // TODO: Connect point.
+                        var target = context.HitTest.TryToGetPoint(
                             context.CurrentContainer.Shapes,
-                            new Point2(point.X, point.Y),
-                            Settings?.ConnectTestRadius ?? 7.0);
-                        if (result != point)
+                            new Point2(source.X, source.Y),
+                            Settings?.ConnectTestRadius ?? 7.0,
+                            source);
+                        if (target != source)
                         {
-                            // TODO: Connect point.
+                            foreach (var item in context.CurrentContainer.Shapes)
+                            {
+                                if (item is ConnectableShape connectable)
+                                {
+                                    if (connectable.Connect(source, target))
+                                    {
+                                        break;
+                                    }
+                                }
+                            }
                         }
                     }
 
-                    if (Settings.DisconnectPoints)
+                    if (Settings.DisconnectPoints && modifier.HasFlag(Modifier.Shift) && _disconnected == false)
                     {
-                        if ((Math.Abs(_originX - point.X) > Settings.DisconnectTestRadius)
-                            || (Math.Abs(_originY - point.Y) > Settings.DisconnectTestRadius))
+                        if ((Math.Abs(_originX - source.X) > Settings.DisconnectTestRadius)
+                            || (Math.Abs(_originY - source.Y) > Settings.DisconnectTestRadius))
                         {
                             // TODO: Disconnect point.
+                            foreach (var item in context.CurrentContainer.Shapes)
+                            {
+                                if (item is ConnectableShape connectable)
+                                {
+                                    if (connectable.Disconnect(source, out var copy))
+                                    {
+                                        if (copy != null)
+                                        {
+                                            source.X = _originX;
+                                            source.Y = _originY;
+                                            context.Selected.Remove(source);
+                                            context.Selected.Add(copy);
+                                            _disconnected = true;
+                                        }
+                                        break;
+                                    }
+                                }
+                            }
                         }
                     }
                 }
@@ -241,6 +274,8 @@ namespace Draw2D.Core.Editor.Tools
         private void CleanInternal(IToolContext context)
         {
             CurrentState = State.None;
+
+            _disconnected = false;
 
             DeHoverShape(context);
 
