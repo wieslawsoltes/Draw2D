@@ -17,7 +17,7 @@ namespace Draw2D.Core.Editor.Tools
 
         public LineToolSettings Settings { get; set; }
 
-        private void StartInternal(IToolContext context, double x, double y, Modifier modifier)
+        private void StartPointInternal(IToolContext context, double x, double y, Modifier modifier)
         {
             Filters?.Any(f => f.Process(context, ref x, ref y));
 
@@ -38,7 +38,7 @@ namespace Draw2D.Core.Editor.Tools
             CurrentState = State.Point;
         }
 
-        private void EndInternal(IToolContext context, double x, double y, Modifier modifier)
+        private void PointInternal(IToolContext context, double x, double y, Modifier modifier)
         {
             Filters?.Any(f => f.Process(context, ref x, ref y));
 
@@ -120,12 +120,12 @@ namespace Draw2D.Core.Editor.Tools
             {
                 case State.StartPoint:
                     {
-                        StartInternal(context, x, y, modifier);
+                        StartPointInternal(context, x, y, modifier);
                     }
                     break;
                 case State.Point:
                     {
-                        EndInternal(context, x, y, modifier);
+                        PointInternal(context, x, y, modifier);
                     }
                     break;
             }
