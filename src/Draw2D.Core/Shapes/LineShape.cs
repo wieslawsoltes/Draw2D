@@ -121,27 +121,27 @@ namespace Draw2D.Core.Shapes
             return false;
         }
 
-        public override bool Disconnect(PointShape point, out PointShape copy)
+        public override bool Disconnect(PointShape point, out PointShape result)
         {
-            if (base.Disconnect(point, out copy))
+            if (base.Disconnect(point, out result))
             {
                 return true;
             }
             else if (StartPoint == point)
             {
                 Debug.WriteLine($"LineShape Disconnected from StartPoint");
-                copy = point.Copy();
-                this.StartPoint = copy;
+                result = point.Copy();
+                this.StartPoint = result;
                 return true;
             }
             else if (Point == point)
             {
                 Debug.WriteLine($"LineShape Disconnected from Point");
-                copy = point.Copy();
-                this.Point = copy;
+                result = point.Copy();
+                this.Point = result;
                 return true;
             }
-            copy = null;
+            result = null;
             return false;
         }
 

@@ -87,9 +87,9 @@ namespace Draw2D.Core.Shapes
             return false;
         }
 
-        public virtual bool Disconnect(PointShape point, out PointShape copy)
+        public virtual bool Disconnect(PointShape point, out PointShape result)
         {
-            copy = null;
+            result = null;
             return false;
         }
     }
