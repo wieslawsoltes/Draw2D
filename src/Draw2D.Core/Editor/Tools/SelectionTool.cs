@@ -1,7 +1,6 @@
 ﻿// Copyright (c) Wiesław Šoltés. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using System;
-using System.Diagnostics;
 using System.Linq;
 using Draw2D.Core.Editor.Selection;
 using Draw2D.Core.Shapes;
@@ -161,15 +160,15 @@ namespace Draw2D.Core.Editor.Tools
                     DeHoverShape(context);
 
                     var target = new Point2(x, y);
-                    var result = SelectionHelper.TryToHover(
+                    var shape = SelectionHelper.TryToHover(
                         context,
                         Settings?.Mode ?? SelectionMode.Shape,
                         Settings?.Targets ?? SelectionTargets.Shapes,
                         target,
                         Settings?.HitTestRadius ?? 7.0);
-                    if (result != null)
+                    if (shape != null)
                     {
-                        HoverShape(context, result);
+                        HoverShape(context, shape);
                         context.Invalidate();
                     }
                     else
@@ -198,6 +197,7 @@ namespace Draw2D.Core.Editor.Tools
 
             double dx = x - _previousX;
             double dy = y - _previousY;
+
             _previousX = x;
             _previousY = y;
 
@@ -205,60 +205,29 @@ namespace Draw2D.Core.Editor.Tools
             {
                 var shape = context.Selected.FirstOrDefault();
 
-                shape.Move(context.Selected, dx, dy);
-
                 if (shape is PointShape source)
                 {
                     if (Settings.ConnectPoints && modifier.HasFlag(Modifier.Shift))
                     {
-                        // TODO: Connect point.
-                        var target = context.HitTest.TryToGetPoint(
-                            context.CurrentContainer.Shapes,
-                            new Point2(source.X, source.Y),
-                            Settings?.ConnectTestRadius ?? 7.0,
-                            source);
-                        if (target != source)
-                        {
-                            foreach (var item in context.CurrentContainer.Shapes)
-                            {
-                                if (item is ConnectableShape connectable)
-                                {
-                                    if (connectable.Connect(source, target))
-                                    {
-                                        break;
-                                    }
-                                }
-                            }
-                        }
+                        Connect(context, source);
                     }
 
-                    if (Settings.DisconnectPoints && modifier.HasFlag(Modifier.Shift) && _disconnected == false)
+                    if (Settings.DisconnectPoints && modifier.HasFlag(Modifier.Shift))
                     {
-                        if ((Math.Abs(_originX - source.X) > Settings.DisconnectTestRadius)
-                            || (Math.Abs(_originY - source.Y) > Settings.DisconnectTestRadius))
+                        if (_disconnected == false)
                         {
-                            // TODO: Disconnect point.
-                            foreach (var item in context.CurrentContainer.Shapes)
+                            double treshold = Settings.DisconnectTestRadius;
+                            double tx = Math.Abs(_originX - source.X);
+                            double ty = Math.Abs(_originY - source.Y);
+                            if (tx > treshold || ty > treshold)
                             {
-                                if (item is ConnectableShape connectable)
-                                {
-                                    if (connectable.Disconnect(source, out var copy))
-                                    {
-                                        if (copy != null)
-                                        {
-                                            source.X = _originX;
-                                            source.Y = _originY;
-                                            context.Selected.Remove(source);
-                                            context.Selected.Add(copy);
-                                            _disconnected = true;
-                                        }
-                                        break;
-                                    }
-                                }
+                                Disconnect(context, source);
                             }
                         }
                     }
                 }
+
+                shape.Move(context.Selected, dx, dy);
             }
             else
             {
@@ -269,6 +238,50 @@ namespace Draw2D.Core.Editor.Tools
             }
 
             context.Invalidate();
+        }
+
+        private void Connect(IToolContext context, PointShape point)
+        {
+            var target = context.HitTest.TryToGetPoint(
+                context.CurrentContainer.Shapes,
+                new Point2(point.X, point.Y),
+                Settings?.ConnectTestRadius ?? 7.0,
+                point);
+            if (target != point)
+            {
+                foreach (var item in context.CurrentContainer.Shapes)
+                {
+                    if (item is ConnectableShape connectable)
+                    {
+                        if (connectable.Connect(point, target))
+                        {
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
+        private void Disconnect(IToolContext context, PointShape point)
+        {
+            foreach (var shape in context.CurrentContainer.Shapes)
+            {
+                if (shape is ConnectableShape connectable)
+                {
+                    if (connectable.Disconnect(point, out var copy))
+                    {
+                        if (copy != null)
+                        {
+                            point.X = _originX;
+                            point.Y = _originY;
+                            context.Selected.Remove(point);
+                            context.Selected.Add(copy);
+                            _disconnected = true;
+                        }
+                        break;
+                    }
+                }
+            }
         }
 
         private void CleanInternal(IToolContext context)

@@ -69,9 +69,9 @@ namespace Draw2D.Core.Shapes
             }
         }
 
-        public virtual bool Connect(PointShape source, PointShape target)
+        public virtual bool Connect(PointShape point, PointShape target)
         {
-            if (_points.Contains(source) == true)
+            if (_points.Contains(point) == true)
             {
                 return false;
             }
@@ -80,14 +80,14 @@ namespace Draw2D.Core.Shapes
             if (index >= 0)
             {
                 Debug.WriteLine($"ConnectableShape Connected to Points");
-                _points[index] = source;
+                _points[index] = point;
                 return true;
             }
 
             return false;
         }
 
-        public virtual bool Disconnect(PointShape source, out PointShape copy)
+        public virtual bool Disconnect(PointShape point, out PointShape copy)
         {
             copy = null;
             return false;

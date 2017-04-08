@@ -97,47 +97,47 @@ namespace Draw2D.Core.Shapes
             Point.Deselect(selected);
         }
 
-        public override bool Connect(PointShape source, PointShape target)
+        public override bool Connect(PointShape point, PointShape target)
         {
-            if (base.Connect(source, target))
+            if (base.Connect(point, target))
             {
                 return true;
             }
-            else if (StartPoint != source && Point != source)
+            else if (StartPoint != point && Point != point)
             { 
                 if (StartPoint == target)
                 {
                     Debug.WriteLine($"LineShape Connected to StartPoint");
-                    this.StartPoint = source;
+                    this.StartPoint = point;
                     return true;
                 }
                 else if (Point == target)
                 {
                     Debug.WriteLine($"LineShape Connected to Point");
-                    this.Point = source;
+                    this.Point = point;
                     return true;
                 }
             }
             return false;
         }
 
-        public override bool Disconnect(PointShape source, out PointShape copy)
+        public override bool Disconnect(PointShape point, out PointShape copy)
         {
-            if (base.Disconnect(source, out copy))
+            if (base.Disconnect(point, out copy))
             {
                 return true;
             }
-            else if (StartPoint == source)
+            else if (StartPoint == point)
             {
                 Debug.WriteLine($"LineShape Disconnected from StartPoint");
-                copy = source.Copy();
+                copy = point.Copy();
                 this.StartPoint = copy;
                 return true;
             }
-            else if (Point == source)
+            else if (Point == point)
             {
                 Debug.WriteLine($"LineShape Disconnected from Point");
-                copy = source.Copy();
+                copy = point.Copy();
                 this.Point = copy;
                 return true;
             }
