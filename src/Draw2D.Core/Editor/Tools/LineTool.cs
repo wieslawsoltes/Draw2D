@@ -17,57 +17,106 @@ namespace Draw2D.Core.Editor.Tools
 
         public LineToolSettings Settings { get; set; }
 
+        private void StartInternal(IToolContext context, double x, double y, Modifier modifier)
+        {
+            Filters?.Any(f => f.Process(context, ref x, ref y));
+
+            var next = context.GetNextPoint(x, y, Settings?.ConnectPoints ?? false, Settings?.HitTestRadius ?? 0.0);
+            _line = new LineShape()
+            {
+                StartPoint = next,
+                Point = next.Copy(),
+                Style = context.CurrentStyle
+            };
+            context.WorkingContainer.Shapes.Add(_line);
+            context.Selected.Add(_line.StartPoint);
+            context.Selected.Add(_line.Point);
+
+            context.Capture();
+            context.Invalidate();
+
+            CurrentState = State.Point;
+        }
+
+        private void EndInternal(IToolContext context, double x, double y, Modifier modifier)
+        {
+            Filters?.Any(f => f.Process(context, ref x, ref y));
+
+            CurrentState = State.StartPoint;
+
+            context.Selected.Remove(_line.StartPoint);
+            context.Selected.Remove(_line.Point);
+            context.WorkingContainer.Shapes.Remove(_line);
+
+            _line.Point = context.GetNextPoint(x, y, Settings?.ConnectPoints ?? false, Settings?.HitTestRadius ?? 0.0);
+
+            Intersections?.ForEach(i => i.Clear(context));
+            Intersections?.ForEach(i => i.Find(context, _line));
+
+            if ((Settings?.SplitIntersections ?? false) && (Intersections?.Any(i => i.Intersections.Count > 0) ?? false))
+            {
+                LineHelper.SplitByIntersections(context, Intersections, _line);
+            }
+            else
+            {
+                context.CurrentContainer.Shapes.Add(_line);
+            }
+
+            _line = null;
+
+            Intersections?.ForEach(i => i.Clear(context));
+
+            context.Release();
+            context.Invalidate();
+        }
+
+        private void MoveInternal(IToolContext context, double x, double y, Modifier modifier)
+        {
+            Filters?.ForEach(f => f.Clear(context));
+            Filters?.Any(f => f.Process(context, ref x, ref y));
+
+            _line.Point.X = x;
+            _line.Point.Y = y;
+
+            Intersections?.ForEach(i => i.Clear(context));
+            Intersections?.ForEach(i => i.Find(context, _line));
+
+            context.Invalidate();
+        }
+
+        private void CleanInternal(IToolContext context)
+        {
+            Intersections?.ForEach(i => i.Clear(context));
+            Filters?.ForEach(f => f.Clear(context));
+
+            CurrentState = State.StartPoint;
+
+            if (_line != null)
+            {
+                context.WorkingContainer.Shapes.Remove(_line);
+                context.Selected.Remove(_line.StartPoint);
+                context.Selected.Remove(_line.Point);
+                _line = null;
+            }
+
+            context.Release();
+            context.Invalidate();
+        }
+
         public override void LeftDown(IToolContext context, double x, double y, Modifier modifier)
         {
             base.LeftDown(context, x, y, modifier);
-
-            Filters?.Any(f => f.Process(context, ref x, ref y));
 
             switch (CurrentState)
             {
                 case State.StartPoint:
                     {
-                        var next = context.GetNextPoint(x, y, Settings?.ConnectPoints ?? false, Settings?.HitTestRadius ?? 0.0);
-                        _line = new LineShape()
-                        {
-                            StartPoint = next,
-                            Point = next.Copy(),
-                            Style = context.CurrentStyle
-                        };
-                        context.WorkingContainer.Shapes.Add(_line);
-                        context.Selected.Add(_line.StartPoint);
-                        context.Selected.Add(_line.Point);
-                        context.Capture();
-                        context.Invalidate();
-                        CurrentState = State.Point;
+                        StartInternal(context, x, y, modifier);
                     }
                     break;
                 case State.Point:
                     {
-                        CurrentState = State.StartPoint;
-
-                        context.Selected.Remove(_line.StartPoint);
-                        context.Selected.Remove(_line.Point);
-                        context.WorkingContainer.Shapes.Remove(_line);
-
-                        _line.Point = context.GetNextPoint(x, y, Settings?.ConnectPoints ?? false, Settings?.HitTestRadius ?? 0.0);
-
-                        Intersections?.ForEach(i => i.Clear(context));
-                        Intersections?.ForEach(i => i.Find(context, _line));
-
-                        if ((Settings?.SplitIntersections ?? false) && (Intersections?.Any(i => i.Intersections.Count > 0) ?? false))
-                        {
-                            LineHelper.SplitByIntersections(context, Intersections, _line);
-                        }
-                        else
-                        {
-                            context.CurrentContainer.Shapes.Add(_line);
-                        }
-
-                        _line = null;
-                        Intersections?.ForEach(i => i.Clear(context));
-                        context.Release();
-                        context.Invalidate();
+                        EndInternal(context, x, y, modifier);
                     }
                     break;
             }
@@ -91,18 +140,11 @@ namespace Draw2D.Core.Editor.Tools
         {
             base.Move(context, x, y, modifier);
 
-            Filters?.ForEach(f => f.Clear(context));
-            Filters?.Any(f => f.Process(context, ref x, ref y));
-
             switch (CurrentState)
             {
                 case State.Point:
                     {
-                        _line.Point.X = x;
-                        _line.Point.Y = y;
-                        Intersections?.ForEach(i => i.Clear(context));
-                        Intersections?.ForEach(i => i.Find(context, _line));
-                        context.Invalidate();
+                        MoveInternal(context, x, y, modifier);
                     }
                     break;
             }
@@ -112,21 +154,7 @@ namespace Draw2D.Core.Editor.Tools
         {
             base.Clean(context);
 
-            CurrentState = State.StartPoint;
-
-            Intersections?.ForEach(i => i.Clear(context));
-            Filters?.ForEach(f => f.Clear(context));
-
-            if (_line != null)
-            {
-                context.WorkingContainer.Shapes.Remove(_line);
-                context.Selected.Remove(_line.StartPoint);
-                context.Selected.Remove(_line.Point);
-                _line = null;
-            }
-
-            context.Release();
-            context.Invalidate();
+            CleanInternal(context);
         }
     }
 }
