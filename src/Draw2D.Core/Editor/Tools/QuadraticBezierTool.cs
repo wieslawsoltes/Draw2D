@@ -16,64 +16,139 @@ namespace Draw2D.Core.Editor.Tools
 
         public QuadraticBezierToolSettings Settings { get; set; }
 
+        private void StartPointInternal(IToolContext context, double x, double y, Modifier modifier)
+        {
+            Filters?.Any(f => f.Process(context, ref x, ref y));
+
+            var next = context.GetNextPoint(x, y, false, 0.0);
+            _quadraticBezier = new QuadraticBezierShape()
+            {
+                StartPoint = next,
+                Point1 = next.Copy(),
+                Point2 = next.Copy(),
+                Style = context.CurrentStyle
+            };
+            context.WorkingContainer.Shapes.Add(_quadraticBezier);
+            context.Selected.Add(_quadraticBezier);
+            context.Selected.Add(_quadraticBezier.StartPoint);
+            context.Selected.Add(_quadraticBezier.Point1);
+            context.Selected.Add(_quadraticBezier.Point2);
+
+            context.Capture();
+            context.Invalidate();
+
+            CurrentState = State.Point2;
+        }
+
+        private void Point1Internal(IToolContext context, double x, double y, Modifier modifier)
+        {
+            Filters?.Any(f => f.Process(context, ref x, ref y));
+
+            CurrentState = State.StartPoint;
+
+            context.Selected.Remove(_quadraticBezier);
+            context.Selected.Remove(_quadraticBezier.StartPoint);
+            context.Selected.Remove(_quadraticBezier.Point1);
+            context.Selected.Remove(_quadraticBezier.Point2);
+            context.WorkingContainer.Shapes.Remove(_quadraticBezier);
+
+            _quadraticBezier.Point1 = context.GetNextPoint(x, y, false, 0.0);
+            context.CurrentContainer.Shapes.Add(_quadraticBezier);
+            _quadraticBezier = null;
+
+            Filters?.ForEach(f => f.Clear(context));
+
+            context.Release();
+            context.Invalidate();
+        }
+
+        private void Point2Internal(IToolContext context, double x, double y, Modifier modifier)
+        {
+            Filters?.Any(f => f.Process(context, ref x, ref y));
+
+            _quadraticBezier.Point1.X = x;
+            _quadraticBezier.Point1.Y = y;
+
+            context.Selected.Remove(_quadraticBezier.Point2);
+            _quadraticBezier.Point2 = context.GetNextPoint(x, y, false, 0.0);
+            context.Selected.Add(_quadraticBezier.Point2);
+
+            CurrentState = State.Point1;
+
+            context.Invalidate();
+        }
+
+        private void MoveStartPointInternal(IToolContext context, double x, double y, Modifier modifier)
+        {
+            Filters?.ForEach(f => f.Clear(context));
+            Filters?.Any(f => f.Process(context, ref x, ref y));
+
+            context.Invalidate();
+        }
+
+        private void MovePoint1Internal(IToolContext context, double x, double y, Modifier modifier)
+        {
+            Filters?.ForEach(f => f.Clear(context));
+            Filters?.Any(f => f.Process(context, ref x, ref y));
+
+            _quadraticBezier.Point1.X = x;
+            _quadraticBezier.Point1.Y = y;
+
+            context.Invalidate();
+        }
+
+        private void MovePoint2Internal(IToolContext context, double x, double y, Modifier modifier)
+        {
+            Filters?.ForEach(f => f.Clear(context));
+            Filters?.Any(f => f.Process(context, ref x, ref y));
+
+            _quadraticBezier.Point1.X = x;
+            _quadraticBezier.Point1.Y = y;
+            _quadraticBezier.Point2.X = x;
+            _quadraticBezier.Point2.Y = y;
+
+            context.Invalidate();
+        }
+
+        private void CleanInternal(IToolContext context)
+        {
+            Filters?.ForEach(f => f.Clear(context));
+
+            CurrentState = State.StartPoint;
+
+            if (_quadraticBezier != null)
+            {
+                context.WorkingContainer.Shapes.Remove(_quadraticBezier);
+                context.Selected.Remove(_quadraticBezier);
+                context.Selected.Remove(_quadraticBezier.StartPoint);
+                context.Selected.Remove(_quadraticBezier.Point1);
+                context.Selected.Remove(_quadraticBezier.Point2);
+                _quadraticBezier = null;
+            }
+
+            context.Release();
+            context.Invalidate();
+        }
+
         public override void LeftDown(IToolContext context, double x, double y, Modifier modifier)
         {
             base.LeftDown(context, x, y, modifier);
-
-            Filters?.Any(f => f.Process(context, ref x, ref y));
 
             switch (CurrentState)
             {
                 case State.StartPoint:
                     {
-                        var next = context.GetNextPoint(x, y, false, 0.0);
-                        _quadraticBezier = new QuadraticBezierShape()
-                        {
-                            StartPoint = next,
-                            Point1 = next.Copy(),
-                            Point2 = next.Copy(),
-                            Style = context.CurrentStyle
-                        };
-                        context.WorkingContainer.Shapes.Add(_quadraticBezier);
-                        context.Selected.Add(_quadraticBezier);
-                        context.Selected.Add(_quadraticBezier.StartPoint);
-                        context.Selected.Add(_quadraticBezier.Point1);
-                        context.Selected.Add(_quadraticBezier.Point2);
-                        context.Capture();
-                        context.Invalidate();
-                        CurrentState = State.Point2;
+                        StartPointInternal(context, x, y, modifier);
                     }
                     break;
                 case State.Point1:
                     {
-                        CurrentState = State.StartPoint;
-
-                        context.Selected.Remove(_quadraticBezier);
-                        context.Selected.Remove(_quadraticBezier.StartPoint);
-                        context.Selected.Remove(_quadraticBezier.Point1);
-                        context.Selected.Remove(_quadraticBezier.Point2);
-                        context.WorkingContainer.Shapes.Remove(_quadraticBezier);
-
-                        _quadraticBezier.Point1 = context.GetNextPoint(x, y, false, 0.0);
-
-                        context.CurrentContainer.Shapes.Add(_quadraticBezier);
-
-                        _quadraticBezier = null;
-                        context.Release();
-                        context.Invalidate();
+                        Point1Internal(context, x, y, modifier);
                     }
                     break;
                 case State.Point2:
                     {
-                        _quadraticBezier.Point1.X = x;
-                        _quadraticBezier.Point1.Y = y;
-
-                        context.Selected.Remove(_quadraticBezier.Point2);
-                        _quadraticBezier.Point2 = context.GetNextPoint(x, y, false, 0.0);
-                        context.Selected.Add(_quadraticBezier.Point2);
-
-                        CurrentState = State.Point1;
-                        context.Invalidate();
+                        Point2Internal(context, x, y, modifier);
                     }
                     break;
             }
@@ -98,25 +173,21 @@ namespace Draw2D.Core.Editor.Tools
         {
             base.Move(context, x, y, modifier);
 
-            Filters?.ForEach(f => f.Clear(context));
-            Filters?.Any(f => f.Process(context, ref x, ref y));
-
             switch (CurrentState)
             {
+                case State.StartPoint:
+                    {
+                        MoveStartPointInternal(context, x, y, modifier);
+                    }
+                    break;
                 case State.Point1:
                     {
-                        _quadraticBezier.Point1.X = x;
-                        _quadraticBezier.Point1.Y = y;
-                        context.Invalidate();
+                        MovePoint1Internal(context, x, y, modifier);
                     }
                     break;
                 case State.Point2:
                     {
-                        _quadraticBezier.Point1.X = x;
-                        _quadraticBezier.Point1.Y = y;
-                        _quadraticBezier.Point2.X = x;
-                        _quadraticBezier.Point2.Y = y;
-                        context.Invalidate();
+                        MovePoint2Internal(context, x, y, modifier);
                     }
                     break;
             }
@@ -126,22 +197,7 @@ namespace Draw2D.Core.Editor.Tools
         {
             base.Clean(context);
 
-            CurrentState = State.StartPoint;
-
-            Filters?.ForEach(f => f.Clear(context));
-
-            if (_quadraticBezier != null)
-            {
-                context.WorkingContainer.Shapes.Remove(_quadraticBezier);
-                context.Selected.Remove(_quadraticBezier);
-                context.Selected.Remove(_quadraticBezier.StartPoint);
-                context.Selected.Remove(_quadraticBezier.Point1);
-                context.Selected.Remove(_quadraticBezier.Point2);
-                _quadraticBezier = null;
-            }
-
-            context.Release();
-            context.Invalidate();
+            CleanInternal(context);
         }
     }
 }
