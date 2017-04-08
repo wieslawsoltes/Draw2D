@@ -11,116 +11,96 @@ namespace Draw2D.Core.Editor.Tools
         private LineShape _line = null;
         private List<PointShape> _points = null;
 
-        public enum State { Start, End };
-        public State CurrentState = State.Start;
+        public enum State { StartPoint, Point };
+        public State CurrentState = State.StartPoint;
 
         public override string Name { get { return "PolyLine"; } }
 
         public PolyLineToolSettings Settings { get; set; }
 
-        public override void LeftDown(IToolContext context, double x, double y, Modifier modifier)
+        private void StartPointInternal(IToolContext context, double x, double y, Modifier modifier)
         {
-            base.LeftDown(context, x, y, modifier);
-
             Filters?.Any(f => f.Process(context, ref x, ref y));
 
-            switch (CurrentState)
+            _points = new List<PointShape>();
+            _line = new LineShape()
             {
-                case State.Start:
-                    {
-                        _points = new List<PointShape>();
-                        _line = new LineShape()
-                        {
-                            StartPoint = context.GetNextPoint(x, y, Settings?.ConnectPoints ?? false, Settings?.HitTestRadius ?? 7.0),
-                            Point = context.GetNextPoint(x, y, false, 0.0),
-                            Style = context?.CurrentStyle
-                        };
-                        _points.Add(_line.StartPoint);
-                        _points.Add(_line.Point);
-                        context.WorkingContainer.Shapes.Add(_line);
-                        context.Selected.Add(_line.StartPoint);
-                        context.Selected.Add(_line.Point);
-                        context.Capture();
-                        context.Invalidate();
-                        CurrentState = State.End;
-                    }
-                    break;
-                case State.End:
-                    {
-                        context.Selected.Remove(_line.Point);
-                        _line.Point = context.GetNextPoint(x, y, Settings?.ConnectPoints ?? false, Settings?.HitTestRadius ?? 7.0);
-                        _points[_points.Count - 1] = _line.Point;
+                StartPoint = context.GetNextPoint(x, y, Settings?.ConnectPoints ?? false, Settings?.HitTestRadius ?? 7.0),
+                Point = context.GetNextPoint(x, y, false, 0.0),
+                Style = context?.CurrentStyle
+            };
+            _points.Add(_line.StartPoint);
+            _points.Add(_line.Point);
+            context.WorkingContainer.Shapes.Add(_line);
+            context.Selected.Add(_line.StartPoint);
+            context.Selected.Add(_line.Point);
 
-                        if (!context.Selected.Contains(_line.Point))
-                        {
-                            context.Selected.Add(_line.Point);
-                        }
+            context.Capture();
+            context.Invalidate();
 
-                        context.WorkingContainer.Shapes.Remove(_line);
-                        context.CurrentContainer.Shapes.Add(_line);
-
-                        _line = new LineShape()
-                        {
-                            StartPoint = _points.Last(),
-                            Point = context.GetNextPoint(x, y, false, 0.0),
-                            Style = context.CurrentStyle
-                        };
-                        _points.Add(_line.Point);
-                        context.WorkingContainer.Shapes.Add(_line);
-                        context.Selected.Add(_line.Point);
-
-                        Intersections?.ForEach(i => i.Clear(context));
-                        Filters?.ForEach(f => f.Clear(context));
-
-                        context.Invalidate();
-                    }
-                    break;
-            }
+            CurrentState = State.Point;
         }
 
-        public override void RightDown(IToolContext context, double x, double y, Modifier modifier)
+        private void PointInternal(IToolContext context, double x, double y, Modifier modifier)
         {
-            base.RightDown(context, x, y, modifier);
-
-            switch (CurrentState)
-            {
-                case State.End:
-                    {
-                        this.Clean(context);
-                    }
-                    break;
-            }
-        }
-
-        public override void Move(IToolContext context, double x, double y, Modifier modifier)
-        {
-            base.Move(context, x, y, modifier);
-
-            Filters?.ForEach(f => f.Clear(context));
             Filters?.Any(f => f.Process(context, ref x, ref y));
 
-            switch (CurrentState)
+            context.Selected.Remove(_line.Point);
+            _line.Point = context.GetNextPoint(x, y, Settings?.ConnectPoints ?? false, Settings?.HitTestRadius ?? 7.0);
+            _points[_points.Count - 1] = _line.Point;
+
+            if (!context.Selected.Contains(_line.Point))
             {
-                case State.End:
-                    {
-                        _line.Point.X = x;
-                        _line.Point.Y = y;
-                        Intersections?.ForEach(i => i.Clear(context));
-                        Intersections?.ForEach(i => i.Find(context, _line));
-                        context.Invalidate();
-                    }
-                    break;
+                context.Selected.Add(_line.Point);
             }
-        }
 
-        public override void Clean(IToolContext context)
-        {
-            base.Clean(context);
+            context.WorkingContainer.Shapes.Remove(_line);
+            context.CurrentContainer.Shapes.Add(_line);
 
-            CurrentState = State.Start;
+            _line = new LineShape()
+            {
+                StartPoint = _points.Last(),
+                Point = context.GetNextPoint(x, y, false, 0.0),
+                Style = context.CurrentStyle
+            };
+            _points.Add(_line.Point);
+            context.WorkingContainer.Shapes.Add(_line);
+            context.Selected.Add(_line.Point);
 
             Intersections?.ForEach(i => i.Clear(context));
             Filters?.ForEach(f => f.Clear(context));
+
+            context.Invalidate();
+        }
+
+        private void MoveStartPointInternal(IToolContext context, double x, double y, Modifier modifier)
+        {
+            Filters?.ForEach(f => f.Clear(context));
+            Filters?.Any(f => f.Process(context, ref x, ref y));
+
+            context.Invalidate();
+        }
+
+        private void MovePointInternal(IToolContext context, double x, double y, Modifier modifier)
+        {
+            Filters?.ForEach(f => f.Clear(context));
+            Filters?.Any(f => f.Process(context, ref x, ref y));
+
+            _line.Point.X = x;
+            _line.Point.Y = y;
+
+            Intersections?.ForEach(i => i.Clear(context));
+            Intersections?.ForEach(i => i.Find(context, _line));
+
+            context.Invalidate();
+        }
+
+        private void CleanInternal(IToolContext context)
+        {
+            Intersections?.ForEach(i => i.Clear(context));
+            Filters?.ForEach(f => f.Clear(context));
+
+            CurrentState = State.StartPoint;
 
             if (_line != null)
             {
@@ -136,6 +116,65 @@ namespace Draw2D.Core.Editor.Tools
 
             context.Release();
             context.Invalidate();
+        }
+
+        public override void LeftDown(IToolContext context, double x, double y, Modifier modifier)
+        {
+            base.LeftDown(context, x, y, modifier);
+
+            switch (CurrentState)
+            {
+                case State.StartPoint:
+                    {
+                        StartPointInternal(context, x, y, modifier);
+                    }
+                    break;
+                case State.Point:
+                    {
+                        PointInternal(context, x, y, modifier);
+                    }
+                    break;
+            }
+        }
+
+        public override void RightDown(IToolContext context, double x, double y, Modifier modifier)
+        {
+            base.RightDown(context, x, y, modifier);
+
+            switch (CurrentState)
+            {
+                case State.Point:
+                    {
+                        this.Clean(context);
+                    }
+                    break;
+            }
+        }
+
+        public override void Move(IToolContext context, double x, double y, Modifier modifier)
+        {
+            base.Move(context, x, y, modifier);
+
+            switch (CurrentState)
+            {
+                case State.StartPoint:
+                    {
+                        MoveStartPointInternal(context, x, y, modifier);
+                    }
+                    break;
+                case State.Point:
+                    {
+                        MovePointInternal(context, x, y, modifier);
+                    }
+                    break;
+            }
+        }
+
+        public override void Clean(IToolContext context)
+        {
+            base.Clean(context);
+
+            CleanInternal(context);
         }
     }
 }
