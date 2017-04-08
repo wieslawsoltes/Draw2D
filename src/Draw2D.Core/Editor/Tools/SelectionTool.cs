@@ -24,6 +24,214 @@ namespace Draw2D.Core.Editor.Tools
         public SelectionToolSettings Settings { get; set; }
         public bool HaveSelection { get; set; }
 
+        private void LeftDownNoneInternal(IToolContext context, double x, double y, Modifier modifier)
+        {
+            _originX = x;
+            _originY = y;
+            _previousX = x;
+            _previousY = y;
+
+            Filters?.ForEach(f => f.Clear(context));
+            Filters?.Any(f => f.Process(context, ref _originX, ref _originY));
+
+            _previousX = _originX;
+            _previousY = _originY;
+
+            var target = new Point2(x, y);
+            var result = SelectionHelper.TryToSelect(
+                context,
+                Settings?.Mode ?? SelectionMode.Shape,
+                Settings?.Targets ?? SelectionTargets.Shapes,
+                target,
+                Settings?.HitTestRadius ?? 7.0,
+                modifier);
+            if (result)
+            {
+                HaveSelection = true;
+                CurrentState = State.Move;
+            }
+            else
+            {
+                HaveSelection = false;
+
+                if (!modifier.HasFlag(Modifier.Control))
+                {
+                    context.Selected.Clear();
+                }
+
+                if (_rectangle == null)
+                {
+                    _rectangle = new RectangleShape()
+                    {
+                        TopLeft = new PointShape(),
+                        BottomRight = new PointShape()
+                    };
+                }
+
+                _rectangle.TopLeft.X = x;
+                _rectangle.TopLeft.Y = y;
+                _rectangle.BottomRight.X = x;
+                _rectangle.BottomRight.Y = y;
+                _rectangle.Style = Settings?.SelectionStyle;
+                context.WorkingContainer.Shapes.Add(_rectangle);
+
+                context.Capture();
+                context.Invalidate();
+
+                CurrentState = State.Selection;
+            }
+        }
+
+        private void LeftDownSelectionInternal(IToolContext context, double x, double y, Modifier modifier)
+        {
+            CurrentState = State.None;
+
+            _rectangle.BottomRight.X = x;
+            _rectangle.BottomRight.Y = y;
+
+            context.Release();
+            context.Invalidate();
+        }
+
+        private void LeftUpSelectionInternal(IToolContext context, double x, double y, Modifier modifier)
+        {
+            Filters?.ForEach(f => f.Clear(context));
+
+            var target = _rectangle.ToRect2();
+            var result = SelectionHelper.TryToSelect(
+                context,
+                Settings?.Mode ?? SelectionMode.Shape,
+                Settings?.Targets ?? SelectionTargets.Shapes,
+                target,
+                Settings?.HitTestRadius ?? 7.0,
+                modifier);
+            if (result)
+            {
+                HaveSelection = true;
+            }
+
+            context.WorkingContainer.Shapes.Remove(_rectangle);
+            _rectangle = null;
+
+            CurrentState = State.None;
+
+            context.Release();
+            context.Invalidate();
+        }
+
+        private void LeftUpMoveInternal(IToolContext context, double x, double y, Modifier modifier)
+        {
+            Filters?.ForEach(f => f.Clear(context));
+
+            CurrentState = State.None;
+        }
+
+        private void RightDownMoveInternal(IToolContext context, double x, double y, Modifier modifier)
+        {
+            CurrentState = State.None;
+        }
+
+        private void MoveNoneInternal(IToolContext context, double x, double y, Modifier modifier)
+        {
+            if (!HaveSelection)
+            {
+                lock (context.Selected)
+                {
+                    var target = new Point2(x, y);
+                    bool result = SelectionHelper.TryToHover(
+                        context,
+                        Settings?.Mode ?? SelectionMode.Shape,
+                        Settings?.Targets ?? SelectionTargets.Shapes,
+                        target,
+                        Settings?.HitTestRadius ?? 7.0);
+                    if (result == true)
+                    {
+                        context.Invalidate();
+                    }
+                }
+            }
+        }
+
+        private void MoveSelectionInternal(IToolContext context, double x, double y, Modifier modifier)
+        {
+            _rectangle.BottomRight.X = x;
+            _rectangle.BottomRight.Y = y;
+
+            context.Invalidate();
+        }
+
+        private void MoveMoveInternal(IToolContext context, double x, double y, Modifier modifier)
+        {
+            Filters?.ForEach(f => f.Clear(context));
+            Filters?.Any(f => f.Process(context, ref x, ref y));
+
+            double dx = x - _previousX;
+            double dy = y - _previousY;
+            _previousX = x;
+            _previousY = y;
+
+            if (context.Selected.Count == 1)
+            {
+                var shape = context.Selected.FirstOrDefault();
+
+                shape.Move(context.Selected, dx, dy);
+
+                if (shape.GetType() == typeof(PointShape))
+                {
+                    var point = shape as PointShape;
+
+                    if (Settings.ConnectPoints)
+                    {
+                        PointShape result = context.HitTest.TryToGetPoint(
+                            context.CurrentContainer.Shapes,
+                            new Point2(point.X, point.Y),
+                            Settings?.ConnectTestRadius ?? 7.0);
+                        if (result != point)
+                        {
+                            // TODO: Connect point.
+                        }
+                    }
+
+                    if (Settings.DisconnectPoints)
+                    {
+                        if ((Math.Abs(_originX - point.X) > Settings.DisconnectTestRadius)
+                            || (Math.Abs(_originY - point.Y) > Settings.DisconnectTestRadius))
+                        {
+                            // TODO: Disconnect point.
+                        }
+                    }
+                }
+            }
+            else
+            {
+                foreach (var shape in context.Selected)
+                {
+                    shape.Move(context.Selected, dx, dy);
+                }
+            }
+
+            context.Invalidate();
+        }
+
+        private void CleanInternal(IToolContext context)
+        {
+            CurrentState = State.None;
+            HaveSelection = false;
+
+            if (_rectangle != null)
+            {
+                context.WorkingContainer.Shapes.Remove(_rectangle);
+                _rectangle = null;
+            }
+
+            //context.Selected.Clear();
+
+            Filters?.ForEach(f => f.Clear(context));
+
+            context.Release();
+            context.Invalidate();
+        }
+
         public override void LeftDown(IToolContext context, double x, double y, Modifier modifier)
         {
             base.LeftDown(context, x, y, modifier);
@@ -32,66 +240,12 @@ namespace Draw2D.Core.Editor.Tools
             {
                 case State.None:
                     {
-                        _originX = x;
-                        _originY = y;
-                        _previousX = x;
-                        _previousY = y;
-
-                        Filters?.ForEach(f => f.Clear(context));
-                        Filters?.Any(f => f.Process(context, ref _originX, ref _originY));
-                        _previousX = _originX;
-                        _previousY = _originY;
-
-                        var target = new Point2(x, y);
-                        var result = SelectionHelper.TryToSelect(
-                            context,
-                            Settings?.Mode ?? SelectionMode.Shape,
-                            Settings?.Targets ?? SelectionTargets.Shapes,
-                            target,
-                            Settings?.HitTestRadius ?? 7.0,
-                            modifier);
-                        if (result)
-                        {
-                            HaveSelection = true;
-                            CurrentState = State.Move;
-                        }
-                        else
-                        {
-                            HaveSelection = false;
-
-                            if (!modifier.HasFlag(Modifier.Control))
-                            {
-                                context.Selected.Clear();
-                            }
-
-                            if (_rectangle == null)
-                            {
-                                _rectangle = new RectangleShape()
-                                {
-                                    TopLeft = new PointShape(),
-                                    BottomRight = new PointShape()
-                                };
-                            }
-                            _rectangle.TopLeft.X = x;
-                            _rectangle.TopLeft.Y = y;
-                            _rectangle.BottomRight.X = x;
-                            _rectangle.BottomRight.Y = y;
-                            _rectangle.Style = Settings?.SelectionStyle;
-                            context.WorkingContainer.Shapes.Add(_rectangle);
-                            context.Capture();
-                            context.Invalidate();
-                            CurrentState = State.Selection;
-                        }
+                        LeftDownNoneInternal(context, x, y, modifier);
                     }
                     break;
                 case State.Selection:
                     {
-                        CurrentState = State.None;
-                        _rectangle.BottomRight.X = x;
-                        _rectangle.BottomRight.Y = y;
-
-                        context.Release();
-                        context.Invalidate();
+                        LeftDownSelectionInternal(context, x, y, modifier);
                     }
                     break;
             }
@@ -101,35 +255,16 @@ namespace Draw2D.Core.Editor.Tools
         {
             base.LeftUp(context, x, y, modifier);
 
-            Filters?.ForEach(f => f.Clear(context));
-
             switch (CurrentState)
             {
                 case State.Selection:
                     {
-                        var target = _rectangle.ToRect2();
-                        var result = SelectionHelper.TryToSelect(
-                            context,
-                            Settings?.Mode ?? SelectionMode.Shape,
-                            Settings?.Targets ?? SelectionTargets.Shapes,
-                            target,
-                            Settings?.HitTestRadius ?? 7.0,
-                            modifier);
-                        if (result)
-                        {
-                            HaveSelection = true;
-                        }
-
-                        context.WorkingContainer.Shapes.Remove(_rectangle);
-                        _rectangle = null;
-                        CurrentState = State.None;
-                        context.Release();
-                        context.Invalidate();
+                        LeftUpSelectionInternal(context, x, y, modifier);
                     }
                     break;
                 case State.Move:
                     {
-                        CurrentState = State.None;
+                        LeftUpMoveInternal(context, x, y, modifier);
                     }
                     break;
             }
@@ -148,7 +283,7 @@ namespace Draw2D.Core.Editor.Tools
                     break;
                 case State.Move:
                     {
-                        CurrentState = State.None;
+                        RightDownMoveInternal(context, x, y, modifier);
                     }
                     break;
             }
@@ -162,83 +297,17 @@ namespace Draw2D.Core.Editor.Tools
             {
                 case State.None:
                     {
-                        if (!HaveSelection)
-                        {
-                            lock (context.Selected)
-                            {
-                                var target = new Point2(x, y);
-                                bool result = SelectionHelper.TryToHover(
-                                    context,
-                                    Settings?.Mode ?? SelectionMode.Shape,
-                                    Settings?.Targets ?? SelectionTargets.Shapes,
-                                    target,
-                                    Settings?.HitTestRadius ?? 7.0);
-                                if (result == true)
-                                {
-                                    context.Invalidate();
-                                }
-                            }
-                        }
+                        MoveNoneInternal(context, x, y, modifier);
                     }
                     break;
                 case State.Selection:
                     {
-                        _rectangle.BottomRight.X = x;
-                        _rectangle.BottomRight.Y = y;
-                        context.Invalidate();
+                        MoveSelectionInternal(context, x, y, modifier);
                     }
                     break;
                 case State.Move:
                     {
-                        Filters?.ForEach(f => f.Clear(context));
-                        Filters?.Any(f => f.Process(context, ref x, ref y));
-
-                        double dx = x - _previousX;
-                        double dy = y - _previousY;
-                        _previousX = x;
-                        _previousY = y;
-
-                        if (context.Selected.Count == 1)
-                        {
-                            var shape = context.Selected.FirstOrDefault();
-
-                            shape.Move(context.Selected, dx, dy);
-
-                            if (shape.GetType() == typeof(PointShape))
-                            {
-                                var point = shape as PointShape;
-
-                                if (Settings.ConnectPoints)
-                                {
-                                    PointShape result = context.HitTest.TryToGetPoint(
-                                        context.CurrentContainer.Shapes, 
-                                        new Point2(point.X, point.Y), 
-                                        Settings?.ConnectTestRadius ?? 7.0);
-                                    if (result != point)
-                                    {
-                                        // TODO: Connect point.
-                                    }
-                                }
-
-                                if (Settings.DisconnectPoints)
-                                {
-                                    if ((Math.Abs(_originX - point.X) > Settings.DisconnectTestRadius)
-                                        || (Math.Abs(_originY - point.Y) > Settings.DisconnectTestRadius))
-                                    {
-                                        // TODO: Disconnect point.
-                                    }
-                                }
-                            }
-                        }
-                        else
-                        {
-                            foreach (var shape in context.Selected)
-                            {
-                                shape.Move(context.Selected, dx, dy);
-                            }
-                        }
-
-                        context.Invalidate();
+                        MoveMoveInternal(context, x, y, modifier);
                     }
                     break;
             }
@@ -248,21 +317,7 @@ namespace Draw2D.Core.Editor.Tools
         {
             base.Clean(context);
 
-            CurrentState = State.None;
-            HaveSelection = false;
-
-            if (_rectangle != null)
-            {
-                context.WorkingContainer.Shapes.Remove(_rectangle);
-                _rectangle = null;
-            }
-
-            //context.Selected.Clear();
-
-            Filters?.ForEach(f => f.Clear(context));
-
-            context.Release();
-            context.Invalidate();
+            CleanInternal(context);
         }
     }
 }
