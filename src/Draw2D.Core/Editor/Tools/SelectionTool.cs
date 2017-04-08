@@ -57,15 +57,14 @@ namespace Draw2D.Core.Editor.Tools
 
             DeHoverShape(context);
 
-            var target = new Point2(x, y);
-            var result = SelectionHelper.TryToSelect(
+            var selected = SelectionHelper.TryToSelect(
                 context,
                 Settings?.Mode ?? SelectionMode.Shape,
                 Settings?.Targets ?? SelectionTargets.Shapes,
-                target,
+                new Point2(x, y),
                 Settings?.HitTestRadius ?? 7.0,
                 modifier);
-            if (result)
+            if (selected == true)
             {
                 CurrentState = State.Move;
             }
@@ -116,18 +115,13 @@ namespace Draw2D.Core.Editor.Tools
 
             DeHoverShape(context);
 
-            var target = _rectangle.ToRect2();
-            var result = SelectionHelper.TryToSelect(
+            SelectionHelper.TryToSelect(
                 context,
                 Settings?.Mode ?? SelectionMode.Shape,
                 Settings?.Targets ?? SelectionTargets.Shapes,
-                target,
+                _rectangle.ToRect2(),
                 Settings?.HitTestRadius ?? 7.0,
                 modifier);
-            if (result)
-            {
-
-            }
 
             context.WorkingContainer.Shapes.Remove(_rectangle);
             _rectangle = null;
@@ -147,6 +141,8 @@ namespace Draw2D.Core.Editor.Tools
 
         private void RightDownMoveInternal(IToolContext context, double x, double y, Modifier modifier)
         {
+            Filters?.ForEach(f => f.Clear(context));
+
             CurrentState = State.None;
         }
 
@@ -207,13 +203,11 @@ namespace Draw2D.Core.Editor.Tools
 
                 shape.Move(context.Selected, dx, dy);
 
-                if (shape.GetType() == typeof(PointShape))
+                if (shape is PointShape point)
                 {
-                    var point = shape as PointShape;
-
                     if (Settings.ConnectPoints)
                     {
-                        PointShape result = context.HitTest.TryToGetPoint(
+                        var result = context.HitTest.TryToGetPoint(
                             context.CurrentContainer.Shapes,
                             new Point2(point.X, point.Y),
                             Settings?.ConnectTestRadius ?? 7.0);
