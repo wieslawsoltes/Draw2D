@@ -33,27 +33,27 @@ namespace Draw2D.Core.Editor.Selection
             {
                 if (shapePoint != null)
                 {
-                    Debug.WriteLine(string.Format("Hover Shape Point: {0}", shapePoint.GetType()));
+                    Debug.WriteLine($"Hover Shape Point: {shapePoint.GetType()}");
                     return shapePoint;
                 }
                 else if (shape != null)
                 {
-                    Debug.WriteLine(string.Format("Hover Shape: {0}", shape.GetType()));
+                    Debug.WriteLine($"Hover Shape: {shape.GetType()}");
                     return shape;
                 }
                 else if (guidePoint != null)
                 {
-                    Debug.WriteLine(string.Format("Hover Guide Point: {0}", guidePoint.GetType()));
+                    Debug.WriteLine($"Hover Guide Point: {guidePoint.GetType()}");
                     return guidePoint;
                 }
                 else if (guide != null)
                 {
-                    Debug.WriteLine(string.Format("Hover Guide: {0}", guide.GetType()));
+                    Debug.WriteLine($"Hover Guide: {guide.GetType()}");
                     return guide;
                 }
             }
 
-            Debug.WriteLine(string.Format("No Hover"));
+            Debug.WriteLine("No Hover");
             return null;
         }
 
@@ -101,12 +101,12 @@ namespace Draw2D.Core.Editor.Selection
                         {
                             if (context.Selected.Contains(shapePoint))
                             {
-                                Debug.WriteLine(string.Format("Deselected Shape Point: {0}", shapePoint.GetType()));
+                                Debug.WriteLine($"Deselected Shape Point: {shapePoint.GetType()}");
                                 shapePoint.Deselect(context.Selected);
                             }
                             else
                             {
-                                Debug.WriteLine(string.Format("Selected Shape Point: {0}", shapePoint.GetType()));
+                                Debug.WriteLine($"Selected Shape Point: {shapePoint.GetType()}");
                                 shapePoint.Select(context.Selected);
                             }
                             return context.Selected.Count > 0;
@@ -114,7 +114,7 @@ namespace Draw2D.Core.Editor.Selection
                         else
                         {
                             context.Selected.Clear();
-                            Debug.WriteLine(string.Format("Selected Shape Point: {0}", shapePoint.GetType()));
+                            Debug.WriteLine($"Selected Shape Point: {shapePoint.GetType()}");
                             shapePoint.Select(context.Selected);
                             return true;
                         }
@@ -125,12 +125,12 @@ namespace Draw2D.Core.Editor.Selection
                         {
                             if (context.Selected.Contains(shape))
                             {
-                                Debug.WriteLine(string.Format("Deselected Shape: {0}", shape.GetType()));
+                                Debug.WriteLine($"Deselected Shape: {shape.GetType()}");
                                 shape.Deselect(context.Selected);
                             }
                             else
                             {
-                                Debug.WriteLine(string.Format("Selected Shape: {0}", shape.GetType()));
+                                Debug.WriteLine($"Selected Shape: {shape.GetType()}");
                                 shape.Select(context.Selected);
                             }
                             return context.Selected.Count > 0;
@@ -138,7 +138,7 @@ namespace Draw2D.Core.Editor.Selection
                         else
                         {
                             context.Selected.Clear();
-                            Debug.WriteLine(string.Format("Selected Shape: {0}", shape.GetType()));
+                            Debug.WriteLine($"Selected Shape: {shape.GetType()}");
                             shape.Select(context.Selected);
                             return true;
                         }
@@ -149,12 +149,12 @@ namespace Draw2D.Core.Editor.Selection
                         {
                             if (context.Selected.Contains(guidePoint))
                             {
-                                Debug.WriteLine(string.Format("Deselected Guide Point: {0}", guidePoint.GetType()));
+                                Debug.WriteLine($"Deselected Guide Point: {guidePoint.GetType()}");
                                 guidePoint.Deselect(context.Selected);
                             }
                             else
                             {
-                                Debug.WriteLine(string.Format("Selected Guide Point: {0}", guidePoint.GetType()));
+                                Debug.WriteLine($"Selected Guide Point: {guidePoint.GetType()}");
                                 guidePoint.Select(context.Selected);
                             }
                             return context.Selected.Count > 0;
@@ -162,7 +162,7 @@ namespace Draw2D.Core.Editor.Selection
                         else
                         {
                             context.Selected.Clear();
-                            Debug.WriteLine(string.Format("Selected Guide Point: {0}", guidePoint.GetType()));
+                            Debug.WriteLine($"Selected Guide Point: {guidePoint.GetType()}");
                             guidePoint.Select(context.Selected);
                             return true;
                         }
@@ -173,12 +173,12 @@ namespace Draw2D.Core.Editor.Selection
                         {
                             if (context.Selected.Contains(guide))
                             {
-                                Debug.WriteLine(string.Format("Deselected Guide: {0}", guide.GetType()));
+                                Debug.WriteLine($"Deselected Guide: {guide.GetType()}");
                                 guide.Deselect(context.Selected);
                             }
                             else
                             {
-                                Debug.WriteLine(string.Format("Selected Guide: {0}", guide.GetType()));
+                                Debug.WriteLine($"Selected Guide: {guide.GetType()}");
                                 guide.Select(context.Selected);
                             }
                             return context.Selected.Count > 0;
@@ -186,7 +186,7 @@ namespace Draw2D.Core.Editor.Selection
                         else
                         {
                             context.Selected.Clear();
-                            Debug.WriteLine(string.Format("Selected Guide: {0}", guide.GetType()));
+                            Debug.WriteLine($"Selected Guide: {guide.GetType()}");
                             guide.Select(context.Selected);
                             return true;
                         }
@@ -219,12 +219,12 @@ namespace Draw2D.Core.Editor.Selection
                         {
                             if (context.Selected.Contains(shape))
                             {
-                                Debug.WriteLine(string.Format("Deselected Shape: {0}", shape.GetType()));
+                                Debug.WriteLine($"Deselected Shape: {shape.GetType()}");
                                 shape.Deselect(context.Selected);
                             }
                             else
                             {
-                                Debug.WriteLine(string.Format("Selected Shape: {0}", shape.GetType()));
+                                Debug.WriteLine($"Selected Shape: {shape.GetType()}");
                                 shape.Select(context.Selected);
                             }
                         }
@@ -232,7 +232,7 @@ namespace Draw2D.Core.Editor.Selection
                     }
                     else
                     {
-                        Debug.WriteLine(string.Format("Selected Shapes: {0}", shapes != null ? shapes.Count : 0));
+                        Debug.WriteLine($"Selected Shapes: {shapes?.Count ?? 0}");
                         context.Selected.Clear();
                         foreach (var shape in shapes)
                         {
@@ -249,12 +249,12 @@ namespace Draw2D.Core.Editor.Selection
                         {
                             if (context.Selected.Contains(guide))
                             {
-                                Debug.WriteLine(string.Format("Deselected Guide: {0}", guide.GetType()));
+                                Debug.WriteLine($"Deselected Guide: {guide.GetType()}");
                                 guide.Deselect(context.Selected);
                             }
                             else
                             {
-                                Debug.WriteLine(string.Format("Selected Guide: {0}", guide.GetType()));
+                                Debug.WriteLine($"Selected Guide: {guide.GetType()}");
                                 guide.Select(context.Selected);
                             }
                         }
@@ -262,7 +262,7 @@ namespace Draw2D.Core.Editor.Selection
                     }
                     else
                     {
-                        Debug.WriteLine(string.Format("Selected Guides: {0}", guides != null ? guides.Count : 0));
+                        Debug.WriteLine($"Selected Guides: {guides?.Count ?? 0}");
                         context.Selected.Clear();
                         foreach (var guide in guides)
                         {

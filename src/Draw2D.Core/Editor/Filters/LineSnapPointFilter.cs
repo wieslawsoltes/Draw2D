@@ -52,7 +52,7 @@ namespace Draw2D.Core.Editor.Filters
                         PointGuides(context, x, y);
                     }
 
-                    Debug.WriteLine(string.Format("Line Snap {0} ({1})", mode, Settings.Target));
+                    Debug.WriteLine($"Line Snap {mode} ({Settings.Target})");
                     return true;
                 }
                 Clear(context);
@@ -88,7 +88,7 @@ namespace Draw2D.Core.Editor.Filters
         {
             snap = default(Point2);
             result = default(LineSnapMode);
-        
+
             foreach (var line in lines)
             {
                 var distance0 = line.StartPoint.ToPoint2().DistanceTo(point);
@@ -113,7 +113,7 @@ namespace Draw2D.Core.Editor.Filters
         {
             snap = default(Point2);
             result = default(LineSnapMode);
-        
+
             foreach (var line in lines)
             {
                 var middle = Line2.Middle(line.StartPoint.ToPoint2(), line.Point.ToPoint2());
@@ -132,7 +132,7 @@ namespace Draw2D.Core.Editor.Filters
         {
             snap = default(Point2);
             result = default(LineSnapMode);
-        
+
             foreach (var line0 in lines)
             {
                 foreach (var line1 in lines)
@@ -160,7 +160,7 @@ namespace Draw2D.Core.Editor.Filters
             snap = default(Point2);
             result = default(LineSnapMode);
             horizontal = default(double);
-            
+
             foreach (var line in lines)
             {
                 if (point.Y >= line.StartPoint.Y - threshold && point.Y <= line.StartPoint.Y + threshold)
@@ -186,7 +186,7 @@ namespace Draw2D.Core.Editor.Filters
             snap = default(Point2);
             result = default(LineSnapMode);
             vertical = default(double);
-            
+
             foreach (var line in lines)
             {
                 if (point.X >= line.StartPoint.X - threshold && point.X <= line.StartPoint.X + threshold)
@@ -211,7 +211,7 @@ namespace Draw2D.Core.Editor.Filters
         {
             snap = default(Point2);
             result = default(LineSnapMode);
-            
+
             foreach (var line in lines)
             {
                 var nearest = point.NearestOnLine(line.StartPoint.ToPoint2(), line.Point.ToPoint2());

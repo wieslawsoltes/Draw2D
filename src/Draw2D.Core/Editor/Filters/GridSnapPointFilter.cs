@@ -33,7 +33,7 @@ namespace Draw2D.Core.Editor.Filters
                     PointGuides(context, x, y);
                 }
 
-                Debug.WriteLineIf(haveSnapToGrid, string.Format("Grid Snap {0}", Settings.Mode));
+                Debug.WriteLineIf(haveSnapToGrid, $"Grid Snap {Settings.Mode}");
                 return haveSnapToGrid;
             }
             Clear(context);
