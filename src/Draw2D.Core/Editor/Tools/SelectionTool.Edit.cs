@@ -3,12 +3,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using Draw2D.Core.Shapes;
+using Draw2D.Spatial;
 
 namespace Draw2D.Core.Editor.Tools
 {
     public partial class SelectionTool : IEdit
     {
         private IList<ShapeObject> _shapesToCopy = null;
+        private ShapeObject _hover = null;
+        private bool _disconnected = false;
 
         private IEnumerable<PointShape> GetPoints(IEnumerable<ShapeObject> shapes)
         {
@@ -266,6 +269,78 @@ namespace Draw2D.Core.Editor.Tools
                 context.Invalidate();
 
                 this.CurrentState = SelectionTool.State.None;
+            }
+        }
+
+        public void Hover(IToolContext context, ShapeObject shape)
+        {
+            if (shape != null)
+            {
+                _hover = shape;
+                _hover.Select(context.Selected);
+            }
+        }
+
+        public void DeHover(IToolContext context)
+        {
+            if (_hover != null)
+            {
+                _hover.Deselect(context.Selected);
+                _hover = null;
+            }
+        }
+
+        public void Connect(IToolContext context, PointShape point)
+        {
+            var target = context.HitTest.TryToGetPoint(
+                context.CurrentContainer.Shapes,
+                new Point2(point.X, point.Y),
+                Settings?.ConnectTestRadius ?? 7.0,
+                point);
+            if (target != point)
+            {
+                foreach (var item in context.CurrentContainer.Shapes)
+                {
+                    if (item is ConnectableShape connectable)
+                    {
+                        if (connectable.Connect(point, target))
+                        {
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
+        public void Disconnect(IToolContext context, PointShape point)
+        {
+            foreach (var shape in context.CurrentContainer.Shapes)
+            {
+                if (shape is ConnectableShape connectable)
+                {
+                    if (connectable.Disconnect(point, out var copy))
+                    {
+                        if (copy != null)
+                        {
+                            point.X = _originX;
+                            point.Y = _originY;
+                            context.Selected.Remove(point);
+                            context.Selected.Add(copy);
+                            _disconnected = true;
+                        }
+                        break;
+                    }
+                }
+            }
+        }
+
+        public void Disconnect(IToolContext context, ShapeObject shape)
+        {
+            if (shape is ConnectableShape connectable)
+            {
+                connectable.Deselect(context.Selected);
+                _disconnected = connectable.Disconnect();
+                connectable.Select(context.Selected);
             }
         }
     }
