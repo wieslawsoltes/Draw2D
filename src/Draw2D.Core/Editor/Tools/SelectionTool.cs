@@ -25,7 +25,7 @@ namespace Draw2D.Core.Editor.Tools
 
         public SelectionToolSettings Settings { get; set; }
 
-        private void HoverShape(IToolContext context, ShapeObject shape)
+        private void Hover(IToolContext context, ShapeObject shape)
         {
             if (shape != null)
             {
@@ -34,12 +34,66 @@ namespace Draw2D.Core.Editor.Tools
             }
         }
 
-        private void DeHoverShape(IToolContext context)
+        private void DeHover(IToolContext context)
         {
             if (_hover != null)
             {
                 _hover.Deselect(context.Selected);
                 _hover = null;
+            }
+        }
+
+        private void Connect(IToolContext context, PointShape point)
+        {
+            var target = context.HitTest.TryToGetPoint(
+                context.CurrentContainer.Shapes,
+                new Point2(point.X, point.Y),
+                Settings?.ConnectTestRadius ?? 7.0,
+                point);
+            if (target != point)
+            {
+                foreach (var item in context.CurrentContainer.Shapes)
+                {
+                    if (item is ConnectableShape connectable)
+                    {
+                        if (connectable.Connect(point, target))
+                        {
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
+        private void Disconnect(IToolContext context, PointShape point)
+        {
+            foreach (var shape in context.CurrentContainer.Shapes)
+            {
+                if (shape is ConnectableShape connectable)
+                {
+                    if (connectable.Disconnect(point, out var copy))
+                    {
+                        if (copy != null)
+                        {
+                            point.X = _originX;
+                            point.Y = _originY;
+                            context.Selected.Remove(point);
+                            context.Selected.Add(copy);
+                            _disconnected = true;
+                        }
+                        break;
+                    }
+                }
+            }
+        }
+
+        private void Disconnect(IToolContext context, ShapeObject shape)
+        {
+            if (shape is ConnectableShape connectable)
+            {
+                connectable.Deselect(context.Selected);
+                _disconnected = connectable.Disconnect();
+                connectable.Select(context.Selected);
             }
         }
 
@@ -58,7 +112,7 @@ namespace Draw2D.Core.Editor.Tools
             _previousX = _originX;
             _previousY = _originY;
 
-            DeHoverShape(context);
+            DeHover(context);
 
             var selected = SelectionHelper.TryToSelect(
                 context,
@@ -116,7 +170,7 @@ namespace Draw2D.Core.Editor.Tools
         {
             Filters?.ForEach(f => f.Clear(context));
 
-            DeHoverShape(context);
+            DeHover(context);
 
             SelectionHelper.TryToSelect(
                 context,
@@ -157,7 +211,7 @@ namespace Draw2D.Core.Editor.Tools
                 {
                     var previous = _hover;
 
-                    DeHoverShape(context);
+                    DeHover(context);
 
                     var target = new Point2(x, y);
                     var shape = SelectionHelper.TryToHover(
@@ -168,7 +222,7 @@ namespace Draw2D.Core.Editor.Tools
                         Settings?.HitTestRadius ?? 7.0);
                     if (shape != null)
                     {
-                        HoverShape(context, shape);
+                        Hover(context, shape);
                         context.Invalidate();
                     }
                     else
@@ -251,67 +305,13 @@ namespace Draw2D.Core.Editor.Tools
             context.Invalidate();
         }
 
-        private void Connect(IToolContext context, PointShape point)
-        {
-            var target = context.HitTest.TryToGetPoint(
-                context.CurrentContainer.Shapes,
-                new Point2(point.X, point.Y),
-                Settings?.ConnectTestRadius ?? 7.0,
-                point);
-            if (target != point)
-            {
-                foreach (var item in context.CurrentContainer.Shapes)
-                {
-                    if (item is ConnectableShape connectable)
-                    {
-                        if (connectable.Connect(point, target))
-                        {
-                            break;
-                        }
-                    }
-                }
-            }
-        }
-
-        private void Disconnect(IToolContext context, PointShape point)
-        {
-            foreach (var shape in context.CurrentContainer.Shapes)
-            {
-                if (shape is ConnectableShape connectable)
-                {
-                    if (connectable.Disconnect(point, out var copy))
-                    {
-                        if (copy != null)
-                        {
-                            point.X = _originX;
-                            point.Y = _originY;
-                            context.Selected.Remove(point);
-                            context.Selected.Add(copy);
-                            _disconnected = true;
-                        }
-                        break;
-                    }
-                }
-            }
-        }
-
-        private void Disconnect(IToolContext context, ShapeObject shape)
-        {
-            if (shape is ConnectableShape connectable)
-            {
-                connectable.Deselect(context.Selected);
-                _disconnected = connectable.Disconnect();
-                connectable.Select(context.Selected);
-            }
-        }
-
         private void CleanInternal(IToolContext context)
         {
             CurrentState = State.None;
 
             _disconnected = false;
 
-            DeHoverShape(context);
+            DeHover(context);
 
             if (_rectangle != null)
             {

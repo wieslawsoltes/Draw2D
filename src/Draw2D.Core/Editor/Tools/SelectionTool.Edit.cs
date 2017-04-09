@@ -158,7 +158,7 @@ namespace Draw2D.Core.Editor.Tools
             {
                 lock (context.Renderer.Selected)
                 {
-                    this.DeHoverShape(context);
+                    this.DeHover(context);
                     context.Renderer.Selected.Clear();
 
                     var distinctPoints = GetPoints(_shapesToCopy).Distinct();
@@ -205,7 +205,7 @@ namespace Draw2D.Core.Editor.Tools
                     }
                 }
 
-                this.DeHoverShape(context);
+                this.DeHover(context);
                 context.Renderer.Selected.Clear();
 
                 context.Invalidate();
@@ -218,7 +218,7 @@ namespace Draw2D.Core.Editor.Tools
         {
             lock (context.Renderer.Selected)
             {
-                this.DeHoverShape(context);
+                this.DeHover(context);
 
                 var shapes = context.Renderer.Selected.ToList();
 
@@ -255,7 +255,7 @@ namespace Draw2D.Core.Editor.Tools
         {
             lock (context.Renderer.Selected)
             {
-                this.DeHoverShape(context);
+                this.DeHover(context);
                 context.Renderer.Selected.Clear();
 
                 foreach (var shape in context.CurrentContainer.Shapes)
