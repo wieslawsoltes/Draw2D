@@ -84,7 +84,7 @@ namespace Draw2D.Core.Editor.Tools
                 Style = context.CurrentStyle
             };
 
-            context.CurrentContainer.Shapes.Add(_path);
+            context.WorkingContainer.Shapes.Add(_path);
             context.Selected.Add(_path);
         }
 
@@ -180,9 +180,16 @@ namespace Draw2D.Core.Editor.Tools
             {
                 context.WorkingContainer.Shapes.Remove(_path);
                 context.Selected.Remove(_path);
+
+                if (_path.Validate(true) == true)
+                {
+                    context.CurrentContainer.Shapes.Add(_path);
+                }
+
                 PreviousSubTool = null;
                 SetNextPoint(null);
                 SetContext(null);
+
                 _path = null;
                 _figure = null;
             }
