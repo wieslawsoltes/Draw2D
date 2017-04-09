@@ -184,7 +184,7 @@ namespace Draw2D.Core.Editor.Tools
 
                     context.Invalidate();
 
-                    this.CurrentState = SelectionTool.State.None;
+                    this.CurrentState = State.None;
                 }
             }
         }
@@ -213,7 +213,7 @@ namespace Draw2D.Core.Editor.Tools
 
                 context.Invalidate();
 
-                this.CurrentState = SelectionTool.State.None;
+                this.CurrentState = State.None;
             }
         }
 
@@ -268,7 +268,7 @@ namespace Draw2D.Core.Editor.Tools
 
                 context.Invalidate();
 
-                this.CurrentState = SelectionTool.State.None;
+                this.CurrentState = State.None;
             }
         }
 

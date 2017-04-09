@@ -52,6 +52,8 @@ namespace Draw2D.Core.Editor.Tools
                 modifier);
             if (selected == true)
             {
+                context.Capture();
+
                 CurrentState = State.Move;
             }
             else
@@ -122,12 +124,18 @@ namespace Draw2D.Core.Editor.Tools
         {
             Filters?.ForEach(f => f.Clear(context));
 
+            context.Release();
+            context.Invalidate();
+
             CurrentState = State.None;
         }
 
         private void RightDownMoveInternal(IToolContext context, double x, double y, Modifier modifier)
         {
             Filters?.ForEach(f => f.Clear(context));
+
+            context.Release();
+            context.Invalidate();
 
             CurrentState = State.None;
         }
