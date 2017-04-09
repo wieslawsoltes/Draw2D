@@ -194,6 +194,32 @@ namespace Draw2D.Core.Shapes
             base.Move(selected, dx, dy);
         }
 
+        public bool Validate(bool removeEmptyFigures)
+        {
+            if (_figures.Count > 0 && _figures[0].Shapes.Count > 0)
+            {
+                var figures = _figures.ToList();
+
+                if (removeEmptyFigures == true)
+                {
+                    foreach (var figure in figures)
+                    {
+                        if (figure.Shapes.Count <= 0)
+                        {
+                            _figures.Remove(figure);
+                        }
+                    }
+                }
+
+                if (_figures.Count > 0 && _figures[0].Shapes.Count > 0)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         public PathShape Copy()
         {
             return new PathShape()
