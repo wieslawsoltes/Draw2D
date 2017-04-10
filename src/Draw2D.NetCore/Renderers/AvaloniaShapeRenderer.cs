@@ -179,6 +179,7 @@ namespace Draw2D.NetCore.Renderers
                     {
                         context.LineTo(result[i]);
                     }
+                    context.EndFigure(false);
                 }
                 _dc.DrawGeometry(style.IsFilled ? cache?.Fill : null, style.IsStroked ? cache?.StrokePen : null, geometry);
             }
@@ -196,6 +197,7 @@ namespace Draw2D.NetCore.Renderers
                     FromPoint(cubicBezier.Point1, dx, dy),
                     FromPoint(cubicBezier.Point2, dx, dy),
                     FromPoint(cubicBezier.Point3, dx, dy));
+                context.EndFigure(false);
             }
             _dc.DrawGeometry(style.IsFilled ? cache?.Fill : null, style.IsStroked ? cache?.StrokePen : null, geometry);
         }
@@ -211,6 +213,7 @@ namespace Draw2D.NetCore.Renderers
                 context.QuadraticBezierTo(
                     FromPoint(quadraticBezier.Point1, dx, dy),
                     FromPoint(quadraticBezier.Point2, dx, dy));
+                context.EndFigure(false);
             }
             _dc.DrawGeometry(style.IsFilled ? cache?.Fill : null, style.IsStroked ? cache?.StrokePen : null, geometry);
         }
