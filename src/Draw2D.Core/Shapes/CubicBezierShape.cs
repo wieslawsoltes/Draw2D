@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Wiesław Šoltés. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using System.Collections.Generic;
+using System.Diagnostics;
 using Draw2D.Core.Renderers;
 
 namespace Draw2D.Core.Shapes
@@ -136,6 +137,123 @@ namespace Draw2D.Core.Shapes
             Point1.Deselect(selected);
             Point2.Deselect(selected);
             Point3.Deselect(selected);
+        }
+
+        private bool CanConnect(PointShape point)
+        {
+            return StartPoint != point
+                && Point1 != point
+                && Point2 != point
+                && Point3 != point;
+        }
+
+        public override bool Connect(PointShape point, PointShape target)
+        {
+            if (base.Connect(point, target))
+            {
+                return true;
+            }
+            else if (CanConnect(point))
+            {
+                if (StartPoint == target)
+                {
+                    Debug.WriteLine($"{nameof(CubicBezierShape)}: Connected to {nameof(StartPoint)}");
+                    this.StartPoint = point;
+                    return true;
+                }
+                else if (Point1 == target)
+                {
+                    Debug.WriteLine($"{nameof(CubicBezierShape)}: Connected to {nameof(Point1)}");
+                    this.Point1 = point;
+                    return true;
+                }
+                else if (Point2 == target)
+                {
+                    Debug.WriteLine($"{nameof(CubicBezierShape)}: Connected to {nameof(Point2)}");
+                    this.Point2 = point;
+                    return true;
+                }
+                else if (Point3 == target)
+                {
+                    Debug.WriteLine($"{nameof(CubicBezierShape)}: Connected to {nameof(Point3)}");
+                    this.Point3 = point;
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public override bool Disconnect(PointShape point, out PointShape result)
+        {
+            if (base.Disconnect(point, out result))
+            {
+                return true;
+            }
+            else if (StartPoint == point)
+            {
+                Debug.WriteLine($"{nameof(CubicBezierShape)}: Disconnected from {nameof(StartPoint)}");
+                result = point.Copy();
+                this.StartPoint = result;
+                return true;
+            }
+            else if (Point1 == point)
+            {
+                Debug.WriteLine($"{nameof(CubicBezierShape)}: Disconnected from {nameof(Point1)}");
+                result = point.Copy();
+                this.Point1 = result;
+                return true;
+            }
+            else if (Point2 == point)
+            {
+                Debug.WriteLine($"{nameof(CubicBezierShape)}: Disconnected from {nameof(Point2)}");
+                result = point.Copy();
+                this.Point2 = result;
+                return true;
+            }
+            else if (Point3 == point)
+            {
+                Debug.WriteLine($"{nameof(CubicBezierShape)}: Disconnected from {nameof(Point3)}");
+                result = point.Copy();
+                this.Point3 = result;
+                return true;
+            }
+            result = null;
+            return false;
+        }
+
+        public override bool Disconnect()
+        {
+            bool result = base.Disconnect();
+
+            if (this.StartPoint != null)
+            {
+                Debug.WriteLine($"{nameof(CubicBezierShape)}: Disconnected from {nameof(StartPoint)}");
+                this.StartPoint = this.StartPoint.Copy();
+                result = true;
+            }
+
+            if (this.Point1 != null)
+            {
+                Debug.WriteLine($"{nameof(CubicBezierShape)}: Disconnected from {nameof(Point1)}");
+                this.Point1 = this.Point1.Copy();
+                result = true;
+            }
+
+            if (this.Point2 != null)
+            {
+                Debug.WriteLine($"{nameof(CubicBezierShape)}: Disconnected from {nameof(Point2)}");
+                this.Point2 = this.Point2.Copy();
+                result = true;
+            }
+
+            if (this.Point3 != null)
+            {
+                Debug.WriteLine($"{nameof(CubicBezierShape)}: Disconnected from {nameof(Point3)}");
+                this.Point3 = this.Point3.Copy();
+                result = true;
+            }
+
+            return result;
         }
 
         public CubicBezierShape Copy()
