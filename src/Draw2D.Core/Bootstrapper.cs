@@ -23,7 +23,7 @@ namespace Draw2D.Core
 {
     public class Bootstrapper
     {
-        public ShapesContainerViewModel CreateViewModel()
+        public ShapesContainerViewModel CreateDemoViewModel()
         {
             var hitTest = new HitTest();
 
@@ -305,6 +305,41 @@ namespace Draw2D.Core
 
             var currentTool = tools.FirstOrDefault(t => t.Name == "Selection");
 
+            var presenter = new DefaultShapePresenter()
+            {
+                Helpers = new Dictionary<Type, ShapeHelper>
+                {
+                    { typeof(PointShape), new PointHelper() },
+                    { typeof(LineShape), new LineHelper() },
+                    { typeof(CubicBezierShape), new CubicBezierHelper() },
+                    { typeof(QuadraticBezierShape), new QuadraticBezierHelper() },
+                    { typeof(PathShape), new PathHelper() },
+                    { typeof(ScribbleShape), new ScribbleHelper() },
+                    { typeof(RectangleShape), new RectangleHelper() },
+                    { typeof(EllipseShape), new EllipseHelper() }
+                }
+            };
+
+            return new ShapesContainerViewModel()
+            {
+                Tools = tools,
+                CurrentTool = currentTool,
+                Presenter = presenter,
+                Renderer = null,
+                Selected = null,
+                HitTest = hitTest,
+                CurrentContainer = null,
+                WorkingContainer = null,
+                CurrentStyle = null,
+                PointShape = null,
+                Capture = null,
+                Release = null,
+                Invalidate = null,
+            };
+        }
+
+        public void CreateDemoContainer(ShapesContainerViewModel vm)
+        {
             var container = new ShapesContainer()
             {
                 Width = 720,
@@ -327,49 +362,32 @@ namespace Draw2D.Core
                 }
             };
 
+            var guideTool = vm.Tools.FirstOrDefault(t => t.Name == "Guide") as GuideTool;
+
             container.Styles.Add(guideTool.Settings.GuideStyle);
             container.Styles.Add(pointShape.Style);
             container.Styles.Add(style);
 
-            //var group = new GroupShape();
-            //group.Shapes.Add(new RectangleShape(new PointShape(30, 30, pointShape), new PointShape(60, 60, pointShape)) { Style = style });
-            //group.Points.Add(new PointShape(45, 30, pointShape));
-            //group.Points.Add(new PointShape(45, 60, pointShape));
-            //group.Points.Add(new PointShape(30, 45, pointShape));
-            //group.Points.Add(new PointShape(60, 45, pointShape));
-            //container.Shapes.Add(group);
+            vm.CurrentContainer = container;
+            vm.WorkingContainer = workingContainer;
+            vm.CurrentStyle = style;
+            vm.PointShape = pointShape;
+        }
 
-            var presenter = new DefaultShapePresenter()
+        public void AddDemoGroupShape(IToolContext context)
+        {
+            var group = new GroupShape();
+            group.Shapes.Add(new RectangleShape(
+                new PointShape(30, 30, context.PointShape),
+                new PointShape(60, 60, context.PointShape))
             {
-                Helpers = new Dictionary<Type, ShapeHelper>
-                {
-                    { typeof(PointShape), new PointHelper() },
-                    { typeof(LineShape), new LineHelper() },
-                    { typeof(CubicBezierShape), new CubicBezierHelper() },
-                    { typeof(QuadraticBezierShape), new QuadraticBezierHelper() },
-                    { typeof(PathShape), new PathHelper() },
-                    { typeof(ScribbleShape), new ScribbleHelper() },
-                    { typeof(RectangleShape), new RectangleHelper() },
-                    { typeof(EllipseShape), new EllipseHelper() }
-                }
-            };
-
-            return new ShapesContainerViewModel()
-            {
-                Tools = tools,
-                CurrentTool = currentTool,
-                Renderer = null,
-                Selected = null,
-                CurrentContainer = container,
-                WorkingContainer = workingContainer,
-                CurrentStyle = style,
-                PointShape = pointShape,
-                HitTest = hitTest,
-                Capture = null,
-                Release = null,
-                Invalidate = null,
-                Presenter = presenter
-            };
+                Style = context.CurrentStyle
+            });
+            group.Points.Add(new PointShape(45, 30, context.PointShape));
+            group.Points.Add(new PointShape(45, 60, context.PointShape));
+            group.Points.Add(new PointShape(30, 45, context.PointShape));
+            group.Points.Add(new PointShape(60, 45, context.PointShape));
+            context.CurrentContainer.Shapes.Add(group);
         }
     }
 }

@@ -24,7 +24,9 @@ namespace Draw2D.NetCore
             var mainView = window.FindControl<MainView>("mainView");
             var rendererView = mainView.FindControl<ShapesContainerRenderView>("rendererView");
 
-            var vm = new Bootstrapper().CreateViewModel();
+            var bootstrapper = new Bootstrapper();
+            var vm = bootstrapper.CreateDemoViewModel();
+            bootstrapper.CreateDemoContainer(vm);
 
             vm.Renderer = new AvaloniaShapeRenderer();
             vm.Selected = vm.Renderer.Selected;

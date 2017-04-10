@@ -18,14 +18,15 @@ namespace Draw2D.Core.ViewModels.Containers
     {
         private ObservableCollection<ToolBase> _tools;
         private ToolBase _currentTool;
+        private ShapePresenter _presenter;
+
         private ShapeRenderer _renderer;
         private ISet<ShapeObject> _selected;
+        private IHitTest _hitTest;
         private IShapesContainer _currentContainer;
         private IShapesContainer _workingContainer;
         private DrawStyle _currentStyle;
         private ShapeObject _pointShape;
-        private IHitTest _hitTest;
-        private ShapePresenter _presenter;
 
         public ObservableCollection<ToolBase> Tools
         {
@@ -43,6 +44,12 @@ namespace Draw2D.Core.ViewModels.Containers
             }
         }
 
+        public ShapePresenter Presenter
+        {
+            get => _presenter;
+            set => Update(ref _presenter, value);
+        }
+
         public ShapeRenderer Renderer
         {
             get => _renderer;
@@ -53,6 +60,12 @@ namespace Draw2D.Core.ViewModels.Containers
         {
             get => _selected;
             set => Update(ref _selected, value);
+        }
+
+        public IHitTest HitTest
+        {
+            get => _hitTest;
+            set => Update(ref _hitTest, value);
         }
 
         public IShapesContainer CurrentContainer
@@ -79,11 +92,11 @@ namespace Draw2D.Core.ViewModels.Containers
             set => Update(ref _pointShape, value);
         }
 
-        public IHitTest HitTest
-        {
-            get => _hitTest;
-            set => Update(ref _hitTest, value);
-        }
+        public Action Capture { get; set; }
+
+        public Action Release { get; set; }
+
+        public Action Invalidate { get; set; }
 
         public PointShape GetNextPoint(double x, double y, bool connect, double radius)
         {
@@ -96,18 +109,6 @@ namespace Draw2D.Core.ViewModels.Containers
                 }
             }
             return new PointShape(x, y, PointShape);
-        }
-
-        public Action Capture { get; set; }
-
-        public Action Release { get; set; }
-
-        public Action Invalidate { get; set; }
-
-        public ShapePresenter Presenter
-        {
-            get => _presenter;
-            set => Update(ref _presenter, value);
         }
     }
 }

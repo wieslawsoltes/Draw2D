@@ -53,6 +53,8 @@ namespace Draw2D.Core.Editor.Tools
             set => SetSelected(value);
         }
 
+        public IHitTest HitTest { get; set; }
+
         public IShapesContainer CurrentContainer
         {
             get => _figure;
@@ -69,17 +71,15 @@ namespace Draw2D.Core.Editor.Tools
 
         public ShapeObject PointShape { get; set; }
 
-        public IHitTest HitTest { get; set; }
-
-        public PointShape GetNextPoint(double x, double y, bool connect, double radius)
-        {
-            return _nextPoint ?? _context?.GetNextPoint(x, y, connect, radius);
-        }
-
         public Action Capture { get; set; }
 
         public Action Release { get; set; }
 
         public Action Invalidate { get; set; }
+
+        public PointShape GetNextPoint(double x, double y, bool connect, double radius)
+        {
+            return _nextPoint ?? _context?.GetNextPoint(x, y, connect, radius);
+        }
     }
 }

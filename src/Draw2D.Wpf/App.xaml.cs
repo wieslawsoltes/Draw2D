@@ -16,7 +16,9 @@ namespace Draw2D.Wpf
             var mainView = window.mainView;
             var rendererView = mainView.rendererView;
 
-            var vm = new Bootstrapper().CreateViewModel();
+            var bootstrapper = new Bootstrapper();
+            var vm = bootstrapper.CreateDemoViewModel();
+            bootstrapper.CreateDemoContainer(vm);
 
             vm.Renderer = new WpfShapeRenderer();
             vm.Selected = vm.Renderer.Selected;

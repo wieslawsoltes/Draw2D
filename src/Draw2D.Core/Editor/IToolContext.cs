@@ -14,14 +14,14 @@ namespace Draw2D.Core.Editor
     {
         ShapeRenderer Renderer { get; set; }
         ISet<ShapeObject> Selected { get; set; }
+        IHitTest HitTest { get; set; }
         IShapesContainer CurrentContainer { get; set; }
         IShapesContainer WorkingContainer { get; set; }
         DrawStyle CurrentStyle { get; set; }
         ShapeObject PointShape { get; set; }
-        IHitTest HitTest { get; set; }
-        PointShape GetNextPoint(double x, double y, bool connect, double radius);
         Action Capture { get; set; }
         Action Release { get; set; }
         Action Invalidate { get; set; }
+        PointShape GetNextPoint(double x, double y, bool connect, double radius);
     }
 }
