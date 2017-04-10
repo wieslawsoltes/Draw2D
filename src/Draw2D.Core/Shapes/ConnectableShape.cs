@@ -99,7 +99,7 @@ namespace Draw2D.Core.Shapes
 
             for (int i = 0; i < _points.Count; i++)
             {
-                Debug.WriteLine($"ConnectableShape Disconnected Point {i}");
+                Debug.WriteLine($"{nameof(ConnectableShape)}: Disconnected from {nameof(Points)} #{i}");
                 _points[i] = _points[i].Copy();
                 result = true;
             }
