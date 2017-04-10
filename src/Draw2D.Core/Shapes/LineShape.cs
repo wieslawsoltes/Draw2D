@@ -97,13 +97,19 @@ namespace Draw2D.Core.Shapes
             Point.Deselect(selected);
         }
 
+        private bool CanConnect(PointShape point)
+        {
+            return StartPoint != point
+                && Point != point;
+        }
+
         public override bool Connect(PointShape point, PointShape target)
         {
             if (base.Connect(point, target))
             {
                 return true;
             }
-            else if (StartPoint != point && Point != point)
+            else if (CanConnect(point))
             {
                 if (StartPoint == target)
                 {

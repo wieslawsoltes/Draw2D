@@ -69,21 +69,23 @@ namespace Draw2D.Core.Shapes
             }
         }
 
+        private bool CanConnect(PointShape point)
+        {
+            return _points.Contains(point) == false;
+        }
+
         public virtual bool Connect(PointShape point, PointShape target)
         {
-            if (_points.Contains(point) == true)
+            if (CanConnect(point))
             {
-                return false;
+                int index = _points.IndexOf(target);
+                if (index >= 0)
+                {
+                    Debug.WriteLine($"ConnectableShape Connected to Points");
+                    _points[index] = point;
+                    return true;
+                }
             }
-
-            int index = _points.IndexOf(target);
-            if (index >= 0)
-            {
-                Debug.WriteLine($"ConnectableShape Connected to Points");
-                _points[index] = point;
-                return true;
-            }
-
             return false;
         }
 

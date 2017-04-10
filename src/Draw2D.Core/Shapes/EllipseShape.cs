@@ -97,13 +97,19 @@ namespace Draw2D.Core.Shapes
             BottomRight.Deselect(selected);
         }
 
+        private bool CanConnect(PointShape point)
+        {
+            return TopLeft != point
+                && BottomRight != point;
+        }
+
         public override bool Connect(PointShape point, PointShape target)
         {
             if (base.Connect(point, target))
             {
                 return true;
             }
-            else if (TopLeft != point && BottomRight != point)
+            else if (CanConnect(point))
             {
                 if (TopLeft == target)
                 {
