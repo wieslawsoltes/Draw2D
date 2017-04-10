@@ -107,13 +107,13 @@ namespace Draw2D.Core.Shapes
             {
                 if (StartPoint == target)
                 {
-                    Debug.WriteLine($"LineShape Connected to StartPoint");
+                    Debug.WriteLine($"{nameof(LineShape)}: Connected to {nameof(StartPoint)}");
                     this.StartPoint = point;
                     return true;
                 }
                 else if (Point == target)
                 {
-                    Debug.WriteLine($"LineShape Connected to Point");
+                    Debug.WriteLine($"{nameof(LineShape)}: Connected to {nameof(Point)}");
                     this.Point = point;
                     return true;
                 }
@@ -129,14 +129,14 @@ namespace Draw2D.Core.Shapes
             }
             else if (StartPoint == point)
             {
-                Debug.WriteLine($"LineShape Disconnected from StartPoint");
+                Debug.WriteLine($"{nameof(LineShape)}: Disconnected from {nameof(StartPoint)}");
                 result = point.Copy();
                 this.StartPoint = result;
                 return true;
             }
             else if (Point == point)
             {
-                Debug.WriteLine($"LineShape Disconnected from Point");
+                Debug.WriteLine($"{nameof(LineShape)}: Disconnected from {nameof(Point)}");
                 result = point.Copy();
                 this.Point = result;
                 return true;
@@ -151,14 +151,14 @@ namespace Draw2D.Core.Shapes
 
             if (this.StartPoint != null)
             {
-                Debug.WriteLine($"LineShape Disconnected from StartPoint");
+                Debug.WriteLine($"{nameof(LineShape)}: Disconnected from {nameof(StartPoint)}");
                 this.StartPoint = this.StartPoint.Copy();
                 result = true;
             }
 
             if (this.Point != null)
             {
-                Debug.WriteLine($"LineShape Disconnected from Point");
+                Debug.WriteLine($"{nameof(LineShape)}: Disconnected from {nameof(Point)}");
                 this.Point = this.Point.Copy();
                 result = true;
             }
