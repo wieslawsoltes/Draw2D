@@ -41,6 +41,7 @@ namespace Draw2D.Core
             {
                 Settings = new GridSnapSettings()
                 {
+                    IsEnabled = true,
                     EnableGuides = true,
                     Mode = GridSnapMode.Horizontal | GridSnapMode.Vertical,
                     GridSizeX = 15.0,
@@ -53,6 +54,7 @@ namespace Draw2D.Core
             {
                 Settings = new LineSnapSettings()
                 {
+                    IsEnabled = true,
                     EnableGuides = true,
                     Target = LineSnapTarget.Guides | LineSnapTarget.Shapes,
                     Mode = LineSnapMode.Point
@@ -81,6 +83,7 @@ namespace Draw2D.Core
                     {
                         Settings = new GridSnapSettings()
                         {
+                            IsEnabled = true,
                             EnableGuides = false,
                             Mode = GridSnapMode.Horizontal | GridSnapMode.Vertical,
                             GridSizeX = 15.0,

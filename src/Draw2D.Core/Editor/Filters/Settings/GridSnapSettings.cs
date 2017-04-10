@@ -6,11 +6,18 @@ namespace Draw2D.Core.Editor.Filters
 {
     public class GridSnapSettings : SettingsBase
     {
+        private bool _isEnabled;
         private bool _enableGuides;
         private GridSnapMode _mode;
         private double _gridSizeX;
         private double _gridSizeY;
         private DrawStyle _guideStyle;
+
+        public bool IsEnabled
+        {
+            get => _isEnabled;
+            set => Update(ref _isEnabled, value);
+        }
 
         public bool EnableGuides
         {

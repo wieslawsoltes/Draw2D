@@ -21,15 +21,18 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <TextBlock Grid.Column="0" Grid.Row="0" Text="EnableGuides"/>
-        <CheckBox Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="0" IsChecked="{Binding EnableGuides, UpdateSourceTrigger=PropertyChanged}"/>
+        <TextBlock Grid.Column="0" Grid.Row="0" Text="IsEnabled"/>
+        <CheckBox Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="0" IsChecked="{Binding IsEnabled, UpdateSourceTrigger=PropertyChanged}"/>
+        <TextBlock Grid.Column="0" Grid.Row="1" Text="EnableGuides"/>
+        <CheckBox Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="1" IsChecked="{Binding EnableGuides, UpdateSourceTrigger=PropertyChanged}"/>
         <!-- TODO: Mode -->
         <!-- TODO: Target -->
-        <TextBlock Grid.Column="0" Grid.Row="3" Text="Threshold"/>
-        <Slider Grid.Column="1" Grid.Row="3" Value="{Binding Threshold}" Minimum="0" Maximum="32" SmallChange="0.1" LargeChange="1" IsSnapToTickEnabled="True" TickFrequency="0.1"/>
-        <TextBox Grid.Column="2" Grid.Row="3" Text="{Binding Threshold, UpdateSourceTrigger=PropertyChanged}"/>
-        <Expander Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="4" Header="GuideStyle" IsExpanded="False">
+        <TextBlock Grid.Column="0" Grid.Row="4" Text="Threshold"/>
+        <Slider Grid.Column="1" Grid.Row="4" Value="{Binding Threshold}" Minimum="0" Maximum="32" SmallChange="0.1" LargeChange="1" IsSnapToTickEnabled="True" TickFrequency="0.1"/>
+        <TextBox Grid.Column="2" Grid.Row="4" Text="{Binding Threshold, UpdateSourceTrigger=PropertyChanged}"/>
+        <Expander Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="5" Header="GuideStyle" IsExpanded="False">
             <ViewsStyle:DrawStyleView DataContext="{Binding GuideStyle}"/>
         </Expander>
     </Grid>

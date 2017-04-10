@@ -6,11 +6,18 @@ namespace Draw2D.Core.Editor.Filters
 {
     public class LineSnapSettings : SettingsBase
     {
+        private bool _isEnabled;
         private bool _enableGuides;
         private LineSnapMode _mode;
         private LineSnapTarget _target;
         private double _threshold;
         private DrawStyle _guideStyle;
+
+        public bool IsEnabled
+        {
+            get => _isEnabled;
+            set => Update(ref _isEnabled, value);
+        }
 
         public bool EnableGuides
         {

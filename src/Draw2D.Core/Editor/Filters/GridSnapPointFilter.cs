@@ -12,6 +12,11 @@ namespace Draw2D.Core.Editor.Filters
 
         public override bool Process(IToolContext context, ref double x, ref double y)
         {
+            if (Settings.IsEnabled == false)
+            {
+                return false;
+            }
+
             if (Settings.Mode != GridSnapMode.None)
             {
                 bool haveSnapToGrid = false;

@@ -15,6 +15,11 @@ namespace Draw2D.Core.Editor.Filters
 
         public override bool Process(IToolContext context, ref double x, ref double y)
         {
+            if (Settings.IsEnabled == false)
+            {
+                return false;
+            }
+
             if (Settings.Target.HasFlag(LineSnapTarget.Guides))
             {
                 if (Process(context, ref x, ref y, context.CurrentContainer.Guides))
