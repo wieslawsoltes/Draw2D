@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Wiesław Šoltés. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using System.Collections.Generic;
+using System.Diagnostics;
 using Draw2D.Core.Renderers;
 
 namespace Draw2D.Core.Shapes
@@ -94,6 +95,75 @@ namespace Draw2D.Core.Shapes
             base.Deselect(selected);
             TopLeft.Deselect(selected);
             BottomRight.Deselect(selected);
+        }
+
+        public override bool Connect(PointShape point, PointShape target)
+        {
+            if (base.Connect(point, target))
+            {
+                return true;
+            }
+            else if (TopLeft != point && BottomRight != point)
+            {
+                if (TopLeft == target)
+                {
+                    Debug.WriteLine($"{nameof(RectangleShape)}: Connected to {nameof(TopLeft)}");
+                    this.TopLeft = point;
+                    return true;
+                }
+                else if (BottomRight == target)
+                {
+                    Debug.WriteLine($"{nameof(RectangleShape)}: Connected to {nameof(BottomRight)}");
+                    this.BottomRight = point;
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public override bool Disconnect(PointShape point, out PointShape result)
+        {
+            if (base.Disconnect(point, out result))
+            {
+                return true;
+            }
+            else if (TopLeft == point)
+            {
+                Debug.WriteLine($"{nameof(RectangleShape)}: Disconnected from {nameof(TopLeft)}");
+                result = point.Copy();
+                this.TopLeft = result;
+                return true;
+            }
+            else if (BottomRight == point)
+            {
+                Debug.WriteLine($"{nameof(RectangleShape)}: Disconnected from {nameof(BottomRight)}");
+                result = point.Copy();
+                this.BottomRight = result;
+                return true;
+            }
+            result = null;
+            return false;
+        }
+
+        public override bool Disconnect()
+        {
+            bool result = base.Disconnect();
+
+            if (this.TopLeft != null)
+            {
+                Debug.WriteLine($"{nameof(RectangleShape)}: Disconnected from {nameof(TopLeft)}");
+                this.TopLeft = this.TopLeft.Copy();
+                result = true;
+            }
+
+            if (this.BottomRight != null)
+            {
+                Debug.WriteLine($"{nameof(RectangleShape)}: Disconnected from {nameof(BottomRight)}");
+                this.BottomRight = this.BottomRight.Copy();
+                result = true;
+            }
+
+            return result;
         }
 
         public RectangleShape Copy()
