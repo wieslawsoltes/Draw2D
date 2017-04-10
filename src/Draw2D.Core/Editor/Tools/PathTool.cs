@@ -1,7 +1,6 @@
 ﻿// Copyright (c) Wiesław Šoltés. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using System;
-using System.Collections.ObjectModel;
 using System.Linq;
 using Draw2D.Core.Shapes;
 
@@ -9,49 +8,12 @@ namespace Draw2D.Core.Editor.Tools
 {
     public partial class PathTool : ToolBase
     {
-        private ToolBase _currentSubTool;
-        private ToolBase _previousSubTool;
         private PathShape _path;
         private FigureShape _figure;
 
         public override string Name { get { return "Path"; } }
 
         public PathToolSettings Settings { get; set; }
-
-        public ObservableCollection<ToolBase> SubTools { get; set; }
-
-        public ToolBase CurrentSubTool
-        {
-            get => _currentSubTool;
-            set
-            {
-                PreviousSubTool = _currentSubTool;
-                Update(ref _currentSubTool, value);
-            }
-        }
-
-        public ToolBase PreviousSubTool
-        {
-            get => _previousSubTool;
-            set => Update(ref _previousSubTool, value);
-        }
-
-        public PathTool()
-        {
-            Capture = () => _context?.Capture();
-            Release = () => _context?.Release();
-            Invalidate = () => _context?.Invalidate();
-
-            SubTools = new ObservableCollection<ToolBase>
-            {
-                new LineTool(),
-                new CubicBezierTool(),
-                new QuadraticBezierTool(),
-                new MoveTool(this)
-            };
-
-            CurrentSubTool = SubTools[0];
-        }
 
         public PointShape GetLastPoint()
         {
@@ -80,7 +42,7 @@ namespace Draw2D.Core.Editor.Tools
         {
             _path = new PathShape()
             {
-                FillRule = PathFillRule.EvenOdd,
+                FillRule = Settings.FillRule,
                 Style = context.CurrentStyle
             };
 
@@ -92,21 +54,21 @@ namespace Draw2D.Core.Editor.Tools
         {
             _figure = new FigureShape()
             {
-                IsFilled = true,
-                IsClosed = true
+                IsFilled = Settings.IsFilled,
+                IsClosed = Settings.IsClosed
             };
             _path.Figures.Add(_figure);
 
-            if (PreviousSubTool != null)
+            if (Settings.PreviousTool != null)
             {
-                CurrentSubTool = PreviousSubTool;
+                Settings.CurrentTool = Settings.PreviousTool;
             }
         }
 
         public void CleanSubTool(IToolContext context)
         {
             SetContext(context);
-            CurrentSubTool?.Clean(this);
+            Settings.CurrentTool?.Clean(this);
             SetContext(null);
         }
 
@@ -121,16 +83,16 @@ namespace Draw2D.Core.Editor.Tools
             }
 
             SetContext(context);
-            CurrentSubTool?.LeftDown(this, x, y, modifier);
+            Settings.CurrentTool?.LeftDown(this, x, y, modifier);
 
-            switch (CurrentSubTool)
+            switch (Settings.CurrentTool)
             {
                 case LineTool lineTool:
                     {
                         if (lineTool.CurrentState == LineTool.State.StartPoint)
                         {
                             SetNextPoint(GetLastPoint());
-                            CurrentSubTool?.LeftDown(this, x, y, modifier);
+                            Settings.CurrentTool?.LeftDown(this, x, y, modifier);
                             SetNextPoint(null);
                         }
                     }
@@ -140,7 +102,7 @@ namespace Draw2D.Core.Editor.Tools
                         if (cubicBezierTool.CurrentState == CubicBezierTool.State.StartPoint)
                         {
                             SetNextPoint(GetLastPoint());
-                            CurrentSubTool?.LeftDown(this, x, y, modifier);
+                            Settings.CurrentTool?.LeftDown(this, x, y, modifier);
                             SetNextPoint(null);
                         }
                     }
@@ -150,7 +112,7 @@ namespace Draw2D.Core.Editor.Tools
                         if (quadraticBezierTool.CurrentState == QuadraticBezierTool.State.StartPoint)
                         {
                             SetNextPoint(GetLastPoint());
-                            CurrentSubTool?.LeftDown(this, x, y, modifier);
+                            Settings.CurrentTool?.LeftDown(this, x, y, modifier);
                             SetNextPoint(null);
                         }
                     }
@@ -166,7 +128,7 @@ namespace Draw2D.Core.Editor.Tools
             Filters?.Any(f => f.Process(context, ref x, ref y));
 
             SetContext(context);
-            CurrentSubTool.Move(this, x, y, modifier);
+            Settings.CurrentTool.Move(this, x, y, modifier);
             SetContext(null);
         }
 
@@ -186,7 +148,7 @@ namespace Draw2D.Core.Editor.Tools
                     context.CurrentContainer.Shapes.Add(_path);
                 }
 
-                PreviousSubTool = null;
+                Settings.PreviousTool = null;
                 SetNextPoint(null);
                 SetContext(null);
 

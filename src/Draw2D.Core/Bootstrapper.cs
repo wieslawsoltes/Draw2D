@@ -248,9 +248,21 @@ namespace Draw2D.Core
                 Settings = new PathToolSettings()
                 {
                     ConnectPoints = true,
-                    HitTestRadius = 7.0
+                    HitTestRadius = 7.0,
+                    FillRule = PathFillRule.EvenOdd,
+                    IsFilled = true,
+                    IsClosed = true
                 }
             };
+
+            pathTool.Settings.Tools = new ObservableCollection<ToolBase>
+            {
+                new LineTool(),
+                new CubicBezierTool(),
+                new QuadraticBezierTool(),
+                new MoveTool(pathTool)
+            };
+            pathTool.Settings.CurrentTool = pathTool.Settings.Tools[0];
 
             var scribbleTool = new ScribbleTool()
             {

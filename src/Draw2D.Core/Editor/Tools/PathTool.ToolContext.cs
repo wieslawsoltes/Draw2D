@@ -53,29 +53,53 @@ namespace Draw2D.Core.Editor.Tools
             set => SetSelected(value);
         }
 
-        public IHitTest HitTest { get; set; }
+        public IHitTest HitTest
+        {
+            get => _context?.HitTest;
+            set => throw new InvalidOperationException($"Can not set {HitTest} property value.");
+        }
 
         public IShapesContainer CurrentContainer
         {
             get => _figure;
-            set => throw new InvalidCastException("Can't cast current container as a figure.");
+            set => throw new InvalidOperationException($"Can not set {CurrentContainer} property value.");
         }
 
         public IShapesContainer WorkingContainer
         {
             get => _figure;
-            set => throw new InvalidCastException("Can't cast current container as a figure.");
+            set => throw new InvalidOperationException($"Can not set {WorkingContainer} property value.");
         }
 
-        public DrawStyle CurrentStyle { get; set; }
+        public DrawStyle CurrentStyle
+        {
+            get => _context?.CurrentStyle;
+            set => throw new InvalidOperationException($"Can not set {CurrentStyle} property value.");
+        }
 
-        public ShapeObject PointShape { get; set; }
+        public ShapeObject PointShape
+        {
+            get => _context?.PointShape;
+            set => throw new InvalidOperationException($"Can not set {PointShape} property value.");
+        }
 
-        public Action Capture { get; set; }
+        public Action Capture
+        {
+            get => _context?.Capture;
+            set => throw new InvalidOperationException($"Can not set {Capture} property value.");
+        }
 
-        public Action Release { get; set; }
+        public Action Release
+        {
+            get => _context?.Release;
+            set => throw new InvalidOperationException($"Can not set {Release} property value.");
+        }
 
-        public Action Invalidate { get; set; }
+        public Action Invalidate
+        {
+            get => _context?.Invalidate;
+            set => throw new InvalidOperationException($"Can not set {Invalidate} property value.");
+        }
 
         public PointShape GetNextPoint(double x, double y, bool connect, double radius)
         {
