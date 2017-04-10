@@ -7,7 +7,7 @@ using Draw2D.Core.Style;
 
 namespace Draw2D.Core
 {
-    public abstract class ShapeObject : IdObject
+    public abstract class ShapeObject : IdObject, IDrawable, ISelectable
     {
         private DrawStyle _style;
         private MatrixObject _transform;
@@ -28,6 +28,22 @@ namespace Draw2D.Core
 
         public abstract void Draw(object dc, ShapeRenderer r, double dx, double dy);
 
+        public virtual void BeginTransform(object dc, ShapeRenderer r)
+        {
+            if (Transform != null)
+            {
+                r.PushMatrix(dc, Transform);
+            }
+        }
+
+        public virtual void EndTransform(object dc, ShapeRenderer r)
+        {
+            if (Transform != null)
+            {
+                r.PopMatrix(dc, null);
+            }
+        }
+
         public abstract void Move(ISet<ShapeObject> selected, double dx, double dy);
 
         public virtual void Select(ISet<ShapeObject> selected)
@@ -43,22 +59,6 @@ namespace Draw2D.Core
             if (selected.Contains(this))
             {
                 selected.Remove(this);
-            }
-        }
-
-        public virtual void BeginTransform(object dc, ShapeRenderer r)
-        {
-            if (Transform != null)
-            {
-                r.PushMatrix(dc, Transform);
-            }
-        }
-
-        public virtual void EndTransform(object dc, ShapeRenderer r)
-        {
-            if (Transform != null)
-            {
-                r.PopMatrix(dc, null);
             }
         }
     }

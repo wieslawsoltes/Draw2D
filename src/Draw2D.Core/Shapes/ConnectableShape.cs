@@ -7,7 +7,7 @@ using Draw2D.Core.Renderers;
 
 namespace Draw2D.Core.Shapes
 {
-    public abstract class ConnectableShape : ShapeObject
+    public abstract class ConnectableShape : ShapeObject, IConnectable
     {
         private ObservableCollection<PointShape> _points;
 
