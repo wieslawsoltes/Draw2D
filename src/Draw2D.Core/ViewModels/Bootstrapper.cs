@@ -19,7 +19,7 @@ using Draw2D.Core.Shapes;
 using Draw2D.Core.Style;
 using Draw2D.Core.ViewModels.Containers;
 
-namespace Draw2D.Core
+namespace Draw2D.Core.ViewModels
 {
     public class Bootstrapper
     {

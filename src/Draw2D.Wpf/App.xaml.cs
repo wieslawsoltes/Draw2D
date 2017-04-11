@@ -1,7 +1,7 @@
 ﻿// Copyright (c) Wiesław Šoltés. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using System.Windows;
-using Draw2D.Core;
+using Draw2D.Core.ViewModels;
 using Draw2D.Wpf.Renderers;
 
 namespace Draw2D.Wpf
