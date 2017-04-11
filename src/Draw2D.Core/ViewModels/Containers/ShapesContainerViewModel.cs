@@ -14,7 +14,7 @@ using Draw2D.Spatial;
 
 namespace Draw2D.Core.ViewModels.Containers
 {
-    public class ShapesContainerViewModel : ViewModelBase, IToolContext
+    public class ShapesContainerViewModel : NamedObject, IToolContext
     {
         private ObservableCollection<ToolBase> _tools;
         private ToolBase _currentTool;
