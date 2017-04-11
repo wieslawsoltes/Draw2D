@@ -1,6 +1,5 @@
 ﻿// Copyright (c) Wiesław Šoltés. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
-using System;
 
 namespace Draw2D.Core.Style
 {
@@ -59,7 +58,6 @@ namespace Draw2D.Core.Style
         {
             return new DrawStyle()
             {
-                Id = Guid.NewGuid(),
                 Name = this.Name,
                 Stroke = this.Stroke.Copy(),
                 Fill = this.Fill.Copy(),
