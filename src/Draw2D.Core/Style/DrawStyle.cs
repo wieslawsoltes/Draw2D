@@ -4,7 +4,7 @@ using System;
 
 namespace Draw2D.Core.Style
 {
-    public class DrawStyle : IdObject, ICopyable<DrawStyle>
+    public class DrawStyle : NamedObject, ICopyable<DrawStyle>
     {
         private DrawColor _stroke;
         private DrawColor _fill;

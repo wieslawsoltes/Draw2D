@@ -4,7 +4,7 @@ using System;
 
 namespace Draw2D.Core
 {
-    public abstract class IdObject : ObservableObject
+    public abstract class NamedObject : ObservableObject
     {
         private Guid _id;
         private string _name;

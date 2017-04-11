@@ -7,7 +7,7 @@ using Draw2D.Core.Style;
 
 namespace Draw2D.Core
 {
-    public abstract class ShapeObject : IdObject, IDrawable, ISelectable
+    public abstract class ShapeObject : NamedObject, IDrawable, ISelectable
     {
         private DrawStyle _style;
         private MatrixObject _transform;

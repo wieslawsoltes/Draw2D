@@ -7,7 +7,7 @@ using Draw2D.Core.Style;
 
 namespace Draw2D.Core.Containers
 {
-    public class ShapesContainer : IdObject, IShapesContainer, ICopyable<ShapesContainer>
+    public class ShapesContainer : NamedObject, IShapesContainer, ICopyable<ShapesContainer>
     {
         private double _width;
         private double _height;
