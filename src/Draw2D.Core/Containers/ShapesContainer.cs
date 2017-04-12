@@ -51,43 +51,6 @@ namespace Draw2D.Core.Containers
             _shapes = new ObservableCollection<ShapeObject>();
         }
 
-        public ShapesContainer(ObservableCollection<ShapeObject> shapes)
-        {
-            this.Styles = new ObservableCollection<DrawStyle>();
-            this.Guides = new ObservableCollection<LineShape>();
-            this.Shapes = shapes;
-        }
-
-        public ShapesContainer(string name)
-            : this()
-        {
-            this.Name = name;
-        }
-
-        public ShapesContainer(string name, ObservableCollection<ShapeObject> shapes)
-        {
-            this.Name = name;
-            this.Styles = new ObservableCollection<DrawStyle>();
-            this.Guides = new ObservableCollection<LineShape>();
-            this.Shapes = shapes;
-        }
-
-        public ShapesContainer(string name, ObservableCollection<LineShape> guides, ObservableCollection<ShapeObject> shapes)
-        {
-            this.Name = name;
-            this.Styles = new ObservableCollection<DrawStyle>();
-            this.Guides = guides;
-            this.Shapes = shapes;
-        }
-
-        public ShapesContainer(string name, ObservableCollection<DrawStyle> styles, ObservableCollection<LineShape> guides, ObservableCollection<ShapeObject> shapes)
-        {
-            this.Name = name;
-            this.Styles = styles;
-            this.Guides = guides;
-            this.Shapes = shapes;
-        }
-
         public ShapesContainer Copy()
         {
             return new ShapesContainer()
