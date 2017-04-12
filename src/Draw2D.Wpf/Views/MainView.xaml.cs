@@ -265,7 +265,7 @@ namespace Draw2D.Wpf.Views
         {
             var dlg = new OpenFileDialog()
             {
-                Filter = "Yaml Files (*.yaml)|*.yaml|All Files (*.*)|*.*",
+                Filter = "Json Files (*.json)|*.json|All Files (*.*)|*.*",
                 FilterIndex = 0
             };
 
@@ -285,7 +285,7 @@ namespace Draw2D.Wpf.Views
         {
             var dlg = new SaveFileDialog()
             {
-                Filter = "Yaml Files (*.yaml)|*.yaml|All Files (*.*)|*.*",
+                Filter = "Json Files (*.json)|*.json|All Files (*.*)|*.*",
                 FilterIndex = 0,
                 FileName = "container"
             };
@@ -383,8 +383,8 @@ namespace Draw2D.Wpf.Views
 
         private void Open(string path, ShapesContainerViewModel vm)
         {
-            var yaml = File.ReadAllText(path);
-            var container = YamlDotNetSerializer.FromYaml<ShapesContainer>(yaml, YamlDraw2DTagMappings.TagMappings);
+            var json = File.ReadAllText(path);
+            var container = NewtonsoftJsonSerializer.FromJson<ShapesContainer>(json);
             var workingContainer = new ShapesContainer();
             vm.CurrentTool.Clean(vm);
             vm.Renderer.Selected.Clear();
@@ -394,8 +394,8 @@ namespace Draw2D.Wpf.Views
 
         private void Save(string path, ShapesContainerViewModel vm)
         {
-            var yaml = YamlDotNetSerializer.ToYaml(vm.CurrentContainer, YamlDraw2DTagMappings.TagMappings);
-            File.WriteAllText(path, yaml);
+            var json = NewtonsoftJsonSerializer.ToJson(vm.CurrentContainer);
+            File.WriteAllText(path, json);
         }
     }
 }
