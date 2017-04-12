@@ -19,7 +19,6 @@ namespace Draw2D.Core.ViewModels.Containers
         private ObservableCollection<ToolBase> _tools;
         private ToolBase _currentTool;
         private ShapePresenter _presenter;
-
         private ShapeRenderer _renderer;
         private ISet<ShapeObject> _selected;
         private IHitTest _hitTest;
