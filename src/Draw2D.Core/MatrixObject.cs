@@ -1,5 +1,6 @@
 ﻿// Copyright (c) Wiesław Šoltés. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
+using Draw2D.Core.Renderers;
 
 namespace Draw2D.Core
 {
@@ -64,6 +65,15 @@ namespace Draw2D.Core
             this.M22 = m22;
             this.OffsetX = offsetX;
             this.OffsetY = offsetY;
+        }
+
+        public virtual void Invalidate(ShapeRenderer r)
+        {
+            if (this.IsDirty == true)
+            {
+                r.InvalidateCache(this);
+                this.IsDirty = false;
+            }
         }
 
         public MatrixObject Copy()
