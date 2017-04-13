@@ -98,7 +98,6 @@ namespace Draw2D.Wpf.Utilities
             binder.Add<QuadraticBezierShape>("Quad");
             binder.Add<PathShape>("Path");
             binder.Add<FigureShape>("Figure");
-            binder.Add<ScribbleShape>("Scribble");
             binder.Add<RectangleShape>("Rect");
             binder.Add<EllipseShape>("Ellipse");
             binder.Add<GroupShape>("Group");

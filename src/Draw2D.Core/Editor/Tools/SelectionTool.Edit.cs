@@ -105,15 +105,6 @@ namespace Draw2D.Core.Editor.Tools
                         }
                         return copy;
                     }
-                case ScribbleShape scribble:
-                    {
-                        var copy = scribble.Copy();
-                        foreach (var point in scribble.Points)
-                        {
-                            copy.Points.Add(distinctPointsCopy[point]);
-                        }
-                        return copy;
-                    }
                 case RectangleShape rectangle:
                     {
                         var copy = rectangle.Copy();

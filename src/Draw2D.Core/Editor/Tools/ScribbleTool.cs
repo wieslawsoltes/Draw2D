@@ -11,7 +11,10 @@ namespace Draw2D.Core.Editor.Tools
 {
     public class ScribbleTool : ToolBase
     {
-        private ScribbleShape _scribble = null;
+        private PathShape _path = null;
+        private FigureShape _figure = null;
+        private PointShape _previousPoint = null;
+        private PointShape _nextPoint = null;
 
         public enum State { Start, Points };
         public State CurrentState = State.Start;
@@ -24,12 +27,23 @@ namespace Draw2D.Core.Editor.Tools
         {
             Filters?.Any(f => f.Process(context, ref x, ref y));
 
-            _scribble = new ScribbleShape()
+            _path = new PathShape()
             {
+                FillRule = Settings.FillRule,
                 Style = context.CurrentStyle
             };
-            _scribble.Points.Add(new PointShape(x, y, context.PointShape));
-            context.WorkingContainer.Shapes.Add(_scribble);
+
+            _figure = new FigureShape()
+            {
+                IsFilled = Settings.IsFilled,
+                IsClosed = Settings.IsClosed
+            };
+
+            _path.Figures.Add(_figure);
+
+            _previousPoint = new PointShape(x, y, context.PointShape);
+
+            context.WorkingContainer.Shapes.Add(_path);
 
             context.Capture();
             context.Invalidate();
@@ -43,24 +57,50 @@ namespace Draw2D.Core.Editor.Tools
 
             if (Settings?.Simplify ?? true)
             {
-                List<Vector2> points = _scribble.Points.Select(p => new Vector2((float)p.X, (float)p.Y)).ToList();
-                int count = _scribble.Points.Count;
+                List<PointShape> points = _path.GetPoints().Distinct().ToList();
+                List<Vector2> vectors = points.Select(p => new Vector2((float)p.X, (float)p.Y)).ToList();
+                int count = vectors.Count;
                 RDP rdp = new RDP();
-                BitArray accepted = rdp.DouglasPeucker(points, 0, count - 1, Settings?.Epsilon ?? 1.0);
+                BitArray accepted = rdp.DouglasPeucker(vectors, 0, count - 1, Settings?.Epsilon ?? 1.0);
                 int removed = 0;
                 for (int i = 0; i <= count - 1; ++i)
                 {
                     if (!accepted[i])
                     {
-                        _scribble.Points.RemoveAt(i - removed);
+                        points.RemoveAt(i - removed);
                         ++removed;
                     }
                 }
-            }
-            context.WorkingContainer.Shapes.Remove(_scribble);
-            context.CurrentContainer.Shapes.Add(_scribble);
 
-            _scribble = null;
+                _figure.Shapes.Clear();
+                _figure.IsDirty = true;
+
+                if (points.Count >= 2)
+                {
+                    for (int i = 0; i < points.Count - 1; i++)
+                    {
+                        var line = new LineShape()
+                        {
+                            StartPoint = points[i],
+                            Point = points[i + 1],
+                            Style = context.CurrentStyle
+                        };
+                        _figure.Shapes.Add(line);
+                    }
+                }
+            }
+
+            context.WorkingContainer.Shapes.Remove(_path);
+
+            if (_path.Validate(true) == true)
+            {
+                context.CurrentContainer.Shapes.Add(_path);
+            }
+
+            _path = null;
+            _figure = null;
+            _previousPoint = null;
+            _nextPoint = null;
 
             Filters?.ForEach(f => f.Clear(context));
 
@@ -81,7 +121,19 @@ namespace Draw2D.Core.Editor.Tools
             Filters?.ForEach(f => f.Clear(context));
             Filters?.Any(f => f.Process(context, ref x, ref y));
 
-            _scribble.Points.Add(new PointShape(x, y, context.PointShape));
+            _nextPoint = new PointShape(x, y, context.PointShape);
+
+            var line = new LineShape()
+            {
+                StartPoint = _previousPoint,
+                Point = _nextPoint,
+                Style = context.CurrentStyle
+            };
+
+            _figure.Shapes.Add(line);
+
+            _previousPoint = _nextPoint;
+            _nextPoint = null;
 
             context.Invalidate();
         }
@@ -92,10 +144,13 @@ namespace Draw2D.Core.Editor.Tools
 
             Filters?.ForEach(f => f.Clear(context));
 
-            if (_scribble != null)
+            if (_path != null)
             {
-                context.WorkingContainer.Shapes.Remove(_scribble);
-                _scribble = null;
+                context.WorkingContainer.Shapes.Remove(_path);
+                _path = null;
+                _figure = null;
+                _previousPoint = null;
+                _nextPoint = null;
             }
 
             context.Release();

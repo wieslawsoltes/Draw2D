@@ -33,7 +33,6 @@ namespace Draw2D.Core.ViewModels
             hitTest.Register(new QuadraticBezierHitTest());
             hitTest.Register(new GroupHitTest());
             hitTest.Register(new PathHitTest());
-            hitTest.Register(new ScribbleHitTest());
             hitTest.Register(new RectangleHitTest());
             hitTest.Register(new EllipseHitTest());
 
@@ -274,7 +273,10 @@ namespace Draw2D.Core.ViewModels
                 Settings = new ScribbleToolSettings()
                 {
                     Simplify = true,
-                    Epsilon = 1.0
+                    Epsilon = 1.0,
+                    FillRule = PathFillRule.EvenOdd,
+                    IsFilled = false,
+                    IsClosed = false
                 }
             };
 
@@ -326,7 +328,6 @@ namespace Draw2D.Core.ViewModels
                     { typeof(CubicBezierShape), new CubicBezierHelper() },
                     { typeof(QuadraticBezierShape), new QuadraticBezierHelper() },
                     { typeof(PathShape), new PathHelper() },
-                    { typeof(ScribbleShape), new ScribbleHelper() },
                     { typeof(RectangleShape), new RectangleHelper() },
                     { typeof(EllipseShape), new EllipseHelper() }
                 }

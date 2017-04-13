@@ -121,21 +121,6 @@ namespace Draw2D.Wpf.Renderers
             return cache;
         }
 
-        private static Geometry ToGeometry(IList<PointShape> points, DrawStyle style, double dx, double dy)
-        {
-            var geometry = new StreamGeometry();
-            var result = FromPoints(points, dx, dy);
-            if (result.Count() >= 2)
-            {
-                using (var context = geometry.Open())
-                {
-                    context.BeginFigure(result.First(), style.IsFilled, false);
-                    context.PolyLineTo(result.Skip(1).ToList(), style.IsStroked, false);
-                }
-            }
-            return geometry;
-        }
-
         private static Geometry ToGeometry(CubicBezierShape cubicBezier, DrawStyle style, double dx, double dy)
         {
             var geometry = new StreamGeometry();
@@ -351,14 +336,6 @@ namespace Draw2D.Wpf.Renderers
             var cache = GetBrushCache(style);
             var _dc = dc as DrawingContext;
             _dc.DrawLine(style.IsStroked ? cache?.StrokePen : null, FromPoint(line.StartPoint, dx, dy), FromPoint(line.Point, dx, dy));
-        }
-
-        public override void DrawPolyLine(object dc, IList<PointShape> points, DrawStyle style, double dx, double dy)
-        {
-            var cache = GetBrushCache(style);
-            var _dc = dc as DrawingContext;
-            var geometry = ToGeometry(points, style, dx, dy);
-            _dc.DrawGeometry(style.IsFilled ? cache?.Fill : null, style.IsStroked ? cache?.StrokePen : null, geometry);
         }
 
         public override void DrawCubicBezier(object dc, CubicBezierShape cubicBezier, DrawStyle style, double dx, double dy)
