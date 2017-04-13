@@ -7,41 +7,29 @@ namespace Draw2D.Core.Presenters
 {
     public class DefaultShapePresenter : ShapePresenter
     {
-        public override void DrawContent(object dc, IToolContext context)
+        public override void DrawContent(object dc, IToolContext context, double dx, double dy)
         {
             var r = context.Renderer;
-
-            foreach (var shape in context.CurrentContainer.Guides)
-            {
-                shape.Invalidate(r);
-                shape.Draw(dc, r, 0.0, 0.0);
-            }
-
-            foreach (var shape in context.CurrentContainer.Shapes)
-            {
-                shape.Invalidate(r);
-                shape.Draw(dc, r, 0.0, 0.0);
-            }
+            var container = context.CurrentContainer;
+            container.Invalidate(r, dx, dy);
+            container.Draw(dc, r, dx, dy);
         }
 
-        public override void DrawWorking(object dc, IToolContext context)
+        public override void DrawWorking(object dc, IToolContext context, double dx, double dy)
         {
             var r = context.Renderer;
-
-            foreach (var shape in context.WorkingContainer.Shapes)
-            {
-                shape.Invalidate(r);
-                shape.Draw(dc, r, 0.0, 0.0);
-            }
+            var container = context.WorkingContainer;
+            container.Invalidate(r, dx, dy);
+            container.Draw(dc, r, dx, dy);
         }
 
-        public override void DrawHelpers(object dc, IToolContext context)
+        public override void DrawHelpers(object dc, IToolContext context, double dx, double dy)
         {
-            DrawHelpers(dc, context, context.CurrentContainer.Shapes);
-            DrawHelpers(dc, context, context.WorkingContainer.Shapes);
+            DrawHelpers(dc, context, context.CurrentContainer.Shapes, dx, dy);
+            DrawHelpers(dc, context, context.WorkingContainer.Shapes, dx, dy);
         }
 
-        public void DrawHelpers(object dc, IToolContext context, IEnumerable<ShapeObject> shapes)
+        public void DrawHelpers(object dc, IToolContext context, IEnumerable<ShapeObject> shapes, double dx, double dy)
         {
             var r = context.Renderer;
             var selected = context.Selected;
@@ -52,7 +40,7 @@ namespace Draw2D.Core.Presenters
                 {
                     if (Helpers.TryGetValue(shape.GetType(), out var helper))
                     {
-                        helper.Draw(dc, r, shape, selected);
+                        helper.Draw(dc, r, shape, selected, dx, dy);
                     }
                 }
             }

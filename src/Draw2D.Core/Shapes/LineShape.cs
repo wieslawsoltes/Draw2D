@@ -45,18 +45,21 @@ namespace Draw2D.Core.Shapes
             }
         }
 
-        public override void Invalidate(ShapeRenderer r)
+        public override bool Invalidate(ShapeRenderer r, double dx, double dy)
         {
-            base.Invalidate(r);
+            bool result = base.Invalidate(r, dx, dy);
 
-            if (this.IsDirty)
+            result |= _startPoint?.Invalidate(r, dx, dy) ?? false;
+            result |= _point?.Invalidate(r, dx, dy) ?? false;
+
+            if (this.IsDirty || result == true)
             {
-                r.InvalidateCache(this);
+                r.InvalidateCache(this, Style, dx, dy);
                 this.IsDirty = false;
+                result |= true;
             }
-            
-            _startPoint?.Invalidate(r);
-            _point?.Invalidate(r);
+
+            return result;
         }
 
         public override void Draw(object dc, ShapeRenderer r, double dx, double dy)

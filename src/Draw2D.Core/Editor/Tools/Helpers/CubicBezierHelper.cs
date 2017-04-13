@@ -8,18 +8,18 @@ namespace Draw2D.Core.Editor.Tools.Helpers
 {
     public class CubicBezierHelper : CommonHelper
     {
-        public void Draw(object dc, ShapeRenderer r, CubicBezierShape cubicBezier)
+        public void Draw(object dc, ShapeRenderer r, CubicBezierShape cubicBezier, double dx, double dy)
         {
-            DrawLine(dc, r, cubicBezier.StartPoint, cubicBezier.Point1);
-            DrawLine(dc, r, cubicBezier.Point3, cubicBezier.Point2);
-            DrawLine(dc, r, cubicBezier.Point1, cubicBezier.Point2);
+            DrawLine(dc, r, cubicBezier.StartPoint, cubicBezier.Point1, dx, dy);
+            DrawLine(dc, r, cubicBezier.Point3, cubicBezier.Point2, dx, dy);
+            DrawLine(dc, r, cubicBezier.Point1, cubicBezier.Point2, dx, dy);
         }
 
-        public override void Draw(object dc, ShapeRenderer r, ShapeObject shape, ISet<ShapeObject> selected)
+        public override void Draw(object dc, ShapeRenderer r, ShapeObject shape, ISet<ShapeObject> selected, double dx, double dy)
         {
             if (shape is CubicBezierShape cubicBezier)
             {
-                Draw(dc, r, cubicBezier);
+                Draw(dc, r, cubicBezier, dx, dy);
             }
         }
     }

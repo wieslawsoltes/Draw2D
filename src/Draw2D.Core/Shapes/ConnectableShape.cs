@@ -27,9 +27,9 @@ namespace Draw2D.Core.Shapes
             this.Points = points;
         }
 
-        public override void Invalidate(ShapeRenderer r)
+        public override bool Invalidate(ShapeRenderer r, double dx, double dy)
         {
-            base.Invalidate(r);
+            return base.Invalidate(r, dx, dy);
         }
 
         public override void Draw(object dc, ShapeRenderer r, double dx, double dy)

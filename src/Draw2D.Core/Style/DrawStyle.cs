@@ -55,7 +55,7 @@ namespace Draw2D.Core.Style
             this.IsFilled = isFilled;
         }
 
-        public virtual void Invalidate(ShapeRenderer r)
+        public virtual bool Invalidate(ShapeRenderer r)
         {
             if ((this.IsDirty == true)
                 || (_stroke?.IsDirty ?? false) 
@@ -73,7 +73,11 @@ namespace Draw2D.Core.Style
                 {
                     _fill.IsDirty = false;
                 }
+
+                return true;
             }
+
+            return false;
         }
 
         public DrawStyle Copy()

@@ -8,17 +8,17 @@ namespace Draw2D.Core.Editor.Tools.Helpers
 {
     public class QuadraticBezierHelper : CommonHelper
     {
-        public void Draw(object dc, ShapeRenderer r, QuadraticBezierShape quadraticBezier)
+        public void Draw(object dc, ShapeRenderer r, QuadraticBezierShape quadraticBezier, double dx, double dy)
         {
-            DrawLine(dc, r, quadraticBezier.StartPoint, quadraticBezier.Point1);
-            DrawLine(dc, r, quadraticBezier.Point1, quadraticBezier.Point2);
+            DrawLine(dc, r, quadraticBezier.StartPoint, quadraticBezier.Point1, dx, dy);
+            DrawLine(dc, r, quadraticBezier.Point1, quadraticBezier.Point2, dx, dy);
         }
 
-        public override void Draw(object dc, ShapeRenderer r, ShapeObject shape, ISet<ShapeObject> selected)
+        public override void Draw(object dc, ShapeRenderer r, ShapeObject shape, ISet<ShapeObject> selected, double dx, double dy)
         {
             if (shape is QuadraticBezierShape quadraticBezier)
             {
-                Draw(dc, r, quadraticBezier);
+                Draw(dc, r, quadraticBezier, dx, dy);
             }
         }
     }

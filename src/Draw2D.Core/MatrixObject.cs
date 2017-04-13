@@ -67,13 +67,15 @@ namespace Draw2D.Core
             this.OffsetY = offsetY;
         }
 
-        public virtual void Invalidate(ShapeRenderer r)
+        public virtual bool Invalidate(ShapeRenderer r)
         {
             if (this.IsDirty == true)
             {
                 r.InvalidateCache(this);
                 this.IsDirty = false;
+                return true;
             }
+            return false;
         }
 
         public MatrixObject Copy()

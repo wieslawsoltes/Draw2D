@@ -11,7 +11,7 @@ namespace Draw2D.Core.Renderers
         public abstract ISet<ShapeObject> Selected { get; set; }
         public abstract void InvalidateCache(DrawStyle style);
         public abstract void InvalidateCache(MatrixObject matrix);
-        public abstract void InvalidateCache(ShapeObject shape);
+        public abstract void InvalidateCache(ShapeObject shape, DrawStyle style, double dx, double dy);
         public abstract object PushMatrix(object dc, MatrixObject matrix);
         public abstract void PopMatrix(object dc, object state);
         public abstract void DrawLine(object dc, LineShape line, DrawStyle style, double dx, double dy);

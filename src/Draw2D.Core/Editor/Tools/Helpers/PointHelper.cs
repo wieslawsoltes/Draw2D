@@ -7,7 +7,7 @@ namespace Draw2D.Core.Editor.Tools.Helpers
 {
     public class PointHelper : CommonHelper
     {
-        public override void Draw(object dc, ShapeRenderer r, ShapeObject shape, ISet<ShapeObject> selected)
+        public override void Draw(object dc, ShapeRenderer r, ShapeObject shape, ISet<ShapeObject> selected, double dx, double dy)
         {
         }
     }

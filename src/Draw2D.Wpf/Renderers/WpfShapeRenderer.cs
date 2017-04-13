@@ -15,7 +15,10 @@ namespace Draw2D.Wpf.Renderers
     public class WpfShapeRenderer : ShapeRenderer
     {
         private readonly IDictionary<DrawStyle, WpfBrushCache> _brushCache;
-
+        private readonly IDictionary<MatrixObject, MatrixTransform> _matrixCache;
+        private readonly IDictionary<CubicBezierShape, Geometry> _cubicGeometryCache;
+        private readonly IDictionary<QuadraticBezierShape, Geometry> _quadGeometryCache;
+        private readonly IDictionary<PathShape, Geometry> _pathGeometryCache;
         private ISet<ShapeObject> _selected;
 
         public override ISet<ShapeObject> Selected
@@ -27,10 +30,14 @@ namespace Draw2D.Wpf.Renderers
         public WpfShapeRenderer()
         {
             _brushCache = new Dictionary<DrawStyle, WpfBrushCache>();
+            _matrixCache = new Dictionary<MatrixObject, MatrixTransform>();
+            _cubicGeometryCache = new Dictionary<CubicBezierShape, Geometry>();
+            _quadGeometryCache = new Dictionary<QuadraticBezierShape, Geometry>();
+            _pathGeometryCache = new Dictionary<PathShape, Geometry>();
             _selected = new HashSet<ShapeObject>();
         }
 
-        private Point FromPoint(PointShape point, double dx, double dy)
+        private static Point FromPoint(PointShape point, double dx, double dy)
         {
             return new Point(point.X + dx, point.Y + dy);
         }
@@ -40,7 +47,7 @@ namespace Draw2D.Wpf.Renderers
             return points.Select(point => new Point(point.X + dx, point.Y + dy));
         }
 
-        private Rect FromPoints(double x1, double y1, double x2, double y2, double dx, double dy)
+        private static Rect FromPoints(double x1, double y1, double x2, double y2, double dx, double dy)
         {
             double x = Math.Min(x1 + dx, x2 + dx);
             double y = Math.Min(y1 + dy, y2 + dy);
@@ -49,7 +56,7 @@ namespace Draw2D.Wpf.Renderers
             return new Rect(x, y, width, height);
         }
 
-        private Rect FromRectnagle(RectangleShape rectangle, double dx, double dy)
+        private static Rect FromRectnagle(RectangleShape rectangle, double dx, double dy)
         {
             return FromPoints(
                 rectangle.TopLeft.X,
@@ -59,7 +66,7 @@ namespace Draw2D.Wpf.Renderers
                 dx, dy);
         }
 
-        private Rect FromEllipse(EllipseShape ellipse, double dx, double dy)
+        private static Rect FromEllipse(EllipseShape ellipse, double dx, double dy)
         {
             return FromPoints(
                 ellipse.TopLeft.X,
@@ -69,7 +76,98 @@ namespace Draw2D.Wpf.Renderers
                 dx, dy);
         }
 
-        private Geometry ToGeometry(PathShape path, double dx, double dy)
+        private static void FromEllipse(EllipseShape ellipse, double dx, double dy, out double radiusX, out double radiusY, out Point center)
+        {
+            var rect = FromEllipse(ellipse, dx, dy);
+            radiusX = rect.Width / 2;
+            radiusY = rect.Height / 2;
+            center = new Point(rect.TopLeft.X, rect.TopLeft.Y);
+            center.Offset(radiusX, radiusY);
+        }
+
+        private WpfBrushCache? GetBrushCache(DrawStyle style)
+        {
+            if (style == null)
+            {
+                return null;
+            }
+            if (!_brushCache.TryGetValue(style, out var cache))
+            {
+                _brushCache[style] = WpfBrushCache.FromDrawStyle(style);
+                return _brushCache[style];
+            }
+            return cache;
+        }
+
+        private static MatrixTransform ToMatrixTransform(MatrixObject matrix)
+        {
+            return new MatrixTransform(
+                matrix.M11, matrix.M12,
+                matrix.M21, matrix.M22,
+                matrix.OffsetX, matrix.OffsetY);
+        }
+
+        private MatrixTransform GetMatrixCache(MatrixObject matrix)
+        {
+            if (matrix == null)
+            {
+                return null;
+            }
+            if (!_matrixCache.TryGetValue(matrix, out var cache))
+            {
+                _matrixCache[matrix] = ToMatrixTransform(matrix);
+                return _matrixCache[matrix];
+            }
+            return cache;
+        }
+
+        private static Geometry ToGeometry(IList<PointShape> points, DrawStyle style, double dx, double dy)
+        {
+            var geometry = new StreamGeometry();
+            var result = FromPoints(points, dx, dy);
+            if (result.Count() >= 2)
+            {
+                using (var context = geometry.Open())
+                {
+                    context.BeginFigure(result.First(), style.IsFilled, false);
+                    context.PolyLineTo(result.Skip(1).ToList(), style.IsStroked, false);
+                }
+            }
+            return geometry;
+        }
+
+        private static Geometry ToGeometry(CubicBezierShape cubicBezier, DrawStyle style, double dx, double dy)
+        {
+            var geometry = new StreamGeometry();
+            using (var context = geometry.Open())
+            {
+                context.BeginFigure(FromPoint(cubicBezier.StartPoint, dx, dy), style.IsFilled, false);
+                context.BezierTo(
+                    FromPoint(cubicBezier.Point1, dx, dy),
+                    FromPoint(cubicBezier.Point2, dx, dy),
+                    FromPoint(cubicBezier.Point3, dx, dy),
+                    style.IsStroked, false);
+            }
+
+            return geometry;
+        }
+
+        private static Geometry ToGeometry(QuadraticBezierShape quadraticBezier, DrawStyle style, double dx, double dy)
+        {
+            var geometry = new StreamGeometry();
+            using (var context = geometry.Open())
+            {
+                context.BeginFigure(FromPoint(quadraticBezier.StartPoint, dx, dy), style.IsFilled, false);
+                context.QuadraticBezierTo(
+                    FromPoint(quadraticBezier.Point1, dx, dy),
+                    FromPoint(quadraticBezier.Point2, dx, dy),
+                    style.IsStroked, false);
+            }
+
+            return geometry;
+        }
+
+        private static Geometry ToGeometry(PathShape path, DrawStyle style, double dx, double dy)
         {
             var geometry = new StreamGeometry()
             {
@@ -124,16 +222,59 @@ namespace Draw2D.Wpf.Renderers
             return geometry;
         }
 
-        private WpfBrushCache? GetOrCreateCache(DrawStyle style)
+        private Geometry GetGeometryCache(CubicBezierShape cubic, DrawStyle style, double dx, double dy)
         {
-            if (style == null)
+            if (cubic == null)
             {
                 return null;
             }
-            if (!_brushCache.TryGetValue(style, out var cache))
+            if (!_cubicGeometryCache.TryGetValue(cubic, out var cache))
             {
-                _brushCache[style] = WpfBrushCache.FromDrawStyle(style);
-                return _brushCache[style];
+                var geometry = ToGeometry(cubic, style, dx, dy);
+                if (geometry != null)
+                {
+                    _cubicGeometryCache[cubic] = geometry;
+                    return _cubicGeometryCache[cubic];
+                }
+                return null;
+            }
+            return cache;
+        }
+
+        private Geometry GetGeometryCache(QuadraticBezierShape quad, DrawStyle style, double dx, double dy)
+        {
+            if (quad == null)
+            {
+                return null;
+            }
+            if (!_quadGeometryCache.TryGetValue(quad, out var cache))
+            {
+                var geometry = ToGeometry(quad, style, dx, dy);
+                if (geometry != null)
+                {
+                    _quadGeometryCache[quad] = geometry;
+                    return _quadGeometryCache[quad];
+                }
+                return null;
+            }
+            return cache;
+        }
+
+        private Geometry GetGeometryCache(PathShape path, DrawStyle style, double dx, double dy)
+        {
+            if (path == null)
+            {
+                return null;
+            }
+            if (!_pathGeometryCache.TryGetValue(path, out var cache))
+            {
+                var geometry = ToGeometry(path, style, dx, dy);
+                if (geometry != null)
+                {
+                    _pathGeometryCache[path] = geometry;
+                    return _pathGeometryCache[path];
+                }
+                return null;
             }
             return cache;
         }
@@ -152,26 +293,50 @@ namespace Draw2D.Wpf.Renderers
 
         public override void InvalidateCache(MatrixObject matrix)
         {
-            // TODO: Invalidate matrix cache.
+            if (matrix != null)
+            {
+                _matrixCache[matrix] = ToMatrixTransform(matrix);
+            }
         }
 
-        public override void InvalidateCache(ShapeObject shape)
+        public override void InvalidateCache(ShapeObject shape, DrawStyle style, double dx, double dy)
         {
-            // TODO: Invalidate shape cache.
-        }
-
-        private MatrixTransform ToMatrixTransform(MatrixObject matrix)
-        {
-            return new MatrixTransform(
-                matrix.M11, matrix.M12,
-                matrix.M21, matrix.M22,
-                matrix.OffsetX, matrix.OffsetY);
+            switch (shape)
+            {
+                case CubicBezierShape cubic:
+                    {
+                        var geometry = ToGeometry(cubic, style, dx, dy);
+                        if (geometry != null)
+                        {
+                            _cubicGeometryCache[cubic] = geometry;
+                        }
+                    }
+                    break;
+                case QuadraticBezierShape quad:
+                    {
+                        var geometry = ToGeometry(quad, style, dx, dy);
+                        if (geometry != null)
+                        {
+                            _quadGeometryCache[quad] = geometry;
+                        }
+                    }
+                    break;
+                case PathShape path:
+                    {
+                        var geometry = ToGeometry(path, style, dx, dy);
+                        if (geometry != null)
+                        {
+                            _pathGeometryCache[path] = geometry;
+                        }
+                    }
+                    break;
+            }
         }
 
         public override object PushMatrix(object dc, MatrixObject matrix)
         {
             var _dc = dc as DrawingContext;
-            _dc.PushTransform(ToMatrixTransform(matrix));
+            _dc.PushTransform(GetMatrixCache(matrix));
             return null;
         }
 
@@ -183,72 +348,46 @@ namespace Draw2D.Wpf.Renderers
 
         public override void DrawLine(object dc, LineShape line, DrawStyle style, double dx, double dy)
         {
-            var cache = GetOrCreateCache(style);
+            var cache = GetBrushCache(style);
             var _dc = dc as DrawingContext;
             _dc.DrawLine(style.IsStroked ? cache?.StrokePen : null, FromPoint(line.StartPoint, dx, dy), FromPoint(line.Point, dx, dy));
         }
 
         public override void DrawPolyLine(object dc, IList<PointShape> points, DrawStyle style, double dx, double dy)
         {
-            var cache = GetOrCreateCache(style);
+            var cache = GetBrushCache(style);
             var _dc = dc as DrawingContext;
-            var geometry = new StreamGeometry();
-            var result = FromPoints(points, dx, dy);
-            if (result.Count() >= 2)
-            {
-                using (var context = geometry.Open())
-                {
-                    context.BeginFigure(result.First(), style.IsFilled, false);
-                    context.PolyLineTo(result.Skip(1).ToList(), style.IsStroked, false);
-                }
-                _dc.DrawGeometry(style.IsFilled ? cache?.Fill : null, style.IsStroked ? cache?.StrokePen : null, geometry);
-            }
+            var geometry = ToGeometry(points, style, dx, dy);
+            _dc.DrawGeometry(style.IsFilled ? cache?.Fill : null, style.IsStroked ? cache?.StrokePen : null, geometry);
         }
 
         public override void DrawCubicBezier(object dc, CubicBezierShape cubicBezier, DrawStyle style, double dx, double dy)
         {
-            var cache = GetOrCreateCache(style);
+            var cache = GetBrushCache(style);
             var _dc = dc as DrawingContext;
-            var geometry = new StreamGeometry();
-            using (var context = geometry.Open())
-            {
-                context.BeginFigure(FromPoint(cubicBezier.StartPoint, dx, dy), style.IsFilled, false);
-                context.BezierTo(
-                    FromPoint(cubicBezier.Point1, dx, dy),
-                    FromPoint(cubicBezier.Point2, dx, dy),
-                    FromPoint(cubicBezier.Point3, dx, dy),
-                    style.IsStroked, false);
-            }
+            var geometry = GetGeometryCache(cubicBezier, style, dx, dy);
             _dc.DrawGeometry(style.IsFilled ? cache?.Fill : null, style.IsStroked ? cache?.StrokePen : null, geometry);
         }
 
         public override void DrawQuadraticBezier(object dc, QuadraticBezierShape quadraticBezier, DrawStyle style, double dx, double dy)
         {
-            var cache = GetOrCreateCache(style);
+            var cache = GetBrushCache(style);
             var _dc = dc as DrawingContext;
-            var geometry = new StreamGeometry();
-            using (var context = geometry.Open())
-            {
-                context.BeginFigure(FromPoint(quadraticBezier.StartPoint, dx, dy), style.IsFilled, false);
-                context.QuadraticBezierTo(
-                    FromPoint(quadraticBezier.Point1, dx, dy),
-                    FromPoint(quadraticBezier.Point2, dx, dy),
-                    style.IsStroked, false);
-            }
+            var geometry = GetGeometryCache(quadraticBezier, style, dx, dy);
             _dc.DrawGeometry(style.IsFilled ? cache?.Fill : null, style.IsStroked ? cache?.StrokePen : null, geometry);
         }
 
         public override void DrawPath(object dc, PathShape path, DrawStyle style, double dx, double dy)
         {
-            var cache = GetOrCreateCache(style);
+            var cache = GetBrushCache(style);
             var _dc = dc as DrawingContext;
-            var geometry = ToGeometry(path, dx, dy);
+            var geometry = GetGeometryCache(path, style, dx, dy);
             _dc.DrawGeometry(style.IsFilled ? cache?.Fill : null, style.IsStroked ? cache?.StrokePen : null, geometry);
         }
 
         public override void DrawRectangle(object dc, RectangleShape rectangle, DrawStyle style, double dx, double dy)
         {
-            var cache = GetOrCreateCache(style);
+            var cache = GetBrushCache(style);
             var _dc = dc as DrawingContext;
             var rect = FromRectnagle(rectangle, dx, dy);
             _dc.DrawRectangle(style.IsFilled ? cache?.Fill : null, style.IsStroked ? cache?.StrokePen : null, rect);
@@ -256,13 +395,9 @@ namespace Draw2D.Wpf.Renderers
 
         public override void DrawEllipse(object dc, EllipseShape ellipse, DrawStyle style, double dx, double dy)
         {
-            var cache = GetOrCreateCache(style);
+            var cache = GetBrushCache(style);
             var _dc = dc as DrawingContext;
-            var rect = FromEllipse(ellipse, dx, dy);
-            var radiusX = rect.Width / 2;
-            var radiusY = rect.Height / 2;
-            var center = new Point(rect.TopLeft.X, rect.TopLeft.Y);
-            center.Offset(radiusX, radiusY);
+            FromEllipse(ellipse, dx, dy, out double radiusX, out double radiusY, out Point center);
             _dc.DrawEllipse(style.IsFilled ? cache?.Fill : null, style.IsStroked ? cache?.StrokePen : null, center, radiusX, radiusY);
         }
     }
