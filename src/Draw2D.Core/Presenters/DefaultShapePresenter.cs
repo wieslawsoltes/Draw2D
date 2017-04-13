@@ -7,7 +7,7 @@ namespace Draw2D.Core.Presenters
 {
     public class DefaultShapePresenter : ShapePresenter
     {
-        public override void Draw(object dc, IToolContext context)
+        public override void DrawContent(object dc, IToolContext context)
         {
             foreach (var shape in context.CurrentContainer.Guides)
             {
@@ -18,7 +18,10 @@ namespace Draw2D.Core.Presenters
             {
                 shape.Draw(dc, context.Renderer, 0.0, 0.0);
             }
+        }
 
+        public override void DrawWorking(object dc, IToolContext context)
+        {
             foreach (var shape in context.WorkingContainer.Shapes)
             {
                 shape.Draw(dc, context.Renderer, 0.0, 0.0);
