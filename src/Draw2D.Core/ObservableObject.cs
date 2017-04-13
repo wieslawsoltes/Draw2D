@@ -7,7 +7,7 @@ namespace Draw2D.Core
 {
     public abstract class ObservableObject : INotifyPropertyChanged
     {
-        public bool IsDirty { get; set; }
+        internal bool IsDirty { get; set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
 
