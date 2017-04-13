@@ -138,6 +138,28 @@ namespace Draw2D.Wpf.Renderers
             return cache;
         }
 
+        public override void InvalidateCache(DrawStyle style)
+        {
+            if (style != null)
+            {
+                if (!_brushCache.TryGetValue(style, out var cache))
+                {
+                    cache.Dispose();
+                }
+                _brushCache[style] = WpfBrushCache.FromDrawStyle(style);
+            }
+        }
+
+        public override void InvalidateCache(MatrixObject matrix)
+        {
+            // TODO: Invalidate matrix cache.
+        }
+
+        public override void InvalidateCache(ShapeObject shape)
+        {
+            // TODO: Invalidate shape cache.
+        }
+
         private MatrixTransform ToMatrixTransform(MatrixObject matrix)
         {
             return new MatrixTransform(
