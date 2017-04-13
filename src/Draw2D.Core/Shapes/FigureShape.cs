@@ -89,9 +89,41 @@ namespace Draw2D.Core.Shapes
             }
         }
 
+        public override void Invalidate(ShapeRenderer r)
+        {
+            base.Invalidate(r);
+
+            if (this.IsDirty)
+            {
+                r.InvalidateCache(this);
+                this.IsDirty = false;
+            }
+
+            if (Guides != null)
+            {
+                foreach (var guide in Guides)
+                {
+                    guide.Invalidate(r);
+                }
+            }
+
+            foreach (var shape in Shapes)
+            {
+                shape.Invalidate(r);
+            }
+        }
+
         public override void Draw(object dc, ShapeRenderer r, double dx, double dy)
         {
             base.BeginTransform(dc, r);
+
+            if (Guides != null)
+            {
+                foreach (var guide in Guides)
+                {
+                    guide.Draw(dc, r, dx, dy);
+                }
+            }
 
             foreach (var shape in Shapes)
             {
