@@ -45,6 +45,18 @@ namespace Draw2D.Core.Shapes
             yield return this;
         }
 
+        public override void Invalidate(ShapeRenderer r)
+        {
+            base.Invalidate(r);
+
+            if (IsDirty)
+            {
+                this.IsDirty = false;
+            }
+
+            _template?.Invalidate(r);
+        }
+
         public override void Draw(object dc, ShapeRenderer r, double dx, double dy)
         {
             if (_template != null)
