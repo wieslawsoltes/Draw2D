@@ -26,6 +26,12 @@ namespace Draw2D.Core
 
         public abstract IEnumerable<PointShape> GetPoints();
 
+        public virtual void Invalidate(ShapeRenderer r)
+        {
+            _style?.Invalidate(r);
+            _transform?.Invalidate(r);
+        }
+
         public abstract void Draw(object dc, ShapeRenderer r, double dx, double dy);
 
         public virtual void BeginTransform(object dc, ShapeRenderer r)
