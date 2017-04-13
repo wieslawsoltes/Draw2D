@@ -9,40 +9,50 @@ namespace Draw2D.Core.Presenters
     {
         public override void DrawContent(object dc, IToolContext context)
         {
+            var r = context.Renderer;
+
             foreach (var shape in context.CurrentContainer.Guides)
             {
-                shape.Draw(dc, context.Renderer, 0.0, 0.0);
+                shape.Invalidate(r);
+                shape.Draw(dc, r, 0.0, 0.0);
             }
 
             foreach (var shape in context.CurrentContainer.Shapes)
             {
-                shape.Draw(dc, context.Renderer, 0.0, 0.0);
+                shape.Invalidate(r);
+                shape.Draw(dc, r, 0.0, 0.0);
             }
         }
 
         public override void DrawWorking(object dc, IToolContext context)
         {
+            var r = context.Renderer;
+
             foreach (var shape in context.WorkingContainer.Shapes)
             {
-                shape.Draw(dc, context.Renderer, 0.0, 0.0);
+                shape.Invalidate(r);
+                shape.Draw(dc, r, 0.0, 0.0);
             }
         }
 
         public override void DrawHelpers(object dc, IToolContext context)
         {
-            DrawHelpers(dc, context, context.CurrentContainer.Shapes, context.Selected);
-            DrawHelpers(dc, context, context.WorkingContainer.Shapes, context.Selected);
+            DrawHelpers(dc, context, context.CurrentContainer.Shapes);
+            DrawHelpers(dc, context, context.WorkingContainer.Shapes);
         }
 
-        public void DrawHelpers(object dc, IToolContext context, IEnumerable<ShapeObject> shapes, ISet<ShapeObject> selected)
+        public void DrawHelpers(object dc, IToolContext context, IEnumerable<ShapeObject> shapes)
         {
+            var r = context.Renderer;
+            var selected = context.Selected;
+
             foreach (var shape in shapes)
             {
                 if (selected.Contains(shape))
                 {
                     if (Helpers.TryGetValue(shape.GetType(), out var helper))
                     {
-                        helper.Draw(dc, context.Renderer, shape, context.Selected);
+                        helper.Draw(dc, r, shape, selected);
                     }
                 }
             }
