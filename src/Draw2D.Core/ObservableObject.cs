@@ -7,6 +7,8 @@ namespace Draw2D.Core
 {
     public abstract class ObservableObject : INotifyPropertyChanged
     {
+        public bool IsDirty { get; set; }
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         public void Notify([CallerMemberName] string propertyName = null)
@@ -19,6 +21,7 @@ namespace Draw2D.Core
             if (!Equals(field, value))
             {
                 field = value;
+                IsDirty = true;
                 Notify(propertyName);
                 return true;
             }
