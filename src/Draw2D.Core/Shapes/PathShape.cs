@@ -65,6 +65,22 @@ namespace Draw2D.Core.Shapes
             }
         }
 
+        public override void Invalidate(ShapeRenderer r)
+        {
+            base.Invalidate(r);
+
+            if (this.IsDirty)
+            {
+                r.InvalidateCache(this);
+                this.IsDirty = false;
+            }
+
+            foreach (var figure in Figures)
+            {
+                figure.Invalidate(r);
+            }
+        }
+
         public override void Draw(object dc, ShapeRenderer r, double dx, double dy)
         {
             base.BeginTransform(dc, r);
