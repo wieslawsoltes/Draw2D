@@ -54,18 +54,9 @@ namespace Draw2D.Core.Shapes
                 r.InvalidateCache(this);
                 this.IsDirty = false;
             }
-
-            if (_startPoint.IsDirty)
-            {
-                r.InvalidateCache(_startPoint);
-                _startPoint.IsDirty = false;
-            }
-
-            if (_point.IsDirty)
-            {
-                r.InvalidateCache(_point);
-                _point.IsDirty = false;
-            }
+            
+            _startPoint?.Invalidate(r);
+            _point?.Invalidate(r);
         }
 
         public override void Draw(object dc, ShapeRenderer r, double dx, double dy)
