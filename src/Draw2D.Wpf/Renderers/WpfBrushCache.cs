@@ -5,7 +5,7 @@ using Draw2D.Core.Style;
 
 namespace Draw2D.Wpf.Renderers
 {
-    public struct WpfBrushCache
+    public struct WpfBrushCache : IDisposable
     {
         public readonly Brush Stroke;
         public readonly Pen StrokePen;
@@ -18,6 +18,10 @@ namespace Draw2D.Wpf.Renderers
             this.Fill = fill;
         }
 
+        public void Dispose()
+        {
+        }
+
         public static Color FromDrawColor(DrawColor color)
         {
             return Color.FromArgb(color.A, color.R, color.G, color.B);
@@ -25,12 +29,24 @@ namespace Draw2D.Wpf.Renderers
 
         public static WpfBrushCache FromDrawStyle(DrawStyle style)
         {
-            var stroke = new SolidColorBrush(FromDrawColor(style.Stroke));
-            var strokePen = new Pen(stroke, style.Thickness);
-            var fill = new SolidColorBrush(FromDrawColor(style.Fill));
-            stroke.Freeze();
-            strokePen.Freeze();
-            fill.Freeze();
+            Brush stroke = null;
+            Pen strokePen = null;
+            Brush fill = null;
+
+            if (style.Stroke != null)
+            {
+                stroke = new SolidColorBrush(FromDrawColor(style.Stroke));
+                strokePen = new Pen(stroke, style.Thickness);
+                stroke.Freeze();
+                strokePen.Freeze();
+            }
+
+            if (style.Fill != null)
+            {
+                fill = new SolidColorBrush(FromDrawColor(style.Fill));
+                fill.Freeze();
+            }
+
             return new WpfBrushCache(stroke, strokePen, fill);
         }
     }
