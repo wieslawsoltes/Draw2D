@@ -1,5 +1,6 @@
 ﻿// Copyright (c) Wiesław Šoltés. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
+using Draw2D.Core.Renderers;
 
 namespace Draw2D.Core.Style
 {
@@ -52,6 +53,27 @@ namespace Draw2D.Core.Style
             this.Thickness = thickness;
             this.IsStroked = isStroked;
             this.IsFilled = isFilled;
+        }
+
+        public virtual void Invalidate(ShapeRenderer r)
+        {
+            if ((this.IsDirty == true)
+                || (_stroke?.IsDirty ?? false) 
+                || (_fill?.IsDirty ?? false))
+            {
+                r.InvalidateCache(this);
+                this.IsDirty = false;
+
+                if (_stroke != null)
+                {
+                    _stroke.IsDirty = false;
+                }
+
+                if (_fill != null)
+                {
+                    _fill.IsDirty = false;
+                }
+            }
         }
 
         public DrawStyle Copy()
