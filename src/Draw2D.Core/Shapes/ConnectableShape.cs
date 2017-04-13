@@ -27,6 +27,11 @@ namespace Draw2D.Core.Shapes
             this.Points = points;
         }
 
+        public override void Invalidate(ShapeRenderer r)
+        {
+            base.Invalidate(r);
+        }
+
         public override void Draw(object dc, ShapeRenderer r, double dx, double dy)
         {
             foreach (var point in Points)
