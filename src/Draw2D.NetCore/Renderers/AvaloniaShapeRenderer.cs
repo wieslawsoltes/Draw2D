@@ -30,17 +30,17 @@ namespace Draw2D.NetCore.Renderers
             _selected = new HashSet<ShapeObject>();
         }
 
-        private static Point FromPoint(PointShape point, double dx, double dy)
+        private static Point ToPoint(PointShape point, double dx, double dy)
         {
             return new Point(point.X + dx, point.Y + dy);
         }
 
-        public static IEnumerable<Point> FromPoints(IEnumerable<PointShape> points, double dx, double dy)
+        public static IEnumerable<Point> ToPoints(IEnumerable<PointShape> points, double dx, double dy)
         {
             return points.Select(point => new Point(point.X + dx, point.Y + dy));
         }
 
-        private static Rect FromPoints(PointShape p1, PointShape p2, double dx, double dy)
+        private static Rect ToRect(PointShape p1, PointShape p2, double dx, double dy)
         {
             double x = Math.Min(p1.X + dx, p2.X + dx);
             double y = Math.Min(p1.Y + dy, p2.Y + dy);
@@ -66,33 +66,33 @@ namespace Draw2D.NetCore.Renderers
                         {
                             if (isFirstShape)
                             {
-                                context.BeginFigure(FromPoint(line.StartPoint, dx, dy), figure.IsFilled);
+                                context.BeginFigure(ToPoint(line.StartPoint, dx, dy), figure.IsFilled);
                                 isFirstShape = false;
                             }
-                            context.LineTo(FromPoint(line.Point, dx, dy));
+                            context.LineTo(ToPoint(line.Point, dx, dy));
                         }
                         else if (shape is CubicBezierShape cubicBezier)
                         {
                             if (isFirstShape)
                             {
-                                context.BeginFigure(FromPoint(cubicBezier.StartPoint, dx, dy), figure.IsFilled);
+                                context.BeginFigure(ToPoint(cubicBezier.StartPoint, dx, dy), figure.IsFilled);
                                 isFirstShape = false;
                             }
                             context.CubicBezierTo(
-                                FromPoint(cubicBezier.Point1, dx, dy),
-                                FromPoint(cubicBezier.Point2, dx, dy),
-                                FromPoint(cubicBezier.Point3, dx, dy));
+                                ToPoint(cubicBezier.Point1, dx, dy),
+                                ToPoint(cubicBezier.Point2, dx, dy),
+                                ToPoint(cubicBezier.Point3, dx, dy));
                         }
                         else if (shape is QuadraticBezierShape quadraticBezier)
                         {
                             if (isFirstShape)
                             {
-                                context.BeginFigure(FromPoint(quadraticBezier.StartPoint, dx, dy), figure.IsFilled);
+                                context.BeginFigure(ToPoint(quadraticBezier.StartPoint, dx, dy), figure.IsFilled);
                                 isFirstShape = false;
                             }
                             context.QuadraticBezierTo(
-                                FromPoint(quadraticBezier.Point1, dx, dy),
-                                FromPoint(quadraticBezier.Point2, dx, dy));
+                                ToPoint(quadraticBezier.Point1, dx, dy),
+                                ToPoint(quadraticBezier.Point2, dx, dy));
                         }
                     }
 
@@ -156,7 +156,7 @@ namespace Draw2D.NetCore.Renderers
         {
             var cache = GetOrCreateCache(style);
             var _dc = dc as DrawingContext;
-            _dc.DrawLine(style.IsStroked ? cache?.StrokePen : null, FromPoint(line.StartPoint, dx, dy), FromPoint(line.Point, dx, dy));
+            _dc.DrawLine(style.IsStroked ? cache?.StrokePen : null, ToPoint(line.StartPoint, dx, dy), ToPoint(line.Point, dx, dy));
         }
 
         public override void DrawCubicBezier(object dc, CubicBezierShape cubicBezier, DrawStyle style, double dx, double dy)
@@ -166,11 +166,11 @@ namespace Draw2D.NetCore.Renderers
             var geometry = new StreamGeometry();
             using (var context = geometry.Open())
             {
-                context.BeginFigure(FromPoint(cubicBezier.StartPoint, dx, dy), false);
+                context.BeginFigure(ToPoint(cubicBezier.StartPoint, dx, dy), false);
                 context.CubicBezierTo(
-                    FromPoint(cubicBezier.Point1, dx, dy),
-                    FromPoint(cubicBezier.Point2, dx, dy),
-                    FromPoint(cubicBezier.Point3, dx, dy));
+                    ToPoint(cubicBezier.Point1, dx, dy),
+                    ToPoint(cubicBezier.Point2, dx, dy),
+                    ToPoint(cubicBezier.Point3, dx, dy));
                 context.EndFigure(false);
             }
             _dc.DrawGeometry(style.IsFilled ? cache?.Fill : null, style.IsStroked ? cache?.StrokePen : null, geometry);
@@ -183,10 +183,10 @@ namespace Draw2D.NetCore.Renderers
             var geometry = new StreamGeometry();
             using (var context = geometry.Open())
             {
-                context.BeginFigure(FromPoint(quadraticBezier.StartPoint, dx, dy), false);
+                context.BeginFigure(ToPoint(quadraticBezier.StartPoint, dx, dy), false);
                 context.QuadraticBezierTo(
-                    FromPoint(quadraticBezier.Point1, dx, dy),
-                    FromPoint(quadraticBezier.Point2, dx, dy));
+                    ToPoint(quadraticBezier.Point1, dx, dy),
+                    ToPoint(quadraticBezier.Point2, dx, dy));
                 context.EndFigure(false);
             }
             _dc.DrawGeometry(style.IsFilled ? cache?.Fill : null, style.IsStroked ? cache?.StrokePen : null, geometry);
@@ -204,7 +204,7 @@ namespace Draw2D.NetCore.Renderers
         {
             var cache = GetOrCreateCache(style);
             var _dc = dc as DrawingContext;
-            var rect = FromPoints(rectangle.TopLeft, rectangle.BottomRight, dx, dy);
+            var rect = ToRect(rectangle.TopLeft, rectangle.BottomRight, dx, dy);
             if (style.IsFilled)
             {
                 _dc.FillRectangle(cache?.Fill, rect);
@@ -219,7 +219,7 @@ namespace Draw2D.NetCore.Renderers
         {
             var cache = GetOrCreateCache(style);
             var _dc = dc as DrawingContext;
-            var rect = FromPoints(ellipse.TopLeft, ellipse.BottomRight, dx, dy);
+            var rect = ToRect(ellipse.TopLeft, ellipse.BottomRight, dx, dy);
             var geometry = new EllipseGeometry(rect);
             _dc.DrawGeometry(style.IsFilled ? cache?.Fill : null, style.IsStroked ? cache?.StrokePen : null, geometry);
         }
