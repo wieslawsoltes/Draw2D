@@ -47,15 +47,6 @@ namespace Draw2D.Wpf.Renderers
             return points.Select(point => new Point(point.X + dx, point.Y + dy));
         }
 
-        private static Rect FromPoints(double x1, double y1, double x2, double y2, double dx, double dy)
-        {
-            double x = Math.Min(x1 + dx, x2 + dx);
-            double y = Math.Min(y1 + dy, y2 + dy);
-            double width = Math.Abs(Math.Max(x1 + dx, x2 + dx) - x);
-            double height = Math.Abs(Math.Max(y1 + dy, y2 + dy) - y);
-            return new Rect(x, y, width, height);
-        }
-
         private static Rect FromPoints(PointShape p1, PointShape p2, double dx, double dy)
         {
             double x = Math.Min(p1.X + dx, p2.X + dx);
