@@ -30,7 +30,7 @@ namespace Draw2D.NetCore.Renderers
             _selected = new HashSet<ShapeObject>();
         }
 
-        private Point FromPoint(PointShape point, double dx, double dy)
+        private static Point FromPoint(PointShape point, double dx, double dy)
         {
             return new Point(point.X + dx, point.Y + dy);
         }
@@ -58,17 +58,17 @@ namespace Draw2D.NetCore.Renderers
             return new Rect(x, y, width, height);
         }
 
-        private Rect FromRectnagle(RectangleShape rectangle, double dx, double dy)
+        private static Rect FromRectnagle(RectangleShape rectangle, double dx, double dy)
         {
             return FromPoints(rectangle.TopLeft, rectangle.BottomRight, dx, dy);
         }
 
-        private Rect FromEllipse(EllipseShape ellipse, double dx, double dy)
+        private static Rect FromEllipse(EllipseShape ellipse, double dx, double dy)
         {
             return FromPoints(ellipse.TopLeft, ellipse.BottomRight, dx, dy);
         }
 
-        private Geometry ToGeometry(PathShape path, double dx, double dy)
+        private static Geometry ToGeometry(PathShape path, double dx, double dy)
         {
             var geometry = new StreamGeometry();
 
@@ -136,7 +136,7 @@ namespace Draw2D.NetCore.Renderers
             return cache;
         }
 
-        private Matrix ToMatrixTransform(MatrixObject matrix)
+        private static Matrix ToMatrixTransform(MatrixObject matrix)
         {
             return new Matrix(
                 matrix.M11, matrix.M12,
