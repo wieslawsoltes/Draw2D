@@ -104,6 +104,7 @@ namespace Draw2D.Wpf.Renderers
         private static Geometry ToGeometry(CubicBezierShape cubicBezier, DrawStyle style, double dx, double dy)
         {
             var geometry = new StreamGeometry();
+
             using (var context = geometry.Open())
             {
                 context.BeginFigure(ToPoint(cubicBezier.StartPoint, dx, dy), style.IsFilled, false);
@@ -120,6 +121,7 @@ namespace Draw2D.Wpf.Renderers
         private static Geometry ToGeometry(QuadraticBezierShape quadraticBezier, DrawStyle style, double dx, double dy)
         {
             var geometry = new StreamGeometry();
+
             using (var context = geometry.Open())
             {
                 context.BeginFigure(ToPoint(quadraticBezier.StartPoint, dx, dy), style.IsFilled, false);
