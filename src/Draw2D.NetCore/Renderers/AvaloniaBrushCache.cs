@@ -1,11 +1,12 @@
 ﻿// Copyright (c) Wiesław Šoltés. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
+using System;
 using Avalonia.Media;
 using Draw2D.Core.Style;
 
 namespace Draw2D.NetCore.Renderers
 {
-    public struct AvaloniaBrushCache
+    public struct AvaloniaBrushCache : IDisposable
     {
         public readonly Brush Stroke;
         public readonly Pen StrokePen;
@@ -16,6 +17,10 @@ namespace Draw2D.NetCore.Renderers
             this.Stroke = stroke;
             this.StrokePen = strokePen;
             this.Fill = fill;
+        }
+
+        public void Dispose()
+        {
         }
 
         public static Color FromDrawColor(DrawColor color)
