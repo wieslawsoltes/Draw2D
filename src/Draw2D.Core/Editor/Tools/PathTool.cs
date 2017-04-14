@@ -70,6 +70,16 @@ namespace Draw2D.Core.Editor.Tools
             SetContext(context);
             Settings.CurrentTool?.Clean(this);
             SetContext(null);
+            UpdateCache(context);
+        }
+
+        public void UpdateCache(IToolContext context)
+        {
+            if (_path != null)
+            {
+                _path.IsDirty = true;
+                _path.Invalidate(context.Renderer, 0.0, 0.0);
+            }
         }
 
         private void DownInternal(IToolContext context, double x, double y, Modifier modifier)
