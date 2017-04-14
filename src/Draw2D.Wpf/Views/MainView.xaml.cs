@@ -1,5 +1,6 @@
 ﻿// Copyright (c) Wiesław Šoltés. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Windows;
@@ -133,6 +134,7 @@ namespace Draw2D.Wpf.Views
         {
             if (Keyboard.Modifiers == ModifierKeys.Control)
             {
+                Debug.WriteLine($"Shortcut: Ctrl+{e.Key}");
                 switch (e.Key)
                 {
                     case Key.N:
@@ -163,6 +165,7 @@ namespace Draw2D.Wpf.Views
             }
             else if (Keyboard.Modifiers == ModifierKeys.None)
             {
+                Debug.WriteLine($"Shortcut: {e.Key}");
                 switch (e.Key)
                 {
                     case Key.N:

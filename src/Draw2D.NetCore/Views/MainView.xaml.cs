@@ -1,5 +1,6 @@
 ﻿// Copyright (c) Wiesław Šoltés. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
+using System.Diagnostics;
 using System.Linq;
 using Avalonia.Controls;
 using Avalonia.Input;
@@ -142,6 +143,7 @@ namespace Draw2D.NetCore.Views
         {
             if (e.Modifiers == InputModifiers.Control)
             {
+                Debug.WriteLine($"Shortcut: Ctrl+{e.Key}");
                 switch (e.Key)
                 {
                     case Key.N:
@@ -172,6 +174,7 @@ namespace Draw2D.NetCore.Views
             }
             else if (e.Modifiers == InputModifiers.None)
             {
+                Debug.WriteLine($"Shortcut: {e.Key}");
                 switch (e.Key)
                 {
                     case Key.N:
