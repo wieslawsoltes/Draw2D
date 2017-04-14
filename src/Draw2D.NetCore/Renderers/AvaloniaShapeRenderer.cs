@@ -49,7 +49,40 @@ namespace Draw2D.NetCore.Renderers
             return new Rect(x, y, width, height);
         }
 
-        private static Geometry ToGeometry(PathShape path, double dx, double dy)
+        private static Geometry ToGeometry(CubicBezierShape cubicBezier, DrawStyle style, double dx, double dy)
+        {
+            var geometry = new StreamGeometry();
+
+            using (var context = geometry.Open())
+            {
+                context.BeginFigure(ToPoint(cubicBezier.StartPoint, dx, dy), false);
+                context.CubicBezierTo(
+                    ToPoint(cubicBezier.Point1, dx, dy),
+                    ToPoint(cubicBezier.Point2, dx, dy),
+                    ToPoint(cubicBezier.Point3, dx, dy));
+                context.EndFigure(false);
+            }
+
+            return geometry;
+        }
+
+        private static Geometry ToGeometry(QuadraticBezierShape quadraticBezier, DrawStyle style, double dx, double dy)
+        {
+            var geometry = new StreamGeometry();
+
+            using (var context = geometry.Open())
+            {
+                context.BeginFigure(ToPoint(quadraticBezier.StartPoint, dx, dy), false);
+                context.QuadraticBezierTo(
+                    ToPoint(quadraticBezier.Point1, dx, dy),
+                    ToPoint(quadraticBezier.Point2, dx, dy));
+                context.EndFigure(false);
+            }
+
+            return geometry;
+        }
+
+        private static Geometry ToGeometry(PathShape path, DrawStyle style, double dx, double dy)
         {
             var geometry = new StreamGeometry();
 
@@ -101,6 +134,12 @@ namespace Draw2D.NetCore.Renderers
             }
 
             return geometry;
+        }
+
+        private static Geometry ToGeometry(EllipseShape ellipse, DrawStyle style, double dx, double dy)
+        {
+            var rect = ToRect(ellipse.TopLeft, ellipse.BottomRight, dx, dy);
+            return new EllipseGeometry(rect);
         }
 
         private AvaloniaBrushCache? GetOrCreateCache(DrawStyle style)
@@ -163,16 +202,7 @@ namespace Draw2D.NetCore.Renderers
         {
             var cache = GetOrCreateCache(style);
             var _dc = dc as DrawingContext;
-            var geometry = new StreamGeometry();
-            using (var context = geometry.Open())
-            {
-                context.BeginFigure(ToPoint(cubicBezier.StartPoint, dx, dy), false);
-                context.CubicBezierTo(
-                    ToPoint(cubicBezier.Point1, dx, dy),
-                    ToPoint(cubicBezier.Point2, dx, dy),
-                    ToPoint(cubicBezier.Point3, dx, dy));
-                context.EndFigure(false);
-            }
+            var geometry = ToGeometry(cubicBezier, style, dx, dy);
             _dc.DrawGeometry(style.IsFilled ? cache?.Fill : null, style.IsStroked ? cache?.StrokePen : null, geometry);
         }
 
@@ -180,15 +210,7 @@ namespace Draw2D.NetCore.Renderers
         {
             var cache = GetOrCreateCache(style);
             var _dc = dc as DrawingContext;
-            var geometry = new StreamGeometry();
-            using (var context = geometry.Open())
-            {
-                context.BeginFigure(ToPoint(quadraticBezier.StartPoint, dx, dy), false);
-                context.QuadraticBezierTo(
-                    ToPoint(quadraticBezier.Point1, dx, dy),
-                    ToPoint(quadraticBezier.Point2, dx, dy));
-                context.EndFigure(false);
-            }
+            var geometry = ToGeometry(quadraticBezier, style, dx, dy);
             _dc.DrawGeometry(style.IsFilled ? cache?.Fill : null, style.IsStroked ? cache?.StrokePen : null, geometry);
         }
 
@@ -196,7 +218,7 @@ namespace Draw2D.NetCore.Renderers
         {
             var cache = GetOrCreateCache(style);
             var _dc = dc as DrawingContext;
-            var geometry = ToGeometry(path, dx, dy);
+            var geometry = ToGeometry(path, style, dx, dy);
             _dc.DrawGeometry(style.IsFilled ? cache?.Fill : null, style.IsStroked ? cache?.StrokePen : null, geometry);
         }
 
@@ -219,8 +241,7 @@ namespace Draw2D.NetCore.Renderers
         {
             var cache = GetOrCreateCache(style);
             var _dc = dc as DrawingContext;
-            var rect = ToRect(ellipse.TopLeft, ellipse.BottomRight, dx, dy);
-            var geometry = new EllipseGeometry(rect);
+            var geometry = ToGeometry(ellipse, style, dx, dy);
             _dc.DrawGeometry(style.IsFilled ? cache?.Fill : null, style.IsStroked ? cache?.StrokePen : null, geometry);
         }
     }
