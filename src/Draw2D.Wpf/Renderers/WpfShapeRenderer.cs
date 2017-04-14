@@ -56,19 +56,9 @@ namespace Draw2D.Wpf.Renderers
             return new Rect(x, y, width, height);
         }
 
-        private static Rect FromRectnagle(RectangleShape rectangle, double dx, double dy)
-        {
-            return FromPoints(rectangle.TopLeft, rectangle.BottomRight, dx, dy);
-        }
-
-        private static Rect FromEllipse(EllipseShape ellipse, double dx, double dy)
-        {
-            return FromPoints(ellipse.TopLeft, ellipse.BottomRight, dx, dy);
-        }
-
         private static void FromEllipse(EllipseShape ellipse, double dx, double dy, out double radiusX, out double radiusY, out Point center)
         {
-            var rect = FromEllipse(ellipse, dx, dy);
+            var rect = FromPoints(ellipse.TopLeft, ellipse.BottomRight, dx, dy);
             radiusX = rect.Width / 2;
             radiusY = rect.Height / 2;
             center = new Point(rect.TopLeft.X, rect.TopLeft.Y);
@@ -356,7 +346,7 @@ namespace Draw2D.Wpf.Renderers
         {
             var cache = GetBrushCache(style);
             var _dc = dc as DrawingContext;
-            var rect = FromRectnagle(rectangle, dx, dy);
+            var rect = FromPoints(rectangle.TopLeft, rectangle.BottomRight, dx, dy);
             _dc.DrawRectangle(style.IsFilled ? cache?.Fill : null, style.IsStroked ? cache?.StrokePen : null, rect);
         }
 

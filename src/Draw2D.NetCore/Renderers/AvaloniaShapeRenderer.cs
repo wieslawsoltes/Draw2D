@@ -49,16 +49,6 @@ namespace Draw2D.NetCore.Renderers
             return new Rect(x, y, width, height);
         }
 
-        private static Rect FromRectnagle(RectangleShape rectangle, double dx, double dy)
-        {
-            return FromPoints(rectangle.TopLeft, rectangle.BottomRight, dx, dy);
-        }
-
-        private static Rect FromEllipse(EllipseShape ellipse, double dx, double dy)
-        {
-            return FromPoints(ellipse.TopLeft, ellipse.BottomRight, dx, dy);
-        }
-
         private static Geometry ToGeometry(PathShape path, double dx, double dy)
         {
             var geometry = new StreamGeometry();
@@ -214,7 +204,7 @@ namespace Draw2D.NetCore.Renderers
         {
             var cache = GetOrCreateCache(style);
             var _dc = dc as DrawingContext;
-            var rect = FromRectnagle(rectangle, dx, dy);
+            var rect = FromPoints(rectangle.TopLeft, rectangle.BottomRight, dx, dy);
             if (style.IsFilled)
             {
                 _dc.FillRectangle(cache?.Fill, rect);
@@ -229,7 +219,7 @@ namespace Draw2D.NetCore.Renderers
         {
             var cache = GetOrCreateCache(style);
             var _dc = dc as DrawingContext;
-            var rect = FromEllipse(ellipse, dx, dy);
+            var rect = FromPoints(ellipse.TopLeft, ellipse.BottomRight, dx, dy);
             var geometry = new EllipseGeometry(rect);
             _dc.DrawGeometry(style.IsFilled ? cache?.Fill : null, style.IsStroked ? cache?.StrokePen : null, geometry);
         }
