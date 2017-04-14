@@ -25,9 +25,21 @@ namespace Draw2D.NetCore.Renderers
 
         public static AvaloniaBrushCache FromDrawStyle(DrawStyle style)
         {
-            var stroke = new SolidColorBrush(FromDrawColor(style.Stroke));
-            var strokePen = new Pen(stroke, style.Thickness);
-            var fill = new SolidColorBrush(FromDrawColor(style.Fill));
+            Brush stroke = null;
+            Pen strokePen = null;
+            Brush fill = null;
+
+            if (style.Stroke != null)
+            {
+                stroke = new SolidColorBrush(FromDrawColor(style.Stroke));
+                strokePen = new Pen(stroke, style.Thickness);
+            }
+
+            if (style.Fill != null)
+            {
+                fill = new SolidColorBrush(FromDrawColor(style.Fill));
+            }
+
             return new AvaloniaBrushCache(stroke, strokePen, fill);
         }
     }
