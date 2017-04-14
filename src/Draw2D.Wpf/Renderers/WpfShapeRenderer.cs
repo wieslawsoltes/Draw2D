@@ -56,24 +56,23 @@ namespace Draw2D.Wpf.Renderers
             return new Rect(x, y, width, height);
         }
 
+        private static Rect FromPoints(PointShape p1, PointShape p2, double dx, double dy)
+        {
+            double x = Math.Min(p1.X + dx, p2.X + dx);
+            double y = Math.Min(p1.Y + dy, p2.Y + dy);
+            double width = Math.Abs(Math.Max(p1.X + dx, p2.X + dx) - x);
+            double height = Math.Abs(Math.Max(p1.Y + dy, p2.Y + dy) - y);
+            return new Rect(x, y, width, height);
+        }
+
         private static Rect FromRectnagle(RectangleShape rectangle, double dx, double dy)
         {
-            return FromPoints(
-                rectangle.TopLeft.X,
-                rectangle.TopLeft.Y,
-                rectangle.BottomRight.X,
-                rectangle.BottomRight.Y,
-                dx, dy);
+            return FromPoints(rectangle.TopLeft, rectangle.BottomRight, dx, dy);
         }
 
         private static Rect FromEllipse(EllipseShape ellipse, double dx, double dy)
         {
-            return FromPoints(
-                ellipse.TopLeft.X,
-                ellipse.TopLeft.Y,
-                ellipse.BottomRight.X,
-                ellipse.BottomRight.Y,
-                dx, dy);
+            return FromPoints(ellipse.TopLeft, ellipse.BottomRight, dx, dy);
         }
 
         private static void FromEllipse(EllipseShape ellipse, double dx, double dy, out double radiusX, out double radiusY, out Point center)
