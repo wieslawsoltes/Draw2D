@@ -287,6 +287,10 @@ namespace Draw2D.Core.ViewModels
                     gridSnapPointFilter
                 },
                 Settings = new RectangleToolSettings()
+                {
+                    ConnectPoints = true,
+                    HitTestRadius = 7.0
+                }
             };
 
             var ellipseTool = new EllipseTool()
