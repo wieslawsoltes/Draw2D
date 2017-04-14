@@ -65,7 +65,7 @@ namespace Draw2D.Core.Editor.Tools
             }
         }
 
-        public void CleanSubTool(IToolContext context)
+        public void CleanCurrentTool(IToolContext context)
         {
             SetContext(context);
             Settings.CurrentTool?.Clean(this);
@@ -144,7 +144,7 @@ namespace Draw2D.Core.Editor.Tools
 
         private void CleanInternal(IToolContext context)
         {
-            CleanSubTool(context);
+            CleanCurrentTool(context);
 
             Filters?.ForEach(f => f.Clear(context));
 

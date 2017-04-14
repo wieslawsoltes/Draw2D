@@ -52,7 +52,7 @@ namespace Draw2D.NetCore.Views
             {
                 if (vm.CurrentTool is PathTool pathTool)
                 {
-                    pathTool.CleanSubTool(vm);
+                    pathTool.CleanCurrentTool(vm);
                     pathTool.Settings.CurrentTool = pathTool.Settings.Tools.Where(t => t.Name == "Line").FirstOrDefault();
                 }
                 else
@@ -76,7 +76,7 @@ namespace Draw2D.NetCore.Views
             {
                 if (vm.CurrentTool is PathTool pathTool)
                 {
-                    pathTool.CleanSubTool(vm);
+                    pathTool.CleanCurrentTool(vm);
                     pathTool.Settings.CurrentTool = pathTool.Settings.Tools.Where(t => t.Name == "CubicBezier").FirstOrDefault();
                 }
                 else
@@ -92,7 +92,7 @@ namespace Draw2D.NetCore.Views
             {
                 if (vm.CurrentTool is PathTool pathTool)
                 {
-                    pathTool.CleanSubTool(vm);
+                    pathTool.CleanCurrentTool(vm);
                     pathTool.Settings.CurrentTool = pathTool.Settings.Tools.Where(t => t.Name == "QuadraticBezier").FirstOrDefault();
                 }
                 else
@@ -116,7 +116,7 @@ namespace Draw2D.NetCore.Views
             {
                 if (vm.CurrentTool is PathTool pathTool)
                 {
-                    pathTool.CleanSubTool(vm);
+                    pathTool.CleanCurrentTool(vm);
                     pathTool.Settings.CurrentTool = pathTool.Settings.Tools.Where(t => t.Name == "Move").FirstOrDefault();
                 }
             }
