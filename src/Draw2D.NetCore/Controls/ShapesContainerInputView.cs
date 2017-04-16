@@ -3,7 +3,7 @@
 using Avalonia.Controls;
 using Avalonia.Input;
 using Draw2D.Core.Editor;
-using Draw2D.Core.ViewModels.Containers;
+using Draw2D.ViewModels.Containers;
 
 namespace Draw2D.NetCore.Controls
 {

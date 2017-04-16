@@ -3,7 +3,7 @@
 using System.Windows.Controls;
 using System.Windows.Input;
 using Draw2D.Core.Editor;
-using Draw2D.Core.ViewModels.Containers;
+using Draw2D.ViewModels.Containers;
 
 namespace Draw2D.Wpf.Controls
 {

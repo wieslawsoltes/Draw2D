@@ -77,7 +77,7 @@ namespace Draw2D.Core.Editor.Tools
         {
             if (_path != null)
             {
-                _path.IsDirty = true;
+                _figure.MarkAsDirty(true);
                 _path.Invalidate(context.Renderer, 0.0, 0.0);
             }
         }

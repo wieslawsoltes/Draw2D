@@ -9,6 +9,8 @@ namespace Draw2D.Core
     {
         internal bool IsDirty { get; set; }
 
+        public void MarkAsDirty(bool value) => IsDirty = value;
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         public void Notify([CallerMemberName] string propertyName = null)

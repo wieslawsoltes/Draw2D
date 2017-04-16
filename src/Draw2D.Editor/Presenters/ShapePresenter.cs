@@ -3,9 +3,8 @@
 using System;
 using System.Collections.Generic;
 using Draw2D.Core.Renderers;
-using Draw2D.Core.Editor;
 
-namespace Draw2D.Core.Presenters
+namespace Draw2D.Core.Editor.Presenters
 {
     public abstract class ShapePresenter
     {

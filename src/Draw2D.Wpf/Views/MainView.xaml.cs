@@ -8,7 +8,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using Draw2D.Core.Containers;
 using Draw2D.Core.Editor.Tools;
-using Draw2D.Core.ViewModels.Containers;
+using Draw2D.ViewModels.Containers;
 using Draw2D.Wpf.Utilities;
 using Microsoft.Win32;
 

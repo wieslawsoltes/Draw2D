@@ -73,7 +73,7 @@ namespace Draw2D.Core.Editor.Tools
                 }
 
                 _figure.Shapes.Clear();
-                _figure.IsDirty = true;
+                _figure.MarkAsDirty(true);
 
                 if (points.Count >= 2)
                 {

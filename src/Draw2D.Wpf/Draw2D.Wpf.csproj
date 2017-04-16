@@ -250,6 +250,14 @@
       <Project>{91296102-D031-473B-9303-3F9143BA14E7}</Project>
       <Name>Draw2D.Core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Draw2D.Editor\Draw2D.Editor.csproj">
+      <Project>{0ae6a2ae-3294-4e28-b383-2db561d1e15d}</Project>
+      <Name>Draw2D.Editor</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Draw2D.ViewModels\Draw2D.ViewModels.csproj">
+      <Project>{031316b5-38d3-4f86-8937-2bd4982ef8cc}</Project>
+      <Name>Draw2D.ViewModels</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -30,6 +30,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Draw2D.Core\Draw2D.Core.csproj" />
+    <ProjectReference Include="..\Draw2D.Editor\Draw2D.Editor.csproj" />
+    <ProjectReference Include="..\Draw2D.ViewModels\Draw2D.ViewModels.csproj" />
   </ItemGroup>
 
   <ItemGroup>

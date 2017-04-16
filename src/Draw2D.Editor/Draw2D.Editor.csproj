@@ -17,7 +17,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Draw2D.Spatial\Draw2D.Spatial.csproj" />
+    <ProjectReference Include="..\Draw2D.Core\Draw2D.Core.csproj" />
   </ItemGroup>
 
 </Project>

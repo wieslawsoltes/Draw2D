@@ -10,16 +10,16 @@ using Draw2D.Core.Editor.Bounds;
 using Draw2D.Core.Editor.Bounds.Shapes;
 using Draw2D.Core.Editor.Filters;
 using Draw2D.Core.Editor.Intersections.Line;
+using Draw2D.Core.Editor.Presenters;
 using Draw2D.Core.Editor.Selection;
 using Draw2D.Core.Editor.Tools;
 using Draw2D.Core.Editor.Tools.Helpers;
-using Draw2D.Core.Presenters;
 using Draw2D.Core.Renderers;
 using Draw2D.Core.Shapes;
 using Draw2D.Core.Style;
-using Draw2D.Core.ViewModels.Containers;
+using Draw2D.ViewModels.Containers;
 
-namespace Draw2D.Core.ViewModels
+namespace Draw2D.ViewModels
 {
     public class Bootstrapper
     {
