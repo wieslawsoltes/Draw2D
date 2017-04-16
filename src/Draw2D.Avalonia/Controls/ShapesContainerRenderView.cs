@@ -31,14 +31,19 @@ namespace Draw2D.Avalonia.Controls
 
             if (this.DataContext is ShapesContainerViewModel vm)
             {
-                vm.Presenter.DrawContent(context, vm, 0.0, 0.0);
+                vm.Presenter.DrawContainer(context, vm.CurrentContainer, vm.Renderer, 0.0, 0.0);
 
                 if (_drawWorking)
                 {
-                    vm.Presenter.DrawWorking(context, vm, 0.0, 0.0);
+                    vm.Presenter.DrawContainer(context, vm.WorkingContainer, vm.Renderer, 0.0, 0.0);
                 }
 
-                vm.Presenter.DrawHelpers(context, vm, 0.0, 0.0);
+                vm.Presenter.DrawHelpers(context, vm.CurrentContainer, vm.Renderer, 0.0, 0.0);
+
+                if (_drawWorking)
+                {
+                    vm.Presenter.DrawHelpers(context, vm.WorkingContainer, vm.Renderer, 0.0, 0.0);
+                }
             }
         }
     }

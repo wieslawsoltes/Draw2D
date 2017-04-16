@@ -31,14 +31,19 @@ namespace Draw2D.Wpf.Controls
 
             if (this.DataContext is ShapesContainerViewModel vm)
             {
-                vm.Presenter.DrawContent(dc, vm, 0.0, 0.0);
+                vm.Presenter.DrawContainer(dc, vm.CurrentContainer, vm.Renderer, 0.0, 0.0);
 
                 if (_drawWorking)
                 {
-                    vm.Presenter.DrawWorking(dc, vm, 0.0, 0.0);
+                    vm.Presenter.DrawContainer(dc, vm.WorkingContainer, vm.Renderer, 0.0, 0.0);
                 }
 
-                vm.Presenter.DrawHelpers(dc, vm, 0.0, 0.0);
+                vm.Presenter.DrawHelpers(dc, vm.CurrentContainer, vm.Renderer, 0.0, 0.0);
+
+                if (_drawWorking)
+                {
+                    vm.Presenter.DrawHelpers(dc, vm.WorkingContainer, vm.Renderer, 0.0, 0.0);
+                }
             }
         }
     }

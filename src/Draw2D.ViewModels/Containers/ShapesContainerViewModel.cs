@@ -7,7 +7,7 @@ using Draw2D.Core;
 using Draw2D.Core.Containers;
 using Draw2D.Core.Editor;
 using Draw2D.Core.Editor.Bounds;
-using Draw2D.Core.Editor.Presenters;
+using Draw2D.Core.Presenters;
 using Draw2D.Core.Renderers;
 using Draw2D.Core.Shapes;
 using Draw2D.Core.Style;
