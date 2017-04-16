@@ -54,9 +54,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Newtonsoft.Json.10.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
-    </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
@@ -81,7 +78,6 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Renderers\WpfBrushCache.cs" />
-    <Compile Include="Utilities\NewtonsoftJsonSerializer.cs" />
     <Compile Include="Views\Filters\GridSnapSettingsView.xaml.cs">
       <DependentUpon>GridSnapSettingsView.xaml</DependentUpon>
     </Compile>
@@ -240,10 +236,6 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config" />
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\Draw2D.Core\Draw2D.Core.csproj">
       <Project>{91296102-D031-473B-9303-3F9143BA14E7}</Project>
       <Name>Draw2D.Core</Name>
@@ -251,6 +243,10 @@
     <ProjectReference Include="..\Draw2D.Editor\Draw2D.Editor.csproj">
       <Project>{0ae6a2ae-3294-4e28-b383-2db561d1e15d}</Project>
       <Name>Draw2D.Editor</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Draw2D.Json\Draw2D.Json.csproj">
+      <Project>{c3907f76-dbbf-4799-8b59-ba9681585bab}</Project>
+      <Name>Draw2D.Json</Name>
     </ProjectReference>
     <ProjectReference Include="..\Draw2D.ViewModels\Draw2D.ViewModels.csproj">
       <Project>{031316b5-38d3-4f86-8937-2bd4982ef8cc}</Project>

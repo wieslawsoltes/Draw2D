@@ -13,7 +13,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
 
-namespace Draw2D.Wpf.Utilities
+namespace Draw2D.Json
 {
     public class NewtonsoftJsonSerializer
     {
@@ -45,7 +45,7 @@ namespace Draw2D.Wpf.Utilities
             {
                 if (name == null)
                 {
-                    var attr = type.GetCustomAttribute<JsonObjectAttribute>();
+                    var attr = type.GetTypeInfo().GetCustomAttribute<JsonObjectAttribute>();
                     if (attr == null || attr.Id == null)
                         throw new ArgumentException($"Name for type '{type}' not specified. Name must be specified either directly or by JsonObjectAttribute.Id.", nameof(name));
                     name = attr.Id;
