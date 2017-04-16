@@ -3,7 +3,7 @@
 using System.Diagnostics;
 using Draw2D.Core.Shapes;
 
-namespace Draw2D.Core.Editor.Filters
+namespace Draw2D.Editor.Filters
 {
     public class GridSnapPointFilter : PointFilter
     {

@@ -7,7 +7,7 @@ using Draw2D.Core.Shapes;
 using Draw2D.Spatial;
 using Draw2D.Spatial.DouglasPeucker;
 
-namespace Draw2D.Core.Editor.Tools
+namespace Draw2D.Editor.Tools
 {
     public class ScribbleTool : ToolBase
     {

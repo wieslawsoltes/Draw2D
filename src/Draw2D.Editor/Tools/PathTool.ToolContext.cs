@@ -3,12 +3,13 @@
 using System;
 using System.Collections.Generic;
 using Draw2D.Core.Containers;
-using Draw2D.Core.Editor.Bounds;
+using Draw2D.Editor.Bounds;
 using Draw2D.Core.Renderers;
 using Draw2D.Core.Shapes;
 using Draw2D.Core.Style;
+using Draw2D.Core;
 
-namespace Draw2D.Core.Editor.Tools
+namespace Draw2D.Editor.Tools
 {
     public partial class PathTool : IToolContext
     {

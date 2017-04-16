@@ -4,7 +4,7 @@ using Draw2D.Core.Renderers;
 using Draw2D.Core.Shapes;
 using Draw2D.Core.Style;
 
-namespace Draw2D.Core.Editor.Tools.Helpers
+namespace Draw2D.Editor.Tools.Helpers
 {
     public abstract class CommonHelper : ShapeHelper
     {

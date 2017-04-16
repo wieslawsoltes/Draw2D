@@ -5,18 +5,18 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using Draw2D.Core.Containers;
-using Draw2D.Core.Editor;
-using Draw2D.Core.Editor.Bounds;
-using Draw2D.Core.Editor.Bounds.Shapes;
-using Draw2D.Core.Editor.Filters;
-using Draw2D.Core.Editor.Intersections.Line;
-using Draw2D.Core.Editor.Selection;
-using Draw2D.Core.Editor.Tools;
-using Draw2D.Core.Editor.Tools.Helpers;
 using Draw2D.Core.Presenters;
 using Draw2D.Core.Renderers;
 using Draw2D.Core.Shapes;
 using Draw2D.Core.Style;
+using Draw2D.Editor;
+using Draw2D.Editor.Bounds;
+using Draw2D.Editor.Bounds.Shapes;
+using Draw2D.Editor.Filters;
+using Draw2D.Editor.Intersections.Line;
+using Draw2D.Editor.Selection;
+using Draw2D.Editor.Tools;
+using Draw2D.Editor.Tools.Helpers;
 using Draw2D.ViewModels.Containers;
 
 namespace Draw2D.ViewModels

@@ -5,12 +5,12 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Draw2D.Core;
 using Draw2D.Core.Containers;
-using Draw2D.Core.Editor;
-using Draw2D.Core.Editor.Bounds;
 using Draw2D.Core.Presenters;
 using Draw2D.Core.Renderers;
 using Draw2D.Core.Shapes;
 using Draw2D.Core.Style;
+using Draw2D.Editor;
+using Draw2D.Editor.Bounds;
 using Draw2D.Spatial;
 
 namespace Draw2D.ViewModels.Containers

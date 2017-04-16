@@ -1,8 +1,9 @@
 ﻿// Copyright (c) Wiesław Šoltés. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using System.Collections.Generic;
+using Draw2D.Core;
 
-namespace Draw2D.Core.Editor
+namespace Draw2D.Editor
 {
     public abstract class PointFilter
     {

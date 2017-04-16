@@ -8,9 +8,9 @@
         xmlns:ViewsToolsSettings="clr-namespace:Draw2D.Wpf.Views.Tools.Settings"
         xmlns:ViewsIntersectionsLineSettings="clr-namespace:Draw2D.Wpf.Views.Intersections.Line.Settings"
         xmlns:ViewsFiltersSettings="clr-namespace:Draw2D.Wpf.Views.Filters.Settings"
-        xmlns:EditorTools="clr-namespace:Draw2D.Core.Editor.Tools;assembly=Draw2D.Editor"
-        xmlns:EditorIntersectionsLine="clr-namespace:Draw2D.Core.Editor.Intersections.Line;assembly=Draw2D.Editor"
-        xmlns:EditorFilters="clr-namespace:Draw2D.Core.Editor.Filters;assembly=Draw2D.Editor"
+        xmlns:EditorTools="clr-namespace:Draw2D.Editor.Tools;assembly=Draw2D.Editor"
+        xmlns:EditorIntersectionsLine="clr-namespace:Draw2D.Editor.Intersections.Line;assembly=Draw2D.Editor"
+        xmlns:EditorFilters="clr-namespace:Draw2D.Editor.Filters;assembly=Draw2D.Editor"
         UseLayoutRounding="True" SnapsToDevicePixels="True" TextOptions.TextFormattingMode="Display"
         Focusable="True">
     <Grid>

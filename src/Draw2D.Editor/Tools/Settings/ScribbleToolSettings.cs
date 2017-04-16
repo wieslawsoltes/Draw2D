@@ -3,7 +3,7 @@
 
 using Draw2D.Core.Shapes;
 
-namespace Draw2D.Core.Editor.Tools
+namespace Draw2D.Editor.Tools
 {
     public class ScribbleToolSettings : SettingsBase
     {

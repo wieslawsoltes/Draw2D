@@ -7,7 +7,7 @@ using Avalonia.Input;
 using Avalonia.Markup.Xaml;
 using Draw2D.Avalonia.Controls;
 using Draw2D.Core.Containers;
-using Draw2D.Core.Editor.Tools;
+using Draw2D.Editor.Tools;
 using Draw2D.ViewModels.Containers;
 
 namespace Draw2D.Avalonia.Views
