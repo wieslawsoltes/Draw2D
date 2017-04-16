@@ -5,7 +5,7 @@ using Avalonia.Input;
 using Draw2D.Core.Editor;
 using Draw2D.ViewModels.Containers;
 
-namespace Draw2D.NetCore.Controls
+namespace Draw2D.Avalonia.Controls
 {
     public class ShapesContainerInputView : Border
     {

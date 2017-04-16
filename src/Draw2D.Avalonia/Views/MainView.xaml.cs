@@ -5,12 +5,12 @@ using System.Linq;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Markup.Xaml;
+using Draw2D.Avalonia.Controls;
 using Draw2D.Core.Containers;
 using Draw2D.Core.Editor.Tools;
 using Draw2D.ViewModels.Containers;
-using Draw2D.NetCore.Controls;
 
-namespace Draw2D.NetCore.Views
+namespace Draw2D.Avalonia.Views
 {
     public class MainView : UserControl
     {

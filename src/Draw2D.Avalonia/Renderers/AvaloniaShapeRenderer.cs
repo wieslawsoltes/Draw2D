@@ -10,7 +10,7 @@ using Draw2D.Core.Renderers;
 using Draw2D.Core.Shapes;
 using Draw2D.Core.Style;
 
-namespace Draw2D.NetCore.Renderers
+namespace Draw2D.Avalonia.Renderers
 {
     public class AvaloniaShapeRenderer : ShapeRenderer
     {

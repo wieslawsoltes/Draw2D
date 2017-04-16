@@ -4,12 +4,12 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Markup.Xaml;
-using Draw2D.NetCore.Controls;
-using Draw2D.NetCore.Renderers;
-using Draw2D.NetCore.Views;
+using Draw2D.Avalonia.Controls;
+using Draw2D.Avalonia.Renderers;
+using Draw2D.Avalonia.Views;
 using Draw2D.ViewModels;
 
-namespace Draw2D.NetCore
+namespace Draw2D.Avalonia
 {
     public class App : Application
     {

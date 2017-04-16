@@ -5,7 +5,7 @@ using Avalonia.Input;
 using Avalonia.Media;
 using Draw2D.ViewModels.Containers;
 
-namespace Draw2D.NetCore.Controls
+namespace Draw2D.Avalonia.Controls
 {
     public class ShapesContainerRenderView : Canvas
     {

@@ -4,7 +4,7 @@ using System;
 using Avalonia.Media;
 using Draw2D.Core.Style;
 
-namespace Draw2D.NetCore.Renderers
+namespace Draw2D.Avalonia.Renderers
 {
     public struct AvaloniaBrushCache : IDisposable
     {

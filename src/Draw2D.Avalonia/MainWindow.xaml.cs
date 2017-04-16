@@ -4,7 +4,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 
-namespace Draw2D.NetCore
+namespace Draw2D.Avalonia
 {
     public class MainWindow : Window
     {

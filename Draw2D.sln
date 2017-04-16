@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Draw2D.Wpf", "src\Draw2D.Wp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Draw2D.Core", "src\Draw2D.Core\Draw2D.Core.csproj", "{91296102-D031-473B-9303-3F9143BA14E7}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Draw2D.NetCore", "src\Draw2D.NetCore\Draw2D.NetCore.csproj", "{B6933C11-D4F5-434E-9C15-7E3E91F07161}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Draw2D.Avalonia", "src\Draw2D.Avalonia\Draw2D.Avalonia.csproj", "{B6933C11-D4F5-434E-9C15-7E3E91F07161}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Draw2D.ViewModels", "src\Draw2D.ViewModels\Draw2D.ViewModels.csproj", "{031316B5-38D3-4F86-8937-2BD4982EF8CC}"
 EndProject
