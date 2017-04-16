@@ -3,6 +3,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Draw2D.Core;
+using Draw2D.Core.Containers;
 using Draw2D.Core.Shapes;
 using Draw2D.Spatial;
 
@@ -185,17 +186,39 @@ namespace Draw2D.Editor.Tools
         {
             lock (context.Renderer.Selected)
             {
+                var container = context.CurrentContainer;
+                var paths = container.Shapes.OfType<PathShape>();
+                var groups = container.Shapes.OfType<GroupShape>();
+                var connectables = container.Shapes.OfType<ConnectableShape>();
+
                 foreach (var shape in context.Renderer.Selected)
                 {
-                    if (context.CurrentContainer.Shapes.Contains(shape))
+                    if (container.Shapes.Contains(shape))
                     {
-                        context.CurrentContainer.Shapes.Remove(shape);
+                        container.Shapes.Remove(shape);
                     }
-                    else if (context.CurrentContainer.Guides.Contains(shape))
+                    else if (container.Guides.Contains(shape))
                     {
                         if (shape is LineShape guide)
                         {
-                            context.CurrentContainer.Guides.Remove(guide);
+                            container.Guides.Remove(guide);
+                        }
+                    }
+                    else
+                    {
+                        if (shape is PointShape point)
+                        {
+                            Delete(container, connectables, point);
+                        }
+
+                        if (paths.Count() > 0)
+                        {
+                            Delete(container, paths, shape);
+                        }
+
+                        if (groups.Count() > 0)
+                        {
+                            Delete(container, groups, shape);
                         }
                     }
                 }
@@ -207,6 +230,67 @@ namespace Draw2D.Editor.Tools
 
                 this.CurrentState = State.None;
             }
+        }
+
+        private static bool Delete(IShapesContainer container, IEnumerable<ConnectableShape> connectables, PointShape point)
+        {
+            foreach (var connectable in connectables)
+            {
+                if (connectable.Points.Contains(point))
+                {
+                    connectable.Points.Remove(point);
+                    connectable.MarkAsDirty(true);
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private bool Delete(IShapesContainer container, IEnumerable<PathShape> paths, ShapeObject shape)
+        {
+            foreach (var path in paths)
+            {
+                foreach (var figure in path.Figures)
+                {
+                    if (figure.Shapes.Contains(shape))
+                    {
+                        figure.Shapes.Remove(shape);
+                        figure.MarkAsDirty(true);
+
+                        if (figure.Shapes.Count <= 0)
+                        {
+                            path.Figures.Remove(figure);
+                            path.MarkAsDirty(true);
+
+                            if (path.Figures.Count <= 0)
+                            {
+                                container.Shapes.Remove(path);
+                            }
+                        }
+
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        private bool Delete(IShapesContainer container, IEnumerable<GroupShape> groups, ShapeObject shape)
+        {
+            foreach (var group in groups)
+            {
+                if (group.Shapes.Contains(shape))
+                {
+                    group.Shapes.Remove(shape);
+                    group.MarkAsDirty(true);
+
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         public void Group(IToolContext context)
