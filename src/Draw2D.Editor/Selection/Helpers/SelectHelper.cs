@@ -4,9 +4,9 @@ using System.Diagnostics;
 using Draw2D.Core;
 using Draw2D.Spatial;
 
-namespace Draw2D.Editor.Selection
+namespace Draw2D.Editor.Selection.Helpers
 {
-    public static class SelectionHelper
+    public static class SelectHelper
     {
         public static ShapeObject TryToHover(IToolContext context, SelectionMode mode, SelectionTargets targets, Point2 target, double radius)
         {

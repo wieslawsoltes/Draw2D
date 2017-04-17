@@ -5,6 +5,7 @@ using System.Linq;
 using Draw2D.Editor.Selection;
 using Draw2D.Core.Shapes;
 using Draw2D.Spatial;
+using Draw2D.Editor.Selection.Helpers;
 
 namespace Draw2D.Editor.Tools
 {
@@ -46,7 +47,7 @@ namespace Draw2D.Editor.Tools
 
             DeHover(context);
 
-            var selected = SelectionHelper.TryToSelect(
+            var selected = SelectHelper.TryToSelect(
                 context,
                 Settings?.Mode ?? SelectionMode.Shape,
                 Settings?.Targets ?? SelectionTargets.Shapes,
@@ -107,7 +108,7 @@ namespace Draw2D.Editor.Tools
 
             DeHover(context);
 
-            SelectionHelper.TryToSelect(
+            SelectHelper.TryToSelect(
                 context,
                 Settings?.Mode ?? SelectionMode.Shape,
                 Settings?.Targets ?? SelectionTargets.Shapes,
@@ -156,7 +157,7 @@ namespace Draw2D.Editor.Tools
                     DeHover(context);
 
                     var target = new Point2(x, y);
-                    var shape = SelectionHelper.TryToHover(
+                    var shape = SelectHelper.TryToHover(
                         context,
                         Settings?.Mode ?? SelectionMode.Shape,
                         Settings?.Targets ?? SelectionTargets.Shapes,
