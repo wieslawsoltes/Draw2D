@@ -15,7 +15,7 @@ namespace Draw2D.Editor.Tools
             Point
         }
 
-        public State CurrentState = State.StartPoint;
+        public State CurrentState { get; set; } = State.StartPoint;
 
         public override string Name => "Guide";
 

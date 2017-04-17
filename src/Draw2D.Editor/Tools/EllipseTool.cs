@@ -15,7 +15,7 @@ namespace Draw2D.Editor.Tools
             BottomRight
         }
 
-        public State CurrentState = State.TopLeft;
+        public State CurrentState { get; set; } = State.TopLeft;
 
         public override string Name => "Ellipse";
 

@@ -24,7 +24,7 @@ namespace Draw2D.Editor.Tools
             Move
         }
 
-        public State CurrentState = State.None;
+        public State CurrentState { get; set; } = State.None;
 
         public override string Name => "Selection";
 

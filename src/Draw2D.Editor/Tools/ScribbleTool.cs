@@ -22,7 +22,7 @@ namespace Draw2D.Editor.Tools
             Points
         }
 
-        public State CurrentState = State.Start;
+        public State CurrentState { get; set; } = State.Start;
 
         public override string Name => "Scribble";
 
