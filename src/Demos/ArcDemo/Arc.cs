@@ -6,7 +6,7 @@ namespace ArcDemo
 {
     public class Arc
     {
-        public Point StartPoint;
-        public Point Point;
+        public Point StartPoint { get; set; }
+        public Point Point { get; set; }
     }
 }

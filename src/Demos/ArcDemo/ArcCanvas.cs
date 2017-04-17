@@ -11,10 +11,16 @@ namespace ArcDemo
 {
     public class ArcCanvas : Canvas
     {
-        enum State { StartPoint, Point }
-        State _state;
-        Arc _arc;
-        List<Arc> Arcs;
+        public enum State 
+        { 
+            StartPoint, 
+            Point 
+        }
+
+        private State _state;
+        private Arc _arc;
+
+        public List<Arc> Arcs { get; set; }
 
         public ArcCanvas()
         {
