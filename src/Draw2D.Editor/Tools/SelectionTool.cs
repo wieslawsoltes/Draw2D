@@ -19,7 +19,13 @@ namespace Draw2D.Editor.Tools
         private double _previousX;
         private double _previousY;
 
-        public enum State { None, Selection, Move };
+        public enum State
+        {
+            None,
+            Selection,
+            Move
+        }
+
         public State CurrentState = State.None;
 
         public override string Name => "Selection";

@@ -16,7 +16,12 @@ namespace Draw2D.Editor.Tools
         private PointShape _previousPoint = null;
         private PointShape _nextPoint = null;
 
-        public enum State { Start, Points };
+        public enum State
+        {
+            Start,
+            Points
+        }
+
         public State CurrentState = State.Start;
 
         public override string Name => "Scribble";
