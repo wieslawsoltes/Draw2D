@@ -9,13 +9,20 @@ using Draw2D.Spatial;
 
 namespace Draw2D.Editor.Tools
 {
-    public partial class SelectionTool : IEdit
+    public class CopyHelper
     {
-        private IList<ShapeObject> _shapesToCopy = null;
-        private ShapeObject _hover = null;
-        private bool _disconnected = false;
+        public static IEnumerable<PointShape> GetPoints(IEnumerable<ShapeObject> shapes)
+        {
+            foreach (var shape in shapes)
+            {
+                foreach (var point in shape.GetPoints())
+                {
+                    yield return point;
+                }
+            }
+        }
 
-        private static void Copy(IList<ShapeObject> shapes, IShapeContainer container, ISet<ShapeObject> selected)
+        public static void Copy(IEnumerable<ShapeObject> shapes, IShapeContainer container, ISet<ShapeObject> selected)
         {
             var distinctPoints = GetPoints(shapes).Distinct();
             var distinctPointsCopy = new Dictionary<PointShape, PointShape>();
@@ -36,7 +43,7 @@ namespace Draw2D.Editor.Tools
             }
         }
 
-        private static ShapeObject Copy(ShapeObject shape, IDictionary<PointShape, PointShape> distinct)
+        public static ShapeObject Copy(ShapeObject shape, IDictionary<PointShape, PointShape> distinct)
         {
             switch (shape)
             {
@@ -62,12 +69,12 @@ namespace Draw2D.Editor.Tools
             return null;
         }
 
-        private static ShapeObject Copy(PointShape point, IDictionary<PointShape, PointShape> distinct)
+        public static ShapeObject Copy(PointShape point, IDictionary<PointShape, PointShape> distinct)
         {
             return point.Copy();
         }
 
-        private static ShapeObject Copy(LineShape line, IDictionary<PointShape, PointShape> distinct)
+        public static ShapeObject Copy(LineShape line, IDictionary<PointShape, PointShape> distinct)
         {
             var copy = line.Copy();
             copy.StartPoint = distinct[line.StartPoint];
@@ -79,7 +86,7 @@ namespace Draw2D.Editor.Tools
             return copy;
         }
 
-        private static ShapeObject Copy(CubicBezierShape cubic, IDictionary<PointShape, PointShape> distinct)
+        public static ShapeObject Copy(CubicBezierShape cubic, IDictionary<PointShape, PointShape> distinct)
         {
             var copy = cubic.Copy();
             copy.StartPoint = distinct[cubic.StartPoint];
@@ -93,7 +100,7 @@ namespace Draw2D.Editor.Tools
             return copy;
         }
 
-        private static ShapeObject Copy(QuadraticBezierShape quadratic, IDictionary<PointShape, PointShape> distinct)
+        public static ShapeObject Copy(QuadraticBezierShape quadratic, IDictionary<PointShape, PointShape> distinct)
         {
             var copy = quadratic.Copy();
             copy.StartPoint = distinct[quadratic.StartPoint];
@@ -106,7 +113,7 @@ namespace Draw2D.Editor.Tools
             return copy;
         }
 
-        private static ShapeObject Copy(FigureShape figure, IDictionary<PointShape, PointShape> distinct)
+        public static ShapeObject Copy(FigureShape figure, IDictionary<PointShape, PointShape> distinct)
         {
             var copy = figure.Copy();
             foreach (var figureShape in figure.Shapes)
@@ -116,7 +123,7 @@ namespace Draw2D.Editor.Tools
             return copy;
         }
 
-        private static ShapeObject Copy(PathShape path, IDictionary<PointShape, PointShape> distinct)
+        public static ShapeObject Copy(PathShape path, IDictionary<PointShape, PointShape> distinct)
         {
             var copy = path.Copy();
 
@@ -132,7 +139,7 @@ namespace Draw2D.Editor.Tools
             return copy;
         }
 
-        private static ShapeObject Copy(GroupShape group, IDictionary<PointShape, PointShape> distinct)
+        public static ShapeObject Copy(GroupShape group, IDictionary<PointShape, PointShape> distinct)
         {
             var copy = group.Copy();
             foreach (var point in group.Points)
@@ -146,7 +153,7 @@ namespace Draw2D.Editor.Tools
             return copy;
         }
 
-        private static ShapeObject Copy(RectangleShape rectangle, IDictionary<PointShape, PointShape> distinct)
+        public static ShapeObject Copy(RectangleShape rectangle, IDictionary<PointShape, PointShape> distinct)
         {
             var copy = rectangle.Copy();
             copy.TopLeft = distinct[rectangle.TopLeft];
@@ -158,7 +165,7 @@ namespace Draw2D.Editor.Tools
             return copy;
         }
 
-        private static ShapeObject Copy(EllipseShape ellipse, IDictionary<PointShape, PointShape> distinct)
+        public static ShapeObject Copy(EllipseShape ellipse, IDictionary<PointShape, PointShape> distinct)
         {
             var copy = ellipse.Copy();
             copy.TopLeft = distinct[ellipse.TopLeft];
@@ -169,6 +176,13 @@ namespace Draw2D.Editor.Tools
             }
             return copy;
         }
+    }
+
+    public partial class SelectionTool : IEdit
+    {
+        private IList<ShapeObject> _shapesToCopy = null;
+        private ShapeObject _hover = null;
+        private bool _disconnected = false;
 
         public void Cut(IToolContext context)
         {
@@ -193,22 +207,11 @@ namespace Draw2D.Editor.Tools
                     this.DeHover(context);
                     context.Renderer.Selected.Clear();
 
-                    Copy(_shapesToCopy, context.CurrentContainer, context.Renderer.Selected);
+                    CopyHelper.Copy(_shapesToCopy, context.CurrentContainer, context.Renderer.Selected);
 
                     context.Invalidate();
 
                     this.CurrentState = State.None;
-                }
-            }
-        }
-
-        private static IEnumerable<PointShape> GetPoints(IEnumerable<ShapeObject> shapes)
-        {
-            foreach (var shape in shapes)
-            {
-                foreach (var point in shape.GetPoints())
-                {
-                    yield return point;
                 }
             }
         }
