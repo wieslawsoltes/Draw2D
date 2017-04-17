@@ -7,7 +7,7 @@ namespace Draw2D.Editor.Tools
 {
     public class QuadraticBezierTool : ToolBase
     {
-        public QuadraticBezierShape _quadraticBezier = null;
+        private QuadraticBezierShape _quadraticBezier = null;
 
         public enum State
         {
