@@ -19,7 +19,7 @@ namespace Draw2D.Editor.Tools
         public enum State { Start, Points };
         public State CurrentState = State.Start;
 
-        public override string Name { get { return "Scribble"; } }
+        public override string Name => "Scribble";
 
         public ScribbleToolSettings Settings { get; set; }
 

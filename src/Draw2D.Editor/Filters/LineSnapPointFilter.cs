@@ -10,7 +10,8 @@ namespace Draw2D.Editor.Filters
 {
     public class LineSnapPointFilter : PointFilter
     {
-        public override string Name { get { return "Line-Snap"; } }
+        public override string Name => "Line-Snap";
+
         public LineSnapSettings Settings { get; set; }
 
         public override bool Process(IToolContext context, ref double x, ref double y)
