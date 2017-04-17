@@ -103,6 +103,23 @@
                         </ListBox.ItemTemplate>
                     </ListBox>
                 </TabItem>
+                <TabItem Header="Container">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="50"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Grid.Column="0" Grid.Row="0" Text="Width"/>
+                        <TextBox Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="0" Text="{Binding CurrentContainer.Width, UpdateSourceTrigger=PropertyChanged}"/>
+                        <TextBlock Grid.Column="0" Grid.Row="1" Text="Height"/>
+                        <TextBox Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="1" Text="{Binding CurrentContainer.Height, UpdateSourceTrigger=PropertyChanged}"/>
+                    </Grid>
+                </TabItem>
             </TabControl>
             <TabControl Grid.Row="1">
                 <TabItem Header="Settings">
