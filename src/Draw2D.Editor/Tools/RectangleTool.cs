@@ -9,7 +9,12 @@ namespace Draw2D.Editor.Tools
     {
         private RectangleShape _rectangle = null;
 
-        public enum State { TopLeft, BottomRight };
+        public enum State
+        {
+            TopLeft,
+            BottomRight
+        }
+
         public State CurrentState = State.TopLeft;
 
         public override string Name => "Rectangle";

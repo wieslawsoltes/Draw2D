@@ -9,7 +9,13 @@ namespace Draw2D.Editor.Tools
     {
         public QuadraticBezierShape _quadraticBezier = null;
 
-        public enum State { StartPoint, Point1, Point2 }
+        public enum State
+        {
+            StartPoint,
+            Point1,
+            Point2
+        }
+
         public State CurrentState = State.StartPoint;
 
         public override string Name => "QuadraticBezier";

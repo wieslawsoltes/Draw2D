@@ -9,7 +9,14 @@ namespace Draw2D.Editor.Tools
     {
         private CubicBezierShape _cubicBezier = null;
 
-        public enum State { StartPoint, Point1, Point2, Point3 }
+        public enum State
+        {
+            StartPoint,
+            Point1,
+            Point2,
+            Point3
+        }
+
         public State CurrentState = State.StartPoint;
 
         public override string Name => "CubicBezier";

@@ -11,7 +11,12 @@ namespace Draw2D.Editor.Tools
         private LineShape _line = null;
         private List<PointShape> _points = null;
 
-        public enum State { StartPoint, Point };
+        public enum State
+        {
+            StartPoint,
+            Point
+        }
+
         public State CurrentState = State.StartPoint;
 
         public override string Name => "PolyLine";
