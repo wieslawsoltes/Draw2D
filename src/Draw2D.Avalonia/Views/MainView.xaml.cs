@@ -1,13 +1,16 @@
 ﻿// Copyright (c) Wiesław Šoltés. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using Avalonia.Controls;
 using Avalonia.Input;
+using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 using Draw2D.Avalonia.Controls;
 using Draw2D.Core.Containers;
 using Draw2D.Editor.Tools;
+using Draw2D.Json;
 using Draw2D.ViewModels.Containers;
 
 namespace Draw2D.Avalonia.Views
@@ -19,8 +22,8 @@ namespace Draw2D.Avalonia.Views
 
         public MainView()
         {
-            this.InitializeComponent();
-            this.KeyDown += MainView_KeyDown;
+            InitializeComponent();
+            KeyDown += MainView_KeyDown;
         }
 
         private void InitializeComponent()
@@ -29,6 +32,17 @@ namespace Draw2D.Avalonia.Views
 
             inputView = this.FindControl<ShapeContainerInputView>("inputView");
             rendererView = this.FindControl<ShapeContainerRenderView>("rendererView");
+
+            this.FindControl<MenuItem>("FileNew").Click += FileNew_Click;
+            this.FindControl<MenuItem>("FileOpen").Click += FileOpen_Click;
+            this.FindControl<MenuItem>("FileSaveAs").Click += FileSaveAs_Click;
+            this.FindControl<MenuItem>("FileExit").Click += FileExit_Click;
+            this.FindControl<MenuItem>("EditCut").Click += EditCut_Click;
+            this.FindControl<MenuItem>("EditCopy").Click += EditCopy_Click;
+            this.FindControl<MenuItem>("EditPaste").Click += EditPaste_Click;
+            this.FindControl<MenuItem>("EditDelete").Click += EditDelete_Click;
+            this.FindControl<MenuItem>("EditGroup").Click += EditGroup_Click;
+            this.FindControl<MenuItem>("EditSelectAll").Click += EditSelectAll_Click;
         }
 
         public void SetNoneTool()
@@ -214,6 +228,56 @@ namespace Draw2D.Avalonia.Views
             }
         }
 
+        private void FileNew_Click(object sender, RoutedEventArgs e)
+        {
+            New();
+        }
+
+        private void FileOpen_Click(object sender, RoutedEventArgs e)
+        {
+            Open();
+        }
+
+        private void FileSaveAs_Click(object sender, RoutedEventArgs e)
+        {
+            SaveAs();
+        }
+
+        private void FileExit_Click(object sender, RoutedEventArgs e)
+        {
+            Window.OpenWindows.FirstOrDefault()?.Close();
+        }
+
+        private void EditCut_Click(object sender, RoutedEventArgs e)
+        {
+            Cut();
+        }
+
+        private void EditCopy_Click(object sender, RoutedEventArgs e)
+        {
+            Copy();
+        }
+
+        private void EditPaste_Click(object sender, RoutedEventArgs e)
+        {
+            Paste();
+        }
+
+        private void EditDelete_Click(object sender, RoutedEventArgs e)
+        {
+            Delete();
+        }
+
+        private void EditGroup_Click(object sender, RoutedEventArgs e)
+        {
+            Group();
+        }
+
+        private void EditSelectAll_Click(object sender, RoutedEventArgs e)
+        {
+            SelectAll();
+        }
+
         private void New()
         {
             if (this.DataContext is ShapeContainerViewModel vm)
@@ -223,14 +287,39 @@ namespace Draw2D.Avalonia.Views
             }
         }
 
-        private void Open()
+        private async void Open()
         {
-            // TODO:
+            var dlg = new OpenFileDialog();
+            dlg.Filters.Add(new FileDialogFilter() { Name = "Json Files", Extensions = { "json" } });
+            dlg.Filters.Add(new FileDialogFilter() { Name = "All Files", Extensions = { "*" } });
+            var result = await dlg.ShowAsync();
+            if (result != null)
+            {
+                var path = result.FirstOrDefault();
+                if (this.DataContext is ShapeContainerViewModel vm)
+                {
+                    Open(path, vm);
+                    rendererView.InvalidateVisual();
+                }
+            }
         }
 
-        private void SaveAs()
+        private async void SaveAs()
         {
-            // TODO:
+            var dlg = new SaveFileDialog();
+            dlg.Filters.Add(new FileDialogFilter() { Name = "Json Files", Extensions = { "json" } });
+            dlg.Filters.Add(new FileDialogFilter() { Name = "All Files", Extensions = { "*" } });
+            dlg.InitialFileName = "container";
+            dlg.DefaultExtension = "project";
+            var result = await dlg.ShowAsync();
+            if (result != null)
+            {
+                var path = result;
+                if (this.DataContext is ShapeContainerViewModel vm)
+                {
+                    Save(path, vm);
+                }
+            }
         }
 
         private void Cut()
@@ -315,12 +404,19 @@ namespace Draw2D.Avalonia.Views
 
         private void Open(string path, ShapeContainerViewModel vm)
         {
-            // TODO:
+            var json = File.ReadAllText(path);
+            var container = NewtonsoftJsonSerializer.FromJson<ShapeContainer>(json);
+            var workingContainer = new ShapeContainer();
+            vm.CurrentTool.Clean(vm);
+            vm.Renderer.Selected.Clear();
+            vm.CurrentContainer = container;
+            vm.WorkingContainer = workingContainer;
         }
 
         private void Save(string path, ShapeContainerViewModel vm)
         {
-            // TODO:
+            var json = NewtonsoftJsonSerializer.ToJson(vm.CurrentContainer);
+            File.WriteAllText(path, json);
         }
     }
 }
