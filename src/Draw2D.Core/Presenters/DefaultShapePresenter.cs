@@ -7,13 +7,13 @@ namespace Draw2D.Core.Presenters
 {
     public class DefaultShapePresenter : ShapePresenter
     {
-        public override void DrawContainer(object dc, IShapesContainer container, ShapeRenderer r, double dx, double dy)
+        public override void DrawContainer(object dc, IShapeContainer container, ShapeRenderer r, double dx, double dy)
         {
             container.Invalidate(r, dx, dy);
             container.Draw(dc, r, dx, dy);
         }
 
-        public override void DrawHelpers(object dc, IShapesContainer container, ShapeRenderer r, double dx, double dy)
+        public override void DrawHelpers(object dc, IShapeContainer container, ShapeRenderer r, double dx, double dy)
         {
             var shapes = container.Shapes;
             var selected = r.Selected;

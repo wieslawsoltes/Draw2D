@@ -24,7 +24,7 @@ namespace Draw2D.Wpf.Views
 
         public void SetNoneTool()
         {
-            if (this.DataContext is ShapesContainerViewModel vm)
+            if (this.DataContext is ShapeContainerViewModel vm)
             {
                 vm.CurrentTool = vm.Tools.Where(t => t.Name == "None").FirstOrDefault();
             }
@@ -32,7 +32,7 @@ namespace Draw2D.Wpf.Views
 
         public void SetSelectionTool()
         {
-            if (this.DataContext is ShapesContainerViewModel vm)
+            if (this.DataContext is ShapeContainerViewModel vm)
             {
                 vm.CurrentTool = vm.Tools.Where(t => t.Name == "Selection").FirstOrDefault();
             }
@@ -40,7 +40,7 @@ namespace Draw2D.Wpf.Views
 
         public void SetLineTool()
         {
-            if (this.DataContext is ShapesContainerViewModel vm)
+            if (this.DataContext is ShapeContainerViewModel vm)
             {
                 if (vm.CurrentTool is PathTool pathTool)
                 {
@@ -56,7 +56,7 @@ namespace Draw2D.Wpf.Views
 
         public void SetPointTool()
         {
-            if (this.DataContext is ShapesContainerViewModel vm)
+            if (this.DataContext is ShapeContainerViewModel vm)
             {
                 vm.CurrentTool = vm.Tools.Where(t => t.Name == "Point").FirstOrDefault();
             }
@@ -64,7 +64,7 @@ namespace Draw2D.Wpf.Views
 
         public void SetCubicBezierTool()
         {
-            if (this.DataContext is ShapesContainerViewModel vm)
+            if (this.DataContext is ShapeContainerViewModel vm)
             {
                 if (vm.CurrentTool is PathTool pathTool)
                 {
@@ -80,7 +80,7 @@ namespace Draw2D.Wpf.Views
 
         public void SetQuadraticBezierTool()
         {
-            if (this.DataContext is ShapesContainerViewModel vm)
+            if (this.DataContext is ShapeContainerViewModel vm)
             {
                 if (vm.CurrentTool is PathTool pathTool)
                 {
@@ -96,7 +96,7 @@ namespace Draw2D.Wpf.Views
 
         public void SetPathTool()
         {
-            if (this.DataContext is ShapesContainerViewModel vm)
+            if (this.DataContext is ShapeContainerViewModel vm)
             {
                 vm.CurrentTool = vm.Tools.Where(t => t.Name == "Path").FirstOrDefault();
             }
@@ -104,7 +104,7 @@ namespace Draw2D.Wpf.Views
 
         public void SetMoveTool()
         {
-            if (this.DataContext is ShapesContainerViewModel vm)
+            if (this.DataContext is ShapeContainerViewModel vm)
             {
                 if (vm.CurrentTool is PathTool pathTool)
                 {
@@ -116,7 +116,7 @@ namespace Draw2D.Wpf.Views
 
         public void SetRectangleTool()
         {
-            if (this.DataContext is ShapesContainerViewModel vm)
+            if (this.DataContext is ShapeContainerViewModel vm)
             {
                 vm.CurrentTool = vm.Tools.Where(t => t.Name == "Rectangle").FirstOrDefault();
             }
@@ -124,7 +124,7 @@ namespace Draw2D.Wpf.Views
 
         public void SetEllipseTool()
         {
-            if (this.DataContext is ShapesContainerViewModel vm)
+            if (this.DataContext is ShapeContainerViewModel vm)
             {
                 vm.CurrentTool = vm.Tools.Where(t => t.Name == "Ellipse").FirstOrDefault();
             }
@@ -257,7 +257,7 @@ namespace Draw2D.Wpf.Views
 
         private void New()
         {
-            if (this.DataContext is ShapesContainerViewModel vm)
+            if (this.DataContext is ShapeContainerViewModel vm)
             {
                 New(vm);
                 rendererView.InvalidateVisual();
@@ -276,7 +276,7 @@ namespace Draw2D.Wpf.Views
             if (result == true)
             {
                 var path = dlg.FileName;
-                if (this.DataContext is ShapesContainerViewModel vm)
+                if (this.DataContext is ShapeContainerViewModel vm)
                 {
                     Open(path, vm);
                     rendererView.InvalidateVisual();
@@ -297,7 +297,7 @@ namespace Draw2D.Wpf.Views
             if (result == true)
             {
                 var path = dlg.FileName;
-                if (this.DataContext is ShapesContainerViewModel vm)
+                if (this.DataContext is ShapeContainerViewModel vm)
                 {
                     Save(path, vm);
                 }
@@ -306,7 +306,7 @@ namespace Draw2D.Wpf.Views
 
         private void Cut()
         {
-            if (this.DataContext is ShapesContainerViewModel vm)
+            if (this.DataContext is ShapeContainerViewModel vm)
             {
                 if (vm.CurrentTool is SelectionTool selectionTool)
                 {
@@ -317,7 +317,7 @@ namespace Draw2D.Wpf.Views
 
         private void Copy()
         {
-            if (this.DataContext is ShapesContainerViewModel vm)
+            if (this.DataContext is ShapeContainerViewModel vm)
             {
                 if (vm.CurrentTool is SelectionTool selectionTool)
                 {
@@ -328,7 +328,7 @@ namespace Draw2D.Wpf.Views
 
         private void Paste()
         {
-            if (this.DataContext is ShapesContainerViewModel vm)
+            if (this.DataContext is ShapeContainerViewModel vm)
             {
                 if (vm.CurrentTool is SelectionTool selectionTool)
                 {
@@ -339,7 +339,7 @@ namespace Draw2D.Wpf.Views
 
         private void Delete()
         {
-            if (this.DataContext is ShapesContainerViewModel vm)
+            if (this.DataContext is ShapeContainerViewModel vm)
             {
                 if (vm.CurrentTool is SelectionTool selectionTool)
                 {
@@ -350,7 +350,7 @@ namespace Draw2D.Wpf.Views
 
         private void Group()
         {
-            if (this.DataContext is ShapesContainerViewModel vm)
+            if (this.DataContext is ShapeContainerViewModel vm)
             {
                 if (vm.CurrentTool is SelectionTool selectionTool)
                 {
@@ -361,7 +361,7 @@ namespace Draw2D.Wpf.Views
 
         private void SelectAll()
         {
-            if (this.DataContext is ShapesContainerViewModel vm)
+            if (this.DataContext is ShapeContainerViewModel vm)
             {
                 if (vm.CurrentTool is SelectionTool selectionTool)
                 {
@@ -370,32 +370,32 @@ namespace Draw2D.Wpf.Views
             }
         }
 
-        private void New(ShapesContainerViewModel vm)
+        private void New(ShapeContainerViewModel vm)
         {
             vm.CurrentTool.Clean(vm);
             vm.Renderer.Selected.Clear();
-            var container = new ShapesContainer()
+            var container = new ShapeContainer()
             {
                 Width = 720,
                 Height = 630
             };
-            var workingContainer = new ShapesContainer();
+            var workingContainer = new ShapeContainer();
             vm.CurrentContainer = container;
-            vm.WorkingContainer = new ShapesContainer();
+            vm.WorkingContainer = new ShapeContainer();
         }
 
-        private void Open(string path, ShapesContainerViewModel vm)
+        private void Open(string path, ShapeContainerViewModel vm)
         {
             var json = File.ReadAllText(path);
-            var container = NewtonsoftJsonSerializer.FromJson<ShapesContainer>(json);
-            var workingContainer = new ShapesContainer();
+            var container = NewtonsoftJsonSerializer.FromJson<ShapeContainer>(json);
+            var workingContainer = new ShapeContainer();
             vm.CurrentTool.Clean(vm);
             vm.Renderer.Selected.Clear();
             vm.CurrentContainer = container;
             vm.WorkingContainer = workingContainer;
         }
 
-        private void Save(string path, ShapesContainerViewModel vm)
+        private void Save(string path, ShapeContainerViewModel vm)
         {
             var json = NewtonsoftJsonSerializer.ToJson(vm.CurrentContainer);
             File.WriteAllText(path, json);

@@ -14,8 +14,8 @@ namespace Draw2D.Avalonia.Views
 {
     public class MainView : UserControl
     {
-        private ShapesContainerInputView inputView;
-        private ShapesContainerRenderView rendererView;
+        private ShapeContainerInputView inputView;
+        private ShapeContainerRenderView rendererView;
 
         public MainView()
         {
@@ -27,13 +27,13 @@ namespace Draw2D.Avalonia.Views
         {
             AvaloniaXamlLoader.Load(this);
 
-            inputView = this.FindControl<ShapesContainerInputView>("inputView");
-            rendererView = this.FindControl<ShapesContainerRenderView>("rendererView");
+            inputView = this.FindControl<ShapeContainerInputView>("inputView");
+            rendererView = this.FindControl<ShapeContainerRenderView>("rendererView");
         }
 
         public void SetNoneTool()
         {
-            if (this.DataContext is ShapesContainerViewModel vm)
+            if (this.DataContext is ShapeContainerViewModel vm)
             {
                 vm.CurrentTool = vm.Tools.Where(t => t.Name == "None").FirstOrDefault();
             }
@@ -41,7 +41,7 @@ namespace Draw2D.Avalonia.Views
 
         public void SetSelectionTool()
         {
-            if (this.DataContext is ShapesContainerViewModel vm)
+            if (this.DataContext is ShapeContainerViewModel vm)
             {
                 vm.CurrentTool = vm.Tools.Where(t => t.Name == "Selection").FirstOrDefault();
             }
@@ -49,7 +49,7 @@ namespace Draw2D.Avalonia.Views
 
         public void SetLineTool()
         {
-            if (this.DataContext is ShapesContainerViewModel vm)
+            if (this.DataContext is ShapeContainerViewModel vm)
             {
                 if (vm.CurrentTool is PathTool pathTool)
                 {
@@ -65,7 +65,7 @@ namespace Draw2D.Avalonia.Views
 
         public void SetPointTool()
         {
-            if (this.DataContext is ShapesContainerViewModel vm)
+            if (this.DataContext is ShapeContainerViewModel vm)
             {
                 vm.CurrentTool = vm.Tools.Where(t => t.Name == "Point").FirstOrDefault();
             }
@@ -73,7 +73,7 @@ namespace Draw2D.Avalonia.Views
 
         public void SetCubicBezierTool()
         {
-            if (this.DataContext is ShapesContainerViewModel vm)
+            if (this.DataContext is ShapeContainerViewModel vm)
             {
                 if (vm.CurrentTool is PathTool pathTool)
                 {
@@ -89,7 +89,7 @@ namespace Draw2D.Avalonia.Views
 
         public void SetQuadraticBezierTool()
         {
-            if (this.DataContext is ShapesContainerViewModel vm)
+            if (this.DataContext is ShapeContainerViewModel vm)
             {
                 if (vm.CurrentTool is PathTool pathTool)
                 {
@@ -105,7 +105,7 @@ namespace Draw2D.Avalonia.Views
 
         public void SetPathTool()
         {
-            if (this.DataContext is ShapesContainerViewModel vm)
+            if (this.DataContext is ShapeContainerViewModel vm)
             {
                 vm.CurrentTool = vm.Tools.Where(t => t.Name == "Path").FirstOrDefault();
             }
@@ -113,7 +113,7 @@ namespace Draw2D.Avalonia.Views
 
         public void SetMoveTool()
         {
-            if (this.DataContext is ShapesContainerViewModel vm)
+            if (this.DataContext is ShapeContainerViewModel vm)
             {
                 if (vm.CurrentTool is PathTool pathTool)
                 {
@@ -125,7 +125,7 @@ namespace Draw2D.Avalonia.Views
 
         public void SetRectangleTool()
         {
-            if (this.DataContext is ShapesContainerViewModel vm)
+            if (this.DataContext is ShapeContainerViewModel vm)
             {
                 vm.CurrentTool = vm.Tools.Where(t => t.Name == "Rectangle").FirstOrDefault();
             }
@@ -133,7 +133,7 @@ namespace Draw2D.Avalonia.Views
 
         public void SetEllipseTool()
         {
-            if (this.DataContext is ShapesContainerViewModel vm)
+            if (this.DataContext is ShapeContainerViewModel vm)
             {
                 vm.CurrentTool = vm.Tools.Where(t => t.Name == "Ellipse").FirstOrDefault();
             }
@@ -216,7 +216,7 @@ namespace Draw2D.Avalonia.Views
 
         private void New()
         {
-            if (this.DataContext is ShapesContainerViewModel vm)
+            if (this.DataContext is ShapeContainerViewModel vm)
             {
                 New(vm);
                 rendererView.InvalidateVisual();
@@ -235,7 +235,7 @@ namespace Draw2D.Avalonia.Views
 
         private void Cut()
         {
-            if (this.DataContext is ShapesContainerViewModel vm)
+            if (this.DataContext is ShapeContainerViewModel vm)
             {
                 if (vm.CurrentTool is SelectionTool selectionTool)
                 {
@@ -246,7 +246,7 @@ namespace Draw2D.Avalonia.Views
 
         private void Copy()
         {
-            if (this.DataContext is ShapesContainerViewModel vm)
+            if (this.DataContext is ShapeContainerViewModel vm)
             {
                 if (vm.CurrentTool is SelectionTool selectionTool)
                 {
@@ -257,7 +257,7 @@ namespace Draw2D.Avalonia.Views
 
         private void Paste()
         {
-            if (this.DataContext is ShapesContainerViewModel vm)
+            if (this.DataContext is ShapeContainerViewModel vm)
             {
                 if (vm.CurrentTool is SelectionTool selectionTool)
                 {
@@ -268,7 +268,7 @@ namespace Draw2D.Avalonia.Views
 
         private void Delete()
         {
-            if (this.DataContext is ShapesContainerViewModel vm)
+            if (this.DataContext is ShapeContainerViewModel vm)
             {
                 if (vm.CurrentTool is SelectionTool selectionTool)
                 {
@@ -279,7 +279,7 @@ namespace Draw2D.Avalonia.Views
 
         private void Group()
         {
-            if (this.DataContext is ShapesContainerViewModel vm)
+            if (this.DataContext is ShapeContainerViewModel vm)
             {
                 if (vm.CurrentTool is SelectionTool selectionTool)
                 {
@@ -290,7 +290,7 @@ namespace Draw2D.Avalonia.Views
 
         private void SelectAll()
         {
-            if (this.DataContext is ShapesContainerViewModel vm)
+            if (this.DataContext is ShapeContainerViewModel vm)
             {
                 if (vm.CurrentTool is SelectionTool selectionTool)
                 {
@@ -299,26 +299,26 @@ namespace Draw2D.Avalonia.Views
             }
         }
 
-        private void New(ShapesContainerViewModel vm)
+        private void New(ShapeContainerViewModel vm)
         {
             vm.CurrentTool.Clean(vm);
             vm.Renderer.Selected.Clear();
-            var container = new ShapesContainer()
+            var container = new ShapeContainer()
             {
                 Width = 720,
                 Height = 630
             };
-            var workingContainer = new ShapesContainer();
+            var workingContainer = new ShapeContainer();
             vm.CurrentContainer = container;
-            vm.WorkingContainer = new ShapesContainer();
+            vm.WorkingContainer = new ShapeContainer();
         }
 
-        private void Open(string path, ShapesContainerViewModel vm)
+        private void Open(string path, ShapeContainerViewModel vm)
         {
             // TODO:
         }
 
-        private void Save(string path, ShapesContainerViewModel vm)
+        private void Save(string path, ShapeContainerViewModel vm)
         {
             // TODO:
         }

@@ -45,7 +45,7 @@ namespace Draw2D.Avalonia
         {
             var window = new MainWindow();
             var mainView = window.FindControl<MainView>("mainView");
-            var rendererView = mainView.FindControl<ShapesContainerRenderView>("rendererView");
+            var rendererView = mainView.FindControl<ShapeContainerRenderView>("rendererView");
 
             var bootstrapper = new Bootstrapper();
             var vm = bootstrapper.CreateDemoViewModel();

@@ -60,13 +60,13 @@ namespace Draw2D.Editor.Tools
             set => throw new InvalidOperationException($"Can not set {HitTest} property value.");
         }
 
-        public IShapesContainer CurrentContainer
+        public IShapeContainer CurrentContainer
         {
             get => _figure;
             set => throw new InvalidOperationException($"Can not set {CurrentContainer} property value.");
         }
 
-        public IShapesContainer WorkingContainer
+        public IShapeContainer WorkingContainer
         {
             get => _figure;
             set => throw new InvalidOperationException($"Can not set {WorkingContainer} property value.");

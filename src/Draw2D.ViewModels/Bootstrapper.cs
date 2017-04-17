@@ -23,7 +23,7 @@ namespace Draw2D.ViewModels
 {
     public class Bootstrapper
     {
-        public ShapesContainerViewModel CreateDemoViewModel()
+        public ShapeContainerViewModel CreateDemoViewModel()
         {
             var hitTest = new HitTest();
 
@@ -336,7 +336,7 @@ namespace Draw2D.ViewModels
                 }
             };
 
-            return new ShapesContainerViewModel()
+            return new ShapeContainerViewModel()
             {
                 Tools = tools,
                 CurrentTool = currentTool,
@@ -354,15 +354,15 @@ namespace Draw2D.ViewModels
             };
         }
 
-        public void CreateDemoContainer(ShapesContainerViewModel vm)
+        public void CreateDemoContainer(ShapeContainerViewModel vm)
         {
-            var container = new ShapesContainer()
+            var container = new ShapeContainer()
             {
                 Width = 720,
                 Height = 630
             };
 
-            var workingContainer = new ShapesContainer();
+            var workingContainer = new ShapeContainer();
 
             var style = new DrawStyle(new DrawColor(255, 0, 255, 0), new DrawColor(80, 0, 255, 0), 2.0, true, true);
 

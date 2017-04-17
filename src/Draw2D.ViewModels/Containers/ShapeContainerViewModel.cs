@@ -15,7 +15,7 @@ using Draw2D.Spatial;
 
 namespace Draw2D.ViewModels.Containers
 {
-    public class ShapesContainerViewModel : NamedObject, IToolContext
+    public class ShapeContainerViewModel : NamedObject, IToolContext
     {
         private ObservableCollection<ToolBase> _tools;
         private ToolBase _currentTool;
@@ -23,8 +23,8 @@ namespace Draw2D.ViewModels.Containers
         private ShapeRenderer _renderer;
         private ISet<ShapeObject> _selected;
         private IHitTest _hitTest;
-        private IShapesContainer _currentContainer;
-        private IShapesContainer _workingContainer;
+        private IShapeContainer _currentContainer;
+        private IShapeContainer _workingContainer;
         private DrawStyle _currentStyle;
         private ShapeObject _pointShape;
 
@@ -68,13 +68,13 @@ namespace Draw2D.ViewModels.Containers
             set => Update(ref _hitTest, value);
         }
 
-        public IShapesContainer CurrentContainer
+        public IShapeContainer CurrentContainer
         {
             get => _currentContainer;
             set => Update(ref _currentContainer, value);
         }
 
-        public IShapesContainer WorkingContainer
+        public IShapeContainer WorkingContainer
         {
             get => _workingContainer;
             set => Update(ref _workingContainer, value);

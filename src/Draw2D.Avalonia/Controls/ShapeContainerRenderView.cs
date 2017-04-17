@@ -7,7 +7,7 @@ using Draw2D.ViewModels.Containers;
 
 namespace Draw2D.Avalonia.Controls
 {
-    public class ShapesContainerRenderView : Canvas
+    public class ShapeContainerRenderView : Canvas
     {
         private bool _drawWorking = false;
 
@@ -29,7 +29,7 @@ namespace Draw2D.Avalonia.Controls
         {
             base.Render(context);
 
-            if (this.DataContext is ShapesContainerViewModel vm)
+            if (this.DataContext is ShapeContainerViewModel vm)
             {
                 vm.Presenter.DrawContainer(context, vm.CurrentContainer, vm.Renderer, 0.0, 0.0);
 

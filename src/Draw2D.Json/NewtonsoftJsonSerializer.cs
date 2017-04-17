@@ -101,7 +101,7 @@ namespace Draw2D.Json
             binder.Add<RectangleShape>("Rect");
             binder.Add<EllipseShape>("Ellipse");
             binder.Add<GroupShape>("Group");
-            binder.Add<ShapesContainer>("Container");
+            binder.Add<ShapeContainer>("Container");
 
             Settings = new JsonSerializerSettings()
             {

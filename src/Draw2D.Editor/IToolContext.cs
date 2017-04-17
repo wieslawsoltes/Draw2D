@@ -16,8 +16,8 @@ namespace Draw2D.Editor
         ShapeRenderer Renderer { get; set; }
         ISet<ShapeObject> Selected { get; set; }
         IHitTest HitTest { get; set; }
-        IShapesContainer CurrentContainer { get; set; }
-        IShapesContainer WorkingContainer { get; set; }
+        IShapeContainer CurrentContainer { get; set; }
+        IShapeContainer WorkingContainer { get; set; }
         DrawStyle CurrentStyle { get; set; }
         ShapeObject PointShape { get; set; }
         Action Capture { get; set; }

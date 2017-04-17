@@ -10,7 +10,7 @@ namespace Draw2D.Core.Presenters
     public abstract class ShapePresenter
     {
         public IDictionary<Type, ShapeHelper> Helpers { get; set; }
-        public abstract void DrawContainer(object dc, IShapesContainer container, ShapeRenderer r, double dx, double dy);
-        public abstract void DrawHelpers(object dc, IShapesContainer container, ShapeRenderer r, double dx, double dy);
+        public abstract void DrawContainer(object dc, IShapeContainer container, ShapeRenderer r, double dx, double dy);
+        public abstract void DrawHelpers(object dc, IShapeContainer container, ShapeRenderer r, double dx, double dy);
     }
 }

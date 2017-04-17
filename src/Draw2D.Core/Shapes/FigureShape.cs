@@ -8,7 +8,7 @@ using Draw2D.Core.Renderers;
 
 namespace Draw2D.Core.Shapes
 {
-    public class FigureShape : ShapeObject, IShapesContainer, ICopyable<FigureShape>
+    public class FigureShape : ShapeObject, IShapeContainer, ICopyable<FigureShape>
     {
         private double _width;
         private double _height;

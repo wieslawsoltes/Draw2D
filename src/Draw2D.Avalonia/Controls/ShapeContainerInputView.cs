@@ -7,9 +7,9 @@ using Draw2D.ViewModels.Containers;
 
 namespace Draw2D.Avalonia.Controls
 {
-    public class ShapesContainerInputView : Border
+    public class ShapeContainerInputView : Border
     {
-        public ShapesContainerInputView()
+        public ShapeContainerInputView()
         {
             PointerPressed += (sender, e) => HandlePointerPressed(e);
             PointerReleased += (sender, e) => HandlePointerReleased(e);
@@ -42,7 +42,7 @@ namespace Draw2D.Avalonia.Controls
         {
             if (e.MouseButton == MouseButton.Left)
             {
-                if (this.DataContext is ShapesContainerViewModel vm)
+                if (this.DataContext is ShapeContainerViewModel vm)
                 {
                     var point = e.GetPosition(Child);
                     vm.CurrentTool.LeftDown(vm, point.X, point.Y, GetModifier(e.InputModifiers));
@@ -51,7 +51,7 @@ namespace Draw2D.Avalonia.Controls
             }
             else if (e.MouseButton == MouseButton.Right)
             {
-                if (this.DataContext is ShapesContainerViewModel vm)
+                if (this.DataContext is ShapeContainerViewModel vm)
                 {
                     var point = e.GetPosition(Child);
                     vm.CurrentTool.RightDown(vm, point.X, point.Y, GetModifier(e.InputModifiers));
@@ -64,7 +64,7 @@ namespace Draw2D.Avalonia.Controls
         {
             if (e.MouseButton == MouseButton.Left)
             {
-                if (this.DataContext is ShapesContainerViewModel vm)
+                if (this.DataContext is ShapeContainerViewModel vm)
                 {
                     var point = e.GetPosition(Child);
                     vm.CurrentTool.LeftUp(vm, point.X, point.Y, GetModifier(e.InputModifiers));
@@ -73,7 +73,7 @@ namespace Draw2D.Avalonia.Controls
             }
             else if (e.MouseButton == MouseButton.Right)
             {
-                if (this.DataContext is ShapesContainerViewModel vm)
+                if (this.DataContext is ShapeContainerViewModel vm)
                 {
                     var point = e.GetPosition(Child);
                     vm.CurrentTool.RightUp(vm, point.X, point.Y, GetModifier(e.InputModifiers));
@@ -84,7 +84,7 @@ namespace Draw2D.Avalonia.Controls
 
         private void HandlePointerMoved(PointerEventArgs e)
         {
-            if (this.DataContext is ShapesContainerViewModel vm)
+            if (this.DataContext is ShapeContainerViewModel vm)
             {
                 var point = e.GetPosition(Child);
                 vm.CurrentTool.Move(vm, point.X, point.Y, GetModifier(e.InputModifiers));

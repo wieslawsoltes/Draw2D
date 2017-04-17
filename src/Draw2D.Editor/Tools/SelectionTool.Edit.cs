@@ -15,123 +15,159 @@ namespace Draw2D.Editor.Tools
         private ShapeObject _hover = null;
         private bool _disconnected = false;
 
-        private IEnumerable<PointShape> GetPoints(IEnumerable<ShapeObject> shapes)
+        private static void Copy(IList<ShapeObject> shapes, IShapeContainer container, ISet<ShapeObject> selected)
         {
+            var distinctPoints = GetPoints(shapes).Distinct();
+            var distinctPointsCopy = new Dictionary<PointShape, PointShape>();
+
+            foreach (var point in distinctPoints)
+            {
+                distinctPointsCopy[point] = point.Copy();
+            }
+
             foreach (var shape in shapes)
             {
-                foreach (var point in shape.GetPoints())
+                var copy = Copy(shape, distinctPointsCopy);
+                if (copy != null && !(copy is PointShape))
                 {
-                    yield return point;
+                    copy.Select(selected);
+                    container.Shapes.Add(copy);
                 }
             }
         }
 
-        private ShapeObject CopyShape(ShapeObject shape, IDictionary<PointShape, PointShape> distinctPointsCopy)
+        private static ShapeObject Copy(ShapeObject shape, IDictionary<PointShape, PointShape> distinct)
         {
             switch (shape)
             {
                 case PointShape point:
-                    {
-                        return point.Copy();
-                    }
+                    return Copy(point, distinct);
                 case LineShape line:
-                    {
-                        var copy = line.Copy();
-                        copy.StartPoint = distinctPointsCopy[line.StartPoint];
-                        copy.Point = distinctPointsCopy[line.Point];
-                        foreach (var point in line.Points)
-                        {
-                            copy.Points.Add(distinctPointsCopy[point]);
-                        }
-                        return copy;
-                    }
+                    return Copy(line, distinct);
                 case CubicBezierShape cubic:
-                    {
-                        var copy = cubic.Copy();
-                        copy.StartPoint = distinctPointsCopy[cubic.StartPoint];
-                        copy.Point1 = distinctPointsCopy[cubic.Point1];
-                        copy.Point2 = distinctPointsCopy[cubic.Point2];
-                        copy.Point3 = distinctPointsCopy[cubic.Point3];
-                        foreach (var point in cubic.Points)
-                        {
-                            copy.Points.Add(distinctPointsCopy[point]);
-                        }
-                        return copy;
-                    }
+                    return Copy(cubic, distinct);
                 case QuadraticBezierShape quadratic:
-                    {
-                        var copy = quadratic.Copy();
-                        copy.StartPoint = distinctPointsCopy[quadratic.StartPoint];
-                        copy.Point1 = distinctPointsCopy[quadratic.Point1];
-                        copy.Point2 = distinctPointsCopy[quadratic.Point2];
-                        foreach (var point in quadratic.Points)
-                        {
-                            copy.Points.Add(distinctPointsCopy[point]);
-                        }
-                        return copy;
-                    }
+                    return Copy(quadratic, distinct);
                 case FigureShape figure:
-                    {
-                        var copy = figure.Copy();
-                        foreach (var figureShape in figure.Shapes)
-                        {
-                            copy.Shapes.Add(CopyShape(figureShape, distinctPointsCopy));
-                        }
-                        return copy;
-                    }
+                    return Copy(figure, distinct);
                 case PathShape path:
-                    {
-                        var copy = path.Copy();
-
-                        foreach (var figure in path.Figures)
-                        {
-                            var figureCopy = figure.Copy();
-                            foreach (var figureShape in figure.Shapes)
-                            {
-                                figureCopy.Shapes.Add(CopyShape(figureShape, distinctPointsCopy));
-                            }
-                            copy.Figures.Add(figureCopy);
-                        }
-                        return copy;
-                    }
+                    return Copy(path, distinct);
                 case GroupShape group:
-                    {
-                        var copy = group.Copy();
-                        foreach (var point in group.Points)
-                        {
-                            copy.Points.Add(distinctPointsCopy[point]);
-                        }
-                        foreach (var groupShape in group.Shapes)
-                        {
-                            copy.Shapes.Add(CopyShape(groupShape, distinctPointsCopy));
-                        }
-                        return copy;
-                    }
+                    return Copy(group, distinct);
                 case RectangleShape rectangle:
-                    {
-                        var copy = rectangle.Copy();
-                        copy.TopLeft = distinctPointsCopy[rectangle.TopLeft];
-                        copy.BottomRight = distinctPointsCopy[rectangle.BottomRight];
-                        foreach (var point in rectangle.Points)
-                        {
-                            copy.Points.Add(distinctPointsCopy[point]);
-                        }
-                        return copy;
-                    }
+                    return Copy(rectangle, distinct);
                 case EllipseShape ellipse:
-                    {
-                        var copy = ellipse.Copy();
-                        copy.TopLeft = distinctPointsCopy[ellipse.TopLeft];
-                        copy.BottomRight = distinctPointsCopy[ellipse.BottomRight];
-                        foreach (var point in ellipse.Points)
-                        {
-                            copy.Points.Add(distinctPointsCopy[point]);
-                        }
-                        return copy;
-                    }
+                    return Copy(ellipse, distinct);
             }
-
             return null;
+        }
+
+        private static ShapeObject Copy(PointShape point, IDictionary<PointShape, PointShape> distinct)
+        {
+            return point.Copy();
+        }
+
+        private static ShapeObject Copy(LineShape line, IDictionary<PointShape, PointShape> distinct)
+        {
+            var copy = line.Copy();
+            copy.StartPoint = distinct[line.StartPoint];
+            copy.Point = distinct[line.Point];
+            foreach (var point in line.Points)
+            {
+                copy.Points.Add(distinct[point]);
+            }
+            return copy;
+        }
+
+        private static ShapeObject Copy(CubicBezierShape cubic, IDictionary<PointShape, PointShape> distinct)
+        {
+            var copy = cubic.Copy();
+            copy.StartPoint = distinct[cubic.StartPoint];
+            copy.Point1 = distinct[cubic.Point1];
+            copy.Point2 = distinct[cubic.Point2];
+            copy.Point3 = distinct[cubic.Point3];
+            foreach (var point in cubic.Points)
+            {
+                copy.Points.Add(distinct[point]);
+            }
+            return copy;
+        }
+
+        private static ShapeObject Copy(QuadraticBezierShape quadratic, IDictionary<PointShape, PointShape> distinct)
+        {
+            var copy = quadratic.Copy();
+            copy.StartPoint = distinct[quadratic.StartPoint];
+            copy.Point1 = distinct[quadratic.Point1];
+            copy.Point2 = distinct[quadratic.Point2];
+            foreach (var point in quadratic.Points)
+            {
+                copy.Points.Add(distinct[point]);
+            }
+            return copy;
+        }
+
+        private static ShapeObject Copy(FigureShape figure, IDictionary<PointShape, PointShape> distinct)
+        {
+            var copy = figure.Copy();
+            foreach (var figureShape in figure.Shapes)
+            {
+                copy.Shapes.Add(Copy(figureShape, distinct));
+            }
+            return copy;
+        }
+
+        private static ShapeObject Copy(PathShape path, IDictionary<PointShape, PointShape> distinct)
+        {
+            var copy = path.Copy();
+
+            foreach (var figure in path.Figures)
+            {
+                var figureCopy = figure.Copy();
+                foreach (var figureShape in figure.Shapes)
+                {
+                    figureCopy.Shapes.Add(Copy(figureShape, distinct));
+                }
+                copy.Figures.Add(figureCopy);
+            }
+            return copy;
+        }
+
+        private static ShapeObject Copy(GroupShape group, IDictionary<PointShape, PointShape> distinct)
+        {
+            var copy = group.Copy();
+            foreach (var point in group.Points)
+            {
+                copy.Points.Add(distinct[point]);
+            }
+            foreach (var groupShape in group.Shapes)
+            {
+                copy.Shapes.Add(Copy(groupShape, distinct));
+            }
+            return copy;
+        }
+
+        private static ShapeObject Copy(RectangleShape rectangle, IDictionary<PointShape, PointShape> distinct)
+        {
+            var copy = rectangle.Copy();
+            copy.TopLeft = distinct[rectangle.TopLeft];
+            copy.BottomRight = distinct[rectangle.BottomRight];
+            foreach (var point in rectangle.Points)
+            {
+                copy.Points.Add(distinct[point]);
+            }
+            return copy;
+        }
+
+        private static ShapeObject Copy(EllipseShape ellipse, IDictionary<PointShape, PointShape> distinct)
+        {
+            var copy = ellipse.Copy();
+            copy.TopLeft = distinct[ellipse.TopLeft];
+            copy.BottomRight = distinct[ellipse.BottomRight];
+            foreach (var point in ellipse.Points)
+            {
+                copy.Points.Add(distinct[point]);
+            }
+            return copy;
         }
 
         public void Cut(IToolContext context)
@@ -157,27 +193,22 @@ namespace Draw2D.Editor.Tools
                     this.DeHover(context);
                     context.Renderer.Selected.Clear();
 
-                    var distinctPoints = GetPoints(_shapesToCopy).Distinct();
-                    var distinctPointsCopy = new Dictionary<PointShape, PointShape>();
-
-                    foreach (var point in distinctPoints)
-                    {
-                        distinctPointsCopy[point] = point.Copy();
-                    }
-
-                    foreach (var shape in _shapesToCopy)
-                    {
-                        var copy = CopyShape(shape, distinctPointsCopy);
-                        if (copy != null && !(copy is PointShape))
-                        {
-                            copy.Select(context.Renderer.Selected);
-                            context.CurrentContainer.Shapes.Add(copy);
-                        }
-                    }
+                    Copy(_shapesToCopy, context.CurrentContainer, context.Renderer.Selected);
 
                     context.Invalidate();
 
                     this.CurrentState = State.None;
+                }
+            }
+        }
+
+        private static IEnumerable<PointShape> GetPoints(IEnumerable<ShapeObject> shapes)
+        {
+            foreach (var shape in shapes)
+            {
+                foreach (var point in shape.GetPoints())
+                {
+                    yield return point;
                 }
             }
         }
@@ -232,7 +263,7 @@ namespace Draw2D.Editor.Tools
             }
         }
 
-        private static bool Delete(IShapesContainer container, IEnumerable<ConnectableShape> connectables, PointShape point)
+        private static bool Delete(IShapeContainer container, IEnumerable<ConnectableShape> connectables, PointShape point)
         {
             foreach (var connectable in connectables)
             {
@@ -248,7 +279,7 @@ namespace Draw2D.Editor.Tools
             return false;
         }
 
-        private bool Delete(IShapesContainer container, IEnumerable<PathShape> paths, ShapeObject shape)
+        private bool Delete(IShapeContainer container, IEnumerable<PathShape> paths, ShapeObject shape)
         {
             foreach (var path in paths)
             {
@@ -278,7 +309,7 @@ namespace Draw2D.Editor.Tools
             return false;
         }
 
-        private bool Delete(IShapesContainer container, IEnumerable<GroupShape> groups, ShapeObject shape)
+        private bool Delete(IShapeContainer container, IEnumerable<GroupShape> groups, ShapeObject shape)
         {
             foreach (var group in groups)
             {

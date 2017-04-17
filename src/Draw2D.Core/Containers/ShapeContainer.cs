@@ -8,7 +8,7 @@ using Draw2D.Core.Style;
 
 namespace Draw2D.Core.Containers
 {
-    public class ShapesContainer : NamedObject, IShapesContainer, ICopyable<ShapesContainer>
+    public class ShapeContainer : NamedObject, IShapeContainer, ICopyable<ShapeContainer>
     {
         private double _width;
         private double _height;
@@ -46,7 +46,7 @@ namespace Draw2D.Core.Containers
             set => Update(ref _shapes, value);
         }
 
-        public ShapesContainer()
+        public ShapeContainer()
         {
             _styles = new ObservableCollection<DrawStyle>();
             _guides = new ObservableCollection<LineShape>();
@@ -107,9 +107,9 @@ namespace Draw2D.Core.Containers
             }
         }
 
-        public ShapesContainer Copy()
+        public ShapeContainer Copy()
         {
-            return new ShapesContainer()
+            return new ShapeContainer()
             {
                 Name = this.Name
             };

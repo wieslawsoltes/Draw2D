@@ -7,7 +7,7 @@ using Draw2D.Core.Shapes;
 
 namespace Draw2D.Core.Containers
 {
-    public interface IShapesContainer
+    public interface IShapeContainer
     {
         double Width { get; set; }
         double Height { get; set; }
