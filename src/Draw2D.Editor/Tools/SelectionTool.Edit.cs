@@ -240,6 +240,7 @@ namespace Draw2D.Editor.Tools
                 {
                     connectable.Points.Remove(point);
                     connectable.MarkAsDirty(true);
+
                     return true;
                 }
             }
