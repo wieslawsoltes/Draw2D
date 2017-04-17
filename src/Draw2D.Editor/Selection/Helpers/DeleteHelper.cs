@@ -33,23 +33,23 @@ namespace Draw2D.Editor.Selection.Helpers
                 {
                     if (shape is PointShape point)
                     {
-                        Delete(container, connectables, point);
+                        TryToDelete(container, connectables, point);
                     }
 
                     if (paths.Count() > 0)
                     {
-                        Delete(container, paths, shape);
+                        TryToDelete(container, paths, shape);
                     }
 
                     if (groups.Count() > 0)
                     {
-                        Delete(container, groups, shape);
+                        TryToDelete(container, groups, shape);
                     }
                 }
             }
         }
 
-        public static bool Delete(IShapeContainer container, IEnumerable<ConnectableShape> connectables, PointShape point)
+        public static bool TryToDelete(IShapeContainer container, IEnumerable<ConnectableShape> connectables, PointShape point)
         {
             foreach (var connectable in connectables)
             {
@@ -65,7 +65,7 @@ namespace Draw2D.Editor.Selection.Helpers
             return false;
         }
 
-        public static bool Delete(IShapeContainer container, IEnumerable<PathShape> paths, ShapeObject shape)
+        public static bool TryToDelete(IShapeContainer container, IEnumerable<PathShape> paths, ShapeObject shape)
         {
             foreach (var path in paths)
             {
@@ -95,7 +95,7 @@ namespace Draw2D.Editor.Selection.Helpers
             return false;
         }
 
-        public static bool Delete(IShapeContainer container, IEnumerable<GroupShape> groups, ShapeObject shape)
+        public static bool TryToDelete(IShapeContainer container, IEnumerable<GroupShape> groups, ShapeObject shape)
         {
             foreach (var group in groups)
             {
