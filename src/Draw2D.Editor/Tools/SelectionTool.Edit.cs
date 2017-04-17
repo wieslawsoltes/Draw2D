@@ -287,6 +287,11 @@ namespace Draw2D.Editor.Tools
                     group.Shapes.Remove(shape);
                     group.MarkAsDirty(true);
 
+                    if (group.Shapes.Count <= 0)
+                    {
+                        container.Shapes.Remove(group);
+                    }
+
                     return true;
                 }
             }
