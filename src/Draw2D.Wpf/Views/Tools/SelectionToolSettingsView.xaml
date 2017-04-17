@@ -27,28 +27,36 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
+        <TextBlock Grid.Column="0" Grid.Row="0" Text="Mode"/>
         <!-- TODO: Mode -->
+        <TextBlock Grid.Column="0" Grid.Row="1" Text="Targets"/>
         <!-- TODO: Targets -->
-        <Expander Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="2" Header="SelectionStyle" IsExpanded="False">
+        <TextBlock Grid.Column="0" Grid.Row="2" Text="SelectionModifier"/>
+        <!-- TODO: SelectionModifier -->
+        <TextBlock Grid.Column="0" Grid.Row="3" Text="ConnectionModifier"/>
+        <!-- TODO: ConnectionModifier -->
+        <Expander Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="4" Header="SelectionStyle" IsExpanded="False">
             <ViewsStyle:DrawStyleView DataContext="{Binding SelectionStyle}"/>
         </Expander>
-        <TextBlock Grid.Column="0" Grid.Row="3" Text="ClearSelectionOnClean"/>
-        <CheckBox Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="3" IsChecked="{Binding ClearSelectionOnClean, UpdateSourceTrigger=PropertyChanged}"/>
-        <TextBlock Grid.Column="0" Grid.Row="4" Text="HitTestRadius"/>
-        <Slider Grid.Column="1" Grid.Row="4" Value="{Binding HitTestRadius}" Minimum="0" Maximum="32" SmallChange="0.1" LargeChange="1" IsSnapToTickEnabled="True" TickFrequency="0.1"/>
-        <TextBox Grid.Column="2" Grid.Row="4" Text="{Binding HitTestRadius, UpdateSourceTrigger=PropertyChanged}"/>
-        <TextBlock Grid.Column="0" Grid.Row="5" Text="ConnectPoints"/>
-        <CheckBox Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="5" IsChecked="{Binding ConnectPoints, UpdateSourceTrigger=PropertyChanged}"/>
-        <TextBlock Grid.Column="0" Grid.Row="6" Text="ConnectTestRadius"/>
-        <Slider Grid.Column="1" Grid.Row="6" Value="{Binding ConnectTestRadius}" Minimum="0" Maximum="32" SmallChange="0.1" LargeChange="1" IsSnapToTickEnabled="True" TickFrequency="0.1"/>
-        <TextBox Grid.Column="2" Grid.Row="6" Text="{Binding ConnectTestRadius, UpdateSourceTrigger=PropertyChanged}"/>
-        <TextBlock Grid.Column="0" Grid.Row="7" Text="DisconnectPoints"/>
-        <CheckBox Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="7" IsChecked="{Binding DisconnectPoints, UpdateSourceTrigger=PropertyChanged}"/>
-        <TextBlock Grid.Column="0" Grid.Row="8" Text="DisconnectTestRadius"/>
-        <Slider Grid.Column="1" Grid.Row="8" Value="{Binding DisconnectTestRadius}" Minimum="0" Maximum="32" SmallChange="0.1" LargeChange="1" IsSnapToTickEnabled="True" TickFrequency="0.1"/>
-        <TextBox Grid.Column="2" Grid.Row="8" Text="{Binding DisconnectTestRadius, UpdateSourceTrigger=PropertyChanged}"/>
-        <TextBlock Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="9" Text="Hold Ctrl key to add/remove selected shapes."/>
-        <TextBlock Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="10" Text="Hold Shift key to connect/disconnect points."/>
+        <TextBlock Grid.Column="0" Grid.Row="5" Text="ClearSelectionOnClean"/>
+        <CheckBox Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="5" IsChecked="{Binding ClearSelectionOnClean, UpdateSourceTrigger=PropertyChanged}"/>
+        <TextBlock Grid.Column="0" Grid.Row="6" Text="HitTestRadius"/>
+        <Slider Grid.Column="1" Grid.Row="6" Value="{Binding HitTestRadius}" Minimum="0" Maximum="32" SmallChange="0.1" LargeChange="1" IsSnapToTickEnabled="True" TickFrequency="0.1"/>
+        <TextBox Grid.Column="2" Grid.Row="6" Text="{Binding HitTestRadius, UpdateSourceTrigger=PropertyChanged}"/>
+        <TextBlock Grid.Column="0" Grid.Row="7" Text="ConnectPoints"/>
+        <CheckBox Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="7" IsChecked="{Binding ConnectPoints, UpdateSourceTrigger=PropertyChanged}"/>
+        <TextBlock Grid.Column="0" Grid.Row="8" Text="ConnectTestRadius"/>
+        <Slider Grid.Column="1" Grid.Row="8" Value="{Binding ConnectTestRadius}" Minimum="0" Maximum="32" SmallChange="0.1" LargeChange="1" IsSnapToTickEnabled="True" TickFrequency="0.1"/>
+        <TextBox Grid.Column="2" Grid.Row="8" Text="{Binding ConnectTestRadius, UpdateSourceTrigger=PropertyChanged}"/>
+        <TextBlock Grid.Column="0" Grid.Row="9" Text="DisconnectPoints"/>
+        <CheckBox Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="9" IsChecked="{Binding DisconnectPoints, UpdateSourceTrigger=PropertyChanged}"/>
+        <TextBlock Grid.Column="0" Grid.Row="10" Text="DisconnectTestRadius"/>
+        <Slider Grid.Column="1" Grid.Row="10" Value="{Binding DisconnectTestRadius}" Minimum="0" Maximum="32" SmallChange="0.1" LargeChange="1" IsSnapToTickEnabled="True" TickFrequency="0.1"/>
+        <TextBox Grid.Column="2" Grid.Row="10" Text="{Binding DisconnectTestRadius, UpdateSourceTrigger=PropertyChanged}"/>
+        <TextBlock Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="11" Text="Hold Ctrl key to add/remove selected shapes."/>
+        <TextBlock Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="12" Text="Hold Shift key to connect/disconnect points."/>
     </Grid>
 </UserControl>

@@ -10,9 +10,6 @@ namespace Draw2D.Editor.Tools
 {
     public partial class SelectionTool : ToolBase
     {
-        public static Modifier SelectionModifier = Modifier.Control;
-        public static Modifier ConnectionModifier = Modifier.Shift;
-
         private RectangleShape _rectangle;
         private double _originX;
         private double _originY;
@@ -53,6 +50,7 @@ namespace Draw2D.Editor.Tools
                 context,
                 Settings?.Mode ?? SelectionMode.Shape,
                 Settings?.Targets ?? SelectionTargets.Shapes,
+                Settings?.SelectionModifier ?? Modifier.Control,
                 new Point2(x, y),
                 Settings?.HitTestRadius ?? 7.0,
                 modifier);
@@ -64,7 +62,7 @@ namespace Draw2D.Editor.Tools
             }
             else
             {
-                if (!modifier.HasFlag(SelectionModifier))
+                if (!modifier.HasFlag(Settings?.SelectionModifier ?? Modifier.Control))
                 {
                     context.Selected.Clear();
                 }
@@ -113,6 +111,7 @@ namespace Draw2D.Editor.Tools
                 context,
                 Settings?.Mode ?? SelectionMode.Shape,
                 Settings?.Targets ?? SelectionTargets.Shapes,
+                Settings?.SelectionModifier ?? Modifier.Control,
                 _rectangle.ToRect2(),
                 Settings?.HitTestRadius ?? 7.0,
                 modifier);
@@ -204,12 +203,12 @@ namespace Draw2D.Editor.Tools
 
                 if (shape is PointShape source)
                 {
-                    if (Settings.ConnectPoints && modifier.HasFlag(ConnectionModifier))
+                    if (Settings.ConnectPoints && modifier.HasFlag(Settings?.ConnectionModifier ?? Modifier.Shift))
                     {
                         Connect(context, source);
                     }
 
-                    if (Settings.DisconnectPoints && modifier.HasFlag(ConnectionModifier))
+                    if (Settings.DisconnectPoints && modifier.HasFlag(Settings?.ConnectionModifier ?? Modifier.Shift))
                     {
                         if (_disconnected == false)
                         {
@@ -230,7 +229,7 @@ namespace Draw2D.Editor.Tools
             {
                 foreach (var shape in context.Selected.ToList())
                 {
-                    if (Settings.DisconnectPoints && modifier.HasFlag(ConnectionModifier))
+                    if (Settings.DisconnectPoints && modifier.HasFlag(Settings?.ConnectionModifier ?? Modifier.Shift))
                     {
                         if (!(shape is PointShape) && _disconnected == false)
                         {

@@ -8,8 +8,6 @@ namespace Draw2D.Editor.Selection
 {
     public static class SelectionHelper
     {
-        public static Modifier SelectionModifier = Modifier.Control;
-
         public static ShapeObject TryToHover(IToolContext context, SelectionMode mode, SelectionTargets targets, Point2 target, double radius)
         {
             var shapePoint =
@@ -60,7 +58,7 @@ namespace Draw2D.Editor.Selection
             return null;
         }
 
-        public static bool TryToSelect(IToolContext context, SelectionMode mode, SelectionTargets targets, Point2 point, double radius, Modifier modifier)
+        public static bool TryToSelect(IToolContext context, SelectionMode mode, SelectionTargets targets, Modifier selectionModifier, Point2 point, double radius, Modifier modifier)
         {
             var shapePoint =
                 mode.HasFlag(SelectionMode.Point)
@@ -92,7 +90,7 @@ namespace Draw2D.Editor.Selection
 
                 if (context.Selected.Count >= 1
                     && !haveNewSelection
-                    && !modifier.HasFlag(SelectionModifier))
+                    && !modifier.HasFlag(selectionModifier))
                 {
                     return true;
                 }
@@ -100,7 +98,7 @@ namespace Draw2D.Editor.Selection
                 {
                     if (shapePoint != null)
                     {
-                        if (modifier.HasFlag(SelectionModifier))
+                        if (modifier.HasFlag(selectionModifier))
                         {
                             if (context.Selected.Contains(shapePoint))
                             {
@@ -124,7 +122,7 @@ namespace Draw2D.Editor.Selection
                     }
                     else if (shape != null)
                     {
-                        if (modifier.HasFlag(SelectionModifier))
+                        if (modifier.HasFlag(selectionModifier))
                         {
                             if (context.Selected.Contains(shape))
                             {
@@ -148,7 +146,7 @@ namespace Draw2D.Editor.Selection
                     }
                     else if (guidePoint != null)
                     {
-                        if (modifier.HasFlag(SelectionModifier))
+                        if (modifier.HasFlag(selectionModifier))
                         {
                             if (context.Selected.Contains(guidePoint))
                             {
@@ -172,7 +170,7 @@ namespace Draw2D.Editor.Selection
                     }
                     else if (guide != null)
                     {
-                        if (modifier.HasFlag(SelectionModifier))
+                        if (modifier.HasFlag(selectionModifier))
                         {
                             if (context.Selected.Contains(guide))
                             {
@@ -200,7 +198,7 @@ namespace Draw2D.Editor.Selection
             return false;
         }
 
-        public static bool TryToSelect(IToolContext context, SelectionMode mode, SelectionTargets targets, Rect2 rect, double radius, Modifier modifier)
+        public static bool TryToSelect(IToolContext context, SelectionMode mode, SelectionTargets targets, Modifier selectionModifier, Rect2 rect, double radius, Modifier modifier)
         {
             var shapes =
                 mode.HasFlag(SelectionMode.Shape)
@@ -216,7 +214,7 @@ namespace Draw2D.Editor.Selection
             {
                 if (shapes != null)
                 {
-                    if (modifier.HasFlag(SelectionModifier))
+                    if (modifier.HasFlag(selectionModifier))
                     {
                         foreach (var shape in shapes)
                         {
@@ -246,7 +244,7 @@ namespace Draw2D.Editor.Selection
                 }
                 else if (guides != null)
                 {
-                    if (modifier.HasFlag(SelectionModifier))
+                    if (modifier.HasFlag(selectionModifier))
                     {
                         foreach (var guide in guides)
                         {
