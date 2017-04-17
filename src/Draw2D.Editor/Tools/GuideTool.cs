@@ -12,7 +12,7 @@ namespace Draw2D.Editor.Tools
         public enum State { StartPoint, Point };
         public State CurrentState = State.StartPoint;
 
-        public override string Name { get { return "Guide"; } }
+        public override string Name => "Guide";
 
         public GuideToolSettings Settings { get; set; }
 

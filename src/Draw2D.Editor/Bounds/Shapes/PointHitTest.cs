@@ -9,7 +9,7 @@ namespace Draw2D.Editor.Bounds.Shapes
 {
     public class PointHitTest : HitTestBase
     {
-        public override Type TargetType { get { return typeof(PointShape); } }
+        public override Type TargetType => typeof(PointShape);
 
         public override PointShape TryToGetPoint(ShapeObject shape, Point2 target, double radius, IHitTest hitTest)
         {

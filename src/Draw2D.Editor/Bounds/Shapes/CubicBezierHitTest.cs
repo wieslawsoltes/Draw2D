@@ -9,7 +9,7 @@ namespace Draw2D.Editor.Bounds.Shapes
 {
     public class CubicBezierHitTest : HitTestBase
     {
-        public override Type TargetType { get { return typeof(CubicBezierShape); } }
+        public override Type TargetType => typeof(CubicBezierShape);
 
         public override PointShape TryToGetPoint(ShapeObject shape, Point2 target, double radius, IHitTest hitTest)
         {

@@ -10,7 +10,8 @@ namespace Draw2D.Editor.Intersections.Line
 {
     public class LineLineIntersection : PointIntersection
     {
-        public override string Name { get { return "Line-Line"; } }
+        public override string Name => "Line-Line";
+
         public LineLineSettings Settings { get; set; }
 
         public override void Find(IToolContext context, ShapeObject shape)

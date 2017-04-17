@@ -8,7 +8,7 @@ namespace Draw2D.Editor.Tools
 {
     public class PointTool : ToolBase
     {
-        public override string Name { get { return "Point"; } }
+        public override string Name => "Point";
 
         public PointToolSettings Settings { get; set; }
 

@@ -22,7 +22,7 @@ namespace Draw2D.Editor.Tools
         public enum State { None, Selection, Move };
         public State CurrentState = State.None;
 
-        public override string Name { get { return "Selection"; } }
+        public override string Name => "Selection";
 
         public SelectionToolSettings Settings { get; set; }
 

@@ -12,7 +12,7 @@ namespace Draw2D.Editor.Tools
         public enum State { StartPoint, Point1, Point2, Point3 }
         public State CurrentState = State.StartPoint;
 
-        public override string Name { get { return "CubicBezier"; } }
+        public override string Name => "CubicBezier";
 
         public CubicBezierToolSettings Settings { get; set; }
 

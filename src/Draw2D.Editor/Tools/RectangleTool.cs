@@ -12,7 +12,7 @@ namespace Draw2D.Editor.Tools
         public enum State { TopLeft, BottomRight };
         public State CurrentState = State.TopLeft;
 
-        public override string Name { get { return "Rectangle"; } }
+        public override string Name => "Rectangle";
 
         public RectangleToolSettings Settings { get; set; }
 

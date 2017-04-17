@@ -7,7 +7,7 @@ namespace Draw2D.Editor.Tools
     {
         private readonly PathTool _pathTool;
 
-        public override string Name { get { return "Move"; } }
+        public override string Name => "Move";
 
         public MoveToolSettings Settings { get; set; }
 

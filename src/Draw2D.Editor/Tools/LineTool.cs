@@ -13,7 +13,7 @@ namespace Draw2D.Editor.Tools
         public enum State { StartPoint, Point };
         public State CurrentState = State.StartPoint;
 
-        public override string Name { get { return "Line"; } }
+        public override string Name => "Line";
 
         public LineToolSettings Settings { get; set; }
 
