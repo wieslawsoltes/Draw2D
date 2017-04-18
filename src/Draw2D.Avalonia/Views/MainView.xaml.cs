@@ -153,6 +153,14 @@ namespace Draw2D.Avalonia.Views
             }
         }
 
+        public void SetTextTool()
+        {
+            if (this.DataContext is ShapeContainerViewModel vm)
+            {
+                vm.CurrentTool = vm.Tools.Where(t => t.Name == "Text").FirstOrDefault();
+            }
+        }
+
         private void MainView_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Modifiers == InputModifiers.Control)
@@ -220,6 +228,9 @@ namespace Draw2D.Avalonia.Views
                         break;
                     case Key.E:
                         SetEllipseTool();
+                        break;
+                    case Key.T:
+                        SetTextTool();
                         break;
                     case Key.Delete:
                         Delete();

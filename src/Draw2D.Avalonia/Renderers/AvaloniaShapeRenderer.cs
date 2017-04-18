@@ -244,5 +244,24 @@ namespace Draw2D.Avalonia.Renderers
             var geometry = ToGeometry(ellipse, style, dx, dy);
             _dc.DrawGeometry(style.IsFilled ? cache?.Fill : null, style.IsStroked ? cache?.StrokePen : null, geometry);
         }
+
+        public override void DrawText(object dc, TextShape text, DrawStyle style, double dx, double dy)
+        {
+            var cache = GetOrCreateCache(style);
+            var _dc = dc as DrawingContext;
+            var rect = ToRect(text.TopLeft, text.BottomRight, dx, dy);
+            if (style.IsFilled)
+            {
+                _dc.FillRectangle(cache?.Fill, rect);
+            }
+            if (style.IsStroked)
+            {
+                _dc.DrawRectangle(cache?.StrokePen, rect);
+            }
+            if (text.Text != null)
+            {
+                // TODO: Draw text Value string.
+            }
+        }
     }
 }

@@ -359,5 +359,17 @@ namespace Draw2D.Wpf.Renderers
             ToEllipse(ellipse, dx, dy, out double radiusX, out double radiusY, out Point center);
             _dc.DrawEllipse(style.IsFilled ? cache?.Fill : null, style.IsStroked ? cache?.StrokePen : null, center, radiusX, radiusY);
         }
+
+        public override void DrawText(object dc, TextShape text, DrawStyle style, double dx, double dy)
+        {
+            var cache = GetBrushCache(style);
+            var _dc = dc as DrawingContext;
+            var rect = ToRect(text.TopLeft, text.BottomRight, dx, dy);
+            _dc.DrawRectangle(style.IsFilled ? cache?.Fill : null, style.IsStroked ? cache?.StrokePen : null, rect);
+            if (text.Text != null)
+            {
+                // TODO: Draw text Value string.
+            }
+        }
     }
 }

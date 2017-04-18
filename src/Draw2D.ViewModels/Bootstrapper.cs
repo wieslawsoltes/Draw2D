@@ -35,6 +35,7 @@ namespace Draw2D.ViewModels
             hitTest.Register(new PathHitTest());
             hitTest.Register(new RectangleHitTest());
             hitTest.Register(new EllipseHitTest());
+            hitTest.Register(new TextHitTest());
 
             var gridSnapPointFilter = new GridSnapPointFilter()
             {
@@ -309,6 +310,20 @@ namespace Draw2D.ViewModels
                 }
             };
 
+            var textTool = new TextTool()
+            {
+                Filters = new List<PointFilter>
+                {
+                    lineSnapPointFilter,
+                    gridSnapPointFilter
+                },
+                Settings = new TextToolSettings()
+                {
+                    ConnectPoints = true,
+                    HitTestRadius = 7.0
+                }
+            };
+
             tools.Add(noneTool);
             tools.Add(selectionTool);
             tools.Add(guideTool);
@@ -321,6 +336,7 @@ namespace Draw2D.ViewModels
             tools.Add(scribbleTool);
             tools.Add(rectangleTool);
             tools.Add(ellipseTool);
+            tools.Add(textTool);
 
             var currentTool = tools.FirstOrDefault(t => t.Name == "Selection");
 
@@ -334,7 +350,8 @@ namespace Draw2D.ViewModels
                     { typeof(QuadraticBezierShape), new QuadraticBezierHelper() },
                     { typeof(PathShape), new PathHelper() },
                     { typeof(RectangleShape), new RectangleHelper() },
-                    { typeof(EllipseShape), new EllipseHelper() }
+                    { typeof(EllipseShape), new EllipseHelper() },
+                    { typeof(TextShape), new TextHelper() }
                 }
             };
 

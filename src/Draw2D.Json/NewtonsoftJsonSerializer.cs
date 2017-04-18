@@ -100,6 +100,8 @@ namespace Draw2D.Json
             binder.Add<FigureShape>("Figure");
             binder.Add<RectangleShape>("Rect");
             binder.Add<EllipseShape>("Ellipse");
+            binder.Add<TextShape>("Text");
+            binder.Add<TextObject>("Value");
             binder.Add<GroupShape>("Group");
             binder.Add<ShapeContainer>("Container");
 

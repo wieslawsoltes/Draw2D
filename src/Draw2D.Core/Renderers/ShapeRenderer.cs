@@ -20,5 +20,6 @@ namespace Draw2D.Core.Renderers
         public abstract void DrawPath(object dc, PathShape path, DrawStyle style, double dx, double dy);
         public abstract void DrawRectangle(object dc, RectangleShape rectangle, DrawStyle style, double dx, double dy);
         public abstract void DrawEllipse(object dc, EllipseShape ellipse, DrawStyle style, double dx, double dy);
+        public abstract void DrawText(object dc, TextShape text, DrawStyle style, double dx, double dy);
     }
 }
