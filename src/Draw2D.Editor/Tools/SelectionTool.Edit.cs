@@ -80,14 +80,6 @@ namespace Draw2D.Editor.Tools
                     {
                         group.Shapes.Add(shape);
                     }
-                    //if (shape is PointShape point)
-                    //{
-                    //    group.Points.Add(point);
-                    //}
-                    //else
-                    //{
-                    //    group.Shapes.Add(shape);
-                    //}
                 }
 
                 group.Select(context.Renderer.Selected);
