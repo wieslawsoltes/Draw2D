@@ -21,19 +21,25 @@ namespace Draw2D.Editor.Selection.Helpers
             }
         }
 
+        public static IDictionary<PointShape, PointShape> CopyPoints(IEnumerable<ShapeObject> shapes)
+        {
+            var copy = new Dictionary<PointShape, PointShape>();
+
+            foreach (var point in GetPoints(shapes).Distinct())
+            {
+                copy[point] = point.Copy();
+            }
+
+            return copy;
+        }
+
         public static void Copy(IEnumerable<ShapeObject> shapes, IShapeContainer container, ISet<ShapeObject> selected)
         {
-            var distinctPoints = GetPoints(shapes).Distinct();
-            var distinctPointsCopy = new Dictionary<PointShape, PointShape>();
-
-            foreach (var point in distinctPoints)
-            {
-                distinctPointsCopy[point] = point.Copy();
-            }
+            var distinct = CopyPoints(shapes);
 
             foreach (var shape in shapes)
             {
-                var copy = Copy(shape, distinctPointsCopy);
+                var copy = Copy(shape, distinct);
                 if (copy != null && !(copy is PointShape))
                 {
                     copy.Select(selected);
