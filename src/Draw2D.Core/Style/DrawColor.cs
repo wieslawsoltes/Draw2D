@@ -1,9 +1,10 @@
 ﻿// Copyright (c) Wiesław Šoltés. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
+using System.Collections.Generic;
 
 namespace Draw2D.Core.Style
 {
-    public class DrawColor : ObservableObject, ICopyable<DrawColor>
+    public class DrawColor : ObservableObject, ICopyable
     {
         private byte _a;
         private byte _r;
@@ -46,7 +47,7 @@ namespace Draw2D.Core.Style
             this.B = b;
         }
 
-        public DrawColor Copy()
+        public object Copy(IDictionary<object, object> shared)
         {
             return new DrawColor()
             {

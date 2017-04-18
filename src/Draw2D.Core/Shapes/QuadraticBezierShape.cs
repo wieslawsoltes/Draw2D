@@ -6,7 +6,7 @@ using Draw2D.Core.Renderers;
 
 namespace Draw2D.Core.Shapes
 {
-    public class QuadraticBezierShape : ConnectableShape, ICopyable<QuadraticBezierShape>
+    public class QuadraticBezierShape : ConnectableShape, ICopyable
     {
         private PointShape _startPoint;
         private PointShape _point1;
@@ -182,21 +182,21 @@ namespace Draw2D.Core.Shapes
             else if (StartPoint == point)
             {
                 Debug.WriteLine($"{nameof(QuadraticBezierShape)}: Disconnected from {nameof(StartPoint)}");
-                result = point.Copy();
+                result = (PointShape)point.Copy(null);
                 this.StartPoint = result;
                 return true;
             }
             else if (Point1 == point)
             {
                 Debug.WriteLine($"{nameof(QuadraticBezierShape)}: Disconnected from {nameof(Point1)}");
-                result = point.Copy();
+                result = (PointShape)point.Copy(null);
                 this.Point1 = result;
                 return true;
             }
             else if (Point2 == point)
             {
                 Debug.WriteLine($"{nameof(QuadraticBezierShape)}: Disconnected from {nameof(Point2)}");
-                result = point.Copy();
+                result = (PointShape)point.Copy(null);
                 this.Point2 = result;
                 return true;
             }
@@ -211,34 +211,48 @@ namespace Draw2D.Core.Shapes
             if (this.StartPoint != null)
             {
                 Debug.WriteLine($"{nameof(QuadraticBezierShape)}: Disconnected from {nameof(StartPoint)}");
-                this.StartPoint = this.StartPoint.Copy();
+                this.StartPoint = (PointShape)this.StartPoint.Copy(null);
                 result = true;
             }
 
             if (this.Point1 != null)
             {
                 Debug.WriteLine($"{nameof(QuadraticBezierShape)}: Disconnected from {nameof(Point1)}");
-                this.Point1 = this.Point1.Copy();
+                this.Point1 = (PointShape)this.Point1.Copy(null);
                 result = true;
             }
 
             if (this.Point2 != null)
             {
                 Debug.WriteLine($"{nameof(QuadraticBezierShape)}: Disconnected from {nameof(Point2)}");
-                this.Point2 = this.Point2.Copy();
+                this.Point2 = (PointShape)this.Point2.Copy(null);
                 result = true;
             }
 
             return result;
         }
 
-        public QuadraticBezierShape Copy()
+        public object Copy(IDictionary<object, object> shared)
         {
-            return new QuadraticBezierShape()
+            var copy = new QuadraticBezierShape()
             {
                 Style = this.Style,
-                Transform = this.Transform?.Copy(),
+                Transform = (MatrixObject)this.Transform?.Copy(shared)
             };
+
+            if (shared != null)
+            {
+                copy.StartPoint = (PointShape)shared[this.StartPoint];
+                copy.Point1 = (PointShape)shared[this.Point1];
+                copy.Point2 = (PointShape)shared[this.Point2];
+
+                foreach (var point in this.Points)
+                {
+                    copy.Points.Add((PointShape)shared[point]);
+                }
+            }
+
+            return copy;
         }
     }
 }

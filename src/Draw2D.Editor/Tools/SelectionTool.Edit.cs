@@ -38,7 +38,7 @@ namespace Draw2D.Editor.Tools
                     this.DeHover(context);
                     context.Renderer.Selected.Clear();
 
-                    CopyHelper.Copy(_shapesToCopy, context.CurrentContainer, context.Renderer.Selected);
+                    CopyHelper.Copy(context.CurrentContainer, _shapesToCopy, context.Renderer.Selected);
 
                     context.Invalidate();
 

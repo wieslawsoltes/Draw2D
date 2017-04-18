@@ -7,7 +7,7 @@ using Draw2D.Core.Renderers;
 
 namespace Draw2D.Core.Shapes
 {
-    public class GroupShape : ConnectableShape, ICopyable<GroupShape>
+    public class GroupShape : ConnectableShape, ICopyable
     {
         private ObservableCollection<ShapeObject> _shapes;
 
@@ -110,13 +110,31 @@ namespace Draw2D.Core.Shapes
             base.Move(selected, dx, dy);
         }
 
-        public GroupShape Copy()
+        public object Copy(IDictionary<object, object> shared)
         {
-            return new GroupShape()
+            var copy = new GroupShape()
             {
                 Style = this.Style,
-                Transform = this.Transform?.Copy()
+                Transform = (MatrixObject)this.Transform?.Copy(shared)
             };
+
+            if (shared != null)
+            {
+                foreach (var point in this.Points)
+                {
+                    copy.Points.Add((PointShape)shared[point]);
+                }
+
+                foreach (var shape in this.Shapes)
+                {
+                    if (shape is ICopyable copyable)
+                    {
+                        copy.Shapes.Add((ShapeObject)copyable.Copy(shared));
+                    }
+                }
+            }
+
+            return copy;
         }
     }
 }

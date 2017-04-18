@@ -1,10 +1,11 @@
 ﻿// Copyright (c) Wiesław Šoltés. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
+using System.Collections.Generic;
 using Draw2D.Core.Renderers;
 
 namespace Draw2D.Core.Style
 {
-    public class DrawStyle : NamedObject, ICopyable<DrawStyle>
+    public class DrawStyle : NamedObject, ICopyable
     {
         private DrawColor _stroke;
         private DrawColor _fill;
@@ -80,13 +81,13 @@ namespace Draw2D.Core.Style
             return false;
         }
 
-        public DrawStyle Copy()
+        public object Copy(IDictionary<object, object> shared)
         {
             return new DrawStyle()
             {
                 Name = this.Name,
-                Stroke = this.Stroke.Copy(),
-                Fill = this.Fill.Copy(),
+                Stroke = (DrawColor)this.Stroke.Copy(shared),
+                Fill = (DrawColor)this.Fill.Copy(shared),
                 Thickness = this.Thickness,
                 IsStroked = this.IsStroked,
                 IsFilled = this.IsFilled

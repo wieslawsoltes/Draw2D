@@ -5,7 +5,7 @@ using Draw2D.Core.Renderers;
 
 namespace Draw2D.Core.Shapes
 {
-    public class PointShape : ShapeObject, ICopyable<PointShape>
+    public class PointShape : ShapeObject, ICopyable
     {
         private double _x;
         private double _y;
@@ -72,12 +72,12 @@ namespace Draw2D.Core.Shapes
             Y += dy;
         }
 
-        public PointShape Copy()
+        public object Copy(IDictionary<object, object> shared)
         {
             return new PointShape()
             {
                 Style = this.Style,
-                Transform = this.Transform?.Copy(),
+                Transform = (MatrixObject)this.Transform?.Copy(shared),
                 X = this.X,
                 Y = this.Y,
                 Template = this.Template

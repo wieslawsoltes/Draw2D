@@ -30,7 +30,7 @@ namespace Draw2D.Editor.Tools
             _line = new LineShape()
             {
                 StartPoint = next,
-                Point = next.Copy(),
+                Point = (PointShape)next.Copy(null),
                 Style = context.CurrentStyle
             };
             context.WorkingContainer.Shapes.Add(_line);

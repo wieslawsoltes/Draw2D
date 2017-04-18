@@ -31,9 +31,9 @@ namespace Draw2D.Editor.Tools
             _cubicBezier = new CubicBezierShape()
             {
                 StartPoint = next,
-                Point1 = next.Copy(),
-                Point2 = next.Copy(),
-                Point3 = next.Copy(),
+                Point1 = (PointShape)next.Copy(null),
+                Point2 = (PointShape)next.Copy(null),
+                Point3 = (PointShape)next.Copy(null),
                 Style = context.CurrentStyle
             };
             context.WorkingContainer.Shapes.Add(_cubicBezier);

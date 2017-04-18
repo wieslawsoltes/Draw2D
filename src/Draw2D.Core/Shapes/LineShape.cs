@@ -6,7 +6,7 @@ using Draw2D.Core.Renderers;
 
 namespace Draw2D.Core.Shapes
 {
-    public class LineShape : ConnectableShape, ICopyable<LineShape>
+    public class LineShape : ConnectableShape, ICopyable
     {
         private PointShape _startPoint;
         private PointShape _point;
@@ -153,14 +153,14 @@ namespace Draw2D.Core.Shapes
             else if (StartPoint == point)
             {
                 Debug.WriteLine($"{nameof(LineShape)}: Disconnected from {nameof(StartPoint)}");
-                result = point.Copy();
+                result = (PointShape)point.Copy(null);
                 this.StartPoint = result;
                 return true;
             }
             else if (Point == point)
             {
                 Debug.WriteLine($"{nameof(LineShape)}: Disconnected from {nameof(Point)}");
-                result = point.Copy();
+                result = (PointShape)point.Copy(null);
                 this.Point = result;
                 return true;
             }
@@ -175,27 +175,40 @@ namespace Draw2D.Core.Shapes
             if (this.StartPoint != null)
             {
                 Debug.WriteLine($"{nameof(LineShape)}: Disconnected from {nameof(StartPoint)}");
-                this.StartPoint = this.StartPoint.Copy();
+                this.StartPoint = (PointShape)this.StartPoint.Copy(null);
                 result = true;
             }
 
             if (this.Point != null)
             {
                 Debug.WriteLine($"{nameof(LineShape)}: Disconnected from {nameof(Point)}");
-                this.Point = this.Point.Copy();
+                this.Point = (PointShape)this.Point.Copy(null);
                 result = true;
             }
 
             return result;
         }
 
-        public LineShape Copy()
+        public object Copy(IDictionary<object, object> shared)
         {
-            return new LineShape()
+            var copy = new LineShape()
             {
                 Style = this.Style,
-                Transform = this.Transform?.Copy()
+                Transform = (MatrixObject)this.Transform?.Copy(shared)
             };
+
+            if (shared != null)
+            {
+                copy.StartPoint = (PointShape)shared[this.StartPoint];
+                copy.Point = (PointShape)shared[this.Point];
+
+                foreach (var point in this.Points)
+                {
+                    copy.Points.Add((PointShape)shared[point]);
+                }
+            }
+
+            return copy;
         }
     }
 }

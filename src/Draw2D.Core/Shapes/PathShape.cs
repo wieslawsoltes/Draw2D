@@ -7,7 +7,7 @@ using Draw2D.Core.Renderers;
 
 namespace Draw2D.Core.Shapes
 {
-    public class PathShape : ConnectableShape, ICopyable<PathShape>
+    public class PathShape : ConnectableShape, ICopyable
     {
         private ObservableCollection<FigureShape> _figures;
         private PathFillRule _fillRule;
@@ -239,14 +239,29 @@ namespace Draw2D.Core.Shapes
             return false;
         }
 
-        public PathShape Copy()
+        public object Copy(IDictionary<object, object> shared)
         {
-            return new PathShape()
+            var copy = new PathShape()
             {
                 Style = this.Style,
-                Transform = this.Transform?.Copy(),
+                Transform = (MatrixObject)this.Transform?.Copy(shared),
                 FillRule = this.FillRule
             };
+
+            if (shared != null)
+            {
+                foreach (var figure in this.Figures)
+                {
+                    copy.Figures.Add((FigureShape)figure.Copy(shared));
+                }
+
+                foreach (var point in this.Points)
+                {
+                    copy.Points.Add((PointShape)shared[point]);
+                }
+            }
+
+            return copy;
         }
     }
 }

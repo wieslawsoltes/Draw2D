@@ -8,13 +8,13 @@ using Draw2D.Core.Style;
 
 namespace Draw2D.Core.Containers
 {
-    public class ShapeContainer : NamedObject, IShapeContainer, ICopyable<ShapeContainer>
+    public class ShapeContainer : NamedObject, IShapeContainer, ICopyable
     {
         private double _width;
         private double _height;
-        private ObservableCollection<DrawStyle> _styles;
         private ObservableCollection<LineShape> _guides;
         private ObservableCollection<ShapeObject> _shapes;
+        private ObservableCollection<DrawStyle> _styles;
 
         public double Width
         {
@@ -26,12 +26,6 @@ namespace Draw2D.Core.Containers
         {
             get => _height;
             set => Update(ref _height, value);
-        }
-
-        public ObservableCollection<DrawStyle> Styles
-        {
-            get => _styles;
-            set => Update(ref _styles, value);
         }
 
         public ObservableCollection<LineShape> Guides
@@ -46,11 +40,17 @@ namespace Draw2D.Core.Containers
             set => Update(ref _shapes, value);
         }
 
+        public ObservableCollection<DrawStyle> Styles
+        {
+            get => _styles;
+            set => Update(ref _styles, value);
+        }
+
         public ShapeContainer()
         {
-            _styles = new ObservableCollection<DrawStyle>();
             _guides = new ObservableCollection<LineShape>();
             _shapes = new ObservableCollection<ShapeObject>();
+            _styles = new ObservableCollection<DrawStyle>();
         }
 
         public IEnumerable<PointShape> GetPoints()
@@ -107,12 +107,32 @@ namespace Draw2D.Core.Containers
             }
         }
 
-        public ShapeContainer Copy()
+        public object Copy(IDictionary<object, object> shared)
         {
-            return new ShapeContainer()
+            var copy = new ShapeContainer()
             {
-                Name = this.Name
+                Name = this.Name,
+                Width = this.Width,
+                Height = this.Height
             };
+
+            if (shared != null)
+            {
+                foreach (var guide in this.Guides)
+                {
+                    copy.Guides.Add((LineShape)guide.Copy(shared));
+                }
+
+                foreach (var shape in this.Shapes)
+                {
+                    if (shape is ICopyable copyable)
+                    {
+                        copy.Shapes.Add((ShapeObject)copyable.Copy(shared));
+                    }
+                }
+            }
+
+            return copy;
         }
     }
 }

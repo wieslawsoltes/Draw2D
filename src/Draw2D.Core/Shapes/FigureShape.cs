@@ -8,7 +8,7 @@ using Draw2D.Core.Renderers;
 
 namespace Draw2D.Core.Shapes
 {
-    public class FigureShape : ShapeObject, IShapeContainer, ICopyable<FigureShape>
+    public class FigureShape : ShapeObject, IShapeContainer, ICopyable
     {
         private double _width;
         private double _height;
@@ -149,17 +149,30 @@ namespace Draw2D.Core.Shapes
             }
         }
 
-        public FigureShape Copy()
+        public object Copy(IDictionary<object, object> shared)
         {
-            return new FigureShape()
+            var copy = new FigureShape()
             {
                 Style = this.Style,
-                Transform = this.Transform?.Copy(),
+                Transform = (MatrixObject)this.Transform?.Copy(shared),
                 Width = this.Width,
                 Height = this.Height,
                 IsFilled = this.IsFilled,
                 IsClosed = this.IsClosed
             };
+
+            if (shared != null)
+            {
+                foreach (var shape in this.Shapes)
+                {
+                    if (shape is ICopyable copyable)
+                    {
+                        copy.Shapes.Add((ShapeObject)copyable.Copy(shared));
+                    }
+                }
+            }
+
+            return copy;
         }
     }
 }

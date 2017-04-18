@@ -1,10 +1,11 @@
 ﻿// Copyright (c) Wiesław Šoltés. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
+using System.Collections.Generic;
 using Draw2D.Core.Renderers;
 
 namespace Draw2D.Core
 {
-    public class MatrixObject : ObservableObject, ICopyable<MatrixObject>
+    public class MatrixObject : ObservableObject, ICopyable
     {
         private double _m11;
         private double _m12;
@@ -78,7 +79,7 @@ namespace Draw2D.Core
             return false;
         }
 
-        public MatrixObject Copy()
+        public object Copy(IDictionary<object, object> shared)
         {
             return new MatrixObject()
             {

@@ -6,7 +6,7 @@ using Draw2D.Core.Renderers;
 
 namespace Draw2D.Core.Shapes
 {
-    public class RectangleShape : ConnectableShape, ICopyable<RectangleShape>
+    public class RectangleShape : ConnectableShape, ICopyable
     {
         private PointShape _topLeft;
         private PointShape _bottomRight;
@@ -153,14 +153,14 @@ namespace Draw2D.Core.Shapes
             else if (TopLeft == point)
             {
                 Debug.WriteLine($"{nameof(RectangleShape)}: Disconnected from {nameof(TopLeft)}");
-                result = point.Copy();
+                result = (PointShape)point.Copy(null);
                 this.TopLeft = result;
                 return true;
             }
             else if (BottomRight == point)
             {
                 Debug.WriteLine($"{nameof(RectangleShape)}: Disconnected from {nameof(BottomRight)}");
-                result = point.Copy();
+                result = (PointShape)point.Copy(null);
                 this.BottomRight = result;
                 return true;
             }
@@ -175,27 +175,40 @@ namespace Draw2D.Core.Shapes
             if (this.TopLeft != null)
             {
                 Debug.WriteLine($"{nameof(RectangleShape)}: Disconnected from {nameof(TopLeft)}");
-                this.TopLeft = this.TopLeft.Copy();
+                this.TopLeft = (PointShape)this.TopLeft.Copy(null);
                 result = true;
             }
 
             if (this.BottomRight != null)
             {
                 Debug.WriteLine($"{nameof(RectangleShape)}: Disconnected from {nameof(BottomRight)}");
-                this.BottomRight = this.BottomRight.Copy();
+                this.BottomRight = (PointShape)this.BottomRight.Copy(null);
                 result = true;
             }
 
             return result;
         }
 
-        public RectangleShape Copy()
+        public object Copy(IDictionary<object, object> shared)
         {
-            return new RectangleShape()
+            var copy = new RectangleShape()
             {
                 Style = this.Style,
-                Transform = this.Transform?.Copy()
+                Transform = (MatrixObject)this.Transform?.Copy(shared)
             };
+
+            if (shared != null)
+            {
+                copy.TopLeft = (PointShape)shared[this.TopLeft];
+                copy.BottomRight = (PointShape)shared[this.BottomRight];
+
+                foreach (var point in this.Points)
+                {
+                    copy.Points.Add((PointShape)shared[point]);
+                }
+            }
+
+            return copy;
         }
     }
 }
