@@ -139,6 +139,9 @@
     <Compile Include="Views\Tools\QuadraticBezierToolSettingsView.xaml.cs">
       <DependentUpon>QuadraticBezierToolSettingsView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Tools\TextToolSettingsView.xaml.cs">
+      <DependentUpon>TextToolSettingsView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Tools\RectangleToolSettingsView.xaml.cs">
       <DependentUpon>RectangleToolSettingsView.xaml</DependentUpon>
     </Compile>
@@ -224,6 +227,10 @@
     <Page Include="Views\Tools\QuadraticBezierToolSettingsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Tools\TextToolSettingsView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\Tools\RectangleToolSettingsView.xaml">
       <SubType>Designer</SubType>
