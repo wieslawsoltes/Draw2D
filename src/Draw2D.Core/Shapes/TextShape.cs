@@ -42,7 +42,8 @@ namespace Draw2D.Core.Shapes
             this.BottomRight = bottomRight;
         }
 
-        public TextShape(TextObject text, PointShape topLeft, PointShape bottomRight) : base()
+        public TextShape(TextObject text, PointShape topLeft, PointShape bottomRight)
+            : base()
         {
             this.TopLeft = topLeft;
             this.BottomRight = bottomRight;
