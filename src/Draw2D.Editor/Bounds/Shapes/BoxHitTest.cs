@@ -12,7 +12,6 @@ namespace Draw2D.Editor.Bounds.Shapes
         public override PointShape TryToGetPoint(ShapeObject shape, Point2 target, double radius, IHitTest hitTest)
         {
             var box = shape as BoxShape ?? throw new ArgumentNullException("shape");
-
             var pointHitTest = hitTest.Registered[typeof(PointShape)];
 
             if (pointHitTest.TryToGetPoint(box.TopLeft, target, radius, hitTest) != null)
@@ -20,7 +19,7 @@ namespace Draw2D.Editor.Bounds.Shapes
                 return box.TopLeft;
             }
 
-            if (box.TryToGetPoint(box.BottomRight, target, radius, hitTest) != null)
+            if (pointHitTest.TryToGetPoint(box.BottomRight, target, radius, hitTest) != null)
             {
                 return box.BottomRight;
             }
