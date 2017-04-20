@@ -41,12 +41,12 @@ namespace Draw2D.Core.Shapes
                 r.DrawRectangle(dc, this, Style, dx, dy);
             }
 
-            if (r.Selected.Contains(_topLeft))
+            if (r.Selected.Contains(TopLeft))
             {
                 TopLeft.Draw(dc, r, dx, dy);
             }
 
-            if (r.Selected.Contains(_bottomRight))
+            if (r.Selected.Contains(BottomRight))
             {
                 BottomRight.Draw(dc, r, dx, dy);
             }
