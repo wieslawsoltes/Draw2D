@@ -15,7 +15,7 @@ namespace Draw2D.Core.Renderers
         public abstract object PushMatrix(object dc, MatrixObject matrix);
         public abstract void PopMatrix(object dc, object state);
         public abstract void DrawLine(object dc, IPoint start, IPoint point, DrawStyle style, double dx, double dy);
-        public abstract void DrawCubicBezier(object dc, IPoint start, IPoint point1, IPoint point2, IPoint poin3, DrawStyle style, double dx, double dy);
+        public abstract void DrawCubicBezier(object dc, IPoint start, IPoint point1, IPoint point2, IPoint point3, DrawStyle style, double dx, double dy);
         public abstract void DrawQuadraticBezier(object dc, IPoint start, IPoint point1, IPoint point2, DrawStyle style, double dx, double dy);
         public abstract void DrawPath(object dc, IPath path, DrawStyle style, double dx, double dy);
         public abstract void DrawRectangle(object dc, IPoint tl, IPoint br, DrawStyle style, double dx, double dy);
