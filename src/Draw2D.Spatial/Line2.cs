@@ -51,15 +51,15 @@ namespace Draw2D.Spatial
         {
             double A0 = b0.Y - a0.Y;
             double B0 = a0.X - b0.X;
-            double C0 = A0 * a0.X + B0 * a0.Y;
+            double C0 = (A0 * a0.X) + (B0 * a0.Y);
             double A1 = b1.Y - a1.Y;
             double B1 = a1.X - b1.X;
-            double C1 = A1 * a1.X + B1 * a1.Y;
-            double det = A0 * B1 - A1 * B0;
+            double C1 = (A1 * a1.X) + (B1 * a1.Y);
+            double det = (A0 * B1) - (A1 * B0);
             if (det != 0.0)
             {
-                double x = (B1 * C0 - B0 * C1) / det;
-                double y = (A0 * C1 - A1 * C0) / det;
+                double x = ((B1 * C0) - (B0 * C1)) / det;
+                double y = ((A0 * C1) - (A1 * C0)) / det;
                 var point = new Point2(x, y);
                 if (point.IsOnLine(a0, b0) && point.IsOnLine(a1, b1))
                 {
@@ -85,8 +85,8 @@ namespace Draw2D.Spatial
             if (rect.Height < 0)
                 throw new ArgumentException("Rectangle Height must be positive value.");
 
-            double cx = rect.Left + rect.Width / 2.0;
-            double cy = rect.Top + rect.Height / 2.0;
+            double cx = rect.Left + (rect.Width / 2.0);
+            double cy = rect.Top + (rect.Height / 2.0);
 
             double p1X = a.X - cx;
             double p1Y = a.Y - cy;
@@ -96,13 +96,13 @@ namespace Draw2D.Spatial
             double rx = rect.Width / 2.0;
             double ry = rect.Height / 2.0;
 
-            double A = (p2X - p1X) * (p2X - p1X) / rx / rx + (p2Y - p1Y) * (p2Y - p1Y) / ry / ry;
-            double B = 2 * p1X * (p2X - p1X) / rx / rx + 2 * p1Y * (p2Y - p1Y) / ry / ry;
-            double C = p1X * p1X / rx / rx + p1Y * p1Y / ry / ry - 1;
+            double A = ((p2X - p1X) * (p2X - p1X) / rx / rx) + ((p2Y - p1Y) * (p2Y - p1Y) / ry / ry);
+            double B = (2 * p1X * (p2X - p1X) / rx / rx) + (2 * p1Y * (p2Y - p1Y) / ry / ry);
+            double C = (p1X * p1X / rx / rx) + (p1Y * p1Y / ry / ry) - 1;
 
             var solutions = new List<double>();
 
-            double discriminant = B * B - 4 * A * C;
+            double discriminant = (B * B) - (4 * A * C);
             if (discriminant == 0)
             {
                 solutions.Add(-B / 2 / A);
@@ -119,8 +119,8 @@ namespace Draw2D.Spatial
             {
                 if (!onlySegment || ((t >= 0f) && (t <= 1f)))
                 {
-                    double x = p1X + (p2X - p1X) * t + cx;
-                    double y = p1Y + (p2Y - p1Y) * t + cy;
+                    double x = p1X + ((p2X - p1X) * t) + cx;
+                    double y = p1Y + ((p2Y - p1Y) * t) + cy;
                     result.Add(new Point2(x, y));
                 }
             }
@@ -213,10 +213,10 @@ namespace Draw2D.Spatial
                 }
             }
 
-            x0clip = x0 + t0 * dx;
-            y0clip = y0 + t0 * dy;
-            x1clip = x0 + t1 * dx;
-            y1clip = y0 + t1 * dy;
+            x0clip = x0 + (t0 * dx);
+            y0clip = y0 + (t0 * dy);
+            x1clip = x0 + (t1 * dx);
+            y1clip = y0 + (t1 * dy);
 
             return true;
         }
