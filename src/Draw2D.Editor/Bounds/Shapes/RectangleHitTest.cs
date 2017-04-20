@@ -7,63 +7,8 @@ using Draw2D.Spatial;
 
 namespace Draw2D.Editor.Bounds.Shapes
 {
-    public class RectangleHitTest : HitTestBase
+    public class RectangleHitTest : BoxHitTest
     {
         public override Type TargetType => typeof(RectangleShape);
-
-        public override PointShape TryToGetPoint(ShapeObject shape, Point2 target, double radius, IHitTest hitTest)
-        {
-            var rectangle = shape as RectangleShape;
-            if (rectangle == null)
-                throw new ArgumentNullException("shape");
-
-            var pointHitTest = hitTest.Registered[typeof(PointShape)];
-
-            if (pointHitTest.TryToGetPoint(rectangle.TopLeft, target, radius, hitTest) != null)
-            {
-                return rectangle.TopLeft;
-            }
-
-            if (pointHitTest.TryToGetPoint(rectangle.BottomRight, target, radius, hitTest) != null)
-            {
-                return rectangle.BottomRight;
-            }
-
-            foreach (var point in rectangle.Points)
-            {
-                if (pointHitTest.TryToGetPoint(point, target, radius, hitTest) != null)
-                {
-                    return point;
-                }
-            }
-
-            return null;
-        }
-
-        public override ShapeObject Contains(ShapeObject shape, Point2 target, double radius, IHitTest hitTest)
-        {
-            var rectangle = shape as RectangleShape;
-            if (rectangle == null)
-                throw new ArgumentNullException("shape");
-
-            return Rect2.FromPoints(
-                rectangle.TopLeft.X,
-                rectangle.TopLeft.Y,
-                rectangle.BottomRight.X,
-                rectangle.BottomRight.Y).Contains(target) ? shape : null;
-        }
-
-        public override ShapeObject Overlaps(ShapeObject shape, Rect2 target, double radius, IHitTest hitTest)
-        {
-            var rectangle = shape as RectangleShape;
-            if (rectangle == null)
-                throw new ArgumentNullException("shape");
-
-            return Rect2.FromPoints(
-                rectangle.TopLeft.X,
-                rectangle.TopLeft.Y,
-                rectangle.BottomRight.X,
-                rectangle.BottomRight.Y).IntersectsWith(target) ? shape : null;
-        }
     }
 }
