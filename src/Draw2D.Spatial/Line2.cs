@@ -22,6 +22,20 @@ namespace Draw2D.Spatial
             this.B = new Point2(bx, by);
         }
 
+        public void Deconstruct(out double ax, out double ay, out double bx, out double by)
+        {
+            ax = this.A.X;
+            ay = this.A.Y;
+            bx = this.B.X;
+            by = this.B.Y;
+        }
+
+        public void Deconstruct(out Point2 a, out Point2 b)
+        {
+            a = this.A;
+            b = this.B;
+        }
+
         public static Line2 FromPoints(double ax, double ay, double bx, double by, double dx = 0.0, double dy = 0.0)
         {
             return new Line2(ax + dx, ay + dy, bx + dx, by + dy);
