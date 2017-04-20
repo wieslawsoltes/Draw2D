@@ -63,12 +63,12 @@ namespace Draw2D.Core.Shapes
 
             if (r.Selected.Contains(_topLeft))
             {
-                _topLeft.Draw(dc, r, dx, dy);
+                TopLeft.Draw(dc, r, dx, dy);
             }
 
             if (r.Selected.Contains(_bottomRight))
             {
-                _bottomRight.Draw(dc, r, dx, dy);
+                BottomRight.Draw(dc, r, dx, dy);
             }
 
             base.Draw(dc, r, dx, dy);
