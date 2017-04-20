@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Draw2D.Core;
 using Draw2D.Core.Shapes;
-using Draw2D.Spatial;
+using Spatial;
 
 namespace Draw2D.Editor.Intersections.Line
 {

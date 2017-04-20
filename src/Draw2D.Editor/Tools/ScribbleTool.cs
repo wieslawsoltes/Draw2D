@@ -4,8 +4,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Draw2D.Core.Shapes;
-using Draw2D.Spatial;
-using Draw2D.Spatial.DouglasPeucker;
+using Spatial;
+using Spatial.DouglasPeucker;
 
 namespace Draw2D.Editor.Tools
 {

@@ -17,6 +17,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Math.Spatial" Version="1.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Draw2D.Core\Draw2D.Core.csproj" />
   </ItemGroup>
 

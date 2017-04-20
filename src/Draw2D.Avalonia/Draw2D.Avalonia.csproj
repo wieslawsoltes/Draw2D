@@ -36,6 +36,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Math.Spatial" Version="1.0.0" />
     <PackageReference Include="Microsoft.NETCore.Runtime.CoreCLR" Version="1.1.1" />
     <PackageReference Include="Microsoft.NETCore.DotNetHostPolicy" Version="1.1.0" />
     <PackageReference Include="Avalonia" Version="0.4.1-build2959-alpha" />

@@ -3,9 +3,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using Draw2D.Core.Shapes;
-using Draw2D.Spatial;
-using Draw2D.Spatial.ConvexHull;
-using Draw2D.Spatial.Sat;
+using Spatial;
+using Spatial.ConvexHull;
+using Spatial.Sat;
 
 namespace Draw2D.Editor.Bounds
 {
