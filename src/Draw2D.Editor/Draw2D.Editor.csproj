@@ -17,7 +17,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Math.Spatial" Version="1.0.0" />
+    <PackageReference Include="Math.Spatial" Version="1.0.2" />
   </ItemGroup>
 
   <ItemGroup>
