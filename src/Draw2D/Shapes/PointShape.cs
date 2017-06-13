@@ -46,24 +46,24 @@ namespace Draw2D.Core.Shapes
             yield return this;
         }
 
-        public override bool Invalidate(ShapeRenderer r, double dx, double dy)
+        public override bool Invalidate(ShapeRenderer renderer, double dx, double dy)
         {
-            bool result = base.Invalidate(r, dx, dy);
+            bool result = base.Invalidate(renderer, dx, dy);
 
-            _template?.Invalidate(r, dx, dy);
+            _template?.Invalidate(renderer, dx, dy);
 
             return this.IsDirty | result;
         }
 
-        public override void Draw(object dc, ShapeRenderer r, double dx, double dy)
+        public override void Draw(object dc, ShapeRenderer renderer, double dx, double dy, object db, object r)
         {
             if (_template != null)
             {
-                var state = base.BeginTransform(dc, r);
+                var state = base.BeginTransform(dc, renderer);
 
-                _template.Draw(dc, r, X + dx, Y + dy);
+                _template.Draw(dc, renderer, X + dx, Y + dy, db, r);
 
-                base.EndTransform(dc, r, state);
+                base.EndTransform(dc, renderer, state);
             }
         }
 

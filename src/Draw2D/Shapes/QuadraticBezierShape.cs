@@ -55,17 +55,17 @@ namespace Draw2D.Core.Shapes
             }
         }
 
-        public override bool Invalidate(ShapeRenderer r, double dx, double dy)
+        public override bool Invalidate(ShapeRenderer renderer, double dx, double dy)
         {
-            bool result = base.Invalidate(r, dx, dy);
+            bool result = base.Invalidate(renderer, dx, dy);
 
-            result |= _startPoint?.Invalidate(r, dx, dy) ?? false;
-            result |= _point1?.Invalidate(r, dx, dy) ?? false;
-            result |= _point2?.Invalidate(r, dx, dy) ?? false;
+            result |= _startPoint?.Invalidate(renderer, dx, dy) ?? false;
+            result |= _point1?.Invalidate(renderer, dx, dy) ?? false;
+            result |= _point2?.Invalidate(renderer, dx, dy) ?? false;
 
             if (this.IsDirty || result == true)
             {
-                r.InvalidateCache(this, Style, dx, dy);
+                renderer.InvalidateCache(this, Style, dx, dy);
                 this.IsDirty = false;
                 result |= true;
             }
@@ -73,32 +73,32 @@ namespace Draw2D.Core.Shapes
             return result;
         }
 
-        public override void Draw(object dc, ShapeRenderer r, double dx, double dy)
+        public override void Draw(object dc, ShapeRenderer renderer, double dx, double dy, object db, object r)
         {
-            var state = base.BeginTransform(dc, r);
+            var state = base.BeginTransform(dc, renderer);
 
             if (Style != null)
             {
-                r.DrawQuadraticBezier(dc, this, Style, dx, dy);
+                renderer.DrawQuadraticBezier(dc, this, Style, dx, dy);
             }
 
-            if (r.Selected.Contains(_startPoint))
+            if (renderer.Selected.Contains(_startPoint))
             {
-                _startPoint.Draw(dc, r, dx, dy);
+                _startPoint.Draw(dc, renderer, dx, dy, db, r);
             }
 
-            if (r.Selected.Contains(_point1))
+            if (renderer.Selected.Contains(_point1))
             {
-                _point1.Draw(dc, r, dx, dy);
+                _point1.Draw(dc, renderer, dx, dy, db, r);
             }
 
-            if (r.Selected.Contains(_point2))
+            if (renderer.Selected.Contains(_point2))
             {
-                _point2.Draw(dc, r, dx, dy);
+                _point2.Draw(dc, renderer, dx, dy, db, r);
             }
 
-            base.Draw(dc, r, dx, dy);
-            base.EndTransform(dc, r, state);
+            base.Draw(dc, renderer, dx, dy, db, r);
+            base.EndTransform(dc, renderer, state);
         }
 
         public override void Move(ISet<BaseShape> selected, double dx, double dy)

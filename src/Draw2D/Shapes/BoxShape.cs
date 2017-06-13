@@ -46,12 +46,12 @@ namespace Draw2D.Core.Shapes
             }
         }
 
-        public override bool Invalidate(ShapeRenderer r, double dx, double dy)
+        public override bool Invalidate(ShapeRenderer renderer, double dx, double dy)
         {
-            bool result = base.Invalidate(r, dx, dy);
+            bool result = base.Invalidate(renderer, dx, dy);
 
-            result |= _topLeft?.Invalidate(r, dx, dy) ?? false;
-            result |= _bottomRight?.Invalidate(r, dx, dy) ?? false;
+            result |= _topLeft?.Invalidate(renderer, dx, dy) ?? false;
+            result |= _bottomRight?.Invalidate(renderer, dx, dy) ?? false;
 
             return result;
         }

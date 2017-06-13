@@ -15,7 +15,7 @@ namespace Draw2D.Core.Containers
         ObservableCollection<LineShape> Guides { get; set; }
         ObservableCollection<BaseShape> Shapes { get; set; }
         IEnumerable<PointShape> GetPoints();
-        bool Invalidate(ShapeRenderer r, double dx, double dy);
-        void Draw(object dc, ShapeRenderer r, double dx, double dy);
+        bool Invalidate(ShapeRenderer renderer, double dx, double dy);
+        void Draw(object dc, ShapeRenderer renderer, double dx, double dy, object db, object r);
     }
 }

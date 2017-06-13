@@ -65,7 +65,7 @@ namespace Draw2D.Core.Containers
             }
         }
 
-        public bool Invalidate(ShapeRenderer r, double dx, double dy)
+        public bool Invalidate(ShapeRenderer renderer, double dx, double dy)
         {
             bool result = false;
 
@@ -75,13 +75,13 @@ namespace Draw2D.Core.Containers
             {
                 foreach (var guide in Guides)
                 {
-                    result |= guide.Invalidate(r, dx, dy);
+                    result |= guide.Invalidate(renderer, dx, dy);
                 }
             }
 
             foreach (var shape in Shapes)
             {
-                result |= shape.Invalidate(r, dx, dy);
+                result |= shape.Invalidate(renderer, dx, dy);
             }
 
             foreach (var point in points)
@@ -92,19 +92,19 @@ namespace Draw2D.Core.Containers
             return result;
         }
 
-        public void Draw(object dc, ShapeRenderer r, double dx, double dy)
+        public void Draw(object dc, ShapeRenderer renderer, double dx, double dy, object db, object r)
         {
             if (Guides != null)
             {
                 foreach (var shape in Guides)
                 {
-                    shape.Draw(dc, r, dx, dy);
+                    shape.Draw(dc, renderer, dx, dy, db, r);
                 }
             }
 
             foreach (var shape in Shapes)
             {
-                shape.Draw(dc, r, dx, dy);
+                shape.Draw(dc, renderer, dx, dy, db, r);
             }
         }
 

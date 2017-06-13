@@ -28,18 +28,18 @@ namespace Draw2D.Core.Shapes
             this.Points = points;
         }
 
-        public override bool Invalidate(ShapeRenderer r, double dx, double dy)
+        public override bool Invalidate(ShapeRenderer renderer, double dx, double dy)
         {
-            return base.Invalidate(r, dx, dy);
+            return base.Invalidate(renderer, dx, dy);
         }
 
-        public override void Draw(object dc, ShapeRenderer r, double dx, double dy)
+        public override void Draw(object dc, ShapeRenderer renderer, double dx, double dy, object db, object r)
         {
             foreach (var point in Points)
             {
-                if (r.Selected.Contains(point))
+                if (renderer.Selected.Contains(point))
                 {
-                    point.Draw(dc, r, dx, dy);
+                    point.Draw(dc, renderer, dx, dy, db , r);
                 }
             }
         }

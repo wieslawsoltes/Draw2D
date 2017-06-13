@@ -66,18 +66,18 @@ namespace Draw2D.Core.Shapes
             }
         }
 
-        public override bool Invalidate(ShapeRenderer r, double dx, double dy)
+        public override bool Invalidate(ShapeRenderer renderer, double dx, double dy)
         {
-            bool result = base.Invalidate(r, dx, dy);
+            bool result = base.Invalidate(renderer, dx, dy);
 
             foreach (var figure in Figures)
             {
-                result |= figure.Invalidate(r, dx, dy);
+                result |= figure.Invalidate(renderer, dx, dy);
             }
 
             if (this.IsDirty || result == true)
             {
-                r.InvalidateCache(this, Style, dx, dy);
+                renderer.InvalidateCache(this, Style, dx, dy);
                 this.IsDirty = false;
                 result |= true;
             }
@@ -85,27 +85,27 @@ namespace Draw2D.Core.Shapes
             return result;
         }
 
-        public override void Draw(object dc, ShapeRenderer r, double dx, double dy)
+        public override void Draw(object dc, ShapeRenderer renderer, double dx, double dy, object db, object r)
         {
-            var state = base.BeginTransform(dc, r);
+            var state = base.BeginTransform(dc, renderer);
 
-            var isPathSelected = r.Selected.Contains(this);
+            var isPathSelected = renderer.Selected.Contains(this);
 
             if (Style != null)
             {
-                r.DrawPath(dc, this, Style, dx, dy);
+                renderer.DrawPath(dc, this, Style, dx, dy);
             }
 
             foreach (var figure in Figures)
             {
-                Draw(dc, r, dx, dy, figure, isPathSelected);
+                Draw(dc, renderer, dx, dy, db, r, figure, isPathSelected);
             }
 
-            base.Draw(dc, r, dx, dy);
-            base.EndTransform(dc, r, state);
+            base.Draw(dc, renderer, dx, dy, db, r);
+            base.EndTransform(dc, renderer, state);
         }
 
-        private void Draw(object dc, ShapeRenderer r, double dx, double dy, FigureShape figure, bool isPathSelected)
+        private void Draw(object dc, ShapeRenderer renderer, double dx, double dy, object db, object r, FigureShape figure, bool isPathSelected)
         {
             foreach (var shape in figure.Shapes)
             {
@@ -113,84 +113,84 @@ namespace Draw2D.Core.Shapes
                 {
                     case LineShape line:
                         {
-                            var isSelected = r.Selected.Contains(line);
+                            var isSelected = renderer.Selected.Contains(line);
 
-                            if (isPathSelected || isSelected || r.Selected.Contains(line.StartPoint))
+                            if (isPathSelected || isSelected || renderer.Selected.Contains(line.StartPoint))
                             {
-                                line.StartPoint.Draw(dc, r, dx, dy);
+                                line.StartPoint.Draw(dc, renderer, dx, dy, db, r);
                             }
 
-                            if (isPathSelected || isSelected || r.Selected.Contains(line.Point))
+                            if (isPathSelected || isSelected || renderer.Selected.Contains(line.Point))
                             {
-                                line.Point.Draw(dc, r, dx, dy);
+                                line.Point.Draw(dc, renderer, dx, dy, db, r);
                             }
 
                             foreach (var point in line.Points)
                             {
-                                if (isPathSelected || isSelected || r.Selected.Contains(point))
+                                if (isPathSelected || isSelected || renderer.Selected.Contains(point))
                                 {
-                                    point.Draw(dc, r, dx, dy);
+                                    point.Draw(dc, renderer, dx, dy, db, r);
                                 }
                             }
                         }
                         break;
                     case CubicBezierShape cubic:
                         {
-                            var isSelected = r.Selected.Contains(cubic);
+                            var isSelected = renderer.Selected.Contains(cubic);
 
-                            if (isPathSelected || isSelected || r.Selected.Contains(cubic.StartPoint))
+                            if (isPathSelected || isSelected || renderer.Selected.Contains(cubic.StartPoint))
                             {
-                                cubic.StartPoint.Draw(dc, r, dx, dy);
+                                cubic.StartPoint.Draw(dc, renderer, dx, dy, db, r);
                             }
 
-                            if (isPathSelected || isSelected || r.Selected.Contains(cubic.Point1))
+                            if (isPathSelected || isSelected || renderer.Selected.Contains(cubic.Point1))
                             {
-                                cubic.Point1.Draw(dc, r, dx, dy);
+                                cubic.Point1.Draw(dc, renderer, dx, dy, db, r);
                             }
 
-                            if (isPathSelected || isSelected || r.Selected.Contains(cubic.Point2))
+                            if (isPathSelected || isSelected || renderer.Selected.Contains(cubic.Point2))
                             {
-                                cubic.Point2.Draw(dc, r, dx, dy);
+                                cubic.Point2.Draw(dc, renderer, dx, dy, db, r);
                             }
 
-                            if (isPathSelected || isSelected || r.Selected.Contains(cubic.Point3))
+                            if (isPathSelected || isSelected || renderer.Selected.Contains(cubic.Point3))
                             {
-                                cubic.Point3.Draw(dc, r, dx, dy);
+                                cubic.Point3.Draw(dc, renderer, dx, dy, db, r);
                             }
 
                             foreach (var point in cubic.Points)
                             {
-                                if (isPathSelected || isSelected || r.Selected.Contains(point))
+                                if (isPathSelected || isSelected || renderer.Selected.Contains(point))
                                 {
-                                    point.Draw(dc, r, dx, dy);
+                                    point.Draw(dc, renderer, dx, dy, db, r);
                                 }
                             }
                         }
                         break;
                     case QuadraticBezierShape quadratic:
                         {
-                            var isSelected = r.Selected.Contains(quadratic);
+                            var isSelected = renderer.Selected.Contains(quadratic);
 
-                            if (isPathSelected || isSelected || r.Selected.Contains(quadratic.StartPoint))
+                            if (isPathSelected || isSelected || renderer.Selected.Contains(quadratic.StartPoint))
                             {
-                                quadratic.StartPoint.Draw(dc, r, dx, dy);
+                                quadratic.StartPoint.Draw(dc, renderer, dx, dy, db, r);
                             }
 
-                            if (isPathSelected || isSelected || r.Selected.Contains(quadratic.Point1))
+                            if (isPathSelected || isSelected || renderer.Selected.Contains(quadratic.Point1))
                             {
-                                quadratic.Point1.Draw(dc, r, dx, dy);
+                                quadratic.Point1.Draw(dc, renderer, dx, dy, db, r);
                             }
 
-                            if (isPathSelected || isSelected || r.Selected.Contains(quadratic.Point2))
+                            if (isPathSelected || isSelected || renderer.Selected.Contains(quadratic.Point2))
                             {
-                                quadratic.Point2.Draw(dc, r, dx, dy);
+                                quadratic.Point2.Draw(dc, renderer, dx, dy, db, r);
                             }
 
                             foreach (var point in quadratic.Points)
                             {
-                                if (isPathSelected || isSelected || r.Selected.Contains(point))
+                                if (isPathSelected || isSelected || renderer.Selected.Contains(point))
                                 {
-                                    point.Draw(dc, r, dx, dy);
+                                    point.Draw(dc, renderer, dx, dy, db, r);
                                 }
                             }
                         }

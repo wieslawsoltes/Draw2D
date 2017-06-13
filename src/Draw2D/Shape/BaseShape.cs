@@ -26,30 +26,30 @@ namespace Draw2D.Core.Shape
 
         public abstract IEnumerable<PointShape> GetPoints();
 
-        public virtual bool Invalidate(ShapeRenderer r, double dx, double dy)
+        public virtual bool Invalidate(ShapeRenderer renderer, double dx, double dy)
         {
             bool result = false;
-            result |= _style?.Invalidate(r) ?? false;
-            result |= _transform?.Invalidate(r) ?? false;
+            result |= _style?.Invalidate(renderer) ?? false;
+            result |= _transform?.Invalidate(renderer) ?? false;
             return result;
         }
 
-        public abstract void Draw(object dc, ShapeRenderer r, double dx, double dy);
+        public abstract void Draw(object dc, ShapeRenderer renderer, double dx, double dy, object db, object r);
 
-        public virtual object BeginTransform(object dc, ShapeRenderer r)
+        public virtual object BeginTransform(object dc, ShapeRenderer renderer)
         {
             if (Transform != null)
             {
-                return r.PushMatrix(dc, Transform);
+                return renderer.PushMatrix(dc, Transform);
             }
             return null;
         }
 
-        public virtual void EndTransform(object dc, ShapeRenderer r, object state)
+        public virtual void EndTransform(object dc, ShapeRenderer renderer, object state)
         {
             if (Transform != null)
             {
-                r.PopMatrix(dc, state);
+                renderer.PopMatrix(dc, state);
             }
         }
 

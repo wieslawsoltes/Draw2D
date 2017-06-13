@@ -17,13 +17,13 @@ namespace Draw2D.Core.Shapes
         {
         }
 
-        public override bool Invalidate(ShapeRenderer r, double dx, double dy)
+        public override bool Invalidate(ShapeRenderer renderer, double dx, double dy)
         {
-            bool result = base.Invalidate(r, dx, dy);
+            bool result = base.Invalidate(renderer, dx, dy);
 
             if (this.IsDirty || result == true)
             {
-                r.InvalidateCache(this, Style, dx, dy);
+                renderer.InvalidateCache(this, Style, dx, dy);
                 this.IsDirty = false;
                 result |= true;
             }
@@ -31,27 +31,27 @@ namespace Draw2D.Core.Shapes
             return result;
         }
 
-        public override void Draw(object dc, ShapeRenderer r, double dx, double dy)
+        public override void Draw(object dc, ShapeRenderer renderer, double dx, double dy, object db, object r)
         {
-            var state = base.BeginTransform(dc, r);
+            var state = base.BeginTransform(dc, renderer);
 
             if (Style != null)
             {
-                r.DrawEllipse(dc, this, Style, dx, dy);
+                renderer.DrawEllipse(dc, this, Style, dx, dy);
             }
 
-            if (r.Selected.Contains(TopLeft))
+            if (renderer.Selected.Contains(TopLeft))
             {
-                TopLeft.Draw(dc, r, dx, dy);
+                TopLeft.Draw(dc, renderer, dx, dy, db, r);
             }
 
-            if (r.Selected.Contains(BottomRight))
+            if (renderer.Selected.Contains(BottomRight))
             {
-                BottomRight.Draw(dc, r, dx, dy);
+                BottomRight.Draw(dc, renderer, dx, dy, db, r);
             }
 
-            base.Draw(dc, r, dx, dy);
-            base.EndTransform(dc, r, state);
+            base.Draw(dc, renderer, dx, dy, db, r);
+            base.EndTransform(dc, renderer, state);
         }
 
         public object Copy(IDictionary<object, object> shared)

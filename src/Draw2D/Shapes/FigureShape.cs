@@ -90,26 +90,26 @@ namespace Draw2D.Core.Shapes
             }
         }
 
-        public override bool Invalidate(ShapeRenderer r, double dx, double dy)
+        public override bool Invalidate(ShapeRenderer renderer, double dx, double dy)
         {
-            bool result = base.Invalidate(r, dx, dy);
+            bool result = base.Invalidate(renderer, dx, dy);
 
             if (Guides != null)
             {
                 foreach (var guide in Guides)
                 {
-                    result |= guide.Invalidate(r, dx, dy);
+                    result |= guide.Invalidate(renderer, dx, dy);
                 }
             }
 
             foreach (var shape in Shapes)
             {
-                result |= shape.Invalidate(r, dx, dy);
+                result |= shape.Invalidate(renderer, dx, dy);
             }
 
             if (this.IsDirty || result == true)
             {
-                r.InvalidateCache(this, Style, dx, dy);
+                renderer.InvalidateCache(this, Style, dx, dy);
                 this.IsDirty = false;
                 result |= true;
             }
@@ -117,24 +117,24 @@ namespace Draw2D.Core.Shapes
             return result;
         }
 
-        public override void Draw(object dc, ShapeRenderer r, double dx, double dy)
+        public override void Draw(object dc, ShapeRenderer renderer, double dx, double dy, object db, object r)
         {
-            var state = base.BeginTransform(dc, r);
+            var state = base.BeginTransform(dc, renderer);
 
             if (Guides != null)
             {
                 foreach (var guide in Guides)
                 {
-                    guide.Draw(dc, r, dx, dy);
+                    guide.Draw(dc, renderer, dx, dy, db, r);
                 }
             }
 
             foreach (var shape in Shapes)
             {
-                shape.Draw(dc, r, dx, dy);
+                shape.Draw(dc, renderer, dx, dy, db ,r);
             }
 
-            base.EndTransform(dc, r, state);
+            base.EndTransform(dc, renderer, state);
         }
 
         public override void Move(ISet<BaseShape> selected, double dx, double dy)

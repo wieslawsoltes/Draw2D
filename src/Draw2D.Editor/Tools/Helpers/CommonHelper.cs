@@ -25,34 +25,34 @@ namespace Draw2D.Editor.Tools.Helpers
             _ellipse = new EllipseShape(new PointShape(0, 0, null), new PointShape(0, 0, null));
         }
 
-        public void DrawLine(object dc, ShapeRenderer r, PointShape a, PointShape b, double dx, double dy)
+        public void DrawLine(object dc, ShapeRenderer renderer, PointShape a, PointShape b, double dx, double dy)
         {
             _line.Style = _strokeStyle;
             _line.StartPoint.X = a.X;
             _line.StartPoint.Y = a.Y;
             _line.Point.X = b.X;
             _line.Point.Y = b.Y;
-            _line.Draw(dc, r, dx, dy);
+            _line.Draw(dc, renderer, dx, dy, null, null);
         }
 
-        public void FillEllipse(object dc, ShapeRenderer r, PointShape s, double radius, double dx, double dy)
+        public void FillEllipse(object dc, ShapeRenderer renderer, PointShape s, double radius, double dx, double dy)
         {
             _ellipse.Style = _fillStyle;
             _ellipse.TopLeft.X = s.X - radius;
             _ellipse.TopLeft.Y = s.Y - radius;
             _ellipse.BottomRight.X = s.X + radius;
             _ellipse.BottomRight.Y = s.Y + radius;
-            _ellipse.Draw(dc, r, dx, dy);
+            _ellipse.Draw(dc, renderer, dx, dy, null, null);
         }
 
-        public void DrawEllipse(object dc, ShapeRenderer r, PointShape s, double radius, double dx, double dy)
+        public void DrawEllipse(object dc, ShapeRenderer renderer, PointShape s, double radius, double dx, double dy)
         {
             _ellipse.Style = _strokeStyle;
             _ellipse.TopLeft.X = s.X - radius;
             _ellipse.TopLeft.Y = s.Y - radius;
             _ellipse.BottomRight.X = s.X + radius;
             _ellipse.BottomRight.Y = s.Y + radius;
-            _ellipse.Draw(dc, r, dx, dy);
+            _ellipse.Draw(dc, renderer, dx, dy, null, null);
         }
     }
 }

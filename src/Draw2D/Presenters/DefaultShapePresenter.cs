@@ -7,16 +7,16 @@ namespace Draw2D.Core.Presenters
 {
     public class DefaultShapePresenter : ShapePresenter
     {
-        public override void DrawContainer(object dc, IShapeContainer container, ShapeRenderer r, double dx, double dy)
+        public override void DrawContainer(object dc, IShapeContainer container, ShapeRenderer renderer, double dx, double dy, object db, object r)
         {
-            container.Invalidate(r, dx, dy);
-            container.Draw(dc, r, dx, dy);
+            container.Invalidate(renderer, dx, dy);
+            container.Draw(dc, renderer, dx, dy, db, r);
         }
 
-        public override void DrawHelpers(object dc, IShapeContainer container, ShapeRenderer r, double dx, double dy)
+        public override void DrawHelpers(object dc, IShapeContainer container, ShapeRenderer renderer, double dx, double dy)
         {
             var shapes = container.Shapes;
-            var selected = r.Selected;
+            var selected = renderer.Selected;
 
             foreach (var shape in shapes)
             {
@@ -24,7 +24,7 @@ namespace Draw2D.Core.Presenters
                 {
                     if (Helpers.TryGetValue(shape.GetType(), out var helper))
                     {
-                        helper.Draw(dc, r, shape, selected, dx, dy);
+                        helper.Draw(dc, renderer, shape, selected, dx, dy);
                     }
                 }
             }

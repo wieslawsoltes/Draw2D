@@ -7,6 +7,6 @@ namespace Draw2D.Core.Renderer
 {
     public abstract class ShapeHelper
     {
-        public abstract void Draw(object dc, ShapeRenderer r, BaseShape shape, ISet<BaseShape> selected, double dx, double dy);
+        public abstract void Draw(object dc, ShapeRenderer renderer, BaseShape shape, ISet<BaseShape> selected, double dx, double dy);
     }
 }

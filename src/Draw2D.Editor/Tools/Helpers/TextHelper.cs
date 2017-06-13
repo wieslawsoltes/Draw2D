@@ -8,7 +8,7 @@ namespace Draw2D.Editor.Tools.Helpers
 {
     public class TextHelper : CommonHelper
     {
-        public override void Draw(object dc, ShapeRenderer r, BaseShape shape, ISet<BaseShape> selected, double dx, double dy)
+        public override void Draw(object dc, ShapeRenderer renderer, BaseShape shape, ISet<BaseShape> selected, double dx, double dy)
         {
         }
     }
