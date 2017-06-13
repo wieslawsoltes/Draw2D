@@ -1,11 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26403.7
+VisualStudioVersion = 15.0.26430.13
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Draw2D.Wpf", "src\Draw2D.Wpf\Draw2D.Wpf.csproj", "{41A7B9BA-A69C-46D4-997E-F2E12ACE58D6}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Draw2D.Core", "src\Draw2D.Core\Draw2D.Core.csproj", "{91296102-D031-473B-9303-3F9143BA14E7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Draw2D", "src\Draw2D.Core\Draw2D.csproj", "{91296102-D031-473B-9303-3F9143BA14E7}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Draw2D.Avalonia", "src\Draw2D.Avalonia\Draw2D.Avalonia.csproj", "{B6933C11-D4F5-434E-9C15-7E3E91F07161}"
 EndProject
