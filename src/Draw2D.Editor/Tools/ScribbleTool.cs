@@ -24,7 +24,7 @@ namespace Draw2D.Editor.Tools
 
         public State CurrentState { get; set; } = State.Start;
 
-        public override string Name => "Scribble";
+        public override string Title => "Scribble";
 
         public ScribbleToolSettings Settings { get; set; }
 

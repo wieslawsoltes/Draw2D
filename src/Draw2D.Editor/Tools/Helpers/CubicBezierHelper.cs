@@ -1,8 +1,8 @@
 ﻿// Copyright (c) Wiesław Šoltés. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using System.Collections.Generic;
-using Draw2D.Core;
-using Draw2D.Core.Renderers;
+using Draw2D.Core.Renderer;
+using Draw2D.Core.Shape;
 using Draw2D.Core.Shapes;
 
 namespace Draw2D.Editor.Tools.Helpers
@@ -16,7 +16,7 @@ namespace Draw2D.Editor.Tools.Helpers
             DrawLine(dc, r, cubicBezier.Point1, cubicBezier.Point2, dx, dy);
         }
 
-        public override void Draw(object dc, ShapeRenderer r, ShapeObject shape, ISet<ShapeObject> selected, double dx, double dy)
+        public override void Draw(object dc, ShapeRenderer r, BaseShape shape, ISet<BaseShape> selected, double dx, double dy)
         {
             if (shape is CubicBezierShape cubicBezier)
             {

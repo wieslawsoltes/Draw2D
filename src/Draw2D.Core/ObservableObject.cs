@@ -7,6 +7,14 @@ namespace Draw2D.Core
 {
     public abstract class ObservableObject : INotifyPropertyChanged
     {
+        private string _name;
+
+        public string Name
+        {
+            get => _name;
+            set => Update(ref _name, value);
+        }
+
         internal bool IsDirty { get; set; }
 
         public void MarkAsDirty(bool value) => IsDirty = value;

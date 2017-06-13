@@ -23,12 +23,12 @@ namespace Draw2D.Avalonia.Renderers
         {
         }
 
-        public static Color FromDrawColor(DrawColor color)
+        public static Color FromDrawColor(ArgbColor color)
         {
             return Color.FromArgb(color.A, color.R, color.G, color.B);
         }
 
-        public static AvaloniaBrushCache FromDrawStyle(DrawStyle style)
+        public static AvaloniaBrushCache FromDrawStyle(ShapeStyle style)
         {
             Brush stroke = null;
             Pen strokePen = null;

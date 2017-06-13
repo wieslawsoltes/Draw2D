@@ -18,7 +18,7 @@ namespace Draw2D.Editor.Tools
 
         public State CurrentState { get; set; } = State.StartPoint;
 
-        public override string Name => "QuadraticBezier";
+        public override string Title => "QuadraticBezier";
 
         public QuadraticBezierToolSettings Settings { get; set; }
 

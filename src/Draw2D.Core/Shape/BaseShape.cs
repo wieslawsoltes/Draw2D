@@ -1,18 +1,18 @@
 ﻿// Copyright (c) Wiesław Šoltés. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using System.Collections.Generic;
-using Draw2D.Core.Renderers;
+using Draw2D.Core.Renderer;
 using Draw2D.Core.Shapes;
 using Draw2D.Core.Style;
 
-namespace Draw2D.Core
+namespace Draw2D.Core.Shape
 {
-    public abstract class ShapeObject : NamedObject, IDrawable, ISelectable
+    public abstract class BaseShape : ObservableObject, IDrawable, ISelectable
     {
-        private DrawStyle _style;
+        private ShapeStyle _style;
         private MatrixObject _transform;
 
-        public DrawStyle Style
+        public ShapeStyle Style
         {
             get => _style;
             set => Update(ref _style, value);
@@ -52,9 +52,9 @@ namespace Draw2D.Core
             }
         }
 
-        public abstract void Move(ISet<ShapeObject> selected, double dx, double dy);
+        public abstract void Move(ISet<BaseShape> selected, double dx, double dy);
 
-        public virtual void Select(ISet<ShapeObject> selected)
+        public virtual void Select(ISet<BaseShape> selected)
         {
             if (!selected.Contains(this))
             {
@@ -62,7 +62,7 @@ namespace Draw2D.Core
             }
         }
 
-        public virtual void Deselect(ISet<ShapeObject> selected)
+        public virtual void Deselect(ISet<BaseShape> selected)
         {
             if (selected.Contains(this))
             {

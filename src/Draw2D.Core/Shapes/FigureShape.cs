@@ -4,16 +4,17 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using Draw2D.Core.Containers;
-using Draw2D.Core.Renderers;
+using Draw2D.Core.Renderer;
+using Draw2D.Core.Shape;
 
 namespace Draw2D.Core.Shapes
 {
-    public class FigureShape : ShapeObject, IShapeContainer, ICopyable
+    public class FigureShape : BaseShape, IShapeContainer, ICopyable
     {
         private double _width;
         private double _height;
         private ObservableCollection<LineShape> _guides;
-        private ObservableCollection<ShapeObject> _shapes;
+        private ObservableCollection<BaseShape> _shapes;
         private bool _isFilled;
         private bool _isClosed;
 
@@ -35,7 +36,7 @@ namespace Draw2D.Core.Shapes
             set => Update(ref _guides, value);
         }
 
-        public ObservableCollection<ShapeObject> Shapes
+        public ObservableCollection<BaseShape> Shapes
         {
             get => _shapes;
             set => Update(ref _shapes, value);
@@ -56,10 +57,10 @@ namespace Draw2D.Core.Shapes
         public FigureShape()
             : base()
         {
-            _shapes = new ObservableCollection<ShapeObject>();
+            _shapes = new ObservableCollection<BaseShape>();
         }
 
-        public FigureShape(ObservableCollection<ShapeObject> shapes)
+        public FigureShape(ObservableCollection<BaseShape> shapes)
             : base()
         {
             this.Shapes = shapes;
@@ -71,7 +72,7 @@ namespace Draw2D.Core.Shapes
             this.Name = name;
         }
 
-        public FigureShape(string name, ObservableCollection<ShapeObject> shapes)
+        public FigureShape(string name, ObservableCollection<BaseShape> shapes)
             : base()
         {
             this.Name = name;
@@ -136,7 +137,7 @@ namespace Draw2D.Core.Shapes
             base.EndTransform(dc, r);
         }
 
-        public override void Move(ISet<ShapeObject> selected, double dx, double dy)
+        public override void Move(ISet<BaseShape> selected, double dx, double dy)
         {
             var points = GetPoints().Distinct();
 
@@ -167,7 +168,7 @@ namespace Draw2D.Core.Shapes
                 {
                     if (shape is ICopyable copyable)
                     {
-                        copy.Shapes.Add((ShapeObject)copyable.Copy(shared));
+                        copy.Shapes.Add((BaseShape)copyable.Copy(shared));
                     }
                 }
             }

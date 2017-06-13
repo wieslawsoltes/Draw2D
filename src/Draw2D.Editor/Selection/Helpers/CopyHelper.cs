@@ -4,13 +4,14 @@ using System.Collections.Generic;
 using System.Linq;
 using Draw2D.Core;
 using Draw2D.Core.Containers;
+using Draw2D.Core.Shape;
 using Draw2D.Core.Shapes;
 
 namespace Draw2D.Editor.Selection.Helpers
 {
     public static class CopyHelper
     {
-        public static IEnumerable<PointShape> GetPoints(IEnumerable<ShapeObject> shapes)
+        public static IEnumerable<PointShape> GetPoints(IEnumerable<BaseShape> shapes)
         {
             foreach (var shape in shapes)
             {
@@ -21,7 +22,7 @@ namespace Draw2D.Editor.Selection.Helpers
             }
         }
 
-        public static IDictionary<object, object> GetPointsCopyDict(IEnumerable<ShapeObject> shapes)
+        public static IDictionary<object, object> GetPointsCopyDict(IEnumerable<BaseShape> shapes)
         {
             var copy = new Dictionary<object, object>();
 
@@ -33,7 +34,7 @@ namespace Draw2D.Editor.Selection.Helpers
             return copy;
         }
 
-        public static void Copy(IShapeContainer container, IEnumerable<ShapeObject> shapes, ISet<ShapeObject> selected)
+        public static void Copy(IShapeContainer container, IEnumerable<BaseShape> shapes, ISet<BaseShape> selected)
         {
             var shared = GetPointsCopyDict(shapes);
 
@@ -41,7 +42,7 @@ namespace Draw2D.Editor.Selection.Helpers
             {
                 if (shape is ICopyable copyable)
                 {
-                    var copy = (ShapeObject)copyable.Copy(shared);
+                    var copy = (BaseShape)copyable.Copy(shared);
                     if (copy != null && !(copy is PointShape))
                     {
                         copy.Select(selected);

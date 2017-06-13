@@ -6,9 +6,9 @@ namespace Draw2D.Editor.Tools
 {
     public class GuideToolSettings : SettingsBase
     {
-        private DrawStyle _guideStyle;
+        private ShapeStyle _guideStyle;
         
-        public DrawStyle GuideStyle
+        public ShapeStyle GuideStyle
         {
             get => _guideStyle;
             set => Update(ref _guideStyle, value);

@@ -11,7 +11,7 @@ namespace Draw2D.Editor.Filters
         private GridSnapMode _mode;
         private double _gridSizeX;
         private double _gridSizeY;
-        private DrawStyle _guideStyle;
+        private ShapeStyle _guideStyle;
 
         public bool IsEnabled
         {
@@ -43,7 +43,7 @@ namespace Draw2D.Editor.Filters
             set => Update(ref _gridSizeY, value);
         }
 
-        public DrawStyle GuideStyle
+        public ShapeStyle GuideStyle
         {
             get => _guideStyle;
             set => Update(ref _guideStyle, value);

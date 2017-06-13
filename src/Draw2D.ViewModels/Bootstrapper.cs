@@ -6,7 +6,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using Draw2D.Core.Containers;
 using Draw2D.Core.Presenters;
-using Draw2D.Core.Renderers;
+using Draw2D.Core.Renderer;
 using Draw2D.Core.Shapes;
 using Draw2D.Core.Style;
 using Draw2D.Editor;
@@ -46,7 +46,7 @@ namespace Draw2D.ViewModels
                     Mode = GridSnapMode.Horizontal | GridSnapMode.Vertical,
                     GridSizeX = 15.0,
                     GridSizeY = 15.0,
-                    GuideStyle = new DrawStyle(new DrawColor(128, 0, 255, 255), new DrawColor(128, 0, 255, 255), 2.0, true, true)
+                    GuideStyle = new ShapeStyle(new ArgbColor(128, 0, 255, 255), new ArgbColor(128, 0, 255, 255), 2.0, true, true)
                 }
             };
 
@@ -64,7 +64,7 @@ namespace Draw2D.ViewModels
                     | LineSnapMode.Horizontal
                     | LineSnapMode.Vertical,
                     Threshold = 10.0,
-                    GuideStyle = new DrawStyle(new DrawColor(128, 0, 255, 255), new DrawColor(128, 0, 255, 255), 2.0, true, true)
+                    GuideStyle = new ShapeStyle(new ArgbColor(128, 0, 255, 255), new ArgbColor(128, 0, 255, 255), 2.0, true, true)
                 }
             };
 
@@ -88,7 +88,7 @@ namespace Draw2D.ViewModels
                             Mode = GridSnapMode.Horizontal | GridSnapMode.Vertical,
                             GridSizeX = 15.0,
                             GridSizeY = 15.0,
-                            GuideStyle = new DrawStyle(new DrawColor(128, 0, 255, 255), new DrawColor(128, 0, 255, 255), 2.0, true, true)
+                            GuideStyle = new ShapeStyle(new ArgbColor(128, 0, 255, 255), new ArgbColor(128, 0, 255, 255), 2.0, true, true)
                         }
                     }
                 },
@@ -98,7 +98,7 @@ namespace Draw2D.ViewModels
                     Targets = SelectionTargets.Shapes | SelectionTargets.Guides,
                     SelectionModifier = Modifier.Control,
                     ConnectionModifier = Modifier.Shift,
-                    SelectionStyle = new DrawStyle(new DrawColor(255, 0, 120, 215), new DrawColor(60, 170, 204, 238), 2.0, true, true),
+                    SelectionStyle = new ShapeStyle(new ArgbColor(255, 0, 120, 215), new ArgbColor(60, 170, 204, 238), 2.0, true, true),
                     ClearSelectionOnClean = false,
                     HitTestRadius = 7.0,
                     ConnectPoints = true,
@@ -117,7 +117,7 @@ namespace Draw2D.ViewModels
                 },
                 Settings = new GuideToolSettings()
                 {
-                    GuideStyle = new DrawStyle(new DrawColor(128, 0, 255, 255), new DrawColor(128, 0, 255, 255), 2.0, true, true)
+                    GuideStyle = new ShapeStyle(new ArgbColor(128, 0, 255, 255), new ArgbColor(128, 0, 255, 255), 2.0, true, true)
                 }
             };
 
@@ -338,7 +338,7 @@ namespace Draw2D.ViewModels
             tools.Add(ellipseTool);
             tools.Add(textTool);
 
-            var currentTool = tools.FirstOrDefault(t => t.Name == "Selection");
+            var currentTool = tools.FirstOrDefault(t => t.Title == "Selection");
 
             var presenter = new DefaultShapePresenter()
             {
@@ -383,14 +383,14 @@ namespace Draw2D.ViewModels
 
             var workingContainer = new ShapeContainer();
 
-            var style = new DrawStyle(new DrawColor(255, 0, 255, 0), new DrawColor(80, 0, 255, 0), 2.0, true, true);
+            var style = new ShapeStyle(new ArgbColor(255, 0, 255, 0), new ArgbColor(80, 0, 255, 0), 2.0, true, true);
 
             var pointShape = new EllipseShape(new PointShape(-4, -4, null), new PointShape(4, 4, null))
             {
-                Style = new DrawStyle(new DrawColor(0, 0, 0, 0), new DrawColor(255, 255, 255, 0), 2.0, false, true)
+                Style = new ShapeStyle(new ArgbColor(0, 0, 0, 0), new ArgbColor(255, 255, 255, 0), 2.0, false, true)
             };
 
-            var guideTool = vm.Tools.FirstOrDefault(t => t.Name == "Guide") as GuideTool;
+            var guideTool = vm.Tools.FirstOrDefault(t => t.Title == "Guide") as GuideTool;
 
             container.Styles.Add(guideTool.Settings.GuideStyle);
             container.Styles.Add(pointShape.Style);

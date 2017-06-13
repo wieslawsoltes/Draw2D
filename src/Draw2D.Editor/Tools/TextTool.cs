@@ -18,7 +18,7 @@ namespace Draw2D.Editor.Tools
 
         public State CurrentState { get; set; } = State.TopLeft;
 
-        public override string Name => "Text";
+        public override string Title => "Text";
 
         public TextToolSettings Settings { get; set; }
 

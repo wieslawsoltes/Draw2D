@@ -2,15 +2,15 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using System.Collections.Generic;
 using System.Linq;
-using Draw2D.Core;
 using Draw2D.Core.Containers;
+using Draw2D.Core.Shape;
 using Draw2D.Core.Shapes;
 
 namespace Draw2D.Editor.Selection.Helpers
 {
     public static class DeleteHelper
     {
-        public static void Delete(IShapeContainer container, ISet<ShapeObject> selected)
+        public static void Delete(IShapeContainer container, ISet<BaseShape> selected)
         {
             var paths = container.Shapes.OfType<PathShape>();
             var groups = container.Shapes.OfType<GroupShape>();
@@ -65,7 +65,7 @@ namespace Draw2D.Editor.Selection.Helpers
             return false;
         }
 
-        public static bool TryToDelete(IShapeContainer container, IEnumerable<PathShape> paths, ShapeObject shape)
+        public static bool TryToDelete(IShapeContainer container, IEnumerable<PathShape> paths, BaseShape shape)
         {
             foreach (var path in paths)
             {
@@ -95,7 +95,7 @@ namespace Draw2D.Editor.Selection.Helpers
             return false;
         }
 
-        public static bool TryToDelete(IShapeContainer container, IEnumerable<GroupShape> groups, ShapeObject shape)
+        public static bool TryToDelete(IShapeContainer container, IEnumerable<GroupShape> groups, BaseShape shape)
         {
             foreach (var group in groups)
             {

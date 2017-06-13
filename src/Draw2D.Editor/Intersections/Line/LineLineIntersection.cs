@@ -2,7 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using System;
 using System.Linq;
-using Draw2D.Core;
+using Draw2D.Core.Shape;
 using Draw2D.Core.Shapes;
 using Spatial;
 
@@ -10,11 +10,11 @@ namespace Draw2D.Editor.Intersections.Line
 {
     public class LineLineIntersection : PointIntersection
     {
-        public override string Name => "Line-Line";
+        public override string Title => "Line-Line";
 
         public LineLineSettings Settings { get; set; }
 
-        public override void Find(IToolContext context, ShapeObject shape)
+        public override void Find(IToolContext context, BaseShape shape)
         {
             var line = shape as LineShape;
             if (line == null)

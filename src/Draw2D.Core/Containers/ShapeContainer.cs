@@ -2,19 +2,20 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using Draw2D.Core.Renderers;
+using Draw2D.Core.Renderer;
+using Draw2D.Core.Shape;
 using Draw2D.Core.Shapes;
 using Draw2D.Core.Style;
 
 namespace Draw2D.Core.Containers
 {
-    public class ShapeContainer : NamedObject, IShapeContainer, ICopyable
+    public class ShapeContainer : ObservableObject, IShapeContainer, ICopyable
     {
         private double _width;
         private double _height;
         private ObservableCollection<LineShape> _guides;
-        private ObservableCollection<ShapeObject> _shapes;
-        private ObservableCollection<DrawStyle> _styles;
+        private ObservableCollection<BaseShape> _shapes;
+        private ObservableCollection<ShapeStyle> _styles;
 
         public double Width
         {
@@ -34,13 +35,13 @@ namespace Draw2D.Core.Containers
             set => Update(ref _guides, value);
         }
 
-        public ObservableCollection<ShapeObject> Shapes
+        public ObservableCollection<BaseShape> Shapes
         {
             get => _shapes;
             set => Update(ref _shapes, value);
         }
 
-        public ObservableCollection<DrawStyle> Styles
+        public ObservableCollection<ShapeStyle> Styles
         {
             get => _styles;
             set => Update(ref _styles, value);
@@ -49,8 +50,8 @@ namespace Draw2D.Core.Containers
         public ShapeContainer()
         {
             _guides = new ObservableCollection<LineShape>();
-            _shapes = new ObservableCollection<ShapeObject>();
-            _styles = new ObservableCollection<DrawStyle>();
+            _shapes = new ObservableCollection<BaseShape>();
+            _styles = new ObservableCollection<ShapeStyle>();
         }
 
         public IEnumerable<PointShape> GetPoints()
@@ -127,7 +128,7 @@ namespace Draw2D.Core.Containers
                 {
                     if (shape is ICopyable copyable)
                     {
-                        copy.Shapes.Add((ShapeObject)copyable.Copy(shared));
+                        copy.Shapes.Add((BaseShape)copyable.Copy(shared));
                     }
                 }
             }

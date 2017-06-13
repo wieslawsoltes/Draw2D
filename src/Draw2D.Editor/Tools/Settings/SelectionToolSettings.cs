@@ -11,7 +11,7 @@ namespace Draw2D.Editor.Tools
         private SelectionTargets _targets;
         private Modifier _selectionModifier;
         private Modifier _connectionModifier;
-        private DrawStyle _selectionStyle;
+        private ShapeStyle _selectionStyle;
         private bool _clearSelectionOnClean;
         private double _hitTestRadius;
         private bool _connectPoints;
@@ -43,7 +43,7 @@ namespace Draw2D.Editor.Tools
             set => Update(ref _connectionModifier, value);
         }
 
-        public DrawStyle SelectionStyle
+        public ShapeStyle SelectionStyle
         {
             get => _selectionStyle;
             set => Update(ref _selectionStyle, value);

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Draw2D.Core.Style
 {
-    public class DrawColor : ObservableObject, ICopyable
+    public class ArgbColor : ObservableObject, ICopyable
     {
         private byte _a;
         private byte _r;
@@ -35,11 +35,11 @@ namespace Draw2D.Core.Style
             set => Update(ref _b, value);
         }
 
-        public DrawColor()
+        public ArgbColor()
         {
         }
 
-        public DrawColor(byte a, byte r, byte g, byte b)
+        public ArgbColor(byte a, byte r, byte g, byte b)
         {
             this.A = a;
             this.R = r;
@@ -49,7 +49,7 @@ namespace Draw2D.Core.Style
 
         public object Copy(IDictionary<object, object> shared)
         {
-            return new DrawColor()
+            return new ArgbColor()
             {
                 A = this.A,
                 R = this.R,

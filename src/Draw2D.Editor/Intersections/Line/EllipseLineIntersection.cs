@@ -3,7 +3,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Draw2D.Core;
+using Draw2D.Core.Shape;
 using Draw2D.Core.Shapes;
 using Spatial;
 
@@ -11,11 +11,11 @@ namespace Draw2D.Editor.Intersections.Line
 {
     public class EllipseLineIntersection : PointIntersection
     {
-        public override string Name => "Ellipse-Line";
+        public override string Title => "Ellipse-Line";
 
         public EllipseLineSettings Settings { get; set; }
 
-        public override void Find(IToolContext context, ShapeObject shape)
+        public override void Find(IToolContext context, BaseShape shape)
         {
             var line = shape as LineShape;
             if (line == null)

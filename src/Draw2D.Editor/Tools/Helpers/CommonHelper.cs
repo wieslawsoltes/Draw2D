@@ -1,6 +1,6 @@
 ﻿// Copyright (c) Wiesław Šoltés. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
-using Draw2D.Core.Renderers;
+using Draw2D.Core.Renderer;
 using Draw2D.Core.Shapes;
 using Draw2D.Core.Style;
 
@@ -8,19 +8,19 @@ namespace Draw2D.Editor.Tools.Helpers
 {
     public abstract class CommonHelper : ShapeHelper
     {
-        private DrawColor _stroke;
-        private DrawColor _fill;
-        private DrawStyle _strokeStyle;
-        private DrawStyle _fillStyle;
+        private ArgbColor _stroke;
+        private ArgbColor _fill;
+        private ShapeStyle _strokeStyle;
+        private ShapeStyle _fillStyle;
         private LineShape _line;
         private EllipseShape _ellipse;
 
         public CommonHelper()
         {
-            _stroke = new DrawColor(255, 0, 255, 255);
-            _fill = new DrawColor(255, 0, 255, 255);
-            _strokeStyle = new DrawStyle(_stroke, _fill, 2.0, true, false);
-            _fillStyle = new DrawStyle(_stroke, _fill, 2.0, false, true);
+            _stroke = new ArgbColor(255, 0, 255, 255);
+            _fill = new ArgbColor(255, 0, 255, 255);
+            _strokeStyle = new ShapeStyle(_stroke, _fill, 2.0, true, false);
+            _fillStyle = new ShapeStyle(_stroke, _fill, 2.0, false, true);
             _line = new LineShape(new PointShape(0, 0, null), new PointShape(0, 0, null));
             _ellipse = new EllipseShape(new PointShape(0, 0, null), new PointShape(0, 0, null));
         }

@@ -55,7 +55,7 @@
                     <ListBox ItemsSource="{Binding Tools}" SelectedItem="{Binding CurrentTool}">
                         <ListBox.ItemTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding Name}"/>
+                                <TextBlock Text="{Binding Title}"/>
                             </DataTemplate>
                         </ListBox.ItemTemplate>
                     </ListBox>
@@ -176,7 +176,7 @@
                         <ComboBox Grid.Row="0" x:Name="Intersections" ItemsSource="{Binding CurrentTool.Intersections}" SelectedIndex="0">
                             <ComboBox.ItemTemplate>
                                 <DataTemplate>
-                                    <TextBlock Text="{Binding Name}"/>
+                                    <TextBlock Text="{Binding Title}"/>
                                 </DataTemplate>
                             </ComboBox.ItemTemplate>
                         </ComboBox>
@@ -204,7 +204,7 @@
                         <ComboBox Grid.Row="0" x:Name="Filters" ItemsSource="{Binding CurrentTool.Filters}" SelectedIndex="0">
                             <ComboBox.ItemTemplate>
                                 <DataTemplate>
-                                    <TextBlock Text="{Binding Name}"/>
+                                    <TextBlock Text="{Binding Title}"/>
                                 </DataTemplate>
                             </ComboBox.ItemTemplate>
                         </ComboBox>

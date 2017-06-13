@@ -1,25 +1,25 @@
 ﻿// Copyright (c) Wiesław Šoltés. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using System.Collections.Generic;
-using Draw2D.Core.Renderers;
+using Draw2D.Core.Renderer;
 
 namespace Draw2D.Core.Style
 {
-    public class DrawStyle : NamedObject, ICopyable
+    public class ShapeStyle : ObservableObject, ICopyable
     {
-        private DrawColor _stroke;
-        private DrawColor _fill;
+        private ArgbColor _stroke;
+        private ArgbColor _fill;
         private double _thickness;
         private bool _isStroked;
         private bool _isFilled;
 
-        public DrawColor Stroke
+        public ArgbColor Stroke
         {
             get => _stroke;
             set => Update(ref _stroke, value);
         }
 
-        public DrawColor Fill
+        public ArgbColor Fill
         {
             get => _fill;
             set => Update(ref _fill, value);
@@ -43,11 +43,11 @@ namespace Draw2D.Core.Style
             set => Update(ref _isFilled, value);
         }
 
-        public DrawStyle()
+        public ShapeStyle()
         {
         }
 
-        public DrawStyle(DrawColor stroke, DrawColor fill, double thickness, bool isStroked, bool isFilled)
+        public ShapeStyle(ArgbColor stroke, ArgbColor fill, double thickness, bool isStroked, bool isFilled)
         {
             this.Stroke = stroke;
             this.Fill = fill;
@@ -83,11 +83,11 @@ namespace Draw2D.Core.Style
 
         public object Copy(IDictionary<object, object> shared)
         {
-            return new DrawStyle()
+            return new ShapeStyle()
             {
                 Name = this.Name,
-                Stroke = (DrawColor)this.Stroke.Copy(shared),
-                Fill = (DrawColor)this.Fill.Copy(shared),
+                Stroke = (ArgbColor)this.Stroke.Copy(shared),
+                Fill = (ArgbColor)this.Fill.Copy(shared),
                 Thickness = this.Thickness,
                 IsStroked = this.IsStroked,
                 IsFilled = this.IsFilled

@@ -2,7 +2,8 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using System.Collections.Generic;
 using System.Diagnostics;
-using Draw2D.Core.Renderers;
+using Draw2D.Core.Renderer;
+using Draw2D.Core.Shape;
 
 namespace Draw2D.Core.Shapes
 {
@@ -100,7 +101,7 @@ namespace Draw2D.Core.Shapes
             base.EndTransform(dc, r);
         }
 
-        public override void Move(ISet<ShapeObject> selected, double dx, double dy)
+        public override void Move(ISet<BaseShape> selected, double dx, double dy)
         {
             if (!selected.Contains(_startPoint))
             {
@@ -120,7 +121,7 @@ namespace Draw2D.Core.Shapes
             base.Move(selected, dx, dy);
         }
 
-        public override void Select(ISet<ShapeObject> selected)
+        public override void Select(ISet<BaseShape> selected)
         {
             base.Select(selected);
             StartPoint.Select(selected);
@@ -128,7 +129,7 @@ namespace Draw2D.Core.Shapes
             Point2.Select(selected);
         }
 
-        public override void Deselect(ISet<ShapeObject> selected)
+        public override void Deselect(ISet<BaseShape> selected)
         {
             base.Deselect(selected);
             StartPoint.Deselect(selected);

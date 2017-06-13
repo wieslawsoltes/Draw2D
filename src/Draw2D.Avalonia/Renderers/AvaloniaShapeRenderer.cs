@@ -5,8 +5,8 @@ using System.Collections.Generic;
 using System.Linq;
 using Avalonia;
 using Avalonia.Media;
-using Draw2D.Core;
-using Draw2D.Core.Renderers;
+using Draw2D.Core.Renderer;
+using Draw2D.Core.Shape;
 using Draw2D.Core.Shapes;
 using Draw2D.Core.Style;
 
@@ -14,11 +14,11 @@ namespace Draw2D.Avalonia.Renderers
 {
     public class AvaloniaShapeRenderer : ShapeRenderer
     {
-        private readonly IDictionary<DrawStyle, AvaloniaBrushCache> _brushCache;
+        private readonly IDictionary<ShapeStyle, AvaloniaBrushCache> _brushCache;
 
-        private ISet<ShapeObject> _selected;
+        private ISet<BaseShape> _selected;
 
-        public override ISet<ShapeObject> Selected
+        public override ISet<BaseShape> Selected
         {
             get => _selected;
             set => Update(ref _selected, value);
@@ -26,8 +26,8 @@ namespace Draw2D.Avalonia.Renderers
 
         public AvaloniaShapeRenderer()
         {
-            _brushCache = new Dictionary<DrawStyle, AvaloniaBrushCache>();
-            _selected = new HashSet<ShapeObject>();
+            _brushCache = new Dictionary<ShapeStyle, AvaloniaBrushCache>();
+            _selected = new HashSet<BaseShape>();
         }
 
         private static Point ToPoint(PointShape point, double dx, double dy)
@@ -49,7 +49,7 @@ namespace Draw2D.Avalonia.Renderers
             return new Rect(x, y, width, height);
         }
 
-        private static Geometry ToGeometry(CubicBezierShape cubicBezier, DrawStyle style, double dx, double dy)
+        private static Geometry ToGeometry(CubicBezierShape cubicBezier, ShapeStyle style, double dx, double dy)
         {
             var geometry = new StreamGeometry();
 
@@ -66,7 +66,7 @@ namespace Draw2D.Avalonia.Renderers
             return geometry;
         }
 
-        private static Geometry ToGeometry(QuadraticBezierShape quadraticBezier, DrawStyle style, double dx, double dy)
+        private static Geometry ToGeometry(QuadraticBezierShape quadraticBezier, ShapeStyle style, double dx, double dy)
         {
             var geometry = new StreamGeometry();
 
@@ -82,7 +82,7 @@ namespace Draw2D.Avalonia.Renderers
             return geometry;
         }
 
-        private static Geometry ToGeometry(PathShape path, DrawStyle style, double dx, double dy)
+        private static Geometry ToGeometry(PathShape path, ShapeStyle style, double dx, double dy)
         {
             var geometry = new StreamGeometry();
 
@@ -136,13 +136,13 @@ namespace Draw2D.Avalonia.Renderers
             return geometry;
         }
 
-        private static Geometry ToGeometry(EllipseShape ellipse, DrawStyle style, double dx, double dy)
+        private static Geometry ToGeometry(EllipseShape ellipse, ShapeStyle style, double dx, double dy)
         {
             var rect = ToRect(ellipse.TopLeft, ellipse.BottomRight, dx, dy);
             return new EllipseGeometry(rect);
         }
 
-        private AvaloniaBrushCache? GetOrCreateCache(DrawStyle style)
+        private AvaloniaBrushCache? GetOrCreateCache(ShapeStyle style)
         {
             if (style == null)
             {
@@ -164,7 +164,7 @@ namespace Draw2D.Avalonia.Renderers
                 matrix.OffsetX, matrix.OffsetY);
         }
 
-        public override void InvalidateCache(DrawStyle style)
+        public override void InvalidateCache(ShapeStyle style)
         {
             // TODO: Implement InvalidateCache method.
         }
@@ -174,7 +174,7 @@ namespace Draw2D.Avalonia.Renderers
             // TODO: Implement InvalidateCache method.
         }
 
-        public override void InvalidateCache(ShapeObject shape, DrawStyle style, double dx, double dy)
+        public override void InvalidateCache(BaseShape shape, ShapeStyle style, double dx, double dy)
         {
             // TODO: Implement InvalidateCache method.
         }
@@ -191,14 +191,14 @@ namespace Draw2D.Avalonia.Renderers
             _state.Dispose();
         }
 
-        public override void DrawLine(object dc, LineShape line, DrawStyle style, double dx, double dy)
+        public override void DrawLine(object dc, LineShape line, ShapeStyle style, double dx, double dy)
         {
             var cache = GetOrCreateCache(style);
             var _dc = dc as DrawingContext;
             _dc.DrawLine(style.IsStroked ? cache?.StrokePen : null, ToPoint(line.StartPoint, dx, dy), ToPoint(line.Point, dx, dy));
         }
 
-        public override void DrawCubicBezier(object dc, CubicBezierShape cubicBezier, DrawStyle style, double dx, double dy)
+        public override void DrawCubicBezier(object dc, CubicBezierShape cubicBezier, ShapeStyle style, double dx, double dy)
         {
             var cache = GetOrCreateCache(style);
             var _dc = dc as DrawingContext;
@@ -206,7 +206,7 @@ namespace Draw2D.Avalonia.Renderers
             _dc.DrawGeometry(style.IsFilled ? cache?.Fill : null, style.IsStroked ? cache?.StrokePen : null, geometry);
         }
 
-        public override void DrawQuadraticBezier(object dc, QuadraticBezierShape quadraticBezier, DrawStyle style, double dx, double dy)
+        public override void DrawQuadraticBezier(object dc, QuadraticBezierShape quadraticBezier, ShapeStyle style, double dx, double dy)
         {
             var cache = GetOrCreateCache(style);
             var _dc = dc as DrawingContext;
@@ -214,7 +214,7 @@ namespace Draw2D.Avalonia.Renderers
             _dc.DrawGeometry(style.IsFilled ? cache?.Fill : null, style.IsStroked ? cache?.StrokePen : null, geometry);
         }
 
-        public override void DrawPath(object dc, PathShape path, DrawStyle style, double dx, double dy)
+        public override void DrawPath(object dc, PathShape path, ShapeStyle style, double dx, double dy)
         {
             var cache = GetOrCreateCache(style);
             var _dc = dc as DrawingContext;
@@ -222,7 +222,7 @@ namespace Draw2D.Avalonia.Renderers
             _dc.DrawGeometry(style.IsFilled ? cache?.Fill : null, style.IsStroked ? cache?.StrokePen : null, geometry);
         }
 
-        public override void DrawRectangle(object dc, RectangleShape rectangle, DrawStyle style, double dx, double dy)
+        public override void DrawRectangle(object dc, RectangleShape rectangle, ShapeStyle style, double dx, double dy)
         {
             var cache = GetOrCreateCache(style);
             var _dc = dc as DrawingContext;
@@ -237,7 +237,7 @@ namespace Draw2D.Avalonia.Renderers
             }
         }
 
-        public override void DrawEllipse(object dc, EllipseShape ellipse, DrawStyle style, double dx, double dy)
+        public override void DrawEllipse(object dc, EllipseShape ellipse, ShapeStyle style, double dx, double dy)
         {
             var cache = GetOrCreateCache(style);
             var _dc = dc as DrawingContext;
@@ -245,7 +245,7 @@ namespace Draw2D.Avalonia.Renderers
             _dc.DrawGeometry(style.IsFilled ? cache?.Fill : null, style.IsStroked ? cache?.StrokePen : null, geometry);
         }
 
-        public override void DrawText(object dc, TextShape text, DrawStyle style, double dx, double dy)
+        public override void DrawText(object dc, TextShape text, ShapeStyle style, double dx, double dy)
         {
             var cache = GetOrCreateCache(style);
             var _dc = dc as DrawingContext;

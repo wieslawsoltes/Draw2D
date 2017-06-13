@@ -7,6 +7,7 @@ using System.Linq;
 using System.Reflection;
 using Draw2D.Core;
 using Draw2D.Core.Containers;
+using Draw2D.Core.Renderer;
 using Draw2D.Core.Shapes;
 using Draw2D.Core.Style;
 using Newtonsoft.Json;
@@ -90,8 +91,8 @@ namespace Draw2D.Json
             var binder = new DictionarySerializationBinder();
 
             binder.Add<MatrixObject>("Matrix");
-            binder.Add<DrawColor>("Color");
-            binder.Add<DrawStyle>("Style");
+            binder.Add<ArgbColor>("Color");
+            binder.Add<ShapeStyle>("Style");
             binder.Add<PointShape>("Point");
             binder.Add<LineShape>("Line");
             binder.Add<CubicBezierShape>("Cubic");

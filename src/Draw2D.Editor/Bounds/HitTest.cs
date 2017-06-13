@@ -3,7 +3,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Draw2D.Core;
+using Draw2D.Core.Shape;
 using Draw2D.Core.Shapes;
 using Spatial;
 
@@ -28,12 +28,12 @@ namespace Draw2D.Editor.Bounds
             return Registered.TryGetValue(target?.GetType(), out var hitTest) ? hitTest : null;
         }
 
-        public PointShape TryToGetPoint(ShapeObject shape, Point2 target, double radius)
+        public PointShape TryToGetPoint(BaseShape shape, Point2 target, double radius)
         {
             return GetHitTest(shape)?.TryToGetPoint(shape, target, radius, this);
         }
 
-        public PointShape TryToGetPoint(IEnumerable<ShapeObject> shapes, Point2 target, double radius, PointShape exclude)
+        public PointShape TryToGetPoint(IEnumerable<BaseShape> shapes, Point2 target, double radius, PointShape exclude)
         {
             foreach (var shape in shapes.Reverse())
             {
@@ -46,7 +46,7 @@ namespace Draw2D.Editor.Bounds
             return null;
         }
 
-        public ShapeObject TryToGetShape(IEnumerable<ShapeObject> shapes, Point2 target, double radius)
+        public BaseShape TryToGetShape(IEnumerable<BaseShape> shapes, Point2 target, double radius)
         {
             foreach (var shape in shapes.Reverse())
             {
@@ -59,9 +59,9 @@ namespace Draw2D.Editor.Bounds
             return null;
         }
 
-        public ISet<ShapeObject> TryToGetShapes(IEnumerable<ShapeObject> shapes, Rect2 target, double radius)
+        public ISet<BaseShape> TryToGetShapes(IEnumerable<BaseShape> shapes, Rect2 target, double radius)
         {
-            var selected = new HashSet<ShapeObject>();
+            var selected = new HashSet<BaseShape>();
             foreach (var shape in shapes.Reverse())
             {
                 var result = GetHitTest(shape)?.Overlaps(shape, target, radius, this);

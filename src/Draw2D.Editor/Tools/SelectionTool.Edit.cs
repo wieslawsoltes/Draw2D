@@ -2,7 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using System.Collections.Generic;
 using System.Linq;
-using Draw2D.Core;
+using Draw2D.Core.Shape;
 using Draw2D.Core.Shapes;
 using Draw2D.Editor.Selection.Helpers;
 using Spatial;
@@ -11,8 +11,8 @@ namespace Draw2D.Editor.Tools
 {
     public partial class SelectionTool : IEdit
     {
-        private IList<ShapeObject> _shapesToCopy = null;
-        private ShapeObject _hover = null;
+        private IList<BaseShape> _shapesToCopy = null;
+        private BaseShape _hover = null;
         private bool _disconnected = false;
 
         public void Cut(IToolContext context)
@@ -109,7 +109,7 @@ namespace Draw2D.Editor.Tools
             }
         }
 
-        public void Hover(IToolContext context, ShapeObject shape)
+        public void Hover(IToolContext context, BaseShape shape)
         {
             if (shape != null)
             {
@@ -171,7 +171,7 @@ namespace Draw2D.Editor.Tools
             }
         }
 
-        public void Disconnect(IToolContext context, ShapeObject shape)
+        public void Disconnect(IToolContext context, BaseShape shape)
         {
             if (shape is ConnectableShape connectable)
             {

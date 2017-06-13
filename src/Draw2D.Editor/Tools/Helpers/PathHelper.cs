@@ -1,8 +1,8 @@
 ﻿// Copyright (c) Wiesław Šoltés. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using System.Collections.Generic;
-using Draw2D.Core;
-using Draw2D.Core.Renderers;
+using Draw2D.Core.Renderer;
+using Draw2D.Core.Shape;
 using Draw2D.Core.Shapes;
 
 namespace Draw2D.Editor.Tools.Helpers
@@ -20,7 +20,7 @@ namespace Draw2D.Editor.Tools.Helpers
             _quadraticBezierHelper = new QuadraticBezierHelper();
         }
 
-        public void DrawShape(object dc, ShapeRenderer r, ShapeObject shape, ISet<ShapeObject> selected, double dx, double dy)
+        public void DrawShape(object dc, ShapeRenderer r, BaseShape shape, ISet<BaseShape> selected, double dx, double dy)
         {
             if (shape is LineShape line)
             {
@@ -45,7 +45,7 @@ namespace Draw2D.Editor.Tools.Helpers
             }
         }
 
-        public void DrawFigure(object dc, ShapeRenderer r, FigureShape figure, ISet<ShapeObject> selected, double dx, double dy)
+        public void DrawFigure(object dc, ShapeRenderer r, FigureShape figure, ISet<BaseShape> selected, double dx, double dy)
         {
             foreach (var shape in figure.Shapes)
             {
@@ -53,7 +53,7 @@ namespace Draw2D.Editor.Tools.Helpers
             }
         }
 
-        public void Draw(object dc, ShapeRenderer r, PathShape path, ISet<ShapeObject> selected, double dx, double dy)
+        public void Draw(object dc, ShapeRenderer r, PathShape path, ISet<BaseShape> selected, double dx, double dy)
         {
             foreach (var figure in path.Figures)
             {
@@ -61,7 +61,7 @@ namespace Draw2D.Editor.Tools.Helpers
             }
         }
 
-        public override void Draw(object dc, ShapeRenderer r, ShapeObject shape, ISet<ShapeObject> selected, double dx, double dy)
+        public override void Draw(object dc, ShapeRenderer r, BaseShape shape, ISet<BaseShape> selected, double dx, double dy)
         {
             if (shape is PathShape path)
             {

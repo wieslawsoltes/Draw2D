@@ -4,10 +4,10 @@ using System;
 using System.Collections.Generic;
 using Draw2D.Core.Containers;
 using Draw2D.Editor.Bounds;
-using Draw2D.Core.Renderers;
 using Draw2D.Core.Shapes;
 using Draw2D.Core.Style;
-using Draw2D.Core;
+using Draw2D.Core.Renderer;
+using Draw2D.Core.Shape;
 
 namespace Draw2D.Editor.Tools
 {
@@ -29,7 +29,7 @@ namespace Draw2D.Editor.Tools
             }
         }
 
-        private void SetSelected(ISet<ShapeObject> selected)
+        private void SetSelected(ISet<BaseShape> selected)
         {
             if (_context != null)
             {
@@ -48,7 +48,7 @@ namespace Draw2D.Editor.Tools
             set => SetRenderer(value);
         }
 
-        public ISet<ShapeObject> Selected
+        public ISet<BaseShape> Selected
         {
             get => _context?.Selected;
             set => SetSelected(value);
@@ -72,13 +72,13 @@ namespace Draw2D.Editor.Tools
             set => throw new InvalidOperationException($"Can not set {WorkingContainer} property value.");
         }
 
-        public DrawStyle CurrentStyle
+        public ShapeStyle CurrentStyle
         {
             get => _context?.CurrentStyle;
             set => throw new InvalidOperationException($"Can not set {CurrentStyle} property value.");
         }
 
-        public ShapeObject PointShape
+        public BaseShape PointShape
         {
             get => _context?.PointShape;
             set => throw new InvalidOperationException($"Can not set {PointShape} property value.");

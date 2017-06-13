@@ -1,14 +1,14 @@
 ﻿// Copyright (c) Wiesław Šoltés. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using System.Collections.Generic;
-using Draw2D.Core;
+using Draw2D.Core.Shape;
 using Draw2D.Core.Shapes;
 
 namespace Draw2D.Editor
 {
     public abstract class PointIntersection
     {
-        public abstract string Name { get; }
+        public abstract string Title { get; }
         public List<PointShape> Intersections { get; set; }
 
         protected PointIntersection()
@@ -16,7 +16,7 @@ namespace Draw2D.Editor
             Intersections = new List<PointShape>();
         }
 
-        public abstract void Find(IToolContext context, ShapeObject shape);
+        public abstract void Find(IToolContext context, BaseShape shape);
 
         public virtual void Clear(IToolContext context)
         {

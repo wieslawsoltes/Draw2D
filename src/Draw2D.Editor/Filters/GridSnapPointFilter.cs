@@ -7,7 +7,7 @@ namespace Draw2D.Editor.Filters
 {
     public class GridSnapPointFilter : PointFilter
     {
-        public override string Name => "Grid-Snap";
+        public override string Title => "Grid-Snap";
 
         public GridSnapSettings Settings { get; set; }
 

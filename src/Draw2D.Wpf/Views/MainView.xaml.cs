@@ -26,7 +26,7 @@ namespace Draw2D.Wpf.Views
         {
             if (this.DataContext is ShapeContainerViewModel vm)
             {
-                vm.CurrentTool = vm.Tools.Where(t => t.Name == "None").FirstOrDefault();
+                vm.CurrentTool = vm.Tools.Where(t => t.Title == "None").FirstOrDefault();
             }
         }
 
@@ -34,7 +34,7 @@ namespace Draw2D.Wpf.Views
         {
             if (this.DataContext is ShapeContainerViewModel vm)
             {
-                vm.CurrentTool = vm.Tools.Where(t => t.Name == "Selection").FirstOrDefault();
+                vm.CurrentTool = vm.Tools.Where(t => t.Title == "Selection").FirstOrDefault();
             }
         }
 
@@ -45,11 +45,11 @@ namespace Draw2D.Wpf.Views
                 if (vm.CurrentTool is PathTool pathTool)
                 {
                     pathTool.CleanCurrentTool(vm);
-                    pathTool.Settings.CurrentTool = pathTool.Settings.Tools.Where(t => t.Name == "Line").FirstOrDefault();
+                    pathTool.Settings.CurrentTool = pathTool.Settings.Tools.Where(t => t.Title == "Line").FirstOrDefault();
                 }
                 else
                 {
-                    vm.CurrentTool = vm.Tools.Where(t => t.Name == "Line").FirstOrDefault();
+                    vm.CurrentTool = vm.Tools.Where(t => t.Title == "Line").FirstOrDefault();
                 }
             }
         }
@@ -58,7 +58,7 @@ namespace Draw2D.Wpf.Views
         {
             if (this.DataContext is ShapeContainerViewModel vm)
             {
-                vm.CurrentTool = vm.Tools.Where(t => t.Name == "Point").FirstOrDefault();
+                vm.CurrentTool = vm.Tools.Where(t => t.Title == "Point").FirstOrDefault();
             }
         }
 
@@ -69,11 +69,11 @@ namespace Draw2D.Wpf.Views
                 if (vm.CurrentTool is PathTool pathTool)
                 {
                     pathTool.CleanCurrentTool(vm);
-                    pathTool.Settings.CurrentTool = pathTool.Settings.Tools.Where(t => t.Name == "CubicBezier").FirstOrDefault();
+                    pathTool.Settings.CurrentTool = pathTool.Settings.Tools.Where(t => t.Title == "CubicBezier").FirstOrDefault();
                 }
                 else
                 {
-                    vm.CurrentTool = vm.Tools.Where(t => t.Name == "CubicBezier").FirstOrDefault();
+                    vm.CurrentTool = vm.Tools.Where(t => t.Title == "CubicBezier").FirstOrDefault();
                 }
             }
         }
@@ -85,11 +85,11 @@ namespace Draw2D.Wpf.Views
                 if (vm.CurrentTool is PathTool pathTool)
                 {
                     pathTool.CleanCurrentTool(vm);
-                    pathTool.Settings.CurrentTool = pathTool.Settings.Tools.Where(t => t.Name == "QuadraticBezier").FirstOrDefault();
+                    pathTool.Settings.CurrentTool = pathTool.Settings.Tools.Where(t => t.Title == "QuadraticBezier").FirstOrDefault();
                 }
                 else
                 {
-                    vm.CurrentTool = vm.Tools.Where(t => t.Name == "QuadraticBezier").FirstOrDefault();
+                    vm.CurrentTool = vm.Tools.Where(t => t.Title == "QuadraticBezier").FirstOrDefault();
                 }
             }
         }
@@ -98,7 +98,7 @@ namespace Draw2D.Wpf.Views
         {
             if (this.DataContext is ShapeContainerViewModel vm)
             {
-                vm.CurrentTool = vm.Tools.Where(t => t.Name == "Path").FirstOrDefault();
+                vm.CurrentTool = vm.Tools.Where(t => t.Title == "Path").FirstOrDefault();
             }
         }
 
@@ -109,7 +109,7 @@ namespace Draw2D.Wpf.Views
                 if (vm.CurrentTool is PathTool pathTool)
                 {
                     pathTool.CleanCurrentTool(vm);
-                    pathTool.Settings.CurrentTool = pathTool.Settings.Tools.Where(t => t.Name == "Move").FirstOrDefault();
+                    pathTool.Settings.CurrentTool = pathTool.Settings.Tools.Where(t => t.Title == "Move").FirstOrDefault();
                 }
             }
         }
@@ -118,7 +118,7 @@ namespace Draw2D.Wpf.Views
         {
             if (this.DataContext is ShapeContainerViewModel vm)
             {
-                vm.CurrentTool = vm.Tools.Where(t => t.Name == "Rectangle").FirstOrDefault();
+                vm.CurrentTool = vm.Tools.Where(t => t.Title == "Rectangle").FirstOrDefault();
             }
         }
 
@@ -126,7 +126,7 @@ namespace Draw2D.Wpf.Views
         {
             if (this.DataContext is ShapeContainerViewModel vm)
             {
-                vm.CurrentTool = vm.Tools.Where(t => t.Name == "Ellipse").FirstOrDefault();
+                vm.CurrentTool = vm.Tools.Where(t => t.Title == "Ellipse").FirstOrDefault();
             }
         }
 
@@ -134,7 +134,7 @@ namespace Draw2D.Wpf.Views
         {
             if (this.DataContext is ShapeContainerViewModel vm)
             {
-                vm.CurrentTool = vm.Tools.Where(t => t.Name == "Text").FirstOrDefault();
+                vm.CurrentTool = vm.Tools.Where(t => t.Title == "Text").FirstOrDefault();
             }
         }
 

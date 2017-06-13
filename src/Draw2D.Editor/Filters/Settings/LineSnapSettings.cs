@@ -11,7 +11,7 @@ namespace Draw2D.Editor.Filters
         private LineSnapMode _mode;
         private LineSnapTarget _target;
         private double _threshold;
-        private DrawStyle _guideStyle;
+        private ShapeStyle _guideStyle;
 
         public bool IsEnabled
         {
@@ -43,7 +43,7 @@ namespace Draw2D.Editor.Filters
             set => Update(ref _threshold, value);
         }
 
-        public DrawStyle GuideStyle
+        public ShapeStyle GuideStyle
         {
             get => _guideStyle;
             set => Update(ref _guideStyle, value);

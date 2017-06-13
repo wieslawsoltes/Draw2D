@@ -1,7 +1,7 @@
 ﻿// Copyright (c) Wiesław Šoltés. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using System;
-using Draw2D.Core;
+using Draw2D.Core.Shape;
 using Draw2D.Core.Shapes;
 using Spatial;
 
@@ -11,7 +11,7 @@ namespace Draw2D.Editor.Bounds.Shapes
     {
         public override Type TargetType => typeof(PointShape);
 
-        public override PointShape TryToGetPoint(ShapeObject shape, Point2 target, double radius, IHitTest hitTest)
+        public override PointShape TryToGetPoint(BaseShape shape, Point2 target, double radius, IHitTest hitTest)
         {
             var point = shape as PointShape;
             if (point == null)
@@ -25,7 +25,7 @@ namespace Draw2D.Editor.Bounds.Shapes
             return null;
         }
 
-        public override ShapeObject Contains(ShapeObject shape, Point2 target, double radius, IHitTest hitTest)
+        public override BaseShape Contains(BaseShape shape, Point2 target, double radius, IHitTest hitTest)
         {
             var point = shape as PointShape;
             if (point == null)
@@ -34,7 +34,7 @@ namespace Draw2D.Editor.Bounds.Shapes
             return Point2.FromXY(point.X, point.Y).ExpandToRect(radius).Contains(target.X, target.Y) ? shape : null;
         }
 
-        public override ShapeObject Overlaps(ShapeObject shape, Rect2 target, double radius, IHitTest hitTest)
+        public override BaseShape Overlaps(BaseShape shape, Rect2 target, double radius, IHitTest hitTest)
         {
             var point = shape as PointShape;
             if (point == null)

@@ -19,7 +19,7 @@ namespace Draw2D.Editor.Tools
 
         public State CurrentState { get; set; } = State.StartPoint;
 
-        public override string Name => "PolyLine";
+        public override string Title => "PolyLine";
 
         public PolyLineToolSettings Settings { get; set; }
 

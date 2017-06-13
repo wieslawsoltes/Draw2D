@@ -3,7 +3,8 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using Draw2D.Core.Renderers;
+using Draw2D.Core.Renderer;
+using Draw2D.Core.Shape;
 
 namespace Draw2D.Core.Shapes
 {
@@ -198,7 +199,7 @@ namespace Draw2D.Core.Shapes
             }
         }
 
-        public override void Move(ISet<ShapeObject> selected, double dx, double dy)
+        public override void Move(ISet<BaseShape> selected, double dx, double dy)
         {
             var points = GetPoints().Distinct();
 

@@ -6,7 +6,8 @@ using System.Collections.ObjectModel;
 using Draw2D.Core;
 using Draw2D.Core.Containers;
 using Draw2D.Core.Presenters;
-using Draw2D.Core.Renderers;
+using Draw2D.Core.Renderer;
+using Draw2D.Core.Shape;
 using Draw2D.Core.Shapes;
 using Draw2D.Core.Style;
 using Draw2D.Editor;
@@ -15,18 +16,18 @@ using Spatial;
 
 namespace Draw2D.ViewModels.Containers
 {
-    public class ShapeContainerViewModel : NamedObject, IToolContext
+    public class ShapeContainerViewModel : ObservableObject, IToolContext
     {
         private ObservableCollection<ToolBase> _tools;
         private ToolBase _currentTool;
         private ShapePresenter _presenter;
         private ShapeRenderer _renderer;
-        private ISet<ShapeObject> _selected;
+        private ISet<BaseShape> _selected;
         private IHitTest _hitTest;
         private IShapeContainer _currentContainer;
         private IShapeContainer _workingContainer;
-        private DrawStyle _currentStyle;
-        private ShapeObject _pointShape;
+        private ShapeStyle _currentStyle;
+        private BaseShape _pointShape;
 
         public ObservableCollection<ToolBase> Tools
         {
@@ -56,7 +57,7 @@ namespace Draw2D.ViewModels.Containers
             set => Update(ref _renderer, value);
         }
 
-        public ISet<ShapeObject> Selected
+        public ISet<BaseShape> Selected
         {
             get => _selected;
             set => Update(ref _selected, value);
@@ -80,13 +81,13 @@ namespace Draw2D.ViewModels.Containers
             set => Update(ref _workingContainer, value);
         }
 
-        public DrawStyle CurrentStyle
+        public ShapeStyle CurrentStyle
         {
             get => _currentStyle;
             set => Update(ref _currentStyle, value);
         }
 
-        public ShapeObject PointShape
+        public BaseShape PointShape
         {
             get => _pointShape;
             set => Update(ref _pointShape, value);

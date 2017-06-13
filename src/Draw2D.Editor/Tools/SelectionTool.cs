@@ -26,7 +26,7 @@ namespace Draw2D.Editor.Tools
 
         public State CurrentState { get; set; } = State.None;
 
-        public override string Name => "Selection";
+        public override string Title => "Selection";
 
         public SelectionToolSettings Settings { get; set; }
 

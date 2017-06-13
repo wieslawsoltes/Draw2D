@@ -3,7 +3,7 @@
 using System;
 using System.Collections.Generic;
 using Draw2D.Core.Containers;
-using Draw2D.Core.Renderers;
+using Draw2D.Core.Renderer;
 
 namespace Draw2D.Core.Presenters
 {

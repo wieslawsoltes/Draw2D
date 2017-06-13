@@ -11,7 +11,7 @@ namespace Draw2D.Editor.Tools
         private PathShape _path;
         private FigureShape _figure;
 
-        public override string Name => "Path";
+        public override string Title => "Path";
 
         public PathToolSettings Settings { get; set; }
 

@@ -5,8 +5,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Media;
-using Draw2D.Core;
-using Draw2D.Core.Renderers;
+using Draw2D.Core.Renderer;
+using Draw2D.Core.Shape;
 using Draw2D.Core.Shapes;
 using Draw2D.Core.Style;
 
@@ -14,14 +14,14 @@ namespace Draw2D.Wpf.Renderers
 {
     public class WpfShapeRenderer : ShapeRenderer
     {
-        private readonly IDictionary<DrawStyle, WpfBrushCache> _brushCache;
+        private readonly IDictionary<ShapeStyle, WpfBrushCache> _brushCache;
         private readonly IDictionary<MatrixObject, MatrixTransform> _matrixCache;
         private readonly IDictionary<CubicBezierShape, Geometry> _cubicGeometryCache;
         private readonly IDictionary<QuadraticBezierShape, Geometry> _quadGeometryCache;
         private readonly IDictionary<PathShape, Geometry> _pathGeometryCache;
-        private ISet<ShapeObject> _selected;
+        private ISet<BaseShape> _selected;
 
-        public override ISet<ShapeObject> Selected
+        public override ISet<BaseShape> Selected
         {
             get => _selected;
             set => Update(ref _selected, value);
@@ -29,12 +29,12 @@ namespace Draw2D.Wpf.Renderers
 
         public WpfShapeRenderer()
         {
-            _brushCache = new Dictionary<DrawStyle, WpfBrushCache>();
+            _brushCache = new Dictionary<ShapeStyle, WpfBrushCache>();
             _matrixCache = new Dictionary<MatrixObject, MatrixTransform>();
             _cubicGeometryCache = new Dictionary<CubicBezierShape, Geometry>();
             _quadGeometryCache = new Dictionary<QuadraticBezierShape, Geometry>();
             _pathGeometryCache = new Dictionary<PathShape, Geometry>();
-            _selected = new HashSet<ShapeObject>();
+            _selected = new HashSet<BaseShape>();
         }
 
         private static Point ToPoint(PointShape point, double dx, double dy)
@@ -65,7 +65,7 @@ namespace Draw2D.Wpf.Renderers
             center.Offset(radiusX, radiusY);
         }
 
-        private WpfBrushCache? GetBrushCache(DrawStyle style)
+        private WpfBrushCache? GetBrushCache(ShapeStyle style)
         {
             if (style == null)
             {
@@ -101,7 +101,7 @@ namespace Draw2D.Wpf.Renderers
             return cache;
         }
 
-        private static Geometry ToGeometry(CubicBezierShape cubicBezier, DrawStyle style, double dx, double dy)
+        private static Geometry ToGeometry(CubicBezierShape cubicBezier, ShapeStyle style, double dx, double dy)
         {
             var geometry = new StreamGeometry();
 
@@ -118,7 +118,7 @@ namespace Draw2D.Wpf.Renderers
             return geometry;
         }
 
-        private static Geometry ToGeometry(QuadraticBezierShape quadraticBezier, DrawStyle style, double dx, double dy)
+        private static Geometry ToGeometry(QuadraticBezierShape quadraticBezier, ShapeStyle style, double dx, double dy)
         {
             var geometry = new StreamGeometry();
 
@@ -134,7 +134,7 @@ namespace Draw2D.Wpf.Renderers
             return geometry;
         }
 
-        private static Geometry ToGeometry(PathShape path, DrawStyle style, double dx, double dy)
+        private static Geometry ToGeometry(PathShape path, ShapeStyle style, double dx, double dy)
         {
             var geometry = new StreamGeometry()
             {
@@ -189,7 +189,7 @@ namespace Draw2D.Wpf.Renderers
             return geometry;
         }
 
-        private Geometry GetGeometryCache(CubicBezierShape cubic, DrawStyle style, double dx, double dy)
+        private Geometry GetGeometryCache(CubicBezierShape cubic, ShapeStyle style, double dx, double dy)
         {
             if (cubic == null)
             {
@@ -208,7 +208,7 @@ namespace Draw2D.Wpf.Renderers
             return cache;
         }
 
-        private Geometry GetGeometryCache(QuadraticBezierShape quad, DrawStyle style, double dx, double dy)
+        private Geometry GetGeometryCache(QuadraticBezierShape quad, ShapeStyle style, double dx, double dy)
         {
             if (quad == null)
             {
@@ -227,7 +227,7 @@ namespace Draw2D.Wpf.Renderers
             return cache;
         }
 
-        private Geometry GetGeometryCache(PathShape path, DrawStyle style, double dx, double dy)
+        private Geometry GetGeometryCache(PathShape path, ShapeStyle style, double dx, double dy)
         {
             if (path == null)
             {
@@ -246,7 +246,7 @@ namespace Draw2D.Wpf.Renderers
             return cache;
         }
 
-        public override void InvalidateCache(DrawStyle style)
+        public override void InvalidateCache(ShapeStyle style)
         {
             if (style != null)
             {
@@ -266,7 +266,7 @@ namespace Draw2D.Wpf.Renderers
             }
         }
 
-        public override void InvalidateCache(ShapeObject shape, DrawStyle style, double dx, double dy)
+        public override void InvalidateCache(BaseShape shape, ShapeStyle style, double dx, double dy)
         {
             switch (shape)
             {
@@ -313,14 +313,14 @@ namespace Draw2D.Wpf.Renderers
             _dc.Pop();
         }
 
-        public override void DrawLine(object dc, LineShape line, DrawStyle style, double dx, double dy)
+        public override void DrawLine(object dc, LineShape line, ShapeStyle style, double dx, double dy)
         {
             var cache = GetBrushCache(style);
             var _dc = dc as DrawingContext;
             _dc.DrawLine(style.IsStroked ? cache?.StrokePen : null, ToPoint(line.StartPoint, dx, dy), ToPoint(line.Point, dx, dy));
         }
 
-        public override void DrawCubicBezier(object dc, CubicBezierShape cubicBezier, DrawStyle style, double dx, double dy)
+        public override void DrawCubicBezier(object dc, CubicBezierShape cubicBezier, ShapeStyle style, double dx, double dy)
         {
             var cache = GetBrushCache(style);
             var _dc = dc as DrawingContext;
@@ -328,7 +328,7 @@ namespace Draw2D.Wpf.Renderers
             _dc.DrawGeometry(style.IsFilled ? cache?.Fill : null, style.IsStroked ? cache?.StrokePen : null, geometry);
         }
 
-        public override void DrawQuadraticBezier(object dc, QuadraticBezierShape quadraticBezier, DrawStyle style, double dx, double dy)
+        public override void DrawQuadraticBezier(object dc, QuadraticBezierShape quadraticBezier, ShapeStyle style, double dx, double dy)
         {
             var cache = GetBrushCache(style);
             var _dc = dc as DrawingContext;
@@ -336,7 +336,7 @@ namespace Draw2D.Wpf.Renderers
             _dc.DrawGeometry(style.IsFilled ? cache?.Fill : null, style.IsStroked ? cache?.StrokePen : null, geometry);
         }
 
-        public override void DrawPath(object dc, PathShape path, DrawStyle style, double dx, double dy)
+        public override void DrawPath(object dc, PathShape path, ShapeStyle style, double dx, double dy)
         {
             var cache = GetBrushCache(style);
             var _dc = dc as DrawingContext;
@@ -344,7 +344,7 @@ namespace Draw2D.Wpf.Renderers
             _dc.DrawGeometry(style.IsFilled ? cache?.Fill : null, style.IsStroked ? cache?.StrokePen : null, geometry);
         }
 
-        public override void DrawRectangle(object dc, RectangleShape rectangle, DrawStyle style, double dx, double dy)
+        public override void DrawRectangle(object dc, RectangleShape rectangle, ShapeStyle style, double dx, double dy)
         {
             var cache = GetBrushCache(style);
             var _dc = dc as DrawingContext;
@@ -352,7 +352,7 @@ namespace Draw2D.Wpf.Renderers
             _dc.DrawRectangle(style.IsFilled ? cache?.Fill : null, style.IsStroked ? cache?.StrokePen : null, rect);
         }
 
-        public override void DrawEllipse(object dc, EllipseShape ellipse, DrawStyle style, double dx, double dy)
+        public override void DrawEllipse(object dc, EllipseShape ellipse, ShapeStyle style, double dx, double dy)
         {
             var cache = GetBrushCache(style);
             var _dc = dc as DrawingContext;
@@ -360,7 +360,7 @@ namespace Draw2D.Wpf.Renderers
             _dc.DrawEllipse(style.IsFilled ? cache?.Fill : null, style.IsStroked ? cache?.StrokePen : null, center, radiusX, radiusY);
         }
 
-        public override void DrawText(object dc, TextShape text, DrawStyle style, double dx, double dy)
+        public override void DrawText(object dc, TextShape text, ShapeStyle style, double dx, double dy)
         {
             var cache = GetBrushCache(style);
             var _dc = dc as DrawingContext;

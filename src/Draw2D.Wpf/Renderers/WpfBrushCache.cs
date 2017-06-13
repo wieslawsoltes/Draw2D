@@ -23,12 +23,12 @@ namespace Draw2D.Wpf.Renderers
         {
         }
 
-        public static Color FromDrawColor(DrawColor color)
+        public static Color FromDrawColor(ArgbColor color)
         {
             return Color.FromArgb(color.A, color.R, color.G, color.B);
         }
 
-        public static WpfBrushCache FromDrawStyle(DrawStyle style)
+        public static WpfBrushCache FromDrawStyle(ShapeStyle style)
         {
             Brush stroke = null;
             Pen strokePen = null;

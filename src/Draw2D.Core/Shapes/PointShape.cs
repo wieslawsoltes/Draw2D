@@ -1,15 +1,16 @@
 ﻿// Copyright (c) Wiesław Šoltés. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using System.Collections.Generic;
-using Draw2D.Core.Renderers;
+using Draw2D.Core.Renderer;
+using Draw2D.Core.Shape;
 
 namespace Draw2D.Core.Shapes
 {
-    public class PointShape : ShapeObject, ICopyable
+    public class PointShape : BaseShape, ICopyable
     {
         private double _x;
         private double _y;
-        private ShapeObject _template;
+        private BaseShape _template;
 
         public double X
         {
@@ -23,7 +24,7 @@ namespace Draw2D.Core.Shapes
             set => Update(ref _y, value);
         }
 
-        public ShapeObject Template
+        public BaseShape Template
         {
             get => _template;
             set => Update(ref _template, value);
@@ -33,7 +34,7 @@ namespace Draw2D.Core.Shapes
         {
         }
 
-        public PointShape(double x, double y, ShapeObject template)
+        public PointShape(double x, double y, BaseShape template)
         {
             this.X = x;
             this.Y = y;
@@ -66,7 +67,7 @@ namespace Draw2D.Core.Shapes
             }
         }
 
-        public override void Move(ISet<ShapeObject> selected, double dx, double dy)
+        public override void Move(ISet<BaseShape> selected, double dx, double dy)
         {
             X += dx;
             Y += dy;

@@ -3,11 +3,12 @@
 using System.Diagnostics;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using Draw2D.Core.Renderers;
+using Draw2D.Core.Shape;
+using Draw2D.Core.Renderer;
 
 namespace Draw2D.Core.Shapes
 {
-    public abstract class ConnectableShape : ShapeObject, IConnectable
+    public abstract class ConnectableShape : BaseShape, IConnectable
     {
         private ObservableCollection<PointShape> _points;
 
@@ -43,7 +44,7 @@ namespace Draw2D.Core.Shapes
             }
         }
 
-        public override void Move(ISet<ShapeObject> selected, double dx, double dy)
+        public override void Move(ISet<BaseShape> selected, double dx, double dy)
         {
             foreach (var point in Points)
             {
@@ -54,7 +55,7 @@ namespace Draw2D.Core.Shapes
             }
         }
 
-        public override void Select(ISet<ShapeObject> selected)
+        public override void Select(ISet<BaseShape> selected)
         {
             base.Select(selected);
 
@@ -64,7 +65,7 @@ namespace Draw2D.Core.Shapes
             }
         }
 
-        public override void Deselect(ISet<ShapeObject> selected)
+        public override void Deselect(ISet<BaseShape> selected)
         {
             base.Deselect(selected);
 

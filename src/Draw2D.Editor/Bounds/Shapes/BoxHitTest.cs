@@ -1,7 +1,7 @@
 ﻿// Copyright (c) Wiesław Šoltés. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using System;
-using Draw2D.Core;
+using Draw2D.Core.Shape;
 using Draw2D.Core.Shapes;
 using Spatial;
 
@@ -9,7 +9,7 @@ namespace Draw2D.Editor.Bounds.Shapes
 {
     public abstract class BoxHitTest : HitTestBase
     {
-        public override PointShape TryToGetPoint(ShapeObject shape, Point2 target, double radius, IHitTest hitTest)
+        public override PointShape TryToGetPoint(BaseShape shape, Point2 target, double radius, IHitTest hitTest)
         {
             var box = shape as BoxShape ?? throw new ArgumentNullException("shape");
             var pointHitTest = hitTest.Registered[typeof(PointShape)];
@@ -35,7 +35,7 @@ namespace Draw2D.Editor.Bounds.Shapes
             return null;
         }
 
-        public override ShapeObject Contains(ShapeObject shape, Point2 target, double radius, IHitTest hitTest)
+        public override BaseShape Contains(BaseShape shape, Point2 target, double radius, IHitTest hitTest)
         {
             var box = shape as BoxShape ?? throw new ArgumentNullException("shape");
 
@@ -46,7 +46,7 @@ namespace Draw2D.Editor.Bounds.Shapes
                 box.BottomRight.Y).Contains(target) ? shape : null;
         }
 
-        public override ShapeObject Overlaps(ShapeObject shape, Rect2 target, double radius, IHitTest hitTest)
+        public override BaseShape Overlaps(BaseShape shape, Rect2 target, double radius, IHitTest hitTest)
         {
             var box = shape as BoxShape ?? throw new ArgumentNullException("shape");
 

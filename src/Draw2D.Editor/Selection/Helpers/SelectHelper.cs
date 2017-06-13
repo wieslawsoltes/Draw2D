@@ -1,14 +1,14 @@
 ﻿// Copyright (c) Wiesław Šoltés. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using System.Diagnostics;
-using Draw2D.Core;
+using Draw2D.Core.Shape;
 using Spatial;
 
 namespace Draw2D.Editor.Selection.Helpers
 {
     public static class SelectHelper
     {
-        public static ShapeObject TryToHover(IToolContext context, SelectionMode mode, SelectionTargets targets, Point2 target, double radius)
+        public static BaseShape TryToHover(IToolContext context, SelectionMode mode, SelectionTargets targets, Point2 target, double radius)
         {
             var shapePoint =
                 mode.HasFlag(SelectionMode.Point)

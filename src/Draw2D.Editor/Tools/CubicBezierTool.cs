@@ -19,7 +19,7 @@ namespace Draw2D.Editor.Tools
 
         public State CurrentState { get; set; } = State.StartPoint;
 
-        public override string Name => "CubicBezier";
+        public override string Title => "CubicBezier";
 
         public CubicBezierToolSettings Settings { get; set; }
 

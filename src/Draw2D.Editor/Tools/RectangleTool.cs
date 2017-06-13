@@ -17,7 +17,7 @@ namespace Draw2D.Editor.Tools
 
         public State CurrentState { get; set; } = State.TopLeft;
 
-        public override string Name => "Rectangle";
+        public override string Title => "Rectangle";
 
         public RectangleToolSettings Settings { get; set; }
 
