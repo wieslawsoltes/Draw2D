@@ -85,7 +85,7 @@ namespace Draw2D.Core.Shapes
 
         public override void Draw(object dc, ShapeRenderer r, double dx, double dy)
         {
-            base.BeginTransform(dc, r);
+            var state = base.BeginTransform(dc, r);
 
             foreach (var shape in Shapes)
             {
@@ -93,7 +93,7 @@ namespace Draw2D.Core.Shapes
             }
 
             base.Draw(dc, r, dx, dy);
-            base.EndTransform(dc, r);
+            base.EndTransform(dc, r, state);
         }
 
         public override void Move(ISet<BaseShape> selected, double dx, double dy)

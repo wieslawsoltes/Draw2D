@@ -33,7 +33,7 @@ namespace Draw2D.Core.Shapes
 
         public override void Draw(object dc, ShapeRenderer r, double dx, double dy)
         {
-            base.BeginTransform(dc, r);
+            var state = base.BeginTransform(dc, r);
 
             if (Style != null)
             {
@@ -51,7 +51,7 @@ namespace Draw2D.Core.Shapes
             }
 
             base.Draw(dc, r, dx, dy);
-            base.EndTransform(dc, r);
+            base.EndTransform(dc, r, state);
         }
 
         public object Copy(IDictionary<object, object> shared)

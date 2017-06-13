@@ -59,11 +59,11 @@ namespace Draw2D.Core.Shapes
         {
             if (_template != null)
             {
-                base.BeginTransform(dc, r);
+                var state = base.BeginTransform(dc, r);
 
                 _template.Draw(dc, r, X + dx, Y + dy);
 
-                base.EndTransform(dc, r);
+                base.EndTransform(dc, r, state);
             }
         }
 

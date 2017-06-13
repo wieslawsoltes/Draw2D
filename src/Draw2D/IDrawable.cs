@@ -5,12 +5,44 @@ using Draw2D.Core.Style;
 
 namespace Draw2D.Core
 {
+    /// <summary>
+    /// Defines drawable shape contract.
+    /// </summary>
     public interface IDrawable
     {
+        /// <summary>
+        /// Get or sets shape drawing style.
+        /// </summary>
         ShapeStyle Style { get; set; }
+
+        /// <summary>
+        /// Get or sets shape matrix transform.
+        /// </summary>
         MatrixObject Transform { get; set; }
-        void BeginTransform(object dc, ShapeRenderer r);
-        void EndTransform(object dc, ShapeRenderer r);
+
+        /// <summary>
+        /// Begins matrix transform.
+        /// </summary>
+        /// <param name="dc">The generic drawing context object.</param>
+        /// <param name="renderer">The generic renderer object used to draw shape.</param>
+        /// <returns>The previous transform state.</returns>
+        object BeginTransform(object dc, ShapeRenderer r);
+
+        /// <summary>
+        /// Ends matrix transform.
+        /// </summary>
+        /// <param name="dc">The generic drawing context object.</param>
+        /// <param name="renderer">The generic renderer object used to draw shape.</param>
+        /// <param name="state">The previous transform state.</param>
+        void EndTransform(object dc, ShapeRenderer r, object state);
+
+        /// <summary>
+        /// Draws shape using current <see cref="ShapeRenderer"/>.
+        /// </summary>
+        /// <param name="dc">The generic drawing context object.</param>
+        /// <param name="r">The generic renderer object used to draw shape.</param>
+        /// <param name="dx">The X axis draw position offset.</param>
+        /// <param name="dy">The Y axis draw position offset.</param>
         void Draw(object dc, ShapeRenderer r, double dx, double dy);
     }
 }

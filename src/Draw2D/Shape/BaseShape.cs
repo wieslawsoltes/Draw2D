@@ -36,19 +36,20 @@ namespace Draw2D.Core.Shape
 
         public abstract void Draw(object dc, ShapeRenderer r, double dx, double dy);
 
-        public virtual void BeginTransform(object dc, ShapeRenderer r)
+        public virtual object BeginTransform(object dc, ShapeRenderer r)
         {
             if (Transform != null)
             {
-                r.PushMatrix(dc, Transform);
+                return r.PushMatrix(dc, Transform);
             }
+            return null;
         }
 
-        public virtual void EndTransform(object dc, ShapeRenderer r)
+        public virtual void EndTransform(object dc, ShapeRenderer r, object state)
         {
             if (Transform != null)
             {
-                r.PopMatrix(dc, null);
+                r.PopMatrix(dc, state);
             }
         }
 

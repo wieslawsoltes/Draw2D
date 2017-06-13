@@ -87,7 +87,7 @@ namespace Draw2D.Core.Shapes
 
         public override void Draw(object dc, ShapeRenderer r, double dx, double dy)
         {
-            base.BeginTransform(dc, r);
+            var state = base.BeginTransform(dc, r);
 
             var isPathSelected = r.Selected.Contains(this);
 
@@ -102,7 +102,7 @@ namespace Draw2D.Core.Shapes
             }
 
             base.Draw(dc, r, dx, dy);
-            base.EndTransform(dc, r);
+            base.EndTransform(dc, r, state);
         }
 
         private void Draw(object dc, ShapeRenderer r, double dx, double dy, FigureShape figure, bool isPathSelected)
