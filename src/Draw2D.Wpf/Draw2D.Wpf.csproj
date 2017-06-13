@@ -249,7 +249,7 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Draw2D.Core\Draw2D.csproj">
+    <ProjectReference Include="..\Draw2D\Draw2D.csproj">
       <Project>{91296102-D031-473B-9303-3F9143BA14E7}</Project>
       <Name>Draw2D</Name>
     </ProjectReference>

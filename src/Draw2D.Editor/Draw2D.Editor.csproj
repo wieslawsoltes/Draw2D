@@ -21,7 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Draw2D.Core\Draw2D.csproj" />
+    <ProjectReference Include="..\Draw2D\Draw2D.csproj" />
   </ItemGroup>
 
 </Project>
