@@ -1,7 +1,7 @@
 ﻿// Copyright (c) Wiesław Šoltés. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using System.Diagnostics;
-using Draw2D.Core.Shape;
+using Draw2D.Shape;
 using Spatial;
 
 namespace Draw2D.Editor.Selection.Helpers

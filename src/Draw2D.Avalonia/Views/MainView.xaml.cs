@@ -8,7 +8,7 @@ using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 using Draw2D.Avalonia.Controls;
-using Draw2D.Core.Containers;
+using Draw2D.Containers;
 using Draw2D.Editor.Tools;
 using Draw2D.Json;
 using Draw2D.ViewModels.Containers;

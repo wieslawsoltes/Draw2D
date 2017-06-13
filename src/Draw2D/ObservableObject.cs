@@ -3,7 +3,7 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-namespace Draw2D.Core
+namespace Draw2D
 {
     public abstract class ObservableObject : INotifyPropertyChanged
     {

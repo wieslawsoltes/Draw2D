@@ -3,11 +3,11 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using Draw2D.Core.Containers;
-using Draw2D.Core.Renderer;
-using Draw2D.Core.Shape;
+using Draw2D.Containers;
+using Draw2D.Renderer;
+using Draw2D.Shape;
 
-namespace Draw2D.Core.Shapes
+namespace Draw2D.Shapes
 {
     public class FigureShape : BaseShape, IShapeContainer, ICopyable
     {

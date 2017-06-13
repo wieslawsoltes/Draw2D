@@ -2,11 +2,11 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using System;
 using System.Collections.Generic;
-using Draw2D.Core.Containers;
-using Draw2D.Core.Renderer;
-using Draw2D.Core.Shape;
-using Draw2D.Core.Shapes;
-using Draw2D.Core.Style;
+using Draw2D.Containers;
+using Draw2D.Renderer;
+using Draw2D.Shape;
+using Draw2D.Shapes;
+using Draw2D.Style;
 using Draw2D.Editor.Bounds;
 
 namespace Draw2D.Editor

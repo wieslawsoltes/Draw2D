@@ -2,7 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using System.Collections.Generic;
 
-namespace Draw2D.Core.Renderer
+namespace Draw2D.Renderer
 {
     public class MatrixObject : ObservableObject, ICopyable
     {

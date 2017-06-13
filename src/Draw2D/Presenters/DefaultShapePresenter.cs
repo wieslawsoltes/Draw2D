@@ -1,9 +1,9 @@
 ﻿// Copyright (c) Wiesław Šoltés. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
-using Draw2D.Core.Containers;
-using Draw2D.Core.Renderer;
+using Draw2D.Containers;
+using Draw2D.Renderer;
 
-namespace Draw2D.Core.Presenters
+namespace Draw2D.Presenters
 {
     public class DefaultShapePresenter : ShapePresenter
     {

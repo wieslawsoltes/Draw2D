@@ -2,7 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using System.Collections.Generic;
 using System.Diagnostics;
-using Draw2D.Core;
+using Draw2D;
 
 namespace Draw2D.Editor
 {

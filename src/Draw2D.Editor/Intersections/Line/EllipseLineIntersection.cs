@@ -3,8 +3,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Draw2D.Core.Shape;
-using Draw2D.Core.Shapes;
+using Draw2D.Shape;
+using Draw2D.Shapes;
 using Spatial;
 
 namespace Draw2D.Editor.Intersections.Line
