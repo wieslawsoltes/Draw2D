@@ -17,11 +17,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Newtonsoft.Json" Version="10.0.2" />
+    <PackageReference Include="Math.Spatial" Version="1.0.2" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Draw2D\Core2D.csproj" />
+    <ProjectReference Include="..\Core2D\Core2D.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,4 +1,4 @@
-Push-Location -Path "src/Draw2D.Avalonia"
+Push-Location -Path "src/Core2D.Avalonia"
 dotnet restore
 dotnet publish -c Release -r win7-x64 -o bin/win7-x64
 dotnet publish -c Release -r win7-x86 -o bin/win7-x86

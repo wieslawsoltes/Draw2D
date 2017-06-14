@@ -9,7 +9,7 @@ platform: Any CPU
 before_build:
 - cmd: nuget restore
 build:
-  project: Draw2D.sln
+  project: Core2D.Experimental.sln
   verbosity: minimal
 after_build:
 - ps: .\NetCore-Build.ps1
@@ -17,16 +17,16 @@ after_build:
 - cmd: NetCore-Patch.cmd
 test: off
 artifacts:
-- path: src\Draw2D.Wpf\bin\Release\AnyCPU
-  name: Draw2D.Wpf-build$(appveyor_build_version)
-- path: src\Draw2D.Avalonia\bin\win7-x64
-  name: Draw2D.Avalonia-win7-x64-build$(appveyor_build_version)
-- path: src\Draw2D.Avalonia\bin\win7-x86
-  name: Draw2D.Avalonia-win7-x86-build$(appveyor_build_version)
-- path: src\Draw2D.Avalonia\bin\ubuntu.14.04-x64
-  name: Draw2D.Avalonia-ubuntu.14.04-x64-build$(appveyor_build_version)
-- path: src\Draw2D.Avalonia\bin\ubuntu.16.10-x64
-  name: Draw2D.Avalonia-ubuntu.16.10-x64-build$(appveyor_build_version)
-- path: src\Draw2D.Avalonia\bin\osx.10.12-x64
-  name: Draw2D.Avalonia-osx.10.12-x64-build$(appveyor_build_version)
+- path: src\Core2D.Wpf\bin\Release\AnyCPU
+  name: Core2D.Wpf-build$(appveyor_build_version)
+- path: src\Core2D.Avalonia\bin\win7-x64
+  name: Core2D.Avalonia-win7-x64-build$(appveyor_build_version)
+- path: src\Core2D.Avalonia\bin\win7-x86
+  name: Core2D.Avalonia-win7-x86-build$(appveyor_build_version)
+- path: src\Core2D.Avalonia\bin\ubuntu.14.04-x64
+  name: Core2D.Avalonia-ubuntu.14.04-x64-build$(appveyor_build_version)
+- path: src\Core2D.Avalonia\bin\ubuntu.16.10-x64
+  name: Core2D.Avalonia-ubuntu.16.10-x64-build$(appveyor_build_version)
+- path: src\Core2D.Avalonia\bin\osx.10.12-x64
+  name: Core2D.Avalonia-osx.10.12-x64-build$(appveyor_build_version)
 deploy: off

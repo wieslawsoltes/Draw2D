@@ -9,7 +9,7 @@ sudo: required
 mono: latest
 dotnet: 1.0.1
 script:
-  - cd src/Draw2D.Avalonia
+  - cd src/Core2D.Avalonia
   - dotnet restore
   - dotnet build
   - dotnet publish -c Release -r win7-x64 -o bin/win7-x64
