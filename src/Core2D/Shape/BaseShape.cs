@@ -26,16 +26,6 @@ namespace Core2D.Shape
 
         public abstract IEnumerable<PointShape> GetPoints();
 
-        public virtual bool Invalidate(ShapeRenderer renderer, double dx, double dy)
-        {
-            bool result = false;
-            result |= _style?.Invalidate(renderer) ?? false;
-            result |= _transform?.Invalidate(renderer) ?? false;
-            return result;
-        }
-
-        public abstract void Draw(object dc, ShapeRenderer renderer, double dx, double dy, object db, object r);
-
         public virtual object BeginTransform(object dc, ShapeRenderer renderer)
         {
             if (Transform != null)
@@ -51,6 +41,16 @@ namespace Core2D.Shape
             {
                 renderer.PopMatrix(dc, state);
             }
+        }
+
+        public abstract void Draw(object dc, ShapeRenderer renderer, double dx, double dy, object db, object r);
+
+        public virtual bool Invalidate(ShapeRenderer renderer, double dx, double dy)
+        {
+            bool result = false;
+            result |= _style?.Invalidate(renderer) ?? false;
+            result |= _transform?.Invalidate(renderer) ?? false;
+            return result;
         }
 
         public abstract void Move(ISet<BaseShape> selected, double dx, double dy);
