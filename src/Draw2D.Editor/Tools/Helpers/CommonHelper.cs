@@ -1,10 +1,10 @@
 ﻿// Copyright (c) Wiesław Šoltés. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
-using Draw2D.Renderer;
-using Draw2D.Shapes;
-using Draw2D.Style;
+using Core2D.Renderer;
+using Core2D.Shapes;
+using Core2D.Style;
 
-namespace Draw2D.Editor.Tools.Helpers
+namespace Core2D.Editor.Tools.Helpers
 {
     public abstract class CommonHelper : ShapeHelper
     {

@@ -29,10 +29,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Draw2D\Draw2D.csproj" />
-    <ProjectReference Include="..\Draw2D.Editor\Draw2D.Editor.csproj" />
-    <ProjectReference Include="..\Draw2D.Json\Draw2D.Json.csproj" />
-    <ProjectReference Include="..\Draw2D.ViewModels\Draw2D.ViewModels.csproj" />
+    <ProjectReference Include="..\Draw2D.Editor\Core2D.Editor.csproj" />
+    <ProjectReference Include="..\Draw2D.Json\Core2D.Json.csproj" />
+    <ProjectReference Include="..\Draw2D.ViewModels\Core2D.ViewModels.csproj" />
+    <ProjectReference Include="..\Draw2D\Core2D.csproj" />
   </ItemGroup>
 
   <ItemGroup>

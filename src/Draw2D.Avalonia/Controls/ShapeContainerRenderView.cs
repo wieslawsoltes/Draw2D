@@ -3,9 +3,9 @@
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Media;
-using Draw2D.ViewModels.Containers;
+using Core2D.ViewModels.Containers;
 
-namespace Draw2D.Avalonia.Controls
+namespace Core2D.Avalonia.Controls
 {
     public class ShapeContainerRenderView : Canvas
     {

@@ -3,11 +3,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Draw2D.Shapes;
+using Core2D.Shapes;
 using Spatial;
 using Spatial.DouglasPeucker;
 
-namespace Draw2D.Editor.Tools
+namespace Core2D.Editor.Tools
 {
     public class ScribbleTool : ToolBase
     {

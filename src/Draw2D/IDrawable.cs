@@ -1,9 +1,9 @@
 ﻿// Copyright (c) Wiesław Šoltés. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
-using Draw2D.Renderer;
-using Draw2D.Style;
+using Core2D.Renderer;
+using Core2D.Style;
 
-namespace Draw2D
+namespace Core2D
 {
     /// <summary>
     /// Defines drawable shape contract.

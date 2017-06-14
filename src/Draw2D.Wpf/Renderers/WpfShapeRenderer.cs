@@ -5,12 +5,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Media;
-using Draw2D.Renderer;
-using Draw2D.Shape;
-using Draw2D.Shapes;
-using Draw2D.Style;
+using Core2D.Renderer;
+using Core2D.Shape;
+using Core2D.Shapes;
+using Core2D.Style;
 
-namespace Draw2D.Wpf.Renderers
+namespace Core2D.Wpf.Renderers
 {
     public class WpfShapeRenderer : ShapeRenderer
     {

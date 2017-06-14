@@ -1,16 +1,16 @@
 ﻿<!-- Copyright (c) Wiesław Šoltés. All rights reserved. -->
 <!-- Licensed under the MIT license. See LICENSE file in the project root for full license information. -->
-<UserControl x:Class="Draw2D.Wpf.Views.MainView"
+<UserControl x:Class="Core2D.Wpf.Views.MainView"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:Controls="clr-namespace:Draw2D.Wpf.Controls"
-        xmlns:ViewsStyle="clr-namespace:Draw2D.Wpf.Views.Style"
-        xmlns:ViewsToolsSettings="clr-namespace:Draw2D.Wpf.Views.Tools.Settings"
-        xmlns:ViewsIntersectionsLineSettings="clr-namespace:Draw2D.Wpf.Views.Intersections.Line.Settings"
-        xmlns:ViewsFiltersSettings="clr-namespace:Draw2D.Wpf.Views.Filters.Settings"
-        xmlns:EditorTools="clr-namespace:Draw2D.Editor.Tools;assembly=Draw2D.Editor"
-        xmlns:EditorIntersectionsLine="clr-namespace:Draw2D.Editor.Intersections.Line;assembly=Draw2D.Editor"
-        xmlns:EditorFilters="clr-namespace:Draw2D.Editor.Filters;assembly=Draw2D.Editor"
+        xmlns:Controls="clr-namespace:Core2D.Wpf.Controls"
+        xmlns:ViewsStyle="clr-namespace:Core2D.Wpf.Views.Style"
+        xmlns:ViewsToolsSettings="clr-namespace:Core2D.Wpf.Views.Tools.Settings"
+        xmlns:ViewsIntersectionsLineSettings="clr-namespace:Core2D.Wpf.Views.Intersections.Line.Settings"
+        xmlns:ViewsFiltersSettings="clr-namespace:Core2D.Wpf.Views.Filters.Settings"
+        xmlns:EditorTools="clr-namespace:Core2D.Editor.Tools;assembly=Core2D.Editor"
+        xmlns:EditorIntersectionsLine="clr-namespace:Core2D.Editor.Intersections.Line;assembly=Core2D.Editor"
+        xmlns:EditorFilters="clr-namespace:Core2D.Editor.Filters;assembly=Core2D.Editor"
         UseLayoutRounding="True" SnapsToDevicePixels="True" TextOptions.TextFormattingMode="Display"
         Focusable="True">
     <Grid>

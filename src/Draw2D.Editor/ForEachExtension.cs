@@ -3,7 +3,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Draw2D.Editor
+namespace Core2D.Editor
 {
     public static class ForEachExtension
     {

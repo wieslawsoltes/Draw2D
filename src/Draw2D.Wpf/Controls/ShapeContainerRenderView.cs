@@ -3,9 +3,9 @@
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
-using Draw2D.ViewModels.Containers;
+using Core2D.ViewModels.Containers;
 
-namespace Draw2D.Wpf.Controls
+namespace Core2D.Wpf.Controls
 {
     public class ShapeContainerRenderView : Canvas
     {

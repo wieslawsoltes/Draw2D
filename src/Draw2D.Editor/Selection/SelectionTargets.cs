@@ -2,7 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using System;
 
-namespace Draw2D.Editor.Selection
+namespace Core2D.Editor.Selection
 {
     [Flags]
     public enum SelectionTargets

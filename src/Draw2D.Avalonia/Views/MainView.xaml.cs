@@ -7,13 +7,13 @@ using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
-using Draw2D.Avalonia.Controls;
-using Draw2D.Containers;
-using Draw2D.Editor.Tools;
-using Draw2D.Json;
-using Draw2D.ViewModels.Containers;
+using Core2D.Avalonia.Controls;
+using Core2D.Containers;
+using Core2D.Editor.Tools;
+using Core2D.Json;
+using Core2D.ViewModels.Containers;
 
-namespace Draw2D.Avalonia.Views
+namespace Core2D.Avalonia.Views
 {
     public class MainView : UserControl
     {

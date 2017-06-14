@@ -1,10 +1,10 @@
 ﻿// Copyright (c) Wiesław Šoltés. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using System.Windows;
-using Draw2D.ViewModels;
-using Draw2D.Wpf.Renderers;
+using Core2D.ViewModels;
+using Core2D.Wpf.Renderers;
 
-namespace Draw2D.Wpf
+namespace Core2D.Wpf
 {
     public partial class App : Application
     {

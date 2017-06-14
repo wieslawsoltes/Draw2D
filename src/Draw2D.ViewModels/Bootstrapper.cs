@@ -4,22 +4,22 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using Draw2D.Containers;
-using Draw2D.Presenters;
-using Draw2D.Renderer;
-using Draw2D.Shapes;
-using Draw2D.Style;
-using Draw2D.Editor;
-using Draw2D.Editor.Bounds;
-using Draw2D.Editor.Bounds.Shapes;
-using Draw2D.Editor.Filters;
-using Draw2D.Editor.Intersections.Line;
-using Draw2D.Editor.Selection;
-using Draw2D.Editor.Tools;
-using Draw2D.Editor.Tools.Helpers;
-using Draw2D.ViewModels.Containers;
+using Core2D.Containers;
+using Core2D.Presenters;
+using Core2D.Renderer;
+using Core2D.Shapes;
+using Core2D.Style;
+using Core2D.Editor;
+using Core2D.Editor.Bounds;
+using Core2D.Editor.Bounds.Shapes;
+using Core2D.Editor.Filters;
+using Core2D.Editor.Intersections.Line;
+using Core2D.Editor.Selection;
+using Core2D.Editor.Tools;
+using Core2D.Editor.Tools.Helpers;
+using Core2D.ViewModels.Containers;
 
-namespace Draw2D.ViewModels
+namespace Core2D.ViewModels
 {
     public class Bootstrapper
     {

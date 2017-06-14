@@ -6,13 +6,13 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using Draw2D.Containers;
-using Draw2D.Editor.Tools;
-using Draw2D.Json;
-using Draw2D.ViewModels.Containers;
+using Core2D.Containers;
+using Core2D.Editor.Tools;
+using Core2D.Json;
+using Core2D.ViewModels.Containers;
 using Microsoft.Win32;
 
-namespace Draw2D.Wpf.Views
+namespace Core2D.Wpf.Views
 {
     public partial class MainView : UserControl
     {

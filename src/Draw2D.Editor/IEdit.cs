@@ -1,9 +1,9 @@
 ﻿// Copyright (c) Wiesław Šoltés. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
-using Draw2D.Shape;
-using Draw2D.Shapes;
+using Core2D.Shape;
+using Core2D.Shapes;
 
-namespace Draw2D.Editor
+namespace Core2D.Editor
 {
     public interface IEdit
     {

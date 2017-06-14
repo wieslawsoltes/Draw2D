@@ -1,9 +1,9 @@
 ﻿// Copyright (c) Wiesław Šoltés. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using System.Collections.Generic;
-using Draw2D.Renderer;
+using Core2D.Renderer;
 
-namespace Draw2D.Style
+namespace Core2D.Style
 {
     public class ShapeStyle : ObservableObject, ICopyable
     {

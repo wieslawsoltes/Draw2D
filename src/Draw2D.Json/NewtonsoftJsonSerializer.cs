@@ -5,16 +5,16 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reflection;
-using Draw2D;
-using Draw2D.Containers;
-using Draw2D.Renderer;
-using Draw2D.Shapes;
-using Draw2D.Style;
+using Core2D;
+using Core2D.Containers;
+using Core2D.Renderer;
+using Core2D.Shapes;
+using Core2D.Style;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
 
-namespace Draw2D.Json
+namespace Core2D.Json
 {
     public class NewtonsoftJsonSerializer
     {

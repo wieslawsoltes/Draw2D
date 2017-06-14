@@ -2,9 +2,9 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using System;
 using System.Windows.Media;
-using Draw2D.Style;
+using Core2D.Style;
 
-namespace Draw2D.Wpf.Renderers
+namespace Core2D.Wpf.Renderers
 {
     public struct WpfBrushCache : IDisposable
     {

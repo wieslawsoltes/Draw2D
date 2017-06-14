@@ -17,11 +17,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Newtonsoft.Json" Version="10.0.2" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\Draw2D\Draw2D.csproj" />
+    <ProjectReference Include="..\Draw2D.Editor\Core2D.Editor.csproj" />
+    <ProjectReference Include="..\Draw2D\Core2D.csproj" />
   </ItemGroup>
 
 </Project>

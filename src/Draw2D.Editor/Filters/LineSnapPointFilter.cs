@@ -3,10 +3,10 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using Draw2D.Shapes;
+using Core2D.Shapes;
 using Spatial;
 
-namespace Draw2D.Editor.Filters
+namespace Core2D.Editor.Filters
 {
     public class LineSnapPointFilter : PointFilter
     {

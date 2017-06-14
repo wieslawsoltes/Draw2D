@@ -3,18 +3,18 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using Draw2D;
-using Draw2D.Containers;
-using Draw2D.Presenters;
-using Draw2D.Renderer;
-using Draw2D.Shape;
-using Draw2D.Shapes;
-using Draw2D.Style;
-using Draw2D.Editor;
-using Draw2D.Editor.Bounds;
+using Core2D;
+using Core2D.Containers;
+using Core2D.Presenters;
+using Core2D.Renderer;
+using Core2D.Shape;
+using Core2D.Shapes;
+using Core2D.Style;
+using Core2D.Editor;
+using Core2D.Editor.Bounds;
 using Spatial;
 
-namespace Draw2D.ViewModels.Containers
+namespace Core2D.ViewModels.Containers
 {
     public class ShapeContainerViewModel : ObservableObject, IToolContext
     {

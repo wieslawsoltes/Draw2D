@@ -5,12 +5,12 @@ using System.Collections.Generic;
 using System.Linq;
 using Avalonia;
 using Avalonia.Media;
-using Draw2D.Renderer;
-using Draw2D.Shape;
-using Draw2D.Shapes;
-using Draw2D.Style;
+using Core2D.Renderer;
+using Core2D.Shape;
+using Core2D.Shapes;
+using Core2D.Style;
 
-namespace Draw2D.Avalonia.Renderers
+namespace Core2D.Avalonia.Renderers
 {
     public class AvaloniaShapeRenderer : ShapeRenderer
     {

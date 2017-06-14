@@ -2,12 +2,12 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using System;
 using System.Linq;
-using Draw2D.Editor.Selection;
-using Draw2D.Shapes;
+using Core2D.Editor.Selection;
+using Core2D.Shapes;
 using Spatial;
-using Draw2D.Editor.Selection.Helpers;
+using Core2D.Editor.Selection.Helpers;
 
-namespace Draw2D.Editor.Tools
+namespace Core2D.Editor.Tools
 {
     public partial class SelectionTool : ToolBase
     {

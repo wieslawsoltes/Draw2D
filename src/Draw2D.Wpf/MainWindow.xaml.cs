@@ -2,7 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using System.Windows;
 
-namespace Draw2D.Wpf
+namespace Core2D.Wpf
 {
     public partial class MainWindow : Window
     {

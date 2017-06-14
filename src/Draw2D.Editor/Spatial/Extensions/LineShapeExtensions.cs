@@ -2,7 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using Spatial;
 
-namespace Draw2D.Shapes
+namespace Core2D.Shapes
 {
     public static class LineShapeExtensions
     {

@@ -1,9 +1,9 @@
 ﻿// Copyright (c) Wiesław Šoltés. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using System.Diagnostics;
-using Draw2D.Shapes;
+using Core2D.Shapes;
 
-namespace Draw2D.Editor.Filters
+namespace Core2D.Editor.Filters
 {
     public class GridSnapPointFilter : PointFilter
     {

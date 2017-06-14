@@ -2,14 +2,14 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using System;
 using System.Collections.Generic;
-using Draw2D.Containers;
-using Draw2D.Renderer;
-using Draw2D.Shape;
-using Draw2D.Shapes;
-using Draw2D.Style;
-using Draw2D.Editor.Bounds;
+using Core2D.Containers;
+using Core2D.Renderer;
+using Core2D.Shape;
+using Core2D.Shapes;
+using Core2D.Style;
+using Core2D.Editor.Bounds;
 
-namespace Draw2D.Editor
+namespace Core2D.Editor
 {
     public interface IToolContext
     {

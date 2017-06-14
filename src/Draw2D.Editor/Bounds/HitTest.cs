@@ -3,11 +3,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Draw2D.Shape;
-using Draw2D.Shapes;
+using Core2D.Shape;
+using Core2D.Shapes;
 using Spatial;
 
-namespace Draw2D.Editor.Bounds
+namespace Core2D.Editor.Bounds
 {
     public class HitTest : IHitTest
     {

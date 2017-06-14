@@ -1,9 +1,9 @@
 ﻿// Copyright (c) Wiesław Šoltés. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using System.Collections.Generic;
-using Draw2D.Shape;
+using Core2D.Shape;
 
-namespace Draw2D
+namespace Core2D
 {
     /// <summary>
     /// Defines selectable shape contract.

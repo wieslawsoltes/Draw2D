@@ -1,10 +1,10 @@
 ﻿// Copyright (c) Wiesław Šoltés. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using System.Linq;
-using Draw2D.Editor.Intersections;
-using Draw2D.Shapes;
+using Core2D.Editor.Intersections;
+using Core2D.Shapes;
 
-namespace Draw2D.Editor.Tools
+namespace Core2D.Editor.Tools
 {
     public class LineTool : ToolBase
     {

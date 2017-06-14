@@ -17,8 +17,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Draw2D\Draw2D.csproj" />
-    <ProjectReference Include="..\Draw2D.Editor\Draw2D.Editor.csproj" />
+    <PackageReference Include="Math.Spatial" Version="1.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Draw2D\Core2D.csproj" />
   </ItemGroup>
 
 </Project>

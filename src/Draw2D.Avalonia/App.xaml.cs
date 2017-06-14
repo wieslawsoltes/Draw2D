@@ -5,13 +5,13 @@ using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Logging.Serilog;
 using Avalonia.Markup.Xaml;
-using Draw2D.Avalonia.Controls;
-using Draw2D.Avalonia.Renderers;
-using Draw2D.Avalonia.Views;
-using Draw2D.ViewModels;
+using Core2D.Avalonia.Controls;
+using Core2D.Avalonia.Renderers;
+using Core2D.Avalonia.Views;
+using Core2D.ViewModels;
 using Serilog;
 
-namespace Draw2D.Avalonia
+namespace Core2D.Avalonia
 {
     public class App : Application
     {

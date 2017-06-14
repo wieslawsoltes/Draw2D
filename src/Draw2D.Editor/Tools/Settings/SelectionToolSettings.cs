@@ -1,9 +1,9 @@
 ﻿// Copyright (c) Wiesław Šoltés. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
-using Draw2D.Editor.Selection;
-using Draw2D.Style;
+using Core2D.Editor.Selection;
+using Core2D.Style;
 
-namespace Draw2D.Editor.Tools
+namespace Core2D.Editor.Tools
 {
     public class SelectionToolSettings : SettingsBase
     {

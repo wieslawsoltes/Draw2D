@@ -2,10 +2,10 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using Avalonia.Controls;
 using Avalonia.Input;
-using Draw2D.Editor;
-using Draw2D.ViewModels.Containers;
+using Core2D.Editor;
+using Core2D.ViewModels.Containers;
 
-namespace Draw2D.Avalonia.Controls
+namespace Core2D.Avalonia.Controls
 {
     public class ShapeContainerInputView : Border
     {

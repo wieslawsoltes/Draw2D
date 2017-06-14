@@ -2,12 +2,12 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using System.Collections.Generic;
 using System.Linq;
-using Draw2D.Shapes;
+using Core2D.Shapes;
 using Spatial;
 using Spatial.ConvexHull;
 using Spatial.Sat;
 
-namespace Draw2D.Editor.Bounds
+namespace Core2D.Editor.Bounds
 {
     public static class HitTestHelper
     {

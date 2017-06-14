@@ -2,11 +2,11 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using Draw2D.Renderer;
-using Draw2D.Shape;
-using Draw2D.Shapes;
+using Core2D.Renderer;
+using Core2D.Shape;
+using Core2D.Shapes;
 
-namespace Draw2D.Containers
+namespace Core2D.Containers
 {
     public interface IShapeContainer
     {

@@ -3,10 +3,10 @@
 using System.Diagnostics;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using Draw2D.Shape;
-using Draw2D.Renderer;
+using Core2D.Shape;
+using Core2D.Renderer;
 
-namespace Draw2D.Shapes
+namespace Core2D.Shapes
 {
     public abstract class ConnectableShape : BaseShape, IConnectable
     {
