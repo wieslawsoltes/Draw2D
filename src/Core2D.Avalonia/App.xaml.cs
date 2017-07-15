@@ -53,8 +53,8 @@ namespace Core2D.Avalonia
 
             vm.Renderer = new AvaloniaShapeRenderer();
             vm.Selected = vm.Renderer.Selected;
-            vm.Capture = () => MouseDevice.Instance.Capture(rendererView);
-            vm.Release = () => MouseDevice.Instance.Capture(null);
+            vm.Capture = () => (window as IInputRoot).MouseDevice?.Capture(rendererView);
+            vm.Release = () => (window as IInputRoot).MouseDevice?.Capture(null);
             vm.Invalidate = () => rendererView.InvalidateVisual();
 
             window.DataContext = vm;
