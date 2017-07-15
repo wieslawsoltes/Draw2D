@@ -2,7 +2,7 @@
 <!-- Licensed under the MIT license. See LICENSE file in the project root for full license information. -->
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:Controls="clr-namespace:Draw2D.Avalonia.Controls;assembly=Core2D.Avalonia"
+             xmlns:Controls="clr-namespace:Core2D.Avalonia.Controls;assembly=Core2D.Avalonia"
              Focusable="True">
     <Grid RowDefinitions="Auto,5,*" ColumnDefinitions="250,*,250">
         <Menu Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Background="Transparent">
