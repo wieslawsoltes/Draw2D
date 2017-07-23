@@ -104,7 +104,7 @@ namespace Core2D.Json
             binder.Add<TextShape>("Text");
             binder.Add<TextObject>("Value");
             binder.Add<GroupShape>("Group");
-            binder.Add<ShapeContainer>("Container");
+            binder.Add<LayerContainer>("Container");
 
             Settings = new JsonSerializerSettings()
             {

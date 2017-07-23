@@ -45,7 +45,7 @@ namespace Core2D.Avalonia
         {
             var window = new MainWindow();
             var mainView = window.FindControl<MainView>("mainView");
-            var rendererView = mainView.FindControl<ShapeContainerRenderView>("rendererView");
+            var rendererView = mainView.FindControl<LayerContainerRenderView>("rendererView");
 
             var bootstrapper = new Bootstrapper();
             var vm = bootstrapper.CreateDemoViewModel();

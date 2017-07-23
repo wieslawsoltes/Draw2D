@@ -10,7 +10,7 @@ namespace Core2D.Editor.Selection.Helpers
 {
     public static class DeleteHelper
     {
-        public static void Delete(IShapeContainer container, ISet<BaseShape> selected)
+        public static void Delete(ILayerContainer container, ISet<BaseShape> selected)
         {
             var paths = container.Shapes.OfType<PathShape>();
             var groups = container.Shapes.OfType<GroupShape>();
@@ -49,7 +49,7 @@ namespace Core2D.Editor.Selection.Helpers
             }
         }
 
-        public static bool TryToDelete(IShapeContainer container, IEnumerable<ConnectableShape> connectables, PointShape point)
+        public static bool TryToDelete(ILayerContainer container, IEnumerable<ConnectableShape> connectables, PointShape point)
         {
             foreach (var connectable in connectables)
             {
@@ -65,7 +65,7 @@ namespace Core2D.Editor.Selection.Helpers
             return false;
         }
 
-        public static bool TryToDelete(IShapeContainer container, IEnumerable<PathShape> paths, BaseShape shape)
+        public static bool TryToDelete(ILayerContainer container, IEnumerable<PathShape> paths, BaseShape shape)
         {
             foreach (var path in paths)
             {
@@ -95,7 +95,7 @@ namespace Core2D.Editor.Selection.Helpers
             return false;
         }
 
-        public static bool TryToDelete(IShapeContainer container, IEnumerable<GroupShape> groups, BaseShape shape)
+        public static bool TryToDelete(ILayerContainer container, IEnumerable<GroupShape> groups, BaseShape shape)
         {
             foreach (var group in groups)
             {

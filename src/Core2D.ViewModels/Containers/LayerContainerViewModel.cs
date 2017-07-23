@@ -16,7 +16,7 @@ using Spatial;
 
 namespace Core2D.ViewModels.Containers
 {
-    public class ShapeContainerViewModel : ObservableObject, IToolContext
+    public class LayerContainerViewModel : ObservableObject, IToolContext
     {
         private ObservableCollection<ToolBase> _tools;
         private ToolBase _currentTool;
@@ -24,8 +24,8 @@ namespace Core2D.ViewModels.Containers
         private ShapeRenderer _renderer;
         private ISet<BaseShape> _selected;
         private IHitTest _hitTest;
-        private IShapeContainer _currentContainer;
-        private IShapeContainer _workingContainer;
+        private ILayerContainer _currentContainer;
+        private ILayerContainer _workingContainer;
         private ShapeStyle _currentStyle;
         private BaseShape _pointShape;
 
@@ -69,13 +69,13 @@ namespace Core2D.ViewModels.Containers
             set => Update(ref _hitTest, value);
         }
 
-        public IShapeContainer CurrentContainer
+        public ILayerContainer CurrentContainer
         {
             get => _currentContainer;
             set => Update(ref _currentContainer, value);
         }
 
-        public IShapeContainer WorkingContainer
+        public ILayerContainer WorkingContainer
         {
             get => _workingContainer;
             set => Update(ref _workingContainer, value);

@@ -16,8 +16,8 @@ namespace Core2D.Editor
         ShapeRenderer Renderer { get; set; }
         ISet<BaseShape> Selected { get; set; }
         IHitTest HitTest { get; set; }
-        IShapeContainer CurrentContainer { get; set; }
-        IShapeContainer WorkingContainer { get; set; }
+        ILayerContainer CurrentContainer { get; set; }
+        ILayerContainer WorkingContainer { get; set; }
         ShapeStyle CurrentStyle { get; set; }
         BaseShape PointShape { get; set; }
         Action Capture { get; set; }

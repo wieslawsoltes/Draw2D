@@ -7,7 +7,7 @@ using Core2D.ViewModels.Containers;
 
 namespace Core2D.Wpf.Controls
 {
-    public class ShapeContainerInputView : Border
+    public class LayerContainerInputView : Border
     {
         private Modifier GetModifier()
         {
@@ -29,7 +29,7 @@ namespace Core2D.Wpf.Controls
         {
             base.OnPreviewMouseLeftButtonDown(e);
 
-            if (this.DataContext is ShapeContainerViewModel vm)
+            if (this.DataContext is LayerContainerViewModel vm)
             {
                 var point = e.GetPosition(Child);
                 vm.CurrentTool.LeftDown(vm, point.X, point.Y, GetModifier());
@@ -41,7 +41,7 @@ namespace Core2D.Wpf.Controls
         {
             base.OnPreviewMouseLeftButtonUp(e);
 
-            if (this.DataContext is ShapeContainerViewModel vm)
+            if (this.DataContext is LayerContainerViewModel vm)
             {
                 var point = e.GetPosition(Child);
                 vm.CurrentTool.LeftUp(vm, point.X, point.Y, GetModifier());
@@ -53,7 +53,7 @@ namespace Core2D.Wpf.Controls
         {
             base.OnPreviewMouseRightButtonDown(e);
 
-            if (this.DataContext is ShapeContainerViewModel vm)
+            if (this.DataContext is LayerContainerViewModel vm)
             {
                 var point = e.GetPosition(Child);
                 vm.CurrentTool.RightDown(vm, point.X, point.Y, GetModifier());
@@ -65,7 +65,7 @@ namespace Core2D.Wpf.Controls
         {
             base.OnPreviewMouseRightButtonUp(e);
 
-            if (this.DataContext is ShapeContainerViewModel vm)
+            if (this.DataContext is LayerContainerViewModel vm)
             {
                 var point = e.GetPosition(Child);
                 vm.CurrentTool.RightUp(vm, point.X, point.Y, GetModifier());
@@ -77,7 +77,7 @@ namespace Core2D.Wpf.Controls
         {
             base.OnPreviewMouseMove(e);
 
-            if (this.DataContext is ShapeContainerViewModel vm)
+            if (this.DataContext is LayerContainerViewModel vm)
             {
                 var point = e.GetPosition(Child);
                 vm.CurrentTool.Move(vm, point.X, point.Y, GetModifier());

@@ -35,9 +35,9 @@
                 </ListBox.DataTemplates>
             </ListBox>
         </Grid>
-        <Controls:ShapeContainerInputView x:Name="inputView" Grid.Row="2" Grid.Column="1" Background="Transparent" ClipToBounds="True">
-            <Controls:ShapeContainerRenderView x:Name="rendererView" Width="{Binding CurrentContainer.Width}" Height="{Binding CurrentContainer.Height}" Background="SlateGray" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-        </Controls:ShapeContainerInputView>
+        <Controls:LayerContainerInputView x:Name="inputView" Grid.Row="2" Grid.Column="1" Background="Transparent" ClipToBounds="True">
+            <Controls:LayerContainerRenderView x:Name="rendererView" Width="{Binding CurrentContainer.Width}" Height="{Binding CurrentContainer.Height}" Background="SlateGray" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+        </Controls:LayerContainerInputView>
         <Grid Grid.Row="2" Grid.Column="2">
             <ListBox Items="{Binding CurrentContainer.Shapes}">
                 <ListBox.DataTemplates>

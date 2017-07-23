@@ -17,8 +17,8 @@ namespace Core2D.Avalonia.Views
 {
     public class MainView : UserControl
     {
-        private ShapeContainerInputView inputView;
-        private ShapeContainerRenderView rendererView;
+        private LayerContainerInputView inputView;
+        private LayerContainerRenderView rendererView;
 
         public MainView()
         {
@@ -30,8 +30,8 @@ namespace Core2D.Avalonia.Views
         {
             AvaloniaXamlLoader.Load(this);
 
-            inputView = this.FindControl<ShapeContainerInputView>("inputView");
-            rendererView = this.FindControl<ShapeContainerRenderView>("rendererView");
+            inputView = this.FindControl<LayerContainerInputView>("inputView");
+            rendererView = this.FindControl<LayerContainerRenderView>("rendererView");
 
             this.FindControl<MenuItem>("FileNew").Click += FileNew_Click;
             this.FindControl<MenuItem>("FileOpen").Click += FileOpen_Click;
@@ -47,7 +47,7 @@ namespace Core2D.Avalonia.Views
 
         public void SetNoneTool()
         {
-            if (this.DataContext is ShapeContainerViewModel vm)
+            if (this.DataContext is LayerContainerViewModel vm)
             {
                 vm.CurrentTool = vm.Tools.Where(t => t.Title == "None").FirstOrDefault();
             }
@@ -55,7 +55,7 @@ namespace Core2D.Avalonia.Views
 
         public void SetSelectionTool()
         {
-            if (this.DataContext is ShapeContainerViewModel vm)
+            if (this.DataContext is LayerContainerViewModel vm)
             {
                 vm.CurrentTool = vm.Tools.Where(t => t.Title == "Selection").FirstOrDefault();
             }
@@ -63,7 +63,7 @@ namespace Core2D.Avalonia.Views
 
         public void SetLineTool()
         {
-            if (this.DataContext is ShapeContainerViewModel vm)
+            if (this.DataContext is LayerContainerViewModel vm)
             {
                 if (vm.CurrentTool is PathTool pathTool)
                 {
@@ -79,7 +79,7 @@ namespace Core2D.Avalonia.Views
 
         public void SetPointTool()
         {
-            if (this.DataContext is ShapeContainerViewModel vm)
+            if (this.DataContext is LayerContainerViewModel vm)
             {
                 vm.CurrentTool = vm.Tools.Where(t => t.Title == "Point").FirstOrDefault();
             }
@@ -87,7 +87,7 @@ namespace Core2D.Avalonia.Views
 
         public void SetCubicBezierTool()
         {
-            if (this.DataContext is ShapeContainerViewModel vm)
+            if (this.DataContext is LayerContainerViewModel vm)
             {
                 if (vm.CurrentTool is PathTool pathTool)
                 {
@@ -103,7 +103,7 @@ namespace Core2D.Avalonia.Views
 
         public void SetQuadraticBezierTool()
         {
-            if (this.DataContext is ShapeContainerViewModel vm)
+            if (this.DataContext is LayerContainerViewModel vm)
             {
                 if (vm.CurrentTool is PathTool pathTool)
                 {
@@ -119,7 +119,7 @@ namespace Core2D.Avalonia.Views
 
         public void SetPathTool()
         {
-            if (this.DataContext is ShapeContainerViewModel vm)
+            if (this.DataContext is LayerContainerViewModel vm)
             {
                 vm.CurrentTool = vm.Tools.Where(t => t.Title == "Path").FirstOrDefault();
             }
@@ -127,7 +127,7 @@ namespace Core2D.Avalonia.Views
 
         public void SetMoveTool()
         {
-            if (this.DataContext is ShapeContainerViewModel vm)
+            if (this.DataContext is LayerContainerViewModel vm)
             {
                 if (vm.CurrentTool is PathTool pathTool)
                 {
@@ -139,7 +139,7 @@ namespace Core2D.Avalonia.Views
 
         public void SetRectangleTool()
         {
-            if (this.DataContext is ShapeContainerViewModel vm)
+            if (this.DataContext is LayerContainerViewModel vm)
             {
                 vm.CurrentTool = vm.Tools.Where(t => t.Title == "Rectangle").FirstOrDefault();
             }
@@ -147,7 +147,7 @@ namespace Core2D.Avalonia.Views
 
         public void SetEllipseTool()
         {
-            if (this.DataContext is ShapeContainerViewModel vm)
+            if (this.DataContext is LayerContainerViewModel vm)
             {
                 vm.CurrentTool = vm.Tools.Where(t => t.Title == "Ellipse").FirstOrDefault();
             }
@@ -155,7 +155,7 @@ namespace Core2D.Avalonia.Views
 
         public void SetTextTool()
         {
-            if (this.DataContext is ShapeContainerViewModel vm)
+            if (this.DataContext is LayerContainerViewModel vm)
             {
                 vm.CurrentTool = vm.Tools.Where(t => t.Title == "Text").FirstOrDefault();
             }
@@ -291,7 +291,7 @@ namespace Core2D.Avalonia.Views
 
         private void New()
         {
-            if (this.DataContext is ShapeContainerViewModel vm)
+            if (this.DataContext is LayerContainerViewModel vm)
             {
                 New(vm);
                 rendererView.InvalidateVisual();
@@ -307,7 +307,7 @@ namespace Core2D.Avalonia.Views
             if (result != null)
             {
                 var path = result.FirstOrDefault();
-                if (this.DataContext is ShapeContainerViewModel vm)
+                if (this.DataContext is LayerContainerViewModel vm)
                 {
                     Open(path, vm);
                     rendererView.InvalidateVisual();
@@ -326,7 +326,7 @@ namespace Core2D.Avalonia.Views
             if (result != null)
             {
                 var path = result;
-                if (this.DataContext is ShapeContainerViewModel vm)
+                if (this.DataContext is LayerContainerViewModel vm)
                 {
                     Save(path, vm);
                 }
@@ -335,7 +335,7 @@ namespace Core2D.Avalonia.Views
 
         private void Cut()
         {
-            if (this.DataContext is ShapeContainerViewModel vm)
+            if (this.DataContext is LayerContainerViewModel vm)
             {
                 if (vm.CurrentTool is SelectionTool selectionTool)
                 {
@@ -346,7 +346,7 @@ namespace Core2D.Avalonia.Views
 
         private void Copy()
         {
-            if (this.DataContext is ShapeContainerViewModel vm)
+            if (this.DataContext is LayerContainerViewModel vm)
             {
                 if (vm.CurrentTool is SelectionTool selectionTool)
                 {
@@ -357,7 +357,7 @@ namespace Core2D.Avalonia.Views
 
         private void Paste()
         {
-            if (this.DataContext is ShapeContainerViewModel vm)
+            if (this.DataContext is LayerContainerViewModel vm)
             {
                 if (vm.CurrentTool is SelectionTool selectionTool)
                 {
@@ -368,7 +368,7 @@ namespace Core2D.Avalonia.Views
 
         private void Delete()
         {
-            if (this.DataContext is ShapeContainerViewModel vm)
+            if (this.DataContext is LayerContainerViewModel vm)
             {
                 if (vm.CurrentTool is SelectionTool selectionTool)
                 {
@@ -379,7 +379,7 @@ namespace Core2D.Avalonia.Views
 
         private void Group()
         {
-            if (this.DataContext is ShapeContainerViewModel vm)
+            if (this.DataContext is LayerContainerViewModel vm)
             {
                 if (vm.CurrentTool is SelectionTool selectionTool)
                 {
@@ -390,7 +390,7 @@ namespace Core2D.Avalonia.Views
 
         private void SelectAll()
         {
-            if (this.DataContext is ShapeContainerViewModel vm)
+            if (this.DataContext is LayerContainerViewModel vm)
             {
                 if (vm.CurrentTool is SelectionTool selectionTool)
                 {
@@ -399,32 +399,32 @@ namespace Core2D.Avalonia.Views
             }
         }
 
-        private void New(ShapeContainerViewModel vm)
+        private void New(LayerContainerViewModel vm)
         {
             vm.CurrentTool.Clean(vm);
             vm.Renderer.Selected.Clear();
-            var container = new ShapeContainer()
+            var container = new LayerContainer()
             {
                 Width = 720,
                 Height = 630
             };
-            var workingContainer = new ShapeContainer();
+            var workingContainer = new LayerContainer();
             vm.CurrentContainer = container;
-            vm.WorkingContainer = new ShapeContainer();
+            vm.WorkingContainer = new LayerContainer();
         }
 
-        private void Open(string path, ShapeContainerViewModel vm)
+        private void Open(string path, LayerContainerViewModel vm)
         {
             var json = File.ReadAllText(path);
-            var container = NewtonsoftJsonSerializer.FromJson<ShapeContainer>(json);
-            var workingContainer = new ShapeContainer();
+            var container = NewtonsoftJsonSerializer.FromJson<LayerContainer>(json);
+            var workingContainer = new LayerContainer();
             vm.CurrentTool.Clean(vm);
             vm.Renderer.Selected.Clear();
             vm.CurrentContainer = container;
             vm.WorkingContainer = workingContainer;
         }
 
-        private void Save(string path, ShapeContainerViewModel vm)
+        private void Save(string path, LayerContainerViewModel vm)
         {
             var json = NewtonsoftJsonSerializer.ToJson(vm.CurrentContainer);
             File.WriteAllText(path, json);

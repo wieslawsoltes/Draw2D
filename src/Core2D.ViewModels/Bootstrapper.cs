@@ -23,7 +23,7 @@ namespace Core2D.ViewModels
 {
     public class Bootstrapper
     {
-        public ShapeContainerViewModel CreateDemoViewModel()
+        public LayerContainerViewModel CreateDemoViewModel()
         {
             var hitTest = new HitTest();
 
@@ -355,7 +355,7 @@ namespace Core2D.ViewModels
                 }
             };
 
-            return new ShapeContainerViewModel()
+            return new LayerContainerViewModel()
             {
                 Tools = tools,
                 CurrentTool = currentTool,
@@ -373,15 +373,15 @@ namespace Core2D.ViewModels
             };
         }
 
-        public void CreateDemoContainer(ShapeContainerViewModel vm)
+        public void CreateDemoContainer(LayerContainerViewModel vm)
         {
-            var container = new ShapeContainer()
+            var container = new LayerContainer()
             {
                 Width = 720,
                 Height = 630
             };
 
-            var workingContainer = new ShapeContainer();
+            var workingContainer = new LayerContainer();
 
             var style = new ShapeStyle(new ArgbColor(255, 0, 255, 0), new ArgbColor(80, 0, 255, 0), 2.0, true, true);
 

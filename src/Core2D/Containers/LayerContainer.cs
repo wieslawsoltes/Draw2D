@@ -9,7 +9,7 @@ using Core2D.Style;
 
 namespace Core2D.Containers
 {
-    public class ShapeContainer : ObservableObject, IShapeContainer, ICopyable
+    public class LayerContainer : ObservableObject, ILayerContainer, ICopyable
     {
         private ShapeStyle _style;
         private MatrixObject _transform;
@@ -61,7 +61,7 @@ namespace Core2D.Containers
             set => Update(ref _styles, value);
         }
 
-        public ShapeContainer()
+        public LayerContainer()
         {
             _guides = new ObservableCollection<LineShape>();
             _shapes = new ObservableCollection<BaseShape>();
@@ -145,7 +145,7 @@ namespace Core2D.Containers
 
         public virtual object Copy(IDictionary<object, object> shared)
         {
-            var copy = new ShapeContainer()
+            var copy = new LayerContainer()
             {
                 Name = this.Name,
                 Width = this.Width,

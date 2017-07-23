@@ -7,7 +7,7 @@ using Core2D.ViewModels.Containers;
 
 namespace Core2D.Avalonia.Controls
 {
-    public class ShapeContainerRenderView : Canvas
+    public class LayerContainerRenderView : Canvas
     {
         private bool _drawWorking = false;
 
@@ -29,7 +29,7 @@ namespace Core2D.Avalonia.Controls
         {
             base.Render(context);
 
-            if (this.DataContext is ShapeContainerViewModel vm)
+            if (this.DataContext is LayerContainerViewModel vm)
             {
                 vm.Presenter.DrawContainer(context, vm.CurrentContainer, vm.Renderer, 0.0, 0.0, null, null);
 

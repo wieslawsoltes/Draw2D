@@ -60,13 +60,13 @@ namespace Core2D.Editor.Tools
             set => throw new InvalidOperationException($"Can not set {HitTest} property value.");
         }
 
-        public IShapeContainer CurrentContainer
+        public ILayerContainer CurrentContainer
         {
             get => _figure;
             set => throw new InvalidOperationException($"Can not set {CurrentContainer} property value.");
         }
 
-        public IShapeContainer WorkingContainer
+        public ILayerContainer WorkingContainer
         {
             get => _figure;
             set => throw new InvalidOperationException($"Can not set {WorkingContainer} property value.");

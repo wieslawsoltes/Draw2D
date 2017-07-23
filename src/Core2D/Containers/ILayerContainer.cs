@@ -7,7 +7,7 @@ using Core2D.Shapes;
 
 namespace Core2D.Containers
 {
-    public interface IShapeContainer : IDrawable
+    public interface ILayerContainer : IDrawable
     {
         double Width { get; set; }
         double Height { get; set; }

@@ -104,8 +104,8 @@
       <DependentUpon>MainView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Renderers\WpfShapeRenderer.cs" />
-    <Compile Include="Controls\ShapeContainerInputView.cs" />
-    <Compile Include="Controls\ShapeContainerRenderView.cs" />
+    <Compile Include="Controls\LayerContainerInputView.cs" />
+    <Compile Include="Controls\LayerContainerRenderView.cs" />
     <Compile Include="Views\Style\DrawColorView.xaml.cs">
       <DependentUpon>DrawColorView.xaml</DependentUpon>
     </Compile>
