@@ -36,29 +36,55 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Math.Spatial" Version="1.0.2" />
     <PackageReference Include="Microsoft.NETCore.Runtime.CoreCLR" Version="1.1.2" />
     <PackageReference Include="Microsoft.NETCore.DotNetHostPolicy" Version="1.1.2" />
-    <PackageReference Include="Avalonia" Version="0.5.1-build3554-alpha" />
-    <PackageReference Include="Avalonia.Gtk3" Version="0.5.1-build3554-alpha" />
-    <PackageReference Include="Avalonia.Win32" Version="0.5.1-build3554-alpha" />
-    <PackageReference Include="Avalonia.Skia.Desktop" Version="0.5.1-build3554-alpha" />
-    <PackageReference Include="Avalonia.LinuxFramebuffer" Version="0.5.1-build3554-alpha" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Avalonia" Version="0.5.1-build3567-alpha" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Avalonia.Gtk3" Version="0.5.1-build3567-alpha" />
+    <PackageReference Include="Avalonia.Win32" Version="0.5.1-build3567-alpha" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Avalonia.Skia.Desktop" Version="0.5.1-build3567-alpha" />
+    <PackageReference Include="Avalonia.LinuxFramebuffer" Version="0.5.1-build3567-alpha" />
     <PackageReference Include="Avalonia.Skia.Linux.Natives" Version="1.57.1.4" />
-    <PackageReference Include="System.ValueTuple" Version="4.3.1" />
-    <PackageReference Include="Newtonsoft.Json" Version="10.0.2" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Avalonia.Direct2D1" Version="0.5.1-build3567-alpha" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Avalonia.Controls.PanAndZoom" Version="0.5.1-build126-alpha" />
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="Serilog" Version="2.4.0" />
     <PackageReference Include="Serilog.Sinks.Trace" Version="2.1.0" />
     <PackageReference Include="Splat" Version="2.0.0" />
     <PackageReference Include="Sprache" Version="2.1.0" />
     <PackageReference Include="System.ValueTuple" Version="4.3.1" />
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="SkiaSharp" Version="1.57.1" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="SharpDX" Version="4.0.1" />
+    <PackageReference Include="SharpDX.Direct2D1" Version="4.0.1" />
+    <PackageReference Include="SharpDX.Direct3D11" Version="4.0.1" />
+    <PackageReference Include="SharpDX.DXGI" Version="4.0.1" />
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="System.Reactive" Version="3.0.0" />
     <PackageReference Include="System.Reactive.Core" Version="3.0.0" />
     <PackageReference Include="System.Reactive.Interfaces" Version="3.0.0" />
     <PackageReference Include="System.Reactive.Linq" Version="3.0.0" />
     <PackageReference Include="System.Reactive.PlatformServices" Version="3.0.0" />
-    <PackageReference Include="Avalonia.Controls.PanAndZoom" Version="0.5.1-build125-alpha" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="10.0.2" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Math.Spatial" Version="1.0.2" />
   </ItemGroup>
 
 </Project>
