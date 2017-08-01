@@ -40,8 +40,8 @@ namespace Core2D.Editor.Tools
             context.Selected.Add(_quadraticBezier.Point1);
             context.Selected.Add(_quadraticBezier.Point2);
 
-            context.Capture();
-            context.Invalidate();
+            context.Capture?.Invoke();
+            context.Invalidate?.Invoke();
 
             CurrentState = State.Point2;
         }
@@ -64,8 +64,8 @@ namespace Core2D.Editor.Tools
 
             Filters?.ForEach(f => f.Clear(context));
 
-            context.Release();
-            context.Invalidate();
+            context.Release?.Invoke();
+            context.Invalidate?.Invoke();
         }
 
         private void Point2Internal(IToolContext context, double x, double y, Modifier modifier)
@@ -81,7 +81,7 @@ namespace Core2D.Editor.Tools
 
             CurrentState = State.Point1;
 
-            context.Invalidate();
+            context.Invalidate?.Invoke();
         }
 
         private void MoveStartPointInternal(IToolContext context, double x, double y, Modifier modifier)
@@ -89,7 +89,7 @@ namespace Core2D.Editor.Tools
             Filters?.ForEach(f => f.Clear(context));
             Filters?.Any(f => f.Process(context, ref x, ref y));
 
-            context.Invalidate();
+            context.Invalidate?.Invoke();
         }
 
         private void MovePoint1Internal(IToolContext context, double x, double y, Modifier modifier)
@@ -100,7 +100,7 @@ namespace Core2D.Editor.Tools
             _quadraticBezier.Point1.X = x;
             _quadraticBezier.Point1.Y = y;
 
-            context.Invalidate();
+            context.Invalidate?.Invoke();
         }
 
         private void MovePoint2Internal(IToolContext context, double x, double y, Modifier modifier)
@@ -113,7 +113,7 @@ namespace Core2D.Editor.Tools
             _quadraticBezier.Point2.X = x;
             _quadraticBezier.Point2.Y = y;
 
-            context.Invalidate();
+            context.Invalidate?.Invoke();
         }
 
         private void CleanInternal(IToolContext context)
@@ -132,8 +132,8 @@ namespace Core2D.Editor.Tools
                 _quadraticBezier = null;
             }
 
-            context.Release();
-            context.Invalidate();
+            context.Release?.Invoke();
+            context.Invalidate?.Invoke();
         }
 
         public override void LeftDown(IToolContext context, double x, double y, Modifier modifier)

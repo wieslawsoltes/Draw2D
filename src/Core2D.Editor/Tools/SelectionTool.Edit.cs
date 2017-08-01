@@ -40,7 +40,7 @@ namespace Core2D.Editor.Tools
 
                     CopyHelper.Copy(context.CurrentContainer, _shapesToCopy, context.Renderer.Selected);
 
-                    context.Invalidate();
+                    context.Invalidate?.Invoke();
 
                     this.CurrentState = State.None;
                 }
@@ -56,7 +56,7 @@ namespace Core2D.Editor.Tools
                 this.DeHover(context);
                 context.Renderer.Selected.Clear();
 
-                context.Invalidate();
+                context.Invalidate?.Invoke();
 
                 this.CurrentState = State.None;
             }
@@ -85,7 +85,7 @@ namespace Core2D.Editor.Tools
                 group.Select(context.Renderer.Selected);
                 context.CurrentContainer.Shapes.Add(group);
 
-                context.Invalidate();
+                context.Invalidate?.Invoke();
 
                 this.CurrentState = State.None;
             }
@@ -103,7 +103,7 @@ namespace Core2D.Editor.Tools
                     shape.Select(context.Renderer.Selected);
                 }
 
-                context.Invalidate();
+                context.Invalidate?.Invoke();
 
                 this.CurrentState = State.None;
             }

@@ -29,13 +29,13 @@ namespace Core2D.Editor.Tools
                 {
                     connectable.Points.Add(point);
                     context.Selected.Add(point);
-                    context.Invalidate();
+                    context.Invalidate?.Invoke();
                 }
             }
             //else
             //{
             //    context.CurrentContainer.Shapes.Add(point);
-            //    context.Invalidate();
+            //    context.Invalidate?.Invoke();
             //}
         }
 
@@ -44,7 +44,7 @@ namespace Core2D.Editor.Tools
             Filters?.ForEach(f => f.Clear(context));
             Filters?.Any(f => f.Process(context, ref x, ref y));
 
-            context.Invalidate();
+            context.Invalidate?.Invoke();
         }
 
         private void CleanInternal(IToolContext context)

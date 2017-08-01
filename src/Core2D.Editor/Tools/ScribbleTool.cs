@@ -50,8 +50,8 @@ namespace Core2D.Editor.Tools
 
             context.WorkingContainer.Shapes.Add(_path);
 
-            context.Capture();
-            context.Invalidate();
+            context.Capture?.Invoke();
+            context.Invalidate?.Invoke();
 
             CurrentState = State.Points;
         }
@@ -109,8 +109,8 @@ namespace Core2D.Editor.Tools
 
             Filters?.ForEach(f => f.Clear(context));
 
-            context.Release();
-            context.Invalidate();
+            context.Release?.Invoke();
+            context.Invalidate?.Invoke();
         }
 
         private void MoveStartInternal(IToolContext context, double x, double y, Modifier modifier)
@@ -118,7 +118,7 @@ namespace Core2D.Editor.Tools
             Filters?.ForEach(f => f.Clear(context));
             Filters?.Any(f => f.Process(context, ref x, ref y));
 
-            context.Invalidate();
+            context.Invalidate?.Invoke();
         }
 
         private void MovePointsInternal(IToolContext context, double x, double y, Modifier modifier)
@@ -140,7 +140,7 @@ namespace Core2D.Editor.Tools
             _previousPoint = _nextPoint;
             _nextPoint = null;
 
-            context.Invalidate();
+            context.Invalidate?.Invoke();
         }
 
         private void CleanInternal(IToolContext context)
@@ -158,8 +158,8 @@ namespace Core2D.Editor.Tools
                 _nextPoint = null;
             }
 
-            context.Release();
-            context.Invalidate();
+            context.Release?.Invoke();
+            context.Invalidate?.Invoke();
         }
 
         public override void LeftDown(IToolContext context, double x, double y, Modifier modifier)

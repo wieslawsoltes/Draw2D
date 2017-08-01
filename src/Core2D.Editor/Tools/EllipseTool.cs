@@ -35,8 +35,8 @@ namespace Core2D.Editor.Tools
             context.Selected.Add(_ellipse.TopLeft);
             context.Selected.Add(_ellipse.BottomRight);
 
-            context.Capture();
-            context.Invalidate();
+            context.Capture?.Invoke();
+            context.Invalidate?.Invoke();
 
             CurrentState = State.BottomRight;
         }
@@ -56,8 +56,8 @@ namespace Core2D.Editor.Tools
 
             Filters?.ForEach(f => f.Clear(context));
 
-            context.Release();
-            context.Invalidate();
+            context.Release?.Invoke();
+            context.Invalidate?.Invoke();
         }
 
         private void MoveTopLeftInternal(IToolContext context, double x, double y, Modifier modifier)
@@ -65,7 +65,7 @@ namespace Core2D.Editor.Tools
             Filters?.ForEach(f => f.Clear(context));
             Filters?.Any(f => f.Process(context, ref x, ref y));
 
-            context.Invalidate();
+            context.Invalidate?.Invoke();
         }
 
         private void MoveBottomRightInternal(IToolContext context, double x, double y, Modifier modifier)
@@ -76,7 +76,7 @@ namespace Core2D.Editor.Tools
             _ellipse.BottomRight.X = x;
             _ellipse.BottomRight.Y = y;
 
-            context.Invalidate();
+            context.Invalidate?.Invoke();
         }
 
         private void CleanInternal(IToolContext context)
@@ -93,8 +93,8 @@ namespace Core2D.Editor.Tools
                 _ellipse = null;
             }
 
-            context.Release();
-            context.Invalidate();
+            context.Release?.Invoke();
+            context.Invalidate?.Invoke();
         }
 
         public override void LeftDown(IToolContext context, double x, double y, Modifier modifier)

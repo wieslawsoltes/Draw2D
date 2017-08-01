@@ -57,7 +57,7 @@ namespace Core2D.Editor.Tools
                 modifier);
             if (selected == true)
             {
-                context.Capture();
+                context.Capture?.Invoke();
 
                 CurrentState = State.Move;
             }
@@ -84,8 +84,8 @@ namespace Core2D.Editor.Tools
                 _rectangle.Style = Settings?.SelectionStyle;
                 context.WorkingContainer.Shapes.Add(_rectangle);
 
-                context.Capture();
-                context.Invalidate();
+                context.Capture?.Invoke();
+                context.Invalidate?.Invoke();
 
                 CurrentState = State.Selection;
             }
@@ -98,8 +98,8 @@ namespace Core2D.Editor.Tools
             _rectangle.BottomRight.X = x;
             _rectangle.BottomRight.Y = y;
 
-            context.Release();
-            context.Invalidate();
+            context.Release?.Invoke();
+            context.Invalidate?.Invoke();
         }
 
         private void LeftUpSelectionInternal(IToolContext context, double x, double y, Modifier modifier)
@@ -122,16 +122,16 @@ namespace Core2D.Editor.Tools
 
             CurrentState = State.None;
 
-            context.Release();
-            context.Invalidate();
+            context.Release?.Invoke();
+            context.Invalidate?.Invoke();
         }
 
         private void LeftUpMoveInternal(IToolContext context, double x, double y, Modifier modifier)
         {
             Filters?.ForEach(f => f.Clear(context));
 
-            context.Release();
-            context.Invalidate();
+            context.Release?.Invoke();
+            context.Invalidate?.Invoke();
 
             CurrentState = State.None;
         }
@@ -140,8 +140,8 @@ namespace Core2D.Editor.Tools
         {
             Filters?.ForEach(f => f.Clear(context));
 
-            context.Release();
-            context.Invalidate();
+            context.Release?.Invoke();
+            context.Invalidate?.Invoke();
 
             CurrentState = State.None;
         }
@@ -166,13 +166,13 @@ namespace Core2D.Editor.Tools
                     if (shape != null)
                     {
                         Hover(context, shape);
-                        context.Invalidate();
+                        context.Invalidate?.Invoke();
                     }
                     else
                     {
                         if (previous != null)
                         {
-                            context.Invalidate();
+                            context.Invalidate?.Invoke();
                         }
                     }
                 }
@@ -184,7 +184,7 @@ namespace Core2D.Editor.Tools
             _rectangle.BottomRight.X = x;
             _rectangle.BottomRight.Y = y;
 
-            context.Invalidate();
+            context.Invalidate?.Invoke();
         }
 
         private void MoveMoveInternal(IToolContext context, double x, double y, Modifier modifier)
@@ -245,7 +245,7 @@ namespace Core2D.Editor.Tools
                 }
             }
 
-            context.Invalidate();
+            context.Invalidate?.Invoke();
         }
 
         private void CleanInternal(IToolContext context)
@@ -269,8 +269,8 @@ namespace Core2D.Editor.Tools
 
             Filters?.ForEach(f => f.Clear(context));
 
-            context.Release();
-            context.Invalidate();
+            context.Release?.Invoke();
+            context.Invalidate?.Invoke();
         }
 
         public override void LeftDown(IToolContext context, double x, double y, Modifier modifier)
