@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using Avalonia.Controls;
+using Avalonia.Controls.PanAndZoom;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
@@ -17,6 +18,7 @@ namespace Core2D.Avalonia.Views
 {
     public class MainView : UserControl
     {
+        private ZoomBorder zoomBorder;
         private LayerContainerInputView inputView;
         private LayerContainerRenderView rendererView;
 
@@ -30,6 +32,7 @@ namespace Core2D.Avalonia.Views
         {
             AvaloniaXamlLoader.Load(this);
 
+            zoomBorder = this.FindControl<ZoomBorder>("zoomBorder");
             inputView = this.FindControl<LayerContainerInputView>("inputView");
             rendererView = this.FindControl<LayerContainerRenderView>("rendererView");
 
@@ -234,6 +237,12 @@ namespace Core2D.Avalonia.Views
                         break;
                     case Key.Delete:
                         Delete();
+                        break;
+                    case Key.Z:
+                        zoomBorder.Reset();
+                        break;
+                    case Key.X:
+                        zoomBorder.AutoFit();
                         break;
                 }
             }
