@@ -39,7 +39,7 @@
         <Border Grid.Row="2" Grid.Column="1">
             <Border ClipToBounds="True">
                 <paz:ZoomBorder AutoFitMode="None" ZoomSpeed="1.2" Background="Transparent" ClipToBounds="False" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
-                    <Controls:LayerContainerInputView x:Name="inputView" Background="Transparent" ClipToBounds="True">
+                    <Controls:LayerContainerInputView x:Name="inputView" Background="Red" ClipToBounds="False" VerticalAlignment="Center" HorizontalAlignment="Center">
                         <Controls:LayerContainerRenderView x:Name="rendererView" Width="{Binding CurrentContainer.Width}" Height="{Binding CurrentContainer.Height}" Background="SlateGray" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                     </Controls:LayerContainerInputView>
                 </paz:ZoomBorder>
