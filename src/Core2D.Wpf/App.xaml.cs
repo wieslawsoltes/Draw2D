@@ -22,8 +22,20 @@ namespace Core2D.Wpf
 
             vm.Renderer = new WpfShapeRenderer();
             vm.Selected = vm.Renderer.Selected;
-            vm.Capture = () => rendererView.CaptureMouse();
-            vm.Release = () => rendererView.ReleaseMouseCapture();
+            vm.Capture = () =>
+            {
+                if (rendererView.IsMouseCaptured == false)
+                {
+                    rendererView.CaptureMouse();
+                }
+            };
+            vm.Release = () =>
+            {
+                if (rendererView.IsMouseCaptured == true)
+                {
+                    rendererView.ReleaseMouseCapture();
+                }
+            };
             vm.Invalidate = () => rendererView.InvalidateVisual();
 
             window.DataContext = vm;

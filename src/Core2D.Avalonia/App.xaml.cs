@@ -44,6 +44,7 @@ namespace Core2D.Avalonia
         public void Start()
         {
             var window = new MainWindow();
+            var inputRoot = window as IInputRoot;
             var mainView = window.FindControl<MainView>("mainView");
             var rendererView = mainView.FindControl<LayerContainerRenderView>("rendererView");
 
@@ -53,8 +54,20 @@ namespace Core2D.Avalonia
 
             vm.Renderer = new AvaloniaShapeRenderer();
             vm.Selected = vm.Renderer.Selected;
-            vm.Capture = () => (window as IInputRoot).MouseDevice?.Capture(rendererView);
-            vm.Release = () => (window as IInputRoot).MouseDevice?.Capture(null);
+            vm.Capture = () =>
+            {
+                if (inputRoot.MouseDevice?.Captured == null)
+                {
+                    inputRoot.MouseDevice?.Capture(rendererView);
+                }
+            };
+            vm.Release = () =>
+            {
+                if (inputRoot.MouseDevice?.Captured != null)
+                {
+                    inputRoot.MouseDevice?.Capture(null);
+                }
+            };
             vm.Invalidate = () => rendererView.InvalidateVisual();
 
             window.DataContext = vm;
