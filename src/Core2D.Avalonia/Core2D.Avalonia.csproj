@@ -40,22 +40,22 @@
     <PackageReference Include="Microsoft.NETCore.DotNetHostPolicy" Version="1.1.2" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Avalonia" Version="0.5.1-build3567-alpha" />
+    <PackageReference Include="Avalonia" Version="0.5.1-build3587-alpha" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Avalonia.Gtk3" Version="0.5.1-build3567-alpha" />
-    <PackageReference Include="Avalonia.Win32" Version="0.5.1-build3567-alpha" />
+    <PackageReference Include="Avalonia.Gtk3" Version="0.5.1-build3587-alpha" />
+    <PackageReference Include="Avalonia.Win32" Version="0.5.1-build3587-alpha" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Avalonia.Skia.Desktop" Version="0.5.1-build3567-alpha" />
-    <PackageReference Include="Avalonia.LinuxFramebuffer" Version="0.5.1-build3567-alpha" />
+    <PackageReference Include="Avalonia.Skia.Desktop" Version="0.5.1-build3587-alpha" />
+    <PackageReference Include="Avalonia.LinuxFramebuffer" Version="0.5.1-build3587-alpha" />
     <PackageReference Include="Avalonia.Skia.Linux.Natives" Version="1.57.1.4" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Avalonia.Direct2D1" Version="0.5.1-build3567-alpha" />
+    <PackageReference Include="Avalonia.Direct2D1" Version="0.5.1-build3587-alpha" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Avalonia.Controls.PanAndZoom" Version="1.0.0-build149-alpha" />
+    <PackageReference Include="Avalonia.Controls.PanAndZoom" Version="1.0.0-build150-alpha" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Serilog" Version="2.4.0" />
