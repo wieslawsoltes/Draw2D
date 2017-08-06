@@ -63,7 +63,7 @@
             </TabControl>
             <TabControl Grid.Row="1">
                 <TabItem Header="Style">
-                    <ViewsStyle:DrawStyleView Grid.Row="1" DataContext="{Binding CurrentStyle}"/>
+                    <ViewsStyle:DrawStyleView DataContext="{Binding CurrentStyle}"/>
                 </TabItem>
             </TabControl>
         </Grid>
@@ -196,7 +196,7 @@
                     </Grid>
                 </TabItem>
                 <TabItem Header="Filters">
-                    <Grid Grid.Row="2" Grid.Column="2">
+                    <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="*"/>
