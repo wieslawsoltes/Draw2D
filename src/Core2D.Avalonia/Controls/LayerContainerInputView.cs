@@ -57,7 +57,6 @@ namespace Core2D.Avalonia.Controls
                 {
                     var point = FixInvalidPointPosition(e.GetPosition(Child));
                     vm.CurrentTool.LeftDown(vm, point.X, point.Y, GetModifier(e.InputModifiers));
-                    Child.InvalidateVisual();
                 }
             }
             else if (e.MouseButton == MouseButton.Right)
@@ -66,7 +65,6 @@ namespace Core2D.Avalonia.Controls
                 {
                     var point = FixInvalidPointPosition(e.GetPosition(Child));
                     vm.CurrentTool.RightDown(vm, point.X, point.Y, GetModifier(e.InputModifiers));
-                    Child.InvalidateVisual();
                 }
             }
         }
@@ -79,7 +77,6 @@ namespace Core2D.Avalonia.Controls
                 {
                     var point = FixInvalidPointPosition(e.GetPosition(Child));
                     vm.CurrentTool.LeftUp(vm, point.X, point.Y, GetModifier(e.InputModifiers));
-                    Child.InvalidateVisual();
                 }
             }
             else if (e.MouseButton == MouseButton.Right)
@@ -88,7 +85,6 @@ namespace Core2D.Avalonia.Controls
                 {
                     var point = FixInvalidPointPosition(e.GetPosition(Child));
                     vm.CurrentTool.RightUp(vm, point.X, point.Y, GetModifier(e.InputModifiers));
-                    Child.InvalidateVisual();
                 }
             }
         }
@@ -99,7 +95,6 @@ namespace Core2D.Avalonia.Controls
             {
                 var point = FixInvalidPointPosition(e.GetPosition(Child));
                 vm.CurrentTool.Move(vm, point.X, point.Y, GetModifier(e.InputModifiers));
-                Child.InvalidateVisual();
             }
         }
     }
