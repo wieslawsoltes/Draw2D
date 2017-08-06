@@ -168,7 +168,7 @@
                     </ContentControl>
                 </TabItem>
                 <TabItem Header="Intersections">
-                    <Grid Grid.Row="2" Grid.Column="2">
+                    <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="*"/>
