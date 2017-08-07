@@ -3,6 +3,7 @@
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.PanAndZoom;
 using Avalonia.Input;
@@ -25,12 +26,17 @@ namespace Core2D.Avalonia.Views
         public MainView()
         {
             InitializeComponent();
-            KeyDown += MainView_KeyDown;
+            InitializeView();
         }
 
         private void InitializeComponent()
         {
             AvaloniaXamlLoader.Load(this);
+        }
+
+        private void InitializeView()
+        {
+            KeyDown += MainView_KeyDown;
 
             zoomBorder = this.FindControl<ZoomBorder>("zoomBorder");
             inputView = this.FindControl<LayerContainerInputView>("inputView");
@@ -46,6 +52,8 @@ namespace Core2D.Avalonia.Views
             this.FindControl<MenuItem>("EditDelete").Click += EditDelete_Click;
             this.FindControl<MenuItem>("EditGroup").Click += EditGroup_Click;
             this.FindControl<MenuItem>("EditSelectAll").Click += EditSelectAll_Click;
+            this.FindControl<MenuItem>("DebugDrawDirtyRects").Click += DebugDrawDirtyRects_Click;
+            this.FindControl<MenuItem>("DebugDrawFps").Click += DebugDrawFps_Click;
         }
 
         public void SetNoneTool()
@@ -296,6 +304,30 @@ namespace Core2D.Avalonia.Views
         private void EditSelectAll_Click(object sender, RoutedEventArgs e)
         {
             SelectAll();
+        }
+
+        private void DebugDrawDirtyRects_Click(object sender, RoutedEventArgs e)
+        {
+            ToggleDrawDirtyRects();
+        }
+
+        private void DebugDrawFps_Click(object sender, RoutedEventArgs e)
+        {
+            ToggleDrawFps();
+        }
+
+        private void ToggleDrawDirtyRects()
+        {
+            bool value = !VisualRoot.Renderer.DrawDirtyRects;
+            VisualRoot.Renderer.DrawDirtyRects = value;
+            this.FindControl<CheckBox>("DebugDrawDirtyRectsCheckBox").IsChecked = value;
+        }
+
+        private void ToggleDrawFps()
+        {
+            bool value = !VisualRoot.Renderer.DrawFps;
+            VisualRoot.Renderer.DrawFps = value;
+            this.FindControl<CheckBox>("DebugDebugDrawFpsCheckBox").IsChecked = value;
         }
 
         private void New()
