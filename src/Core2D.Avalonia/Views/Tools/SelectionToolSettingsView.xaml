@@ -19,17 +19,17 @@
         <TextBlock Classes="default" Grid.Column="0" Grid.Row="5" Text="ClearSelectionOnClean"/>
         <CheckBox Classes="default" Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="5" IsChecked="{Binding ClearSelectionOnClean}"/>
         <TextBlock Classes="default" Grid.Column="0" Grid.Row="6" Text="HitTestRadius"/>
-        <Slider Classes="default" Grid.Column="1" Grid.Row="6" Value="{Binding HitTestRadius}" Minimum="0" Maximum="32" SmallChange="0.1" LargeChange="1" IsSnapToTickEnabled="True" TickFrequency="0.1"/>
+        <Slider Classes="default" Grid.Column="1" Grid.Row="6" Value="{Binding HitTestRadius}" Minimum="0" Maximum="32"/>
         <TextBox Classes="default" Grid.Column="2" Grid.Row="6" Text="{Binding HitTestRadius}"/>
         <TextBlock Classes="default" Grid.Column="0" Grid.Row="7" Text="ConnectPoints"/>
         <CheckBox Classes="default" Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="7" IsChecked="{Binding ConnectPoints}"/>
         <TextBlock Classes="default" Grid.Column="0" Grid.Row="8" Text="ConnectTestRadius"/>
-        <Slider Classes="default" Grid.Column="1" Grid.Row="8" Value="{Binding ConnectTestRadius}" Minimum="0" Maximum="32" SmallChange="0.1" LargeChange="1" IsSnapToTickEnabled="True" TickFrequency="0.1"/>
+        <Slider Classes="default" Grid.Column="1" Grid.Row="8" Value="{Binding ConnectTestRadius}" Minimum="0" Maximum="32"/>
         <TextBox Classes="default" Grid.Column="2" Grid.Row="8" Text="{Binding ConnectTestRadius}"/>
         <TextBlock Classes="default" Grid.Column="0" Grid.Row="9" Text="DisconnectPoints"/>
         <CheckBox Classes="default" Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="9" IsChecked="{Binding DisconnectPoints}"/>
         <TextBlock Classes="default" Grid.Column="0" Grid.Row="10" Text="DisconnectTestRadius"/>
-        <Slider Classes="default" Grid.Column="1" Grid.Row="10" Value="{Binding DisconnectTestRadius}" Minimum="0" Maximum="32" SmallChange="0.1" LargeChange="1" IsSnapToTickEnabled="True" TickFrequency="0.1"/>
+        <Slider Classes="default" Grid.Column="1" Grid.Row="10" Value="{Binding DisconnectTestRadius}" Minimum="0" Maximum="32"/>
         <TextBox Classes="default" Grid.Column="2" Grid.Row="10" Text="{Binding DisconnectTestRadius}"/>
         <TextBlock Classes="default" Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="11" Text="Hold Ctrl key to add/remove selected shapes."/>
         <TextBlock Classes="default" Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="12" Text="Hold Shift key to connect/disconnect points."/>

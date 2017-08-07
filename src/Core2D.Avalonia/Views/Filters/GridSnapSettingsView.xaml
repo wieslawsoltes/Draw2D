@@ -11,10 +11,10 @@
         <CheckBox Classes="default" Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="1" IsChecked="{Binding EnableGuides}"/>
         <!-- TODO: Mode -->
         <TextBlock Classes="default" Grid.Column="0" Grid.Row="3" Text="GridSizeX"/>
-        <Slider Classes="default" Grid.Column="1" Grid.Row="3" Value="{Binding GridSizeX}" Minimum="0" Maximum="32" SmallChange="0.1" LargeChange="1" IsSnapToTickEnabled="True" TickFrequency="0.1"/>
+        <Slider Classes="default" Grid.Column="1" Grid.Row="3" Value="{Binding GridSizeX}" Minimum="0" Maximum="32"/>
         <TextBox Classes="default" Grid.Column="2" Grid.Row="3" Text="{Binding GridSizeX}"/>
         <TextBlock Classes="default" Grid.Column="0" Grid.Row="4" Text="GridSizeY"/>
-        <Slider Classes="default" Grid.Column="1" Grid.Row="4" Value="{Binding GridSizeY}" Minimum="0" Maximum="32" SmallChange="0.1" LargeChange="1" IsSnapToTickEnabled="True" TickFrequency="0.1"/>
+        <Slider Classes="default" Grid.Column="1" Grid.Row="4" Value="{Binding GridSizeY}" Minimum="0" Maximum="32"/>
         <TextBox Classes="default" Grid.Column="2" Grid.Row="4" Text="{Binding GridSizeY}"/>
         <Expander Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="5" Header="GuideStyle" IsExpanded="False">
             <ViewsStyle:DrawStyleView DataContext="{Binding GuideStyle}"/>
