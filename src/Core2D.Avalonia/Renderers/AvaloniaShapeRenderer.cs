@@ -15,7 +15,11 @@ namespace Core2D.Avalonia.Renderers
     public class AvaloniaShapeRenderer : ShapeRenderer
     {
         private readonly IDictionary<ShapeStyle, AvaloniaBrushCache> _brushCache;
-
+        private readonly IDictionary<MatrixObject, Matrix> _matrixCache;
+        private readonly IDictionary<CubicBezierShape, Geometry> _cubicGeometryCache;
+        private readonly IDictionary<QuadraticBezierShape, Geometry> _quadGeometryCache;
+        private readonly IDictionary<PathShape, Geometry> _pathGeometryCache;
+        private readonly IDictionary<EllipseShape, Geometry> _ellipseGeometryCache;
         private ISet<BaseShape> _selected;
 
         public override ISet<BaseShape> Selected
@@ -27,6 +31,11 @@ namespace Core2D.Avalonia.Renderers
         public AvaloniaShapeRenderer()
         {
             _brushCache = new Dictionary<ShapeStyle, AvaloniaBrushCache>();
+            _matrixCache = new Dictionary<MatrixObject, Matrix>();
+            _cubicGeometryCache = new Dictionary<CubicBezierShape, Geometry>();
+            _quadGeometryCache = new Dictionary<QuadraticBezierShape, Geometry>();
+            _pathGeometryCache = new Dictionary<PathShape, Geometry>();
+            _ellipseGeometryCache = new Dictionary<EllipseShape, Geometry>();
             _selected = new HashSet<BaseShape>();
         }
 
@@ -47,6 +56,42 @@ namespace Core2D.Avalonia.Renderers
             double width = Math.Abs(Math.Max(p1.X + dx, p2.X + dx) - x);
             double height = Math.Abs(Math.Max(p1.Y + dy, p2.Y + dy) - y);
             return new Rect(x, y, width, height);
+        }
+
+        private AvaloniaBrushCache? GetBrushCache(ShapeStyle style)
+        {
+            if (style == null)
+            {
+                return null;
+            }
+            if (!_brushCache.TryGetValue(style, out var cache))
+            {
+                _brushCache[style] = AvaloniaBrushCache.FromDrawStyle(style);
+                return _brushCache[style];
+            }
+            return cache;
+        }
+
+        private static Matrix ToMatrixTransform(MatrixObject matrix)
+        {
+            return new Matrix(
+                matrix.M11, matrix.M12,
+                matrix.M21, matrix.M22,
+                matrix.OffsetX, matrix.OffsetY);
+        }
+
+        private Matrix? GetMatrixCache(MatrixObject matrix)
+        {
+            if (matrix == null)
+            {
+                return null;
+            }
+            if (!_matrixCache.TryGetValue(matrix, out var cache))
+            {
+                _matrixCache[matrix] = ToMatrixTransform(matrix);
+                return _matrixCache[matrix];
+            }
+            return cache;
         }
 
         private static Geometry ToGeometry(CubicBezierShape cubicBezier, ShapeStyle style, double dx, double dy)
@@ -142,47 +187,149 @@ namespace Core2D.Avalonia.Renderers
             return new EllipseGeometry(rect);
         }
 
-        private AvaloniaBrushCache? GetOrCreateCache(ShapeStyle style)
+        private Geometry GetGeometryCache(CubicBezierShape cubic, ShapeStyle style, double dx, double dy)
         {
-            if (style == null)
+            if (cubic == null)
             {
                 return null;
             }
-            if (!_brushCache.TryGetValue(style, out var cache))
+            if (!_cubicGeometryCache.TryGetValue(cubic, out var cache))
             {
-                _brushCache[style] = AvaloniaBrushCache.FromDrawStyle(style);
-                return _brushCache[style];
+                var geometry = ToGeometry(cubic, style, dx, dy);
+                if (geometry != null)
+                {
+                    _cubicGeometryCache[cubic] = geometry;
+                    return _cubicGeometryCache[cubic];
+                }
+                return null;
             }
             return cache;
         }
 
-        private static Matrix ToMatrixTransform(MatrixObject matrix)
+        private Geometry GetGeometryCache(QuadraticBezierShape quad, ShapeStyle style, double dx, double dy)
         {
-            return new Matrix(
-                matrix.M11, matrix.M12,
-                matrix.M21, matrix.M22,
-                matrix.OffsetX, matrix.OffsetY);
+            if (quad == null)
+            {
+                return null;
+            }
+            if (!_quadGeometryCache.TryGetValue(quad, out var cache))
+            {
+                var geometry = ToGeometry(quad, style, dx, dy);
+                if (geometry != null)
+                {
+                    _quadGeometryCache[quad] = geometry;
+                    return _quadGeometryCache[quad];
+                }
+                return null;
+            }
+            return cache;
+        }
+
+        private Geometry GetGeometryCache(PathShape path, ShapeStyle style, double dx, double dy)
+        {
+            if (path == null)
+            {
+                return null;
+            }
+            if (!_pathGeometryCache.TryGetValue(path, out var cache))
+            {
+                var geometry = ToGeometry(path, style, dx, dy);
+                if (geometry != null)
+                {
+                    _pathGeometryCache[path] = geometry;
+                    return _pathGeometryCache[path];
+                }
+                return null;
+            }
+            return cache;
+        }
+
+        private Geometry GetGeometryCache(EllipseShape ellipse, ShapeStyle style, double dx, double dy)
+        {
+            if (ellipse == null)
+            {
+                return null;
+            }
+            if (!_ellipseGeometryCache.TryGetValue(ellipse, out var cache))
+            {
+                var geometry = ToGeometry(ellipse, style, dx, dy);
+                if (geometry != null)
+                {
+                    _ellipseGeometryCache[ellipse] = geometry;
+                    return _ellipseGeometryCache[ellipse];
+                }
+                return null;
+            }
+            return cache;
         }
 
         public override void InvalidateCache(ShapeStyle style)
         {
-            // TODO: Implement InvalidateCache method.
+            if (style != null)
+            {
+                if (!_brushCache.TryGetValue(style, out var cache))
+                {
+                    cache.Dispose();
+                }
+                _brushCache[style] = AvaloniaBrushCache.FromDrawStyle(style);
+            }
         }
 
         public override void InvalidateCache(MatrixObject matrix)
         {
-            // TODO: Implement InvalidateCache method.
+            if (matrix != null)
+            {
+                _matrixCache[matrix] = ToMatrixTransform(matrix);
+            }
         }
 
         public override void InvalidateCache(BaseShape shape, ShapeStyle style, double dx, double dy)
         {
-            // TODO: Implement InvalidateCache method.
+            switch (shape)
+            {
+                case CubicBezierShape cubic:
+                    {
+                        var geometry = ToGeometry(cubic, style, dx, dy);
+                        if (geometry != null)
+                        {
+                            _cubicGeometryCache[cubic] = geometry;
+                        }
+                    }
+                    break;
+                case QuadraticBezierShape quad:
+                    {
+                        var geometry = ToGeometry(quad, style, dx, dy);
+                        if (geometry != null)
+                        {
+                            _quadGeometryCache[quad] = geometry;
+                        }
+                    }
+                    break;
+                case PathShape path:
+                    {
+                        var geometry = ToGeometry(path, style, dx, dy);
+                        if (geometry != null)
+                        {
+                            _pathGeometryCache[path] = geometry;
+                        }
+                    }
+                    break;
+                case EllipseShape ellipse:
+                    {
+                        var geometry = ToGeometry(ellipse, style, dx, dy);
+                        if (geometry != null)
+                        {
+                            _ellipseGeometryCache[ellipse] = geometry;
+                        }
+                    }
+                    break;
+            }
         }
 
         public override object PushMatrix(object dc, MatrixObject matrix)
         {
             var _dc = dc as DrawingContext;
-            return _dc.PushPreTransform(ToMatrixTransform(matrix));
+            return _dc.PushPreTransform(GetMatrixCache(matrix).Value);
         }
 
         public override void PopMatrix(object dc, object state)
@@ -193,38 +340,38 @@ namespace Core2D.Avalonia.Renderers
 
         public override void DrawLine(object dc, LineShape line, ShapeStyle style, double dx, double dy)
         {
-            var cache = GetOrCreateCache(style);
+            var cache = GetBrushCache(style);
             var _dc = dc as DrawingContext;
             _dc.DrawLine(style.IsStroked ? cache?.StrokePen : null, ToPoint(line.StartPoint, dx, dy), ToPoint(line.Point, dx, dy));
         }
 
         public override void DrawCubicBezier(object dc, CubicBezierShape cubicBezier, ShapeStyle style, double dx, double dy)
         {
-            var cache = GetOrCreateCache(style);
+            var cache = GetBrushCache(style);
             var _dc = dc as DrawingContext;
-            var geometry = ToGeometry(cubicBezier, style, dx, dy);
+            var geometry = GetGeometryCache(cubicBezier, style, dx, dy);
             _dc.DrawGeometry(style.IsFilled ? cache?.Fill : null, style.IsStroked ? cache?.StrokePen : null, geometry);
         }
 
         public override void DrawQuadraticBezier(object dc, QuadraticBezierShape quadraticBezier, ShapeStyle style, double dx, double dy)
         {
-            var cache = GetOrCreateCache(style);
+            var cache = GetBrushCache(style);
             var _dc = dc as DrawingContext;
-            var geometry = ToGeometry(quadraticBezier, style, dx, dy);
+            var geometry = GetGeometryCache(quadraticBezier, style, dx, dy);
             _dc.DrawGeometry(style.IsFilled ? cache?.Fill : null, style.IsStroked ? cache?.StrokePen : null, geometry);
         }
 
         public override void DrawPath(object dc, PathShape path, ShapeStyle style, double dx, double dy)
         {
-            var cache = GetOrCreateCache(style);
+            var cache = GetBrushCache(style);
             var _dc = dc as DrawingContext;
-            var geometry = ToGeometry(path, style, dx, dy);
+            var geometry = GetGeometryCache(path, style, dx, dy);
             _dc.DrawGeometry(style.IsFilled ? cache?.Fill : null, style.IsStroked ? cache?.StrokePen : null, geometry);
         }
 
         public override void DrawRectangle(object dc, RectangleShape rectangle, ShapeStyle style, double dx, double dy)
         {
-            var cache = GetOrCreateCache(style);
+            var cache = GetBrushCache(style);
             var _dc = dc as DrawingContext;
             var rect = ToRect(rectangle.TopLeft, rectangle.BottomRight, dx, dy);
             if (style.IsFilled)
@@ -239,15 +386,16 @@ namespace Core2D.Avalonia.Renderers
 
         public override void DrawEllipse(object dc, EllipseShape ellipse, ShapeStyle style, double dx, double dy)
         {
-            var cache = GetOrCreateCache(style);
+            var cache = GetBrushCache(style);
             var _dc = dc as DrawingContext;
+            // FIXME: var geometry = GetGeometryCache(ellipse, style, dx, dy);
             var geometry = ToGeometry(ellipse, style, dx, dy);
             _dc.DrawGeometry(style.IsFilled ? cache?.Fill : null, style.IsStroked ? cache?.StrokePen : null, geometry);
         }
 
         public override void DrawText(object dc, TextShape text, ShapeStyle style, double dx, double dy)
         {
-            var cache = GetOrCreateCache(style);
+            var cache = GetBrushCache(style);
             var _dc = dc as DrawingContext;
             var rect = ToRect(text.TopLeft, text.BottomRight, dx, dy);
             if (style.IsFilled)
