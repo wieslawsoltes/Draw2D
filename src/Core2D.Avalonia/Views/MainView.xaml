@@ -41,7 +41,7 @@
                 </MenuItem>
                 <MenuItem Header="DrawFps" x:Name="DebugDrawFps">
                     <MenuItem.Icon>
-                        <CheckBox BorderThickness="0" IsHitTestVisible="False" IsChecked="False" x:Name="DebugDebugDrawFpsCheckBox"/>
+                        <CheckBox BorderThickness="0" IsHitTestVisible="False" IsChecked="False" x:Name="DebugDrawFpsCheckBox"/>
                     </MenuItem.Icon>
                 </MenuItem>
             </MenuItem>
