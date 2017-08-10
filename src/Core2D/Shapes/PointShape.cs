@@ -8,6 +8,7 @@ namespace Core2D.Shapes
 {
     public class PointShape : BaseShape, ICopyable
     {
+        private MatrixObject _templateTransform = MatrixObject.Identity;
         private double _x;
         private double _y;
         private BaseShape _template;
@@ -59,11 +60,26 @@ namespace Core2D.Shapes
         {
             if (_template != null)
             {
-                var state = base.BeginTransform(dc, renderer);
+                var pointState = base.BeginTransform(dc, renderer);
 
-                _template.Draw(dc, renderer, X + dx, Y + dy, db, r);
+                double offsetX = X + dx;
+                double offsetY = Y + dy;
 
-                base.EndTransform(dc, renderer, state);
+                if (_templateTransform.OffsetX != offsetX
+                    || _templateTransform.OffsetY != offsetY)
+                {
+                    _templateTransform.OffsetX = offsetX;
+                    _templateTransform.OffsetY = offsetY;
+                    _templateTransform.Invalidate(renderer);
+                }
+
+                var templateState = renderer.PushMatrix(dc, _templateTransform);
+
+                _template.Draw(dc, renderer, 0, 0, db, r);
+
+                renderer.PopMatrix(dc, templateState);
+
+                base.EndTransform(dc, renderer, pointState);
             }
         }
 
