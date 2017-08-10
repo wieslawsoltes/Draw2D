@@ -263,6 +263,36 @@ namespace Core2D.Avalonia.Renderers
             return cache;
         }
 
+        private void GetTextCache(TextShape text, Rect rect, out FormattedText formattedText, out Point origin)
+        {
+            var constraint = new Size(rect.Width, rect.Height);
+
+            formattedText = new FormattedText()
+            {
+                Text = text.Text.Value,
+                Constraint = constraint,
+                TextAlignment = TextAlignment.Center,
+                Wrapping = TextWrapping.NoWrap,
+                Typeface = new Typeface("Arial", 11)
+            };
+
+            var size = formattedText.Measure();
+
+            var top = new Point(
+                rect.X,
+                rect.Y);
+
+            var center = new Point(
+                rect.X,
+                rect.Y + rect.Height / 2 - size.Height / 2);
+
+            var bottom = new Point(
+                rect.X,
+                rect.Y + rect.Height - size.Height);
+
+            origin = center;
+        }
+
         public override void InvalidateCache(ShapeStyle style)
         {
             if (style != null)
@@ -321,6 +351,11 @@ namespace Core2D.Avalonia.Renderers
                         {
                             _ellipseGeometryCache[ellipse] = geometry;
                         }
+                    }
+                    break;
+                case TextShape text:
+                    {
+                        // TODO: 
                     }
                     break;
             }
@@ -397,17 +432,21 @@ namespace Core2D.Avalonia.Renderers
             var cache = GetBrushCache(style);
             var _dc = dc as DrawingContext;
             var rect = ToRect(text.TopLeft, text.BottomRight, dx, dy);
-            if (style.IsFilled)
-            {
-                _dc.FillRectangle(cache?.Fill, rect);
-            }
-            if (style.IsStroked)
-            {
-                _dc.DrawRectangle(cache?.StrokePen, rect);
-            }
+
+            //if (style.IsFilled)
+            //{
+            //    _dc.FillRectangle(cache?.Fill, rect);
+            //}
+
+            //if (style.IsStroked)
+            //{
+            //    _dc.DrawRectangle(cache?.StrokePen, rect);
+            //}
+
             if (text.Text != null)
             {
-                // TODO: Draw text Value string.
+                GetTextCache(text, rect, out FormattedText formattedText, out Point origin);
+                _dc.DrawText(cache?.Stroke, origin, formattedText);
             }
         }
     }
