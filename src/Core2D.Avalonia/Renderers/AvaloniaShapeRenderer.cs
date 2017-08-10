@@ -389,7 +389,6 @@ namespace Core2D.Avalonia.Renderers
             var cache = GetBrushCache(style);
             var _dc = dc as DrawingContext;
             var geometry = GetGeometryCache(ellipse, style, dx, dy);
-            //var geometry = ToGeometry(ellipse, style, dx, dy);
             _dc.DrawGeometry(style.IsFilled ? cache?.Fill : null, style.IsStroked ? cache?.StrokePen : null, geometry);
         }
 
