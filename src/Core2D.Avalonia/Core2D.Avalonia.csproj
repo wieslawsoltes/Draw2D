@@ -54,7 +54,7 @@
     <PackageReference Include="Avalonia.Direct2D1" Version="0.5.1-build3602-alpha" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Avalonia.Controls.PanAndZoom" Version="1.0.0-build152-alpha" />
+    <PackageReference Include="Avalonia.Controls.PanAndZoom" Version="1.0.0-build158-alpha" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Serilog" Version="2.4.0" />
