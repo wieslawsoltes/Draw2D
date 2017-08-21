@@ -7,7 +7,7 @@ env:
     - DOTNET_CLI_TELEMETRY_OPTOUT=1
 sudo: required
 mono: latest
-dotnet: 1.0.1
+dotnet: 2.0.0
 script:
   - cd src/Core2D.Avalonia
   - dotnet restore
