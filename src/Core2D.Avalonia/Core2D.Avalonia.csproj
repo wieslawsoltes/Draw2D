@@ -40,21 +40,21 @@
     <PackageReference Include="Microsoft.NETCore.DotNetHostPolicy" Version="2.0.0" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Avalonia" Version="0.5.1-build3602-alpha" />
+    <PackageReference Include="Avalonia" Version="0.5.2-build3697-alpha" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Avalonia.Gtk3" Version="0.5.1-build3602-alpha" />
-    <PackageReference Include="Avalonia.Win32" Version="0.5.1-build3602-alpha" />
+    <PackageReference Include="Avalonia.Gtk3" Version="0.5.2-build3697-alpha" />
+    <PackageReference Include="Avalonia.Win32" Version="0.5.2-build3697-alpha" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Avalonia.Skia.Desktop" Version="0.5.1-build3602-alpha" />
-    <PackageReference Include="Avalonia.LinuxFramebuffer" Version="0.5.1-build3602-alpha" />
+    <PackageReference Include="Avalonia.Skia" Version="0.5.2-build3697-alpha" />
+    <PackageReference Include="Avalonia.LinuxFramebuffer" Version="0.5.2-build3697-alpha" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Avalonia.Direct2D1" Version="0.5.1-build3602-alpha" />
+    <PackageReference Include="Avalonia.Direct2D1" Version="0.5.2-build3697-alpha" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Avalonia.Controls.PanAndZoom" Version="1.0.0-build158-alpha" />
+    <PackageReference Include="Avalonia.Controls.PanAndZoom" Version="1.0.0-build167-alpha" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Serilog" Version="2.4.0" />
@@ -74,12 +74,12 @@
     <PackageReference Include="SharpDX.DXGI" Version="4.0.1" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="System.Reactive" Version="3.1.0" />
-    <PackageReference Include="System.Reactive.Core" Version="3.1.0" />
-    <PackageReference Include="System.Reactive.Interfaces" Version="3.1.0" />
-    <PackageReference Include="System.Reactive.Linq" Version="3.1.0" />
-    <PackageReference Include="System.Reactive.PlatformServices" Version="3.1.0" />
-    <PackageReference Condition="$(TargetFramework.StartsWith('net4'))" Include="System.Reactive.Windows.Threading" Version="3.1.0" />
+    <PackageReference Include="System.Reactive" Version="3.0.0" />
+    <PackageReference Include="System.Reactive.Core" Version="3.0.0" />
+    <PackageReference Include="System.Reactive.Interfaces" Version="3.0.0" />
+    <PackageReference Include="System.Reactive.Linq" Version="3.0.0" />
+    <PackageReference Include="System.Reactive.PlatformServices" Version="3.0.0" />
+    <PackageReference Condition="$(TargetFramework.StartsWith('net4'))" Include="System.Reactive.Windows.Threading" Version="3.0.0" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
