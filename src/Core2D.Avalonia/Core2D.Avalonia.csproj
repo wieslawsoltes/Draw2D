@@ -16,6 +16,12 @@
     <EnableDefaultCompileItems>False</EnableDefaultCompileItems>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <TrimUnusedDependencies>True</TrimUnusedDependencies>
+    <LinkDuringPublish>False</LinkDuringPublish>
+    <ShowLinkerSizeComparison>True</ShowLinkerSizeComparison>
+  </PropertyGroup>
+
   <ItemGroup>
     <Compile Include="**\*.cs" Exclude="obj\**" />
   </ItemGroup>
@@ -35,6 +41,12 @@
     <ProjectReference Include="..\Core2D\Core2D.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Packaging.Tools.Trimming" Version="1.0.0-preview2-25401-01" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="ILLink.Tasks" Version="0.1.4-preview-906439" />
+  </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.NETCore.Runtime.CoreCLR" Version="2.0.0" />
     <PackageReference Include="Microsoft.NETCore.DotNetHostPolicy" Version="2.0.0" />
