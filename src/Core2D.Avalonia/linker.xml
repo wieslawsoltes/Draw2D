@@ -1,0 +1,35 @@
+<linker>
+    <assembly fullname="System.Collections.Concurrent">
+        <type fullname="System.Collections.*" preserve="all"/>
+    </assembly>
+    <assembly fullname="System.Collections.NonGeneric">
+        <type fullname="System.Collections.*" preserve="all"/>
+    </assembly>
+    <assembly fullname="System.Collections.Specialized">
+        <type fullname="System.Collections.*" preserve="all"/>
+    </assembly>
+    <assembly fullname="System.Collections">
+        <type fullname="System.Collections.*" preserve="all"/>
+    </assembly>
+    <assembly fullname="System.ComponentModel.Annotations">
+        <type fullname="System.ComponentModel.*" preserve="all"/>
+    </assembly>
+    <assembly fullname="System.ComponentModel.Composition">
+        <type fullname="System.ComponentModel.*" preserve="all"/>
+    </assembly>
+    <assembly fullname="System.ComponentModel.DataAnnotations">
+        <type fullname="System.ComponentModel.*" preserve="all"/>
+    </assembly>
+    <assembly fullname="System.ComponentModel.EventBasedAsync">
+        <type fullname="System.ComponentModel.*" preserve="all"/>
+    </assembly>
+    <assembly fullname="System.ComponentModel.Primitives">
+        <type fullname="System.ComponentModel.*" preserve="all"/>
+    </assembly>
+    <assembly fullname="System.ComponentModel.TypeConverter">
+        <type fullname="System.ComponentModel.*" preserve="all"/>
+    </assembly>
+    <assembly fullname="System.ComponentModel">
+        <type fullname="System.ComponentModel.*" preserve="all"/>
+    </assembly>
+</linker>
