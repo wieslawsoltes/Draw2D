@@ -1,5 +1,6 @@
 ﻿// Copyright (c) Wiesław Šoltés. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
+using System;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
@@ -15,15 +16,32 @@ namespace Core2D.Avalonia
 {
     public class App : Application
     {
+        static void Print(Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+            Console.WriteLine(ex.StackTrace);
+            if (ex.InnerException != null)
+            {
+                Print(ex.InnerException);
+            }
+        }
+
         static void Main(string[] args)
         {
-            InitializeLogging();
+            try
+            {
+                InitializeLogging();
 
-            var app = new App();
-            AppBuilder.Configure(app)
-                .UsePlatformDetect()
-                .SetupWithoutStarting();
-            app.Start();
+                var app = new App();
+                AppBuilder.Configure(app)
+                    .UsePlatformDetect()
+                    .SetupWithoutStarting();
+                app.Start();
+            }
+            catch (Exception ex)
+            {
+                Print(ex);
+            }
         }
 
         static void InitializeLogging()
