@@ -4,14 +4,7 @@ skip_branch_with_pr: true
 environment:
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
   DOTNET_CLI_TELEMETRY_OPTOUT: 1
-configuration: Release
-platform: Any CPU
-before_build:
-- cmd: nuget restore
 build:
-  project: Core2D.Experimental.sln
-  verbosity: minimal
-after_build:
 - ps: .\NetCore-Build.ps1
 - ps: .\NetCore-Publish.ps1
 - cmd: NetCore-Patch.cmd
