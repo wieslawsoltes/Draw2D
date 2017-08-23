@@ -7,5 +7,5 @@ set win7_x64=src\Core2D.Avalonia\bin\win7-x64
 set executable=Core2D.Avalonia.exe
 copy /Y "%msvcp140_x64%" "%win7_x64%"
 copy /Y "%vcruntime140_x64%" "%win7_x64%"
-"%editbin%" /subsystem:windows "%win7_x64%\%executable%"
+rem "%editbin%" /subsystem:windows "%win7_x64%\%executable%"
 endlocal
