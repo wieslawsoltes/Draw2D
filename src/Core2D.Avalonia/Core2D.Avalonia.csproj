@@ -17,8 +17,8 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <TrimUnusedDependencies>True</TrimUnusedDependencies>
-    <LinkDuringPublish>False</LinkDuringPublish>
+    <TrimUnusedDependencies>False</TrimUnusedDependencies>
+    <LinkDuringPublish>True</LinkDuringPublish>
     <ShowLinkerSizeComparison>True</ShowLinkerSizeComparison>
   </PropertyGroup>
 
