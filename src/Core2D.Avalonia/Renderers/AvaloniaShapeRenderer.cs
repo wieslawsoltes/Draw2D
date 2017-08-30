@@ -20,6 +20,7 @@ namespace Core2D.Avalonia.Renderers
         private readonly IDictionary<QuadraticBezierShape, Geometry> _quadGeometryCache;
         private readonly IDictionary<PathShape, Geometry> _pathGeometryCache;
         private readonly IDictionary<EllipseShape, Geometry> _ellipseGeometryCache;
+        private readonly IDictionary<TextShape, FormattedTextCache> _formattedTextCache;
         private ISet<BaseShape> _selected;
 
         public override ISet<BaseShape> Selected
@@ -31,6 +32,7 @@ namespace Core2D.Avalonia.Renderers
         public AvaloniaShapeRenderer()
         {
             _brushCache = new Dictionary<ShapeStyle, AvaloniaBrushCache>();
+            _formattedTextCache = new Dictionary<TextShape, FormattedTextCache>();
             _matrixCache = new Dictionary<MatrixObject, Matrix>();
             _cubicGeometryCache = new Dictionary<CubicBezierShape, Geometry>();
             _quadGeometryCache = new Dictionary<QuadraticBezierShape, Geometry>();
@@ -263,34 +265,14 @@ namespace Core2D.Avalonia.Renderers
             return cache;
         }
 
-        private void GetTextCache(TextShape text, Rect rect, out FormattedText formattedText, out Point origin)
+        private FormattedTextCache GetTextCache(TextShape text, Rect rect)
         {
-            var constraint = new Size(rect.Width, rect.Height);
-
-            formattedText = new FormattedText()
+            if (!_formattedTextCache.TryGetValue(text, out var cache))
             {
-                Text = text.Text.Value,
-                Constraint = constraint,
-                TextAlignment = TextAlignment.Center,
-                Wrapping = TextWrapping.NoWrap,
-                Typeface = new Typeface("Arial", 11)
-            };
-
-            var size = formattedText.Measure();
-
-            var top = new Point(
-                rect.X,
-                rect.Y);
-
-            var center = new Point(
-                rect.X,
-                rect.Y + rect.Height / 2 - size.Height / 2);
-
-            var bottom = new Point(
-                rect.X,
-                rect.Y + rect.Height - size.Height);
-
-            origin = center;
+                _formattedTextCache[text] = FormattedTextCache.FromTextShape(text, rect);
+                return _formattedTextCache[text];
+            }
+            return cache;
         }
 
         public override void InvalidateCache(ShapeStyle style)
@@ -355,7 +337,12 @@ namespace Core2D.Avalonia.Renderers
                     break;
                 case TextShape text:
                     {
-                        // TODO: 
+                        if (!_formattedTextCache.TryGetValue(text, out var cache))
+                        {
+                            cache.Dispose();
+                        }
+                        var rect = ToRect(text.TopLeft, text.BottomRight, dx, dy);
+                        _formattedTextCache[text] = FormattedTextCache.FromTextShape(text, rect);
                     }
                     break;
             }
@@ -445,8 +432,8 @@ namespace Core2D.Avalonia.Renderers
 
             if (text.Text != null)
             {
-                GetTextCache(text, rect, out FormattedText formattedText, out Point origin);
-                _dc.DrawText(cache?.Stroke, origin, formattedText);
+                var ftc = GetTextCache(text, rect);
+                _dc.DrawText(cache?.Stroke, ftc.Origin, ftc.FormattedText);
             }
         }
     }
