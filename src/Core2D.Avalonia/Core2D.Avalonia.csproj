@@ -19,7 +19,7 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <TrimUnusedDependencies>True</TrimUnusedDependencies>
+    <TrimUnusedDependencies>False</TrimUnusedDependencies>
     <LinkDuringPublish>True</LinkDuringPublish>
     <ShowLinkerSizeComparison>True</ShowLinkerSizeComparison>
   </PropertyGroup>
