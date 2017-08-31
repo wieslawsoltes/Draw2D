@@ -8,9 +8,9 @@
              xmlns:ViewsToolsSettings="clr-namespace:Core2D.Avalonia.Views.Tools;assembly=Core2D.Avalonia"
              xmlns:ViewsIntersectionsLineSettings="clr-namespace:Core2D.Avalonia.Views.Intersections;assembly=Core2D.Avalonia"
              xmlns:ViewsFiltersSettings="clr-namespace:Core2D.Avalonia.Views.Filters;assembly=Core2D.Avalonia"
-             xmlns:EditorTools="clr-namespace:Core2D.Editor.Tools;assembly=Core2D.Editor"
-             xmlns:EditorIntersectionsLine="clr-namespace:Core2D.Editor.Intersections.Line;assembly=Core2D.Editor"
-             xmlns:EditorFilters="clr-namespace:Core2D.Editor.Filters;assembly=Core2D.Editor"
+             xmlns:EditorTools="clr-namespace:Core2D.Editor.Tools;assembly=Core2D.Avalonia"
+             xmlns:EditorIntersectionsLine="clr-namespace:Core2D.Editor.Intersections.Line;assembly=Core2D.Avalonia"
+             xmlns:EditorFilters="clr-namespace:Core2D.Editor.Filters;assembly=Core2D.Avalonia"
              UseLayoutRounding="True" Focusable="True">
     <Grid RowDefinitions="Auto,5,*" ColumnDefinitions="250,*,250">
         <Menu Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Background="Transparent">

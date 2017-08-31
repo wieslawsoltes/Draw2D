@@ -6,6 +6,8 @@
     <Company>Wiesław Šoltés</Company>
     <Description>A 2D vector diagram editor.</Description>
     <Copyright>Copyright © Wiesław Šoltés 2017</Copyright>
+    <PackageLicenseUrl>https://github.com/wieslawsoltes/Draw2D/blob/master/LICENSE.TXT</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/wieslawsoltes/Draw2D</PackageProjectUrl>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -36,13 +38,6 @@
       <SubType>Code</SubType>
     </Compile>
     <EmbeddedResource Include="**\*.xaml" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\Core2D.Editor\Core2D.Editor.csproj" />
-    <ProjectReference Include="..\Core2D.Json\Core2D.Json.csproj" />
-    <ProjectReference Include="..\Core2D.ViewModels\Core2D.ViewModels.csproj" />
-    <ProjectReference Include="..\Core2D\Core2D.csproj" />
   </ItemGroup>
 
   <ItemGroup>
