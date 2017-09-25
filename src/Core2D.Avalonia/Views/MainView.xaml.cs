@@ -363,7 +363,7 @@ namespace Core2D.Avalonia.Views
             dlg.Filters.Add(new FileDialogFilter() { Name = "All Files", Extensions = { "*" } });
             dlg.InitialFileName = "container";
             dlg.DefaultExtension = "project";
-            var result = await dlg.ShowAsync();
+            var result = await dlg.ShowAsync(Window.OpenWindows[0]);
             if (result != null)
             {
                 var path = result;

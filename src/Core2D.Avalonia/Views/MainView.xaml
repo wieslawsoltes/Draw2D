@@ -68,7 +68,7 @@
         </Grid>
         <Border Grid.Row="2" Grid.Column="1">
             <Border ClipToBounds="True">
-                <paz:ZoomBorder x:Name="zoomBorder" Stretch="None" ZoomSpeed="1.2" Background="Transparent" ClipToBounds="False" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+                <paz:ZoomBorder x:Name="zoomBorder" Stretch="None" ZoomSpeed="1.2" PanButton="Right" Background="Transparent" ClipToBounds="False" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
                     <Controls:LayerContainerInputView x:Name="inputView" Background="Transparent" ClipToBounds="False" VerticalAlignment="Center" HorizontalAlignment="Center">
                         <Border Background="SlateGray" Width="{Binding CurrentContainer.Width}" Height="{Binding CurrentContainer.Height}" VerticalAlignment="Center" HorizontalAlignment="Center">
                             <Controls:LayerContainerRenderView x:Name="rendererView" Width="{Binding CurrentContainer.Width}" Height="{Binding CurrentContainer.Height}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
