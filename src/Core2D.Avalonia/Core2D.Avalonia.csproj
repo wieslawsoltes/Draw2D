@@ -31,8 +31,8 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.NETCore.Runtime.CoreCLR" Version="2.0.0" />
     <PackageReference Include="Microsoft.NETCore.DotNetHostPolicy" Version="2.0.0" />
-    <PackageReference Include="Avalonia.Desktop" Version="0.5.2-build4042-alpha" />
-    <PackageReference Include="Avalonia.Controls.PanAndZoom" Version="1.0.0-build202-alpha" />
+    <PackageReference Include="Avalonia.Desktop" Version="0.5.2-build4108-alpha" />
+    <PackageReference Include="Avalonia.Controls.PanAndZoom" Version="1.0.0-build203-alpha" />
     <PackageReference Include="Serilog" Version="2.4.0" />
     <PackageReference Include="Serilog.Sinks.Trace" Version="2.1.0" />
     <PackageReference Include="Splat" Version="2.0.0" />
