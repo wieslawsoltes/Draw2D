@@ -1,11 +1,23 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26730.12
+VisualStudioVersion = 15.0.27004.2006
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core2D.Avalonia", "src\Core2D.Avalonia\Core2D.Avalonia.csproj", "{B6933C11-D4F5-434E-9C15-7E3E91F07161}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{DD542814-7BFF-4989-879F-B3FDA0381D0A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{1E5AD982-D53E-4284-8F0F-DA5007634100}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "props", "props", "{5AE480D6-EE0B-49BB-91DF-30F172F49569}"
+	ProjectSection(SolutionItems) = preProject
+		build\Avalonia.Desktop.props = build\Avalonia.Desktop.props
+		build\Avalonia.props = build\Avalonia.props
+		build\Math.Spatial.props = build\Math.Spatial.props
+		build\NETCore.props = build\NETCore.props
+		build\Newtonsoft.Json.props = build\Newtonsoft.Json.props
+		build\Rx.props = build\Rx.props
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,6 +47,7 @@ Global
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{B6933C11-D4F5-434E-9C15-7E3E91F07161} = {DD542814-7BFF-4989-879F-B3FDA0381D0A}
+		{5AE480D6-EE0B-49BB-91DF-30F172F49569} = {1E5AD982-D53E-4284-8F0F-DA5007634100}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {497FC496-A3AD-4F7E-A11F-8554436570B9}
