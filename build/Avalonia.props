@@ -1,0 +1,14 @@
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <PackageReference Include="Avalonia" Version="0.5.2-build4189-alpha" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Serilog" Version="2.4.0" />
+    <PackageReference Include="Splat" Version="2.0.0" />
+    <PackageReference Include="Sprache" Version="2.1.0" />
+    <PackageReference Include="System.ValueTuple" Version="4.3.1" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Avalonia.Controls.PanAndZoom" Version="1.0.0-build205-alpha" />
+  </ItemGroup>
+</Project>
