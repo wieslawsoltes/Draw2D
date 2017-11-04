@@ -359,6 +359,7 @@ namespace Core2D.ViewModels
             {
                 Tools = tools,
                 CurrentTool = currentTool,
+                Mode = EditMode.Mouse,
                 Presenter = presenter,
                 Renderer = null,
                 Selected = null,

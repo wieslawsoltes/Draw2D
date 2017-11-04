@@ -20,6 +20,7 @@ namespace Core2D.ViewModels.Containers
     {
         private ObservableCollection<ToolBase> _tools;
         private ToolBase _currentTool;
+        private EditMode _mode;
         private ShapePresenter _presenter;
         private ShapeRenderer _renderer;
         private ISet<BaseShape> _selected;
@@ -43,6 +44,12 @@ namespace Core2D.ViewModels.Containers
                 _currentTool?.Clean(this);
                 Update(ref _currentTool, value);
             }
+        }
+
+        public EditMode Mode
+        {
+            get => _mode;
+            set => Update(ref _mode, value);
         }
 
         public ShapePresenter Presenter

@@ -76,7 +76,14 @@ namespace Core2D.Avalonia.Controls
                 if (this.DataContext is LayerContainerViewModel vm)
                 {
                     var point = FixInvalidPointPosition(e.GetPosition(Child));
-                    vm.CurrentTool.LeftUp(vm, point.X, point.Y, GetModifier(e.InputModifiers));
+                    if (vm.Mode == EditMode.Mouse)
+                    {
+                        vm.CurrentTool.LeftUp(vm, point.X, point.Y, GetModifier(e.InputModifiers));
+                    }
+                    else if (vm.Mode == EditMode.Touch)
+                    {
+                        vm.CurrentTool.LeftDown(vm, point.X, point.Y, GetModifier(e.InputModifiers));
+                    }
                 }
             }
             else if (e.MouseButton == MouseButton.Right)
