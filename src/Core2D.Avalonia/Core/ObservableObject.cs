@@ -46,6 +46,14 @@ namespace Core2D
         public void MarkAsDirty(bool value) => IsDirty = value;
 
         /// <summary>
+        /// Set unique string for <see cref="Id"/> using <see cref="Guid.NewGuid"/>
+        /// </summary>
+        public void SetUniqueId()
+        {
+            Id = Guid.NewGuid().ToString();
+        }
+
+        /// <summary>
         /// Occurs when a property value changes.
         /// </summary>
         public event PropertyChangedEventHandler PropertyChanged;
