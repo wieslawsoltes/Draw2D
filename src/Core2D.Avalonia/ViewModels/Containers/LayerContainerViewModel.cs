@@ -3,7 +3,6 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using Core2D;
 using Core2D.Containers;
 using Core2D.Presenters;
 using Core2D.Renderer;

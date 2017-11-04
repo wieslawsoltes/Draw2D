@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reflection;
-using Core2D;
 using Core2D.Containers;
 using Core2D.Renderer;
 using Core2D.Shapes;
