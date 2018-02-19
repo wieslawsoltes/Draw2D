@@ -10,7 +10,6 @@ using Core2D.Avalonia.Controls;
 using Core2D.Avalonia.Renderers;
 using Core2D.Avalonia.Views;
 using Core2D.ViewModels;
-using Serilog;
 
 namespace Core2D.Avalonia
 {
@@ -26,32 +25,23 @@ namespace Core2D.Avalonia
             }
         }
 
+        public static AppBuilder BuildAvaloniaApp()
+            => AppBuilder.Configure<App>()
+                         .UsePlatformDetect()
+                         .LogToDebug();
+
         static void Main(string[] args)
         {
             try
             {
-                InitializeLogging();
-
-                var app = new App();
-                AppBuilder.Configure(app)
-                    .UsePlatformDetect()
-                    .SetupWithoutStarting();
+                var appBuilder = BuildAvaloniaApp().SetupWithoutStarting();
+                var app = appBuilder.Instance as App;
                 app.Start();
             }
             catch (Exception ex)
             {
                 Print(ex);
             }
-        }
-
-        static void InitializeLogging()
-        {
-#if DEBUG
-            SerilogLogger.Initialize(new LoggerConfiguration()
-                .MinimumLevel.Warning()
-                .WriteTo.Trace(outputTemplate: "{Area}: {Message}")
-                .CreateLogger());
-#endif
         }
 
         public override void Initialize()
