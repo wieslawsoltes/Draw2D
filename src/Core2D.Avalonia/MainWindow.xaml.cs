@@ -3,6 +3,8 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
+using Core2D.Avalonia.Renderers;
+using Core2D.ViewModels;
 
 namespace Core2D.Avalonia
 {
@@ -12,6 +14,15 @@ namespace Core2D.Avalonia
         {
             this.InitializeComponent();
             this.AttachDevTools();
+
+            var bootstrapper = new Bootstrapper();
+            var vm = bootstrapper.CreateDemoViewModel();
+            bootstrapper.CreateDemoContainer(vm);
+
+            vm.Renderer = new AvaloniaShapeRenderer();
+            vm.Selected = vm.Renderer.Selected;
+
+            DataContext = vm;
         }
 
         private void InitializeComponent()

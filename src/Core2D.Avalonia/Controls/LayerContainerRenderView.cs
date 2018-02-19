@@ -1,8 +1,10 @@
 ﻿// Copyright (c) Wiesław Šoltés. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
+using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Media;
+using Avalonia.VisualTree;
 using Core2D.ViewModels.Containers;
 
 namespace Core2D.Avalonia.Controls
@@ -10,6 +12,46 @@ namespace Core2D.Avalonia.Controls
     public class LayerContainerRenderView : Canvas
     {
         private bool _drawWorking = false;
+
+        protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e)
+        {
+            base.OnAttachedToVisualTree(e);
+
+            if (this.DataContext is LayerContainerViewModel vm)
+            {
+                var md = (this.GetVisualRoot() as IInputRoot)?.MouseDevice;
+                if (md != null)
+                {
+                    vm.Capture = () =>
+                    {
+                        if (md.Captured == null)
+                        {
+                            md.Capture(this);
+                        }
+                    };
+                    vm.Release = () =>
+                    {
+                        if (md.Captured != null)
+                        {
+                            md.Capture(null);
+                        }
+                    };
+                    vm.Invalidate = () => this.InvalidateVisual();
+                }
+            }
+        }
+
+        protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
+        {
+            base.OnDetachedFromVisualTree(e);
+
+            if (this.DataContext is LayerContainerViewModel vm)
+            {
+                vm.Capture = null;
+                vm.Release = null;
+                vm.Invalidate = null;
+            }
+        }
 
         protected override void OnPointerEnter(PointerEventArgs e)
         {
