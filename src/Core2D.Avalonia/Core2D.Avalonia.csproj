@@ -28,7 +28,12 @@
     <EmbeddedResource Include="**\*.xaml" />
   </ItemGroup>
 
-  <Import Project="$(MSBuildThisFileDirectory)..\..\build\NETCore.props" />
+  <ItemGroup>
+    <RdXmlFile Include="$(MSBuildThisFileDirectory)..\..\build\native\rd.xml" />
+  </ItemGroup>
+  <Import Project="$(MSBuildThisFileDirectory)..\..\build\ILCompiler.props" />
+
+  <!-- <Import Project="$(MSBuildThisFileDirectory)..\..\build\NETCore.props" /> -->
   <Import Project="$(MSBuildThisFileDirectory)..\..\build\Rx.props" />
   <Import Project="$(MSBuildThisFileDirectory)..\..\build\Avalonia.props" />
   <Import Project="$(MSBuildThisFileDirectory)..\..\build\Avalonia.Desktop.props" />
