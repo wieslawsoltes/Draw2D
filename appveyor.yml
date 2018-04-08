@@ -10,12 +10,12 @@ build_script:
 - cmd: NetCore-Patch.cmd
 test: off
 artifacts:
-#- path: src\Core2D.Avalonia\bin\win7-x64
-#  name: Core2D.Avalonia-win7-x64-build$(appveyor_build_version)
-#- path: src\Core2D.Avalonia\bin\ubuntu.14.04-x64
-#  name: Core2D.Avalonia-ubuntu.14.04-x64-build$(appveyor_build_version)
-#- path: src\Core2D.Avalonia\bin\osx.10.12-x64
-#  name: Core2D.Avalonia-osx.10.12-x64-build$(appveyor_build_version)
+- path: src\Core2D.Avalonia\bin\win7-x64
+  name: Core2D.Avalonia-win7-x64-build$(appveyor_build_version)
+- path: src\Core2D.Avalonia\bin\ubuntu.14.04-x64
+  name: Core2D.Avalonia-ubuntu.14.04-x64-build$(appveyor_build_version)
+- path: src\Core2D.Avalonia\bin\osx.10.12-x64
+  name: Core2D.Avalonia-osx.10.12-x64-build$(appveyor_build_version)
 - path: src\Core2D.Avalonia\bin\win-x64-debug
   name: Core2D.Avalonia-win-x64-debug-build$(appveyor_build_version)
 - path: src\Core2D.Avalonia\bin\win-x64-release

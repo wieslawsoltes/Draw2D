@@ -6,6 +6,7 @@
     <RuntimeIdentifiers>win7-x64;ubuntu.14.04-x64;osx.10.12-x64</RuntimeIdentifiers>
     <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
     <EnableDefaultCompileItems>False</EnableDefaultCompileItems>
+    <CoreRT>False</CoreRT>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -28,12 +29,12 @@
     <EmbeddedResource Include="**\*.xaml" />
   </ItemGroup>
 
-  <ItemGroup>
+  <ItemGroup Condition="'$(CoreRT)' == 'True'">
     <RdXmlFile Include="$(MSBuildThisFileDirectory)..\..\build\native\rd.xml" />
   </ItemGroup>
-  <Import Project="$(MSBuildThisFileDirectory)..\..\build\ILCompiler.props" />
 
-  <!-- <Import Project="$(MSBuildThisFileDirectory)..\..\build\NETCore.props" /> -->
+  <Import Project="$(MSBuildThisFileDirectory)..\..\build\ILCompiler.props" Condition="'$(CoreRT)' == 'True'" />
+  <Import Project="$(MSBuildThisFileDirectory)..\..\build\NETCore.props" Condition="'$(CoreRT)' == 'False'"/>
   <Import Project="$(MSBuildThisFileDirectory)..\..\build\Rx.props" />
   <Import Project="$(MSBuildThisFileDirectory)..\..\build\Avalonia.props" />
   <Import Project="$(MSBuildThisFileDirectory)..\..\build\Avalonia.Desktop.props" />
