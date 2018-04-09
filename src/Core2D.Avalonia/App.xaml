@@ -5,7 +5,7 @@
         <StyleInclude Source="resm:Avalonia.Themes.Default.DefaultTheme.xaml?assembly=Avalonia.Themes.Default"/>
         <StyleInclude Source="resm:Avalonia.Themes.Default.Accents.BaseLight.xaml?assembly=Avalonia.Themes.Default"/>
         <Style Selector="Border.default">
-            <Setter Property="Margin" Value="0"/>
+            <Setter Property="Margin" Value="5"/>
             <Setter Property="Padding" Value="3,3,3,3"/>
             <Setter Property="BorderBrush" Value="{DynamicResource ThemeBorderLightBrush}"/>
             <Setter Property="BorderThickness" Value="1"/>
@@ -27,10 +27,26 @@
         <Style Selector="DropDown.default:focus /template/ Border#border">
             <Setter Property="BorderThickness" Value="1"/>
         </Style>
+        <Style Selector="GridSplitter:vertical">
+            <Setter Property="Width" Value="8"/>
+            <Setter Property="Template">
+                <ControlTemplate>
+                    <Border Background="{TemplateBinding Background}"/>
+                </ControlTemplate>
+            </Setter>
+        </Style>
+        <Style Selector="GridSplitter:horizontal">
+            <Setter Property="Height" Value="8"/>
+            <Setter Property="Template">
+                <ControlTemplate>
+                    <Border Background="{TemplateBinding Background}"/>
+                </ControlTemplate>
+            </Setter>
+        </Style>
         <Style Selector="ListBox.default">
             <Setter Property="Margin" Value="0"/>
             <Setter Property="Padding" Value="0"/>
-            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="AutoScrollToSelectedItem" Value="True"/>
         </Style>
         <Style Selector="Slider.default">
@@ -45,7 +61,7 @@
             <Setter Property="Margin" Value="0"/>
         </Style>
         <Style Selector="TabItem.default">
-            <Setter Property="Margin" Value="3"/>
+            <Setter Property="Margin" Value="0"/>
             <Setter Property="FontSize" Value="12"/>
             <Setter Property="FontWeight" Value="Normal"/>
         </Style>

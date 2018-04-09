@@ -12,7 +12,7 @@
              xmlns:EditorIntersectionsLine="clr-namespace:Core2D.Editor.Intersections.Line;assembly=Core2D.Avalonia"
              xmlns:EditorFilters="clr-namespace:Core2D.Editor.Filters;assembly=Core2D.Avalonia"
              UseLayoutRounding="True" Focusable="True">
-    <Grid RowDefinitions="Auto,5,*" ColumnDefinitions="250,*,250">
+    <Grid RowDefinitions="Auto,5,*" ColumnDefinitions="250,Auto,*,Auto,250">
         <Menu Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Background="Transparent">
             <MenuItem Header="_File">
                 <MenuItem Header="New" x:Name="FileNew"/>
@@ -46,19 +46,22 @@
                 </MenuItem>
             </MenuItem>
         </Menu>
-        <Grid RowDefinitions="50*,50*" Grid.Row="2" Grid.Column="0">
-            <TabControl Classes="default" Grid.Row="0">
+        <Grid RowDefinitions="45*,Auto,55*" Grid.Row="2" Grid.Column="0">
+            <TabControl Classes="default" Grid.Row="0" TabStripPlacement="Bottom">
                 <TabItem Classes="default" Header="Tools">
-                    <ListBox Classes="default" Items="{Binding Tools}" SelectedItem="{Binding CurrentTool}">
-                        <ListBox.DataTemplates>
-                            <DataTemplate>
-                                <TextBlock Classes="default" Text="{Binding Title}"/>
-                            </DataTemplate>
-                        </ListBox.DataTemplates>
-                    </ListBox>
+                    <Border Classes="default">
+                        <ListBox Classes="default" Items="{Binding Tools}" SelectedItem="{Binding CurrentTool}">
+                            <ListBox.DataTemplates>
+                                <DataTemplate>
+                                    <TextBlock Classes="default" Text="{Binding Title}"/>
+                                </DataTemplate>
+                            </ListBox.DataTemplates>
+                        </ListBox>
+                    </Border>
                 </TabItem>
             </TabControl>
-            <TabControl Classes="default" Grid.Row="1">
+            <GridSplitter Grid.Row="1"/>
+            <TabControl Classes="default" Grid.Row="2" TabStripPlacement="Bottom">
                 <TabItem Classes="default" Header="Style">
                     <Border Classes="default">
                         <ScrollViewer>
@@ -68,8 +71,9 @@
                 </TabItem>
             </TabControl>
         </Grid>
-        <Border Grid.Row="2" Grid.Column="1">
-            <Border ClipToBounds="True">
+        <GridSplitter Grid.Row="2" Grid.Column="1"/>
+        <Border Grid.Row="2" Grid.Column="2">
+            <Border Classes="default" ClipToBounds="True">
                 <paz:ZoomBorder x:Name="zoomBorder" Stretch="None" ZoomSpeed="1.2" PanButton="Right" Background="Transparent" ClipToBounds="False" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
                     <Controls:LayerContainerInputView x:Name="inputView" Background="Transparent" ClipToBounds="False" VerticalAlignment="Center" HorizontalAlignment="Center">
                         <Border Background="SlateGray" Width="{Binding CurrentContainer.Width}" Height="{Binding CurrentContainer.Height}" VerticalAlignment="Center" HorizontalAlignment="Center">
@@ -79,34 +83,41 @@
                 </paz:ZoomBorder>
             </Border>
         </Border>
-        <Grid RowDefinitions="50*,50*" Grid.Row="2" Grid.Column="2">
-            <TabControl Classes="default" Grid.Row="0">
+        <GridSplitter Grid.Row="2" Grid.Column="3"/>
+        <Grid RowDefinitions="45*,Auto,55*" Grid.Row="2" Grid.Column="4">
+            <TabControl Classes="default" Grid.Row="0" TabStripPlacement="Bottom">
                 <TabItem Classes="default" Header="Shapes">
-                    <ListBox Classes="default" Items="{Binding CurrentContainer.Shapes}">
-                        <ListBox.DataTemplates>
-                            <DataTemplate>
-                                <TextBlock Classes="default" Text="{Binding}"/>
-                            </DataTemplate>
-                        </ListBox.DataTemplates>
-                    </ListBox>
+                    <Border Classes="default">
+                        <ListBox Classes="default" Items="{Binding CurrentContainer.Shapes}">
+                            <ListBox.DataTemplates>
+                                <DataTemplate>
+                                    <TextBlock Classes="default" Text="{Binding}"/>
+                                </DataTemplate>
+                            </ListBox.DataTemplates>
+                        </ListBox>
+                    </Border>
                 </TabItem>
                 <TabItem Classes="default" Header="Guides">
-                    <ListBox Classes="default" Items="{Binding CurrentContainer.Guides}">
-                        <ListBox.DataTemplates>
-                            <DataTemplate>
-                                <TextBlock Classes="default" Text="{Binding}"/>
-                            </DataTemplate>
-                        </ListBox.DataTemplates>
-                    </ListBox>
+                    <Border Classes="default">
+                        <ListBox Classes="default" Items="{Binding CurrentContainer.Guides}">
+                            <ListBox.DataTemplates>
+                                <DataTemplate>
+                                    <TextBlock Classes="default" Text="{Binding}"/>
+                                </DataTemplate>
+                            </ListBox.DataTemplates>
+                        </ListBox>
+                    </Border>
                 </TabItem>
                 <TabItem Classes="default" Header="Working">
-                    <ListBox Classes="default" Items="{Binding WorkingContainer.Shapes}">
-                        <ListBox.DataTemplates>
-                            <DataTemplate>
-                                <TextBlock Classes="default" Text="{Binding}"/>
-                            </DataTemplate>
-                        </ListBox.DataTemplates>
-                    </ListBox>
+                    <Border Classes="default">
+                        <ListBox Classes="default" Items="{Binding WorkingContainer.Shapes}">
+                            <ListBox.DataTemplates>
+                                <DataTemplate>
+                                    <TextBlock Classes="default" Text="{Binding}"/>
+                                </DataTemplate>
+                            </ListBox.DataTemplates>
+                        </ListBox>
+                    </Border>
                 </TabItem>
                 <TabItem Classes="default" Header="Container">
                     <Border Classes="default">
@@ -121,7 +132,8 @@
                     </Border>
                 </TabItem>
             </TabControl>
-            <TabControl Classes="default" Grid.Row="1">
+            <GridSplitter Grid.Row="1"/>
+            <TabControl Classes="default" Grid.Row="2" TabStripPlacement="Bottom">
                 <TabItem Classes="default" Header="Settings">
                     <Border Classes="default">
                         <ScrollViewer>
