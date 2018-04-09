@@ -61,7 +61,9 @@
             <TabControl Classes="default" Grid.Row="1">
                 <TabItem Classes="default" Header="Style">
                     <Border Classes="default">
-                        <ViewsStyle:DrawStyleView DataContext="{Binding CurrentStyle}"/>
+                        <ScrollViewer>
+                            <ViewsStyle:DrawStyleView DataContext="{Binding CurrentStyle}"/>
+                        </ScrollViewer>
                     </Border>
                 </TabItem>
             </TabControl>
@@ -108,110 +110,118 @@
                 </TabItem>
                 <TabItem Classes="default" Header="Container">
                     <Border Classes="default">
-                        <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="Auto,*,50">
-                            <TextBlock Classes="default" Grid.Column="0" Grid.Row="0" Text="Width"/>
-                            <TextBox Classes="default" Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="0" Text="{Binding CurrentContainer.Width}"/>
-                            <TextBlock Classes="default" Grid.Column="0" Grid.Row="1" Text="Height"/>
-                            <TextBox Classes="default" Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="1" Text="{Binding CurrentContainer.Height}"/>
-                        </Grid>
+                        <ScrollViewer>
+                            <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="Auto,*,50">
+                                <TextBlock Classes="default" Grid.Column="0" Grid.Row="0" Text="Width"/>
+                                <TextBox Classes="default" Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="0" Text="{Binding CurrentContainer.Width}"/>
+                                <TextBlock Classes="default" Grid.Column="0" Grid.Row="1" Text="Height"/>
+                                <TextBox Classes="default" Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="1" Text="{Binding CurrentContainer.Height}"/>
+                            </Grid>
+                        </ScrollViewer>
                     </Border>
                 </TabItem>
             </TabControl>
             <TabControl Classes="default" Grid.Row="1">
                 <TabItem Classes="default" Header="Settings">
                     <Border Classes="default">
-                        <ContentControl Content="{Binding CurrentTool.Settings}">
-                            <ContentControl.DataTemplates>
-                                <DataTemplate DataType="{x:Type EditorTools:NoneToolSettings}">
-                                    <ViewsToolsSettings:NoneToolSettingsView/>
-                                </DataTemplate>
-                                <DataTemplate DataType="{x:Type EditorTools:SelectionToolSettings}">
-                                    <ViewsToolsSettings:SelectionToolSettingsView/>
-                                </DataTemplate>
-                                <DataTemplate DataType="{x:Type EditorTools:GuideToolSettings}">
-                                    <ViewsToolsSettings:GuideToolSettingsView/>
-                                </DataTemplate>
-                                <DataTemplate DataType="{x:Type EditorTools:PointToolSettings}">
-                                    <ViewsToolsSettings:PointToolSettingsView/>
-                                </DataTemplate>
-                                <DataTemplate DataType="{x:Type EditorTools:LineToolSettings}">
-                                    <ViewsToolsSettings:LineToolSettingsView/>
-                                </DataTemplate>
-                                <DataTemplate DataType="{x:Type EditorTools:PolyLineToolSettings}">
-                                    <ViewsToolsSettings:PolyLineToolSettingsView/>
-                                </DataTemplate>
-                                <DataTemplate DataType="{x:Type EditorTools:CubicBezierToolSettings}">
-                                    <ViewsToolsSettings:CubicBezierToolSettingsView/>
-                                </DataTemplate>
-                                <DataTemplate DataType="{x:Type EditorTools:QuadraticBezierToolSettings}">
-                                    <ViewsToolsSettings:QuadraticBezierToolSettingsView/>
-                                </DataTemplate>
-                                <DataTemplate DataType="{x:Type EditorTools:PathToolSettings}">
-                                    <ViewsToolsSettings:PathToolSettingsView/>
-                                </DataTemplate>
-                                <DataTemplate DataType="{x:Type EditorTools:ScribbleToolSettings}">
-                                    <ViewsToolsSettings:ScribbleToolSettingsView/>
-                                </DataTemplate>
-                                <DataTemplate DataType="{x:Type EditorTools:RectangleToolSettings}">
-                                    <ViewsToolsSettings:RectangleToolSettingsView/>
-                                </DataTemplate>
-                                <DataTemplate DataType="{x:Type EditorTools:EllipseToolSettings}">
-                                    <ViewsToolsSettings:EllipseToolSettingsView/>
-                                </DataTemplate>
-                                <DataTemplate DataType="{x:Type EditorTools:TextToolSettings}">
-                                    <ViewsToolsSettings:TextToolSettingsView/>
-                                </DataTemplate>
-                            </ContentControl.DataTemplates>
-                        </ContentControl>
+                        <ScrollViewer>
+                            <ContentControl Content="{Binding CurrentTool.Settings}">
+                                <ContentControl.DataTemplates>
+                                    <DataTemplate DataType="{x:Type EditorTools:NoneToolSettings}">
+                                        <ViewsToolsSettings:NoneToolSettingsView/>
+                                    </DataTemplate>
+                                    <DataTemplate DataType="{x:Type EditorTools:SelectionToolSettings}">
+                                        <ViewsToolsSettings:SelectionToolSettingsView/>
+                                    </DataTemplate>
+                                    <DataTemplate DataType="{x:Type EditorTools:GuideToolSettings}">
+                                        <ViewsToolsSettings:GuideToolSettingsView/>
+                                    </DataTemplate>
+                                    <DataTemplate DataType="{x:Type EditorTools:PointToolSettings}">
+                                        <ViewsToolsSettings:PointToolSettingsView/>
+                                    </DataTemplate>
+                                    <DataTemplate DataType="{x:Type EditorTools:LineToolSettings}">
+                                        <ViewsToolsSettings:LineToolSettingsView/>
+                                    </DataTemplate>
+                                    <DataTemplate DataType="{x:Type EditorTools:PolyLineToolSettings}">
+                                        <ViewsToolsSettings:PolyLineToolSettingsView/>
+                                    </DataTemplate>
+                                    <DataTemplate DataType="{x:Type EditorTools:CubicBezierToolSettings}">
+                                        <ViewsToolsSettings:CubicBezierToolSettingsView/>
+                                    </DataTemplate>
+                                    <DataTemplate DataType="{x:Type EditorTools:QuadraticBezierToolSettings}">
+                                        <ViewsToolsSettings:QuadraticBezierToolSettingsView/>
+                                    </DataTemplate>
+                                    <DataTemplate DataType="{x:Type EditorTools:PathToolSettings}">
+                                        <ViewsToolsSettings:PathToolSettingsView/>
+                                    </DataTemplate>
+                                    <DataTemplate DataType="{x:Type EditorTools:ScribbleToolSettings}">
+                                        <ViewsToolsSettings:ScribbleToolSettingsView/>
+                                    </DataTemplate>
+                                    <DataTemplate DataType="{x:Type EditorTools:RectangleToolSettings}">
+                                        <ViewsToolsSettings:RectangleToolSettingsView/>
+                                    </DataTemplate>
+                                    <DataTemplate DataType="{x:Type EditorTools:EllipseToolSettings}">
+                                        <ViewsToolsSettings:EllipseToolSettingsView/>
+                                    </DataTemplate>
+                                    <DataTemplate DataType="{x:Type EditorTools:TextToolSettings}">
+                                        <ViewsToolsSettings:TextToolSettingsView/>
+                                    </DataTemplate>
+                                </ContentControl.DataTemplates>
+                            </ContentControl>
+                        </ScrollViewer>
                     </Border>
                 </TabItem>
                 <TabItem Classes="default" Header="Intersections">
                     <Border Classes="default">
-                        <Grid RowDefinitions="Auto,*">
-                            <DropDown Classes="default" Grid.Row="0" x:Name="Intersections" Items="{Binding CurrentTool.Intersections}" SelectedIndex="0">
-                                <DropDown.DataTemplates>
-                                    <DataTemplate>
-                                        <TextBlock Classes="default" Text="{Binding Title}"/>
-                                    </DataTemplate>
-                                </DropDown.DataTemplates>
-                            </DropDown>
-                            <ContentControl Grid.Row="1" Content="{Binding ElementName=Intersections, Path=SelectedItem.Settings}">
-                                <ContentControl.DataTemplates>
-                                    <DataTemplate DataType="{x:Type EditorIntersectionsLine:LineLineSettings}">
-                                        <ViewsIntersectionsLineSettings:LineLineSettingsView/>
-                                    </DataTemplate>
-                                    <DataTemplate DataType="{x:Type EditorIntersectionsLine:RectangleLineSettings}">
-                                        <ViewsIntersectionsLineSettings:RectangleLineSettingsView/>
-                                    </DataTemplate>
-                                    <DataTemplate DataType="{x:Type EditorIntersectionsLine:EllipseLineSettings}">
-                                        <ViewsIntersectionsLineSettings:EllipseLineSettingsView/>
-                                    </DataTemplate>
-                                </ContentControl.DataTemplates>
-                            </ContentControl>
-                        </Grid>
+                        <ScrollViewer>
+                            <Grid RowDefinitions="Auto,*">
+                                <DropDown Classes="default" Grid.Row="0" x:Name="Intersections" Items="{Binding CurrentTool.Intersections}" SelectedIndex="0">
+                                    <DropDown.DataTemplates>
+                                        <DataTemplate>
+                                            <TextBlock Classes="default" Text="{Binding Title}"/>
+                                        </DataTemplate>
+                                    </DropDown.DataTemplates>
+                                </DropDown>
+                                <ContentControl Grid.Row="1" Content="{Binding ElementName=Intersections, Path=SelectedItem.Settings}">
+                                    <ContentControl.DataTemplates>
+                                        <DataTemplate DataType="{x:Type EditorIntersectionsLine:LineLineSettings}">
+                                            <ViewsIntersectionsLineSettings:LineLineSettingsView/>
+                                        </DataTemplate>
+                                        <DataTemplate DataType="{x:Type EditorIntersectionsLine:RectangleLineSettings}">
+                                            <ViewsIntersectionsLineSettings:RectangleLineSettingsView/>
+                                        </DataTemplate>
+                                        <DataTemplate DataType="{x:Type EditorIntersectionsLine:EllipseLineSettings}">
+                                            <ViewsIntersectionsLineSettings:EllipseLineSettingsView/>
+                                        </DataTemplate>
+                                    </ContentControl.DataTemplates>
+                                </ContentControl>
+                            </Grid>
+                        </ScrollViewer>
                     </Border>
                 </TabItem>
                 <TabItem Classes="default" Header="Filters">
                     <Border Classes="default">
-                        <Grid RowDefinitions="Auto,*">
-                            <DropDown Classes="default" Grid.Row="0" x:Name="Filters" Items="{Binding CurrentTool.Filters}" SelectedIndex="0">
-                                <DropDown.DataTemplates>
-                                    <DataTemplate>
-                                        <TextBlock Classes="default" Text="{Binding Title}"/>
-                                    </DataTemplate>
-                                </DropDown.DataTemplates>
-                            </DropDown>
-                            <ContentControl Grid.Row="1" Content="{Binding ElementName=Filters, Path=SelectedItem.Settings}">
-                                <ContentControl.DataTemplates>
-                                    <DataTemplate DataType="{x:Type EditorFilters:LineSnapSettings}">
-                                        <ViewsFiltersSettings:LineSnapSettingsView/>
-                                    </DataTemplate>
-                                    <DataTemplate DataType="{x:Type EditorFilters:GridSnapSettings}">
-                                        <ViewsFiltersSettings:GridSnapSettingsView/>
-                                    </DataTemplate>
-                                </ContentControl.DataTemplates>
-                            </ContentControl>
-                        </Grid>
+                        <ScrollViewer>
+                            <Grid RowDefinitions="Auto,*">
+                                <DropDown Classes="default" Grid.Row="0" x:Name="Filters" Items="{Binding CurrentTool.Filters}" SelectedIndex="0">
+                                    <DropDown.DataTemplates>
+                                        <DataTemplate>
+                                            <TextBlock Classes="default" Text="{Binding Title}"/>
+                                        </DataTemplate>
+                                    </DropDown.DataTemplates>
+                                </DropDown>
+                                <ContentControl Grid.Row="1" Content="{Binding ElementName=Filters, Path=SelectedItem.Settings}">
+                                    <ContentControl.DataTemplates>
+                                        <DataTemplate DataType="{x:Type EditorFilters:LineSnapSettings}">
+                                            <ViewsFiltersSettings:LineSnapSettingsView/>
+                                        </DataTemplate>
+                                        <DataTemplate DataType="{x:Type EditorFilters:GridSnapSettings}">
+                                            <ViewsFiltersSettings:GridSnapSettingsView/>
+                                        </DataTemplate>
+                                    </ContentControl.DataTemplates>
+                                </ContentControl>
+                            </Grid>
+                        </ScrollViewer>
                     </Border>
                 </TabItem>
             </TabControl>
