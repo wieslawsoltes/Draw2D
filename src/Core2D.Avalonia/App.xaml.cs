@@ -2,14 +2,8 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using System;
 using Avalonia;
-using Avalonia.Controls;
-using Avalonia.Input;
 using Avalonia.Logging.Serilog;
 using Avalonia.Markup.Xaml;
-using Core2D.Avalonia.Controls;
-using Core2D.Avalonia.Renderers;
-using Core2D.Avalonia.Views;
-using Core2D.ViewModels;
 
 namespace Core2D.Avalonia
 {
