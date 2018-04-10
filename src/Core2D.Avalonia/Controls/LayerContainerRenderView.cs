@@ -5,6 +5,7 @@ using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Media;
 using Avalonia.VisualTree;
+using Core2D.Avalonia.Renderers;
 using Core2D.ViewModels.Containers;
 
 namespace Core2D.Avalonia.Controls
@@ -73,6 +74,13 @@ namespace Core2D.Avalonia.Controls
 
             if (this.DataContext is LayerContainerViewModel vm)
             {
+                if (vm.CurrentContainer.WorkBackground != null)
+                {
+                    var color = AvaloniaBrushCache.FromDrawColor(vm.CurrentContainer.WorkBackground);
+                    var brush = new SolidColorBrush(color);
+                    context.FillRectangle(brush, new Rect(0, 0, Bounds.Width, Bounds.Height));
+                }
+
                 vm.Presenter.DrawContainer(context, vm.CurrentContainer, vm.Renderer, 0.0, 0.0, null, null);
 
                 if (_drawWorking)

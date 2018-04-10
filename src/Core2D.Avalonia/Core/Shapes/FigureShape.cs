@@ -6,6 +6,7 @@ using System.Linq;
 using Core2D.Containers;
 using Core2D.Renderer;
 using Core2D.Shape;
+using Core2D.Style;
 
 namespace Core2D.Shapes
 {
@@ -13,6 +14,9 @@ namespace Core2D.Shapes
     {
         private double _width;
         private double _height;
+        private ArgbColor _printBackground;
+        private ArgbColor _workBackground;
+        private ArgbColor _inputBackground;
         private ObservableCollection<LineShape> _guides;
         private ObservableCollection<BaseShape> _shapes;
         private bool _isFilled;
@@ -28,6 +32,24 @@ namespace Core2D.Shapes
         {
             get => _height;
             set => Update(ref _height, value);
+        }
+
+        public ArgbColor PrintBackground
+        {
+            get => _printBackground;
+            set => Update(ref _printBackground, value);
+        }
+
+        public ArgbColor WorkBackground
+        {
+            get => _workBackground;
+            set => Update(ref _workBackground, value);
+        }
+
+        public ArgbColor InputBackground
+        {
+            get => _inputBackground;
+            set => Update(ref _inputBackground, value);
         }
 
         public ObservableCollection<LineShape> Guides

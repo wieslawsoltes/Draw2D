@@ -4,6 +4,9 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.PanAndZoom;
 using Avalonia.Input;
+using Avalonia.Media;
+using Avalonia.VisualTree;
+using Core2D.Avalonia.Renderers;
 using Core2D.Editor;
 using Core2D.ViewModels.Containers;
 
@@ -11,6 +14,15 @@ namespace Core2D.Avalonia.Controls
 {
     public class LayerContainerInputView : Border
     {
+        public static readonly StyledProperty<IVisual> RelativeToProperty =
+            AvaloniaProperty.Register<LayerContainerInputView, IVisual>(nameof(RelativeTo));
+
+        public IVisual RelativeTo
+        {
+            get { return GetValue(RelativeToProperty); }
+            set { SetValue(RelativeToProperty, value); }
+        }
+
         public LayerContainerInputView()
         {
             PointerPressed += (sender, e) => HandlePointerPressed(e);
@@ -40,11 +52,11 @@ namespace Core2D.Avalonia.Controls
             return modifier;
         }
 
-        private Point FixInvalidPointPosition(Point point)
+        private Point AdjustGetPosition(Point point)
         {
-            if (this?.RenderTransform != null)
+            if (RelativeTo?.RenderTransform != null)
             {
-                return MatrixHelper.TransformPoint(this.RenderTransform.Value.Invert(), point);
+                return MatrixHelper.TransformPoint(RelativeTo.RenderTransform.Value.Invert(), point);
             }
             return point;
         }
@@ -55,7 +67,7 @@ namespace Core2D.Avalonia.Controls
             {
                 if (this.DataContext is LayerContainerViewModel vm)
                 {
-                    var point = FixInvalidPointPosition(e.GetPosition(Child));
+                    var point = AdjustGetPosition(e.GetPosition(RelativeTo));
                     vm.CurrentTool.LeftDown(vm, point.X, point.Y, GetModifier(e.InputModifiers));
                 }
             }
@@ -63,7 +75,7 @@ namespace Core2D.Avalonia.Controls
             {
                 if (this.DataContext is LayerContainerViewModel vm)
                 {
-                    var point = FixInvalidPointPosition(e.GetPosition(Child));
+                    var point = AdjustGetPosition(e.GetPosition(RelativeTo));
                     vm.CurrentTool.RightDown(vm, point.X, point.Y, GetModifier(e.InputModifiers));
                 }
             }
@@ -75,7 +87,7 @@ namespace Core2D.Avalonia.Controls
             {
                 if (this.DataContext is LayerContainerViewModel vm)
                 {
-                    var point = FixInvalidPointPosition(e.GetPosition(Child));
+                    var point = AdjustGetPosition(e.GetPosition(RelativeTo));
                     if (vm.Mode == EditMode.Mouse)
                     {
                         vm.CurrentTool.LeftUp(vm, point.X, point.Y, GetModifier(e.InputModifiers));
@@ -90,7 +102,7 @@ namespace Core2D.Avalonia.Controls
             {
                 if (this.DataContext is LayerContainerViewModel vm)
                 {
-                    var point = FixInvalidPointPosition(e.GetPosition(Child));
+                    var point = AdjustGetPosition(e.GetPosition(RelativeTo));
                     vm.CurrentTool.RightUp(vm, point.X, point.Y, GetModifier(e.InputModifiers));
                 }
             }
@@ -100,8 +112,23 @@ namespace Core2D.Avalonia.Controls
         {
             if (this.DataContext is LayerContainerViewModel vm)
             {
-                var point = FixInvalidPointPosition(e.GetPosition(Child));
+                var point = AdjustGetPosition(e.GetPosition(RelativeTo));
                 vm.CurrentTool.Move(vm, point.X, point.Y, GetModifier(e.InputModifiers));
+            }
+        }
+
+        public override void Render(DrawingContext context)
+        {
+            base.Render(context);
+
+            if (this.DataContext is LayerContainerViewModel vm)
+            {
+                if (vm.CurrentContainer.WorkBackground != null)
+                {
+                    var color = AvaloniaBrushCache.FromDrawColor(vm.CurrentContainer.InputBackground);
+                    var brush = new SolidColorBrush(color);
+                    context.FillRectangle(brush, new Rect(0, 0, Bounds.Width, Bounds.Height));
+                }
             }
         }
     }

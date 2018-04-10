@@ -15,6 +15,9 @@ namespace Core2D.Containers
         private MatrixObject _transform;
         private double _width;
         private double _height;
+        private ArgbColor _printBackground;
+        private ArgbColor _workBackground;
+        private ArgbColor _inputBackground;
         private ObservableCollection<LineShape> _guides;
         private ObservableCollection<BaseShape> _shapes;
         private ObservableCollection<ShapeStyle> _styles;
@@ -41,6 +44,24 @@ namespace Core2D.Containers
         {
             get => _height;
             set => Update(ref _height, value);
+        }
+
+        public ArgbColor PrintBackground
+        {
+            get => _printBackground;
+            set => Update(ref _printBackground, value);
+        }
+
+        public ArgbColor WorkBackground
+        {
+            get => _workBackground;
+            set => Update(ref _workBackground, value);
+        }
+
+        public ArgbColor InputBackground
+        {
+            get => _inputBackground;
+            set => Update(ref _inputBackground, value);
         }
 
         public ObservableCollection<LineShape> Guides

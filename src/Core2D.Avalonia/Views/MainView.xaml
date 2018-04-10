@@ -105,12 +105,12 @@
         </Grid>
         <GridSplitter Grid.Row="2" Grid.Column="1"/>
         <Border Classes="zoom" Grid.Row="2" Grid.Column="2">
-            <Border Classes="clip" ClipToBounds="True" Background="LightGray">
-                <paz:ZoomBorder x:Name="zoomBorder" Stretch="None" ZoomSpeed="1.2" PanButton="Right" Background="Transparent" ClipToBounds="False" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
-                    <Controls:LayerContainerInputView x:Name="inputView" Background="Gray" ClipToBounds="False" Width="{Binding CurrentContainer.Width}" Height="{Binding CurrentContainer.Height}">
-                        <Controls:LayerContainerRenderView x:Name="rendererView" ClipToBounds="False" Width="{Binding CurrentContainer.Width}" Height="{Binding CurrentContainer.Height}"/>
-                    </Controls:LayerContainerInputView>
-                </paz:ZoomBorder>
+            <Border Classes="clip" ClipToBounds="True" Background="Transparent">
+                <Controls:LayerContainerInputView x:Name="inputView" RelativeTo="{Binding #rendererView}" Background="Transparent" ClipToBounds="False">
+                    <paz:ZoomBorder x:Name="zoomBorder" Stretch="None" ZoomSpeed="1.2" PanButton="Right" Background="Transparent" ClipToBounds="False" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+                        <Controls:LayerContainerRenderView x:Name="rendererView" Background="Transparent" ClipToBounds="False" Width="{Binding CurrentContainer.Width}" Height="{Binding CurrentContainer.Height}"/>
+                    </paz:ZoomBorder>
+                </Controls:LayerContainerInputView>
             </Border>
         </Border>
         <GridSplitter Grid.Row="2" Grid.Column="3"/>
@@ -152,11 +152,22 @@
                 <TabItem Classes="default" Header="Container">
                     <Border Classes="default">
                         <ScrollViewer>
-                            <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="Auto,*,50">
-                                <TextBlock Classes="default" Grid.Column="0" Grid.Row="0" Text="Width"/>
-                                <TextBox Classes="default" Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="0" Text="{Binding CurrentContainer.Width}"/>
-                                <TextBlock Classes="default" Grid.Column="0" Grid.Row="1" Text="Height"/>
-                                <TextBox Classes="default" Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="1" Text="{Binding CurrentContainer.Height}"/>
+                            <Grid RowDefinitions="Auto,Auto,Auto,Auto">
+                                <Grid Grid.Row="0" RowDefinitions="Auto,Auto" ColumnDefinitions="Auto,*,50">
+                                    <TextBlock Classes="default" Grid.Column="0" Grid.Row="0" Text="Width"/>
+                                    <TextBox Classes="default" Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="0" Text="{Binding CurrentContainer.Width}"/>
+                                    <TextBlock Classes="default" Grid.Column="0" Grid.Row="1" Text="Height"/>
+                                    <TextBox Classes="default" Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="1" Text="{Binding CurrentContainer.Height}"/>
+                                </Grid>
+                                <Expander Grid.Row="1" Header="PrintBackground" IsExpanded="True">
+                                    <ViewsStyle:DrawColorView DataContext="{Binding CurrentContainer.PrintBackground}"/>
+                                </Expander>
+                                <Expander Grid.Row="2" Header="WorkBackground" IsExpanded="True">
+                                    <ViewsStyle:DrawColorView DataContext="{Binding CurrentContainer.WorkBackground}"/>
+                                </Expander>
+                                <Expander Grid.Row="3" Header="InputBackground" IsExpanded="True">
+                                    <ViewsStyle:DrawColorView DataContext="{Binding CurrentContainer.InputBackground}"/>
+                                </Expander>
                             </Grid>
                         </ScrollViewer>
                     </Border>
