@@ -12,7 +12,7 @@
              xmlns:EditorIntersectionsLine="clr-namespace:Core2D.Editor.Intersections.Line;assembly=Core2D.Avalonia"
              xmlns:EditorFilters="clr-namespace:Core2D.Editor.Filters;assembly=Core2D.Avalonia"
              UseLayoutRounding="True" Focusable="True">
-    <Grid RowDefinitions="Auto,5,*" ColumnDefinitions="260,Auto,*,Auto,280">
+    <Grid RowDefinitions="Auto,5,*,5" ColumnDefinitions="260,Auto,*,Auto,280">
         <Menu Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Background="Transparent">
             <MenuItem Header="_File">
                 <MenuItem Header="New" Command="{Binding New}"/>
