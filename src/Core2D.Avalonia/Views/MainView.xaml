@@ -35,24 +35,33 @@
             </MenuItem>
             <MenuItem Header="_View">
                 <MenuItem Header="_Reset Zoom" Command="{Binding ResetZoom}"/>
+                <Separator/>
                 <MenuItem Header="_AutoFit Zoom" Command="{Binding AutoFitZoom}"/>
                 <Separator/>
-                <MenuItem Header="Stretch _None" Command="{Binding SetStretchNone}"/>
-                <MenuItem Header="Stretch _Fill" Command="{Binding SetStretchFill}"/>
-                <MenuItem Header="Stretch _Uniform" Command="{Binding SetStretchUniform}"/>
-                <MenuItem Header="Stretch Uniform_ToFill" Command="{Binding SetStretchUniformToFill}"/>
+                <MenuItem Header="AutoFit _Mode">
+                    <MenuItem Header="_None" Command="{Binding SetStretchNone}"/>
+                    <MenuItem Header="_Fill" Command="{Binding SetStretchFill}"/>
+                    <MenuItem Header="_Uniform" Command="{Binding SetStretchUniform}"/>
+                    <MenuItem Header="Uniform_ToFill" Command="{Binding SetStretchUniformToFill}"/>
+                </MenuItem>
             </MenuItem>
             <MenuItem Header="_Tool">
                 <MenuItem Header="_None" Command="{Binding SetNoneTool}"/>
+                <Separator/>
                 <MenuItem Header="_Selection" Command="{Binding SetSelectionTool}"/>
-                <MenuItem Header="_Line" Command="{Binding SetLineTool}"/>
+                <Separator/>
                 <MenuItem Header="_Point" Command="{Binding SetPointTool}"/>
+                <Separator/>
+                <MenuItem Header="_Line" Command="{Binding SetLineTool}"/>
                 <MenuItem Header="_Cubic Bezier" Command="{Binding SetCubicBezierTool}"/>
                 <MenuItem Header="_Quadratic Bezier" Command="{Binding SetQuadraticBezierTool}"/>
+                <Separator/>
                 <MenuItem Header="Pat_h" Command="{Binding SetPathTool}"/>
                 <MenuItem Header="_Move" Command="{Binding SetMoveTool}"/>
+                <Separator/>
                 <MenuItem Header="_Rectangle" Command="{Binding SetRectangleTool}"/>
                 <MenuItem Header="_Ellipse" Command="{Binding SetEllipseTool}"/>
+                <Separator/>
                 <MenuItem Header="_Text" Command="{Binding SetTextTool}"/>
             </MenuItem>
             <MenuItem Header="_Debug">
