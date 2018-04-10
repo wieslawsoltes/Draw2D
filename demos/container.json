@@ -1,0 +1,400 @@
+{
+  "$id": "1",
+  "$type": "Container",
+  "Width": 720.0,
+  "Height": 630.0,
+  "Guides": [],
+  "Shapes": [
+    {
+      "$id": "2",
+      "$type": "Rect",
+      "TopLeft": {
+        "$id": "3",
+        "$type": "Point",
+        "X": 150.0,
+        "Y": 135.0,
+        "Template": {
+          "$id": "4",
+          "$type": "Ellipse",
+          "TopLeft": {
+            "$id": "5",
+            "$type": "Point",
+            "X": -4.0,
+            "Y": -4.0
+          },
+          "BottomRight": {
+            "$id": "6",
+            "$type": "Point",
+            "X": 4.0,
+            "Y": 4.0
+          },
+          "Points": [],
+          "Style": {
+            "$id": "7",
+            "$type": "Style",
+            "Stroke": {
+              "$id": "8",
+              "$type": "Color",
+              "A": 0,
+              "R": 0,
+              "G": 0,
+              "B": 0
+            },
+            "Fill": {
+              "$id": "9",
+              "$type": "Color",
+              "A": 255,
+              "R": 255,
+              "G": 255,
+              "B": 0
+            },
+            "Thickness": 2.0,
+            "IsStroked": true,
+            "IsFilled": true
+          }
+        }
+      },
+      "BottomRight": {
+        "$id": "10",
+        "$type": "Point",
+        "X": 240.0,
+        "Y": 225.0,
+        "Template": {
+          "$ref": "4"
+        }
+      },
+      "Points": [
+        {
+          "$id": "11",
+          "$type": "Point",
+          "X": 240.0,
+          "Y": 180.0,
+          "Template": {
+            "$ref": "4"
+          }
+        },
+        {
+          "$id": "12",
+          "$type": "Point",
+          "X": 195.0,
+          "Y": 135.0,
+          "Template": {
+            "$ref": "4"
+          }
+        },
+        {
+          "$id": "13",
+          "$type": "Point",
+          "X": 150.0,
+          "Y": 180.0,
+          "Template": {
+            "$ref": "4"
+          }
+        },
+        {
+          "$id": "14",
+          "$type": "Point",
+          "X": 195.0,
+          "Y": 225.0,
+          "Template": {
+            "$ref": "4"
+          }
+        }
+      ],
+      "Style": {
+        "$id": "15",
+        "$type": "Style",
+        "Stroke": {
+          "$id": "16",
+          "$type": "Color",
+          "A": 255,
+          "R": 0,
+          "G": 255,
+          "B": 0
+        },
+        "Fill": {
+          "$id": "17",
+          "$type": "Color",
+          "A": 80,
+          "R": 0,
+          "G": 255,
+          "B": 0
+        },
+        "Thickness": 2.0,
+        "IsStroked": true,
+        "IsFilled": true
+      }
+    },
+    {
+      "$id": "18",
+      "$type": "Ellipse",
+      "TopLeft": {
+        "$id": "19",
+        "$type": "Point",
+        "X": 465.0,
+        "Y": 135.0,
+        "Template": {
+          "$ref": "4"
+        }
+      },
+      "BottomRight": {
+        "$id": "20",
+        "$type": "Point",
+        "X": 555.0,
+        "Y": 225.0,
+        "Template": {
+          "$ref": "4"
+        }
+      },
+      "Points": [
+        {
+          "$id": "21",
+          "$type": "Point",
+          "X": 465.0,
+          "Y": 180.0,
+          "Template": {
+            "$ref": "4"
+          }
+        },
+        {
+          "$id": "22",
+          "$type": "Point",
+          "X": 510.0,
+          "Y": 135.0,
+          "Template": {
+            "$ref": "4"
+          }
+        },
+        {
+          "$id": "23",
+          "$type": "Point",
+          "X": 510.0,
+          "Y": 225.0,
+          "Template": {
+            "$ref": "4"
+          }
+        },
+        {
+          "$id": "24",
+          "$type": "Point",
+          "X": 555.0,
+          "Y": 180.0,
+          "Template": {
+            "$ref": "4"
+          }
+        }
+      ],
+      "Style": {
+        "$ref": "15"
+      }
+    },
+    {
+      "$id": "25",
+      "$type": "Line",
+      "StartPoint": {
+        "$ref": "11"
+      },
+      "Point": {
+        "$ref": "21"
+      },
+      "Points": [],
+      "Style": {
+        "$ref": "15"
+      }
+    },
+    {
+      "$id": "26",
+      "$type": "Rect",
+      "TopLeft": {
+        "$id": "27",
+        "$type": "Point",
+        "X": 150.0,
+        "Y": 330.0,
+        "Template": {
+          "$ref": "4"
+        }
+      },
+      "BottomRight": {
+        "$id": "28",
+        "$type": "Point",
+        "X": 240.0,
+        "Y": 420.0,
+        "Template": {
+          "$ref": "4"
+        }
+      },
+      "Points": [
+        {
+          "$id": "29",
+          "$type": "Point",
+          "X": 240.0,
+          "Y": 375.0,
+          "Template": {
+            "$ref": "4"
+          }
+        },
+        {
+          "$id": "30",
+          "$type": "Point",
+          "X": 195.0,
+          "Y": 330.0,
+          "Template": {
+            "$ref": "4"
+          }
+        },
+        {
+          "$id": "31",
+          "$type": "Point",
+          "X": 150.0,
+          "Y": 375.0,
+          "Template": {
+            "$ref": "4"
+          }
+        },
+        {
+          "$id": "32",
+          "$type": "Point",
+          "X": 195.0,
+          "Y": 420.0,
+          "Template": {
+            "$ref": "4"
+          }
+        }
+      ],
+      "Style": {
+        "$ref": "15"
+      }
+    },
+    {
+      "$id": "33",
+      "$type": "Rect",
+      "TopLeft": {
+        "$id": "34",
+        "$type": "Point",
+        "X": 465.0,
+        "Y": 330.0,
+        "Template": {
+          "$ref": "4"
+        }
+      },
+      "BottomRight": {
+        "$id": "35",
+        "$type": "Point",
+        "X": 555.0,
+        "Y": 420.0,
+        "Template": {
+          "$ref": "4"
+        }
+      },
+      "Points": [
+        {
+          "$id": "36",
+          "$type": "Point",
+          "X": 555.0,
+          "Y": 375.0,
+          "Template": {
+            "$ref": "4"
+          }
+        },
+        {
+          "$id": "37",
+          "$type": "Point",
+          "X": 510.0,
+          "Y": 330.0,
+          "Template": {
+            "$ref": "4"
+          }
+        },
+        {
+          "$id": "38",
+          "$type": "Point",
+          "X": 465.0,
+          "Y": 375.0,
+          "Template": {
+            "$ref": "4"
+          }
+        },
+        {
+          "$id": "39",
+          "$type": "Point",
+          "X": 510.0,
+          "Y": 420.0,
+          "Template": {
+            "$ref": "4"
+          }
+        }
+      ],
+      "Style": {
+        "$ref": "15"
+      }
+    },
+    {
+      "$id": "40",
+      "$type": "Quad",
+      "StartPoint": {
+        "$ref": "14"
+      },
+      "Point1": {
+        "$id": "41",
+        "$type": "Point",
+        "X": 225.0,
+        "Y": 285.0,
+        "Template": {
+          "$ref": "4"
+        }
+      },
+      "Point2": {
+        "$ref": "30"
+      },
+      "Points": [],
+      "Style": {
+        "$ref": "15"
+      }
+    },
+    {
+      "$id": "42",
+      "$type": "Line",
+      "StartPoint": {
+        "$ref": "29"
+      },
+      "Point": {
+        "$ref": "38"
+      },
+      "Points": [],
+      "Style": {
+        "$ref": "15"
+      }
+    }
+  ],
+  "Styles": [
+    {
+      "$id": "43",
+      "$type": "Style",
+      "Stroke": {
+        "$id": "44",
+        "$type": "Color",
+        "A": 128,
+        "R": 0,
+        "G": 255,
+        "B": 255
+      },
+      "Fill": {
+        "$id": "45",
+        "$type": "Color",
+        "A": 128,
+        "R": 0,
+        "G": 255,
+        "B": 255
+      },
+      "Thickness": 2.0,
+      "IsStroked": true,
+      "IsFilled": true
+    },
+    {
+      "$ref": "7"
+    },
+    {
+      "$ref": "15"
+    }
+  ]
+}
