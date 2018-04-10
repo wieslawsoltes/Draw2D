@@ -48,6 +48,8 @@ namespace Core2D.Avalonia
         public static AppBuilder BuildAvaloniaApp()
             => AppBuilder.Configure<App>()
                 .UsePlatformDetect()
+                //.UseDirect2D1()
+                //.UseSkia()
                 .LogToDebug();
     }
 }
