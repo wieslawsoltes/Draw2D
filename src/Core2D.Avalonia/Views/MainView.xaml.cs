@@ -11,7 +11,23 @@ namespace Core2D.Avalonia.Views
 {
     public class MainView : UserControl
     {
-        private ZoomBorder zoomBorder;
+        public static readonly StyledProperty<bool> DrawDirtyRectsProperty =
+            AvaloniaProperty.Register<MainView, bool>(nameof(DrawDirtyRects));
+
+        public bool DrawDirtyRects
+        {
+            get { return GetValue(DrawDirtyRectsProperty); }
+            set { SetValue(DrawDirtyRectsProperty, value); }
+        }
+
+        public static readonly StyledProperty<bool> DrawFpsProperty =
+            AvaloniaProperty.Register<MainView, bool>(nameof(DrawFps));
+
+        public bool DrawFps
+        {
+            get { return GetValue(DrawFpsProperty); }
+            set { SetValue(DrawFpsProperty, value); }
+        }
 
         public MainView()
         {
@@ -29,7 +45,7 @@ namespace Core2D.Avalonia.Views
 
             if (this.DataContext is LayerContainerViewModel vm)
             {
-                zoomBorder = this.FindControl<ZoomBorder>("zoomBorder");
+                var zoomBorder = this.FindControl<ZoomBorder>("zoomBorder");
                 vm.Reset = () => zoomBorder.Reset();
                 vm.AutoFit = () => zoomBorder.AutoFit();
                 vm.StretchNone = () => zoomBorder.Stretch = PanAndZoom.StretchMode.None;
@@ -38,8 +54,8 @@ namespace Core2D.Avalonia.Views
                 vm.StretchUniformToFill = () => zoomBorder.Stretch = PanAndZoom.StretchMode.UniformToFill;
             }
 
-            this.FindControl<MenuItem>("DebugDrawDirtyRects").Click += DebugDrawDirtyRects_Click;
-            this.FindControl<MenuItem>("DebugDrawFps").Click += DebugDrawFps_Click;
+            DrawDirtyRects = VisualRoot.Renderer.DrawDirtyRects;
+            DrawFps = VisualRoot.Renderer.DrawFps;
         }
 
         protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
@@ -55,23 +71,18 @@ namespace Core2D.Avalonia.Views
                 vm.StretchUniform = null;
                 vm.StretchUniformToFill = null;
             }
-
-            this.FindControl<MenuItem>("DebugDrawDirtyRects").Click -= DebugDrawDirtyRects_Click;
-            this.FindControl<MenuItem>("DebugDrawFps").Click -= DebugDrawFps_Click;
         }
 
         private void DebugDrawDirtyRects_Click(object sender, RoutedEventArgs e)
         {
-            bool value = !VisualRoot.Renderer.DrawDirtyRects;
-            VisualRoot.Renderer.DrawDirtyRects = value;
-            this.FindControl<CheckBox>("DebugDrawDirtyRectsCheckBox").IsChecked = value;
+            VisualRoot.Renderer.DrawDirtyRects = !VisualRoot.Renderer.DrawDirtyRects;
+            DrawDirtyRects = VisualRoot.Renderer.DrawDirtyRects;
         }
 
         private void DebugDrawFps_Click(object sender, RoutedEventArgs e)
         {
-            bool value = !VisualRoot.Renderer.DrawFps;
-            VisualRoot.Renderer.DrawFps = value;
-            this.FindControl<CheckBox>("DebugDrawFpsCheckBox").IsChecked = value;
+            VisualRoot.Renderer.DrawFps = !VisualRoot.Renderer.DrawFps;
+            DrawFps = VisualRoot.Renderer.DrawFps;
         }
     }
 }

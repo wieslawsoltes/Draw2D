@@ -4,6 +4,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:paz="clr-namespace:Avalonia.Controls.PanAndZoom;assembly=Avalonia.Controls.PanAndZoom"
              xmlns:Controls="clr-namespace:Core2D.Avalonia.Controls;assembly=Core2D.Avalonia"
+             xmlns:Views="clr-namespace:Core2D.Avalonia.Views;assembly=Core2D.Avalonia"
              xmlns:ViewsStyle="clr-namespace:Core2D.Avalonia.Views.Style;assembly=Core2D.Avalonia"
              xmlns:ViewsToolsSettings="clr-namespace:Core2D.Avalonia.Views.Tools;assembly=Core2D.Avalonia"
              xmlns:ViewsIntersectionsLineSettings="clr-namespace:Core2D.Avalonia.Views.Intersections;assembly=Core2D.Avalonia"
@@ -65,14 +66,14 @@
                 <MenuItem Header="_Text" Command="{Binding SetTextTool}"/>
             </MenuItem>
             <MenuItem Header="_Debug">
-                <MenuItem Header="DrawDirtyRects" x:Name="DebugDrawDirtyRects">
+                <MenuItem Header="DrawDirtyRects" Click="DebugDrawDirtyRects_Click">
                     <MenuItem.Icon>
-                        <CheckBox BorderThickness="0" IsHitTestVisible="False" IsChecked="False" x:Name="DebugDrawDirtyRectsCheckBox"/>
+                        <CheckBox BorderThickness="0" IsHitTestVisible="False" IsChecked="{Binding $parent[Views:MainView].DrawDirtyRects}"/>
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Header="DrawFps" x:Name="DebugDrawFps">
+                <MenuItem Header="DrawFps" Click="DebugDrawFps_Click">
                     <MenuItem.Icon>
-                        <CheckBox BorderThickness="0" IsHitTestVisible="False" IsChecked="False" x:Name="DebugDrawFpsCheckBox"/>
+                        <CheckBox BorderThickness="0" IsHitTestVisible="False" IsChecked="{Binding $parent[Views:MainView].DrawFps}"/>
                     </MenuItem.Icon>
                 </MenuItem>
             </MenuItem>
