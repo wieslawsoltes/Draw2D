@@ -14,7 +14,7 @@
     <Authors>Wiesław Šoltés</Authors>
     <Company>Wiesław Šoltés</Company>
     <Description>A 2D vector diagram editor.</Description>
-    <Copyright>Copyright © Wiesław Šoltés 2017</Copyright>
+    <Copyright>Copyright © Wiesław Šoltés 2018</Copyright>
   </PropertyGroup>
 
   <ItemGroup>
@@ -34,7 +34,7 @@
   </ItemGroup>
 
   <Import Project="$(MSBuildThisFileDirectory)..\..\build\ILCompiler.props" Condition="'$(CoreRT)' == 'True'" />
-  <Import Project="$(MSBuildThisFileDirectory)..\..\build\NETCore.props" Condition="'$(CoreRT)' == 'False'"/>
+  <Import Project="$(MSBuildThisFileDirectory)..\..\build\NETCore.props" Condition="'$(CoreRT)' == 'False'" />
   <Import Project="$(MSBuildThisFileDirectory)..\..\build\Rx.props" />
   <Import Project="$(MSBuildThisFileDirectory)..\..\build\Avalonia.props" />
   <Import Project="$(MSBuildThisFileDirectory)..\..\build\Avalonia.Desktop.props" />

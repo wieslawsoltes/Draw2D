@@ -73,12 +73,12 @@
             <Setter Property="BorderThickness" Value="1"/>
         </Style>
         <Style Selector="TextBlock.default">
-            <Setter Property="Margin" Value="1"/>
+            <Setter Property="Margin" Value="2"/>
             <Setter Property="FontSize" Value="12"/>
         </Style>
         <Style Selector="TextBox.default">
             <Setter Property="Padding" Value="0"/>
-            <Setter Property="Margin" Value="0"/>
+            <Setter Property="Margin" Value="2"/>
             <Setter Property="FontSize" Value="12"/>
             <Setter Property="BorderThickness" Value="1"/>
         </Style>

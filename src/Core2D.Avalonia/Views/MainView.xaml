@@ -12,26 +12,26 @@
              xmlns:EditorIntersectionsLine="clr-namespace:Core2D.Editor.Intersections.Line;assembly=Core2D.Avalonia"
              xmlns:EditorFilters="clr-namespace:Core2D.Editor.Filters;assembly=Core2D.Avalonia"
              UseLayoutRounding="True" Focusable="True">
-    <Grid RowDefinitions="Auto,5,*" ColumnDefinitions="250,Auto,*,Auto,250">
+    <Grid RowDefinitions="Auto,5,*" ColumnDefinitions="260,Auto,*,Auto,280">
         <Menu Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Background="Transparent">
             <MenuItem Header="_File">
-                <MenuItem Header="New" x:Name="FileNew"/>
+                <MenuItem Header="New" Command="{Binding New}"/>
                 <Separator/>
-                <MenuItem Header="_Open..." x:Name="FileOpen"/>
+                <MenuItem Header="_Open..." Command="{Binding Open}"/>
                 <Separator/>
-                <MenuItem Header="Save _As..." x:Name="FileSaveAs"/>
+                <MenuItem Header="Save _As..." Command="{Binding SaveAs}"/>
                 <Separator/>
-                <MenuItem Header="E_xit" x:Name="FileExit"/>
+                <MenuItem Header="E_xit" Command="{Binding Exit}"/>
             </MenuItem>
             <MenuItem Header="_Edit">
-                <MenuItem Header="Cut" x:Name="EditCut"/>
-                <MenuItem Header="Copy" x:Name="EditCopy"/>
-                <MenuItem Header="Paste" x:Name="EditPaste"/>
-                <MenuItem Header="Delete" x:Name="EditDelete"/>
+                <MenuItem Header="Cut" Command="{Binding Cut}"/>
+                <MenuItem Header="Copy" Command="{Binding Copy}"/>
+                <MenuItem Header="Paste" Command="{Binding Paste}"/>
+                <MenuItem Header="Delete" Command="{Binding Delete}"/>
                 <Separator/>
-                <MenuItem Header="Group" x:Name="EditGroup"/>
+                <MenuItem Header="Group" Command="{Binding Group}"/>
                 <Separator/>
-                <MenuItem Header="Select All" x:Name="EditSelectAll"/>
+                <MenuItem Header="Select All" Command="{Binding SelectAll}"/>
             </MenuItem>
             <MenuItem Header="_Debug">
                 <MenuItem Header="DrawDirtyRects" x:Name="DebugDrawDirtyRects">
