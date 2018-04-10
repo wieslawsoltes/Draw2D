@@ -104,13 +104,11 @@
             </TabControl>
         </Grid>
         <GridSplitter Grid.Row="2" Grid.Column="1"/>
-        <Border Grid.Row="2" Grid.Column="2">
-            <Border Classes="default" ClipToBounds="True">
+        <Border Classes="zoom" Grid.Row="2" Grid.Column="2">
+            <Border Classes="clip" ClipToBounds="True" Background="LightGray">
                 <paz:ZoomBorder x:Name="zoomBorder" Stretch="None" ZoomSpeed="1.2" PanButton="Right" Background="Transparent" ClipToBounds="False" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
-                    <Controls:LayerContainerInputView x:Name="inputView" Background="Transparent" ClipToBounds="False" VerticalAlignment="Center" HorizontalAlignment="Center">
-                        <Border Background="SlateGray" Width="{Binding CurrentContainer.Width}" Height="{Binding CurrentContainer.Height}" VerticalAlignment="Center" HorizontalAlignment="Center">
-                            <Controls:LayerContainerRenderView x:Name="rendererView" Width="{Binding CurrentContainer.Width}" Height="{Binding CurrentContainer.Height}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                        </Border>
+                    <Controls:LayerContainerInputView x:Name="inputView" Background="Gray" ClipToBounds="False" Width="{Binding CurrentContainer.Width}" Height="{Binding CurrentContainer.Height}">
+                        <Controls:LayerContainerRenderView x:Name="rendererView" ClipToBounds="False" Width="{Binding CurrentContainer.Width}" Height="{Binding CurrentContainer.Height}"/>
                     </Controls:LayerContainerInputView>
                 </paz:ZoomBorder>
             </Border>
