@@ -24,14 +24,36 @@
                 <MenuItem Header="E_xit" Command="{Binding Exit}"/>
             </MenuItem>
             <MenuItem Header="_Edit">
-                <MenuItem Header="Cut" Command="{Binding Cut}"/>
-                <MenuItem Header="Copy" Command="{Binding Copy}"/>
-                <MenuItem Header="Paste" Command="{Binding Paste}"/>
-                <MenuItem Header="Delete" Command="{Binding Delete}"/>
+                <MenuItem Header="Cu_t" Command="{Binding Cut}"/>
+                <MenuItem Header="_Copy" Command="{Binding Copy}"/>
+                <MenuItem Header="_Paste" Command="{Binding Paste}"/>
+                <MenuItem Header="_Delete" Command="{Binding Delete}"/>
                 <Separator/>
-                <MenuItem Header="Group" Command="{Binding Group}"/>
+                <MenuItem Header="_Group" Command="{Binding Group}"/>
                 <Separator/>
-                <MenuItem Header="Select All" Command="{Binding SelectAll}"/>
+                <MenuItem Header="Select _All" Command="{Binding SelectAll}"/>
+            </MenuItem>
+            <MenuItem Header="_View">
+                <MenuItem Header="_Reset Zoom" Command="{Binding ResetZoom}"/>
+                <MenuItem Header="_AutoFit Zoom" Command="{Binding AutoFitZoom}"/>
+                <Separator/>
+                <MenuItem Header="Stretch _None" Command="{Binding SetStretchNone}"/>
+                <MenuItem Header="Stretch _Fill" Command="{Binding SetStretchFill}"/>
+                <MenuItem Header="Stretch _Uniform" Command="{Binding SetStretchUniform}"/>
+                <MenuItem Header="Stretch Uniform_ToFill" Command="{Binding SetStretchUniformToFill}"/>
+            </MenuItem>
+            <MenuItem Header="_Tool">
+                <MenuItem Header="_None" Command="{Binding SetNoneTool}"/>
+                <MenuItem Header="_Selection" Command="{Binding SetSelectionTool}"/>
+                <MenuItem Header="_Line" Command="{Binding SetLineTool}"/>
+                <MenuItem Header="_Point" Command="{Binding SetPointTool}"/>
+                <MenuItem Header="_Cubic Bezier" Command="{Binding SetCubicBezierTool}"/>
+                <MenuItem Header="_Quadratic Bezier" Command="{Binding SetQuadraticBezierTool}"/>
+                <MenuItem Header="Pat_h" Command="{Binding SetPathTool}"/>
+                <MenuItem Header="_Move" Command="{Binding SetMoveTool}"/>
+                <MenuItem Header="_Rectangle" Command="{Binding SetRectangleTool}"/>
+                <MenuItem Header="_Ellipse" Command="{Binding SetEllipseTool}"/>
+                <MenuItem Header="_Text" Command="{Binding SetTextTool}"/>
             </MenuItem>
             <MenuItem Header="_Debug">
                 <MenuItem Header="DrawDirtyRects" x:Name="DebugDrawDirtyRects">

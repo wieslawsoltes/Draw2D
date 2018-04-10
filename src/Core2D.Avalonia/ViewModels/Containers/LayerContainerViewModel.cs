@@ -114,6 +114,14 @@ namespace Core2D.ViewModels.Containers
 
         public Action AutoFit { get; set; }
 
+        public Action StretchNone { get; set; }
+
+        public Action StretchFill { get; set; }
+
+        public Action StretchUniform { get; set; }
+
+        public Action StretchUniformToFill { get; set; }
+
         public PointShape GetNextPoint(double x, double y, bool connect, double radius)
         {
             if (connect == true)
@@ -332,6 +340,26 @@ namespace Core2D.ViewModels.Containers
         public void AutoFitZoom()
         {
             AutoFit?.Invoke();
+        }
+
+        public void SetStretchNone()
+        {
+            StretchNone?.Invoke();
+        }
+
+        public void SetStretchFill()
+        {
+            StretchFill?.Invoke();
+        }
+
+        public void SetStretchUniform()
+        {
+            StretchUniform?.Invoke();
+        }
+
+        public void SetStretchUniformToFill()
+        {
+            StretchUniformToFill?.Invoke();
         }
     }
 }

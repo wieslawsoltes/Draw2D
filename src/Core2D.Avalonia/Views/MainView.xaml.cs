@@ -32,6 +32,10 @@ namespace Core2D.Avalonia.Views
                 zoomBorder = this.FindControl<ZoomBorder>("zoomBorder");
                 vm.Reset = () => zoomBorder.Reset();
                 vm.AutoFit = () => zoomBorder.AutoFit();
+                vm.StretchNone = () => zoomBorder.Stretch = PanAndZoom.StretchMode.None;
+                vm.StretchFill = () => zoomBorder.Stretch = PanAndZoom.StretchMode.Fill;
+                vm.StretchUniform = () => zoomBorder.Stretch = PanAndZoom.StretchMode.Uniform;
+                vm.StretchUniformToFill = () => zoomBorder.Stretch = PanAndZoom.StretchMode.UniformToFill;
             }
 
             this.FindControl<MenuItem>("DebugDrawDirtyRects").Click += DebugDrawDirtyRects_Click;
@@ -46,6 +50,10 @@ namespace Core2D.Avalonia.Views
             {
                 vm.Reset = null;
                 vm.AutoFit = null;
+                vm.StretchNone = null;
+                vm.StretchFill = null;
+                vm.StretchUniform = null;
+                vm.StretchUniformToFill = null;
             }
 
             this.FindControl<MenuItem>("DebugDrawDirtyRects").Click -= DebugDrawDirtyRects_Click;
