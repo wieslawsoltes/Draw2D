@@ -142,7 +142,10 @@ namespace Core2D.ViewModels.Containers
             var container = new LayerContainer()
             {
                 Width = 720,
-                Height = 630
+                Height = 630,
+                PrintBackground = new ArgbColor(0, 255, 255, 255),
+                WorkBackground = new ArgbColor(255, 128, 128, 128),
+                InputBackground = new ArgbColor(255, 211, 211, 211)
             };
             var workingContainer = new LayerContainer();
             CurrentContainer = container;
