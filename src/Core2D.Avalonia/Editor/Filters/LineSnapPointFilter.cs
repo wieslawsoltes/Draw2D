@@ -58,7 +58,7 @@ namespace Core2D.Editor.Filters
                         PointGuides(context, x, y);
                     }
 
-                    Debug.WriteLine($"Line Snap {mode} ({Settings.Target})");
+                    Log.Info($"Line Snap {mode} ({Settings.Target})");
                     return true;
                 }
                 Clear(context);

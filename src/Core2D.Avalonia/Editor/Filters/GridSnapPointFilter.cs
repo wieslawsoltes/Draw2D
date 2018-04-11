@@ -39,7 +39,11 @@ namespace Core2D.Editor.Filters
                     PointGuides(context, x, y);
                 }
 
-                Debug.WriteLineIf(haveSnapToGrid, $"Grid Snap {Settings.Mode}");
+                if (haveSnapToGrid)
+                {
+                    Log.Info(haveSnapToGrid, $"Grid Snap {Settings.Mode}");
+                }
+
                 return haveSnapToGrid;
             }
             Clear(context);

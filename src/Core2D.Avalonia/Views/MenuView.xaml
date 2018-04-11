@@ -60,9 +60,16 @@
                     <CheckBox BorderThickness="0" IsHitTestVisible="False" IsChecked="{Binding $parent[local:MenuView].DrawDirtyRects}"/>
                 </MenuItem.Icon>
             </MenuItem>
+            <Separator/>
             <MenuItem Header="DrawFps" Click="DebugDrawFps_Click">
                 <MenuItem.Icon>
                     <CheckBox BorderThickness="0" IsHitTestVisible="False" IsChecked="{Binding $parent[local:MenuView].DrawFps}"/>
+                </MenuItem.Icon>
+            </MenuItem>
+            <Separator/>
+            <MenuItem Header="LoggerEnabled" Click="LoggerEnabled_Click">
+                <MenuItem.Icon>
+                    <CheckBox BorderThickness="0" IsHitTestVisible="False" IsChecked="{Binding $parent[local:MenuView].LoggerEnabled}"/>
                 </MenuItem.Icon>
             </MenuItem>
         </MenuItem>

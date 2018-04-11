@@ -34,27 +34,27 @@ namespace Core2D.Editor.Selection.Helpers
             {
                 if (shapePoint != null)
                 {
-                    Debug.WriteLine($"Hover Shape Point: {shapePoint.GetType()}");
+                    Log.Info($"Hover Shape Point: {shapePoint.GetType()}");
                     return shapePoint;
                 }
                 else if (shape != null)
                 {
-                    Debug.WriteLine($"Hover Shape: {shape.GetType()}");
+                    Log.Info($"Hover Shape: {shape.GetType()}");
                     return shape;
                 }
                 else if (guidePoint != null)
                 {
-                    Debug.WriteLine($"Hover Guide Point: {guidePoint.GetType()}");
+                    Log.Info($"Hover Guide Point: {guidePoint.GetType()}");
                     return guidePoint;
                 }
                 else if (guide != null)
                 {
-                    Debug.WriteLine($"Hover Guide: {guide.GetType()}");
+                    Log.Info($"Hover Guide: {guide.GetType()}");
                     return guide;
                 }
             }
 
-            Debug.WriteLine("No Hover");
+            Log.Info("No Hover");
             return null;
         }
 
@@ -102,12 +102,12 @@ namespace Core2D.Editor.Selection.Helpers
                         {
                             if (context.Selected.Contains(shapePoint))
                             {
-                                Debug.WriteLine($"Deselected Shape Point: {shapePoint.GetType()}");
+                                Log.Info($"Deselected Shape Point: {shapePoint.GetType()}");
                                 shapePoint.Deselect(context.Selected);
                             }
                             else
                             {
-                                Debug.WriteLine($"Selected Shape Point: {shapePoint.GetType()}");
+                                Log.Info($"Selected Shape Point: {shapePoint.GetType()}");
                                 shapePoint.Select(context.Selected);
                             }
                             return context.Selected.Count > 0;
@@ -115,7 +115,7 @@ namespace Core2D.Editor.Selection.Helpers
                         else
                         {
                             context.Selected.Clear();
-                            Debug.WriteLine($"Selected Shape Point: {shapePoint.GetType()}");
+                            Log.Info($"Selected Shape Point: {shapePoint.GetType()}");
                             shapePoint.Select(context.Selected);
                             return true;
                         }
@@ -126,12 +126,12 @@ namespace Core2D.Editor.Selection.Helpers
                         {
                             if (context.Selected.Contains(shape))
                             {
-                                Debug.WriteLine($"Deselected Shape: {shape.GetType()}");
+                                Log.Info($"Deselected Shape: {shape.GetType()}");
                                 shape.Deselect(context.Selected);
                             }
                             else
                             {
-                                Debug.WriteLine($"Selected Shape: {shape.GetType()}");
+                                Log.Info($"Selected Shape: {shape.GetType()}");
                                 shape.Select(context.Selected);
                             }
                             return context.Selected.Count > 0;
@@ -139,7 +139,7 @@ namespace Core2D.Editor.Selection.Helpers
                         else
                         {
                             context.Selected.Clear();
-                            Debug.WriteLine($"Selected Shape: {shape.GetType()}");
+                            Log.Info($"Selected Shape: {shape.GetType()}");
                             shape.Select(context.Selected);
                             return true;
                         }
@@ -150,12 +150,12 @@ namespace Core2D.Editor.Selection.Helpers
                         {
                             if (context.Selected.Contains(guidePoint))
                             {
-                                Debug.WriteLine($"Deselected Guide Point: {guidePoint.GetType()}");
+                                Log.Info($"Deselected Guide Point: {guidePoint.GetType()}");
                                 guidePoint.Deselect(context.Selected);
                             }
                             else
                             {
-                                Debug.WriteLine($"Selected Guide Point: {guidePoint.GetType()}");
+                                Log.Info($"Selected Guide Point: {guidePoint.GetType()}");
                                 guidePoint.Select(context.Selected);
                             }
                             return context.Selected.Count > 0;
@@ -163,7 +163,7 @@ namespace Core2D.Editor.Selection.Helpers
                         else
                         {
                             context.Selected.Clear();
-                            Debug.WriteLine($"Selected Guide Point: {guidePoint.GetType()}");
+                            Log.Info($"Selected Guide Point: {guidePoint.GetType()}");
                             guidePoint.Select(context.Selected);
                             return true;
                         }
@@ -174,12 +174,12 @@ namespace Core2D.Editor.Selection.Helpers
                         {
                             if (context.Selected.Contains(guide))
                             {
-                                Debug.WriteLine($"Deselected Guide: {guide.GetType()}");
+                                Log.Info($"Deselected Guide: {guide.GetType()}");
                                 guide.Deselect(context.Selected);
                             }
                             else
                             {
-                                Debug.WriteLine($"Selected Guide: {guide.GetType()}");
+                                Log.Info($"Selected Guide: {guide.GetType()}");
                                 guide.Select(context.Selected);
                             }
                             return context.Selected.Count > 0;
@@ -187,7 +187,7 @@ namespace Core2D.Editor.Selection.Helpers
                         else
                         {
                             context.Selected.Clear();
-                            Debug.WriteLine($"Selected Guide: {guide.GetType()}");
+                            Log.Info($"Selected Guide: {guide.GetType()}");
                             guide.Select(context.Selected);
                             return true;
                         }
@@ -220,12 +220,12 @@ namespace Core2D.Editor.Selection.Helpers
                         {
                             if (context.Selected.Contains(shape))
                             {
-                                Debug.WriteLine($"Deselected Shape: {shape.GetType()}");
+                                Log.Info($"Deselected Shape: {shape.GetType()}");
                                 shape.Deselect(context.Selected);
                             }
                             else
                             {
-                                Debug.WriteLine($"Selected Shape: {shape.GetType()}");
+                                Log.Info($"Selected Shape: {shape.GetType()}");
                                 shape.Select(context.Selected);
                             }
                         }
@@ -233,7 +233,7 @@ namespace Core2D.Editor.Selection.Helpers
                     }
                     else
                     {
-                        Debug.WriteLine($"Selected Shapes: {shapes?.Count ?? 0}");
+                        Log.Info($"Selected Shapes: {shapes?.Count ?? 0}");
                         context.Selected.Clear();
                         foreach (var shape in shapes)
                         {
@@ -250,12 +250,12 @@ namespace Core2D.Editor.Selection.Helpers
                         {
                             if (context.Selected.Contains(guide))
                             {
-                                Debug.WriteLine($"Deselected Guide: {guide.GetType()}");
+                                Log.Info($"Deselected Guide: {guide.GetType()}");
                                 guide.Deselect(context.Selected);
                             }
                             else
                             {
-                                Debug.WriteLine($"Selected Guide: {guide.GetType()}");
+                                Log.Info($"Selected Guide: {guide.GetType()}");
                                 guide.Select(context.Selected);
                             }
                         }
@@ -263,7 +263,7 @@ namespace Core2D.Editor.Selection.Helpers
                     }
                     else
                     {
-                        Debug.WriteLine($"Selected Guides: {guides?.Count ?? 0}");
+                        Log.Info($"Selected Guides: {guides?.Count ?? 0}");
                         context.Selected.Clear();
                         foreach (var guide in guides)
                         {
