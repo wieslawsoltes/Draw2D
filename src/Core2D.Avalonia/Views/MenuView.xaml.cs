@@ -10,7 +10,7 @@ namespace Core2D.Avalonia.Views
     public partial class MenuView : UserControl
     {
         public static readonly StyledProperty<bool> DrawDirtyRectsProperty =
-            AvaloniaProperty.Register<MainView, bool>(nameof(DrawDirtyRects));
+            AvaloniaProperty.Register<MenuView, bool>(nameof(DrawDirtyRects));
 
         public bool DrawDirtyRects
         {
@@ -19,7 +19,7 @@ namespace Core2D.Avalonia.Views
         }
 
         public static readonly StyledProperty<bool> DrawFpsProperty =
-            AvaloniaProperty.Register<MainView, bool>(nameof(DrawFps));
+            AvaloniaProperty.Register<MenuView, bool>(nameof(DrawFps));
 
         public bool DrawFps
         {
