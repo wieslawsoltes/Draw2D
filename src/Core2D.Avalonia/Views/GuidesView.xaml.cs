@@ -5,9 +5,9 @@ using Avalonia.Markup.Xaml;
 
 namespace Core2D.Avalonia.Views
 {
-    public class MainView : UserControl
+    public partial class GuidesView : UserControl
     {
-        public MainView()
+        public GuidesView()
         {
             InitializeComponent();
         }
