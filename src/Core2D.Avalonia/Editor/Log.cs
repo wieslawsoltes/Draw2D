@@ -12,7 +12,10 @@ namespace Core2D.Editor
         {
             if (Enabled)
             {
-                Console.WriteLine("[Info] " + value);
+                var color = Console.ForegroundColor;
+                Console.ForegroundColor = ConsoleColor.White;
+                Console.WriteLine(value);
+                Console.ForegroundColor = color;
             }
         }
 
@@ -20,7 +23,10 @@ namespace Core2D.Editor
         {
             if (Enabled)
             {
-                Console.WriteLine("[Warning] " + value);
+                var color = Console.ForegroundColor;
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.WriteLine(value);
+                Console.ForegroundColor = color;
             }
         }
 
@@ -28,7 +34,10 @@ namespace Core2D.Editor
         {
             if (Enabled)
             {
-                Console.WriteLine("[Error] " + value);
+                var color = Console.ForegroundColor;
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine(value);
+                Console.ForegroundColor = color;
             }
         }
     }
