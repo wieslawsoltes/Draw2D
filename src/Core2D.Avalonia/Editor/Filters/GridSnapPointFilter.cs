@@ -41,7 +41,7 @@ namespace Core2D.Editor.Filters
 
                 if (haveSnapToGrid)
                 {
-                    Log.Info(haveSnapToGrid, $"Grid Snap {Settings.Mode}");
+                    Log.Info($"Grid Snap {Settings.Mode}");
                 }
 
                 return haveSnapToGrid;
