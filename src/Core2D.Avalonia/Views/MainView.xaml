@@ -6,12 +6,12 @@
              xmlns:ViewsStyle="clr-namespace:Core2D.Avalonia.Views.Style;assembly=Core2D.Avalonia"
              UseLayoutRounding="True" Focusable="True">
     <Grid RowDefinitions="Auto,5,*,5" ColumnDefinitions="260,Auto,*,Auto,280">
-        <Views:MenuView Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3"/>
+        <Views:MenuView Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" DataContext="{Binding}"/>
         <Grid RowDefinitions="45*,Auto,55*" Grid.Row="2" Grid.Column="0">
             <TabControl Classes="default" Grid.Row="0" TabStripPlacement="Bottom">
                 <TabItem Classes="default" Header="Tools">
                     <Border Classes="default">
-                        <Views:ToolsView/>
+                        <Views:ToolsView DataContext="{Binding}"/>
                     </Border>
                 </TabItem>
             </TabControl>
@@ -28,30 +28,30 @@
         </Grid>
         <GridSplitter Grid.Row="2" Grid.Column="1"/>
         <Border Classes="zoom" Grid.Row="2" Grid.Column="2">
-            <Views:RenderView/>
+            <Views:RenderView DataContext="{Binding}"/>
         </Border>
         <GridSplitter Grid.Row="2" Grid.Column="3"/>
         <Grid RowDefinitions="45*,Auto,55*" Grid.Row="2" Grid.Column="4">
             <TabControl Classes="default" Grid.Row="0" TabStripPlacement="Bottom">
                 <TabItem Classes="default" Header="Shapes">
                     <Border Classes="default">
-                        <Views:ShapesView/>
+                        <Views:ShapesView DataContext="{Binding}"/>
                     </Border>
                 </TabItem>
                 <TabItem Classes="default" Header="Guides">
                     <Border Classes="default">
-                        <Views:GuidesView/>
+                        <Views:GuidesView DataContext="{Binding}"/>
                     </Border>
                 </TabItem>
                 <TabItem Classes="default" Header="Working">
                     <Border Classes="default">
-                        <Views:WorkingView/>
+                        <Views:WorkingView DataContext="{Binding}"/>
                     </Border>
                 </TabItem>
                 <TabItem Classes="default" Header="Container">
                     <Border Classes="default">
                         <ScrollViewer>
-                            <Views:ContainerView/>
+                            <Views:ContainerView DataContext="{Binding}"/>
                         </ScrollViewer>
                     </Border>
                 </TabItem>
@@ -61,21 +61,21 @@
                 <TabItem Classes="default" Header="Settings">
                     <Border Classes="default">
                         <ScrollViewer>
-                            <Views:SettingsView/>
+                            <Views:SettingsView DataContext="{Binding}"/>
                         </ScrollViewer>
                     </Border>
                 </TabItem>
                 <TabItem Classes="default" Header="Intersections">
                     <Border Classes="default">
                         <ScrollViewer>
-                            <Views:IntersectionsView/>
+                            <Views:IntersectionsView DataContext="{Binding}"/>
                         </ScrollViewer>
                     </Border>
                 </TabItem>
                 <TabItem Classes="default" Header="Filters">
                     <Border Classes="default">
                         <ScrollViewer>
-                            <Views:FiltersView/>
+                            <Views:FiltersView DataContext="{Binding}"/>
                         </ScrollViewer>
                     </Border>
                 </TabItem>
