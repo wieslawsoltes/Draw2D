@@ -371,6 +371,12 @@ namespace Core2D.ViewModels
                 Capture = null,
                 Release = null,
                 Invalidate = null,
+                Reset = null,
+                AutoFit = null,
+                StretchNone = null,
+                StretchFill = null,
+                StretchUniform = null,
+                StretchUniformToFill = null
             };
         }
 

@@ -122,6 +122,61 @@ namespace Core2D.ViewModels.Containers
 
         public Action StretchUniformToFill { get; set; }
 
+        public static LayerContainerViewModel Load(string path)
+        {
+            var json = File.ReadAllText(path);
+            var vm = NewtonsoftJsonSerializer.FromJson<LayerContainerViewModel>(json);
+            return vm;
+        }
+
+        public static void Save(string path, LayerContainerViewModel vm)
+        {
+            var renderer = vm.Renderer;
+            var selected = vm.Selected;
+            var currentContainer = vm.CurrentContainer;
+            var workingContainer = vm.WorkingContainer;
+            var capture = vm.Capture;
+            var release = vm.Release;
+            var invalidate = vm.Invalidate;
+            var reset = vm.Reset;
+            var autoFit = vm.AutoFit;
+            var stretchNone = vm.StretchNone;
+            var stretchFill = vm.StretchFill;
+            var stretchUniform = vm.StretchUniform;
+            var stretchUniformToFill = vm.StretchUniformToFill;
+
+            vm.Renderer = null;
+            vm.Selected = null;
+            vm.CurrentContainer = null;
+            vm.WorkingContainer = null;
+            vm.Capture = null;
+            vm.Release = null;
+            vm.Invalidate = null;
+            vm.Reset = null;
+            vm.AutoFit = null;
+            vm.StretchNone = null;
+            vm.StretchFill = null;
+            vm.StretchUniform = null;
+            vm.StretchUniformToFill = null;
+
+            var json = NewtonsoftJsonSerializer.ToJson(vm);
+            File.WriteAllText(path, json);
+
+            vm.Renderer = renderer;
+            vm.Selected = selected;
+            vm.CurrentContainer = currentContainer;
+            vm.WorkingContainer = workingContainer;
+            vm.Capture = capture;
+            vm.Release = release;
+            vm.Invalidate = invalidate;
+            vm.Reset = reset;
+            vm.AutoFit = autoFit;
+            vm.StretchNone = stretchNone;
+            vm.StretchFill = stretchFill;
+            vm.StretchUniform = stretchUniform;
+            vm.StretchUniformToFill = stretchUniformToFill;
+        }
+
         public PointShape GetNextPoint(double x, double y, bool connect, double radius)
         {
             if (connect == true)
