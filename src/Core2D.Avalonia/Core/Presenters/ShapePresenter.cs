@@ -9,7 +9,7 @@ namespace Core2D.Presenters
 {
     public abstract class ShapePresenter
     {
-        public IDictionary<Type, ShapeHelper> Helpers { get; set; }
+        public Dictionary<Type, ShapeHelper> Helpers { get; set; }
         public abstract void DrawContainer(object dc, ILayerContainer container, ShapeRenderer renderer, double dx, double dy, object db, object r);
         public abstract void DrawHelpers(object dc, ILayerContainer container, ShapeRenderer renderer, double dx, double dy);
     }
