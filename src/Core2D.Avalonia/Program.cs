@@ -6,6 +6,7 @@ using Avalonia;
 using Avalonia.Logging.Serilog;
 using Core2D.Avalonia.Renderers;
 using Core2D.ViewModels;
+using Core2D.ViewModels.Containers;
 
 namespace Core2D.Avalonia
 {
