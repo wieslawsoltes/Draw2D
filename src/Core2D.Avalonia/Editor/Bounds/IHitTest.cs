@@ -10,7 +10,7 @@ namespace Core2D.Editor.Bounds
 {
     public interface IHitTest
     {
-        IDictionary<Type, HitTestBase> Registered { get; }
+        IDictionary<Type, HitTestBase> Registered { get; set; }
         void Register(HitTestBase hitTest);
         PointShape TryToGetPoint(IEnumerable<BaseShape> shapes, Point2 target, double radius, PointShape exclude);
         PointShape TryToGetPoint(BaseShape shape, Point2 target, double radius);

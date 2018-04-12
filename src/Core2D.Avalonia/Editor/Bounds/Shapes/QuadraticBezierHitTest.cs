@@ -9,7 +9,7 @@ namespace Core2D.Editor.Bounds.Shapes
 {
     public class QuadraticBezierHitTest : HitTestBase
     {
-        public override Type TargetType => typeof(QuadraticBezierShape);
+        public override Type TargetType { get; set; } => typeof(QuadraticBezierShape);
 
         public override PointShape TryToGetPoint(BaseShape shape, Point2 target, double radius, IHitTest hitTest)
         {

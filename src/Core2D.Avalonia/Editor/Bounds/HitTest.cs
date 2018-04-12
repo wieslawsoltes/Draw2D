@@ -11,7 +11,7 @@ namespace Core2D.Editor.Bounds
 {
     public class HitTest : IHitTest
     {
-        public IDictionary<Type, HitTestBase> Registered { get; }
+        public IDictionary<Type, HitTestBase> Registered { get; set; }
 
         public HitTest()
         {

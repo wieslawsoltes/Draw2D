@@ -9,7 +9,7 @@ namespace Core2D.Editor.Bounds
 {
     public abstract class HitTestBase
     {
-        public abstract Type TargetType { get; }
+        public abstract Type TargetType { get; set; }
         public abstract PointShape TryToGetPoint(BaseShape shape, Point2 target, double radius, IHitTest hitTest);
         public abstract BaseShape Contains(BaseShape shape, Point2 target, double radius, IHitTest hitTest);
         public abstract BaseShape Overlaps(BaseShape shape, Rect2 target, double radius, IHitTest hitTest);
