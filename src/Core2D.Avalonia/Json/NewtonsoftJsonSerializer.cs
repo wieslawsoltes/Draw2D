@@ -17,7 +17,7 @@ namespace Core2D.Json
 {
     public class NewtonsoftJsonSerializer
     {
-        public class ProjectContractResolver : DefaultContractResolver
+        public class CoreContractResolver : DefaultContractResolver
         {
             public override JsonContract ResolveContract(Type type)
             {
@@ -87,6 +87,7 @@ namespace Core2D.Json
 
         static NewtonsoftJsonSerializer()
         {
+            /*
             var binder = new DictionarySerializationBinder();
 
             binder.Add<MatrixObject>("Matrix");
@@ -104,6 +105,7 @@ namespace Core2D.Json
             binder.Add<TextObject>("Value");
             binder.Add<GroupShape>("Group");
             binder.Add<LayerContainer>("Container");
+            */
 
             Settings = new JsonSerializerSettings()
             {
@@ -111,9 +113,9 @@ namespace Core2D.Json
                 TypeNameHandling = TypeNameHandling.Objects,
                 PreserveReferencesHandling = PreserveReferencesHandling.Objects,
                 ReferenceLoopHandling = ReferenceLoopHandling.Serialize,
-                ContractResolver = new ProjectContractResolver(),
+                ContractResolver = new CoreContractResolver(),
                 NullValueHandling = NullValueHandling.Ignore,
-                SerializationBinder = binder,
+                //SerializationBinder = binder,
                 Converters = { new KeyValuePairConverter() }
             };
         }
