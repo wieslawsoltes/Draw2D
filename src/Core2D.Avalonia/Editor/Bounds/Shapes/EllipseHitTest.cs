@@ -7,6 +7,6 @@ namespace Core2D.Editor.Bounds.Shapes
 {
     public class EllipseHitTest : BoxHitTest
     {
-        public override Type TargetType { get; set; } => typeof(EllipseShape);
+        public override Type TargetType => typeof(EllipseShape);
     }
 }

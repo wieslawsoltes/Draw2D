@@ -7,6 +7,6 @@ namespace Core2D.Editor.Bounds.Shapes
 {
     public class TextHitTest : BoxHitTest
     {
-        public override Type TargetType { get; set; } => typeof(TextShape);
+        public override Type TargetType => typeof(TextShape);
     }
 }

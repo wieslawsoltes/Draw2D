@@ -9,7 +9,7 @@ namespace Core2D.Editor.Bounds.Shapes
 {
     public class GroupHitTest : HitTestBase
     {
-        public override Type TargetType { get; set; } => typeof(GroupShape);
+        public override Type TargetType => typeof(GroupShape);
 
         public override PointShape TryToGetPoint(BaseShape shape, Point2 target, double radius, IHitTest hitTest)
         {
