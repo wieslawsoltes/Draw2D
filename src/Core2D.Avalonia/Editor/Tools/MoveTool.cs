@@ -5,7 +5,7 @@ namespace Core2D.Editor.Tools
 {
     public class MoveTool : ToolBase
     {
-        private readonly PathTool _pathTool;
+        public PathTool PathTool { get; set; }
 
         public override string Title => "Move";
 
@@ -13,14 +13,14 @@ namespace Core2D.Editor.Tools
 
         public MoveTool(PathTool pathTool)
         {
-            _pathTool = pathTool;
+            PathTool = pathTool;
         }
 
         public override void LeftDown(IToolContext context, double x, double y, Modifier modifier)
         {
             base.LeftDown(context, x, y, modifier);
 
-            _pathTool.Move();
+            PathTool.Move();
         }
     }
 }
