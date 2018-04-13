@@ -27,7 +27,6 @@ namespace Core2D.ViewModels.Containers
         private EditMode _mode;
         private ShapePresenter _presenter;
         private ShapeRenderer _renderer;
-        private ISet<BaseShape> _selected;
         private IHitTest _hitTest;
         private ILayerContainer _currentContainer;
         private ILayerContainer _workingContainer;
@@ -66,12 +65,6 @@ namespace Core2D.ViewModels.Containers
         {
             get => _renderer;
             set => Update(ref _renderer, value);
-        }
-
-        public ISet<BaseShape> Selected
-        {
-            get => _selected;
-            set => Update(ref _selected, value);
         }
 
         public IHitTest HitTest
@@ -132,7 +125,6 @@ namespace Core2D.ViewModels.Containers
         public static void Save(string path, LayerContainerViewModel vm)
         {
             var renderer = vm.Renderer;
-            var selected = vm.Selected;
             var currentContainer = vm.CurrentContainer;
             var workingContainer = vm.WorkingContainer;
             var capture = vm.Capture;
@@ -146,7 +138,6 @@ namespace Core2D.ViewModels.Containers
             var stretchUniformToFill = vm.StretchUniformToFill;
 
             vm.Renderer = null;
-            vm.Selected = null;
             vm.CurrentContainer = null;
             vm.WorkingContainer = null;
             vm.Capture = null;
@@ -163,7 +154,6 @@ namespace Core2D.ViewModels.Containers
             File.WriteAllText(path, json);
 
             vm.Renderer = renderer;
-            vm.Selected = selected;
             vm.CurrentContainer = currentContainer;
             vm.WorkingContainer = workingContainer;
             vm.Capture = capture;

@@ -10,13 +10,13 @@ namespace Core2D.Editor.Selection.Helpers
 {
     public static class DeleteHelper
     {
-        public static void Delete(ILayerContainer container, ISet<BaseShape> selected)
+        public static void Delete(ILayerContainer container, ISelection selection)
         {
             var paths = container.Shapes.OfType<PathShape>();
             var groups = container.Shapes.OfType<GroupShape>();
             var connectables = container.Shapes.OfType<ConnectableShape>();
 
-            foreach (var shape in selected)
+            foreach (var shape in selection.Selected)
             {
                 if (container.Shapes.Contains(shape))
                 {

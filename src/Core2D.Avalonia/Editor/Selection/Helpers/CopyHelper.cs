@@ -33,7 +33,7 @@ namespace Core2D.Editor.Selection.Helpers
             return copy;
         }
 
-        public static void Copy(ILayerContainer container, IEnumerable<BaseShape> shapes, ISet<BaseShape> selected)
+        public static void Copy(ILayerContainer container, IEnumerable<BaseShape> shapes, ISelection selection)
         {
             var shared = GetPointsCopyDict(shapes);
 
@@ -44,7 +44,7 @@ namespace Core2D.Editor.Selection.Helpers
                     var copy = (BaseShape)copyable.Copy(shared);
                     if (copy != null && !(copy is PointShape))
                     {
-                        copy.Select(selected);
+                        copy.Select(selection);
                         container.Shapes.Add(copy);
                     }
                 }

@@ -56,33 +56,33 @@ namespace Core2D.Shapes
             return result;
         }
 
-        public override void Move(ISet<BaseShape> selected, double dx, double dy)
+        public override void Move(ISelection selection, double dx, double dy)
         {
-            if (!selected.Contains(_topLeft))
+            if (!selection.Selected.Contains(_topLeft))
             {
-                _topLeft.Move(selected, dx, dy);
+                _topLeft.Move(selection, dx, dy);
             }
 
-            if (!selected.Contains(_bottomRight))
+            if (!selection.Selected.Contains(_bottomRight))
             {
-                _bottomRight.Move(selected, dx, dy);
+                _bottomRight.Move(selection, dx, dy);
             }
 
-            base.Move(selected, dx, dy);
+            base.Move(selection, dx, dy);
         }
 
-        public override void Select(ISet<BaseShape> selected)
+        public override void Select(ISelection selection)
         {
-            base.Select(selected);
-            TopLeft.Select(selected);
-            BottomRight.Select(selected);
+            base.Select(selection);
+            TopLeft.Select(selection);
+            BottomRight.Select(selection);
         }
 
-        public override void Deselect(ISet<BaseShape> selected)
+        public override void Deselect(ISelection selection)
         {
-            base.Deselect(selected);
-            TopLeft.Deselect(selected);
-            BottomRight.Deselect(selected);
+            base.Deselect(selection);
+            TopLeft.Deselect(selection);
+            BottomRight.Deselect(selection);
         }
 
         private bool CanConnect(PointShape point)

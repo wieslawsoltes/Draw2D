@@ -65,7 +65,7 @@ namespace Core2D.Editor.Tools
             {
                 if (!modifier.HasFlag(Settings?.SelectionModifier ?? Modifier.Control))
                 {
-                    context.Selected.Clear();
+                    context.Renderer.Selected.Clear();
                 }
 
                 if (_rectangle == null)
@@ -148,9 +148,9 @@ namespace Core2D.Editor.Tools
 
         private void MoveNoneInternal(IToolContext context, double x, double y, Modifier modifier)
         {
-            if (!(_hover == null && context.Selected.Count > 0))
+            if (!(_hover == null && context.Renderer.Selected.Count > 0))
             {
-                lock (context.Selected)
+                lock (context.Renderer.Selected)
                 {
                     var previous = _hover;
 
@@ -198,9 +198,9 @@ namespace Core2D.Editor.Tools
             _previousX = x;
             _previousY = y;
 
-            if (context.Selected.Count == 1)
+            if (context.Renderer.Selected.Count == 1)
             {
-                var shape = context.Selected.FirstOrDefault();
+                var shape = context.Renderer.Selected.FirstOrDefault();
 
                 if (shape is PointShape source)
                 {
@@ -224,11 +224,11 @@ namespace Core2D.Editor.Tools
                     }
                 }
 
-                shape.Move(context.Selected, dx, dy);
+                shape.Move(context.Renderer, dx, dy);
             }
             else
             {
-                foreach (var shape in context.Selected.ToList())
+                foreach (var shape in context.Renderer.Selected.ToList())
                 {
                     if (Settings.DisconnectPoints && modifier.HasFlag(Settings?.ConnectionModifier ?? Modifier.Shift))
                     {
@@ -239,9 +239,9 @@ namespace Core2D.Editor.Tools
                     }
                 }
 
-                foreach (var shape in context.Selected.ToList())
+                foreach (var shape in context.Renderer.Selected.ToList())
                 {
-                    shape.Move(context.Selected, dx, dy);
+                    shape.Move(context.Renderer, dx, dy);
                 }
             }
 
@@ -264,7 +264,7 @@ namespace Core2D.Editor.Tools
 
             if (Settings?.ClearSelectionOnClean == true)
             {
-                context.Selected.Clear();
+                context.Renderer.Selected.Clear();
             }
 
             Filters?.ForEach(f => f.Clear(context));

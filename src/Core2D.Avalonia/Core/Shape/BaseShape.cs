@@ -53,21 +53,21 @@ namespace Core2D.Shape
             return result;
         }
 
-        public abstract void Move(ISet<BaseShape> selected, double dx, double dy);
+        public abstract void Move(ISelection selection, double dx, double dy);
 
-        public virtual void Select(ISet<BaseShape> selected)
+        public virtual void Select(ISelection selection)
         {
-            if (!selected.Contains(this))
+            if (!selection.Selected.Contains(this))
             {
-                selected.Add(this);
+                selection.Selected.Add(this);
             }
         }
 
-        public virtual void Deselect(ISet<BaseShape> selected)
+        public virtual void Deselect(ISelection selection)
         {
-            if (selected.Contains(this))
+            if (selection.Selected.Contains(this))
             {
-                selected.Remove(this);
+                selection.Selected.Remove(this);
             }
         }
     }

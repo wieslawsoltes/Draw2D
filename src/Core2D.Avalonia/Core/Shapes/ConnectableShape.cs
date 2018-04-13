@@ -44,34 +44,34 @@ namespace Core2D.Shapes
             }
         }
 
-        public override void Move(ISet<BaseShape> selected, double dx, double dy)
+        public override void Move(ISelection selection, double dx, double dy)
         {
             foreach (var point in Points)
             {
-                if (!selected.Contains(point))
+                if (!selection.Selected.Contains(point))
                 {
-                    point.Move(selected, dx, dy);
+                    point.Move(selection, dx, dy);
                 }
             }
         }
 
-        public override void Select(ISet<BaseShape> selected)
+        public override void Select(ISelection selection)
         {
-            base.Select(selected);
+            base.Select(selection);
 
             foreach (var point in Points)
             {
-                point.Select(selected);
+                point.Select(selection);
             }
         }
 
-        public override void Deselect(ISet<BaseShape> selected)
+        public override void Deselect(ISelection selection)
         {
-            base.Deselect(selected);
+            base.Deselect(selection);
 
             foreach (var point in Points)
             {
-                point.Deselect(selected);
+                point.Deselect(selection);
             }
         }
 

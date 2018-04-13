@@ -37,11 +37,11 @@ namespace Core2D.Editor.Tools
                 Style = context.CurrentStyle
             };
             context.WorkingContainer.Shapes.Add(_cubicBezier);
-            context.Selected.Add(_cubicBezier);
-            context.Selected.Add(_cubicBezier.StartPoint);
-            context.Selected.Add(_cubicBezier.Point1);
-            context.Selected.Add(_cubicBezier.Point2);
-            context.Selected.Add(_cubicBezier.Point3);
+            context.Renderer.Selected.Add(_cubicBezier);
+            context.Renderer.Selected.Add(_cubicBezier.StartPoint);
+            context.Renderer.Selected.Add(_cubicBezier.Point1);
+            context.Renderer.Selected.Add(_cubicBezier.Point2);
+            context.Renderer.Selected.Add(_cubicBezier.Point3);
 
             context.Capture?.Invoke();
             context.Invalidate?.Invoke();
@@ -55,11 +55,11 @@ namespace Core2D.Editor.Tools
 
             CurrentState = State.StartPoint;
 
-            context.Selected.Remove(_cubicBezier);
-            context.Selected.Remove(_cubicBezier.StartPoint);
-            context.Selected.Remove(_cubicBezier.Point1);
-            context.Selected.Remove(_cubicBezier.Point2);
-            context.Selected.Remove(_cubicBezier.Point3);
+            context.Renderer.Selected.Remove(_cubicBezier);
+            context.Renderer.Selected.Remove(_cubicBezier.StartPoint);
+            context.Renderer.Selected.Remove(_cubicBezier.Point1);
+            context.Renderer.Selected.Remove(_cubicBezier.Point2);
+            context.Renderer.Selected.Remove(_cubicBezier.Point3);
             context.WorkingContainer.Shapes.Remove(_cubicBezier);
 
             _cubicBezier.Point1 = context.GetNextPoint(x, y, false, 0.0);
@@ -79,9 +79,9 @@ namespace Core2D.Editor.Tools
             _cubicBezier.Point1.X = x;
             _cubicBezier.Point1.Y = y;
 
-            context.Selected.Remove(_cubicBezier.Point2);
+            context.Renderer.Selected.Remove(_cubicBezier.Point2);
             _cubicBezier.Point2 = context.GetNextPoint(x, y, false, 0.0);
-            context.Selected.Add(_cubicBezier.Point2);
+            context.Renderer.Selected.Add(_cubicBezier.Point2);
 
             CurrentState = State.Point1;
 
@@ -95,9 +95,9 @@ namespace Core2D.Editor.Tools
             _cubicBezier.Point2.X = x;
             _cubicBezier.Point2.Y = y;
 
-            context.Selected.Remove(_cubicBezier.Point3);
+            context.Renderer.Selected.Remove(_cubicBezier.Point3);
             _cubicBezier.Point3 = context.GetNextPoint(x, y, false, 0.0);
-            context.Selected.Add(_cubicBezier.Point3);
+            context.Renderer.Selected.Add(_cubicBezier.Point3);
 
             CurrentState = State.Point2;
 
@@ -158,11 +158,11 @@ namespace Core2D.Editor.Tools
             if (_cubicBezier != null)
             {
                 context.WorkingContainer.Shapes.Remove(_cubicBezier);
-                context.Selected.Remove(_cubicBezier);
-                context.Selected.Remove(_cubicBezier.StartPoint);
-                context.Selected.Remove(_cubicBezier.Point1);
-                context.Selected.Remove(_cubicBezier.Point2);
-                context.Selected.Remove(_cubicBezier.Point3);
+                context.Renderer.Selected.Remove(_cubicBezier);
+                context.Renderer.Selected.Remove(_cubicBezier.StartPoint);
+                context.Renderer.Selected.Remove(_cubicBezier.Point1);
+                context.Renderer.Selected.Remove(_cubicBezier.Point2);
+                context.Renderer.Selected.Remove(_cubicBezier.Point3);
                 _cubicBezier = null;
             }
 

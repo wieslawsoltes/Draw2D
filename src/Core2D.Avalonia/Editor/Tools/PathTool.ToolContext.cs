@@ -29,14 +29,6 @@ namespace Core2D.Editor.Tools
             }
         }
 
-        private void SetSelected(ISet<BaseShape> selected)
-        {
-            if (_context != null)
-            {
-                _context.Selected = selected;
-            }
-        }
-
         private void SetNextPoint(PointShape point)
         {
             _nextPoint = point;
@@ -46,12 +38,6 @@ namespace Core2D.Editor.Tools
         {
             get => _context?.Renderer;
             set => SetRenderer(value);
-        }
-
-        public ISet<BaseShape> Selected
-        {
-            get => _context?.Selected;
-            set => SetSelected(value);
         }
 
         public IHitTest HitTest

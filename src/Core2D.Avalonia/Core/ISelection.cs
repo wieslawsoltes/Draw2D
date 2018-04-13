@@ -1,11 +1,13 @@
 ﻿// Copyright (c) Wiesław Šoltés. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
+using System.Collections.Generic;
 using Core2D.Shape;
 
-namespace Core2D.Renderer
+namespace Core2D
 {
-    public abstract class ShapeHelper
+    public interface ISelection
     {
-        public abstract void Draw(object dc, ShapeRenderer renderer, BaseShape shape, ISelection selected, double dx, double dy);
+        BaseShape Hover { get; set; }
+        ISet<BaseShape> Selected { get; set; }
     }
 }

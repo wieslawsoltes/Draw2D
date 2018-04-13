@@ -21,7 +21,15 @@ namespace Core2D.Avalonia.Renderers
         private readonly IDictionary<PathShape, Geometry> _pathGeometryCache;
         private readonly IDictionary<EllipseShape, Geometry> _ellipseGeometryCache;
         private readonly IDictionary<TextShape, FormattedTextCache> _formattedTextCache;
+
+        private BaseShape _hover;
         private ISet<BaseShape> _selected;
+
+        public override BaseShape Hover
+        {
+            get => _hover;
+            set => Update(ref _hover, value);
+        }
 
         public override ISet<BaseShape> Selected
         {
@@ -38,6 +46,7 @@ namespace Core2D.Avalonia.Renderers
             _quadGeometryCache = new Dictionary<QuadraticBezierShape, Geometry>();
             _pathGeometryCache = new Dictionary<PathShape, Geometry>();
             _ellipseGeometryCache = new Dictionary<EllipseShape, Geometry>();
+            _hover = null;
             _selected = new HashSet<BaseShape>();
         }
 

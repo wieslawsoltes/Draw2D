@@ -20,52 +20,52 @@ namespace Core2D.Editor.Tools.Helpers
             _quadraticBezierHelper = new QuadraticBezierHelper();
         }
 
-        public void DrawShape(object dc, ShapeRenderer renderer, BaseShape shape, ISet<BaseShape> selected, double dx, double dy)
+        public void DrawShape(object dc, ShapeRenderer renderer, BaseShape shape, ISelection selection, double dx, double dy)
         {
             if (shape is LineShape line)
             {
-                if (selected.Contains(line))
+                if (selection.Selected.Contains(line))
                 {
-                    _lineHelper.Draw(dc, renderer, line, selected, dx, dy);
+                    _lineHelper.Draw(dc, renderer, line, selection, dx, dy);
                 }
             }
             else if (shape is CubicBezierShape cubicBezier)
             {
-                if (selected.Contains(cubicBezier))
+                if (selection.Selected.Contains(cubicBezier))
                 {
-                    _cubiceBezierHelper.Draw(dc, renderer, cubicBezier, selected, dx, dy);
+                    _cubiceBezierHelper.Draw(dc, renderer, cubicBezier, selection, dx, dy);
                 }
             }
             else if (shape is QuadraticBezierShape quadraticBezier)
             {
-                if (selected.Contains(quadraticBezier))
+                if (selection.Selected.Contains(quadraticBezier))
                 {
-                    _quadraticBezierHelper.Draw(dc, renderer, quadraticBezier, selected, dx, dy);
+                    _quadraticBezierHelper.Draw(dc, renderer, quadraticBezier, selection, dx, dy);
                 }
             }
         }
 
-        public void DrawFigure(object dc, ShapeRenderer renderer, FigureShape figure, ISet<BaseShape> selected, double dx, double dy)
+        public void DrawFigure(object dc, ShapeRenderer renderer, FigureShape figure, ISelection selection, double dx, double dy)
         {
             foreach (var shape in figure.Shapes)
             {
-                DrawShape(dc, renderer, shape, selected, dx, dy);
+                DrawShape(dc, renderer, shape, selection, dx, dy);
             }
         }
 
-        public void Draw(object dc, ShapeRenderer renderer, PathShape path, ISet<BaseShape> selected, double dx, double dy)
+        public void Draw(object dc, ShapeRenderer renderer, PathShape path, ISelection selection, double dx, double dy)
         {
             foreach (var figure in path.Figures)
             {
-                DrawFigure(dc, renderer, figure, selected, dx, dy);
+                DrawFigure(dc, renderer, figure, selection, dx, dy);
             }
         }
 
-        public override void Draw(object dc, ShapeRenderer renderer, BaseShape shape, ISet<BaseShape> selected, double dx, double dy)
+        public override void Draw(object dc, ShapeRenderer renderer, BaseShape shape, ISelection selection, double dx, double dy)
         {
             if (shape is PathShape path)
             {
-                Draw(dc, renderer, path, selected, dx, dy);
+                Draw(dc, renderer, path, selection, dx, dy);
             }
         }
     }

@@ -96,19 +96,19 @@ namespace Core2D.Shapes
             base.EndTransform(dc, renderer, state);
         }
 
-        public override void Move(ISet<BaseShape> selected, double dx, double dy)
+        public override void Move(ISelection selection, double dx, double dy)
         {
             var points = GetPoints().Distinct();
 
             foreach (var point in points)
             {
-                if (!selected.Contains(point))
+                if (!selection.Selected.Contains(point))
                 {
-                    point.Move(selected, dx, dy);
+                    point.Move(selection, dx, dy);
                 }
             }
 
-            base.Move(selected, dx, dy);
+            base.Move(selection, dx, dy);
         }
 
         public object Copy(IDictionary<object, object> shared)

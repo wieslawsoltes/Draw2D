@@ -83,12 +83,12 @@ namespace Core2D.Editor.Selection.Helpers
             if (shapePoint != null || shape != null || guidePoint != null || guide != null)
             {
                 bool haveNewSelection =
-                    (shapePoint != null && !context.Selected.Contains(shapePoint))
-                    || (shape != null && !context.Selected.Contains(shape))
-                    || (guidePoint != null && !context.Selected.Contains(guidePoint))
-                    || (guide != null && !context.Selected.Contains(guide));
+                    (shapePoint != null && !context.Renderer.Selected.Contains(shapePoint))
+                    || (shape != null && !context.Renderer.Selected.Contains(shape))
+                    || (guidePoint != null && !context.Renderer.Selected.Contains(guidePoint))
+                    || (guide != null && !context.Renderer.Selected.Contains(guide));
 
-                if (context.Selected.Count >= 1
+                if (context.Renderer.Selected.Count >= 1
                     && !haveNewSelection
                     && !modifier.HasFlag(selectionModifier))
                 {
@@ -100,23 +100,23 @@ namespace Core2D.Editor.Selection.Helpers
                     {
                         if (modifier.HasFlag(selectionModifier))
                         {
-                            if (context.Selected.Contains(shapePoint))
+                            if (context.Renderer.Selected.Contains(shapePoint))
                             {
                                 Log.Info($"Deselected Shape Point: {shapePoint.GetType()}");
-                                shapePoint.Deselect(context.Selected);
+                                shapePoint.Deselect(context.Renderer);
                             }
                             else
                             {
                                 Log.Info($"Selected Shape Point: {shapePoint.GetType()}");
-                                shapePoint.Select(context.Selected);
+                                shapePoint.Select(context.Renderer);
                             }
-                            return context.Selected.Count > 0;
+                            return context.Renderer.Selected.Count > 0;
                         }
                         else
                         {
-                            context.Selected.Clear();
+                            context.Renderer.Selected.Clear();
                             Log.Info($"Selected Shape Point: {shapePoint.GetType()}");
-                            shapePoint.Select(context.Selected);
+                            shapePoint.Select(context.Renderer);
                             return true;
                         }
                     }
@@ -124,23 +124,23 @@ namespace Core2D.Editor.Selection.Helpers
                     {
                         if (modifier.HasFlag(selectionModifier))
                         {
-                            if (context.Selected.Contains(shape))
+                            if (context.Renderer.Selected.Contains(shape))
                             {
                                 Log.Info($"Deselected Shape: {shape.GetType()}");
-                                shape.Deselect(context.Selected);
+                                shape.Deselect(context.Renderer);
                             }
                             else
                             {
                                 Log.Info($"Selected Shape: {shape.GetType()}");
-                                shape.Select(context.Selected);
+                                shape.Select(context.Renderer);
                             }
-                            return context.Selected.Count > 0;
+                            return context.Renderer.Selected.Count > 0;
                         }
                         else
                         {
-                            context.Selected.Clear();
+                            context.Renderer.Selected.Clear();
                             Log.Info($"Selected Shape: {shape.GetType()}");
-                            shape.Select(context.Selected);
+                            shape.Select(context.Renderer);
                             return true;
                         }
                     }
@@ -148,23 +148,23 @@ namespace Core2D.Editor.Selection.Helpers
                     {
                         if (modifier.HasFlag(selectionModifier))
                         {
-                            if (context.Selected.Contains(guidePoint))
+                            if (context.Renderer.Selected.Contains(guidePoint))
                             {
                                 Log.Info($"Deselected Guide Point: {guidePoint.GetType()}");
-                                guidePoint.Deselect(context.Selected);
+                                guidePoint.Deselect(context.Renderer);
                             }
                             else
                             {
                                 Log.Info($"Selected Guide Point: {guidePoint.GetType()}");
-                                guidePoint.Select(context.Selected);
+                                guidePoint.Select(context.Renderer);
                             }
-                            return context.Selected.Count > 0;
+                            return context.Renderer.Selected.Count > 0;
                         }
                         else
                         {
-                            context.Selected.Clear();
+                            context.Renderer.Selected.Clear();
                             Log.Info($"Selected Guide Point: {guidePoint.GetType()}");
-                            guidePoint.Select(context.Selected);
+                            guidePoint.Select(context.Renderer);
                             return true;
                         }
                     }
@@ -172,23 +172,23 @@ namespace Core2D.Editor.Selection.Helpers
                     {
                         if (modifier.HasFlag(selectionModifier))
                         {
-                            if (context.Selected.Contains(guide))
+                            if (context.Renderer.Selected.Contains(guide))
                             {
                                 Log.Info($"Deselected Guide: {guide.GetType()}");
-                                guide.Deselect(context.Selected);
+                                guide.Deselect(context.Renderer);
                             }
                             else
                             {
                                 Log.Info($"Selected Guide: {guide.GetType()}");
-                                guide.Select(context.Selected);
+                                guide.Select(context.Renderer);
                             }
-                            return context.Selected.Count > 0;
+                            return context.Renderer.Selected.Count > 0;
                         }
                         else
                         {
-                            context.Selected.Clear();
+                            context.Renderer.Selected.Clear();
                             Log.Info($"Selected Guide: {guide.GetType()}");
-                            guide.Select(context.Selected);
+                            guide.Select(context.Renderer);
                             return true;
                         }
                     }
@@ -218,26 +218,26 @@ namespace Core2D.Editor.Selection.Helpers
                     {
                         foreach (var shape in shapes)
                         {
-                            if (context.Selected.Contains(shape))
+                            if (context.Renderer.Selected.Contains(shape))
                             {
                                 Log.Info($"Deselected Shape: {shape.GetType()}");
-                                shape.Deselect(context.Selected);
+                                shape.Deselect(context.Renderer);
                             }
                             else
                             {
                                 Log.Info($"Selected Shape: {shape.GetType()}");
-                                shape.Select(context.Selected);
+                                shape.Select(context.Renderer);
                             }
                         }
-                        return context.Selected.Count > 0;
+                        return context.Renderer.Selected.Count > 0;
                     }
                     else
                     {
                         Log.Info($"Selected Shapes: {shapes?.Count ?? 0}");
-                        context.Selected.Clear();
+                        context.Renderer.Selected.Clear();
                         foreach (var shape in shapes)
                         {
-                            shape.Select(context.Selected);
+                            shape.Select(context.Renderer);
                         }
                         return true;
                     }
@@ -248,26 +248,26 @@ namespace Core2D.Editor.Selection.Helpers
                     {
                         foreach (var guide in guides)
                         {
-                            if (context.Selected.Contains(guide))
+                            if (context.Renderer.Selected.Contains(guide))
                             {
                                 Log.Info($"Deselected Guide: {guide.GetType()}");
-                                guide.Deselect(context.Selected);
+                                guide.Deselect(context.Renderer);
                             }
                             else
                             {
                                 Log.Info($"Selected Guide: {guide.GetType()}");
-                                guide.Select(context.Selected);
+                                guide.Select(context.Renderer);
                             }
                         }
-                        return context.Selected.Count > 0;
+                        return context.Renderer.Selected.Count > 0;
                     }
                     else
                     {
                         Log.Info($"Selected Guides: {guides?.Count ?? 0}");
-                        context.Selected.Clear();
+                        context.Renderer.Selected.Clear();
                         foreach (var guide in guides)
                         {
-                            guide.Select(context.Selected);
+                            guide.Select(context.Renderer);
                         }
                         return true;
                     }

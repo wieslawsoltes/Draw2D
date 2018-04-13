@@ -1,7 +1,6 @@
 ﻿// Copyright (c) Wiesław Šoltés. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using System;
-using System.Collections.Generic;
 using Core2D.Containers;
 using Core2D.Renderer;
 using Core2D.Shape;
@@ -14,7 +13,6 @@ namespace Core2D.Editor
     public interface IToolContext
     {
         ShapeRenderer Renderer { get; set; }
-        ISet<BaseShape> Selected { get; set; }
         IHitTest HitTest { get; set; }
         ILayerContainer CurrentContainer { get; set; }
         ILayerContainer WorkingContainer { get; set; }

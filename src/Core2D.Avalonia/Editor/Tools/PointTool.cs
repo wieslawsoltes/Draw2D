@@ -28,7 +28,7 @@ namespace Core2D.Editor.Tools
                 if (shape is ConnectableShape connectable)
                 {
                     connectable.Points.Add(point);
-                    context.Selected.Add(point);
+                    context.Renderer.Selected.Add(point);
                     context.Invalidate?.Invoke();
                 }
             }

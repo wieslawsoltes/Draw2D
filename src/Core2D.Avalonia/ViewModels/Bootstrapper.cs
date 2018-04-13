@@ -362,7 +362,6 @@ namespace Core2D.ViewModels
                 Mode = EditMode.Mouse,
                 Presenter = presenter,
                 Renderer = null,
-                Selected = null,
                 HitTest = hitTest,
                 CurrentContainer = null,
                 WorkingContainer = null,

@@ -7,8 +7,9 @@ using Core2D.Style;
 
 namespace Core2D.Renderer
 {
-    public abstract class ShapeRenderer : ObservableObject
+    public abstract class ShapeRenderer : ObservableObject, ISelection
     {
+        public abstract BaseShape Hover { get; set; }
         public abstract ISet<BaseShape> Selected { get; set; }
         public abstract void InvalidateCache(ShapeStyle style);
         public abstract void InvalidateCache(MatrixObject matrix);

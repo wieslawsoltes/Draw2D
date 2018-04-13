@@ -83,7 +83,7 @@ namespace Core2D.Shapes
             }
         }
 
-        public override void Move(ISet<BaseShape> selected, double dx, double dy)
+        public override void Move(ISelection selection, double dx, double dy)
         {
             X += dx;
             Y += dy;

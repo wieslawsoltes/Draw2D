@@ -38,7 +38,7 @@ namespace Core2D.Editor.Tools
                     this.DeHover(context);
                     context.Renderer.Selected.Clear();
 
-                    CopyHelper.Copy(context.CurrentContainer, _shapesToCopy, context.Renderer.Selected);
+                    CopyHelper.Copy(context.CurrentContainer, _shapesToCopy, context.Renderer);
 
                     context.Invalidate?.Invoke();
 
@@ -51,7 +51,7 @@ namespace Core2D.Editor.Tools
         {
             lock (context.Renderer.Selected)
             {
-                DeleteHelper.Delete(context.CurrentContainer, context.Renderer.Selected);
+                DeleteHelper.Delete(context.CurrentContainer, context.Renderer);
 
                 this.DeHover(context);
                 context.Renderer.Selected.Clear();
@@ -82,7 +82,7 @@ namespace Core2D.Editor.Tools
                     }
                 }
 
-                group.Select(context.Renderer.Selected);
+                group.Select(context.Renderer);
                 context.CurrentContainer.Shapes.Add(group);
 
                 context.Invalidate?.Invoke();
@@ -100,7 +100,7 @@ namespace Core2D.Editor.Tools
 
                 foreach (var shape in context.CurrentContainer.Shapes)
                 {
-                    shape.Select(context.Renderer.Selected);
+                    shape.Select(context.Renderer);
                 }
 
                 context.Invalidate?.Invoke();
@@ -114,7 +114,7 @@ namespace Core2D.Editor.Tools
             if (shape != null)
             {
                 _hover = shape;
-                _hover.Select(context.Selected);
+                _hover.Select(context.Renderer);
             }
         }
 
@@ -122,7 +122,7 @@ namespace Core2D.Editor.Tools
         {
             if (_hover != null)
             {
-                _hover.Deselect(context.Selected);
+                _hover.Deselect(context.Renderer);
                 _hover = null;
             }
         }
@@ -161,8 +161,8 @@ namespace Core2D.Editor.Tools
                         {
                             point.X = _originX;
                             point.Y = _originY;
-                            context.Selected.Remove(point);
-                            context.Selected.Add(copy);
+                            context.Renderer.Selected.Remove(point);
+                            context.Renderer.Selected.Add(copy);
                             _disconnected = true;
                         }
                         break;
@@ -175,9 +175,9 @@ namespace Core2D.Editor.Tools
         {
             if (shape is ConnectableShape connectable)
             {
-                connectable.Deselect(context.Selected);
+                connectable.Deselect(context.Renderer);
                 _disconnected = connectable.Disconnect();
-                connectable.Select(context.Selected);
+                connectable.Select(context.Renderer);
             }
         }
     }

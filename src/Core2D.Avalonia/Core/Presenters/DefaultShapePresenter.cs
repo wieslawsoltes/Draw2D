@@ -16,15 +16,15 @@ namespace Core2D.Presenters
         public override void DrawHelpers(object dc, ILayerContainer container, ShapeRenderer renderer, double dx, double dy)
         {
             var shapes = container.Shapes;
-            var selected = renderer.Selected;
+            var selection = renderer;
 
             foreach (var shape in shapes)
             {
-                if (selected.Contains(shape))
+                if (selection.Selected.Contains(shape))
                 {
                     if (Helpers.TryGetValue(shape.GetType(), out var helper))
                     {
-                        helper.Draw(dc, renderer, shape, selected, dx, dy);
+                        helper.Draw(dc, renderer, shape, selection, dx, dy);
                     }
                 }
             }

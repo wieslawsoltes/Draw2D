@@ -101,40 +101,40 @@ namespace Core2D.Shapes
             base.EndTransform(dc, renderer, state);
         }
 
-        public override void Move(ISet<BaseShape> selected, double dx, double dy)
+        public override void Move(ISelection selection, double dx, double dy)
         {
-            if (!selected.Contains(_startPoint))
+            if (!selection.Selected.Contains(_startPoint))
             {
-                _startPoint.Move(selected, dx, dy);
+                _startPoint.Move(selection, dx, dy);
             }
 
-            if (!selected.Contains(_point1))
+            if (!selection.Selected.Contains(_point1))
             {
-                _point1.Move(selected, dx, dy);
+                _point1.Move(selection, dx, dy);
             }
 
-            if (!selected.Contains(_point2))
+            if (!selection.Selected.Contains(_point2))
             {
-                _point2.Move(selected, dx, dy);
+                _point2.Move(selection, dx, dy);
             }
 
-            base.Move(selected, dx, dy);
+            base.Move(selection, dx, dy);
         }
 
-        public override void Select(ISet<BaseShape> selected)
+        public override void Select(ISelection selection)
         {
-            base.Select(selected);
-            StartPoint.Select(selected);
-            Point1.Select(selected);
-            Point2.Select(selected);
+            base.Select(selection);
+            StartPoint.Select(selection);
+            Point1.Select(selection);
+            Point2.Select(selection);
         }
 
-        public override void Deselect(ISet<BaseShape> selected)
+        public override void Deselect(ISelection selection)
         {
-            base.Deselect(selected);
-            StartPoint.Deselect(selected);
-            Point1.Deselect(selected);
-            Point2.Deselect(selected);
+            base.Deselect(selection);
+            StartPoint.Deselect(selection);
+            Point1.Deselect(selection);
+            Point2.Deselect(selection);
         }
 
         private bool CanConnect(PointShape point)

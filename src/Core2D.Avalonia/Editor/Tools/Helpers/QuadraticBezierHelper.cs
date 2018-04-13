@@ -15,7 +15,7 @@ namespace Core2D.Editor.Tools.Helpers
             DrawLine(dc, renderer, quadraticBezier.Point1, quadraticBezier.Point2, dx, dy);
         }
 
-        public override void Draw(object dc, ShapeRenderer renderer, BaseShape shape, ISet<BaseShape> selected, double dx, double dy)
+        public override void Draw(object dc, ShapeRenderer renderer, BaseShape shape, ISelection selection, double dx, double dy)
         {
             if (shape is QuadraticBezierShape quadraticBezier)
             {

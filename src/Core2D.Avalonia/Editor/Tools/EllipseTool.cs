@@ -32,8 +32,8 @@ namespace Core2D.Editor.Tools
                 Style = context.CurrentStyle
             };
             context.WorkingContainer.Shapes.Add(_ellipse);
-            context.Selected.Add(_ellipse.TopLeft);
-            context.Selected.Add(_ellipse.BottomRight);
+            context.Renderer.Selected.Add(_ellipse.TopLeft);
+            context.Renderer.Selected.Add(_ellipse.BottomRight);
 
             context.Capture?.Invoke();
             context.Invalidate?.Invoke();
@@ -47,10 +47,10 @@ namespace Core2D.Editor.Tools
 
             CurrentState = State.TopLeft;
 
-            context.Selected.Remove(_ellipse.BottomRight);
+            context.Renderer.Selected.Remove(_ellipse.BottomRight);
             _ellipse.BottomRight = context.GetNextPoint(x, y, Settings?.ConnectPoints ?? false, Settings?.HitTestRadius ?? 7.0);
             context.WorkingContainer.Shapes.Remove(_ellipse);
-            context.Selected.Remove(_ellipse.TopLeft);
+            context.Renderer.Selected.Remove(_ellipse.TopLeft);
             context.CurrentContainer.Shapes.Add(_ellipse);
             _ellipse = null;
 
@@ -88,8 +88,8 @@ namespace Core2D.Editor.Tools
             if (_ellipse != null)
             {
                 context.WorkingContainer.Shapes.Remove(_ellipse);
-                context.Selected.Remove(_ellipse.TopLeft);
-                context.Selected.Remove(_ellipse.BottomRight);
+                context.Renderer.Selected.Remove(_ellipse.TopLeft);
+                context.Renderer.Selected.Remove(_ellipse.BottomRight);
                 _ellipse = null;
             }
 

@@ -35,10 +35,10 @@ namespace Core2D.Editor.Tools
                 Style = context.CurrentStyle
             };
             context.WorkingContainer.Shapes.Add(_quadraticBezier);
-            context.Selected.Add(_quadraticBezier);
-            context.Selected.Add(_quadraticBezier.StartPoint);
-            context.Selected.Add(_quadraticBezier.Point1);
-            context.Selected.Add(_quadraticBezier.Point2);
+            context.Renderer.Selected.Add(_quadraticBezier);
+            context.Renderer.Selected.Add(_quadraticBezier.StartPoint);
+            context.Renderer.Selected.Add(_quadraticBezier.Point1);
+            context.Renderer.Selected.Add(_quadraticBezier.Point2);
 
             context.Capture?.Invoke();
             context.Invalidate?.Invoke();
@@ -52,10 +52,10 @@ namespace Core2D.Editor.Tools
 
             CurrentState = State.StartPoint;
 
-            context.Selected.Remove(_quadraticBezier);
-            context.Selected.Remove(_quadraticBezier.StartPoint);
-            context.Selected.Remove(_quadraticBezier.Point1);
-            context.Selected.Remove(_quadraticBezier.Point2);
+            context.Renderer.Selected.Remove(_quadraticBezier);
+            context.Renderer.Selected.Remove(_quadraticBezier.StartPoint);
+            context.Renderer.Selected.Remove(_quadraticBezier.Point1);
+            context.Renderer.Selected.Remove(_quadraticBezier.Point2);
             context.WorkingContainer.Shapes.Remove(_quadraticBezier);
 
             _quadraticBezier.Point1 = context.GetNextPoint(x, y, false, 0.0);
@@ -75,9 +75,9 @@ namespace Core2D.Editor.Tools
             _quadraticBezier.Point1.X = x;
             _quadraticBezier.Point1.Y = y;
 
-            context.Selected.Remove(_quadraticBezier.Point2);
+            context.Renderer.Selected.Remove(_quadraticBezier.Point2);
             _quadraticBezier.Point2 = context.GetNextPoint(x, y, false, 0.0);
-            context.Selected.Add(_quadraticBezier.Point2);
+            context.Renderer.Selected.Add(_quadraticBezier.Point2);
 
             CurrentState = State.Point1;
 
@@ -125,10 +125,10 @@ namespace Core2D.Editor.Tools
             if (_quadraticBezier != null)
             {
                 context.WorkingContainer.Shapes.Remove(_quadraticBezier);
-                context.Selected.Remove(_quadraticBezier);
-                context.Selected.Remove(_quadraticBezier.StartPoint);
-                context.Selected.Remove(_quadraticBezier.Point1);
-                context.Selected.Remove(_quadraticBezier.Point2);
+                context.Renderer.Selected.Remove(_quadraticBezier);
+                context.Renderer.Selected.Remove(_quadraticBezier.StartPoint);
+                context.Renderer.Selected.Remove(_quadraticBezier.Point1);
+                context.Renderer.Selected.Remove(_quadraticBezier.Point2);
                 _quadraticBezier = null;
             }
 

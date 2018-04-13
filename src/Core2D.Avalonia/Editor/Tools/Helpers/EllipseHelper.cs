@@ -8,7 +8,7 @@ namespace Core2D.Editor.Tools.Helpers
 {
     public class EllipseHelper : CommonHelper
     {
-        public override void Draw(object dc, ShapeRenderer renderer, BaseShape shape, ISet<BaseShape> selected, double dx, double dy)
+        public override void Draw(object dc, ShapeRenderer renderer, BaseShape shape, ISelection selection, double dx, double dy)
         {
         }
     }

@@ -47,7 +47,7 @@ namespace Core2D.Editor.Tools
             };
 
             context.WorkingContainer.Shapes.Add(_path);
-            context.Selected.Add(_path);
+            context.Renderer.Selected.Add(_path);
         }
 
         public void Move()
@@ -151,7 +151,7 @@ namespace Core2D.Editor.Tools
             if (_path != null)
             {
                 context.WorkingContainer.Shapes.Remove(_path);
-                context.Selected.Remove(_path);
+                context.Renderer.Selected.Remove(_path);
 
                 if (_path.Validate(true) == true)
                 {

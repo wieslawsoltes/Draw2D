@@ -39,7 +39,6 @@ namespace Core2D.Avalonia
                 bootstrapper.CreateDemoContainer(vm);
 
                 vm.Renderer = new AvaloniaShapeRenderer();
-                vm.Selected = vm.Renderer.Selected;
 
                 BuildAvaloniaApp().Start<MainWindow>(() => vm);
 

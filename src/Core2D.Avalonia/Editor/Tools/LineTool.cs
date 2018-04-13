@@ -34,8 +34,8 @@ namespace Core2D.Editor.Tools
                 Style = context.CurrentStyle
             };
             context.WorkingContainer.Shapes.Add(_line);
-            context.Selected.Add(_line.StartPoint);
-            context.Selected.Add(_line.Point);
+            context.Renderer.Selected.Add(_line.StartPoint);
+            context.Renderer.Selected.Add(_line.Point);
 
             context.Capture?.Invoke();
             context.Invalidate?.Invoke();
@@ -49,8 +49,8 @@ namespace Core2D.Editor.Tools
 
             CurrentState = State.StartPoint;
 
-            context.Selected.Remove(_line.StartPoint);
-            context.Selected.Remove(_line.Point);
+            context.Renderer.Selected.Remove(_line.StartPoint);
+            context.Renderer.Selected.Remove(_line.Point);
             context.WorkingContainer.Shapes.Remove(_line);
 
             _line.Point = context.GetNextPoint(x, y, Settings?.ConnectPoints ?? false, Settings?.HitTestRadius ?? 0.0);
@@ -108,8 +108,8 @@ namespace Core2D.Editor.Tools
             if (_line != null)
             {
                 context.WorkingContainer.Shapes.Remove(_line);
-                context.Selected.Remove(_line.StartPoint);
-                context.Selected.Remove(_line.Point);
+                context.Renderer.Selected.Remove(_line.StartPoint);
+                context.Renderer.Selected.Remove(_line.Point);
                 _line = null;
             }
 

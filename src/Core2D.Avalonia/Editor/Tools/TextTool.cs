@@ -36,8 +36,8 @@ namespace Core2D.Editor.Tools
                 Style = context.CurrentStyle
             };
             context.WorkingContainer.Shapes.Add(_text);
-            context.Selected.Add(_text.TopLeft);
-            context.Selected.Add(_text.BottomRight);
+            context.Renderer.Selected.Add(_text.TopLeft);
+            context.Renderer.Selected.Add(_text.BottomRight);
 
             context.Capture?.Invoke();
             context.Invalidate?.Invoke();
@@ -51,11 +51,11 @@ namespace Core2D.Editor.Tools
 
             CurrentState = State.TopLeft;
 
-            context.Selected.Remove(_text.BottomRight);
+            context.Renderer.Selected.Remove(_text.BottomRight);
             _text.BottomRight = context.GetNextPoint(x, y, Settings?.ConnectPoints ?? false, Settings?.HitTestRadius ?? 7.0);
             _text.BottomRight.Y = y;
             context.WorkingContainer.Shapes.Remove(_text);
-            context.Selected.Remove(_text.TopLeft);
+            context.Renderer.Selected.Remove(_text.TopLeft);
             context.CurrentContainer.Shapes.Add(_text);
             _text = null;
 
@@ -93,8 +93,8 @@ namespace Core2D.Editor.Tools
             if (_text != null)
             {
                 context.WorkingContainer.Shapes.Remove(_text);
-                context.Selected.Remove(_text.TopLeft);
-                context.Selected.Remove(_text.BottomRight);
+                context.Renderer.Selected.Remove(_text.TopLeft);
+                context.Renderer.Selected.Remove(_text.BottomRight);
                 _text = null;
             }
 
