@@ -25,6 +25,7 @@
 
   <ItemGroup Condition="'$(CoreRT)' == 'True'">
     <RdXmlFile Include="$(MSBuildThisFileDirectory)..\..\build\native\rd.xml" />
+    <IlcArg Include="--stacktracedata" />
   </ItemGroup>
 
   <Import Project="$(MSBuildThisFileDirectory)..\..\build\ILCompiler.props" Condition="'$(CoreRT)' == 'True'" />
