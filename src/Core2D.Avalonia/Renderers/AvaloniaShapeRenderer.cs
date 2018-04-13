@@ -176,7 +176,10 @@ namespace Core2D.Avalonia.Renderers
                         }
                     }
 
-                    context.EndFigure(figure.IsClosed);
+                    if (!isFirstShape)
+                    {
+                        context.EndFigure(figure.IsClosed);
+                    }
                 }
             }
 
