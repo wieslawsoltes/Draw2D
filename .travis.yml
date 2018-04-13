@@ -8,11 +8,4 @@ env:
 sudo: required
 mono: latest
 dotnet: 2.0.0
-script:
-  - cd src/Core2D.Avalonia
-  - dotnet restore
-  - dotnet build
-  - dotnet publish -c Release -r win7-x64 -o bin/win7-x64 /p:CoreRT=False
-  - dotnet publish -c Release -r ubuntu.14.04-x64 -o bin/ubuntu.14.04-x64 /p:CoreRT=False
-  - dotnet publish -c Release -r osx.10.12-x64 -o bin/osx.10.12-x64 /p:CoreRT=False
-  
+script: ./build.sh
