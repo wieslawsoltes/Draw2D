@@ -397,7 +397,7 @@ namespace Core2D.ViewModels
 
             var pointShape = new EllipseShape(new PointShape(-4, -4, null), new PointShape(4, 4, null))
             {
-                Style = new ShapeStyle(new ArgbColor(0, 0, 0, 0), new ArgbColor(255, 255, 255, 0), 2.0, false, true)
+                Style = new ShapeStyle(new ArgbColor(0, 0, 0, 0), new ArgbColor(255, 255, 255, 0), 2.0, true, true)
             };
 
             var guideTool = vm.Tools.FirstOrDefault(t => t.Title == "Guide") as GuideTool;
