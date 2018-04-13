@@ -11,6 +11,7 @@ namespace Core2D.Avalonia
         public MainWindow()
         {
             this.InitializeComponent();
+            this.AttachDevTools();
         }
 
         private void InitializeComponent()
