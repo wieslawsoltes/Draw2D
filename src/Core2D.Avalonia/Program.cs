@@ -43,7 +43,7 @@ namespace Core2D.Avalonia
 
                 BuildAvaloniaApp().Start<MainWindow>(() => vm);
 
-                LayerContainerViewModel.Save(file, vm);
+                //LayerContainerViewModel.Save(file, vm);
             }
             catch (Exception ex)
             {
