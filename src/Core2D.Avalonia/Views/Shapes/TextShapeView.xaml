@@ -3,5 +3,7 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:Core2D.Avalonia.Views.Shapes;assembly=Core2D.Avalonia">
-
+    <Grid>
+        <TextBlock Text="Text" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+    </Grid>
 </UserControl>

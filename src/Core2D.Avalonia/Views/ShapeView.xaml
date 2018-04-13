@@ -5,7 +5,7 @@
              xmlns:local="clr-namespace:Core2D.Avalonia.Views;assembly=Core2D.Avalonia"
              xmlns:ViewsShapes="clr-namespace:Core2D.Avalonia.Views.Shapes;assembly=Core2D.Avalonia"
              xmlns:CoreShapes="clr-namespace:Core2D.Shapes;assembly=Core2D.Avalonia">
-    <ContentControl Content="{Binding CurrentTool.Settings}">
+    <ContentControl Content="{Binding}">
         <ContentControl.DataTemplates>
             <DataTemplate DataType="{x:Type CoreShapes:PointShape}">
                 <ViewsShapes:PointShapeView/>

@@ -264,6 +264,7 @@ namespace Core2D.Editor.Tools
 
             if (Settings?.ClearSelectionOnClean == true)
             {
+                context.Renderer.Hover = null;
                 context.Renderer.Selected.Clear();
             }
 

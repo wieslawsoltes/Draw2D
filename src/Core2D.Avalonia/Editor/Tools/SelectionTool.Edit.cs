@@ -111,6 +111,8 @@ namespace Core2D.Editor.Tools
 
         public void Hover(IToolContext context, BaseShape shape)
         {
+            context.Renderer.Hover = shape;
+
             if (shape != null)
             {
                 _hover = shape;
@@ -120,6 +122,8 @@ namespace Core2D.Editor.Tools
 
         public void DeHover(IToolContext context)
         {
+            context.Renderer.Hover = null;
+
             if (_hover != null)
             {
                 _hover.Deselect(context.Renderer);

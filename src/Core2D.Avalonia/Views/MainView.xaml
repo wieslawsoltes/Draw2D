@@ -40,7 +40,7 @@
                 </TabItem>
                 <TabItem Classes="default" Header="Shape">
                     <Border Classes="default">
-                        <Views:ShapeView DataContext="{Binding Hover}"/>
+                        <Views:ShapeView DataContext="{Binding Renderer.Hover}"/>
                     </Border>
                 </TabItem>
                 <TabItem Classes="default" Header="Guides">
