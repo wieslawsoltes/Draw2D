@@ -12,10 +12,6 @@ A 2D vector diagram editor.
 
 This is an experimental project used for development of new features for [Core2D](https://github.com/wieslawsoltes/Core2D).
 
-[![Main Window](screenshots/MainWindow.png)](https://github.com/wieslawsoltes/Draw2D/blob/master/screenshots/MainWindow.png)
-
-[![Main Window](screenshots/MainWindow.gif)](https://github.com/wieslawsoltes/Draw2D/blob/master/screenshots/MainWindow.gif)
-
 ## License
 
 Draw2D is licensed under the [MIT license](LICENSE.TXT).
