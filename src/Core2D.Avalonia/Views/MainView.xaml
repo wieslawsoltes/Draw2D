@@ -38,6 +38,11 @@
                         <Views:ShapesView DataContext="{Binding}"/>
                     </Border>
                 </TabItem>
+                <TabItem Classes="default" Header="Shape">
+                    <Border Classes="default">
+                        <Views:ShapeView DataContext="{Binding Selected}"/>
+                    </Border>
+                </TabItem>
                 <TabItem Classes="default" Header="Guides">
                     <Border Classes="default">
                         <Views:GuidesView DataContext="{Binding}"/>
