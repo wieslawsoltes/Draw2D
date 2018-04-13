@@ -26,7 +26,7 @@ namespace Core2D.Avalonia
         {
             try
             {
-                var file = "vm.json";
+                //var file = "vm.json";
                 var bootstrapper = new Bootstrapper();
 
                 LayerContainerViewModel vm;
