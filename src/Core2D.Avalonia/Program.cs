@@ -31,9 +31,9 @@ namespace Core2D.Avalonia
 
                 LayerContainerViewModel vm;
 
-                if (File.Exists(file))
-                    vm = LayerContainerViewModel.Load(file);
-                else
+                //if (File.Exists(file))
+                //    vm = LayerContainerViewModel.Load(file);
+                //else
                     vm = bootstrapper.CreateDemoViewModel();
 
                 bootstrapper.CreateDemoContainer(vm);
