@@ -45,7 +45,7 @@
 
         <!-- .NET Core -->
 
-        <Assembly Name="mscorlib" Dynamic="Required All" />
+        <Assembly Name="mscorlib"/>
         <Assembly Name="System.ComponentModel.TypeConverter" Dynamic="Required All">
             <Type Name="System.ComponentModel.TypeConverter" Dynamic="Required All" />
             <Type Name="System.ComponentModel.StringConverter" Dynamic="Required All" />
@@ -56,7 +56,7 @@
             <Type Name="System.Linq.Expressions.ExpressionCreator`1[[System.Func`2[[System.Object,System.Private.CoreLib],[System.Object,System.Private.CoreLib]],System.Private.CoreLib]]" Dynamic="Required All" />
         </Assembly>
         <Assembly Name="System.Memory" Dynamic="Required All" />
-        <Assembly Name="System.Private.CoreLib" Dynamic="Required All">
+        <Assembly Name="System.Private.CoreLib">
             <Type Name="System.Action`2[System.Object,System.EventArgs]`"> 
                 <Method Name="Invoke" Dynamic="Required All" />
             </Type>
