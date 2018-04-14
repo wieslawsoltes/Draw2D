@@ -13,8 +13,8 @@ if ($LastExitCode -ne 0) { Exit 1 }
 #dotnet publish src/Core2D.Avalonia/Core2D.Avalonia.csproj -c Release -r osx.10.12-x64 -o bin/osx.10.12-x64 -v m /p:CoreRT=False
 #if ($LastExitCode -ne 0) { Exit 1 }
 
-dotnet publish src/Core2D.Avalonia/Core2D.Avalonia.csproj -c Debug -r win-x64 -o bin/win-x64-debug -v m /p:CoreRT=True
-if ($LastExitCode -ne 0) { Exit 1 }
+#dotnet publish src/Core2D.Avalonia/Core2D.Avalonia.csproj -c Debug -r win-x64 -o bin/win-x64-debug -v m /p:CoreRT=True
+#if ($LastExitCode -ne 0) { Exit 1 }
 
 dotnet publish src/Core2D.Avalonia/Core2D.Avalonia.csproj -c Release -r win-x64 -o bin/win-x64-release -v m /p:CoreRT=True
 if ($LastExitCode -ne 0) { Exit 1 }
