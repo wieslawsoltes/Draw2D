@@ -26,6 +26,33 @@ namespace Core2D.Avalonia
         {
             try
             {
+                var builder = BuildAvaloniaApp();
+                if (args.Length > 0)
+                {
+                    foreach (var arg in args)
+                    {
+                        switch (arg)
+                        {
+                            case "--d2d":
+                                builder.UseDirect2D1();
+                                break;
+                            case "--skia":
+                                builder.UseSkia();
+                                break;
+                            case "--win32":
+                                builder.UseWin32();
+                                break;
+                            case "--gtk3":
+                                builder.UseGtk3();
+                                break;
+                            case "--mac":
+                                builder.UseMonoMac();
+                                break;
+
+                        }
+                    }
+                }
+
                 //var file = "vm.json";
                 var bootstrapper = new Bootstrapper();
 
@@ -40,7 +67,7 @@ namespace Core2D.Avalonia
 
                 vm.Renderer = new AvaloniaShapeRenderer();
 
-                BuildAvaloniaApp().Start<MainWindow>(() => vm);
+                builder.Start<MainWindow>(() => vm);
 
                 //LayerContainerViewModel.Save(file, vm);
             }
@@ -53,8 +80,6 @@ namespace Core2D.Avalonia
         public static AppBuilder BuildAvaloniaApp()
             => AppBuilder.Configure<App>()
                 .UsePlatformDetect()
-                //.UseDirect2D1()
-                //.UseSkia()
                 .LogToDebug();
     }
 }
