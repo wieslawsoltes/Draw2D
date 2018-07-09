@@ -7,5 +7,5 @@ env:
     - DOTNET_CLI_TELEMETRY_OPTOUT=1
 sudo: required
 mono: latest
-dotnet: 2.0.0
+dotnet: 2.1.0
 script: ./build.sh
