@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using Avalonia;
 using Avalonia.Controls;
 using Core2D.Containers;
 using Core2D.Editor;
@@ -236,7 +237,7 @@ namespace Core2D.ViewModels.Containers
             dlg.Filters.Add(new FileDialogFilter() { Name = "All Files", Extensions = { "*" } });
             dlg.InitialFileName = "container";
             dlg.DefaultExtension = "project";
-            var result = await dlg.ShowAsync(Window.OpenWindows[0]);
+            var result = await dlg.ShowAsync(Application.Current.Windows[0]);
             if (result != null)
             {
                 var path = result;
@@ -246,7 +247,7 @@ namespace Core2D.ViewModels.Containers
 
         public void Exit()
         {
-            Window.OpenWindows.FirstOrDefault()?.Close();
+            Application.Current.Windows.FirstOrDefault()?.Close();
         }
 
         public void Cut()
