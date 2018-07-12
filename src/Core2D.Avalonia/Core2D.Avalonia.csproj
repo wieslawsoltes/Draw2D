@@ -9,7 +9,19 @@
     <CoreRT>False</CoreRT>
   </PropertyGroup>
 
+  <ItemGroup Condition="'$(CoreRT)' == 'True'">
+    <RdXmlFile Include="$(MSBuildThisFileDirectory)..\..\build\native\rd.xml" />
+    <IlcArg Include="--stacktracedata" />
+  </ItemGroup>
+
   <Import Project="$(MSBuildThisFileDirectory)..\..\build\Version.props" />
+  <Import Project="$(MSBuildThisFileDirectory)..\..\build\ILCompiler.props" Condition="'$(CoreRT)' == 'True'" />
+  <Import Project="$(MSBuildThisFileDirectory)..\..\build\NETCore.props" Condition="'$(CoreRT)' == 'False'" />
+  <Import Project="$(MSBuildThisFileDirectory)..\..\build\Rx.props" />
+  <Import Project="$(MSBuildThisFileDirectory)..\..\build\Avalonia.props" />
+  <Import Project="$(MSBuildThisFileDirectory)..\..\build\Avalonia.Desktop.props" />
+  <Import Project="$(MSBuildThisFileDirectory)..\..\build\Newtonsoft.Json.props" />
+  <Import Project="$(MSBuildThisFileDirectory)..\..\build\Math.Spatial.props" />
 
   <ItemGroup>
     <Compile Include="**\*.cs" Exclude="obj\**" />
@@ -22,18 +34,5 @@
     </Compile>
     <EmbeddedResource Include="**\*.xaml" />
   </ItemGroup>
-
-  <ItemGroup Condition="'$(CoreRT)' == 'True'">
-    <RdXmlFile Include="$(MSBuildThisFileDirectory)..\..\build\native\rd.xml" />
-    <IlcArg Include="--stacktracedata" />
-  </ItemGroup>
-
-  <Import Project="$(MSBuildThisFileDirectory)..\..\build\ILCompiler.props" Condition="'$(CoreRT)' == 'True'" />
-  <Import Project="$(MSBuildThisFileDirectory)..\..\build\NETCore.props" Condition="'$(CoreRT)' == 'False'" />
-  <Import Project="$(MSBuildThisFileDirectory)..\..\build\Rx.props" />
-  <Import Project="$(MSBuildThisFileDirectory)..\..\build\Avalonia.props" />
-  <Import Project="$(MSBuildThisFileDirectory)..\..\build\Avalonia.Desktop.props" />
-  <Import Project="$(MSBuildThisFileDirectory)..\..\build\Newtonsoft.Json.props" />
-  <Import Project="$(MSBuildThisFileDirectory)..\..\build\Math.Spatial.props" />
 
 </Project>
