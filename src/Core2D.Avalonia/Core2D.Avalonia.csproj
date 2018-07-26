@@ -25,18 +25,18 @@
     <PackageReference Include="System.Reactive.Linq" Version="3.1.1" />
     <PackageReference Include="System.Reactive.PlatformServices" Version="3.1.1" />
     <PackageReference Condition="$(TargetFramework.StartsWith('net4'))" Include="System.Reactive.Windows.Threading" Version="3.1.1" />
-    <PackageReference Include="Avalonia" Version="0.6.2-build5670-beta" />
+    <PackageReference Include="Avalonia" Version="0.6.2-build5804-beta" />
+    <PackageReference Include="Avalonia.Desktop" Version="0.6.2-build5804-beta" />
+    <PackageReference Include="Avalonia.Controls.PanAndZoom" Version="1.0.2-build252" />
+    <PackageReference Include="Avalonia.Skia.Linux.Natives" Version="1.60.0.1" />
     <PackageReference Include="Serilog" Version="2.5.0" />
     <PackageReference Include="Sprache" Version="2.1.0" />
     <PackageReference Include="System.ValueTuple" Version="4.3.1" />
-    <PackageReference Include="Avalonia.Controls.PanAndZoom" Version="1.0.2-build248" />
-    <PackageReference Include="Avalonia.Desktop" Version="0.6.2-build5670-beta" />
     <PackageReference Include="SharpDX" Version="4.0.1" />
     <PackageReference Include="SharpDX.Direct2D1" Version="4.0.1" />
     <PackageReference Include="SharpDX.Direct3D11" Version="4.0.1" />
     <PackageReference Include="SharpDX.DXGI" Version="4.0.1" />
     <PackageReference Include="SkiaSharp" Version="1.60.0" />
-    <PackageReference Include="Avalonia.Skia.Linux.Natives" Version="1.60.0.1" />
     <PackageReference Include="Serilog.Sinks.Trace" Version="2.1.0" />
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
     <PackageReference Include="Math.Spatial" Version="1.0.2" />
