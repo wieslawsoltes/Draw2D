@@ -4,7 +4,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:Views="clr-namespace:Core2D.Avalonia.Views;assembly=Core2D.Avalonia"
              xmlns:ViewsStyle="clr-namespace:Core2D.Avalonia.Views.Style;assembly=Core2D.Avalonia"
-             UseLayoutRounding="True" Focusable="True">
+             UseLayoutRounding="True" RenderOptions.BitmapInterpolationMode="HighQuality" 
+             Focusable="True">
     <Grid RowDefinitions="Auto,5,*,5" ColumnDefinitions="260,Auto,*,Auto,280">
         <Views:MenuView Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" DataContext="{Binding}"/>
         <Grid RowDefinitions="45*,Auto,55*" Grid.Row="2" Grid.Column="0">

@@ -3,6 +3,7 @@
 <Window xmlns="https://github.com/avaloniaui" 
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:views="clr-namespace:Core2D.Avalonia.Views;assembly=Core2D.Avalonia"
+        UseLayoutRounding="True" RenderOptions.BitmapInterpolationMode="HighQuality"
         Title="Core2D" Height="700" Width="1320">
     <Window.KeyBindings>
         <!-- File -->
