@@ -1,0 +1,25 @@
+jobs:
+- job: Linux
+  pool:
+    vmImage: 'ubuntu-16.04'
+  steps:
+  - task: DotNetCoreInstaller@0
+    inputs:
+      version: '2.1.401'
+  - script: build.sh
+- job: macOS
+  pool:
+    vmImage: 'xcode9-macos10.13'
+  steps:
+  - task: DotNetCoreInstaller@0
+    inputs:
+      version: '2.1.401'
+  - script: build.sh
+- job: Windows
+  pool:
+    vmImage: 'vs2017-win2017'
+  steps:
+  - task: DotNetCoreInstaller@0
+    inputs:
+      version: '2.1.401'
+  - script: build.ps1
