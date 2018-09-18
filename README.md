@@ -3,6 +3,7 @@
 [![Build status](https://ci.appveyor.com/api/projects/status/84jhip3ut9ocpum8/branch/master?svg=true)](https://ci.appveyor.com/project/wieslawsoltes/draw2d/branch/master)
 [![Build Status](https://travis-ci.org/wieslawsoltes/Draw2D.svg?branch=master)](https://travis-ci.org/wieslawsoltes/Draw2D)
 [![CircleCI](https://circleci.com/gh/wieslawsoltes/Draw2D/tree/master.svg?style=svg)](https://circleci.com/gh/wieslawsoltes/Draw2D/tree/master)
+[![Build Status](https://dev.azure.com/wieslawsoltes/Draw2D/_apis/build/status/wieslawsoltes.Draw2D)](https://dev.azure.com/wieslawsoltes/Draw2D/_build/latest?definitionId=1)
 
 A 2D vector diagram editor.
 
