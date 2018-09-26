@@ -24,7 +24,7 @@
     <PackageReference Include="System.Reactive.Interfaces" Version="4.0.0" />
     <PackageReference Include="System.Reactive.Linq" Version="4.0.0" />
     <PackageReference Include="System.Reactive.PlatformServices" Version="4.0.0" />
-    <PackageReference Condition="$(TargetFramework.StartsWith('net4'))" Include="System.Reactive.Windows.Threading" Version="4.0.0" />
+    <PackageReference Condition="$(TargetFramework.StartsWith('net4'))" Include="System.Reactive.Windows.Threading" Version="4.1.0" />
     <PackageReference Include="Avalonia" Version="0.6.2-build6256-beta" />
     <PackageReference Include="Avalonia.Desktop" Version="0.6.2-build6256-beta" />
     <PackageReference Include="Avalonia.Controls.PanAndZoom" Version="1.0.2-build258" />
