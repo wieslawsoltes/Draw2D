@@ -307,6 +307,10 @@ namespace Core2D.ViewModels.Containers
                 {
                     pathTool.Settings.CurrentTool = tool;
                 }
+                else
+                {
+                    CurrentTool = Tools.Where(t => t.Title == name).FirstOrDefault();
+                }
             }
             else
             {
