@@ -5,8 +5,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
-using Avalonia;
-using Avalonia.Controls;
 using Core2D.Containers;
 using Core2D.Editor;
 using Core2D.Editor.Bounds;
