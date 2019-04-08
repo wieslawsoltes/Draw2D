@@ -29,7 +29,6 @@ namespace Core2D.Shapes
         public FigureShape()
             : base()
         {
-            _shapes = new ObservableCollection<BaseShape>();
         }
 
         public FigureShape(ObservableCollection<BaseShape> shapes)
