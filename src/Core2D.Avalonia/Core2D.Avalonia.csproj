@@ -19,8 +19,6 @@
   <ItemGroup>
     <PackageReference Include="Avalonia" Version="0.8.0" />
     <PackageReference Include="Avalonia.Desktop" Version="0.8.0" />
-    <PackageReference Include="Avalonia.MatrixExtensions" Version="2.0.0" />
-    <PackageReference Include="Avalonia.Controls.PanAndZoom" Version="2.0.0" />
     <PackageReference Include="Serilog" Version="2.5.0" />
     <PackageReference Include="System.Memory" Version="4.5.1" />
     <PackageReference Include="System.ValueTuple" Version="4.5.0" />
@@ -31,7 +29,6 @@
     <PackageReference Include="SharpDX.DXGI" Version="4.0.1" />
     <PackageReference Include="SkiaSharp" Version="1.68.0" />
     <PackageReference Include="Serilog.Sinks.Trace" Version="2.1.0" />
-    <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
     <PackageReference Include="System.Reactive" Version="4.0.0" />
     <PackageReference Include="System.Reactive.Core" Version="4.0.0" />
     <PackageReference Include="System.Reactive.Interfaces" Version="4.0.0" />
@@ -39,6 +36,9 @@
     <PackageReference Include="System.Reactive.PlatformServices" Version="4.0.0" />
     <PackageReference Condition="$(TargetFramework.StartsWith('net4'))" Include="System.Reactive.Windows.Threading" Version="4.0.0" />
     <PackageReference Include="Math.Spatial" Version="1.0.4" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
+    <PackageReference Include="Avalonia.MatrixExtensions" Version="2.0.0" />
+    <PackageReference Include="Avalonia.Controls.PanAndZoom" Version="2.0.0" />
   </ItemGroup>
 
   <ItemGroup>

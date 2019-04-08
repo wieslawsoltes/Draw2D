@@ -52,22 +52,13 @@ namespace Core2D.Avalonia.Controls
             return modifier;
         }
 
-        private Point AdjustGetPosition(Point point)
-        {
-            if (RelativeTo?.RenderTransform != null)
-            {
-                return MatrixHelper.TransformPoint(RelativeTo.RenderTransform.Value.Invert(), point);
-            }
-            return point;
-        }
-
         private void HandlePointerPressed(PointerPressedEventArgs e)
         {
             if (e.MouseButton == MouseButton.Left)
             {
                 if (this.DataContext is LayerContainerViewModel vm)
                 {
-                    var point = AdjustGetPosition(e.GetPosition(RelativeTo));
+                    var point = e.GetPosition(RelativeTo);
                     vm.CurrentTool.LeftDown(vm, point.X, point.Y, GetModifier(e.InputModifiers));
                 }
             }
@@ -75,7 +66,7 @@ namespace Core2D.Avalonia.Controls
             {
                 if (this.DataContext is LayerContainerViewModel vm)
                 {
-                    var point = AdjustGetPosition(e.GetPosition(RelativeTo));
+                    var point = e.GetPosition(RelativeTo);
                     vm.CurrentTool.RightDown(vm, point.X, point.Y, GetModifier(e.InputModifiers));
                 }
             }
@@ -87,7 +78,7 @@ namespace Core2D.Avalonia.Controls
             {
                 if (this.DataContext is LayerContainerViewModel vm)
                 {
-                    var point = AdjustGetPosition(e.GetPosition(RelativeTo));
+                    var point = e.GetPosition(RelativeTo);
                     if (vm.Mode == EditMode.Mouse)
                     {
                         vm.CurrentTool.LeftUp(vm, point.X, point.Y, GetModifier(e.InputModifiers));
@@ -102,7 +93,7 @@ namespace Core2D.Avalonia.Controls
             {
                 if (this.DataContext is LayerContainerViewModel vm)
                 {
-                    var point = AdjustGetPosition(e.GetPosition(RelativeTo));
+                    var point = e.GetPosition(RelativeTo);
                     vm.CurrentTool.RightUp(vm, point.X, point.Y, GetModifier(e.InputModifiers));
                 }
             }
@@ -112,7 +103,7 @@ namespace Core2D.Avalonia.Controls
         {
             if (this.DataContext is LayerContainerViewModel vm)
             {
-                var point = AdjustGetPosition(e.GetPosition(RelativeTo));
+                var point = e.GetPosition(RelativeTo);
                 vm.CurrentTool.Move(vm, point.X, point.Y, GetModifier(e.InputModifiers));
             }
         }
