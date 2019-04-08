@@ -11,57 +11,8 @@ namespace Core2D.Shapes
 {
     public class FigureShape : CanvasContainer, ICopyable
     {
-        private double _width;
-        private double _height;
-        private ArgbColor _printBackground;
-        private ArgbColor _workBackground;
-        private ArgbColor _inputBackground;
-        private ObservableCollection<LineShape> _guides;
-        private ObservableCollection<BaseShape> _shapes;
         private bool _isFilled;
         private bool _isClosed;
-
-        public double Width
-        {
-            get => _width;
-            set => Update(ref _width, value);
-        }
-
-        public double Height
-        {
-            get => _height;
-            set => Update(ref _height, value);
-        }
-
-        public ArgbColor PrintBackground
-        {
-            get => _printBackground;
-            set => Update(ref _printBackground, value);
-        }
-
-        public ArgbColor WorkBackground
-        {
-            get => _workBackground;
-            set => Update(ref _workBackground, value);
-        }
-
-        public ArgbColor InputBackground
-        {
-            get => _inputBackground;
-            set => Update(ref _inputBackground, value);
-        }
-
-        public ObservableCollection<LineShape> Guides
-        {
-            get => _guides;
-            set => Update(ref _guides, value);
-        }
-
-        public ObservableCollection<BaseShape> Shapes
-        {
-            get => _shapes;
-            set => Update(ref _shapes, value);
-        }
 
         public bool IsFilled
         {
@@ -100,33 +51,9 @@ namespace Core2D.Shapes
             this.Shapes = shapes;
         }
 
-        public override IEnumerable<PointShape> GetPoints()
-        {
-            foreach (var shape in Shapes)
-            {
-                foreach (var point in shape.GetPoints())
-                {
-                    yield return point;
-                }
-            }
-        }
-
         public override bool Invalidate(ShapeRenderer renderer, double dx, double dy)
         {
             bool result = base.Invalidate(renderer, dx, dy);
-
-            if (Guides != null)
-            {
-                foreach (var guide in Guides)
-                {
-                    result |= guide.Invalidate(renderer, dx, dy);
-                }
-            }
-
-            foreach (var shape in Shapes)
-            {
-                result |= shape.Invalidate(renderer, dx, dy);
-            }
 
             if (this.IsDirty || result == true)
             {
@@ -171,10 +98,11 @@ namespace Core2D.Shapes
             }
         }
 
-        public object Copy(IDictionary<object, object> shared)
+        public override object Copy(IDictionary<object, object> shared)
         {
             var copy = new FigureShape()
             {
+                Name = this.Name,
                 Style = this.Style,
                 Transform = (MatrixObject)this.Transform?.Copy(shared),
                 Width = this.Width,
@@ -185,6 +113,11 @@ namespace Core2D.Shapes
 
             if (shared != null)
             {
+                foreach (var guide in this.Guides)
+                {
+                    copy.Guides.Add((LineShape)guide.Copy(shared));
+                }
+
                 foreach (var shape in this.Shapes)
                 {
                     if (shape is ICopyable copyable)

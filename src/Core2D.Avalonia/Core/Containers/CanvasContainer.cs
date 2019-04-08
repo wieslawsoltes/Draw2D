@@ -137,8 +137,10 @@ namespace Core2D.Containers
             var copy = new CanvasContainer()
             {
                 Name = this.Name,
+                Style = this.Style,
+                Transform = (MatrixObject)this.Transform?.Copy(shared),
                 Width = this.Width,
-                Height = this.Height
+                Height = this.Height,
             };
 
             if (shared != null)
