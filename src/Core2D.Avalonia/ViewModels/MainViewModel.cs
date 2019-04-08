@@ -10,21 +10,17 @@ using Avalonia.Controls;
 using Core2D.Containers;
 using Core2D.Editor;
 using Core2D.Editor.Bounds;
-using Core2D.Editor.Tools;
-using Core2D.Json;
-using Core2D.Presenters;
-using Core2D.Renderer;
-using Core2D.Shapes;
-using Core2D.Style;
-using Core2D.Editor;
-using Core2D.Editor.Bounds;
 using Core2D.Editor.Bounds.Shapes;
 using Core2D.Editor.Filters;
 using Core2D.Editor.Intersections.Line;
 using Core2D.Editor.Selection;
 using Core2D.Editor.Tools;
 using Core2D.Editor.Tools.Helpers;
-using Core2D.ViewModels.Containers;
+using Core2D.Json;
+using Core2D.Presenters;
+using Core2D.Renderer;
+using Core2D.Shapes;
+using Core2D.Style;
 using Spatial;
 
 namespace Core2D.ViewModels
