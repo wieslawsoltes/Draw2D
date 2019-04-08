@@ -9,7 +9,7 @@ using Core2D.Style;
 
 namespace Core2D.Shapes
 {
-    public class FigureShape : BaseShape, CanvasContainer, ICopyable
+    public class FigureShape : CanvasContainer, ICopyable
     {
         private double _width;
         private double _height;

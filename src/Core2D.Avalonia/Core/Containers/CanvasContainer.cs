@@ -105,7 +105,7 @@ namespace Core2D.Containers
             EndTransform(dc, renderer, state);
         }
 
-        public virtual bool Invalidate(ShapeRenderer renderer, double dx, double dy)
+        public override bool Invalidate(ShapeRenderer renderer, double dx, double dy)
         {
             bool result = false;
 
@@ -160,16 +160,17 @@ namespace Core2D.Containers
             return copy;
         }
 
-        public virtual void Move(ISelection selection, double dx, double dy)
+        public override void Move(ISelection selection, double dx, double dy)
         {
-        }
+            var points = GetPoints().Distinct();
 
-        public virtual void Select(ISelection selection)
-        {
-        }
-
-        public virtual void Deselect(ISelection selection)
-        {
+            foreach (var point in points)
+            {
+                if (!selection.Selected.Contains(point))
+                {
+                    point.Move(selection, dx, dy);
+                }
+            }
         }
     }
 }
