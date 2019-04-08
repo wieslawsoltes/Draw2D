@@ -8,8 +8,6 @@ namespace Core2D.Renderer
 {
     public interface IShapeRenderer : ISelection
     {
-        BaseShape Hover { get; set; }
-        ISet<BaseShape> Selected { get; set; }
         void InvalidateCache(ShapeStyle style);
         void InvalidateCache(MatrixObject matrix);
         void InvalidateCache(BaseShape shape, ShapeStyle style, double dx, double dy);
