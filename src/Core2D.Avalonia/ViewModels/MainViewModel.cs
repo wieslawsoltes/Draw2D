@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using Avalonia;
+using Avalonia.Controls;
 using Core2D.Containers;
 using Core2D.Editor;
 using Core2D.Editor.Bounds;
@@ -395,7 +397,7 @@ namespace Core2D.ViewModels
                 },
                 Settings = new SelectionToolSettings()
                 {
-                    Mode = SelectionMode.Point | SelectionMode.Shape,
+                    Mode = Core2D.Editor.Selection.SelectionMode.Point | Core2D.Editor.Selection.SelectionMode.Shape,
                     Targets = SelectionTargets.Shapes | SelectionTargets.Guides,
                     SelectionModifier = Modifier.Control,
                     ConnectionModifier = Modifier.Shift,
