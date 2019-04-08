@@ -298,117 +298,21 @@ namespace Core2D.ViewModels.Containers
             }
         }
 
-        public void SetNoneTool()
-        {
-            CurrentTool = Tools.Where(t => t.Title == "None").FirstOrDefault();
-        }
-
-        public void SetSelectionTool()
-        {
-            CurrentTool = Tools.Where(t => t.Title == "Selection").FirstOrDefault();
-        }
-
-        public void SetLineTool()
+        public void SetTool(string name)
         {
             if (CurrentTool is PathTool pathTool)
             {
                 pathTool.CleanCurrentTool(this);
-                pathTool.Settings.CurrentTool = pathTool.Settings.Tools.Where(t => t.Title == "Line").FirstOrDefault();
+                var tool = pathTool.Settings.Tools.Where(t => t.Title == name).FirstOrDefault();
+                if (tool != null)
+                {
+                    pathTool.Settings.CurrentTool = tool;
+                }
             }
             else
             {
-                CurrentTool = Tools.Where(t => t.Title == "Line").FirstOrDefault();
+                CurrentTool = Tools.Where(t => t.Title == name).FirstOrDefault();
             }
-        }
-
-        public void SetPointTool()
-        {
-            CurrentTool = Tools.Where(t => t.Title == "Point").FirstOrDefault();
-        }
-
-        public void SetCubicBezierTool()
-        {
-            if (CurrentTool is PathTool pathTool)
-            {
-                pathTool.CleanCurrentTool(this);
-                pathTool.Settings.CurrentTool = pathTool.Settings.Tools.Where(t => t.Title == "CubicBezier").FirstOrDefault();
-            }
-            else
-            {
-                CurrentTool = Tools.Where(t => t.Title == "CubicBezier").FirstOrDefault();
-            }
-        }
-
-        public void SetQuadraticBezierTool()
-        {
-            if (CurrentTool is PathTool pathTool)
-            {
-                pathTool.CleanCurrentTool(this);
-                pathTool.Settings.CurrentTool = pathTool.Settings.Tools.Where(t => t.Title == "QuadraticBezier").FirstOrDefault();
-            }
-            else
-            {
-                CurrentTool = Tools.Where(t => t.Title == "QuadraticBezier").FirstOrDefault();
-            }
-        }
-
-        public void SetPathTool()
-        {
-            CurrentTool = Tools.Where(t => t.Title == "Path").FirstOrDefault();
-        }
-
-        public void SetMoveTool()
-        {
-            if (CurrentTool is PathTool pathTool)
-            {
-                pathTool.CleanCurrentTool(this);
-                pathTool.Settings.CurrentTool = pathTool.Settings.Tools.Where(t => t.Title == "Move").FirstOrDefault();
-            }
-        }
-
-        public void SetRectangleTool()
-        {
-            CurrentTool = Tools.Where(t => t.Title == "Rectangle").FirstOrDefault();
-        }
-
-        public void SetEllipseTool()
-        {
-            CurrentTool = Tools.Where(t => t.Title == "Ellipse").FirstOrDefault();
-        }
-
-        public void SetTextTool()
-        {
-            CurrentTool = Tools.Where(t => t.Title == "Text").FirstOrDefault();
-        }
-
-        public void ResetZoom()
-        {
-            Reset?.Invoke();
-        }
-
-        public void AutoFitZoom()
-        {
-            AutoFit?.Invoke();
-        }
-
-        public void SetStretchNone()
-        {
-            StretchNone?.Invoke();
-        }
-
-        public void SetStretchFill()
-        {
-            StretchFill?.Invoke();
-        }
-
-        public void SetStretchUniform()
-        {
-            StretchUniform?.Invoke();
-        }
-
-        public void SetStretchUniformToFill()
-        {
-            StretchUniformToFill?.Invoke();
         }
     }
 }
