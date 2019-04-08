@@ -8,7 +8,7 @@ namespace Core2D.Editor.Tools.Helpers
 {
     public class PointHelper : CommonHelper
     {
-        public override void Draw(object dc, ShapeRenderer renderer, BaseShape shape, ISelection selection, double dx, double dy)
+        public override void Draw(object dc, IShapeRenderer renderer, BaseShape shape, ISelection selection, double dx, double dy)
         {
         }
     }

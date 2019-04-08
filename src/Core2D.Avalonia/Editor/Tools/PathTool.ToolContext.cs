@@ -20,7 +20,7 @@ namespace Core2D.Editor.Tools
             _context = context;
         }
 
-        private void SetRenderer(ShapeRenderer renderer)
+        private void SetRenderer(IShapeRenderer renderer)
         {
             if (_context != null)
             {
@@ -33,7 +33,7 @@ namespace Core2D.Editor.Tools
             _nextPoint = point;
         }
 
-        public ShapeRenderer Renderer
+        public IShapeRenderer Renderer
         {
             get => _context?.Renderer;
             set => SetRenderer(value);

@@ -45,7 +45,7 @@ namespace Core2D.Shapes
             }
         }
 
-        public override bool Invalidate(ShapeRenderer renderer, double dx, double dy)
+        public override bool Invalidate(IShapeRenderer renderer, double dx, double dy)
         {
             bool result = base.Invalidate(renderer, dx, dy);
 

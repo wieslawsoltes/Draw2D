@@ -103,7 +103,7 @@ namespace Core2D.Avalonia.Renderers
         }
     }
 
-    public class AvaloniaShapeRenderer : ShapeRenderer
+    public class AvaloniaShapeRenderer : ObservableObject, IShapeRenderer
     {
         private readonly IDictionary<ShapeStyle, AvaloniaBrushCache> _brushCache;
         private readonly IDictionary<MatrixObject, Matrix> _matrixCache;
@@ -116,13 +116,13 @@ namespace Core2D.Avalonia.Renderers
         private BaseShape _hover;
         private ISet<BaseShape> _selected;
 
-        public override BaseShape Hover
+        public BaseShape Hover
         {
             get => _hover;
             set => Update(ref _hover, value);
         }
 
-        public override ISet<BaseShape> Selected
+        public ISet<BaseShape> Selected
         {
             get => _selected;
             set => Update(ref _selected, value);
@@ -375,7 +375,7 @@ namespace Core2D.Avalonia.Renderers
             return cache;
         }
 
-        public override void InvalidateCache(ShapeStyle style)
+        public void InvalidateCache(ShapeStyle style)
         {
             if (style != null)
             {
@@ -387,7 +387,7 @@ namespace Core2D.Avalonia.Renderers
             }
         }
 
-        public override void InvalidateCache(MatrixObject matrix)
+        public void InvalidateCache(MatrixObject matrix)
         {
             if (matrix != null)
             {
@@ -395,7 +395,7 @@ namespace Core2D.Avalonia.Renderers
             }
         }
 
-        public override void InvalidateCache(BaseShape shape, ShapeStyle style, double dx, double dy)
+        public void InvalidateCache(BaseShape shape, ShapeStyle style, double dx, double dy)
         {
             switch (shape)
             {
@@ -448,26 +448,26 @@ namespace Core2D.Avalonia.Renderers
             }
         }
 
-        public override object PushMatrix(object dc, MatrixObject matrix)
+        public object PushMatrix(object dc, MatrixObject matrix)
         {
             var _dc = dc as DrawingContext;
             return _dc.PushPreTransform(GetMatrixCache(matrix).Value);
         }
 
-        public override void PopMatrix(object dc, object state)
+        public void PopMatrix(object dc, object state)
         {
             var _state = (DrawingContext.PushedState)state;
             _state.Dispose();
         }
 
-        public override void DrawLine(object dc, LineShape line, ShapeStyle style, double dx, double dy)
+        public void DrawLine(object dc, LineShape line, ShapeStyle style, double dx, double dy)
         {
             var cache = GetBrushCache(style);
             var _dc = dc as DrawingContext;
             _dc.DrawLine(style.IsStroked ? cache?.StrokePen : null, ToPoint(line.StartPoint, dx, dy), ToPoint(line.Point, dx, dy));
         }
 
-        public override void DrawCubicBezier(object dc, CubicBezierShape cubicBezier, ShapeStyle style, double dx, double dy)
+        public void DrawCubicBezier(object dc, CubicBezierShape cubicBezier, ShapeStyle style, double dx, double dy)
         {
             var cache = GetBrushCache(style);
             var _dc = dc as DrawingContext;
@@ -475,7 +475,7 @@ namespace Core2D.Avalonia.Renderers
             _dc.DrawGeometry(style.IsFilled ? cache?.Fill : null, style.IsStroked ? cache?.StrokePen : null, geometry);
         }
 
-        public override void DrawQuadraticBezier(object dc, QuadraticBezierShape quadraticBezier, ShapeStyle style, double dx, double dy)
+        public void DrawQuadraticBezier(object dc, QuadraticBezierShape quadraticBezier, ShapeStyle style, double dx, double dy)
         {
             var cache = GetBrushCache(style);
             var _dc = dc as DrawingContext;
@@ -483,7 +483,7 @@ namespace Core2D.Avalonia.Renderers
             _dc.DrawGeometry(style.IsFilled ? cache?.Fill : null, style.IsStroked ? cache?.StrokePen : null, geometry);
         }
 
-        public override void DrawPath(object dc, PathShape path, ShapeStyle style, double dx, double dy)
+        public void DrawPath(object dc, PathShape path, ShapeStyle style, double dx, double dy)
         {
             var cache = GetBrushCache(style);
             var _dc = dc as DrawingContext;
@@ -491,7 +491,7 @@ namespace Core2D.Avalonia.Renderers
             _dc.DrawGeometry(style.IsFilled ? cache?.Fill : null, style.IsStroked ? cache?.StrokePen : null, geometry);
         }
 
-        public override void DrawRectangle(object dc, RectangleShape rectangle, ShapeStyle style, double dx, double dy)
+        public void DrawRectangle(object dc, RectangleShape rectangle, ShapeStyle style, double dx, double dy)
         {
             var cache = GetBrushCache(style);
             var _dc = dc as DrawingContext;
@@ -506,7 +506,7 @@ namespace Core2D.Avalonia.Renderers
             }
         }
 
-        public override void DrawEllipse(object dc, EllipseShape ellipse, ShapeStyle style, double dx, double dy)
+        public void DrawEllipse(object dc, EllipseShape ellipse, ShapeStyle style, double dx, double dy)
         {
             var cache = GetBrushCache(style);
             var _dc = dc as DrawingContext;
@@ -514,7 +514,7 @@ namespace Core2D.Avalonia.Renderers
             _dc.DrawGeometry(style.IsFilled ? cache?.Fill : null, style.IsStroked ? cache?.StrokePen : null, geometry);
         }
 
-        public override void DrawText(object dc, TextShape text, ShapeStyle style, double dx, double dy)
+        public void DrawText(object dc, TextShape text, ShapeStyle style, double dx, double dy)
         {
             var cache = GetBrushCache(style);
             var _dc = dc as DrawingContext;

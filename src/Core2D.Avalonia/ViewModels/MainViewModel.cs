@@ -31,7 +31,7 @@ namespace Core2D.ViewModels
         private ToolBase _currentTool;
         private EditMode _mode;
         private ShapePresenter _presenter;
-        private ShapeRenderer _renderer;
+        private IShapeRenderer _renderer;
         private IHitTest _hitTest;
         private CanvasContainer _currentContainer;
         private CanvasContainer _workingContainer;
@@ -66,7 +66,7 @@ namespace Core2D.ViewModels
             set => Update(ref _presenter, value);
         }
 
-        public ShapeRenderer Renderer
+        public IShapeRenderer Renderer
         {
             get => _renderer;
             set => Update(ref _renderer, value);
@@ -643,7 +643,7 @@ namespace Core2D.ViewModels
 
             var currentTool = tools.FirstOrDefault(t => t.Title == "Selection");
 
-            var presenter = new DefaultShapePresenter()
+            var presenter = new ShapePresenter()
             {
                 Helpers = new Dictionary<Type, ShapeHelper>
                 {

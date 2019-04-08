@@ -8,14 +8,14 @@ namespace Core2D.Editor.Tools.Helpers
 {
     public class CubicBezierHelper : CommonHelper
     {
-        public void Draw(object dc, ShapeRenderer renderer, CubicBezierShape cubicBezier, double dx, double dy)
+        public void Draw(object dc, IShapeRenderer renderer, CubicBezierShape cubicBezier, double dx, double dy)
         {
             DrawLine(dc, renderer, cubicBezier.StartPoint, cubicBezier.Point1, dx, dy);
             DrawLine(dc, renderer, cubicBezier.Point3, cubicBezier.Point2, dx, dy);
             DrawLine(dc, renderer, cubicBezier.Point1, cubicBezier.Point2, dx, dy);
         }
 
-        public override void Draw(object dc, ShapeRenderer renderer, BaseShape shape, ISelection selection, double dx, double dy)
+        public override void Draw(object dc, IShapeRenderer renderer, BaseShape shape, ISelection selection, double dx, double dy)
         {
             if (shape is CubicBezierShape cubicBezier)
             {

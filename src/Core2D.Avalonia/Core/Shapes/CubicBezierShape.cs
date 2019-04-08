@@ -63,7 +63,7 @@ namespace Core2D.Shapes
             }
         }
 
-        public override bool Invalidate(ShapeRenderer renderer, double dx, double dy)
+        public override bool Invalidate(IShapeRenderer renderer, double dx, double dy)
         {
             bool result = base.Invalidate(renderer, dx, dy);
 
@@ -82,7 +82,7 @@ namespace Core2D.Shapes
             return result;
         }
 
-        public override void Draw(object dc, ShapeRenderer renderer, double dx, double dy, object db, object r)
+        public override void Draw(object dc, IShapeRenderer renderer, double dx, double dy, object db, object r)
         {
             var state = base.BeginTransform(dc, renderer);
 

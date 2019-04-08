@@ -56,7 +56,7 @@ namespace Core2D.Style
             this.IsFilled = isFilled;
         }
 
-        public virtual bool Invalidate(ShapeRenderer r)
+        public virtual bool Invalidate(IShapeRenderer r)
         {
             if ((this.IsDirty == true)
                 || (_stroke?.IsDirty ?? false) 

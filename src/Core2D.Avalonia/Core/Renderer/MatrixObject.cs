@@ -67,7 +67,7 @@ namespace Core2D.Renderer
             this.OffsetY = offsetY;
         }
 
-        public virtual bool Invalidate(ShapeRenderer r)
+        public virtual bool Invalidate(IShapeRenderer r)
         {
             if (this.IsDirty == true)
             {

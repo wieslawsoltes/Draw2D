@@ -19,7 +19,7 @@ namespace Core2D.Editor.Tools.Helpers
             _quadraticBezierHelper = new QuadraticBezierHelper();
         }
 
-        public void DrawShape(object dc, ShapeRenderer renderer, BaseShape shape, ISelection selection, double dx, double dy)
+        public void DrawShape(object dc, IShapeRenderer renderer, BaseShape shape, ISelection selection, double dx, double dy)
         {
             if (shape is LineShape line)
             {
@@ -44,7 +44,7 @@ namespace Core2D.Editor.Tools.Helpers
             }
         }
 
-        public void DrawFigure(object dc, ShapeRenderer renderer, FigureShape figure, ISelection selection, double dx, double dy)
+        public void DrawFigure(object dc, IShapeRenderer renderer, FigureShape figure, ISelection selection, double dx, double dy)
         {
             foreach (var shape in figure.Shapes)
             {
@@ -52,7 +52,7 @@ namespace Core2D.Editor.Tools.Helpers
             }
         }
 
-        public void Draw(object dc, ShapeRenderer renderer, PathShape path, ISelection selection, double dx, double dy)
+        public void Draw(object dc, IShapeRenderer renderer, PathShape path, ISelection selection, double dx, double dy)
         {
             foreach (var figure in path.Figures)
             {
@@ -60,7 +60,7 @@ namespace Core2D.Editor.Tools.Helpers
             }
         }
 
-        public override void Draw(object dc, ShapeRenderer renderer, BaseShape shape, ISelection selection, double dx, double dy)
+        public override void Draw(object dc, IShapeRenderer renderer, BaseShape shape, ISelection selection, double dx, double dy)
         {
             if (shape is PathShape path)
             {

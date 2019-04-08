@@ -25,7 +25,7 @@ namespace Core2D.Shapes
 
         public abstract IEnumerable<PointShape> GetPoints();
 
-        public virtual object BeginTransform(object dc, ShapeRenderer renderer)
+        public virtual object BeginTransform(object dc, IShapeRenderer renderer)
         {
             if (Transform != null)
             {
@@ -34,7 +34,7 @@ namespace Core2D.Shapes
             return null;
         }
 
-        public virtual void EndTransform(object dc, ShapeRenderer renderer, object state)
+        public virtual void EndTransform(object dc, IShapeRenderer renderer, object state)
         {
             if (Transform != null)
             {
@@ -42,9 +42,9 @@ namespace Core2D.Shapes
             }
         }
 
-        public abstract void Draw(object dc, ShapeRenderer renderer, double dx, double dy, object db, object r);
+        public abstract void Draw(object dc, IShapeRenderer renderer, double dx, double dy, object db, object r);
 
-        public virtual bool Invalidate(ShapeRenderer renderer, double dx, double dy)
+        public virtual bool Invalidate(IShapeRenderer renderer, double dx, double dy)
         {
             bool result = false;
             result |= _style?.Invalidate(renderer) ?? false;

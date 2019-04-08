@@ -86,7 +86,7 @@ namespace Core2D.Containers
             }
         }
 
-        public override void Draw(object dc, ShapeRenderer renderer, double dx, double dy, object db, object r)
+        public override void Draw(object dc, IShapeRenderer renderer, double dx, double dy, object db, object r)
         {
             var state = BeginTransform(dc, renderer);
 
@@ -106,7 +106,7 @@ namespace Core2D.Containers
             EndTransform(dc, renderer, state);
         }
 
-        public override bool Invalidate(ShapeRenderer renderer, double dx, double dy)
+        public override bool Invalidate(IShapeRenderer renderer, double dx, double dy)
         {
             bool result = false;
 

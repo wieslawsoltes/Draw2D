@@ -7,10 +7,31 @@ using Core2D.Renderer;
 
 namespace Core2D.Presenters
 {
-    public abstract class ShapePresenter
+    public class ShapePresenter
     {
         public Dictionary<Type, ShapeHelper> Helpers { get; set; }
-        public abstract void DrawContainer(object dc, CanvasContainer container, ShapeRenderer renderer, double dx, double dy, object db, object r);
-        public abstract void DrawHelpers(object dc, CanvasContainer container, ShapeRenderer renderer, double dx, double dy);
+
+        public virtual void DrawContainer(object dc, CanvasContainer container, IShapeRenderer renderer, double dx, double dy, object db, object r)
+        {
+            container.Invalidate(renderer, dx, dy);
+            container.Draw(dc, renderer, dx, dy, db, r);
+        }
+
+        public virtual void DrawHelpers(object dc, CanvasContainer container, IShapeRenderer renderer, double dx, double dy)
+        {
+            var shapes = container.Shapes;
+            var selection = renderer;
+
+            foreach (var shape in shapes)
+            {
+                if (selection.Selected.Contains(shape))
+                {
+                    if (Helpers.TryGetValue(shape.GetType(), out var helper))
+                    {
+                        helper.Draw(dc, renderer, shape, selection, dx, dy);
+                    }
+                }
+            }
+        }
     }
 }

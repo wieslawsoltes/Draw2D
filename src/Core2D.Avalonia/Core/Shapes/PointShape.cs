@@ -46,7 +46,7 @@ namespace Core2D.Shapes
             yield return this;
         }
 
-        public override bool Invalidate(ShapeRenderer renderer, double dx, double dy)
+        public override bool Invalidate(IShapeRenderer renderer, double dx, double dy)
         {
             bool result = base.Invalidate(renderer, dx, dy);
 
@@ -55,7 +55,7 @@ namespace Core2D.Shapes
             return this.IsDirty | result;
         }
 
-        public override void Draw(object dc, ShapeRenderer renderer, double dx, double dy, object db, object r)
+        public override void Draw(object dc, IShapeRenderer renderer, double dx, double dy, object db, object r)
         {
             if (_template != null)
             {

@@ -8,13 +8,13 @@ namespace Core2D.Editor.Tools.Helpers
 {
     public class QuadraticBezierHelper : CommonHelper
     {
-        public void Draw(object dc, ShapeRenderer renderer, QuadraticBezierShape quadraticBezier, double dx, double dy)
+        public void Draw(object dc, IShapeRenderer renderer, QuadraticBezierShape quadraticBezier, double dx, double dy)
         {
             DrawLine(dc, renderer, quadraticBezier.StartPoint, quadraticBezier.Point1, dx, dy);
             DrawLine(dc, renderer, quadraticBezier.Point1, quadraticBezier.Point2, dx, dy);
         }
 
-        public override void Draw(object dc, ShapeRenderer renderer, BaseShape shape, ISelection selection, double dx, double dy)
+        public override void Draw(object dc, IShapeRenderer renderer, BaseShape shape, ISelection selection, double dx, double dy)
         {
             if (shape is QuadraticBezierShape quadraticBezier)
             {

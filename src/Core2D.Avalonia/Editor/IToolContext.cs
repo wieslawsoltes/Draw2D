@@ -11,7 +11,7 @@ namespace Core2D.Editor
 {
     public interface IToolContext
     {
-        ShapeRenderer Renderer { get; set; }
+        IShapeRenderer Renderer { get; set; }
         IHitTest HitTest { get; set; }
         CanvasContainer CurrentContainer { get; set; }
         CanvasContainer WorkingContainer { get; set; }
