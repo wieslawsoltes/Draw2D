@@ -7,13 +7,13 @@ namespace Core2D.Presenters
 {
     public class DefaultShapePresenter : ShapePresenter
     {
-        public override void DrawContainer(object dc, ILayerContainer container, ShapeRenderer renderer, double dx, double dy, object db, object r)
+        public override void DrawContainer(object dc, CanvasContainer container, ShapeRenderer renderer, double dx, double dy, object db, object r)
         {
             container.Invalidate(renderer, dx, dy);
             container.Draw(dc, renderer, dx, dy, db, r);
         }
 
-        public override void DrawHelpers(object dc, ILayerContainer container, ShapeRenderer renderer, double dx, double dy)
+        public override void DrawHelpers(object dc, CanvasContainer container, ShapeRenderer renderer, double dx, double dy)
         {
             var shapes = container.Shapes;
             var selection = renderer;

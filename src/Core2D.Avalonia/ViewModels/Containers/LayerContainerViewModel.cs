@@ -29,8 +29,8 @@ namespace Core2D.ViewModels.Containers
         private ShapePresenter _presenter;
         private ShapeRenderer _renderer;
         private IHitTest _hitTest;
-        private ILayerContainer _currentContainer;
-        private ILayerContainer _workingContainer;
+        private CanvasContainer _currentContainer;
+        private CanvasContainer _workingContainer;
         private ShapeStyle _currentStyle;
         private BaseShape _pointShape;
 
@@ -74,13 +74,13 @@ namespace Core2D.ViewModels.Containers
             set => Update(ref _hitTest, value);
         }
 
-        public ILayerContainer CurrentContainer
+        public CanvasContainer CurrentContainer
         {
             get => _currentContainer;
             set => Update(ref _currentContainer, value);
         }
 
-        public ILayerContainer WorkingContainer
+        public CanvasContainer WorkingContainer
         {
             get => _workingContainer;
             set => Update(ref _workingContainer, value);
@@ -185,7 +185,7 @@ namespace Core2D.ViewModels.Containers
         {
             CurrentTool.Clean(this);
             Renderer.Selected.Clear();
-            var container = new LayerContainer()
+            var container = new CanvasContainer()
             {
                 Width = 720,
                 Height = 630,
@@ -193,17 +193,17 @@ namespace Core2D.ViewModels.Containers
                 WorkBackground = new ArgbColor(255, 128, 128, 128),
                 InputBackground = new ArgbColor(255, 211, 211, 211)
             };
-            var workingContainer = new LayerContainer();
+            var workingContainer = new CanvasContainer();
             CurrentContainer = container;
-            WorkingContainer = new LayerContainer();
+            WorkingContainer = new CanvasContainer();
             Invalidate?.Invoke();
         }
 
         public void OpenAsJson(string path)
         {
             var json = File.ReadAllText(path);
-            var container = NewtonsoftJsonSerializer.FromJson<LayerContainer>(json);
-            var workingContainer = new LayerContainer();
+            var container = NewtonsoftJsonSerializer.FromJson<CanvasContainer>(json);
+            var workingContainer = new CanvasContainer();
             CurrentTool.Clean(this);
             Renderer.Selected.Clear();
             CurrentContainer = container;

@@ -14,8 +14,8 @@ namespace Core2D.Editor
     {
         ShapeRenderer Renderer { get; set; }
         IHitTest HitTest { get; set; }
-        ILayerContainer CurrentContainer { get; set; }
-        ILayerContainer WorkingContainer { get; set; }
+        CanvasContainer CurrentContainer { get; set; }
+        CanvasContainer WorkingContainer { get; set; }
         ShapeStyle CurrentStyle { get; set; }
         BaseShape PointShape { get; set; }
         Action Capture { get; set; }

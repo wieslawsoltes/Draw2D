@@ -1,4 +1,4 @@
-﻿// Copyright (c) Wiesław Šoltés. All rights reserved.
+// Copyright (c) Wiesław Šoltés. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using System;
 using System.Collections.Generic;
@@ -381,7 +381,7 @@ namespace Core2D.ViewModels
 
         public void CreateDemoContainer(LayerContainerViewModel vm)
         {
-            var container = new LayerContainer()
+            var container = new CanvasContainer()
             {
                 Width = 720,
                 Height = 630,
@@ -390,7 +390,7 @@ namespace Core2D.ViewModels
                 InputBackground = new ArgbColor(255, 211, 211, 211)
             };
 
-            var workingContainer = new LayerContainer();
+            var workingContainer = new CanvasContainer();
 
             var style = new ShapeStyle(new ArgbColor(255, 0, 255, 0), new ArgbColor(80, 0, 255, 0), 2.0, true, true);
 
