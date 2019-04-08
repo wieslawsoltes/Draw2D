@@ -3,7 +3,6 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using Core2D.Renderer;
-using Core2D.Shape;
 
 namespace Core2D.Shapes
 {

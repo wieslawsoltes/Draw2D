@@ -6,7 +6,6 @@ using System.Linq;
 using Avalonia;
 using Avalonia.Media;
 using Core2D.Renderer;
-using Core2D.Shape;
 using Core2D.Shapes;
 using Core2D.Style;
 

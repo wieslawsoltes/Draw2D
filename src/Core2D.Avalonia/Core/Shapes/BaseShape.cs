@@ -2,10 +2,9 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using System.Collections.Generic;
 using Core2D.Renderer;
-using Core2D.Shapes;
 using Core2D.Style;
 
-namespace Core2D.Shape
+namespace Core2D.Shapes
 {
     public abstract class BaseShape : ObservableObject, IDrawable, ISelectable
     {

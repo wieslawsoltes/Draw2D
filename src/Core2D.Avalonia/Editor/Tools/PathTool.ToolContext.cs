@@ -7,7 +7,7 @@ using Core2D.Editor.Bounds;
 using Core2D.Shapes;
 using Core2D.Style;
 using Core2D.Renderer;
-using Core2D.Shape;
+using Core2D.Shapes;
 
 namespace Core2D.Editor.Tools
 {

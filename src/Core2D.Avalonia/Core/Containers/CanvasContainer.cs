@@ -3,13 +3,12 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Core2D.Renderer;
-using Core2D.Shape;
 using Core2D.Shapes;
 using Core2D.Style;
 
 namespace Core2D.Containers
 {
-    public class CanvasContainer : ObservableObject, IDrawable, ICopyable
+    public class CanvasContainer : BaseShape, ICopyable
     {
         private ShapeStyle _style;
         private MatrixObject _transform;
@@ -190,6 +189,18 @@ namespace Core2D.Containers
             }
 
             return copy;
+        }
+
+        public virtual void Move(ISelection selection, double dx, double dy)
+        {
+        }
+
+        public virtual void Select(ISelection selection)
+        {
+        }
+
+        public virtual void Deselect(ISelection selection)
+        {
         }
     }
 }
