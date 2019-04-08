@@ -8,7 +8,7 @@ using Avalonia.Media;
 using Avalonia.VisualTree;
 using Core2D.Avalonia.Renderers;
 using Core2D.Editor;
-using Core2D.ViewModels.Containers;
+using Core2D.ViewModels;
 
 namespace Core2D.Avalonia.Controls
 {
@@ -56,7 +56,7 @@ namespace Core2D.Avalonia.Controls
         {
             if (e.MouseButton == MouseButton.Left)
             {
-                if (this.DataContext is LayerContainerViewModel vm)
+                if (this.DataContext is MainViewModel vm)
                 {
                     var point = e.GetPosition(RelativeTo);
                     vm.CurrentTool.LeftDown(vm, point.X, point.Y, GetModifier(e.InputModifiers));
@@ -64,7 +64,7 @@ namespace Core2D.Avalonia.Controls
             }
             else if (e.MouseButton == MouseButton.Right)
             {
-                if (this.DataContext is LayerContainerViewModel vm)
+                if (this.DataContext is MainViewModel vm)
                 {
                     var point = e.GetPosition(RelativeTo);
                     vm.CurrentTool.RightDown(vm, point.X, point.Y, GetModifier(e.InputModifiers));
@@ -76,7 +76,7 @@ namespace Core2D.Avalonia.Controls
         {
             if (e.MouseButton == MouseButton.Left)
             {
-                if (this.DataContext is LayerContainerViewModel vm)
+                if (this.DataContext is MainViewModel vm)
                 {
                     var point = e.GetPosition(RelativeTo);
                     if (vm.Mode == EditMode.Mouse)
@@ -91,7 +91,7 @@ namespace Core2D.Avalonia.Controls
             }
             else if (e.MouseButton == MouseButton.Right)
             {
-                if (this.DataContext is LayerContainerViewModel vm)
+                if (this.DataContext is MainViewModel vm)
                 {
                     var point = e.GetPosition(RelativeTo);
                     vm.CurrentTool.RightUp(vm, point.X, point.Y, GetModifier(e.InputModifiers));
@@ -101,7 +101,7 @@ namespace Core2D.Avalonia.Controls
 
         private void HandlePointerMoved(PointerEventArgs e)
         {
-            if (this.DataContext is LayerContainerViewModel vm)
+            if (this.DataContext is MainViewModel vm)
             {
                 var point = e.GetPosition(RelativeTo);
                 vm.CurrentTool.Move(vm, point.X, point.Y, GetModifier(e.InputModifiers));
@@ -112,7 +112,7 @@ namespace Core2D.Avalonia.Controls
         {
             base.Render(context);
 
-            if (this.DataContext is LayerContainerViewModel vm)
+            if (this.DataContext is MainViewModel vm)
             {
                 if (vm.CurrentContainer.WorkBackground != null)
                 {

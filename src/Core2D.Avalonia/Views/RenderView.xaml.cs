@@ -5,7 +5,7 @@ using Avalonia.Controls;
 using Avalonia.Controls.PanAndZoom;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
-using Core2D.ViewModels.Containers;
+using Core2D.ViewModels;
 
 namespace Core2D.Avalonia.Views
 {
@@ -25,7 +25,7 @@ namespace Core2D.Avalonia.Views
         {
             base.OnAttachedToVisualTree(e);
 
-            if (this.DataContext is LayerContainerViewModel vm)
+            if (this.DataContext is MainViewModel vm)
             {
                 var zoomBorder = this.FindControl<ZoomBorder>("zoomBorder");
                 vm.Reset = () => zoomBorder.Reset();
@@ -41,7 +41,7 @@ namespace Core2D.Avalonia.Views
         {
             base.OnDetachedFromVisualTree(e);
 
-            if (this.DataContext is LayerContainerViewModel vm)
+            if (this.DataContext is MainViewModel vm)
             {
                 vm.Reset = null;
                 vm.AutoFit = null;

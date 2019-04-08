@@ -6,7 +6,7 @@ using Avalonia.Input;
 using Avalonia.Media;
 using Avalonia.VisualTree;
 using Core2D.Avalonia.Renderers;
-using Core2D.ViewModels.Containers;
+using Core2D.ViewModels;
 
 namespace Core2D.Avalonia.Controls
 {
@@ -18,7 +18,7 @@ namespace Core2D.Avalonia.Controls
         {
             base.OnAttachedToVisualTree(e);
 
-            if (this.DataContext is LayerContainerViewModel vm)
+            if (this.DataContext is MainViewModel vm)
             {
                 var md = (this.GetVisualRoot() as IInputRoot)?.MouseDevice;
                 if (md != null)
@@ -46,7 +46,7 @@ namespace Core2D.Avalonia.Controls
         {
             base.OnDetachedFromVisualTree(e);
 
-            if (this.DataContext is LayerContainerViewModel vm)
+            if (this.DataContext is MainViewModel vm)
             {
                 vm.Capture = null;
                 vm.Release = null;
@@ -72,7 +72,7 @@ namespace Core2D.Avalonia.Controls
         {
             base.Render(context);
 
-            if (this.DataContext is LayerContainerViewModel vm)
+            if (this.DataContext is MainViewModel vm)
             {
                 if (vm.CurrentContainer.WorkBackground != null)
                 {

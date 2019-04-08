@@ -7,7 +7,6 @@ using Avalonia.Logging.Serilog;
 using Avalonia.Markup.Xaml;
 using Core2D.Avalonia.Renderers;
 using Core2D.ViewModels;
-using Core2D.ViewModels.Containers;
 
 namespace Core2D.Avalonia
 {
@@ -21,9 +20,9 @@ namespace Core2D.Avalonia
 
         static void AppMain(Application app, string[] args)
         {
-            var bootstrapper = new Bootstrapper();
-            LayerContainerViewModel vm = bootstrapper.CreateDemoViewModel();
-            bootstrapper.CreateDemoContainer(vm);
+            var factory = new MainViewModelFactory();
+            MainViewModel vm = factory.CreateMainViewModel();
+            factory.CreateDemoContainer(vm);
             vm.Renderer = new AvaloniaShapeRenderer();
 
             var window = new MainWindow
