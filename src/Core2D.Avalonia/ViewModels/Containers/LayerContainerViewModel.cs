@@ -221,7 +221,7 @@ namespace Core2D.ViewModels.Containers
             var dlg = new OpenFileDialog();
             dlg.Filters.Add(new FileDialogFilter() { Name = "Json Files", Extensions = { "json" } });
             dlg.Filters.Add(new FileDialogFilter() { Name = "All Files", Extensions = { "*" } });
-            var result = await dlg.ShowAsync();
+            var result = await dlg.ShowAsync(Application.Current.Windows[0]);
             if (result != null)
             {
                 var path = result.FirstOrDefault();

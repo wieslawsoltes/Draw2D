@@ -35,7 +35,7 @@ namespace Core2D.Avalonia.Renderers
                 Typeface = new Typeface("Arial", 11)
             };
 
-            var size = formattedText.Measure();
+            var size = formattedText.Bounds.Size;
 
             // Vertical Alignment: Top
             //var top = new Point(
