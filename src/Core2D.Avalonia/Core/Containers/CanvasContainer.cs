@@ -10,8 +10,6 @@ namespace Core2D.Containers
 {
     public class CanvasContainer : BaseShape, ICopyable
     {
-        private ShapeStyle _style;
-        private MatrixObject _transform;
         private double _width;
         private double _height;
         private ArgbColor _printBackground;
@@ -20,18 +18,6 @@ namespace Core2D.Containers
         private ObservableCollection<LineShape> _guides;
         private ObservableCollection<BaseShape> _shapes;
         private ObservableCollection<ShapeStyle> _styles;
-
-        public ShapeStyle Style
-        {
-            get => _style;
-            set => Update(ref _style, value);
-        }
-
-        public MatrixObject Transform
-        {
-            get => _transform;
-            set => Update(ref _transform, value);
-        }
 
         public double Width
         {
@@ -88,7 +74,7 @@ namespace Core2D.Containers
             _styles = new ObservableCollection<ShapeStyle>();
         }
 
-        public virtual IEnumerable<PointShape> GetPoints()
+        public override IEnumerable<PointShape> GetPoints()
         {
             foreach (var shape in Shapes)
             {
@@ -99,24 +85,7 @@ namespace Core2D.Containers
             }
         }
 
-        public virtual object BeginTransform(object dc, ShapeRenderer renderer)
-        {
-            if (Transform != null)
-            {
-                return renderer.PushMatrix(dc, Transform);
-            }
-            return null;
-        }
-
-        public virtual void EndTransform(object dc, ShapeRenderer renderer, object state)
-        {
-            if (Transform != null)
-            {
-                renderer.PopMatrix(dc, state);
-            }
-        }
-
-        public virtual void Draw(object dc, ShapeRenderer renderer, double dx, double dy, object db, object r)
+        public override void Draw(object dc, ShapeRenderer renderer, double dx, double dy, object db, object r)
         {
             var state = BeginTransform(dc, renderer);
 

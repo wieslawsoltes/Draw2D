@@ -3,7 +3,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Core2D.Shapes;
-using Core2D.Shapes;
 using Core2D.Editor.Selection.Helpers;
 using Spatial;
 
