@@ -3,7 +3,6 @@
 using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using Core2D.Attributes;
 
 namespace Core2D
 {
@@ -18,7 +17,6 @@ namespace Core2D
         /// <summary>
         /// Gets or sets observable object name.
         /// </summary>
-        [Name]
         public virtual string Id
         {
             get => _id;
