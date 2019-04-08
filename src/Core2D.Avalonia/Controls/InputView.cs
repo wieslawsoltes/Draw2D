@@ -12,10 +12,10 @@ using Core2D.ViewModels;
 
 namespace Core2D.Avalonia.Controls
 {
-    public class LayerContainerInputView : Border
+    public class InputView : Border
     {
         public static readonly StyledProperty<IVisual> RelativeToProperty =
-            AvaloniaProperty.Register<LayerContainerInputView, IVisual>(nameof(RelativeTo));
+            AvaloniaProperty.Register<InputView, IVisual>(nameof(RelativeTo));
 
         public IVisual RelativeTo
         {
@@ -23,7 +23,7 @@ namespace Core2D.Avalonia.Controls
             set { SetValue(RelativeToProperty, value); }
         }
 
-        public LayerContainerInputView()
+        public InputView()
         {
             PointerPressed += (sender, e) => HandlePointerPressed(e);
             PointerReleased += (sender, e) => HandlePointerReleased(e);

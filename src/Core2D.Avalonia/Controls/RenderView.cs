@@ -10,7 +10,7 @@ using Core2D.ViewModels;
 
 namespace Core2D.Avalonia.Controls
 {
-    public class LayerContainerRenderView : Canvas
+    public class RenderView : Canvas
     {
         private bool _drawWorking = false;
 
