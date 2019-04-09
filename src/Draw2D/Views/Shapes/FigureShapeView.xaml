@@ -3,7 +3,7 @@
 <UserControl x:Class="Draw2D.Views.Shapes.FigureShapeView"
              xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:Draw2D.Views.Shapes;assembly=Draw2D">
+             xmlns:local="clr-namespace:Draw2D.Views.Shapes">
     <Grid>
         <TextBlock Text="Figure" VerticalAlignment="Center" HorizontalAlignment="Center"/>
     </Grid>

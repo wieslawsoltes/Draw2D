@@ -3,78 +3,218 @@
 <UserControl x:Class="Draw2D.Views.MainView"
              xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:Views="clr-namespace:Draw2D.Views;assembly=Draw2D"
-             xmlns:ViewsStyle="clr-namespace:Draw2D.Views.Style;assembly=Draw2D"
+             xmlns:local="clr-namespace:Draw2D.Views"
+             xmlns:vm="clr-namespace:Draw2D.ViewModels"
+             xmlns:paz="clr-namespace:Avalonia.Controls.PanAndZoom;assembly=Avalonia.Controls.PanAndZoom"
              UseLayoutRounding="True" RenderOptions.BitmapInterpolationMode="HighQuality" 
              Focusable="True">
+    <UserControl.Resources>
+        <local:IsCheckedToolConverter x:Key="IsCheckedToolConverter"/>
+    </UserControl.Resources>
     <Grid RowDefinitions="Auto,5,*,5" ColumnDefinitions="300,Auto,*">
-        <Views:MenuView Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" DataContext="{Binding}"/>
+        <Menu Background="Transparent" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3">
+            <MenuItem Header="_File">
+                <MenuItem Header="New" Command="{Binding New}"/>
+                <Separator/>
+                <MenuItem Header="_Open..." Command="{Binding Open}"/>
+                <Separator/>
+                <MenuItem Header="Save _As..." Command="{Binding SaveAs}"/>
+                <Separator/>
+                <MenuItem Header="E_xit" Command="{Binding Exit}"/>
+            </MenuItem>
+            <MenuItem Header="_Edit">
+                <MenuItem Header="Cu_t" Command="{Binding Edit.Cut}" CommandParameter="{Binding}"/>
+                <MenuItem Header="_Copy" Command="{Binding Edit.Copy}" CommandParameter="{Binding}"/>
+                <MenuItem Header="_Paste" Command="{Binding Edit.Paste}" CommandParameter="{Binding}"/>
+                <MenuItem Header="_Delete" Command="{Binding Edit.Delete}" CommandParameter="{Binding}"/>
+                <Separator/>
+                <MenuItem Header="_Group" Command="{Binding Edit.Group}" CommandParameter="{Binding}"/>
+                <Separator/>
+                <MenuItem Header="Select _All" Command="{Binding Edit.SelectAll}" CommandParameter="{Binding}"/>
+            </MenuItem>
+            <MenuItem Header="_View">
+                <MenuItem Header="_Reset Zoom" Command="{Binding Reset}"/>
+                <Separator/>
+                <MenuItem Header="_AutoFit Zoom" Command="{Binding AutoFit}"/>
+                <Separator/>
+                <MenuItem Header="AutoFit _Mode">
+                    <MenuItem Header="_None" Command="{Binding StretchNone}"/>
+                    <MenuItem Header="_Fill" Command="{Binding StretchFill}"/>
+                    <MenuItem Header="_Uniform" Command="{Binding StretchUniform}"/>
+                    <MenuItem Header="Uniform_ToFill" Command="{Binding StretchUniformToFill}"/>
+                </MenuItem>
+            </MenuItem>
+            <MenuItem Header="_Tool">
+                <MenuItem Header="_None" Command="{Binding SetTool}" CommandParameter="None">
+                    <MenuItem.Icon>
+                        <CheckBox BorderThickness="0" IsHitTestVisible="False" IsChecked="{Binding CurrentTool, Converter={StaticResource IsCheckedToolConverter}, ConverterParameter=None, Mode=OneWay}"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <Separator/>
+                <MenuItem Header="_Selection" Command="{Binding SetTool}" CommandParameter="Selection">
+                    <MenuItem.Icon>
+                        <CheckBox BorderThickness="0" IsHitTestVisible="False" IsChecked="{Binding CurrentTool, Converter={StaticResource IsCheckedToolConverter}, ConverterParameter=Selection, Mode=OneWay}"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <Separator/>
+                <MenuItem Header="_Point" Command="{Binding SetTool}" CommandParameter="Point">
+                    <MenuItem.Icon>
+                        <CheckBox BorderThickness="0" IsHitTestVisible="False" IsChecked="{Binding CurrentTool, Converter={StaticResource IsCheckedToolConverter}, ConverterParameter=Point, Mode=OneWay}"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <Separator/>
+                <MenuItem Header="_Line" Command="{Binding SetTool}" CommandParameter="Line">
+                    <MenuItem.Icon>
+                        <CheckBox BorderThickness="0" IsHitTestVisible="False" IsChecked="{Binding CurrentTool, Converter={StaticResource IsCheckedToolConverter}, ConverterParameter=Line, Mode=OneWay}"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="_Cubic Bezier" Command="{Binding SetTool}" CommandParameter="CubicBezier">
+                    <MenuItem.Icon>
+                        <CheckBox BorderThickness="0" IsHitTestVisible="False" IsChecked="{Binding CurrentTool, Converter={StaticResource IsCheckedToolConverter}, ConverterParameter=CubicBezier, Mode=OneWay}"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="_Quadratic Bezier" Command="{Binding SetTool}" CommandParameter="QuadraticBezier">
+                    <MenuItem.Icon>
+                        <CheckBox BorderThickness="0" IsHitTestVisible="False" IsChecked="{Binding CurrentTool, Converter={StaticResource IsCheckedToolConverter}, ConverterParameter=QuadraticBezier, Mode=OneWay}"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <Separator/>
+                <MenuItem Header="Pat_h" Command="{Binding SetTool}" CommandParameter="Path">
+                    <MenuItem.Icon>
+                        <CheckBox BorderThickness="0" IsHitTestVisible="False" IsChecked="{Binding CurrentTool, Converter={StaticResource IsCheckedToolConverter}, ConverterParameter=Path, Mode=OneWay}"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="_Move" Command="{Binding SetTool}" CommandParameter="Move">
+                    <MenuItem.Icon>
+                        <CheckBox BorderThickness="0" IsHitTestVisible="False" IsChecked="{Binding CurrentTool, Converter={StaticResource IsCheckedToolConverter}, ConverterParameter=Move, Mode=OneWay}"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <Separator/>
+                <MenuItem Header="_Rectangle" Command="{Binding SetTool}" CommandParameter="Rectangle">
+                    <MenuItem.Icon>
+                        <CheckBox BorderThickness="0" IsHitTestVisible="False" IsChecked="{Binding CurrentTool, Converter={StaticResource IsCheckedToolConverter}, ConverterParameter=Rectangle, Mode=OneWay}"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="_Ellipse" Command="{Binding SetTool}" CommandParameter="Ellipse">
+                    <MenuItem.Icon>
+                        <CheckBox BorderThickness="0" IsHitTestVisible="False" IsChecked="{Binding CurrentTool, Converter={StaticResource IsCheckedToolConverter}, ConverterParameter=Ellipse, Mode=OneWay}"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <Separator/>
+                <MenuItem Header="_Text" Command="{Binding SetTool}" CommandParameter="Text">
+                    <MenuItem.Icon>
+                        <CheckBox BorderThickness="0" IsHitTestVisible="False" IsChecked="{Binding CurrentTool, Converter={StaticResource IsCheckedToolConverter}, ConverterParameter=Text, Mode=OneWay}"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+            </MenuItem>
+            <MenuItem Header="_Debug">
+                <MenuItem Header="DrawDirtyRects" Click="DebugDrawDirtyRects_Click">
+                    <MenuItem.Icon>
+                        <CheckBox BorderThickness="0" IsHitTestVisible="False" IsChecked="{Binding $parent[local:MainView].DrawDirtyRects}"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <Separator/>
+                <MenuItem Header="DrawFps" Click="DebugDrawFps_Click">
+                    <MenuItem.Icon>
+                        <CheckBox BorderThickness="0" IsHitTestVisible="False" IsChecked="{Binding $parent[local:MainView].DrawFps}"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+            </MenuItem>
+        </Menu>
         <Grid RowDefinitions="55*,Auto,45*" Grid.Row="2" Grid.Column="0">
             <TabControl Classes="default" Grid.Row="0" TabStripPlacement="Top">
                 <TabItem Classes="default" Header="Settings">
                     <Border Classes="default">
                         <ScrollViewer>
-                            <Views:SettingsView DataContext="{Binding}"/>
+                            <ContentControl Content="{Binding CurrentTool.Settings}"/>
                         </ScrollViewer>
                     </Border>
                 </TabItem>
                 <TabItem Classes="default" Header="Intersections">
                     <Border Classes="default">
                         <ScrollViewer>
-                            <Views:IntersectionsView DataContext="{Binding}"/>
+                            <Grid RowDefinitions="Auto,*">
+                                <DropDown Classes="default" Grid.Row="0" x:Name="Intersections" Items="{Binding CurrentTool.Intersections}" SelectedIndex="0">
+                                    <DropDown.DataTemplates>
+                                        <DataTemplate>
+                                            <TextBlock Classes="default" Text="{Binding Title}"/>
+                                        </DataTemplate>
+                                    </DropDown.DataTemplates>
+                                </DropDown>
+                                <ContentControl Grid.Row="1" Content="{Binding ElementName=Intersections, Path=SelectedItem.Settings}"/>
+                            </Grid>
                         </ScrollViewer>
                     </Border>
                 </TabItem>
                 <TabItem Classes="default" Header="Filters">
                     <Border Classes="default">
                         <ScrollViewer>
-                            <Views:FiltersView DataContext="{Binding}"/>
+                            <Grid RowDefinitions="Auto,*">
+                                <DropDown Classes="default" Grid.Row="0" x:Name="Filters" Items="{Binding CurrentTool.Filters}" SelectedIndex="0">
+                                    <DropDown.DataTemplates>
+                                        <DataTemplate>
+                                            <TextBlock Classes="default" Text="{Binding Title}"/>
+                                        </DataTemplate>
+                                    </DropDown.DataTemplates>
+                                </DropDown>
+                                <ContentControl Grid.Row="1" Content="{Binding ElementName=Filters, Path=SelectedItem.Settings}"/>
+                            </Grid>
                         </ScrollViewer>
                     </Border>
                 </TabItem>
                 <TabItem Classes="default" Header="Style">
                     <Border Classes="default">
                         <ScrollViewer>
-                            <ViewsStyle:DrawStyleView DataContext="{Binding CurrentStyle}"/>
+                            <ContentControl Content="{Binding CurrentStyle}"/>
                         </ScrollViewer>
                     </Border>
                 </TabItem>
-
                 <TabItem Classes="default" Header="Shape">
                     <Border Classes="default">
-                        <Views:ShapeView DataContext="{Binding Renderer.Hover}"/>
+                        <ContentControl Content="{Binding Renderer.Hover}"/>
                     </Border>
                 </TabItem>
             </TabControl>
             <GridSplitter Grid.Row="1"/>
             <TabControl Classes="default" Grid.Row="2" TabStripPlacement="Top">
-                <TabItem Classes="default" Header="Shapes">
+                <TabItem Classes="default" Header="Container">
                     <Border Classes="default">
-                        <Views:ShapesView DataContext="{Binding}"/>
-                    </Border>
-                </TabItem>
-                <TabItem Classes="default" Header="Guides">
-                    <Border Classes="default">
-                        <Views:GuidesView DataContext="{Binding}"/>
+                        <ScrollViewer>
+                            <ContentControl Content="{Binding CurrentContainer}"/>
+                        </ScrollViewer>
                     </Border>
                 </TabItem>
                 <TabItem Classes="default" Header="Working">
                     <Border Classes="default">
-                        <Views:WorkingView DataContext="{Binding}"/>
+                        <Border Classes="default">
+                            <ScrollViewer>
+                                <ContentControl Content="{Binding WorkingContainer}"/>
+                            </ScrollViewer>
+                        </Border>
                     </Border>
                 </TabItem>
-                <TabItem Classes="default" Header="Container">
+                <TabItem Classes="default" Header="Tools">
                     <Border Classes="default">
-                        <ScrollViewer>
-                            <Views:ContainerView DataContext="{Binding}"/>
-                        </ScrollViewer>
+                        <ListBox Classes="default" Items="{Binding Tools}" SelectedItem="{Binding CurrentTool}">
+                            <ListBox.DataTemplates>
+                                <DataTemplate>
+                                    <TextBlock Classes="default" Text="{Binding Title}"/>
+                                </DataTemplate>
+                            </ListBox.DataTemplates>
+                        </ListBox>
                     </Border>
                 </TabItem>
             </TabControl>
         </Grid>
         <GridSplitter Grid.Row="2" Grid.Column="1"/>
         <Border Classes="zoom" Grid.Row="2" Grid.Column="2">
-            <Views:RenderView DataContext="{Binding}"/>
+            <Border Classes="clip" ClipToBounds="True" Background="Transparent">
+                <vm:InputView x:Name="inputView" RelativeTo="{Binding #rendererView}" Background="Transparent" ClipToBounds="False">
+                    <paz:ZoomBorder x:Name="zoomBorder" Stretch="None" ZoomSpeed="1.2" PanButton="Right" Background="Transparent" ClipToBounds="False" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+                        <vm:RenderView x:Name="rendererView" Background="Transparent" ClipToBounds="False" Width="{Binding CurrentContainer.Width}" Height="{Binding CurrentContainer.Height}"/>
+                    </paz:ZoomBorder>
+                </vm:InputView>
+            </Border>
         </Border>
     </Grid>
 </UserControl>

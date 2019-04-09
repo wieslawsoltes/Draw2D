@@ -2,14 +2,18 @@
 <!-- Licensed under the MIT license. See LICENSE file in the project root for full license information. -->
 <Application x:Class="Draw2D.App"
              xmlns="https://github.com/avaloniaui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:Draw2D">
+    <Application.DataTemplates>
+        <local:ViewLocator/>
+    </Application.DataTemplates>
     <Application.Styles>
         <StyleInclude Source="avares://Avalonia.Themes.Default/DefaultTheme.xaml"/>
         <StyleInclude Source="avares://Avalonia.Themes.Default/Accents/BaseLight.xaml"/>
         <Style Selector="Border.default">
             <Setter Property="Margin" Value="5"/>
             <Setter Property="Padding" Value="3,3,3,3"/>
-            <Setter Property="BorderBrush" Value="{DynamicResource ThemeBorderLightBrush}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource ThemeBorderHighColor}"/>
             <Setter Property="BorderThickness" Value="1"/>
         </Style>
         <Style Selector="Border.zoom">

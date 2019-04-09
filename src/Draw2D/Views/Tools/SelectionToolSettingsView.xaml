@@ -3,36 +3,43 @@
 <UserControl x:Class="Draw2D.Views.Tools.SelectionToolSettingsView"
              xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:Draw2D.Views.Tools;assembly=Draw2D"
-             xmlns:ViewsStyle="clr-namespace:Draw2D.Views.Style;assembly=Draw2D">
-    <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="Auto,*,50">
-        <TextBlock Classes="default" Grid.Column="0" Grid.Row="0" Text="Mode"/>
-        <!-- TODO: Mode -->
-        <TextBlock Classes="default" Grid.Column="0" Grid.Row="1" Text="Targets"/>
-        <!-- TODO: Targets -->
-        <TextBlock Classes="default" Grid.Column="0" Grid.Row="2" Text="SelectionModifier"/>
-        <!-- TODO: SelectionModifier -->
-        <TextBlock Classes="default" Grid.Column="0" Grid.Row="3" Text="ConnectionModifier"/>
-        <!-- TODO: ConnectionModifier -->
-        <Expander Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="4" Header="SelectionStyle" IsExpanded="False">
-            <ViewsStyle:DrawStyleView DataContext="{Binding SelectionStyle}"/>
-        </Expander>
-        <TextBlock Classes="default" Grid.Column="0" Grid.Row="5" Text="ClearSelectionOnClean"/>
-        <CheckBox Classes="default" Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="5" IsChecked="{Binding ClearSelectionOnClean}"/>
-        <TextBlock Classes="default" Grid.Column="0" Grid.Row="6" Text="HitTestRadius"/>
-        <Slider Classes="default" Grid.Column="1" Grid.Row="6" Value="{Binding HitTestRadius}" Minimum="0" Maximum="32"/>
-        <TextBox Classes="default" Grid.Column="2" Grid.Row="6" Text="{Binding HitTestRadius}"/>
-        <TextBlock Classes="default" Grid.Column="0" Grid.Row="7" Text="ConnectPoints"/>
-        <CheckBox Classes="default" Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="7" IsChecked="{Binding ConnectPoints}"/>
-        <TextBlock Classes="default" Grid.Column="0" Grid.Row="8" Text="ConnectTestRadius"/>
-        <Slider Classes="default" Grid.Column="1" Grid.Row="8" Value="{Binding ConnectTestRadius}" Minimum="0" Maximum="32"/>
-        <TextBox Classes="default" Grid.Column="2" Grid.Row="8" Text="{Binding ConnectTestRadius}"/>
-        <TextBlock Classes="default" Grid.Column="0" Grid.Row="9" Text="DisconnectPoints"/>
-        <CheckBox Classes="default" Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="9" IsChecked="{Binding DisconnectPoints}"/>
-        <TextBlock Classes="default" Grid.Column="0" Grid.Row="10" Text="DisconnectTestRadius"/>
-        <Slider Classes="default" Grid.Column="1" Grid.Row="10" Value="{Binding DisconnectTestRadius}" Minimum="0" Maximum="32"/>
-        <TextBox Classes="default" Grid.Column="2" Grid.Row="10" Text="{Binding DisconnectTestRadius}"/>
-        <TextBlock Classes="default" Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="11" Text="Hold Ctrl key to add/remove selected shapes."/>
-        <TextBlock Classes="default" Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="12" Text="Hold Shift key to connect/disconnect points."/>
-    </Grid>
+             xmlns:local="clr-namespace:Draw2D.Views.Tools">
+    <TabControl Classes="default" Grid.Row="0" TabStripPlacement="Top">
+        <TabItem Classes="default" Header="Settings">
+            <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="Auto,*,50">
+                <TextBlock Classes="default" Grid.Column="0" Grid.Row="0" Text="ClearSelectionOnClean"/>
+                <CheckBox Classes="default" Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="0" IsChecked="{Binding ClearSelectionOnClean}"/>
+                <TextBlock Classes="default" Grid.Column="0" Grid.Row="1" Text="HitTestRadius"/>
+                <Slider Classes="default" Grid.Column="1" Grid.Row="1" Value="{Binding HitTestRadius}" Minimum="0" Maximum="32"/>
+                <TextBox Classes="default" Grid.Column="2" Grid.Row="1" Text="{Binding HitTestRadius}"/>
+                <TextBlock Classes="default" Grid.Column="0" Grid.Row="2" Text="ConnectPoints"/>
+                <CheckBox Classes="default" Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="2" IsChecked="{Binding ConnectPoints}"/>
+                <TextBlock Classes="default" Grid.Column="0" Grid.Row="3" Text="ConnectTestRadius"/>
+                <Slider Classes="default" Grid.Column="1" Grid.Row="3" Value="{Binding ConnectTestRadius}" Minimum="0" Maximum="32"/>
+                <TextBox Classes="default" Grid.Column="2" Grid.Row="3" Text="{Binding ConnectTestRadius}"/>
+                <TextBlock Classes="default" Grid.Column="0" Grid.Row="4" Text="DisconnectPoints"/>
+                <CheckBox Classes="default" Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="4" IsChecked="{Binding DisconnectPoints}"/>
+                <TextBlock Classes="default" Grid.Column="0" Grid.Row="5" Text="DisconnectTestRadius"/>
+                <Slider Classes="default" Grid.Column="1" Grid.Row="5" Value="{Binding DisconnectTestRadius}" Minimum="0" Maximum="32"/>
+                <TextBox Classes="default" Grid.Column="2" Grid.Row="5" Text="{Binding DisconnectTestRadius}"/>
+                <TextBlock Classes="default" Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="6" Text="Hold Ctrl key to add/remove selected shapes."/>
+                <TextBlock Classes="default" Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="7" Text="Hold Shift key to connect/disconnect points."/>
+            </Grid>
+        </TabItem>
+        <TabItem Classes="default" Header="SelectionStyle">
+            <ContentControl Content="{Binding SelectionStyle}"/>
+        </TabItem>
+        <TabItem Classes="default" Header="Other">
+            <Grid RowDefinitions="Auto,Auto,Auto,Auto" ColumnDefinitions="Auto,*,50">
+                <TextBlock Classes="default" Grid.Column="0" Grid.Row="0" Text="Mode"/>
+                <!-- TODO: Mode -->
+                <TextBlock Classes="default" Grid.Column="0" Grid.Row="1" Text="Targets"/>
+                <!-- TODO: Targets -->
+                <TextBlock Classes="default" Grid.Column="0" Grid.Row="2" Text="SelectionModifier"/>
+                <!-- TODO: SelectionModifier -->
+                <TextBlock Classes="default" Grid.Column="0" Grid.Row="3" Text="ConnectionModifier"/>
+                <!-- TODO: ConnectionModifier -->
+            </Grid>
+        </TabItem>
+    </TabControl>
 </UserControl>

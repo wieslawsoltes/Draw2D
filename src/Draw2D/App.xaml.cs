@@ -4,6 +4,8 @@ using System;
 using Avalonia;
 using Avalonia.Logging.Serilog;
 using Avalonia.Markup.Xaml;
+using Draw2D.ViewModels;
+using Draw2D.Views;
 
 namespace Draw2D
 {
@@ -19,7 +21,7 @@ namespace Draw2D
         {
             var window = new MainWindow
             {
-                DataContext = new MainViewModelFactory().Create(),
+                DataContext = new MainFactory().Create(),
             };
             app.Run(window);
         }
