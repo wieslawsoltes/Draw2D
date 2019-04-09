@@ -4,9 +4,9 @@ using Draw2D.Renderer;
 using Draw2D.Shapes;
 using Draw2D.Style;
 
-namespace Draw2D.Editor.Tools.Helpers
+namespace Draw2D.Editor.Decorators
 {
-    public abstract class CommonHelper : ShapeHelper
+    public abstract class CommonDecorator : ShapeDecorator
     {
         private ArgbColor _stroke;
         private ArgbColor _fill;
@@ -15,7 +15,7 @@ namespace Draw2D.Editor.Tools.Helpers
         private LineShape _line;
         private EllipseShape _ellipse;
 
-        public CommonHelper()
+        public CommonDecorator()
         {
             _stroke = new ArgbColor(255, 0, 255, 255);
             _fill = new ArgbColor(255, 0, 255, 255);

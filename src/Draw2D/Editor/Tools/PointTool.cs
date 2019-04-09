@@ -6,6 +6,24 @@ using Spatial;
 
 namespace Draw2D.Editor.Tools
 {
+    public class PointToolSettings : SettingsBase
+    {
+        private bool _connectPoints;
+        private double _hitTestRadius;
+
+        public bool ConnectPoints
+        {
+            get => _connectPoints;
+            set => Update(ref _connectPoints, value);
+        }
+
+        public double HitTestRadius
+        {
+            get => _hitTestRadius;
+            set => Update(ref _hitTestRadius, value);
+        }
+    }
+
     public class PointTool : ToolBase
     {
         public override string Title => "Point";

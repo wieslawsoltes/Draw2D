@@ -7,7 +7,7 @@ using Spatial;
 
 namespace Draw2D.Editor.Intersections
 {
-    public static class LineHelper
+    public static class LineDecorator
     {
         public static IList<LineShape> SplitByIntersections(IToolContext context, IEnumerable<PointIntersection> intersections, LineShape target)
         {

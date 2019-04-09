@@ -4,7 +4,7 @@ using Draw2D.Shapes;
 
 namespace Draw2D.Renderer
 {
-    public abstract class ShapeHelper
+    public abstract class ShapeDecorator
     {
         public abstract void Draw(object dc, IShapeRenderer renderer, BaseShape shape, ISelection selected, double dx, double dy);
     }

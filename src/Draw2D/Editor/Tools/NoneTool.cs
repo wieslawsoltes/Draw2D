@@ -3,6 +3,10 @@
 
 namespace Draw2D.Editor.Tools
 {
+    public class NoneToolSettings : SettingsBase
+    {
+    }
+
     public class NoneTool : ToolBase
     {
         public override string Title => "None";

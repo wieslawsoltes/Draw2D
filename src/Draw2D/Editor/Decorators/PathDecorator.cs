@@ -4,19 +4,19 @@ using System.Collections.Generic;
 using Draw2D.Renderer;
 using Draw2D.Shapes;
 
-namespace Draw2D.Editor.Tools.Helpers
+namespace Draw2D.Editor.Decorators
 {
-    public class PathHelper : CommonHelper
+    public class PathDecorator : CommonDecorator
     {
-        private LineHelper _lineHelper;
-        private CubicBezierHelper _cubiceBezierHelper;
-        private QuadraticBezierHelper _quadraticBezierHelper;
+        private LineDecorator _lineDecorator;
+        private CubicBezierDecorator _cubiceBezierDecorator;
+        private QuadraticBezierDecorator _quadraticBezierDecorator;
 
-        public PathHelper()
+        public PathDecorator()
         {
-            _lineHelper = new LineHelper();
-            _cubiceBezierHelper = new CubicBezierHelper();
-            _quadraticBezierHelper = new QuadraticBezierHelper();
+            _lineDecorator = new LineDecorator();
+            _cubiceBezierDecorator = new CubicBezierDecorator();
+            _quadraticBezierDecorator = new QuadraticBezierDecorator();
         }
 
         public void DrawShape(object dc, IShapeRenderer renderer, BaseShape shape, ISelection selection, double dx, double dy)
@@ -25,21 +25,21 @@ namespace Draw2D.Editor.Tools.Helpers
             {
                 if (selection.Selected.Contains(line))
                 {
-                    _lineHelper.Draw(dc, renderer, line, selection, dx, dy);
+                    _lineDecorator.Draw(dc, renderer, line, selection, dx, dy);
                 }
             }
             else if (shape is CubicBezierShape cubicBezier)
             {
                 if (selection.Selected.Contains(cubicBezier))
                 {
-                    _cubiceBezierHelper.Draw(dc, renderer, cubicBezier, selection, dx, dy);
+                    _cubiceBezierDecorator.Draw(dc, renderer, cubicBezier, selection, dx, dy);
                 }
             }
             else if (shape is QuadraticBezierShape quadraticBezier)
             {
                 if (selection.Selected.Contains(quadraticBezier))
                 {
-                    _quadraticBezierHelper.Draw(dc, renderer, quadraticBezier, selection, dx, dy);
+                    _quadraticBezierDecorator.Draw(dc, renderer, quadraticBezier, selection, dx, dy);
                 }
             }
         }

@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using Draw2D.Renderer;
 using Draw2D.Shapes;
 
-namespace Draw2D.Editor.Tools.Helpers
+namespace Draw2D.Editor.Decorators
 {
-    public class RectangleHelper : CommonHelper
+    public class TextDecorator : CommonDecorator
     {
         public override void Draw(object dc, IShapeRenderer renderer, BaseShape shape, ISelection selection, double dx, double dy)
         {

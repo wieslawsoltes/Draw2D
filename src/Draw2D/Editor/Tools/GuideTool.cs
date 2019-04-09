@@ -5,6 +5,17 @@ using Draw2D.Shapes;
 
 namespace Draw2D.Editor.Tools
 {
+    public class GuideToolSettings : SettingsBase
+    {
+        private ShapeStyle _guideStyle;
+        
+        public ShapeStyle GuideStyle
+        {
+            get => _guideStyle;
+            set => Update(ref _guideStyle, value);
+        }
+    }
+
     public class GuideTool : ToolBase
     {
         private LineShape _line = null;

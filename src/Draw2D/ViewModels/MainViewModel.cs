@@ -15,7 +15,7 @@ using Draw2D.Editor.Filters;
 using Draw2D.Editor.Intersections.Line;
 using Draw2D.Editor.Selection;
 using Draw2D.Editor.Tools;
-using Draw2D.Editor.Tools.Helpers;
+using Draw2D.Editor.Decorators;
 using Draw2D.Json;
 using Draw2D.Presenters;
 using Draw2D.Renderer;
@@ -645,16 +645,16 @@ namespace Draw2D.ViewModels
 
             var presenter = new ShapePresenter()
             {
-                Helpers = new Dictionary<Type, ShapeHelper>
+                Decorators = new Dictionary<Type, ShapeDecorator>
                 {
-                    { typeof(PointShape), new PointHelper() },
-                    { typeof(LineShape), new LineHelper() },
-                    { typeof(CubicBezierShape), new CubicBezierHelper() },
-                    { typeof(QuadraticBezierShape), new QuadraticBezierHelper() },
-                    { typeof(PathShape), new PathHelper() },
-                    { typeof(RectangleShape), new RectangleHelper() },
-                    { typeof(EllipseShape), new EllipseHelper() },
-                    { typeof(TextShape), new TextHelper() }
+                    { typeof(PointShape), new PointDecorator() },
+                    { typeof(LineShape), new LineDecorator() },
+                    { typeof(CubicBezierShape), new CubicBezierDecorator() },
+                    { typeof(QuadraticBezierShape), new QuadraticBezierDecorator() },
+                    { typeof(PathShape), new PathDecorator() },
+                    { typeof(RectangleShape), new RectangleDecorator() },
+                    { typeof(EllipseShape), new EllipseDecorator() },
+                    { typeof(TextShape), new TextDecorator() }
                 }
             };
 

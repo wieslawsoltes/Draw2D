@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using Draw2D.Renderer;
 using Draw2D.Shapes;
 
-namespace Draw2D.Editor.Tools.Helpers
+namespace Draw2D.Editor.Decorators
 {
-    public class CubicBezierHelper : CommonHelper
+    public class CubicBezierDecorator : CommonDecorator
     {
         public void Draw(object dc, IShapeRenderer renderer, CubicBezierShape cubicBezier, double dx, double dy)
         {

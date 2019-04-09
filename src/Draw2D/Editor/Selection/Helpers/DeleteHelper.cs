@@ -5,7 +5,7 @@ using System.Linq;
 using Draw2D.Containers;
 using Draw2D.Shapes;
 
-namespace Draw2D.Editor.Selection.Helpers
+namespace Draw2D.Editor.Selection.Decorators
 {
     public static class DeleteHelper
     {

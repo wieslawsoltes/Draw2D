@@ -3,6 +3,10 @@
 
 namespace Draw2D.Editor.Tools
 {
+    public class MoveToolSettings : SettingsBase
+    {
+    }
+
     public class MoveTool : ToolBase
     {
         public PathTool PathTool { get; set; }

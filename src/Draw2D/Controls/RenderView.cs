@@ -88,11 +88,11 @@ namespace Draw2D.Controls
                     vm.Presenter.DrawContainer(context, vm.WorkingContainer, vm.Renderer, 0.0, 0.0, null, null);
                 }
 
-                vm.Presenter.DrawHelpers(context, vm.CurrentContainer, vm.Renderer, 0.0, 0.0);
+                vm.Presenter.DrawDecorators(context, vm.CurrentContainer, vm.Renderer, 0.0, 0.0);
 
                 if (_drawWorking)
                 {
-                    vm.Presenter.DrawHelpers(context, vm.WorkingContainer, vm.Renderer, 0.0, 0.0);
+                    vm.Presenter.DrawDecorators(context, vm.WorkingContainer, vm.Renderer, 0.0, 0.0);
                 }
             }
         }

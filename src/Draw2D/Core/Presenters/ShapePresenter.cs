@@ -9,7 +9,7 @@ namespace Draw2D.Presenters
 {
     public class ShapePresenter
     {
-        public Dictionary<Type, ShapeHelper> Helpers { get; set; }
+        public Dictionary<Type, ShapeDecorator> Decorators { get; set; }
 
         public virtual void DrawContainer(object dc, CanvasContainer container, IShapeRenderer renderer, double dx, double dy, object db, object r)
         {
@@ -17,7 +17,7 @@ namespace Draw2D.Presenters
             container.Draw(dc, renderer, dx, dy, db, r);
         }
 
-        public virtual void DrawHelpers(object dc, CanvasContainer container, IShapeRenderer renderer, double dx, double dy)
+        public virtual void DrawDecorators(object dc, CanvasContainer container, IShapeRenderer renderer, double dx, double dy)
         {
             var shapes = container.Shapes;
             var selection = renderer;
@@ -26,7 +26,7 @@ namespace Draw2D.Presenters
             {
                 if (selection.Selected.Contains(shape))
                 {
-                    if (Helpers.TryGetValue(shape.GetType(), out var helper))
+                    if (Decorators.TryGetValue(shape.GetType(), out var helper))
                     {
                         helper.Draw(dc, renderer, shape, selection, dx, dy);
                     }

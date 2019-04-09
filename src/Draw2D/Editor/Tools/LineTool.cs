@@ -6,6 +6,31 @@ using Draw2D.Shapes;
 
 namespace Draw2D.Editor.Tools
 {
+    public class LineToolSettings : SettingsBase
+    {
+        private bool _connectPoints;
+        private double _hitTestRadius;
+        private bool _splitIntersections;
+
+        public bool ConnectPoints
+        {
+            get => _connectPoints;
+            set => Update(ref _connectPoints, value);
+        }
+
+        public double HitTestRadius
+        {
+            get => _hitTestRadius;
+            set => Update(ref _hitTestRadius, value);
+        }
+
+        public bool SplitIntersections
+        {
+            get => _splitIntersections;
+            set => Update(ref _splitIntersections, value);
+        }
+    }
+
     public class LineTool : ToolBase
     {
         private LineShape _line = null;
@@ -60,7 +85,7 @@ namespace Draw2D.Editor.Tools
 
             if ((Settings?.SplitIntersections ?? false) && (Intersections?.Any(i => i.Intersections.Count > 0) ?? false))
             {
-                LineHelper.SplitByIntersections(context, Intersections, _line);
+                LineDecorator.SplitByIntersections(context, Intersections, _line);
             }
             else
             {
