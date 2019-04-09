@@ -3,7 +3,7 @@
 using Draw2D.Shapes;
 using Spatial;
 
-namespace Draw2D.Editor.Selection.Decorators
+namespace Draw2D.Editor.Selection.Helpers
 {
     public static class SelectHelper
     {

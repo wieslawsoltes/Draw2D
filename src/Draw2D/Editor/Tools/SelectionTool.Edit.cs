@@ -3,7 +3,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Draw2D.Shapes;
-using Draw2D.Editor.Selection.Decorators;
+using Draw2D.Editor.Selection.Helpers;
 using Spatial;
 
 namespace Draw2D.Editor.Tools
