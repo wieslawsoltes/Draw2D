@@ -1,0 +1,14 @@
+﻿<!-- Copyright (c) Wiesław Šoltés. All rights reserved. -->
+<!-- Licensed under the MIT license. See LICENSE file in the project root for full license information. -->
+<UserControl x:Class="Draw2D.Views.ToolsView"
+             xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:Draw2D.Views;assembly=Draw2D">
+    <ListBox Classes="default" Items="{Binding Tools}" SelectedItem="{Binding CurrentTool}">
+        <ListBox.DataTemplates>
+            <DataTemplate>
+                <TextBlock Classes="default" Text="{Binding Title}"/>
+            </DataTemplate>
+        </ListBox.DataTemplates>
+    </ListBox>
+</UserControl>

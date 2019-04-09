@@ -1,0 +1,41 @@
+﻿<!-- Copyright (c) Wiesław Šoltés. All rights reserved. -->
+<!-- Licensed under the MIT license. See LICENSE file in the project root for full license information. -->
+<Window x:Class="Draw2D.MainWindow"
+        xmlns="https://github.com/avaloniaui" 
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:views="clr-namespace:Draw2D.Views;assembly=Draw2D"
+        WindowState="Normal" WindowStartupLocation="CenterScreen"
+        UseLayoutRounding="True" RenderOptions.BitmapInterpolationMode="HighQuality"
+        Foreground="{DynamicResource ThemeForegroundBrush}"
+        Title="Draw2D" Height="700" Width="1320">
+    <Window.KeyBindings>
+        <!-- File -->
+        <KeyBinding Command="{Binding New}" Gesture="Ctrl+N"/>
+        <KeyBinding Command="{Binding Open}" Gesture="Ctrl+O"/>
+        <KeyBinding Command="{Binding SaveAs}" Gesture="Ctrl+S"/>
+        <KeyBinding Command="{Binding Exit}" Gesture="Alt+F4"/>
+        <!-- Edit -->
+        <KeyBinding Command="{Binding Cut}" Gesture="Ctrl+X"/>
+        <KeyBinding Command="{Binding Copy}" Gesture="Ctrl+C"/>
+        <KeyBinding Command="{Binding Paste}" Gesture="Ctrl+V"/>
+        <KeyBinding Command="{Binding Delete}" Gesture="Delete"/>
+        <KeyBinding Command="{Binding Group}" Gesture="Ctrl+G"/>
+        <KeyBinding Command="{Binding SelectAll}" Gesture="Ctrl+A"/>
+        <!-- Tool -->
+        <KeyBinding Command="{Binding SetTool}" CommandParameter="None" Gesture="N"/>
+        <KeyBinding Command="{Binding SetTool}" CommandParameter="Selection" Gesture="S"/>
+        <KeyBinding Command="{Binding SetTool}" CommandParameter="Line" Gesture="L"/>
+        <KeyBinding Command="{Binding SetTool}" CommandParameter="Point" Gesture="P"/>
+        <KeyBinding Command="{Binding SetTool}" CommandParameter="CubicBezier" Gesture="C"/>
+        <KeyBinding Command="{Binding SetTool}" CommandParameter="QuadraticBezier" Gesture="Q"/>
+        <KeyBinding Command="{Binding SetTool}" CommandParameter="Path" Gesture="H"/>
+        <KeyBinding Command="{Binding SetTool}" CommandParameter="Move" Gesture="M"/>
+        <KeyBinding Command="{Binding SetTool}" CommandParameter="Rectangle" Gesture="R"/>
+        <KeyBinding Command="{Binding SetTool}" CommandParameter="Ellipse" Gesture="E"/>
+        <KeyBinding Command="{Binding SetTool}" CommandParameter="Text" Gesture="T"/>
+        <!-- View -->
+        <KeyBinding Command="{Binding Reset}" Gesture="Z"/>
+        <KeyBinding Command="{Binding AutoFit}" Gesture="X"/>
+    </Window.KeyBindings>
+    <views:MainView x:Name="mainView"/>
+</Window>

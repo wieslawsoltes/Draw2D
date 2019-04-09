@@ -5,7 +5,7 @@ VisualStudioVersion = 15.0.26124.0
 MinimumVisualStudioVersion = 15.0.26124.0
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{0A6C444A-1F68-4421-9DB2-FCBDD1F2993C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core2D.Avalonia", "src\Core2D.Avalonia\Core2D.Avalonia.csproj", "{00EC6083-A7DB-45D6-9F05-F3EE48203ADA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Draw2D", "src\Draw2D\Draw2D.csproj", "{00EC6083-A7DB-45D6-9F05-F3EE48203ADA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

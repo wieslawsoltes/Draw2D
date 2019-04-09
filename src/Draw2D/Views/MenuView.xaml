@@ -1,0 +1,78 @@
+﻿<!-- Copyright (c) Wiesław Šoltés. All rights reserved. -->
+<!-- Licensed under the MIT license. See LICENSE file in the project root for full license information. -->
+<UserControl x:Class="Draw2D.Views.MenuView"
+             xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:Draw2D.Views;assembly=Draw2D">
+    <Menu Background="Transparent">
+        <MenuItem Header="_File">
+            <MenuItem Header="New" Command="{Binding New}"/>
+            <Separator/>
+            <MenuItem Header="_Open..." Command="{Binding Open}"/>
+            <Separator/>
+            <MenuItem Header="Save _As..." Command="{Binding SaveAs}"/>
+            <Separator/>
+            <MenuItem Header="E_xit" Command="{Binding Exit}"/>
+        </MenuItem>
+        <MenuItem Header="_Edit">
+            <MenuItem Header="Cu_t" Command="{Binding Cut}"/>
+            <MenuItem Header="_Copy" Command="{Binding Copy}"/>
+            <MenuItem Header="_Paste" Command="{Binding Paste}"/>
+            <MenuItem Header="_Delete" Command="{Binding Delete}"/>
+            <Separator/>
+            <MenuItem Header="_Group" Command="{Binding Group}"/>
+            <Separator/>
+            <MenuItem Header="Select _All" Command="{Binding SelectAll}"/>
+        </MenuItem>
+        <MenuItem Header="_View">
+            <MenuItem Header="_Reset Zoom" Command="{Binding Reset}"/>
+            <Separator/>
+            <MenuItem Header="_AutoFit Zoom" Command="{Binding AutoFit}"/>
+            <Separator/>
+            <MenuItem Header="AutoFit _Mode">
+                <MenuItem Header="_None" Command="{Binding StretchNone}"/>
+                <MenuItem Header="_Fill" Command="{Binding StretchFill}"/>
+                <MenuItem Header="_Uniform" Command="{Binding StretchUniform}"/>
+                <MenuItem Header="Uniform_ToFill" Command="{Binding StretchUniformToFill}"/>
+            </MenuItem>
+        </MenuItem>
+        <MenuItem Header="_Tool">
+            <MenuItem Header="_None" Command="{Binding SetTool}" CommandParameter="None"/>
+            <Separator/>
+            <MenuItem Header="_Selection" Command="{Binding SetTool}" CommandParameter="Selection"/>
+            <Separator/>
+            <MenuItem Header="_Point" Command="{Binding SetTool}" CommandParameter="Point"/>
+            <Separator/>
+            <MenuItem Header="_Line" Command="{Binding SetTool}" CommandParameter="Line"/>
+            <MenuItem Header="_Cubic Bezier" Command="{Binding SetTool}" CommandParameter="CubicBezier"/>
+            <MenuItem Header="_Quadratic Bezier" Command="{Binding SetTool}" CommandParameter="QuadraticBezier"/>
+            <Separator/>
+            <MenuItem Header="Pat_h" Command="{Binding SetTool}" CommandParameter="Path"/>
+            <MenuItem Header="_Move" Command="{Binding SetTool}" CommandParameter="Move"/>
+            <Separator/>
+            <MenuItem Header="_Rectangle" Command="{Binding SetTool}" CommandParameter="Rectangle"/>
+            <MenuItem Header="_Ellipse" Command="{Binding SetTool}" CommandParameter="Ellipse"/>
+            <Separator/>
+            <MenuItem Header="_Text" Command="{Binding SetTool}" CommandParameter="Text"/>
+        </MenuItem>
+        <MenuItem Header="_Debug">
+            <MenuItem Header="DrawDirtyRects" Click="DebugDrawDirtyRects_Click">
+                <MenuItem.Icon>
+                    <CheckBox BorderThickness="0" IsHitTestVisible="False" IsChecked="{Binding $parent[local:MenuView].DrawDirtyRects}"/>
+                </MenuItem.Icon>
+            </MenuItem>
+            <Separator/>
+            <MenuItem Header="DrawFps" Click="DebugDrawFps_Click">
+                <MenuItem.Icon>
+                    <CheckBox BorderThickness="0" IsHitTestVisible="False" IsChecked="{Binding $parent[local:MenuView].DrawFps}"/>
+                </MenuItem.Icon>
+            </MenuItem>
+            <Separator/>
+            <MenuItem Header="LoggerEnabled" Click="LoggerEnabled_Click">
+                <MenuItem.Icon>
+                    <CheckBox BorderThickness="0" IsHitTestVisible="False" IsChecked="{Binding $parent[local:MenuView].LoggerEnabled}"/>
+                </MenuItem.Icon>
+            </MenuItem>
+        </MenuItem>
+    </Menu>
+</UserControl>
