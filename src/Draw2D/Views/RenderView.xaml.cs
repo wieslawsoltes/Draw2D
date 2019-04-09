@@ -11,6 +11,8 @@ namespace Draw2D.Views
 {
     public partial class RenderView : UserControl
     {
+        private ZoomBorder _zoomBorder;
+
         public RenderView()
         {
             InitializeComponent();
@@ -19,6 +21,7 @@ namespace Draw2D.Views
         private void InitializeComponent()
         {
             AvaloniaXamlLoader.Load(this);
+            _zoomBorder = this.FindControl<ZoomBorder>("zoomBorder");
         }
 
         protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e)
@@ -27,13 +30,12 @@ namespace Draw2D.Views
 
             if (this.DataContext is MainViewModel vm)
             {
-                var zoomBorder = this.FindControl<ZoomBorder>("zoomBorder");
-                vm.Reset = () => zoomBorder.Reset();
-                vm.AutoFit = () => zoomBorder.AutoFit();
-                vm.StretchNone = () => zoomBorder.Stretch = PanAndZoom.StretchMode.None;
-                vm.StretchFill = () => zoomBorder.Stretch = PanAndZoom.StretchMode.Fill;
-                vm.StretchUniform = () => zoomBorder.Stretch = PanAndZoom.StretchMode.Uniform;
-                vm.StretchUniformToFill = () => zoomBorder.Stretch = PanAndZoom.StretchMode.UniformToFill;
+                vm.Reset = () => _zoomBorder.Reset();
+                vm.AutoFit = () => _zoomBorder.AutoFit();
+                vm.StretchNone = () => _zoomBorder.Stretch = PanAndZoom.StretchMode.None;
+                vm.StretchFill = () => _zoomBorder.Stretch = PanAndZoom.StretchMode.Fill;
+                vm.StretchUniform = () => _zoomBorder.Stretch = PanAndZoom.StretchMode.Uniform;
+                vm.StretchUniformToFill = () => _zoomBorder.Stretch = PanAndZoom.StretchMode.UniformToFill;
             }
         }
 
