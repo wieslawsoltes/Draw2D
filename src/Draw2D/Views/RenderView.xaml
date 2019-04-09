@@ -4,13 +4,12 @@
              xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:Draw2D.Views;assembly=Draw2D"
-             xmlns:paz="clr-namespace:Avalonia.Controls.PanAndZoom;assembly=Avalonia.Controls.PanAndZoom"
-             xmlns:Controls="clr-namespace:Draw2D.Controls;assembly=Draw2D">
+             xmlns:paz="clr-namespace:Avalonia.Controls.PanAndZoom;assembly=Avalonia.Controls.PanAndZoom">
     <Border Classes="clip" ClipToBounds="True" Background="Transparent">
-        <Controls:InputView x:Name="inputView" RelativeTo="{Binding #rendererView}" Background="Transparent" ClipToBounds="False">
+        <local:InputView x:Name="inputView" RelativeTo="{Binding #rendererView}" Background="Transparent" ClipToBounds="False">
             <paz:ZoomBorder x:Name="zoomBorder" Stretch="None" ZoomSpeed="1.2" PanButton="Right" Background="Transparent" ClipToBounds="False" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
-                <Controls:RenderView x:Name="rendererView" Background="Transparent" ClipToBounds="False" Width="{Binding CurrentContainer.Width}" Height="{Binding CurrentContainer.Height}"/>
+                <local:RenderView x:Name="rendererView" Background="Transparent" ClipToBounds="False" Width="{Binding CurrentContainer.Width}" Height="{Binding CurrentContainer.Height}"/>
             </paz:ZoomBorder>
-        </Controls:InputView>
+        </local:InputView>
     </Border>
 </UserControl>

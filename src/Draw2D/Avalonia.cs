@@ -4,12 +4,18 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Avalonia;
+using Avalonia.Controls;
+using Avalonia.MatrixExtensions;
+using Avalonia.Input;
 using Avalonia.Media;
+using Avalonia.VisualTree;
 using Draw2D.Renderer;
 using Draw2D.Shapes;
 using Draw2D.Style;
+using Draw2D.Editor;
+using Draw2D.ViewModels;
 
-namespace Draw2D.Renderers
+namespace Draw2D
 {
     public struct AvaloniaBrushCache : IDisposable
     {
@@ -534,6 +540,206 @@ namespace Draw2D.Renderers
             {
                 var ftc = GetTextCache(text, rect);
                 _dc.DrawText(cache?.Stroke, ftc.Origin, ftc.FormattedText);
+            }
+        }
+    }
+
+    public class InputView : Border
+    {
+        public static readonly StyledProperty<IVisual> RelativeToProperty =
+            AvaloniaProperty.Register<InputView, IVisual>(nameof(RelativeTo));
+
+        public IVisual RelativeTo
+        {
+            get { return GetValue(RelativeToProperty); }
+            set { SetValue(RelativeToProperty, value); }
+        }
+
+        public InputView()
+        {
+            PointerPressed += (sender, e) => HandlePointerPressed(e);
+            PointerReleased += (sender, e) => HandlePointerReleased(e);
+            PointerMoved += (sender, e) => HandlePointerMoved(e);
+        }
+
+        private Modifier GetModifier(InputModifiers inputModifiers)
+        {
+            Modifier modifier = Modifier.None;
+
+            if (inputModifiers.HasFlag(InputModifiers.Alt))
+            {
+                modifier |= Modifier.Alt;
+            }
+
+            if (inputModifiers.HasFlag(InputModifiers.Control))
+            {
+                modifier |= Modifier.Control;
+            }
+
+            if (inputModifiers.HasFlag(InputModifiers.Shift))
+            {
+                modifier |= Modifier.Shift;
+            }
+
+            return modifier;
+        }
+
+        private void HandlePointerPressed(PointerPressedEventArgs e)
+        {
+            if (e.MouseButton == MouseButton.Left)
+            {
+                if (this.DataContext is MainViewModel vm)
+                {
+                    var point = e.GetPosition(RelativeTo);
+                    vm.CurrentTool.LeftDown(vm, point.X, point.Y, GetModifier(e.InputModifiers));
+                }
+            }
+            else if (e.MouseButton == MouseButton.Right)
+            {
+                if (this.DataContext is MainViewModel vm)
+                {
+                    var point = e.GetPosition(RelativeTo);
+                    vm.CurrentTool.RightDown(vm, point.X, point.Y, GetModifier(e.InputModifiers));
+                }
+            }
+        }
+
+        private void HandlePointerReleased(PointerReleasedEventArgs e)
+        {
+            if (e.MouseButton == MouseButton.Left)
+            {
+                if (this.DataContext is MainViewModel vm)
+                {
+                    var point = e.GetPosition(RelativeTo);
+                    if (vm.Mode == EditMode.Mouse)
+                    {
+                        vm.CurrentTool.LeftUp(vm, point.X, point.Y, GetModifier(e.InputModifiers));
+                    }
+                    else if (vm.Mode == EditMode.Touch)
+                    {
+                        vm.CurrentTool.LeftDown(vm, point.X, point.Y, GetModifier(e.InputModifiers));
+                    }
+                }
+            }
+            else if (e.MouseButton == MouseButton.Right)
+            {
+                if (this.DataContext is MainViewModel vm)
+                {
+                    var point = e.GetPosition(RelativeTo);
+                    vm.CurrentTool.RightUp(vm, point.X, point.Y, GetModifier(e.InputModifiers));
+                }
+            }
+        }
+
+        private void HandlePointerMoved(PointerEventArgs e)
+        {
+            if (this.DataContext is MainViewModel vm)
+            {
+                var point = e.GetPosition(RelativeTo);
+                vm.CurrentTool.Move(vm, point.X, point.Y, GetModifier(e.InputModifiers));
+            }
+        }
+
+        public override void Render(DrawingContext context)
+        {
+            base.Render(context);
+
+            if (this.DataContext is MainViewModel vm)
+            {
+                if (vm.CurrentContainer.WorkBackground != null)
+                {
+                    var color = AvaloniaBrushCache.FromDrawColor(vm.CurrentContainer.InputBackground);
+                    var brush = new SolidColorBrush(color);
+                    context.FillRectangle(brush, new Rect(0, 0, Bounds.Width, Bounds.Height));
+                }
+            }
+        }
+    }
+
+    public class RenderView : Canvas
+    {
+        private bool _drawWorking = false;
+
+        protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e)
+        {
+            base.OnAttachedToVisualTree(e);
+
+            if (this.DataContext is MainViewModel vm)
+            {
+                var md = (this.GetVisualRoot() as IInputRoot)?.MouseDevice;
+                if (md != null)
+                {
+                    vm.Capture = () =>
+                    {
+                        if (md.Captured == null)
+                        {
+                            md.Capture(this);
+                        }
+                    };
+                    vm.Release = () =>
+                    {
+                        if (md.Captured != null)
+                        {
+                            md.Capture(null);
+                        }
+                    };
+                    vm.Invalidate = () => this.InvalidateVisual();
+                }
+            }
+        }
+
+        protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
+        {
+            base.OnDetachedFromVisualTree(e);
+
+            if (this.DataContext is MainViewModel vm)
+            {
+                vm.Capture = null;
+                vm.Release = null;
+                vm.Invalidate = null;
+            }
+        }
+
+        protected override void OnPointerEnter(PointerEventArgs e)
+        {
+            base.OnPointerEnter(e);
+            _drawWorking = true;
+            this.InvalidateVisual();
+        }
+
+        protected override void OnPointerLeave(PointerEventArgs e)
+        {
+            base.OnPointerLeave(e);
+            _drawWorking = false;
+            this.InvalidateVisual();
+        }
+
+        public override void Render(DrawingContext context)
+        {
+            base.Render(context);
+
+            if (this.DataContext is MainViewModel vm)
+            {
+                if (vm.CurrentContainer.WorkBackground != null)
+                {
+                    var color = AvaloniaBrushCache.FromDrawColor(vm.CurrentContainer.WorkBackground);
+                    var brush = new SolidColorBrush(color);
+                    context.FillRectangle(brush, new Rect(0, 0, Bounds.Width, Bounds.Height));
+                }
+
+                vm.Presenter.DrawContainer(context, vm.CurrentContainer, vm.Renderer, 0.0, 0.0, null, null);
+
+                if (_drawWorking)
+                {
+                    vm.Presenter.DrawContainer(context, vm.WorkingContainer, vm.Renderer, 0.0, 0.0, null, null);
+                }
+
+                vm.Presenter.DrawDecorators(context, vm.CurrentContainer, vm.Renderer, 0.0, 0.0);
+
+                if (_drawWorking)
+                {
+                    vm.Presenter.DrawDecorators(context, vm.WorkingContainer, vm.Renderer, 0.0, 0.0);
+                }
             }
         }
     }
