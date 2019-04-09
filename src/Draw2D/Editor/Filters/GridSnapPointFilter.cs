@@ -6,6 +6,14 @@ using Draw2D.Style;
 
 namespace Draw2D.Editor.Filters
 {
+    [Flags]
+    public enum GridSnapMode
+    {
+        None = 0,
+        Horizontal = 1,
+        Vertical = 2
+    }
+
     public class GridSnapSettings : SettingsBase
     {
         private bool _isEnabled;
