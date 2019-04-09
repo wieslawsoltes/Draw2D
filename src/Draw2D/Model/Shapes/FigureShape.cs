@@ -5,7 +5,6 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using Draw2D.Containers;
 using Draw2D.Renderer;
-using Draw2D.Style;
 
 namespace Draw2D.Shapes
 {

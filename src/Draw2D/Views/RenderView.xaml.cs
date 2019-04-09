@@ -3,7 +3,6 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.PanAndZoom;
-using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 
 namespace Draw2D.Views
