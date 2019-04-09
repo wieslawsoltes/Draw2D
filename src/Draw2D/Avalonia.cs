@@ -38,7 +38,7 @@ namespace Draw2D
         {
             protected override JsonContract CreateContract(Type objectType)
             {
-                if (objectType.GetInterfaces().Any(i => i == typeof(IDictionary) || 
+                if (objectType.GetInterfaces().Any(i => i == typeof(IDictionary) ||
                    (i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IDictionary<,>))))
                 {
                     return base.CreateArrayContract(objectType);
@@ -661,7 +661,7 @@ namespace Draw2D
                 StretchUniform = null,
                 StretchUniformToFill = null
             };
-            
+
             var container = new CanvasContainer()
             {
                 Width = 720,
@@ -688,7 +688,7 @@ namespace Draw2D
             vm.WorkingContainer = workingContainer;
             vm.CurrentStyle = style;
             vm.PointShape = pointShape;
-            
+
             return vm;
         }
 
