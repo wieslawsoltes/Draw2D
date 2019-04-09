@@ -18,6 +18,7 @@ using Draw2D.Editor.Decorators;
 using Draw2D.Json;
 using Draw2D.Presenters;
 using Draw2D.Renderer;
+using Draw2D.Renderers;
 using Draw2D.Shapes;
 using Draw2D.Style;
 using Spatial;
