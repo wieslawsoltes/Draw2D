@@ -14,32 +14,26 @@ namespace Draw2D.Editor
 
         public virtual void LeftDown(IToolContext context, double x, double y, Modifier modifier)
         {
-            Log.Info($"[{Title}] LeftDown X={x} Y={y}, Modifier {modifier}");
         }
 
         public virtual void LeftUp(IToolContext context, double x, double y, Modifier modifier)
         {
-            Log.Info($"[{Title}] LeftUp X={x} Y={y}, Modifier {modifier}");
         }
 
         public virtual void RightDown(IToolContext context, double x, double y, Modifier modifier)
         {
-            Log.Info($"[{Title}] RightDown X={x} Y={y}, Modifier {modifier}");
         }
 
         public virtual void RightUp(IToolContext context, double x, double y, Modifier modifier)
         {
-            Log.Info($"[{Title}] RightUp X={x} Y={y}, Modifier {modifier}");
         }
 
         public virtual void Move(IToolContext context, double x, double y, Modifier modifier)
         {
-            Log.Info($"[{Title}] Move X={x} Y={y}, Modifier {modifier}");
         }
 
         public virtual void Clean(IToolContext context)
         {
-            Log.Info($"[{Title}] Clean");
         }
     }
 }

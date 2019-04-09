@@ -133,27 +133,22 @@ namespace Draw2D.Editor.Tools
             {
                 if (shapePoint != null)
                 {
-                    Log.Info($"Hover Shape Point: {shapePoint.GetType()}");
                     return shapePoint;
                 }
                 else if (shape != null)
                 {
-                    Log.Info($"Hover Shape: {shape.GetType()}");
                     return shape;
                 }
                 else if (guidePoint != null)
                 {
-                    Log.Info($"Hover Guide Point: {guidePoint.GetType()}");
                     return guidePoint;
                 }
                 else if (guide != null)
                 {
-                    Log.Info($"Hover Guide: {guide.GetType()}");
                     return guide;
                 }
             }
 
-            Log.Info("No Hover");
             return null;
         }
 
@@ -201,12 +196,10 @@ namespace Draw2D.Editor.Tools
                         {
                             if (context.Renderer.Selected.Contains(shapePoint))
                             {
-                                Log.Info($"Deselected Shape Point: {shapePoint.GetType()}");
                                 shapePoint.Deselect(context.Renderer);
                             }
                             else
                             {
-                                Log.Info($"Selected Shape Point: {shapePoint.GetType()}");
                                 shapePoint.Select(context.Renderer);
                             }
                             return context.Renderer.Selected.Count > 0;
@@ -214,7 +207,6 @@ namespace Draw2D.Editor.Tools
                         else
                         {
                             context.Renderer.Selected.Clear();
-                            Log.Info($"Selected Shape Point: {shapePoint.GetType()}");
                             shapePoint.Select(context.Renderer);
                             return true;
                         }
@@ -225,12 +217,10 @@ namespace Draw2D.Editor.Tools
                         {
                             if (context.Renderer.Selected.Contains(shape))
                             {
-                                Log.Info($"Deselected Shape: {shape.GetType()}");
                                 shape.Deselect(context.Renderer);
                             }
                             else
                             {
-                                Log.Info($"Selected Shape: {shape.GetType()}");
                                 shape.Select(context.Renderer);
                             }
                             return context.Renderer.Selected.Count > 0;
@@ -238,7 +228,6 @@ namespace Draw2D.Editor.Tools
                         else
                         {
                             context.Renderer.Selected.Clear();
-                            Log.Info($"Selected Shape: {shape.GetType()}");
                             shape.Select(context.Renderer);
                             return true;
                         }
@@ -249,12 +238,10 @@ namespace Draw2D.Editor.Tools
                         {
                             if (context.Renderer.Selected.Contains(guidePoint))
                             {
-                                Log.Info($"Deselected Guide Point: {guidePoint.GetType()}");
                                 guidePoint.Deselect(context.Renderer);
                             }
                             else
                             {
-                                Log.Info($"Selected Guide Point: {guidePoint.GetType()}");
                                 guidePoint.Select(context.Renderer);
                             }
                             return context.Renderer.Selected.Count > 0;
@@ -262,7 +249,6 @@ namespace Draw2D.Editor.Tools
                         else
                         {
                             context.Renderer.Selected.Clear();
-                            Log.Info($"Selected Guide Point: {guidePoint.GetType()}");
                             guidePoint.Select(context.Renderer);
                             return true;
                         }
@@ -273,12 +259,10 @@ namespace Draw2D.Editor.Tools
                         {
                             if (context.Renderer.Selected.Contains(guide))
                             {
-                                Log.Info($"Deselected Guide: {guide.GetType()}");
                                 guide.Deselect(context.Renderer);
                             }
                             else
                             {
-                                Log.Info($"Selected Guide: {guide.GetType()}");
                                 guide.Select(context.Renderer);
                             }
                             return context.Renderer.Selected.Count > 0;
@@ -286,7 +270,6 @@ namespace Draw2D.Editor.Tools
                         else
                         {
                             context.Renderer.Selected.Clear();
-                            Log.Info($"Selected Guide: {guide.GetType()}");
                             guide.Select(context.Renderer);
                             return true;
                         }
@@ -319,12 +302,10 @@ namespace Draw2D.Editor.Tools
                         {
                             if (context.Renderer.Selected.Contains(shape))
                             {
-                                Log.Info($"Deselected Shape: {shape.GetType()}");
                                 shape.Deselect(context.Renderer);
                             }
                             else
                             {
-                                Log.Info($"Selected Shape: {shape.GetType()}");
                                 shape.Select(context.Renderer);
                             }
                         }
@@ -332,7 +313,6 @@ namespace Draw2D.Editor.Tools
                     }
                     else
                     {
-                        Log.Info($"Selected Shapes: {shapes?.Count ?? 0}");
                         context.Renderer.Selected.Clear();
                         foreach (var shape in shapes)
                         {
@@ -349,12 +329,10 @@ namespace Draw2D.Editor.Tools
                         {
                             if (context.Renderer.Selected.Contains(guide))
                             {
-                                Log.Info($"Deselected Guide: {guide.GetType()}");
                                 guide.Deselect(context.Renderer);
                             }
                             else
                             {
-                                Log.Info($"Selected Guide: {guide.GetType()}");
                                 guide.Select(context.Renderer);
                             }
                         }
@@ -362,7 +340,6 @@ namespace Draw2D.Editor.Tools
                     }
                     else
                     {
-                        Log.Info($"Selected Guides: {guides?.Count ?? 0}");
                         context.Renderer.Selected.Clear();
                         foreach (var guide in guides)
                         {

@@ -94,11 +94,6 @@ namespace Draw2D.Editor.Filters
                     PointGuides(context, x, y);
                 }
 
-                if (haveSnapToGrid)
-                {
-                    Log.Info($"Grid Snap {Settings.Mode}");
-                }
-
                 return haveSnapToGrid;
             }
             Clear(context);

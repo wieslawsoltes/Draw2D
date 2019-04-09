@@ -4,7 +4,6 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
-using Draw2D.Editor;
 
 namespace Draw2D.Views
 {
@@ -28,15 +27,6 @@ namespace Draw2D.Views
             set { SetValue(DrawFpsProperty, value); }
         }
 
-        public static readonly StyledProperty<bool> LoggerEnabledProperty =
-            AvaloniaProperty.Register<MenuView, bool>(nameof(LoggerEnabled));
-
-        public bool LoggerEnabled
-        {
-            get { return GetValue(LoggerEnabledProperty); }
-            set { SetValue(LoggerEnabledProperty, value); }
-        }
-
         public MenuView()
         {
             InitializeComponent();
@@ -50,10 +40,8 @@ namespace Draw2D.Views
         protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e)
         {
             base.OnAttachedToVisualTree(e);
-
             DrawDirtyRects = VisualRoot.Renderer.DrawDirtyRects;
             DrawFps = VisualRoot.Renderer.DrawFps;
-            LoggerEnabled = Log.Enabled;
         }
 
         protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
@@ -71,12 +59,6 @@ namespace Draw2D.Views
         {
             VisualRoot.Renderer.DrawFps = !VisualRoot.Renderer.DrawFps;
             DrawFps = VisualRoot.Renderer.DrawFps;
-        }
-
-        private void LoggerEnabled_Click(object sender, RoutedEventArgs e)
-        {
-            Log.Enabled = !Log.Enabled;
-            LoggerEnabled = Log.Enabled;
         }
     }
 }

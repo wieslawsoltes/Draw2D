@@ -125,7 +125,6 @@ namespace Draw2D.Editor.Filters
                         PointGuides(context, x, y);
                     }
 
-                    Log.Info($"Line Snap {mode} ({Settings.Target})");
                     return true;
                 }
                 Clear(context);
