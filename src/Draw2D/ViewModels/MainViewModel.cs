@@ -12,7 +12,7 @@ using Draw2D.Editor;
 using Draw2D.Editor.Bounds;
 using Draw2D.Editor.Bounds.Shapes;
 using Draw2D.Editor.Filters;
-using Draw2D.Editor.Intersections.Line;
+using Draw2D.Editor.Intersections;
 using Draw2D.Editor.Tools;
 using Draw2D.Editor.Decorators;
 using Draw2D.Json;

@@ -5,8 +5,19 @@ using System.Linq;
 using Draw2D.Shapes;
 using Spatial;
 
-namespace Draw2D.Editor.Intersections.Line
+namespace Draw2D.Editor.Intersections
 {
+    public class RectangleLineSettings : SettingsBase
+    {
+        private bool _isEnabled;
+
+        public bool IsEnabled
+        {
+            get => _isEnabled;
+            set => Update(ref _isEnabled, value);
+        }
+    }
+
     public class RectangleLineIntersection : PointIntersection
     {
         public override string Title => "Rectangle-Line";

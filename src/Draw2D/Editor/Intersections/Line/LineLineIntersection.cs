@@ -5,8 +5,19 @@ using System.Linq;
 using Draw2D.Shapes;
 using Spatial;
 
-namespace Draw2D.Editor.Intersections.Line
+namespace Draw2D.Editor.Intersections
 {
+    public class LineLineSettings : SettingsBase
+    {
+        private bool _isEnabled;
+
+        public bool IsEnabled
+        {
+            get => _isEnabled;
+            set => Update(ref _isEnabled, value);
+        }
+    }
+
     public class LineLineIntersection : PointIntersection
     {
         public override string Title => "Line-Line";

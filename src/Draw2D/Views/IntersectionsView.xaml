@@ -5,7 +5,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:Draw2D.Views;assembly=Draw2D"
              xmlns:ViewsIntersectionsLineSettings="clr-namespace:Draw2D.Views.Intersections;assembly=Draw2D"
-             xmlns:EditorIntersectionsLine="clr-namespace:Draw2D.Editor.Intersections.Line;assembly=Draw2D">
+             xmlns:EditorIntersections="clr-namespace:Draw2D.Editor.Intersections;assembly=Draw2D">
     <Grid RowDefinitions="Auto,*">
         <DropDown Classes="default" Grid.Row="0" x:Name="Intersections" Items="{Binding CurrentTool.Intersections}" SelectedIndex="0">
             <DropDown.DataTemplates>
@@ -16,13 +16,13 @@
         </DropDown>
         <ContentControl Grid.Row="1" Content="{Binding ElementName=Intersections, Path=SelectedItem.Settings}">
             <ContentControl.DataTemplates>
-                <DataTemplate DataType="{x:Type EditorIntersectionsLine:LineLineSettings}">
+                <DataTemplate DataType="{x:Type EditorIntersections:LineLineSettings}">
                     <ViewsIntersectionsLineSettings:LineLineSettingsView/>
                 </DataTemplate>
-                <DataTemplate DataType="{x:Type EditorIntersectionsLine:RectangleLineSettings}">
+                <DataTemplate DataType="{x:Type EditorIntersections:RectangleLineSettings}">
                     <ViewsIntersectionsLineSettings:RectangleLineSettingsView/>
                 </DataTemplate>
-                <DataTemplate DataType="{x:Type EditorIntersectionsLine:EllipseLineSettings}">
+                <DataTemplate DataType="{x:Type EditorIntersections:EllipseLineSettings}">
                     <ViewsIntersectionsLineSettings:EllipseLineSettingsView/>
                 </DataTemplate>
             </ContentControl.DataTemplates>
