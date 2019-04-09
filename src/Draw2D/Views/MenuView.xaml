@@ -15,14 +15,14 @@
             <MenuItem Header="E_xit" Command="{Binding Exit}"/>
         </MenuItem>
         <MenuItem Header="_Edit">
-            <MenuItem Header="Cu_t" Command="{Binding Cut}"/>
-            <MenuItem Header="_Copy" Command="{Binding Copy}"/>
-            <MenuItem Header="_Paste" Command="{Binding Paste}"/>
-            <MenuItem Header="_Delete" Command="{Binding Delete}"/>
+            <MenuItem Header="Cu_t" Command="{Binding Edit.Cut}" CommandParameter="{Binding}"/>
+            <MenuItem Header="_Copy" Command="{Binding Edit.Copy}" CommandParameter="{Binding}"/>
+            <MenuItem Header="_Paste" Command="{Binding Edit.Paste}" CommandParameter="{Binding}"/>
+            <MenuItem Header="_Delete" Command="{Binding Edit.Delete}" CommandParameter="{Binding}"/>
             <Separator/>
-            <MenuItem Header="_Group" Command="{Binding Group}"/>
+            <MenuItem Header="_Group" Command="{Binding Edit.Group}" CommandParameter="{Binding}"/>
             <Separator/>
-            <MenuItem Header="Select _All" Command="{Binding SelectAll}"/>
+            <MenuItem Header="Select _All" Command="{Binding Edit.SelectAll}" CommandParameter="{Binding}"/>
         </MenuItem>
         <MenuItem Header="_View">
             <MenuItem Header="_Reset Zoom" Command="{Binding Reset}"/>

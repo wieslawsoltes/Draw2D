@@ -12,26 +12,8 @@ namespace Draw2D.Editor.Tools
 {
     public partial class PathTool : IToolContext
     {
-        private PointShape _nextPoint;
         private IToolContext _context;
-
-        private void SetContext(IToolContext context)
-        {
-            _context = context;
-        }
-
-        private void SetRenderer(IShapeRenderer renderer)
-        {
-            if (_context != null)
-            {
-                _context.Renderer = renderer;
-            }
-        }
-
-        private void SetNextPoint(PointShape point)
-        {
-            _nextPoint = point;
-        }
+        private PointShape _nextPoint;
 
         public IShapeRenderer Renderer
         {
@@ -90,6 +72,24 @@ namespace Draw2D.Editor.Tools
         public PointShape GetNextPoint(double x, double y, bool connect, double radius)
         {
             return _nextPoint ?? _context?.GetNextPoint(x, y, connect, radius);
+        }
+
+        private void SetContext(IToolContext context)
+        {
+            _context = context;
+        }
+
+        private void SetRenderer(IShapeRenderer renderer)
+        {
+            if (_context != null)
+            {
+                _context.Renderer = renderer;
+            }
+        }
+
+        private void SetNextPoint(PointShape point)
+        {
+            _nextPoint = point;
         }
     }
 }

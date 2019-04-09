@@ -24,46 +24,14 @@ using Spatial;
 
 namespace Draw2D.ViewModels
 {
-    public class MainViewModel : ObservableObject, IToolContext
+    public abstract class ToolContext : ObservableObject, IToolContext
     {
-        private ObservableCollection<ToolBase> _tools;
-        private ToolBase _currentTool;
-        private EditMode _mode;
-        private ShapePresenter _presenter;
         private IShapeRenderer _renderer;
         private IHitTest _hitTest;
         private CanvasContainer _currentContainer;
         private CanvasContainer _workingContainer;
         private ShapeStyle _currentStyle;
         private BaseShape _pointShape;
-
-        public ObservableCollection<ToolBase> Tools
-        {
-            get => _tools;
-            set => Update(ref _tools, value);
-        }
-
-        public ToolBase CurrentTool
-        {
-            get => _currentTool;
-            set
-            {
-                _currentTool?.Clean(this);
-                Update(ref _currentTool, value);
-            }
-        }
-
-        public EditMode Mode
-        {
-            get => _mode;
-            set => Update(ref _mode, value);
-        }
-
-        public ShapePresenter Presenter
-        {
-            get => _presenter;
-            set => Update(ref _presenter, value);
-        }
 
         public IShapeRenderer Renderer
         {
@@ -107,71 +75,7 @@ namespace Draw2D.ViewModels
 
         public Action Invalidate { get; set; }
 
-        public Action Reset { get; set; }
-
-        public Action AutoFit { get; set; }
-
-        public Action StretchNone { get; set; }
-
-        public Action StretchFill { get; set; }
-
-        public Action StretchUniform { get; set; }
-
-        public Action StretchUniformToFill { get; set; }
-
-        public static MainViewModel Load(string path)
-        {
-            var json = File.ReadAllText(path);
-            var vm = NewtonsoftJsonSerializer.FromJson<MainViewModel>(json);
-            return vm;
-        }
-
-        public static void Save(string path, MainViewModel vm)
-        {
-            var renderer = vm.Renderer;
-            var currentContainer = vm.CurrentContainer;
-            var workingContainer = vm.WorkingContainer;
-            var capture = vm.Capture;
-            var release = vm.Release;
-            var invalidate = vm.Invalidate;
-            var reset = vm.Reset;
-            var autoFit = vm.AutoFit;
-            var stretchNone = vm.StretchNone;
-            var stretchFill = vm.StretchFill;
-            var stretchUniform = vm.StretchUniform;
-            var stretchUniformToFill = vm.StretchUniformToFill;
-
-            vm.Renderer = null;
-            vm.CurrentContainer = null;
-            vm.WorkingContainer = null;
-            vm.Capture = null;
-            vm.Release = null;
-            vm.Invalidate = null;
-            vm.Reset = null;
-            vm.AutoFit = null;
-            vm.StretchNone = null;
-            vm.StretchFill = null;
-            vm.StretchUniform = null;
-            vm.StretchUniformToFill = null;
-
-            var json = NewtonsoftJsonSerializer.ToJson(vm);
-            File.WriteAllText(path, json);
-
-            vm.Renderer = renderer;
-            vm.CurrentContainer = currentContainer;
-            vm.WorkingContainer = workingContainer;
-            vm.Capture = capture;
-            vm.Release = release;
-            vm.Invalidate = invalidate;
-            vm.Reset = reset;
-            vm.AutoFit = autoFit;
-            vm.StretchNone = stretchNone;
-            vm.StretchFill = stretchFill;
-            vm.StretchUniform = stretchUniform;
-            vm.StretchUniformToFill = stretchUniformToFill;
-        }
-
-        public PointShape GetNextPoint(double x, double y, bool connect, double radius)
+        public virtual PointShape GetNextPoint(double x, double y, bool connect, double radius)
         {
             if (connect == true)
             {
@@ -183,123 +87,61 @@ namespace Draw2D.ViewModels
             }
             return new PointShape(x, y, PointShape);
         }
+    }
 
-        public void New()
+    public class MainViewModel : ToolContext
+    {
+        private ObservableCollection<ToolBase> _tools;
+        private ToolBase _currentTool;
+        private EditMode _mode;
+        private ShapePresenter _presenter;
+        private IEdit _edit;
+
+        public ObservableCollection<ToolBase> Tools
         {
-            CurrentTool.Clean(this);
-            Renderer.Selected.Clear();
-            var container = new CanvasContainer()
+            get => _tools;
+            set => Update(ref _tools, value);
+        }
+
+        public ToolBase CurrentTool
+        {
+            get => _currentTool;
+            set
             {
-                Width = 720,
-                Height = 630,
-                PrintBackground = new ArgbColor(0, 255, 255, 255),
-                WorkBackground = new ArgbColor(255, 128, 128, 128),
-                InputBackground = new ArgbColor(255, 211, 211, 211)
-            };
-            var workingContainer = new CanvasContainer();
-            CurrentContainer = container;
-            WorkingContainer = new CanvasContainer();
-            Invalidate?.Invoke();
-        }
-
-        public void OpenAsJson(string path)
-        {
-            var json = File.ReadAllText(path);
-            var container = NewtonsoftJsonSerializer.FromJson<CanvasContainer>(json);
-            var workingContainer = new CanvasContainer();
-            CurrentTool.Clean(this);
-            Renderer.Selected.Clear();
-            CurrentContainer = container;
-            WorkingContainer = workingContainer;
-        }
-
-        public void SaveAsJson(string path)
-        {
-            var json = NewtonsoftJsonSerializer.ToJson(CurrentContainer);
-            File.WriteAllText(path, json);
-        }
-
-        public async void Open()
-        {
-            var dlg = new OpenFileDialog();
-            dlg.Filters.Add(new FileDialogFilter() { Name = "Json Files", Extensions = { "json" } });
-            dlg.Filters.Add(new FileDialogFilter() { Name = "All Files", Extensions = { "*" } });
-            var result = await dlg.ShowAsync(Application.Current.Windows[0]);
-            if (result != null)
-            {
-                var path = result.FirstOrDefault();
-                OpenAsJson(path);
-                Invalidate?.Invoke();
+                _currentTool?.Clean(this);
+                Update(ref _currentTool, value);
             }
         }
 
-        public async void SaveAs()
+        public EditMode Mode
         {
-            var dlg = new SaveFileDialog();
-            dlg.Filters.Add(new FileDialogFilter() { Name = "Json Files", Extensions = { "json" } });
-            dlg.Filters.Add(new FileDialogFilter() { Name = "All Files", Extensions = { "*" } });
-            dlg.InitialFileName = "container";
-            dlg.DefaultExtension = "project";
-            var result = await dlg.ShowAsync(Application.Current.Windows[0]);
-            if (result != null)
-            {
-                var path = result;
-                SaveAsJson(path);
-            }
+            get => _mode;
+            set => Update(ref _mode, value);
         }
 
-        public void Exit()
+        public ShapePresenter Presenter
         {
-            Application.Current.Windows.FirstOrDefault()?.Close();
+            get => _presenter;
+            set => Update(ref _presenter, value);
         }
 
-        public void Cut()
+        public IEdit Edit
         {
-            if (CurrentTool is SelectionTool selectionTool)
-            {
-                selectionTool.Cut(this);
-            }
+            get => _edit;
+            set => Update(ref _edit, value);
         }
 
-        public void Copy()
-        {
-            if (CurrentTool is SelectionTool selectionTool)
-            {
-                selectionTool.Copy(this);
-            }
-        }
+        public Action Reset { get; set; }
 
-        public void Paste()
-        {
-            if (CurrentTool is SelectionTool selectionTool)
-            {
-                selectionTool.Paste(this);
-            }
-        }
+        public Action AutoFit { get; set; }
 
-        public void Delete()
-        {
-            if (CurrentTool is SelectionTool selectionTool)
-            {
-                selectionTool.Delete(this);
-            }
-        }
+        public Action StretchNone { get; set; }
 
-        public void Group()
-        {
-            if (CurrentTool is SelectionTool selectionTool)
-            {
-                selectionTool.Group(this);
-            }
-        }
+        public Action StretchFill { get; set; }
 
-        public void SelectAll()
-        {
-            if (CurrentTool is SelectionTool selectionTool)
-            {
-                selectionTool.SelectAll(this);
-            }
-        }
+        public Action StretchUniform { get; set; }
+
+        public Action StretchUniformToFill { get; set; }
 
         public void SetTool(string name)
         {
@@ -320,6 +162,75 @@ namespace Draw2D.ViewModels
             {
                 CurrentTool = Tools.Where(t => t.Title == name).FirstOrDefault();
             }
+        }
+
+        public T Load<T>(string path)
+        {
+            var json = File.ReadAllText(path);
+            return NewtonsoftJsonSerializer.FromJson<T>(json);
+        }
+
+        public void Save<T>(string path, T value)
+        {
+            var json = NewtonsoftJsonSerializer.ToJson<T>(value);
+            File.WriteAllText(path, json);
+        }
+
+        public void New()
+        {
+            CurrentTool.Clean(this);
+            Renderer.Selected.Clear();
+            var container = new CanvasContainer()
+            {
+                Width = 720,
+                Height = 630,
+                PrintBackground = new ArgbColor(0, 255, 255, 255),
+                WorkBackground = new ArgbColor(255, 128, 128, 128),
+                InputBackground = new ArgbColor(255, 211, 211, 211)
+            };
+            var workingContainer = new CanvasContainer();
+            CurrentContainer = container;
+            WorkingContainer = new CanvasContainer();
+            Invalidate?.Invoke();
+        }
+
+        public async void Open()
+        {
+            var dlg = new OpenFileDialog();
+            dlg.Filters.Add(new FileDialogFilter() { Name = "Json Files", Extensions = { "json" } });
+            dlg.Filters.Add(new FileDialogFilter() { Name = "All Files", Extensions = { "*" } });
+            var result = await dlg.ShowAsync(Application.Current.Windows[0]);
+            if (result != null)
+            {
+                var path = result.FirstOrDefault();
+                var container = Load<CanvasContainer>(path);
+                var workingContainer = new CanvasContainer();
+                CurrentTool.Clean(this);
+                Renderer.Selected.Clear();
+                CurrentContainer = container;
+                WorkingContainer = workingContainer;
+                Invalidate?.Invoke();
+            }
+        }
+
+        public async void SaveAs()
+        {
+            var dlg = new SaveFileDialog();
+            dlg.Filters.Add(new FileDialogFilter() { Name = "Json Files", Extensions = { "json" } });
+            dlg.Filters.Add(new FileDialogFilter() { Name = "All Files", Extensions = { "*" } });
+            dlg.InitialFileName = "container";
+            dlg.DefaultExtension = "project";
+            var result = await dlg.ShowAsync(Application.Current.Windows[0]);
+            if (result != null)
+            {
+                var path = result;
+                Save(path, CurrentContainer);
+            }
+        }
+
+        public void Exit()
+        {
+            Application.Current.Windows.FirstOrDefault()?.Close();
         }
     }
 
@@ -659,10 +570,7 @@ namespace Draw2D.ViewModels
 
             return new MainViewModel()
             {
-                Tools = tools,
-                CurrentTool = currentTool,
-                Mode = EditMode.Mouse,
-                Presenter = presenter,
+                // IToolContext
                 Renderer = null,
                 HitTest = hitTest,
                 CurrentContainer = null,
@@ -672,6 +580,12 @@ namespace Draw2D.ViewModels
                 Capture = null,
                 Release = null,
                 Invalidate = null,
+                // ViewModel
+                Tools = tools,
+                CurrentTool = currentTool,
+                Mode = EditMode.Mouse,
+                Presenter = presenter,
+                Edit = selectionTool,
                 Reset = null,
                 AutoFit = null,
                 StretchNone = null,
