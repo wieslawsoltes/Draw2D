@@ -13,7 +13,6 @@ using Draw2D.Editor.Bounds;
 using Draw2D.Editor.Bounds.Shapes;
 using Draw2D.Editor.Filters;
 using Draw2D.Editor.Intersections.Line;
-using Draw2D.Editor.Selection;
 using Draw2D.Editor.Tools;
 using Draw2D.Editor.Decorators;
 using Draw2D.Json;
@@ -397,8 +396,8 @@ namespace Draw2D.ViewModels
                 },
                 Settings = new SelectionToolSettings()
                 {
-                    Mode = Draw2D.Editor.Selection.SelectionMode.Point | Draw2D.Editor.Selection.SelectionMode.Shape,
-                    Targets = SelectionTargets.Shapes | SelectionTargets.Guides,
+                    Mode = Draw2D.Editor.Tools.SelectionMode.Point | Draw2D.Editor.Tools.SelectionMode.Shape,
+                    Targets = Draw2D.Editor.Tools.SelectionTargets.Shapes | Draw2D.Editor.Tools.SelectionTargets.Guides,
                     SelectionModifier = Modifier.Control,
                     ConnectionModifier = Modifier.Shift,
                     SelectionStyle = new ShapeStyle(new ArgbColor(255, 0, 120, 215), new ArgbColor(60, 170, 204, 238), 2.0, true, true),
