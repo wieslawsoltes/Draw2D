@@ -236,7 +236,7 @@ namespace Draw2D.ViewModels
 
     public class MainViewModelFactory
     {
-        public MainViewModel CreateMainViewModel()
+        public MainViewModel Create()
         {
             var hitTest = new HitTest();
 
@@ -568,10 +568,12 @@ namespace Draw2D.ViewModels
                 }
             };
 
-            return new MainViewModel()
+            var renderer = new AvaloniaShapeRenderer();
+
+            var vm = new MainViewModel()
             {
                 // IToolContext
-                Renderer = null,
+                Renderer = renderer,
                 HitTest = hitTest,
                 CurrentContainer = null,
                 WorkingContainer = null,
@@ -593,10 +595,7 @@ namespace Draw2D.ViewModels
                 StretchUniform = null,
                 StretchUniformToFill = null
             };
-        }
-
-        public void CreateDemoContainer(MainViewModel vm)
-        {
+            
             var container = new CanvasContainer()
             {
                 Width = 720,
@@ -615,8 +614,6 @@ namespace Draw2D.ViewModels
                 Style = new ShapeStyle(new ArgbColor(0, 0, 0, 0), new ArgbColor(255, 255, 255, 0), 2.0, true, true)
             };
 
-            var guideTool = vm.Tools.FirstOrDefault(t => t.Title == "Guide") as GuideTool;
-
             container.Styles.Add(guideTool.Settings.GuideStyle);
             container.Styles.Add(pointShape.Style);
             container.Styles.Add(style);
@@ -625,6 +622,8 @@ namespace Draw2D.ViewModels
             vm.WorkingContainer = workingContainer;
             vm.CurrentStyle = style;
             vm.PointShape = pointShape;
+            
+            return vm;
         }
 
         public void AddDemoGroupShape(IToolContext context)

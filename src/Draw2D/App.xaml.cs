@@ -5,7 +5,6 @@ using System.IO;
 using Avalonia;
 using Avalonia.Logging.Serilog;
 using Avalonia.Markup.Xaml;
-using Draw2D.Renderers;
 using Draw2D.ViewModels;
 
 namespace Draw2D
@@ -20,16 +19,10 @@ namespace Draw2D
 
         static void AppMain(Application app, string[] args)
         {
-            var factory = new MainViewModelFactory();
-            MainViewModel vm = factory.CreateMainViewModel();
-            factory.CreateDemoContainer(vm);
-            vm.Renderer = new AvaloniaShapeRenderer();
-
             var window = new MainWindow
             {
-                DataContext = vm,
+                DataContext = new MainViewModelFactory().Create(),
             };
-
             app.Run(window);
         }
 
