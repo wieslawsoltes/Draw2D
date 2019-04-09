@@ -13,7 +13,7 @@
         <Style Selector="Border.default">
             <Setter Property="Margin" Value="5"/>
             <Setter Property="Padding" Value="3,3,3,3"/>
-            <Setter Property="BorderBrush" Value="{DynamicResource ThemeBorderHighColor}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource ThemeBorderLightBrush}"/>
             <Setter Property="BorderThickness" Value="1"/>
         </Style>
         <Style Selector="Border.zoom">
@@ -76,9 +76,11 @@
         </Style>
         <Style Selector="TabControl.default">
             <Setter Property="Margin" Value="0"/>
+            <Setter Property="Padding" Value="0"/>
         </Style>
         <Style Selector="TabItem.default">
             <Setter Property="Margin" Value="0"/>
+            <Setter Property="Padding" Value="4"/>
             <Setter Property="FontSize" Value="{DynamicResource FontSizeNormal}"/>
             <Setter Property="FontWeight" Value="Normal"/>
         </Style>
