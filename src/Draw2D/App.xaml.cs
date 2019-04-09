@@ -5,7 +5,6 @@ using System.IO;
 using Avalonia;
 using Avalonia.Logging.Serilog;
 using Avalonia.Markup.Xaml;
-using Draw2D.ViewModels;
 
 namespace Draw2D
 {

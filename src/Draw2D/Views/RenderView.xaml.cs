@@ -5,7 +5,6 @@ using Avalonia.Controls;
 using Avalonia.Controls.PanAndZoom;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
-using Draw2D.ViewModels;
 
 namespace Draw2D.Views
 {
