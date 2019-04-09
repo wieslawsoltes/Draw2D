@@ -9,7 +9,7 @@
              Focusable="True">
     <Grid RowDefinitions="Auto,5,*,5" ColumnDefinitions="300,Auto,*">
         <Views:MenuView Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" DataContext="{Binding}"/>
-        <Grid RowDefinitions="45*,Auto,55*" Grid.Row="2" Grid.Column="0">
+        <Grid RowDefinitions="55*,Auto,45*" Grid.Row="2" Grid.Column="0">
             <TabControl Classes="default" Grid.Row="0" TabStripPlacement="Top">
                 <TabItem Classes="default" Header="Settings">
                     <Border Classes="default">
