@@ -6,11 +6,11 @@ using Spatial;
 
 namespace Draw2D.Editor.Bounds.Shapes
 {
-    public class CubicBezierHitTest : HitTestBase
+    public class CubicBezierBounds : IBounds
     {
-        public override Type TargetType => typeof(CubicBezierShape);
+        public Type TargetType => typeof(CubicBezierShape);
 
-        public override PointShape TryToGetPoint(BaseShape shape, Point2 target, double radius, IHitTest hitTest)
+        public PointShape TryToGetPoint(BaseShape shape, Point2 target, double radius, IHitTest hitTest)
         {
             var cubicBezier = shape as CubicBezierShape;
             if (cubicBezier == null)
@@ -49,7 +49,7 @@ namespace Draw2D.Editor.Bounds.Shapes
             return null;
         }
 
-        public override BaseShape Contains(BaseShape shape, Point2 target, double radius, IHitTest hitTest)
+        public BaseShape Contains(BaseShape shape, Point2 target, double radius, IHitTest hitTest)
         {
             var cubicBezier = shape as CubicBezierShape;
             if (cubicBezier == null)
@@ -58,7 +58,7 @@ namespace Draw2D.Editor.Bounds.Shapes
             return HitTestHelper.Contains(cubicBezier.GetPoints(), target) ? shape : null;
         }
 
-        public override BaseShape Overlaps(BaseShape shape, Rect2 target, double radius, IHitTest hitTest)
+        public BaseShape Overlaps(BaseShape shape, Rect2 target, double radius, IHitTest hitTest)
         {
             var cubicBezier = shape as CubicBezierShape;
             if (cubicBezier == null)

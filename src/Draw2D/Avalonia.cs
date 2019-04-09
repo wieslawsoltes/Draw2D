@@ -305,15 +305,15 @@ namespace Draw2D
         {
             var hitTest = new HitTest();
 
-            hitTest.Register(new PointHitTest());
-            hitTest.Register(new LineHitTest());
-            hitTest.Register(new CubicBezierHitTest());
-            hitTest.Register(new QuadraticBezierHitTest());
-            hitTest.Register(new GroupHitTest());
-            hitTest.Register(new PathHitTest());
-            hitTest.Register(new RectangleHitTest());
-            hitTest.Register(new EllipseHitTest());
-            hitTest.Register(new TextHitTest());
+            hitTest.Register(new PointBounds());
+            hitTest.Register(new LineBounds());
+            hitTest.Register(new CubicBezierBounds());
+            hitTest.Register(new QuadraticBezierBounds());
+            hitTest.Register(new GroupBounds());
+            hitTest.Register(new PathBounds());
+            hitTest.Register(new RectangleBounds());
+            hitTest.Register(new EllipseBounds());
+            hitTest.Register(new TextBounds());
 
             var gridSnapPointFilter = new GridSnapPointFilter()
             {

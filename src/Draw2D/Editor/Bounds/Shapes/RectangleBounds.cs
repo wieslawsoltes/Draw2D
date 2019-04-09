@@ -6,9 +6,11 @@ using Spatial;
 
 namespace Draw2D.Editor.Bounds.Shapes
 {
-    public abstract class BoxHitTest : HitTestBase
+    public class RectangleBounds : IBounds
     {
-        public override PointShape TryToGetPoint(BaseShape shape, Point2 target, double radius, IHitTest hitTest)
+        public Type TargetType => typeof(RectangleShape);
+
+        public PointShape TryToGetPoint(BaseShape shape, Point2 target, double radius, IHitTest hitTest)
         {
             var box = shape as BoxShape ?? throw new ArgumentNullException("shape");
             var pointHitTest = hitTest.Registered[typeof(PointShape)];
@@ -34,7 +36,7 @@ namespace Draw2D.Editor.Bounds.Shapes
             return null;
         }
 
-        public override BaseShape Contains(BaseShape shape, Point2 target, double radius, IHitTest hitTest)
+        public BaseShape Contains(BaseShape shape, Point2 target, double radius, IHitTest hitTest)
         {
             var box = shape as BoxShape ?? throw new ArgumentNullException("shape");
 
@@ -45,7 +47,7 @@ namespace Draw2D.Editor.Bounds.Shapes
                 box.BottomRight.Y).Contains(target) ? shape : null;
         }
 
-        public override BaseShape Overlaps(BaseShape shape, Rect2 target, double radius, IHitTest hitTest)
+        public BaseShape Overlaps(BaseShape shape, Rect2 target, double radius, IHitTest hitTest)
         {
             var box = shape as BoxShape ?? throw new ArgumentNullException("shape");
 

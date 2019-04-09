@@ -6,11 +6,11 @@ using Spatial;
 
 namespace Draw2D.Editor.Bounds.Shapes
 {
-    public class PointHitTest : HitTestBase
+    public class PointBounds : IBounds
     {
-        public override Type TargetType => typeof(PointShape);
+        public Type TargetType => typeof(PointShape);
 
-        public override PointShape TryToGetPoint(BaseShape shape, Point2 target, double radius, IHitTest hitTest)
+        public PointShape TryToGetPoint(BaseShape shape, Point2 target, double radius, IHitTest hitTest)
         {
             var point = shape as PointShape;
             if (point == null)
@@ -24,7 +24,7 @@ namespace Draw2D.Editor.Bounds.Shapes
             return null;
         }
 
-        public override BaseShape Contains(BaseShape shape, Point2 target, double radius, IHitTest hitTest)
+        public BaseShape Contains(BaseShape shape, Point2 target, double radius, IHitTest hitTest)
         {
             var point = shape as PointShape;
             if (point == null)
@@ -33,7 +33,7 @@ namespace Draw2D.Editor.Bounds.Shapes
             return Point2.FromXY(point.X, point.Y).ExpandToRect(radius).Contains(target.X, target.Y) ? shape : null;
         }
 
-        public override BaseShape Overlaps(BaseShape shape, Rect2 target, double radius, IHitTest hitTest)
+        public BaseShape Overlaps(BaseShape shape, Rect2 target, double radius, IHitTest hitTest)
         {
             var point = shape as PointShape;
             if (point == null)

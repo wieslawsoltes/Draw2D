@@ -9,8 +9,8 @@ namespace Draw2D.Editor.Bounds
 {
     public interface IHitTest
     {
-        Dictionary<Type, HitTestBase> Registered { get; set; }
-        void Register(HitTestBase hitTest);
+        Dictionary<Type, IBounds> Registered { get; set; }
+        void Register(IBounds hitTest);
         PointShape TryToGetPoint(IEnumerable<BaseShape> shapes, Point2 target, double radius, PointShape exclude);
         PointShape TryToGetPoint(BaseShape shape, Point2 target, double radius);
         BaseShape TryToGetShape(IEnumerable<BaseShape> shapes, Point2 target, double radius);
