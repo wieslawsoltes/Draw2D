@@ -4,8 +4,9 @@ using System;
 using System.Linq;
 using Draw2D.Editor.Selection;
 using Draw2D.Shapes;
-using Spatial;
+using Draw2D.Style;
 using Draw2D.Editor.Selection.Decorators;
+using Spatial;
 
 namespace Draw2D.Editor.Tools
 {
