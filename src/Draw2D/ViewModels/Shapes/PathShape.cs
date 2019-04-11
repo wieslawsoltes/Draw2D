@@ -88,7 +88,7 @@ namespace Draw2D.ViewModels.Shapes
         {
             var state = base.BeginTransform(dc, renderer);
 
-            var isPathSelected = renderer.Selected.Contains(this);
+            var isPathSelected = renderer.Selection.Selected.Contains(this);
 
             if (Style != null)
             {
@@ -112,21 +112,21 @@ namespace Draw2D.ViewModels.Shapes
                 {
                     case LineShape line:
                         {
-                            var isSelected = renderer.Selected.Contains(line);
+                            var isSelected = renderer.Selection.Selected.Contains(line);
 
-                            if (isPathSelected || isSelected || renderer.Selected.Contains(line.StartPoint))
+                            if (isPathSelected || isSelected || renderer.Selection.Selected.Contains(line.StartPoint))
                             {
                                 line.StartPoint.Draw(dc, renderer, dx, dy, db, r);
                             }
 
-                            if (isPathSelected || isSelected || renderer.Selected.Contains(line.Point))
+                            if (isPathSelected || isSelected || renderer.Selection.Selected.Contains(line.Point))
                             {
                                 line.Point.Draw(dc, renderer, dx, dy, db, r);
                             }
 
                             foreach (var point in line.Points)
                             {
-                                if (isPathSelected || isSelected || renderer.Selected.Contains(point))
+                                if (isPathSelected || isSelected || renderer.Selection.Selected.Contains(point))
                                 {
                                     point.Draw(dc, renderer, dx, dy, db, r);
                                 }
@@ -135,31 +135,31 @@ namespace Draw2D.ViewModels.Shapes
                         break;
                     case CubicBezierShape cubic:
                         {
-                            var isSelected = renderer.Selected.Contains(cubic);
+                            var isSelected = renderer.Selection.Selected.Contains(cubic);
 
-                            if (isPathSelected || isSelected || renderer.Selected.Contains(cubic.StartPoint))
+                            if (isPathSelected || isSelected || renderer.Selection.Selected.Contains(cubic.StartPoint))
                             {
                                 cubic.StartPoint.Draw(dc, renderer, dx, dy, db, r);
                             }
 
-                            if (isPathSelected || isSelected || renderer.Selected.Contains(cubic.Point1))
+                            if (isPathSelected || isSelected || renderer.Selection.Selected.Contains(cubic.Point1))
                             {
                                 cubic.Point1.Draw(dc, renderer, dx, dy, db, r);
                             }
 
-                            if (isPathSelected || isSelected || renderer.Selected.Contains(cubic.Point2))
+                            if (isPathSelected || isSelected || renderer.Selection.Selected.Contains(cubic.Point2))
                             {
                                 cubic.Point2.Draw(dc, renderer, dx, dy, db, r);
                             }
 
-                            if (isPathSelected || isSelected || renderer.Selected.Contains(cubic.Point3))
+                            if (isPathSelected || isSelected || renderer.Selection.Selected.Contains(cubic.Point3))
                             {
                                 cubic.Point3.Draw(dc, renderer, dx, dy, db, r);
                             }
 
                             foreach (var point in cubic.Points)
                             {
-                                if (isPathSelected || isSelected || renderer.Selected.Contains(point))
+                                if (isPathSelected || isSelected || renderer.Selection.Selected.Contains(point))
                                 {
                                     point.Draw(dc, renderer, dx, dy, db, r);
                                 }
@@ -168,26 +168,26 @@ namespace Draw2D.ViewModels.Shapes
                         break;
                     case QuadraticBezierShape quadratic:
                         {
-                            var isSelected = renderer.Selected.Contains(quadratic);
+                            var isSelected = renderer.Selection.Selected.Contains(quadratic);
 
-                            if (isPathSelected || isSelected || renderer.Selected.Contains(quadratic.StartPoint))
+                            if (isPathSelected || isSelected || renderer.Selection.Selected.Contains(quadratic.StartPoint))
                             {
                                 quadratic.StartPoint.Draw(dc, renderer, dx, dy, db, r);
                             }
 
-                            if (isPathSelected || isSelected || renderer.Selected.Contains(quadratic.Point1))
+                            if (isPathSelected || isSelected || renderer.Selection.Selected.Contains(quadratic.Point1))
                             {
                                 quadratic.Point1.Draw(dc, renderer, dx, dy, db, r);
                             }
 
-                            if (isPathSelected || isSelected || renderer.Selected.Contains(quadratic.Point2))
+                            if (isPathSelected || isSelected || renderer.Selection.Selected.Contains(quadratic.Point2))
                             {
                                 quadratic.Point2.Draw(dc, renderer, dx, dy, db, r);
                             }
 
                             foreach (var point in quadratic.Points)
                             {
-                                if (isPathSelected || isSelected || renderer.Selected.Contains(point))
+                                if (isPathSelected || isSelected || renderer.Selection.Selected.Contains(point))
                                 {
                                     point.Draw(dc, renderer, dx, dy, db, r);
                                 }

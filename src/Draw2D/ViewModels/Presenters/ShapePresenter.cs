@@ -20,7 +20,7 @@ namespace Draw2D.ViewModels.Presenters
         public virtual void DrawDecorators(object dc, CanvasContainer container, IShapeRenderer renderer, double dx, double dy)
         {
             var shapes = container.Shapes;
-            var selection = renderer;
+            var selection = renderer.Selection;
 
             foreach (var shape in shapes)
             {

@@ -50,8 +50,8 @@ namespace Draw2D.ViewModels.Tools
                 Style = context.CurrentStyle
             };
             context.WorkingContainer.Shapes.Add(_rectangle);
-            context.Renderer.Selected.Add(_rectangle.TopLeft);
-            context.Renderer.Selected.Add(_rectangle.BottomRight);
+            context.Renderer.Selection.Selected.Add(_rectangle.TopLeft);
+            context.Renderer.Selection.Selected.Add(_rectangle.BottomRight);
 
             context.Capture?.Invoke();
             context.Invalidate?.Invoke();
@@ -65,11 +65,11 @@ namespace Draw2D.ViewModels.Tools
 
             CurrentState = State.TopLeft;
 
-            context.Renderer.Selected.Remove(_rectangle.BottomRight);
+            context.Renderer.Selection.Selected.Remove(_rectangle.BottomRight);
             _rectangle.BottomRight = context.GetNextPoint(x, y, Settings?.ConnectPoints ?? false, Settings?.HitTestRadius ?? 7.0);
             _rectangle.BottomRight.Y = y;
             context.WorkingContainer.Shapes.Remove(_rectangle);
-            context.Renderer.Selected.Remove(_rectangle.TopLeft);
+            context.Renderer.Selection.Selected.Remove(_rectangle.TopLeft);
             context.CurrentContainer.Shapes.Add(_rectangle);
             _rectangle = null;
 
@@ -107,8 +107,8 @@ namespace Draw2D.ViewModels.Tools
             if (_rectangle != null)
             {
                 context.WorkingContainer.Shapes.Remove(_rectangle);
-                context.Renderer.Selected.Remove(_rectangle.TopLeft);
-                context.Renderer.Selected.Remove(_rectangle.BottomRight);
+                context.Renderer.Selection.Selected.Remove(_rectangle.TopLeft);
+                context.Renderer.Selection.Selected.Remove(_rectangle.BottomRight);
                 _rectangle = null;
             }
 

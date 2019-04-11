@@ -55,8 +55,8 @@ namespace Draw2D.ViewModels.Tools
             _points.Add(_line.StartPoint);
             _points.Add(_line.Point);
             context.WorkingContainer.Shapes.Add(_line);
-            context.Renderer.Selected.Add(_line.StartPoint);
-            context.Renderer.Selected.Add(_line.Point);
+            context.Renderer.Selection.Selected.Add(_line.StartPoint);
+            context.Renderer.Selection.Selected.Add(_line.Point);
 
             context.Capture?.Invoke();
             context.Invalidate?.Invoke();
@@ -68,13 +68,13 @@ namespace Draw2D.ViewModels.Tools
         {
             Filters?.Any(f => f.Process(context, ref x, ref y));
 
-            context.Renderer.Selected.Remove(_line.Point);
+            context.Renderer.Selection.Selected.Remove(_line.Point);
             _line.Point = context.GetNextPoint(x, y, Settings?.ConnectPoints ?? false, Settings?.HitTestRadius ?? 7.0);
             _points[_points.Count - 1] = _line.Point;
 
-            if (!context.Renderer.Selected.Contains(_line.Point))
+            if (!context.Renderer.Selection.Selected.Contains(_line.Point))
             {
-                context.Renderer.Selected.Add(_line.Point);
+                context.Renderer.Selection.Selected.Add(_line.Point);
             }
 
             context.WorkingContainer.Shapes.Remove(_line);
@@ -88,7 +88,7 @@ namespace Draw2D.ViewModels.Tools
             };
             _points.Add(_line.Point);
             context.WorkingContainer.Shapes.Add(_line);
-            context.Renderer.Selected.Add(_line.Point);
+            context.Renderer.Selection.Selected.Add(_line.Point);
 
             Intersections?.ForEach(i => i.Clear(context));
             Filters?.ForEach(f => f.Clear(context));
@@ -133,7 +133,7 @@ namespace Draw2D.ViewModels.Tools
 
             if (_points != null)
             {
-                _points.ForEach(point => context.Renderer.Selected.Remove(point));
+                _points.ForEach(point => context.Renderer.Selection.Selected.Remove(point));
                 _points = null;
             }
 

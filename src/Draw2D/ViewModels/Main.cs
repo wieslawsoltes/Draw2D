@@ -160,7 +160,7 @@ namespace Draw2D.ViewModels
         private ToolBase _currentTool;
         private EditMode _mode;
         private ShapePresenter _presenter;
-        private IEdit _edit;
+        private ISelection _selection;
         private IPanAndZoom _zoom;
 
         public ObservableCollection<ToolBase> Tools
@@ -191,10 +191,10 @@ namespace Draw2D.ViewModels
             set => Update(ref _presenter, value);
         }
 
-        public IEdit Edit
+        public ISelection Selection
         {
-            get => _edit;
-            set => Update(ref _edit, value);
+            get => _selection;
+            set => Update(ref _selection, value);
         }
 
         public IPanAndZoom Zoom
@@ -239,7 +239,7 @@ namespace Draw2D.ViewModels
         public void New()
         {
             CurrentTool.Clean(this);
-            Renderer.Selected.Clear();
+            Selection.Selected.Clear();
             var container = new CanvasContainer()
             {
                 Width = 720,
@@ -266,7 +266,7 @@ namespace Draw2D.ViewModels
                 var container = Load<CanvasContainer>(path);
                 var workingContainer = new CanvasContainer();
                 CurrentTool.Clean(this);
-                Renderer.Selected.Clear();
+                Selection.Selected.Clear();
                 CurrentContainer = container;
                 WorkingContainer = workingContainer;
                 Invalidate?.Invoke();
@@ -378,7 +378,9 @@ namespace Draw2D.ViewModels
                     ConnectTestRadius = 10.0,
                     DisconnectPoints = true,
                     DisconnectTestRadius = 10.0
-                }
+                },
+                Hovered = null,
+                Selected = new HashSet<BaseShape>()
             };
 
             var guideTool = new GuideTool()
@@ -628,7 +630,11 @@ namespace Draw2D.ViewModels
                 }
             };
 
-            var renderer = new AvaloniaShapeRenderer();
+            var renderer = new AvaloniaShapeRenderer()
+            {
+                Name = "Default",
+                Selection = selectionTool
+            };
 
             var vm = new Main()
             {
@@ -647,7 +653,7 @@ namespace Draw2D.ViewModels
                 CurrentTool = currentTool,
                 Mode = EditMode.Mouse,
                 Presenter = presenter,
-                Edit = selectionTool,
+                Selection = selectionTool,
                 Zoom = null
             };
 
@@ -800,19 +806,12 @@ namespace Draw2D.ViewModels
         private readonly IDictionary<EllipseShape, Geometry> _ellipseGeometryCache;
         private readonly IDictionary<TextShape, FormattedTextCache> _formattedTextCache;
 
-        private BaseShape _hover;
-        private ISet<BaseShape> _selected;
+        private ISelection _selection;
 
-        public BaseShape Hover
+        public ISelection Selection
         {
-            get => _hover;
-            set => Update(ref _hover, value);
-        }
-
-        public ISet<BaseShape> Selected
-        {
-            get => _selected;
-            set => Update(ref _selected, value);
+            get => _selection;
+            set => Update(ref _selection, value);
         }
 
         public AvaloniaShapeRenderer()
@@ -824,8 +823,6 @@ namespace Draw2D.ViewModels
             _quadGeometryCache = new Dictionary<QuadraticBezierShape, Geometry>();
             _pathGeometryCache = new Dictionary<PathShape, Geometry>();
             _ellipseGeometryCache = new Dictionary<EllipseShape, Geometry>();
-            _hover = null;
-            _selected = new HashSet<BaseShape>();
         }
 
         private static Point ToPoint(PointShape point, double dx, double dy)

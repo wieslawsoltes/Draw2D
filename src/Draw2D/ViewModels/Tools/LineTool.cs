@@ -86,8 +86,8 @@ namespace Draw2D.ViewModels.Tools
                 Style = context.CurrentStyle
             };
             context.WorkingContainer.Shapes.Add(_line);
-            context.Renderer.Selected.Add(_line.StartPoint);
-            context.Renderer.Selected.Add(_line.Point);
+            context.Renderer.Selection.Selected.Add(_line.StartPoint);
+            context.Renderer.Selection.Selected.Add(_line.Point);
 
             context.Capture?.Invoke();
             context.Invalidate?.Invoke();
@@ -101,8 +101,8 @@ namespace Draw2D.ViewModels.Tools
 
             CurrentState = State.StartPoint;
 
-            context.Renderer.Selected.Remove(_line.StartPoint);
-            context.Renderer.Selected.Remove(_line.Point);
+            context.Renderer.Selection.Selected.Remove(_line.StartPoint);
+            context.Renderer.Selection.Selected.Remove(_line.Point);
             context.WorkingContainer.Shapes.Remove(_line);
 
             _line.Point = context.GetNextPoint(x, y, Settings?.ConnectPoints ?? false, Settings?.HitTestRadius ?? 0.0);
@@ -160,8 +160,8 @@ namespace Draw2D.ViewModels.Tools
             if (_line != null)
             {
                 context.WorkingContainer.Shapes.Remove(_line);
-                context.Renderer.Selected.Remove(_line.StartPoint);
-                context.Renderer.Selected.Remove(_line.Point);
+                context.Renderer.Selection.Selected.Remove(_line.StartPoint);
+                context.Renderer.Selection.Selected.Remove(_line.Point);
                 _line = null;
             }
 

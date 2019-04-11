@@ -51,7 +51,7 @@ namespace Draw2D.ViewModels.Intersections
                             var point = new PointShape(p.X, p.Y, context.PointShape);
                             Intersections.Add(point);
                             context.WorkingContainer.Shapes.Add(point);
-                            context.Renderer.Selected.Add(point);
+                            context.Renderer.Selection.Selected.Add(point);
                         }
                     }
                 }

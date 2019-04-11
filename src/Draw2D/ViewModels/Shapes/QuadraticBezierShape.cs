@@ -81,17 +81,17 @@ namespace Draw2D.ViewModels.Shapes
                 renderer.DrawQuadraticBezier(dc, this, Style, dx, dy);
             }
 
-            if (renderer.Selected.Contains(_startPoint))
+            if (renderer.Selection.Selected.Contains(_startPoint))
             {
                 _startPoint.Draw(dc, renderer, dx, dy, db, r);
             }
 
-            if (renderer.Selected.Contains(_point1))
+            if (renderer.Selection.Selected.Contains(_point1))
             {
                 _point1.Draw(dc, renderer, dx, dy, db, r);
             }
 
-            if (renderer.Selected.Contains(_point2))
+            if (renderer.Selection.Selected.Contains(_point2))
             {
                 _point2.Draw(dc, renderer, dx, dy, db, r);
             }

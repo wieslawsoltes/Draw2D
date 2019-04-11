@@ -60,12 +60,12 @@ namespace Draw2D.ViewModels.Shapes
                 renderer.DrawText(dc, this, Style, dx, dy);
             }
 
-            if (renderer.Selected.Contains(TopLeft))
+            if (renderer.Selection.Selected.Contains(TopLeft))
             {
                 TopLeft.Draw(dc, renderer, dx, dy, db, r);
             }
 
-            if (renderer.Selected.Contains(BottomRight))
+            if (renderer.Selection.Selected.Contains(BottomRight))
             {
                 BottomRight.Draw(dc, renderer, dx, dy, db, r);
             }

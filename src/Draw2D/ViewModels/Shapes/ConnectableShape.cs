@@ -35,7 +35,7 @@ namespace Draw2D.ViewModels.Shapes
         {
             foreach (var point in Points)
             {
-                if (renderer.Selected.Contains(point))
+                if (renderer.Selection.Selected.Contains(point))
                 {
                     point.Draw(dc, renderer, dx, dy, db , r);
                 }

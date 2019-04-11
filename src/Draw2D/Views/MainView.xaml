@@ -23,14 +23,14 @@
                 <MenuItem Header="E_xit" Command="{Binding Exit}"/>
             </MenuItem>
             <MenuItem Header="_Edit">
-                <MenuItem Header="Cu_t" Command="{Binding Edit.Cut}" CommandParameter="{Binding}"/>
-                <MenuItem Header="_Copy" Command="{Binding Edit.Copy}" CommandParameter="{Binding}"/>
-                <MenuItem Header="_Paste" Command="{Binding Edit.Paste}" CommandParameter="{Binding}"/>
-                <MenuItem Header="_Delete" Command="{Binding Edit.Delete}" CommandParameter="{Binding}"/>
+                <MenuItem Header="Cu_t" Command="{Binding Selection.Cut}" CommandParameter="{Binding}"/>
+                <MenuItem Header="_Copy" Command="{Binding Selection.Copy}" CommandParameter="{Binding}"/>
+                <MenuItem Header="_Paste" Command="{Binding Selection.Paste}" CommandParameter="{Binding}"/>
+                <MenuItem Header="_Delete" Command="{Binding Selection.Delete}" CommandParameter="{Binding}"/>
                 <Separator/>
-                <MenuItem Header="_Group" Command="{Binding Edit.Group}" CommandParameter="{Binding}"/>
+                <MenuItem Header="_Group" Command="{Binding Selection.Group}" CommandParameter="{Binding}"/>
                 <Separator/>
-                <MenuItem Header="Select _All" Command="{Binding Edit.SelectAll}" CommandParameter="{Binding}"/>
+                <MenuItem Header="Select _All" Command="{Binding Selection.SelectAll}" CommandParameter="{Binding}"/>
             </MenuItem>
             <MenuItem Header="_View">
                 <MenuItem Header="_Reset Zoom" Command="{Binding Zoom.Reset}"/>
@@ -123,38 +123,6 @@
                         </ScrollViewer>
                     </Border>
                 </TabItem>
-                <TabItem Classes="default" Header="Intersections">
-                    <Border Classes="default">
-                        <ScrollViewer>
-                            <Grid RowDefinitions="Auto,*">
-                                <DropDown Classes="default" Grid.Row="0" x:Name="Intersections" Items="{Binding CurrentTool.Intersections}" SelectedIndex="0">
-                                    <DropDown.DataTemplates>
-                                        <DataTemplate>
-                                            <TextBlock Classes="default" Text="{Binding Title}"/>
-                                        </DataTemplate>
-                                    </DropDown.DataTemplates>
-                                </DropDown>
-                                <ContentControl Grid.Row="1" Content="{Binding ElementName=Intersections, Path=SelectedItem.Settings}"/>
-                            </Grid>
-                        </ScrollViewer>
-                    </Border>
-                </TabItem>
-                <TabItem Classes="default" Header="Filters">
-                    <Border Classes="default">
-                        <ScrollViewer>
-                            <Grid RowDefinitions="Auto,*">
-                                <DropDown Classes="default" Grid.Row="0" x:Name="Filters" Items="{Binding CurrentTool.Filters}" SelectedIndex="0">
-                                    <DropDown.DataTemplates>
-                                        <DataTemplate>
-                                            <TextBlock Classes="default" Text="{Binding Title}"/>
-                                        </DataTemplate>
-                                    </DropDown.DataTemplates>
-                                </DropDown>
-                                <ContentControl Grid.Row="1" Content="{Binding ElementName=Filters, Path=SelectedItem.Settings}"/>
-                            </Grid>
-                        </ScrollViewer>
-                    </Border>
-                </TabItem>
                 <TabItem Classes="default" Header="Style">
                     <Border Classes="default">
                         <ScrollViewer>
@@ -162,9 +130,20 @@
                         </ScrollViewer>
                     </Border>
                 </TabItem>
-                <TabItem Classes="default" Header="Shape">
+                <TabItem Classes="default" Header="Hovered">
                     <Border Classes="default">
-                        <ContentControl Content="{Binding Renderer.Hover}"/>
+                        <ContentControl Content="{Binding Selection.Hovered}"/>
+                    </Border>
+                </TabItem>
+                <TabItem Classes="default" Header="Selected">
+                    <Border Classes="default">
+                        <ListBox Classes="default" Items="{Binding Selection.Selected}" SelectedItem="{Binding Hovered}">
+                            <ListBox.DataTemplates>
+                                <DataTemplate>
+                                    <TextBlock Classes="default" Text="{Binding}"/>
+                                </DataTemplate>
+                            </ListBox.DataTemplates>
+                        </ListBox>
                     </Border>
                 </TabItem>
             </TabControl>
@@ -195,6 +174,38 @@
                                 </DataTemplate>
                             </ListBox.DataTemplates>
                         </ListBox>
+                    </Border>
+                </TabItem>
+                <TabItem Classes="default" Header="Intersections">
+                    <Border Classes="default">
+                        <ScrollViewer>
+                            <Grid RowDefinitions="Auto,*">
+                                <DropDown Classes="default" Grid.Row="0" x:Name="Intersections" Items="{Binding CurrentTool.Intersections}" SelectedIndex="0">
+                                    <DropDown.DataTemplates>
+                                        <DataTemplate>
+                                            <TextBlock Classes="default" Text="{Binding Title}"/>
+                                        </DataTemplate>
+                                    </DropDown.DataTemplates>
+                                </DropDown>
+                                <ContentControl Grid.Row="1" Content="{Binding ElementName=Intersections, Path=SelectedItem.Settings}"/>
+                            </Grid>
+                        </ScrollViewer>
+                    </Border>
+                </TabItem>
+                <TabItem Classes="default" Header="Filters">
+                    <Border Classes="default">
+                        <ScrollViewer>
+                            <Grid RowDefinitions="Auto,*">
+                                <DropDown Classes="default" Grid.Row="0" x:Name="Filters" Items="{Binding CurrentTool.Filters}" SelectedIndex="0">
+                                    <DropDown.DataTemplates>
+                                        <DataTemplate>
+                                            <TextBlock Classes="default" Text="{Binding Title}"/>
+                                        </DataTemplate>
+                                    </DropDown.DataTemplates>
+                                </DropDown>
+                                <ContentControl Grid.Row="1" Content="{Binding ElementName=Filters, Path=SelectedItem.Settings}"/>
+                            </Grid>
+                        </ScrollViewer>
                     </Border>
                 </TabItem>
             </TabControl>

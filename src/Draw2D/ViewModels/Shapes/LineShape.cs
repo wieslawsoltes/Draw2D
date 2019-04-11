@@ -71,12 +71,12 @@ namespace Draw2D.ViewModels.Shapes
                 renderer.DrawLine(dc, this, Style, dx, dy);
             }
 
-            if (renderer.Selected.Contains(_startPoint))
+            if (renderer.Selection.Selected.Contains(_startPoint))
             {
                 _startPoint.Draw(dc, renderer, dx, dy, db, r);
             }
 
-            if (renderer.Selected.Contains(_point))
+            if (renderer.Selection.Selected.Contains(_point))
             {
                 _point.Draw(dc, renderer, dx, dy, db, r);
             }

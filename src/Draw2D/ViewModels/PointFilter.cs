@@ -22,7 +22,7 @@ namespace Draw2D.ViewModels
             foreach (var guide in Guides)
             {
                 context.WorkingContainer.Shapes.Remove(guide);
-                context.Renderer.Selected.Remove(guide);
+                context.Renderer.Selection.Selected.Remove(guide);
             }
             Guides.Clear();
         }

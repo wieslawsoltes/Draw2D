@@ -53,10 +53,10 @@ namespace Draw2D.ViewModels.Tools
                 Style = context.CurrentStyle
             };
             context.WorkingContainer.Shapes.Add(_quadraticBezier);
-            context.Renderer.Selected.Add(_quadraticBezier);
-            context.Renderer.Selected.Add(_quadraticBezier.StartPoint);
-            context.Renderer.Selected.Add(_quadraticBezier.Point1);
-            context.Renderer.Selected.Add(_quadraticBezier.Point2);
+            context.Renderer.Selection.Selected.Add(_quadraticBezier);
+            context.Renderer.Selection.Selected.Add(_quadraticBezier.StartPoint);
+            context.Renderer.Selection.Selected.Add(_quadraticBezier.Point1);
+            context.Renderer.Selection.Selected.Add(_quadraticBezier.Point2);
 
             context.Capture?.Invoke();
             context.Invalidate?.Invoke();
@@ -70,10 +70,10 @@ namespace Draw2D.ViewModels.Tools
 
             CurrentState = State.StartPoint;
 
-            context.Renderer.Selected.Remove(_quadraticBezier);
-            context.Renderer.Selected.Remove(_quadraticBezier.StartPoint);
-            context.Renderer.Selected.Remove(_quadraticBezier.Point1);
-            context.Renderer.Selected.Remove(_quadraticBezier.Point2);
+            context.Renderer.Selection.Selected.Remove(_quadraticBezier);
+            context.Renderer.Selection.Selected.Remove(_quadraticBezier.StartPoint);
+            context.Renderer.Selection.Selected.Remove(_quadraticBezier.Point1);
+            context.Renderer.Selection.Selected.Remove(_quadraticBezier.Point2);
             context.WorkingContainer.Shapes.Remove(_quadraticBezier);
 
             _quadraticBezier.Point1 = context.GetNextPoint(x, y, false, 0.0);
@@ -93,9 +93,9 @@ namespace Draw2D.ViewModels.Tools
             _quadraticBezier.Point1.X = x;
             _quadraticBezier.Point1.Y = y;
 
-            context.Renderer.Selected.Remove(_quadraticBezier.Point2);
+            context.Renderer.Selection.Selected.Remove(_quadraticBezier.Point2);
             _quadraticBezier.Point2 = context.GetNextPoint(x, y, false, 0.0);
-            context.Renderer.Selected.Add(_quadraticBezier.Point2);
+            context.Renderer.Selection.Selected.Add(_quadraticBezier.Point2);
 
             CurrentState = State.Point1;
 
@@ -143,10 +143,10 @@ namespace Draw2D.ViewModels.Tools
             if (_quadraticBezier != null)
             {
                 context.WorkingContainer.Shapes.Remove(_quadraticBezier);
-                context.Renderer.Selected.Remove(_quadraticBezier);
-                context.Renderer.Selected.Remove(_quadraticBezier.StartPoint);
-                context.Renderer.Selected.Remove(_quadraticBezier.Point1);
-                context.Renderer.Selected.Remove(_quadraticBezier.Point2);
+                context.Renderer.Selection.Selected.Remove(_quadraticBezier);
+                context.Renderer.Selection.Selected.Remove(_quadraticBezier.StartPoint);
+                context.Renderer.Selection.Selected.Remove(_quadraticBezier.Point1);
+                context.Renderer.Selection.Selected.Remove(_quadraticBezier.Point2);
                 _quadraticBezier = null;
             }
 

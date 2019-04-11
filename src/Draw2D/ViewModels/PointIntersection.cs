@@ -22,7 +22,7 @@ namespace Draw2D.ViewModels
             foreach (var point in Intersections)
             {
                 context.WorkingContainer.Shapes.Remove(point);
-                context.Renderer.Selected.Remove(point);
+                context.Renderer.Selection.Selected.Remove(point);
             }
             Intersections.Clear();
         }

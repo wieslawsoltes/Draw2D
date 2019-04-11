@@ -15,12 +15,12 @@
         <KeyBinding Command="{Binding SaveAs}" Gesture="Ctrl+S"/>
         <KeyBinding Command="{Binding Exit}" Gesture="Alt+F4"/>
         <!-- Edit -->
-        <KeyBinding Command="{Binding Edit.Cut}" CommandParameter="{Binding}" Gesture="Ctrl+X"/>
-        <KeyBinding Command="{Binding Edit.Copy}" CommandParameter="{Binding}" Gesture="Ctrl+C"/>
-        <KeyBinding Command="{Binding Edit.Paste}" CommandParameter="{Binding}" Gesture="Ctrl+V"/>
-        <KeyBinding Command="{Binding Edit.Delete}" CommandParameter="{Binding}" Gesture="Delete"/>
-        <KeyBinding Command="{Binding Edit.Group}" CommandParameter="{Binding}" Gesture="Ctrl+G"/>
-        <KeyBinding Command="{Binding Edit.SelectAll}" CommandParameter="{Binding}" Gesture="Ctrl+A"/>
+        <KeyBinding Command="{Binding Selection.Cut}" CommandParameter="{Binding}" Gesture="Ctrl+X"/>
+        <KeyBinding Command="{Binding Selection.Copy}" CommandParameter="{Binding}" Gesture="Ctrl+C"/>
+        <KeyBinding Command="{Binding Selection.Paste}" CommandParameter="{Binding}" Gesture="Ctrl+V"/>
+        <KeyBinding Command="{Binding Selection.Delete}" CommandParameter="{Binding}" Gesture="Delete"/>
+        <KeyBinding Command="{Binding Selection.Group}" CommandParameter="{Binding}" Gesture="Ctrl+G"/>
+        <KeyBinding Command="{Binding Selection.SelectAll}" CommandParameter="{Binding}" Gesture="Ctrl+A"/>
         <!-- Tool -->
         <KeyBinding Command="{Binding SetTool}" CommandParameter="None" Gesture="N"/>
         <KeyBinding Command="{Binding SetTool}" CommandParameter="Selection" Gesture="S"/>

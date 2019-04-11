@@ -112,7 +112,7 @@ namespace Draw2D.ViewModels.Tools
             };
 
             context.WorkingContainer.Shapes.Add(_path);
-            context.Renderer.Selected.Add(_path);
+            context.Renderer.Selection.Selected.Add(_path);
         }
 
         public void Move()
@@ -216,7 +216,7 @@ namespace Draw2D.ViewModels.Tools
             if (_path != null)
             {
                 context.WorkingContainer.Shapes.Remove(_path);
-                context.Renderer.Selected.Remove(_path);
+                context.Renderer.Selection.Selected.Remove(_path);
 
                 if (_path.Validate(true) == true)
                 {

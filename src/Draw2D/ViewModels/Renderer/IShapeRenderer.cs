@@ -5,8 +5,9 @@ using Draw2D.ViewModels.Style;
 
 namespace Draw2D.ViewModels.Renderer
 {
-    public interface IShapeRenderer : ISelection
+    public interface IShapeRenderer
     {
+        ISelection Selection { get; set; }
         void InvalidateCache(ShapeStyle style);
         void InvalidateCache(MatrixObject matrix);
         void InvalidateCache(BaseShape shape, ShapeStyle style, double dx, double dy);
