@@ -18,7 +18,7 @@ namespace Draw2D.ViewModels.Intersections
         }
     }
 
-    public class LineLineIntersection : PointIntersection
+    public class LineLineIntersection : PointIntersectionBase
     {
         public override string Title => "Line-Line";
 
@@ -49,7 +49,7 @@ namespace Draw2D.ViewModels.Intersections
                         var point = new PointShape(clip.X, clip.Y, context.PointShape);
                         Intersections.Add(point);
                         context.WorkingContainer.Shapes.Add(point);
-                        context.Renderer.Selection.Selected.Add(point);
+                        context.Selection.Selected.Add(point);
                     }
                 }
             }

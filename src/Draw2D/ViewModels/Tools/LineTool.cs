@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Wiesław Šoltés. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using Draw2D.ViewModels.Shapes;
 using Spatial;
@@ -34,7 +35,7 @@ namespace Draw2D.ViewModels.Tools
 
     public static class LineHelper
     {
-        public static IList<LineShape> SplitByIntersections(IToolContext context, IEnumerable<PointIntersection> intersections, LineShape target)
+        public static IList<LineShape> SplitByIntersections(IToolContext context, IEnumerable<PointIntersectionBase> intersections, LineShape target)
         {
             var points = intersections.SelectMany(i => i.Intersections).ToList();
             points.Insert(0, target.StartPoint);
@@ -44,7 +45,7 @@ namespace Draw2D.ViewModels.Tools
                 .Select(p => new Point2(p.X, p.Y)).Distinct().OrderBy(p => p)
                 .Select(p => new PointShape(p.X, p.Y, context.PointShape)).ToList();
 
-            var lines = new List<LineShape>();
+            var lines = new ObservableCollection<LineShape>();
             for (int i = 0; i < unique.Count - 1; i++)
             {
                 var line = new LineShape(unique[i], unique[i + 1]);
@@ -86,8 +87,8 @@ namespace Draw2D.ViewModels.Tools
                 Style = context.CurrentStyle
             };
             context.WorkingContainer.Shapes.Add(_line);
-            context.Renderer.Selection.Selected.Add(_line.StartPoint);
-            context.Renderer.Selection.Selected.Add(_line.Point);
+            context.Selection.Selected.Add(_line.StartPoint);
+            context.Selection.Selected.Add(_line.Point);
 
             context.Capture?.Invoke();
             context.Invalidate?.Invoke();
@@ -101,8 +102,8 @@ namespace Draw2D.ViewModels.Tools
 
             CurrentState = State.StartPoint;
 
-            context.Renderer.Selection.Selected.Remove(_line.StartPoint);
-            context.Renderer.Selection.Selected.Remove(_line.Point);
+            context.Selection.Selected.Remove(_line.StartPoint);
+            context.Selection.Selected.Remove(_line.Point);
             context.WorkingContainer.Shapes.Remove(_line);
 
             _line.Point = context.GetNextPoint(x, y, Settings?.ConnectPoints ?? false, Settings?.HitTestRadius ?? 0.0);
@@ -160,8 +161,8 @@ namespace Draw2D.ViewModels.Tools
             if (_line != null)
             {
                 context.WorkingContainer.Shapes.Remove(_line);
-                context.Renderer.Selection.Selected.Remove(_line.StartPoint);
-                context.Renderer.Selection.Selected.Remove(_line.Point);
+                context.Selection.Selected.Remove(_line.StartPoint);
+                context.Selection.Selected.Remove(_line.Point);
                 _line = null;
             }
 

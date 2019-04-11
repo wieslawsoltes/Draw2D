@@ -75,7 +75,7 @@ namespace Draw2D.ViewModels.Filters
         }
     }
 
-    public class LineSnapPointFilter : PointFilter
+    public class LineSnapPointFilter : PointFilterBase
     {
         public override string Title => "Line-Snap";
 

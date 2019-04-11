@@ -46,7 +46,7 @@ namespace Draw2D.ViewModels.Tools
                 if (shape is ConnectableShape connectable)
                 {
                     connectable.Points.Add(point);
-                    context.Renderer.Selection.Selected.Add(point);
+                    context.Selection.Selected.Add(point);
                     context.Invalidate?.Invoke();
                 }
             }

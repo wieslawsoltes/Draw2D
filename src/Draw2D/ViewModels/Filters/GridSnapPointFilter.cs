@@ -60,7 +60,7 @@ namespace Draw2D.ViewModels.Filters
         }
     }
 
-    public class GridSnapPointFilter : PointFilter
+    public class GridSnapPointFilter : PointFilterBase
     {
         public override string Title => "Grid-Snap";
 

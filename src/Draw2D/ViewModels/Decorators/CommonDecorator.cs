@@ -1,12 +1,11 @@
 ﻿// Copyright (c) Wiesław Šoltés. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
-using Draw2D.ViewModels.Renderer;
 using Draw2D.ViewModels.Shapes;
 using Draw2D.ViewModels.Style;
 
 namespace Draw2D.ViewModels.Decorators
 {
-    public abstract class CommonDecorator : ShapeDecorator
+    public abstract class CommonDecorator : IShapeDecorator
     {
         private ArgbColor _stroke;
         private ArgbColor _fill;
@@ -54,5 +53,7 @@ namespace Draw2D.ViewModels.Decorators
             _ellipse.BottomRight.Y = s.Y + radius;
             _ellipse.Draw(dc, renderer, dx, dy, null, null);
         }
+
+        public abstract void Draw(object dc, BaseShape shape, IShapeRenderer renderer, ISelection selected, double dx, double dy);
     }
 }

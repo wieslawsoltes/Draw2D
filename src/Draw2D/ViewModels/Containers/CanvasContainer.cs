@@ -3,7 +3,6 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using Draw2D.ViewModels.Renderer;
 using Draw2D.ViewModels.Shapes;
 using Draw2D.ViewModels.Style;
 

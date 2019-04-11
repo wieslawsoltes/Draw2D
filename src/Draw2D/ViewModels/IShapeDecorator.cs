@@ -2,10 +2,10 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using Draw2D.ViewModels.Shapes;
 
-namespace Draw2D.ViewModels.Renderer
+namespace Draw2D.ViewModels
 {
-    public abstract class ShapeDecorator
+    public interface IShapeDecorator
     {
-        public abstract void Draw(object dc, IShapeRenderer renderer, BaseShape shape, ISelection selected, double dx, double dy);
+        void Draw(object dc, BaseShape shape, IShapeRenderer renderer, ISelection selected, double dx, double dy);
     }
 }

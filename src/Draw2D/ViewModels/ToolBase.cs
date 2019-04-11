@@ -8,9 +8,9 @@ namespace Draw2D.ViewModels
     {
         public abstract string Title { get; }
 
-        public List<PointIntersection> Intersections { get; set; }
+        public IList<PointIntersectionBase> Intersections { get; set; }
 
-        public List<PointFilter> Filters { get; set; }
+        public IList<PointFilterBase> Filters { get; set; }
 
         public virtual void LeftDown(IToolContext context, double x, double y, Modifier modifier)
         {

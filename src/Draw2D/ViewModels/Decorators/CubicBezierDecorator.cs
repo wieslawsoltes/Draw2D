@@ -1,6 +1,5 @@
 ﻿// Copyright (c) Wiesław Šoltés. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
-using Draw2D.ViewModels.Renderer;
 using Draw2D.ViewModels.Shapes;
 
 namespace Draw2D.ViewModels.Decorators
@@ -14,7 +13,7 @@ namespace Draw2D.ViewModels.Decorators
             DrawLine(dc, renderer, cubicBezier.Point1, cubicBezier.Point2, dx, dy);
         }
 
-        public override void Draw(object dc, IShapeRenderer renderer, BaseShape shape, ISelection selection, double dx, double dy)
+        public override void Draw(object dc, BaseShape shape, IShapeRenderer renderer, ISelection selection, double dx, double dy)
         {
             if (shape is CubicBezierShape cubicBezier)
             {

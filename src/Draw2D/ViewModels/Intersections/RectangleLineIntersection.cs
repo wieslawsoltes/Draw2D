@@ -18,7 +18,7 @@ namespace Draw2D.ViewModels.Intersections
         }
     }
 
-    public class RectangleLineIntersection : PointIntersection
+    public class RectangleLineIntersection : PointIntersectionBase
     {
         public override string Title => "Rectangle-Line";
 
@@ -47,12 +47,12 @@ namespace Draw2D.ViewModels.Intersections
                         var point1 = new PointShape(x0clip, y0clip, context.PointShape);
                         Intersections.Add(point1);
                         context.WorkingContainer.Shapes.Add(point1);
-                        context.Renderer.Selection.Selected.Add(point1);
+                        context.Selection.Selected.Add(point1);
 
                         var point2 = new PointShape(x1clip, y1clip, context.PointShape);
                         Intersections.Add(point2);
                         context.WorkingContainer.Shapes.Add(point2);
-                        context.Renderer.Selection.Selected.Add(point2);
+                        context.Selection.Selected.Add(point2);
                     }
                 }
             }

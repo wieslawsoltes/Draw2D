@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Wiesław Šoltés. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using Draw2D.ViewModels.Shapes;
 
@@ -27,7 +28,7 @@ namespace Draw2D.ViewModels.Tools
     public class PolyLineTool : ToolBase
     {
         private LineShape _line = null;
-        private List<PointShape> _points = null;
+        private IList<PointShape> _points = null;
 
         public enum State
         {
@@ -45,7 +46,7 @@ namespace Draw2D.ViewModels.Tools
         {
             Filters?.Any(f => f.Process(context, ref x, ref y));
 
-            _points = new List<PointShape>();
+            _points = new ObservableCollection<PointShape>();
             _line = new LineShape()
             {
                 StartPoint = context.GetNextPoint(x, y, Settings?.ConnectPoints ?? false, Settings?.HitTestRadius ?? 7.0),
@@ -55,8 +56,8 @@ namespace Draw2D.ViewModels.Tools
             _points.Add(_line.StartPoint);
             _points.Add(_line.Point);
             context.WorkingContainer.Shapes.Add(_line);
-            context.Renderer.Selection.Selected.Add(_line.StartPoint);
-            context.Renderer.Selection.Selected.Add(_line.Point);
+            context.Selection.Selected.Add(_line.StartPoint);
+            context.Selection.Selected.Add(_line.Point);
 
             context.Capture?.Invoke();
             context.Invalidate?.Invoke();
@@ -68,13 +69,13 @@ namespace Draw2D.ViewModels.Tools
         {
             Filters?.Any(f => f.Process(context, ref x, ref y));
 
-            context.Renderer.Selection.Selected.Remove(_line.Point);
+            context.Selection.Selected.Remove(_line.Point);
             _line.Point = context.GetNextPoint(x, y, Settings?.ConnectPoints ?? false, Settings?.HitTestRadius ?? 7.0);
             _points[_points.Count - 1] = _line.Point;
 
-            if (!context.Renderer.Selection.Selected.Contains(_line.Point))
+            if (!context.Selection.Selected.Contains(_line.Point))
             {
-                context.Renderer.Selection.Selected.Add(_line.Point);
+                context.Selection.Selected.Add(_line.Point);
             }
 
             context.WorkingContainer.Shapes.Remove(_line);
@@ -88,7 +89,7 @@ namespace Draw2D.ViewModels.Tools
             };
             _points.Add(_line.Point);
             context.WorkingContainer.Shapes.Add(_line);
-            context.Renderer.Selection.Selected.Add(_line.Point);
+            context.Selection.Selected.Add(_line.Point);
 
             Intersections?.ForEach(i => i.Clear(context));
             Filters?.ForEach(f => f.Clear(context));
@@ -133,7 +134,7 @@ namespace Draw2D.ViewModels.Tools
 
             if (_points != null)
             {
-                _points.ForEach(point => context.Renderer.Selection.Selected.Remove(point));
+                _points.ForEach(point => context.Selection.Selected.Remove(point));
                 _points = null;
             }
 

@@ -3,21 +3,20 @@
 using System;
 using System.Collections.Generic;
 using Draw2D.ViewModels.Containers;
-using Draw2D.ViewModels.Renderer;
 
-namespace Draw2D.ViewModels.Presenters
+namespace Draw2D.ViewModels
 {
-    public class ShapePresenter
+    public class CanvasPresenter : ICanvasPresenter
     {
-        public Dictionary<Type, ShapeDecorator> Decorators { get; set; }
+        public IDictionary<Type, IShapeDecorator> Decorators { get; set; }
 
-        public virtual void DrawContainer(object dc, CanvasContainer container, IShapeRenderer renderer, double dx, double dy, object db, object r)
+        public void DrawContainer(object dc, CanvasContainer container, IShapeRenderer renderer, double dx, double dy, object db, object r)
         {
             container.Invalidate(renderer, dx, dy);
             container.Draw(dc, renderer, dx, dy, db, r);
         }
 
-        public virtual void DrawDecorators(object dc, CanvasContainer container, IShapeRenderer renderer, double dx, double dy)
+        public void DrawDecorators(object dc, CanvasContainer container, IShapeRenderer renderer, double dx, double dy)
         {
             var shapes = container.Shapes;
             var selection = renderer.Selection;
@@ -28,7 +27,7 @@ namespace Draw2D.ViewModels.Presenters
                 {
                     if (Decorators.TryGetValue(shape.GetType(), out var helper))
                     {
-                        helper.Draw(dc, renderer, shape, selection, dx, dy);
+                        helper.Draw(dc, shape, renderer, selection, dx, dy);
                     }
                 }
             }

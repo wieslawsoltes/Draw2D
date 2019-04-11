@@ -3,7 +3,7 @@
 using Draw2D.ViewModels.Shapes;
 using Draw2D.ViewModels.Style;
 
-namespace Draw2D.ViewModels.Renderer
+namespace Draw2D.ViewModels
 {
     public interface IShapeRenderer
     {

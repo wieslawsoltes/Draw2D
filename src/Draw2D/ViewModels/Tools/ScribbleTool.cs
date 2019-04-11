@@ -101,8 +101,8 @@ namespace Draw2D.ViewModels.Tools
 
             if (Settings?.Simplify ?? true)
             {
-                List<PointShape> points = _path.GetPoints().Distinct().ToList();
-                List<Vector2> vectors = points.Select(p => new Vector2((float)p.X, (float)p.Y)).ToList();
+                IList<PointShape> points = _path.GetPoints().Distinct().ToList();
+                IList<Vector2> vectors = points.Select(p => new Vector2((float)p.X, (float)p.Y)).ToList();
                 int count = vectors.Count;
                 RDP rdp = new RDP();
                 BitArray accepted = rdp.DouglasPeucker(vectors, 0, count - 1, Settings?.Epsilon ?? 1.0);

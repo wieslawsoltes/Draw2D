@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using Draw2D.ViewModels.Shapes;
 using Spatial;
 
-namespace Draw2D.ViewModels.Bounds
+namespace Draw2D.ViewModels
 {
     public interface IHitTest
     {

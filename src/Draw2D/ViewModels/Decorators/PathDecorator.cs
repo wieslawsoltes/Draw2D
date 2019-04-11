@@ -1,6 +1,5 @@
 ﻿// Copyright (c) Wiesław Šoltés. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
-using Draw2D.ViewModels.Renderer;
 using Draw2D.ViewModels.Shapes;
 
 namespace Draw2D.ViewModels.Decorators
@@ -24,21 +23,21 @@ namespace Draw2D.ViewModels.Decorators
             {
                 if (selection.Selected.Contains(line))
                 {
-                    _lineDecorator.Draw(dc, renderer, line, selection, dx, dy);
+                    _lineDecorator.Draw(dc, line, renderer, selection, dx, dy);
                 }
             }
             else if (shape is CubicBezierShape cubicBezier)
             {
                 if (selection.Selected.Contains(cubicBezier))
                 {
-                    _cubiceBezierDecorator.Draw(dc, renderer, cubicBezier, selection, dx, dy);
+                    _cubiceBezierDecorator.Draw(dc, cubicBezier, renderer, selection, dx, dy);
                 }
             }
             else if (shape is QuadraticBezierShape quadraticBezier)
             {
                 if (selection.Selected.Contains(quadraticBezier))
                 {
-                    _quadraticBezierDecorator.Draw(dc, renderer, quadraticBezier, selection, dx, dy);
+                    _quadraticBezierDecorator.Draw(dc, quadraticBezier, renderer, selection, dx, dy);
                 }
             }
         }
@@ -59,7 +58,7 @@ namespace Draw2D.ViewModels.Decorators
             }
         }
 
-        public override void Draw(object dc, IShapeRenderer renderer, BaseShape shape, ISelection selection, double dx, double dy)
+        public override void Draw(object dc, BaseShape shape, IShapeRenderer renderer, ISelection selection, double dx, double dy)
         {
             if (shape is PathShape path)
             {
