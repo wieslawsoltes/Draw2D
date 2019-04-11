@@ -34,8 +34,8 @@
         <KeyBinding Command="{Binding SetTool}" CommandParameter="Ellipse" Gesture="E"/>
         <KeyBinding Command="{Binding SetTool}" CommandParameter="Text" Gesture="T"/>
         <!-- View -->
-        <KeyBinding Command="{Binding Reset}" Gesture="Z"/>
-        <KeyBinding Command="{Binding AutoFit}" Gesture="X"/>
+        <KeyBinding Command="{Binding Zoom.Reset}" Gesture="Z"/>
+        <KeyBinding Command="{Binding Zoom.AutoFit}" Gesture="X"/>
     </Window.KeyBindings>
     <local:MainView/>
 </Window>
