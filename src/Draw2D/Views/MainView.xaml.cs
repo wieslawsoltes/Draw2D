@@ -72,9 +72,9 @@ namespace Draw2D.Views
             DrawDirtyRects = VisualRoot.Renderer.DrawDirtyRects;
             DrawFps = VisualRoot.Renderer.DrawFps;
 
-            if (this.DataContext is Editor vm)
+            if (this.DataContext is IToolContext ctx)
             {
-                vm.Zoom = _zoomBorder;
+                ctx.Zoom = _zoomBorder;
             }
         }
 
@@ -82,9 +82,9 @@ namespace Draw2D.Views
         {
             base.OnDetachedFromVisualTree(e);
 
-            if (this.DataContext is Editor vm)
+            if (this.DataContext is IToolContext ctx)
             {
-                vm.Zoom = null;
+                ctx.Zoom = null;
             }
         }
 
