@@ -93,7 +93,7 @@ namespace Draw2D
                 }
             };
 
-            var tools = new ObservableCollection<ToolBase>();
+            var tools = new ObservableCollection<ITool>();
 
             var noneTool = new NoneTool()
             {
@@ -284,7 +284,7 @@ namespace Draw2D
                 }
             };
 
-            pathTool.Settings.Tools = new ObservableCollection<ToolBase>
+            pathTool.Settings.Tools = new ObservableCollection<ITool>
             {
                 new LineTool(),
                 new CubicBezierTool(),

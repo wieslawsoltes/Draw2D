@@ -1,9 +1,13 @@
 ﻿// Copyright (c) Wiesław Šoltés. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using Draw2D.ViewModels.Containers;
 using Draw2D.ViewModels.Shapes;
+using Draw2D.ViewModels.Style;
+using PanAndZoom;
 
 namespace Draw2D.ViewModels.Tools
 {
@@ -14,9 +18,9 @@ namespace Draw2D.ViewModels.Tools
         private PathFillRule _fillRule;
         private bool _isFilled;
         private bool _isClosed;
-        private ObservableCollection<ToolBase> _tools;
-        private ToolBase _currentTool;
-        private ToolBase _previousTool;
+        private ObservableCollection<ITool> _tools;
+        private ITool _currentTool;
+        private ITool _previousTool;
 
         public bool ConnectPoints
         {
@@ -48,13 +52,13 @@ namespace Draw2D.ViewModels.Tools
             set => Update(ref _isClosed, value);
         }
 
-        public ObservableCollection<ToolBase> Tools
+        public ObservableCollection<ITool> Tools
         {
             get => _tools;
             set => Update(ref _tools, value);
         }
 
-        public ToolBase CurrentTool
+        public ITool CurrentTool
         {
             get => _currentTool;
             set
@@ -64,19 +68,147 @@ namespace Draw2D.ViewModels.Tools
             }
         }
 
-        public ToolBase PreviousTool
+        public ITool PreviousTool
         {
             get => _previousTool;
             set => Update(ref _previousTool, value);
         }
     }
 
-    public partial class PathTool : ToolBase
+    public partial class PathTool : IToolContext
+    {
+        private IToolContext _context;
+        private PointShape _nextPoint;
+
+        public IShapeRenderer Renderer
+        {
+            get => _context.Renderer;
+            set => SetRenderer(value);
+        }
+
+        public IHitTest HitTest
+        {
+            get => _context.HitTest;
+            set => throw new InvalidOperationException($"Can not set {HitTest} property value.");
+        }
+
+        public CanvasContainer CurrentContainer
+        {
+            get => _figure;
+            set => throw new InvalidOperationException($"Can not set {CurrentContainer} property value.");
+        }
+
+        public CanvasContainer WorkingContainer
+        {
+            get => _figure;
+            set => throw new InvalidOperationException($"Can not set {WorkingContainer} property value.");
+        }
+
+        public ShapeStyle CurrentStyle
+        {
+            get => _context.CurrentStyle;
+            set => throw new InvalidOperationException($"Can not set {CurrentStyle} property value.");
+        }
+
+        public BaseShape PointShape
+        {
+            get => _context.PointShape;
+            set => throw new InvalidOperationException($"Can not set {PointShape} property value.");
+        }
+
+        public Action Capture
+        {
+            get => _context.Capture;
+            set => throw new InvalidOperationException($"Can not set {Capture} property value.");
+        }
+
+        public Action Release
+        {
+            get => _context.Release;
+            set => throw new InvalidOperationException($"Can not set {Release} property value.");
+        }
+
+        public Action Invalidate
+        {
+            get => _context.Invalidate;
+            set => throw new InvalidOperationException($"Can not set {Invalidate} property value.");
+        }
+
+        public IList<ITool> Tools
+        {
+            get => _context.Tools;
+            set => throw new InvalidOperationException($"Can not set {Tools} property value.");
+        }
+
+        public ITool CurrentTool
+        {
+            get => _context.CurrentTool;
+            set => throw new InvalidOperationException($"Can not set {CurrentTool} property value.");
+        }
+
+        public EditMode Mode
+        {
+            get => _context.Mode;
+            set => throw new InvalidOperationException($"Can not set {Mode} property value.");
+        }
+
+        public ICanvasPresenter Presenter
+        {
+            get => _context.Presenter;
+            set => throw new InvalidOperationException($"Can not set {Presenter} property value.");
+        }
+
+        public ISelection Selection
+        {
+            get => _context.Selection;
+            set => throw new InvalidOperationException($"Can not set {Selection} property value.");
+        }
+
+        public IPanAndZoom Zoom
+        {
+            get => _context.Zoom;
+            set => throw new InvalidOperationException($"Can not set {Zoom} property value.");
+        }
+
+        public PointShape GetNextPoint(double x, double y, bool connect, double radius)
+        {
+            return _nextPoint ?? _context.GetNextPoint(x, y, connect, radius);
+        }
+
+        public void SetTool(string name)
+        {
+            _context.SetTool(name);
+        }
+
+        private void SetContext(IToolContext context)
+        {
+            _context = context;
+        }
+
+        private void SetRenderer(IShapeRenderer renderer)
+        {
+            if (_context != null)
+            {
+                _context.Renderer = renderer;
+            }
+        }
+
+        private void SetNextPoint(PointShape point)
+        {
+            _nextPoint = point;
+        }
+    }
+
+    public partial class PathTool : ViewModelBase, ITool
     {
         private PathShape _path;
         private FigureShape _figure;
 
-        public override string Title => "Path";
+        public string Title => "Path";
+
+        public IList<PointIntersectionBase> Intersections { get; set; }
+
+        public IList<PointFilterBase> Filters { get; set; }
 
         public PathToolSettings Settings { get; set; }
 
@@ -232,31 +364,31 @@ namespace Draw2D.ViewModels.Tools
             }
         }
 
-        public override void LeftDown(IToolContext context, double x, double y, Modifier modifier)
+        public void LeftDown(IToolContext context, double x, double y, Modifier modifier)
         {
-            base.LeftDown(context, x, y, modifier);
-
             DownInternal(context, x, y, modifier);
         }
 
-        public override void RightDown(IToolContext context, double x, double y, Modifier modifier)
+        public void LeftUp(IToolContext context, double x, double y, Modifier modifier)
         {
-            base.RightDown(context, x, y, modifier);
+        }
 
+        public void RightDown(IToolContext context, double x, double y, Modifier modifier)
+        {
             this.Clean(context);
         }
 
-        public override void Move(IToolContext context, double x, double y, Modifier modifier)
+        public void RightUp(IToolContext context, double x, double y, Modifier modifier)
         {
-            base.Move(context, x, y, modifier);
+        }
 
+        public void Move(IToolContext context, double x, double y, Modifier modifier)
+        {
             MoveInternal(context, x, y, modifier);
         }
 
-        public override void Clean(IToolContext context)
+        public void Clean(IToolContext context)
         {
-            base.Clean(context);
-
             CleanInternal(context);
         }
     }

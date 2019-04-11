@@ -21,8 +21,8 @@ namespace Draw2D.ViewModels
         private CanvasContainer _workingContainer;
         private ShapeStyle _currentStyle;
         private BaseShape _pointShape;
-        private IList<ToolBase> _tools;
-        private ToolBase _currentTool;
+        private IList<ITool> _tools;
+        private ITool _currentTool;
         private EditMode _mode;
         private ICanvasPresenter _presenter;
         private ISelection _selection;
@@ -70,13 +70,13 @@ namespace Draw2D.ViewModels
 
         public Action Invalidate { get; set; }
 
-        public IList<ToolBase> Tools
+        public IList<ITool> Tools
         {
             get => _tools;
             set => Update(ref _tools, value);
         }
 
-        public ToolBase CurrentTool
+        public ITool CurrentTool
         {
             get => _currentTool;
             set

@@ -25,7 +25,7 @@ namespace Draw2D.ViewModels.Tools
         }
     }
 
-    public class PolyLineTool : ToolBase
+    public class PolyLineTool : ViewModelBase, ITool
     {
         private LineShape _line = null;
         private IList<PointShape> _points = null;
@@ -38,7 +38,11 @@ namespace Draw2D.ViewModels.Tools
 
         public State CurrentState { get; set; } = State.StartPoint;
 
-        public override string Title => "PolyLine";
+        public string Title => "PolyLine";
+
+        public IList<PointIntersectionBase> Intersections { get; set; }
+
+        public IList<PointFilterBase> Filters { get; set; }
 
         public PolyLineToolSettings Settings { get; set; }
 
@@ -142,10 +146,8 @@ namespace Draw2D.ViewModels.Tools
             context.Invalidate?.Invoke();
         }
 
-        public override void LeftDown(IToolContext context, double x, double y, Modifier modifier)
+        public void LeftDown(IToolContext context, double x, double y, Modifier modifier)
         {
-            base.LeftDown(context, x, y, modifier);
-
             switch (CurrentState)
             {
                 case State.StartPoint:
@@ -161,10 +163,12 @@ namespace Draw2D.ViewModels.Tools
             }
         }
 
-        public override void RightDown(IToolContext context, double x, double y, Modifier modifier)
+        public void LeftUp(IToolContext context, double x, double y, Modifier modifier)
         {
-            base.RightDown(context, x, y, modifier);
+        }
 
+        public void RightDown(IToolContext context, double x, double y, Modifier modifier)
+        {
             switch (CurrentState)
             {
                 case State.Point:
@@ -175,10 +179,12 @@ namespace Draw2D.ViewModels.Tools
             }
         }
 
-        public override void Move(IToolContext context, double x, double y, Modifier modifier)
+        public void RightUp(IToolContext context, double x, double y, Modifier modifier)
         {
-            base.Move(context, x, y, modifier);
+        }
 
+        public void Move(IToolContext context, double x, double y, Modifier modifier)
+        {
             switch (CurrentState)
             {
                 case State.StartPoint:
@@ -194,10 +200,8 @@ namespace Draw2D.ViewModels.Tools
             }
         }
 
-        public override void Clean(IToolContext context)
+        public void Clean(IToolContext context)
         {
-            base.Clean(context);
-
             CleanInternal(context);
         }
     }

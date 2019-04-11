@@ -16,7 +16,7 @@ namespace Draw2D.Views
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value is ToolBase tool && parameter is string name)
+            if (value is ITool tool && parameter is string name)
             {
                 if (tool.Title == name)
                 {

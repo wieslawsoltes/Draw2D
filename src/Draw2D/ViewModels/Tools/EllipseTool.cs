@@ -1,5 +1,6 @@
 ﻿// Copyright (c) Wiesław Šoltés. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
+using System.Collections.Generic;
 using System.Linq;
 using Draw2D.ViewModels.Shapes;
 
@@ -23,7 +24,7 @@ namespace Draw2D.ViewModels.Tools
         }
     }
 
-    public class EllipseTool : ToolBase
+    public class EllipseTool : ViewModelBase, ITool
     {
         private EllipseShape _ellipse = null;
 
@@ -35,7 +36,11 @@ namespace Draw2D.ViewModels.Tools
 
         public State CurrentState { get; set; } = State.TopLeft;
 
-        public override string Title => "Ellipse";
+        public string Title => "Ellipse";
+
+        public IList<PointIntersectionBase> Intersections { get; set; }
+
+        public IList<PointFilterBase> Filters { get; set; }
 
         public EllipseToolSettings Settings { get; set; }
 
@@ -115,10 +120,8 @@ namespace Draw2D.ViewModels.Tools
             context.Invalidate?.Invoke();
         }
 
-        public override void LeftDown(IToolContext context, double x, double y, Modifier modifier)
+        public void LeftDown(IToolContext context, double x, double y, Modifier modifier)
         {
-            base.LeftDown(context, x, y, modifier);
-
             switch (CurrentState)
             {
                 case State.TopLeft:
@@ -134,10 +137,12 @@ namespace Draw2D.ViewModels.Tools
             }
         }
 
-        public override void RightDown(IToolContext context, double x, double y, Modifier modifier)
+        public void LeftUp(IToolContext context, double x, double y, Modifier modifier)
         {
-            base.RightDown(context, x, y, modifier);
+        }
 
+        public void RightDown(IToolContext context, double x, double y, Modifier modifier)
+        {
             switch (CurrentState)
             {
                 case State.BottomRight:
@@ -148,10 +153,12 @@ namespace Draw2D.ViewModels.Tools
             }
         }
 
-        public override void Move(IToolContext context, double x, double y, Modifier modifier)
+        public void RightUp(IToolContext context, double x, double y, Modifier modifier)
         {
-            base.Move(context, x, y, modifier);
+        }
 
+        public void Move(IToolContext context, double x, double y, Modifier modifier)
+        {
             switch (CurrentState)
             {
                 case State.TopLeft:
@@ -167,10 +174,8 @@ namespace Draw2D.ViewModels.Tools
             }
         }
 
-        public override void Clean(IToolContext context)
+        public void Clean(IToolContext context)
         {
-            base.Clean(context);
-
             CleanInternal(context);
         }
     }

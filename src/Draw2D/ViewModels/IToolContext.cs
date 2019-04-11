@@ -20,8 +20,8 @@ namespace Draw2D.ViewModels
         Action Capture { get; set; }
         Action Release { get; set; }
         Action Invalidate { get; set; }
-        IList<ToolBase> Tools { get; set; }
-        ToolBase CurrentTool { get; set; }
+        IList<ITool> Tools { get; set; }
+        ITool CurrentTool { get; set; }
         EditMode Mode { get; set; }
         ICanvasPresenter Presenter { get; set; }
         ISelection Selection { get; set; }
