@@ -11,7 +11,7 @@ using Draw2D.ViewModels.Tools;
 using PanAndZoom;
 using Spatial;
 
-namespace Draw2D.Editor
+namespace Draw2D.ViewModels
 {
     public abstract class ToolContext : ViewModelBase, IToolContext
     {

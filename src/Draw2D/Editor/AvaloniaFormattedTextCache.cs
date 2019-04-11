@@ -7,12 +7,12 @@ using Draw2D.ViewModels.Shapes;
 
 namespace Draw2D.Editor
 {
-    public struct FormattedTextCache : IDisposable
+    public struct AvaloniaFormattedTextCache : IDisposable
     {
         public readonly FormattedText FormattedText;
         public readonly Point Origin;
 
-        public FormattedTextCache(FormattedText formattedText, Point origin)
+        public AvaloniaFormattedTextCache(FormattedText formattedText, Point origin)
         {
             FormattedText = formattedText;
             Origin = origin;
@@ -22,7 +22,7 @@ namespace Draw2D.Editor
         {
         }
 
-        public static FormattedTextCache FromTextShape(TextShape text, Rect rect)
+        public static AvaloniaFormattedTextCache FromTextShape(TextShape text, Rect rect)
         {
             var constraint = new Size(rect.Width, rect.Height);
 
@@ -52,7 +52,7 @@ namespace Draw2D.Editor
             //    rect.X,
             //    rect.Y + rect.Height - size.Height);
 
-            return new FormattedTextCache(formattedText, center);
+            return new AvaloniaFormattedTextCache(formattedText, center);
         }
     }
 }

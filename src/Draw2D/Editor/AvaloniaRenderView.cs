@@ -9,7 +9,7 @@ using Draw2D.ViewModels;
 
 namespace Draw2D.Editor
 {
-    public class RenderView : Canvas
+    public class AvaloniaRenderView : Canvas
     {
         private bool _drawWorking = false;
 

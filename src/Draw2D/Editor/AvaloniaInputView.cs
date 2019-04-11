@@ -9,10 +9,10 @@ using Draw2D.ViewModels;
 
 namespace Draw2D.Editor
 {
-    public class InputView : Border
+    public class AvaloniaInputView : Border
     {
         public static readonly StyledProperty<IVisual> RelativeToProperty =
-            AvaloniaProperty.Register<InputView, IVisual>(nameof(RelativeTo));
+            AvaloniaProperty.Register<AvaloniaInputView, IVisual>(nameof(RelativeTo));
 
         public IVisual RelativeTo
         {
@@ -20,7 +20,7 @@ namespace Draw2D.Editor
             set { SetValue(RelativeToProperty, value); }
         }
 
-        public InputView()
+        public AvaloniaInputView()
         {
             PointerPressed += (sender, e) => HandlePointerPressed(e);
             PointerReleased += (sender, e) => HandlePointerReleased(e);

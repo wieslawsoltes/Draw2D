@@ -25,12 +25,12 @@ namespace Draw2D.Editor
         public T Load<T>(string path)
         {
             var json = File.ReadAllText(path);
-            return NewtonsoftJsonSerializer.FromJson<T>(json);
+            return JsonSerializer.FromJson<T>(json);
         }
 
         public void Save<T>(string path, T value)
         {
-            var json = NewtonsoftJsonSerializer.ToJson<T>(value);
+            var json = JsonSerializer.ToJson<T>(value);
             File.WriteAllText(path, json);
         }
 

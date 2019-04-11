@@ -12,9 +12,9 @@ using Newtonsoft.Json.Serialization;
 
 namespace Draw2D.Editor
 {
-    public class NewtonsoftJsonSerializer
+    internal class JsonSerializer
     {
-        public class CoreContractResolver : DefaultContractResolver
+        internal class CoreContractResolver : DefaultContractResolver
         {
             protected override JsonContract CreateContract(Type objectType)
             {
@@ -45,7 +45,7 @@ namespace Draw2D.Editor
 
         private static readonly JsonSerializerSettings Settings;
 
-        static NewtonsoftJsonSerializer()
+        static JsonSerializer()
         {
             Settings = new JsonSerializerSettings()
             {

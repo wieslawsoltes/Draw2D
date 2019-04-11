@@ -19,7 +19,7 @@ namespace Draw2D.Editor
         private readonly IDictionary<QuadraticBezierShape, Geometry> _quadGeometryCache;
         private readonly IDictionary<PathShape, Geometry> _pathGeometryCache;
         private readonly IDictionary<EllipseShape, Geometry> _ellipseGeometryCache;
-        private readonly IDictionary<TextShape, FormattedTextCache> _formattedTextCache;
+        private readonly IDictionary<TextShape, AvaloniaFormattedTextCache> _formattedTextCache;
 
         private ISelection _selection;
 
@@ -32,7 +32,7 @@ namespace Draw2D.Editor
         public AvaloniaShapeRenderer()
         {
             _brushCache = new Dictionary<ShapeStyle, AvaloniaBrushCache>();
-            _formattedTextCache = new Dictionary<TextShape, FormattedTextCache>();
+            _formattedTextCache = new Dictionary<TextShape, AvaloniaFormattedTextCache>();
             _matrixCache = new Dictionary<MatrixObject, Matrix>();
             _cubicGeometryCache = new Dictionary<CubicBezierShape, Geometry>();
             _quadGeometryCache = new Dictionary<QuadraticBezierShape, Geometry>();
@@ -264,11 +264,11 @@ namespace Draw2D.Editor
             return cache;
         }
 
-        private FormattedTextCache GetTextCache(TextShape text, Rect rect)
+        private AvaloniaFormattedTextCache GetTextCache(TextShape text, Rect rect)
         {
             if (!_formattedTextCache.TryGetValue(text, out var cache))
             {
-                _formattedTextCache[text] = FormattedTextCache.FromTextShape(text, rect);
+                _formattedTextCache[text] = AvaloniaFormattedTextCache.FromTextShape(text, rect);
                 return _formattedTextCache[text];
             }
             return cache;
@@ -341,7 +341,7 @@ namespace Draw2D.Editor
                             cache.Dispose();
                         }
                         var rect = ToRect(text.TopLeft, text.BottomRight, dx, dy);
-                        _formattedTextCache[text] = FormattedTextCache.FromTextShape(text, rect);
+                        _formattedTextCache[text] = AvaloniaFormattedTextCache.FromTextShape(text, rect);
                     }
                     break;
             }
