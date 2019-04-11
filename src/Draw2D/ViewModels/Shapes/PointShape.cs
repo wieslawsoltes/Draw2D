@@ -1,9 +1,23 @@
 ﻿// Copyright (c) Wiesław Šoltés. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using System.Collections.Generic;
+using Spatial;
 
 namespace Draw2D.ViewModels.Shapes
 {
+    public static class PointShapeExtensions
+    {
+        public static Point2 ToPoint2(this PointShape point)
+        {
+            return new Point2(point.X, point.Y);
+        }
+
+        public static PointShape FromPoint2(this Point2 point, BaseShape template = null)
+        {
+            return new PointShape(point.X, point.Y, template);
+        }
+    }
+
     public class PointShape : BaseShape, ICopyable
     {
         private MatrixObject _templateTransform = MatrixObject.Identity;
