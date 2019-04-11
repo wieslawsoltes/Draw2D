@@ -26,6 +26,7 @@ using Draw2D.ViewModels.Tools;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
+using PanAndZoom;
 using Spatial;
 
 namespace Draw2D.ViewModels
@@ -160,6 +161,7 @@ namespace Draw2D.ViewModels
         private EditMode _mode;
         private ShapePresenter _presenter;
         private IEdit _edit;
+        private IPanAndZoom _zoom;
 
         public ObservableCollection<ToolBase> Tools
         {
@@ -195,17 +197,11 @@ namespace Draw2D.ViewModels
             set => Update(ref _edit, value);
         }
 
-        public Action Reset { get; set; }
-
-        public Action AutoFit { get; set; }
-
-        public Action StretchNone { get; set; }
-
-        public Action StretchFill { get; set; }
-
-        public Action StretchUniform { get; set; }
-
-        public Action StretchUniformToFill { get; set; }
+        public IPanAndZoom Zoom
+        {
+            get => _zoom;
+            set => Update(ref _zoom, value);
+        }
 
         public void SetTool(string name)
         {
@@ -652,12 +648,7 @@ namespace Draw2D.ViewModels
                 Mode = EditMode.Mouse,
                 Presenter = presenter,
                 Edit = selectionTool,
-                Reset = null,
-                AutoFit = null,
-                StretchNone = null,
-                StretchFill = null,
-                StretchUniform = null,
-                StretchUniformToFill = null
+                Zoom = null
             };
 
             var container = new CanvasContainer()

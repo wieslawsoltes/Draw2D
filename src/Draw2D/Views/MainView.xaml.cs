@@ -74,12 +74,7 @@ namespace Draw2D.Views
 
             if (this.DataContext is Main vm)
             {
-                vm.Reset = () => _zoomBorder.Reset();
-                vm.AutoFit = () => _zoomBorder.AutoFit();
-                vm.StretchNone = () => _zoomBorder.Stretch = PanAndZoom.StretchMode.None;
-                vm.StretchFill = () => _zoomBorder.Stretch = PanAndZoom.StretchMode.Fill;
-                vm.StretchUniform = () => _zoomBorder.Stretch = PanAndZoom.StretchMode.Uniform;
-                vm.StretchUniformToFill = () => _zoomBorder.Stretch = PanAndZoom.StretchMode.UniformToFill;
+                vm.Zoom = _zoomBorder;
             }
         }
 
@@ -89,12 +84,7 @@ namespace Draw2D.Views
 
             if (this.DataContext is Main vm)
             {
-                vm.Reset = null;
-                vm.AutoFit = null;
-                vm.StretchNone = null;
-                vm.StretchFill = null;
-                vm.StretchUniform = null;
-                vm.StretchUniformToFill = null;
+                vm.Zoom = null;
             }
         }
 

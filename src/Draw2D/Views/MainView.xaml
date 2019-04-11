@@ -33,16 +33,9 @@
                 <MenuItem Header="Select _All" Command="{Binding Edit.SelectAll}" CommandParameter="{Binding}"/>
             </MenuItem>
             <MenuItem Header="_View">
-                <MenuItem Header="_Reset Zoom" Command="{Binding Reset}"/>
+                <MenuItem Header="_Reset Zoom" Command="{Binding Zoom.Reset}"/>
                 <Separator/>
-                <MenuItem Header="_AutoFit Zoom" Command="{Binding AutoFit}"/>
-                <Separator/>
-                <MenuItem Header="AutoFit _Mode">
-                    <MenuItem Header="_None" Command="{Binding StretchNone}"/>
-                    <MenuItem Header="_Fill" Command="{Binding StretchFill}"/>
-                    <MenuItem Header="_Uniform" Command="{Binding StretchUniform}"/>
-                    <MenuItem Header="Uniform_ToFill" Command="{Binding StretchUniformToFill}"/>
-                </MenuItem>
+                <MenuItem Header="_AutoFit Zoom" Command="{Binding Zoom.AutoFit}"/>
             </MenuItem>
             <MenuItem Header="_Tool">
                 <MenuItem Header="_None" Command="{Binding SetTool}" CommandParameter="None">
