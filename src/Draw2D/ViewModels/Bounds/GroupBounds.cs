@@ -4,7 +4,7 @@ using System;
 using Draw2D.ViewModels.Shapes;
 using Spatial;
 
-namespace Draw2D.ViewModels.Bounds.Shapes
+namespace Draw2D.ViewModels.Bounds
 {
     public class GroupBounds : IBounds
     {

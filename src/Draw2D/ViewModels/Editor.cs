@@ -13,7 +13,6 @@ using Avalonia.Input;
 using Avalonia.Media;
 using Avalonia.VisualTree;
 using Draw2D.ViewModels.Bounds;
-using Draw2D.ViewModels.Bounds.Shapes;
 using Draw2D.ViewModels.Containers;
 using Draw2D.ViewModels.Decorators;
 using Draw2D.ViewModels.Filters;

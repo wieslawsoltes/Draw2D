@@ -8,7 +8,7 @@ using Spatial;
 using Spatial.ConvexHull;
 using Spatial.Sat;
 
-namespace Draw2D.ViewModels.Bounds
+namespace Draw2D.ViewModels
 {
     public static class HitTestHelper
     {
