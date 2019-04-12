@@ -118,16 +118,12 @@
             <TabControl Classes="default" Grid.Row="0" TabStripPlacement="Top">
                 <TabItem Classes="default" Header="Settings">
                     <Border Classes="default">
-                        <ScrollViewer>
-                            <ContentControl Content="{Binding CurrentTool.Settings}"/>
-                        </ScrollViewer>
+                        <ContentControl Content="{Binding CurrentTool.Settings}"/>
                     </Border>
                 </TabItem>
                 <TabItem Classes="default" Header="Style">
                     <Border Classes="default">
-                        <ScrollViewer>
-                            <ContentControl Content="{Binding CurrentStyle}"/>
-                        </ScrollViewer>
+                        <ContentControl Content="{Binding CurrentStyle}"/>
                     </Border>
                 </TabItem>
                 <TabItem Classes="default" Header="Hovered">
@@ -151,18 +147,12 @@
             <TabControl Classes="default" Grid.Row="2" TabStripPlacement="Top">
                 <TabItem Classes="default" Header="Container">
                     <Border Classes="default">
-                        <ScrollViewer>
-                            <ContentControl Content="{Binding CurrentContainer}"/>
-                        </ScrollViewer>
+                        <ContentControl Content="{Binding CurrentContainer}"/>
                     </Border>
                 </TabItem>
                 <TabItem Classes="default" Header="Working">
                     <Border Classes="default">
-                        <Border Classes="default">
-                            <ScrollViewer>
-                                <ContentControl Content="{Binding WorkingContainer}"/>
-                            </ScrollViewer>
-                        </Border>
+                        <ContentControl Content="{Binding WorkingContainer}"/>
                     </Border>
                 </TabItem>
                 <TabItem Classes="default" Header="Tools">
@@ -178,34 +168,30 @@
                 </TabItem>
                 <TabItem Classes="default" Header="Intersections">
                     <Border Classes="default">
-                        <ScrollViewer>
-                            <Grid RowDefinitions="Auto,*">
-                                <DropDown Classes="default" Grid.Row="0" x:Name="Intersections" Items="{Binding CurrentTool.Intersections}" SelectedIndex="0">
-                                    <DropDown.DataTemplates>
-                                        <DataTemplate>
-                                            <TextBlock Classes="default" Text="{Binding Title}"/>
-                                        </DataTemplate>
-                                    </DropDown.DataTemplates>
-                                </DropDown>
-                                <ContentControl Grid.Row="1" Content="{Binding ElementName=Intersections, Path=SelectedItem.Settings}"/>
-                            </Grid>
-                        </ScrollViewer>
+                        <Grid RowDefinitions="Auto,*">
+                            <DropDown Classes="default" Grid.Row="0" x:Name="Intersections" Items="{Binding CurrentTool.Intersections}" SelectedIndex="0">
+                                <DropDown.DataTemplates>
+                                    <DataTemplate>
+                                        <TextBlock Classes="default" Text="{Binding Title}"/>
+                                    </DataTemplate>
+                                </DropDown.DataTemplates>
+                            </DropDown>
+                            <ContentControl Grid.Row="1" Content="{Binding ElementName=Intersections, Path=SelectedItem.Settings}"/>
+                        </Grid>
                     </Border>
                 </TabItem>
                 <TabItem Classes="default" Header="Filters">
                     <Border Classes="default">
-                        <ScrollViewer>
-                            <Grid RowDefinitions="Auto,*">
-                                <DropDown Classes="default" Grid.Row="0" x:Name="Filters" Items="{Binding CurrentTool.Filters}" SelectedIndex="0">
-                                    <DropDown.DataTemplates>
-                                        <DataTemplate>
-                                            <TextBlock Classes="default" Text="{Binding Title}"/>
-                                        </DataTemplate>
-                                    </DropDown.DataTemplates>
-                                </DropDown>
-                                <ContentControl Grid.Row="1" Content="{Binding ElementName=Filters, Path=SelectedItem.Settings}"/>
-                            </Grid>
-                        </ScrollViewer>
+                        <Grid RowDefinitions="Auto,*">
+                            <DropDown Classes="default" Grid.Row="0" x:Name="Filters" Items="{Binding CurrentTool.Filters}" SelectedIndex="0">
+                                <DropDown.DataTemplates>
+                                    <DataTemplate>
+                                        <TextBlock Classes="default" Text="{Binding Title}"/>
+                                    </DataTemplate>
+                                </DropDown.DataTemplates>
+                            </DropDown>
+                            <ContentControl Grid.Row="1" Content="{Binding ElementName=Filters, Path=SelectedItem.Settings}"/>
+                        </Grid>
                     </Border>
                 </TabItem>
             </TabControl>
