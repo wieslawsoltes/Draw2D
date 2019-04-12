@@ -4,14 +4,80 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Media;
+using Avalonia.Platform;
+using Avalonia.Rendering.SceneGraph;
+using Avalonia.Skia;
+using Avalonia.Threading;
 using Avalonia.VisualTree;
 using Draw2D.ViewModels;
 
 namespace Draw2D.Editor
 {
-    public class AvaloniaRenderView : Canvas
+    struct CustomDrawOperation : ICustomDrawOperation
+    {
+        private bool _drawWorking;
+        private IToolContext _ctx;
+
+        public CustomDrawOperation(Rect bounds, bool drawWorking, IToolContext context)
+        {
+            Bounds = bounds;
+            _drawWorking = drawWorking;
+            _ctx = context;
+        }
+
+        public Rect Bounds { get; }
+
+        public bool HitTest(Point p) => false;
+
+        public bool Equals(ICustomDrawOperation other) => false;
+
+        public void Render(IDrawingContextImpl context)
+        {
+            var canvas = (context as ISkiaDrawingContextImpl)?.SkCanvas;
+            if (canvas != null)
+            {
+                canvas.Save();
+
+                var renderer = new SkiaShapeRenderer()
+                {
+                    Selection = _ctx.Selection
+                };
+
+                if (_ctx.CurrentContainer.WorkBackground != null)
+                {
+                    using (var brush = SkiaShapeRenderer.ToSKPaintBrush(_ctx.CurrentContainer.WorkBackground))
+                    {
+                        canvas.DrawRect(SkiaShapeRenderer.ToRect(0, 0, Bounds.Width, Bounds.Height), brush);
+                    }
+                }
+
+                _ctx.Presenter.DrawContainer(canvas, _ctx.CurrentContainer, renderer, 0.0, 0.0, null, null);
+
+                if (_drawWorking)
+                {
+                    _ctx.Presenter.DrawContainer(canvas, _ctx.WorkingContainer, renderer, 0.0, 0.0, null, null);
+                }
+
+                _ctx.Presenter.DrawDecorators(canvas, _ctx.CurrentContainer, renderer, 0.0, 0.0);
+
+                if (_drawWorking)
+                {
+                    _ctx.Presenter.DrawDecorators(canvas, _ctx.WorkingContainer, renderer, 0.0, 0.0);
+                }
+
+                canvas.Restore();
+            }
+        }
+
+        public void Dispose()
+        {
+        }
+    }
+
+    public class AvaloniaRenderView : Control
     {
         private bool _drawWorking = false;
+        private bool _customDraw = true;
 
         protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e)
         {
@@ -69,29 +135,35 @@ namespace Draw2D.Editor
 
         public override void Render(DrawingContext context)
         {
-            base.Render(context);
-
             if (this.DataContext is IToolContext ctx)
             {
-                if (ctx.CurrentContainer.WorkBackground != null)
+                if (_customDraw)
                 {
-                    var color = AvaloniaBrushCache.FromDrawColor(ctx.CurrentContainer.WorkBackground);
-                    var brush = new SolidColorBrush(color);
-                    context.FillRectangle(brush, new Rect(0, 0, Bounds.Width, Bounds.Height));
+                    context.Custom(new CustomDrawOperation(new Rect(0, 0, Bounds.Width, Bounds.Height), _drawWorking, ctx));
+                    Dispatcher.UIThread.InvokeAsync(InvalidateVisual, DispatcherPriority.Background);
                 }
-
-                ctx.Presenter.DrawContainer(context, ctx.CurrentContainer, ctx.Renderer, 0.0, 0.0, null, null);
-
-                if (_drawWorking)
+                else
                 {
-                    ctx.Presenter.DrawContainer(context, ctx.WorkingContainer, ctx.Renderer, 0.0, 0.0, null, null);
-                }
-
-                ctx.Presenter.DrawDecorators(context, ctx.CurrentContainer, ctx.Renderer, 0.0, 0.0);
-
-                if (_drawWorking)
-                {
-                    ctx.Presenter.DrawDecorators(context, ctx.WorkingContainer, ctx.Renderer, 0.0, 0.0);
+                    if (ctx.CurrentContainer.WorkBackground != null)
+                    {
+                        var color = AvaloniaBrushCache.FromDrawColor(ctx.CurrentContainer.WorkBackground);
+                        var brush = new SolidColorBrush(color);
+                        context.FillRectangle(brush, new Rect(0, 0, Bounds.Width, Bounds.Height));
+                    }
+                    
+                    ctx.Presenter.DrawContainer(context, ctx.CurrentContainer, ctx.Renderer, 0.0, 0.0, null, null);
+                    
+                    if (_drawWorking)
+                    {
+                        ctx.Presenter.DrawContainer(context, ctx.WorkingContainer, ctx.Renderer, 0.0, 0.0, null, null);
+                    }
+                    
+                    ctx.Presenter.DrawDecorators(context, ctx.CurrentContainer, ctx.Renderer, 0.0, 0.0);
+                    
+                    if (_drawWorking)
+                    {
+                        ctx.Presenter.DrawDecorators(context, ctx.WorkingContainer, ctx.Renderer, 0.0, 0.0);
+                    }
                 }
             }
         }

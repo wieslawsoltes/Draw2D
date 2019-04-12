@@ -16,8 +16,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Avalonia" Version="0.8.0" />
-    <PackageReference Include="Avalonia.Desktop" Version="0.8.0" />
+    <PackageReference Include="Avalonia" Version="0.8.1-cibuild0001906-beta" />
+    <PackageReference Include="Avalonia.Desktop" Version="0.8.1-cibuild0001906-beta" />
+    <PackageReference Include="Avalonia.Angle.Windows.Natives" Version="2.1.0.2019013001" />
     <PackageReference Include="Math.Spatial" Version="1.0.4" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
     <PackageReference Include="Avalonia.Controls.PanAndZoom" Version="2.0.0" />

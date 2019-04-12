@@ -41,6 +41,7 @@ namespace Draw2D
         public static AppBuilder BuildAvaloniaApp()
             => AppBuilder.Configure<App>()
                          .UsePlatformDetect()
+                         .UseSkia()
                          .LogToDebug();
 
         public override void Initialize()
