@@ -3,7 +3,11 @@
 <UserControl x:Class="Draw2D.Views.Style.ArgbColorView"
              xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:Draw2D.Views.Style">
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:Draw2D.Views.Style"
+             mc:Ignorable="d"
+             d:DesignWidth="400" d:DesignHeight="300">
     <Grid RowDefinitions="Auto,Auto,Auto,Auto" ColumnDefinitions="Auto,*,50">
         <TextBlock Classes="default" Grid.Column="0" Grid.Row="0" Text="A"/>
         <Slider Classes="default" Grid.Column="1" Grid.Row="0" Value="{Binding A, Mode=TwoWay}" Minimum="0" Maximum="255"/>

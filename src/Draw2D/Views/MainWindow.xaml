@@ -1,13 +1,17 @@
 ﻿<!-- Copyright (c) Wiesław Šoltés. All rights reserved. -->
 <!-- Licensed under the MIT license. See LICENSE file in the project root for full license information. -->
 <Window x:Class="Draw2D.Views.MainWindow"
-        xmlns="https://github.com/avaloniaui" 
+        xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:local="clr-namespace:Draw2D.Views"
         WindowState="Maximized" WindowStartupLocation="CenterScreen"
         UseLayoutRounding="True" RenderOptions.BitmapInterpolationMode="HighQuality"
         Foreground="{DynamicResource ThemeForegroundBrush}"
-        Title="Draw2D" Height="700" Width="1320">
+        Title="Draw2D" Height="700" Width="1320"
+        mc:Ignorable="d"
+        d:DesignWidth="1000" d:DesignHeight="700">
     <Window.KeyBindings>
         <!-- File -->
         <KeyBinding Command="{Binding New}" Gesture="Ctrl+N"/>

@@ -3,7 +3,11 @@
 <UserControl x:Class="Draw2D.Views.Containers.CanvasContainerView"
              xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:Draw2D.Views.Containers">
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:Draw2D.Views.Containers"
+             mc:Ignorable="d"
+             d:DesignWidth="400" d:DesignHeight="300">
     <TabControl Classes="default" Grid.Row="1" TabStripPlacement="Top">
         <TabItem Classes="default" Header="Container">
             <Grid Grid.Row="0" RowDefinitions="Auto,Auto" ColumnDefinitions="Auto,*,50">
