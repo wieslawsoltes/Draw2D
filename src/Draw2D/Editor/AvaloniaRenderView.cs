@@ -140,7 +140,7 @@ namespace Draw2D.Editor
                 if (_customDraw)
                 {
                     context.Custom(new CustomDrawOperation(new Rect(0, 0, Bounds.Width, Bounds.Height), _drawWorking, ctx));
-                    Dispatcher.UIThread.InvokeAsync(InvalidateVisual, DispatcherPriority.Background);
+                    //Dispatcher.UIThread.InvokeAsync(InvalidateVisual, DispatcherPriority.Background);
                 }
                 else
                 {
