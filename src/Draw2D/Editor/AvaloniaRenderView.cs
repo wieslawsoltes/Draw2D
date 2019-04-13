@@ -38,34 +38,39 @@ namespace Draw2D.Editor
             {
                 canvas.Save();
 
-                var renderer = new SkiaShapeRenderer()
-                {
-                    Selection = _ctx.Selection
-                };
-
-                if (_ctx.CurrentContainer.WorkBackground != null)
-                {
-                    using (var brush = SkiaShapeRenderer.ToSKPaintBrush(_ctx.CurrentContainer.WorkBackground))
-                    {
-                        canvas.DrawRect(SkiaShapeRenderer.ToRect(0, 0, Bounds.Width, Bounds.Height), brush);
-                    }
-                }
-
-                _ctx.Presenter.DrawContainer(canvas, _ctx.CurrentContainer, renderer, 0.0, 0.0, null, null);
-
-                if (_drawWorking)
-                {
-                    _ctx.Presenter.DrawContainer(canvas, _ctx.WorkingContainer, renderer, 0.0, 0.0, null, null);
-                }
-
-                _ctx.Presenter.DrawDecorators(canvas, _ctx.CurrentContainer, renderer, 0.0, 0.0);
-
-                if (_drawWorking)
-                {
-                    _ctx.Presenter.DrawDecorators(canvas, _ctx.WorkingContainer, renderer, 0.0, 0.0);
-                }
+                Draw(canvas, _ctx, _drawWorking);
 
                 canvas.Restore();
+            }
+        }
+
+        private void Draw(SkiaSharp.SKCanvas canvas, IToolContext ctx, bool drawWorking)
+        {
+            var renderer = new SkiaShapeRenderer()
+            {
+                Selection = ctx.Selection
+            };
+
+            if (ctx.CurrentContainer.WorkBackground != null)
+            {
+                using (var brush = SkiaShapeRenderer.ToSKPaintBrush(ctx.CurrentContainer.WorkBackground))
+                {
+                    canvas.DrawRect(SkiaShapeRenderer.ToRect(0, 0, Bounds.Width, Bounds.Height), brush);
+                }
+            }
+
+            ctx.Presenter.DrawContainer(canvas, ctx.CurrentContainer, renderer, 0.0, 0.0, null, null);
+
+            if (drawWorking)
+            {
+                ctx.Presenter.DrawContainer(canvas, ctx.WorkingContainer, renderer, 0.0, 0.0, null, null);
+            }
+
+            ctx.Presenter.DrawDecorators(canvas, ctx.CurrentContainer, renderer, 0.0, 0.0);
+
+            if (drawWorking)
+            {
+                ctx.Presenter.DrawDecorators(canvas, ctx.WorkingContainer, renderer, 0.0, 0.0);
             }
         }
 
@@ -133,6 +138,30 @@ namespace Draw2D.Editor
             this.InvalidateVisual();
         }
 
+        private void Draw(DrawingContext context, IToolContext ctx, bool drawWorking)
+        {
+            if (ctx.CurrentContainer.WorkBackground != null)
+            {
+                var color = AvaloniaBrushCache.FromDrawColor(ctx.CurrentContainer.WorkBackground);
+                var brush = new SolidColorBrush(color);
+                context.FillRectangle(brush, new Rect(0, 0, Bounds.Width, Bounds.Height));
+            }
+
+            ctx.Presenter.DrawContainer(context, ctx.CurrentContainer, ctx.Renderer, 0.0, 0.0, null, null);
+
+            if (drawWorking)
+            {
+                ctx.Presenter.DrawContainer(context, ctx.WorkingContainer, ctx.Renderer, 0.0, 0.0, null, null);
+            }
+
+            ctx.Presenter.DrawDecorators(context, ctx.CurrentContainer, ctx.Renderer, 0.0, 0.0);
+
+            if (drawWorking)
+            {
+                ctx.Presenter.DrawDecorators(context, ctx.WorkingContainer, ctx.Renderer, 0.0, 0.0);
+            }
+        }
+
         public override void Render(DrawingContext context)
         {
             if (this.DataContext is IToolContext ctx)
@@ -143,26 +172,7 @@ namespace Draw2D.Editor
                 }
                 else
                 {
-                    if (ctx.CurrentContainer.WorkBackground != null)
-                    {
-                        var color = AvaloniaBrushCache.FromDrawColor(ctx.CurrentContainer.WorkBackground);
-                        var brush = new SolidColorBrush(color);
-                        context.FillRectangle(brush, new Rect(0, 0, Bounds.Width, Bounds.Height));
-                    }
-                    
-                    ctx.Presenter.DrawContainer(context, ctx.CurrentContainer, ctx.Renderer, 0.0, 0.0, null, null);
-                    
-                    if (_drawWorking)
-                    {
-                        ctx.Presenter.DrawContainer(context, ctx.WorkingContainer, ctx.Renderer, 0.0, 0.0, null, null);
-                    }
-                    
-                    ctx.Presenter.DrawDecorators(context, ctx.CurrentContainer, ctx.Renderer, 0.0, 0.0);
-                    
-                    if (_drawWorking)
-                    {
-                        ctx.Presenter.DrawDecorators(context, ctx.WorkingContainer, ctx.Renderer, 0.0, 0.0);
-                    }
+                    Draw(context, ctx, _drawWorking);
                 }
             }
         }
