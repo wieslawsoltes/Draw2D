@@ -4,84 +4,13 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Media;
-using Avalonia.Platform;
-using Avalonia.Rendering.SceneGraph;
-using Avalonia.Skia;
-using Avalonia.Threading;
 using Avalonia.VisualTree;
 using Draw2D.ViewModels;
 
 namespace Draw2D.Editor
 {
-    struct CustomDrawOperation : ICustomDrawOperation
-    {
-        private bool _drawWorking;
-        private IToolContext _ctx;
-
-        public CustomDrawOperation(Rect bounds, bool drawWorking, IToolContext context)
-        {
-            Bounds = bounds;
-            _drawWorking = drawWorking;
-            _ctx = context;
-        }
-
-        public Rect Bounds { get; }
-
-        public bool HitTest(Point p) => false;
-
-        public bool Equals(ICustomDrawOperation other) => false;
-
-        public void Render(IDrawingContextImpl context)
-        {
-            var canvas = (context as ISkiaDrawingContextImpl)?.SkCanvas;
-            if (canvas != null)
-            {
-                canvas.Save();
-
-                Draw(canvas, _ctx, _drawWorking);
-
-                canvas.Restore();
-            }
-        }
-
-        private void Draw(SkiaSharp.SKCanvas canvas, IToolContext ctx, bool drawWorking)
-        {
-            var renderer = new SkiaShapeRenderer()
-            {
-                Selection = ctx.Selection
-            };
-
-            if (ctx.CurrentContainer.WorkBackground != null)
-            {
-                using (var brush = SkiaShapeRenderer.ToSKPaintBrush(ctx.CurrentContainer.WorkBackground))
-                {
-                    canvas.DrawRect(SkiaShapeRenderer.ToRect(0, 0, Bounds.Width, Bounds.Height), brush);
-                }
-            }
-
-            ctx.Presenter.DrawContainer(canvas, ctx.CurrentContainer, renderer, 0.0, 0.0, null, null);
-
-            if (drawWorking)
-            {
-                ctx.Presenter.DrawContainer(canvas, ctx.WorkingContainer, renderer, 0.0, 0.0, null, null);
-            }
-
-            ctx.Presenter.DrawDecorators(canvas, ctx.CurrentContainer, renderer, 0.0, 0.0);
-
-            if (drawWorking)
-            {
-                ctx.Presenter.DrawDecorators(canvas, ctx.WorkingContainer, renderer, 0.0, 0.0);
-            }
-        }
-
-        public void Dispose()
-        {
-        }
-    }
-
     public class AvaloniaRenderView : Control
     {
-        private bool _drawWorking = false;
         private bool _customDraw = true;
 
         protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e)
@@ -168,11 +97,11 @@ namespace Draw2D.Editor
             {
                 if (_customDraw)
                 {
-                    context.Custom(new CustomDrawOperation(new Rect(0, 0, Bounds.Width, Bounds.Height), _drawWorking, ctx));
+                    context.Custom(new CustomDrawOperation(new Rect(0, 0, Bounds.Width, Bounds.Height), drawWorking: false, ctx));
                 }
                 else
                 {
-                    Draw(context, ctx, _drawWorking);
+                    Draw(context, ctx, drawWorking: false);
                 }
             }
         }
