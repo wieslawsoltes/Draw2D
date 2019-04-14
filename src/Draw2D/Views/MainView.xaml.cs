@@ -13,7 +13,7 @@ using Draw2D.ViewModels;
 
 namespace Draw2D.Views
 {
-    public class IsCheckedToolConverter : IValueConverter
+    public class IsToolConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {

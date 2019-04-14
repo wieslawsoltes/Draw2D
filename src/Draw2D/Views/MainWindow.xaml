@@ -12,34 +12,5 @@
         Title="Draw2D" Height="700" Width="1320"
         mc:Ignorable="d"
         d:DesignWidth="1000" d:DesignHeight="700">
-    <Window.KeyBindings>
-        <!-- File -->
-        <KeyBinding Command="{Binding New}" Gesture="Ctrl+N"/>
-        <KeyBinding Command="{Binding Open}" Gesture="Ctrl+O"/>
-        <KeyBinding Command="{Binding SaveAs}" Gesture="Ctrl+S"/>
-        <KeyBinding Command="{Binding Exit}" Gesture="Alt+F4"/>
-        <!-- Edit -->
-        <KeyBinding Command="{Binding Selection.Cut}" CommandParameter="{Binding}" Gesture="Ctrl+X"/>
-        <KeyBinding Command="{Binding Selection.Copy}" CommandParameter="{Binding}" Gesture="Ctrl+C"/>
-        <KeyBinding Command="{Binding Selection.Paste}" CommandParameter="{Binding}" Gesture="Ctrl+V"/>
-        <KeyBinding Command="{Binding Selection.Delete}" CommandParameter="{Binding}" Gesture="Delete"/>
-        <KeyBinding Command="{Binding Selection.Group}" CommandParameter="{Binding}" Gesture="Ctrl+G"/>
-        <KeyBinding Command="{Binding Selection.SelectAll}" CommandParameter="{Binding}" Gesture="Ctrl+A"/>
-        <!-- Tool -->
-        <KeyBinding Command="{Binding SetTool}" CommandParameter="None" Gesture="N"/>
-        <KeyBinding Command="{Binding SetTool}" CommandParameter="Selection" Gesture="S"/>
-        <KeyBinding Command="{Binding SetTool}" CommandParameter="Line" Gesture="L"/>
-        <KeyBinding Command="{Binding SetTool}" CommandParameter="Point" Gesture="P"/>
-        <KeyBinding Command="{Binding SetTool}" CommandParameter="CubicBezier" Gesture="C"/>
-        <KeyBinding Command="{Binding SetTool}" CommandParameter="QuadraticBezier" Gesture="Q"/>
-        <KeyBinding Command="{Binding SetTool}" CommandParameter="Path" Gesture="H"/>
-        <KeyBinding Command="{Binding SetTool}" CommandParameter="Move" Gesture="M"/>
-        <KeyBinding Command="{Binding SetTool}" CommandParameter="Rectangle" Gesture="R"/>
-        <KeyBinding Command="{Binding SetTool}" CommandParameter="Ellipse" Gesture="E"/>
-        <KeyBinding Command="{Binding SetTool}" CommandParameter="Text" Gesture="T"/>
-        <!-- View -->
-        <KeyBinding Command="{Binding Zoom.Reset}" Gesture="Z"/>
-        <KeyBinding Command="{Binding Zoom.AutoFit}" Gesture="X"/>
-    </Window.KeyBindings>
     <local:MainView/>
 </Window>
