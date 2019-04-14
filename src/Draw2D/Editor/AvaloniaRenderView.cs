@@ -11,6 +11,7 @@ namespace Draw2D.Editor
 {
     public class AvaloniaRenderView : Control
     {
+        private bool _drawWorking = false;
         private bool _customDraw = true;
 
         protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e)
@@ -97,11 +98,11 @@ namespace Draw2D.Editor
             {
                 if (_customDraw)
                 {
-                    context.Custom(new CustomDrawOperation(new Rect(0, 0, Bounds.Width, Bounds.Height), drawWorking: false, ctx));
+                    context.Custom(new CustomDrawOperation(new Rect(0, 0, Bounds.Width, Bounds.Height), _drawWorking, ctx));
                 }
                 else
                 {
-                    Draw(context, ctx, drawWorking: false);
+                    Draw(context, ctx, _drawWorking);
                 }
             }
         }
