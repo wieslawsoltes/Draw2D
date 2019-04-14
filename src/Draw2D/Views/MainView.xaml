@@ -39,6 +39,12 @@
                 <MenuItem Header="_Reset Zoom" Command="{Binding Zoom.Reset}"/>
                 <Separator/>
                 <MenuItem Header="_AutoFit Zoom" Command="{Binding Zoom.AutoFit}"/>
+                <Separator/>
+                <MenuItem Header="_Custom Draw">
+                    <MenuItem.Icon>
+                        <CheckBox BorderThickness="0" IsHitTestVisible="False" IsChecked="{Binding #rendererView.CustomDraw, Mode=TwoWay}"/>
+                    </MenuItem.Icon>
+                </MenuItem>
             </MenuItem>
             <MenuItem Header="_Tool">
                 <MenuItem Header="_None" Command="{Binding SetTool}" CommandParameter="None">
@@ -119,7 +125,7 @@
         </Menu>
         <Grid RowDefinitions="55*,Auto,45*" Grid.Row="2" Grid.Column="0">
             <TabControl Classes="default" Grid.Row="0" TabStripPlacement="Top">
-                <TabItem Classes="default" Header="Settings">
+                <TabItem Classes="default" Header="Tool">
                     <Border Classes="default">
                         <ContentControl Content="{Binding CurrentTool.Settings}"/>
                     </Border>
@@ -204,7 +210,7 @@
             <Border Classes="clip" ClipToBounds="True" Background="Transparent">
                 <editor:AvaloniaInputView x:Name="inputView" RelativeTo="{Binding #rendererView}" Background="Transparent" ClipToBounds="False">
                     <paz:ZoomBorder x:Name="zoomBorder" Stretch="None" ZoomSpeed="1.2" PanButton="Right" Background="Transparent" ClipToBounds="False" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
-                        <editor:AvaloniaRenderView x:Name="rendererView" ClipToBounds="False" Width="{Binding CurrentContainer.Width}" Height="{Binding CurrentContainer.Height}"/>
+                        <editor:AvaloniaRenderView x:Name="rendererView" CustomDraw="True" ClipToBounds="False" Width="{Binding CurrentContainer.Width}" Height="{Binding CurrentContainer.Height}"/>
                     </paz:ZoomBorder>
                 </editor:AvaloniaInputView>
             </Border>

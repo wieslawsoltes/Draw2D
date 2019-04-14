@@ -14,18 +14,18 @@ namespace Draw2D.Editor
         private bool _drawWorking;
         private IToolContext _ctx;
 
+        public Rect Bounds { get; }
+
+        public bool HitTest(Point p) => false;
+
+        public bool Equals(ICustomDrawOperation other) => false;
+
         public CustomDrawOperation(Rect bounds, bool drawWorking, IToolContext context)
         {
             Bounds = bounds;
             _drawWorking = drawWorking;
             _ctx = context;
         }
-
-        public Rect Bounds { get; }
-
-        public bool HitTest(Point p) => false;
-
-        public bool Equals(ICustomDrawOperation other) => false;
 
         public void Render(IDrawingContextImpl context)
         {

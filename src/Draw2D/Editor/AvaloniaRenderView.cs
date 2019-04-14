@@ -12,7 +12,15 @@ namespace Draw2D.Editor
     public class AvaloniaRenderView : Control
     {
         private bool _drawWorking = false;
-        private bool _customDraw = true;
+
+        public static readonly StyledProperty<bool> CustomDrawProperty =
+            AvaloniaProperty.Register<AvaloniaRenderView, bool>(nameof(CustomDraw));
+
+        public bool CustomDraw
+        {
+            get { return GetValue(CustomDrawProperty); }
+            set { SetValue(CustomDrawProperty, value); }
+        }
 
         protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e)
         {
@@ -96,7 +104,7 @@ namespace Draw2D.Editor
         {
             if (this.DataContext is IToolContext ctx)
             {
-                if (_customDraw)
+                if (CustomDraw)
                 {
                     context.Custom(new CustomDrawOperation(new Rect(0, 0, Bounds.Width, Bounds.Height), _drawWorking, ctx));
                 }
