@@ -125,7 +125,7 @@ namespace Draw2D.ViewModels
 
         public void SetTool(string title)
         {
-            if (CurrentTool is PathTool pathTool && pathTool.CurrentTool.Title != title)
+            if (CurrentTool is PathTool pathTool && pathTool.Settings.CurrentTool.Title != title)
             {
                 pathTool.CleanCurrentTool(this);
                 var tool = pathTool.Settings.Tools.Where(t => t.Title == title).FirstOrDefault();
