@@ -203,17 +203,6 @@
                         <ContentControl Content="{Binding Selection.Hovered}"/>
                     </Border>
                 </TabItem>
-                <TabItem Classes="default" Header="Selected">
-                    <Border Classes="default">
-                        <ListBox Classes="default" Items="{Binding Selection.Selected}" SelectedItem="{Binding Hovered}">
-                            <ListBox.DataTemplates>
-                                <DataTemplate>
-                                    <TextBlock Classes="default" Text="{Binding}"/>
-                                </DataTemplate>
-                            </ListBox.DataTemplates>
-                        </ListBox>
-                    </Border>
-                </TabItem>
             </TabControl>
             <GridSplitter Grid.Row="1"/>
             <TabControl Classes="default" Grid.Row="2" TabStripPlacement="Top">
