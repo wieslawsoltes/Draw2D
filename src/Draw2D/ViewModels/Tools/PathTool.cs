@@ -268,6 +268,7 @@ namespace Draw2D.ViewModels.Tools
             Settings.CurrentTool?.Clean(this);
             SetContext(null);
             UpdateCache(context);
+            context.Invalidate?.Invoke();
         }
 
         public void UpdateCache(IToolContext context)

@@ -45,6 +45,7 @@ namespace Draw2D.ViewModels.Tools
 
         public void Move(IToolContext context, double x, double y, Modifier modifier)
         {
+            context.Invalidate?.Invoke();
         }
 
         public void Clean(IToolContext context)
