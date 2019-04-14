@@ -8,6 +8,7 @@ using Avalonia.Controls.PanAndZoom;
 using Avalonia.Data.Converters;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
+using Draw2D.Editor;
 using Draw2D.ViewModels;
 
 namespace Draw2D.Views
@@ -52,6 +53,7 @@ namespace Draw2D.Views
             set { SetValue(DrawFpsProperty, value); }
         }
 
+        private AvaloniaRenderView _renderView;
         private ZoomBorder _zoomBorder;
 
         public MainView()
@@ -62,6 +64,7 @@ namespace Draw2D.Views
         private void InitializeComponent()
         {
             AvaloniaXamlLoader.Load(this);
+            _renderView = this.FindControl<AvaloniaRenderView>("renderView");
             _zoomBorder = this.FindControl<ZoomBorder>("zoomBorder");
         }
 
@@ -86,6 +89,11 @@ namespace Draw2D.Views
             {
                 ctx.Zoom = null;
             }
+        }
+
+        private void ViewCustomDraw_Click(object sender, RoutedEventArgs e)
+        {
+            _renderView.CustomDraw = !_renderView.CustomDraw;
         }
 
         private void DebugDrawDirtyRects_Click(object sender, RoutedEventArgs e)

@@ -40,9 +40,9 @@
                 <Separator/>
                 <MenuItem Header="_AutoFit Zoom" Command="{Binding Zoom.AutoFit}"/>
                 <Separator/>
-                <MenuItem Header="_Custom Draw">
+                <MenuItem Header="_Custom Draw" Click="ViewCustomDraw_Click">
                     <MenuItem.Icon>
-                        <CheckBox BorderThickness="0" IsHitTestVisible="False" IsChecked="{Binding #rendererView.CustomDraw, Mode=TwoWay}"/>
+                        <CheckBox BorderThickness="0" IsHitTestVisible="False" IsChecked="{Binding #rendererView.CustomDraw}"/>
                     </MenuItem.Icon>
                 </MenuItem>
             </MenuItem>
