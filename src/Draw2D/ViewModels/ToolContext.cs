@@ -123,24 +123,24 @@ namespace Draw2D.ViewModels
             return new PointShape(x, y, PointShape);
         }
 
-        public void SetTool(string name)
+        public void SetTool(string title)
         {
-            if (CurrentTool is PathTool pathTool && pathTool.CurrentTool.Name != name)
+            if (CurrentTool is PathTool pathTool && pathTool.CurrentTool.Title != title)
             {
                 pathTool.CleanCurrentTool(this);
-                var tool = pathTool.Settings.Tools.Where(t => t.Title == name).FirstOrDefault();
+                var tool = pathTool.Settings.Tools.Where(t => t.Title == title).FirstOrDefault();
                 if (tool != null)
                 {
                     pathTool.Settings.CurrentTool = tool;
                 }
                 else
                 {
-                    CurrentTool = Tools.Where(t => t.Title == name).FirstOrDefault();
+                    CurrentTool = Tools.Where(t => t.Title == title).FirstOrDefault();
                 }
             }
             else
             {
-                CurrentTool = Tools.Where(t => t.Title == name).FirstOrDefault();
+                CurrentTool = Tools.Where(t => t.Title == title).FirstOrDefault();
             }
         }
     }
