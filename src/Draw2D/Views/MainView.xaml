@@ -127,11 +127,6 @@
                     </MenuItem.Icon>
                 </MenuItem>
                 <MenuItem Header="Path T_ools" IsEnabled="{Binding CurrentTool, Converter={StaticResource IsToolConverter}, ConverterParameter=Path, Mode=OneWay}">
-                    <MenuItem Header="_Line" Command="{Binding SetTool}" CommandParameter="Line">
-                        <MenuItem.Icon>
-                            <CheckBox BorderThickness="0" IsHitTestVisible="False" IsChecked="{Binding CurrentTool.Settings.CurrentTool, Converter={StaticResource IsToolConverter}, ConverterParameter=Line, Mode=OneWay}"/>
-                        </MenuItem.Icon>
-                    </MenuItem>
                     <MenuItem Header="_Line" Command="{Binding SetTool}" CommandParameter="PolyLine">
                         <MenuItem.Icon>
                             <CheckBox BorderThickness="0" IsHitTestVisible="False" IsChecked="{Binding CurrentTool.Settings.CurrentTool, Converter={StaticResource IsToolConverter}, ConverterParameter=PolyLine, Mode=OneWay}"/>
@@ -153,6 +148,7 @@
                         </MenuItem.Icon>
                     </MenuItem>
                 </MenuItem>
+                <Separator/>
                 <MenuItem Header="Scr_ibble" Command="{Binding SetTool}" CommandParameter="Path">
                     <MenuItem.Icon>
                         <CheckBox BorderThickness="0" IsHitTestVisible="False" IsChecked="{Binding CurrentTool, Converter={StaticResource IsToolConverter}, ConverterParameter=Scribble, Mode=OneWay}"/>
