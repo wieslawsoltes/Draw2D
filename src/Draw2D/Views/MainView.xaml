@@ -149,7 +149,7 @@
                     </MenuItem>
                 </MenuItem>
                 <Separator/>
-                <MenuItem Header="Scr_ibble" Command="{Binding SetTool}" CommandParameter="Path">
+                <MenuItem Header="Scr_ibble" Command="{Binding SetTool}" CommandParameter="Scribble">
                     <MenuItem.Icon>
                         <CheckBox BorderThickness="0" IsHitTestVisible="False" IsChecked="{Binding CurrentTool, Converter={StaticResource IsToolConverter}, ConverterParameter=Scribble, Mode=OneWay}"/>
                     </MenuItem.Icon>
