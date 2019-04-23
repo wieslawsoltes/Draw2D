@@ -91,18 +91,18 @@ namespace Draw2D.Views
             }
         }
 
-        private void ViewCustomDraw_Click(object sender, RoutedEventArgs e)
+        public void ViewCustomDraw_Click(object sender, RoutedEventArgs e)
         {
             _renderView.CustomDraw = !_renderView.CustomDraw;
         }
 
-        private void DebugDrawDirtyRects_Click(object sender, RoutedEventArgs e)
+        public void DebugDrawDirtyRects_Click(object sender, RoutedEventArgs e)
         {
             VisualRoot.Renderer.DrawDirtyRects = !VisualRoot.Renderer.DrawDirtyRects;
             DrawDirtyRects = VisualRoot.Renderer.DrawDirtyRects;
         }
 
-        private void DebugDrawFps_Click(object sender, RoutedEventArgs e)
+        public void DebugDrawFps_Click(object sender, RoutedEventArgs e)
         {
             VisualRoot.Renderer.DrawFps = !VisualRoot.Renderer.DrawFps;
             DrawFps = VisualRoot.Renderer.DrawFps;
