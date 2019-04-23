@@ -88,7 +88,7 @@
                     </MenuItem.Icon>
                 </MenuItem>
                 <Separator/>
-                <MenuItem Header="_Selection" Command="{Binding SetTool}" CommandParameter="Guide">
+                <MenuItem Header="_Guide" Command="{Binding SetTool}" CommandParameter="Guide">
                     <MenuItem.Icon>
                         <CheckBox BorderThickness="0" IsHitTestVisible="False" IsChecked="{Binding CurrentTool, Converter={StaticResource IsToolConverter}, ConverterParameter=Guide, Mode=OneWay}"/>
                     </MenuItem.Icon>
