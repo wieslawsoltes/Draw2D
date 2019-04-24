@@ -5,7 +5,6 @@ using Draw2D.ViewModels.Containers;
 using Draw2D.ViewModels.Shapes;
 using Draw2D.ViewModels.Style;
 using System.Collections.Generic;
-using PanAndZoom;
 
 namespace Draw2D.ViewModels
 {
@@ -25,7 +24,6 @@ namespace Draw2D.ViewModels
         EditMode Mode { get; set; }
         ICanvasPresenter Presenter { get; set; }
         ISelection Selection { get; set; }
-        IPanAndZoom Zoom { get; set; }
         PointShape GetNextPoint(double x, double y, bool connect, double radius);
         void SetTool(string name);
     }

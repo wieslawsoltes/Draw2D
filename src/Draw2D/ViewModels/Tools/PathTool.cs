@@ -7,7 +7,6 @@ using System.Linq;
 using Draw2D.ViewModels.Containers;
 using Draw2D.ViewModels.Shapes;
 using Draw2D.ViewModels.Style;
-using PanAndZoom;
 
 namespace Draw2D.ViewModels.Tools
 {
@@ -162,12 +161,6 @@ namespace Draw2D.ViewModels.Tools
         {
             get => _context.Selection;
             set => throw new InvalidOperationException($"Can not set {Selection} property value.");
-        }
-
-        public IPanAndZoom Zoom
-        {
-            get => _context.Zoom;
-            set => throw new InvalidOperationException($"Can not set {Zoom} property value.");
         }
 
         public PointShape GetNextPoint(double x, double y, bool connect, double radius)

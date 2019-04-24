@@ -405,7 +405,6 @@ namespace Draw2D.Editor
             this.Mode = EditMode.Mouse;
             this.Presenter = presenter;
             this.Selection = selectionTool;
-            this.Zoom = null;
 
             var container = new CanvasContainer()
             {

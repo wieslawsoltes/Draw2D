@@ -1,5 +1,6 @@
 ﻿// Copyright (c) Wiesław Šoltés. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
+using System.Diagnostics;
 using Avalonia;
 using Avalonia.Platform;
 using Avalonia.Rendering.SceneGraph;
@@ -26,6 +27,7 @@ namespace Draw2D.Editor
 
         public CustomDrawOperation(IToolContext context, bool drawWorking, double width, double height, double ox, double oy)
         {
+            Debug.WriteLine($"CustomDrawOperation {drawWorking} {width} {height} {ox} {oy}");
             _ctx = context;
             _drawWorking = drawWorking;
             _width = width;
@@ -54,7 +56,7 @@ namespace Draw2D.Editor
             {
                 using (var brush = SkiaShapeRenderer.ToSKPaintBrush(ctx.CurrentContainer.WorkBackground))
                 {
-                    canvas.DrawRect(SkiaShapeRenderer.ToRect(ox, oy, ctx.CurrentContainer.Width, ctx.CurrentContainer.Height), brush);
+                    canvas.DrawRect(SkiaShapeRenderer.ToRect(ox, oy, ctx.CurrentContainer.Width + ox, ctx.CurrentContainer.Height + oy), brush);
                 }
             }
 

@@ -8,7 +8,6 @@ using Draw2D.ViewModels.Containers;
 using Draw2D.ViewModels.Shapes;
 using Draw2D.ViewModels.Style;
 using Draw2D.ViewModels.Tools;
-using PanAndZoom;
 using Spatial;
 
 namespace Draw2D.ViewModels
@@ -26,7 +25,6 @@ namespace Draw2D.ViewModels
         private EditMode _mode;
         private ICanvasPresenter _presenter;
         private ISelection _selection;
-        private IPanAndZoom _zoom;
 
         public IShapeRenderer Renderer
         {
@@ -102,12 +100,6 @@ namespace Draw2D.ViewModels
         {
             get => _selection;
             set => Update(ref _selection, value);
-        }
-
-        public IPanAndZoom Zoom
-        {
-            get => _zoom;
-            set => Update(ref _zoom, value);
         }
 
         public virtual PointShape GetNextPoint(double x, double y, bool connect, double radius)
