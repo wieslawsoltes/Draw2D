@@ -41,7 +41,8 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(RuntimeIdentifier)' == 'win-x64' or '$(RuntimeIdentifier)' == 'linux-x64' or '$(RuntimeIdentifier)' == 'osx-x64'">
-    <CopyOutputSymbolsToPublishDirectory>False</CopyOutputSymbolsToPublishDirectory>
+      <DebugType>None</DebugType>
+      <DebugSymbols>False</DebugSymbols>
   </PropertyGroup>
 
 </Project>

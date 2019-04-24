@@ -26,6 +26,8 @@ namespace Draw2D.Editor
         void New();
         void Open();
         void SaveAs();
+        void OpenContainer(string path);
+        void SaveContainer(string path);
         void Exit();
     }
 
@@ -463,6 +465,22 @@ namespace Draw2D.Editor
             Invalidate?.Invoke();
         }
 
+        public void OpenContainer(string path)
+        {
+            var container = Load<CanvasContainer>(path);
+            var workingContainer = new CanvasContainer();
+            CurrentTool.Clean(this);
+            Selection.Selected.Clear();
+            CurrentContainer = container;
+            WorkingContainer = workingContainer;
+            Invalidate?.Invoke();
+        }
+
+        public void SaveContainer(string path)
+        {
+            Save(path, CurrentContainer);
+        }
+
         public async void Open()
         {
             var dlg = new OpenFileDialog();
@@ -472,13 +490,7 @@ namespace Draw2D.Editor
             if (result != null)
             {
                 var path = result.FirstOrDefault();
-                var container = Load<CanvasContainer>(path);
-                var workingContainer = new CanvasContainer();
-                CurrentTool.Clean(this);
-                Selection.Selected.Clear();
-                CurrentContainer = container;
-                WorkingContainer = workingContainer;
-                Invalidate?.Invoke();
+                OpenContainer(path);
             }
         }
 
@@ -488,12 +500,12 @@ namespace Draw2D.Editor
             dlg.Filters.Add(new FileDialogFilter() { Name = "Json Files", Extensions = { "json" } });
             dlg.Filters.Add(new FileDialogFilter() { Name = "All Files", Extensions = { "*" } });
             dlg.InitialFileName = "container";
-            dlg.DefaultExtension = "project";
+            dlg.DefaultExtension = "json";
             var result = await dlg.ShowAsync(Application.Current.Windows[0]);
             if (result != null)
             {
                 var path = result;
-                Save(path, CurrentContainer);
+                SaveContainer(path);
             }
         }
 

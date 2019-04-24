@@ -1,4 +1,4 @@
-﻿<!-- Copyright (c) Wiesław Šoltés. All rights reserved. -->
+<!-- Copyright (c) Wiesław Šoltés. All rights reserved. -->
 <!-- Licensed under the MIT license. See LICENSE file in the project root for full license information. -->
 <UserControl x:Class="Draw2D.Views.MainView"
              xmlns="https://github.com/avaloniaui"
@@ -202,6 +202,14 @@
                     <Border Classes="default">
                         <ContentControl Content="{Binding Selection.Hovered}"/>
                     </Border>
+                </TabItem>
+                <TabItem Classes="default" Header="Json">
+                    <Grid RowDefinitions="Auto,Auto,Auto,Auto">
+                        <TextBlock Classes="default" Text="Path:" Grid.Row="0"/>
+                        <TextBox x:Name="path" Classes="default" Text="container.json" Grid.Row="1"/>
+                        <Button Classes="default" Content="Open Container" Command="{Binding OpenContainer}" CommandParameter="{Binding #path.Text}" Grid.Row="2"/>
+                        <Button Classes="default" Content="Save Container" Command="{Binding SaveContainer}" CommandParameter="{Binding #path.Text}" Grid.Row="3"/>
+                    </Grid>
                 </TabItem>
             </TabControl>
             <GridSplitter Grid.Row="1"/>

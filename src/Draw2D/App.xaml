@@ -27,6 +27,19 @@
             <Setter Property="Padding" Value="0"/>
             <Setter Property="BorderThickness" Value="0"/>
         </Style>
+        <Style Selector="Button.default">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Margin" Value="0"/>
+            <Setter Property="Padding" Value="0"/>
+            <Setter Property="FontSize" Value="{DynamicResource FontSizeNormal}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+        </Style>
+        <Style Selector="Button.default:pointerover /template/ ContentPresenter">
+            <Setter Property="Background" Value="{DynamicResource ThemeControlMidBrush}"/>
+        </Style>
+        <Style Selector="Button.default:pressed /template/ ContentPresenter">
+            <Setter Property="Background" Value="{DynamicResource ThemeControlDarkBrush}"/>
+        </Style>
         <Style Selector="CheckBox.default">
             <Setter Property="Margin" Value="0,1,0,1"/>
             <Setter Property="FontSize" Value="{DynamicResource FontSizeNormal}"/>
