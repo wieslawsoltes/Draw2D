@@ -65,12 +65,10 @@ namespace Draw2D.Editor
             }
 
             ctx.Presenter.DrawDecorators(canvas, ctx.CurrentContainer, renderer, 0.0, 0.0, DrawMode.Shape);
-            ctx.Presenter.DrawDecorators(canvas, ctx.CurrentContainer, renderer, 0.0, 0.0, DrawMode.Point);
 
             if (drawWorking)
             {
                 ctx.Presenter.DrawDecorators(canvas, ctx.WorkingContainer, renderer, 0.0, 0.0, DrawMode.Shape);
-                ctx.Presenter.DrawDecorators(canvas, ctx.WorkingContainer, renderer, 0.0, 0.0, DrawMode.Point);
             }
         }
 
