@@ -1,0 +1,29 @@
+<Directives>
+    <Application>
+
+        <!-- App -->
+
+        <Assembly Name="Draw2D" Dynamic="Required All" />
+
+        <!-- Avalonia -->
+
+        <Assembly Name="Avalonia.Animation" Dynamic="Required All" />
+        <Assembly Name="Avalonia.Visuals" Dynamic="Required All" />
+        <Assembly Name="Avalonia.Themes.Default" Dynamic="Required All"  />
+
+        <Assembly Name="SkiaSharp" >
+          <Type Name="SkiaSharp.SKData" Dynamic="Required All" />
+          <Type Name="SkiaSharp.SKImage" Dynamic="Required All" />
+          <Type Name="SkiaSharp.SKTypeface" Dynamic="Required All" />
+          <Type Name="SkiaSharp.SKString" Dynamic="Required All" />
+          <Type Name="SkiaSharp.SKSurface" Dynamic="Required All" />
+          <Type Name="SkiaSharp.SKCanvas" Dynamic="Required All" />
+          <Type Name="SkiaSharp.SKShader" Dynamic="Required All" />
+        </Assembly>
+
+        <!-- .NET Core -->
+
+        <Assembly Name="mscorlib"/>
+
+    </Application>
+</Directives>
