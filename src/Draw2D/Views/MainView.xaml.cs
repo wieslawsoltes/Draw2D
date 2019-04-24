@@ -92,10 +92,10 @@ namespace Draw2D.Views
 
         public void ViewCustomDraw_Click(object sender, RoutedEventArgs e)
         {
-            var renderView = this.FindControl<AvaloniaRenderView>("renderView");
-            if (renderView != null)
+            var inputView = this.FindControl<AvaloniaInputView>("inputView");
+            if (inputView != null)
             {
-                renderView.CustomDraw = !renderView.CustomDraw;
+                inputView.CustomDraw = !inputView.CustomDraw;
             }
         }
 

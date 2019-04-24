@@ -35,20 +35,7 @@ namespace Draw2D.Editor
             Bounds = new Rect(0, 0, width, height);
         }
 
-        public void Render(IDrawingContextImpl context)
-        {
-            var canvas = (context as ISkiaDrawingContextImpl)?.SkCanvas;
-            if (canvas != null)
-            {
-                canvas.Save();
-
-                Draw(canvas, _ctx, _drawWorking);
-
-                canvas.Restore();
-            }
-        }
-
-        private void Draw(SKCanvas canvas, IToolContext ctx, bool drawWorking)
+        private void Draw(SKCanvas canvas, IToolContext ctx, bool drawWorking, double width, double height, double ox, double oy)
         {
             var renderer = new SkiaShapeRenderer()
             {
@@ -59,7 +46,7 @@ namespace Draw2D.Editor
             {
                 using (var brush = SkiaShapeRenderer.ToSKPaintBrush(ctx.CurrentContainer.InputBackground))
                 {
-                    canvas.DrawRect(SkiaShapeRenderer.ToRect(0, 0, _width, _height), brush);
+                    canvas.DrawRect(SkiaShapeRenderer.ToRect(0, 0, width, height), brush);
                 }
             }
 
@@ -67,7 +54,7 @@ namespace Draw2D.Editor
             {
                 using (var brush = SkiaShapeRenderer.ToSKPaintBrush(ctx.CurrentContainer.WorkBackground))
                 {
-                    canvas.DrawRect(SkiaShapeRenderer.ToRect(_ox, _oy, ctx.CurrentContainer.Width, ctx.CurrentContainer.Height), brush);
+                    canvas.DrawRect(SkiaShapeRenderer.ToRect(ox, oy, ctx.CurrentContainer.Width, ctx.CurrentContainer.Height), brush);
                 }
             }
 
@@ -85,6 +72,19 @@ namespace Draw2D.Editor
             if (drawWorking)
             {
                 ctx.Presenter.DrawDecorators(canvas, ctx.WorkingContainer, renderer, ox, oy, DrawMode.Shape);
+            }
+        }
+
+        public void Render(IDrawingContextImpl context)
+        {
+            var canvas = (context as ISkiaDrawingContextImpl)?.SkCanvas;
+            if (canvas != null)
+            {
+                canvas.Save();
+
+                Draw(canvas, _ctx, _drawWorking, _width, _height, _ox, _oy);
+
+                canvas.Restore();
             }
         }
 

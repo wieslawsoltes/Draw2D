@@ -268,7 +268,7 @@
         <GridSplitter Grid.Row="2" Grid.Column="1"/>
         <Border Classes="zoom" Grid.Row="2" Grid.Column="2">
             <Border Classes="clip" ClipToBounds="True" Background="Transparent">
-                <editor:AvaloniaInputView Background="Transparent" ClipToBounds="False"/>
+                <editor:AvaloniaInputView x:Name="inputView" Background="Transparent" ClipToBounds="False"/>
             </Border>
         </Border>
     </Grid>

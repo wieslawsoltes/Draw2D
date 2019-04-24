@@ -175,8 +175,6 @@ namespace Draw2D.Editor
 
         private void Draw(DrawingContext context, IToolContext ctx, bool drawWorking, double width, double height, double ox, double oy)
         {
-            GetOffset(ctx, width, height, out double ox, out double oy);
-
             if (ctx.CurrentContainer.InputBackground != null)
             {
                 var color = AvaloniaBrushCache.FromDrawColor(ctx.CurrentContainer.InputBackground);
@@ -214,13 +212,18 @@ namespace Draw2D.Editor
 
             if (this.DataContext is IToolContext ctx)
             {
+                double width = Bounds.Width;
+                double height = Bounds.Height;
+
+                GetOffset(ctx, width, height, out double ox, out double oy);
+
                 if (CustomDraw)
                 {
-                    context.Custom(new CustomDrawOperation(ctx, _drawWorking, Bounds.Width, Bounds.Height, ox, oy));
+                    context.Custom(new CustomDrawOperation(ctx, _drawWorking, width, height, ox, oy));
                 }
                 else
                 {
-                    Draw(context, ctx, _drawWorking, Bounds.Width, Bounds.Height, ox, oy);
+                    Draw(context, ctx, _drawWorking, width, height, ox, oy);
                 }
             }
         }
