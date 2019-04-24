@@ -71,7 +71,7 @@
                 <Separator/>
                 <MenuItem Header="_Custom Draw" Click="ViewCustomDraw_Click">
                     <MenuItem.Icon>
-                        <CheckBox BorderThickness="0" IsHitTestVisible="False" IsChecked="{Binding #rendererView.CustomDraw}"/>
+                        <CheckBox BorderThickness="0" IsHitTestVisible="False" IsChecked="{Binding #inputView.CustomDraw}"/>
                     </MenuItem.Icon>
                 </MenuItem>
             </MenuItem>
