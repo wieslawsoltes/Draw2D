@@ -6,7 +6,7 @@ namespace Draw2D.ViewModels.Decorators
 {
     public class CubicBezierDecorator : CommonDecorator
     {
-        public void Draw(object dc, IShapeRenderer renderer, CubicBezierShape cubicBezier, double dx, double dy)
+        public void Draw(object dc, IShapeRenderer renderer, CubicBezierShape cubicBezier, double dx, double dy, DrawMode mode)
         {
             DrawLine(dc, renderer, cubicBezier.StartPoint, cubicBezier.Point1, dx, dy, mode);
             DrawLine(dc, renderer, cubicBezier.Point3, cubicBezier.Point2, dx, dy, mode);

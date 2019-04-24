@@ -81,11 +81,11 @@ namespace Draw2D.ViewModels.Shapes
             return result;
         }
 
-        public override void Draw(object dc, IShapeRenderer renderer, double dx, double dy, object db, object r)
+        public override void Draw(object dc, IShapeRenderer renderer, double dx, double dy, DrawMode mode, object db, object r)
         {
             var state = base.BeginTransform(dc, renderer);
 
-            if (Style != null && if (mode.HasFlag(DrawMode.Shape)))
+            if (Style != null && mode.HasFlag(DrawMode.Shape))
             {
                 renderer.DrawCubicBezier(dc, this, Style, dx, dy);
             }
@@ -94,22 +94,22 @@ namespace Draw2D.ViewModels.Shapes
             {
                 if (renderer.Selection.Selected.Contains(_startPoint))
                 {
-                    _startPoint.Draw(dc, renderer, dx, dy, db, r);
+                    _startPoint.Draw(dc, renderer, dx, dy, mode, db, r);
                 }
     
                 if (renderer.Selection.Selected.Contains(_point1))
                 {
-                    _point1.Draw(dc, renderer, dx, dy, db, r);
+                    _point1.Draw(dc, renderer, dx, dy, mode, db, r);
                 }
     
                 if (renderer.Selection.Selected.Contains(_point2))
                 {
-                    _point2.Draw(dc, renderer, dx, dy, db, r);
+                    _point2.Draw(dc, renderer, dx, dy, mode, db, r);
                 }
     
                 if (renderer.Selection.Selected.Contains(_point3))
                 {
-                    _point3.Draw(dc, renderer, dx, dy, db, r);
+                    _point3.Draw(dc, renderer, dx, dy, mode, db, r);
                 }
             }
 

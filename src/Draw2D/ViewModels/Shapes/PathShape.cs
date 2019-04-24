@@ -98,7 +98,7 @@ namespace Draw2D.ViewModels.Shapes
             {
                 foreach (var figure in Figures)
                 {
-                    DrawPoints(dc, renderer, dx, dy, db, mode, r, figure, isPathSelected);
+                    DrawPoints(dc, renderer, dx, dy, mode, db, r, figure, isPathSelected);
                 }
             }
 

@@ -87,7 +87,7 @@ namespace Draw2D.ViewModels.Shapes
 
                 var templateState = renderer.PushMatrix(dc, _templateTransform);
 
-                _template.Draw(dc, renderer, 0, 0, db, r);
+                _template.Draw(dc, renderer, 0, 0, mode, db, r);
 
                 renderer.PopMatrix(dc, templateState);
 
