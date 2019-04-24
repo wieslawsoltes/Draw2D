@@ -59,6 +59,7 @@ namespace Draw2D.ViewModels.Tools
                 Style = context.CurrentStyle
             };
             context.WorkingContainer.Shapes.Add(_text);
+            context.Selection.Selected.Add(_text);
             context.Selection.Selected.Add(_text.TopLeft);
             context.Selection.Selected.Add(_text.BottomRight);
 
@@ -74,6 +75,7 @@ namespace Draw2D.ViewModels.Tools
 
             CurrentState = State.TopLeft;
 
+            context.Selection.Selected.Remove(_text);
             context.Selection.Selected.Remove(_text.BottomRight);
             _text.BottomRight = context.GetNextPoint(x, y, Settings?.ConnectPoints ?? false, Settings?.HitTestRadius ?? 7.0);
             _text.BottomRight.Y = y;
@@ -116,6 +118,7 @@ namespace Draw2D.ViewModels.Tools
             if (_text != null)
             {
                 context.WorkingContainer.Shapes.Remove(_text);
+                context.Selection.Selected.Remove(_text);
                 context.Selection.Selected.Remove(_text.TopLeft);
                 context.Selection.Selected.Remove(_text.BottomRight);
                 _text = null;

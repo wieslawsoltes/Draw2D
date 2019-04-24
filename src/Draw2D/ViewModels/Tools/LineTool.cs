@@ -91,6 +91,7 @@ namespace Draw2D.ViewModels.Tools
                 Style = context.CurrentStyle
             };
             context.WorkingContainer.Shapes.Add(_line);
+            context.Selection.Selected.Add(_line);
             context.Selection.Selected.Add(_line.StartPoint);
             context.Selection.Selected.Add(_line.Point);
 
@@ -106,6 +107,7 @@ namespace Draw2D.ViewModels.Tools
 
             CurrentState = State.StartPoint;
 
+            context.Selection.Selected.Remove(_line);
             context.Selection.Selected.Remove(_line.StartPoint);
             context.Selection.Selected.Remove(_line.Point);
             context.WorkingContainer.Shapes.Remove(_line);
@@ -165,6 +167,7 @@ namespace Draw2D.ViewModels.Tools
             if (_line != null)
             {
                 context.WorkingContainer.Shapes.Remove(_line);
+                context.Selection.Selected.Remove(_line);
                 context.Selection.Selected.Remove(_line.StartPoint);
                 context.Selection.Selected.Remove(_line.Point);
                 _line = null;

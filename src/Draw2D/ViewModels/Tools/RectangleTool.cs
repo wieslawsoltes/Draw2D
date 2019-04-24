@@ -55,6 +55,7 @@ namespace Draw2D.ViewModels.Tools
                 Style = context.CurrentStyle
             };
             context.WorkingContainer.Shapes.Add(_rectangle);
+            context.Selection.Selected.Add(_rectangle);
             context.Selection.Selected.Add(_rectangle.TopLeft);
             context.Selection.Selected.Add(_rectangle.BottomRight);
 
@@ -70,6 +71,7 @@ namespace Draw2D.ViewModels.Tools
 
             CurrentState = State.TopLeft;
 
+            context.Selection.Selected.Remove(_rectangle);
             context.Selection.Selected.Remove(_rectangle.BottomRight);
             _rectangle.BottomRight = context.GetNextPoint(x, y, Settings?.ConnectPoints ?? false, Settings?.HitTestRadius ?? 7.0);
             _rectangle.BottomRight.Y = y;
@@ -112,6 +114,7 @@ namespace Draw2D.ViewModels.Tools
             if (_rectangle != null)
             {
                 context.WorkingContainer.Shapes.Remove(_rectangle);
+                context.Selection.Selected.Remove(_rectangle);
                 context.Selection.Selected.Remove(_rectangle.TopLeft);
                 context.Selection.Selected.Remove(_rectangle.BottomRight);
                 _rectangle = null;

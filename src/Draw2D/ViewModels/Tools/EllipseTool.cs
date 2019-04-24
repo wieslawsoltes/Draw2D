@@ -55,6 +55,7 @@ namespace Draw2D.ViewModels.Tools
                 Style = context.CurrentStyle
             };
             context.WorkingContainer.Shapes.Add(_ellipse);
+            context.Selection.Selected.Add(_ellipse);
             context.Selection.Selected.Add(_ellipse.TopLeft);
             context.Selection.Selected.Add(_ellipse.BottomRight);
 
@@ -73,6 +74,7 @@ namespace Draw2D.ViewModels.Tools
             context.Selection.Selected.Remove(_ellipse.BottomRight);
             _ellipse.BottomRight = context.GetNextPoint(x, y, Settings?.ConnectPoints ?? false, Settings?.HitTestRadius ?? 7.0);
             context.WorkingContainer.Shapes.Remove(_ellipse);
+            context.Selection.Selected.Remove(_ellipse);
             context.Selection.Selected.Remove(_ellipse.TopLeft);
             context.CurrentContainer.Shapes.Add(_ellipse);
             _ellipse = null;
@@ -111,6 +113,7 @@ namespace Draw2D.ViewModels.Tools
             if (_ellipse != null)
             {
                 context.WorkingContainer.Shapes.Remove(_ellipse);
+                context.Selection.Selected.Remove(_ellipse);
                 context.Selection.Selected.Remove(_ellipse.TopLeft);
                 context.Selection.Selected.Remove(_ellipse.BottomRight);
                 _ellipse = null;
