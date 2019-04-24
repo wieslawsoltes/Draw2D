@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -19,9 +19,22 @@
     <PackageReference Include="Avalonia" Version="0.8.1-cibuild0002069-beta" />
     <PackageReference Include="Avalonia.Desktop" Version="0.8.1-cibuild0002069-beta" />
     <PackageReference Include="Avalonia.Angle.Windows.Natives" Version="2.1.0.2019013001" />
+    <PackageReference Include="Avalonia.Controls.PanAndZoom" Version="2.1.0-build20190424-01" />
     <PackageReference Include="Math.Spatial" Version="1.0.4" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
-    <PackageReference Include="Avalonia.Controls.PanAndZoom" Version="2.1.0-build20190424-01" />
   </ItemGroup>
+
+  <!-- https://github.com/dotnet/corert -->
+  <ItemGroup>
+    <RdXmlFile Include="Draw2D.rd.xml" />
+    <PackageReference Include="Microsoft.DotNet.ILCompiler" Version="1.0.0-alpha-*" />
+  </ItemGroup>
+
+  <!-- https://github.com/dotnet/corert/blob/master/Documentation/using-corert/optimizing-corert.md -->
+  <PropertyGroup>
+    <RootAllApplicationAssemblies>False</RootAllApplicationAssemblies>
+    <IlcGenerateCompleteTypeMetadata>False</IlcGenerateCompleteTypeMetadata>
+    <IlcGenerateStackTraceData>False</IlcGenerateStackTraceData>
+  </PropertyGroup>
 
 </Project>
