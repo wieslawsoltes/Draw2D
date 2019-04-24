@@ -1,4 +1,4 @@
-﻿// Copyright (c) Wiesław Šoltés. All rights reserved.
+// Copyright (c) Wiesław Šoltés. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using System;
 using System.Globalization;
@@ -53,9 +53,6 @@ namespace Draw2D.Views
             set { SetValue(DrawFpsProperty, value); }
         }
 
-        private AvaloniaRenderView _renderView;
-        private ZoomBorder _zoomBorder;
-
         public MainView()
         {
             InitializeComponent();
@@ -64,8 +61,6 @@ namespace Draw2D.Views
         private void InitializeComponent()
         {
             AvaloniaXamlLoader.Load(this);
-            _renderView = this.FindControl<AvaloniaRenderView>("renderView");
-            _zoomBorder = this.FindControl<ZoomBorder>("zoomBorder");
         }
 
         protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e)
@@ -77,7 +72,11 @@ namespace Draw2D.Views
 
             if (this.DataContext is IToolContext ctx)
             {
-                ctx.Zoom = _zoomBorder;
+                var zoomBorder = this.FindControl<ZoomBorder>("zoomBorder");
+                if (zoomBorder != null)
+                {
+                    ctx.Zoom = zoomBorder;
+                }
             }
         }
 
@@ -93,7 +92,11 @@ namespace Draw2D.Views
 
         public void ViewCustomDraw_Click(object sender, RoutedEventArgs e)
         {
-            _renderView.CustomDraw = !_renderView.CustomDraw;
+            var renderView = this.FindControl<AvaloniaRenderView>("renderView");
+            if (renderView != null)
+            {
+                renderView.CustomDraw = !renderView.CustomDraw;
+            }
         }
 
         public void DebugDrawDirtyRects_Click(object sender, RoutedEventArgs e)
