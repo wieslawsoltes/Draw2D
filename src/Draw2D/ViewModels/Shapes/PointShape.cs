@@ -74,8 +74,8 @@ namespace Draw2D.ViewModels.Shapes
             {
                 var pointState = base.BeginTransform(dc, renderer);
 
-                double offsetX = X + dx;
-                double offsetY = Y + dy;
+                double offsetX = X
+                double offsetY = Y;
 
                 if (_templateTransform.OffsetX != offsetX || _templateTransform.OffsetY != offsetY)
                 {
@@ -86,7 +86,7 @@ namespace Draw2D.ViewModels.Shapes
 
                 var templateState = renderer.PushMatrix(dc, _templateTransform);
 
-                _template.Draw(dc, renderer, 0, 0, DrawMode.Shape, db, r);
+                _template.Draw(dc, renderer, dx, dy, DrawMode.Shape, db, r);
 
                 renderer.PopMatrix(dc, templateState);
 
