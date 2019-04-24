@@ -40,4 +40,8 @@
     <IlcGenerateStackTraceData>False</IlcGenerateStackTraceData>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(RuntimeIdentifier)' == 'win-x64' or '$(RuntimeIdentifier)' == 'linux-x64' or '$(RuntimeIdentifier)' == 'osx-x64'">
+    <CopyOutputSymbolsToPublishDirectory>False</CopyOutputSymbolsToPublishDirectory>
+  </PropertyGroup>
+
 </Project>
