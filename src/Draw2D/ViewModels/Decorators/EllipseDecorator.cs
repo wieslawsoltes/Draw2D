@@ -6,8 +6,17 @@ namespace Draw2D.ViewModels.Decorators
 {
     public class EllipseDecorator : CommonDecorator
     {
+        public void Draw(object dc, IShapeRenderer renderer, EllipseShape ellipseShape, double dx, double dy, DrawMode mode)
+        {
+            DrawRectangle(dc, renderer, ellipseShape.TopLeft, ellipseShape.BottomRight, dx, dy, mode);
+        }
+
         public override void Draw(object dc, BaseShape shape, IShapeRenderer renderer, ISelection selection, double dx, double dy, DrawMode mode)
         {
+            if (shape is EllipseShape ellipseShape)
+            {
+                Draw(dc, renderer, ellipseShape, dx, dy, mode);
+            }
         }
     }
 }
