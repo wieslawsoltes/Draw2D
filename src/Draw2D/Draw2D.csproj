@@ -28,16 +28,13 @@
   </ItemGroup>
 
   <!-- https://github.com/dotnet/corert -->
-  <ItemGroup>
+  <ItemGroup Condition="'$(RuntimeIdentifier)' == 'win-x64' or '$(RuntimeIdentifier)' == 'linux-x64' or '$(RuntimeIdentifier)' == 'osx-x64'">
     <RdXmlFile Include="Draw2D.rd.xml" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Microsoft.DotNet.ILCompiler" Version="1.0.0-alpha-*" />
   </ItemGroup>
 
   <!-- https://github.com/dotnet/corert/blob/master/Documentation/using-corert/optimizing-corert.md -->
-  <PropertyGroup>
+  <PropertyGroup Condition="'$(RuntimeIdentifier)' == 'win-x64' or '$(RuntimeIdentifier)' == 'linux-x64' or '$(RuntimeIdentifier)' == 'osx-x64'">
     <RootAllApplicationAssemblies>False</RootAllApplicationAssemblies>
     <IlcGenerateCompleteTypeMetadata>False</IlcGenerateCompleteTypeMetadata>
     <IlcGenerateStackTraceData>False</IlcGenerateStackTraceData>
