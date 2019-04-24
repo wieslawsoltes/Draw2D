@@ -358,7 +358,7 @@ namespace Draw2D.Editor
                 var fm = paint.FontMetrics;
                 float offset = -(fm.Top + fm.Bottom);
 
-                SKRect bounds = new SKRect();
+                var bounds = new SKRect();
                 paint.MeasureText(text.Text.Value, ref bounds);
                 var origin = GetTextOrigin(2, 2, ref rect, ref bounds);
 

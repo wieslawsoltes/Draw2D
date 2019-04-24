@@ -4,11 +4,9 @@ using System;
 using System.Globalization;
 using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Controls.PanAndZoom;
 using Avalonia.Data.Converters;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
-using Draw2D.Editor;
 using Draw2D.ViewModels;
 
 namespace Draw2D.Views
@@ -69,34 +67,6 @@ namespace Draw2D.Views
 
             DrawDirtyRects = VisualRoot.Renderer.DrawDirtyRects;
             DrawFps = VisualRoot.Renderer.DrawFps;
-
-            if (this.DataContext is IToolContext ctx)
-            {
-                var zoomBorder = this.FindControl<ZoomBorder>("zoomBorder");
-                if (zoomBorder != null)
-                {
-                    ctx.Zoom = zoomBorder;
-                }
-            }
-        }
-
-        protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
-        {
-            base.OnDetachedFromVisualTree(e);
-
-            if (this.DataContext is IToolContext ctx)
-            {
-                ctx.Zoom = null;
-            }
-        }
-
-        public void ViewCustomDraw_Click(object sender, RoutedEventArgs e)
-        {
-            var inputView = this.FindControl<AvaloniaInputView>("inputView");
-            if (inputView != null)
-            {
-                inputView.CustomDraw = !inputView.CustomDraw;
-            }
         }
 
         public void DebugDrawDirtyRects_Click(object sender, RoutedEventArgs e)

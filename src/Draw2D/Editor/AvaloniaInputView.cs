@@ -9,7 +9,7 @@ using Draw2D.ViewModels;
 
 namespace Draw2D.Editor
 {
-    public class AvaloniaInputView : Border
+    public class AvaloniaInputView : Control
     {
         private bool _drawWorking = false;
 
