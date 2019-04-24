@@ -6,8 +6,17 @@ namespace Draw2D.ViewModels.Decorators
 {
     public class LineDecorator : CommonDecorator
     {
+        public void Draw(object dc, IShapeRenderer renderer, LineShape lineShape, double dx, double dy, DrawMode mode)
+        {
+            DrawRectangle(dc, renderer, lineShape.StartPoint, lineShape.Point, dx, dy, mode);
+        }
+
         public override void Draw(object dc, BaseShape shape, IShapeRenderer renderer, ISelection selection, double dx, double dy, DrawMode mode)
         {
+            if (shape is LineShape lineShape)
+            {
+                Draw(dc, renderer, lineShape, dx, dy, mode);
+            }
         }
     }
 }

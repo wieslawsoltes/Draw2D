@@ -32,7 +32,7 @@
         <KeyBinding Command="{Binding SetTool}" CommandParameter="Selection" Gesture="S"/>
         <KeyBinding Command="{Binding SetTool}" CommandParameter="Line" Gesture="L"/>
         <KeyBinding Command="{Binding SetTool}" CommandParameter="Point" Gesture="P"/>
-        <KeyBinding Command="{Binding SetTool}" CommandParameter="CubicBezier" Gesture="C"/>
+        <KeyBinding Command="{Binding SetTool}" CommandParameter="CubicBezier" Gesture="B"/>
         <KeyBinding Command="{Binding SetTool}" CommandParameter="QuadraticBezier" Gesture="Q"/>
         <KeyBinding Command="{Binding SetTool}" CommandParameter="Path" Gesture="H"/>
         <KeyBinding Command="{Binding SetTool}" CommandParameter="Move" Gesture="M"/>
