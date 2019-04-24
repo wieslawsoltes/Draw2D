@@ -16,17 +16,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Avalonia" Version="0.8.1-cibuild0002064-beta" />
-    <PackageReference Include="Avalonia.Desktop" Version="0.8.1-cibuild0002064-beta" />
+    <PackageReference Include="Avalonia" Version="0.8.1-cibuild0002069-beta" />
+    <PackageReference Include="Avalonia.Desktop" Version="0.8.1-cibuild0002069-beta" />
     <PackageReference Include="Avalonia.Angle.Windows.Natives" Version="2.1.0.2019013001" />
     <PackageReference Include="Math.Spatial" Version="1.0.4" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
-    <PackageReference Include="Avalonia.Controls.PanAndZoom" Version="2.1.0-build20190423-02" />
+    <PackageReference Include="Avalonia.Controls.PanAndZoom" Version="2.1.0-build20190424-01" />
   </ItemGroup>
-
-  <PropertyGroup Condition="'$(TargetFramework)' == 'net461' and '$(OS)' == 'Unix'">
-    <FrameworkPathOverride>/usr/lib/mono/4.6.1-api</FrameworkPathOverride>
-    <FrameworkPathOverride Condition="$([MSBuild]::IsOsPlatform('OSX'))">/Library/Frameworks/Mono.framework/Versions/Current/lib/mono/4.6.1-api</FrameworkPathOverride>
-  </PropertyGroup>
 
 </Project>
