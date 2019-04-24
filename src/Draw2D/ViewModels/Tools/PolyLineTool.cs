@@ -136,7 +136,7 @@ namespace Draw2D.ViewModels.Tools
             if (_line != null)
             {
                 context.WorkingContainer.Shapes.Remove(_line);
-                context.Selection.Selected.Remove(_line)
+                context.Selection.Selected.Remove(_line);
                 _line = null;
             }
 
