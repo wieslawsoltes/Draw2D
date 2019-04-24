@@ -74,7 +74,7 @@ namespace Draw2D.ViewModels.Shapes
             {
                 var pointState = base.BeginTransform(dc, renderer);
 
-                double offsetX = X
+                double offsetX = X;
                 double offsetY = Y;
 
                 if (_templateTransform.OffsetX != offsetX || _templateTransform.OffsetY != offsetY)
