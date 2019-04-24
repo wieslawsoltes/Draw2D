@@ -42,9 +42,10 @@ namespace Draw2D.ViewModels
         /// <param name="renderer">The generic renderer object used to draw shape.</param>
         /// <param name="dx">The X axis draw position offset.</param>
         /// <param name="dy">The Y axis draw position offset.</param>
+        /// <param name="mode">The drawing mode.</param>
         /// <param name="db">The properties database.</param>
         /// <param name="r">The database record.</param>
-        void Draw(object dc, IShapeRenderer renderer, double dx, double dy, object db, object r);
+        void Draw(object dc, IShapeRenderer renderer, double dx, double dy, DrawMode mode, object db, object r);
 
         /// <summary>
         /// Invalidates shape renderer cache.

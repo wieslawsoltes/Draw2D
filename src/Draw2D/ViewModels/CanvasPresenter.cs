@@ -10,13 +10,13 @@ namespace Draw2D.ViewModels
     {
         public IDictionary<Type, IShapeDecorator> Decorators { get; set; }
 
-        public void DrawContainer(object dc, CanvasContainer container, IShapeRenderer renderer, double dx, double dy, object db, object r)
+        public void DrawContainer(object dc, CanvasContainer container, IShapeRenderer renderer, double dx, double dy, DrawMode mode, object db, object r)
         {
             container.Invalidate(renderer, dx, dy);
-            container.Draw(dc, renderer, dx, dy, db, r);
+            container.Draw(dc, renderer, dx, dy, mode, db, r);
         }
 
-        public void DrawDecorators(object dc, CanvasContainer container, IShapeRenderer renderer, double dx, double dy)
+        public void DrawDecorators(object dc, CanvasContainer container, IShapeRenderer renderer, double dx, double dy, DrawMode mode)
         {
             var shapes = container.Shapes;
             var selection = renderer.Selection;
@@ -27,7 +27,7 @@ namespace Draw2D.ViewModels
                 {
                     if (Decorators.TryGetValue(shape.GetType(), out var helper))
                     {
-                        helper.Draw(dc, shape, renderer, selection, dx, dy);
+                        helper.Draw(dc, shape, renderer, selection, dx, dy, mode);
                     }
                 }
             }

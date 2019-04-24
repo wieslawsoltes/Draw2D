@@ -6,7 +6,7 @@ namespace Draw2D.ViewModels.Decorators
 {
     public class TextDecorator : CommonDecorator
     {
-        public override void Draw(object dc, BaseShape shape, IShapeRenderer renderer, ISelection selection, double dx, double dy)
+        public override void Draw(object dc, BaseShape shape, IShapeRenderer renderer, ISelection selection, double dx, double dy, DrawMode mode)
         {
         }
     }

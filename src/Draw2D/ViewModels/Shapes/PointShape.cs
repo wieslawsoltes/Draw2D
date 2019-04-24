@@ -68,7 +68,7 @@ namespace Draw2D.ViewModels.Shapes
             return this.IsDirty | result;
         }
 
-        public override void Draw(object dc, IShapeRenderer renderer, double dx, double dy, object db, object r)
+        public override void Draw(object dc, IShapeRenderer renderer, double dx, double dy, DrawMode mode, object db, object r)
         {
             if (_template != null)
             {

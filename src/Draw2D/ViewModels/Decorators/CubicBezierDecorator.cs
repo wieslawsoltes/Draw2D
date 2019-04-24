@@ -8,16 +8,16 @@ namespace Draw2D.ViewModels.Decorators
     {
         public void Draw(object dc, IShapeRenderer renderer, CubicBezierShape cubicBezier, double dx, double dy)
         {
-            DrawLine(dc, renderer, cubicBezier.StartPoint, cubicBezier.Point1, dx, dy);
-            DrawLine(dc, renderer, cubicBezier.Point3, cubicBezier.Point2, dx, dy);
-            DrawLine(dc, renderer, cubicBezier.Point1, cubicBezier.Point2, dx, dy);
+            DrawLine(dc, renderer, cubicBezier.StartPoint, cubicBezier.Point1, dx, dy, mode);
+            DrawLine(dc, renderer, cubicBezier.Point3, cubicBezier.Point2, dx, dy, mode);
+            DrawLine(dc, renderer, cubicBezier.Point1, cubicBezier.Point2, dx, dy, mode);
         }
 
-        public override void Draw(object dc, BaseShape shape, IShapeRenderer renderer, ISelection selection, double dx, double dy)
+        public override void Draw(object dc, BaseShape shape, IShapeRenderer renderer, ISelection selection, double dx, double dy, DrawMode mode)
         {
             if (shape is CubicBezierShape cubicBezier)
             {
-                Draw(dc, renderer, cubicBezier, dx, dy);
+                Draw(dc, renderer, cubicBezier, dx, dy, mode);
             }
         }
     }

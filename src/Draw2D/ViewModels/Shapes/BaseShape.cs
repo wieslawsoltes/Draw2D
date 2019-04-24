@@ -41,7 +41,7 @@ namespace Draw2D.ViewModels.Shapes
             }
         }
 
-        public abstract void Draw(object dc, IShapeRenderer renderer, double dx, double dy, object db, object r);
+        public abstract void Draw(object dc, IShapeRenderer renderer, double dx, double dy, DrawMode mode, object db, object r);
 
         public virtual bool Invalidate(IShapeRenderer renderer, double dx, double dy)
         {

@@ -71,31 +71,34 @@ namespace Draw2D.ViewModels.Shapes
             return result;
         }
 
-        public override void Draw(object dc, IShapeRenderer renderer, double dx, double dy, object db, object r)
+        public override void Draw(object dc, IShapeRenderer renderer, double dx, double dy, DrawMode mode, object db, object r)
         {
             var state = base.BeginTransform(dc, renderer);
 
-            if (Style != null)
+            if (Style != null && mode.HasFlag(DrawMode.Shape))
             {
                 renderer.DrawQuadraticBezier(dc, this, Style, dx, dy);
             }
 
-            if (renderer.Selection.Selected.Contains(_startPoint))
+            if (mode.HasFlag(DrawMode.Point))
             {
-                _startPoint.Draw(dc, renderer, dx, dy, db, r);
+                if (renderer.Selection.Selected.Contains(_startPoint))
+                {
+                    _startPoint.Draw(dc, renderer, dx, dy, mode, db, r);
+                }
+    
+                if (renderer.Selection.Selected.Contains(_point1))
+                {
+                    _point1.Draw(dc, renderer, dx, dy, mode, db, r);
+                }
+    
+                if (renderer.Selection.Selected.Contains(_point2))
+                {
+                    _point2.Draw(dc, renderer, dx, dy, mode, db, r);
+                }
             }
 
-            if (renderer.Selection.Selected.Contains(_point1))
-            {
-                _point1.Draw(dc, renderer, dx, dy, db, r);
-            }
-
-            if (renderer.Selection.Selected.Contains(_point2))
-            {
-                _point2.Draw(dc, renderer, dx, dy, db, r);
-            }
-
-            base.Draw(dc, renderer, dx, dy, db, r);
+            base.Draw(dc, renderer, dx, dy, mode, db, r);
             base.EndTransform(dc, renderer, state);
         }
 

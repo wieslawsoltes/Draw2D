@@ -62,7 +62,7 @@ namespace Draw2D.ViewModels.Shapes
             return result;
         }
 
-        public override void Draw(object dc, IShapeRenderer renderer, double dx, double dy, object db, object r)
+        public override void Draw(object dc, IShapeRenderer renderer, double dx, double dy, DrawMode mode, object db, object r)
         {
             var state = base.BeginTransform(dc, renderer);
 
@@ -70,13 +70,13 @@ namespace Draw2D.ViewModels.Shapes
             {
                 foreach (var guide in Guides)
                 {
-                    guide.Draw(dc, renderer, dx, dy, db, r);
+                    guide.Draw(dc, renderer, dx, dy, mode, db, r);
                 }
             }
 
             foreach (var shape in Shapes)
             {
-                shape.Draw(dc, renderer, dx, dy, db ,r);
+                shape.Draw(dc, renderer, dx, dy, mode, db ,r);
             }
 
             base.EndTransform(dc, renderer, state);

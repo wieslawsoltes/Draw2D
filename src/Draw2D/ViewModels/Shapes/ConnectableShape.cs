@@ -30,13 +30,16 @@ namespace Draw2D.ViewModels.Shapes
             return base.Invalidate(renderer, dx, dy);
         }
 
-        public override void Draw(object dc, IShapeRenderer renderer, double dx, double dy, object db, object r)
+        public override void Draw(object dc, IShapeRenderer renderer, double dx, double dy, DrawMode mode, object db, object r)
         {
-            foreach (var point in Points)
+            if (mode.HasFlag(DrawMode.Point))
             {
-                if (renderer.Selection.Selected.Contains(point))
+                foreach (var point in Points)
                 {
-                    point.Draw(dc, renderer, dx, dy, db , r);
+                    if (renderer.Selection.Selected.Contains(point))
+                    {
+                        point.Draw(dc, renderer, dx, dy, mode, db , r);
+                    }
                 }
             }
         }

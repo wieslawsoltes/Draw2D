@@ -85,32 +85,35 @@ namespace Draw2D.ViewModels.Shapes
         {
             var state = base.BeginTransform(dc, renderer);
 
-            if (Style != null)
+            if (Style != null && if (mode.HasFlag(DrawMode.Shape)))
             {
                 renderer.DrawCubicBezier(dc, this, Style, dx, dy);
             }
 
-            if (renderer.Selection.Selected.Contains(_startPoint))
+            if (mode.HasFlag(DrawMode.Point))
             {
-                _startPoint.Draw(dc, renderer, dx, dy, db, r);
+                if (renderer.Selection.Selected.Contains(_startPoint))
+                {
+                    _startPoint.Draw(dc, renderer, dx, dy, db, r);
+                }
+    
+                if (renderer.Selection.Selected.Contains(_point1))
+                {
+                    _point1.Draw(dc, renderer, dx, dy, db, r);
+                }
+    
+                if (renderer.Selection.Selected.Contains(_point2))
+                {
+                    _point2.Draw(dc, renderer, dx, dy, db, r);
+                }
+    
+                if (renderer.Selection.Selected.Contains(_point3))
+                {
+                    _point3.Draw(dc, renderer, dx, dy, db, r);
+                }
             }
 
-            if (renderer.Selection.Selected.Contains(_point1))
-            {
-                _point1.Draw(dc, renderer, dx, dy, db, r);
-            }
-
-            if (renderer.Selection.Selected.Contains(_point2))
-            {
-                _point2.Draw(dc, renderer, dx, dy, db, r);
-            }
-
-            if (renderer.Selection.Selected.Contains(_point3))
-            {
-                _point3.Draw(dc, renderer, dx, dy, db, r);
-            }
-
-            base.Draw(dc, renderer, dx, dy, db, r);
+            base.Draw(dc, renderer, dx, dy, mode, db, r);
             base.EndTransform(dc, renderer, state);
         }
 

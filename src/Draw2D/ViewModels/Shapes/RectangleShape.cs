@@ -47,26 +47,29 @@ namespace Draw2D.ViewModels.Shapes
             return result;
         }
 
-        public override void Draw(object dc, IShapeRenderer renderer, double dx, double dy, object db, object r)
+        public override void Draw(object dc, IShapeRenderer renderer, double dx, double dy, DrawMode mode, object db, object r)
         {
             var state = base.BeginTransform(dc, renderer);
 
-            if (Style != null)
+            if (Style != null && mode.HasFlag(DrawMode.Shape))
             {
                 renderer.DrawRectangle(dc, this, Style, dx, dy);
             }
 
-            if (renderer.Selection.Selected.Contains(TopLeft))
+            if (mode.HasFlag(DrawMode.Point))
             {
-                TopLeft.Draw(dc, renderer, dx, dy, db, r);
+                if (renderer.Selection.Selected.Contains(TopLeft))
+                {
+                    TopLeft.Draw(dc, renderer, dx, dy, mode, db, r);
+                }
+    
+                if (renderer.Selection.Selected.Contains(BottomRight))
+                {
+                    BottomRight.Draw(dc, renderer, dx, dy, mode, db, r);
+                }
             }
 
-            if (renderer.Selection.Selected.Contains(BottomRight))
-            {
-                BottomRight.Draw(dc, renderer, dx, dy, db, r);
-            }
-
-            base.Draw(dc, renderer, dx, dy, db, r);
+            base.Draw(dc, renderer, dx, dy, mode, db, r);
             base.EndTransform(dc, renderer, state);
         }
 
