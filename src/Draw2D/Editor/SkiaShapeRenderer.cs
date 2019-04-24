@@ -100,7 +100,7 @@ namespace Draw2D.Editor
             return ToSKMatrix(m.M11, m.M12, m.M21, m.M22, m.OffsetX, m.OffsetY);
         }
 
-        public static SKPath ToGeometry(CubicBezierShape cubicBezier, ShapeStyle style, double dx, double dy)
+        public static SKPath ToGeometry(CubicBezierShape cubicBezier, double dx, double dy)
         {
             var geometry = new SKPath();
             geometry.MoveTo(ToPoint(cubicBezier.StartPoint, dx, dy));
@@ -111,7 +111,7 @@ namespace Draw2D.Editor
             return geometry;
         }
 
-        public static SKPath ToGeometry(QuadraticBezierShape quadraticBezier, ShapeStyle style, double dx, double dy)
+        public static SKPath ToGeometry(QuadraticBezierShape quadraticBezier, double dx, double dy)
         {
             var geometry = new SKPath();
             geometry.MoveTo(ToPoint(quadraticBezier.StartPoint, dx, dy));
@@ -121,7 +121,7 @@ namespace Draw2D.Editor
             return geometry;
         }
 
-        public static SKPath ToGeometry(PathShape path, ShapeStyle style, double dx, double dy)
+        public static SKPath ToGeometry(PathShape path, double dx, double dy)
         {
             var geometry = new SKPath
             {
@@ -259,7 +259,7 @@ namespace Draw2D.Editor
             var canvas = dc as SKCanvas;
             using (var brush = ToSKPaintBrush(style.Fill))
             using (var pen = ToSKPaintPen(style))
-            using (var geometry = ToGeometry(cubicBezier, style, dx, dy))
+            using (var geometry = ToGeometry(cubicBezier, dx, dy))
             {
                 if (style.IsFilled)
                 {
@@ -277,7 +277,7 @@ namespace Draw2D.Editor
             var canvas = dc as SKCanvas;
             using (var brush = ToSKPaintBrush(style.Fill))
             using (var pen = ToSKPaintPen(style))
-            using (var geometry = ToGeometry(quadraticBezier, style, dx, dy))
+            using (var geometry = ToGeometry(quadraticBezier, dx, dy))
             {
                 if (style.IsFilled)
                 {
@@ -295,7 +295,7 @@ namespace Draw2D.Editor
             var canvas = dc as SKCanvas;
             using (var brush = ToSKPaintBrush(style.Fill))
             using (var pen = ToSKPaintPen(style))
-            using (var geometry = ToGeometry(path, style, dx, dy))
+            using (var geometry = ToGeometry(path, dx, dy))
             {
                 if (style.IsFilled)
                 {
@@ -311,10 +311,10 @@ namespace Draw2D.Editor
         public void DrawRectangle(object dc, RectangleShape rectangle, ShapeStyle style, double dx, double dy)
         {
             var canvas = dc as SKCanvas;
+            var rect = ToRect(rectangle.TopLeft, rectangle.BottomRight, dx, dy);
             using (var brush = ToSKPaintBrush(style.Fill))
             using (var pen = ToSKPaintPen(style))
             {
-                var rect = ToRect(rectangle.TopLeft, rectangle.BottomRight, dx, dy);
                 if (style.IsFilled)
                 {
                     canvas.DrawRect(rect, brush);
@@ -329,10 +329,10 @@ namespace Draw2D.Editor
         public void DrawEllipse(object dc, EllipseShape ellipse, ShapeStyle style, double dx, double dy)
         {
             var canvas = dc as SKCanvas;
+            var rect = ToRect(ellipse.TopLeft, ellipse.BottomRight, dx, dy);
             using (var brush = ToSKPaintBrush(style.Fill))
             using (var pen = ToSKPaintPen(style))
             {
-                var rect = ToRect(ellipse.TopLeft, ellipse.BottomRight, dx, dy);
                 if (style.IsFilled)
                 {
                     canvas.DrawOval(rect, brush);
