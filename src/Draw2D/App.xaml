@@ -11,26 +11,26 @@
         <StyleInclude Source="avares://Avalonia.Themes.Default/DefaultTheme.xaml"/>
         <StyleInclude Source="avares://Avalonia.Themes.Default/Accents/BaseLight.xaml"/>
         <Style Selector="Border.default">
-            <Setter Property="Margin" Value="0"/>
             <Setter Property="Padding" Value="0"/>
+            <Setter Property="Margin" Value="0"/>
             <Setter Property="BorderBrush" Value="{DynamicResource ThemeBorderLightBrush}"/>
             <Setter Property="BorderThickness" Value="0"/>
         </Style>
         <Style Selector="Border.zoom">
-            <Setter Property="Margin" Value="5"/>
             <Setter Property="Padding" Value="0"/>
+            <Setter Property="Margin" Value="5"/>
             <Setter Property="BorderBrush" Value="{DynamicResource ThemeBorderLightBrush}"/>
             <Setter Property="BorderThickness" Value="1"/>
         </Style>
         <Style Selector="Border.clip">
-            <Setter Property="Margin" Value="0"/>
             <Setter Property="Padding" Value="0"/>
+            <Setter Property="Margin" Value="0"/>
             <Setter Property="BorderThickness" Value="0"/>
         </Style>
         <Style Selector="Button.default">
+            <Setter Property="Padding" Value="1"/>
+            <Setter Property="Margin" Value="2"/>
             <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="Margin" Value="0"/>
-            <Setter Property="Padding" Value="0"/>
             <Setter Property="FontSize" Value="{DynamicResource FontSizeNormal}"/>
             <Setter Property="BorderThickness" Value="1"/>
         </Style>
@@ -41,12 +41,13 @@
             <Setter Property="Background" Value="{DynamicResource ThemeControlDarkBrush}"/>
         </Style>
         <Style Selector="CheckBox.default">
-            <Setter Property="Margin" Value="0,1,0,1"/>
+            <Setter Property="Padding" Value="2"/>
+            <Setter Property="Margin" Value="2"/>
             <Setter Property="FontSize" Value="{DynamicResource FontSizeNormal}"/>
             <Setter Property="BorderThickness" Value="1"/>
         </Style>
         <Style Selector="DropDown.default">
-            <Setter Property="Padding" Value="4,0,4,0"/>
+            <Setter Property="Padding" Value="2"/>
             <Setter Property="Margin" Value="2"/>
             <Setter Property="FontSize" Value="{DynamicResource FontSizeNormal}"/>
             <Setter Property="BorderThickness" Value="1"/>
@@ -74,35 +75,36 @@
             </Setter>
         </Style>
         <Style Selector="ListBox.default">
-            <Setter Property="Margin" Value="0"/>
-            <Setter Property="Padding" Value="0"/>
+            <Setter Property="Padding" Value="2"/>
+            <Setter Property="Margin" Value="2"/>
             <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="AutoScrollToSelectedItem" Value="True"/>
         </Style>
         <Style Selector="Slider.default">
+            <Setter Property="Padding" Value="2"/>
+            <Setter Property="Margin" Value="2"/>
             <Setter Property="Orientation" Value="Horizontal"/>
-            <Setter Property="Margin" Value="1"/>
             <Setter Property="HorizontalAlignment" Value="Stretch"/>
             <Setter Property="VerticalAlignment" Value="Stretch"/>
             <Setter Property="IsSnapToTickEnabled" Value="True"/>
             <Setter Property="TickFrequency" Value="0.1"/>
         </Style>
         <Style Selector="TabControl.default">
-            <Setter Property="Margin" Value="0"/>
-            <Setter Property="Padding" Value="0"/>
+            <Setter Property="Padding" Value="2"/>
+            <Setter Property="Margin" Value="2"/>
         </Style>
         <Style Selector="TabItem.default">
-            <Setter Property="Margin" Value="0"/>
-            <Setter Property="Padding" Value="4"/>
+            <Setter Property="Padding" Value="2"/>
+            <Setter Property="Margin" Value="2"/>
             <Setter Property="FontSize" Value="{DynamicResource FontSizeNormal}"/>
             <Setter Property="FontWeight" Value="Normal"/>
         </Style>
         <Style Selector="TextBlock.default">
             <Setter Property="Margin" Value="2"/>
-            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="FontSize" Value="{DynamicResource FontSizeNormal}"/>
         </Style>
         <Style Selector="TextBox.default">
-            <Setter Property="Padding" Value="1"/>
+            <Setter Property="Padding" Value="2"/>
             <Setter Property="Margin" Value="2"/>
             <Setter Property="FontSize" Value="{DynamicResource FontSizeNormal}"/>
             <Setter Property="BorderThickness" Value="1"/>
@@ -111,8 +113,8 @@
             <Setter Property="BorderThickness" Value="1"/>
         </Style>
         <Style Selector="TreeView.default">
-            <Setter Property="Margin" Value="0"/>
-            <Setter Property="Padding" Value="0"/>
+            <Setter Property="Padding" Value="2"/>
+            <Setter Property="Margin" Value="2"/>
             <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="AutoScrollToSelectedItem" Value="True"/>
         </Style>
