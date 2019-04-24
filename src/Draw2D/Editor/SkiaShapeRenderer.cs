@@ -348,33 +348,21 @@ namespace Draw2D.Editor
         public void DrawText(object dc, TextShape text, ShapeStyle style, double dx, double dy)
         {
             var canvas = dc as SKCanvas;
-            using (var brush = ToSKPaintBrush(style.Fill))
-            using (var pen = ToSKPaintPen(style))
+            var rect = ToRect(text.TopLeft, text.BottomRight, dx, dy);
+            using (var paint = ToSKPaintBrush(style.Stroke))
+            using (var tf = SKTypeface.FromFamilyName("Calibri", SKFontStyleWeight.Normal, SKFontStyleWidth.Normal, SKFontStyleSlant.Upright))
             {
-                var rect = ToRect(text.TopLeft, text.BottomRight, dx, dy);
-                //if (style.IsFilled)
-                //{
-                //    canvas.DrawRect(rect, brush);
-                //}
-                //if (style.IsStroked)
-                //{
-                //    canvas.DrawRect(rect, pen);
-                //}
-                using (var paint = ToSKPaintBrush(style.Stroke))
-                using (var tf = SKTypeface.FromFamilyName("Calibri", SKFontStyleWeight.Normal, SKFontStyleWidth.Normal, SKFontStyleSlant.Upright))
-                {
-                    paint.TextEncoding = SKTextEncoding.Utf16;
-                    paint.TextSize = 12;
+                paint.TextEncoding = SKTextEncoding.Utf16;
+                paint.TextSize = 12;
 
-                    var fm = paint.FontMetrics;
-                    float offset = -(fm.Top + fm.Bottom);
+                var fm = paint.FontMetrics;
+                float offset = -(fm.Top + fm.Bottom);
 
-                    SKRect bounds = new SKRect();
-                    paint.MeasureText(text.Text.Value, ref bounds);
-                    var origin = GetTextOrigin(2, 2, ref rect, ref bounds);
+                SKRect bounds = new SKRect();
+                paint.MeasureText(text.Text.Value, ref bounds);
+                var origin = GetTextOrigin(2, 2, ref rect, ref bounds);
 
-                    canvas.DrawText(text.Text.Value, origin.X, origin.Y + offset, paint);
-                }
+                canvas.DrawText(text.Text.Value, origin.X, origin.Y + offset, paint);
             }
         }
     }

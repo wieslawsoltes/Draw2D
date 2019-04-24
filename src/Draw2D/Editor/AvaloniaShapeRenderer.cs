@@ -418,17 +418,6 @@ namespace Draw2D.Editor
             var cache = GetBrushCache(style);
             var _dc = dc as DrawingContext;
             var rect = ToRect(text.TopLeft, text.BottomRight, dx, dy);
-
-            //if (style.IsFilled)
-            //{
-            //    _dc.FillRectangle(cache?.Fill, rect);
-            //}
-
-            //if (style.IsStroked)
-            //{
-            //    _dc.DrawRectangle(cache?.StrokePen, rect);
-            //}
-
             if (text.Text != null)
             {
                 var ftc = GetTextCache(text, rect);
