@@ -60,7 +60,7 @@ namespace Draw2D.Editor
             {
                 using (var brush = SkiaShapeRenderer.ToSKPaintBrush(ctx.CurrentContainer.WorkBackground))
                 {
-                    canvas.DrawRect(SkiaShapeRenderer.ToRect(0.0, 0.0, ctx.CurrentContainer.Width, ctx.CurrentContainer.Height, brush);
+                    canvas.DrawRect(SkiaShapeRenderer.ToRect(0.0, 0.0, ctx.CurrentContainer.Width, ctx.CurrentContainer.Height), brush);
                 }
             }
 
