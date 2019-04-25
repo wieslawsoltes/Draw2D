@@ -44,17 +44,18 @@ namespace Draw2D.Editor
                 Selection = ctx.Selection
             };
 
+            canvas.Save();
+
             if (ctx.CurrentContainer.InputBackground != null)
             {
                 using (var brush = SkiaShapeRenderer.ToSKPaintBrush(ctx.CurrentContainer.InputBackground))
                 {
-                    canvas.DrawRect(SkiaShapeRenderer.ToRect(0, 0, width, height), brush);
+                    canvas.DrawRect(SkiaShapeRenderer.ToRect(0.0, 0.0, width, height), brush);
                 }
             }
 
-            var matrix = SkiaShapeRenderer.Multiply(SkiaShapeRenderer.ToSKMatrix(zx, 0.0, 0.0, zy, dx, dy), canvas.TotalMatrix);
-            int count = canvas.Save();
-            canvas.SetMatrix(matrix);
+            canvas.Translate((float)dx, (float)dy);
+            canvas.Scale((float)zx, (float)zy);
 
             if (ctx.CurrentContainer.WorkBackground != null)
             {
@@ -73,7 +74,7 @@ namespace Draw2D.Editor
             ctx.Presenter.DrawDecorators(canvas, ctx.CurrentContainer, renderer, 0.0, 0.0, 1.0, 1.0, DrawMode.Shape);
             ctx.Presenter.DrawDecorators(canvas, ctx.WorkingContainer, renderer, 0.0, 0.0, 1.0, 1.0, DrawMode.Shape);
 
-            canvas.RestoreToCount(count);
+            canvas.Restore();
         }
 
         public void Render(IDrawingContextImpl context)
@@ -81,11 +82,7 @@ namespace Draw2D.Editor
             var canvas = (context as ISkiaDrawingContextImpl)?.SkCanvas;
             if (canvas != null)
             {
-                canvas.Save();
-
                 Draw(canvas, _ctx, _width, _height, _dx, _dy, _zx, _zy);
-
-                canvas.Restore();
             }
         }
 
