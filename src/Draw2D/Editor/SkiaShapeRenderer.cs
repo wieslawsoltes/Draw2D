@@ -54,9 +54,9 @@ namespace Draw2D.Editor
             return points.Select(point => new SKPoint((float)((point.X + dx) * zx), (float)((point.Y + dy) * zy)));
         }
 
-        public static SKRect ToRect(double left, double top, double right, double bottom, double zx, double zy)
+        public static SKRect ToRect(double left, double top, double right, double bottom)
         {
-            return new SKRect((float)(left * zx), (float)(top * zy), (float)(right * zx), (float)(bottom * zy));
+            return new SKRect((float)left, (float)top, (float)right, (float)bottom);
         }
 
         public static SKRect ToRect(PointShape p1, PointShape p2, double dx, double dy, double zx, double zy)
@@ -65,7 +65,7 @@ namespace Draw2D.Editor
             double top = Math.Min(p1.Y + dy, p2.Y + dy);
             double right = left + Math.Abs(Math.Max(p1.X + dx, p2.X + dx) - left);
             double bottom = top + Math.Abs(Math.Max(p1.Y + dy, p2.Y + dy) - top);
-            return new SKRect((float)left, (float)top, (float)right, (float)bottom, zx, zy);
+            return new SKRect((float)(left * zx), (float)(top * zy), (float)(right * zx), (float)(bottom * zy));
         }
 
         public static SKMatrix Multiply(SKMatrix value1, SKMatrix value2)
@@ -353,7 +353,7 @@ namespace Draw2D.Editor
             using (var tf = SKTypeface.FromFamilyName("Calibri", SKFontStyleWeight.Normal, SKFontStyleWidth.Normal, SKFontStyleSlant.Upright))
             {
                 paint.TextEncoding = SKTextEncoding.Utf16;
-                paint.TextSize = 12 * zx;
+                paint.TextSize = (float)(12.0 * zx);
 
                 var fm = paint.FontMetrics;
                 float offset = -(fm.Top + fm.Bottom);

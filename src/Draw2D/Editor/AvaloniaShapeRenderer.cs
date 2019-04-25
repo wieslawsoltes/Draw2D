@@ -118,7 +118,7 @@ namespace Draw2D.Editor
                 context.BeginFigure(ToPoint(quadraticBezier.StartPoint, dx, dy, zx, zy), false);
                 context.QuadraticBezierTo(
                     ToPoint(quadraticBezier.Point1, dx, dy, zx, zy),
-                    ToPoint(quadraticBezier.Point2, dx, , zx, zy));
+                    ToPoint(quadraticBezier.Point2, dx, dy, zx, zy));
                 context.EndFigure(false);
             }
 
@@ -341,7 +341,7 @@ namespace Draw2D.Editor
                             cache.Dispose();
                         }
                         var rect = ToRect(text.TopLeft, text.BottomRight, dx, dy, zx, zy);
-                        _formattedTextCache[text] = AvaloniaFormattedTextCache.FromTextShape(text, rect);
+                        _formattedTextCache[text] = AvaloniaFormattedTextCache.FromTextShape(text, rect, zx, zy);
                     }
                     break;
             }
@@ -363,7 +363,7 @@ namespace Draw2D.Editor
         {
             var cache = GetBrushCache(style);
             var _dc = dc as DrawingContext;
-            _dc.DrawLine(style.IsStroked ? cache?.StrokePen : null, ToPoint(line.StartPoint, dx, dy), ToPoint(line.Point, dx, dy));
+            _dc.DrawLine(style.IsStroked ? cache?.StrokePen : null, ToPoint(line.StartPoint, dx, dy, zx, zy), ToPoint(line.Point, dx, dy, zx, zy));
         }
 
         public void DrawCubicBezier(object dc, CubicBezierShape cubicBezier, ShapeStyle style, double dx, double dy, double zx, double zy)
