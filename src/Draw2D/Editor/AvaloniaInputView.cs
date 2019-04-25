@@ -115,8 +115,7 @@ namespace Draw2D.Editor
 
         private Point AdjustPoint(Point point, double dx, double dy, double zx, double zy)
         {
-            //return new Point((point.X - dx) / zx, (point.Y - dy) / zy);
-            return new Point(point.X - dx, point.Y - dy);
+            return new Point((point.X - dx) / zx, (point.Y - dy) / zy);
         }
 
         private void GetOffset(out double dx, out double dy, out double zx, out double zy)
@@ -212,7 +211,7 @@ namespace Draw2D.Editor
             {
                 var color = AvaloniaBrushCache.FromDrawColor(ctx.CurrentContainer.WorkBackground);
                 var brush = new SolidColorBrush(color);
-                context.FillRectangle(brush, new Rect(dx * zx, dy * zy, ctx.CurrentContainer.Width * zx, ctx.CurrentContainer.Height * zy));
+                context.FillRectangle(brush, new Rect(dx, dy, ctx.CurrentContainer.Width * zx, ctx.CurrentContainer.Height * zy));
             }
 
             ctx.Presenter.DrawContainer(context, ctx.CurrentContainer, ctx.Renderer, dx, dy, zx, zy, DrawMode.Shape, null, null);
