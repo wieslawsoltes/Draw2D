@@ -53,17 +53,17 @@ namespace Draw2D.ViewModels.Shapes
             }
         }
 
-        public override bool Invalidate(IShapeRenderer renderer, double dx, double dy, double zx, double zy)
+        public override bool Invalidate(IShapeRenderer renderer, double dx, double dy)
         {
-            bool result = base.Invalidate(renderer, dx, dy, zx, zy);
+            bool result = base.Invalidate(renderer, dx, dy);
 
-            result |= _startPoint?.Invalidate(renderer, dx, dy, zx, zy) ?? false;
-            result |= _point1?.Invalidate(renderer, dx, dy, zx, zy) ?? false;
-            result |= _point2?.Invalidate(renderer, dx, dy, zx, zy) ?? false;
+            result |= _startPoint?.Invalidate(renderer, dx, dy) ?? false;
+            result |= _point1?.Invalidate(renderer, dx, dy) ?? false;
+            result |= _point2?.Invalidate(renderer, dx, dy) ?? false;
 
             if (this.IsDirty || result == true)
             {
-                renderer.InvalidateCache(this, Style, dx, dy, zx, zy);
+                renderer.InvalidateCache(this, Style, dx, dy);
                 this.IsDirty = false;
                 result |= true;
             }
@@ -71,34 +71,34 @@ namespace Draw2D.ViewModels.Shapes
             return result;
         }
 
-        public override void Draw(object dc, IShapeRenderer renderer, double dx, double dy, double zx, double zy, DrawMode mode, object db, object r)
+        public override void Draw(object dc, IShapeRenderer renderer, double dx, double dy, DrawMode mode, object db, object r)
         {
             var state = base.BeginTransform(dc, renderer);
 
             if (Style != null && mode.HasFlag(DrawMode.Shape))
             {
-                renderer.DrawQuadraticBezier(dc, this, Style, dx, dy, zx, zy);
+                renderer.DrawQuadraticBezier(dc, this, Style, dx, dy);
             }
 
             if (mode.HasFlag(DrawMode.Point))
             {
                 if (renderer.Selection.Selected.Contains(_startPoint))
                 {
-                    _startPoint.Draw(dc, renderer, dx, dy, zx, zy, mode, db, r);
+                    _startPoint.Draw(dc, renderer, dx, dy, mode, db, r);
                 }
     
                 if (renderer.Selection.Selected.Contains(_point1))
                 {
-                    _point1.Draw(dc, renderer, dx, dy, zx, zy, mode, db, r);
+                    _point1.Draw(dc, renderer, dx, dy, mode, db, r);
                 }
     
                 if (renderer.Selection.Selected.Contains(_point2))
                 {
-                    _point2.Draw(dc, renderer, dx, dy, zx, zy, mode, db, r);
+                    _point2.Draw(dc, renderer, dx, dy, mode, db, r);
                 }
             }
 
-            base.Draw(dc, renderer, dx, dy, zx, zy, mode, db, r);
+            base.Draw(dc, renderer, dx, dy, mode, db, r);
             base.EndTransform(dc, renderer, state);
         }
 

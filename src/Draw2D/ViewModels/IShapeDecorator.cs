@@ -6,6 +6,6 @@ namespace Draw2D.ViewModels
 {
     public interface IShapeDecorator
     {
-        void Draw(object dc, BaseShape shape, IShapeRenderer renderer, ISelection selected, double dx, double dy, double zx, double zy, DrawMode mode);
+        void Draw(object dc, BaseShape shape, IShapeRenderer renderer, ISelection selected, double dx, double dy, DrawMode mode);
     }
 }

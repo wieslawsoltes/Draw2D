@@ -42,12 +42,10 @@ namespace Draw2D.ViewModels
         /// <param name="renderer">The generic renderer object used to draw shape.</param>
         /// <param name="dx">The X axis draw position offset.</param>
         /// <param name="dy">The Y axis draw position offset.</param>
-        /// <param name="zx">The X axis draw zoom scale.</param>
-        /// <param name="zy">The Y axis draw zoom scale.</param>
         /// <param name="mode">The drawing mode.</param>
         /// <param name="db">The properties database.</param>
         /// <param name="r">The database record.</param>
-        void Draw(object dc, IShapeRenderer renderer, double dx, double dy, double zx, double zy, DrawMode mode, object db, object r);
+        void Draw(object dc, IShapeRenderer renderer, double dx, double dy, DrawMode mode, object db, object r);
 
         /// <summary>
         /// Invalidates shape renderer cache.
@@ -55,9 +53,7 @@ namespace Draw2D.ViewModels
         /// <param name="renderer">The generic renderer object used to draw shape.</param>
         /// <param name="dx">The X axis draw position offset.</param>
         /// <param name="dy">The Y axis draw position offset.</param>
-        /// <param name="zx">The X axis draw zoom scale.</param>
-        /// <param name="zy">The Y axis draw zoom scale.</param>
         /// <returns>Returns true if shape was invalidated; otherwise, returns false.</returns>
-        bool Invalidate(IShapeRenderer renderer, double dx, double dy, double zx, double zy);
+        bool Invalidate(IShapeRenderer renderer, double dx, double dy);
     }
 }

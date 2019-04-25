@@ -1,4 +1,4 @@
-﻿// Copyright (c) Wiesław Šoltés. All rights reserved.
+// Copyright (c) Wiesław Šoltés. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using System;
 using System.Collections.Generic;
@@ -10,13 +10,13 @@ namespace Draw2D.ViewModels
     {
         public IDictionary<Type, IShapeDecorator> Decorators { get; set; }
 
-        public void DrawContainer(object dc, CanvasContainer container, IShapeRenderer renderer, double dx, double dy, double zx, double zy, DrawMode mode, object db, object r)
+        public void DrawContainer(object dc, CanvasContainer container, IShapeRenderer renderer, double dx, double dy, DrawMode mode, object db, object r)
         {
-            container.Invalidate(renderer, dx, dy, zx, zy);
-            container.Draw(dc, renderer, dx, dy, zx, zy, mode, db, r);
+            container.Invalidate(renderer, dx, dy);
+            container.Draw(dc, renderer, dx, dy, mode, db, r);
         }
 
-        public void DrawDecorators(object dc, CanvasContainer container, IShapeRenderer renderer, double dx, double dy, double zx, double zy, DrawMode mode)
+        public void DrawDecorators(object dc, CanvasContainer container, IShapeRenderer renderer, double dx, double dy, DrawMode mode)
         {
             var shapes = container.Shapes;
             var selection = renderer.Selection;
@@ -27,7 +27,7 @@ namespace Draw2D.ViewModels
                 {
                     if (Decorators.TryGetValue(shape.GetType(), out var helper))
                     {
-                        helper.Draw(dc, shape, renderer, selection, dx, dy, zx, zy, mode);
+                        helper.Draw(dc, shape, renderer, selection, dx, dy, mode);
                     }
                 }
             }

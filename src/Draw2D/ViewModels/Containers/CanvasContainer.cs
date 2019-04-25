@@ -85,7 +85,7 @@ namespace Draw2D.ViewModels.Containers
             }
         }
 
-        public override void Draw(object dc, IShapeRenderer renderer, double dx, double dy, double zx, double zy, DrawMode mode, object db, object r)
+        public override void Draw(object dc, IShapeRenderer renderer, double dx, double dy, DrawMode mode, object db, object r)
         {
             var state = BeginTransform(dc, renderer);
 
@@ -93,19 +93,19 @@ namespace Draw2D.ViewModels.Containers
             {
                 foreach (var shape in Guides)
                 {
-                    shape.Draw(dc, renderer, dx, dy, zx, zy, mode, db, r);
+                    shape.Draw(dc, renderer, dx, dy, mode, db, r);
                 }
             }
 
             foreach (var shape in Shapes)
             {
-                shape.Draw(dc, renderer, dx, dy, zx, zy, mode, db, r);
+                shape.Draw(dc, renderer, dx, dy, mode, db, r);
             }
 
             EndTransform(dc, renderer, state);
         }
 
-        public override bool Invalidate(IShapeRenderer renderer, double dx, double dy, double zx, double zy)
+        public override bool Invalidate(IShapeRenderer renderer, double dx, double dy)
         {
             bool result = false;
 
@@ -115,13 +115,13 @@ namespace Draw2D.ViewModels.Containers
             {
                 foreach (var guide in Guides)
                 {
-                    result |= guide.Invalidate(renderer, dx, dy, zx, zy);
+                    result |= guide.Invalidate(renderer, dx, dy);
                 }
             }
 
             foreach (var shape in Shapes)
             {
-                result |= shape.Invalidate(renderer, dx, dy, zx, zy);
+                result |= shape.Invalidate(renderer, dx, dy);
             }
 
             foreach (var point in points)

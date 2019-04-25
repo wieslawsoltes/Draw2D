@@ -59,23 +59,23 @@ namespace Draw2D.ViewModels.Shapes
             yield return this;
         }
 
-        public override bool Invalidate(IShapeRenderer renderer, double dx, double dy, double zx, double zy)
+        public override bool Invalidate(IShapeRenderer renderer, double dx, double dy)
         {
-            bool result = base.Invalidate(renderer, dx, dy, zx, zy);
+            bool result = base.Invalidate(renderer, dx, dy);
 
-            _template?.Invalidate(renderer, dx, dy, zx, zy);
+            _template?.Invalidate(renderer, dx, dy);
 
             return this.IsDirty | result;
         }
 
-        public override void Draw(object dc, IShapeRenderer renderer, double dx, double dy, double zx, double zy, DrawMode mode, object db, object r)
+        public override void Draw(object dc, IShapeRenderer renderer, double dx, double dy, DrawMode mode, object db, object r)
         {
             if (_template != null)
             {
                 var pointState = base.BeginTransform(dc, renderer);
 
-                double offsetX = X * zx;
-                double offsetY = Y * zy;
+                double offsetX = X;
+                double offsetY = Y;
 
                 if (_templateTransform.OffsetX != offsetX || _templateTransform.OffsetY != offsetY)
                 {
@@ -86,7 +86,7 @@ namespace Draw2D.ViewModels.Shapes
 
                 var templateState = renderer.PushMatrix(dc, _templateTransform);
 
-                _template.Draw(dc, renderer, dx, dy, zx, zy, DrawMode.Shape, db, r);
+                _template.Draw(dc, renderer, dx, dy, DrawMode.Shape, db, r);
 
                 renderer.PopMatrix(dc, templateState);
 

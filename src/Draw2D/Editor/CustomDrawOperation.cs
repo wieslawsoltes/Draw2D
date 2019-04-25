@@ -39,7 +39,7 @@ namespace Draw2D.Editor
 
         private void Draw(SKCanvas canvas, IToolContext ctx, double width, double height, double dx, double dy, double zx, double zy)
         {
-            var renderer = new SkiaShapeRenderer()
+            var renderer = new SkiaShapeRenderer(zx)
             {
                 Selection = ctx.Selection
             };
@@ -65,14 +65,14 @@ namespace Draw2D.Editor
                 }
             }
 
-            ctx.Presenter.DrawContainer(canvas, ctx.CurrentContainer, renderer, 0.0, 0.0, 1.0, 1.0, DrawMode.Shape, null, null);
-            ctx.Presenter.DrawContainer(canvas, ctx.CurrentContainer, renderer, 0.0, 0.0, 1.0, 1.0, DrawMode.Point, null, null);
+            ctx.Presenter.DrawContainer(canvas, ctx.CurrentContainer, renderer, 0.0, 0.0, DrawMode.Shape, null, null);
+            ctx.Presenter.DrawContainer(canvas, ctx.CurrentContainer, renderer, 0.0, 0.0, DrawMode.Point, null, null);
 
-            ctx.Presenter.DrawContainer(canvas, ctx.WorkingContainer, renderer, 0.0, 0.0, 1.0, 1.0, DrawMode.Shape, null, null);
-            ctx.Presenter.DrawContainer(canvas, ctx.WorkingContainer, renderer, 0.0, 0.0, 1.0, 1.0, DrawMode.Point, null, null);
+            ctx.Presenter.DrawContainer(canvas, ctx.WorkingContainer, renderer, 0.0, 0.0, DrawMode.Shape, null, null);
+            ctx.Presenter.DrawContainer(canvas, ctx.WorkingContainer, renderer, 0.0, 0.0, DrawMode.Point, null, null);
 
-            ctx.Presenter.DrawDecorators(canvas, ctx.CurrentContainer, renderer, 0.0, 0.0, 1.0, 1.0, DrawMode.Shape);
-            ctx.Presenter.DrawDecorators(canvas, ctx.WorkingContainer, renderer, 0.0, 0.0, 1.0, 1.0, DrawMode.Shape);
+            ctx.Presenter.DrawDecorators(canvas, ctx.CurrentContainer, renderer, 0.0, 0.0, DrawMode.Shape);
+            ctx.Presenter.DrawDecorators(canvas, ctx.WorkingContainer, renderer, 0.0, 0.0, DrawMode.Shape);
 
             canvas.Restore();
         }

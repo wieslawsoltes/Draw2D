@@ -216,21 +216,25 @@ namespace Draw2D.Editor
                 context.FillRectangle(brush, new Rect(0, 0, width, height));
             }
 
+            var state = context.PushPreTransform(new Matrix(zx, 0.0, 0.0, zy, dx, dy));
+
             if (ctx.CurrentContainer.WorkBackground != null)
             {
                 var color = AvaloniaBrushCache.FromDrawColor(ctx.CurrentContainer.WorkBackground);
                 var brush = new SolidColorBrush(color);
-                context.FillRectangle(brush, new Rect(dx * zx, dy * zy, ctx.CurrentContainer.Width * zx, ctx.CurrentContainer.Height * zy));
+                context.FillRectangle(brush, new Rect(0.0, 0.0, ctx.CurrentContainer.Width, ctx.CurrentContainer.Height));
             }
 
-            ctx.Presenter.DrawContainer(context, ctx.CurrentContainer, ctx.Renderer, dx, dy, zx, zy, DrawMode.Shape, null, null);
-            ctx.Presenter.DrawContainer(context, ctx.CurrentContainer, ctx.Renderer, dx, dy, zx, zy, DrawMode.Point, null, null);
+            ctx.Presenter.DrawContainer(context, ctx.CurrentContainer, ctx.Renderer, 0.0, 0.0, DrawMode.Shape, null, null);
+            ctx.Presenter.DrawContainer(context, ctx.CurrentContainer, ctx.Renderer, 0.0, 0.0, DrawMode.Point, null, null);
 
-            ctx.Presenter.DrawContainer(context, ctx.WorkingContainer, ctx.Renderer, dx, dy, zx, zy, DrawMode.Shape, null, null);
-            ctx.Presenter.DrawContainer(context, ctx.WorkingContainer, ctx.Renderer, dx, dy, zx, zy, DrawMode.Point, null, null);
+            ctx.Presenter.DrawContainer(context, ctx.WorkingContainer, ctx.Renderer, 0.0, 0.0, DrawMode.Shape, null, null);
+            ctx.Presenter.DrawContainer(context, ctx.WorkingContainer, ctx.Renderer, 0.0, 0.0, DrawMode.Point, null, null);
 
-            ctx.Presenter.DrawDecorators(context, ctx.CurrentContainer, ctx.Renderer, dx, dy, zx, zy, DrawMode.Shape);
-            ctx.Presenter.DrawDecorators(context, ctx.WorkingContainer, ctx.Renderer, dx, dy, zx, zy, DrawMode.Shape);
+            ctx.Presenter.DrawDecorators(context, ctx.CurrentContainer, ctx.Renderer, 0.0, 0.0, DrawMode.Shape);
+            ctx.Presenter.DrawDecorators(context, ctx.WorkingContainer, ctx.Renderer, 0.0, 0.0, DrawMode.Shape);
+
+            state.Dispose();
         }
 
         public override void Render(DrawingContext context)
