@@ -52,22 +52,28 @@ namespace Draw2D.Editor
                 }
             }
 
+            var matrix = SkiaShapeRenderer.Multiply(SkiaShapeRenderer.ToSKMatrix(zx, 0.0, 0.0, zy, dx, dy), canvas.TotalMatrix);
+            int count = canvas.Save();
+            canvas.SetMatrix(matrix);
+
             if (ctx.CurrentContainer.WorkBackground != null)
             {
                 using (var brush = SkiaShapeRenderer.ToSKPaintBrush(ctx.CurrentContainer.WorkBackground))
                 {
-                    canvas.DrawRect(SkiaShapeRenderer.ToRect(dx * zx, dy * zy, (ctx.CurrentContainer.Width + dx) * zx, (ctx.CurrentContainer.Height + dy) * zy), brush);
+                    canvas.DrawRect(SkiaShapeRenderer.ToRect(0.0, 0.0, ctx.CurrentContainer.Width, ctx.CurrentContainer.Height, brush);
                 }
             }
 
-            ctx.Presenter.DrawContainer(canvas, ctx.CurrentContainer, renderer, dx, dy, zx, zy, DrawMode.Shape, null, null);
-            ctx.Presenter.DrawContainer(canvas, ctx.CurrentContainer, renderer, dx, dy, zx, zy, DrawMode.Point, null, null);
+            ctx.Presenter.DrawContainer(canvas, ctx.CurrentContainer, renderer, 0.0, 0.0, 1.0, 1.0, DrawMode.Shape, null, null);
+            ctx.Presenter.DrawContainer(canvas, ctx.CurrentContainer, renderer, 0.0, 0.0, 1.0, 1.0, DrawMode.Point, null, null);
 
-            ctx.Presenter.DrawContainer(canvas, ctx.WorkingContainer, renderer, dx, dy, zx, zy, DrawMode.Shape, null, null);
-            ctx.Presenter.DrawContainer(canvas, ctx.WorkingContainer, renderer, dx, dy, zx, zy, DrawMode.Point, null, null);
+            ctx.Presenter.DrawContainer(canvas, ctx.WorkingContainer, renderer, 0.0, 0.0, 1.0, 1.0, DrawMode.Shape, null, null);
+            ctx.Presenter.DrawContainer(canvas, ctx.WorkingContainer, renderer, 0.0, 0.0, 1.0, 1.0, DrawMode.Point, null, null);
 
-            ctx.Presenter.DrawDecorators(canvas, ctx.CurrentContainer, renderer, dx, dy, zx, zy, DrawMode.Shape);
-            ctx.Presenter.DrawDecorators(canvas, ctx.WorkingContainer, renderer, dx, dy, zx, zy, DrawMode.Shape);
+            ctx.Presenter.DrawDecorators(canvas, ctx.CurrentContainer, renderer, 0.0, 0.0, 1.0, 1.0, DrawMode.Shape);
+            ctx.Presenter.DrawDecorators(canvas, ctx.WorkingContainer, renderer, 0.0, 0.0, 1.0, 1.0, DrawMode.Shape);
+
+            canvas.RestoreToCount(count);
         }
 
         public void Render(IDrawingContextImpl context)
