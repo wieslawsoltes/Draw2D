@@ -113,6 +113,12 @@ namespace Draw2D.Editor
             return modifier;
         }
 
+        private Point AdjustPoint(Point point, double dx, double dy, double zx, double zy)
+        {
+            //return new Point((point.X - dx) / zx, (point.Y - dy) / zy);
+            return new Point(point.X - dx, point.Y - dy);
+        }
+
         private void GetOffset(out double dx, out double dy, out double zx, out double zy)
         {
             dx = _zoomState.OffsetX;
@@ -132,9 +138,9 @@ namespace Draw2D.Editor
             {
                 if (this.DataContext is IToolContext ctx)
                 {
-                    var point = e.GetPosition(this);
                     GetOffset(out double dx, out double dy, out double zx, out double zy);
-                    ctx.CurrentTool.LeftDown(ctx, (point.X - dx) / zx, (point.Y - dy) / zy, GetModifier(e.InputModifiers));
+                    var point = AdjustPoint(e.GetPosition(this), dx, dy, zx, zy);
+                    ctx.CurrentTool.LeftDown(ctx, point.X, point.Y, GetModifier(e.InputModifiers));
                 }
             }
             else if (e.MouseButton == MouseButton.Right)
@@ -143,9 +149,9 @@ namespace Draw2D.Editor
 
                 if (this.DataContext is IToolContext ctx && _zoomState.IsPanning == false)
                 {
-                    var point = e.GetPosition(this);
                     GetOffset(out double dx, out double dy, out double zx, out double zy);
-                    ctx.CurrentTool.RightDown(ctx, (point.X - dx) / zx, (point.Y - dy) / zy, GetModifier(e.InputModifiers));
+                    var point = AdjustPoint(e.GetPosition(this), dx, dy, zx, zy);
+                    ctx.CurrentTool.RightDown(ctx, point.X, point.Y, GetModifier(e.InputModifiers));
                 }
             }
         }
@@ -156,15 +162,15 @@ namespace Draw2D.Editor
             {
                 if (this.DataContext is IToolContext ctx)
                 {
-                    var point = e.GetPosition(this);
                     GetOffset(out double dx, out double dy, out double zx, out double zy);
+                    var point = AdjustPoint(e.GetPosition(this), dx, dy, zx, zy);
                     if (ctx.Mode == EditMode.Mouse)
                     {
-                        ctx.CurrentTool.LeftUp(ctx, (point.X - dx) / zx, (point.Y - dy) / zy, GetModifier(e.InputModifiers));
+                        ctx.CurrentTool.LeftUp(ctx, point.X, point.Y, GetModifier(e.InputModifiers));
                     }
                     else if (ctx.Mode == EditMode.Touch)
                     {
-                        ctx.CurrentTool.LeftDown(ctx, (point.X - dx) / zx, (point.Y - dy) / zy, GetModifier(e.InputModifiers));
+                        ctx.CurrentTool.LeftDown(ctx, point.X, point.Y, GetModifier(e.InputModifiers));
                     }
                 }
             }
@@ -174,9 +180,9 @@ namespace Draw2D.Editor
 
                 if (this.DataContext is IToolContext ctx && _zoomState.IsPanning == false)
                 {
-                    var point = e.GetPosition(this);
                     GetOffset(out double dx, out double dy, out double zx, out double zy);
-                    ctx.CurrentTool.RightUp(ctx, (point.X - dx) / zx, (point.Y - dy) / zy, GetModifier(e.InputModifiers));
+                    var point = AdjustPoint(e.GetPosition(this), dx, dy, zx, zy);
+                    ctx.CurrentTool.RightUp(ctx, point.X, point.Y, GetModifier(e.InputModifiers));
                 }
             }
         }
@@ -187,9 +193,9 @@ namespace Draw2D.Editor
 
             if (this.DataContext is IToolContext ctx && _zoomState.IsPanning == false)
             {
-                var point = e.GetPosition(this);
                 GetOffset(out double dx, out double dy, out double zx, out double zy);
-                ctx.CurrentTool.Move(ctx, (point.X - dx) / zx, (point.Y - dy) / zy, GetModifier(e.InputModifiers));
+                var point = AdjustPoint(e.GetPosition(this), dx, dy, zx, zy);
+                ctx.CurrentTool.Move(ctx, point.X, point.Y, GetModifier(e.InputModifiers));
             }
         }
 
