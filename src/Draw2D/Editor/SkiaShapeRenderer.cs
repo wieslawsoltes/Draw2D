@@ -365,7 +365,7 @@ namespace Draw2D.Editor
             using (var tf = SKTypeface.FromFamilyName("Calibri", SKFontStyleWeight.Normal, SKFontStyleWidth.Normal, SKFontStyleSlant.Upright))
             {
                 paint.TextEncoding = SKTextEncoding.Utf16;
-                paint.TextSize = (float)(12.0 * _scale);
+                paint.TextSize = (float)(12.0);
 
                 var fm = paint.FontMetrics;
                 float offset = -(fm.Top + fm.Bottom);
