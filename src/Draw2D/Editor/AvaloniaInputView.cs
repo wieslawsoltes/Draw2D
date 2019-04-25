@@ -120,12 +120,12 @@ namespace Draw2D.Editor
 
         private Point AdjustZoomPoint(Point point)
         {
-            GetOffset(out double dx, out double dy, out double zx, out double zy);
-            return new Point((point.X - dx) / zx, (point.Y - dy) / zy);
+            return new Point(point.X, point.Y);
         }
 
-        private Point AdjustPoint(Point point, double dx, double dy, double zx, double zy)
+        private Point AdjustToolPoint(Point point)
         {
+            GetOffset(out double dx, out double dy, out double zx, out double zy);
             return new Point((point.X - dx) / zx, (point.Y - dy) / zy);
         }
 
@@ -141,9 +141,8 @@ namespace Draw2D.Editor
             {
                 if (this.DataContext is IToolContext ctx)
                 {
-                    GetOffset(out double dx, out double dy, out double zx, out double zy);
-                    var point = AdjustPoint(e.GetPosition(this), dx, dy, zx, zy);
-                    ctx.CurrentTool.LeftDown(ctx, point.X, point.Y, GetModifier(e.InputModifiers));
+                    var tpoint = AdjustToolPoint(e.GetPosition(this));
+                    ctx.CurrentTool.LeftDown(ctx, tpoint.X, tpoint.Y, GetModifier(e.InputModifiers));
                 }
             }
             else if (e.MouseButton == MouseButton.Right)
@@ -153,9 +152,8 @@ namespace Draw2D.Editor
 
                 if (this.DataContext is IToolContext ctx && _zoomState.IsPanning == false)
                 {
-                    GetOffset(out double dx, out double dy, out double zx, out double zy);
-                    var point = AdjustPoint(e.GetPosition(this), dx, dy, zx, zy);
-                    ctx.CurrentTool.RightDown(ctx, point.X, point.Y, GetModifier(e.InputModifiers));
+                    var tpoint = AdjustToolPoint(e.GetPosition(this));
+                    ctx.CurrentTool.RightDown(ctx, tpoint.X, tpoint.Y, GetModifier(e.InputModifiers));
                 }
             }
         }
@@ -166,15 +164,14 @@ namespace Draw2D.Editor
             {
                 if (this.DataContext is IToolContext ctx)
                 {
-                    GetOffset(out double dx, out double dy, out double zx, out double zy);
-                    var point = AdjustPoint(e.GetPosition(this), dx, dy, zx, zy);
+                    var tpoint = AdjustToolPoint(e.GetPosition(this));
                     if (ctx.Mode == EditMode.Mouse)
                     {
-                        ctx.CurrentTool.LeftUp(ctx, point.X, point.Y, GetModifier(e.InputModifiers));
+                        ctx.CurrentTool.LeftUp(ctx, tpoint.X, tpoint.Y, GetModifier(e.InputModifiers));
                     }
                     else if (ctx.Mode == EditMode.Touch)
                     {
-                        ctx.CurrentTool.LeftDown(ctx, point.X, point.Y, GetModifier(e.InputModifiers));
+                        ctx.CurrentTool.LeftDown(ctx, tpoint.X, tpoint.Y, GetModifier(e.InputModifiers));
                     }
                 }
             }
@@ -185,9 +182,8 @@ namespace Draw2D.Editor
 
                 if (this.DataContext is IToolContext ctx && _zoomState.IsPanning == false)
                 {
-                    GetOffset(out double dx, out double dy, out double zx, out double zy);
-                    var point = AdjustPoint(e.GetPosition(this), dx, dy, zx, zy);
-                    ctx.CurrentTool.RightUp(ctx, point.X, point.Y, GetModifier(e.InputModifiers));
+                    var tpoint = AdjustToolPoint(e.GetPosition(this));
+                    ctx.CurrentTool.RightUp(ctx, tpoint.X, tpoint.Y, GetModifier(e.InputModifiers));
                 }
             }
         }
@@ -199,9 +195,8 @@ namespace Draw2D.Editor
 
             if (this.DataContext is IToolContext ctx && _zoomState.IsPanning == false)
             {
-                GetOffset(out double dx, out double dy, out double zx, out double zy);
-                var point = AdjustPoint(e.GetPosition(this), dx, dy, zx, zy);
-                ctx.CurrentTool.Move(ctx, point.X, point.Y, GetModifier(e.InputModifiers));
+                var tpoint = AdjustToolPoint(e.GetPosition(this));
+                ctx.CurrentTool.Move(ctx, tpoint.X, tpoint.Y, GetModifier(e.InputModifiers));
             }
         }
 
