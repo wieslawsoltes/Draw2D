@@ -44,28 +44,28 @@ namespace Draw2D.Editor
             };
         }
 
-        public static SKPoint ToPoint(PointShape point, double dx, double dy)
+        public static SKPoint ToPoint(PointShape point, double dx, double dy, double zx, double zy)
         {
-            return new SKPoint((float)(point.X + dx), (float)(point.Y + dy));
+            return new SKPoint((float)((point.X + dx) * zx), (float)((point.Y + dy) * zy));
         }
 
-        public static IEnumerable<SKPoint> ToPoints(IEnumerable<PointShape> points, double dx, double dy)
+        public static IEnumerable<SKPoint> ToPoints(IEnumerable<PointShape> points, double dx, double dy, double zx, double zy)
         {
-            return points.Select(point => new SKPoint((float)(point.X + dx), (float)(point.Y + dy)));
+            return points.Select(point => new SKPoint((float)((point.X + dx) * zx), (float)((point.Y + dy) * zy)));
         }
 
-        public static SKRect ToRect(double left, double top, double right, double bottom)
+        public static SKRect ToRect(double left, double top, double right, double bottom, double zx, double zy)
         {
-            return new SKRect((float)left, (float)top, (float)right, (float)bottom);
+            return new SKRect((float)(left * zx), (float)(top * zy), (float)(right * zx), (float)(bottom * zy));
         }
 
-        public static SKRect ToRect(PointShape p1, PointShape p2, double dx, double dy)
+        public static SKRect ToRect(PointShape p1, PointShape p2, double dx, double dy, double zx, double zy)
         {
             double left = Math.Min(p1.X + dx, p2.X + dx);
             double top = Math.Min(p1.Y + dy, p2.Y + dy);
             double right = left + Math.Abs(Math.Max(p1.X + dx, p2.X + dx) - left);
             double bottom = top + Math.Abs(Math.Max(p1.Y + dy, p2.Y + dy) - top);
-            return new SKRect((float)left, (float)top, (float)right, (float)bottom);
+            return new SKRect((float)left, (float)top, (float)right, (float)bottom, zx, zy);
         }
 
         public static SKMatrix Multiply(SKMatrix value1, SKMatrix value2)
@@ -100,28 +100,28 @@ namespace Draw2D.Editor
             return ToSKMatrix(m.M11, m.M12, m.M21, m.M22, m.OffsetX, m.OffsetY);
         }
 
-        public static SKPath ToGeometry(CubicBezierShape cubicBezier, double dx, double dy)
+        public static SKPath ToGeometry(CubicBezierShape cubicBezier, double dx, double dy, double zx, double zy)
         {
             var geometry = new SKPath();
-            geometry.MoveTo(ToPoint(cubicBezier.StartPoint, dx, dy));
+            geometry.MoveTo(ToPoint(cubicBezier.StartPoint, dx, dy, zx, zy));
             geometry.CubicTo(
-                ToPoint(cubicBezier.Point1, dx, dy),
-                ToPoint(cubicBezier.Point2, dx, dy),
-                ToPoint(cubicBezier.Point3, dx, dy));
+                ToPoint(cubicBezier.Point1, dx, dy, zx, zy),
+                ToPoint(cubicBezier.Point2, dx, dy, zx, zy),
+                ToPoint(cubicBezier.Point3, dx, dy, zx, zy));
             return geometry;
         }
 
-        public static SKPath ToGeometry(QuadraticBezierShape quadraticBezier, double dx, double dy)
+        public static SKPath ToGeometry(QuadraticBezierShape quadraticBezier, double dx, double dy, double zx, double zy)
         {
             var geometry = new SKPath();
-            geometry.MoveTo(ToPoint(quadraticBezier.StartPoint, dx, dy));
+            geometry.MoveTo(ToPoint(quadraticBezier.StartPoint, dx, dy, zx, zy));
             geometry.QuadTo(
-                ToPoint(quadraticBezier.Point1, dx, dy),
-                ToPoint(quadraticBezier.Point2, dx, dy));
+                ToPoint(quadraticBezier.Point1, dx, dy, zx, zy),
+                ToPoint(quadraticBezier.Point2, dx, dy, zx, zy));
             return geometry;
         }
 
-        public static SKPath ToGeometry(PathShape path, double dx, double dy)
+        public static SKPath ToGeometry(PathShape path, double dx, double dy, double zx, double zy)
         {
             var geometry = new SKPath
             {
@@ -137,33 +137,33 @@ namespace Draw2D.Editor
                     {
                         if (isFirstShape)
                         {
-                            geometry.MoveTo(ToPoint(line.StartPoint, dx, dy));
+                            geometry.MoveTo(ToPoint(line.StartPoint, dx, dy, zx, zy));
                             isFirstShape = false;
                         }
-                        geometry.LineTo(ToPoint(line.Point, dx, dy));
+                        geometry.LineTo(ToPoint(line.Point, dx, dy, zx, zy));
                     }
                     else if (shape is CubicBezierShape cubicBezier)
                     {
                         if (isFirstShape)
                         {
-                            geometry.MoveTo(ToPoint(cubicBezier.StartPoint, dx, dy));
+                            geometry.MoveTo(ToPoint(cubicBezier.StartPoint, dx, dy, zx, zy));
                             isFirstShape = false;
                         }
                         geometry.CubicTo(
-                            ToPoint(cubicBezier.Point1, dx, dy),
-                            ToPoint(cubicBezier.Point2, dx, dy),
-                            ToPoint(cubicBezier.Point3, dx, dy));
+                            ToPoint(cubicBezier.Point1, dx, dy, zx, zy),
+                            ToPoint(cubicBezier.Point2, dx, dy, zx, zy),
+                            ToPoint(cubicBezier.Point3, dx, dy, zx, zy));
                     }
                     else if (shape is QuadraticBezierShape quadraticBezier)
                     {
                         if (isFirstShape)
                         {
-                            geometry.MoveTo(ToPoint(quadraticBezier.StartPoint, dx, dy));
+                            geometry.MoveTo(ToPoint(quadraticBezier.StartPoint, dx, dy, zx, zy));
                             isFirstShape = false;
                         }
                         geometry.QuadTo(
-                            ToPoint(quadraticBezier.Point1, dx, dy),
-                            ToPoint(quadraticBezier.Point2, dx, dy));
+                            ToPoint(quadraticBezier.Point1, dx, dy, zx, zy),
+                            ToPoint(quadraticBezier.Point2, dx, dy, zx, zy));
                     }
                 }
 
@@ -223,7 +223,7 @@ namespace Draw2D.Editor
         {
         }
 
-        public void InvalidateCache(BaseShape shape, ShapeStyle style, double dx, double dy)
+        public void InvalidateCache(BaseShape shape, ShapeStyle style, double dx, double dy, double zx, double zy)
         {
         }
 
@@ -242,24 +242,24 @@ namespace Draw2D.Editor
             canvas.RestoreToCount(count);
         }
 
-        public void DrawLine(object dc, LineShape line, ShapeStyle style, double dx, double dy)
+        public void DrawLine(object dc, LineShape line, ShapeStyle style, double dx, double dy, double zx, double zy)
         {
             var canvas = dc as SKCanvas;
             using (var pen = ToSKPaintPen(style))
             {
                 if (style.IsStroked)
                 {
-                    canvas.DrawLine(ToPoint(line.StartPoint, dx, dy), ToPoint(line.Point, dx, dy), pen);
+                    canvas.DrawLine(ToPoint(line.StartPoint, dx, dy, zx, zy), ToPoint(line.Point, dx, dy, zx, zy), pen);
                 }
             }
         }
 
-        public void DrawCubicBezier(object dc, CubicBezierShape cubicBezier, ShapeStyle style, double dx, double dy)
+        public void DrawCubicBezier(object dc, CubicBezierShape cubicBezier, ShapeStyle style, double dx, double dy, double zx, double zy)
         {
             var canvas = dc as SKCanvas;
             using (var brush = ToSKPaintBrush(style.Fill))
             using (var pen = ToSKPaintPen(style))
-            using (var geometry = ToGeometry(cubicBezier, dx, dy))
+            using (var geometry = ToGeometry(cubicBezier, dx, dy, zx, zy))
             {
                 if (style.IsFilled)
                 {
@@ -272,12 +272,12 @@ namespace Draw2D.Editor
             }
         }
 
-        public void DrawQuadraticBezier(object dc, QuadraticBezierShape quadraticBezier, ShapeStyle style, double dx, double dy)
+        public void DrawQuadraticBezier(object dc, QuadraticBezierShape quadraticBezier, ShapeStyle style, double dx, double dy, double zx, double zy)
         {
             var canvas = dc as SKCanvas;
             using (var brush = ToSKPaintBrush(style.Fill))
             using (var pen = ToSKPaintPen(style))
-            using (var geometry = ToGeometry(quadraticBezier, dx, dy))
+            using (var geometry = ToGeometry(quadraticBezier, dx, dy, zx, zy))
             {
                 if (style.IsFilled)
                 {
@@ -290,12 +290,12 @@ namespace Draw2D.Editor
             }
         }
 
-        public void DrawPath(object dc, PathShape path, ShapeStyle style, double dx, double dy)
+        public void DrawPath(object dc, PathShape path, ShapeStyle style, double dx, double dy, double zx, double zy)
         {
             var canvas = dc as SKCanvas;
             using (var brush = ToSKPaintBrush(style.Fill))
             using (var pen = ToSKPaintPen(style))
-            using (var geometry = ToGeometry(path, dx, dy))
+            using (var geometry = ToGeometry(path, dx, dy, zx, zy))
             {
                 if (style.IsFilled)
                 {
@@ -308,10 +308,10 @@ namespace Draw2D.Editor
             }
         }
 
-        public void DrawRectangle(object dc, RectangleShape rectangle, ShapeStyle style, double dx, double dy)
+        public void DrawRectangle(object dc, RectangleShape rectangle, ShapeStyle style, double dx, double dy, double zx, double zy)
         {
             var canvas = dc as SKCanvas;
-            var rect = ToRect(rectangle.TopLeft, rectangle.BottomRight, dx, dy);
+            var rect = ToRect(rectangle.TopLeft, rectangle.BottomRight, dx, dy, zx, zy);
             using (var brush = ToSKPaintBrush(style.Fill))
             using (var pen = ToSKPaintPen(style))
             {
@@ -326,10 +326,10 @@ namespace Draw2D.Editor
             }
         }
 
-        public void DrawEllipse(object dc, EllipseShape ellipse, ShapeStyle style, double dx, double dy)
+        public void DrawEllipse(object dc, EllipseShape ellipse, ShapeStyle style, double dx, double dy, double zx, double zy)
         {
             var canvas = dc as SKCanvas;
-            var rect = ToRect(ellipse.TopLeft, ellipse.BottomRight, dx, dy);
+            var rect = ToRect(ellipse.TopLeft, ellipse.BottomRight, dx, dy, zx, zy);
             using (var brush = ToSKPaintBrush(style.Fill))
             using (var pen = ToSKPaintPen(style))
             {
@@ -345,15 +345,15 @@ namespace Draw2D.Editor
             }
         }
 
-        public void DrawText(object dc, TextShape text, ShapeStyle style, double dx, double dy)
+        public void DrawText(object dc, TextShape text, ShapeStyle style, double dx, double dy, double zx, double zy)
         {
             var canvas = dc as SKCanvas;
-            var rect = ToRect(text.TopLeft, text.BottomRight, dx, dy);
+            var rect = ToRect(text.TopLeft, text.BottomRight, dx, dy, zx, zy);
             using (var paint = ToSKPaintBrush(style.Stroke))
             using (var tf = SKTypeface.FromFamilyName("Calibri", SKFontStyleWeight.Normal, SKFontStyleWidth.Normal, SKFontStyleSlant.Upright))
             {
                 paint.TextEncoding = SKTextEncoding.Utf16;
-                paint.TextSize = 12;
+                paint.TextSize = 12 * zx;
 
                 var fm = paint.FontMetrics;
                 float offset = -(fm.Top + fm.Bottom);

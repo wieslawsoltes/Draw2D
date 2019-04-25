@@ -44,12 +44,12 @@ namespace Draw2D.ViewModels.Shapes
             }
         }
 
-        public override bool Invalidate(IShapeRenderer renderer, double dx, double dy)
+        public override bool Invalidate(IShapeRenderer renderer, double dx, double dy, double zx, double zy)
         {
-            bool result = base.Invalidate(renderer, dx, dy);
+            bool result = base.Invalidate(renderer, dx, dy, zx, zy);
 
-            result |= _topLeft?.Invalidate(renderer, dx, dy) ?? false;
-            result |= _bottomRight?.Invalidate(renderer, dx, dy) ?? false;
+            result |= _topLeft?.Invalidate(renderer, dx, dy, zx, zy) ?? false;
+            result |= _bottomRight?.Invalidate(renderer, dx, dy, zx, zy) ?? false;
 
             return result;
         }

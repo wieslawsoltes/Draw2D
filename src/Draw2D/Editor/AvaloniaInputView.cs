@@ -244,10 +244,12 @@ namespace Draw2D.Editor
             return modifier;
         }
 
-        private void GetOffset(out double ox, out double oy)
+        private void GetOffset(out double dx, out double dy, out double zx, out double zy)
         {
-            ox = _zoomState.OffsetX;
-            oy = _zoomState.OffsetY;
+            dx = _zoomState.OffsetX;
+            dy = _zoomState.OffsetY;
+            zx = _zoomState.ZoomX;
+            zy = _zoomState.ZoomY;
         }
 
         private void HandlePointerWheelChanged(PointerWheelEventArgs e)
@@ -262,8 +264,8 @@ namespace Draw2D.Editor
                 if (this.DataContext is IToolContext ctx)
                 {
                     var point = e.GetPosition(this);
-                    GetOffset(out double ox, out double oy);
-                    ctx.CurrentTool.LeftDown(ctx, point.X - ox, point.Y - oy, GetModifier(e.InputModifiers));
+                    GetOffset(out double dx, out double dy, out double zx, out double zy);
+                    ctx.CurrentTool.LeftDown(ctx, (point.X - dx) / zx, (point.Y - dy) / zy, GetModifier(e.InputModifiers));
                 }
             }
             else if (e.MouseButton == MouseButton.Right)
@@ -273,8 +275,8 @@ namespace Draw2D.Editor
                 if (this.DataContext is IToolContext ctx && _zoomState.IsPanning == false)
                 {
                     var point = e.GetPosition(this);
-                    GetOffset(out double ox, out double oy);
-                    ctx.CurrentTool.RightDown(ctx, point.X - ox, point.Y - oy, GetModifier(e.InputModifiers));
+                    GetOffset(out double dx, out double dy, out double zx, out double zy);
+                    ctx.CurrentTool.RightDown(ctx, (point.X - dx) / zx, (point.Y - dy) / zy, GetModifier(e.InputModifiers));
                 }
             }
         }
@@ -286,14 +288,14 @@ namespace Draw2D.Editor
                 if (this.DataContext is IToolContext ctx)
                 {
                     var point = e.GetPosition(this);
-                    GetOffset(out double ox, out double oy);
+                    GetOffset(out double dx, out double dy, out double zx, out double zy);
                     if (ctx.Mode == EditMode.Mouse)
                     {
-                        ctx.CurrentTool.LeftUp(ctx, point.X - ox, point.Y - oy, GetModifier(e.InputModifiers));
+                        ctx.CurrentTool.LeftUp(ctx, (point.X - dx) / zx, (point.Y - dy) / zy, GetModifier(e.InputModifiers));
                     }
                     else if (ctx.Mode == EditMode.Touch)
                     {
-                        ctx.CurrentTool.LeftDown(ctx, point.X - ox, point.Y - oy, GetModifier(e.InputModifiers));
+                        ctx.CurrentTool.LeftDown(ctx, (point.X - dx) / zx, (point.Y - dy) / zy, GetModifier(e.InputModifiers));
                     }
                 }
             }
@@ -304,8 +306,8 @@ namespace Draw2D.Editor
                 if (this.DataContext is IToolContext ctx && _zoomState.IsPanning == false)
                 {
                     var point = e.GetPosition(this);
-                    GetOffset(out double ox, out double oy);
-                    ctx.CurrentTool.RightUp(ctx, point.X - ox, point.Y - oy, GetModifier(e.InputModifiers));
+                    GetOffset(out double dx, out double dy, out double zx, out double zy);
+                    ctx.CurrentTool.RightUp(ctx, (point.X - dx) / zx, (point.Y - dy) / zy, GetModifier(e.InputModifiers));
                 }
             }
         }
@@ -317,12 +319,12 @@ namespace Draw2D.Editor
             if (this.DataContext is IToolContext ctx && _zoomState.IsPanning == false)
             {
                 var point = e.GetPosition(this);
-                GetOffset(out double ox, out double oy);
-                ctx.CurrentTool.Move(ctx, point.X - ox, point.Y - oy, GetModifier(e.InputModifiers));
+                GetOffset(out double dx, out double dy, out double zx, out double zy);
+                ctx.CurrentTool.Move(ctx, (point.X - dx) / zx, (point.Y - dy) / zy, GetModifier(e.InputModifiers));
             }
         }
 
-        private void Draw(DrawingContext context, IToolContext ctx, bool drawWorking, double width, double height, double ox, double oy)
+        private void Draw(DrawingContext context, IToolContext ctx, bool drawWorking, double width, double height, double dx, double dy, double zx, double zy)
         {
             if (ctx.CurrentContainer.InputBackground != null)
             {
@@ -335,23 +337,23 @@ namespace Draw2D.Editor
             {
                 var color = AvaloniaBrushCache.FromDrawColor(ctx.CurrentContainer.WorkBackground);
                 var brush = new SolidColorBrush(color);
-                context.FillRectangle(brush, new Rect(ox, oy, ctx.CurrentContainer.Width, ctx.CurrentContainer.Height));
+                context.FillRectangle(brush, new Rect(dx * zx, dy * zy, ctx.CurrentContainer.Width * zx, ctx.CurrentContainer.Height * zy));
             }
 
-            ctx.Presenter.DrawContainer(context, ctx.CurrentContainer, ctx.Renderer, ox, oy, DrawMode.Shape, null, null);
-            ctx.Presenter.DrawContainer(context, ctx.CurrentContainer, ctx.Renderer, ox, oy, DrawMode.Point, null, null);
+            ctx.Presenter.DrawContainer(context, ctx.CurrentContainer, ctx.Renderer, dx, dy, zx, zy, DrawMode.Shape, null, null);
+            ctx.Presenter.DrawContainer(context, ctx.CurrentContainer, ctx.Renderer, dx, dy, zx, zy, DrawMode.Point, null, null);
 
             if (drawWorking)
             {
-                ctx.Presenter.DrawContainer(context, ctx.WorkingContainer, ctx.Renderer, ox, oy, DrawMode.Shape, null, null);
-                ctx.Presenter.DrawContainer(context, ctx.WorkingContainer, ctx.Renderer, ox, oy, DrawMode.Point, null, null);
+                ctx.Presenter.DrawContainer(context, ctx.WorkingContainer, ctx.Renderer, dx, dy, zx, zy, DrawMode.Shape, null, null);
+                ctx.Presenter.DrawContainer(context, ctx.WorkingContainer, ctx.Renderer, dx, dy, zx, zy, DrawMode.Point, null, null);
             }
 
-            ctx.Presenter.DrawDecorators(context, ctx.CurrentContainer, ctx.Renderer, ox, oy, DrawMode.Shape);
+            ctx.Presenter.DrawDecorators(context, ctx.CurrentContainer, ctx.Renderer, dx, dy, zx, zy, DrawMode.Shape);
 
             if (drawWorking)
             {
-                ctx.Presenter.DrawDecorators(context, ctx.WorkingContainer, ctx.Renderer, ox, oy, DrawMode.Shape);
+                ctx.Presenter.DrawDecorators(context, ctx.WorkingContainer, ctx.Renderer, dx, dy, zx, zy, DrawMode.Shape);
             }
         }
 
@@ -372,15 +374,15 @@ namespace Draw2D.Editor
                     _zoomState.Invalidate(this, false);
                 }
 
-                GetOffset(out double ox, out double oy);
+                GetOffset(out double dx, out double dy, out double zx, out double zy);
 
                 if (CustomDraw)
                 {
-                    context.Custom(new CustomDrawOperation(ctx, _drawWorking, width, height, ox, oy));
+                    context.Custom(new CustomDrawOperation(ctx, _drawWorking, width, height, dx, dy, zx, zy));
                 }
                 else
                 {
-                    Draw(context, ctx, _drawWorking, width, height, ox, oy);
+                    Draw(context, ctx, _drawWorking, width, height, dx, dy, zx, zy);
                 }
             }
         }

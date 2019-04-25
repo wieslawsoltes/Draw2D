@@ -22,7 +22,7 @@ namespace Draw2D.Editor
         {
         }
 
-        public static AvaloniaFormattedTextCache FromTextShape(TextShape text, Rect rect)
+        public static AvaloniaFormattedTextCache FromTextShape(TextShape text, Rect rect, double zx, double zy)
         {
             var constraint = new Size(rect.Width, rect.Height);
 
@@ -32,7 +32,7 @@ namespace Draw2D.Editor
                 Constraint = constraint,
                 TextAlignment = TextAlignment.Center,
                 Wrapping = TextWrapping.NoWrap,
-                Typeface = new Typeface("Arial", 11)
+                Typeface = new Typeface("Calibri", 12 * zx)
             };
 
             var size = formattedText.Bounds.Size;

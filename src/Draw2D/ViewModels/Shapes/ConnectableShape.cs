@@ -25,12 +25,12 @@ namespace Draw2D.ViewModels.Shapes
             this.Points = points;
         }
 
-        public override bool Invalidate(IShapeRenderer renderer, double dx, double dy)
+        public override bool Invalidate(IShapeRenderer renderer, double dx, double dy, double zx, double zy)
         {
-            return base.Invalidate(renderer, dx, dy);
+            return base.Invalidate(renderer, dx, dy, zx, zy);
         }
 
-        public override void Draw(object dc, IShapeRenderer renderer, double dx, double dy, DrawMode mode, object db, object r)
+        public override void Draw(object dc, IShapeRenderer renderer, double dx, double dy, double zx, double zy, DrawMode mode, object db, object r)
         {
             if (mode.HasFlag(DrawMode.Point))
             {
@@ -38,7 +38,7 @@ namespace Draw2D.ViewModels.Shapes
                 {
                     if (renderer.Selection.Selected.Contains(point))
                     {
-                        point.Draw(dc, renderer, dx, dy, mode, db , r);
+                        point.Draw(dc, renderer, dx, dy, zx, zy, mode, db , r);
                     }
                 }
             }

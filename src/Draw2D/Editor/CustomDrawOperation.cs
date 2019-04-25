@@ -16,8 +16,10 @@ namespace Draw2D.Editor
         private bool _drawWorking;
         private double _width;
         private double _height;
-        private double _ox;
-        private double _oy;
+        private double _dx;
+        private double _dy;
+        private double _zx;
+        private double _zy;
 
         public Rect Bounds { get; }
 
@@ -25,19 +27,21 @@ namespace Draw2D.Editor
 
         public bool Equals(ICustomDrawOperation other) => false;
 
-        public CustomDrawOperation(IToolContext context, bool drawWorking, double width, double height, double ox, double oy)
+        public CustomDrawOperation(IToolContext context, bool drawWorking, double width, double height, double dx, double dy, double zx, double zy)
         {
-            Debug.WriteLine($"CustomDrawOperation {drawWorking} {width} {height} {ox} {oy}");
+            Debug.WriteLine($"CustomDrawOperation {drawWorking} {width} {height} {dx} {dy}");
             _ctx = context;
             _drawWorking = drawWorking;
             _width = width;
             _height = height;
-            _ox = ox;
-            _oy = oy;
+            _dx = dx;
+            _dy = dy;
+            _zx = zx;
+            _zy = zy;
             Bounds = new Rect(0, 0, width, height);
         }
 
-        private void Draw(SKCanvas canvas, IToolContext ctx, bool drawWorking, double width, double height, double ox, double oy)
+        private void Draw(SKCanvas canvas, IToolContext ctx, bool drawWorking, double width, double height, double dx, double dy, double zx, double zy)
         {
             var renderer = new SkiaShapeRenderer()
             {
@@ -56,24 +60,24 @@ namespace Draw2D.Editor
             {
                 using (var brush = SkiaShapeRenderer.ToSKPaintBrush(ctx.CurrentContainer.WorkBackground))
                 {
-                    canvas.DrawRect(SkiaShapeRenderer.ToRect(ox, oy, ctx.CurrentContainer.Width + ox, ctx.CurrentContainer.Height + oy), brush);
+                    canvas.DrawRect(SkiaShapeRenderer.ToRect(dx * zx, dy * zy, (ctx.CurrentContainer.Width + dx) * zx, (ctx.CurrentContainer.Height + dy) * zy), brush);
                 }
             }
 
-            ctx.Presenter.DrawContainer(canvas, ctx.CurrentContainer, renderer, ox, oy, DrawMode.Shape, null, null);
-            ctx.Presenter.DrawContainer(canvas, ctx.CurrentContainer, renderer, ox, oy, DrawMode.Point, null, null);
+            ctx.Presenter.DrawContainer(canvas, ctx.CurrentContainer, renderer, dx, dy, zx, zy, DrawMode.Shape, null, null);
+            ctx.Presenter.DrawContainer(canvas, ctx.CurrentContainer, renderer, dx, dy, zx, zy, DrawMode.Point, null, null);
 
             if (drawWorking)
             {
-                ctx.Presenter.DrawContainer(canvas, ctx.WorkingContainer, renderer, ox, oy, DrawMode.Shape, null, null);
-                ctx.Presenter.DrawContainer(canvas, ctx.WorkingContainer, renderer, ox, oy, DrawMode.Point, null, null);
+                ctx.Presenter.DrawContainer(canvas, ctx.WorkingContainer, renderer, dx, dy, zx, zy, DrawMode.Shape, null, null);
+                ctx.Presenter.DrawContainer(canvas, ctx.WorkingContainer, renderer, dx, dy, zx, zy, DrawMode.Point, null, null);
             }
 
-            ctx.Presenter.DrawDecorators(canvas, ctx.CurrentContainer, renderer, ox, oy, DrawMode.Shape);
+            ctx.Presenter.DrawDecorators(canvas, ctx.CurrentContainer, renderer, dx, dy, zx, zy, DrawMode.Shape);
 
             if (drawWorking)
             {
-                ctx.Presenter.DrawDecorators(canvas, ctx.WorkingContainer, renderer, ox, oy, DrawMode.Shape);
+                ctx.Presenter.DrawDecorators(canvas, ctx.WorkingContainer, renderer, dx, dy, zx, zy, DrawMode.Shape);
             }
         }
 
@@ -84,7 +88,7 @@ namespace Draw2D.Editor
             {
                 canvas.Save();
 
-                Draw(canvas, _ctx, _drawWorking, _width, _height, _ox, _oy);
+                Draw(canvas, _ctx, _drawWorking, _width, _height, _dx, _dy, _zx, _zy);
 
                 canvas.Restore();
             }

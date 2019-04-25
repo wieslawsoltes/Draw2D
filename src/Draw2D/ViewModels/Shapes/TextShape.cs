@@ -30,9 +30,9 @@ namespace Draw2D.ViewModels.Shapes
             this.Text = text;
         }
 
-        public override bool Invalidate(IShapeRenderer renderer, double dx, double dy)
+        public override bool Invalidate(IShapeRenderer renderer, double dx, double dy, double zx, double zy)
         {
-            bool result = base.Invalidate(renderer, dx, dy);
+            bool result = base.Invalidate(renderer, dx, dy, zx, zy);
 
             if (_text?.IsDirty ?? false)
             {
@@ -42,7 +42,7 @@ namespace Draw2D.ViewModels.Shapes
 
             if (this.IsDirty || result == true)
             {
-                renderer.InvalidateCache(this, Style, dx, dy);
+                renderer.InvalidateCache(this, Style, dx, dy, zx, zy);
                 this.IsDirty = false;
                 result |= true;
             }
@@ -50,29 +50,29 @@ namespace Draw2D.ViewModels.Shapes
             return result;
         }
 
-        public override void Draw(object dc, IShapeRenderer renderer, double dx, double dy, DrawMode mode, object db, object r)
+        public override void Draw(object dc, IShapeRenderer renderer, double dx, double dy, double zx, double zy, DrawMode mode, object db, object r)
         {
             var state = base.BeginTransform(dc, renderer);
 
             if (Style != null && mode.HasFlag(DrawMode.Shape))
             {
-                renderer.DrawText(dc, this, Style, dx, dy);
+                renderer.DrawText(dc, this, Style, dx, dy, zx, zy);
             }
 
             if (mode.HasFlag(DrawMode.Point))
             {
                 if (renderer.Selection.Selected.Contains(TopLeft))
                 {
-                    TopLeft.Draw(dc, renderer, dx, dy, mode, db, r);
+                    TopLeft.Draw(dc, renderer, dx, dy, zx, zy, mode, db, r);
                 }
     
                 if (renderer.Selection.Selected.Contains(BottomRight))
                 {
-                    BottomRight.Draw(dc, renderer, dx, dy, mode, db, r);
+                    BottomRight.Draw(dc, renderer, dx, dy, zx, zy, mode, db, r);
                 }
             }
 
-            base.Draw(dc, renderer, dx, dy, mode, db, r);
+            base.Draw(dc, renderer, dx, dy, zx, zy, mode, db, r);
             base.EndTransform(dc, renderer, state);
         }
 

@@ -9,7 +9,7 @@ namespace Draw2D.ViewModels
     public interface ICanvasPresenter
     {
         IDictionary<Type, IShapeDecorator> Decorators { get; set; }
-        void DrawContainer(object dc, CanvasContainer container, IShapeRenderer renderer, double dx, double dy, DrawMode mode, object db, object r);
-        void DrawDecorators(object dc, CanvasContainer container, IShapeRenderer renderer, double dx, double dy, DrawMode mode);
+        void DrawContainer(object dc, CanvasContainer container, IShapeRenderer renderer, double dx, double dy, double zx, double zy, DrawMode mode, object db, object r);
+        void DrawDecorators(object dc, CanvasContainer container, IShapeRenderer renderer, double dx, double dy, double zx, double zy, DrawMode mode);
     }
 }

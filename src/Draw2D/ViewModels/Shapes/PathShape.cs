@@ -64,18 +64,18 @@ namespace Draw2D.ViewModels.Shapes
             }
         }
 
-        public override bool Invalidate(IShapeRenderer renderer, double dx, double dy)
+        public override bool Invalidate(IShapeRenderer renderer, double dx, double dy, double zx, double zy)
         {
-            bool result = base.Invalidate(renderer, dx, dy);
+            bool result = base.Invalidate(renderer, dx, dy, zx, zy);
 
             foreach (var figure in Figures)
             {
-                result |= figure.Invalidate(renderer, dx, dy);
+                result |= figure.Invalidate(renderer, dx, dy, zx, zy);
             }
 
             if (this.IsDirty || result == true)
             {
-                renderer.InvalidateCache(this, Style, dx, dy);
+                renderer.InvalidateCache(this, Style, dx, dy, zx, zy);
                 this.IsDirty = false;
                 result |= true;
             }
@@ -83,7 +83,7 @@ namespace Draw2D.ViewModels.Shapes
             return result;
         }
 
-        public override void Draw(object dc, IShapeRenderer renderer, double dx, double dy, DrawMode mode, object db, object r)
+        public override void Draw(object dc, IShapeRenderer renderer, double dx, double dy, double zx, double zy, DrawMode mode, object db, object r)
         {
             var state = base.BeginTransform(dc, renderer);
 
@@ -91,22 +91,22 @@ namespace Draw2D.ViewModels.Shapes
 
             if (Style != null && mode.HasFlag(DrawMode.Shape))
             {
-                renderer.DrawPath(dc, this, Style, dx, dy);
+                renderer.DrawPath(dc, this, Style, dx, dy, zx, zy);
             }
 
             if (mode.HasFlag(DrawMode.Point))
             {
                 foreach (var figure in Figures)
                 {
-                    DrawPoints(dc, renderer, dx, dy, mode, db, r, figure, isPathSelected);
+                    DrawPoints(dc, renderer, dx, dy, zx, zy, mode, db, r, figure, isPathSelected);
                 }
             }
 
-            base.Draw(dc, renderer, dx, dy, mode, db, r);
+            base.Draw(dc, renderer, dx, dy, zx, zy, mode, db, r);
             base.EndTransform(dc, renderer, state);
         }
 
-        private void DrawPoints(object dc, IShapeRenderer renderer, double dx, double dy, DrawMode mode, object db, object r, FigureShape figure, bool isPathSelected)
+        private void DrawPoints(object dc, IShapeRenderer renderer, double dx, double dy, double zx, double zy, DrawMode mode, object db, object r, FigureShape figure, bool isPathSelected)
         {
             foreach (var shape in figure.Shapes)
             {
@@ -118,19 +118,19 @@ namespace Draw2D.ViewModels.Shapes
 
                             if (isPathSelected || isSelected || renderer.Selection.Selected.Contains(line.StartPoint))
                             {
-                                line.StartPoint.Draw(dc, renderer, dx, dy, mode, db, r);
+                                line.StartPoint.Draw(dc, renderer, dx, dy, zx, zy, mode, db, r);
                             }
 
                             if (isPathSelected || isSelected || renderer.Selection.Selected.Contains(line.Point))
                             {
-                                line.Point.Draw(dc, renderer, dx, dy, mode, db, r);
+                                line.Point.Draw(dc, renderer, dx, dy, zx, zy, mode, db, r);
                             }
 
                             foreach (var point in line.Points)
                             {
                                 if (isPathSelected || isSelected || renderer.Selection.Selected.Contains(point))
                                 {
-                                    point.Draw(dc, renderer, dx, dy, mode, db, r);
+                                    point.Draw(dc, renderer, dx, dy, zx, zy, mode, db, r);
                                 }
                             }
                         }
@@ -141,29 +141,29 @@ namespace Draw2D.ViewModels.Shapes
 
                             if (isPathSelected || isSelected || renderer.Selection.Selected.Contains(cubic.StartPoint))
                             {
-                                cubic.StartPoint.Draw(dc, renderer, dx, dy, mode, db, r);
+                                cubic.StartPoint.Draw(dc, renderer, dx, dy, zx, zy, mode, db, r);
                             }
 
                             if (isPathSelected || isSelected || renderer.Selection.Selected.Contains(cubic.Point1))
                             {
-                                cubic.Point1.Draw(dc, renderer, dx, dy, mode, db, r);
+                                cubic.Point1.Draw(dc, renderer, dx, dy, zx, zy, mode, db, r);
                             }
 
                             if (isPathSelected || isSelected || renderer.Selection.Selected.Contains(cubic.Point2))
                             {
-                                cubic.Point2.Draw(dc, renderer, dx, dy, mode, db, r);
+                                cubic.Point2.Draw(dc, renderer, dx, dy, zx, zy, mode, db, r);
                             }
 
                             if (isPathSelected || isSelected || renderer.Selection.Selected.Contains(cubic.Point3))
                             {
-                                cubic.Point3.Draw(dc, renderer, dx, dy, mode, db, r);
+                                cubic.Point3.Draw(dc, renderer, dx, dy, zx, zy, mode, db, r);
                             }
 
                             foreach (var point in cubic.Points)
                             {
                                 if (isPathSelected || isSelected || renderer.Selection.Selected.Contains(point))
                                 {
-                                    point.Draw(dc, renderer, dx, dy, mode, db, r);
+                                    point.Draw(dc, renderer, dx, dy, zx, zy, mode, db, r);
                                 }
                             }
                         }
@@ -174,24 +174,24 @@ namespace Draw2D.ViewModels.Shapes
 
                             if (isPathSelected || isSelected || renderer.Selection.Selected.Contains(quadratic.StartPoint))
                             {
-                                quadratic.StartPoint.Draw(dc, renderer, dx, dy, mode, db, r);
+                                quadratic.StartPoint.Draw(dc, renderer, dx, dy, zx, zy, mode, db, r);
                             }
 
                             if (isPathSelected || isSelected || renderer.Selection.Selected.Contains(quadratic.Point1))
                             {
-                                quadratic.Point1.Draw(dc, renderer, dx, dy, mode, db, r);
+                                quadratic.Point1.Draw(dc, renderer, dx, dy, zx, zy, mode, db, r);
                             }
 
                             if (isPathSelected || isSelected || renderer.Selection.Selected.Contains(quadratic.Point2))
                             {
-                                quadratic.Point2.Draw(dc, renderer, dx, dy, mode, db, r);
+                                quadratic.Point2.Draw(dc, renderer, dx, dy, zx, zy, mode, db, r);
                             }
 
                             foreach (var point in quadratic.Points)
                             {
                                 if (isPathSelected || isSelected || renderer.Selection.Selected.Contains(point))
                                 {
-                                    point.Draw(dc, renderer, dx, dy, mode, db, r);
+                                    point.Draw(dc, renderer, dx, dy, zx, zy, mode, db, r);
                                 }
                             }
                         }

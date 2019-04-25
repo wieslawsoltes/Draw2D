@@ -6,16 +6,16 @@ namespace Draw2D.ViewModels.Decorators
 {
     public class TextDecorator : CommonDecorator
     {
-        public void Draw(object dc, IShapeRenderer renderer, TextShape textShape, double dx, double dy, DrawMode mode)
+        public void Draw(object dc, IShapeRenderer renderer, TextShape textShape, double dx, double dy, double zx, double zy, DrawMode mode)
         {
-            DrawRectangle(dc, renderer, textShape.TopLeft, textShape.BottomRight, dx, dy, mode);
+            DrawRectangle(dc, renderer, textShape.TopLeft, textShape.BottomRight, dx, dy, zx, zy, mode);
         }
 
-        public override void Draw(object dc, BaseShape shape, IShapeRenderer renderer, ISelection selection, double dx, double dy, DrawMode mode)
+        public override void Draw(object dc, BaseShape shape, IShapeRenderer renderer, ISelection selection, double dx, double dy, double zx, double zy, DrawMode mode)
         {
             if (shape is TextShape textShape)
             {
-                Draw(dc, renderer, textShape, dx, dy, mode);
+                Draw(dc, renderer, textShape, dx, dy, zx, zy, mode);
             }
         }
     }

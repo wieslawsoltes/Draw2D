@@ -40,23 +40,23 @@ namespace Draw2D.Editor
             _ellipseGeometryCache = new Dictionary<EllipseShape, Geometry>();
         }
 
-        private static Point ToPoint(PointShape point, double dx, double dy)
+        private static Point ToPoint(PointShape point, double dx, double dy, double zx, double zy)
         {
-            return new Point(point.X + dx, point.Y + dy);
+            return new Point((point.X + dx) * zx, (point.Y + dy) * zy);
         }
 
-        public static IEnumerable<Point> ToPoints(IEnumerable<PointShape> points, double dx, double dy)
+        public static IEnumerable<Point> ToPoints(IEnumerable<PointShape> points, double dx, double dy, double zx, double zy)
         {
-            return points.Select(point => new Point(point.X + dx, point.Y + dy));
+            return points.Select(point => new Point((point.X + dx) * zx, (point.Y + dy) * zy));
         }
 
-        private static Rect ToRect(PointShape p1, PointShape p2, double dx, double dy)
+        private static Rect ToRect(PointShape p1, PointShape p2, double dx, double dy, double zx, double zy)
         {
             double x = Math.Min(p1.X + dx, p2.X + dx);
             double y = Math.Min(p1.Y + dy, p2.Y + dy);
             double width = Math.Abs(Math.Max(p1.X + dx, p2.X + dx) - x);
             double height = Math.Abs(Math.Max(p1.Y + dy, p2.Y + dy) - y);
-            return new Rect(x, y, width, height);
+            return new Rect(x * zx, y * zy, width * zx, height * zy);
         }
 
         private AvaloniaBrushCache? GetBrushCache(ShapeStyle style)
@@ -92,40 +92,40 @@ namespace Draw2D.Editor
             return cache;
         }
 
-        private static Geometry ToGeometry(CubicBezierShape cubicBezier, ShapeStyle style, double dx, double dy)
+        private static Geometry ToGeometry(CubicBezierShape cubicBezier, ShapeStyle style, double dx, double dy, double zx, double zy)
         {
             var geometry = new StreamGeometry();
 
             using (var context = geometry.Open())
             {
-                context.BeginFigure(ToPoint(cubicBezier.StartPoint, dx, dy), false);
+                context.BeginFigure(ToPoint(cubicBezier.StartPoint, dx, dy, zx, zy), false);
                 context.CubicBezierTo(
-                    ToPoint(cubicBezier.Point1, dx, dy),
-                    ToPoint(cubicBezier.Point2, dx, dy),
-                    ToPoint(cubicBezier.Point3, dx, dy));
+                    ToPoint(cubicBezier.Point1, dx, dy, zx, zy),
+                    ToPoint(cubicBezier.Point2, dx, dy, zx, zy),
+                    ToPoint(cubicBezier.Point3, dx, dy, zx, zy));
                 context.EndFigure(false);
             }
 
             return geometry;
         }
 
-        private static Geometry ToGeometry(QuadraticBezierShape quadraticBezier, ShapeStyle style, double dx, double dy)
+        private static Geometry ToGeometry(QuadraticBezierShape quadraticBezier, ShapeStyle style, double dx, double dy, double zx, double zy)
         {
             var geometry = new StreamGeometry();
 
             using (var context = geometry.Open())
             {
-                context.BeginFigure(ToPoint(quadraticBezier.StartPoint, dx, dy), false);
+                context.BeginFigure(ToPoint(quadraticBezier.StartPoint, dx, dy, zx, zy), false);
                 context.QuadraticBezierTo(
-                    ToPoint(quadraticBezier.Point1, dx, dy),
-                    ToPoint(quadraticBezier.Point2, dx, dy));
+                    ToPoint(quadraticBezier.Point1, dx, dy, zx, zy),
+                    ToPoint(quadraticBezier.Point2, dx, , zx, zy));
                 context.EndFigure(false);
             }
 
             return geometry;
         }
 
-        private static Geometry ToGeometry(PathShape path, ShapeStyle style, double dx, double dy)
+        private static Geometry ToGeometry(PathShape path, ShapeStyle style, double dx, double dy, double zx, double zy)
         {
             var geometry = new StreamGeometry();
 
@@ -142,33 +142,33 @@ namespace Draw2D.Editor
                         {
                             if (isFirstShape)
                             {
-                                context.BeginFigure(ToPoint(line.StartPoint, dx, dy), figure.IsFilled);
+                                context.BeginFigure(ToPoint(line.StartPoint, dx, dy, zx, zy), figure.IsFilled);
                                 isFirstShape = false;
                             }
-                            context.LineTo(ToPoint(line.Point, dx, dy));
+                            context.LineTo(ToPoint(line.Point, dx, dy, zx, zy));
                         }
                         else if (shape is CubicBezierShape cubicBezier)
                         {
                             if (isFirstShape)
                             {
-                                context.BeginFigure(ToPoint(cubicBezier.StartPoint, dx, dy), figure.IsFilled);
+                                context.BeginFigure(ToPoint(cubicBezier.StartPoint, dx, dy, zx, zy), figure.IsFilled);
                                 isFirstShape = false;
                             }
                             context.CubicBezierTo(
-                                ToPoint(cubicBezier.Point1, dx, dy),
-                                ToPoint(cubicBezier.Point2, dx, dy),
-                                ToPoint(cubicBezier.Point3, dx, dy));
+                                ToPoint(cubicBezier.Point1, dx, dy, zx, zy),
+                                ToPoint(cubicBezier.Point2, dx, dy, zx, zy),
+                                ToPoint(cubicBezier.Point3, dx, dy, zx, zy));
                         }
                         else if (shape is QuadraticBezierShape quadraticBezier)
                         {
                             if (isFirstShape)
                             {
-                                context.BeginFigure(ToPoint(quadraticBezier.StartPoint, dx, dy), figure.IsFilled);
+                                context.BeginFigure(ToPoint(quadraticBezier.StartPoint, dx, dy, zx, zy), figure.IsFilled);
                                 isFirstShape = false;
                             }
                             context.QuadraticBezierTo(
-                                ToPoint(quadraticBezier.Point1, dx, dy),
-                                ToPoint(quadraticBezier.Point2, dx, dy));
+                                ToPoint(quadraticBezier.Point1, dx, dy, zx, zy),
+                                ToPoint(quadraticBezier.Point2, dx, dy, zx, zy));
                         }
                     }
 
@@ -182,13 +182,13 @@ namespace Draw2D.Editor
             return geometry;
         }
 
-        private static Geometry ToGeometry(EllipseShape ellipse, ShapeStyle style, double dx, double dy)
+        private static Geometry ToGeometry(EllipseShape ellipse, ShapeStyle style, double dx, double dy, double zx, double zy)
         {
-            var rect = ToRect(ellipse.TopLeft, ellipse.BottomRight, dx, dy);
+            var rect = ToRect(ellipse.TopLeft, ellipse.BottomRight, dx, dy, zx, zy);
             return new EllipseGeometry(rect);
         }
 
-        private Geometry GetGeometryCache(CubicBezierShape cubic, ShapeStyle style, double dx, double dy)
+        private Geometry GetGeometryCache(CubicBezierShape cubic, ShapeStyle style, double dx, double dy, double zx, double zy)
         {
             if (cubic == null)
             {
@@ -196,7 +196,7 @@ namespace Draw2D.Editor
             }
             if (!_cubicGeometryCache.TryGetValue(cubic, out var cache))
             {
-                var geometry = ToGeometry(cubic, style, dx, dy);
+                var geometry = ToGeometry(cubic, style, dx, dy, zx, zy);
                 if (geometry != null)
                 {
                     _cubicGeometryCache[cubic] = geometry;
@@ -207,7 +207,7 @@ namespace Draw2D.Editor
             return cache;
         }
 
-        private Geometry GetGeometryCache(QuadraticBezierShape quad, ShapeStyle style, double dx, double dy)
+        private Geometry GetGeometryCache(QuadraticBezierShape quad, ShapeStyle style, double dx, double dy, double zx, double zy)
         {
             if (quad == null)
             {
@@ -215,7 +215,7 @@ namespace Draw2D.Editor
             }
             if (!_quadGeometryCache.TryGetValue(quad, out var cache))
             {
-                var geometry = ToGeometry(quad, style, dx, dy);
+                var geometry = ToGeometry(quad, style, dx, dy, zx, zy);
                 if (geometry != null)
                 {
                     _quadGeometryCache[quad] = geometry;
@@ -226,7 +226,7 @@ namespace Draw2D.Editor
             return cache;
         }
 
-        private Geometry GetGeometryCache(PathShape path, ShapeStyle style, double dx, double dy)
+        private Geometry GetGeometryCache(PathShape path, ShapeStyle style, double dx, double dy, double zx, double zy)
         {
             if (path == null)
             {
@@ -234,7 +234,7 @@ namespace Draw2D.Editor
             }
             if (!_pathGeometryCache.TryGetValue(path, out var cache))
             {
-                var geometry = ToGeometry(path, style, dx, dy);
+                var geometry = ToGeometry(path, style, dx, dy, zx, zy);
                 if (geometry != null)
                 {
                     _pathGeometryCache[path] = geometry;
@@ -245,7 +245,7 @@ namespace Draw2D.Editor
             return cache;
         }
 
-        private Geometry GetGeometryCache(EllipseShape ellipse, ShapeStyle style, double dx, double dy)
+        private Geometry GetGeometryCache(EllipseShape ellipse, ShapeStyle style, double dx, double dy, double zx, double zy)
         {
             if (ellipse == null)
             {
@@ -253,7 +253,7 @@ namespace Draw2D.Editor
             }
             if (!_ellipseGeometryCache.TryGetValue(ellipse, out var cache))
             {
-                var geometry = ToGeometry(ellipse, style, dx, dy);
+                var geometry = ToGeometry(ellipse, style, dx, dy, zx, zy);
                 if (geometry != null)
                 {
                     _ellipseGeometryCache[ellipse] = geometry;
@@ -264,11 +264,11 @@ namespace Draw2D.Editor
             return cache;
         }
 
-        private AvaloniaFormattedTextCache GetTextCache(TextShape text, Rect rect)
+        private AvaloniaFormattedTextCache GetTextCache(TextShape text, Rect rect, double zx, double zy)
         {
             if (!_formattedTextCache.TryGetValue(text, out var cache))
             {
-                _formattedTextCache[text] = AvaloniaFormattedTextCache.FromTextShape(text, rect);
+                _formattedTextCache[text] = AvaloniaFormattedTextCache.FromTextShape(text, rect, zx, zy);
                 return _formattedTextCache[text];
             }
             return cache;
@@ -294,13 +294,13 @@ namespace Draw2D.Editor
             }
         }
 
-        public void InvalidateCache(BaseShape shape, ShapeStyle style, double dx, double dy)
+        public void InvalidateCache(BaseShape shape, ShapeStyle style, double dx, double dy, double zx, double zy)
         {
             switch (shape)
             {
                 case CubicBezierShape cubic:
                     {
-                        var geometry = ToGeometry(cubic, style, dx, dy);
+                        var geometry = ToGeometry(cubic, style, dx, dy, zx, zy);
                         if (geometry != null)
                         {
                             _cubicGeometryCache[cubic] = geometry;
@@ -309,7 +309,7 @@ namespace Draw2D.Editor
                     break;
                 case QuadraticBezierShape quad:
                     {
-                        var geometry = ToGeometry(quad, style, dx, dy);
+                        var geometry = ToGeometry(quad, style, dx, dy, zx, zy);
                         if (geometry != null)
                         {
                             _quadGeometryCache[quad] = geometry;
@@ -318,7 +318,7 @@ namespace Draw2D.Editor
                     break;
                 case PathShape path:
                     {
-                        var geometry = ToGeometry(path, style, dx, dy);
+                        var geometry = ToGeometry(path, style, dx, dy, zx, zy);
                         if (geometry != null)
                         {
                             _pathGeometryCache[path] = geometry;
@@ -327,7 +327,7 @@ namespace Draw2D.Editor
                     break;
                 case EllipseShape ellipse:
                     {
-                        var geometry = ToGeometry(ellipse, style, dx, dy);
+                        var geometry = ToGeometry(ellipse, style, dx, dy, zx, zy);
                         if (geometry != null)
                         {
                             _ellipseGeometryCache[ellipse] = geometry;
@@ -340,7 +340,7 @@ namespace Draw2D.Editor
                         {
                             cache.Dispose();
                         }
-                        var rect = ToRect(text.TopLeft, text.BottomRight, dx, dy);
+                        var rect = ToRect(text.TopLeft, text.BottomRight, dx, dy, zx, zy);
                         _formattedTextCache[text] = AvaloniaFormattedTextCache.FromTextShape(text, rect);
                     }
                     break;
@@ -359,42 +359,42 @@ namespace Draw2D.Editor
             _state.Dispose();
         }
 
-        public void DrawLine(object dc, LineShape line, ShapeStyle style, double dx, double dy)
+        public void DrawLine(object dc, LineShape line, ShapeStyle style, double dx, double dy, double zx, double zy)
         {
             var cache = GetBrushCache(style);
             var _dc = dc as DrawingContext;
             _dc.DrawLine(style.IsStroked ? cache?.StrokePen : null, ToPoint(line.StartPoint, dx, dy), ToPoint(line.Point, dx, dy));
         }
 
-        public void DrawCubicBezier(object dc, CubicBezierShape cubicBezier, ShapeStyle style, double dx, double dy)
+        public void DrawCubicBezier(object dc, CubicBezierShape cubicBezier, ShapeStyle style, double dx, double dy, double zx, double zy)
         {
             var cache = GetBrushCache(style);
             var _dc = dc as DrawingContext;
-            var geometry = GetGeometryCache(cubicBezier, style, dx, dy);
+            var geometry = GetGeometryCache(cubicBezier, style, dx, dy, zx, zy);
             _dc.DrawGeometry(style.IsFilled ? cache?.Fill : null, style.IsStroked ? cache?.StrokePen : null, geometry);
         }
 
-        public void DrawQuadraticBezier(object dc, QuadraticBezierShape quadraticBezier, ShapeStyle style, double dx, double dy)
+        public void DrawQuadraticBezier(object dc, QuadraticBezierShape quadraticBezier, ShapeStyle style, double dx, double dy, double zx, double zy)
         {
             var cache = GetBrushCache(style);
             var _dc = dc as DrawingContext;
-            var geometry = GetGeometryCache(quadraticBezier, style, dx, dy);
+            var geometry = GetGeometryCache(quadraticBezier, style, dx, dy, zx, zy);
             _dc.DrawGeometry(style.IsFilled ? cache?.Fill : null, style.IsStroked ? cache?.StrokePen : null, geometry);
         }
 
-        public void DrawPath(object dc, PathShape path, ShapeStyle style, double dx, double dy)
+        public void DrawPath(object dc, PathShape path, ShapeStyle style, double dx, double dy, double zx, double zy)
         {
             var cache = GetBrushCache(style);
             var _dc = dc as DrawingContext;
-            var geometry = GetGeometryCache(path, style, dx, dy);
+            var geometry = GetGeometryCache(path, style, dx, dy, zx, zy);
             _dc.DrawGeometry(style.IsFilled ? cache?.Fill : null, style.IsStroked ? cache?.StrokePen : null, geometry);
         }
 
-        public void DrawRectangle(object dc, RectangleShape rectangle, ShapeStyle style, double dx, double dy)
+        public void DrawRectangle(object dc, RectangleShape rectangle, ShapeStyle style, double dx, double dy, double zx, double zy)
         {
             var cache = GetBrushCache(style);
             var _dc = dc as DrawingContext;
-            var rect = ToRect(rectangle.TopLeft, rectangle.BottomRight, dx, dy);
+            var rect = ToRect(rectangle.TopLeft, rectangle.BottomRight, dx, dy, zx, zy);
             if (style.IsFilled)
             {
                 _dc.FillRectangle(cache?.Fill, rect);
@@ -405,22 +405,22 @@ namespace Draw2D.Editor
             }
         }
 
-        public void DrawEllipse(object dc, EllipseShape ellipse, ShapeStyle style, double dx, double dy)
+        public void DrawEllipse(object dc, EllipseShape ellipse, ShapeStyle style, double dx, double dy, double zx, double zy)
         {
             var cache = GetBrushCache(style);
             var _dc = dc as DrawingContext;
-            var geometry = GetGeometryCache(ellipse, style, dx, dy);
+            var geometry = GetGeometryCache(ellipse, style, dx, dy, zx, zy);
             _dc.DrawGeometry(style.IsFilled ? cache?.Fill : null, style.IsStroked ? cache?.StrokePen : null, geometry);
         }
 
-        public void DrawText(object dc, TextShape text, ShapeStyle style, double dx, double dy)
+        public void DrawText(object dc, TextShape text, ShapeStyle style, double dx, double dy, double zx, double zy)
         {
             var cache = GetBrushCache(style);
             var _dc = dc as DrawingContext;
-            var rect = ToRect(text.TopLeft, text.BottomRight, dx, dy);
+            var rect = ToRect(text.TopLeft, text.BottomRight, dx, dy, zx, zy);
             if (text.Text != null)
             {
-                var ftc = GetTextCache(text, rect);
+                var ftc = GetTextCache(text, rect, zx, zy);
                 _dc.DrawText(cache?.Stroke, ftc.Origin, ftc.FormattedText);
             }
         }
