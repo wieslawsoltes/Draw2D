@@ -1,7 +1,6 @@
 ﻿// Copyright (c) Wiesław Šoltés. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using System;
-using System.Diagnostics;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
@@ -22,56 +21,55 @@ namespace Draw2D.Editor
         public double ZoomY { get; set; } = 1.0;
         public double OffsetX { get; set; } = 0.0;
         public double OffsetY { get; set; } = 0.0;
+        public Action Capture { get; set; }
+        public Action Release { get; set; }
+        public Action Redraw { get; set; }
 
-        public void Wheel(PointerWheelEventArgs e, IControl relativeTo)
+        public void Wheel(double delta, double x, double y)
         {
-            Point point = e.GetPosition(relativeTo);
-            ZoomDeltaTo(e.Delta.Y, point.X, point.Y);
-            Invalidate(relativeTo, true);
+            ZoomDeltaTo(delta, x, y);
+            Invalidate(true);
         }
 
-        public void Pressed(PointerPressedEventArgs e, IControl relativeTo)
+        public void Pressed(double x, double y)
         {
             if (e.Device.Captured == null && IsPanning == false)
             {
                 IsPanning = true;
-                var point = e.GetPosition(relativeTo);
-                e.Device.Capture(relativeTo);
-                StartPan(point.X, point.Y);
-                Invalidate(relativeTo, true);
+                Capture();
+                StartPan(x, y);
+                Invalidate(true);
             }
         }
 
-        public void Released(PointerReleasedEventArgs e, IControl relativeTo)
+        public void Released(double x, double y)
         {
             if (IsPanning == true)
             {
-                e.Device.Capture(null);
-                Invalidate(relativeTo, true);
+                Release();
+                Invalidate(true);
                 IsPanning = false;
             }
         }
 
-        public void Moved(PointerEventArgs e, IVisual relativeTo)
+        public void Moved(double x, double y)
         {
             if (IsPanning == true)
             {
-                var point = e.GetPosition(relativeTo);
-                PanTo(point.X, point.Y);
-                Invalidate(relativeTo, true);
+                PanTo(x, y);
+                Invalidate(true);
             }
         }
 
-        public void Invalidate(IVisual relativeTo, bool redraw)
+        public void Invalidate(bool redraw)
         {
             ZoomX = CurrentMatrix.M11;
             ZoomY = CurrentMatrix.M22;
             OffsetX = CurrentMatrix.M31;
             OffsetY = CurrentMatrix.M32;
-            Debug.WriteLine($"OffsetX: {OffsetX} OffsetY: {OffsetY}");
             if (redraw)
             {
-                relativeTo.InvalidateVisual();
+                Redraw();
             }
         }
 
@@ -100,7 +98,6 @@ namespace Draw2D.Editor
         public void StartPan(double x, double y)
         {
             PanPosition = new Point(x, y);
-            Debug.WriteLine($"[StartPan] PreviousPosition: {PanPosition}");
         }
 
         public void PanTo(double x, double y)
@@ -110,7 +107,6 @@ namespace Draw2D.Editor
             Point delta = new Point(dx, dy);
             PanPosition = new Point(x, y);
             CurrentMatrix = MatrixHelper.TranslatePrepend(CurrentMatrix, delta.X, delta.Y);
-            Debug.WriteLine($"[PanTo] PreviousPosition: {PanPosition} delta: {delta}");
         }
 
         public void Fill(double panelWidth, double panelHeight, double elementWidth, double elementHeight)
