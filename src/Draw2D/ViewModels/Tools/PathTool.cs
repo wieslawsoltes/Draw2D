@@ -268,7 +268,7 @@ namespace Draw2D.ViewModels.Tools
             if (_path != null)
             {
                 _figure.MarkAsDirty(true);
-                _path.Invalidate(context.Renderer, 0.0, 0.0, 0.0, 0.0);
+                _path.Invalidate(context.Renderer, 0.0, 0.0);
             }
         }
 

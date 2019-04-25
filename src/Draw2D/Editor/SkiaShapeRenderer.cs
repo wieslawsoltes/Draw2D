@@ -16,12 +16,12 @@ namespace Draw2D.Editor
     
         public ISelection Selection { get; set; }
 
-        public void SkiaShapeRenderer()
+        public SkiaShapeRenderer()
         {
             _scale = 1.0;
         }
 
-        public void SkiaShapeRenderer(double scale)
+        public SkiaShapeRenderer(double scale)
         {
             _scale = scale;
         }
@@ -31,13 +31,13 @@ namespace Draw2D.Editor
             return new SKColor(color.R, color.G, color.B, color.A);
         }
 
-        public static SKPaint ToSKPaintPen(ShapeStyle style)
+        public static SKPaint ToSKPaintPen(ShapeStyle style, double scale)
         {
             return new SKPaint()
             {
                 IsAntialias = true,
                 IsStroke = true,
-                StrokeWidth = (float)(style.Thickness / _scale),
+                StrokeWidth = (float)(style.Thickness / scale),
                 Color = ToSKColor(style.Stroke),
                 StrokeCap = SKStrokeCap.Butt,
                 PathEffect = null
@@ -63,7 +63,7 @@ namespace Draw2D.Editor
 
         public static IEnumerable<SKPoint> ToPoints(IEnumerable<PointShape> points, double dx, double dy)
         {
-            return points.Select(point => new SKPoint((float)(point.X + dx), (float)(point.Y + dy));
+            return points.Select(point => new SKPoint((float)(point.X + dx), (float)(point.Y + dy)));
         }
 
         public static SKRect ToRect(double left, double top, double right, double bottom)
@@ -257,7 +257,7 @@ namespace Draw2D.Editor
         public void DrawLine(object dc, LineShape line, ShapeStyle style, double dx, double dy)
         {
             var canvas = dc as SKCanvas;
-            using (var pen = ToSKPaintPen(style))
+            using (var pen = ToSKPaintPen(style, _scale))
             {
                 if (style.IsStroked)
                 {
@@ -270,7 +270,7 @@ namespace Draw2D.Editor
         {
             var canvas = dc as SKCanvas;
             using (var brush = ToSKPaintBrush(style.Fill))
-            using (var pen = ToSKPaintPen(style))
+            using (var pen = ToSKPaintPen(style, _scale))
             using (var geometry = ToGeometry(cubicBezier, dx, dy))
             {
                 if (style.IsFilled)
@@ -288,7 +288,7 @@ namespace Draw2D.Editor
         {
             var canvas = dc as SKCanvas;
             using (var brush = ToSKPaintBrush(style.Fill))
-            using (var pen = ToSKPaintPen(style))
+            using (var pen = ToSKPaintPen(style, _scale))
             using (var geometry = ToGeometry(quadraticBezier, dx, dy))
             {
                 if (style.IsFilled)
@@ -306,7 +306,7 @@ namespace Draw2D.Editor
         {
             var canvas = dc as SKCanvas;
             using (var brush = ToSKPaintBrush(style.Fill))
-            using (var pen = ToSKPaintPen(style))
+            using (var pen = ToSKPaintPen(style, _scale))
             using (var geometry = ToGeometry(path, dx, dy))
             {
                 if (style.IsFilled)
@@ -325,7 +325,7 @@ namespace Draw2D.Editor
             var canvas = dc as SKCanvas;
             var rect = ToRect(rectangle.TopLeft, rectangle.BottomRight, dx, dy);
             using (var brush = ToSKPaintBrush(style.Fill))
-            using (var pen = ToSKPaintPen(style))
+            using (var pen = ToSKPaintPen(style, _scale))
             {
                 if (style.IsFilled)
                 {
@@ -343,7 +343,7 @@ namespace Draw2D.Editor
             var canvas = dc as SKCanvas;
             var rect = ToRect(ellipse.TopLeft, ellipse.BottomRight, dx, dy);
             using (var brush = ToSKPaintBrush(style.Fill))
-            using (var pen = ToSKPaintPen(style))
+            using (var pen = ToSKPaintPen(style, _scale))
             {
                 if (style.IsFilled)
                 {
