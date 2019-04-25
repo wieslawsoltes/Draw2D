@@ -208,7 +208,7 @@ namespace Draw2D.Editor
             {
                 var color = AvaloniaBrushCache.FromDrawColor(ctx.CurrentContainer.WorkBackground);
                 var brush = new SolidColorBrush(color);
-                context.FillRectangle(brush, new Rect(dx, dy, ctx.CurrentContainer.Width * zx, ctx.CurrentContainer.Height * zy));
+                context.FillRectangle(brush, new Rect(dx * zx, dy * zy, ctx.CurrentContainer.Width * zx, ctx.CurrentContainer.Height * zy));
             }
 
             ctx.Presenter.DrawContainer(context, ctx.CurrentContainer, ctx.Renderer, dx, dy, zx, zy, DrawMode.Shape, null, null);
