@@ -121,7 +121,7 @@ namespace Draw2D.Editor
         private Point AdjustZoomPoint(Point point)
         {
             GetOffset(out double dx, out double dy, out double zx, out double zy);
-            return new Point(point.X / zx, point.Y / zy);
+            return new Point((point.X + dx) * zx, (point.Y + dy) * zy);
         }
 
         private Point AdjustPoint(Point point, double dx, double dy, double zx, double zy)
