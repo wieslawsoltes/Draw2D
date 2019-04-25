@@ -14,7 +14,6 @@ namespace Draw2D.Editor
 {
     public class AvaloniaInputView : Border
     {
-        private bool _drawWorking = false;
         private ZoomState _zoomState;
 
         public static readonly StyledProperty<bool> CustomDrawProperty =
@@ -80,14 +79,12 @@ namespace Draw2D.Editor
         protected override void OnPointerEnter(PointerEventArgs e)
         {
             base.OnPointerEnter(e);
-            _drawWorking = true;
             this.InvalidateVisual();
         }
 
         protected override void OnPointerLeave(PointerEventArgs e)
         {
             base.OnPointerLeave(e);
-            _drawWorking = false;
             this.InvalidateVisual();
         }
 
@@ -198,7 +195,7 @@ namespace Draw2D.Editor
             }
         }
 
-        private void Draw(DrawingContext context, IToolContext ctx, bool drawWorking, double width, double height, double dx, double dy, double zx, double zy)
+        private void Draw(DrawingContext context, IToolContext ctx, double width, double height, double dx, double dy, double zx, double zy)
         {
             if (ctx.CurrentContainer.InputBackground != null)
             {
@@ -217,18 +214,11 @@ namespace Draw2D.Editor
             ctx.Presenter.DrawContainer(context, ctx.CurrentContainer, ctx.Renderer, dx, dy, zx, zy, DrawMode.Shape, null, null);
             ctx.Presenter.DrawContainer(context, ctx.CurrentContainer, ctx.Renderer, dx, dy, zx, zy, DrawMode.Point, null, null);
 
-            if (drawWorking)
-            {
-                ctx.Presenter.DrawContainer(context, ctx.WorkingContainer, ctx.Renderer, dx, dy, zx, zy, DrawMode.Shape, null, null);
-                ctx.Presenter.DrawContainer(context, ctx.WorkingContainer, ctx.Renderer, dx, dy, zx, zy, DrawMode.Point, null, null);
-            }
+            ctx.Presenter.DrawContainer(context, ctx.WorkingContainer, ctx.Renderer, dx, dy, zx, zy, DrawMode.Shape, null, null);
+            ctx.Presenter.DrawContainer(context, ctx.WorkingContainer, ctx.Renderer, dx, dy, zx, zy, DrawMode.Point, null, null);
 
             ctx.Presenter.DrawDecorators(context, ctx.CurrentContainer, ctx.Renderer, dx, dy, zx, zy, DrawMode.Shape);
-
-            if (drawWorking)
-            {
-                ctx.Presenter.DrawDecorators(context, ctx.WorkingContainer, ctx.Renderer, dx, dy, zx, zy, DrawMode.Shape);
-            }
+            ctx.Presenter.DrawDecorators(context, ctx.WorkingContainer, ctx.Renderer, dx, dy, zx, zy, DrawMode.Shape);
         }
 
         public override void Render(DrawingContext context)
@@ -252,11 +242,11 @@ namespace Draw2D.Editor
 
                 if (CustomDraw)
                 {
-                    context.Custom(new CustomDrawOperation(ctx, _drawWorking, width, height, dx, dy, zx, zy));
+                    context.Custom(new CustomDrawOperation(ctx, width, height, dx, dy, zx, zy));
                 }
                 else
                 {
-                    Draw(context, ctx, _drawWorking, width, height, dx, dy, zx, zy);
+                    Draw(context, ctx, width, height, dx, dy, zx, zy);
                 }
             }
         }

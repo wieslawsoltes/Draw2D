@@ -1,6 +1,5 @@
 ﻿// Copyright (c) Wiesław Šoltés. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
-using System.Diagnostics;
 using Avalonia;
 using Avalonia.Platform;
 using Avalonia.Rendering.SceneGraph;
@@ -13,7 +12,6 @@ namespace Draw2D.Editor
     struct CustomDrawOperation : ICustomDrawOperation
     {
         private IToolContext _ctx;
-        private bool _drawWorking;
         private double _width;
         private double _height;
         private double _dx;
@@ -27,11 +25,9 @@ namespace Draw2D.Editor
 
         public bool Equals(ICustomDrawOperation other) => false;
 
-        public CustomDrawOperation(IToolContext context, bool drawWorking, double width, double height, double dx, double dy, double zx, double zy)
+        public CustomDrawOperation(IToolContext context, double width, double height, double dx, double dy, double zx, double zy)
         {
-            Debug.WriteLine($"CustomDrawOperation {drawWorking} {width} {height} {dx} {dy}");
             _ctx = context;
-            _drawWorking = drawWorking;
             _width = width;
             _height = height;
             _dx = dx;
@@ -41,7 +37,7 @@ namespace Draw2D.Editor
             Bounds = new Rect(0, 0, width, height);
         }
 
-        private void Draw(SKCanvas canvas, IToolContext ctx, bool drawWorking, double width, double height, double dx, double dy, double zx, double zy)
+        private void Draw(SKCanvas canvas, IToolContext ctx, double width, double height, double dx, double dy, double zx, double zy)
         {
             var renderer = new SkiaShapeRenderer()
             {
@@ -67,18 +63,12 @@ namespace Draw2D.Editor
             ctx.Presenter.DrawContainer(canvas, ctx.CurrentContainer, renderer, dx, dy, zx, zy, DrawMode.Shape, null, null);
             ctx.Presenter.DrawContainer(canvas, ctx.CurrentContainer, renderer, dx, dy, zx, zy, DrawMode.Point, null, null);
 
-            if (drawWorking)
-            {
-                ctx.Presenter.DrawContainer(canvas, ctx.WorkingContainer, renderer, dx, dy, zx, zy, DrawMode.Shape, null, null);
-                ctx.Presenter.DrawContainer(canvas, ctx.WorkingContainer, renderer, dx, dy, zx, zy, DrawMode.Point, null, null);
-            }
+            ctx.Presenter.DrawContainer(canvas, ctx.WorkingContainer, renderer, dx, dy, zx, zy, DrawMode.Shape, null, null);
+            ctx.Presenter.DrawContainer(canvas, ctx.WorkingContainer, renderer, dx, dy, zx, zy, DrawMode.Point, null, null);
 
             ctx.Presenter.DrawDecorators(canvas, ctx.CurrentContainer, renderer, dx, dy, zx, zy, DrawMode.Shape);
 
-            if (drawWorking)
-            {
-                ctx.Presenter.DrawDecorators(canvas, ctx.WorkingContainer, renderer, dx, dy, zx, zy, DrawMode.Shape);
-            }
+            ctx.Presenter.DrawDecorators(canvas, ctx.WorkingContainer, renderer, dx, dy, zx, zy, DrawMode.Shape);
         }
 
         public void Render(IDrawingContextImpl context)
@@ -88,7 +78,7 @@ namespace Draw2D.Editor
             {
                 canvas.Save();
 
-                Draw(canvas, _ctx, _drawWorking, _width, _height, _dx, _dy, _zx, _zy);
+                Draw(canvas, _ctx, _width, _height, _dx, _dy, _zx, _zy);
 
                 canvas.Restore();
             }
