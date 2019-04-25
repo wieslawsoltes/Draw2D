@@ -23,6 +23,7 @@ namespace Draw2D.Editor
         public double OffsetY { get; set; } = 0.0;
         public Action Capture { get; set; }
         public Action Release { get; set; }
+        public Func<bool> IsCaptured { get; set; }
         public Action Redraw { get; set; }
 
         public void Wheel(double delta, double x, double y)
@@ -33,7 +34,7 @@ namespace Draw2D.Editor
 
         public void Pressed(double x, double y)
         {
-            if (e.Device.Captured == null && IsPanning == false)
+            if (IsCaptured() == false && IsPanning == false)
             {
                 IsPanning = true;
                 Capture();

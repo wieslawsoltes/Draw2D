@@ -261,6 +261,10 @@ namespace Draw2D.Editor
                                 md.Capture(null);
                             }
                         };
+                        _zoomState.IsCaptured = () =>
+                        {
+                            return md.Captured != null;
+                        };
                         _zoomState.Redraw = () =>
                         {
                             this.InvalidateVisual();
@@ -269,7 +273,7 @@ namespace Draw2D.Editor
 
                     _zoomState.Reset();
                     _zoomState.Center(width, height, ctx.CurrentContainer.Width, ctx.CurrentContainer.Height);
-                    _zoomState.Invalidate(this, false);
+                    _zoomState.Invalidate(false);
                 }
 
                 GetOffset(out double dx, out double dy, out double zx, out double zy);
