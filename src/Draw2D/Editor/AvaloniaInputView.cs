@@ -118,6 +118,12 @@ namespace Draw2D.Editor
             zy = _zoomState.ZoomY;
         }
 
+        private Point AdjustPanPoint(Point point)
+        {
+            GetOffset(out double dx, out double dy, out double zx, out double zy);
+            return new Point(point.X / zx, point.Y / zy);
+        }
+
         private Point AdjustZoomPoint(Point point)
         {
             GetOffset(out double dx, out double dy, out double zx, out double zy);
@@ -148,7 +154,7 @@ namespace Draw2D.Editor
             }
             else if (e.MouseButton == MouseButton.Right)
             {
-                Point zpoint = AdjustZoomPoint(e.GetPosition(this));
+                Point zpoint = AdjustPanPoint(e.GetPosition(this));
                 _zoomState.Pressed(zpoint.X, zpoint.Y);
 
                 if (this.DataContext is IToolContext ctx && _zoomState.IsPanning == false)
@@ -178,7 +184,7 @@ namespace Draw2D.Editor
             }
             else if (e.MouseButton == MouseButton.Right)
             {
-                Point zpoint = AdjustZoomPoint(e.GetPosition(this));
+                Point zpoint = AdjustPanPoint(e.GetPosition(this));
                 _zoomState.Released(zpoint.X, zpoint.Y);
 
                 if (this.DataContext is IToolContext ctx && _zoomState.IsPanning == false)
@@ -191,7 +197,7 @@ namespace Draw2D.Editor
 
         private void HandlePointerMoved(PointerEventArgs e)
         {
-            Point zpoint = AdjustZoomPoint(e.GetPosition(this));
+            Point zpoint = AdjustPanPoint(e.GetPosition(this));
             _zoomState.Moved(zpoint.X, zpoint.Y);
 
             if (this.DataContext is IToolContext ctx && _zoomState.IsPanning == false)
