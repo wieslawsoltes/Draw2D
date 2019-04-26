@@ -116,13 +116,6 @@ namespace Draw2D.Editor
         {
             base.OnPointerEnter(e);
             this.Focus();
-            this.InvalidateVisual();
-        }
-
-        protected override void OnPointerLeave(PointerEventArgs e)
-        {
-            base.OnPointerLeave(e);
-            this.InvalidateVisual();
         }
 
         private Modifier GetModifier(InputModifiers inputModifiers)
@@ -175,7 +168,7 @@ namespace Draw2D.Editor
 
         private void HandlePointerWheelChanged(PointerWheelEventArgs e)
         {
-            Point zpoint = AdjustZoomPoint(e.GetPosition(this));
+            var zpoint = AdjustZoomPoint(e.GetPosition(this));
             _zoom.Wheel(e.Delta.Y, zpoint.X, zpoint.Y);
         }
 
@@ -191,7 +184,7 @@ namespace Draw2D.Editor
             }
             else if (e.MouseButton == MouseButton.Right)
             {
-                Point zpoint = AdjustPanPoint(e.GetPosition(this));
+                var zpoint = AdjustPanPoint(e.GetPosition(this));
                 _zoom.Pressed(zpoint.X, zpoint.Y);
 
                 if (this.DataContext is IToolContext ctx && _zoom.IsPanning == false)
@@ -221,7 +214,7 @@ namespace Draw2D.Editor
             }
             else if (e.MouseButton == MouseButton.Right)
             {
-                Point zpoint = AdjustPanPoint(e.GetPosition(this));
+                var zpoint = AdjustPanPoint(e.GetPosition(this));
                 _zoom.Released(zpoint.X, zpoint.Y);
 
                 if (this.DataContext is IToolContext ctx && _zoom.IsPanning == false)
@@ -234,7 +227,7 @@ namespace Draw2D.Editor
 
         private void HandlePointerMoved(PointerEventArgs e)
         {
-            Point zpoint = AdjustPanPoint(e.GetPosition(this));
+            var zpoint = AdjustPanPoint(e.GetPosition(this));
             _zoom.Moved(zpoint.X, zpoint.Y);
 
             if (this.DataContext is IToolContext ctx && _zoom.IsPanning == false)
