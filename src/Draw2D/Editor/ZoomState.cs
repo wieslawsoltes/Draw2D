@@ -2,12 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using System;
 using Avalonia;
-using Avalonia.Controls;
-using Avalonia.Input;
 using Avalonia.MatrixExtensions;
-using Avalonia.Media;
-using Avalonia.VisualTree;
-using Draw2D.ViewModels;
 
 namespace Draw2D.Editor
 {
