@@ -10,6 +10,7 @@
         <Assembly Name="Avalonia.Animation" Dynamic="Required All" />
         <Assembly Name="Avalonia.Visuals" Dynamic="Required All" />
         <Assembly Name="Avalonia.Themes.Default" Dynamic="Required All"  />
+        <Assembly Name="Avalonia.Diagnostics" Dynamic="Required All" />
 
         <Assembly Name="SkiaSharp" >
           <Type Name="SkiaSharp.SKData" Dynamic="Required All" />
