@@ -65,10 +65,15 @@
                 <MenuItem Header="Select _All" Command="{Binding Selection.SelectAll}" CommandParameter="{Binding}"/>
             </MenuItem>
             <MenuItem Header="_View">
-                <MenuItem Header="_Reset Zoom" Command="{Binding Zoom.Reset}"/>
+                <MenuItem Header="_Reset Zoom" Command="{Binding #inputView.ResetRoom}" CommandParameter="True"/>
                 <Separator/>
-                <MenuItem Header="_AutoFit Zoom" Command="{Binding Zoom.AutoFit}"/>
+                <MenuItem Header="_Center Zoom" Command="{Binding #inputView.CenterZoom}" CommandParameter="True"/>
                 <Separator/>
+                <MenuItem Header="_Fill Zoom" Command="{Binding #inputView.FillZoom}" CommandParameter="True"/>
+                <Separator/>
+                <MenuItem Header="_Uniform Zoom" Command="{Binding #inputView.UniformZoom}" CommandParameter="True"/>
+                <Separator/>
+                <MenuItem Header="Uniform_ToFill Zoom" Command="{Binding #inputView.UniformToFillZoom}" CommandParameter="True"/>
             </MenuItem>
             <MenuItem Header="_Tool">
                 <MenuItem Header="_None" Command="{Binding SetTool}" CommandParameter="None">

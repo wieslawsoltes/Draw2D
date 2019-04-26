@@ -14,7 +14,8 @@ namespace Draw2D.Editor
 {
     public class AvaloniaInputView : Border
     {
-        private ZoomState _zoom = null;
+        private bool _initializedZoom = false;
+        private ZoomState _zoom =  new ZoomState();
         private bool _customDraw = true;
 
         public static readonly DirectProperty<AvaloniaInputView, ZoomState> ZoomProperty =
@@ -59,6 +60,7 @@ namespace Draw2D.Editor
                             md.Capture(this);
                         }
                     };
+
                     ctx.Release = () =>
                     {
                         if (md.Captured != null)
@@ -66,7 +68,34 @@ namespace Draw2D.Editor
                             md.Capture(null);
                         }
                     };
+
                     ctx.Invalidate = () =>
+                    {
+                        this.InvalidateVisual();
+                    };
+
+                    _zoom.Capture = () =>
+                    {
+                        if (md.Captured == null)
+                        {
+                            md.Capture(this);
+                        }
+                    };
+
+                    _zoom.Release = () =>
+                    {
+                        if (md.Captured != null)
+                        {
+                            md.Capture(null);
+                        }
+                    };
+
+                    _zoom.IsCaptured = () =>
+                    {
+                        return md.Captured != null;
+                    };
+
+                    _zoom.Redraw = () =>
                     {
                         this.InvalidateVisual();
                     };
@@ -218,6 +247,51 @@ namespace Draw2D.Editor
             }
         }
 
+        public void ResetZoom(bool redraw)
+        {
+            if (this.DataContext is IToolContext ctx)
+            {
+                _zoom.Reset();
+                _zoom.Invalidate(redraw);
+            }
+        }
+
+        public void CenterZoom(bool redraw)
+        {
+            if (this.DataContext is IToolContext ctx)
+            {
+                _zoom.Center(Bounds.Width, Bounds.Height, ctx.CurrentContainer.Width, ctx.CurrentContainer.Height);
+                _zoom.Invalidate(redraw);
+            }
+        }
+
+        public void FillZoom(bool redraw)
+        {
+            if (this.DataContext is IToolContext ctx)
+            {
+                _zoom.Fill(Bounds.Width, Bounds.Height, ctx.CurrentContainer.Width, ctx.CurrentContainer.Height);
+                _zoom.Invalidate(redraw);
+            }
+        }
+
+        public void UniformZoom(bool redraw)
+        {
+            if (this.DataContext is IToolContext ctx)
+            {
+                _zoom.Uniform(Bounds.Width, Bounds.Height, ctx.CurrentContainer.Width, ctx.CurrentContainer.Height);
+                _zoom.Invalidate(redraw);
+            }
+        }
+
+        public void UniformToFillZoom(bool redraw)
+        {
+            if (this.DataContext is IToolContext ctx)
+            {
+                _zoom.Center(Bounds.Width, Bounds.Height, ctx.CurrentContainer.Width, ctx.CurrentContainer.Height);
+                _zoom.Invalidate(redraw);
+            }
+        }
+
         private void Draw(DrawingContext context, IToolContext ctx, double width, double height, double dx, double dy, double zx, double zy)
         {
             if (ctx.CurrentContainer.InputBackground != null)
@@ -257,40 +331,10 @@ namespace Draw2D.Editor
                 double width = Bounds.Width;
                 double height = Bounds.Height;
 
-                if (_zoom == null)
+                if (_initializedZoom == false)
                 {
-                    _zoom = new ZoomState();
-
-                    var md = (this.GetVisualRoot() as IInputRoot)?.MouseDevice;
-                    if (md != null)
-                    {
-                        _zoom.Capture = () =>
-                        {
-                            if (md.Captured == null)
-                            {
-                                md.Capture(this);
-                            }
-                        };
-                        _zoom.Release = () =>
-                        {
-                            if (md.Captured != null)
-                            {
-                                md.Capture(null);
-                            }
-                        };
-                        _zoom.IsCaptured = () =>
-                        {
-                            return md.Captured != null;
-                        };
-                        _zoom.Redraw = () =>
-                        {
-                            this.InvalidateVisual();
-                        };
-                    }
-
-                    _zoom.Reset();
-                    _zoom.Center(width, height, ctx.CurrentContainer.Width, ctx.CurrentContainer.Height);
-                    _zoom.Invalidate(false);
+                    CenterZoom(false);
+                    _initializedZoom = true;
                 }
 
                 GetOffset(out double dx, out double dy, out double zx, out double zy);

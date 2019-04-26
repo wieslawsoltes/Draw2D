@@ -126,18 +126,6 @@ namespace Draw2D.Editor
             }
         }
 
-        public void Reset()
-        {
-            CurrentMatrix = Matrix.Identity;
-        }
-
-        public void Center(double panelWidth, double panelHeight, double elementWidth, double elementHeight)
-        {
-            double ox = (panelWidth - elementWidth) / 2;
-            double oy = (panelHeight - elementHeight) / 2;
-            CurrentMatrix = new Matrix(1.0, 0.0, 0.0, 1.0, ox, oy);
-        }
-
         public void ZoomTo(double zoom, double x, double y)
         {
             CurrentMatrix = MatrixHelper.ScaleAtPrepend(CurrentMatrix, zoom, zoom, x, y);
@@ -160,6 +148,18 @@ namespace Draw2D.Editor
             Point delta = new Point(dx, dy);
             PanPosition = new Point(x, y);
             CurrentMatrix = MatrixHelper.TranslatePrepend(CurrentMatrix, delta.X, delta.Y);
+        }
+
+        public void Reset()
+        {
+            CurrentMatrix = Matrix.Identity;
+        }
+
+        public void Center(double panelWidth, double panelHeight, double elementWidth, double elementHeight)
+        {
+            double ox = (panelWidth - elementWidth) / 2;
+            double oy = (panelHeight - elementHeight) / 2;
+            CurrentMatrix = new Matrix(1.0, 0.0, 0.0, 1.0, ox, oy);
         }
 
         public void Fill(double panelWidth, double panelHeight, double elementWidth, double elementHeight)
