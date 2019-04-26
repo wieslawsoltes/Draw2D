@@ -287,7 +287,7 @@ namespace Draw2D.Editor
         {
             if (this.DataContext is IToolContext ctx)
             {
-                _zoom.Center(Bounds.Width, Bounds.Height, ctx.CurrentContainer.Width, ctx.CurrentContainer.Height);
+                _zoom.UniformToFill(Bounds.Width, Bounds.Height, ctx.CurrentContainer.Width, ctx.CurrentContainer.Height);
                 _zoom.Invalidate(redraw);
             }
         }
