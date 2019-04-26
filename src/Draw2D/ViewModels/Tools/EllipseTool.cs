@@ -59,8 +59,8 @@ namespace Draw2D.ViewModels.Tools
             context.Selection.Selected.Add(_ellipse.TopLeft);
             context.Selection.Selected.Add(_ellipse.BottomRight);
 
-            context.Capture?.Invoke();
-            context.Invalidate?.Invoke();
+            context.InputService?.Capture?.Invoke();
+            context.InputService?.Redraw?.Invoke();
 
             CurrentState = State.BottomRight;
         }
@@ -81,8 +81,8 @@ namespace Draw2D.ViewModels.Tools
 
             Filters?.ForEach(f => f.Clear(context));
 
-            context.Release?.Invoke();
-            context.Invalidate?.Invoke();
+            context.InputService?.Release?.Invoke();
+            context.InputService?.Redraw?.Invoke();
         }
 
         private void MoveTopLeftInternal(IToolContext context, double x, double y, Modifier modifier)
@@ -90,7 +90,7 @@ namespace Draw2D.ViewModels.Tools
             Filters?.ForEach(f => f.Clear(context));
             Filters?.Any(f => f.Process(context, ref x, ref y));
 
-            context.Invalidate?.Invoke();
+            context.InputService?.Redraw?.Invoke();
         }
 
         private void MoveBottomRightInternal(IToolContext context, double x, double y, Modifier modifier)
@@ -101,7 +101,7 @@ namespace Draw2D.ViewModels.Tools
             _ellipse.BottomRight.X = x;
             _ellipse.BottomRight.Y = y;
 
-            context.Invalidate?.Invoke();
+            context.InputService?.Redraw?.Invoke();
         }
 
         private void CleanInternal(IToolContext context)
@@ -119,8 +119,8 @@ namespace Draw2D.ViewModels.Tools
                 _ellipse = null;
             }
 
-            context.Release?.Invoke();
-            context.Invalidate?.Invoke();
+            context.InputService?.Release?.Invoke();
+            context.InputService?.Redraw?.Invoke();
         }
 
         public void LeftDown(IToolContext context, double x, double y, Modifier modifier)

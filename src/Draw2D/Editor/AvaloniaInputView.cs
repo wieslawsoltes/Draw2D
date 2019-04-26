@@ -1,5 +1,6 @@
 ﻿// Copyright (c) Wiesław Šoltés. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
+using System;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
@@ -9,7 +10,7 @@ using Draw2D.ViewModels;
 
 namespace Draw2D.Editor
 {
-    public class AvaloniaInputView : Border
+    public class AvaloniaInputView : Border, IInputService
     {
         private bool _initializedZoom = false;
         private ZoomState _zoom = new ZoomState();
@@ -33,6 +34,14 @@ namespace Draw2D.Editor
             set { SetAndRaise(CustomDrawProperty, ref _customDraw, value); }
         }
 
+        public Action Capture { get; set; }
+
+        public Action Release { get; set; }
+
+        public Func<bool> IsCaptured { get; set; }
+
+        public Action Redraw { get; set; }
+
         public AvaloniaInputView()
         {
             PointerWheelChanged += (sender, e) => HandlePointerWheelChanged(e);
@@ -50,7 +59,7 @@ namespace Draw2D.Editor
                 var md = (this.GetVisualRoot() as IInputRoot)?.MouseDevice;
                 if (md != null)
                 {
-                    ctx.Capture = () =>
+                    this.Capture = () =>
                     {
                         if (md.Captured == null)
                         {
@@ -58,7 +67,7 @@ namespace Draw2D.Editor
                         }
                     };
 
-                    ctx.Release = () =>
+                    this.Release = () =>
                     {
                         if (md.Captured != null)
                         {
@@ -66,36 +75,18 @@ namespace Draw2D.Editor
                         }
                     };
 
-                    ctx.Invalidate = () =>
-                    {
-                        this.InvalidateVisual();
-                    };
-
-                    _zoom.Capture = () =>
-                    {
-                        if (md.Captured == null)
-                        {
-                            md.Capture(this);
-                        }
-                    };
-
-                    _zoom.Release = () =>
-                    {
-                        if (md.Captured != null)
-                        {
-                            md.Capture(null);
-                        }
-                    };
-
-                    _zoom.IsCaptured = () =>
+                    this.IsCaptured = () =>
                     {
                         return md.Captured != null;
                     };
 
-                    _zoom.Redraw = () =>
+                    this.Redraw = () =>
                     {
                         this.InvalidateVisual();
                     };
+
+                    ctx.InputService = this;
+                    _zoom.InputService = this;
                 }
             }
         }
@@ -106,9 +97,8 @@ namespace Draw2D.Editor
 
             if (this.DataContext is IToolContext ctx)
             {
-                ctx.Capture = null;
-                ctx.Release = null;
-                ctx.Invalidate = null;
+                ctx.InputService = null;
+                _zoom.InputService = null;
             }
         }
 
@@ -120,7 +110,7 @@ namespace Draw2D.Editor
 
         private Modifier GetModifier(InputModifiers inputModifiers)
         {
-            Modifier modifier = Modifier.None;
+            var modifier = Modifier.None;
 
             if (inputModifiers.HasFlag(InputModifiers.Alt))
             {

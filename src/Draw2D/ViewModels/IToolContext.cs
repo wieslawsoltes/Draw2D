@@ -1,6 +1,5 @@
 ﻿// Copyright (c) Wiesław Šoltés. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
-using System;
 using Draw2D.ViewModels.Containers;
 using Draw2D.ViewModels.Shapes;
 using Draw2D.ViewModels.Style;
@@ -16,9 +15,7 @@ namespace Draw2D.ViewModels
         CanvasContainer WorkingContainer { get; set; }
         ShapeStyle CurrentStyle { get; set; }
         BaseShape PointShape { get; set; }
-        Action Capture { get; set; }
-        Action Release { get; set; }
-        Action Invalidate { get; set; }
+        IInputService InputService { get; set; }
         IList<ITool> Tools { get; set; }
         ITool CurrentTool { get; set; }
         EditMode Mode { get; set; }

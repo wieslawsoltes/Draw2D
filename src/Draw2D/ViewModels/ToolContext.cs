@@ -19,6 +19,7 @@ namespace Draw2D.ViewModels
         private CanvasContainer _workingContainer;
         private ShapeStyle _currentStyle;
         private BaseShape _pointShape;
+        private IInputService _inputService;
         private IList<ITool> _tools;
         private ITool _currentTool;
         private EditMode _mode;
@@ -61,11 +62,11 @@ namespace Draw2D.ViewModels
             set => Update(ref _pointShape, value);
         }
 
-        public Action Capture { get; set; }
-
-        public Action Release { get; set; }
-
-        public Action Invalidate { get; set; }
+        public IInputService InputService
+        {
+            get => _inputService;
+            set => Update(ref _inputService, value);
+        }
 
         public IList<ITool> Tools
         {

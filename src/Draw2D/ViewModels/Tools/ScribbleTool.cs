@@ -93,8 +93,8 @@ namespace Draw2D.ViewModels.Tools
 
             context.WorkingContainer.Shapes.Add(_path);
 
-            context.Capture?.Invoke();
-            context.Invalidate?.Invoke();
+            context.InputService?.Capture?.Invoke();
+            context.InputService?.Redraw?.Invoke();
 
             CurrentState = State.Points;
         }
@@ -152,8 +152,8 @@ namespace Draw2D.ViewModels.Tools
 
             Filters?.ForEach(f => f.Clear(context));
 
-            context.Release?.Invoke();
-            context.Invalidate?.Invoke();
+            context.InputService?.Release?.Invoke();
+            context.InputService?.Redraw?.Invoke();
         }
 
         private void MoveStartInternal(IToolContext context, double x, double y, Modifier modifier)
@@ -161,7 +161,7 @@ namespace Draw2D.ViewModels.Tools
             Filters?.ForEach(f => f.Clear(context));
             Filters?.Any(f => f.Process(context, ref x, ref y));
 
-            context.Invalidate?.Invoke();
+            context.InputService?.Redraw?.Invoke();
         }
 
         private void MovePointsInternal(IToolContext context, double x, double y, Modifier modifier)
@@ -183,7 +183,7 @@ namespace Draw2D.ViewModels.Tools
             _previousPoint = _nextPoint;
             _nextPoint = null;
 
-            context.Invalidate?.Invoke();
+            context.InputService?.Redraw?.Invoke();
         }
 
         private void CleanInternal(IToolContext context)
@@ -201,8 +201,8 @@ namespace Draw2D.ViewModels.Tools
                 _nextPoint = null;
             }
 
-            context.Release?.Invoke();
-            context.Invalidate?.Invoke();
+            context.InputService?.Release?.Invoke();
+            context.InputService?.Redraw?.Invoke();
         }
 
         public void LeftDown(IToolContext context, double x, double y, Modifier modifier)

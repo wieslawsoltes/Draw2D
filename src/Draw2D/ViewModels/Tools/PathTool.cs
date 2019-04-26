@@ -115,22 +115,10 @@ namespace Draw2D.ViewModels.Tools
             set => throw new InvalidOperationException($"Can not set {PointShape} property value.");
         }
 
-        public Action Capture
+        public IInputService InputService
         {
-            get => _context.Capture;
-            set => throw new InvalidOperationException($"Can not set {Capture} property value.");
-        }
-
-        public Action Release
-        {
-            get => _context.Release;
-            set => throw new InvalidOperationException($"Can not set {Release} property value.");
-        }
-
-        public Action Invalidate
-        {
-            get => _context.Invalidate;
-            set => throw new InvalidOperationException($"Can not set {Invalidate} property value.");
+            get => _context.InputService;
+            set => throw new InvalidOperationException($"Can not set {InputService} property value.");
         }
 
         public IList<ITool> Tools

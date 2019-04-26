@@ -396,9 +396,7 @@ namespace Draw2D.Editor
             this.WorkingContainer = null;
             this.CurrentStyle = null;
             this.PointShape = null;
-            this.Capture = null;
-            this.Release = null;
-            this.Invalidate = null;
+            this.InputService = null;
             // ViewModel
             this.Tools = tools;
             this.CurrentTool = currentTool;
@@ -461,7 +459,7 @@ namespace Draw2D.Editor
             var workingContainer = new CanvasContainer();
             CurrentContainer = container;
             WorkingContainer = new CanvasContainer();
-            Invalidate?.Invoke();
+            InputService?.Redraw?.Invoke();
         }
 
         public void OpenContainer(string path)
@@ -472,7 +470,7 @@ namespace Draw2D.Editor
             Selection.Selected.Clear();
             CurrentContainer = container;
             WorkingContainer = workingContainer;
-            Invalidate?.Invoke();
+            InputService?.Redraw?.Invoke();
         }
 
         public void SaveContainer(string path)

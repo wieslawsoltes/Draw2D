@@ -3,6 +3,7 @@
 using System;
 using Avalonia;
 using Avalonia.MatrixExtensions;
+using Draw2D.ViewModels;
 
 namespace Draw2D.Editor
 {
@@ -59,19 +60,13 @@ namespace Draw2D.Editor
             set { SetAndRaise(OffsetYProperty, ref _offsetY, value); }
         }
 
+        public IInputService InputService { get; set; }
+
         public bool IsPanning { get; set; }
 
-        public Action Capture { get; set; }
+        public Matrix CurrentMatrix { get; set; }
 
-        public Action Release { get; set; }
-
-        public Func<bool> IsCaptured { get; set; }
-
-        public Action Redraw { get; set; }
-
-        private Matrix CurrentMatrix { get; set; }
-
-        private Point PanPosition { get; set; }
+        public Point PanPosition { get; set; }
 
         public void Wheel(double delta, double x, double y)
         {
@@ -81,10 +76,10 @@ namespace Draw2D.Editor
 
         public void Pressed(double x, double y)
         {
-            if (IsCaptured() == false && IsPanning == false)
+            if (InputService?.IsCaptured() == false && IsPanning == false)
             {
                 IsPanning = true;
-                Capture();
+                InputService?.Capture();
                 StartPan(x, y);
                 Invalidate(true);
             }
@@ -94,7 +89,7 @@ namespace Draw2D.Editor
         {
             if (IsPanning == true)
             {
-                Release();
+                InputService?.Release();
                 Invalidate(true);
                 IsPanning = false;
             }
@@ -117,7 +112,7 @@ namespace Draw2D.Editor
             OffsetY = CurrentMatrix.M32;
             if (redraw)
             {
-                Redraw();
+                InputService.Redraw();
             }
         }
 
