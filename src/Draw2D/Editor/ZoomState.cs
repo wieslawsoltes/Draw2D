@@ -76,10 +76,10 @@ namespace Draw2D.Editor
 
         public void Pressed(double x, double y)
         {
-            if (InputService?.IsCaptured() == false && IsPanning == false)
+            if (InputService?.IsCaptured?.Invoke() == false && IsPanning == false)
             {
                 IsPanning = true;
-                InputService?.Capture();
+                InputService?.Capture?.Invoke();
                 StartPan(x, y);
                 Invalidate(true);
             }
@@ -89,7 +89,7 @@ namespace Draw2D.Editor
         {
             if (IsPanning == true)
             {
-                InputService?.Release();
+                InputService?.Release?.Invoke();
                 Invalidate(true);
                 IsPanning = false;
             }
@@ -112,7 +112,7 @@ namespace Draw2D.Editor
             OffsetY = CurrentMatrix.M32;
             if (redraw)
             {
-                InputService.Redraw();
+                InputService.Redraw?.Invoke();
             }
         }
 
