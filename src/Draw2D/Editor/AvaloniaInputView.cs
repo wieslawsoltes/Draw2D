@@ -14,15 +14,25 @@ namespace Draw2D.Editor
 {
     public class AvaloniaInputView : Border
     {
-        private ZoomState _zoomState;
+        private ZoomState _zoom = null;
+        private bool _customDraw = true;
 
-        public static readonly StyledProperty<bool> CustomDrawProperty =
-            AvaloniaProperty.Register<AvaloniaInputView, bool>(nameof(CustomDraw), true);
+        public static readonly DirectProperty<AvaloniaInputView, ZoomState> ZoomProperty =
+           AvaloniaProperty.RegisterDirect<AvaloniaInputView, ZoomState>(nameof(Zoom), o => o.Zoom, (o, v) => o.Zoom = v);
 
-        public bool CustomDraw
+        public static readonly DirectProperty<AvaloniaInputView, bool> CustomDrawProperty =
+           AvaloniaProperty.RegisterDirect<AvaloniaInputView, bool>(nameof(CustomDraw), o => o.CustomDraw, (o, v) => o.CustomDraw = v);
+
+        public ZoomState Zoom
         {
-            get { return GetValue(CustomDrawProperty); }
-            set { SetValue(CustomDrawProperty, value); }
+            get { return _zoom; }
+            set { SetAndRaise(ZoomProperty, ref _zoom, value); }
+        }
+
+        public double CustomDraw
+        {
+            get { return _customDraw; }
+            set { SetAndRaise(CustomDrawProperty, ref _customDraw, value); }
         }
 
         public AvaloniaInputView()
@@ -79,6 +89,7 @@ namespace Draw2D.Editor
         protected override void OnPointerEnter(PointerEventArgs e)
         {
             base.OnPointerEnter(e);
+            this.Focus();
             this.InvalidateVisual();
         }
 
@@ -112,10 +123,10 @@ namespace Draw2D.Editor
 
         private void GetOffset(out double dx, out double dy, out double zx, out double zy)
         {
-            dx = _zoomState.OffsetX;
-            dy = _zoomState.OffsetY;
-            zx = _zoomState.ZoomX;
-            zy = _zoomState.ZoomY;
+            dx = _zoom.OffsetX;
+            dy = _zoom.OffsetY;
+            zx = _zoom.ZoomX;
+            zy = _zoom.ZoomY;
         }
 
         private Point AdjustPanPoint(Point point)
@@ -139,7 +150,7 @@ namespace Draw2D.Editor
         private void HandlePointerWheelChanged(PointerWheelEventArgs e)
         {
             Point zpoint = AdjustZoomPoint(e.GetPosition(this));
-            _zoomState.Wheel(e.Delta.Y, zpoint.X, zpoint.Y);
+            _zoom.Wheel(e.Delta.Y, zpoint.X, zpoint.Y);
         }
 
         private void HandlePointerPressed(PointerPressedEventArgs e)
@@ -155,9 +166,9 @@ namespace Draw2D.Editor
             else if (e.MouseButton == MouseButton.Right)
             {
                 Point zpoint = AdjustPanPoint(e.GetPosition(this));
-                _zoomState.Pressed(zpoint.X, zpoint.Y);
+                _zoom.Pressed(zpoint.X, zpoint.Y);
 
-                if (this.DataContext is IToolContext ctx && _zoomState.IsPanning == false)
+                if (this.DataContext is IToolContext ctx && _zoom.IsPanning == false)
                 {
                     var tpoint = AdjustToolPoint(e.GetPosition(this));
                     ctx.CurrentTool.RightDown(ctx, tpoint.X, tpoint.Y, GetModifier(e.InputModifiers));
@@ -185,9 +196,9 @@ namespace Draw2D.Editor
             else if (e.MouseButton == MouseButton.Right)
             {
                 Point zpoint = AdjustPanPoint(e.GetPosition(this));
-                _zoomState.Released(zpoint.X, zpoint.Y);
+                _zoom.Released(zpoint.X, zpoint.Y);
 
-                if (this.DataContext is IToolContext ctx && _zoomState.IsPanning == false)
+                if (this.DataContext is IToolContext ctx && _zoom.IsPanning == false)
                 {
                     var tpoint = AdjustToolPoint(e.GetPosition(this));
                     ctx.CurrentTool.RightUp(ctx, tpoint.X, tpoint.Y, GetModifier(e.InputModifiers));
@@ -198,9 +209,9 @@ namespace Draw2D.Editor
         private void HandlePointerMoved(PointerEventArgs e)
         {
             Point zpoint = AdjustPanPoint(e.GetPosition(this));
-            _zoomState.Moved(zpoint.X, zpoint.Y);
+            _zoom.Moved(zpoint.X, zpoint.Y);
 
-            if (this.DataContext is IToolContext ctx && _zoomState.IsPanning == false)
+            if (this.DataContext is IToolContext ctx && _zoom.IsPanning == false)
             {
                 var tpoint = AdjustToolPoint(e.GetPosition(this));
                 ctx.CurrentTool.Move(ctx, tpoint.X, tpoint.Y, GetModifier(e.InputModifiers));
@@ -246,40 +257,40 @@ namespace Draw2D.Editor
                 double width = Bounds.Width;
                 double height = Bounds.Height;
 
-                if (_zoomState == null)
+                if (_zoom == null)
                 {
-                    _zoomState = new ZoomState();
+                    _zoom = new ZoomState();
 
                     var md = (this.GetVisualRoot() as IInputRoot)?.MouseDevice;
                     if (md != null)
                     {
-                        _zoomState.Capture = () =>
+                        _zoom.Capture = () =>
                         {
                             if (md.Captured == null)
                             {
                                 md.Capture(this);
                             }
                         };
-                        _zoomState.Release = () =>
+                        _zoom.Release = () =>
                         {
                             if (md.Captured != null)
                             {
                                 md.Capture(null);
                             }
                         };
-                        _zoomState.IsCaptured = () =>
+                        _zoom.IsCaptured = () =>
                         {
                             return md.Captured != null;
                         };
-                        _zoomState.Redraw = () =>
+                        _zoom.Redraw = () =>
                         {
                             this.InvalidateVisual();
                         };
                     }
 
-                    _zoomState.Reset();
-                    _zoomState.Center(width, height, ctx.CurrentContainer.Width, ctx.CurrentContainer.Height);
-                    _zoomState.Invalidate(false);
+                    _zoom.Reset();
+                    _zoom.Center(width, height, ctx.CurrentContainer.Width, ctx.CurrentContainer.Height);
+                    _zoom.Invalidate(false);
                 }
 
                 GetOffset(out double dx, out double dy, out double zx, out double zy);

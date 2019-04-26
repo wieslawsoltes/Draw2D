@@ -11,20 +11,72 @@ using Draw2D.ViewModels;
 
 namespace Draw2D.Editor
 {
-    public class ZoomState
+    public class ZoomState : AvaloniaObject
     {
-        public Matrix CurrentMatrix { get; set; }
-        public Point PanPosition { get; set; }
+        private double _zoomSpeed = 1.2;
+        private double _zoomX = 1.0;
+        private double _zoomY = 1.0;
+        private double _offsetX = 0.0;
+        private double _offsetY = 0.0;
+
+        public static readonly DirectProperty<ZoomState, double> ZoomSpeedProperty =
+           AvaloniaProperty.RegisterDirect<ZoomState, double>(nameof(ZoomSpeed), o => o.ZoomSpeed, (o, v) => o.ZoomSpeed = v);
+
+        public static readonly DirectProperty<ZoomState, double> ZoomXProperty =
+           AvaloniaProperty.RegisterDirect<ZoomState, double>(nameof(ZoomX), o => o.ZoomX, (o, v) => o.ZoomX = v);
+
+        public static readonly DirectProperty<ZoomState, double> ZoomYProperty =
+           AvaloniaProperty.RegisterDirect<ZoomState, double>(nameof(ZoomY), o => o.ZoomY, (o, v) => o.ZoomY = v);
+
+        public static readonly DirectProperty<ZoomState, double> OffsetXProperty =
+           AvaloniaProperty.RegisterDirect<ZoomState, double>(nameof(OffsetX), o => o.OffsetX, (o, v) => o.OffsetX = v);
+
+        public static readonly DirectProperty<ZoomState, double> OffsetYProperty =
+           AvaloniaProperty.RegisterDirect<ZoomState, double>(nameof(OffsetY), o => o.OffsetY, (o, v) => o.OffsetY = v);
+
+        public double ZoomSpeed
+        {
+            get { return _zoomSpeed; }
+            set { SetAndRaise(ZoomSpeedProperty, ref _zoomSpeed, value); }
+        }
+
+        public double ZoomX
+        {
+            get { return _zoomX; }
+            set { SetAndRaise(ZoomXProperty, ref _zoomX, value); }
+        }
+
+        public double ZoomY
+        {
+            get { return _zoomY; }
+            set { SetAndRaise(ZoomYProperty, ref _zoomY, value); }
+        }
+
+        public double OffsetX
+        {
+            get { return _offsetX; }
+            set { SetAndRaise(OffsetXProperty, ref _offsetX, value); }
+        }
+
+        public double OffsetY
+        {
+            get { return _offsetY; }
+            set { SetAndRaise(OffsetYProperty, ref _offsetY, value); }
+        }
+
         public bool IsPanning { get; set; }
-        public double ZoomSpeed { get; set; } = 1.2;
-        public double ZoomX { get; set; } = 1.0;
-        public double ZoomY { get; set; } = 1.0;
-        public double OffsetX { get; set; } = 0.0;
-        public double OffsetY { get; set; } = 0.0;
+
         public Action Capture { get; set; }
+
         public Action Release { get; set; }
+
         public Func<bool> IsCaptured { get; set; }
+
         public Action Redraw { get; set; }
+
+        private Matrix CurrentMatrix { get; set; }
+
+        private Point PanPosition { get; set; }
 
         public void Wheel(double delta, double x, double y)
         {
