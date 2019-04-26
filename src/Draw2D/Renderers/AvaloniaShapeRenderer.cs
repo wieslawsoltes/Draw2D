@@ -9,7 +9,7 @@ using Draw2D.ViewModels;
 using Draw2D.ViewModels.Shapes;
 using Draw2D.ViewModels.Style;
 
-namespace Draw2D.Editor
+namespace Draw2D.Renderers
 {
     internal struct AvaloniaBrushCache : IDisposable
     {

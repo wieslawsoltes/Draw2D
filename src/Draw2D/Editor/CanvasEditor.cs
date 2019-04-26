@@ -11,6 +11,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Media;
 using Draw2D.Input;
+using Draw2D.Renderers;
 using Draw2D.ViewModels;
 using Draw2D.ViewModels.Bounds;
 using Draw2D.ViewModels.Containers;

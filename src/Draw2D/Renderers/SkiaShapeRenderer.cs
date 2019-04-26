@@ -8,7 +8,7 @@ using Draw2D.ViewModels.Shapes;
 using Draw2D.ViewModels.Style;
 using SkiaSharp;
 
-namespace Draw2D.Editor
+namespace Draw2D.Renderers
 {
     public class SkiaShapeRenderer : IShapeRenderer
     {
