@@ -166,29 +166,29 @@ namespace Draw2D.Editor
         {
             double zx = panelWidth / elementWidth;
             double zy = panelHeight / elementHeight;
-            double cx = elementWidth / 2.0;
-            double cy = elementHeight / 2.0;
-            CurrentMatrix = MatrixHelper.ScaleAt(zx, zy, cx, cy);
+            double ox = (panelWidth - elementWidth * zx) / 2;
+            double oy = (panelHeight - elementHeight * zy) / 2;
+            CurrentMatrix = new Matrix(zx, 0.0, 0.0, zy, ox, oy);
         }
 
         public void Uniform(double panelWidth, double panelHeight, double elementWidth, double elementHeight)
         {
             double zx = panelWidth / elementWidth;
             double zy = panelHeight / elementHeight;
-            double cx = elementWidth / 2.0;
-            double cy = elementHeight / 2.0;
             double zoom = Math.Min(zx, zy);
-            CurrentMatrix = MatrixHelper.ScaleAt(zoom, zoom, cx, cy);
+            double ox = (panelWidth - elementWidth * zoom) / 2;
+            double oy = (panelHeight - elementHeight * zoom) / 2;
+            CurrentMatrix = new Matrix(zoom, 0.0, 0.0, zoom, ox, oy);
         }
 
         public void UniformToFill(double panelWidth, double panelHeight, double elementWidth, double elementHeight)
         {
             double zx = panelWidth / elementWidth;
             double zy = panelHeight / elementHeight;
-            double cx = elementWidth / 2.0;
-            double cy = elementHeight / 2.0;
             double zoom = Math.Max(zx, zy);
-            CurrentMatrix = MatrixHelper.ScaleAt(zoom, zoom, cx, cy);
+            double ox = (panelWidth - elementWidth * zoom) / 2;
+            double oy = (panelHeight - elementHeight * zoom) / 2;
+            CurrentMatrix = new Matrix(zoom, 0.0, 0.0, zoom, ox, oy);
         }
     }
 }
