@@ -152,7 +152,7 @@ namespace Draw2D.Editor
 
         public void Reset()
         {
-            CurrentMatrix = Matrix.Identity;
+            CurrentMatrix = new Matrix(1.0, 0.0, 0.0, 1.0, 0.0, 0.0);
         }
 
         public void Center(double panelWidth, double panelHeight, double elementWidth, double elementHeight)
