@@ -11,6 +11,98 @@ using Draw2D.ViewModels.Style;
 
 namespace Draw2D.Editor
 {
+    internal struct AvaloniaBrushCache : IDisposable
+    {
+        public readonly Brush Stroke;
+        public readonly Pen StrokePen;
+        public readonly Brush Fill;
+
+        public AvaloniaBrushCache(Brush stroke, Pen strokePen, Brush fill)
+        {
+            this.Stroke = stroke;
+            this.StrokePen = strokePen;
+            this.Fill = fill;
+        }
+
+        public void Dispose()
+        {
+        }
+
+        public static Color FromDrawColor(ArgbColor color)
+        {
+            return Color.FromArgb(color.A, color.R, color.G, color.B);
+        }
+
+        public static AvaloniaBrushCache FromDrawStyle(ShapeStyle style)
+        {
+            Brush stroke = null;
+            Pen strokePen = null;
+            Brush fill = null;
+
+            if (style.Stroke != null)
+            {
+                stroke = new SolidColorBrush(FromDrawColor(style.Stroke));
+                strokePen = new Pen(stroke, style.Thickness);
+            }
+
+            if (style.Fill != null)
+            {
+                fill = new SolidColorBrush(FromDrawColor(style.Fill));
+            }
+
+            return new AvaloniaBrushCache(stroke, strokePen, fill);
+        }
+    }
+
+    internal struct AvaloniaFormattedTextCache : IDisposable
+    {
+        public readonly FormattedText FormattedText;
+        public readonly Point Origin;
+
+        public AvaloniaFormattedTextCache(FormattedText formattedText, Point origin)
+        {
+            FormattedText = formattedText;
+            Origin = origin;
+        }
+
+        public void Dispose()
+        {
+        }
+
+        public static AvaloniaFormattedTextCache FromTextShape(TextShape text, Rect rect)
+        {
+            var constraint = new Size(rect.Width, rect.Height);
+
+            var formattedText = new FormattedText()
+            {
+                Text = text.Text.Value,
+                Constraint = constraint,
+                TextAlignment = TextAlignment.Center,
+                Wrapping = TextWrapping.NoWrap,
+                Typeface = new Typeface("Calibri", 12)
+            };
+
+            var size = formattedText.Bounds.Size;
+
+            // Vertical Alignment: Top
+            //var top = new Point(
+            //    rect.X,
+            //    rect.Y);
+
+            // Vertical Alignment: Center
+            var center = new Point(
+                rect.X,
+                rect.Y + rect.Height / 2 - size.Height / 2);
+
+            // Vertical Alignment: Bottom
+            //var bottom = new Point(
+            //    rect.X,
+            //    rect.Y + rect.Height - size.Height);
+
+            return new AvaloniaFormattedTextCache(formattedText, center);
+        }
+    }
+
     public class AvaloniaShapeRenderer : ViewModelBase, IShapeRenderer
     {
         private readonly IDictionary<ShapeStyle, AvaloniaBrushCache> _brushCache;

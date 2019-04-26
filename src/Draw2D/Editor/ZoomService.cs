@@ -3,11 +3,11 @@
 using System;
 using Avalonia;
 using Avalonia.MatrixExtensions;
-using Draw2D.ViewModels;
+using Draw2D.Input;
 
 namespace Draw2D.Editor
 {
-    public class ZoomState : AvaloniaObject
+    public class ZoomService : AvaloniaObject, IZoomService
     {
         private double _zoomSpeed = 1.2;
         private double _zoomX = 1.0;
@@ -15,20 +15,20 @@ namespace Draw2D.Editor
         private double _offsetX = 0.0;
         private double _offsetY = 0.0;
 
-        public static readonly DirectProperty<ZoomState, double> ZoomSpeedProperty =
-           AvaloniaProperty.RegisterDirect<ZoomState, double>(nameof(ZoomSpeed), o => o.ZoomSpeed, (o, v) => o.ZoomSpeed = v);
+        public static readonly DirectProperty<ZoomService, double> ZoomSpeedProperty =
+           AvaloniaProperty.RegisterDirect<ZoomService, double>(nameof(ZoomSpeed), o => o.ZoomSpeed, (o, v) => o.ZoomSpeed = v);
 
-        public static readonly DirectProperty<ZoomState, double> ZoomXProperty =
-           AvaloniaProperty.RegisterDirect<ZoomState, double>(nameof(ZoomX), o => o.ZoomX, (o, v) => o.ZoomX = v);
+        public static readonly DirectProperty<ZoomService, double> ZoomXProperty =
+           AvaloniaProperty.RegisterDirect<ZoomService, double>(nameof(ZoomX), o => o.ZoomX, (o, v) => o.ZoomX = v);
 
-        public static readonly DirectProperty<ZoomState, double> ZoomYProperty =
-           AvaloniaProperty.RegisterDirect<ZoomState, double>(nameof(ZoomY), o => o.ZoomY, (o, v) => o.ZoomY = v);
+        public static readonly DirectProperty<ZoomService, double> ZoomYProperty =
+           AvaloniaProperty.RegisterDirect<ZoomService, double>(nameof(ZoomY), o => o.ZoomY, (o, v) => o.ZoomY = v);
 
-        public static readonly DirectProperty<ZoomState, double> OffsetXProperty =
-           AvaloniaProperty.RegisterDirect<ZoomState, double>(nameof(OffsetX), o => o.OffsetX, (o, v) => o.OffsetX = v);
+        public static readonly DirectProperty<ZoomService, double> OffsetXProperty =
+           AvaloniaProperty.RegisterDirect<ZoomService, double>(nameof(OffsetX), o => o.OffsetX, (o, v) => o.OffsetX = v);
 
-        public static readonly DirectProperty<ZoomState, double> OffsetYProperty =
-           AvaloniaProperty.RegisterDirect<ZoomState, double>(nameof(OffsetY), o => o.OffsetY, (o, v) => o.OffsetY = v);
+        public static readonly DirectProperty<ZoomService, double> OffsetYProperty =
+           AvaloniaProperty.RegisterDirect<ZoomService, double>(nameof(OffsetY), o => o.OffsetY, (o, v) => o.OffsetY = v);
 
         public double ZoomSpeed
         {
@@ -64,9 +64,9 @@ namespace Draw2D.Editor
 
         public bool IsPanning { get; set; }
 
-        public Matrix CurrentMatrix { get; set; }
+        private Matrix CurrentMatrix { get; set; }
 
-        public Point PanPosition { get; set; }
+        private Point PanPosition { get; set; }
 
         public void Wheel(double delta, double x, double y)
         {

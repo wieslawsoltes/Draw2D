@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using Draw2D.Input;
 using Draw2D.ViewModels.Containers;
 using Draw2D.ViewModels.Shapes;
 using Draw2D.ViewModels.Style;
@@ -159,6 +160,41 @@ namespace Draw2D.ViewModels.Tools
         public void SetTool(string name)
         {
             _context.SetTool(name);
+        }
+
+        public double GetWidth()
+        {
+            return _context.GetWidth();
+        }
+
+        public double GetHeight()
+        {
+            return _context.GetHeight();
+        }
+
+        public void LeftDown(double x, double y, Modifier modifier)
+        {
+            _context.LeftDown(x, y, modifier);
+        }
+
+        public void LeftUp(double x, double y, Modifier modifier)
+        {
+            _context.LeftUp(x, y, modifier);
+        }
+
+        public void RightDown(double x, double y, Modifier modifier)
+        {
+            _context.RightDown(x, y, modifier);
+        }
+
+        public void RightUp(double x, double y, Modifier modifier)
+        {
+            _context.RightUp(x, y, modifier);
+        }
+
+        public void Move(double x, double y, Modifier modifier)
+        {
+            _context.Move(x, y, modifier);
         }
 
         private void SetContext(IToolContext context)

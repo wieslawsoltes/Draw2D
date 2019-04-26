@@ -1,12 +1,16 @@
 ﻿// Copyright (c) Wiesław Šoltés. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Media;
+using Draw2D.Input;
 using Draw2D.ViewModels;
 using Draw2D.ViewModels.Bounds;
 using Draw2D.ViewModels.Containers;
@@ -16,10 +20,72 @@ using Draw2D.ViewModels.Intersections;
 using Draw2D.ViewModels.Shapes;
 using Draw2D.ViewModels.Style;
 using Draw2D.ViewModels.Tools;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+using Newtonsoft.Json.Serialization;
+using SkiaSharp;
 
 namespace Draw2D.Editor
 {
-    public interface ICanvasEditor : IToolContext
+    internal class JsonSerializer
+    {
+        internal class CoreContractResolver : DefaultContractResolver
+        {
+            protected override JsonContract CreateContract(Type objectType)
+            {
+                if (objectType.GetInterfaces().Any(i => i == typeof(IDictionary) ||
+                   (i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IDictionary<,>))))
+                {
+                    return base.CreateArrayContract(objectType);
+                }
+                return base.CreateContract(objectType);
+            }
+
+            public override JsonContract ResolveContract(Type type)
+            {
+                if (type.GetTypeInfo().IsGenericType && type.GetGenericTypeDefinition() == typeof(IList<>))
+                {
+                    return base
+                        .ResolveContract(typeof(ObservableCollection<>)
+                        .MakeGenericType(type.GenericTypeArguments[0]));
+                }
+                return base.ResolveContract(type);
+            }
+
+            protected override IList<JsonProperty> CreateProperties(Type type, MemberSerialization memberSerialization)
+            {
+                return base.CreateProperties(type, memberSerialization).Where(p => p.Writable).ToList();
+            }
+        }
+
+        private static readonly JsonSerializerSettings Settings;
+
+        static JsonSerializer()
+        {
+            Settings = new JsonSerializerSettings()
+            {
+                Formatting = Formatting.Indented,
+                TypeNameHandling = TypeNameHandling.Objects,
+                PreserveReferencesHandling = PreserveReferencesHandling.Objects,
+                ReferenceLoopHandling = ReferenceLoopHandling.Serialize,
+                ContractResolver = new CoreContractResolver(),
+                NullValueHandling = NullValueHandling.Ignore,
+                Converters = { new KeyValuePairConverter() }
+            };
+        }
+
+        public static string ToJson<T>(T value)
+        {
+            return JsonConvert.SerializeObject(value, Settings);
+        }
+
+        public static T FromJson<T>(string json)
+        {
+            return JsonConvert.DeserializeObject<T>(json, Settings);
+        }
+    }
+
+    public interface ICanvasEditor : IToolContext, IDrawTarget
     {
         T Load<T>(string path);
         void Save<T>(string path, T value);
@@ -509,6 +575,90 @@ namespace Draw2D.Editor
         public void Exit()
         {
             Application.Current.Windows.FirstOrDefault()?.Close();
+        }
+
+        private void Draw(DrawingContext context, double width, double height, double dx, double dy, double zx, double zy)
+        {
+            if (this.CurrentContainer.InputBackground != null)
+            {
+                var color = AvaloniaBrushCache.FromDrawColor(this.CurrentContainer.InputBackground);
+                var brush = new SolidColorBrush(color);
+                context.FillRectangle(brush, new Rect(0, 0, width, height));
+            }
+
+            var state = context.PushPreTransform(new Matrix(zx, 0.0, 0.0, zy, dx, dy));
+
+            if (this.CurrentContainer.WorkBackground != null)
+            {
+                var color = AvaloniaBrushCache.FromDrawColor(this.CurrentContainer.WorkBackground);
+                var brush = new SolidColorBrush(color);
+                context.FillRectangle(brush, new Rect(0.0, 0.0, this.CurrentContainer.Width, this.CurrentContainer.Height));
+            }
+
+            this.Presenter.DrawContainer(context, this.CurrentContainer, this.Renderer, 0.0, 0.0, DrawMode.Shape, null, null);
+            this.Presenter.DrawContainer(context, this.CurrentContainer, this.Renderer, 0.0, 0.0, DrawMode.Point, null, null);
+
+            this.Presenter.DrawContainer(context, this.WorkingContainer, this.Renderer, 0.0, 0.0, DrawMode.Shape, null, null);
+            this.Presenter.DrawContainer(context, this.WorkingContainer, this.Renderer, 0.0, 0.0, DrawMode.Point, null, null);
+
+            this.Presenter.DrawDecorators(context, this.CurrentContainer, this.Renderer, 0.0, 0.0, DrawMode.Shape);
+            this.Presenter.DrawDecorators(context, this.WorkingContainer, this.Renderer, 0.0, 0.0, DrawMode.Shape);
+
+            state.Dispose();
+        }
+
+        private void Draw(SKCanvas canvas, double width, double height, double dx, double dy, double zx, double zy)
+        {
+            var renderer = new SkiaShapeRenderer(zx)
+            {
+                Selection = this.Selection
+            };
+
+            canvas.Save();
+
+            if (this.CurrentContainer.InputBackground != null)
+            {
+                using (var brush = SkiaShapeRenderer.ToSKPaintBrush(this.CurrentContainer.InputBackground))
+                {
+                    canvas.DrawRect(SkiaShapeRenderer.ToRect(0.0, 0.0, width, height), brush);
+                }
+            }
+
+            canvas.Translate((float)dx, (float)dy);
+            canvas.Scale((float)zx, (float)zy);
+
+            if (this.CurrentContainer.WorkBackground != null)
+            {
+                using (var brush = SkiaShapeRenderer.ToSKPaintBrush(this.CurrentContainer.WorkBackground))
+                {
+                    canvas.DrawRect(SkiaShapeRenderer.ToRect(0.0, 0.0, this.CurrentContainer.Width, this.CurrentContainer.Height), brush);
+                }
+            }
+
+            this.Presenter.DrawContainer(canvas, this.CurrentContainer, renderer, 0.0, 0.0, DrawMode.Shape, null, null);
+            this.Presenter.DrawContainer(canvas, this.CurrentContainer, renderer, 0.0, 0.0, DrawMode.Point, null, null);
+
+            this.Presenter.DrawContainer(canvas, this.WorkingContainer, renderer, 0.0, 0.0, DrawMode.Shape, null, null);
+            this.Presenter.DrawContainer(canvas, this.WorkingContainer, renderer, 0.0, 0.0, DrawMode.Point, null, null);
+
+            this.Presenter.DrawDecorators(canvas, this.CurrentContainer, renderer, 0.0, 0.0, DrawMode.Shape);
+            this.Presenter.DrawDecorators(canvas, this.WorkingContainer, renderer, 0.0, 0.0, DrawMode.Shape);
+
+            canvas.Restore();
+        }
+
+        public void Draw(object context, double width, double height, double dx, double dy, double zx, double zy)
+        {
+            switch (context)
+            {
+                case DrawingContext drawingContext:
+                    Draw(drawingContext, width, height, dx, dy, zx, zy);
+                    break;
+                case SKCanvas canvas:
+                    Draw(canvas, width, height, dx, dy, zx, zy);
+                    break;
+            }
+            
         }
     }
 }

@@ -1,8 +1,8 @@
 ﻿// Copyright (c) Wiesław Šoltés. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
-using System;
 using System.Collections.Generic;
 using System.Linq;
+using Draw2D.Input;
 using Draw2D.ViewModels.Containers;
 using Draw2D.ViewModels.Shapes;
 using Draw2D.ViewModels.Style;
@@ -13,18 +13,24 @@ namespace Draw2D.ViewModels
 {
     public abstract class ToolContext : ViewModelBase, IToolContext
     {
+        private IInputService _inputService;
         private IShapeRenderer _renderer;
         private IHitTest _hitTest;
         private CanvasContainer _currentContainer;
         private CanvasContainer _workingContainer;
         private ShapeStyle _currentStyle;
         private BaseShape _pointShape;
-        private IInputService _inputService;
         private IList<ITool> _tools;
         private ITool _currentTool;
         private EditMode _mode;
         private ICanvasPresenter _presenter;
         private ISelection _selection;
+
+        public IInputService InputService
+        {
+            get => _inputService;
+            set => Update(ref _inputService, value);
+        }
 
         public IShapeRenderer Renderer
         {
@@ -60,12 +66,6 @@ namespace Draw2D.ViewModels
         {
             get => _pointShape;
             set => Update(ref _pointShape, value);
-        }
-
-        public IInputService InputService
-        {
-            get => _inputService;
-            set => Update(ref _inputService, value);
         }
 
         public IList<ITool> Tools
@@ -134,6 +134,48 @@ namespace Draw2D.ViewModels
             {
                 CurrentTool = Tools.Where(t => t.Title == title).FirstOrDefault();
             }
+        }
+
+        public void LeftDown(double x, double y, Modifier modifier)
+        {
+            _currentTool.LeftDown(this, x, y, modifier);
+        }
+
+        public void LeftUp(double x, double y, Modifier modifier)
+        {
+            if (_mode == EditMode.Mouse)
+            {
+                _currentTool.LeftUp(this, x, y, modifier);
+            }
+            else if (_mode == EditMode.Touch)
+            {
+                _currentTool.LeftDown(this, x, y, modifier);
+            }
+        }
+
+        public void RightDown(double x, double y, Modifier modifier)
+        {
+            _currentTool.RightDown(this, x, y, modifier);
+        }
+
+        public void RightUp(double x, double y, Modifier modifier)
+        {
+            _currentTool.RightUp(this, x, y, modifier);
+        }
+
+        public void Move(double x, double y, Modifier modifier)
+        {
+            _currentTool.Move(this, x, y, modifier);
+        }
+
+        public double GetWidth()
+        {
+            return _currentContainer?.Width ?? 0.0;
+        }
+
+        public double GetHeight()
+        {
+            return _currentContainer?.Height ?? 0.0;
         }
     }
 }

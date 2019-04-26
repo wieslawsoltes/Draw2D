@@ -3,6 +3,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using Draw2D.Input;
 using Draw2D.ViewModels.Shapes;
 
 namespace Draw2D.ViewModels.Tools

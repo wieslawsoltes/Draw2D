@@ -3,6 +3,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Draw2D.Input;
 using Draw2D.ViewModels.Shapes;
 using Spatial;
 using Spatial.DouglasPeucker;
