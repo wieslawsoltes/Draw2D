@@ -29,7 +29,7 @@ namespace Draw2D.Editor
             set { SetAndRaise(ZoomProperty, ref _zoom, value); }
         }
 
-        public double CustomDraw
+        public bool CustomDraw
         {
             get { return _customDraw; }
             set { SetAndRaise(CustomDrawProperty, ref _customDraw, value); }
