@@ -15,7 +15,7 @@ namespace Draw2D.Editor
     public class AvaloniaInputView : Border
     {
         private bool _initializedZoom = false;
-        private ZoomState _zoom =  new ZoomState();
+        private ZoomState _zoom = new ZoomState();
         private bool _customDraw = true;
 
         public static readonly DirectProperty<AvaloniaInputView, ZoomState> ZoomProperty =
