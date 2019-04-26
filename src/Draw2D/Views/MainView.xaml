@@ -201,15 +201,15 @@
                 <TabItem Classes="default" Header="Renderer">
                     <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="Auto,*,50">
                         <TextBlock Classes="default" Grid.Column="0" Grid.Row="0" Text="ZoomSpeed"/>
-                        <TextBox Classes="default" Grid.Column="2" Grid.ColumnSpan="2" Grid.Row="0" Text="{Binding Zoom.ZoomSpeed}"/>
+                        <TextBox Classes="default" Grid.Column="2" Grid.ColumnSpan="2" Grid.Row="0" Text="{Binding #inputView.Zoom.ZoomSpeed}"/>
                         <TextBlock Classes="default" Grid.Column="0" Grid.Row="1" Text="ZoomX"/>
-                        <TextBox Classes="default" Grid.Column="2" Grid.ColumnSpan="2" Grid.Row="1" Text="{Binding Zoom.ZoomX}"/>
+                        <TextBox Classes="default" Grid.Column="2" Grid.ColumnSpan="2" Grid.Row="1" Text="{Binding #inputView.Zoom.ZoomX}"/>
                         <TextBlock Classes="default" Grid.Column="0" Grid.Row="2" Text="ZoomY"/>
-                        <TextBox Classes="default" Grid.Column="2" Grid.ColumnSpan="2" Grid.Row="2" Text="{Binding Zoom.ZoomY}"/>
+                        <TextBox Classes="default" Grid.Column="2" Grid.ColumnSpan="2" Grid.Row="2" Text="{Binding #inputView.Zoom.ZoomY}"/>
                         <TextBlock Classes="default" Grid.Column="0" Grid.Row="3" Text="OffsetX"/>
-                        <TextBox Classes="default" Grid.Column="2" Grid.ColumnSpan="2" Grid.Row="3" Text="{Binding Zoom.OffsetX}"/>
+                        <TextBox Classes="default" Grid.Column="2" Grid.ColumnSpan="2" Grid.Row="3" Text="{Binding #inputView.Zoom.OffsetX}"/>
                         <TextBlock Classes="default" Grid.Column="0" Grid.Row="4" Text="OffsetY"/>
-                        <TextBox Classes="default" Grid.Column="2" Grid.ColumnSpan="2" Grid.Row="4" Text="{Binding Zoom.OffsetY}"/>
+                        <TextBox Classes="default" Grid.Column="2" Grid.ColumnSpan="2" Grid.Row="4" Text="{Binding #inputView.Zoom.OffsetY}"/>
                         <TextBlock Classes="default" Grid.Column="0" Grid.Row="5" Text="CustomDraw"/>
                         <CheckBox Classes="default" Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="5" IsChecked="{Binding #inputView.CustomDraw, Mode=TwoWay}"/>
                     </Grid>
