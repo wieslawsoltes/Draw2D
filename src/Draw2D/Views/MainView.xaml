@@ -65,7 +65,7 @@
                 <MenuItem Header="Select _All" Command="{Binding Selection.SelectAll}" CommandParameter="{Binding}"/>
             </MenuItem>
             <MenuItem Header="_View">
-                <MenuItem Header="_Reset Zoom" Command="{Binding #inputView.ResetRoom}" CommandParameter="True"/>
+                <MenuItem Header="_Reset Zoom" Command="{Binding #inputView.ResetZoom}" CommandParameter="True"/>
                 <Separator/>
                 <MenuItem Header="_Center Zoom" Command="{Binding #inputView.CenterZoom}" CommandParameter="True"/>
                 <Separator/>
