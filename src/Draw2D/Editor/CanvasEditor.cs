@@ -580,36 +580,44 @@ namespace Draw2D.Editor
 
         private void Draw(DrawingContext context, double width, double height, double dx, double dy, double zx, double zy)
         {
-            if (this.CurrentContainer.InputBackground != null)
+            var currentContainer = this.CurrentContainer;
+            var workingContainer = this.WorkingContainer;
+            var presenter = this.Presenter;
+            var renderer = this.Renderer;
+
+            if (currentContainer.InputBackground != null)
             {
-                var color = AvaloniaBrushCache.FromDrawColor(this.CurrentContainer.InputBackground);
+                var color = AvaloniaBrushCache.FromDrawColor(currentContainer.InputBackground);
                 var brush = new SolidColorBrush(color);
                 context.FillRectangle(brush, new Rect(0, 0, width, height));
             }
 
             var state = context.PushPreTransform(new Matrix(zx, 0.0, 0.0, zy, dx, dy));
 
-            if (this.CurrentContainer.WorkBackground != null)
+            if (currentContainer.WorkBackground != null)
             {
-                var color = AvaloniaBrushCache.FromDrawColor(this.CurrentContainer.WorkBackground);
+                var color = AvaloniaBrushCache.FromDrawColor(currentContainer.WorkBackground);
                 var brush = new SolidColorBrush(color);
-                context.FillRectangle(brush, new Rect(0.0, 0.0, this.CurrentContainer.Width, this.CurrentContainer.Height));
+                context.FillRectangle(brush, new Rect(0.0, 0.0, currentContainer.Width, currentContainer.Height));
             }
 
-            this.Presenter.DrawContainer(context, this.CurrentContainer, this.Renderer, 0.0, 0.0, DrawMode.Shape, null, null);
-            this.Presenter.DrawContainer(context, this.CurrentContainer, this.Renderer, 0.0, 0.0, DrawMode.Point, null, null);
+            presenter.DrawContainer(context, currentContainer, renderer, 0.0, 0.0, DrawMode.Shape, null, null);
+            presenter.DrawContainer(context, currentContainer, renderer, 0.0, 0.0, DrawMode.Point, null, null);
 
-            this.Presenter.DrawContainer(context, this.WorkingContainer, this.Renderer, 0.0, 0.0, DrawMode.Shape, null, null);
-            this.Presenter.DrawContainer(context, this.WorkingContainer, this.Renderer, 0.0, 0.0, DrawMode.Point, null, null);
+            presenter.DrawContainer(context, workingContainer, renderer, 0.0, 0.0, DrawMode.Shape, null, null);
+            presenter.DrawContainer(context, workingContainer, renderer, 0.0, 0.0, DrawMode.Point, null, null);
 
-            this.Presenter.DrawDecorators(context, this.CurrentContainer, this.Renderer, 0.0, 0.0, DrawMode.Shape);
-            this.Presenter.DrawDecorators(context, this.WorkingContainer, this.Renderer, 0.0, 0.0, DrawMode.Shape);
+            presenter.DrawDecorators(context, currentContainer, renderer, 0.0, 0.0, DrawMode.Shape);
+            presenter.DrawDecorators(context, workingContainer, renderer, 0.0, 0.0, DrawMode.Shape);
 
             state.Dispose();
         }
 
         private void Draw(SKCanvas canvas, double width, double height, double dx, double dy, double zx, double zy)
         {
+            var currentContainer = this.CurrentContainer;
+            var workingContainer = this.WorkingContainer;
+            var presenter = this.Presenter;
             var renderer = new SkiaShapeRenderer(zx)
             {
                 Selection = this.Selection
@@ -617,9 +625,9 @@ namespace Draw2D.Editor
 
             canvas.Save();
 
-            if (this.CurrentContainer.InputBackground != null)
+            if (currentContainer.InputBackground != null)
             {
-                using (var brush = SkiaShapeRenderer.ToSKPaintBrush(this.CurrentContainer.InputBackground))
+                using (var brush = SkiaShapeRenderer.ToSKPaintBrush(currentContainer.InputBackground))
                 {
                     canvas.DrawRect(SkiaShapeRenderer.ToRect(0.0, 0.0, width, height), brush);
                 }
@@ -628,22 +636,22 @@ namespace Draw2D.Editor
             canvas.Translate((float)dx, (float)dy);
             canvas.Scale((float)zx, (float)zy);
 
-            if (this.CurrentContainer.WorkBackground != null)
+            if (currentContainer.WorkBackground != null)
             {
-                using (var brush = SkiaShapeRenderer.ToSKPaintBrush(this.CurrentContainer.WorkBackground))
+                using (var brush = SkiaShapeRenderer.ToSKPaintBrush(currentContainer.WorkBackground))
                 {
-                    canvas.DrawRect(SkiaShapeRenderer.ToRect(0.0, 0.0, this.CurrentContainer.Width, this.CurrentContainer.Height), brush);
+                    canvas.DrawRect(SkiaShapeRenderer.ToRect(0.0, 0.0, currentContainer.Width, currentContainer.Height), brush);
                 }
             }
 
-            this.Presenter.DrawContainer(canvas, this.CurrentContainer, renderer, 0.0, 0.0, DrawMode.Shape, null, null);
-            this.Presenter.DrawContainer(canvas, this.CurrentContainer, renderer, 0.0, 0.0, DrawMode.Point, null, null);
+            presenter.DrawContainer(canvas, currentContainer, renderer, 0.0, 0.0, DrawMode.Shape, null, null);
+            presenter.DrawContainer(canvas, currentContainer, renderer, 0.0, 0.0, DrawMode.Point, null, null);
 
-            this.Presenter.DrawContainer(canvas, this.WorkingContainer, renderer, 0.0, 0.0, DrawMode.Shape, null, null);
-            this.Presenter.DrawContainer(canvas, this.WorkingContainer, renderer, 0.0, 0.0, DrawMode.Point, null, null);
+            presenter.DrawContainer(canvas, workingContainer, renderer, 0.0, 0.0, DrawMode.Shape, null, null);
+            presenter.DrawContainer(canvas, workingContainer, renderer, 0.0, 0.0, DrawMode.Point, null, null);
 
-            this.Presenter.DrawDecorators(canvas, this.CurrentContainer, renderer, 0.0, 0.0, DrawMode.Shape);
-            this.Presenter.DrawDecorators(canvas, this.WorkingContainer, renderer, 0.0, 0.0, DrawMode.Shape);
+            presenter.DrawDecorators(canvas, currentContainer, renderer, 0.0, 0.0, DrawMode.Shape);
+            presenter.DrawDecorators(canvas, workingContainer, renderer, 0.0, 0.0, DrawMode.Shape);
 
             canvas.Restore();
         }
@@ -659,7 +667,6 @@ namespace Draw2D.Editor
                     Draw(canvas, width, height, dx, dy, zx, zy);
                     break;
             }
-            
         }
     }
 }
