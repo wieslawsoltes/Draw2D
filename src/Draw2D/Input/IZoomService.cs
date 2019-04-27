@@ -5,12 +5,12 @@ namespace Draw2D.Input
 {
     public interface IZoomService
     {
+        IInputService InputService { get; set; }
         double ZoomSpeed { get; set; }
         double ZoomX { get; set; }
         double ZoomY { get; set; }
         double OffsetX { get; set; }
         double OffsetY { get; set; }
-        IInputService InputService { get; set; }
         bool IsPanning { get; set; }
         void Wheel(double delta, double x, double y);
         void Pressed(double x, double y);
