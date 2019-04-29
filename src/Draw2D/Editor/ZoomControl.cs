@@ -55,30 +55,70 @@ namespace Draw2D.Editor
         }
     }
 
-    public class InputService : Border, IInputService
+    public class ZoomControl : Border, IInputService
     {
+        private double _zoomSpeed = 1.2;
+        private double _zoomX = 1.0;
+        private double _zoomY = 1.0;
+        private double _offsetX = 0.0;
+        private double _offsetY = 0.0;
         private bool _initializedZoom = false;
-        private IZoomService _zoomService = new ZoomService();
         private bool _customDraw = true;
         private IInputTarget _inputTarget = null;
         private IDrawTarget _drawTarget = null;
 
-        public static readonly DirectProperty<InputService, IZoomService> ZoomProperty =
-           AvaloniaProperty.RegisterDirect<InputService, IZoomService>(nameof(ZoomService), o => o.ZoomService, (o, v) => o.ZoomService = v);
+        public static readonly DirectProperty<ZoomControl, double> ZoomSpeedProperty =
+           AvaloniaProperty.RegisterDirect<ZoomControl, double>(nameof(ZoomSpeed), o => o.ZoomSpeed, (o, v) => o.ZoomSpeed = v);
 
-        public static readonly DirectProperty<InputService, bool> CustomDrawProperty =
-           AvaloniaProperty.RegisterDirect<InputService, bool>(nameof(CustomDraw), o => o.CustomDraw, (o, v) => o.CustomDraw = v);
+        public static readonly DirectProperty<ZoomControl, double> ZoomXProperty =
+           AvaloniaProperty.RegisterDirect<ZoomControl, double>(nameof(ZoomX), o => o.ZoomX, (o, v) => o.ZoomX = v);
 
-        public static readonly DirectProperty<InputService, IInputTarget> InputTargetProperty =
-           AvaloniaProperty.RegisterDirect<InputService, IInputTarget>(nameof(InputTarget), o => o.InputTarget, (o, v) => o.InputTarget = v);
+        public static readonly DirectProperty<ZoomControl, double> ZoomYProperty =
+           AvaloniaProperty.RegisterDirect<ZoomControl, double>(nameof(ZoomY), o => o.ZoomY, (o, v) => o.ZoomY = v);
 
-        public static readonly DirectProperty<InputService, IDrawTarget> DrawTargetProperty =
-           AvaloniaProperty.RegisterDirect<InputService, IDrawTarget>(nameof(DrawTarget), o => o.DrawTarget, (o, v) => o.DrawTarget = v);
+        public static readonly DirectProperty<ZoomControl, double> OffsetXProperty =
+           AvaloniaProperty.RegisterDirect<ZoomControl, double>(nameof(OffsetX), o => o.OffsetX, (o, v) => o.OffsetX = v);
 
-        public IZoomService ZoomService
+        public static readonly DirectProperty<ZoomControl, double> OffsetYProperty =
+           AvaloniaProperty.RegisterDirect<ZoomControl, double>(nameof(OffsetY), o => o.OffsetY, (o, v) => o.OffsetY = v);
+
+        public static readonly DirectProperty<ZoomControl, bool> CustomDrawProperty =
+           AvaloniaProperty.RegisterDirect<ZoomControl, bool>(nameof(CustomDraw), o => o.CustomDraw, (o, v) => o.CustomDraw = v);
+
+        public static readonly DirectProperty<ZoomControl, IInputTarget> InputTargetProperty =
+           AvaloniaProperty.RegisterDirect<ZoomControl, IInputTarget>(nameof(InputTarget), o => o.InputTarget, (o, v) => o.InputTarget = v);
+
+        public static readonly DirectProperty<ZoomControl, IDrawTarget> DrawTargetProperty =
+           AvaloniaProperty.RegisterDirect<ZoomControl, IDrawTarget>(nameof(DrawTarget), o => o.DrawTarget, (o, v) => o.DrawTarget = v);
+
+        public double ZoomSpeed
         {
-            get { return _zoomService; }
-            set { SetAndRaise(ZoomProperty, ref _zoomService, value); }
+            get { return _zoomSpeed; }
+            set { SetAndRaise(ZoomSpeedProperty, ref _zoomSpeed, value); }
+        }
+
+        public double ZoomX
+        {
+            get { return _zoomX; }
+            set { SetAndRaise(ZoomXProperty, ref _zoomX, value); }
+        }
+
+        public double ZoomY
+        {
+            get { return _zoomY; }
+            set { SetAndRaise(ZoomYProperty, ref _zoomY, value); }
+        }
+
+        public double OffsetX
+        {
+            get { return _offsetX; }
+            set { SetAndRaise(OffsetXProperty, ref _offsetX, value); }
+        }
+
+        public double OffsetY
+        {
+            get { return _offsetY; }
+            set { SetAndRaise(OffsetYProperty, ref _offsetY, value); }
         }
 
         public bool CustomDraw
@@ -99,6 +139,12 @@ namespace Draw2D.Editor
             set { SetAndRaise(DrawTargetProperty, ref _drawTarget, value); }
         }
 
+        public bool IsPanning { get; set; }
+
+        private Matrix CurrentMatrix { get; set; }
+
+        private Point PanPosition { get; set; }
+
         public Action Capture { get; set; }
 
         public Action Release { get; set; }
@@ -107,7 +153,7 @@ namespace Draw2D.Editor
 
         public Action Redraw { get; set; }
 
-        public InputService()
+        public ZoomControl()
         {
             PointerWheelChanged += (sender, e) => HandlePointerWheelChanged(e);
             PointerPressed += (sender, e) => HandlePointerPressed(e);
@@ -152,13 +198,7 @@ namespace Draw2D.Editor
             if (_inputTarget != null)
             {
                 // FIXME:
-                _inputTarget.InputService = this;
-            }
-
-            if (_zoomService != null)
-            {
-                // FIXME:
-                _zoomService.InputService = this;
+                _inputTarget.ZoomControl = this;
             }
         }
 
@@ -169,13 +209,7 @@ namespace Draw2D.Editor
             if (_inputTarget != null)
             {
                 // FIXME:
-                _inputTarget.InputService = null;
-            }
-
-            if (_zoomService != null)
-            {
-                // FIXME:
-                _zoomService.InputService = null;
+                _inputTarget.ZoomControl = null;
             }
         }
 
@@ -207,12 +241,125 @@ namespace Draw2D.Editor
             return modifier;
         }
 
+        public void Wheel(double delta, double x, double y)
+        {
+            ZoomDeltaTo(delta, x, y);
+            Invalidate(true);
+        }
+
+        public void Pressed(double x, double y)
+        {
+            if (IsCaptured?.Invoke() == false && IsPanning == false)
+            {
+                IsPanning = true;
+                Capture?.Invoke();
+                StartPan(x, y);
+                Invalidate(true);
+            }
+        }
+
+        public void Released(double x, double y)
+        {
+            if (IsPanning == true)
+            {
+                Release?.Invoke();
+                Invalidate(true);
+                IsPanning = false;
+            }
+        }
+
+        public void Moved(double x, double y)
+        {
+            if (IsPanning == true)
+            {
+                PanTo(x, y);
+                Invalidate(true);
+            }
+        }
+
+        public void Invalidate(bool redraw)
+        {
+            ZoomX = CurrentMatrix.M11;
+            ZoomY = CurrentMatrix.M22;
+            OffsetX = CurrentMatrix.M31;
+            OffsetY = CurrentMatrix.M32;
+            if (redraw)
+            {
+                Redraw?.Invoke();
+            }
+        }
+
+        public void ZoomTo(double zoom, double x, double y)
+        {
+            CurrentMatrix = new Matrix(zoom, 0, 0, zoom, x - (zoom * x), y - (zoom * y)) * CurrentMatrix;
+        }
+
+        public void ZoomDeltaTo(double delta, double x, double y)
+        {
+            ZoomTo(delta > 0 ? ZoomSpeed : 1 / ZoomSpeed, x, y);
+        }
+
+        public void StartPan(double x, double y)
+        {
+            PanPosition = new Point(x, y);
+        }
+
+        public void PanTo(double x, double y)
+        {
+            double dx = x - PanPosition.X;
+            double dy = y - PanPosition.Y;
+            Point delta = new Point(dx, dy);
+            PanPosition = new Point(x, y);
+            CurrentMatrix = new Matrix(1.0, 0.0, 0.0, 1.0, delta.X, delta.Y) * CurrentMatrix;
+        }
+
+        public void Reset()
+        {
+            CurrentMatrix = new Matrix(1.0, 0.0, 0.0, 1.0, 0.0, 0.0);
+        }
+
+        public void Center(double panelWidth, double panelHeight, double elementWidth, double elementHeight)
+        {
+            double ox = (panelWidth - elementWidth) / 2;
+            double oy = (panelHeight - elementHeight) / 2;
+            CurrentMatrix = new Matrix(1.0, 0.0, 0.0, 1.0, ox, oy);
+        }
+
+        public void Fill(double panelWidth, double panelHeight, double elementWidth, double elementHeight)
+        {
+            double zx = panelWidth / elementWidth;
+            double zy = panelHeight / elementHeight;
+            double ox = (panelWidth - elementWidth * zx) / 2;
+            double oy = (panelHeight - elementHeight * zy) / 2;
+            CurrentMatrix = new Matrix(zx, 0.0, 0.0, zy, ox, oy);
+        }
+
+        public void Uniform(double panelWidth, double panelHeight, double elementWidth, double elementHeight)
+        {
+            double zx = panelWidth / elementWidth;
+            double zy = panelHeight / elementHeight;
+            double zoom = Math.Min(zx, zy);
+            double ox = (panelWidth - elementWidth * zoom) / 2;
+            double oy = (panelHeight - elementHeight * zoom) / 2;
+            CurrentMatrix = new Matrix(zoom, 0.0, 0.0, zoom, ox, oy);
+        }
+
+        public void UniformToFill(double panelWidth, double panelHeight, double elementWidth, double elementHeight)
+        {
+            double zx = panelWidth / elementWidth;
+            double zy = panelHeight / elementHeight;
+            double zoom = Math.Max(zx, zy);
+            double ox = (panelWidth - elementWidth * zoom) / 2;
+            double oy = (panelHeight - elementHeight * zoom) / 2;
+            CurrentMatrix = new Matrix(zoom, 0.0, 0.0, zoom, ox, oy);
+        }
+
         private void GetOffset(out double dx, out double dy, out double zx, out double zy)
         {
-            dx = _zoomService.OffsetX;
-            dy = _zoomService.OffsetY;
-            zx = _zoomService.ZoomX;
-            zy = _zoomService.ZoomY;
+            dx = OffsetX;
+            dy = OffsetY;
+            zx = ZoomX;
+            zy = ZoomY;
         }
 
         private Point AdjustPanPoint(Point point)
@@ -236,7 +383,7 @@ namespace Draw2D.Editor
         private void HandlePointerWheelChanged(PointerWheelEventArgs e)
         {
             var zpoint = AdjustZoomPoint(e.GetPosition(this));
-            _zoomService.Wheel(e.Delta.Y, zpoint.X, zpoint.Y);
+            Wheel(e.Delta.Y, zpoint.X, zpoint.Y);
         }
 
         private void HandlePointerPressed(PointerPressedEventArgs e)
@@ -252,9 +399,9 @@ namespace Draw2D.Editor
             else if (e.MouseButton == MouseButton.Right)
             {
                 var zpoint = AdjustPanPoint(e.GetPosition(this));
-                _zoomService.Pressed(zpoint.X, zpoint.Y);
+                Pressed(zpoint.X, zpoint.Y);
 
-                if (_inputTarget != null && _zoomService.IsPanning == false)
+                if (_inputTarget != null && IsPanning == false)
                 {
                     var tpoint = AdjustTargetPoint(e.GetPosition(this));
                     _inputTarget.RightDown(tpoint.X, tpoint.Y, GetModifier(e.InputModifiers));
@@ -275,9 +422,9 @@ namespace Draw2D.Editor
             else if (e.MouseButton == MouseButton.Right)
             {
                 var zpoint = AdjustPanPoint(e.GetPosition(this));
-                _zoomService.Released(zpoint.X, zpoint.Y);
+                Released(zpoint.X, zpoint.Y);
 
-                if (_inputTarget != null && _zoomService.IsPanning == false)
+                if (_inputTarget != null && IsPanning == false)
                 {
                     var tpoint = AdjustTargetPoint(e.GetPosition(this));
                     _inputTarget.RightUp(tpoint.X, tpoint.Y, GetModifier(e.InputModifiers));
@@ -288,9 +435,9 @@ namespace Draw2D.Editor
         private void HandlePointerMoved(PointerEventArgs e)
         {
             var zpoint = AdjustPanPoint(e.GetPosition(this));
-            _zoomService.Moved(zpoint.X, zpoint.Y);
+            Moved(zpoint.X, zpoint.Y);
 
-            if (_inputTarget != null && _zoomService.IsPanning == false)
+            if (_inputTarget != null && IsPanning == false)
             {
                 var tpoint = AdjustTargetPoint(e.GetPosition(this));
                 _inputTarget.Move(tpoint.X, tpoint.Y, GetModifier(e.InputModifiers));
@@ -299,16 +446,16 @@ namespace Draw2D.Editor
 
         public void ResetZoom(bool redraw)
         {
-            _zoomService.Reset();
-            _zoomService.Invalidate(redraw);
+            Reset();
+            Invalidate(redraw);
         }
 
         public void CenterZoom(bool redraw)
         {
             if (_inputTarget != null)
             {
-                _zoomService.Center(Bounds.Width, Bounds.Height, _inputTarget.GetWidth(), _inputTarget.GetHeight());
-                _zoomService.Invalidate(redraw);
+                Center(Bounds.Width, Bounds.Height, _inputTarget.GetWidth(), _inputTarget.GetHeight());
+                Invalidate(redraw);
             }
         }
 
@@ -316,8 +463,8 @@ namespace Draw2D.Editor
         {
             if (_inputTarget != null)
             {
-                _zoomService.Fill(Bounds.Width, Bounds.Height, _inputTarget.GetWidth(), _inputTarget.GetHeight());
-                _zoomService.Invalidate(redraw);
+                Fill(Bounds.Width, Bounds.Height, _inputTarget.GetWidth(), _inputTarget.GetHeight());
+                Invalidate(redraw);
             }
         }
 
@@ -325,8 +472,8 @@ namespace Draw2D.Editor
         {
             if (_inputTarget != null)
             {
-                _zoomService.Uniform(Bounds.Width, Bounds.Height, _inputTarget.GetWidth(), _inputTarget.GetHeight());
-                _zoomService.Invalidate(redraw);
+                Uniform(Bounds.Width, Bounds.Height, _inputTarget.GetWidth(), _inputTarget.GetHeight());
+                Invalidate(redraw);
             }
         }
 
@@ -334,8 +481,8 @@ namespace Draw2D.Editor
         {
             if (_inputTarget != null)
             {
-                _zoomService.UniformToFill(Bounds.Width, Bounds.Height, _inputTarget.GetWidth(), _inputTarget.GetHeight());
-                _zoomService.Invalidate(redraw);
+                UniformToFill(Bounds.Width, Bounds.Height, _inputTarget.GetWidth(), _inputTarget.GetHeight());
+                Invalidate(redraw);
             }
         }
 

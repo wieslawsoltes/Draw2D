@@ -53,7 +53,7 @@ namespace Draw2D.ViewModels.Tools
                 {
                     connectable.Points.Add(point);
                     context.Selection.Selected.Add(point);
-                    context.InputService?.Redraw?.Invoke();
+                    context.ZoomControl?.Redraw?.Invoke();
                 }
             }
             //else
@@ -68,7 +68,7 @@ namespace Draw2D.ViewModels.Tools
             Filters?.ForEach(f => f.Clear(context));
             Filters?.Any(f => f.Process(context, ref x, ref y));
 
-            context.InputService?.Redraw?.Invoke();
+            context.ZoomControl?.Redraw?.Invoke();
         }
 
         private void CleanInternal(IToolContext context)

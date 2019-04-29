@@ -65,8 +65,8 @@ namespace Draw2D.ViewModels.Tools
             context.Selection.Selected.Add(_line.StartPoint);
             context.Selection.Selected.Add(_line.Point);
 
-            context.InputService?.Capture?.Invoke();
-            context.InputService?.Redraw?.Invoke();
+            context.ZoomControl?.Capture?.Invoke();
+            context.ZoomControl?.Redraw?.Invoke();
 
             CurrentState = State.Point;
         }
@@ -102,7 +102,7 @@ namespace Draw2D.ViewModels.Tools
             Intersections?.ForEach(i => i.Clear(context));
             Filters?.ForEach(f => f.Clear(context));
 
-            context.InputService?.Redraw?.Invoke();
+            context.ZoomControl?.Redraw?.Invoke();
         }
 
         private void MoveStartPointInternal(IToolContext context, double x, double y, Modifier modifier)
@@ -110,7 +110,7 @@ namespace Draw2D.ViewModels.Tools
             Filters?.ForEach(f => f.Clear(context));
             Filters?.Any(f => f.Process(context, ref x, ref y));
 
-            context.InputService?.Redraw?.Invoke();
+            context.ZoomControl?.Redraw?.Invoke();
         }
 
         private void MovePointInternal(IToolContext context, double x, double y, Modifier modifier)
@@ -124,7 +124,7 @@ namespace Draw2D.ViewModels.Tools
             Intersections?.ForEach(i => i.Clear(context));
             Intersections?.ForEach(i => i.Find(context, _line));
 
-            context.InputService?.Redraw?.Invoke();
+            context.ZoomControl?.Redraw?.Invoke();
         }
 
         private void CleanInternal(IToolContext context)
@@ -147,8 +147,8 @@ namespace Draw2D.ViewModels.Tools
                 _points = null;
             }
 
-            context.InputService?.Release?.Invoke();
-            context.InputService?.Redraw?.Invoke();
+            context.ZoomControl?.Release?.Invoke();
+            context.ZoomControl?.Redraw?.Invoke();
         }
 
         public void LeftDown(IToolContext context, double x, double y, Modifier modifier)

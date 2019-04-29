@@ -64,8 +64,8 @@ namespace Draw2D.ViewModels.Tools
             context.Selection.Selected.Add(_quadraticBezier.Point1);
             context.Selection.Selected.Add(_quadraticBezier.Point2);
 
-            context.InputService?.Capture?.Invoke();
-            context.InputService?.Redraw?.Invoke();
+            context.ZoomControl?.Capture?.Invoke();
+            context.ZoomControl?.Redraw?.Invoke();
 
             CurrentState = State.Point2;
         }
@@ -88,8 +88,8 @@ namespace Draw2D.ViewModels.Tools
 
             Filters?.ForEach(f => f.Clear(context));
 
-            context.InputService?.Release?.Invoke();
-            context.InputService?.Redraw?.Invoke();
+            context.ZoomControl?.Release?.Invoke();
+            context.ZoomControl?.Redraw?.Invoke();
         }
 
         private void Point2Internal(IToolContext context, double x, double y, Modifier modifier)
@@ -105,7 +105,7 @@ namespace Draw2D.ViewModels.Tools
 
             CurrentState = State.Point1;
 
-            context.InputService?.Redraw?.Invoke();
+            context.ZoomControl?.Redraw?.Invoke();
         }
 
         private void MoveStartPointInternal(IToolContext context, double x, double y, Modifier modifier)
@@ -113,7 +113,7 @@ namespace Draw2D.ViewModels.Tools
             Filters?.ForEach(f => f.Clear(context));
             Filters?.Any(f => f.Process(context, ref x, ref y));
 
-            context.InputService?.Redraw?.Invoke();
+            context.ZoomControl?.Redraw?.Invoke();
         }
 
         private void MovePoint1Internal(IToolContext context, double x, double y, Modifier modifier)
@@ -124,7 +124,7 @@ namespace Draw2D.ViewModels.Tools
             _quadraticBezier.Point1.X = x;
             _quadraticBezier.Point1.Y = y;
 
-            context.InputService?.Redraw?.Invoke();
+            context.ZoomControl?.Redraw?.Invoke();
         }
 
         private void MovePoint2Internal(IToolContext context, double x, double y, Modifier modifier)
@@ -137,7 +137,7 @@ namespace Draw2D.ViewModels.Tools
             _quadraticBezier.Point2.X = x;
             _quadraticBezier.Point2.Y = y;
 
-            context.InputService?.Redraw?.Invoke();
+            context.ZoomControl?.Redraw?.Invoke();
         }
 
         private void CleanInternal(IToolContext context)
@@ -156,8 +156,8 @@ namespace Draw2D.ViewModels.Tools
                 _quadraticBezier = null;
             }
 
-            context.InputService?.Release?.Invoke();
-            context.InputService?.Redraw?.Invoke();
+            context.ZoomControl?.Release?.Invoke();
+            context.ZoomControl?.Redraw?.Invoke();
         }
 
         public void LeftDown(IToolContext context, double x, double y, Modifier modifier)

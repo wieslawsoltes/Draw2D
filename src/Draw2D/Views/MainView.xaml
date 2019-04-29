@@ -62,15 +62,15 @@
                 <MenuItem Header="Select _All" Command="{Binding Selection.SelectAll}" CommandParameter="{Binding}"/>
             </MenuItem>
             <MenuItem Header="_View">
-                <MenuItem Header="_Reset Zoom" Command="{Binding #inputService.ResetZoom}" CommandParameter="True"/>
+                <MenuItem Header="_Reset Zoom" Command="{Binding #zoomControl.ResetZoom}" CommandParameter="True"/>
                 <Separator/>
-                <MenuItem Header="_Center Zoom" Command="{Binding #inputService.CenterZoom}" CommandParameter="True"/>
+                <MenuItem Header="_Center Zoom" Command="{Binding #zoomControl.CenterZoom}" CommandParameter="True"/>
                 <Separator/>
-                <MenuItem Header="_Fill Zoom" Command="{Binding #inputService.FillZoom}" CommandParameter="True"/>
+                <MenuItem Header="_Fill Zoom" Command="{Binding #zoomControl.FillZoom}" CommandParameter="True"/>
                 <Separator/>
-                <MenuItem Header="_Uniform Zoom" Command="{Binding #inputService.UniformZoom}" CommandParameter="True"/>
+                <MenuItem Header="_Uniform Zoom" Command="{Binding #zoomControl.UniformZoom}" CommandParameter="True"/>
                 <Separator/>
-                <MenuItem Header="Uniform_ToFill Zoom" Command="{Binding #inputService.UniformToFillZoom}" CommandParameter="True"/>
+                <MenuItem Header="Uniform_ToFill Zoom" Command="{Binding #zoomControl.UniformToFillZoom}" CommandParameter="True"/>
             </MenuItem>
             <MenuItem Header="_Tool">
                 <MenuItem Header="_None" Command="{Binding SetTool}" CommandParameter="None">
@@ -203,17 +203,17 @@
                 <TabItem Classes="default" Header="Renderer">
                     <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="*,150">
                         <TextBlock Classes="default" Grid.Column="0" Grid.Row="0" Text="ZoomSpeed"/>
-                        <TextBox Classes="default" Grid.Column="1" Grid.Row="0" Text="{Binding #inputService.ZoomService.ZoomSpeed}"/>
+                        <TextBox Classes="default" Grid.Column="1" Grid.Row="0" Text="{Binding #zoomControl.ZoomSpeed}"/>
                         <TextBlock Classes="default" Grid.Column="0" Grid.Row="1" Text="ZoomX"/>
-                        <TextBox Classes="default" Grid.Column="1" Grid.Row="1" Text="{Binding #inputService.ZoomService.ZoomX}"/>
+                        <TextBox Classes="default" Grid.Column="1" Grid.Row="1" Text="{Binding #zoomControl.ZoomX}"/>
                         <TextBlock Classes="default" Grid.Column="0" Grid.Row="2" Text="ZoomY"/>
-                        <TextBox Classes="default" Grid.Column="1" Grid.Row="2" Text="{Binding #inputService.ZoomService.ZoomY}"/>
+                        <TextBox Classes="default" Grid.Column="1" Grid.Row="2" Text="{Binding #zoomControl.ZoomY}"/>
                         <TextBlock Classes="default" Grid.Column="0" Grid.Row="3" Text="OffsetX"/>
-                        <TextBox Classes="default" Grid.Column="1" Grid.Row="3" Text="{Binding #inputService.ZoomService.OffsetX}"/>
+                        <TextBox Classes="default" Grid.Column="1" Grid.Row="3" Text="{Binding #zoomControl.OffsetX}"/>
                         <TextBlock Classes="default" Grid.Column="0" Grid.Row="4" Text="OffsetY"/>
-                        <TextBox Classes="default" Grid.Column="1" Grid.Row="4" Text="{Binding #inputService.ZoomService.OffsetY}"/>
+                        <TextBox Classes="default" Grid.Column="1" Grid.Row="4" Text="{Binding #zoomControl.OffsetY}"/>
                         <TextBlock Classes="default" Grid.Column="0" Grid.Row="5" Text="CustomDraw"/>
-                        <CheckBox Classes="default" Grid.Column="1" Grid.Row="5" IsChecked="{Binding #inputService.CustomDraw, Mode=TwoWay}"/>
+                        <CheckBox Classes="default" Grid.Column="1" Grid.Row="5" IsChecked="{Binding #zoomControl.CustomDraw, Mode=TwoWay}"/>
                     </Grid>
                 </TabItem>
                 <TabItem Classes="default" Header="Json">
@@ -281,7 +281,7 @@
         <GridSplitter Grid.Row="2" Grid.Column="1"/>
         <Border Classes="zoom" Grid.Row="2" Grid.Column="2">
             <Border Classes="clip" ClipToBounds="True" Background="Transparent">
-                <editor:InputService x:Name="inputService" InputTarget="{Binding}" DrawTarget="{Binding}" CustomDraw="True" Background="Transparent" ClipToBounds="False"/>
+                <editor:ZoomControl x:Name="zoomControl" InputTarget="{Binding}" DrawTarget="{Binding}" CustomDraw="True" Background="Transparent" ClipToBounds="False"/>
             </Border>
         </Border>
     </Grid>

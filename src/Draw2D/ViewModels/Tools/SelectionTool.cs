@@ -177,7 +177,7 @@ namespace Draw2D.ViewModels.Tools
                 modifier);
             if (selected == true)
             {
-                context.InputService?.Capture?.Invoke();
+                context.ZoomControl?.Capture?.Invoke();
 
                 CurrentState = State.Move;
             }
@@ -204,8 +204,8 @@ namespace Draw2D.ViewModels.Tools
                 _rectangle.Style = Settings?.SelectionStyle;
                 context.WorkingContainer.Shapes.Add(_rectangle);
 
-                context.InputService?.Capture?.Invoke();
-                context.InputService?.Redraw?.Invoke();
+                context.ZoomControl?.Capture?.Invoke();
+                context.ZoomControl?.Redraw?.Invoke();
 
                 CurrentState = State.Selection;
             }
@@ -218,8 +218,8 @@ namespace Draw2D.ViewModels.Tools
             _rectangle.BottomRight.X = x;
             _rectangle.BottomRight.Y = y;
 
-            context.InputService?.Release?.Invoke();
-            context.InputService?.Redraw?.Invoke();
+            context.ZoomControl?.Release?.Invoke();
+            context.ZoomControl?.Redraw?.Invoke();
         }
 
         private void LeftUpSelectionInternal(IToolContext context, double x, double y, Modifier modifier)
@@ -242,16 +242,16 @@ namespace Draw2D.ViewModels.Tools
 
             CurrentState = State.None;
 
-            context.InputService?.Release?.Invoke();
-            context.InputService?.Redraw?.Invoke();
+            context.ZoomControl?.Release?.Invoke();
+            context.ZoomControl?.Redraw?.Invoke();
         }
 
         private void LeftUpMoveInternal(IToolContext context, double x, double y, Modifier modifier)
         {
             Filters?.ForEach(f => f.Clear(context));
 
-            context.InputService?.Release?.Invoke();
-            context.InputService?.Redraw?.Invoke();
+            context.ZoomControl?.Release?.Invoke();
+            context.ZoomControl?.Redraw?.Invoke();
 
             CurrentState = State.None;
         }
@@ -260,8 +260,8 @@ namespace Draw2D.ViewModels.Tools
         {
             Filters?.ForEach(f => f.Clear(context));
 
-            context.InputService?.Release?.Invoke();
-            context.InputService?.Redraw?.Invoke();
+            context.ZoomControl?.Release?.Invoke();
+            context.ZoomControl?.Redraw?.Invoke();
 
             CurrentState = State.None;
         }
@@ -286,13 +286,13 @@ namespace Draw2D.ViewModels.Tools
                     if (shape != null)
                     {
                         Hover(context, shape);
-                        context.InputService?.Redraw?.Invoke();
+                        context.ZoomControl?.Redraw?.Invoke();
                     }
                     else
                     {
                         if (previous != null)
                         {
-                            context.InputService?.Redraw?.Invoke();
+                            context.ZoomControl?.Redraw?.Invoke();
                         }
                     }
                 }
@@ -304,7 +304,7 @@ namespace Draw2D.ViewModels.Tools
             _rectangle.BottomRight.X = x;
             _rectangle.BottomRight.Y = y;
 
-            context.InputService?.Redraw?.Invoke();
+            context.ZoomControl?.Redraw?.Invoke();
         }
 
         private void MoveMoveInternal(IToolContext context, double x, double y, Modifier modifier)
@@ -365,7 +365,7 @@ namespace Draw2D.ViewModels.Tools
                 }
             }
 
-            context.InputService?.Redraw?.Invoke();
+            context.ZoomControl?.Redraw?.Invoke();
         }
 
         private void CleanInternal(IToolContext context)
@@ -390,8 +390,8 @@ namespace Draw2D.ViewModels.Tools
 
             Filters?.ForEach(f => f.Clear(context));
 
-            context.InputService?.Release?.Invoke();
-            context.InputService?.Redraw?.Invoke();
+            context.ZoomControl?.Release?.Invoke();
+            context.ZoomControl?.Redraw?.Invoke();
         }
 
         public void LeftDown(IToolContext context, double x, double y, Modifier modifier)
@@ -501,7 +501,7 @@ namespace Draw2D.ViewModels.Tools
 
                     Copy(context.CurrentContainer, _shapesToCopy, this);
 
-                    context.InputService?.Redraw?.Invoke();
+                    context.ZoomControl?.Redraw?.Invoke();
 
                     this.CurrentState = State.None;
                 }
@@ -517,7 +517,7 @@ namespace Draw2D.ViewModels.Tools
                 this.DeHover(context);
                 _selected.Clear();
 
-                context.InputService?.Redraw?.Invoke();
+                context.ZoomControl?.Redraw?.Invoke();
 
                 this.CurrentState = State.None;
             }
@@ -546,7 +546,7 @@ namespace Draw2D.ViewModels.Tools
                 group.Select(this);
                 context.CurrentContainer.Shapes.Add(group);
 
-                context.InputService?.Redraw?.Invoke();
+                context.ZoomControl?.Redraw?.Invoke();
 
                 this.CurrentState = State.None;
             }
@@ -564,7 +564,7 @@ namespace Draw2D.ViewModels.Tools
                     shape.Select(this);
                 }
 
-                context.InputService?.Redraw?.Invoke();
+                context.ZoomControl?.Redraw?.Invoke();
 
                 this.CurrentState = State.None;
             }

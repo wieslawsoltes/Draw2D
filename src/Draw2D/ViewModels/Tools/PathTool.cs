@@ -116,10 +116,10 @@ namespace Draw2D.ViewModels.Tools
             set => throw new InvalidOperationException($"Can not set {PointShape} property value.");
         }
 
-        public IInputService InputService
+        public IInputService ZoomControl
         {
-            get => _context.InputService;
-            set => throw new InvalidOperationException($"Can not set {InputService} property value.");
+            get => _context.ZoomControl;
+            set => throw new InvalidOperationException($"Can not set {ZoomControl} property value.");
         }
 
         public IList<ITool> Tools
