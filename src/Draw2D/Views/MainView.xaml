@@ -62,15 +62,15 @@
                 <MenuItem Header="Select _All" Command="{Binding Selection.SelectAll}" CommandParameter="{Binding}"/>
             </MenuItem>
             <MenuItem Header="_View">
-                <MenuItem Header="_Reset Zoom" Command="{Binding #zoomControl.ResetZoom}" CommandParameter="True"/>
+                <MenuItem Header="_Reset Zoom" Command="{Binding ContainerView.ZoomService.ResetZoom}" CommandParameter="True"/>
                 <Separator/>
-                <MenuItem Header="_Center Zoom" Command="{Binding #zoomControl.CenterZoom}" CommandParameter="True"/>
+                <MenuItem Header="_Center Zoom" Command="{Binding ContainerView.ZoomService.CenterZoom}" CommandParameter="True"/>
                 <Separator/>
-                <MenuItem Header="_Fill Zoom" Command="{Binding #zoomControl.FillZoom}" CommandParameter="True"/>
+                <MenuItem Header="_Fill Zoom" Command="{Binding ContainerView.ZoomService.FillZoom}" CommandParameter="True"/>
                 <Separator/>
-                <MenuItem Header="_Uniform Zoom" Command="{Binding #zoomControl.UniformZoom}" CommandParameter="True"/>
+                <MenuItem Header="_Uniform Zoom" Command="{Binding ContainerView.ZoomService.UniformZoom}" CommandParameter="True"/>
                 <Separator/>
-                <MenuItem Header="Uniform_ToFill Zoom" Command="{Binding #zoomControl.UniformToFillZoom}" CommandParameter="True"/>
+                <MenuItem Header="Uniform_ToFill Zoom" Command="{Binding ContainerView.ZoomService.UniformToFillZoom}" CommandParameter="True"/>
             </MenuItem>
             <MenuItem Header="_Tool">
                 <MenuItem Header="_None" Command="{Binding SetTool}" CommandParameter="None">
@@ -203,17 +203,17 @@
                 <TabItem Classes="default" Header="Renderer">
                     <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="*,150">
                         <TextBlock Classes="default" Grid.Column="0" Grid.Row="0" Text="ZoomSpeed"/>
-                        <TextBox Classes="default" Grid.Column="1" Grid.Row="0" Text="{Binding #zoomControl.ZoomSpeed}"/>
+                        <TextBox Classes="default" Grid.Column="1" Grid.Row="0" Text="{Binding ContainerView.ZoomService.ZoomSpeed}"/>
                         <TextBlock Classes="default" Grid.Column="0" Grid.Row="1" Text="ZoomX"/>
-                        <TextBox Classes="default" Grid.Column="1" Grid.Row="1" Text="{Binding #zoomControl.ZoomX}"/>
+                        <TextBox Classes="default" Grid.Column="1" Grid.Row="1" Text="{Binding ContainerView.ZoomService.ZoomX}"/>
                         <TextBlock Classes="default" Grid.Column="0" Grid.Row="2" Text="ZoomY"/>
-                        <TextBox Classes="default" Grid.Column="1" Grid.Row="2" Text="{Binding #zoomControl.ZoomY}"/>
+                        <TextBox Classes="default" Grid.Column="1" Grid.Row="2" Text="{Binding ContainerView.ZoomService.ZoomY}"/>
                         <TextBlock Classes="default" Grid.Column="0" Grid.Row="3" Text="OffsetX"/>
-                        <TextBox Classes="default" Grid.Column="1" Grid.Row="3" Text="{Binding #zoomControl.OffsetX}"/>
+                        <TextBox Classes="default" Grid.Column="1" Grid.Row="3" Text="{Binding ContainerView.ZoomService.OffsetX}"/>
                         <TextBlock Classes="default" Grid.Column="0" Grid.Row="4" Text="OffsetY"/>
-                        <TextBox Classes="default" Grid.Column="1" Grid.Row="4" Text="{Binding #zoomControl.OffsetY}"/>
+                        <TextBox Classes="default" Grid.Column="1" Grid.Row="4" Text="{Binding ContainerView.ZoomService.OffsetY}"/>
                         <TextBlock Classes="default" Grid.Column="0" Grid.Row="5" Text="CustomDraw"/>
-                        <CheckBox Classes="default" Grid.Column="1" Grid.Row="5" IsChecked="{Binding #zoomControl.CustomDraw, Mode=TwoWay}"/>
+                        <CheckBox Classes="default" Grid.Column="1" Grid.Row="5" IsChecked="{Binding ContainerView.ZoomService.CustomDraw, Mode=TwoWay}"/>
                     </Grid>
                 </TabItem>
                 <TabItem Classes="default" Header="Json">
@@ -229,12 +229,12 @@
             <TabControl Classes="default" Grid.Row="2" TabStripPlacement="Top">
                 <TabItem Classes="default" Header="Container">
                     <Border Classes="default">
-                        <ContentControl Content="{Binding CurrentContainer}"/>
+                        <ContentControl Content="{Binding ContainerView.CurrentContainer}"/>
                     </Border>
                 </TabItem>
                 <TabItem Classes="default" Header="Working">
                     <Border Classes="default">
-                        <ContentControl Content="{Binding WorkingContainer}"/>
+                        <ContentControl Content="{Binding ContainerView.WorkingContainer}"/>
                     </Border>
                 </TabItem>
                 <TabItem Classes="default" Header="Tools">
@@ -281,7 +281,7 @@
         <GridSplitter Grid.Row="2" Grid.Column="1"/>
         <Border Classes="zoom" Grid.Row="2" Grid.Column="2">
             <Border Classes="clip" ClipToBounds="True" Background="Transparent">
-                <controls:ZoomControl x:Name="zoomControl" InputTarget="{Binding}" DrawTarget="{Binding}" CustomDraw="True" Background="Transparent" ClipToBounds="False"/>
+                <controls:ZoomControl x:Name="zoomControl" InputTarget="{Binding}" DrawTarget="{Binding ContainerView}" CustomDraw="True" Background="Transparent" ClipToBounds="False"/>
             </Border>
         </Border>
     </Grid>

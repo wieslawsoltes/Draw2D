@@ -21,7 +21,7 @@ namespace Draw2D
         {
             var window = new MainWindow
             {
-                DataContext = new CanvasEditor(),
+                DataContext = new ContainerEditor(),
             };
             app.Run(window);
         }

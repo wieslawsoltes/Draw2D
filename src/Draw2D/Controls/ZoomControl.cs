@@ -9,7 +9,7 @@ using Avalonia.Platform;
 using Avalonia.Rendering.SceneGraph;
 using Avalonia.Skia;
 using Avalonia.VisualTree;
-using Draw2D.Input;
+using Draw2D.ViewModels;
 
 namespace Draw2D.Controls
 {
@@ -198,7 +198,8 @@ namespace Draw2D.Controls
             if (_inputTarget != null)
             {
                 // FIXME:
-                _inputTarget.InputService = this;
+                _drawTarget.InputService = this;
+                _drawTarget.ZoomService = this;
             }
         }
 
@@ -209,7 +210,8 @@ namespace Draw2D.Controls
             if (_inputTarget != null)
             {
                 // FIXME:
-                _inputTarget.InputService = null;
+                _drawTarget.InputService = null;
+                _drawTarget.ZoomService = null;
             }
         }
 
@@ -217,6 +219,124 @@ namespace Draw2D.Controls
         {
             base.OnPointerEnter(e);
             this.Focus();
+        }
+
+        private void GetOffset(out double dx, out double dy, out double zx, out double zy)
+        {
+            dx = OffsetX;
+            dy = OffsetY;
+            zx = ZoomX;
+            zy = ZoomY;
+        }
+
+        private Point AdjustPanPoint(Point point)
+        {
+            GetOffset(out double dx, out double dy, out double zx, out double zy);
+            return new Point(point.X / zx, point.Y / zy);
+        }
+
+        private Point AdjustZoomPoint(Point point)
+        {
+            GetOffset(out double dx, out double dy, out double zx, out double zy);
+            return new Point((point.X - dx) / zx, (point.Y - dy) / zy);
+        }
+
+        private Point AdjustTargetPoint(Point point)
+        {
+            GetOffset(out double dx, out double dy, out double zx, out double zy);
+            return new Point((point.X - dx) / zx, (point.Y - dy) / zy);
+        }
+
+        private void HandlePointerWheelChanged(PointerWheelEventArgs e)
+        {
+            var zpoint = AdjustZoomPoint(e.GetPosition(this));
+            Wheel(e.Delta.Y, zpoint.X, zpoint.Y);
+        }
+
+        private void HandlePointerPressed(PointerPressedEventArgs e)
+        {
+            if (e.MouseButton == MouseButton.Left)
+            {
+                if (_inputTarget != null)
+                {
+                    var tpoint = AdjustTargetPoint(e.GetPosition(this));
+                    _inputTarget.LeftDown(tpoint.X, tpoint.Y, GetModifier(e.InputModifiers));
+                }
+            }
+            else if (e.MouseButton == MouseButton.Right)
+            {
+                var zpoint = AdjustPanPoint(e.GetPosition(this));
+                Pressed(zpoint.X, zpoint.Y);
+
+                if (_inputTarget != null && IsPanning == false)
+                {
+                    var tpoint = AdjustTargetPoint(e.GetPosition(this));
+                    _inputTarget.RightDown(tpoint.X, tpoint.Y, GetModifier(e.InputModifiers));
+                }
+            }
+        }
+
+        private void HandlePointerReleased(PointerReleasedEventArgs e)
+        {
+            if (e.MouseButton == MouseButton.Left)
+            {
+                if (_inputTarget != null)
+                {
+                    var tpoint = AdjustTargetPoint(e.GetPosition(this));
+                    InputTarget.LeftUp(tpoint.X, tpoint.Y, GetModifier(e.InputModifiers));
+                }
+            }
+            else if (e.MouseButton == MouseButton.Right)
+            {
+                var zpoint = AdjustPanPoint(e.GetPosition(this));
+                Released(zpoint.X, zpoint.Y);
+
+                if (_inputTarget != null && IsPanning == false)
+                {
+                    var tpoint = AdjustTargetPoint(e.GetPosition(this));
+                    _inputTarget.RightUp(tpoint.X, tpoint.Y, GetModifier(e.InputModifiers));
+                }
+            }
+        }
+
+        private void HandlePointerMoved(PointerEventArgs e)
+        {
+            var zpoint = AdjustPanPoint(e.GetPosition(this));
+            Moved(zpoint.X, zpoint.Y);
+
+            if (_inputTarget != null && IsPanning == false)
+            {
+                var tpoint = AdjustTargetPoint(e.GetPosition(this));
+                _inputTarget.Move(tpoint.X, tpoint.Y, GetModifier(e.InputModifiers));
+            }
+        }
+
+        public override void Render(DrawingContext context)
+        {
+            base.Render(context);
+
+            if (_drawTarget != null)
+            {
+                double width = Bounds.Width;
+                double height = Bounds.Height;
+
+                if (_initializedZoom == false)
+                {
+                    CenterZoom(false);
+                    _initializedZoom = true;
+                }
+
+                GetOffset(out double dx, out double dy, out double zx, out double zy);
+
+                if (CustomDraw)
+                {
+                    context.Custom(new CustomDrawOperation(_drawTarget, width, height, dx, dy, zx, zy));
+                }
+                else
+                {
+                    _drawTarget.Draw(context, width, height, dx, dy, zx, zy);
+                }
+            }
         }
 
         private Modifier GetModifier(InputModifiers inputModifiers)
@@ -354,96 +474,6 @@ namespace Draw2D.Controls
             CurrentMatrix = new Matrix(zoom, 0.0, 0.0, zoom, ox, oy);
         }
 
-        private void GetOffset(out double dx, out double dy, out double zx, out double zy)
-        {
-            dx = OffsetX;
-            dy = OffsetY;
-            zx = ZoomX;
-            zy = ZoomY;
-        }
-
-        private Point AdjustPanPoint(Point point)
-        {
-            GetOffset(out double dx, out double dy, out double zx, out double zy);
-            return new Point(point.X / zx, point.Y / zy);
-        }
-
-        private Point AdjustZoomPoint(Point point)
-        {
-            GetOffset(out double dx, out double dy, out double zx, out double zy);
-            return new Point((point.X - dx) / zx, (point.Y - dy) / zy);
-        }
-
-        private Point AdjustTargetPoint(Point point)
-        {
-            GetOffset(out double dx, out double dy, out double zx, out double zy);
-            return new Point((point.X - dx) / zx, (point.Y - dy) / zy);
-        }
-
-        private void HandlePointerWheelChanged(PointerWheelEventArgs e)
-        {
-            var zpoint = AdjustZoomPoint(e.GetPosition(this));
-            Wheel(e.Delta.Y, zpoint.X, zpoint.Y);
-        }
-
-        private void HandlePointerPressed(PointerPressedEventArgs e)
-        {
-            if (e.MouseButton == MouseButton.Left)
-            {
-                if (_inputTarget != null)
-                {
-                    var tpoint = AdjustTargetPoint(e.GetPosition(this));
-                    _inputTarget.LeftDown(tpoint.X, tpoint.Y, GetModifier(e.InputModifiers));
-                }
-            }
-            else if (e.MouseButton == MouseButton.Right)
-            {
-                var zpoint = AdjustPanPoint(e.GetPosition(this));
-                Pressed(zpoint.X, zpoint.Y);
-
-                if (_inputTarget != null && IsPanning == false)
-                {
-                    var tpoint = AdjustTargetPoint(e.GetPosition(this));
-                    _inputTarget.RightDown(tpoint.X, tpoint.Y, GetModifier(e.InputModifiers));
-                }
-            }
-        }
-
-        private void HandlePointerReleased(PointerReleasedEventArgs e)
-        {
-            if (e.MouseButton == MouseButton.Left)
-            {
-                if (_inputTarget != null)
-                {
-                    var tpoint = AdjustTargetPoint(e.GetPosition(this));
-                    InputTarget.LeftUp(tpoint.X, tpoint.Y, GetModifier(e.InputModifiers));
-                }
-            }
-            else if (e.MouseButton == MouseButton.Right)
-            {
-                var zpoint = AdjustPanPoint(e.GetPosition(this));
-                Released(zpoint.X, zpoint.Y);
-
-                if (_inputTarget != null && IsPanning == false)
-                {
-                    var tpoint = AdjustTargetPoint(e.GetPosition(this));
-                    _inputTarget.RightUp(tpoint.X, tpoint.Y, GetModifier(e.InputModifiers));
-                }
-            }
-        }
-
-        private void HandlePointerMoved(PointerEventArgs e)
-        {
-            var zpoint = AdjustPanPoint(e.GetPosition(this));
-            Moved(zpoint.X, zpoint.Y);
-
-            if (_inputTarget != null && IsPanning == false)
-            {
-                var tpoint = AdjustTargetPoint(e.GetPosition(this));
-                _inputTarget.Move(tpoint.X, tpoint.Y, GetModifier(e.InputModifiers));
-            }
-        }
-
         public void ResetZoom(bool redraw)
         {
             Reset();
@@ -483,34 +513,6 @@ namespace Draw2D.Controls
             {
                 UniformToFill(Bounds.Width, Bounds.Height, _inputTarget.GetWidth(), _inputTarget.GetHeight());
                 Invalidate(redraw);
-            }
-        }
-
-        public override void Render(DrawingContext context)
-        {
-            base.Render(context);
-
-            if (_drawTarget != null)
-            {
-                double width = Bounds.Width;
-                double height = Bounds.Height;
-
-                if (_initializedZoom == false)
-                {
-                    CenterZoom(false);
-                    _initializedZoom = true;
-                }
-
-                GetOffset(out double dx, out double dy, out double zx, out double zy);
-
-                if (CustomDraw)
-                {
-                    context.Custom(new CustomDrawOperation(_drawTarget, width, height, dx, dy, zx, zy));
-                }
-                else
-                {
-                    _drawTarget.Draw(context, width, height, dx, dy, zx, zy);
-                }
             }
         }
     }
