@@ -2,7 +2,6 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using System;
 using Avalonia;
-using Avalonia.MatrixExtensions;
 using Draw2D.Input;
 
 namespace Draw2D.Editor
@@ -118,7 +117,7 @@ namespace Draw2D.Editor
 
         public void ZoomTo(double zoom, double x, double y)
         {
-            CurrentMatrix = MatrixHelper.ScaleAtPrepend(CurrentMatrix, zoom, zoom, x, y);
+            CurrentMatrix = new Matrix(zoom, 0, 0, zoom, x - (zoom * x), y - (zoom * y)) * CurrentMatrix;
         }
 
         public void ZoomDeltaTo(double delta, double x, double y)
@@ -137,7 +136,7 @@ namespace Draw2D.Editor
             double dy = y - PanPosition.Y;
             Point delta = new Point(dx, dy);
             PanPosition = new Point(x, y);
-            CurrentMatrix = MatrixHelper.TranslatePrepend(CurrentMatrix, delta.X, delta.Y);
+            CurrentMatrix = new Matrix(1.0, 0.0, 0.0, 1.0, delta.X, delta.Y) * CurrentMatrix;
         }
 
         public void Reset()

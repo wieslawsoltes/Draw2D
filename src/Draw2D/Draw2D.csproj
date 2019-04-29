@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
@@ -19,10 +19,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Avalonia" Version="0.8.1-cibuild0002102-beta" />
-    <PackageReference Include="Avalonia.Desktop" Version="0.8.1-cibuild0002102-beta" />
+    <PackageReference Include="Avalonia" Version="0.8.1-cibuild0002121-beta" />
+    <PackageReference Include="Avalonia.Desktop" Version="0.8.1-cibuild0002121-beta" />
     <PackageReference Include="Avalonia.Angle.Windows.Natives" Version="2.1.0.2019013001" />
-    <PackageReference Include="Avalonia.MatrixExtensions" Version="2.1.0-build20190427-01" />
     <PackageReference Include="Math.Spatial" Version="1.0.4" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
   </ItemGroup>
