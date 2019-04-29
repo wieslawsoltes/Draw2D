@@ -23,7 +23,7 @@ namespace Draw2D.ViewModels
     {
         public static void ForEach<T>(this IList<T> list, Action<T> action)
         {
-            foreach (T t in list)
+            foreach (var t in list)
             {
                 action(t);
             }
@@ -259,9 +259,9 @@ namespace Draw2D.ViewModels
             return false;
         }
 
-        public virtual bool ShouldSerializeId() => !String.IsNullOrWhiteSpace(_id);
+        public virtual bool ShouldSerializeId() => !string.IsNullOrWhiteSpace(_id);
 
-        public virtual bool ShouldSerializeName() => !String.IsNullOrWhiteSpace(_name);
+        public virtual bool ShouldSerializeName() => !string.IsNullOrWhiteSpace(_name);
 
         public virtual bool ShouldSerializeIsDirty() => false;
     }
@@ -2611,7 +2611,13 @@ namespace Draw2D.ViewModels.Containers
         void Draw(IContainerView view, object context, double width, double height, double dx, double dy, double zx, double zy);
     }
 
-    public interface IContainerView : IDrawTarget
+    public interface IHitTestable
+    {
+        IHitTest HitTest { get; set; }
+        PointShape GetNextPoint(double x, double y, bool connect, double radius);
+    }
+
+    public interface IContainerView : IDrawTarget, IHitTestable
     {
         IShapeRenderer Renderer { get; set; }
         IDrawContainerView DrawContainerView { get; set; }
@@ -2627,8 +2633,6 @@ namespace Draw2D.ViewModels.Containers
         IList<ITool> Tools { get; set; }
         ITool CurrentTool { get; set; }
         EditMode Mode { get; set; }
-        IHitTest HitTest { get; set; }
-        PointShape GetNextPoint(double x, double y, bool connect, double radius);
         void SetTool(string name);
     }
 
@@ -2824,6 +2828,7 @@ namespace Draw2D.ViewModels.Containers
         private ISelection _selection;
         private CanvasContainer _currentContainer;
         private CanvasContainer _workingContainer;
+        private IHitTest _hitTest;
 
         public IInputService InputService
         {
@@ -2873,6 +2878,25 @@ namespace Draw2D.ViewModels.Containers
             set => Update(ref _workingContainer, value);
         }
 
+        public IHitTest HitTest
+        {
+            get => _hitTest;
+            set => Update(ref _hitTest, value);
+        }
+
+        public virtual PointShape GetNextPoint(double x, double y, bool connect, double radius)
+        {
+            if (connect == true)
+            {
+                var point = HitTest.TryToGetPoint(_currentContainer.Shapes, new Point2(x, y), radius, null);
+                if (point != null)
+                {
+                    return point;
+                }
+            }
+            return new PointShape(x, y, _currentContainer.PointTemplate);
+        }
+
         public void Draw(object context, double width, double height, double dx, double dy, double zx, double zy)
         {
             _drawContainerView?.Draw(this, context, width, height, dx, dy, zx, zy);
@@ -2885,7 +2909,6 @@ namespace Draw2D.ViewModels.Containers
         private IList<ITool> _tools;
         private ITool _currentTool;
         private EditMode _mode;
-        private IHitTest _hitTest;
 
         public IContainerView ContainerView
         {
@@ -2913,25 +2936,6 @@ namespace Draw2D.ViewModels.Containers
         {
             get => _mode;
             set => Update(ref _mode, value);
-        }
-
-        public IHitTest HitTest
-        {
-            get => _hitTest;
-            set => Update(ref _hitTest, value);
-        }
-
-        public virtual PointShape GetNextPoint(double x, double y, bool connect, double radius)
-        {
-            if (connect == true)
-            {
-                var point = HitTest.TryToGetPoint(ContainerView.CurrentContainer.Shapes, new Point2(x, y), radius, null);
-                if (point != null)
-                {
-                    return point;
-                }
-            }
-            return new PointShape(x, y, ContainerView.CurrentContainer.PointTemplate);
         }
 
         public void SetTool(string title)
@@ -3522,9 +3526,7 @@ namespace Draw2D.ViewModels.Filters
         {
             if (lines.Any() && Settings.Mode != LineSnapMode.None)
             {
-                Point2 snap;
-                LineSnapMode mode;
-                var result = SnapLines(lines, Settings.Mode, Settings.Threshold, new Point2(x, y), out snap, out mode);
+                var result = SnapLines(lines, Settings.Mode, Settings.Threshold, new Point2(x, y), out var snap, out _);
                 if (result)
                 {
                     x = snap.X;
@@ -3569,8 +3571,8 @@ namespace Draw2D.ViewModels.Filters
 
         public static bool SnapLinesToPoint(IEnumerable<LineShape> lines, double threshold, Point2 point, out Point2 snap, out LineSnapMode result)
         {
-            snap = default(Point2);
-            result = default(LineSnapMode);
+            snap = default;
+            result = default;
 
             foreach (var line in lines)
             {
@@ -3594,8 +3596,8 @@ namespace Draw2D.ViewModels.Filters
 
         public static bool SnapLineToMiddle(IEnumerable<LineShape> lines, double threshold, Point2 point, out Point2 snap, out LineSnapMode result)
         {
-            snap = default(Point2);
-            result = default(LineSnapMode);
+            snap = default;
+            result = default;
 
             foreach (var line in lines)
             {
@@ -3613,8 +3615,8 @@ namespace Draw2D.ViewModels.Filters
 
         public static bool SnapLineToIntersection(IEnumerable<LineShape> lines, double threshold, Point2 point, out Point2 snap, out LineSnapMode result)
         {
-            snap = default(Point2);
-            result = default(LineSnapMode);
+            snap = default;
+            result = default;
 
             foreach (var line0 in lines)
             {
@@ -3622,8 +3624,7 @@ namespace Draw2D.ViewModels.Filters
                 {
                     if (line0 == line1)
                         continue;
-                    Point2 clip;
-                    if (Line2.LineIntersectWithLine(line0.StartPoint.ToPoint2(), line0.Point.ToPoint2(), line1.StartPoint.ToPoint2(), line1.Point.ToPoint2(), out clip))
+                    if (Line2.LineIntersectWithLine(line0.StartPoint.ToPoint2(), line0.Point.ToPoint2(), line1.StartPoint.ToPoint2(), line1.Point.ToPoint2(), out var clip))
                     {
                         var distance = clip.DistanceTo(point);
                         if (distance < threshold)
@@ -3640,9 +3641,9 @@ namespace Draw2D.ViewModels.Filters
 
         public static bool SnapLineToHorizontal(IEnumerable<LineShape> lines, double threshold, Point2 point, out Point2 snap, out LineSnapMode result, out double horizontal)
         {
-            snap = default(Point2);
-            result = default(LineSnapMode);
-            horizontal = default(double);
+            snap = default;
+            result = default;
+            horizontal = default;
 
             foreach (var line in lines)
             {
@@ -3666,9 +3667,9 @@ namespace Draw2D.ViewModels.Filters
 
         public static bool SnapLinesToVertical(IEnumerable<LineShape> lines, double threshold, Point2 point, out Point2 snap, out LineSnapMode result, out double vertical)
         {
-            snap = default(Point2);
-            result = default(LineSnapMode);
-            vertical = default(double);
+            snap = default;
+            result = default;
+            vertical = default;
 
             foreach (var line in lines)
             {
@@ -3692,8 +3693,8 @@ namespace Draw2D.ViewModels.Filters
 
         public static bool SnapLinesToNearest(IEnumerable<LineShape> lines, double threshold, Point2 point, out Point2 snap, out LineSnapMode result)
         {
-            snap = default(Point2);
-            result = default(LineSnapMode);
+            snap = default;
+            result = default;
 
             foreach (var line in lines)
             {
@@ -3711,8 +3712,8 @@ namespace Draw2D.ViewModels.Filters
 
         public static bool SnapLines(IEnumerable<LineShape> lines, LineSnapMode mode, double threshold, Point2 point, out Point2 snap, out LineSnapMode result)
         {
-            snap = default(Point2);
-            result = default(LineSnapMode);
+            snap = default;
+            result = default;
 
             if (mode.HasFlag(LineSnapMode.Point))
             {
@@ -3738,8 +3739,8 @@ namespace Draw2D.ViewModels.Filters
                 }
             }
 
-            double horizontal = default(double);
-            double vertical = default(double);
+            double horizontal = default;
+            double vertical = default;
 
             if (mode.HasFlag(LineSnapMode.Horizontal))
             {
@@ -3796,8 +3797,7 @@ namespace Draw2D.ViewModels.Intersections
 
         public override void Find(IToolContext context, BaseShape shape)
         {
-            var line = shape as LineShape;
-            if (line == null)
+            if (!(shape is LineShape line))
                 throw new ArgumentNullException("shape");
 
             if (!Settings.IsEnabled)
@@ -3811,8 +3811,7 @@ namespace Draw2D.ViewModels.Intersections
                     var rect = Rect2.FromPoints(ellipse.TopLeft.ToPoint2(), ellipse.BottomRight.ToPoint2());
                     var p1 = line.StartPoint.ToPoint2();
                     var p2 = line.Point.ToPoint2();
-                    IList<Point2> intersections;
-                    Line2.LineIntersectsWithEllipse(p1, p2, rect, true, out intersections);
+                    Line2.LineIntersectsWithEllipse(p1, p2, rect, true, out var intersections);
                     if (intersections != null && intersections.Any())
                     {
                         foreach (var p in intersections)
@@ -3847,8 +3846,7 @@ namespace Draw2D.ViewModels.Intersections
 
         public override void Find(IToolContext context, BaseShape shape)
         {
-            var line = shape as LineShape;
-            if (line == null)
+            if (!(shape is LineShape line))
                 throw new ArgumentNullException("shape");
 
             if (!Settings.IsEnabled)
@@ -3863,8 +3861,7 @@ namespace Draw2D.ViewModels.Intersections
                 {
                     var a1 = l.StartPoint.ToPoint2();
                     var b1 = l.Point.ToPoint2();
-                    Point2 clip;
-                    var intersection = Line2.LineIntersectWithLine(a0, b0, a1, b1, out clip);
+                    bool intersection = Line2.LineIntersectWithLine(a0, b0, a1, b1, out var clip);
                     if (intersection)
                     {
                         var point = new PointShape(clip.X, clip.Y, context.ContainerView.CurrentContainer.PointTemplate);
@@ -3896,8 +3893,7 @@ namespace Draw2D.ViewModels.Intersections
 
         public override void Find(IToolContext context, BaseShape shape)
         {
-            var line = shape as LineShape;
-            if (line == null)
+            if (!(shape is LineShape line))
                 throw new ArgumentNullException("shape");
 
             if (!Settings.IsEnabled)
@@ -3938,8 +3934,7 @@ namespace Draw2D.ViewModels.Bounds
 
         public PointShape TryToGetPoint(BaseShape shape, Point2 target, double radius, IHitTest hitTest)
         {
-            var cubicBezier = shape as CubicBezierShape;
-            if (cubicBezier == null)
+            if (!(shape is CubicBezierShape cubicBezier))
                 throw new ArgumentNullException("shape");
 
             var pointHitTest = hitTest.Registered[typeof(PointShape)];
@@ -3977,8 +3972,7 @@ namespace Draw2D.ViewModels.Bounds
 
         public BaseShape Contains(BaseShape shape, Point2 target, double radius, IHitTest hitTest)
         {
-            var cubicBezier = shape as CubicBezierShape;
-            if (cubicBezier == null)
+            if (!(shape is CubicBezierShape cubicBezier))
                 throw new ArgumentNullException("shape");
 
             return HitTestHelper.Contains(cubicBezier.GetPoints(), target) ? shape : null;
@@ -3986,8 +3980,7 @@ namespace Draw2D.ViewModels.Bounds
 
         public BaseShape Overlaps(BaseShape shape, Rect2 target, double radius, IHitTest hitTest)
         {
-            var cubicBezier = shape as CubicBezierShape;
-            if (cubicBezier == null)
+            if (!(shape is CubicBezierShape cubicBezier))
                 throw new ArgumentNullException("shape");
 
             return HitTestHelper.Overlap(cubicBezier.GetPoints(), target) ? shape : null;
@@ -4053,8 +4046,7 @@ namespace Draw2D.ViewModels.Bounds
 
         public PointShape TryToGetPoint(BaseShape shape, Point2 target, double radius, IHitTest hitTest)
         {
-            var group = shape as GroupShape;
-            if (group == null)
+            if (!(shape is GroupShape group))
                 throw new ArgumentNullException("shape");
 
             var pointHitTest = hitTest.Registered[typeof(PointShape)];
@@ -4082,8 +4074,7 @@ namespace Draw2D.ViewModels.Bounds
 
         public BaseShape Contains(BaseShape shape, Point2 target, double radius, IHitTest hitTest)
         {
-            var group = shape as GroupShape;
-            if (group == null)
+            if (!(shape is GroupShape group))
                 throw new ArgumentNullException("shape");
 
             foreach (var groupShape in group.Shapes)
@@ -4100,8 +4091,7 @@ namespace Draw2D.ViewModels.Bounds
 
         public BaseShape Overlaps(BaseShape shape, Rect2 target, double radius, IHitTest hitTest)
         {
-            var group = shape as GroupShape;
-            if (group == null)
+            if (!(shape is GroupShape group))
                 throw new ArgumentNullException("shape");
 
             foreach (var groupShape in group.Shapes)
@@ -4123,8 +4113,7 @@ namespace Draw2D.ViewModels.Bounds
 
         public PointShape TryToGetPoint(BaseShape shape, Point2 target, double radius, IHitTest hitTest)
         {
-            var line = shape as LineShape;
-            if (line == null)
+            if (!(shape is LineShape line))
                 throw new ArgumentNullException("shape");
 
             var pointHitTest = hitTest.Registered[typeof(PointShape)];
@@ -4152,8 +4141,7 @@ namespace Draw2D.ViewModels.Bounds
 
         public BaseShape Contains(BaseShape shape, Point2 target, double radius, IHitTest hitTest)
         {
-            var line = shape as LineShape;
-            if (line == null)
+            if (!(shape is LineShape line))
                 throw new ArgumentNullException("shape");
 
             var a = new Point2(line.StartPoint.X, line.StartPoint.Y);
@@ -4165,17 +4153,12 @@ namespace Draw2D.ViewModels.Bounds
 
         public BaseShape Overlaps(BaseShape shape, Rect2 target, double radius, IHitTest hitTest)
         {
-            var line = shape as LineShape;
-            if (line == null)
+            if (!(shape is LineShape line))
                 throw new ArgumentNullException("shape");
 
             var a = new Point2(line.StartPoint.X, line.StartPoint.Y);
             var b = new Point2(line.Point.X, line.Point.Y);
-            return Line2.LineIntersectsWithRect(
-                a, b,
-                target,
-                out double x0clip, out double y0clip,
-                out double x1clip, out double y1clip) ? shape : null;
+            return Line2.LineIntersectsWithRect(a, b, target, out _, out _, out _, out _) ? shape : null;
         }
     }
 
@@ -4185,8 +4168,7 @@ namespace Draw2D.ViewModels.Bounds
 
         public PointShape TryToGetPoint(BaseShape shape, Point2 target, double radius, IHitTest hitTest)
         {
-            var path = shape as PathShape;
-            if (path == null)
+            if (!(shape is PathShape path))
                 throw new ArgumentNullException("shape");
 
             var pointHitTest = hitTest.Registered[typeof(PointShape)];
@@ -4217,8 +4199,7 @@ namespace Draw2D.ViewModels.Bounds
 
         public BaseShape Contains(BaseShape shape, Point2 target, double radius, IHitTest hitTest)
         {
-            var path = shape as PathShape;
-            if (path == null)
+            if (!(shape is PathShape path))
                 throw new ArgumentNullException("shape");
 
             foreach (var figure in path.Figures)
@@ -4239,8 +4220,7 @@ namespace Draw2D.ViewModels.Bounds
 
         public BaseShape Overlaps(BaseShape shape, Rect2 target, double radius, IHitTest hitTest)
         {
-            var path = shape as PathShape;
-            if (path == null)
+            if (!(shape is PathShape path))
                 throw new ArgumentNullException("shape");
 
             foreach (var figure in path.Figures)
@@ -4266,8 +4246,7 @@ namespace Draw2D.ViewModels.Bounds
 
         public PointShape TryToGetPoint(BaseShape shape, Point2 target, double radius, IHitTest hitTest)
         {
-            var point = shape as PointShape;
-            if (point == null)
+            if (!(shape is PointShape point))
                 throw new ArgumentNullException("shape");
 
             if (Point2.FromXY(point.X, point.Y).ExpandToRect(radius).Contains(target.X, target.Y))
@@ -4280,8 +4259,7 @@ namespace Draw2D.ViewModels.Bounds
 
         public BaseShape Contains(BaseShape shape, Point2 target, double radius, IHitTest hitTest)
         {
-            var point = shape as PointShape;
-            if (point == null)
+            if (!(shape is PointShape point))
                 throw new ArgumentNullException("shape");
 
             return Point2.FromXY(point.X, point.Y).ExpandToRect(radius).Contains(target.X, target.Y) ? shape : null;
@@ -4289,8 +4267,7 @@ namespace Draw2D.ViewModels.Bounds
 
         public BaseShape Overlaps(BaseShape shape, Rect2 target, double radius, IHitTest hitTest)
         {
-            var point = shape as PointShape;
-            if (point == null)
+            if (!(shape is PointShape point))
                 throw new ArgumentNullException("shape");
 
             return Point2.FromXY(point.X, point.Y).ExpandToRect(radius).IntersectsWith(target) ? shape : null;
@@ -4303,8 +4280,7 @@ namespace Draw2D.ViewModels.Bounds
 
         public PointShape TryToGetPoint(BaseShape shape, Point2 target, double radius, IHitTest hitTest)
         {
-            var quadraticBezier = shape as QuadraticBezierShape;
-            if (quadraticBezier == null)
+            if (!(shape is QuadraticBezierShape quadraticBezier))
                 throw new ArgumentNullException("shape");
 
             var pointHitTest = hitTest.Registered[typeof(PointShape)];
@@ -4337,8 +4313,7 @@ namespace Draw2D.ViewModels.Bounds
 
         public BaseShape Contains(BaseShape shape, Point2 target, double radius, IHitTest hitTest)
         {
-            var quadraticBezier = shape as QuadraticBezierShape;
-            if (quadraticBezier == null)
+            if (!(shape is QuadraticBezierShape quadraticBezier))
                 throw new ArgumentNullException("shape");
 
             return HitTestHelper.Contains(quadraticBezier.GetPoints(), target) ? shape : null;
@@ -4346,8 +4321,7 @@ namespace Draw2D.ViewModels.Bounds
 
         public BaseShape Overlaps(BaseShape shape, Rect2 target, double radius, IHitTest hitTest)
         {
-            var quadraticBezier = shape as QuadraticBezierShape;
-            if (quadraticBezier == null)
+            if (!(shape is QuadraticBezierShape quadraticBezier))
                 throw new ArgumentNullException("shape");
 
             return HitTestHelper.Overlap(quadraticBezier.GetPoints(), target) ? shape : null;
@@ -4628,7 +4602,7 @@ namespace Draw2D.ViewModels.Tools
         {
             Filters?.Any(f => f.Process(context, ref x, ref y));
 
-            var next = context.GetNextPoint(x, y, false, 0.0);
+            var next = context.ContainerView.GetNextPoint(x, y, false, 0.0);
             _cubicBezier = new CubicBezierShape()
             {
                 StartPoint = next,
@@ -4663,7 +4637,7 @@ namespace Draw2D.ViewModels.Tools
             context.ContainerView.Selection.Selected.Remove(_cubicBezier.Point3);
             context.ContainerView.WorkingContainer.Shapes.Remove(_cubicBezier);
 
-            _cubicBezier.Point1 = context.GetNextPoint(x, y, false, 0.0);
+            _cubicBezier.Point1 = context.ContainerView.GetNextPoint(x, y, false, 0.0);
             context.ContainerView.CurrentContainer.Shapes.Add(_cubicBezier);
             _cubicBezier = null;
 
@@ -4681,7 +4655,7 @@ namespace Draw2D.ViewModels.Tools
             _cubicBezier.Point1.Y = y;
 
             context.ContainerView.Selection.Selected.Remove(_cubicBezier.Point2);
-            _cubicBezier.Point2 = context.GetNextPoint(x, y, false, 0.0);
+            _cubicBezier.Point2 = context.ContainerView.GetNextPoint(x, y, false, 0.0);
             context.ContainerView.Selection.Selected.Add(_cubicBezier.Point2);
 
             CurrentState = State.Point1;
@@ -4697,7 +4671,7 @@ namespace Draw2D.ViewModels.Tools
             _cubicBezier.Point2.Y = y;
 
             context.ContainerView.Selection.Selected.Remove(_cubicBezier.Point3);
-            _cubicBezier.Point3 = context.GetNextPoint(x, y, false, 0.0);
+            _cubicBezier.Point3 = context.ContainerView.GetNextPoint(x, y, false, 0.0);
             context.ContainerView.Selection.Selected.Add(_cubicBezier.Point3);
 
             CurrentState = State.Point2;
@@ -4897,8 +4871,8 @@ namespace Draw2D.ViewModels.Tools
 
             _ellipse = new EllipseShape()
             {
-                TopLeft = context.GetNextPoint(x, y, Settings?.ConnectPoints ?? false, Settings?.HitTestRadius ?? 7.0),
-                BottomRight = context.GetNextPoint(x, y, false, 0.0),
+                TopLeft = context.ContainerView.GetNextPoint(x, y, Settings?.ConnectPoints ?? false, Settings?.HitTestRadius ?? 7.0),
+                BottomRight = context.ContainerView.GetNextPoint(x, y, false, 0.0),
                 Style = context.ContainerView.CurrentContainer.CurrentStyle
             };
             context.ContainerView.WorkingContainer.Shapes.Add(_ellipse);
@@ -4919,7 +4893,7 @@ namespace Draw2D.ViewModels.Tools
             CurrentState = State.TopLeft;
 
             context.ContainerView.Selection.Selected.Remove(_ellipse.BottomRight);
-            _ellipse.BottomRight = context.GetNextPoint(x, y, Settings?.ConnectPoints ?? false, Settings?.HitTestRadius ?? 7.0);
+            _ellipse.BottomRight = context.ContainerView.GetNextPoint(x, y, Settings?.ConnectPoints ?? false, Settings?.HitTestRadius ?? 7.0);
             context.ContainerView.WorkingContainer.Shapes.Remove(_ellipse);
             context.ContainerView.Selection.Selected.Remove(_ellipse);
             context.ContainerView.Selection.Selected.Remove(_ellipse.TopLeft);
@@ -5232,9 +5206,10 @@ namespace Draw2D.ViewModels.Tools
             var lines = new ObservableCollection<LineShape>();
             for (int i = 0; i < unique.Count - 1; i++)
             {
-                var line = new LineShape(unique[i], unique[i + 1]);
-                line.Style = context.ContainerView.CurrentContainer.CurrentStyle;
-
+                var line = new LineShape(unique[i], unique[i + 1])
+                {
+                    Style = context.ContainerView.CurrentContainer.CurrentStyle
+                };
                 context.ContainerView.CurrentContainer.Shapes.Add(line);
                 lines.Add(line);
             }
@@ -5267,7 +5242,7 @@ namespace Draw2D.ViewModels.Tools
         {
             Filters?.Any(f => f.Process(context, ref x, ref y));
 
-            var next = context.GetNextPoint(x, y, Settings?.ConnectPoints ?? false, Settings?.HitTestRadius ?? 0.0);
+            var next = context.ContainerView.GetNextPoint(x, y, Settings?.ConnectPoints ?? false, Settings?.HitTestRadius ?? 0.0);
             _line = new LineShape()
             {
                 StartPoint = next,
@@ -5296,7 +5271,7 @@ namespace Draw2D.ViewModels.Tools
             context.ContainerView.Selection.Selected.Remove(_line.Point);
             context.ContainerView.WorkingContainer.Shapes.Remove(_line);
 
-            _line.Point = context.GetNextPoint(x, y, Settings?.ConnectPoints ?? false, Settings?.HitTestRadius ?? 0.0);
+            _line.Point = context.ContainerView.GetNextPoint(x, y, Settings?.ConnectPoints ?? false, Settings?.HitTestRadius ?? 0.0);
 
             Intersections?.ForEach(i => i.Clear(context));
             Intersections?.ForEach(i => i.Find(context, _line));
@@ -5573,8 +5548,9 @@ namespace Draw2D.ViewModels.Tools
 
     internal class FigureContainerView : IContainerView
     {
-        private IToolContext _context;
-        private PathTool _pathTool;
+        internal IToolContext _context;
+        internal PathTool _pathTool;
+        internal PointShape _nextPoint;
 
         public FigureContainerView(IToolContext context, PathTool pathTool)
         {
@@ -5630,6 +5606,15 @@ namespace Draw2D.ViewModels.Tools
             set => throw new InvalidOperationException($"Can not set {WorkingContainer} property value.");
         }
 
+        public IHitTest HitTest
+        {
+            get => _context.ContainerView.HitTest;
+            set => throw new InvalidOperationException($"Can not set {HitTest} property value.");
+        }
+
+        public PointShape GetNextPoint(double x, double y, bool connect, double radius)
+            => _nextPoint ?? _context.ContainerView.GetNextPoint(x, y, connect, radius);
+
         public void Draw(object context, double width, double height, double dx, double dy, double zx, double zy)
         {
             _context.ContainerView.Draw(context, width, height, dx, dy, zx, zy);
@@ -5639,8 +5624,7 @@ namespace Draw2D.ViewModels.Tools
     public partial class PathTool : IToolContext
     {
         private IToolContext _context;
-        private PointShape _nextPoint;
-        private IContainerView _containerView;
+        internal FigureContainerView _containerView;
 
         public IContainerView ContainerView
         {
@@ -5665,15 +5649,6 @@ namespace Draw2D.ViewModels.Tools
             get => _context.Mode;
             set => throw new InvalidOperationException($"Can not set {Mode} property value.");
         }
-
-        public IHitTest HitTest
-        {
-            get => _context.HitTest;
-            set => throw new InvalidOperationException($"Can not set {HitTest} property value.");
-        }
-
-        public PointShape GetNextPoint(double x, double y, bool connect, double radius)
-            => _nextPoint ?? _context.GetNextPoint(x, y, connect, radius);
 
         public void SetTool(string name)
             => _context.SetTool(name);
@@ -5703,7 +5678,7 @@ namespace Draw2D.ViewModels.Tools
             => _context = context;
 
         private void SetNextPoint(PointShape point)
-            => _nextPoint = point;
+            => _containerView._nextPoint = point;
     }
 
     public partial class PathTool : ViewModelBase, ITool
@@ -5938,7 +5913,7 @@ namespace Draw2D.ViewModels.Tools
 
             var point = new PointShape(x, y, context.ContainerView.CurrentContainer.PointTemplate);
 
-            var shape = context.HitTest?.TryToGetShape(
+            var shape = context.ContainerView.HitTest?.TryToGetShape(
                 context.ContainerView.CurrentContainer.Shapes,
                 new Point2(x, y),
                 Settings?.HitTestRadius ?? 7.0);
@@ -6045,8 +6020,8 @@ namespace Draw2D.ViewModels.Tools
             _points = new ObservableCollection<PointShape>();
             _line = new LineShape()
             {
-                StartPoint = context.GetNextPoint(x, y, Settings?.ConnectPoints ?? false, Settings?.HitTestRadius ?? 7.0),
-                Point = context.GetNextPoint(x, y, false, 0.0),
+                StartPoint = context.ContainerView.GetNextPoint(x, y, Settings?.ConnectPoints ?? false, Settings?.HitTestRadius ?? 7.0),
+                Point = context.ContainerView.GetNextPoint(x, y, false, 0.0),
                 Style = context?.ContainerView.CurrentContainer.CurrentStyle
             };
             _points.Add(_line.StartPoint);
@@ -6068,7 +6043,7 @@ namespace Draw2D.ViewModels.Tools
 
             context.ContainerView.Selection.Selected.Remove(_line);
             context.ContainerView.Selection.Selected.Remove(_line.Point);
-            _line.Point = context.GetNextPoint(x, y, Settings?.ConnectPoints ?? false, Settings?.HitTestRadius ?? 7.0);
+            _line.Point = context.ContainerView.GetNextPoint(x, y, Settings?.ConnectPoints ?? false, Settings?.HitTestRadius ?? 7.0);
             _points[_points.Count - 1] = _line.Point;
 
             if (!context.ContainerView.Selection.Selected.Contains(_line.Point))
@@ -6082,7 +6057,7 @@ namespace Draw2D.ViewModels.Tools
             _line = new LineShape()
             {
                 StartPoint = _points.Last(),
-                Point = context.GetNextPoint(x, y, false, 0.0),
+                Point = context.ContainerView.GetNextPoint(x, y, false, 0.0),
                 Style = context.ContainerView.CurrentContainer.CurrentStyle
             };
             _points.Add(_line.Point);
@@ -6245,7 +6220,7 @@ namespace Draw2D.ViewModels.Tools
         {
             Filters?.Any(f => f.Process(context, ref x, ref y));
 
-            var next = context.GetNextPoint(x, y, false, 0.0);
+            var next = context.ContainerView.GetNextPoint(x, y, false, 0.0);
             _quadraticBezier = new QuadraticBezierShape()
             {
                 StartPoint = next,
@@ -6277,7 +6252,7 @@ namespace Draw2D.ViewModels.Tools
             context.ContainerView.Selection.Selected.Remove(_quadraticBezier.Point2);
             context.ContainerView.WorkingContainer.Shapes.Remove(_quadraticBezier);
 
-            _quadraticBezier.Point1 = context.GetNextPoint(x, y, false, 0.0);
+            _quadraticBezier.Point1 = context.ContainerView.GetNextPoint(x, y, false, 0.0);
             context.ContainerView.CurrentContainer.Shapes.Add(_quadraticBezier);
             _quadraticBezier = null;
 
@@ -6295,7 +6270,7 @@ namespace Draw2D.ViewModels.Tools
             _quadraticBezier.Point1.Y = y;
 
             context.ContainerView.Selection.Selected.Remove(_quadraticBezier.Point2);
-            _quadraticBezier.Point2 = context.GetNextPoint(x, y, false, 0.0);
+            _quadraticBezier.Point2 = context.ContainerView.GetNextPoint(x, y, false, 0.0);
             context.ContainerView.Selection.Selected.Add(_quadraticBezier.Point2);
 
             CurrentState = State.Point1;
@@ -6470,8 +6445,8 @@ namespace Draw2D.ViewModels.Tools
 
             _rectangle = new RectangleShape()
             {
-                TopLeft = context.GetNextPoint(x, y, Settings?.ConnectPoints ?? false, Settings?.HitTestRadius ?? 7.0),
-                BottomRight = context.GetNextPoint(x, y, false, 0.0),
+                TopLeft = context.ContainerView.GetNextPoint(x, y, Settings?.ConnectPoints ?? false, Settings?.HitTestRadius ?? 7.0),
+                BottomRight = context.ContainerView.GetNextPoint(x, y, false, 0.0),
                 Style = context.ContainerView.CurrentContainer.CurrentStyle
             };
             context.ContainerView.WorkingContainer.Shapes.Add(_rectangle);
@@ -6493,7 +6468,7 @@ namespace Draw2D.ViewModels.Tools
 
             context.ContainerView.Selection.Selected.Remove(_rectangle);
             context.ContainerView.Selection.Selected.Remove(_rectangle.BottomRight);
-            _rectangle.BottomRight = context.GetNextPoint(x, y, Settings?.ConnectPoints ?? false, Settings?.HitTestRadius ?? 7.0);
+            _rectangle.BottomRight = context.ContainerView.GetNextPoint(x, y, Settings?.ConnectPoints ?? false, Settings?.HitTestRadius ?? 7.0);
             _rectangle.BottomRight.Y = y;
             context.ContainerView.WorkingContainer.Shapes.Remove(_rectangle);
             context.ContainerView.Selection.Selected.Remove(_rectangle.TopLeft);
@@ -7446,7 +7421,7 @@ namespace Draw2D.ViewModels.Tools
 
         public void Connect(IToolContext context, PointShape point)
         {
-            var target = context.HitTest.TryToGetPoint(
+            var target = context.ContainerView.HitTest.TryToGetPoint(
                 context.ContainerView.CurrentContainer.Shapes,
                 new Point2(point.X, point.Y),
                 Settings?.ConnectTestRadius ?? 7.0,
@@ -7650,22 +7625,22 @@ namespace Draw2D.ViewModels.Tools
             var shapePoint =
                 mode.HasFlag(SelectionMode.Point)
                 && targets.HasFlag(SelectionTargets.Shapes) ?
-                context.HitTest?.TryToGetPoint(context.ContainerView.CurrentContainer.Shapes, target, radius, null) : null;
+                context.ContainerView.HitTest?.TryToGetPoint(context.ContainerView.CurrentContainer.Shapes, target, radius, null) : null;
 
             var shape =
                 mode.HasFlag(SelectionMode.Shape)
                 && targets.HasFlag(SelectionTargets.Shapes) ?
-                context.HitTest?.TryToGetShape(context.ContainerView.CurrentContainer.Shapes, target, radius) : null;
+                context.ContainerView.HitTest?.TryToGetShape(context.ContainerView.CurrentContainer.Shapes, target, radius) : null;
 
             var guidePoint =
                 mode.HasFlag(SelectionMode.Point)
                 && targets.HasFlag(SelectionTargets.Guides) ?
-                context.HitTest?.TryToGetPoint(context.ContainerView.CurrentContainer.Guides, target, radius, null) : null;
+                context.ContainerView.HitTest?.TryToGetPoint(context.ContainerView.CurrentContainer.Guides, target, radius, null) : null;
 
             var guide =
                 mode.HasFlag(SelectionMode.Shape)
                 && targets.HasFlag(SelectionTargets.Guides) ?
-                context.HitTest?.TryToGetShape(context.ContainerView.CurrentContainer.Guides, target, radius) : null;
+                context.ContainerView.HitTest?.TryToGetShape(context.ContainerView.CurrentContainer.Guides, target, radius) : null;
 
             if (shapePoint != null || shape != null || guide != null)
             {
@@ -7695,22 +7670,22 @@ namespace Draw2D.ViewModels.Tools
             var shapePoint =
                 mode.HasFlag(SelectionMode.Point)
                 && targets.HasFlag(SelectionTargets.Shapes) ?
-                context.HitTest?.TryToGetPoint(context.ContainerView.CurrentContainer.Shapes, point, radius, null) : null;
+                context.ContainerView.HitTest?.TryToGetPoint(context.ContainerView.CurrentContainer.Shapes, point, radius, null) : null;
 
             var shape =
                 mode.HasFlag(SelectionMode.Shape)
                 && targets.HasFlag(SelectionTargets.Shapes) ?
-                context.HitTest?.TryToGetShape(context.ContainerView.CurrentContainer.Shapes, point, radius) : null;
+                context.ContainerView.HitTest?.TryToGetShape(context.ContainerView.CurrentContainer.Shapes, point, radius) : null;
 
             var guidePoint =
                 mode.HasFlag(SelectionMode.Point)
                 && targets.HasFlag(SelectionTargets.Guides) ?
-                context.HitTest?.TryToGetPoint(context.ContainerView.CurrentContainer.Guides, point, radius, null) : null;
+                context.ContainerView.HitTest?.TryToGetPoint(context.ContainerView.CurrentContainer.Guides, point, radius, null) : null;
 
             var guide =
                 mode.HasFlag(SelectionMode.Shape)
                 && targets.HasFlag(SelectionTargets.Guides) ?
-                context.HitTest?.TryToGetShape(context.ContainerView.CurrentContainer.Guides, point, radius) : null;
+                context.ContainerView.HitTest?.TryToGetShape(context.ContainerView.CurrentContainer.Guides, point, radius) : null;
 
             if (shapePoint != null || shape != null || guidePoint != null || guide != null)
             {
@@ -7823,12 +7798,12 @@ namespace Draw2D.ViewModels.Tools
             var shapes =
                 mode.HasFlag(SelectionMode.Shape)
                 && targets.HasFlag(SelectionTargets.Shapes) ?
-                context.HitTest?.TryToGetShapes(context.ContainerView.CurrentContainer.Shapes, rect, radius) : null;
+                context.ContainerView.HitTest?.TryToGetShapes(context.ContainerView.CurrentContainer.Shapes, rect, radius) : null;
 
             var guides =
                 mode.HasFlag(SelectionMode.Shape)
                 && targets.HasFlag(SelectionTargets.Guides) ?
-                context.HitTest?.TryToGetShapes(context.ContainerView.CurrentContainer.Guides, rect, radius) : null;
+                context.ContainerView.HitTest?.TryToGetShapes(context.ContainerView.CurrentContainer.Guides, rect, radius) : null;
 
             if (shapes != null || guides != null)
             {
@@ -7936,8 +7911,8 @@ namespace Draw2D.ViewModels.Tools
 
             _text = new TextShape()
             {
-                TopLeft = context.GetNextPoint(x, y, Settings?.ConnectPoints ?? false, Settings?.HitTestRadius ?? 7.0),
-                BottomRight = context.GetNextPoint(x, y, false, 0.0),
+                TopLeft = context.ContainerView.GetNextPoint(x, y, Settings?.ConnectPoints ?? false, Settings?.HitTestRadius ?? 7.0),
+                BottomRight = context.ContainerView.GetNextPoint(x, y, false, 0.0),
                 Text = new Text()
                 {
                     Value = "Text"
@@ -7963,7 +7938,7 @@ namespace Draw2D.ViewModels.Tools
 
             context.ContainerView.Selection.Selected.Remove(_text);
             context.ContainerView.Selection.Selected.Remove(_text.BottomRight);
-            _text.BottomRight = context.GetNextPoint(x, y, Settings?.ConnectPoints ?? false, Settings?.HitTestRadius ?? 7.0);
+            _text.BottomRight = context.ContainerView.GetNextPoint(x, y, Settings?.ConnectPoints ?? false, Settings?.HitTestRadius ?? 7.0);
             _text.BottomRight.Y = y;
             context.ContainerView.WorkingContainer.Shapes.Remove(_text);
             context.ContainerView.Selection.Selected.Remove(_text.TopLeft);
