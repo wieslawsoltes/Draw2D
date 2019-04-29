@@ -1,12 +1,10 @@
 ﻿// Copyright (c) Wiesław Šoltés. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using Avalonia;
 using Avalonia.Controls;
 using Draw2D.Renderers;
@@ -19,110 +17,9 @@ using Draw2D.ViewModels.Intersections;
 using Draw2D.ViewModels.Shapes;
 using Draw2D.ViewModels.Style;
 using Draw2D.ViewModels.Tools;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
-using Newtonsoft.Json.Serialization;
 
 namespace Draw2D.Editor
 {
-    internal class JsonSerializer
-    {
-        internal class CoreContractResolver : DefaultContractResolver
-        {
-            protected override JsonContract CreateContract(Type objectType)
-            {
-                if (objectType.GetInterfaces().Any(i => i == typeof(IDictionary) ||
-                   (i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IDictionary<,>))))
-                {
-                    return base.CreateArrayContract(objectType);
-                }
-                return base.CreateContract(objectType);
-            }
-
-            public override JsonContract ResolveContract(Type type)
-            {
-                if (type.GetTypeInfo().IsGenericType && type.GetGenericTypeDefinition() == typeof(IList<>))
-                {
-                    return base
-                        .ResolveContract(typeof(ObservableCollection<>)
-                        .MakeGenericType(type.GenericTypeArguments[0]));
-                }
-                return base.ResolveContract(type);
-            }
-
-            protected override IList<JsonProperty> CreateProperties(Type type, MemberSerialization memberSerialization)
-            {
-                return base.CreateProperties(type, memberSerialization).Where(p => p.Writable).ToList();
-            }
-        }
-
-        private static readonly JsonSerializerSettings Settings;
-
-        static JsonSerializer()
-        {
-            Settings = new JsonSerializerSettings()
-            {
-                Formatting = Formatting.Indented,
-                TypeNameHandling = TypeNameHandling.Objects,
-                PreserveReferencesHandling = PreserveReferencesHandling.Objects,
-                ReferenceLoopHandling = ReferenceLoopHandling.Serialize,
-                ContractResolver = new CoreContractResolver(),
-                NullValueHandling = NullValueHandling.Ignore,
-                Converters = { new KeyValuePairConverter() }
-            };
-        }
-
-        public static string ToJson<T>(T value)
-        {
-            return JsonConvert.SerializeObject(value, Settings);
-        }
-
-        public static T FromJson<T>(string json)
-        {
-            return JsonConvert.DeserializeObject<T>(json, Settings);
-        }
-    }
-
-    public interface IContainerEditor : IToolContext
-    {
-        T Load<T>(string path);
-        void Save<T>(string path, T value);
-        void New();
-        void Open();
-        void SaveAs();
-        void OpenContainer(string path);
-        void SaveContainer(string path);
-        void Exit();
-    }
-
-    public class CanvasPresenter : ICanvasPresenter
-    {
-        public IDictionary<Type, IShapeDecorator> Decorators { get; set; }
-
-        public void DrawContainer(object dc, CanvasContainer container, IShapeRenderer renderer, double dx, double dy, DrawMode mode, object db, object r)
-        {
-            container.Invalidate(renderer, dx, dy);
-            container.Draw(dc, renderer, dx, dy, mode, db, r);
-        }
-
-        public void DrawDecorators(object dc, CanvasContainer container, IShapeRenderer renderer, double dx, double dy, DrawMode mode)
-        {
-            var shapes = container.Shapes;
-            var selection = renderer.Selection;
-
-            foreach (var shape in shapes)
-            {
-                if (selection.Selected.Contains(shape))
-                {
-                    if (Decorators.TryGetValue(shape.GetType(), out var helper))
-                    {
-                        helper.Draw(dc, shape, renderer, selection, dx, dy, mode);
-                    }
-                }
-            }
-        }
-    }
-
     public class ContainerEditor : ToolContext, IContainerEditor
     {
         public static void CreateDemoGroup(IToolContext context)
@@ -488,10 +385,13 @@ namespace Draw2D.Editor
                 Selection = selectionTool
             };
 
+            var drawContainerView = new DrawContainerView();
+
             var containerView = new ContainerView()
             {
                 InputService = null,
                 Renderer = renderer,
+                DrawContainerView = drawContainerView,
                 Presenter = presenter,
                 Selection = selectionTool,
                 CurrentContainer = null,
@@ -515,9 +415,9 @@ namespace Draw2D.Editor
                 WorkBackground = new ArgbColor(255, 128, 128, 128),
                 InputBackground = new ArgbColor(255, 211, 211, 211),
                 CurrentStyle = new ShapeStyle(new ArgbColor(255, 0, 255, 0), new ArgbColor(80, 0, 255, 0), 2.0, true, true),
-                PointTemplate = new EllipseShape(new PointShape(-4, -4, null), new PointShape(4, 4, null))
+                PointTemplate = new RectangleShape(new PointShape(-4, -4, null), new PointShape(4, 4, null))
                 {
-                    Style = new ShapeStyle(new ArgbColor(0, 0, 0, 0), new ArgbColor(255, 255, 255, 0), 2.0, true, true)
+                    Style = new ShapeStyle(new ArgbColor(192, 255, 255, 0), new ArgbColor(128, 255, 255, 0), 2.0, true, true)
                 }
             };
             ContainerView.WorkingContainer = new CanvasContainer();

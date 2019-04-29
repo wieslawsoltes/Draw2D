@@ -8,14 +8,10 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using Avalonia;
-using Avalonia.Media;
-using Draw2D.Renderers;
 using Draw2D.ViewModels.Containers;
 using Draw2D.ViewModels.Shapes;
 using Draw2D.ViewModels.Style;
 using Draw2D.ViewModels.Tools;
-using SkiaSharp;
 using Spatial;
 using Spatial.ConvexHull;
 using Spatial.DouglasPeucker;
@@ -2610,9 +2606,15 @@ namespace Draw2D.ViewModels.Shapes
 
 namespace Draw2D.ViewModels.Containers
 {
+    public interface IDrawContainerView
+    {
+        void Draw(IContainerView view, object context, double width, double height, double dx, double dy, double zx, double zy);
+    }
+
     public interface IContainerView : IDrawTarget
     {
         IShapeRenderer Renderer { get; set; }
+        IDrawContainerView DrawContainerView { get; set; }
         ICanvasPresenter Presenter { get; set; }
         ISelection Selection { get; set; }
         CanvasContainer CurrentContainer { get; set; }
@@ -2817,6 +2819,7 @@ namespace Draw2D.ViewModels.Containers
         private IInputService _inputService;
         private IZoomService _zoomService;
         private IShapeRenderer _renderer;
+        private IDrawContainerView _drawContainerView;
         private ICanvasPresenter _presenter;
         private ISelection _selection;
         private CanvasContainer _currentContainer;
@@ -2838,6 +2841,12 @@ namespace Draw2D.ViewModels.Containers
         {
             get => _renderer;
             set => Update(ref _renderer, value);
+        }
+
+        public IDrawContainerView DrawContainerView
+        {
+            get => _drawContainerView;
+            set => Update(ref _drawContainerView, value);
         }
 
         public ICanvasPresenter Presenter
@@ -2864,95 +2873,9 @@ namespace Draw2D.ViewModels.Containers
             set => Update(ref _workingContainer, value);
         }
 
-        private void Draw(DrawingContext context, double width, double height, double dx, double dy, double zx, double zy)
-        {
-            var currentContainer = this.CurrentContainer;
-            var workingContainer = this.WorkingContainer;
-            var presenter = this.Presenter;
-            var renderer = this.Renderer;
-
-            if (currentContainer.InputBackground != null)
-            {
-                var color = AvaloniaBrushCache.FromDrawColor(currentContainer.InputBackground);
-                var brush = new SolidColorBrush(color);
-                context.FillRectangle(brush, new Rect(0, 0, width, height));
-            }
-
-            var state = context.PushPreTransform(new Matrix(zx, 0.0, 0.0, zy, dx, dy));
-
-            if (currentContainer.WorkBackground != null)
-            {
-                var color = AvaloniaBrushCache.FromDrawColor(currentContainer.WorkBackground);
-                var brush = new SolidColorBrush(color);
-                context.FillRectangle(brush, new Rect(0.0, 0.0, currentContainer.Width, currentContainer.Height));
-            }
-
-            presenter.DrawContainer(context, currentContainer, renderer, 0.0, 0.0, DrawMode.Shape, null, null);
-            presenter.DrawContainer(context, currentContainer, renderer, 0.0, 0.0, DrawMode.Point, null, null);
-
-            presenter.DrawContainer(context, workingContainer, renderer, 0.0, 0.0, DrawMode.Shape, null, null);
-            presenter.DrawContainer(context, workingContainer, renderer, 0.0, 0.0, DrawMode.Point, null, null);
-
-            presenter.DrawDecorators(context, currentContainer, renderer, 0.0, 0.0, DrawMode.Shape);
-            presenter.DrawDecorators(context, workingContainer, renderer, 0.0, 0.0, DrawMode.Shape);
-
-            state.Dispose();
-        }
-
-        private void Draw(SKCanvas canvas, double width, double height, double dx, double dy, double zx, double zy)
-        {
-            var currentContainer = this.CurrentContainer;
-            var workingContainer = this.WorkingContainer;
-            var presenter = this.Presenter;
-            var renderer = new SkiaShapeRenderer(zx)
-            {
-                Selection = this.Selection
-            };
-
-            canvas.Save();
-
-            if (currentContainer.InputBackground != null)
-            {
-                using (var brush = SkiaShapeRenderer.ToSKPaintBrush(currentContainer.InputBackground))
-                {
-                    canvas.DrawRect(SkiaShapeRenderer.ToRect(0.0, 0.0, width, height), brush);
-                }
-            }
-
-            canvas.Translate((float)dx, (float)dy);
-            canvas.Scale((float)zx, (float)zy);
-
-            if (currentContainer.WorkBackground != null)
-            {
-                using (var brush = SkiaShapeRenderer.ToSKPaintBrush(currentContainer.WorkBackground))
-                {
-                    canvas.DrawRect(SkiaShapeRenderer.ToRect(0.0, 0.0, currentContainer.Width, currentContainer.Height), brush);
-                }
-            }
-
-            presenter.DrawContainer(canvas, currentContainer, renderer, 0.0, 0.0, DrawMode.Shape, null, null);
-            presenter.DrawContainer(canvas, currentContainer, renderer, 0.0, 0.0, DrawMode.Point, null, null);
-
-            presenter.DrawContainer(canvas, workingContainer, renderer, 0.0, 0.0, DrawMode.Shape, null, null);
-            presenter.DrawContainer(canvas, workingContainer, renderer, 0.0, 0.0, DrawMode.Point, null, null);
-
-            presenter.DrawDecorators(canvas, currentContainer, renderer, 0.0, 0.0, DrawMode.Shape);
-            presenter.DrawDecorators(canvas, workingContainer, renderer, 0.0, 0.0, DrawMode.Shape);
-
-            canvas.Restore();
-        }
-
         public void Draw(object context, double width, double height, double dx, double dy, double zx, double zy)
         {
-            switch (context)
-            {
-                case DrawingContext drawingContext:
-                    Draw(drawingContext, width, height, dx, dy, zx, zy);
-                    break;
-                case SKCanvas canvas:
-                    Draw(canvas, width, height, dx, dy, zx, zy);
-                    break;
-            }
+            _drawContainerView?.Draw(this, context, width, height, dx, dy, zx, zy);
         }
     }
 
@@ -5675,6 +5598,12 @@ namespace Draw2D.ViewModels.Tools
         {
             get => _context.ContainerView.Renderer;
             set => throw new InvalidOperationException($"Can not set {Renderer} property value.");
+        }
+
+        public IDrawContainerView DrawContainerView
+        {
+            get => _context.ContainerView.DrawContainerView;
+            set => throw new InvalidOperationException($"Can not set {DrawContainerView} property value.");
         }
 
         public ICanvasPresenter Presenter
