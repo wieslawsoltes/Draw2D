@@ -51,8 +51,8 @@ namespace Draw2D.ViewModels.Tools
             };
             context.WorkingContainer.Shapes.Add(_line);
 
-            context.ZoomControl?.Capture?.Invoke();
-            context.ZoomControl?.Redraw?.Invoke();
+            context.InputService?.Capture?.Invoke();
+            context.InputService?.Redraw?.Invoke();
 
             CurrentState = State.Point;
         }
@@ -71,8 +71,8 @@ namespace Draw2D.ViewModels.Tools
 
             Filters?.ForEach(f => f.Clear(context));
 
-            context.ZoomControl?.Release?.Invoke();
-            context.ZoomControl?.Redraw?.Invoke();
+            context.InputService?.Release?.Invoke();
+            context.InputService?.Redraw?.Invoke();
         }
 
         private void MoveStratPointInternal(IToolContext context, double x, double y, Modifier modifier)
@@ -80,7 +80,7 @@ namespace Draw2D.ViewModels.Tools
             Filters?.ForEach(f => f.Clear(context));
             Filters?.Any(f => f.Process(context, ref x, ref y));
 
-            context.ZoomControl?.Redraw?.Invoke();
+            context.InputService?.Redraw?.Invoke();
         }
 
         private void MovePointInternal(IToolContext context, double x, double y, Modifier modifier)
@@ -91,7 +91,7 @@ namespace Draw2D.ViewModels.Tools
             _line.Point.X = x;
             _line.Point.Y = y;
 
-            context.ZoomControl?.Redraw?.Invoke();
+            context.InputService?.Redraw?.Invoke();
         }
 
         private void CleanInternal(IToolContext context)
@@ -106,8 +106,8 @@ namespace Draw2D.ViewModels.Tools
                 _line = null;
             }
 
-            context.ZoomControl?.Release?.Invoke();
-            context.ZoomControl?.Redraw?.Invoke();
+            context.InputService?.Release?.Invoke();
+            context.InputService?.Redraw?.Invoke();
         }
 
         public void LeftDown(IToolContext context, double x, double y, Modifier modifier)

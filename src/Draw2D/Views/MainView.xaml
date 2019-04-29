@@ -6,9 +6,9 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:Draw2D.Views"
-             xmlns:editor="clr-namespace:Draw2D.Editor"
-             xmlns:paz="clr-namespace:Avalonia.Controls.PanAndZoom;assembly=Avalonia.Controls.PanAndZoom"
-             UseLayoutRounding="True" RenderOptions.BitmapInterpolationMode="HighQuality" Focusable="True"
+             xmlns:controls="clr-namespace:Draw2D.Controls"
+             UseLayoutRounding="True" RenderOptions.BitmapInterpolationMode="HighQuality"
+             Focusable="True"
              mc:Ignorable="d"
              d:DesignWidth="800" d:DesignHeight="600">
     <UserControl.Resources>
@@ -281,7 +281,7 @@
         <GridSplitter Grid.Row="2" Grid.Column="1"/>
         <Border Classes="zoom" Grid.Row="2" Grid.Column="2">
             <Border Classes="clip" ClipToBounds="True" Background="Transparent">
-                <editor:ZoomControl x:Name="zoomControl" InputTarget="{Binding}" DrawTarget="{Binding}" CustomDraw="True" Background="Transparent" ClipToBounds="False"/>
+                <controls:ZoomControl x:Name="zoomControl" InputTarget="{Binding}" DrawTarget="{Binding}" CustomDraw="True" Background="Transparent" ClipToBounds="False"/>
             </Border>
         </Border>
     </Grid>

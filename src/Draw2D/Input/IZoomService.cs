@@ -5,7 +5,6 @@ namespace Draw2D.Input
 {
     public interface IZoomService
     {
-        IInputService ZoomControl { get; set; }
         double ZoomSpeed { get; set; }
         double ZoomX { get; set; }
         double ZoomY { get; set; }

@@ -26,7 +26,7 @@ namespace Draw2D.ViewModels
         private ICanvasPresenter _presenter;
         private ISelection _selection;
 
-        public IInputService ZoomControl
+        public IInputService InputService
         {
             get => _inputService;
             set => Update(ref _inputService, value);

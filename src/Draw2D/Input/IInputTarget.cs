@@ -5,7 +5,7 @@ namespace Draw2D.Input
 {
     public interface IInputTarget
     {
-        IInputService ZoomControl { get; set; }
+        IInputService InputService { get; set; }
         void LeftDown(double x, double y, Modifier modifier);
         void LeftUp(double x, double y, Modifier modifier);
         void RightDown(double x, double y, Modifier modifier);

@@ -11,7 +11,7 @@ using Avalonia.Skia;
 using Avalonia.VisualTree;
 using Draw2D.Input;
 
-namespace Draw2D.Editor
+namespace Draw2D.Controls
 {
     internal struct CustomDrawOperation : ICustomDrawOperation
     {
@@ -55,7 +55,7 @@ namespace Draw2D.Editor
         }
     }
 
-    public class ZoomControl : Border, IInputService
+    public class ZoomControl : Border, IInputService, IZoomService
     {
         private double _zoomSpeed = 1.2;
         private double _zoomX = 1.0;
@@ -198,7 +198,7 @@ namespace Draw2D.Editor
             if (_inputTarget != null)
             {
                 // FIXME:
-                _inputTarget.ZoomControl = this;
+                _inputTarget.InputService = this;
             }
         }
 
@@ -209,7 +209,7 @@ namespace Draw2D.Editor
             if (_inputTarget != null)
             {
                 // FIXME:
-                _inputTarget.ZoomControl = null;
+                _inputTarget.InputService = null;
             }
         }
 
