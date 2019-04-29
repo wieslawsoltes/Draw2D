@@ -112,28 +112,6 @@ namespace Draw2D.ViewModels
         void Draw(object context, double width, double height, double dx, double dy, double zx, double zy);
     }
 
-    public interface IContainerView : IDrawTarget
-    {
-        IShapeRenderer Renderer { get; set; }
-        ICanvasPresenter Presenter { get; set; }
-        ISelection Selection { get; set; }
-        CanvasContainer CurrentContainer { get; set; }
-        CanvasContainer WorkingContainer { get; set; }
-    }
-
-    public interface IToolContext : IInputTarget
-    {
-        IContainerView ContainerView { get; set; }
-        ShapeStyle CurrentStyle { get; set; }
-        BaseShape PointShape { get; set; }
-        IList<ITool> Tools { get; set; }
-        ITool CurrentTool { get; set; }
-        EditMode Mode { get; set; }
-        IHitTest HitTest { get; set; }
-        PointShape GetNextPoint(double x, double y, bool connect, double radius);
-        void SetTool(string name);
-    }
-
     public interface IConnectable
     {
         bool Connect(PointShape point, PointShape target);
@@ -149,7 +127,7 @@ namespace Draw2D.ViewModels
     public interface IDrawable
     {
         ShapeStyle Style { get; set; }
-        MatrixObject Transform { get; set; }
+        Matrix2 Transform { get; set; }
         object BeginTransform(object dc, IShapeRenderer renderer);
         void EndTransform(object dc, IShapeRenderer renderer, object state);
         void Draw(object dc, IShapeRenderer renderer, double dx, double dy, DrawMode mode, object db, object r);
@@ -167,9 +145,9 @@ namespace Draw2D.ViewModels
     {
         ISelection Selection { get; set; }
         void InvalidateCache(ShapeStyle style);
-        void InvalidateCache(MatrixObject matrix);
+        void InvalidateCache(Matrix2 matrix);
         void InvalidateCache(BaseShape shape, ShapeStyle style, double dx, double dy);
-        object PushMatrix(object dc, MatrixObject matrix);
+        object PushMatrix(object dc, Matrix2 matrix);
         void PopMatrix(object dc, object state);
         void DrawLine(object dc, LineShape line, ShapeStyle style, double dx, double dy);
         void DrawCubicBezier(object dc, CubicBezierShape cubicBezier, ShapeStyle style, double dx, double dy);
@@ -222,8 +200,8 @@ namespace Draw2D.ViewModels
     public interface ITool
     {
         string Title { get; }
-        IList<PointIntersectionBase> Intersections { get; set; }
-        IList<PointFilterBase> Filters { get; set; }
+        IList<PointIntersection> Intersections { get; set; }
+        IList<PointFilter> Filters { get; set; }
         void LeftDown(IToolContext context, double x, double y, Modifier modifier);
         void LeftUp(IToolContext context, double x, double y, Modifier modifier);
         void RightDown(IToolContext context, double x, double y, Modifier modifier);
@@ -292,26 +270,26 @@ namespace Draw2D.ViewModels
         public virtual bool ShouldSerializeIsDirty() => false;
     }
 
-    public static class MatrixObjectExtensions
+    public static class Matrix2Extensions
     {
-        public static Matrix2 ToMatrix2(this MatrixObject matrix)
+        public static Spatial.Matrix2 ToMatrix2(this Matrix2 matrix)
+        {
+            return new Spatial.Matrix2(
+                matrix.M11, matrix.M12,
+                matrix.M21, matrix.M22,
+                matrix.OffsetX, matrix.OffsetY);
+        }
+
+        public static Matrix2 FromMatrix2(this Spatial.Matrix2 matrix)
         {
             return new Matrix2(
                 matrix.M11, matrix.M12,
                 matrix.M21, matrix.M22,
                 matrix.OffsetX, matrix.OffsetY);
         }
-
-        public static MatrixObject FromMatrix2(this Matrix2 matrix)
-        {
-            return new MatrixObject(
-                matrix.M11, matrix.M12,
-                matrix.M21, matrix.M22,
-                matrix.OffsetX, matrix.OffsetY);
-        }
     }
 
-    public class MatrixObject : ViewModelBase, ICopyable
+    public class Matrix2 : ViewModelBase, ICopyable
     {
         private double _m11;
         private double _m12;
@@ -356,14 +334,14 @@ namespace Draw2D.ViewModels
             set => Update(ref _offsetY, value);
         }
 
-        public static MatrixObject Identity => new MatrixObject(1.0, 0.0, 0.0, 1.0, 0.0, 0.0);
+        public static Matrix2 Identity => new Matrix2(1.0, 0.0, 0.0, 1.0, 0.0, 0.0);
 
-        public MatrixObject()
+        public Matrix2()
             : base()
         {
         }
 
-        public MatrixObject(double m11, double m12, double m21, double m22, double offsetX, double offsetY)
+        public Matrix2(double m11, double m12, double m21, double m22, double offsetX, double offsetY)
             : base()
         {
             this.M11 = m11;
@@ -387,7 +365,7 @@ namespace Draw2D.ViewModels
 
         public object Copy(IDictionary<object, object> shared)
         {
-            return new MatrixObject()
+            return new Matrix2()
             {
                 M11 = this.M11,
                 M12 = this.M12,
@@ -399,7 +377,7 @@ namespace Draw2D.ViewModels
         }
     }
 
-    public class TextObject : ViewModelBase, ICopyable
+    public class Text : ViewModelBase, ICopyable
     {
         private string _value;
 
@@ -411,23 +389,23 @@ namespace Draw2D.ViewModels
 
         public object Copy(IDictionary<object, object> shared)
         {
-            return new TextObject()
+            return new Text()
             {
                 Value = this.Value
             };
         }
     }
 
-    public abstract class SettingsBase : ViewModelBase
+    public abstract class Settings : ViewModelBase
     {
     }
 
-    public abstract class PointFilterBase
+    public abstract class PointFilter
     {
         public abstract string Title { get; }
         public IList<BaseShape> Guides { get; set; }
 
-        protected PointFilterBase()
+        protected PointFilter()
         {
             Guides = new ObservableCollection<BaseShape>();
         }
@@ -445,12 +423,12 @@ namespace Draw2D.ViewModels
         }
     }
 
-    public abstract class PointIntersectionBase
+    public abstract class PointIntersection
     {
         public abstract string Title { get; }
         public IList<PointShape> Intersections { get; set; }
 
-        protected PointIntersectionBase()
+        protected PointIntersection()
         {
             Intersections = new ObservableCollection<PointShape>();
         }
@@ -465,432 +443,6 @@ namespace Draw2D.ViewModels
                 context.ContainerView.Selection.Selected.Remove(point);
             }
             Intersections.Clear();
-        }
-    }
-
-    public class CanvasPresenter : ICanvasPresenter
-    {
-        public IDictionary<Type, IShapeDecorator> Decorators { get; set; }
-
-        public void DrawContainer(object dc, CanvasContainer container, IShapeRenderer renderer, double dx, double dy, DrawMode mode, object db, object r)
-        {
-            container.Invalidate(renderer, dx, dy);
-            container.Draw(dc, renderer, dx, dy, mode, db, r);
-        }
-
-        public void DrawDecorators(object dc, CanvasContainer container, IShapeRenderer renderer, double dx, double dy, DrawMode mode)
-        {
-            var shapes = container.Shapes;
-            var selection = renderer.Selection;
-
-            foreach (var shape in shapes)
-            {
-                if (selection.Selected.Contains(shape))
-                {
-                    if (Decorators.TryGetValue(shape.GetType(), out var helper))
-                    {
-                        helper.Draw(dc, shape, renderer, selection, dx, dy, mode);
-                    }
-                }
-            }
-        }
-    }
-
-    public class ContainerView : ViewModelBase, IContainerView
-    {
-        private IInputService _inputService;
-        private IZoomService _zoomService;
-        private IShapeRenderer _renderer;
-        private ICanvasPresenter _presenter;
-        private ISelection _selection;
-        private CanvasContainer _currentContainer;
-        private CanvasContainer _workingContainer;
-
-        public IInputService InputService
-        {
-            get => _inputService;
-            set => Update(ref _inputService, value);
-        }
-
-        public IZoomService ZoomService
-        {
-            get => _zoomService;
-            set => Update(ref _zoomService, value);
-        }
-
-        public IShapeRenderer Renderer
-        {
-            get => _renderer;
-            set => Update(ref _renderer, value);
-        }
-
-        public ICanvasPresenter Presenter
-        {
-            get => _presenter;
-            set => Update(ref _presenter, value);
-        }
-
-        public ISelection Selection
-        {
-            get => _selection;
-            set => Update(ref _selection, value);
-        }
-
-        public CanvasContainer CurrentContainer
-        {
-            get => _currentContainer;
-            set => Update(ref _currentContainer, value);
-        }
-
-        public CanvasContainer WorkingContainer
-        {
-            get => _workingContainer;
-            set => Update(ref _workingContainer, value);
-        }
-
-        private void Draw(DrawingContext context, double width, double height, double dx, double dy, double zx, double zy)
-        {
-            var currentContainer = this.CurrentContainer;
-            var workingContainer = this.WorkingContainer;
-            var presenter = this.Presenter;
-            var renderer = this.Renderer;
-
-            if (currentContainer.InputBackground != null)
-            {
-                var color = AvaloniaBrushCache.FromDrawColor(currentContainer.InputBackground);
-                var brush = new SolidColorBrush(color);
-                context.FillRectangle(brush, new Rect(0, 0, width, height));
-            }
-
-            var state = context.PushPreTransform(new Matrix(zx, 0.0, 0.0, zy, dx, dy));
-
-            if (currentContainer.WorkBackground != null)
-            {
-                var color = AvaloniaBrushCache.FromDrawColor(currentContainer.WorkBackground);
-                var brush = new SolidColorBrush(color);
-                context.FillRectangle(brush, new Rect(0.0, 0.0, currentContainer.Width, currentContainer.Height));
-            }
-
-            presenter.DrawContainer(context, currentContainer, renderer, 0.0, 0.0, DrawMode.Shape, null, null);
-            presenter.DrawContainer(context, currentContainer, renderer, 0.0, 0.0, DrawMode.Point, null, null);
-
-            presenter.DrawContainer(context, workingContainer, renderer, 0.0, 0.0, DrawMode.Shape, null, null);
-            presenter.DrawContainer(context, workingContainer, renderer, 0.0, 0.0, DrawMode.Point, null, null);
-
-            presenter.DrawDecorators(context, currentContainer, renderer, 0.0, 0.0, DrawMode.Shape);
-            presenter.DrawDecorators(context, workingContainer, renderer, 0.0, 0.0, DrawMode.Shape);
-
-            state.Dispose();
-        }
-
-        private void Draw(SKCanvas canvas, double width, double height, double dx, double dy, double zx, double zy)
-        {
-            var currentContainer = this.CurrentContainer;
-            var workingContainer = this.WorkingContainer;
-            var presenter = this.Presenter;
-            var renderer = new SkiaShapeRenderer(zx)
-            {
-                Selection = this.Selection
-            };
-
-            canvas.Save();
-
-            if (currentContainer.InputBackground != null)
-            {
-                using (var brush = SkiaShapeRenderer.ToSKPaintBrush(currentContainer.InputBackground))
-                {
-                    canvas.DrawRect(SkiaShapeRenderer.ToRect(0.0, 0.0, width, height), brush);
-                }
-            }
-
-            canvas.Translate((float)dx, (float)dy);
-            canvas.Scale((float)zx, (float)zy);
-
-            if (currentContainer.WorkBackground != null)
-            {
-                using (var brush = SkiaShapeRenderer.ToSKPaintBrush(currentContainer.WorkBackground))
-                {
-                    canvas.DrawRect(SkiaShapeRenderer.ToRect(0.0, 0.0, currentContainer.Width, currentContainer.Height), brush);
-                }
-            }
-
-            presenter.DrawContainer(canvas, currentContainer, renderer, 0.0, 0.0, DrawMode.Shape, null, null);
-            presenter.DrawContainer(canvas, currentContainer, renderer, 0.0, 0.0, DrawMode.Point, null, null);
-
-            presenter.DrawContainer(canvas, workingContainer, renderer, 0.0, 0.0, DrawMode.Shape, null, null);
-            presenter.DrawContainer(canvas, workingContainer, renderer, 0.0, 0.0, DrawMode.Point, null, null);
-
-            presenter.DrawDecorators(canvas, currentContainer, renderer, 0.0, 0.0, DrawMode.Shape);
-            presenter.DrawDecorators(canvas, workingContainer, renderer, 0.0, 0.0, DrawMode.Shape);
-
-            canvas.Restore();
-        }
-
-        public void Draw(object context, double width, double height, double dx, double dy, double zx, double zy)
-        {
-            switch (context)
-            {
-                case DrawingContext drawingContext:
-                    Draw(drawingContext, width, height, dx, dy, zx, zy);
-                    break;
-                case SKCanvas canvas:
-                    Draw(canvas, width, height, dx, dy, zx, zy);
-                    break;
-            }
-        }
-    }
-
-    public class ToolContext : ViewModelBase, IToolContext
-    {
-        private IContainerView _containerView;
-        private ShapeStyle _currentStyle;
-        private BaseShape _pointShape;
-        private IList<ITool> _tools;
-        private ITool _currentTool;
-        private EditMode _mode;
-        private IHitTest _hitTest;
-
-        public IContainerView ContainerView
-        {
-            get => _containerView;
-            set => Update(ref _containerView, value);
-        }
-
-        public ShapeStyle CurrentStyle
-        {
-            get => _currentStyle;
-            set => Update(ref _currentStyle, value);
-        }
-
-        public BaseShape PointShape
-        {
-            get => _pointShape;
-            set => Update(ref _pointShape, value);
-        }
-
-        public IList<ITool> Tools
-        {
-            get => _tools;
-            set => Update(ref _tools, value);
-        }
-
-        public ITool CurrentTool
-        {
-            get => _currentTool;
-            set
-            {
-                _currentTool?.Clean(this);
-                Update(ref _currentTool, value);
-            }
-        }
-
-        public EditMode Mode
-        {
-            get => _mode;
-            set => Update(ref _mode, value);
-        }
-
-        public IHitTest HitTest
-        {
-            get => _hitTest;
-            set => Update(ref _hitTest, value);
-        }
-
-        public virtual PointShape GetNextPoint(double x, double y, bool connect, double radius)
-        {
-            if (connect == true)
-            {
-                var point = HitTest.TryToGetPoint(ContainerView.CurrentContainer.Shapes, new Point2(x, y), radius, null);
-                if (point != null)
-                {
-                    return point;
-                }
-            }
-            return new PointShape(x, y, PointShape);
-        }
-
-        public void SetTool(string title)
-        {
-            if (CurrentTool is PathTool pathTool && pathTool.Settings.CurrentTool.Title != title)
-            {
-                pathTool.CleanCurrentTool(this);
-                var tool = pathTool.Settings.Tools.Where(t => t.Title == title).FirstOrDefault();
-                if (tool != null)
-                {
-                    pathTool.Settings.CurrentTool = tool;
-                }
-                else
-                {
-                    CurrentTool = Tools.Where(t => t.Title == title).FirstOrDefault();
-                }
-            }
-            else
-            {
-                CurrentTool = Tools.Where(t => t.Title == title).FirstOrDefault();
-            }
-        }
-
-        public void LeftDown(double x, double y, Modifier modifier)
-        {
-            _currentTool.LeftDown(this, x, y, modifier);
-        }
-
-        public void LeftUp(double x, double y, Modifier modifier)
-        {
-            if (_mode == EditMode.Mouse)
-            {
-                _currentTool.LeftUp(this, x, y, modifier);
-            }
-            else if (_mode == EditMode.Touch)
-            {
-                _currentTool.LeftDown(this, x, y, modifier);
-            }
-        }
-
-        public void RightDown(double x, double y, Modifier modifier)
-        {
-            _currentTool.RightDown(this, x, y, modifier);
-        }
-
-        public void RightUp(double x, double y, Modifier modifier)
-        {
-            _currentTool.RightUp(this, x, y, modifier);
-        }
-
-        public void Move(double x, double y, Modifier modifier)
-        {
-            _currentTool.Move(this, x, y, modifier);
-        }
-
-        public double GetWidth()
-        {
-            return ContainerView.CurrentContainer?.Width ?? 0.0;
-        }
-
-        public double GetHeight()
-        {
-            return ContainerView.CurrentContainer?.Height ?? 0.0;
-        }
-    }
-
-    public static class HitTestHelper
-    {
-        public static MonotoneChain MC => new MonotoneChain();
-        public static SeparatingAxisTheorem SAT => new SeparatingAxisTheorem();
-
-        public static Vector2[] ToSelection(Rect2 rect)
-        {
-            return new Vector2[]
-            {
-                new Vector2(rect.X, rect.Y),
-                new Vector2(rect.X + rect.Width, rect.Y),
-                new Vector2(rect.X + rect.Width, rect.Y + rect.Height),
-                new Vector2(rect.X, rect.Y + rect.Height)
-            };
-        }
-
-        public static void ToConvexHull(IEnumerable<PointShape> points, out int k, out Vector2[] convexHull)
-        {
-            Vector2[] vertices = new Vector2[points.Count()];
-            int i = 0;
-            foreach (var point in points)
-            {
-                vertices[i] = new Vector2(point.X, point.Y);
-                i++;
-            }
-            MC.ConvexHull(vertices, out convexHull, out k);
-        }
-
-        public static bool Contains(IEnumerable<PointShape> points, Point2 point)
-        {
-            ToConvexHull(points, out int k, out Vector2[] convexHull);
-            bool contains = false;
-            for (int i = 0, j = k - 2; i < k - 1; j = i++)
-            {
-                if (((convexHull[i].Y > point.Y) != (convexHull[j].Y > point.Y))
-                    && (point.X < (convexHull[j].X - convexHull[i].X) * (point.Y - convexHull[i].Y) / (convexHull[j].Y - convexHull[i].Y) + convexHull[i].X))
-                {
-                    contains = !contains;
-                }
-            }
-            return contains;
-        }
-
-        public static bool Overlap(IEnumerable<PointShape> points, Vector2[] selection)
-        {
-            ToConvexHull(points, out int k, out Vector2[] convexHull);
-            Vector2[] vertices = convexHull.Take(k).ToArray();
-            return SAT.Overlap(selection, vertices);
-        }
-
-        public static bool Overlap(IEnumerable<PointShape> points, Rect2 rect)
-        {
-            return Overlap(points, ToSelection(rect));
-        }
-    }
-
-    public class HitTest : IHitTest
-    {
-        public Dictionary<Type, IBounds> Registered { get; set; }
-
-        public HitTest()
-        {
-            Registered = new Dictionary<Type, IBounds>();
-        }
-
-        public void Register(IBounds hitTest)
-        {
-            Registered.Add(hitTest.TargetType, hitTest);
-        }
-
-        private IBounds GetHitTest(object target)
-        {
-            return Registered.TryGetValue(target?.GetType(), out var hitTest) ? hitTest : null;
-        }
-
-        public PointShape TryToGetPoint(BaseShape shape, Point2 target, double radius)
-        {
-            return GetHitTest(shape)?.TryToGetPoint(shape, target, radius, this);
-        }
-
-        public PointShape TryToGetPoint(IEnumerable<BaseShape> shapes, Point2 target, double radius, PointShape exclude)
-        {
-            foreach (var shape in shapes.Reverse())
-            {
-                var result = TryToGetPoint(shape, target, radius);
-                if (result != null && result != exclude)
-                {
-                    return result;
-                }
-            }
-            return null;
-        }
-
-        public BaseShape TryToGetShape(IEnumerable<BaseShape> shapes, Point2 target, double radius)
-        {
-            foreach (var shape in shapes.Reverse())
-            {
-                var result = GetHitTest(shape)?.Contains(shape, target, radius, this);
-                if (result != null)
-                {
-                    return result;
-                }
-            }
-            return null;
-        }
-
-        public ISet<BaseShape> TryToGetShapes(IEnumerable<BaseShape> shapes, Rect2 target, double radius)
-        {
-            var selected = new HashSet<BaseShape>();
-            foreach (var shape in shapes.Reverse())
-            {
-                var result = GetHitTest(shape)?.Overlaps(shape, target, radius, this);
-                if (result != null)
-                {
-                    selected.Add(shape);
-                }
-            }
-            return selected.Count > 0 ? selected : null;
         }
     }
 }
@@ -1048,7 +600,7 @@ namespace Draw2D.ViewModels.Shapes
     public abstract class BaseShape : ViewModelBase, IDrawable, ISelectable
     {
         private ShapeStyle _style;
-        private MatrixObject _transform;
+        private Matrix2 _transform;
 
         public ShapeStyle Style
         {
@@ -1056,7 +608,7 @@ namespace Draw2D.ViewModels.Shapes
             set => Update(ref _style, value);
         }
 
-        public MatrixObject Transform
+        public Matrix2 Transform
         {
             get => _transform;
             set => Update(ref _transform, value);
@@ -1652,7 +1204,7 @@ namespace Draw2D.ViewModels.Shapes
             var copy = new CubicBezierShape()
             {
                 Style = this.Style,
-                Transform = (MatrixObject)this.Transform?.Copy(shared)
+                Transform = (Matrix2)this.Transform?.Copy(shared)
             };
 
             if (shared != null)
@@ -1745,7 +1297,7 @@ namespace Draw2D.ViewModels.Shapes
             var copy = new EllipseShape()
             {
                 Style = this.Style,
-                Transform = (MatrixObject)this.Transform?.Copy(shared)
+                Transform = (Matrix2)this.Transform?.Copy(shared)
             };
 
             if (shared != null)
@@ -1857,7 +1409,7 @@ namespace Draw2D.ViewModels.Shapes
             {
                 Name = this.Name,
                 Style = this.Style,
-                Transform = (MatrixObject)this.Transform?.Copy(shared),
+                Transform = (Matrix2)this.Transform?.Copy(shared),
                 Width = this.Width,
                 Height = this.Height,
                 IsFilled = this.IsFilled,
@@ -1992,7 +1544,7 @@ namespace Draw2D.ViewModels.Shapes
             var copy = new GroupShape()
             {
                 Style = this.Style,
-                Transform = (MatrixObject)this.Transform?.Copy(shared)
+                Transform = (Matrix2)this.Transform?.Copy(shared)
             };
 
             if (shared != null)
@@ -2222,7 +1774,7 @@ namespace Draw2D.ViewModels.Shapes
             var copy = new LineShape()
             {
                 Style = this.Style,
-                Transform = (MatrixObject)this.Transform?.Copy(shared)
+                Transform = (Matrix2)this.Transform?.Copy(shared)
             };
 
             if (shared != null)
@@ -2486,7 +2038,7 @@ namespace Draw2D.ViewModels.Shapes
             var copy = new PathShape()
             {
                 Style = this.Style,
-                Transform = (MatrixObject)this.Transform?.Copy(shared),
+                Transform = (Matrix2)this.Transform?.Copy(shared),
                 FillRule = this.FillRule
             };
 
@@ -2522,7 +2074,7 @@ namespace Draw2D.ViewModels.Shapes
 
     public class PointShape : BaseShape, ICopyable
     {
-        private MatrixObject _templateTransform = MatrixObject.Identity;
+        private Matrix2 _templateTransform = Matrix2.Identity;
         private double _x;
         private double _y;
         private BaseShape _template;
@@ -2607,7 +2159,7 @@ namespace Draw2D.ViewModels.Shapes
             return new PointShape()
             {
                 Style = this.Style,
-                Transform = (MatrixObject)this.Transform?.Copy(shared),
+                Transform = (Matrix2)this.Transform?.Copy(shared),
                 X = this.X,
                 Y = this.Y,
                 Template = this.Template
@@ -2849,7 +2401,7 @@ namespace Draw2D.ViewModels.Shapes
             var copy = new QuadraticBezierShape()
             {
                 Style = this.Style,
-                Transform = (MatrixObject)this.Transform?.Copy(shared)
+                Transform = (Matrix2)this.Transform?.Copy(shared)
             };
 
             if (shared != null)
@@ -2941,7 +2493,7 @@ namespace Draw2D.ViewModels.Shapes
             var copy = new RectangleShape()
             {
                 Style = this.Style,
-                Transform = (MatrixObject)this.Transform?.Copy(shared)
+                Transform = (Matrix2)this.Transform?.Copy(shared)
             };
 
             if (shared != null)
@@ -2961,9 +2513,9 @@ namespace Draw2D.ViewModels.Shapes
 
     public class TextShape : BoxShape, ICopyable
     {
-        private TextObject _text;
+        private Text _text;
 
-        public TextObject Text
+        public Text Text
         {
             get => _text;
             set => Update(ref _text, value);
@@ -2979,7 +2531,7 @@ namespace Draw2D.ViewModels.Shapes
         {
         }
 
-        public TextShape(TextObject text, PointShape topLeft, PointShape bottomRight)
+        public TextShape(Text text, PointShape topLeft, PointShape bottomRight)
             : base(topLeft, bottomRight)
         {
             this.Text = text;
@@ -3036,8 +2588,8 @@ namespace Draw2D.ViewModels.Shapes
             var copy = new TextShape()
             {
                 Style = this.Style,
-                Transform = (MatrixObject)this.Transform?.Copy(shared),
-                Text = (TextObject)this.Text?.Copy(shared)
+                Transform = (Matrix2)this.Transform?.Copy(shared),
+                Text = (Text)this.Text?.Copy(shared)
             };
 
             if (shared != null)
@@ -3058,6 +2610,26 @@ namespace Draw2D.ViewModels.Shapes
 
 namespace Draw2D.ViewModels.Containers
 {
+    public interface IContainerView : IDrawTarget
+    {
+        IShapeRenderer Renderer { get; set; }
+        ICanvasPresenter Presenter { get; set; }
+        ISelection Selection { get; set; }
+        CanvasContainer CurrentContainer { get; set; }
+        CanvasContainer WorkingContainer { get; set; }
+    }
+
+    public interface IToolContext : IInputTarget
+    {
+        IContainerView ContainerView { get; set; }
+        IList<ITool> Tools { get; set; }
+        ITool CurrentTool { get; set; }
+        EditMode Mode { get; set; }
+        IHitTest HitTest { get; set; }
+        PointShape GetNextPoint(double x, double y, bool connect, double radius);
+        void SetTool(string name);
+    }
+
     public class CanvasContainer : BaseShape, ICopyable
     {
         private double _width;
@@ -3068,6 +2640,8 @@ namespace Draw2D.ViewModels.Containers
         private ObservableCollection<LineShape> _guides;
         private ObservableCollection<BaseShape> _shapes;
         private ObservableCollection<ShapeStyle> _styles;
+        private ShapeStyle _currentStyle;
+        private BaseShape _pointTemplate;
 
         public double Width
         {
@@ -3115,6 +2689,18 @@ namespace Draw2D.ViewModels.Containers
         {
             get => _styles;
             set => Update(ref _styles, value);
+        }
+
+        public ShapeStyle CurrentStyle
+        {
+            get => _currentStyle;
+            set => Update(ref _currentStyle, value);
+        }
+
+        public BaseShape PointTemplate
+        {
+            get => _pointTemplate;
+            set => Update(ref _pointTemplate, value);
         }
 
         public CanvasContainer()
@@ -3188,7 +2774,7 @@ namespace Draw2D.ViewModels.Containers
             {
                 Name = this.Name,
                 Style = this.Style,
-                Transform = (MatrixObject)this.Transform?.Copy(shared),
+                Transform = (Matrix2)this.Transform?.Copy(shared),
                 Width = this.Width,
                 Height = this.Height,
             };
@@ -3223,6 +2809,269 @@ namespace Draw2D.ViewModels.Containers
                     point.Move(selection, dx, dy);
                 }
             }
+        }
+    }
+
+    public class ContainerView : ViewModelBase, IContainerView
+    {
+        private IInputService _inputService;
+        private IZoomService _zoomService;
+        private IShapeRenderer _renderer;
+        private ICanvasPresenter _presenter;
+        private ISelection _selection;
+        private CanvasContainer _currentContainer;
+        private CanvasContainer _workingContainer;
+
+        public IInputService InputService
+        {
+            get => _inputService;
+            set => Update(ref _inputService, value);
+        }
+
+        public IZoomService ZoomService
+        {
+            get => _zoomService;
+            set => Update(ref _zoomService, value);
+        }
+
+        public IShapeRenderer Renderer
+        {
+            get => _renderer;
+            set => Update(ref _renderer, value);
+        }
+
+        public ICanvasPresenter Presenter
+        {
+            get => _presenter;
+            set => Update(ref _presenter, value);
+        }
+
+        public ISelection Selection
+        {
+            get => _selection;
+            set => Update(ref _selection, value);
+        }
+
+        public CanvasContainer CurrentContainer
+        {
+            get => _currentContainer;
+            set => Update(ref _currentContainer, value);
+        }
+
+        public CanvasContainer WorkingContainer
+        {
+            get => _workingContainer;
+            set => Update(ref _workingContainer, value);
+        }
+
+        private void Draw(DrawingContext context, double width, double height, double dx, double dy, double zx, double zy)
+        {
+            var currentContainer = this.CurrentContainer;
+            var workingContainer = this.WorkingContainer;
+            var presenter = this.Presenter;
+            var renderer = this.Renderer;
+
+            if (currentContainer.InputBackground != null)
+            {
+                var color = AvaloniaBrushCache.FromDrawColor(currentContainer.InputBackground);
+                var brush = new SolidColorBrush(color);
+                context.FillRectangle(brush, new Rect(0, 0, width, height));
+            }
+
+            var state = context.PushPreTransform(new Matrix(zx, 0.0, 0.0, zy, dx, dy));
+
+            if (currentContainer.WorkBackground != null)
+            {
+                var color = AvaloniaBrushCache.FromDrawColor(currentContainer.WorkBackground);
+                var brush = new SolidColorBrush(color);
+                context.FillRectangle(brush, new Rect(0.0, 0.0, currentContainer.Width, currentContainer.Height));
+            }
+
+            presenter.DrawContainer(context, currentContainer, renderer, 0.0, 0.0, DrawMode.Shape, null, null);
+            presenter.DrawContainer(context, currentContainer, renderer, 0.0, 0.0, DrawMode.Point, null, null);
+
+            presenter.DrawContainer(context, workingContainer, renderer, 0.0, 0.0, DrawMode.Shape, null, null);
+            presenter.DrawContainer(context, workingContainer, renderer, 0.0, 0.0, DrawMode.Point, null, null);
+
+            presenter.DrawDecorators(context, currentContainer, renderer, 0.0, 0.0, DrawMode.Shape);
+            presenter.DrawDecorators(context, workingContainer, renderer, 0.0, 0.0, DrawMode.Shape);
+
+            state.Dispose();
+        }
+
+        private void Draw(SKCanvas canvas, double width, double height, double dx, double dy, double zx, double zy)
+        {
+            var currentContainer = this.CurrentContainer;
+            var workingContainer = this.WorkingContainer;
+            var presenter = this.Presenter;
+            var renderer = new SkiaShapeRenderer(zx)
+            {
+                Selection = this.Selection
+            };
+
+            canvas.Save();
+
+            if (currentContainer.InputBackground != null)
+            {
+                using (var brush = SkiaShapeRenderer.ToSKPaintBrush(currentContainer.InputBackground))
+                {
+                    canvas.DrawRect(SkiaShapeRenderer.ToRect(0.0, 0.0, width, height), brush);
+                }
+            }
+
+            canvas.Translate((float)dx, (float)dy);
+            canvas.Scale((float)zx, (float)zy);
+
+            if (currentContainer.WorkBackground != null)
+            {
+                using (var brush = SkiaShapeRenderer.ToSKPaintBrush(currentContainer.WorkBackground))
+                {
+                    canvas.DrawRect(SkiaShapeRenderer.ToRect(0.0, 0.0, currentContainer.Width, currentContainer.Height), brush);
+                }
+            }
+
+            presenter.DrawContainer(canvas, currentContainer, renderer, 0.0, 0.0, DrawMode.Shape, null, null);
+            presenter.DrawContainer(canvas, currentContainer, renderer, 0.0, 0.0, DrawMode.Point, null, null);
+
+            presenter.DrawContainer(canvas, workingContainer, renderer, 0.0, 0.0, DrawMode.Shape, null, null);
+            presenter.DrawContainer(canvas, workingContainer, renderer, 0.0, 0.0, DrawMode.Point, null, null);
+
+            presenter.DrawDecorators(canvas, currentContainer, renderer, 0.0, 0.0, DrawMode.Shape);
+            presenter.DrawDecorators(canvas, workingContainer, renderer, 0.0, 0.0, DrawMode.Shape);
+
+            canvas.Restore();
+        }
+
+        public void Draw(object context, double width, double height, double dx, double dy, double zx, double zy)
+        {
+            switch (context)
+            {
+                case DrawingContext drawingContext:
+                    Draw(drawingContext, width, height, dx, dy, zx, zy);
+                    break;
+                case SKCanvas canvas:
+                    Draw(canvas, width, height, dx, dy, zx, zy);
+                    break;
+            }
+        }
+    }
+
+    public class ToolContext : ViewModelBase, IToolContext
+    {
+        private IContainerView _containerView;
+        private IList<ITool> _tools;
+        private ITool _currentTool;
+        private EditMode _mode;
+        private IHitTest _hitTest;
+
+        public IContainerView ContainerView
+        {
+            get => _containerView;
+            set => Update(ref _containerView, value);
+        }
+
+        public IList<ITool> Tools
+        {
+            get => _tools;
+            set => Update(ref _tools, value);
+        }
+
+        public ITool CurrentTool
+        {
+            get => _currentTool;
+            set
+            {
+                _currentTool?.Clean(this);
+                Update(ref _currentTool, value);
+            }
+        }
+
+        public EditMode Mode
+        {
+            get => _mode;
+            set => Update(ref _mode, value);
+        }
+
+        public IHitTest HitTest
+        {
+            get => _hitTest;
+            set => Update(ref _hitTest, value);
+        }
+
+        public virtual PointShape GetNextPoint(double x, double y, bool connect, double radius)
+        {
+            if (connect == true)
+            {
+                var point = HitTest.TryToGetPoint(ContainerView.CurrentContainer.Shapes, new Point2(x, y), radius, null);
+                if (point != null)
+                {
+                    return point;
+                }
+            }
+            return new PointShape(x, y, ContainerView.CurrentContainer.PointTemplate);
+        }
+
+        public void SetTool(string title)
+        {
+            if (CurrentTool is PathTool pathTool && pathTool.Settings.CurrentTool.Title != title)
+            {
+                pathTool.CleanCurrentTool(this);
+                var tool = pathTool.Settings.Tools.Where(t => t.Title == title).FirstOrDefault();
+                if (tool != null)
+                {
+                    pathTool.Settings.CurrentTool = tool;
+                }
+                else
+                {
+                    CurrentTool = Tools.Where(t => t.Title == title).FirstOrDefault();
+                }
+            }
+            else
+            {
+                CurrentTool = Tools.Where(t => t.Title == title).FirstOrDefault();
+            }
+        }
+
+        public void LeftDown(double x, double y, Modifier modifier)
+        {
+            _currentTool.LeftDown(this, x, y, modifier);
+        }
+
+        public void LeftUp(double x, double y, Modifier modifier)
+        {
+            if (_mode == EditMode.Mouse)
+            {
+                _currentTool.LeftUp(this, x, y, modifier);
+            }
+            else if (_mode == EditMode.Touch)
+            {
+                _currentTool.LeftDown(this, x, y, modifier);
+            }
+        }
+
+        public void RightDown(double x, double y, Modifier modifier)
+        {
+            _currentTool.RightDown(this, x, y, modifier);
+        }
+
+        public void RightUp(double x, double y, Modifier modifier)
+        {
+            _currentTool.RightUp(this, x, y, modifier);
+        }
+
+        public void Move(double x, double y, Modifier modifier)
+        {
+            _currentTool.Move(this, x, y, modifier);
+        }
+
+        public double GetWidth()
+        {
+            return ContainerView.CurrentContainer?.Width ?? 0.0;
+        }
+
+        public double GetHeight()
+        {
+            return ContainerView.CurrentContainer?.Height ?? 0.0;
         }
     }
 }
@@ -3532,7 +3381,7 @@ namespace Draw2D.ViewModels.Filters
         Vertical = 2
     }
 
-    public class GridSnapSettings : SettingsBase
+    public class GridSnapSettings : Settings
     {
         private bool _isEnabled;
         private bool _enableGuides;
@@ -3578,7 +3427,7 @@ namespace Draw2D.ViewModels.Filters
         }
     }
 
-    public class GridSnapPointFilter : PointFilterBase
+    public class GridSnapPointFilter : PointFilter
     {
         public override string Title => "Grid-Snap";
 
@@ -3668,7 +3517,7 @@ namespace Draw2D.ViewModels.Filters
         Shapes = 2
     }
 
-    public class LineSnapSettings : SettingsBase
+    public class LineSnapSettings : Settings
     {
         private bool _isEnabled;
         private bool _enableGuides;
@@ -3714,7 +3563,7 @@ namespace Draw2D.ViewModels.Filters
         }
     }
 
-    public class LineSnapPointFilter : PointFilterBase
+    public class LineSnapPointFilter : PointFilter
     {
         public override string Title => "Line-Snap";
 
@@ -4005,7 +3854,7 @@ namespace Draw2D.ViewModels.Filters
 
 namespace Draw2D.ViewModels.Intersections
 {
-    public class EllipseLineSettings : SettingsBase
+    public class EllipseLineSettings : Settings
     {
         private bool _isEnabled;
 
@@ -4016,7 +3865,7 @@ namespace Draw2D.ViewModels.Intersections
         }
     }
 
-    public class EllipseLineIntersection : PointIntersectionBase
+    public class EllipseLineIntersection : PointIntersection
     {
         public override string Title => "Ellipse-Line";
 
@@ -4045,7 +3894,7 @@ namespace Draw2D.ViewModels.Intersections
                     {
                         foreach (var p in intersections)
                         {
-                            var point = new PointShape(p.X, p.Y, context.PointShape);
+                            var point = new PointShape(p.X, p.Y, context.ContainerView.CurrentContainer.PointTemplate);
                             Intersections.Add(point);
                             context.ContainerView.WorkingContainer.Shapes.Add(point);
                             context.ContainerView.Selection.Selected.Add(point);
@@ -4056,7 +3905,7 @@ namespace Draw2D.ViewModels.Intersections
         }
     }
 
-    public class LineLineSettings : SettingsBase
+    public class LineLineSettings : Settings
     {
         private bool _isEnabled;
 
@@ -4067,7 +3916,7 @@ namespace Draw2D.ViewModels.Intersections
         }
     }
 
-    public class LineLineIntersection : PointIntersectionBase
+    public class LineLineIntersection : PointIntersection
     {
         public override string Title => "Line-Line";
 
@@ -4095,7 +3944,7 @@ namespace Draw2D.ViewModels.Intersections
                     var intersection = Line2.LineIntersectWithLine(a0, b0, a1, b1, out clip);
                     if (intersection)
                     {
-                        var point = new PointShape(clip.X, clip.Y, context.PointShape);
+                        var point = new PointShape(clip.X, clip.Y, context.ContainerView.CurrentContainer.PointTemplate);
                         Intersections.Add(point);
                         context.ContainerView.WorkingContainer.Shapes.Add(point);
                         context.ContainerView.Selection.Selected.Add(point);
@@ -4105,7 +3954,7 @@ namespace Draw2D.ViewModels.Intersections
         }
     }
 
-    public class RectangleLineSettings : SettingsBase
+    public class RectangleLineSettings : Settings
     {
         private bool _isEnabled;
 
@@ -4116,7 +3965,7 @@ namespace Draw2D.ViewModels.Intersections
         }
     }
 
-    public class RectangleLineIntersection : PointIntersectionBase
+    public class RectangleLineIntersection : PointIntersection
     {
         public override string Title => "Rectangle-Line";
 
@@ -4142,12 +3991,12 @@ namespace Draw2D.ViewModels.Intersections
                     var intersections = Line2.LineIntersectsWithRect(p1, p2, rect, out double x0clip, out double y0clip, out double x1clip, out double y1clip);
                     if (intersections)
                     {
-                        var point1 = new PointShape(x0clip, y0clip, context.PointShape);
+                        var point1 = new PointShape(x0clip, y0clip, context.ContainerView.CurrentContainer.PointTemplate);
                         Intersections.Add(point1);
                         context.ContainerView.WorkingContainer.Shapes.Add(point1);
                         context.ContainerView.Selection.Selected.Add(point1);
 
-                        var point2 = new PointShape(x1clip, y1clip, context.PointShape);
+                        var point2 = new PointShape(x1clip, y1clip, context.ContainerView.CurrentContainer.PointTemplate);
                         Intersections.Add(point2);
                         context.ContainerView.WorkingContainer.Shapes.Add(point2);
                         context.ContainerView.Selection.Selected.Add(point2);
@@ -4687,11 +4536,132 @@ namespace Draw2D.ViewModels.Bounds
                 box.BottomRight.Y).IntersectsWith(target) ? shape : null;
         }
     }
+
+    public static class HitTestHelper
+    {
+        public static MonotoneChain MC => new MonotoneChain();
+        public static SeparatingAxisTheorem SAT => new SeparatingAxisTheorem();
+
+        public static Vector2[] ToSelection(Rect2 rect)
+        {
+            return new Vector2[]
+            {
+                new Vector2(rect.X, rect.Y),
+                new Vector2(rect.X + rect.Width, rect.Y),
+                new Vector2(rect.X + rect.Width, rect.Y + rect.Height),
+                new Vector2(rect.X, rect.Y + rect.Height)
+            };
+        }
+
+        public static void ToConvexHull(IEnumerable<PointShape> points, out int k, out Vector2[] convexHull)
+        {
+            Vector2[] vertices = new Vector2[points.Count()];
+            int i = 0;
+            foreach (var point in points)
+            {
+                vertices[i] = new Vector2(point.X, point.Y);
+                i++;
+            }
+            MC.ConvexHull(vertices, out convexHull, out k);
+        }
+
+        public static bool Contains(IEnumerable<PointShape> points, Point2 point)
+        {
+            ToConvexHull(points, out int k, out Vector2[] convexHull);
+            bool contains = false;
+            for (int i = 0, j = k - 2; i < k - 1; j = i++)
+            {
+                if (((convexHull[i].Y > point.Y) != (convexHull[j].Y > point.Y))
+                    && (point.X < (convexHull[j].X - convexHull[i].X) * (point.Y - convexHull[i].Y) / (convexHull[j].Y - convexHull[i].Y) + convexHull[i].X))
+                {
+                    contains = !contains;
+                }
+            }
+            return contains;
+        }
+
+        public static bool Overlap(IEnumerable<PointShape> points, Vector2[] selection)
+        {
+            ToConvexHull(points, out int k, out Vector2[] convexHull);
+            Vector2[] vertices = convexHull.Take(k).ToArray();
+            return SAT.Overlap(selection, vertices);
+        }
+
+        public static bool Overlap(IEnumerable<PointShape> points, Rect2 rect)
+        {
+            return Overlap(points, ToSelection(rect));
+        }
+    }
+
+    public class HitTest : IHitTest
+    {
+        public Dictionary<Type, IBounds> Registered { get; set; }
+
+        public HitTest()
+        {
+            Registered = new Dictionary<Type, IBounds>();
+        }
+
+        public void Register(IBounds hitTest)
+        {
+            Registered.Add(hitTest.TargetType, hitTest);
+        }
+
+        private IBounds GetHitTest(object target)
+        {
+            return Registered.TryGetValue(target?.GetType(), out var hitTest) ? hitTest : null;
+        }
+
+        public PointShape TryToGetPoint(BaseShape shape, Point2 target, double radius)
+        {
+            return GetHitTest(shape)?.TryToGetPoint(shape, target, radius, this);
+        }
+
+        public PointShape TryToGetPoint(IEnumerable<BaseShape> shapes, Point2 target, double radius, PointShape exclude)
+        {
+            foreach (var shape in shapes.Reverse())
+            {
+                var result = TryToGetPoint(shape, target, radius);
+                if (result != null && result != exclude)
+                {
+                    return result;
+                }
+            }
+            return null;
+        }
+
+        public BaseShape TryToGetShape(IEnumerable<BaseShape> shapes, Point2 target, double radius)
+        {
+            foreach (var shape in shapes.Reverse())
+            {
+                var result = GetHitTest(shape)?.Contains(shape, target, radius, this);
+                if (result != null)
+                {
+                    return result;
+                }
+            }
+            return null;
+        }
+
+        public ISet<BaseShape> TryToGetShapes(IEnumerable<BaseShape> shapes, Rect2 target, double radius)
+        {
+            var selected = new HashSet<BaseShape>();
+            foreach (var shape in shapes.Reverse())
+            {
+                var result = GetHitTest(shape)?.Overlaps(shape, target, radius, this);
+                if (result != null)
+                {
+                    selected.Add(shape);
+                }
+            }
+            return selected.Count > 0 ? selected : null;
+        }
+    }
 }
 
 namespace Draw2D.ViewModels.Tools
 {
-    public class CubicBezierToolSettings : SettingsBase
+    public class CubicBezierToolSettings : Settings
     {
         private bool _connectPoints;
         private double _hitTestRadius;
@@ -4725,9 +4695,9 @@ namespace Draw2D.ViewModels.Tools
 
         public string Title => "CubicBezier";
 
-        public IList<PointIntersectionBase> Intersections { get; set; }
+        public IList<PointIntersection> Intersections { get; set; }
 
-        public IList<PointFilterBase> Filters { get; set; }
+        public IList<PointFilter> Filters { get; set; }
 
         public CubicBezierToolSettings Settings { get; set; }
 
@@ -4742,7 +4712,7 @@ namespace Draw2D.ViewModels.Tools
                 Point1 = (PointShape)next.Copy(null),
                 Point2 = (PointShape)next.Copy(null),
                 Point3 = (PointShape)next.Copy(null),
-                Style = context.CurrentStyle
+                Style = context.ContainerView.CurrentContainer.CurrentStyle
             };
             context.ContainerView.WorkingContainer.Shapes.Add(_cubicBezier);
             context.ContainerView.Selection.Selected.Add(_cubicBezier);
@@ -4960,7 +4930,7 @@ namespace Draw2D.ViewModels.Tools
         }
     }
 
-    public class EllipseToolSettings : SettingsBase
+    public class EllipseToolSettings : Settings
     {
         private bool _connectPoints;
         private double _hitTestRadius;
@@ -4992,9 +4962,9 @@ namespace Draw2D.ViewModels.Tools
 
         public string Title => "Ellipse";
 
-        public IList<PointIntersectionBase> Intersections { get; set; }
+        public IList<PointIntersection> Intersections { get; set; }
 
-        public IList<PointFilterBase> Filters { get; set; }
+        public IList<PointFilter> Filters { get; set; }
 
         public EllipseToolSettings Settings { get; set; }
 
@@ -5006,7 +4976,7 @@ namespace Draw2D.ViewModels.Tools
             {
                 TopLeft = context.GetNextPoint(x, y, Settings?.ConnectPoints ?? false, Settings?.HitTestRadius ?? 7.0),
                 BottomRight = context.GetNextPoint(x, y, false, 0.0),
-                Style = context.CurrentStyle
+                Style = context.ContainerView.CurrentContainer.CurrentStyle
             };
             context.ContainerView.WorkingContainer.Shapes.Add(_ellipse);
             context.ContainerView.Selection.Selected.Add(_ellipse);
@@ -5137,7 +5107,7 @@ namespace Draw2D.ViewModels.Tools
         }
     }
 
-    public class GuideToolSettings : SettingsBase
+    public class GuideToolSettings : Settings
     {
         private ShapeStyle _guideStyle;
 
@@ -5162,9 +5132,9 @@ namespace Draw2D.ViewModels.Tools
 
         public string Title => "Guide";
 
-        public IList<PointIntersectionBase> Intersections { get; set; }
+        public IList<PointIntersection> Intersections { get; set; }
 
-        public IList<PointFilterBase> Filters { get; set; }
+        public IList<PointFilter> Filters { get; set; }
 
         public GuideToolSettings Settings { get; set; }
 
@@ -5299,7 +5269,7 @@ namespace Draw2D.ViewModels.Tools
         }
     }
 
-    public class LineToolSettings : SettingsBase
+    public class LineToolSettings : Settings
     {
         private bool _connectPoints;
         private double _hitTestRadius;
@@ -5326,7 +5296,7 @@ namespace Draw2D.ViewModels.Tools
 
     public static class LineHelper
     {
-        public static IList<LineShape> SplitByIntersections(IToolContext context, IEnumerable<PointIntersectionBase> intersections, LineShape target)
+        public static IList<LineShape> SplitByIntersections(IToolContext context, IEnumerable<PointIntersection> intersections, LineShape target)
         {
             var points = intersections.SelectMany(i => i.Intersections).ToList();
             points.Insert(0, target.StartPoint);
@@ -5334,13 +5304,13 @@ namespace Draw2D.ViewModels.Tools
 
             var unique = points
                 .Select(p => new Point2(p.X, p.Y)).Distinct().OrderBy(p => p)
-                .Select(p => new PointShape(p.X, p.Y, context.PointShape)).ToList();
+                .Select(p => new PointShape(p.X, p.Y, context.ContainerView.CurrentContainer.PointTemplate)).ToList();
 
             var lines = new ObservableCollection<LineShape>();
             for (int i = 0; i < unique.Count - 1; i++)
             {
                 var line = new LineShape(unique[i], unique[i + 1]);
-                line.Style = context.CurrentStyle;
+                line.Style = context.ContainerView.CurrentContainer.CurrentStyle;
 
                 context.ContainerView.CurrentContainer.Shapes.Add(line);
                 lines.Add(line);
@@ -5364,9 +5334,9 @@ namespace Draw2D.ViewModels.Tools
 
         public string Title => "Line";
 
-        public IList<PointIntersectionBase> Intersections { get; set; }
+        public IList<PointIntersection> Intersections { get; set; }
 
-        public IList<PointFilterBase> Filters { get; set; }
+        public IList<PointFilter> Filters { get; set; }
 
         public LineToolSettings Settings { get; set; }
 
@@ -5379,7 +5349,7 @@ namespace Draw2D.ViewModels.Tools
             {
                 StartPoint = next,
                 Point = (PointShape)next.Copy(null),
-                Style = context.CurrentStyle
+                Style = context.ContainerView.CurrentContainer.CurrentStyle
             };
             context.ContainerView.WorkingContainer.Shapes.Add(_line);
             context.ContainerView.Selection.Selected.Add(_line);
@@ -5528,7 +5498,7 @@ namespace Draw2D.ViewModels.Tools
         }
     }
 
-    public class MoveToolSettings : SettingsBase
+    public class MoveToolSettings : Settings
     {
     }
 
@@ -5538,9 +5508,9 @@ namespace Draw2D.ViewModels.Tools
 
         public string Title => "Move";
 
-        public IList<PointIntersectionBase> Intersections { get; set; }
+        public IList<PointIntersection> Intersections { get; set; }
 
-        public IList<PointFilterBase> Filters { get; set; }
+        public IList<PointFilter> Filters { get; set; }
 
         public MoveToolSettings Settings { get; set; }
 
@@ -5575,7 +5545,7 @@ namespace Draw2D.ViewModels.Tools
         }
     }
 
-    public class NoneToolSettings : SettingsBase
+    public class NoneToolSettings : Settings
     {
     }
 
@@ -5583,9 +5553,9 @@ namespace Draw2D.ViewModels.Tools
     {
         public string Title => "None";
 
-        public IList<PointIntersectionBase> Intersections { get; set; }
+        public IList<PointIntersection> Intersections { get; set; }
 
-        public IList<PointFilterBase> Filters { get; set; }
+        public IList<PointFilter> Filters { get; set; }
 
         public NoneToolSettings Settings { get; set; }
 
@@ -5614,7 +5584,7 @@ namespace Draw2D.ViewModels.Tools
         }
     }
 
-    public class PathToolSettings : SettingsBase
+    public class PathToolSettings : Settings
     {
         private bool _connectPoints;
         private double _hitTestRadius;
@@ -5749,18 +5719,6 @@ namespace Draw2D.ViewModels.Tools
             set => throw new InvalidOperationException($"Can not set {ContainerView} property value.");
         }
 
-        public ShapeStyle CurrentStyle
-        {
-            get => _context.CurrentStyle;
-            set => throw new InvalidOperationException($"Can not set {CurrentStyle} property value.");
-        }
-
-        public BaseShape PointShape
-        {
-            get => _context.PointShape;
-            set => throw new InvalidOperationException($"Can not set {PointShape} property value.");
-        }
-
         public IList<ITool> Tools
         {
             get => _context.Tools;
@@ -5785,37 +5743,37 @@ namespace Draw2D.ViewModels.Tools
             set => throw new InvalidOperationException($"Can not set {HitTest} property value.");
         }
 
-        public PointShape GetNextPoint(double x, double y, bool connect, double radius) 
+        public PointShape GetNextPoint(double x, double y, bool connect, double radius)
             => _nextPoint ?? _context.GetNextPoint(x, y, connect, radius);
 
-        public void SetTool(string name) 
+        public void SetTool(string name)
             => _context.SetTool(name);
 
-        public double GetWidth() 
+        public double GetWidth()
             => _context.GetWidth();
 
-        public double GetHeight() 
+        public double GetHeight()
             => _context.GetHeight();
 
-        public void LeftDown(double x, double y, Modifier modifier) 
+        public void LeftDown(double x, double y, Modifier modifier)
             => _context.LeftDown(x, y, modifier);
 
-        public void LeftUp(double x, double y, Modifier modifier) 
+        public void LeftUp(double x, double y, Modifier modifier)
             => _context.LeftUp(x, y, modifier);
 
-        public void RightDown(double x, double y, Modifier modifier) 
+        public void RightDown(double x, double y, Modifier modifier)
             => _context.RightDown(x, y, modifier);
 
-        public void RightUp(double x, double y, Modifier modifier) 
+        public void RightUp(double x, double y, Modifier modifier)
             => _context.RightUp(x, y, modifier);
 
-        public void Move(double x, double y, Modifier modifier) 
+        public void Move(double x, double y, Modifier modifier)
             => _context.Move(x, y, modifier);
 
-        private void SetContext(IToolContext context) 
+        private void SetContext(IToolContext context)
             => _context = context;
 
-        private void SetNextPoint(PointShape point) 
+        private void SetNextPoint(PointShape point)
             => _nextPoint = point;
     }
 
@@ -5826,9 +5784,9 @@ namespace Draw2D.ViewModels.Tools
 
         public string Title => "Path";
 
-        public IList<PointIntersectionBase> Intersections { get; set; }
+        public IList<PointIntersection> Intersections { get; set; }
 
-        public IList<PointFilterBase> Filters { get; set; }
+        public IList<PointFilter> Filters { get; set; }
 
         public PathToolSettings Settings { get; set; }
 
@@ -5862,7 +5820,7 @@ namespace Draw2D.ViewModels.Tools
             _path = new PathShape()
             {
                 FillRule = Settings.FillRule,
-                Style = context.CurrentStyle
+                Style = context.ContainerView.CurrentContainer.CurrentStyle
             };
 
             context.ContainerView.WorkingContainer.Shapes.Add(_path);
@@ -6016,7 +5974,7 @@ namespace Draw2D.ViewModels.Tools
         }
     }
 
-    public class PointToolSettings : SettingsBase
+    public class PointToolSettings : Settings
     {
         private bool _connectPoints;
         private double _hitTestRadius;
@@ -6038,9 +5996,9 @@ namespace Draw2D.ViewModels.Tools
     {
         public string Title => "Point";
 
-        public IList<PointIntersectionBase> Intersections { get; set; }
+        public IList<PointIntersection> Intersections { get; set; }
 
-        public IList<PointFilterBase> Filters { get; set; }
+        public IList<PointFilter> Filters { get; set; }
 
         public PointToolSettings Settings { get; set; }
 
@@ -6049,7 +6007,7 @@ namespace Draw2D.ViewModels.Tools
             Filters?.ForEach(f => f.Clear(context));
             Filters?.Any(f => f.Process(context, ref x, ref y));
 
-            var point = new PointShape(x, y, context.PointShape);
+            var point = new PointShape(x, y, context.ContainerView.CurrentContainer.PointTemplate);
 
             var shape = context.HitTest?.TryToGetShape(
                 context.ContainerView.CurrentContainer.Shapes,
@@ -6112,7 +6070,7 @@ namespace Draw2D.ViewModels.Tools
         }
     }
 
-    public class PolyLineToolSettings : SettingsBase
+    public class PolyLineToolSettings : Settings
     {
         private bool _connectPoints;
         private double _hitTestRadius;
@@ -6145,9 +6103,9 @@ namespace Draw2D.ViewModels.Tools
 
         public string Title => "PolyLine";
 
-        public IList<PointIntersectionBase> Intersections { get; set; }
+        public IList<PointIntersection> Intersections { get; set; }
 
-        public IList<PointFilterBase> Filters { get; set; }
+        public IList<PointFilter> Filters { get; set; }
 
         public PolyLineToolSettings Settings { get; set; }
 
@@ -6160,7 +6118,7 @@ namespace Draw2D.ViewModels.Tools
             {
                 StartPoint = context.GetNextPoint(x, y, Settings?.ConnectPoints ?? false, Settings?.HitTestRadius ?? 7.0),
                 Point = context.GetNextPoint(x, y, false, 0.0),
-                Style = context?.CurrentStyle
+                Style = context?.ContainerView.CurrentContainer.CurrentStyle
             };
             _points.Add(_line.StartPoint);
             _points.Add(_line.Point);
@@ -6196,7 +6154,7 @@ namespace Draw2D.ViewModels.Tools
             {
                 StartPoint = _points.Last(),
                 Point = context.GetNextPoint(x, y, false, 0.0),
-                Style = context.CurrentStyle
+                Style = context.ContainerView.CurrentContainer.CurrentStyle
             };
             _points.Add(_line.Point);
             context.ContainerView.WorkingContainer.Shapes.Add(_line);
@@ -6315,7 +6273,7 @@ namespace Draw2D.ViewModels.Tools
         }
     }
 
-    public class QuadraticBezierToolSettings : SettingsBase
+    public class QuadraticBezierToolSettings : Settings
     {
         private bool _connectPoints;
         private double _hitTestRadius;
@@ -6350,9 +6308,9 @@ namespace Draw2D.ViewModels.Tools
 
         public QuadraticBezierToolSettings Settings { get; set; }
 
-        public IList<PointIntersectionBase> Intersections { get; set; }
+        public IList<PointIntersection> Intersections { get; set; }
 
-        public IList<PointFilterBase> Filters { get; set; }
+        public IList<PointFilter> Filters { get; set; }
 
         private void StartPointInternal(IToolContext context, double x, double y, Modifier modifier)
         {
@@ -6364,7 +6322,7 @@ namespace Draw2D.ViewModels.Tools
                 StartPoint = next,
                 Point1 = (PointShape)next.Copy(null),
                 Point2 = (PointShape)next.Copy(null),
-                Style = context.CurrentStyle
+                Style = context.ContainerView.CurrentContainer.CurrentStyle
             };
             context.ContainerView.WorkingContainer.Shapes.Add(_quadraticBezier);
             context.ContainerView.Selection.Selected.Add(_quadraticBezier);
@@ -6539,7 +6497,7 @@ namespace Draw2D.ViewModels.Tools
         }
     }
 
-    public class RectangleToolSettings : SettingsBase
+    public class RectangleToolSettings : Settings
     {
         private bool _connectPoints;
         private double _hitTestRadius;
@@ -6571,9 +6529,9 @@ namespace Draw2D.ViewModels.Tools
 
         public string Title => "Rectangle";
 
-        public IList<PointIntersectionBase> Intersections { get; set; }
+        public IList<PointIntersection> Intersections { get; set; }
 
-        public IList<PointFilterBase> Filters { get; set; }
+        public IList<PointFilter> Filters { get; set; }
 
         public RectangleToolSettings Settings { get; set; }
 
@@ -6585,7 +6543,7 @@ namespace Draw2D.ViewModels.Tools
             {
                 TopLeft = context.GetNextPoint(x, y, Settings?.ConnectPoints ?? false, Settings?.HitTestRadius ?? 7.0),
                 BottomRight = context.GetNextPoint(x, y, false, 0.0),
-                Style = context.CurrentStyle
+                Style = context.ContainerView.CurrentContainer.CurrentStyle
             };
             context.ContainerView.WorkingContainer.Shapes.Add(_rectangle);
             context.ContainerView.Selection.Selected.Add(_rectangle);
@@ -6717,7 +6675,7 @@ namespace Draw2D.ViewModels.Tools
         }
     }
 
-    public class ScribbleToolSettings : SettingsBase
+    public class ScribbleToolSettings : Settings
     {
         private bool _simplify;
         private double _epsilon;
@@ -6773,9 +6731,9 @@ namespace Draw2D.ViewModels.Tools
 
         public string Title => "Scribble";
 
-        public IList<PointIntersectionBase> Intersections { get; set; }
+        public IList<PointIntersection> Intersections { get; set; }
 
-        public IList<PointFilterBase> Filters { get; set; }
+        public IList<PointFilter> Filters { get; set; }
 
         public ScribbleToolSettings Settings { get; set; }
 
@@ -6786,7 +6744,7 @@ namespace Draw2D.ViewModels.Tools
             _path = new PathShape()
             {
                 FillRule = Settings.FillRule,
-                Style = context.CurrentStyle
+                Style = context.ContainerView.CurrentContainer.CurrentStyle
             };
 
             _figure = new FigureShape()
@@ -6797,7 +6755,7 @@ namespace Draw2D.ViewModels.Tools
 
             _path.Figures.Add(_figure);
 
-            _previousPoint = new PointShape(x, y, context.PointShape);
+            _previousPoint = new PointShape(x, y, context.ContainerView.CurrentContainer.PointTemplate);
 
             context.ContainerView.WorkingContainer.Shapes.Add(_path);
 
@@ -6839,7 +6797,7 @@ namespace Draw2D.ViewModels.Tools
                         {
                             StartPoint = points[i],
                             Point = points[i + 1],
-                            Style = context.CurrentStyle
+                            Style = context.ContainerView.CurrentContainer.CurrentStyle
                         };
                         _figure.Shapes.Add(line);
                     }
@@ -6877,13 +6835,13 @@ namespace Draw2D.ViewModels.Tools
             Filters?.ForEach(f => f.Clear(context));
             Filters?.Any(f => f.Process(context, ref x, ref y));
 
-            _nextPoint = new PointShape(x, y, context.PointShape);
+            _nextPoint = new PointShape(x, y, context.ContainerView.CurrentContainer.PointTemplate);
 
             var line = new LineShape()
             {
                 StartPoint = _previousPoint,
                 Point = _nextPoint,
-                Style = context.CurrentStyle
+                Style = context.ContainerView.CurrentContainer.CurrentStyle
             };
 
             _figure.Shapes.Add(line);
@@ -6992,7 +6950,7 @@ namespace Draw2D.ViewModels.Tools
         Guides = 2
     }
 
-    public class SelectionToolSettings : SettingsBase
+    public class SelectionToolSettings : Settings
     {
         private SelectionMode _mode;
         private SelectionTargets _targets;
@@ -7097,9 +7055,9 @@ namespace Draw2D.ViewModels.Tools
 
         public string Title => "Selection";
 
-        public IList<PointIntersectionBase> Intersections { get; set; }
+        public IList<PointIntersection> Intersections { get; set; }
 
-        public IList<PointFilterBase> Filters { get; set; }
+        public IList<PointFilter> Filters { get; set; }
 
         public SelectionToolSettings Settings { get; set; }
 
@@ -8005,7 +7963,7 @@ namespace Draw2D.ViewModels.Tools
         }
     }
 
-    public class TextToolSettings : SettingsBase
+    public class TextToolSettings : Settings
     {
         private bool _connectPoints;
         private double _hitTestRadius;
@@ -8037,9 +7995,9 @@ namespace Draw2D.ViewModels.Tools
 
         public string Title => "Text";
 
-        public IList<PointIntersectionBase> Intersections { get; set; }
+        public IList<PointIntersection> Intersections { get; set; }
 
-        public IList<PointFilterBase> Filters { get; set; }
+        public IList<PointFilter> Filters { get; set; }
 
         public TextToolSettings Settings { get; set; }
 
@@ -8051,11 +8009,11 @@ namespace Draw2D.ViewModels.Tools
             {
                 TopLeft = context.GetNextPoint(x, y, Settings?.ConnectPoints ?? false, Settings?.HitTestRadius ?? 7.0),
                 BottomRight = context.GetNextPoint(x, y, false, 0.0),
-                Text = new TextObject()
+                Text = new Text()
                 {
                     Value = "Text"
                 },
-                Style = context.CurrentStyle
+                Style = context.ContainerView.CurrentContainer.CurrentStyle
             };
             context.ContainerView.WorkingContainer.Shapes.Add(_text);
             context.ContainerView.Selection.Selected.Add(_text);

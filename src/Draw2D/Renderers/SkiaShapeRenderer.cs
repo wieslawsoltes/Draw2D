@@ -107,7 +107,7 @@ namespace Draw2D.Renderers
             };
         }
 
-        public static SKMatrix ToMatrixTransform(MatrixObject m)
+        public static SKMatrix ToMatrixTransform(Matrix2 m)
         {
             return ToSKMatrix(m.M11, m.M12, m.M21, m.M22, m.OffsetX, m.OffsetY);
         }
@@ -231,7 +231,7 @@ namespace Draw2D.Renderers
         {
         }
 
-        public void InvalidateCache(MatrixObject matrix)
+        public void InvalidateCache(Matrix2 matrix)
         {
         }
 
@@ -239,7 +239,7 @@ namespace Draw2D.Renderers
         {
         }
 
-        public object PushMatrix(object dc, MatrixObject matrix)
+        public object PushMatrix(object dc, Matrix2 matrix)
         {
             var canvas = dc as SKCanvas;
             int count = canvas.Save();

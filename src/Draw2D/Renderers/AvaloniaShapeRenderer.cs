@@ -106,7 +106,7 @@ namespace Draw2D.Renderers
     public class AvaloniaShapeRenderer : ViewModelBase, IShapeRenderer
     {
         private readonly IDictionary<ShapeStyle, AvaloniaBrushCache> _brushCache;
-        private readonly IDictionary<MatrixObject, Matrix> _matrixCache;
+        private readonly IDictionary<Matrix2, Matrix> _matrixCache;
         private readonly IDictionary<CubicBezierShape, Geometry> _cubicGeometryCache;
         private readonly IDictionary<QuadraticBezierShape, Geometry> _quadGeometryCache;
         private readonly IDictionary<PathShape, Geometry> _pathGeometryCache;
@@ -125,7 +125,7 @@ namespace Draw2D.Renderers
         {
             _brushCache = new Dictionary<ShapeStyle, AvaloniaBrushCache>();
             _formattedTextCache = new Dictionary<TextShape, AvaloniaFormattedTextCache>();
-            _matrixCache = new Dictionary<MatrixObject, Matrix>();
+            _matrixCache = new Dictionary<Matrix2, Matrix>();
             _cubicGeometryCache = new Dictionary<CubicBezierShape, Geometry>();
             _quadGeometryCache = new Dictionary<QuadraticBezierShape, Geometry>();
             _pathGeometryCache = new Dictionary<PathShape, Geometry>();
@@ -165,12 +165,12 @@ namespace Draw2D.Renderers
             return cache;
         }
 
-        private static Matrix ToMatrixTransform(MatrixObject m)
+        private static Matrix ToMatrixTransform(Matrix2 m)
         {
             return new Matrix(m.M11, m.M12, m.M21, m.M22, m.OffsetX, m.OffsetY);
         }
 
-        private Matrix? GetMatrixCache(MatrixObject matrix)
+        private Matrix? GetMatrixCache(Matrix2 matrix)
         {
             if (matrix == null)
             {
@@ -378,7 +378,7 @@ namespace Draw2D.Renderers
             }
         }
 
-        public void InvalidateCache(MatrixObject matrix)
+        public void InvalidateCache(Matrix2 matrix)
         {
             if (matrix != null)
             {
@@ -439,7 +439,7 @@ namespace Draw2D.Renderers
             }
         }
 
-        public object PushMatrix(object dc, MatrixObject matrix)
+        public object PushMatrix(object dc, Matrix2 matrix)
         {
             var _dc = dc as DrawingContext;
             return _dc.PushPreTransform(GetMatrixCache(matrix).Value);

@@ -95,25 +95,60 @@ namespace Draw2D.Editor
         void Exit();
     }
 
+    public class CanvasPresenter : ICanvasPresenter
+    {
+        public IDictionary<Type, IShapeDecorator> Decorators { get; set; }
+
+        public void DrawContainer(object dc, CanvasContainer container, IShapeRenderer renderer, double dx, double dy, DrawMode mode, object db, object r)
+        {
+            container.Invalidate(renderer, dx, dy);
+            container.Draw(dc, renderer, dx, dy, mode, db, r);
+        }
+
+        public void DrawDecorators(object dc, CanvasContainer container, IShapeRenderer renderer, double dx, double dy, DrawMode mode)
+        {
+            var shapes = container.Shapes;
+            var selection = renderer.Selection;
+
+            foreach (var shape in shapes)
+            {
+                if (selection.Selected.Contains(shape))
+                {
+                    if (Decorators.TryGetValue(shape.GetType(), out var helper))
+                    {
+                        helper.Draw(dc, shape, renderer, selection, dx, dy, mode);
+                    }
+                }
+            }
+        }
+    }
+
     public class ContainerEditor : ToolContext, IContainerEditor
     {
         public static void CreateDemoGroup(IToolContext context)
         {
+            var container = context.ContainerView.CurrentContainer;
             var group = new GroupShape();
-            group.Shapes.Add(new RectangleShape(
-                new PointShape(30, 30, context.PointShape),
-                new PointShape(60, 60, context.PointShape))
+            group.Shapes.Add(
+                new RectangleShape(new PointShape(30, 30, container.PointTemplate), 
+                new PointShape(60, 60, container.PointTemplate))
             {
-                Style = context.CurrentStyle
+                Style = container.CurrentStyle
             });
-            group.Points.Add(new PointShape(45, 30, context.PointShape));
-            group.Points.Add(new PointShape(45, 60, context.PointShape));
-            group.Points.Add(new PointShape(30, 45, context.PointShape));
-            group.Points.Add(new PointShape(60, 45, context.PointShape));
+            group.Points.Add(new PointShape(45, 30, container.PointTemplate));
+            group.Points.Add(new PointShape(45, 60, container.PointTemplate));
+            group.Points.Add(new PointShape(30, 45, container.PointTemplate));
+            group.Points.Add(new PointShape(60, 45, container.PointTemplate));
             context.ContainerView.CurrentContainer.Shapes.Add(group);
         }
 
         public ContainerEditor()
+        {
+            Initialize();
+            NewContainer();
+        }
+
+        private void Initialize()
         {
             var hitTest = new HitTest();
 
@@ -167,7 +202,7 @@ namespace Draw2D.Editor
 
             var selectionTool = new SelectionTool()
             {
-                Filters = new ObservableCollection<PointFilterBase>
+                Filters = new ObservableCollection<PointFilter>
                 {
                     new GridSnapPointFilter()
                     {
@@ -202,7 +237,7 @@ namespace Draw2D.Editor
 
             var guideTool = new GuideTool()
             {
-                Filters = new ObservableCollection<PointFilterBase>
+                Filters = new ObservableCollection<PointFilter>
                 {
                     lineSnapPointFilter,
                     gridSnapPointFilter
@@ -215,7 +250,7 @@ namespace Draw2D.Editor
 
             var pointTool = new PointTool()
             {
-                Filters = new ObservableCollection<PointFilterBase>
+                Filters = new ObservableCollection<PointFilter>
                 {
                     lineSnapPointFilter,
                     gridSnapPointFilter
@@ -229,7 +264,7 @@ namespace Draw2D.Editor
 
             var lineTool = new LineTool()
             {
-                Intersections = new ObservableCollection<PointIntersectionBase>
+                Intersections = new ObservableCollection<PointIntersection>
                 {
                     new LineLineIntersection()
                     {
@@ -253,7 +288,7 @@ namespace Draw2D.Editor
                         }
                     }
                 },
-                Filters = new ObservableCollection<PointFilterBase>
+                Filters = new ObservableCollection<PointFilter>
                 {
                     lineSnapPointFilter,
                     gridSnapPointFilter
@@ -268,7 +303,7 @@ namespace Draw2D.Editor
 
             var polyLineTool = new PolyLineTool()
             {
-                Intersections = new ObservableCollection<PointIntersectionBase>
+                Intersections = new ObservableCollection<PointIntersection>
                 {
                     new LineLineIntersection()
                     {
@@ -292,7 +327,7 @@ namespace Draw2D.Editor
                         }
                     }
                 },
-                Filters = new ObservableCollection<PointFilterBase>
+                Filters = new ObservableCollection<PointFilter>
                 {
                     lineSnapPointFilter,
                     gridSnapPointFilter
@@ -306,7 +341,7 @@ namespace Draw2D.Editor
 
             var cubicBezierTool = new CubicBezierTool()
             {
-                Filters = new ObservableCollection<PointFilterBase>
+                Filters = new ObservableCollection<PointFilter>
                 {
                     lineSnapPointFilter,
                     gridSnapPointFilter
@@ -320,7 +355,7 @@ namespace Draw2D.Editor
 
             var quadraticBezierTool = new QuadraticBezierTool()
             {
-                Filters = new ObservableCollection<PointFilterBase>
+                Filters = new ObservableCollection<PointFilter>
                 {
                     lineSnapPointFilter,
                     gridSnapPointFilter
@@ -334,7 +369,7 @@ namespace Draw2D.Editor
 
             var pathTool = new PathTool()
             {
-                Filters = new ObservableCollection<PointFilterBase>
+                Filters = new ObservableCollection<PointFilter>
                 {
                     lineSnapPointFilter,
                     gridSnapPointFilter
@@ -360,7 +395,7 @@ namespace Draw2D.Editor
 
             var scribbleTool = new ScribbleTool()
             {
-                Filters = new ObservableCollection<PointFilterBase>
+                Filters = new ObservableCollection<PointFilter>
                 {
                     lineSnapPointFilter
                 },
@@ -376,7 +411,7 @@ namespace Draw2D.Editor
 
             var rectangleTool = new RectangleTool()
             {
-                Filters = new ObservableCollection<PointFilterBase>
+                Filters = new ObservableCollection<PointFilter>
                 {
                     lineSnapPointFilter,
                     gridSnapPointFilter
@@ -390,7 +425,7 @@ namespace Draw2D.Editor
 
             var ellipseTool = new EllipseTool()
             {
-                Filters = new ObservableCollection<PointFilterBase>
+                Filters = new ObservableCollection<PointFilter>
                 {
                     lineSnapPointFilter,
                     gridSnapPointFilter
@@ -404,7 +439,7 @@ namespace Draw2D.Editor
 
             var textTool = new TextTool()
             {
-                Filters = new ObservableCollection<PointFilterBase>
+                Filters = new ObservableCollection<PointFilter>
                 {
                     lineSnapPointFilter,
                     gridSnapPointFilter
@@ -463,42 +498,29 @@ namespace Draw2D.Editor
                 WorkingContainer = null
             };
 
-            // IToolContext
-            this.ContainerView = containerView;
-            this.HitTest = hitTest;
-            this.CurrentStyle = null;
-            this.PointShape = null;
-            // ViewModel
-            this.Tools = tools;
-            this.CurrentTool = currentTool;
-            this.Mode = EditMode.Mouse;
+            ContainerView = containerView;
+            Tools = tools;
+            CurrentTool = currentTool;
+            Mode = EditMode.Mouse;
+            HitTest = hitTest;
+        }
 
-            var container = new CanvasContainer()
+        private void NewContainer()
+        {
+            ContainerView.CurrentContainer = new CanvasContainer()
             {
                 Width = 720,
                 Height = 630,
                 PrintBackground = new ArgbColor(0, 255, 255, 255),
                 WorkBackground = new ArgbColor(255, 128, 128, 128),
-                InputBackground = new ArgbColor(255, 211, 211, 211)
+                InputBackground = new ArgbColor(255, 211, 211, 211),
+                CurrentStyle = new ShapeStyle(new ArgbColor(255, 0, 255, 0), new ArgbColor(80, 0, 255, 0), 2.0, true, true),
+                PointTemplate = new EllipseShape(new PointShape(-4, -4, null), new PointShape(4, 4, null))
+                {
+                    Style = new ShapeStyle(new ArgbColor(0, 0, 0, 0), new ArgbColor(255, 255, 255, 0), 2.0, true, true)
+                }
             };
-
-            var workingContainer = new CanvasContainer();
-
-            var style = new ShapeStyle(new ArgbColor(255, 0, 255, 0), new ArgbColor(80, 0, 255, 0), 2.0, true, true);
-
-            var pointShape = new EllipseShape(new PointShape(-4, -4, null), new PointShape(4, 4, null))
-            {
-                Style = new ShapeStyle(new ArgbColor(0, 0, 0, 0), new ArgbColor(255, 255, 255, 0), 2.0, true, true)
-            };
-
-            container.Styles.Add(guideTool.Settings.GuideStyle);
-            container.Styles.Add(pointShape.Style);
-            container.Styles.Add(style);
-
-            this.ContainerView.CurrentContainer = container;
-            this.ContainerView.WorkingContainer = workingContainer;
-            this.CurrentStyle = style;
-            this.PointShape = pointShape;
+            ContainerView.WorkingContainer = new CanvasContainer();
         }
 
         public T Load<T>(string path)
@@ -517,17 +539,7 @@ namespace Draw2D.Editor
         {
             CurrentTool.Clean(this);
             ContainerView.Selection.Selected.Clear();
-            var container = new CanvasContainer()
-            {
-                Width = 720,
-                Height = 630,
-                PrintBackground = new ArgbColor(0, 255, 255, 255),
-                WorkBackground = new ArgbColor(255, 128, 128, 128),
-                InputBackground = new ArgbColor(255, 211, 211, 211)
-            };
-            var workingContainer = new CanvasContainer();
-            ContainerView.CurrentContainer = container;
-            ContainerView.WorkingContainer = new CanvasContainer();
+            NewContainer();
             ContainerView.InputService?.Redraw?.Invoke();
         }
 
