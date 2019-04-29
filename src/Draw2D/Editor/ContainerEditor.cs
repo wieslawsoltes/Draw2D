@@ -27,11 +27,11 @@ namespace Draw2D.Editor
             var container = context.ContainerView.CurrentContainer;
             var group = new GroupShape();
             group.Shapes.Add(
-                new RectangleShape(new PointShape(30, 30, container.PointTemplate), 
+                new RectangleShape(new PointShape(30, 30, container.PointTemplate),
                 new PointShape(60, 60, container.PointTemplate))
-            {
-                Style = container.CurrentStyle
-            });
+                {
+                    Style = container.CurrentStyle
+                });
             group.Points.Add(new PointShape(45, 30, container.PointTemplate));
             group.Points.Add(new PointShape(45, 60, container.PointTemplate));
             group.Points.Add(new PointShape(30, 45, container.PointTemplate));
@@ -395,14 +395,14 @@ namespace Draw2D.Editor
                 Presenter = presenter,
                 Selection = selectionTool,
                 CurrentContainer = null,
-                WorkingContainer = null
+                WorkingContainer = null,
+                HitTest = hitTest
             };
 
             ContainerView = containerView;
             Tools = tools;
             CurrentTool = currentTool;
             Mode = EditMode.Mouse;
-            HitTest = hitTest;
         }
 
         private void NewContainer()
