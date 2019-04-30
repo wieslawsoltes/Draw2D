@@ -1211,9 +1211,6 @@ namespace Draw2D.ViewModels.Shapes
         }
     }
 
-
-
-
     public class CubicBezierShape : ConnectableShape, ICopyable
     {
         private PointShape _startPoint;
