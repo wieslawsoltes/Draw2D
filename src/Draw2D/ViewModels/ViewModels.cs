@@ -5641,7 +5641,7 @@ namespace Draw2D.ViewModels.Tools
 
     public partial class PathTool : IToolContext
     {
-        private IToolContext _context;
+        internal IToolContext _context;
         internal FigureContainerView _containerView;
 
         public IContainerView ContainerView
@@ -5737,7 +5737,10 @@ namespace Draw2D.ViewModels.Tools
 
         public void Create(IToolContext context)
         {
-            _containerView = new FigureContainerView(context, this);
+            if (_containerView == null)
+            {
+                _containerView = new FigureContainerView(context, this);
+            }
 
             _path = new PathShape()
             {
@@ -5835,6 +5838,11 @@ namespace Draw2D.ViewModels.Tools
         {
             Filters?.ForEach(f => f.Clear(context));
             Filters?.Any(f => f.Process(context, ref x, ref y));
+
+            if (_containerView == null)
+            {
+                _containerView = new FigureContainerView(context, this);
+            }
 
             SetContext(context);
             Settings.CurrentTool.Move(this, x, y, modifier);
