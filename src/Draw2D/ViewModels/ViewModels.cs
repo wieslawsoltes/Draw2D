@@ -1188,11 +1188,12 @@ namespace Draw2D.ViewModels.Shapes
 
         public object Copy(IDictionary<object, object> shared)
         {
-            var copy = new QuadraticBezierShape()
+            var copy = new ConicShape()
             {
                 Style = this.Style,
                 Transform = (Matrix2)this.Transform?.Copy(shared),
-                Text = (Text)this.Text?.Copy(shared)
+                Text = (Text)this.Text?.Copy(shared),
+                Weight = this.Weight
             };
 
             if (shared != null)
