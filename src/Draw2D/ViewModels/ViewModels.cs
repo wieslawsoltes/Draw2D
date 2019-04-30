@@ -383,6 +383,15 @@ namespace Draw2D.ViewModels
             set => Update(ref _value, value);
         }
 
+        public Text()
+        {
+        }
+
+        public Text(string value)
+        {
+            _value = value;
+        }
+
         public object Copy(IDictionary<object, object> shared)
         {
             return new Text()
@@ -815,11 +824,18 @@ namespace Draw2D.ViewModels.Shapes
     public abstract class ConnectableShape : BaseShape, IConnectable
     {
         private ObservableCollection<PointShape> _points;
+        private Text _text;
 
         public ObservableCollection<PointShape> Points
         {
             get => _points;
             set => Update(ref _points, value);
+        }
+
+        public Text Text
+        {
+            get => _text;
+            set => Update(ref _text, value);
         }
 
         public ConnectableShape()
@@ -834,7 +850,15 @@ namespace Draw2D.ViewModels.Shapes
 
         public override bool Invalidate(IShapeRenderer renderer, double dx, double dy)
         {
-            return base.Invalidate(renderer, dx, dy);
+            bool result = base.Invalidate(renderer, dx, dy);
+
+            if (_text?.IsDirty ?? false)
+            {
+                _text.IsDirty = false;
+                result |= true;
+            }
+
+            return result;
         }
 
         public override void Draw(object dc, IShapeRenderer renderer, double dx, double dy, DrawMode mode, object db, object r)
@@ -1200,7 +1224,8 @@ namespace Draw2D.ViewModels.Shapes
             var copy = new CubicBezierShape()
             {
                 Style = this.Style,
-                Transform = (Matrix2)this.Transform?.Copy(shared)
+                Transform = (Matrix2)this.Transform?.Copy(shared),
+                Text = (Text)this.Text?.Copy(shared)
             };
 
             if (shared != null)
@@ -1293,7 +1318,8 @@ namespace Draw2D.ViewModels.Shapes
             var copy = new EllipseShape()
             {
                 Style = this.Style,
-                Transform = (Matrix2)this.Transform?.Copy(shared)
+                Transform = (Matrix2)this.Transform?.Copy(shared),
+                Text = (Text)this.Text?.Copy(shared)
             };
 
             if (shared != null)
@@ -1540,7 +1566,8 @@ namespace Draw2D.ViewModels.Shapes
             var copy = new GroupShape()
             {
                 Style = this.Style,
-                Transform = (Matrix2)this.Transform?.Copy(shared)
+                Transform = (Matrix2)this.Transform?.Copy(shared),
+                Text = (Text)this.Text?.Copy(shared)
             };
 
             if (shared != null)
@@ -1770,7 +1797,8 @@ namespace Draw2D.ViewModels.Shapes
             var copy = new LineShape()
             {
                 Style = this.Style,
-                Transform = (Matrix2)this.Transform?.Copy(shared)
+                Transform = (Matrix2)this.Transform?.Copy(shared),
+                Text = (Text)this.Text?.Copy(shared)
             };
 
             if (shared != null)
@@ -2035,7 +2063,8 @@ namespace Draw2D.ViewModels.Shapes
             {
                 Style = this.Style,
                 Transform = (Matrix2)this.Transform?.Copy(shared),
-                FillRule = this.FillRule
+                FillRule = this.FillRule,
+                Text = (Text)this.Text?.Copy(shared)
             };
 
             if (shared != null)
@@ -2397,7 +2426,8 @@ namespace Draw2D.ViewModels.Shapes
             var copy = new QuadraticBezierShape()
             {
                 Style = this.Style,
-                Transform = (Matrix2)this.Transform?.Copy(shared)
+                Transform = (Matrix2)this.Transform?.Copy(shared),
+                Text = (Text)this.Text?.Copy(shared)
             };
 
             if (shared != null)
@@ -2489,7 +2519,8 @@ namespace Draw2D.ViewModels.Shapes
             var copy = new RectangleShape()
             {
                 Style = this.Style,
-                Transform = (Matrix2)this.Transform?.Copy(shared)
+                Transform = (Matrix2)this.Transform?.Copy(shared),
+                Text = (Text)this.Text?.Copy(shared)
             };
 
             if (shared != null)
@@ -2509,14 +2540,6 @@ namespace Draw2D.ViewModels.Shapes
 
     public class TextShape : BoxShape, ICopyable
     {
-        private Text _text;
-
-        public Text Text
-        {
-            get => _text;
-            set => Update(ref _text, value);
-        }
-
         public TextShape()
             : base()
         {
@@ -2536,12 +2559,6 @@ namespace Draw2D.ViewModels.Shapes
         public override bool Invalidate(IShapeRenderer renderer, double dx, double dy)
         {
             bool result = base.Invalidate(renderer, dx, dy);
-
-            if (_text?.IsDirty ?? false)
-            {
-                _text.IsDirty = false;
-                result |= true;
-            }
 
             if (this.IsDirty || result == true)
             {
@@ -4609,6 +4626,7 @@ namespace Draw2D.ViewModels.Tools
                 Point1 = (PointShape)next.Copy(null),
                 Point2 = (PointShape)next.Copy(null),
                 Point3 = (PointShape)next.Copy(null),
+                Text = new Text(),
                 Style = context.ContainerView.CurrentContainer.CurrentStyle
             };
             context.ContainerView.WorkingContainer.Shapes.Add(_cubicBezier);
@@ -6226,6 +6244,7 @@ namespace Draw2D.ViewModels.Tools
                 StartPoint = next,
                 Point1 = (PointShape)next.Copy(null),
                 Point2 = (PointShape)next.Copy(null),
+                Text = new Text(),
                 Style = context.ContainerView.CurrentContainer.CurrentStyle
             };
             context.ContainerView.WorkingContainer.Shapes.Add(_quadraticBezier);
@@ -7913,11 +7932,8 @@ namespace Draw2D.ViewModels.Tools
             {
                 TopLeft = context.ContainerView.GetNextPoint(x, y, Settings?.ConnectPoints ?? false, Settings?.HitTestRadius ?? 7.0),
                 BottomRight = context.ContainerView.GetNextPoint(x, y, false, 0.0),
-                Text = new Text()
-                {
-                    Value = "Text"
-                },
-                Style = context.ContainerView.CurrentContainer.CurrentStyle
+                Text = new Text("Text"),
+                Style = context.ContainerView.CurrentContainer.CurrentStyle,
             };
             context.ContainerView.WorkingContainer.Shapes.Add(_text);
             context.ContainerView.Selection.Selected.Add(_text);

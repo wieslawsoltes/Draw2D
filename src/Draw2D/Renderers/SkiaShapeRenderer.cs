@@ -227,6 +227,22 @@ namespace Draw2D.Renderers
             return new SKPoint((float)ox, (float)oy);
         }
 
+        private void DrawTextOnPath(SKCanvas canvas, Text text, SKPath path, SKPaint paint)
+        {
+            using (var tf = SKTypeface.FromFamilyName("Calibri", SKFontStyleWeight.Normal, SKFontStyleWidth.Normal, SKFontStyleSlant.Upright))
+            {
+                paint.TextEncoding = SKTextEncoding.Utf16;
+                paint.TextSize = (float)(12.0);
+
+                var bounds = new SKRect();
+                float baseTextWidth = paint.MeasureText(text.Value, ref bounds);
+                SKPathMeasure pathMeasure = new SKPathMeasure(path, false, 1);
+                float hOffset = (pathMeasure.Length / 2f) - (baseTextWidth / 2f);
+
+                canvas.DrawTextOnPath(text.Value, path, hOffset, 0f, paint);
+            }
+        }
+
         public void InvalidateCache(ShapeStyle style)
         {
         }
@@ -281,6 +297,13 @@ namespace Draw2D.Renderers
                 {
                     canvas.DrawPath(geometry, pen);
                 }
+                if (cubicBezier.Text is Text text && !string.IsNullOrEmpty(text.Value))
+                {
+                    using (var paint = ToSKPaintBrush(style.Stroke))
+                    {
+                        DrawTextOnPath(canvas, text, geometry, paint);
+                    }
+                }
             }
         }
 
@@ -298,6 +321,13 @@ namespace Draw2D.Renderers
                 if (style.IsStroked)
                 {
                     canvas.DrawPath(geometry, pen);
+                }
+                if (quadraticBezier.Text is Text text && !string.IsNullOrEmpty(text.Value))
+                {
+                    using (var paint = ToSKPaintBrush(style.Stroke))
+                    {
+                        DrawTextOnPath(canvas, text, geometry, paint);
+                    }
                 }
             }
         }
