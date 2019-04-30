@@ -415,9 +415,9 @@ namespace Draw2D.Editor
                 WorkBackground = new ArgbColor(255, 128, 128, 128),
                 InputBackground = new ArgbColor(255, 211, 211, 211),
                 CurrentStyle = new ShapeStyle(new ArgbColor(255, 0, 255, 0), new ArgbColor(80, 0, 255, 0), 2.0, true, true),
-                PointTemplate = new RectangleShape(new PointShape(-4, -4, null), new PointShape(4, 4, null))
+                PointTemplate = new EllipseShape(new PointShape(-3, -3, null), new PointShape(3, 3, null))
                 {
-                    Style = new ShapeStyle(new ArgbColor(192, 255, 255, 0), new ArgbColor(128, 255, 255, 0), 2.0, true, true)
+                    Style = new ShapeStyle(new ArgbColor(255, 255, 255, 0), new ArgbColor(255, 255, 255, 0), 2.0, true, true)
                 }
             };
             ContainerView.WorkingContainer = new CanvasContainer();
