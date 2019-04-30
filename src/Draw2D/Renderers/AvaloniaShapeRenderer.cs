@@ -109,6 +109,7 @@ namespace Draw2D.Renderers
         private readonly IDictionary<Matrix2, Matrix> _matrixCache;
         private readonly IDictionary<CubicBezierShape, Geometry> _cubicGeometryCache;
         private readonly IDictionary<QuadraticBezierShape, Geometry> _quadGeometryCache;
+        private readonly IDictionary<ConicShape, Geometry> _conicGeometryCache;
         private readonly IDictionary<PathShape, Geometry> _pathGeometryCache;
         private readonly IDictionary<EllipseShape, Geometry> _ellipseGeometryCache;
         private readonly IDictionary<TextShape, AvaloniaFormattedTextCache> _formattedTextCache;
@@ -128,6 +129,7 @@ namespace Draw2D.Renderers
             _matrixCache = new Dictionary<Matrix2, Matrix>();
             _cubicGeometryCache = new Dictionary<CubicBezierShape, Geometry>();
             _quadGeometryCache = new Dictionary<QuadraticBezierShape, Geometry>();
+            _conicGeometryCache = new Dictionary<ConicShape, Geometry>();
             _pathGeometryCache = new Dictionary<PathShape, Geometry>();
             _ellipseGeometryCache = new Dictionary<EllipseShape, Geometry>();
         }
@@ -211,6 +213,20 @@ namespace Draw2D.Renderers
                 context.QuadraticBezierTo(
                     ToPoint(quadraticBezier.Point1, dx, dy),
                     ToPoint(quadraticBezier.Point2, dx, dy));
+                context.EndFigure(false);
+            }
+
+            return geometry;
+        }
+
+        private static Geometry ToGeometry(ConicShape conic, ShapeStyle style, double dx, double dy)
+        {
+            var geometry = new StreamGeometry();
+
+            using (var context = geometry.Open())
+            {
+                context.BeginFigure(ToPoint(conic.StartPoint, dx, dy), false);
+                // FIXME: Add support for ConicTo
                 context.EndFigure(false);
             }
 
@@ -312,6 +328,25 @@ namespace Draw2D.Renderers
                 {
                     _quadGeometryCache[quad] = geometry;
                     return _quadGeometryCache[quad];
+                }
+                return null;
+            }
+            return cache;
+        }
+
+        private Geometry GetGeometryCache(ConicShape conic, ShapeStyle style, double dx, double dy)
+        {
+            if (conic == null)
+            {
+                return null;
+            }
+            if (!_conicGeometryCache.TryGetValue(conic, out var cache))
+            {
+                var geometry = ToGeometry(conic, style, dx, dy);
+                if (geometry != null)
+                {
+                    _conicGeometryCache[conic] = geometry;
+                    return _conicGeometryCache[conic];
                 }
                 return null;
             }
@@ -471,6 +506,14 @@ namespace Draw2D.Renderers
             var cache = GetBrushCache(style);
             var _dc = dc as DrawingContext;
             var geometry = GetGeometryCache(quadraticBezier, style, dx, dy);
+            _dc.DrawGeometry(style.IsFilled ? cache?.Fill : null, style.IsStroked ? cache?.StrokePen : null, geometry);
+        }
+
+        public void DrawConic(object dc, ConicShape conic, ShapeStyle style, double dx, double dy)
+        {
+            var cache = GetBrushCache(style);
+            var _dc = dc as DrawingContext;
+            var geometry = GetGeometryCache(conic, style, dx, dy);
             _dc.DrawGeometry(style.IsFilled ? cache?.Fill : null, style.IsStroked ? cache?.StrokePen : null, geometry);
         }
 

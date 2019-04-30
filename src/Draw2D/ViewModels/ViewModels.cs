@@ -148,6 +148,7 @@ namespace Draw2D.ViewModels
         void DrawLine(object dc, LineShape line, ShapeStyle style, double dx, double dy);
         void DrawCubicBezier(object dc, CubicBezierShape cubicBezier, ShapeStyle style, double dx, double dy);
         void DrawQuadraticBezier(object dc, QuadraticBezierShape quadraticBezier, ShapeStyle style, double dx, double dy);
+        void DrawConic(object dc, ConicShape conic, ShapeStyle style, double dx, double dy);
         void DrawPath(object dc, PathShape path, ShapeStyle style, double dx, double dy);
         void DrawRectangle(object dc, RectangleShape rectangle, ShapeStyle style, double dx, double dy);
         void DrawEllipse(object dc, EllipseShape ellipse, ShapeStyle style, double dx, double dy);
@@ -946,6 +947,271 @@ namespace Draw2D.ViewModels.Shapes
             return result;
         }
     }
+
+    public class ConicShape : ConnectableShape, ICopyable
+    {
+        private PointShape _startPoint;
+        private PointShape _point1;
+        private PointShape _point2;
+        private double _weight;
+
+        public PointShape StartPoint
+        {
+            get => _startPoint;
+            set => Update(ref _startPoint, value);
+        }
+
+        public PointShape Point1
+        {
+            get => _point1;
+            set => Update(ref _point1, value);
+        }
+
+        public PointShape Point2
+        {
+            get => _point2;
+            set => Update(ref _point2, value);
+        }
+
+        public double Weight
+        {
+            get => _weight;
+            set => Update(ref _weight, value);
+        }
+
+        public ConicShape()
+            : base()
+        {
+        }
+
+        public ConicShape(PointShape startPoint, PointShape point1, PointShape point2, double weight)
+            : base()
+        {
+            this.StartPoint = startPoint;
+            this.Point1 = point1;
+            this.Point2 = point2;
+            this.Weight = weight;
+        }
+
+        public override IEnumerable<PointShape> GetPoints()
+        {
+            yield return StartPoint;
+            yield return Point1;
+            yield return Point2;
+            foreach (var point in Points)
+            {
+                yield return point;
+            }
+        }
+
+        public override bool Invalidate(IShapeRenderer renderer, double dx, double dy)
+        {
+            bool result = base.Invalidate(renderer, dx, dy);
+
+            result |= _startPoint?.Invalidate(renderer, dx, dy) ?? false;
+            result |= _point1?.Invalidate(renderer, dx, dy) ?? false;
+            result |= _point2?.Invalidate(renderer, dx, dy) ?? false;
+
+            if (this.IsDirty || result == true)
+            {
+                renderer.InvalidateCache(this, Style, dx, dy);
+                this.IsDirty = false;
+                result |= true;
+            }
+
+            return result;
+        }
+
+        public override void Draw(object dc, IShapeRenderer renderer, double dx, double dy, DrawMode mode, object db, object r)
+        {
+            var state = base.BeginTransform(dc, renderer);
+
+            if (Style != null && mode.HasFlag(DrawMode.Shape))
+            {
+                renderer.DrawConic(dc, this, Style, dx, dy);
+            }
+
+            if (mode.HasFlag(DrawMode.Point))
+            {
+                if (renderer.Selection.Selected.Contains(_startPoint))
+                {
+                    _startPoint.Draw(dc, renderer, dx, dy, mode, db, r);
+                }
+
+                if (renderer.Selection.Selected.Contains(_point1))
+                {
+                    _point1.Draw(dc, renderer, dx, dy, mode, db, r);
+                }
+
+                if (renderer.Selection.Selected.Contains(_point2))
+                {
+                    _point2.Draw(dc, renderer, dx, dy, mode, db, r);
+                }
+            }
+
+            base.Draw(dc, renderer, dx, dy, mode, db, r);
+            base.EndTransform(dc, renderer, state);
+        }
+
+        public override void Move(ISelection selection, double dx, double dy)
+        {
+            if (!selection.Selected.Contains(_startPoint))
+            {
+                _startPoint.Move(selection, dx, dy);
+            }
+
+            if (!selection.Selected.Contains(_point1))
+            {
+                _point1.Move(selection, dx, dy);
+            }
+
+            if (!selection.Selected.Contains(_point2))
+            {
+                _point2.Move(selection, dx, dy);
+            }
+
+            base.Move(selection, dx, dy);
+        }
+
+        public override void Select(ISelection selection)
+        {
+            base.Select(selection);
+            StartPoint.Select(selection);
+            Point1.Select(selection);
+            Point2.Select(selection);
+        }
+
+        public override void Deselect(ISelection selection)
+        {
+            base.Deselect(selection);
+            StartPoint.Deselect(selection);
+            Point1.Deselect(selection);
+            Point2.Deselect(selection);
+        }
+
+        private bool CanConnect(PointShape point)
+        {
+            return StartPoint != point
+                && Point1 != point
+                && Point2 != point;
+        }
+
+        public override bool Connect(PointShape point, PointShape target)
+        {
+            if (base.Connect(point, target))
+            {
+                return true;
+            }
+            else if (CanConnect(point))
+            {
+                if (StartPoint == target)
+                {
+                    Debug.WriteLine($"{nameof(QuadraticBezierShape)}: Connected to {nameof(StartPoint)}");
+                    this.StartPoint = point;
+                    return true;
+                }
+                else if (Point1 == target)
+                {
+                    Debug.WriteLine($"{nameof(QuadraticBezierShape)}: Connected to {nameof(Point1)}");
+                    this.Point1 = point;
+                    return true;
+                }
+                else if (Point2 == target)
+                {
+                    Debug.WriteLine($"{nameof(QuadraticBezierShape)}: Connected to {nameof(Point2)}");
+                    this.Point2 = point;
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public override bool Disconnect(PointShape point, out PointShape result)
+        {
+            if (base.Disconnect(point, out result))
+            {
+                return true;
+            }
+            else if (StartPoint == point)
+            {
+                Debug.WriteLine($"{nameof(QuadraticBezierShape)}: Disconnected from {nameof(StartPoint)}");
+                result = (PointShape)point.Copy(null);
+                this.StartPoint = result;
+                return true;
+            }
+            else if (Point1 == point)
+            {
+                Debug.WriteLine($"{nameof(QuadraticBezierShape)}: Disconnected from {nameof(Point1)}");
+                result = (PointShape)point.Copy(null);
+                this.Point1 = result;
+                return true;
+            }
+            else if (Point2 == point)
+            {
+                Debug.WriteLine($"{nameof(QuadraticBezierShape)}: Disconnected from {nameof(Point2)}");
+                result = (PointShape)point.Copy(null);
+                this.Point2 = result;
+                return true;
+            }
+            result = null;
+            return false;
+        }
+
+        public override bool Disconnect()
+        {
+            bool result = base.Disconnect();
+
+            if (this.StartPoint != null)
+            {
+                Debug.WriteLine($"{nameof(QuadraticBezierShape)}: Disconnected from {nameof(StartPoint)}");
+                this.StartPoint = (PointShape)this.StartPoint.Copy(null);
+                result = true;
+            }
+
+            if (this.Point1 != null)
+            {
+                Debug.WriteLine($"{nameof(QuadraticBezierShape)}: Disconnected from {nameof(Point1)}");
+                this.Point1 = (PointShape)this.Point1.Copy(null);
+                result = true;
+            }
+
+            if (this.Point2 != null)
+            {
+                Debug.WriteLine($"{nameof(QuadraticBezierShape)}: Disconnected from {nameof(Point2)}");
+                this.Point2 = (PointShape)this.Point2.Copy(null);
+                result = true;
+            }
+
+            return result;
+        }
+
+        public object Copy(IDictionary<object, object> shared)
+        {
+            var copy = new QuadraticBezierShape()
+            {
+                Style = this.Style,
+                Transform = (Matrix2)this.Transform?.Copy(shared),
+                Text = (Text)this.Text?.Copy(shared)
+            };
+
+            if (shared != null)
+            {
+                copy.StartPoint = (PointShape)shared[this.StartPoint];
+                copy.Point1 = (PointShape)shared[this.Point1];
+                copy.Point2 = (PointShape)shared[this.Point2];
+
+                foreach (var point in this.Points)
+                {
+                    copy.Points.Add((PointShape)shared[point]);
+                }
+            }
+
+            return copy;
+        }
+    }
+
+
+
 
     public class CubicBezierShape : ConnectableShape, ICopyable
     {
@@ -3191,12 +3457,14 @@ namespace Draw2D.ViewModels.Decorators
         private LineDecorator _lineDecorator;
         private CubicBezierDecorator _cubiceBezierDecorator;
         private QuadraticBezierDecorator _quadraticBezierDecorator;
+        private ConicDecorator _conicDecorator;
 
         public PathDecorator()
         {
             _lineDecorator = new LineDecorator();
             _cubiceBezierDecorator = new CubicBezierDecorator();
             _quadraticBezierDecorator = new QuadraticBezierDecorator();
+            _conicDecorator = new ConicDecorator();
         }
 
         public void DrawShape(object dc, IShapeRenderer renderer, BaseShape shape, ISelection selection, double dx, double dy, DrawMode mode)
@@ -3220,6 +3488,13 @@ namespace Draw2D.ViewModels.Decorators
                 if (selection.Selected.Contains(quadraticBezier))
                 {
                     _quadraticBezierDecorator.Draw(dc, quadraticBezier, renderer, selection, dx, dy, mode);
+                }
+            }
+            else if (shape is ConicShape conicShape)
+            {
+                if (selection.Selected.Contains(conicShape))
+                {
+                    _conicDecorator.Draw(dc, conicShape, renderer, selection, dx, dy, mode);
                 }
             }
         }
@@ -3278,6 +3553,23 @@ namespace Draw2D.ViewModels.Decorators
             if (shape is QuadraticBezierShape quadraticBezier)
             {
                 Draw(dc, renderer, quadraticBezier, dx, dy, mode);
+            }
+        }
+    }
+
+    public class ConicDecorator : CommonDecorator
+    {
+        public void Draw(object dc, IShapeRenderer renderer, ConicShape conic, double dx, double dy, DrawMode mode)
+        {
+            DrawLine(dc, renderer, conic.StartPoint, conic.Point1, dx, dy, mode);
+            DrawLine(dc, renderer, conic.Point1, conic.Point2, dx, dy, mode);
+        }
+
+        public override void Draw(object dc, BaseShape shape, IShapeRenderer renderer, ISelection selection, double dx, double dy, DrawMode mode)
+        {
+            if (shape is ConicShape conic)
+            {
+                Draw(dc, renderer, conic, dx, dy, mode);
             }
         }
     }
@@ -4342,6 +4634,60 @@ namespace Draw2D.ViewModels.Bounds
                 throw new ArgumentNullException("shape");
 
             return HitTestHelper.Overlap(quadraticBezier.GetPoints(), target) ? shape : null;
+        }
+    }
+
+    public class ConicBounds : IBounds
+    {
+        public Type TargetType => typeof(ConicShape);
+
+        public PointShape TryToGetPoint(BaseShape shape, Point2 target, double radius, IHitTest hitTest)
+        {
+            if (!(shape is ConicShape conic))
+                throw new ArgumentNullException("shape");
+
+            var pointHitTest = hitTest.Registered[typeof(PointShape)];
+
+            if (pointHitTest.TryToGetPoint(conic.StartPoint, target, radius, hitTest) != null)
+            {
+                return conic.StartPoint;
+            }
+
+            if (pointHitTest.TryToGetPoint(conic.Point1, target, radius, hitTest) != null)
+            {
+                return conic.Point1;
+            }
+
+            if (pointHitTest.TryToGetPoint(conic.Point2, target, radius, hitTest) != null)
+            {
+                return conic.Point2;
+            }
+
+            foreach (var point in conic.Points)
+            {
+                if (pointHitTest.TryToGetPoint(point, target, radius, hitTest) != null)
+                {
+                    return point;
+                }
+            }
+
+            return null;
+        }
+
+        public BaseShape Contains(BaseShape shape, Point2 target, double radius, IHitTest hitTest)
+        {
+            if (!(shape is ConicShape conic))
+                throw new ArgumentNullException("shape");
+
+            return HitTestHelper.Contains(conic.GetPoints(), target) ? shape : null;
+        }
+
+        public BaseShape Overlaps(BaseShape shape, Rect2 target, double radius, IHitTest hitTest)
+        {
+            if (!(shape is ConicShape conic))
+                throw new ArgumentNullException("shape");
+
+            return HitTestHelper.Overlap(conic.GetPoints(), target) ? shape : null;
         }
     }
 
@@ -5727,6 +6073,8 @@ namespace Draw2D.ViewModels.Tools
                             return cubicBezier.Point3;
                         case QuadraticBezierShape quadraticBezier:
                             return quadraticBezier.Point2;
+                        case ConicShape conic:
+                            return conic.Point2;
                         default:
                             throw new Exception("Could not find last path point.");
                     }
@@ -6351,6 +6699,239 @@ namespace Draw2D.ViewModels.Tools
                 context.ContainerView.Selection.Selected.Remove(_quadraticBezier.Point1);
                 context.ContainerView.Selection.Selected.Remove(_quadraticBezier.Point2);
                 _quadraticBezier = null;
+            }
+
+            context.ContainerView.InputService?.Release?.Invoke();
+            context.ContainerView.InputService?.Redraw?.Invoke();
+        }
+
+        public void LeftDown(IToolContext context, double x, double y, Modifier modifier)
+        {
+            switch (CurrentState)
+            {
+                case State.StartPoint:
+                    {
+                        StartPointInternal(context, x, y, modifier);
+                    }
+                    break;
+                case State.Point1:
+                    {
+                        Point1Internal(context, x, y, modifier);
+                    }
+                    break;
+                case State.Point2:
+                    {
+                        Point2Internal(context, x, y, modifier);
+                    }
+                    break;
+            }
+        }
+
+        public void LeftUp(IToolContext context, double x, double y, Modifier modifier)
+        {
+        }
+
+        public void RightDown(IToolContext context, double x, double y, Modifier modifier)
+        {
+            switch (CurrentState)
+            {
+                case State.Point1:
+                case State.Point2:
+                    {
+                        this.Clean(context);
+                    }
+                    break;
+            }
+        }
+
+        public void RightUp(IToolContext context, double x, double y, Modifier modifier)
+        {
+        }
+
+        public void Move(IToolContext context, double x, double y, Modifier modifier)
+        {
+            switch (CurrentState)
+            {
+                case State.StartPoint:
+                    {
+                        MoveStartPointInternal(context, x, y, modifier);
+                    }
+                    break;
+                case State.Point1:
+                    {
+                        MovePoint1Internal(context, x, y, modifier);
+                    }
+                    break;
+                case State.Point2:
+                    {
+                        MovePoint2Internal(context, x, y, modifier);
+                    }
+                    break;
+            }
+        }
+
+        public void Clean(IToolContext context)
+        {
+            CleanInternal(context);
+        }
+    }
+
+    public class ConicToolSettings : Settings
+    {
+        private bool _connectPoints;
+        private double _hitTestRadius;
+        private double _weight;
+
+        public bool ConnectPoints
+        {
+            get => _connectPoints;
+            set => Update(ref _connectPoints, value);
+        }
+
+        public double HitTestRadius
+        {
+            get => _hitTestRadius;
+            set => Update(ref _hitTestRadius, value);
+        }
+
+        public double Weight
+        {
+            get => _weight;
+            set => Update(ref _weight, value);
+        }
+    }
+
+    public class ConicTool : ViewModelBase, ITool
+    {
+        private ConicShape _conic = null;
+
+        public enum State
+        {
+            StartPoint,
+            Point1,
+            Point2
+        }
+
+        public State CurrentState { get; set; } = State.StartPoint;
+
+        public string Title => "Conic";
+
+        public ConicToolSettings Settings { get; set; }
+
+        public IList<PointIntersection> Intersections { get; set; }
+
+        public IList<PointFilter> Filters { get; set; }
+
+        private void StartPointInternal(IToolContext context, double x, double y, Modifier modifier)
+        {
+            Filters?.Any(f => f.Process(context, ref x, ref y));
+
+            var next = context.ContainerView.GetNextPoint(x, y, false, 0.0);
+            _conic = new ConicShape()
+            {
+                StartPoint = next,
+                Point1 = (PointShape)next.Copy(null),
+                Point2 = (PointShape)next.Copy(null),
+                Weight = Settings.Weight,
+                Text = new Text(),
+                Style = context.ContainerView.CurrentContainer.CurrentStyle
+            };
+            context.ContainerView.WorkingContainer.Shapes.Add(_conic);
+            context.ContainerView.Selection.Selected.Add(_conic);
+            context.ContainerView.Selection.Selected.Add(_conic.StartPoint);
+            context.ContainerView.Selection.Selected.Add(_conic.Point1);
+            context.ContainerView.Selection.Selected.Add(_conic.Point2);
+
+            context.ContainerView.InputService?.Capture?.Invoke();
+            context.ContainerView.InputService?.Redraw?.Invoke();
+
+            CurrentState = State.Point2;
+        }
+
+        private void Point1Internal(IToolContext context, double x, double y, Modifier modifier)
+        {
+            Filters?.Any(f => f.Process(context, ref x, ref y));
+
+            CurrentState = State.StartPoint;
+
+            context.ContainerView.Selection.Selected.Remove(_conic);
+            context.ContainerView.Selection.Selected.Remove(_conic.StartPoint);
+            context.ContainerView.Selection.Selected.Remove(_conic.Point1);
+            context.ContainerView.Selection.Selected.Remove(_conic.Point2);
+            context.ContainerView.WorkingContainer.Shapes.Remove(_conic);
+
+            _conic.Point1 = context.ContainerView.GetNextPoint(x, y, false, 0.0);
+            context.ContainerView.CurrentContainer.Shapes.Add(_conic);
+            _conic = null;
+
+            Filters?.ForEach(f => f.Clear(context));
+
+            context.ContainerView.InputService?.Release?.Invoke();
+            context.ContainerView.InputService?.Redraw?.Invoke();
+        }
+
+        private void Point2Internal(IToolContext context, double x, double y, Modifier modifier)
+        {
+            Filters?.Any(f => f.Process(context, ref x, ref y));
+
+            _conic.Point1.X = x;
+            _conic.Point1.Y = y;
+
+            context.ContainerView.Selection.Selected.Remove(_conic.Point2);
+            _conic.Point2 = context.ContainerView.GetNextPoint(x, y, false, 0.0);
+            context.ContainerView.Selection.Selected.Add(_conic.Point2);
+
+            CurrentState = State.Point1;
+
+            context.ContainerView.InputService?.Redraw?.Invoke();
+        }
+
+        private void MoveStartPointInternal(IToolContext context, double x, double y, Modifier modifier)
+        {
+            Filters?.ForEach(f => f.Clear(context));
+            Filters?.Any(f => f.Process(context, ref x, ref y));
+
+            context.ContainerView.InputService?.Redraw?.Invoke();
+        }
+
+        private void MovePoint1Internal(IToolContext context, double x, double y, Modifier modifier)
+        {
+            Filters?.ForEach(f => f.Clear(context));
+            Filters?.Any(f => f.Process(context, ref x, ref y));
+
+            _conic.Point1.X = x;
+            _conic.Point1.Y = y;
+
+            context.ContainerView.InputService?.Redraw?.Invoke();
+        }
+
+        private void MovePoint2Internal(IToolContext context, double x, double y, Modifier modifier)
+        {
+            Filters?.ForEach(f => f.Clear(context));
+            Filters?.Any(f => f.Process(context, ref x, ref y));
+
+            _conic.Point1.X = x;
+            _conic.Point1.Y = y;
+            _conic.Point2.X = x;
+            _conic.Point2.Y = y;
+
+            context.ContainerView.InputService?.Redraw?.Invoke();
+        }
+
+        private void CleanInternal(IToolContext context)
+        {
+            Filters?.ForEach(f => f.Clear(context));
+
+            CurrentState = State.StartPoint;
+
+            if (_conic != null)
+            {
+                context.ContainerView.WorkingContainer.Shapes.Remove(_conic);
+                context.ContainerView.Selection.Selected.Remove(_conic);
+                context.ContainerView.Selection.Selected.Remove(_conic.StartPoint);
+                context.ContainerView.Selection.Selected.Remove(_conic.Point1);
+                context.ContainerView.Selection.Selected.Remove(_conic.Point2);
+                _conic = null;
             }
 
             context.ContainerView.InputService?.Release?.Invoke();

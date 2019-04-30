@@ -54,6 +54,7 @@ namespace Draw2D.Editor
             hitTest.Register(new LineBounds());
             hitTest.Register(new CubicBezierBounds());
             hitTest.Register(new QuadraticBezierBounds());
+            hitTest.Register(new ConicBounds());
             hitTest.Register(new GroupBounds());
             hitTest.Register(new PathBounds());
             hitTest.Register(new RectangleBounds());
@@ -265,6 +266,21 @@ namespace Draw2D.Editor
                 }
             };
 
+            var conicTool = new ConicTool()
+            {
+                Filters = new ObservableCollection<PointFilter>
+                {
+                    lineSnapPointFilter,
+                    gridSnapPointFilter
+                },
+                Settings = new ConicToolSettings()
+                {
+                    ConnectPoints = true,
+                    HitTestRadius = 7.0,
+                    Weight = 1.0
+                }
+            };
+
             var pathTool = new PathTool()
             {
                 Filters = new ObservableCollection<PointFilter>
@@ -287,6 +303,7 @@ namespace Draw2D.Editor
                 new LineTool(),
                 new CubicBezierTool(),
                 new QuadraticBezierTool(),
+                new ConicTool(),
                 new MoveTool(pathTool)
             };
             pathTool.Settings.CurrentTool = pathTool.Settings.Tools[0];
@@ -357,6 +374,7 @@ namespace Draw2D.Editor
             tools.Add(polyLineTool);
             tools.Add(cubicBezierTool);
             tools.Add(quadraticBezierTool);
+            tools.Add(conicTool);
             tools.Add(pathTool);
             tools.Add(scribbleTool);
             tools.Add(rectangleTool);
@@ -373,6 +391,7 @@ namespace Draw2D.Editor
                     { typeof(LineShape), new LineDecorator() },
                     { typeof(CubicBezierShape), new CubicBezierDecorator() },
                     { typeof(QuadraticBezierShape), new QuadraticBezierDecorator() },
+                    { typeof(ConicShape), new ConicDecorator() },
                     { typeof(PathShape), new PathDecorator() },
                     { typeof(RectangleShape), new RectangleDecorator() },
                     { typeof(EllipseShape), new EllipseDecorator() },
@@ -503,6 +522,8 @@ namespace Draw2D.Editor
                             return cubicBezier.StartPoint;
                         case QuadraticBezierShape quadraticBezier:
                             return quadraticBezier.StartPoint;
+                        case ConicShape conic:
+                            return conic.StartPoint;
                         default:
                             throw new Exception("Could not find last path point.");
                     }
@@ -526,6 +547,8 @@ namespace Draw2D.Editor
                             return cubicBezier.Point3;
                         case QuadraticBezierShape quadraticBezier:
                             return quadraticBezier.Point2;
+                        case ConicShape conic:
+                            return conic.Point2;
                         default:
                             throw new Exception("Could not find last path point.");
                     }
@@ -622,11 +645,20 @@ namespace Draw2D.Editor
                             break;
                         case SKPathVerb.Conic:
                             {
-                                // points[0], points[1], points[2], iterator.ConicWeight()
-                                // TODO: 
-                                // https://docs.microsoft.com/en-us/xamarin/xamarin-forms/user-interface/graphics/skiasharp/curves/information
-                                // https://skia.org/user/api/SkPath_Reference#Conic
-                                // https://skia.org/user/api/SkPath_Reference#SkPath_conicTo
+                                var lastPointShape = GetLastPoint(pathShape);
+                                if (lastPointShape == null)
+                                {
+                                    lastPointShape = new PointShape(points[0].X, points[0].Y, ContainerView.CurrentContainer.PointTemplate);
+                                }
+                                var quadraticBezierShape = new ConicShape()
+                                {
+                                    StartPoint = lastPointShape,
+                                    Point1 = new PointShape(points[1].X, points[1].Y, ContainerView.CurrentContainer.PointTemplate),
+                                    Point2 = new PointShape(points[2].X, points[2].Y, ContainerView.CurrentContainer.PointTemplate),
+                                    Weight = iterator.ConicWeight(),
+                                    Style = ContainerView.CurrentContainer.CurrentStyle
+                                };
+                                figureShape.Shapes.Add(quadraticBezierShape);
                                 lastPoint = points[2];
                             }
                             break;

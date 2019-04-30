@@ -119,6 +119,17 @@ namespace Draw2D.Renderers
             return geometry;
         }
 
+        public static SKPath ToGeometry(ConicShape conic, double dx, double dy)
+        {
+            var geometry = new SKPath();
+            geometry.MoveTo(ToPoint(conic.StartPoint, dx, dy));
+            geometry.ConicTo(
+                ToPoint(conic.Point1, dx, dy),
+                ToPoint(conic.Point2, dx, dy),
+                (float)conic.Weight);
+            return geometry;
+        }
+
         public static SKPath ToGeometry(PathShape path, double dx, double dy)
         {
             var geometry = new SKPath
@@ -162,6 +173,18 @@ namespace Draw2D.Renderers
                         geometry.QuadTo(
                             ToPoint(quadraticBezier.Point1, dx, dy),
                             ToPoint(quadraticBezier.Point2, dx, dy));
+                    }
+                    else if (shape is ConicShape conic)
+                    {
+                        if (isFirstShape)
+                        {
+                            geometry.MoveTo(ToPoint(conic.StartPoint, dx, dy));
+                            isFirstShape = false;
+                        }
+                        geometry.ConicTo(
+                            ToPoint(conic.Point1, dx, dy),
+                            ToPoint(conic.Point2, dx, dy),
+                            (float)conic.Weight);
                     }
                 }
 
@@ -326,6 +349,31 @@ namespace Draw2D.Renderers
                     canvas.DrawPath(geometry, pen);
                 }
                 if (quadraticBezier.Text is Text text && !string.IsNullOrEmpty(text.Value))
+                {
+                    using (var paint = SkiapHelper.ToSKPaintBrush(style.Stroke))
+                    {
+                        DrawTextOnPath(canvas, text, geometry, paint);
+                    }
+                }
+            }
+        }
+
+        public void DrawConic(object dc, ConicShape conic, ShapeStyle style, double dx, double dy)
+        {
+            var canvas = dc as SKCanvas;
+            using (var brush = SkiapHelper.ToSKPaintBrush(style.Fill))
+            using (var pen = SkiapHelper.ToSKPaintPen(style, _scale))
+            using (var geometry = SkiapHelper.ToGeometry(conic, dx, dy))
+            {
+                if (style.IsFilled)
+                {
+                    canvas.DrawPath(geometry, brush);
+                }
+                if (style.IsStroked)
+                {
+                    canvas.DrawPath(geometry, pen);
+                }
+                if (conic.Text is Text text && !string.IsNullOrEmpty(text.Value))
                 {
                     using (var paint = SkiapHelper.ToSKPaintBrush(style.Stroke))
                     {

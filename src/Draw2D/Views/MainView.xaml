@@ -98,6 +98,11 @@
                         <CheckBox BorderThickness="0" IsHitTestVisible="False" IsChecked="{Binding CurrentTool, Converter={StaticResource IsToolConverter}, ConverterParameter=QuadraticBezier, Mode=OneWay}"/>
                     </MenuItem.Icon>
                 </MenuItem>
+                <MenuItem Header="Con_ic" Command="{Binding SetTool}" CommandParameter="Conic">
+                    <MenuItem.Icon>
+                        <CheckBox BorderThickness="0" IsHitTestVisible="False" IsChecked="{Binding CurrentTool, Converter={StaticResource IsToolConverter}, ConverterParameter=Conic, Mode=OneWay}"/>
+                    </MenuItem.Icon>
+                </MenuItem>
                 <Separator/>
                 <MenuItem Header="Pat_h" Command="{Binding SetTool}" CommandParameter="Path">
                     <MenuItem.Icon>
@@ -118,6 +123,11 @@
                     <MenuItem Header="_Quadratic Bezier" Command="{Binding SetTool}" CommandParameter="QuadraticBezier">
                         <MenuItem.Icon>
                             <CheckBox BorderThickness="0" IsHitTestVisible="False" IsChecked="{Binding CurrentTool.Settings.CurrentTool, Converter={StaticResource IsToolConverter}, ConverterParameter=QuadraticBezier, Mode=OneWay}"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem Header="Con_ic" Command="{Binding SetTool}" CommandParameter="Conic">
+                        <MenuItem.Icon>
+                            <CheckBox BorderThickness="0" IsHitTestVisible="False" IsChecked="{Binding CurrentTool.Settings.CurrentTool, Converter={StaticResource IsToolConverter}, ConverterParameter=Conic, Mode=OneWay}"/>
                         </MenuItem.Icon>
                     </MenuItem>
                     <MenuItem Header="_Move" Command="{Binding SetTool}" CommandParameter="Move">
@@ -285,6 +295,7 @@
                     <KeyBinding Command="{Binding SetTool}" CommandParameter="Point" Gesture="P"/>
                     <KeyBinding Command="{Binding SetTool}" CommandParameter="CubicBezier" Gesture="B"/>
                     <KeyBinding Command="{Binding SetTool}" CommandParameter="QuadraticBezier" Gesture="Q"/>
+                    <KeyBinding Command="{Binding SetTool}" CommandParameter="Conic" Gesture="A"/>
                     <KeyBinding Command="{Binding SetTool}" CommandParameter="Path" Gesture="H"/>
                     <KeyBinding Command="{Binding SetTool}" CommandParameter="Move" Gesture="M"/>
                     <KeyBinding Command="{Binding SetTool}" CommandParameter="Rectangle" Gesture="R"/>
