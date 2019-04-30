@@ -139,6 +139,7 @@ namespace Draw2D.ViewModels
 
     public interface IShapeRenderer
     {
+        double Scale { get; set; }
         ISelection Selection { get; set; }
         void InvalidateCache(ShapeStyle style);
         void InvalidateCache(Matrix2 matrix);

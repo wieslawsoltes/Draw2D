@@ -11,6 +11,8 @@ namespace Draw2D.Editor
 {
     public class DrawContainerView : IDrawContainerView
     {
+        private SkiaShapeRenderer _skiaRenderer = new SkiaShapeRenderer();
+
         private void Draw(IContainerView view, DrawingContext context, double width, double height, double dx, double dy, double zx, double zy)
         {
             var currentContainer = view.CurrentContainer;
@@ -51,10 +53,9 @@ namespace Draw2D.Editor
             var currentContainer = view.CurrentContainer;
             var workingContainer = view.WorkingContainer;
             var presenter = view.Presenter;
-            var renderer = new SkiaShapeRenderer(zx)
-            {
-                Selection = view.Selection
-            };
+
+            _skiaRenderer.Scale = zx;
+            _skiaRenderer.Selection = view.Selection;
 
             canvas.Save();
 
@@ -77,14 +78,14 @@ namespace Draw2D.Editor
                 }
             }
 
-            presenter.DrawContainer(canvas, currentContainer, renderer, 0.0, 0.0, DrawMode.Shape, null, null);
-            presenter.DrawContainer(canvas, workingContainer, renderer, 0.0, 0.0, DrawMode.Shape, null, null);
+            presenter.DrawContainer(canvas, currentContainer, _skiaRenderer, 0.0, 0.0, DrawMode.Shape, null, null);
+            presenter.DrawContainer(canvas, workingContainer, _skiaRenderer, 0.0, 0.0, DrawMode.Shape, null, null);
 
-            presenter.DrawDecorators(canvas, currentContainer, renderer, 0.0, 0.0, DrawMode.Shape);
-            presenter.DrawDecorators(canvas, workingContainer, renderer, 0.0, 0.0, DrawMode.Shape);
+            presenter.DrawDecorators(canvas, currentContainer, _skiaRenderer, 0.0, 0.0, DrawMode.Shape);
+            presenter.DrawDecorators(canvas, workingContainer, _skiaRenderer, 0.0, 0.0, DrawMode.Shape);
 
-            presenter.DrawContainer(canvas, workingContainer, renderer, 0.0, 0.0, DrawMode.Point, null, null);
-            presenter.DrawContainer(canvas, currentContainer, renderer, 0.0, 0.0, DrawMode.Point, null, null);
+            presenter.DrawContainer(canvas, workingContainer, _skiaRenderer, 0.0, 0.0, DrawMode.Point, null, null);
+            presenter.DrawContainer(canvas, currentContainer, _skiaRenderer, 0.0, 0.0, DrawMode.Point, null, null);
 
             canvas.Restore();
         }

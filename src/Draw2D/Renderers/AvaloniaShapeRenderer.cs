@@ -114,7 +114,14 @@ namespace Draw2D.Renderers
         private readonly IDictionary<EllipseShape, Geometry> _ellipseGeometryCache;
         private readonly IDictionary<TextShape, AvaloniaFormattedTextCache> _formattedTextCache;
 
-        private ISelection _selection;
+        private double _scale = 1.0;
+        private ISelection _selection = null;
+
+        public double Scale
+        {
+            get => _scale;
+            set => Update(ref _scale, value);
+        }
 
         public ISelection Selection
         {
