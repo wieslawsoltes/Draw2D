@@ -10,22 +10,8 @@ using SkiaSharp;
 
 namespace Draw2D.Renderers
 {
-    public class SkiaShapeRenderer : IShapeRenderer
+    public class SkiapHelper
     {
-        private readonly double _scale;
-    
-        public ISelection Selection { get; set; }
-
-        public SkiaShapeRenderer()
-        {
-            _scale = 1.0;
-        }
-
-        public SkiaShapeRenderer(double scale)
-        {
-            _scale = scale;
-        }
-
         public static SKColor ToSKColor(ArgbColor color)
         {
             return new SKColor(color.R, color.G, color.B, color.A);
@@ -226,6 +212,23 @@ namespace Draw2D.Renderers
 
             return new SKPoint((float)ox, (float)oy);
         }
+    }
+
+    public class SkiaShapeRenderer : IShapeRenderer
+    {
+        private readonly double _scale;
+    
+        public ISelection Selection { get; set; }
+
+        public SkiaShapeRenderer()
+        {
+            _scale = 1.0;
+        }
+
+        public SkiaShapeRenderer(double scale)
+        {
+            _scale = scale;
+        }
 
         private void DrawTextOnPath(SKCanvas canvas, Text text, SKPath path, SKPaint paint)
         {
@@ -259,7 +262,7 @@ namespace Draw2D.Renderers
         {
             var canvas = dc as SKCanvas;
             int count = canvas.Save();
-            canvas.SetMatrix(Multiply(ToMatrixTransform(matrix), canvas.TotalMatrix));
+            canvas.SetMatrix(SkiapHelper.Multiply(SkiapHelper.ToMatrixTransform(matrix), canvas.TotalMatrix));
             return count;
         }
 
@@ -273,11 +276,11 @@ namespace Draw2D.Renderers
         public void DrawLine(object dc, LineShape line, ShapeStyle style, double dx, double dy)
         {
             var canvas = dc as SKCanvas;
-            using (var pen = ToSKPaintPen(style, _scale))
+            using (var pen = SkiapHelper.ToSKPaintPen(style, _scale))
             {
                 if (style.IsStroked)
                 {
-                    canvas.DrawLine(ToPoint(line.StartPoint, dx, dy), ToPoint(line.Point, dx, dy), pen);
+                    canvas.DrawLine(SkiapHelper.ToPoint(line.StartPoint, dx, dy), SkiapHelper.ToPoint(line.Point, dx, dy), pen);
                 }
             }
         }
@@ -285,9 +288,9 @@ namespace Draw2D.Renderers
         public void DrawCubicBezier(object dc, CubicBezierShape cubicBezier, ShapeStyle style, double dx, double dy)
         {
             var canvas = dc as SKCanvas;
-            using (var brush = ToSKPaintBrush(style.Fill))
-            using (var pen = ToSKPaintPen(style, _scale))
-            using (var geometry = ToGeometry(cubicBezier, dx, dy))
+            using (var brush = SkiapHelper.ToSKPaintBrush(style.Fill))
+            using (var pen = SkiapHelper.ToSKPaintPen(style, _scale))
+            using (var geometry = SkiapHelper.ToGeometry(cubicBezier, dx, dy))
             {
                 if (style.IsFilled)
                 {
@@ -299,7 +302,7 @@ namespace Draw2D.Renderers
                 }
                 if (cubicBezier.Text is Text text && !string.IsNullOrEmpty(text.Value))
                 {
-                    using (var paint = ToSKPaintBrush(style.Stroke))
+                    using (var paint = SkiapHelper.ToSKPaintBrush(style.Stroke))
                     {
                         DrawTextOnPath(canvas, text, geometry, paint);
                     }
@@ -310,9 +313,9 @@ namespace Draw2D.Renderers
         public void DrawQuadraticBezier(object dc, QuadraticBezierShape quadraticBezier, ShapeStyle style, double dx, double dy)
         {
             var canvas = dc as SKCanvas;
-            using (var brush = ToSKPaintBrush(style.Fill))
-            using (var pen = ToSKPaintPen(style, _scale))
-            using (var geometry = ToGeometry(quadraticBezier, dx, dy))
+            using (var brush = SkiapHelper.ToSKPaintBrush(style.Fill))
+            using (var pen = SkiapHelper.ToSKPaintPen(style, _scale))
+            using (var geometry = SkiapHelper.ToGeometry(quadraticBezier, dx, dy))
             {
                 if (style.IsFilled)
                 {
@@ -324,7 +327,7 @@ namespace Draw2D.Renderers
                 }
                 if (quadraticBezier.Text is Text text && !string.IsNullOrEmpty(text.Value))
                 {
-                    using (var paint = ToSKPaintBrush(style.Stroke))
+                    using (var paint = SkiapHelper.ToSKPaintBrush(style.Stroke))
                     {
                         DrawTextOnPath(canvas, text, geometry, paint);
                     }
@@ -335,9 +338,9 @@ namespace Draw2D.Renderers
         public void DrawPath(object dc, PathShape path, ShapeStyle style, double dx, double dy)
         {
             var canvas = dc as SKCanvas;
-            using (var brush = ToSKPaintBrush(style.Fill))
-            using (var pen = ToSKPaintPen(style, _scale))
-            using (var geometry = ToGeometry(path, dx, dy))
+            using (var brush = SkiapHelper.ToSKPaintBrush(style.Fill))
+            using (var pen = SkiapHelper.ToSKPaintPen(style, _scale))
+            using (var geometry = SkiapHelper.ToGeometry(path, dx, dy))
             {
                 if (style.IsFilled)
                 {
@@ -353,9 +356,9 @@ namespace Draw2D.Renderers
         public void DrawRectangle(object dc, RectangleShape rectangle, ShapeStyle style, double dx, double dy)
         {
             var canvas = dc as SKCanvas;
-            var rect = ToRect(rectangle.TopLeft, rectangle.BottomRight, dx, dy);
-            using (var brush = ToSKPaintBrush(style.Fill))
-            using (var pen = ToSKPaintPen(style, _scale))
+            var rect = SkiapHelper.ToRect(rectangle.TopLeft, rectangle.BottomRight, dx, dy);
+            using (var brush = SkiapHelper.ToSKPaintBrush(style.Fill))
+            using (var pen = SkiapHelper.ToSKPaintPen(style, _scale))
             {
                 if (style.IsFilled)
                 {
@@ -371,15 +374,14 @@ namespace Draw2D.Renderers
         public void DrawEllipse(object dc, EllipseShape ellipse, ShapeStyle style, double dx, double dy)
         {
             var canvas = dc as SKCanvas;
-            var rect = ToRect(ellipse.TopLeft, ellipse.BottomRight, dx, dy);
-            using (var brush = ToSKPaintBrush(style.Fill))
-            using (var pen = ToSKPaintPen(style, _scale))
+            var rect = SkiapHelper.ToRect(ellipse.TopLeft, ellipse.BottomRight, dx, dy);
+            using (var brush = SkiapHelper.ToSKPaintBrush(style.Fill))
+            using (var pen = SkiapHelper.ToSKPaintPen(style, _scale))
             {
                 if (style.IsFilled)
                 {
                     canvas.DrawOval(rect, brush);
                 }
-
                 if (style.IsStroked)
                 {
                     canvas.DrawOval(rect, pen);
@@ -390,8 +392,8 @@ namespace Draw2D.Renderers
         public void DrawText(object dc, TextShape text, ShapeStyle style, double dx, double dy)
         {
             var canvas = dc as SKCanvas;
-            var rect = ToRect(text.TopLeft, text.BottomRight, dx, dy);
-            using (var paint = ToSKPaintBrush(style.Stroke))
+            var rect = SkiapHelper.ToRect(text.TopLeft, text.BottomRight, dx, dy);
+            using (var paint = SkiapHelper.ToSKPaintBrush(style.Stroke))
             using (var tf = SKTypeface.FromFamilyName("Calibri", SKFontStyleWeight.Normal, SKFontStyleWidth.Normal, SKFontStyleSlant.Upright))
             {
                 paint.TextEncoding = SKTextEncoding.Utf16;
@@ -402,7 +404,7 @@ namespace Draw2D.Renderers
 
                 var bounds = new SKRect();
                 paint.MeasureText(text.Text.Value, ref bounds);
-                var origin = GetTextOrigin(2, 2, ref rect, ref bounds);
+                var origin = SkiapHelper.GetTextOrigin(2, 2, ref rect, ref bounds);
 
                 canvas.DrawText(text.Text.Value, origin.X, origin.Y + offset, paint);
             }

@@ -60,9 +60,9 @@ namespace Draw2D.Editor
 
             if (currentContainer.InputBackground != null)
             {
-                using (var brush = SkiaShapeRenderer.ToSKPaintBrush(currentContainer.InputBackground))
+                using (var brush = SkiapHelper.ToSKPaintBrush(currentContainer.InputBackground))
                 {
-                    canvas.DrawRect(SkiaShapeRenderer.ToRect(0.0, 0.0, width, height), brush);
+                    canvas.DrawRect(SkiapHelper.ToRect(0.0, 0.0, width, height), brush);
                 }
             }
 
@@ -71,9 +71,9 @@ namespace Draw2D.Editor
 
             if (currentContainer.WorkBackground != null)
             {
-                using (var brush = SkiaShapeRenderer.ToSKPaintBrush(currentContainer.WorkBackground))
+                using (var brush = SkiapHelper.ToSKPaintBrush(currentContainer.WorkBackground))
                 {
-                    canvas.DrawRect(SkiaShapeRenderer.ToRect(0.0, 0.0, currentContainer.Width, currentContainer.Height), brush);
+                    canvas.DrawRect(SkiapHelper.ToRect(0.0, 0.0, currentContainer.Width, currentContainer.Height), brush);
                 }
             }
 
