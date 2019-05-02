@@ -161,66 +161,6 @@ namespace Draw2D.Controls
             PointerMoved += (sender, e) => HandlePointerMoved(e);
         }
 
-        protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e)
-        {
-            base.OnAttachedToVisualTree(e);
-
-            var md = (this.GetVisualRoot() as IInputRoot)?.MouseDevice;
-            if (md != null)
-            {
-                this.Capture = () =>
-                {
-                    if (md.Captured == null)
-                    {
-                        md.Capture(this);
-                    }
-                };
-
-                this.Release = () =>
-                {
-                    if (md.Captured != null)
-                    {
-                        md.Capture(null);
-                    }
-                };
-
-                this.IsCaptured = () =>
-                {
-                    return md.Captured != null;
-                };
-
-                this.Redraw = () =>
-                {
-                    this.InvalidateVisual();
-                };
-            }
-
-            if (_inputTarget != null)
-            {
-                // FIXME:
-                _drawTarget.InputService = this;
-                _drawTarget.ZoomService = this;
-            }
-        }
-
-        protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
-        {
-            base.OnDetachedFromVisualTree(e);
-
-            if (_inputTarget != null)
-            {
-                // FIXME:
-                _drawTarget.InputService = null;
-                _drawTarget.ZoomService = null;
-            }
-        }
-
-        protected override void OnPointerEnter(PointerEventArgs e)
-        {
-            base.OnPointerEnter(e);
-            this.Focus();
-        }
-
         private void GetOffset(out double dx, out double dy, out double zx, out double zy)
         {
             dx = OffsetX;
@@ -308,34 +248,6 @@ namespace Draw2D.Controls
             {
                 var tpoint = AdjustTargetPoint(e.GetPosition(this));
                 _inputTarget.Move(tpoint.X, tpoint.Y, GetModifier(e.InputModifiers));
-            }
-        }
-
-        public override void Render(DrawingContext context)
-        {
-            base.Render(context);
-
-            if (_drawTarget != null)
-            {
-                double width = Bounds.Width;
-                double height = Bounds.Height;
-
-                if (_initializedZoom == false)
-                {
-                    CenterZoom(false);
-                    _initializedZoom = true;
-                }
-
-                GetOffset(out double dx, out double dy, out double zx, out double zy);
-
-                if (CustomDraw)
-                {
-                    context.Custom(new CustomDrawOperation(_drawTarget, width, height, dx, dy, zx, zy));
-                }
-                else
-                {
-                    _drawTarget.Draw(context, width, height, dx, dy, zx, zy);
-                }
             }
         }
 
@@ -513,6 +425,94 @@ namespace Draw2D.Controls
             {
                 UniformToFill(Bounds.Width, Bounds.Height, _inputTarget.GetWidth(), _inputTarget.GetHeight());
                 Invalidate(redraw);
+            }
+        }
+
+        protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e)
+        {
+            base.OnAttachedToVisualTree(e);
+
+            var md = (this.GetVisualRoot() as IInputRoot)?.MouseDevice;
+            if (md != null)
+            {
+                this.Capture = () =>
+                {
+                    if (md.Captured == null)
+                    {
+                        md.Capture(this);
+                    }
+                };
+
+                this.Release = () =>
+                {
+                    if (md.Captured != null)
+                    {
+                        md.Capture(null);
+                    }
+                };
+
+                this.IsCaptured = () =>
+                {
+                    return md.Captured != null;
+                };
+
+                this.Redraw = () =>
+                {
+                    this.InvalidateVisual();
+                };
+            }
+
+            if (_inputTarget != null)
+            {
+                // FIXME:
+                _drawTarget.InputService = this;
+                _drawTarget.ZoomService = this;
+            }
+        }
+
+        protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
+        {
+            base.OnDetachedFromVisualTree(e);
+
+            if (_inputTarget != null)
+            {
+                // FIXME:
+                _drawTarget.InputService = null;
+                _drawTarget.ZoomService = null;
+            }
+        }
+
+        protected override void OnPointerEnter(PointerEventArgs e)
+        {
+            base.OnPointerEnter(e);
+            this.Focus();
+        }
+
+        public override void Render(DrawingContext context)
+        {
+            base.Render(context);
+
+            if (_drawTarget != null)
+            {
+                double width = Bounds.Width;
+                double height = Bounds.Height;
+
+                if (_initializedZoom == false)
+                {
+                    CenterZoom(false);
+                    _initializedZoom = true;
+                }
+
+                GetOffset(out double dx, out double dy, out double zx, out double zy);
+
+                if (CustomDraw)
+                {
+                    context.Custom(new CustomDrawOperation(_drawTarget, width, height, dx, dy, zx, zy));
+                }
+                else
+                {
+                    _drawTarget.Draw(context, width, height, dx, dy, zx, zy);
+                }
             }
         }
     }
