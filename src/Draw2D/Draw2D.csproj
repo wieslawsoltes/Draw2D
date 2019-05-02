@@ -4,6 +4,7 @@
     <OutputType>WinExe</OutputType>
     <TargetFrameworks>netcoreapp3.0</TargetFrameworks>
     <EnableDefaultCompileItems>False</EnableDefaultCompileItems>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>
