@@ -38,7 +38,8 @@ namespace Draw2D.Renderers
                 IsStroke = false,
                 LcdRenderText = true,
                 SubpixelText = true,
-                Color = ToSKColor(color)
+                Color = ToSKColor(color),
+                TextAlign = SKTextAlign.Left
             };
         }
 
@@ -199,10 +200,6 @@ namespace Draw2D.Renderers
 
         public static SKPoint GetTextOrigin(int halignment, int valignment, ref SKRect rect, ref SKRect size)
         {
-            double rwidth = Math.Abs(rect.Right - rect.Left);
-            double rheight = Math.Abs(rect.Bottom - rect.Top);
-            double swidth = Math.Abs(size.Right - size.Left);
-            double sheight = Math.Abs(size.Bottom - size.Top);
             double ox, oy;
 
             switch (halignment)
@@ -211,11 +208,11 @@ namespace Draw2D.Renderers
                     ox = rect.Left;
                     break;
                 case 1:
-                    ox = rect.Right - swidth;
+                    ox = rect.Right - size.Width;
                     break;
                 case 2:
                 default:
-                    ox = (rect.Left + rwidth / 2f) - (swidth / 2f);
+                    ox = (rect.Left + rect.Width / 2f) - (size.Width / 2f);
                     break;
             }
 
@@ -225,11 +222,11 @@ namespace Draw2D.Renderers
                     oy = rect.Top;
                     break;
                 case 1:
-                    oy = rect.Bottom - sheight;
+                    oy = rect.Bottom - size.Height;
                     break;
                 case 2:
                 default:
-                    oy = (rect.Bottom - rheight / 2f) - (sheight / 2f);
+                    oy = (rect.Bottom - rect.Height / 2f) - (size.Height / 2f);
                     break;
             }
 
