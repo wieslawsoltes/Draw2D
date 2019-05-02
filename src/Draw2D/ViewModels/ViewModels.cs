@@ -127,7 +127,7 @@ namespace Draw2D.ViewModels
         object BeginTransform(object dc, IShapeRenderer renderer);
         void EndTransform(object dc, IShapeRenderer renderer, object state);
         void Draw(object dc, IShapeRenderer renderer, double dx, double dy, DrawMode mode, object db, object r);
-        bool Invalidate();
+        void Invalidate();
     }
 
     public interface ISelectable
@@ -613,12 +613,16 @@ namespace Draw2D.ViewModels.Shapes
 
         public abstract void Draw(object dc, IShapeRenderer renderer, double dx, double dy, DrawMode mode, object db, object r);
 
-        public virtual bool Invalidate()
+        public virtual void Invalidate()
         {
-            bool result = false;
-            result |= _style?.Invalidate() ?? false;
-            result |= _transform?.Invalidate() ?? false;
-            return result | this.IsDirty;
+            _style?.Invalidate();
+
+            _transform?.Invalidate();
+
+            if (this.IsDirty)
+            {
+                this.IsDirty = false;
+            }
         }
 
         public abstract void Move(ISelection selection, double dx, double dy);
@@ -679,12 +683,18 @@ namespace Draw2D.ViewModels.Shapes
             }
         }
 
-        public override bool Invalidate()
+        public override void Invalidate()
         {
-            bool result = base.Invalidate();
-            result |= _topLeft?.Invalidate() ?? false;
-            result |= _bottomRight?.Invalidate() ?? false;
-            return result | this.IsDirty;
+            base.Invalidate();
+
+            _topLeft?.Invalidate();
+
+            _bottomRight?.Invalidate();
+
+            if (this.IsDirty)
+            {
+                this.IsDirty = false;
+            }
         }
 
         public override void Move(ISelection selection, double dx, double dy)
@@ -819,10 +829,14 @@ namespace Draw2D.ViewModels.Shapes
             this.Points = points;
         }
 
-        public override bool Invalidate()
+        public override void Invalidate()
         {
-            bool result = base.Invalidate();
-            return result | this.IsDirty;
+            base.Invalidate();
+
+            if (this.IsDirty)
+            {
+                this.IsDirty = false;
+            }
         }
 
         public override void Draw(object dc, IShapeRenderer renderer, double dx, double dy, DrawMode mode, object db, object r)
@@ -967,13 +981,20 @@ namespace Draw2D.ViewModels.Shapes
             }
         }
 
-        public override bool Invalidate()
+        public override void Invalidate()
         {
-            bool result = base.Invalidate();
-            result |= _startPoint?.Invalidate() ?? false;
-            result |= _point1?.Invalidate() ?? false;
-            result |= _point2?.Invalidate() ?? false;
-            return result | this.IsDirty;
+            base.Invalidate();
+
+            _startPoint?.Invalidate();
+
+            _point1?.Invalidate();
+
+            _point2?.Invalidate();
+
+            if (this.IsDirty)
+            {
+                this.IsDirty = false;
+            }
         }
 
         public override void Draw(object dc, IShapeRenderer renderer, double dx, double dy, DrawMode mode, object db, object r)
@@ -1222,14 +1243,22 @@ namespace Draw2D.ViewModels.Shapes
             }
         }
 
-        public override bool Invalidate()
+        public override void Invalidate()
         {
-            bool result = base.Invalidate();
-            result |= _startPoint?.Invalidate() ?? false;
-            result |= _point1?.Invalidate() ?? false;
-            result |= _point2?.Invalidate() ?? false;
-            result |= _point3?.Invalidate() ?? false;
-            return result | this.IsDirty;
+            base.Invalidate();
+
+            _startPoint?.Invalidate();
+
+            _point1?.Invalidate();
+
+            _point2?.Invalidate();
+
+            _point3?.Invalidate();
+
+            if (this.IsDirty)
+            {
+                this.IsDirty = false;
+            }
         }
 
         public override void Draw(object dc, IShapeRenderer renderer, double dx, double dy, DrawMode mode, object db, object r)
@@ -1482,10 +1511,14 @@ namespace Draw2D.ViewModels.Shapes
         {
         }
 
-        public override bool Invalidate()
+        public override void Invalidate()
         {
-            bool result = base.Invalidate();
-            return result | this.IsDirty;
+            base.Invalidate();
+
+            if (this.IsDirty)
+            {
+                this.IsDirty = false;
+            }
         }
 
         public override void Draw(object dc, IShapeRenderer renderer, double dx, double dy, DrawMode mode, object db, object r)
@@ -1579,10 +1612,14 @@ namespace Draw2D.ViewModels.Shapes
             this.Shapes = shapes;
         }
 
-        public override bool Invalidate()
+        public override void Invalidate()
         {
-            bool result = base.Invalidate();
-            return result | this.IsDirty;
+            base.Invalidate();
+
+            if (this.IsDirty)
+            {
+                this.IsDirty = false;
+            }
         }
 
         public override void Draw(object dc, IShapeRenderer renderer, double dx, double dy, DrawMode mode, object db, object r)
@@ -1702,21 +1739,24 @@ namespace Draw2D.ViewModels.Shapes
             }
         }
 
-        public override bool Invalidate()
+        public override void Invalidate()
         {
-            bool result = base.Invalidate();
+            base.Invalidate();
 
             foreach (var point in Points)
             {
-                result |= point.Invalidate();
+                point.Invalidate();
             }
 
             foreach (var shape in Shapes)
             {
-                result |= shape.Invalidate();
+                shape.Invalidate();
             }
 
-            return result | this.IsDirty;
+            if (this.IsDirty)
+            {
+                this.IsDirty = false;
+            }
         }
 
         public override void Draw(object dc, IShapeRenderer renderer, double dx, double dy, DrawMode mode, object db, object r)
@@ -1831,12 +1871,18 @@ namespace Draw2D.ViewModels.Shapes
             }
         }
 
-        public override bool Invalidate()
+        public override void Invalidate()
         {
-            bool result = base.Invalidate();
-            result |= _startPoint?.Invalidate() ?? false;
-            result |= _point?.Invalidate() ?? false;
-            return result | this.IsDirty;
+            base.Invalidate();
+
+            _startPoint?.Invalidate();
+
+            _point?.Invalidate();
+
+            if (this.IsDirty)
+            {
+                this.IsDirty = false;
+            }
         }
 
         public override void Draw(object dc, IShapeRenderer renderer, double dx, double dy, DrawMode mode, object db, object r)
@@ -2057,16 +2103,19 @@ namespace Draw2D.ViewModels.Shapes
             }
         }
 
-        public override bool Invalidate()
+        public override void Invalidate()
         {
-            bool result = base.Invalidate();
+            base.Invalidate();
 
             foreach (var figure in Figures)
             {
-                result |= figure.Invalidate();
+                figure.Invalidate();
             }
 
-            return result | this.IsDirty;
+            if (this.IsDirty)
+            {
+                this.IsDirty = false;
+            }
         }
 
         public override void Draw(object dc, IShapeRenderer renderer, double dx, double dy, DrawMode mode, object db, object r)
@@ -2308,11 +2357,16 @@ namespace Draw2D.ViewModels.Shapes
             yield return this;
         }
 
-        public override bool Invalidate()
+        public override void Invalidate()
         {
-            bool result = base.Invalidate();
-            result |= _template?.Invalidate() ?? false;
-            return this.IsDirty | result;
+            base.Invalidate();
+
+            _template?.Invalidate();
+
+            if (this.IsDirty)
+            {
+                this.IsDirty = false;
+            }
         }
 
         public override void Draw(object dc, IShapeRenderer renderer, double dx, double dy, DrawMode mode, object db, object r)
@@ -2328,7 +2382,6 @@ namespace Draw2D.ViewModels.Shapes
                 {
                     _templateTransform.OffsetX = offsetX;
                     _templateTransform.OffsetY = offsetY;
-                    _templateTransform.Invalidate();
                 }
 
                 var templateState = renderer.PushMatrix(dc, _templateTransform);
@@ -2408,13 +2461,21 @@ namespace Draw2D.ViewModels.Shapes
             }
         }
 
-        public override bool Invalidate()
+        public override void Invalidate()
         {
-            bool result = base.Invalidate();
-            result |= _startPoint?.Invalidate() ?? false;
-            result |= _point1?.Invalidate() ?? false;
-            result |= _point2?.Invalidate() ?? false;
-            return result | this.IsDirty;
+            base.Invalidate();
+
+            _startPoint?.Invalidate();
+
+            _point1?.Invalidate();
+
+            _point2?.Invalidate();
+
+
+            if (this.IsDirty)
+            {
+                this.IsDirty = false;
+            }
         }
 
         public override void Draw(object dc, IShapeRenderer renderer, double dx, double dy, DrawMode mode, object db, object r)
@@ -2633,10 +2694,14 @@ namespace Draw2D.ViewModels.Shapes
         {
         }
 
-        public override bool Invalidate()
+        public override void Invalidate()
         {
-            bool result = base.Invalidate();
-            return result | this.IsDirty;
+            base.Invalidate();
+
+            if (this.IsDirty)
+            {
+                this.IsDirty = false;
+            }
         }
 
         public override void Draw(object dc, IShapeRenderer renderer, double dx, double dy, DrawMode mode, object db, object r)
@@ -2707,10 +2772,14 @@ namespace Draw2D.ViewModels.Shapes
             this.Text = text;
         }
 
-        public override bool Invalidate()
+        public override void Invalidate()
         {
-            bool result = base.Invalidate();
-            return result | this.IsDirty;
+            base.Invalidate();
+
+            if (this.IsDirty)
+            {
+                this.IsDirty = false;
+            }
         }
 
         public override void Draw(object dc, IShapeRenderer renderer, double dx, double dy, DrawMode mode, object db, object r)
@@ -2779,7 +2848,6 @@ namespace Draw2D.ViewModels.Containers
 
     public interface IContainerView : IDrawTarget, IHitTestable
     {
-        IShapeRenderer Renderer { get; set; }
         IDrawContainerView DrawContainerView { get; set; }
         ICanvasPresenter Presenter { get; set; }
         ISelection Selection { get; set; }
@@ -2907,23 +2975,21 @@ namespace Draw2D.ViewModels.Containers
             EndTransform(dc, renderer, state);
         }
 
-        public override bool Invalidate()
+        public override void Invalidate()
         {
-            bool result = false;
-
             var points = GetPoints();
 
             if (Guides != null)
             {
                 foreach (var guide in Guides)
                 {
-                    result |= guide.Invalidate();
+                    guide.Invalidate();
                 }
             }
 
             foreach (var shape in Shapes)
             {
-                result |= shape.Invalidate();
+                shape.Invalidate();
             }
 
             foreach (var point in points)
@@ -2931,7 +2997,10 @@ namespace Draw2D.ViewModels.Containers
                 point.IsDirty = false;
             }
 
-            return result;
+            if (this.IsDirty)
+            {
+                this.IsDirty = false;
+            }
         }
 
         public virtual object Copy(IDictionary<object, object> shared)
@@ -2982,7 +3051,6 @@ namespace Draw2D.ViewModels.Containers
     {
         private IInputService _inputService;
         private IZoomService _zoomService;
-        private IShapeRenderer _renderer;
         private IDrawContainerView _drawContainerView;
         private ICanvasPresenter _presenter;
         private ISelection _selection;
@@ -3000,12 +3068,6 @@ namespace Draw2D.ViewModels.Containers
         {
             get => _zoomService;
             set => Update(ref _zoomService, value);
-        }
-
-        public IShapeRenderer Renderer
-        {
-            get => _renderer;
-            set => Update(ref _renderer, value);
         }
 
         public IDrawContainerView DrawContainerView
@@ -5809,12 +5871,6 @@ namespace Draw2D.ViewModels.Tools
         {
             get => _context.ContainerView.ZoomService;
             set => throw new InvalidOperationException($"Can not set {ZoomService} property value.");
-        }
-
-        public IShapeRenderer Renderer
-        {
-            get => _context.ContainerView.Renderer;
-            set => throw new InvalidOperationException($"Can not set {Renderer} property value.");
         }
 
         public IDrawContainerView DrawContainerView

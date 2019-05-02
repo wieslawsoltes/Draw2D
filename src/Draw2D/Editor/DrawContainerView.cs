@@ -12,13 +12,16 @@ namespace Draw2D.Editor
     public class DrawContainerView : IDrawContainerView
     {
         private SkiaShapeRenderer _skiaRenderer = new SkiaShapeRenderer();
+        private AvaloniaShapeRenderer _avaloniaRenderer = new AvaloniaShapeRenderer();
 
         private void Draw(IContainerView view, DrawingContext context, double width, double height, double dx, double dy, double zx, double zy)
         {
             var currentContainer = view.CurrentContainer;
             var workingContainer = view.WorkingContainer;
             var presenter = view.Presenter;
-            var renderer = view.Renderer;
+
+            _avaloniaRenderer.Scale = zx;
+            _avaloniaRenderer.Selection = view.Selection;
 
             if (currentContainer.InputBackground != null)
             {
@@ -36,14 +39,14 @@ namespace Draw2D.Editor
                 context.FillRectangle(brush, new Rect(0.0, 0.0, currentContainer.Width, currentContainer.Height));
             }
 
-            presenter.DrawContainer(context, currentContainer, renderer, 0.0, 0.0, DrawMode.Shape, null, null);
-            presenter.DrawContainer(context, workingContainer, renderer, 0.0, 0.0, DrawMode.Shape, null, null);
+            presenter.DrawContainer(context, currentContainer, _avaloniaRenderer, 0.0, 0.0, DrawMode.Shape, null, null);
+            presenter.DrawContainer(context, workingContainer, _avaloniaRenderer, 0.0, 0.0, DrawMode.Shape, null, null);
 
-            presenter.DrawDecorators(context, currentContainer, renderer, 0.0, 0.0, DrawMode.Shape);
-            presenter.DrawDecorators(context, workingContainer, renderer, 0.0, 0.0, DrawMode.Shape);
+            presenter.DrawDecorators(context, currentContainer, _avaloniaRenderer, 0.0, 0.0, DrawMode.Shape);
+            presenter.DrawDecorators(context, workingContainer, _avaloniaRenderer, 0.0, 0.0, DrawMode.Shape);
 
-            presenter.DrawContainer(context, currentContainer, renderer, 0.0, 0.0, DrawMode.Point, null, null);
-            presenter.DrawContainer(context, workingContainer, renderer, 0.0, 0.0, DrawMode.Point, null, null);
+            presenter.DrawContainer(context, currentContainer, _avaloniaRenderer, 0.0, 0.0, DrawMode.Point, null, null);
+            presenter.DrawContainer(context, workingContainer, _avaloniaRenderer, 0.0, 0.0, DrawMode.Point, null, null);
 
             state.Dispose();
         }

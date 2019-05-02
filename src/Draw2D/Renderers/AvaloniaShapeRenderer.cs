@@ -286,7 +286,8 @@ namespace Draw2D.Renderers
             {
                 return null;
             }
-            if (!_matrixCache.TryGetValue(matrix, out var cache))
+            Matrix cache = default;
+            if (matrix.IsDirty = true || !_matrixCache.TryGetValue(matrix, out cache))
             {
                 _matrixCache[matrix] = AvaloniaHelper.ToMatrixTransform(matrix);
                 return _matrixCache[matrix];
@@ -300,7 +301,8 @@ namespace Draw2D.Renderers
             {
                 return null;
             }
-            if (!_brushCache.TryGetValue(style, out var cache))
+            AvaloniaBrushCache cache = default;
+            if (style.IsDirty = true || !_brushCache.TryGetValue(style, out cache))
             {
                 _brushCache[style] = AvaloniaBrushCache.FromDrawStyle(style);
                 return _brushCache[style];
@@ -314,8 +316,10 @@ namespace Draw2D.Renderers
             {
                 return null;
             }
-            if (!cacheDictionary.TryGetValue(shape, out var cache))
+            Geometry cache = null;
+            if (shape.IsDirty = true || !cacheDictionary.TryGetValue(shape, out cache))
             {
+                shape.Invalidate();
                 var geometry = AvaloniaHelper.ToGeometry(shape, style, dx, dy);
                 if (geometry != null)
                 {

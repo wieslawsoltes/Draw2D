@@ -399,18 +399,11 @@ namespace Draw2D.Editor
                 }
             };
 
-            var renderer = new AvaloniaShapeRenderer()
-            {
-                Name = "Default",
-                Selection = selectionTool
-            };
-
             var drawContainerView = new DrawContainerView();
 
             var containerView = new ContainerView()
             {
                 InputService = null,
-                Renderer = renderer,
                 DrawContainerView = drawContainerView,
                 Presenter = presenter,
                 Selection = selectionTool,
