@@ -22,7 +22,7 @@ namespace Draw2D.Editor
 
             if (currentContainer.InputBackground != null)
             {
-                var color = AvaloniaBrushCache.FromDrawColor(currentContainer.InputBackground);
+                var color = AvaloniaBrushCache.ToColor(currentContainer.InputBackground);
                 var brush = new SolidColorBrush(color);
                 context.FillRectangle(brush, new Rect(0, 0, width, height));
             }
@@ -31,7 +31,7 @@ namespace Draw2D.Editor
 
             if (currentContainer.WorkBackground != null)
             {
-                var color = AvaloniaBrushCache.FromDrawColor(currentContainer.WorkBackground);
+                var color = AvaloniaBrushCache.ToColor(currentContainer.WorkBackground);
                 var brush = new SolidColorBrush(color);
                 context.FillRectangle(brush, new Rect(0.0, 0.0, currentContainer.Width, currentContainer.Height));
             }
@@ -61,9 +61,9 @@ namespace Draw2D.Editor
 
             if (currentContainer.InputBackground != null)
             {
-                using (var brush = SkiapHelper.ToSKPaintBrush(currentContainer.InputBackground))
+                using (var brush = SkiaHelper.ToSKPaintBrush(currentContainer.InputBackground))
                 {
-                    canvas.DrawRect(SkiapHelper.ToRect(0.0, 0.0, width, height), brush);
+                    canvas.DrawRect(SkiaHelper.ToRect(0.0, 0.0, width, height), brush);
                 }
             }
 
@@ -72,9 +72,9 @@ namespace Draw2D.Editor
 
             if (currentContainer.WorkBackground != null)
             {
-                using (var brush = SkiapHelper.ToSKPaintBrush(currentContainer.WorkBackground))
+                using (var brush = SkiaHelper.ToSKPaintBrush(currentContainer.WorkBackground))
                 {
-                    canvas.DrawRect(SkiapHelper.ToRect(0.0, 0.0, currentContainer.Width, currentContainer.Height), brush);
+                    canvas.DrawRect(SkiaHelper.ToRect(0.0, 0.0, currentContainer.Width, currentContainer.Height), brush);
                 }
             }
 
