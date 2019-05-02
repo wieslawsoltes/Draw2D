@@ -10,7 +10,7 @@ using SkiaSharp;
 
 namespace Draw2D.Renderers
 {
-    public class SkiapHelper
+    internal class SkiaHelper
     {
         public static SKColor ToSKColor(ArgbColor color)
         {
@@ -263,7 +263,7 @@ namespace Draw2D.Renderers
         {
             var canvas = dc as SKCanvas;
             int count = canvas.Save();
-            canvas.SetMatrix(SkiapHelper.Multiply(SkiapHelper.ToMatrixTransform(matrix), canvas.TotalMatrix));
+            canvas.SetMatrix(SkiaHelper.Multiply(SkiaHelper.ToMatrixTransform(matrix), canvas.TotalMatrix));
             return count;
         }
 
@@ -277,11 +277,11 @@ namespace Draw2D.Renderers
         public void DrawLine(object dc, LineShape line, ShapeStyle style, double dx, double dy)
         {
             var canvas = dc as SKCanvas;
-            using (var pen = SkiapHelper.ToSKPaintPen(style, Scale))
+            using (var pen = SkiaHelper.ToSKPaintPen(style, Scale))
             {
                 if (style.IsStroked)
                 {
-                    canvas.DrawLine(SkiapHelper.ToPoint(line.StartPoint, dx, dy), SkiapHelper.ToPoint(line.Point, dx, dy), pen);
+                    canvas.DrawLine(SkiaHelper.ToPoint(line.StartPoint, dx, dy), SkiaHelper.ToPoint(line.Point, dx, dy), pen);
                 }
             }
         }
@@ -289,9 +289,9 @@ namespace Draw2D.Renderers
         public void DrawCubicBezier(object dc, CubicBezierShape cubicBezier, ShapeStyle style, double dx, double dy)
         {
             var canvas = dc as SKCanvas;
-            using (var brush = SkiapHelper.ToSKPaintBrush(style.Fill))
-            using (var pen = SkiapHelper.ToSKPaintPen(style, Scale))
-            using (var geometry = SkiapHelper.ToGeometry(cubicBezier, dx, dy))
+            using (var brush = SkiaHelper.ToSKPaintBrush(style.Fill))
+            using (var pen = SkiaHelper.ToSKPaintPen(style, Scale))
+            using (var geometry = SkiaHelper.ToGeometry(cubicBezier, dx, dy))
             {
                 if (style.IsFilled)
                 {
@@ -303,7 +303,7 @@ namespace Draw2D.Renderers
                 }
                 if (cubicBezier.Text is Text text && !string.IsNullOrEmpty(text.Value))
                 {
-                    using (var paint = SkiapHelper.ToSKPaintBrush(style.Stroke))
+                    using (var paint = SkiaHelper.ToSKPaintBrush(style.Stroke))
                     {
                         DrawTextOnPath(canvas, text, geometry, paint);
                     }
@@ -314,9 +314,9 @@ namespace Draw2D.Renderers
         public void DrawQuadraticBezier(object dc, QuadraticBezierShape quadraticBezier, ShapeStyle style, double dx, double dy)
         {
             var canvas = dc as SKCanvas;
-            using (var brush = SkiapHelper.ToSKPaintBrush(style.Fill))
-            using (var pen = SkiapHelper.ToSKPaintPen(style, Scale))
-            using (var geometry = SkiapHelper.ToGeometry(quadraticBezier, dx, dy))
+            using (var brush = SkiaHelper.ToSKPaintBrush(style.Fill))
+            using (var pen = SkiaHelper.ToSKPaintPen(style, Scale))
+            using (var geometry = SkiaHelper.ToGeometry(quadraticBezier, dx, dy))
             {
                 if (style.IsFilled)
                 {
@@ -328,7 +328,7 @@ namespace Draw2D.Renderers
                 }
                 if (quadraticBezier.Text is Text text && !string.IsNullOrEmpty(text.Value))
                 {
-                    using (var paint = SkiapHelper.ToSKPaintBrush(style.Stroke))
+                    using (var paint = SkiaHelper.ToSKPaintBrush(style.Stroke))
                     {
                         DrawTextOnPath(canvas, text, geometry, paint);
                     }
@@ -339,9 +339,9 @@ namespace Draw2D.Renderers
         public void DrawConic(object dc, ConicShape conic, ShapeStyle style, double dx, double dy)
         {
             var canvas = dc as SKCanvas;
-            using (var brush = SkiapHelper.ToSKPaintBrush(style.Fill))
-            using (var pen = SkiapHelper.ToSKPaintPen(style, Scale))
-            using (var geometry = SkiapHelper.ToGeometry(conic, dx, dy))
+            using (var brush = SkiaHelper.ToSKPaintBrush(style.Fill))
+            using (var pen = SkiaHelper.ToSKPaintPen(style, Scale))
+            using (var geometry = SkiaHelper.ToGeometry(conic, dx, dy))
             {
                 if (style.IsFilled)
                 {
@@ -353,7 +353,7 @@ namespace Draw2D.Renderers
                 }
                 if (conic.Text is Text text && !string.IsNullOrEmpty(text.Value))
                 {
-                    using (var paint = SkiapHelper.ToSKPaintBrush(style.Stroke))
+                    using (var paint = SkiaHelper.ToSKPaintBrush(style.Stroke))
                     {
                         DrawTextOnPath(canvas, text, geometry, paint);
                     }
@@ -364,9 +364,9 @@ namespace Draw2D.Renderers
         public void DrawPath(object dc, PathShape path, ShapeStyle style, double dx, double dy)
         {
             var canvas = dc as SKCanvas;
-            using (var brush = SkiapHelper.ToSKPaintBrush(style.Fill))
-            using (var pen = SkiapHelper.ToSKPaintPen(style, Scale))
-            using (var geometry = SkiapHelper.ToGeometry(path, dx, dy))
+            using (var brush = SkiaHelper.ToSKPaintBrush(style.Fill))
+            using (var pen = SkiaHelper.ToSKPaintPen(style, Scale))
+            using (var geometry = SkiaHelper.ToGeometry(path, dx, dy))
             {
                 if (style.IsFilled)
                 {
@@ -382,9 +382,9 @@ namespace Draw2D.Renderers
         public void DrawRectangle(object dc, RectangleShape rectangle, ShapeStyle style, double dx, double dy)
         {
             var canvas = dc as SKCanvas;
-            var rect = SkiapHelper.ToRect(rectangle.TopLeft, rectangle.BottomRight, dx, dy);
-            using (var brush = SkiapHelper.ToSKPaintBrush(style.Fill))
-            using (var pen = SkiapHelper.ToSKPaintPen(style, Scale))
+            var rect = SkiaHelper.ToRect(rectangle.TopLeft, rectangle.BottomRight, dx, dy);
+            using (var brush = SkiaHelper.ToSKPaintBrush(style.Fill))
+            using (var pen = SkiaHelper.ToSKPaintPen(style, Scale))
             {
                 if (style.IsFilled)
                 {
@@ -400,9 +400,9 @@ namespace Draw2D.Renderers
         public void DrawEllipse(object dc, EllipseShape ellipse, ShapeStyle style, double dx, double dy)
         {
             var canvas = dc as SKCanvas;
-            var rect = SkiapHelper.ToRect(ellipse.TopLeft, ellipse.BottomRight, dx, dy);
-            using (var brush = SkiapHelper.ToSKPaintBrush(style.Fill))
-            using (var pen = SkiapHelper.ToSKPaintPen(style, Scale))
+            var rect = SkiaHelper.ToRect(ellipse.TopLeft, ellipse.BottomRight, dx, dy);
+            using (var brush = SkiaHelper.ToSKPaintBrush(style.Fill))
+            using (var pen = SkiaHelper.ToSKPaintPen(style, Scale))
             {
                 if (style.IsFilled)
                 {
@@ -418,8 +418,8 @@ namespace Draw2D.Renderers
         public void DrawText(object dc, TextShape text, ShapeStyle style, double dx, double dy)
         {
             var canvas = dc as SKCanvas;
-            var rect = SkiapHelper.ToRect(text.TopLeft, text.BottomRight, dx, dy);
-            using (var paint = SkiapHelper.ToSKPaintBrush(style.Stroke))
+            var rect = SkiaHelper.ToRect(text.TopLeft, text.BottomRight, dx, dy);
+            using (var paint = SkiaHelper.ToSKPaintBrush(style.Stroke))
             using (var tf = SKTypeface.FromFamilyName("Calibri", SKFontStyleWeight.Normal, SKFontStyleWidth.Normal, SKFontStyleSlant.Upright))
             {
                 paint.TextEncoding = SKTextEncoding.Utf16;
@@ -430,7 +430,7 @@ namespace Draw2D.Renderers
 
                 var bounds = new SKRect();
                 paint.MeasureText(text.Text.Value, ref bounds);
-                var origin = SkiapHelper.GetTextOrigin(2, 2, ref rect, ref bounds);
+                var origin = SkiaHelper.GetTextOrigin(2, 2, ref rect, ref bounds);
 
                 canvas.DrawText(text.Text.Value, origin.X, origin.Y + offset, paint);
             }

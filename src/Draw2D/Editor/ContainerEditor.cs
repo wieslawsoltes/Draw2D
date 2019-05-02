@@ -703,7 +703,7 @@ namespace Draw2D.Editor
                 {
                     case CubicBezierShape cubicBezierShape:
                         {
-                            var path = SkiapHelper.ToGeometry(cubicBezierShape, 0.0, 0.0);
+                            var path = SkiaHelper.ToGeometry(cubicBezierShape, 0.0, 0.0);
                             var svgPathData = path.ToSvgPathData();
                             textBox.Text = svgPathData;
                             Application.Current.Clipboard.SetTextAsync(svgPathData);
@@ -727,7 +727,7 @@ namespace Draw2D.Editor
                         break;
                     case PathShape pathShape:
                         {
-                            var path = SkiapHelper.ToGeometry(pathShape, 0.0, 0.0);
+                            var path = SkiaHelper.ToGeometry(pathShape, 0.0, 0.0);
                             var svgPathData = path.ToSvgPathData();
                             textBox.Text = svgPathData;
                             Application.Current.Clipboard.SetTextAsync(svgPathData);
@@ -739,7 +739,7 @@ namespace Draw2D.Editor
                         break;
                     case QuadraticBezierShape quadraticBezierShape:
                         {
-                            var path = SkiapHelper.ToGeometry(quadraticBezierShape, 0.0, 0.0);
+                            var path = SkiaHelper.ToGeometry(quadraticBezierShape, 0.0, 0.0);
                             var svgPathData = path.ToSvgPathData();
                             textBox.Text = svgPathData;
                             Application.Current.Clipboard.SetTextAsync(svgPathData);
