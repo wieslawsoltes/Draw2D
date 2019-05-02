@@ -220,21 +220,21 @@ namespace Draw2D.Renderers
             var size = formattedText.Bounds.Size;
 
             // Vertical Alignment: Top
-            //var top = new Point(
+            //var origin = new Point(
             //    rect.X,
             //    rect.Y);
 
             // Vertical Alignment: Center
-            var center = new Point(
+            var origin = new Point(
                 rect.X,
                 rect.Y + rect.Height / 2 - size.Height / 2);
 
             // Vertical Alignment: Bottom
-            //var bottom = new Point(
+            //var origin = new Point(
             //    rect.X,
             //    rect.Y + rect.Height - size.Height);
 
-            return new AvaloniaFormattedTextCache(formattedText, center);
+            return new AvaloniaFormattedTextCache(formattedText, origin);
         }
 
         public void Dispose()

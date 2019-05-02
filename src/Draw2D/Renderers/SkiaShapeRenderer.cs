@@ -10,6 +10,20 @@ using SkiaSharp;
 
 namespace Draw2D.Renderers
 {
+    internal enum HAlign
+    {
+        Left,
+        Center,
+        Right
+    }
+
+    internal enum VAlign
+    {
+        Top,
+        Center,
+        Bottom
+    }
+
     internal class SkiaHelper
     {
         public static SKColor ToSKColor(ArgbColor color)
@@ -198,35 +212,35 @@ namespace Draw2D.Renderers
             return geometry;
         }
 
-        public static SKPoint GetTextOrigin(int halignment, int valignment, ref SKRect rect, ref SKRect size)
+        public static SKPoint GetTextOrigin(HAlign halignment, VAlign valignment, ref SKRect rect, ref SKRect size)
         {
             double ox, oy;
 
             switch (halignment)
             {
-                case 0:
+                case HAlign.Left:
                     ox = rect.Left;
                     break;
-                case 1:
-                    ox = rect.Right - size.Width;
-                    break;
-                case 2:
+                case HAlign.Center:
                 default:
                     ox = (rect.Left + rect.Width / 2f) - (size.Width / 2f);
+                    break;
+                case HAlign.Right:
+                    ox = rect.Right - size.Width;
                     break;
             }
 
             switch (valignment)
             {
-                case 0:
+                case VAlign.Top:
                     oy = rect.Top;
                     break;
-                case 1:
-                    oy = rect.Bottom - size.Height;
-                    break;
-                case 2:
+                case VAlign.Center:
                 default:
                     oy = (rect.Bottom - rect.Height / 2f) - (size.Height / 2f);
+                    break;
+                case VAlign.Bottom:
+                    oy = rect.Bottom - size.Height;
                     break;
             }
 
@@ -244,6 +258,7 @@ namespace Draw2D.Renderers
         {
             using (var tf = SKTypeface.FromFamilyName("Calibri", SKFontStyleWeight.Normal, SKFontStyleWidth.Normal, SKFontStyleSlant.Upright))
             {
+                paint.Typeface = tf;
                 paint.TextEncoding = SKTextEncoding.Utf16;
                 paint.TextSize = (float)(12.0);
 
@@ -419,17 +434,43 @@ namespace Draw2D.Renderers
             using (var paint = SkiaHelper.ToSKPaintBrush(style.Stroke))
             using (var tf = SKTypeface.FromFamilyName("Calibri", SKFontStyleWeight.Normal, SKFontStyleWidth.Normal, SKFontStyleSlant.Upright))
             {
+                paint.Typeface = tf;
                 paint.TextEncoding = SKTextEncoding.Utf16;
                 paint.TextSize = (float)(12.0);
 
-                var fm = paint.FontMetrics;
-                float offset = -(fm.Top + fm.Bottom);
+                var metrics = paint.FontMetrics;
+                var mTop = metrics.Top; 
+                var mBottom = metrics.Bottom;
+                var mLeading = metrics.Leading;
+                var mDescent = metrics.Descent;
+                var mAscent = metrics.Ascent;
+
+                var lineHeight = mDescent - mAscent;
+                var lineOffset = (-mAscent);
+                var offset = -mDescent - mAscent;
 
                 var bounds = new SKRect();
                 paint.MeasureText(text.Text.Value, ref bounds);
-                var origin = SkiaHelper.GetTextOrigin(2, 2, ref rect, ref bounds);
-
+                var origin = SkiaHelper.GetTextOrigin(HAlign.Center, VAlign.Center, ref rect, ref bounds);
                 canvas.DrawText(text.Text.Value, origin.X, origin.Y + offset, paint);
+                /*
+                float y = lineOffset;
+                canvas.DrawText($"mTop: {mTop}", 0f, y, paint);
+                y += lineHeight;
+                canvas.DrawText($"mBottom: {mBottom}", 0f, y, paint);
+                y += lineHeight;
+                canvas.DrawText($"mLeading: {mLeading}", 0f, y, paint);
+                y += lineHeight;
+                canvas.DrawText($"mDescent: {mDescent}", 0f, y, paint);
+                y += lineHeight;
+                canvas.DrawText($"mAscent: {mAscent}", 0f, y, paint);
+                y += lineHeight;
+                canvas.DrawText($"lineHeight: {lineHeight}", 0f, y, paint);
+                y += lineHeight;
+                canvas.DrawText($"lineOffset: {lineOffset}", 0f, y, paint);
+                y += lineHeight;
+                canvas.DrawText($"offset: {offset}", 0f, y, paint);
+                //*/
             }
         }
     }
