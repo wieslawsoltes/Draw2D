@@ -259,18 +259,6 @@ namespace Draw2D.Renderers
             }
         }
 
-        public void InvalidateCache(ShapeStyle style)
-        {
-        }
-
-        public void InvalidateCache(Matrix2 matrix)
-        {
-        }
-
-        public void InvalidateCache(BaseShape shape, ShapeStyle style, double dx, double dy)
-        {
-        }
-
         public object PushMatrix(object dc, Matrix2 matrix)
         {
             var canvas = dc as SKCanvas;

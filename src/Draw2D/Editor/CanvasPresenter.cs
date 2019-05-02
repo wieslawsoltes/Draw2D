@@ -13,7 +13,7 @@ namespace Draw2D.Editor
 
         public void DrawContainer(object dc, CanvasContainer container, IShapeRenderer renderer, double dx, double dy, DrawMode mode, object db, object r)
         {
-            container.Invalidate(renderer, dx, dy);
+            container.Invalidate();
             container.Draw(dc, renderer, dx, dy, mode, db, r);
         }
 
