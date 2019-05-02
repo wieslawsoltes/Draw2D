@@ -155,7 +155,9 @@ namespace Draw2D.Renderers
     internal struct AvaloniaBrushCache : IDisposable
     {
         public readonly Brush Stroke;
+
         public readonly Pen StrokePen;
+
         public readonly Brush Fill;
 
         public AvaloniaBrushCache(Brush stroke, Pen strokePen, Brush fill)
@@ -193,6 +195,7 @@ namespace Draw2D.Renderers
     internal struct AvaloniaFormattedTextCache : IDisposable
     {
         public readonly FormattedText FormattedText;
+
         public readonly Point Origin;
 
         public AvaloniaFormattedTextCache(FormattedText formattedText, Point origin)
