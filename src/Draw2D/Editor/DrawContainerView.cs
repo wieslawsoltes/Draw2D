@@ -22,7 +22,7 @@ namespace Draw2D.Editor
 
             if (currentContainer.InputBackground != null)
             {
-                var color = AvaloniaBrushCache.ToColor(currentContainer.InputBackground);
+                var color = AvaloniaHelper.ToColor(currentContainer.InputBackground);
                 var brush = new SolidColorBrush(color);
                 context.FillRectangle(brush, new Rect(0, 0, width, height));
             }
@@ -31,7 +31,7 @@ namespace Draw2D.Editor
 
             if (currentContainer.WorkBackground != null)
             {
-                var color = AvaloniaBrushCache.ToColor(currentContainer.WorkBackground);
+                var color = AvaloniaHelper.ToColor(currentContainer.WorkBackground);
                 var brush = new SolidColorBrush(color);
                 context.FillRectangle(brush, new Rect(0.0, 0.0, currentContainer.Width, currentContainer.Height));
             }
