@@ -490,6 +490,14 @@ namespace Draw2D.ViewModels.Style
             this.B = b;
         }
 
+        public virtual void Invalidate()
+        {
+            if (this.IsDirty)
+            {
+                this.IsDirty = false;
+            }
+        }
+
         public object Copy(IDictionary<object, object> shared)
         {
             return new ArgbColor()
@@ -575,9 +583,12 @@ namespace Draw2D.ViewModels.Style
             this.IsStroked = isStroked;
         }
 
-        public virtual bool Invalidate()
+        public virtual void Invalidate()
         {
-            return (this.IsDirty == true) || (_stroke?.IsDirty ?? false);
+            if (this.IsDirty)
+            {
+                this.IsDirty = false;
+            }
         }
 
         public object Copy(IDictionary<object, object> shared)
@@ -654,9 +665,12 @@ namespace Draw2D.ViewModels.Style
             this.TextStyle = textStyle;
         }
 
-        public virtual bool Invalidate()
+        public virtual void Invalidate()
         {
-            return (this.IsDirty == true) || (_stroke?.IsDirty ?? false) || (_fill?.IsDirty ?? false) || (_textStyle?.IsDirty ?? false);
+            if (this.IsDirty)
+            {
+                this.IsDirty = false;
+            }
         }
 
         public object Copy(IDictionary<object, object> shared)
