@@ -484,7 +484,6 @@ namespace Draw2D.Renderers
         {
             var canvas = dc as SKCanvas;
             var rect = SkiaHelper.ToRect(text.TopLeft, text.BottomRight, dx, dy);
-
             if (style.TextStyle.IsStroked)
             {
                 GetSKTypeface(style.TextStyle.FontFamily, out var typeface);
