@@ -502,6 +502,99 @@ namespace Draw2D.ViewModels.Style
         }
     }
 
+    public enum HAlign
+    {
+        Left,
+        Center,
+        Right
+    }
+
+    public enum VAlign
+    {
+        Top,
+        Center,
+        Bottom
+    }
+
+    public class TextStyle : ViewModelBase, ICopyable
+    {
+        private string _fontFamily;
+        private double _fontSize;
+        private HAlign _hAlign;
+        private VAlign _vAlign;
+        private ArgbColor _stroke;
+        private bool _isStroked;
+
+        public string FontFamily
+        {
+            get => _fontFamily;
+            set => Update(ref _fontFamily, value);
+        }
+
+        public double FontSize
+        {
+            get => _fontSize;
+            set => Update(ref _fontSize, value);
+        }
+
+        public HAlign HAlign
+        {
+            get => _hAlign;
+            set => Update(ref _hAlign, value);
+        }
+
+        public VAlign VAlign
+        {
+            get => _vAlign;
+            set => Update(ref _vAlign, value);
+        }
+
+        public ArgbColor Stroke
+        {
+            get => _stroke;
+            set => Update(ref _stroke, value);
+        }
+
+        public bool IsStroked
+        {
+            get => _isStroked;
+            set => Update(ref _isStroked, value);
+        }
+
+        public TextStyle()
+        {
+        }
+
+        public TextStyle(string fontFamily, double fontSize, HAlign hAlign, VAlign vAlign, ArgbColor stroke, bool isStroked)
+        {
+            this.FontFamily = fontFamily;
+            this.FontSize = fontSize;
+            this.HAlign = hAlign;
+            this.VAlign = vAlign;
+            this.Stroke = stroke;
+            this.IsStroked = isStroked;
+        }
+
+        public virtual bool Invalidate()
+        {
+            return (this.IsDirty == true) || (_stroke?.IsDirty ?? false);
+        }
+
+        public object Copy(IDictionary<object, object> shared)
+        {
+            return new TextStyle()
+            {
+                Name = this.Name,
+                FontFamily = this.FontFamily,
+                FontSize = this.FontSize,
+                HAlign = this.HAlign,
+                VAlign = this.VAlign,
+                Stroke = (ArgbColor)this.Stroke.Copy(shared),
+                IsStroked = this.IsStroked
+            };
+        }
+    }
+
     public class ShapeStyle : ViewModelBase, ICopyable
     {
         private ArgbColor _stroke;
@@ -509,6 +602,7 @@ namespace Draw2D.ViewModels.Style
         private double _thickness;
         private bool _isStroked;
         private bool _isFilled;
+        private TextStyle _textStyle;
 
         public ArgbColor Stroke
         {
@@ -540,22 +634,29 @@ namespace Draw2D.ViewModels.Style
             set => Update(ref _isFilled, value);
         }
 
+        public TextStyle TextStyle
+        {
+            get => _textStyle;
+            set => Update(ref _textStyle, value);
+        }
+
         public ShapeStyle()
         {
         }
 
-        public ShapeStyle(ArgbColor stroke, ArgbColor fill, double thickness, bool isStroked, bool isFilled)
+        public ShapeStyle(ArgbColor stroke, ArgbColor fill, double thickness, bool isStroked, bool isFilled, TextStyle textStyle)
         {
             this.Stroke = stroke;
             this.Fill = fill;
             this.Thickness = thickness;
             this.IsStroked = isStroked;
             this.IsFilled = isFilled;
+            this.TextStyle = textStyle;
         }
 
         public virtual bool Invalidate()
         {
-            return (this.IsDirty == true) || (_stroke?.IsDirty ?? false) || (_fill?.IsDirty ?? false);
+            return (this.IsDirty == true) || (_stroke?.IsDirty ?? false) || (_fill?.IsDirty ?? false) || (_textStyle?.IsDirty ?? false);
         }
 
         public object Copy(IDictionary<object, object> shared)
@@ -567,7 +668,8 @@ namespace Draw2D.ViewModels.Style
                 Fill = (ArgbColor)this.Fill.Copy(shared),
                 Thickness = this.Thickness,
                 IsStroked = this.IsStroked,
-                IsFilled = this.IsFilled
+                IsFilled = this.IsFilled,
+                TextStyle = (TextStyle)this.TextStyle.Copy(shared)
             };
         }
     }
@@ -3229,6 +3331,7 @@ namespace Draw2D.ViewModels.Decorators
 {
     public abstract class CommonDecorator : IShapeDecorator
     {
+        private TextStyle _textStyle;
         private ArgbColor _stroke;
         private ArgbColor _fill;
         private ShapeStyle _strokeStyle;
@@ -3236,16 +3339,19 @@ namespace Draw2D.ViewModels.Decorators
         private LineShape _line;
         private EllipseShape _ellipse;
         private RectangleShape _rectangle;
+        private TextShape _text;
 
         public CommonDecorator()
         {
+            _textStyle = new TextStyle("Calibri", 12.0, HAlign.Center, VAlign.Center, new ArgbColor(255, 0, 255, 255), true);
             _stroke = new ArgbColor(255, 0, 255, 255);
             _fill = new ArgbColor(255, 0, 255, 255);
-            _strokeStyle = new ShapeStyle(_stroke, _fill, 2.0, true, false);
-            _fillStyle = new ShapeStyle(_stroke, _fill, 2.0, false, true);
+            _strokeStyle = new ShapeStyle(_stroke, _fill, 2.0, true, false, _textStyle);
+            _fillStyle = new ShapeStyle(_stroke, _fill, 2.0, false, true, _textStyle);
             _line = new LineShape(new PointShape(0, 0, null), new PointShape(0, 0, null));
             _ellipse = new EllipseShape(new PointShape(0, 0, null), new PointShape(0, 0, null));
             _rectangle = new RectangleShape(new PointShape(0, 0, null), new PointShape(0, 0, null));
+            _text = new TextShape(new Text(""), new PointShape(0, 0, null), new PointShape(0, 0, null));
         }
 
         public void DrawLine(object dc, IShapeRenderer renderer, PointShape a, PointShape b, double dx, double dy, DrawMode mode)
@@ -3336,6 +3442,16 @@ namespace Draw2D.ViewModels.Decorators
             _rectangle.BottomRight.X = b.X;
             _rectangle.BottomRight.Y = b.Y;
             _rectangle.Draw(dc, renderer, dx, dy, mode, null, null);
+        }
+
+        public void DrawText(object dc, IShapeRenderer renderer, string text, PointShape a, PointShape b, double dx, double dy, DrawMode mode)
+        {
+            _text.Style = _strokeStyle;
+            _text.TopLeft.X = a.X;
+            _text.TopLeft.Y = a.Y;
+            _text.BottomRight.X = b.X;
+            _text.BottomRight.Y = b.Y;
+            _text.Draw(dc, renderer, dx, dy, mode, null, null);
         }
 
         public abstract void Draw(object dc, BaseShape shape, IShapeRenderer renderer, ISelection selected, double dx, double dy, DrawMode mode);

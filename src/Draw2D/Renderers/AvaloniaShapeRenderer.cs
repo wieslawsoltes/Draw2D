@@ -204,35 +204,50 @@ namespace Draw2D.Renderers
             Origin = origin;
         }
 
-        public static AvaloniaFormattedTextCache FromTextShape(TextShape text, Rect rect)
+        public static AvaloniaFormattedTextCache FromTextShape(TextShape text, Rect rect, TextStyle style)
         {
             var constraint = new Size(rect.Width, rect.Height);
+
+            TextAlignment textAlignment;
+            switch (style.HAlign)
+            {
+                case HAlign.Left:
+                    textAlignment = TextAlignment.Left;
+                    break;
+                case HAlign.Center:
+                default:
+                    textAlignment = TextAlignment.Center;
+                    break;
+                case HAlign.Right:
+                    textAlignment = TextAlignment.Right;
+                    break;
+            }
 
             var formattedText = new FormattedText()
             {
                 Text = text.Text.Value,
                 Constraint = constraint,
-                TextAlignment = TextAlignment.Center,
+                TextAlignment = textAlignment,
                 Wrapping = TextWrapping.NoWrap,
-                Typeface = new Typeface("Calibri", 12)
+                Typeface = new Typeface(style.FontFamily, style.FontSize)
             };
 
             var size = formattedText.Bounds.Size;
 
-            // Vertical Alignment: Top
-            //var origin = new Point(
-            //    rect.X,
-            //    rect.Y);
-
-            // Vertical Alignment: Center
-            var origin = new Point(
-                rect.X,
-                rect.Y + rect.Height / 2 - size.Height / 2);
-
-            // Vertical Alignment: Bottom
-            //var origin = new Point(
-            //    rect.X,
-            //    rect.Y + rect.Height - size.Height);
+            Point origin;
+            switch (style.VAlign)
+            {
+                case VAlign.Top:
+                    origin = new Point(rect.X, rect.Y);
+                    break;
+                case VAlign.Center:
+                default:
+                    origin = new Point(rect.X, rect.Y + rect.Height / 2 - size.Height / 2);
+                    break;
+                case VAlign.Bottom:
+                    origin = new Point(rect.X, rect.Y + rect.Height - size.Height);
+                    break;
+            }
 
             return new AvaloniaFormattedTextCache(formattedText, origin);
         }
@@ -331,11 +346,11 @@ namespace Draw2D.Renderers
             return cache;
         }
 
-        private AvaloniaFormattedTextCache GetTextCache(TextShape text, Rect rect)
+        private AvaloniaFormattedTextCache GetTextCache(TextShape text, Rect rect, ShapeStyle style)
         {
             if (!_formattedTextCache.TryGetValue(text, out var cache))
             {
-                _formattedTextCache[text] = AvaloniaFormattedTextCache.FromTextShape(text, rect);
+                _formattedTextCache[text] = AvaloniaFormattedTextCache.FromTextShape(text, rect, style.TextStyle);
                 return _formattedTextCache[text];
             }
             return cache;
@@ -422,7 +437,7 @@ namespace Draw2D.Renderers
             var rect = AvaloniaHelper.ToRect(text.TopLeft, text.BottomRight, dx, dy);
             if (text.Text != null)
             {
-                var ftc = GetTextCache(text, rect);
+                var ftc = GetTextCache(text, rect, style);
                 _dc.DrawText(cache?.Stroke, ftc.Origin, ftc.FormattedText);
             }
         }

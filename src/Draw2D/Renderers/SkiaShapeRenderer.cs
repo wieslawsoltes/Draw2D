@@ -10,20 +10,6 @@ using SkiaSharp;
 
 namespace Draw2D.Renderers
 {
-    internal enum HAlign
-    {
-        Left,
-        Center,
-        Right
-    }
-
-    internal enum VAlign
-    {
-        Top,
-        Center,
-        Bottom
-    }
-
     internal class SkiaHelper
     {
         public static SKTypeface ToSKTypeface(string familyName)
@@ -241,11 +227,11 @@ namespace Draw2D.Renderers
             return geometry;
         }
 
-        public static SKPoint GetTextOrigin(HAlign halignment, VAlign valignment, ref SKRect rect, ref SKRect size)
+        public static SKPoint GetTextOrigin(HAlign hAlign, VAlign vAlign, ref SKRect rect, ref SKRect size)
         {
             double ox, oy;
 
-            switch (halignment)
+            switch (hAlign)
             {
                 case HAlign.Left:
                     ox = rect.Left;
@@ -259,7 +245,7 @@ namespace Draw2D.Renderers
                     break;
             }
 
-            switch (valignment)
+            switch (vAlign)
             {
                 case VAlign.Top:
                     oy = rect.Top;
@@ -332,14 +318,14 @@ namespace Draw2D.Renderers
             }
         }
 
-        private void DrawTextOnPath(SKCanvas canvas, Text text, SKPath path, ArgbColor color)
+        private void DrawTextOnPath(SKCanvas canvas, Text text, SKPath path, TextStyle style)
         {
-            GetSKTypeface("Calibri", out var typeface);
-            GetSKPaintBrush(color, out var paint);
+            GetSKTypeface(style.FontFamily, out var typeface);
+            GetSKPaintBrush(style.Stroke, out var paint);
 
             paint.Typeface = typeface;
             paint.TextEncoding = SKTextEncoding.Utf16;
-            paint.TextSize = (float)(12.0);
+            paint.TextSize = (float)style.FontSize;
 
             var bounds = new SKRect();
             float baseTextWidth = paint.MeasureText(text.Value, ref bounds);
@@ -389,9 +375,9 @@ namespace Draw2D.Renderers
                     GetSKPaintPen(style, out var pen, Scale);
                     canvas.DrawPath(geometry, pen);
                 }
-                if (cubicBezier.Text is Text text && !string.IsNullOrEmpty(text.Value))
+                if (style.TextStyle.IsStroked && cubicBezier.Text is Text text && !string.IsNullOrEmpty(text.Value))
                 {
-                    DrawTextOnPath(canvas, text, geometry, style.Stroke);
+                    DrawTextOnPath(canvas, text, geometry, style.TextStyle);
                 }
             }
         }
@@ -411,9 +397,9 @@ namespace Draw2D.Renderers
                     GetSKPaintPen(style, out var pen, Scale);
                     canvas.DrawPath(geometry, pen);
                 }
-                if (quadraticBezier.Text is Text text && !string.IsNullOrEmpty(text.Value))
+                if (style.TextStyle.IsStroked && quadraticBezier.Text is Text text && !string.IsNullOrEmpty(text.Value))
                 {
-                    DrawTextOnPath(canvas, text, geometry, style.Stroke);
+                    DrawTextOnPath(canvas, text, geometry, style.TextStyle);
                 }
             }
         }
@@ -433,9 +419,9 @@ namespace Draw2D.Renderers
                     GetSKPaintPen(style, out var pen, Scale);
                     canvas.DrawPath(geometry, pen);
                 }
-                if (conic.Text is Text text && !string.IsNullOrEmpty(text.Value))
+                if (style.TextStyle.IsStroked && conic.Text is Text text && !string.IsNullOrEmpty(text.Value))
                 {
-                    DrawTextOnPath(canvas, text, geometry, style.Stroke);
+                    DrawTextOnPath(canvas, text, geometry, style.TextStyle);
                 }
             }
         }
@@ -454,6 +440,10 @@ namespace Draw2D.Renderers
                 {
                     GetSKPaintPen(style, out var pen, Scale);
                     canvas.DrawPath(geometry, pen);
+                }
+                if (style.TextStyle.IsStroked && path.Text is Text text && !string.IsNullOrEmpty(text.Value))
+                {
+                    DrawTextOnPath(canvas, text, geometry, style.TextStyle);
                 }
             }
         }
@@ -495,45 +485,48 @@ namespace Draw2D.Renderers
             var canvas = dc as SKCanvas;
             var rect = SkiaHelper.ToRect(text.TopLeft, text.BottomRight, dx, dy);
 
-            GetSKTypeface("Calibri", out var typeface);
-            GetSKPaintBrush(style.Stroke, out var paint);
+            if (style.TextStyle.IsStroked)
+            {
+                GetSKTypeface(style.TextStyle.FontFamily, out var typeface);
+                GetSKPaintBrush(style.TextStyle.Stroke, out var paint);
 
-            paint.Typeface = typeface;
-            paint.TextEncoding = SKTextEncoding.Utf16;
-            paint.TextSize = (float)(12.0);
+                paint.Typeface = typeface;
+                paint.TextEncoding = SKTextEncoding.Utf16;
+                paint.TextSize = (float)style.TextStyle.FontSize;
 
-            var metrics = paint.FontMetrics;
-            //var mTop = metrics.Top;
-            //var mBottom = metrics.Bottom;
-            //var mLeading = metrics.Leading;
-            var mDescent = metrics.Descent;
-            var mAscent = metrics.Ascent;
-            //var lineHeight = mDescent - mAscent;
-            //var lineOffset = (-mAscent);
-            var offset = -mDescent - mAscent;
+                var metrics = paint.FontMetrics;
+                //var mTop = metrics.Top;
+                //var mBottom = metrics.Bottom;
+                //var mLeading = metrics.Leading;
+                var mDescent = metrics.Descent;
+                var mAscent = metrics.Ascent;
+                //var lineHeight = mDescent - mAscent;
+                //var lineOffset = (-mAscent);
+                var offset = -mDescent - mAscent;
 
-            var bounds = new SKRect();
-            paint.MeasureText(text.Text.Value, ref bounds);
-            var origin = SkiaHelper.GetTextOrigin(HAlign.Center, VAlign.Center, ref rect, ref bounds);
-            canvas.DrawText(text.Text.Value, origin.X, origin.Y + offset, paint);
-            /*
-            float y = lineOffset;
-            canvas.DrawText($"mTop: {mTop}", 0f, y, paint);
-            y += lineHeight;
-            canvas.DrawText($"mBottom: {mBottom}", 0f, y, paint);
-            y += lineHeight;
-            canvas.DrawText($"mLeading: {mLeading}", 0f, y, paint);
-            y += lineHeight;
-            canvas.DrawText($"mDescent: {mDescent}", 0f, y, paint);
-            y += lineHeight;
-            canvas.DrawText($"mAscent: {mAscent}", 0f, y, paint);
-            y += lineHeight;
-            canvas.DrawText($"lineHeight: {lineHeight}", 0f, y, paint);
-            y += lineHeight;
-            canvas.DrawText($"lineOffset: {lineOffset}", 0f, y, paint);
-            y += lineHeight;
-            canvas.DrawText($"offset: {offset}", 0f, y, paint);
-            //*/
+                var bounds = new SKRect();
+                paint.MeasureText(text.Text.Value, ref bounds);
+                var origin = SkiaHelper.GetTextOrigin(style.TextStyle.HAlign, style.TextStyle.VAlign, ref rect, ref bounds);
+                canvas.DrawText(text.Text.Value, origin.X, origin.Y + offset, paint);
+                /*
+                float y = lineOffset;
+                canvas.DrawText($"mTop: {mTop}", 0f, y, paint);
+                y += lineHeight;
+                canvas.DrawText($"mBottom: {mBottom}", 0f, y, paint);
+                y += lineHeight;
+                canvas.DrawText($"mLeading: {mLeading}", 0f, y, paint);
+                y += lineHeight;
+                canvas.DrawText($"mDescent: {mDescent}", 0f, y, paint);
+                y += lineHeight;
+                canvas.DrawText($"mAscent: {mAscent}", 0f, y, paint);
+                y += lineHeight;
+                canvas.DrawText($"lineHeight: {lineHeight}", 0f, y, paint);
+                y += lineHeight;
+                canvas.DrawText($"lineOffset: {lineOffset}", 0f, y, paint);
+                y += lineHeight;
+                canvas.DrawText($"offset: {offset}", 0f, y, paint);
+                //*/
+            }
         }
     }
 }

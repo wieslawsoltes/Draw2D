@@ -70,7 +70,11 @@ namespace Draw2D.Editor
                     Mode = GridSnapMode.Horizontal | GridSnapMode.Vertical,
                     GridSizeX = 15.0,
                     GridSizeY = 15.0,
-                    GuideStyle = new ShapeStyle(new ArgbColor(128, 0, 255, 255), new ArgbColor(128, 0, 255, 255), 2.0, true, true)
+                    GuideStyle = new ShapeStyle(
+                        new ArgbColor(128, 0, 255, 255),
+                        new ArgbColor(128, 0, 255, 255),
+                        2.0, true, true,
+                        new TextStyle("Calibri", 12.0, HAlign.Center, VAlign.Center, new ArgbColor(128, 0, 255, 255), true))
                 }
             };
 
@@ -88,7 +92,11 @@ namespace Draw2D.Editor
                     | LineSnapMode.Horizontal
                     | LineSnapMode.Vertical,
                     Threshold = 10.0,
-                    GuideStyle = new ShapeStyle(new ArgbColor(128, 0, 255, 255), new ArgbColor(128, 0, 255, 255), 2.0, true, true)
+                    GuideStyle = new ShapeStyle(
+                        new ArgbColor(128, 0, 255, 255), 
+                        new ArgbColor(128, 0, 255, 255), 
+                        2.0, true, true,
+                        new TextStyle("Calibri", 12.0, HAlign.Center, VAlign.Center, new ArgbColor(128, 0, 255, 255), true))
                 }
             };
 
@@ -112,7 +120,11 @@ namespace Draw2D.Editor
                             Mode = GridSnapMode.Horizontal | GridSnapMode.Vertical,
                             GridSizeX = 15.0,
                             GridSizeY = 15.0,
-                            GuideStyle = new ShapeStyle(new ArgbColor(128, 0, 255, 255), new ArgbColor(128, 0, 255, 255), 2.0, true, true)
+                            GuideStyle = new ShapeStyle(
+                                new ArgbColor(128, 0, 255, 255), 
+                                new ArgbColor(128, 0, 255, 255), 
+                                2.0, true, true,
+                                new TextStyle("Calibri", 12.0, HAlign.Center, VAlign.Center, new ArgbColor(128, 0, 255, 255), true))
                         }
                     }
                 },
@@ -122,7 +134,11 @@ namespace Draw2D.Editor
                     Targets = ViewModels.Tools.SelectionTargets.Shapes | ViewModels.Tools.SelectionTargets.Guides,
                     SelectionModifier = Modifier.Control,
                     ConnectionModifier = Modifier.Shift,
-                    SelectionStyle = new ShapeStyle(new ArgbColor(255, 0, 120, 215), new ArgbColor(60, 170, 204, 238), 2.0, true, true),
+                    SelectionStyle = new ShapeStyle(
+                        new ArgbColor(255, 0, 120, 215), 
+                        new ArgbColor(60, 170, 204, 238), 
+                        2.0, true, true,
+                        new TextStyle("Calibri", 12.0, HAlign.Center, VAlign.Center, new ArgbColor(255, 0, 120, 215), true)),
                     ClearSelectionOnClean = false,
                     HitTestRadius = 7.0,
                     ConnectPoints = true,
@@ -143,7 +159,11 @@ namespace Draw2D.Editor
                 },
                 Settings = new GuideToolSettings()
                 {
-                    GuideStyle = new ShapeStyle(new ArgbColor(128, 0, 255, 255), new ArgbColor(128, 0, 255, 255), 2.0, true, true)
+                    GuideStyle = new ShapeStyle(
+                        new ArgbColor(128, 0, 255, 255), 
+                        new ArgbColor(128, 0, 255, 255), 
+                        2.0, true, true,
+                        new TextStyle("Calibri", 12.0, HAlign.Center, VAlign.Center, new ArgbColor(128, 0, 255, 255), true))
                 }
             };
 
@@ -427,10 +447,18 @@ namespace Draw2D.Editor
                 PrintBackground = new ArgbColor(0, 255, 255, 255),
                 WorkBackground = new ArgbColor(255, 128, 128, 128),
                 InputBackground = new ArgbColor(255, 211, 211, 211),
-                CurrentStyle = new ShapeStyle(new ArgbColor(255, 0, 255, 0), new ArgbColor(80, 0, 255, 0), 2.0, true, true),
+                CurrentStyle = new ShapeStyle(
+                    new ArgbColor(255, 0, 255, 0), 
+                    new ArgbColor(80, 0, 255, 0), 
+                    2.0, true, true,
+                    new TextStyle("Calibri", 12.0, HAlign.Center, VAlign.Center, new ArgbColor(255, 0, 255, 0), true)),
                 PointTemplate = new EllipseShape(new PointShape(-3, -3, null), new PointShape(3, 3, null))
                 {
-                    Style = new ShapeStyle(new ArgbColor(255, 255, 255, 0), new ArgbColor(255, 255, 255, 0), 2.0, true, true)
+                    Style = new ShapeStyle(
+                        new ArgbColor(255, 255, 255, 0), 
+                        new ArgbColor(255, 255, 255, 0), 
+                        2.0, true, true,
+                        new TextStyle("Calibri", 12.0, HAlign.Center, VAlign.Center, new ArgbColor(255, 255, 255, 0), true))
                 }
             };
             ContainerView.WorkingContainer = new CanvasContainer();
