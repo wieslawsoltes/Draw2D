@@ -318,12 +318,12 @@
                             <Border Classes="clip" ClipToBounds="True" Background="Transparent" Focusable="True">
                                 <Border.KeyBindings>
                                     <!-- Edit -->
-                                    <KeyBinding Command="{Binding Selection.Cut}" CommandParameter="{Binding}" Gesture="Ctrl+X"/>
-                                    <KeyBinding Command="{Binding Selection.Copy}" CommandParameter="{Binding}" Gesture="Ctrl+C"/>
-                                    <KeyBinding Command="{Binding Selection.Paste}" CommandParameter="{Binding}" Gesture="Ctrl+V"/>
-                                    <KeyBinding Command="{Binding Selection.Delete}" CommandParameter="{Binding}" Gesture="Delete"/>
-                                    <KeyBinding Command="{Binding Selection.Group}" CommandParameter="{Binding}" Gesture="Ctrl+G"/>
-                                    <KeyBinding Command="{Binding Selection.SelectAll}" CommandParameter="{Binding}" Gesture="Ctrl+A"/>
+                                    <KeyBinding Command="{Binding Selection.Cut}" CommandParameter="{Binding $parent[UserControl].DataContext}" Gesture="Ctrl+X"/>
+                                    <KeyBinding Command="{Binding Selection.Copy}" CommandParameter="{Binding $parent[UserControl].DataContext}" Gesture="Ctrl+C"/>
+                                    <KeyBinding Command="{Binding Selection.Paste}" CommandParameter="{Binding $parent[UserControl].DataContext}" Gesture="Ctrl+V"/>
+                                    <KeyBinding Command="{Binding Selection.Delete}" CommandParameter="{Binding $parent[UserControl].DataContext}" Gesture="Delete"/>
+                                    <KeyBinding Command="{Binding Selection.Group}" CommandParameter="{Binding $parent[UserControl].DataContext}" Gesture="Ctrl+G"/>
+                                    <KeyBinding Command="{Binding Selection.SelectAll}" CommandParameter="{Binding $parent[UserControl].DataContext}" Gesture="Ctrl+A"/>
                                     <!-- Tools -->
                                     <KeyBinding Command="{Binding $parent[UserControl].DataContext.SetTool}" CommandParameter="None" Gesture="N"/>
                                     <KeyBinding Command="{Binding $parent[UserControl].DataContext.SetTool}" CommandParameter="Selection" Gesture="S"/>
