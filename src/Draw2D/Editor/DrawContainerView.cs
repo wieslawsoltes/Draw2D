@@ -1,94 +1,120 @@
 ﻿// Copyright (c) Wiesław Šoltés. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
+using System.Collections.Generic;
 using Avalonia;
 using Avalonia.Media;
 using Draw2D.Renderers;
 using Draw2D.ViewModels;
 using Draw2D.ViewModels.Containers;
+using Draw2D.ViewModels.Style;
 using SkiaSharp;
 
 namespace Draw2D.Editor
 {
     public class DrawContainerView : IDrawContainerView
     {
-        private SkiaShapeRenderer _skiaRenderer = new SkiaShapeRenderer();
-        private AvaloniaShapeRenderer _avaloniaRenderer = new AvaloniaShapeRenderer();
+        private SkiaShapeRenderer _skiaRenderer;
+        private AvaloniaShapeRenderer _avaloniaRenderer;
+        private Dictionary<ArgbColor, SKPaint> _fillSKPaintCache;
+        private Dictionary<ArgbColor, Brush> _fillBrushCache;
+
+        private void GetSKPaintFill(ArgbColor color, out SKPaint brush)
+        {
+            if (color.IsDirty == true || !_fillSKPaintCache.TryGetValue(color, out var brushCached))
+            {
+                color.Invalidate();
+                brushCached = SkiaHelper.ToSKPaintBrush(color);
+                _fillSKPaintCache[color] = brushCached;
+            }
+            else
+            {
+                SkiaHelper.ToSKPaintBrushUpdate(brushCached, color);
+            }
+
+            brush = brushCached;
+        }
+
+        private void GetBrushFill(ArgbColor color, out Brush brush)
+        {
+            if (color.IsDirty == true || !_fillBrushCache.TryGetValue(color, out var brushCached))
+            {
+                color.Invalidate();
+                brushCached = new SolidColorBrush(AvaloniaHelper.ToColor(color));
+                _fillBrushCache[color] = brushCached;
+            }
+
+            brush = brushCached;
+        }
+
+        public DrawContainerView()
+        {
+            _skiaRenderer = new SkiaShapeRenderer();
+            _avaloniaRenderer = new AvaloniaShapeRenderer();
+            // FIXME: Properly dispose SKPaint objects.
+            _fillSKPaintCache = new Dictionary<ArgbColor, SKPaint>();
+            // FIXME: Properly dispose Brush objects.
+            _fillBrushCache = new Dictionary<ArgbColor, Brush>();
+        }
+
+        private void Draw(IContainerView view, object context, IShapeRenderer renderer)
+        {
+            view.Presenter.DrawContainer(context, view.CurrentContainer, renderer, 0.0, 0.0, DrawMode.Shape, null, null);
+            view.Presenter.DrawContainer(context, view.WorkingContainer, renderer, 0.0, 0.0, DrawMode.Shape, null, null);
+
+            view.Presenter.DrawDecorators(context, view.CurrentContainer, renderer, 0.0, 0.0, DrawMode.Shape);
+            view.Presenter.DrawDecorators(context, view.WorkingContainer, renderer, 0.0, 0.0, DrawMode.Shape);
+
+            view.Presenter.DrawContainer(context, view.CurrentContainer, renderer, 0.0, 0.0, DrawMode.Point, null, null);
+            view.Presenter.DrawContainer(context, view.WorkingContainer, renderer, 0.0, 0.0, DrawMode.Point, null, null);
+        }
 
         private void Draw(IContainerView view, DrawingContext context, double width, double height, double dx, double dy, double zx, double zy)
         {
-            var currentContainer = view.CurrentContainer;
-            var workingContainer = view.WorkingContainer;
-            var presenter = view.Presenter;
-
             _avaloniaRenderer.Scale = zx;
             _avaloniaRenderer.Selection = view.Selection;
 
-            if (currentContainer.InputBackground != null)
+            if (view.CurrentContainer.InputBackground != null)
             {
-                var color = AvaloniaHelper.ToColor(currentContainer.InputBackground);
-                var brush = new SolidColorBrush(color);
+                GetBrushFill(view.CurrentContainer.InputBackground, out var brush);
                 context.FillRectangle(brush, new Rect(0, 0, width, height));
             }
 
             var state = context.PushPreTransform(new Matrix(zx, 0.0, 0.0, zy, dx, dy));
 
-            if (currentContainer.WorkBackground != null)
+            if (view.CurrentContainer.WorkBackground != null)
             {
-                var color = AvaloniaHelper.ToColor(currentContainer.WorkBackground);
-                var brush = new SolidColorBrush(color);
-                context.FillRectangle(brush, new Rect(0.0, 0.0, currentContainer.Width, currentContainer.Height));
+                GetBrushFill(view.CurrentContainer.WorkBackground, out var brush);
+                context.FillRectangle(brush, new Rect(0.0, 0.0, view.CurrentContainer.Width, view.CurrentContainer.Height));
             }
 
-            presenter.DrawContainer(context, currentContainer, _avaloniaRenderer, 0.0, 0.0, DrawMode.Shape, null, null);
-            presenter.DrawContainer(context, workingContainer, _avaloniaRenderer, 0.0, 0.0, DrawMode.Shape, null, null);
-
-            presenter.DrawDecorators(context, currentContainer, _avaloniaRenderer, 0.0, 0.0, DrawMode.Shape);
-            presenter.DrawDecorators(context, workingContainer, _avaloniaRenderer, 0.0, 0.0, DrawMode.Shape);
-
-            presenter.DrawContainer(context, currentContainer, _avaloniaRenderer, 0.0, 0.0, DrawMode.Point, null, null);
-            presenter.DrawContainer(context, workingContainer, _avaloniaRenderer, 0.0, 0.0, DrawMode.Point, null, null);
+            Draw(view, context, _avaloniaRenderer);
 
             state.Dispose();
         }
 
         private void Draw(IContainerView view, SKCanvas canvas, double width, double height, double dx, double dy, double zx, double zy)
         {
-            var currentContainer = view.CurrentContainer;
-            var workingContainer = view.WorkingContainer;
-            var presenter = view.Presenter;
-
             _skiaRenderer.Scale = zx;
             _skiaRenderer.Selection = view.Selection;
 
             canvas.Save();
 
-            if (currentContainer.InputBackground != null)
+            if (view.CurrentContainer.InputBackground != null)
             {
-                using (var brush = SkiaHelper.ToSKPaintBrush(currentContainer.InputBackground))
-                {
-                    canvas.DrawRect(SkiaHelper.ToRect(0.0, 0.0, width, height), brush);
-                }
+                GetSKPaintFill(view.CurrentContainer.InputBackground, out var brush);
+                canvas.DrawRect(SkiaHelper.ToRect(0.0, 0.0, width, height), brush);
             }
 
             canvas.Translate((float)dx, (float)dy);
             canvas.Scale((float)zx, (float)zy);
 
-            if (currentContainer.WorkBackground != null)
+            if (view.CurrentContainer.WorkBackground != null)
             {
-                using (var brush = SkiaHelper.ToSKPaintBrush(currentContainer.WorkBackground))
-                {
-                    canvas.DrawRect(SkiaHelper.ToRect(0.0, 0.0, currentContainer.Width, currentContainer.Height), brush);
-                }
+                GetSKPaintFill(view.CurrentContainer.WorkBackground, out var brush);
+                canvas.DrawRect(SkiaHelper.ToRect(0.0, 0.0, view.CurrentContainer.Width, view.CurrentContainer.Height), brush);
             }
 
-            presenter.DrawContainer(canvas, currentContainer, _skiaRenderer, 0.0, 0.0, DrawMode.Shape, null, null);
-            presenter.DrawContainer(canvas, workingContainer, _skiaRenderer, 0.0, 0.0, DrawMode.Shape, null, null);
-
-            presenter.DrawDecorators(canvas, currentContainer, _skiaRenderer, 0.0, 0.0, DrawMode.Shape);
-            presenter.DrawDecorators(canvas, workingContainer, _skiaRenderer, 0.0, 0.0, DrawMode.Shape);
-
-            presenter.DrawContainer(canvas, workingContainer, _skiaRenderer, 0.0, 0.0, DrawMode.Point, null, null);
-            presenter.DrawContainer(canvas, currentContainer, _skiaRenderer, 0.0, 0.0, DrawMode.Point, null, null);
+            Draw(view, canvas, _skiaRenderer);
 
             canvas.Restore();
         }
