@@ -2964,6 +2964,7 @@ namespace Draw2D.ViewModels.Containers
 
     public interface IContainerView : IDrawTarget, IHitTestable
     {
+        string Title { get; set; }
         IDrawContainerView DrawContainerView { get; set; }
         ICanvasPresenter Presenter { get; set; }
         ISelection Selection { get; set; }
@@ -3165,6 +3166,7 @@ namespace Draw2D.ViewModels.Containers
 
     public class ContainerView : ViewModelBase, IContainerView
     {
+        private string _title;
         private IInputService _inputService;
         private IZoomService _zoomService;
         private IDrawContainerView _drawContainerView;
@@ -3173,6 +3175,12 @@ namespace Draw2D.ViewModels.Containers
         private CanvasContainer _currentContainer;
         private CanvasContainer _workingContainer;
         private IHitTest _hitTest;
+
+        public string Title
+        {
+            get => _title;
+            set => Update(ref _title, value);
+        }
 
         public IInputService InputService
         {
@@ -3243,10 +3251,17 @@ namespace Draw2D.ViewModels.Containers
 
     public class ToolContext : ViewModelBase, IToolContext
     {
+        private IList<IContainerView> _containerViews;
         private IContainerView _containerView;
         private IList<ITool> _tools;
         private ITool _currentTool;
         private EditMode _mode;
+
+        public IList<IContainerView> ContainerViews
+        {
+            get => _containerViews;
+            set => Update(ref _containerViews, value);
+        }
 
         public IContainerView ContainerView
         {
@@ -5989,6 +6004,12 @@ namespace Draw2D.ViewModels.Tools
         {
             _context = context;
             _pathTool = pathTool;
+        }
+
+        public string Title
+        {
+            get => _context.ContainerView.Title;
+            set => throw new InvalidOperationException($"Can not set {Title} property value.");
         }
 
         public IInputService InputService

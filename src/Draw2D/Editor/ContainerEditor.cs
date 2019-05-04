@@ -43,7 +43,8 @@ namespace Draw2D.Editor
         public ContainerEditor()
         {
             Initialize();
-            NewContainer();
+            NewContainer(ContainerViews[0]);
+            NewContainer(ContainerViews[1]);
         }
 
         private void Initialize()
@@ -419,12 +420,13 @@ namespace Draw2D.Editor
                 }
             };
 
-            var drawContainerView = new DrawContainerView();
+            var containerViews = new ObservableCollection<IContainerView>();
 
-            var containerView = new ContainerView()
+            var containerView0 = new ContainerView()
             {
+                Title = "View0",
                 InputService = null,
-                DrawContainerView = drawContainerView,
+                DrawContainerView = new DrawContainerView(),
                 Presenter = presenter,
                 Selection = selectionTool,
                 CurrentContainer = null,
@@ -432,15 +434,31 @@ namespace Draw2D.Editor
                 HitTest = hitTest
             };
 
-            ContainerView = containerView;
+            var containerView1 = new ContainerView()
+            {
+                Title = "View1",
+                InputService = null,
+                DrawContainerView = new DrawContainerView(),
+                Presenter = presenter,
+                Selection = selectionTool,
+                CurrentContainer = null,
+                WorkingContainer = null,
+                HitTest = hitTest
+            };
+
+            containerViews.Add(containerView0);
+            containerViews.Add(containerView1);
+
+            ContainerViews = containerViews;
+            ContainerView = containerView0;
             Tools = tools;
             CurrentTool = currentTool;
             Mode = EditMode.Mouse;
         }
 
-        private void NewContainer()
+        private void NewContainer(IContainerView view)
         {
-            ContainerView.CurrentContainer = new CanvasContainer()
+            view.CurrentContainer = new CanvasContainer()
             {
                 Width = 720,
                 Height = 630,
@@ -461,7 +479,7 @@ namespace Draw2D.Editor
                         new TextStyle("Calibri", 12.0, HAlign.Center, VAlign.Center, new ArgbColor(255, 255, 255, 0), true))
                 }
             };
-            ContainerView.WorkingContainer = new CanvasContainer();
+            view.WorkingContainer = new CanvasContainer();
         }
 
         public T Load<T>(string path)
@@ -480,7 +498,7 @@ namespace Draw2D.Editor
         {
             CurrentTool.Clean(this);
             ContainerView.Selection.Selected.Clear();
-            NewContainer();
+            NewContainer(ContainerView);
             ContainerView.InputService?.Redraw?.Invoke();
         }
 

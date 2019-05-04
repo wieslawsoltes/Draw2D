@@ -18,9 +18,8 @@
         </Style>
         <Style Selector="Border.zoom">
             <Setter Property="Padding" Value="0"/>
-            <Setter Property="Margin" Value="5"/>
-            <Setter Property="BorderBrush" Value="{DynamicResource ThemeBorderLightBrush}"/>
-            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Margin" Value="0"/>
+            <Setter Property="BorderThickness" Value="0"/>
         </Style>
         <Style Selector="Border.clip">
             <Setter Property="Padding" Value="0"/>
@@ -57,6 +56,9 @@
         </Style>
         <Style Selector="ComboBox.default:focus /template/ Border#border">
             <Setter Property="BorderThickness" Value="1"/>
+        </Style>
+        <Style Selector="DockPanel.views">
+            <Setter Property="Margin" Value="5"/>
         </Style>
         <Style Selector="GridSplitter:vertical">
             <Setter Property="Width" Value="8"/>
