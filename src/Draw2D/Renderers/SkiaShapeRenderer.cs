@@ -279,7 +279,7 @@ namespace Draw2D.Renderers
         {
             // FIXME: Properly dispose SKTypeface objects.
             _typefaceCache = new Dictionary<string, SKTypeface>();
-            // FIXME: Properly dispose SKTypeface objects.
+            // FIXME: Properly dispose SKPaint and SKFontMetrics objects.
             _textPaintCache = new Dictionary<TextStyle, (SKPaint, SKFontMetrics)>();
             // FIXME: Properly dispose SKPaint objects.
             _fillPaintCache = new Dictionary<ShapeStyle, SKPaint>();
