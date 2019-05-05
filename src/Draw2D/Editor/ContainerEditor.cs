@@ -26,11 +26,16 @@ namespace Draw2D.Editor
         public static void CreateDemoGroup(IToolContext context)
         {
             var container = context.ContainerView.CurrentContainer;
-            var group = new GroupShape();
+            var group = new GroupShape()
+            {
+                Points = new ObservableCollection<PointShape>(),
+                Shapes = new ObservableCollection<BaseShape>()
+            };
             group.Shapes.Add(
                 new RectangleShape(new PointShape(30, 30, container.PointTemplate),
                 new PointShape(60, 60, container.PointTemplate))
                 {
+                    Points = new ObservableCollection<PointShape>(),
                     Style = container.CurrentStyle
                 });
             group.Points.Add(new PointShape(45, 30, container.PointTemplate));
@@ -43,13 +48,14 @@ namespace Draw2D.Editor
         public ContainerEditor()
         {
             Initialize();
-            NewContainer(ContainerViews[0]);
-            NewContainer(ContainerViews[1]);
         }
 
         private void Initialize()
         {
-            var hitTest = new HitTest();
+            var hitTest = new HitTest()
+            {
+                Registered = new Dictionary<Type, IBounds>()
+            };
 
             hitTest.Register(new PointBounds());
             hitTest.Register(new LineBounds());
@@ -64,6 +70,7 @@ namespace Draw2D.Editor
 
             var gridSnapPointFilter = new GridSnapPointFilter()
             {
+                Guides = new ObservableCollection<BaseShape>(),
                 Settings = new GridSnapSettings()
                 {
                     IsEnabled = true,
@@ -81,6 +88,7 @@ namespace Draw2D.Editor
 
             var lineSnapPointFilter = new LineSnapPointFilter()
             {
+                Guides = new ObservableCollection<BaseShape>(),
                 Settings = new LineSnapSettings()
                 {
                     IsEnabled = true,
@@ -94,8 +102,8 @@ namespace Draw2D.Editor
                     | LineSnapMode.Vertical,
                     Threshold = 10.0,
                     GuideStyle = new ShapeStyle(
-                        new ArgbColor(128, 0, 255, 255), 
-                        new ArgbColor(128, 0, 255, 255), 
+                        new ArgbColor(128, 0, 255, 255),
+                        new ArgbColor(128, 0, 255, 255),
                         2.0, true, true,
                         new TextStyle("Calibri", 12.0, HAlign.Center, VAlign.Center, new ArgbColor(128, 0, 255, 255), true))
                 }
@@ -114,6 +122,7 @@ namespace Draw2D.Editor
                 {
                     new GridSnapPointFilter()
                     {
+                        Guides = new ObservableCollection<BaseShape>(),
                         Settings = new GridSnapSettings()
                         {
                             IsEnabled = true,
@@ -122,8 +131,8 @@ namespace Draw2D.Editor
                             GridSizeX = 15.0,
                             GridSizeY = 15.0,
                             GuideStyle = new ShapeStyle(
-                                new ArgbColor(128, 0, 255, 255), 
-                                new ArgbColor(128, 0, 255, 255), 
+                                new ArgbColor(128, 0, 255, 255),
+                                new ArgbColor(128, 0, 255, 255),
                                 2.0, true, true,
                                 new TextStyle("Calibri", 12.0, HAlign.Center, VAlign.Center, new ArgbColor(128, 0, 255, 255), true))
                         }
@@ -136,8 +145,8 @@ namespace Draw2D.Editor
                     SelectionModifier = Modifier.Control,
                     ConnectionModifier = Modifier.Shift,
                     SelectionStyle = new ShapeStyle(
-                        new ArgbColor(255, 0, 120, 215), 
-                        new ArgbColor(60, 170, 204, 238), 
+                        new ArgbColor(255, 0, 120, 215),
+                        new ArgbColor(60, 170, 204, 238),
                         2.0, true, true,
                         new TextStyle("Calibri", 12.0, HAlign.Center, VAlign.Center, new ArgbColor(255, 0, 120, 215), true)),
                     ClearSelectionOnClean = false,
@@ -161,8 +170,8 @@ namespace Draw2D.Editor
                 Settings = new GuideToolSettings()
                 {
                     GuideStyle = new ShapeStyle(
-                        new ArgbColor(128, 0, 255, 255), 
-                        new ArgbColor(128, 0, 255, 255), 
+                        new ArgbColor(128, 0, 255, 255),
+                        new ArgbColor(128, 0, 255, 255),
                         2.0, true, true,
                         new TextStyle("Calibri", 12.0, HAlign.Center, VAlign.Center, new ArgbColor(128, 0, 255, 255), true))
                 }
@@ -188,6 +197,7 @@ namespace Draw2D.Editor
                 {
                     new LineLineIntersection()
                     {
+                        Intersections = new ObservableCollection<PointShape>(),
                         Settings = new LineLineSettings()
                         {
                             IsEnabled = true
@@ -195,6 +205,7 @@ namespace Draw2D.Editor
                     },
                     new RectangleLineIntersection()
                     {
+                        Intersections = new ObservableCollection<PointShape>(),
                         Settings = new RectangleLineSettings()
                         {
                             IsEnabled = true
@@ -202,6 +213,7 @@ namespace Draw2D.Editor
                     },
                     new EllipseLineIntersection()
                     {
+                        Intersections = new ObservableCollection<PointShape>(),
                         Settings = new EllipseLineSettings()
                         {
                             IsEnabled = true
@@ -227,6 +239,7 @@ namespace Draw2D.Editor
                 {
                     new LineLineIntersection()
                     {
+                        Intersections = new ObservableCollection<PointShape>(),
                         Settings = new LineLineSettings()
                         {
                             IsEnabled = true
@@ -234,6 +247,7 @@ namespace Draw2D.Editor
                     },
                     new RectangleLineIntersection()
                     {
+                        Intersections = new ObservableCollection<PointShape>(),
                         Settings = new RectangleLineSettings()
                         {
                             IsEnabled = true
@@ -241,6 +255,7 @@ namespace Draw2D.Editor
                     },
                     new EllipseLineIntersection()
                     {
+                        Intersections = new ObservableCollection<PointShape>(),
                         Settings = new EllipseLineSettings()
                         {
                             IsEnabled = true
@@ -404,82 +419,98 @@ namespace Draw2D.Editor
 
             var currentTool = tools.FirstOrDefault(t => t.Title == "Selection");
 
+            var decorators = new Dictionary<Type, IShapeDecorator>
+            {
+                { typeof(PointShape), new PointDecorator() },
+                { typeof(LineShape), new LineDecorator() },
+                { typeof(CubicBezierShape), new CubicBezierDecorator() },
+                { typeof(QuadraticBezierShape), new QuadraticBezierDecorator() },
+                { typeof(ConicShape), new ConicDecorator() },
+                { typeof(PathShape), new PathDecorator() },
+                { typeof(RectangleShape), new RectangleDecorator() },
+                { typeof(EllipseShape), new EllipseDecorator() },
+                { typeof(TextShape), new TextDecorator() }
+            };
+
             var presenter = new CanvasPresenter()
             {
-                Decorators = new Dictionary<Type, IShapeDecorator>
-                {
-                    { typeof(PointShape), new PointDecorator() },
-                    { typeof(LineShape), new LineDecorator() },
-                    { typeof(CubicBezierShape), new CubicBezierDecorator() },
-                    { typeof(QuadraticBezierShape), new QuadraticBezierDecorator() },
-                    { typeof(ConicShape), new ConicDecorator() },
-                    { typeof(PathShape), new PathDecorator() },
-                    { typeof(RectangleShape), new RectangleDecorator() },
-                    { typeof(EllipseShape), new EllipseDecorator() },
-                    { typeof(TextShape), new TextDecorator() }
-                }
+                Decorators = decorators
             };
 
             var containerViews = new ObservableCollection<IContainerView>();
 
-            var containerView0 = new ContainerView()
-            {
-                Title = "View0",
-                InputService = null,
-                DrawContainerView = new DrawContainerView(),
-                Presenter = presenter,
-                Selection = selectionTool,
-                CurrentContainer = null,
-                WorkingContainer = null,
-                HitTest = hitTest
-            };
+            var containerView0 = NewContainerView("View0", hitTest, selectionTool, presenter);
 
-            var containerView1 = new ContainerView()
-            {
-                Title = "View1",
-                InputService = null,
-                DrawContainerView = new DrawContainerView(),
-                Presenter = presenter,
-                Selection = selectionTool,
-                CurrentContainer = null,
-                WorkingContainer = null,
-                HitTest = hitTest
-            };
+            var containerView1 = NewContainerView("View1", hitTest, selectionTool, presenter);
 
             containerViews.Add(containerView0);
             containerViews.Add(containerView1);
 
             ContainerViews = containerViews;
-            ContainerView = containerView0;
+            ContainerView = containerViews.FirstOrDefault();
             Tools = tools;
             CurrentTool = currentTool;
             Mode = EditMode.Mouse;
         }
 
-        private void NewContainer(IContainerView view)
+        private CanvasContainer NewCurrentContainer()
         {
-            view.CurrentContainer = new CanvasContainer()
+            return new CanvasContainer()
             {
+                Guides = new ObservableCollection<LineShape>(),
+                Shapes = new ObservableCollection<BaseShape>(),
+                Styles = new ObservableCollection<ShapeStyle>(),
                 Width = 720,
                 Height = 630,
                 PrintBackground = new ArgbColor(0, 255, 255, 255),
                 WorkBackground = new ArgbColor(255, 128, 128, 128),
                 InputBackground = new ArgbColor(255, 211, 211, 211),
                 CurrentStyle = new ShapeStyle(
-                    new ArgbColor(255, 0, 255, 0), 
-                    new ArgbColor(80, 0, 255, 0), 
-                    2.0, true, true,
-                    new TextStyle("Calibri", 12.0, HAlign.Center, VAlign.Center, new ArgbColor(255, 0, 255, 0), true)),
+                                new ArgbColor(255, 0, 255, 0),
+                                new ArgbColor(80, 0, 255, 0),
+                                2.0, true, true,
+                                new TextStyle("Calibri", 12.0, HAlign.Center, VAlign.Center, new ArgbColor(255, 0, 255, 0), true)),
                 PointTemplate = new EllipseShape(new PointShape(-3, -3, null), new PointShape(3, 3, null))
                 {
+                    Points = new ObservableCollection<PointShape>(),
                     Style = new ShapeStyle(
-                        new ArgbColor(255, 255, 255, 0), 
-                        new ArgbColor(255, 255, 255, 0), 
-                        2.0, true, true,
-                        new TextStyle("Calibri", 12.0, HAlign.Center, VAlign.Center, new ArgbColor(255, 255, 255, 0), true))
+                                    new ArgbColor(255, 255, 255, 0),
+                                    new ArgbColor(255, 255, 255, 0),
+                                    2.0, true, true,
+                                    new TextStyle("Calibri", 12.0, HAlign.Center, VAlign.Center, new ArgbColor(255, 255, 255, 0), true))
                 }
             };
-            view.WorkingContainer = new CanvasContainer();
+        }
+
+        private CanvasContainer NewWorkingContainer()
+        {
+            return new CanvasContainer()
+            {
+                Guides = new ObservableCollection<LineShape>(),
+                Shapes = new ObservableCollection<BaseShape>(),
+                Styles = new ObservableCollection<ShapeStyle>()
+            };
+        }
+
+        private IContainerView NewContainerView(string title, IHitTest hitTest, ISelection selection, ICanvasPresenter presenter)
+        {
+            var containerView = new ContainerView()
+            {
+                Title = title,
+                InputService = null,
+                DrawContainerView = new DrawContainerView(),
+                Presenter = presenter,
+                Selection = selection,
+                CurrentContainer = null,
+                WorkingContainer = null,
+                HitTest = hitTest
+            };
+
+            containerView.CurrentContainer = NewCurrentContainer();
+
+            containerView.WorkingContainer = NewWorkingContainer();
+
+            return containerView;
         }
 
         public T Load<T>(string path)
@@ -496,19 +527,22 @@ namespace Draw2D.Editor
 
         public void New()
         {
+            var currentContainer = NewCurrentContainer();
+            var workingContainer = NewWorkingContainer();
             CurrentTool.Clean(this);
             ContainerView.Selection.Selected.Clear();
-            NewContainer(ContainerView);
+            ContainerView.CurrentContainer = currentContainer;
+            ContainerView.WorkingContainer = workingContainer;
             ContainerView.InputService?.Redraw?.Invoke();
         }
 
         public void OpenContainer(string path)
         {
-            var container = Load<CanvasContainer>(path);
-            var workingContainer = new CanvasContainer();
+            var currentContainer = Load<CanvasContainer>(path);
+            var workingContainer = NewWorkingContainer();
             CurrentTool.Clean(this);
             ContainerView.Selection.Selected.Clear();
-            ContainerView.CurrentContainer = container;
+            ContainerView.CurrentContainer = currentContainer;
             ContainerView.WorkingContainer = workingContainer;
             ContainerView.InputService?.Redraw?.Invoke();
         }
@@ -600,6 +634,8 @@ namespace Draw2D.Editor
         {
             var pathShape = new PathShape()
             {
+                Points = new ObservableCollection<PointShape>(),
+                Figures = new ObservableCollection<FigureShape>(),
                 FillRule = PathFillRule.EvenOdd,
                 Style = ContainerView.CurrentContainer.CurrentStyle
             };
@@ -621,6 +657,9 @@ namespace Draw2D.Editor
                             {
                                 figureShape = new FigureShape()
                                 {
+                                    Guides = new ObservableCollection<LineShape>(),
+                                    Shapes = new ObservableCollection<BaseShape>(),
+                                    Styles = new ObservableCollection<ShapeStyle>(),
                                     IsFilled = true,
                                     IsClosed = false
                                 };
@@ -637,6 +676,7 @@ namespace Draw2D.Editor
                                 }
                                 var lineShape = new LineShape()
                                 {
+                                    Points = new ObservableCollection<PointShape>(),
                                     StartPoint = lastPointShape,
                                     Point = new PointShape(points[1].X, points[1].Y, ContainerView.CurrentContainer.PointTemplate),
                                     Style = ContainerView.CurrentContainer.CurrentStyle
@@ -654,6 +694,7 @@ namespace Draw2D.Editor
                                 }
                                 var cubicBezierShape = new CubicBezierShape()
                                 {
+                                    Points = new ObservableCollection<PointShape>(),
                                     StartPoint = lastPointShape,
                                     Point1 = new PointShape(points[1].X, points[1].Y, ContainerView.CurrentContainer.PointTemplate),
                                     Point2 = new PointShape(points[2].X, points[2].Y, ContainerView.CurrentContainer.PointTemplate),
@@ -673,6 +714,7 @@ namespace Draw2D.Editor
                                 }
                                 var quadraticBezierShape = new QuadraticBezierShape()
                                 {
+                                    Points = new ObservableCollection<PointShape>(),
                                     StartPoint = lastPointShape,
                                     Point1 = new PointShape(points[1].X, points[1].Y, ContainerView.CurrentContainer.PointTemplate),
                                     Point2 = new PointShape(points[2].X, points[2].Y, ContainerView.CurrentContainer.PointTemplate),
@@ -691,6 +733,7 @@ namespace Draw2D.Editor
                                 }
                                 var quadraticBezierShape = new ConicShape()
                                 {
+                                    Points = new ObservableCollection<PointShape>(),
                                     StartPoint = lastPointShape,
                                     Point1 = new PointShape(points[1].X, points[1].Y, ContainerView.CurrentContainer.PointTemplate),
                                     Point2 = new PointShape(points[2].X, points[2].Y, ContainerView.CurrentContainer.PointTemplate),
@@ -705,6 +748,7 @@ namespace Draw2D.Editor
                             {
                                 //var line = new LineShape()
                                 //{
+                                //    Points = new ObservableCollection<PointShape>(),
                                 //    StartPoint = GetLastPoint(pathShape),
                                 //    Point = GetFirstPoint(pathShape),
                                 //    Style = ContainerView.CurrentContainer.CurrentStyle
