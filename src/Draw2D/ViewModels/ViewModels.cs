@@ -8,6 +8,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Runtime.Serialization;
 using Draw2D.ViewModels.Containers;
 using Draw2D.ViewModels.Shapes;
 using Draw2D.ViewModels.Style;
@@ -213,23 +214,27 @@ namespace Draw2D.ViewModels
         BaseShape Overlaps(BaseShape shape, Rect2 target, double radius, IHitTest hitTest);
     }
 
+    [DataContract(IsReference = true)]
     public abstract class ViewModelBase : INotifyPropertyChanged
     {
         private string _id = null;
         private string _name = "";
 
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public virtual string Id
         {
             get => _id;
             set => Update(ref _id, value);
         }
 
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public virtual string Name
         {
             get => _name;
             set => Update(ref _name, value);
         }
 
+        [IgnoreDataMember]
         internal bool IsDirty { get; set; }
 
         public void MarkAsDirty(bool value) => IsDirty = value;
@@ -257,33 +262,9 @@ namespace Draw2D.ViewModels
             }
             return false;
         }
-
-        public virtual bool ShouldSerializeId() => !string.IsNullOrWhiteSpace(_id);
-
-        public virtual bool ShouldSerializeName() => !string.IsNullOrWhiteSpace(_name);
-
-        public virtual bool ShouldSerializeIsDirty() => false;
     }
 
-    public static class Matrix2Extensions
-    {
-        public static Spatial.Matrix2 ToMatrix2(this Matrix2 matrix)
-        {
-            return new Spatial.Matrix2(
-                matrix.M11, matrix.M12,
-                matrix.M21, matrix.M22,
-                matrix.OffsetX, matrix.OffsetY);
-        }
-
-        public static Matrix2 FromMatrix2(this Spatial.Matrix2 matrix)
-        {
-            return new Matrix2(
-                matrix.M11, matrix.M12,
-                matrix.M21, matrix.M22,
-                matrix.OffsetX, matrix.OffsetY);
-        }
-    }
-
+    [DataContract(IsReference = true)]
     public class Matrix2 : ViewModelBase, ICopyable
     {
         private double _m11;
@@ -293,36 +274,42 @@ namespace Draw2D.ViewModels
         private double _offsetX;
         private double _offsetY;
 
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public double M11
         {
             get => _m11;
             set => Update(ref _m11, value);
         }
 
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public double M12
         {
             get => _m12;
             set => Update(ref _m12, value);
         }
 
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public double M21
         {
             get => _m21;
             set => Update(ref _m21, value);
         }
 
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public double M22
         {
             get => _m22;
             set => Update(ref _m22, value);
         }
 
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public double OffsetX
         {
             get => _offsetX;
             set => Update(ref _offsetX, value);
         }
 
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public double OffsetY
         {
             get => _offsetY;
@@ -366,10 +353,31 @@ namespace Draw2D.ViewModels
         }
     }
 
+    public static class Matrix2Extensions
+    {
+        public static Spatial.Matrix2 ToMatrix2(this Matrix2 matrix)
+        {
+            return new Spatial.Matrix2(
+                matrix.M11, matrix.M12,
+                matrix.M21, matrix.M22,
+                matrix.OffsetX, matrix.OffsetY);
+        }
+
+        public static Matrix2 FromMatrix2(this Spatial.Matrix2 matrix)
+        {
+            return new Matrix2(
+                matrix.M11, matrix.M12,
+                matrix.M21, matrix.M22,
+                matrix.OffsetX, matrix.OffsetY);
+        }
+    }
+
+    [DataContract(IsReference = true)]
     public class Text : ViewModelBase, ICopyable
     {
         private string _value;
 
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public string Value
         {
             get => _value;
@@ -394,18 +402,23 @@ namespace Draw2D.ViewModels
         }
     }
 
+    [DataContract(IsReference = true)]
     public abstract class Settings : ViewModelBase
     {
     }
 
-    public abstract class PointFilter
+    [DataContract(IsReference = true)]
+    public abstract class PointFilter : ViewModelBase
     {
-        public abstract string Title { get; }
-        public IList<BaseShape> Guides { get; set; }
+        private IList<BaseShape> _guides;
 
-        protected PointFilter()
+        public abstract string Title { get; }
+
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public IList<BaseShape> Guides
         {
-            Guides = new ObservableCollection<BaseShape>();
+            get => _guides;
+            set => Update(ref _guides, value);
         }
 
         public abstract bool Process(IToolContext context, ref double x, ref double y);
@@ -421,14 +434,18 @@ namespace Draw2D.ViewModels
         }
     }
 
-    public abstract class PointIntersection
+    [DataContract(IsReference = true)]
+    public abstract class PointIntersection : ViewModelBase
     {
-        public abstract string Title { get; }
-        public IList<PointShape> Intersections { get; set; }
+        private IList<PointShape> _intersections;
 
-        protected PointIntersection()
+        public abstract string Title { get; }
+
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public IList<PointShape> Intersections
         {
-            Intersections = new ObservableCollection<PointShape>();
+            get => _intersections;
+            set => Update(ref _intersections, value);
         }
 
         public abstract void Find(IToolContext context, BaseShape shape);
@@ -447,6 +464,7 @@ namespace Draw2D.ViewModels
 
 namespace Draw2D.ViewModels.Style
 {
+    [DataContract(IsReference = true)]
     public class ArgbColor : ViewModelBase, ICopyable
     {
         private byte _a;
@@ -454,24 +472,28 @@ namespace Draw2D.ViewModels.Style
         private byte _g;
         private byte _b;
 
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public byte A
         {
             get => _a;
             set => Update(ref _a, value);
         }
 
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public byte R
         {
             get => _r;
             set => Update(ref _r, value);
         }
 
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public byte G
         {
             get => _g;
             set => Update(ref _g, value);
         }
 
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public byte B
         {
             get => _b;
@@ -524,6 +546,7 @@ namespace Draw2D.ViewModels.Style
         Bottom
     }
 
+    [DataContract(IsReference = true)]
     public class TextStyle : ViewModelBase, ICopyable
     {
         private string _fontFamily;
@@ -533,36 +556,42 @@ namespace Draw2D.ViewModels.Style
         private ArgbColor _stroke;
         private bool _isStroked;
 
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public string FontFamily
         {
             get => _fontFamily;
             set => Update(ref _fontFamily, value);
         }
 
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public double FontSize
         {
             get => _fontSize;
             set => Update(ref _fontSize, value);
         }
 
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public HAlign HAlign
         {
             get => _hAlign;
             set => Update(ref _hAlign, value);
         }
 
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public VAlign VAlign
         {
             get => _vAlign;
             set => Update(ref _vAlign, value);
         }
 
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public ArgbColor Stroke
         {
             get => _stroke;
             set => Update(ref _stroke, value);
         }
 
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public bool IsStroked
         {
             get => _isStroked;
@@ -606,6 +635,7 @@ namespace Draw2D.ViewModels.Style
         }
     }
 
+    [DataContract(IsReference = true)]
     public class ShapeStyle : ViewModelBase, ICopyable
     {
         private ArgbColor _stroke;
@@ -615,36 +645,42 @@ namespace Draw2D.ViewModels.Style
         private bool _isFilled;
         private TextStyle _textStyle;
 
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public ArgbColor Stroke
         {
             get => _stroke;
             set => Update(ref _stroke, value);
         }
 
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public ArgbColor Fill
         {
             get => _fill;
             set => Update(ref _fill, value);
         }
 
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public double Thickness
         {
             get => _thickness;
             set => Update(ref _thickness, value);
         }
 
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public bool IsStroked
         {
             get => _isStroked;
             set => Update(ref _isStroked, value);
         }
 
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public bool IsFilled
         {
             get => _isFilled;
             set => Update(ref _isFilled, value);
         }
 
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public TextStyle TextStyle
         {
             get => _textStyle;
@@ -691,17 +727,20 @@ namespace Draw2D.ViewModels.Style
 
 namespace Draw2D.ViewModels.Shapes
 {
+    [DataContract(IsReference = true)]
     public abstract class BaseShape : ViewModelBase, IDrawable, ISelectable
     {
         private ShapeStyle _style;
         private Matrix2 _transform;
 
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public ShapeStyle Style
         {
             get => _style;
             set => Update(ref _style, value);
         }
 
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public Matrix2 Transform
         {
             get => _transform;
@@ -760,17 +799,20 @@ namespace Draw2D.ViewModels.Shapes
         }
     }
 
+    [DataContract(IsReference = true)]
     public abstract class BoxShape : ConnectableShape
     {
         private PointShape _topLeft;
         private PointShape _bottomRight;
 
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public PointShape TopLeft
         {
             get => _topLeft;
             set => Update(ref _topLeft, value);
         }
 
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public PointShape BottomRight
         {
             get => _bottomRight;
@@ -918,17 +960,20 @@ namespace Draw2D.ViewModels.Shapes
         }
     }
 
+    [DataContract(IsReference = true)]
     public abstract class ConnectableShape : BaseShape, IConnectable
     {
-        private ObservableCollection<PointShape> _points;
+        private IList<PointShape> _points;
         private Text _text;
 
-        public ObservableCollection<PointShape> Points
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public IList<PointShape> Points
         {
             get => _points;
             set => Update(ref _points, value);
         }
 
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public Text Text
         {
             get => _text;
@@ -937,10 +982,9 @@ namespace Draw2D.ViewModels.Shapes
 
         public ConnectableShape()
         {
-            _points = new ObservableCollection<PointShape>();
         }
 
-        public ConnectableShape(ObservableCollection<PointShape> points)
+        public ConnectableShape(IList<PointShape> points)
         {
             this.Points = points;
         }
@@ -1041,6 +1085,7 @@ namespace Draw2D.ViewModels.Shapes
         }
     }
 
+    [DataContract(IsReference = true)]
     public class ConicShape : ConnectableShape, ICopyable
     {
         private PointShape _startPoint;
@@ -1048,24 +1093,28 @@ namespace Draw2D.ViewModels.Shapes
         private PointShape _point2;
         private double _weight;
 
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public PointShape StartPoint
         {
             get => _startPoint;
             set => Update(ref _startPoint, value);
         }
 
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public PointShape Point1
         {
             get => _point1;
             set => Update(ref _point1, value);
         }
 
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public PointShape Point2
         {
             get => _point2;
             set => Update(ref _point2, value);
         }
 
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public double Weight
         {
             get => _weight;
@@ -1280,6 +1329,7 @@ namespace Draw2D.ViewModels.Shapes
         {
             var copy = new ConicShape()
             {
+                Points = new ObservableCollection<PointShape>(),
                 Style = this.Style,
                 Transform = (Matrix2)this.Transform?.Copy(shared),
                 Text = (Text)this.Text?.Copy(shared),
@@ -1302,6 +1352,7 @@ namespace Draw2D.ViewModels.Shapes
         }
     }
 
+    [DataContract(IsReference = true)]
     public class CubicBezierShape : ConnectableShape, ICopyable
     {
         private PointShape _startPoint;
@@ -1309,24 +1360,28 @@ namespace Draw2D.ViewModels.Shapes
         private PointShape _point2;
         private PointShape _point3;
 
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public PointShape StartPoint
         {
             get => _startPoint;
             set => Update(ref _startPoint, value);
         }
 
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public PointShape Point1
         {
             get => _point1;
             set => Update(ref _point1, value);
         }
 
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public PointShape Point2
         {
             get => _point2;
             set => Update(ref _point2, value);
         }
 
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public PointShape Point3
         {
             get => _point3;
@@ -1577,6 +1632,7 @@ namespace Draw2D.ViewModels.Shapes
         {
             var copy = new CubicBezierShape()
             {
+                Points = new ObservableCollection<PointShape>(),
                 Style = this.Style,
                 Transform = (Matrix2)this.Transform?.Copy(shared),
                 Text = (Text)this.Text?.Copy(shared)
@@ -1599,22 +1655,7 @@ namespace Draw2D.ViewModels.Shapes
         }
     }
 
-    public static class EllipseShapeExtensions
-    {
-        public static Rect2 ToRect2(this EllipseShape ellipse, double dx = 0.0, double dy = 0.0)
-        {
-            return Rect2.FromPoints(
-                ellipse.TopLeft.X, ellipse.TopLeft.Y,
-                ellipse.BottomRight.X, ellipse.BottomRight.Y,
-                dx, dy);
-        }
-
-        public static EllipseShape FromRect2(this Rect2 rect)
-        {
-            return new EllipseShape(rect.TopLeft.FromPoint2(), rect.BottomRight.FromPoint2());
-        }
-    }
-
+    [DataContract(IsReference = true)]
     public class EllipseShape : BoxShape, ICopyable
     {
         public EllipseShape()
@@ -1667,6 +1708,7 @@ namespace Draw2D.ViewModels.Shapes
         {
             var copy = new EllipseShape()
             {
+                Points = new ObservableCollection<PointShape>(),
                 Style = this.Style,
                 Transform = (Matrix2)this.Transform?.Copy(shared),
                 Text = (Text)this.Text?.Copy(shared)
@@ -1687,17 +1729,39 @@ namespace Draw2D.ViewModels.Shapes
         }
     }
 
+    public static class EllipseShapeExtensions
+    {
+        public static Rect2 ToRect2(this EllipseShape ellipse, double dx = 0.0, double dy = 0.0)
+        {
+            return Rect2.FromPoints(
+                ellipse.TopLeft.X, ellipse.TopLeft.Y,
+                ellipse.BottomRight.X, ellipse.BottomRight.Y,
+                dx, dy);
+        }
+
+        public static EllipseShape FromRect2(this Rect2 rect)
+        {
+            return new EllipseShape(rect.TopLeft.FromPoint2(), rect.BottomRight.FromPoint2())
+            {
+                Points = new ObservableCollection<PointShape>()
+            };
+        }
+    }
+
+    [DataContract(IsReference = true)]
     public class FigureShape : CanvasContainer, ICopyable
     {
         private bool _isFilled;
         private bool _isClosed;
 
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public bool IsFilled
         {
             get => _isFilled;
             set => Update(ref _isFilled, value);
         }
 
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public bool IsClosed
         {
             get => _isClosed;
@@ -1709,7 +1773,7 @@ namespace Draw2D.ViewModels.Shapes
         {
         }
 
-        public FigureShape(ObservableCollection<BaseShape> shapes)
+        public FigureShape(IList<BaseShape> shapes)
             : base()
         {
             this.Shapes = shapes;
@@ -1721,7 +1785,7 @@ namespace Draw2D.ViewModels.Shapes
             this.Name = name;
         }
 
-        public FigureShape(string name, ObservableCollection<BaseShape> shapes)
+        public FigureShape(string name, IList<BaseShape> shapes)
             : base()
         {
             this.Name = name;
@@ -1775,6 +1839,9 @@ namespace Draw2D.ViewModels.Shapes
         {
             var copy = new FigureShape()
             {
+                Guides = new ObservableCollection<LineShape>(),
+                Shapes = new ObservableCollection<BaseShape>(),
+                Styles = new ObservableCollection<ShapeStyle>(),
                 Name = this.Name,
                 Style = this.Style,
                 Transform = (Matrix2)this.Transform?.Copy(shared),
@@ -1804,11 +1871,13 @@ namespace Draw2D.ViewModels.Shapes
         }
     }
 
+    [DataContract(IsReference = true)]
     public class GroupShape : ConnectableShape, ICopyable
     {
-        private ObservableCollection<BaseShape> _shapes;
+        private IList<BaseShape> _shapes;
 
-        public ObservableCollection<BaseShape> Shapes
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public IList<BaseShape> Shapes
         {
             get => _shapes;
             set => Update(ref _shapes, value);
@@ -1817,10 +1886,9 @@ namespace Draw2D.ViewModels.Shapes
         public GroupShape()
             : base()
         {
-            _shapes = new ObservableCollection<BaseShape>();
         }
 
-        public GroupShape(ObservableCollection<BaseShape> shapes)
+        public GroupShape(IList<BaseShape> shapes)
             : base()
         {
             this.Shapes = shapes;
@@ -1832,7 +1900,7 @@ namespace Draw2D.ViewModels.Shapes
             this.Name = name;
         }
 
-        public GroupShape(string name, ObservableCollection<BaseShape> shapes)
+        public GroupShape(string name, IList<BaseShape> shapes)
             : base()
         {
             this.Name = name;
@@ -1907,6 +1975,8 @@ namespace Draw2D.ViewModels.Shapes
         {
             var copy = new GroupShape()
             {
+                Points = new ObservableCollection<PointShape>(),
+                Shapes = new ObservableCollection<BaseShape>(),
                 Style = this.Style,
                 Transform = (Matrix2)this.Transform?.Copy(shared),
                 Text = (Text)this.Text?.Copy(shared)
@@ -1932,33 +2002,20 @@ namespace Draw2D.ViewModels.Shapes
         }
     }
 
-    public static class LineShapeExtensions
-    {
-        public static Line2 ToLine2(this LineShape line, double dx = 0.0, double dy = 0.0)
-        {
-            return Line2.FromPoints(
-                line.StartPoint.X, line.StartPoint.Y,
-                line.Point.X, line.Point.Y,
-                dx, dy);
-        }
-
-        public static LineShape FromLine2(this Line2 line)
-        {
-            return new LineShape(line.A.FromPoint2(), line.B.FromPoint2());
-        }
-    }
-
+    [DataContract(IsReference = true)]
     public class LineShape : ConnectableShape, ICopyable
     {
         private PointShape _startPoint;
         private PointShape _point;
 
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public PointShape StartPoint
         {
             get => _startPoint;
             set => Update(ref _startPoint, value);
         }
 
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public PointShape Point
         {
             get => _point;
@@ -2135,6 +2192,7 @@ namespace Draw2D.ViewModels.Shapes
         {
             var copy = new LineShape()
             {
+                Points = new ObservableCollection<PointShape>(),
                 Style = this.Style,
                 Transform = (Matrix2)this.Transform?.Copy(shared),
                 Text = (Text)this.Text?.Copy(shared)
@@ -2155,23 +2213,45 @@ namespace Draw2D.ViewModels.Shapes
         }
     }
 
+    public static class LineShapeExtensions
+    {
+        public static Line2 ToLine2(this LineShape line, double dx = 0.0, double dy = 0.0)
+        {
+            return Line2.FromPoints(
+                line.StartPoint.X, line.StartPoint.Y,
+                line.Point.X, line.Point.Y,
+                dx, dy);
+        }
+
+        public static LineShape FromLine2(this Line2 line)
+        {
+            return new LineShape(line.A.FromPoint2(), line.B.FromPoint2())
+            {
+                Points = new ObservableCollection<PointShape>()
+            };
+        }
+    }
+
     public enum PathFillRule
     {
         EvenOdd,
         Nonzero
     }
 
+    [DataContract(IsReference = true)]
     public class PathShape : ConnectableShape, ICopyable
     {
-        private ObservableCollection<FigureShape> _figures;
+        private IList<FigureShape> _figures;
         private PathFillRule _fillRule;
 
-        public ObservableCollection<FigureShape> Figures
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public IList<FigureShape> Figures
         {
             get => _figures;
             set => Update(ref _figures, value);
         }
 
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public PathFillRule FillRule
         {
             get => _fillRule;
@@ -2181,10 +2261,9 @@ namespace Draw2D.ViewModels.Shapes
         public PathShape()
             : base()
         {
-            _figures = new ObservableCollection<FigureShape>();
         }
 
-        public PathShape(ObservableCollection<FigureShape> figures)
+        public PathShape(IList<FigureShape> figures)
             : base()
         {
             this.Figures = figures;
@@ -2196,7 +2275,7 @@ namespace Draw2D.ViewModels.Shapes
             this.Name = name;
         }
 
-        public PathShape(string name, ObservableCollection<FigureShape> figures)
+        public PathShape(string name, IList<FigureShape> figures)
             : base()
         {
             this.Name = name;
@@ -2347,6 +2426,34 @@ namespace Draw2D.ViewModels.Shapes
                             }
                         }
                         break;
+                    case ConicShape conic:
+                        {
+                            var isSelected = renderer.Selection.Selected.Contains(conic);
+
+                            if (isPathSelected || isSelected || renderer.Selection.Selected.Contains(conic.StartPoint))
+                            {
+                                conic.StartPoint.Draw(dc, renderer, dx, dy, mode, db, r);
+                            }
+
+                            if (isPathSelected || isSelected || renderer.Selection.Selected.Contains(conic.Point1))
+                            {
+                                conic.Point1.Draw(dc, renderer, dx, dy, mode, db, r);
+                            }
+
+                            if (isPathSelected || isSelected || renderer.Selection.Selected.Contains(conic.Point2))
+                            {
+                                conic.Point2.Draw(dc, renderer, dx, dy, mode, db, r);
+                            }
+
+                            foreach (var point in conic.Points)
+                            {
+                                if (isPathSelected || isSelected || renderer.Selection.Selected.Contains(point))
+                                {
+                                    point.Draw(dc, renderer, dx, dy, mode, db, r);
+                                }
+                            }
+                        }
+                        break;
                 }
             }
         }
@@ -2396,6 +2503,8 @@ namespace Draw2D.ViewModels.Shapes
         {
             var copy = new PathShape()
             {
+                Points = new ObservableCollection<PointShape>(),
+                Figures = new ObservableCollection<FigureShape>(),
                 Style = this.Style,
                 Transform = (Matrix2)this.Transform?.Copy(shared),
                 FillRule = this.FillRule,
@@ -2419,19 +2528,7 @@ namespace Draw2D.ViewModels.Shapes
         }
     }
 
-    public static class PointShapeExtensions
-    {
-        public static Point2 ToPoint2(this PointShape point)
-        {
-            return new Point2(point.X, point.Y);
-        }
-
-        public static PointShape FromPoint2(this Point2 point, BaseShape template = null)
-        {
-            return new PointShape(point.X, point.Y, template);
-        }
-    }
-
+    [DataContract(IsReference = true)]
     public class PointShape : BaseShape, ICopyable
     {
         private Matrix2 _templateTransform = Matrix2.Identity;
@@ -2439,18 +2536,21 @@ namespace Draw2D.ViewModels.Shapes
         private double _y;
         private BaseShape _template;
 
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public double X
         {
             get => _x;
             set => Update(ref _x, value);
         }
 
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public double Y
         {
             get => _y;
             set => Update(ref _y, value);
         }
 
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public BaseShape Template
         {
             get => _template;
@@ -2529,24 +2629,41 @@ namespace Draw2D.ViewModels.Shapes
         }
     }
 
+    public static class PointShapeExtensions
+    {
+        public static Point2 ToPoint2(this PointShape point)
+        {
+            return new Point2(point.X, point.Y);
+        }
+
+        public static PointShape FromPoint2(this Point2 point, BaseShape template = null)
+        {
+            return new PointShape(point.X, point.Y, template);
+        }
+    }
+
+    [DataContract(IsReference = true)]
     public class QuadraticBezierShape : ConnectableShape, ICopyable
     {
         private PointShape _startPoint;
         private PointShape _point1;
         private PointShape _point2;
 
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public PointShape StartPoint
         {
             get => _startPoint;
             set => Update(ref _startPoint, value);
         }
 
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public PointShape Point1
         {
             get => _point1;
             set => Update(ref _point1, value);
         }
 
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public PointShape Point2
         {
             get => _point2;
@@ -2761,6 +2878,7 @@ namespace Draw2D.ViewModels.Shapes
         {
             var copy = new QuadraticBezierShape()
             {
+                Points = new ObservableCollection<PointShape>(),
                 Style = this.Style,
                 Transform = (Matrix2)this.Transform?.Copy(shared),
                 Text = (Text)this.Text?.Copy(shared)
@@ -2782,22 +2900,7 @@ namespace Draw2D.ViewModels.Shapes
         }
     }
 
-    public static class RectangleShapeExtensions
-    {
-        public static Rect2 ToRect2(this RectangleShape rectangle, double dx = 0.0, double dy = 0.0)
-        {
-            return Rect2.FromPoints(
-                rectangle.TopLeft.X, rectangle.TopLeft.Y,
-                rectangle.BottomRight.X, rectangle.BottomRight.Y,
-                dx, dy);
-        }
-
-        public static RectangleShape FromRect2(this Rect2 rect)
-        {
-            return new RectangleShape(rect.TopLeft.FromPoint2(), rect.BottomRight.FromPoint2());
-        }
-    }
-
+    [DataContract(IsReference = true)]
     public class RectangleShape : BoxShape, ICopyable
     {
         public RectangleShape()
@@ -2850,6 +2953,7 @@ namespace Draw2D.ViewModels.Shapes
         {
             var copy = new RectangleShape()
             {
+                Points = new ObservableCollection<PointShape>(),
                 Style = this.Style,
                 Transform = (Matrix2)this.Transform?.Copy(shared),
                 Text = (Text)this.Text?.Copy(shared)
@@ -2870,6 +2974,26 @@ namespace Draw2D.ViewModels.Shapes
         }
     }
 
+    public static class RectangleShapeExtensions
+    {
+        public static Rect2 ToRect2(this RectangleShape rectangle, double dx = 0.0, double dy = 0.0)
+        {
+            return Rect2.FromPoints(
+                rectangle.TopLeft.X, rectangle.TopLeft.Y,
+                rectangle.BottomRight.X, rectangle.BottomRight.Y,
+                dx, dy);
+        }
+
+        public static RectangleShape FromRect2(this Rect2 rect)
+        {
+            return new RectangleShape(rect.TopLeft.FromPoint2(), rect.BottomRight.FromPoint2())
+            {
+                Points = new ObservableCollection<PointShape>()
+            };
+        }
+    }
+
+    [DataContract(IsReference = true)]
     public class TextShape : BoxShape, ICopyable
     {
         public TextShape()
@@ -2928,6 +3052,7 @@ namespace Draw2D.ViewModels.Shapes
         {
             var copy = new TextShape()
             {
+                Points = new ObservableCollection<PointShape>(),
                 Style = this.Style,
                 Transform = (Matrix2)this.Transform?.Copy(shared),
                 Text = (Text)this.Text?.Copy(shared)
@@ -2964,6 +3089,7 @@ namespace Draw2D.ViewModels.Containers
 
     public interface IContainerView : IDrawTarget, IHitTestable
     {
+        string Title { get; set; }
         IDrawContainerView DrawContainerView { get; set; }
         ICanvasPresenter Presenter { get; set; }
         ISelection Selection { get; set; }
@@ -2980,6 +3106,7 @@ namespace Draw2D.ViewModels.Containers
         void SetTool(string name);
     }
 
+    [DataContract(IsReference = true)]
     public class CanvasContainer : BaseShape, ICopyable
     {
         private double _width;
@@ -2987,66 +3114,76 @@ namespace Draw2D.ViewModels.Containers
         private ArgbColor _printBackground;
         private ArgbColor _workBackground;
         private ArgbColor _inputBackground;
-        private ObservableCollection<LineShape> _guides;
-        private ObservableCollection<BaseShape> _shapes;
-        private ObservableCollection<ShapeStyle> _styles;
+        private IList<LineShape> _guides;
+        private IList<BaseShape> _shapes;
+        private IList<ShapeStyle> _styles;
         private ShapeStyle _currentStyle;
         private BaseShape _pointTemplate;
 
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public double Width
         {
             get => _width;
             set => Update(ref _width, value);
         }
 
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public double Height
         {
             get => _height;
             set => Update(ref _height, value);
         }
 
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public ArgbColor PrintBackground
         {
             get => _printBackground;
             set => Update(ref _printBackground, value);
         }
 
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public ArgbColor WorkBackground
         {
             get => _workBackground;
             set => Update(ref _workBackground, value);
         }
 
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public ArgbColor InputBackground
         {
             get => _inputBackground;
             set => Update(ref _inputBackground, value);
         }
 
-        public ObservableCollection<LineShape> Guides
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public IList<LineShape> Guides
         {
             get => _guides;
             set => Update(ref _guides, value);
         }
 
-        public ObservableCollection<BaseShape> Shapes
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public IList<BaseShape> Shapes
         {
             get => _shapes;
             set => Update(ref _shapes, value);
         }
 
-        public ObservableCollection<ShapeStyle> Styles
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public IList<ShapeStyle> Styles
         {
             get => _styles;
             set => Update(ref _styles, value);
         }
 
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public ShapeStyle CurrentStyle
         {
             get => _currentStyle;
             set => Update(ref _currentStyle, value);
         }
 
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public BaseShape PointTemplate
         {
             get => _pointTemplate;
@@ -3055,9 +3192,6 @@ namespace Draw2D.ViewModels.Containers
 
         public CanvasContainer()
         {
-            _guides = new ObservableCollection<LineShape>();
-            _shapes = new ObservableCollection<BaseShape>();
-            _styles = new ObservableCollection<ShapeStyle>();
         }
 
         public override IEnumerable<PointShape> GetPoints()
@@ -3123,6 +3257,9 @@ namespace Draw2D.ViewModels.Containers
         {
             var copy = new CanvasContainer()
             {
+                Guides = new ObservableCollection<LineShape>(),
+                Shapes = new ObservableCollection<BaseShape>(),
+                Styles = new ObservableCollection<ShapeStyle>(),
                 Name = this.Name,
                 Style = this.Style,
                 Transform = (Matrix2)this.Transform?.Copy(shared),
@@ -3163,8 +3300,10 @@ namespace Draw2D.ViewModels.Containers
         }
     }
 
+    [DataContract(IsReference = true)]
     public class ContainerView : ViewModelBase, IContainerView
     {
+        private string _title;
         private IInputService _inputService;
         private IZoomService _zoomService;
         private IDrawContainerView _drawContainerView;
@@ -3174,12 +3313,21 @@ namespace Draw2D.ViewModels.Containers
         private CanvasContainer _workingContainer;
         private IHitTest _hitTest;
 
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public string Title
+        {
+            get => _title;
+            set => Update(ref _title, value);
+        }
+
+        [IgnoreDataMember]
         public IInputService InputService
         {
             get => _inputService;
             set => Update(ref _inputService, value);
         }
 
+        [IgnoreDataMember]
         public IZoomService ZoomService
         {
             get => _zoomService;
@@ -3192,30 +3340,35 @@ namespace Draw2D.ViewModels.Containers
             set => Update(ref _drawContainerView, value);
         }
 
+        [IgnoreDataMember]
         public ICanvasPresenter Presenter
         {
             get => _presenter;
             set => Update(ref _presenter, value);
         }
 
+        [IgnoreDataMember]
         public ISelection Selection
         {
             get => _selection;
             set => Update(ref _selection, value);
         }
 
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public CanvasContainer CurrentContainer
         {
             get => _currentContainer;
             set => Update(ref _currentContainer, value);
         }
 
+        [IgnoreDataMember]
         public CanvasContainer WorkingContainer
         {
             get => _workingContainer;
             set => Update(ref _workingContainer, value);
         }
 
+        [IgnoreDataMember]
         public IHitTest HitTest
         {
             get => _hitTest;
@@ -3241,25 +3394,37 @@ namespace Draw2D.ViewModels.Containers
         }
     }
 
+    [DataContract(IsReference = true)]
     public class ToolContext : ViewModelBase, IToolContext
     {
+        private IList<IContainerView> _containerViews;
         private IContainerView _containerView;
         private IList<ITool> _tools;
         private ITool _currentTool;
         private EditMode _mode;
 
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public IList<IContainerView> ContainerViews
+        {
+            get => _containerViews;
+            set => Update(ref _containerViews, value);
+        }
+
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public IContainerView ContainerView
         {
             get => _containerView;
             set => Update(ref _containerView, value);
         }
 
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public IList<ITool> Tools
         {
             get => _tools;
             set => Update(ref _tools, value);
         }
 
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public ITool CurrentTool
         {
             get => _currentTool;
@@ -3270,6 +3435,7 @@ namespace Draw2D.ViewModels.Containers
             }
         }
 
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public EditMode Mode
         {
             get => _mode;
@@ -3343,6 +3509,7 @@ namespace Draw2D.ViewModels.Containers
 
 namespace Draw2D.ViewModels.Decorators
 {
+    [DataContract(IsReference = true)]
     public abstract class CommonDecorator : IShapeDecorator
     {
         private TextStyle _textStyle;
@@ -3362,10 +3529,22 @@ namespace Draw2D.ViewModels.Decorators
             _fill = new ArgbColor(255, 0, 255, 255);
             _strokeStyle = new ShapeStyle(_stroke, _fill, 2.0, true, false, _textStyle);
             _fillStyle = new ShapeStyle(_stroke, _fill, 2.0, false, true, _textStyle);
-            _line = new LineShape(new PointShape(0, 0, null), new PointShape(0, 0, null));
-            _ellipse = new EllipseShape(new PointShape(0, 0, null), new PointShape(0, 0, null));
-            _rectangle = new RectangleShape(new PointShape(0, 0, null), new PointShape(0, 0, null));
-            _text = new TextShape(new Text(""), new PointShape(0, 0, null), new PointShape(0, 0, null));
+            _line = new LineShape(new PointShape(0, 0, null), new PointShape(0, 0, null))
+            {
+                Points = new ObservableCollection<PointShape>()
+            };
+            _ellipse = new EllipseShape(new PointShape(0, 0, null), new PointShape(0, 0, null))
+            {
+                Points = new ObservableCollection<PointShape>(),
+            };
+            _rectangle = new RectangleShape(new PointShape(0, 0, null), new PointShape(0, 0, null))
+            {
+                Points = new ObservableCollection<PointShape>(),
+            };
+            _text = new TextShape(new Text(""), new PointShape(0, 0, null), new PointShape(0, 0, null))
+            {
+                Points = new ObservableCollection<PointShape>(),
+            };
         }
 
         public void DrawLine(object dc, IShapeRenderer renderer, PointShape a, PointShape b, double dx, double dy, DrawMode mode)
@@ -3471,6 +3650,7 @@ namespace Draw2D.ViewModels.Decorators
         public abstract void Draw(object dc, BaseShape shape, IShapeRenderer renderer, ISelection selected, double dx, double dy, DrawMode mode);
     }
 
+    [DataContract(IsReference = true)]
     public class CubicBezierDecorator : CommonDecorator
     {
         public void Draw(object dc, IShapeRenderer renderer, CubicBezierShape cubicBezier, double dx, double dy, DrawMode mode)
@@ -3489,6 +3669,7 @@ namespace Draw2D.ViewModels.Decorators
         }
     }
 
+    [DataContract(IsReference = true)]
     public class EllipseDecorator : CommonDecorator
     {
         public void Draw(object dc, IShapeRenderer renderer, EllipseShape ellipseShape, double dx, double dy, DrawMode mode)
@@ -3505,6 +3686,7 @@ namespace Draw2D.ViewModels.Decorators
         }
     }
 
+    [DataContract(IsReference = true)]
     public class LineDecorator : CommonDecorator
     {
         public void Draw(object dc, IShapeRenderer renderer, LineShape lineShape, double dx, double dy, DrawMode mode)
@@ -3521,6 +3703,7 @@ namespace Draw2D.ViewModels.Decorators
         }
     }
 
+    [DataContract(IsReference = true)]
     public class PathDecorator : CommonDecorator
     {
         private LineDecorator _lineDecorator;
@@ -3593,6 +3776,7 @@ namespace Draw2D.ViewModels.Decorators
         }
     }
 
+    [DataContract(IsReference = true)]
     public class PointDecorator : CommonDecorator
     {
         public void Draw(object dc, IShapeRenderer renderer, PointShape pointShape, double dx, double dy, DrawMode mode)
@@ -3609,6 +3793,7 @@ namespace Draw2D.ViewModels.Decorators
         }
     }
 
+    [DataContract(IsReference = true)]
     public class QuadraticBezierDecorator : CommonDecorator
     {
         public void Draw(object dc, IShapeRenderer renderer, QuadraticBezierShape quadraticBezier, double dx, double dy, DrawMode mode)
@@ -3626,6 +3811,7 @@ namespace Draw2D.ViewModels.Decorators
         }
     }
 
+    [DataContract(IsReference = true)]
     public class ConicDecorator : CommonDecorator
     {
         public void Draw(object dc, IShapeRenderer renderer, ConicShape conic, double dx, double dy, DrawMode mode)
@@ -3643,6 +3829,7 @@ namespace Draw2D.ViewModels.Decorators
         }
     }
 
+    [DataContract(IsReference = true)]
     public class RectangleDecorator : CommonDecorator
     {
         public void Draw(object dc, IShapeRenderer renderer, RectangleShape rectangleShape, double dx, double dy, DrawMode mode)
@@ -3659,6 +3846,7 @@ namespace Draw2D.ViewModels.Decorators
         }
     }
 
+    [DataContract(IsReference = true)]
     public class TextDecorator : CommonDecorator
     {
         public void Draw(object dc, IShapeRenderer renderer, TextShape textShape, double dx, double dy, DrawMode mode)
@@ -3686,6 +3874,7 @@ namespace Draw2D.ViewModels.Filters
         Vertical = 2
     }
 
+    [DataContract(IsReference = true)]
     public class GridSnapSettings : Settings
     {
         private bool _isEnabled;
@@ -3695,36 +3884,42 @@ namespace Draw2D.ViewModels.Filters
         private double _gridSizeY;
         private ShapeStyle _guideStyle;
 
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public bool IsEnabled
         {
             get => _isEnabled;
             set => Update(ref _isEnabled, value);
         }
 
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public bool EnableGuides
         {
             get => _enableGuides;
             set => Update(ref _enableGuides, value);
         }
 
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public GridSnapMode Mode
         {
             get => _mode;
             set => Update(ref _mode, value);
         }
 
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public double GridSizeX
         {
             get => _gridSizeX;
             set => Update(ref _gridSizeX, value);
         }
 
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public double GridSizeY
         {
             get => _gridSizeY;
             set => Update(ref _gridSizeY, value);
         }
 
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public ShapeStyle GuideStyle
         {
             get => _guideStyle;
@@ -3732,11 +3927,20 @@ namespace Draw2D.ViewModels.Filters
         }
     }
 
+    [DataContract(IsReference = true)]
     public class GridSnapPointFilter : PointFilter
     {
+        private GridSnapSettings _settings;
+
+        [IgnoreDataMember]
         public override string Title => "Grid-Snap";
 
-        public GridSnapSettings Settings { get; set; }
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public GridSnapSettings Settings
+        {
+            get => _settings;
+            set => Update(ref _settings, value);
+        }
 
         public override bool Process(IToolContext context, ref double x, ref double y)
         {
@@ -3776,6 +3980,7 @@ namespace Draw2D.ViewModels.Filters
         {
             var horizontal = new LineShape()
             {
+                Points = new ObservableCollection<PointShape>(),
                 StartPoint = new PointShape(0, y, null),
                 Point = new PointShape(context.ContainerView.CurrentContainer.Width, y, null),
                 Style = Settings.GuideStyle
@@ -3783,6 +3988,7 @@ namespace Draw2D.ViewModels.Filters
 
             var vertical = new LineShape()
             {
+                Points = new ObservableCollection<PointShape>(),
                 StartPoint = new PointShape(x, 0, null),
                 Point = new PointShape(x, context.ContainerView.CurrentContainer.Height, null),
                 Style = Settings.GuideStyle
@@ -3822,6 +4028,7 @@ namespace Draw2D.ViewModels.Filters
         Shapes = 2
     }
 
+    [DataContract(IsReference = true)]
     public class LineSnapSettings : Settings
     {
         private bool _isEnabled;
@@ -3831,36 +4038,42 @@ namespace Draw2D.ViewModels.Filters
         private double _threshold;
         private ShapeStyle _guideStyle;
 
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public bool IsEnabled
         {
             get => _isEnabled;
             set => Update(ref _isEnabled, value);
         }
 
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public bool EnableGuides
         {
             get => _enableGuides;
             set => Update(ref _enableGuides, value);
         }
 
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public LineSnapMode Mode
         {
             get => _mode;
             set => Update(ref _mode, value);
         }
 
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public LineSnapTarget Target
         {
             get => _target;
             set => Update(ref _target, value);
         }
 
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public double Threshold
         {
             get => _threshold;
             set => Update(ref _threshold, value);
         }
 
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public ShapeStyle GuideStyle
         {
             get => _guideStyle;
@@ -3868,11 +4081,20 @@ namespace Draw2D.ViewModels.Filters
         }
     }
 
+    [DataContract(IsReference = true)]
     public class LineSnapPointFilter : PointFilter
     {
+        private LineSnapSettings _settings;
+
+        [IgnoreDataMember]
         public override string Title => "Line-Snap";
 
-        public LineSnapSettings Settings { get; set; }
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public LineSnapSettings Settings
+        {
+            get => _settings;
+            set => Update(ref _settings, value);
+        }
 
         public override bool Process(IToolContext context, ref double x, ref double y)
         {
@@ -3928,6 +4150,7 @@ namespace Draw2D.ViewModels.Filters
         {
             var horizontal = new LineShape()
             {
+                Points = new ObservableCollection<PointShape>(),
                 StartPoint = new PointShape(0, y, null),
                 Point = new PointShape(context.ContainerView.CurrentContainer.Width, y, null),
                 Style = Settings.GuideStyle
@@ -3935,6 +4158,7 @@ namespace Draw2D.ViewModels.Filters
 
             var vertical = new LineShape()
             {
+                Points = new ObservableCollection<PointShape>(),
                 StartPoint = new PointShape(x, 0, null),
                 Point = new PointShape(x, context.ContainerView.CurrentContainer.Height, null),
                 Style = Settings.GuideStyle
@@ -4156,6 +4380,7 @@ namespace Draw2D.ViewModels.Filters
 
 namespace Draw2D.ViewModels.Intersections
 {
+    [DataContract(IsReference = true)]
     public class EllipseLineSettings : Settings
     {
         private bool _isEnabled;
@@ -4167,11 +4392,20 @@ namespace Draw2D.ViewModels.Intersections
         }
     }
 
+    [DataContract(IsReference = true)]
     public class EllipseLineIntersection : PointIntersection
     {
+        private EllipseLineSettings _settings;
+
+        [IgnoreDataMember]
         public override string Title => "Ellipse-Line";
 
-        public EllipseLineSettings Settings { get; set; }
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public EllipseLineSettings Settings
+        {
+            get => _settings;
+            set => Update(ref _settings, value);
+        }
 
         public override void Find(IToolContext context, BaseShape shape)
         {
@@ -4205,10 +4439,12 @@ namespace Draw2D.ViewModels.Intersections
         }
     }
 
+    [DataContract(IsReference = true)]
     public class LineLineSettings : Settings
     {
         private bool _isEnabled;
 
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public bool IsEnabled
         {
             get => _isEnabled;
@@ -4216,11 +4452,20 @@ namespace Draw2D.ViewModels.Intersections
         }
     }
 
+    [DataContract(IsReference = true)]
     public class LineLineIntersection : PointIntersection
     {
+        private LineLineSettings _settings;
+
+        [IgnoreDataMember]
         public override string Title => "Line-Line";
 
-        public LineLineSettings Settings { get; set; }
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public LineLineSettings Settings
+        {
+            get => _settings;
+            set => Update(ref _settings, value);
+        }
 
         public override void Find(IToolContext context, BaseShape shape)
         {
@@ -4252,10 +4497,12 @@ namespace Draw2D.ViewModels.Intersections
         }
     }
 
+    [DataContract(IsReference = true)]
     public class RectangleLineSettings : Settings
     {
         private bool _isEnabled;
 
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public bool IsEnabled
         {
             get => _isEnabled;
@@ -4263,11 +4510,20 @@ namespace Draw2D.ViewModels.Intersections
         }
     }
 
+    [DataContract(IsReference = true)]
     public class RectangleLineIntersection : PointIntersection
     {
+        private RectangleLineSettings _settings;
+
+        [IgnoreDataMember]
         public override string Title => "Rectangle-Line";
 
-        public RectangleLineSettings Settings { get; set; }
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public RectangleLineSettings Settings
+        {
+            get => _settings;
+            set => Update(ref _settings, value);
+        }
 
         public override void Find(IToolContext context, BaseShape shape)
         {
@@ -4306,8 +4562,10 @@ namespace Draw2D.ViewModels.Intersections
 
 namespace Draw2D.ViewModels.Bounds
 {
+    [DataContract(IsReference = true)]
     public class CubicBezierBounds : IBounds
     {
+        [IgnoreDataMember]
         public Type TargetType => typeof(CubicBezierShape);
 
         public PointShape TryToGetPoint(BaseShape shape, Point2 target, double radius, IHitTest hitTest)
@@ -4365,8 +4623,10 @@ namespace Draw2D.ViewModels.Bounds
         }
     }
 
+    [DataContract(IsReference = true)]
     public class EllipseBounds : IBounds
     {
+        [IgnoreDataMember]
         public Type TargetType => typeof(EllipseShape);
 
         public PointShape TryToGetPoint(BaseShape shape, Point2 target, double radius, IHitTest hitTest)
@@ -4418,8 +4678,10 @@ namespace Draw2D.ViewModels.Bounds
         }
     }
 
+    [DataContract(IsReference = true)]
     public class GroupBounds : IBounds
     {
+        [IgnoreDataMember]
         public Type TargetType => typeof(GroupShape);
 
         public PointShape TryToGetPoint(BaseShape shape, Point2 target, double radius, IHitTest hitTest)
@@ -4485,8 +4747,10 @@ namespace Draw2D.ViewModels.Bounds
         }
     }
 
+    [DataContract(IsReference = true)]
     public class LineBounds : IBounds
     {
+        [IgnoreDataMember]
         public Type TargetType => typeof(LineShape);
 
         public PointShape TryToGetPoint(BaseShape shape, Point2 target, double radius, IHitTest hitTest)
@@ -4540,8 +4804,10 @@ namespace Draw2D.ViewModels.Bounds
         }
     }
 
+    [DataContract(IsReference = true)]
     public class PathBounds : IBounds
     {
+        [IgnoreDataMember]
         public Type TargetType => typeof(PathShape);
 
         public PointShape TryToGetPoint(BaseShape shape, Point2 target, double radius, IHitTest hitTest)
@@ -4618,8 +4884,10 @@ namespace Draw2D.ViewModels.Bounds
         }
     }
 
+    [DataContract(IsReference = true)]
     public class PointBounds : IBounds
     {
+        [IgnoreDataMember]
         public Type TargetType => typeof(PointShape);
 
         public PointShape TryToGetPoint(BaseShape shape, Point2 target, double radius, IHitTest hitTest)
@@ -4652,8 +4920,10 @@ namespace Draw2D.ViewModels.Bounds
         }
     }
 
+    [DataContract(IsReference = true)]
     public class QuadraticBezierBounds : IBounds
     {
+        [IgnoreDataMember]
         public Type TargetType => typeof(QuadraticBezierShape);
 
         public PointShape TryToGetPoint(BaseShape shape, Point2 target, double radius, IHitTest hitTest)
@@ -4706,8 +4976,10 @@ namespace Draw2D.ViewModels.Bounds
         }
     }
 
+    [DataContract(IsReference = true)]
     public class ConicBounds : IBounds
     {
+        [IgnoreDataMember]
         public Type TargetType => typeof(ConicShape);
 
         public PointShape TryToGetPoint(BaseShape shape, Point2 target, double radius, IHitTest hitTest)
@@ -4760,8 +5032,10 @@ namespace Draw2D.ViewModels.Bounds
         }
     }
 
+    [DataContract(IsReference = true)]
     public class RectangleBounds : IBounds
     {
+        [IgnoreDataMember]
         public Type TargetType => typeof(RectangleShape);
 
         public PointShape TryToGetPoint(BaseShape shape, Point2 target, double radius, IHitTest hitTest)
@@ -4813,8 +5087,10 @@ namespace Draw2D.ViewModels.Bounds
         }
     }
 
+    [DataContract(IsReference = true)]
     public class TextBounds : IBounds
     {
+        [IgnoreDataMember]
         public Type TargetType => typeof(TextShape);
 
         public PointShape TryToGetPoint(BaseShape shape, Point2 target, double radius, IHitTest hitTest)
@@ -4869,6 +5145,7 @@ namespace Draw2D.ViewModels.Bounds
     public static class HitTestHelper
     {
         public static MonotoneChain MC => new MonotoneChain();
+
         public static SeparatingAxisTheorem SAT => new SeparatingAxisTheorem();
 
         public static Vector2[] ToSelection(Rect2 rect)
@@ -4922,13 +5199,20 @@ namespace Draw2D.ViewModels.Bounds
         }
     }
 
-    public class HitTest : IHitTest
+    [DataContract(IsReference = true)]
+    public class HitTest : ViewModelBase, IHitTest
     {
-        public Dictionary<Type, IBounds> Registered { get; set; }
+        private Dictionary<Type, IBounds> _registered;
+
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public Dictionary<Type, IBounds> Registered
+        {
+            get => _registered;
+            set => Update(ref _registered, value);
+        }
 
         public HitTest()
         {
-            Registered = new Dictionary<Type, IBounds>();
         }
 
         public void Register(IBounds hitTest)
@@ -4990,17 +5274,20 @@ namespace Draw2D.ViewModels.Bounds
 
 namespace Draw2D.ViewModels.Tools
 {
+    [DataContract(IsReference = true)]
     public class CubicBezierToolSettings : Settings
     {
         private bool _connectPoints;
         private double _hitTestRadius;
 
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public bool ConnectPoints
         {
             get => _connectPoints;
             set => Update(ref _connectPoints, value);
         }
 
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public double HitTestRadius
         {
             get => _hitTestRadius;
@@ -5008,8 +5295,12 @@ namespace Draw2D.ViewModels.Tools
         }
     }
 
+    [DataContract(IsReference = true)]
     public class CubicBezierTool : ViewModelBase, ITool
     {
+        private IList<PointIntersection> _intersections;
+        private IList<PointFilter> _filters;
+        private CubicBezierToolSettings _settings;
         private CubicBezierShape _cubicBezier = null;
 
         public enum State
@@ -5020,15 +5311,32 @@ namespace Draw2D.ViewModels.Tools
             Point3
         }
 
+        [IgnoreDataMember]
         public State CurrentState { get; set; } = State.StartPoint;
 
+        [IgnoreDataMember]
         public string Title => "CubicBezier";
 
-        public IList<PointIntersection> Intersections { get; set; }
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public IList<PointIntersection> Intersections
+        {
+            get => _intersections;
+            set => Update(ref _intersections, value);
+        }
 
-        public IList<PointFilter> Filters { get; set; }
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public IList<PointFilter> Filters
+        {
+            get => _filters;
+            set => Update(ref _filters, value);
+        }
 
-        public CubicBezierToolSettings Settings { get; set; }
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public CubicBezierToolSettings Settings
+        {
+            get => _settings;
+            set => Update(ref _settings, value);
+        }
 
         private void StartPointInternal(IToolContext context, double x, double y, Modifier modifier)
         {
@@ -5037,6 +5345,7 @@ namespace Draw2D.ViewModels.Tools
             var next = context.ContainerView.GetNextPoint(x, y, false, 0.0);
             _cubicBezier = new CubicBezierShape()
             {
+                Points = new ObservableCollection<PointShape>(),
                 StartPoint = next,
                 Point1 = (PointShape)next.Copy(null),
                 Point2 = (PointShape)next.Copy(null),
@@ -5260,17 +5569,20 @@ namespace Draw2D.ViewModels.Tools
         }
     }
 
+    [DataContract(IsReference = true)]
     public class EllipseToolSettings : Settings
     {
         private bool _connectPoints;
         private double _hitTestRadius;
 
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public bool ConnectPoints
         {
             get => _connectPoints;
             set => Update(ref _connectPoints, value);
         }
 
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public double HitTestRadius
         {
             get => _hitTestRadius;
@@ -5278,8 +5590,12 @@ namespace Draw2D.ViewModels.Tools
         }
     }
 
+    [DataContract(IsReference = true)]
     public class EllipseTool : ViewModelBase, ITool
     {
+        private IList<PointIntersection> _intersections;
+        private IList<PointFilter> _filters;
+        private EllipseToolSettings _settings;
         private EllipseShape _ellipse = null;
 
         public enum State
@@ -5288,15 +5604,33 @@ namespace Draw2D.ViewModels.Tools
             BottomRight
         }
 
+        [IgnoreDataMember]
         public State CurrentState { get; set; } = State.TopLeft;
 
+        [IgnoreDataMember]
         public string Title => "Ellipse";
 
-        public IList<PointIntersection> Intersections { get; set; }
 
-        public IList<PointFilter> Filters { get; set; }
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public IList<PointIntersection> Intersections
+        {
+            get => _intersections;
+            set => Update(ref _intersections, value);
+        }
 
-        public EllipseToolSettings Settings { get; set; }
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public IList<PointFilter> Filters
+        {
+            get => _filters;
+            set => Update(ref _filters, value);
+        }
+
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public EllipseToolSettings Settings
+        {
+            get => _settings;
+            set => Update(ref _settings, value);
+        }
 
         private void TopLeftInternal(IToolContext context, double x, double y, Modifier modifier)
         {
@@ -5304,6 +5638,7 @@ namespace Draw2D.ViewModels.Tools
 
             _ellipse = new EllipseShape()
             {
+                Points = new ObservableCollection<PointShape>(),
                 TopLeft = context.ContainerView.GetNextPoint(x, y, Settings?.ConnectPoints ?? false, Settings?.HitTestRadius ?? 7.0),
                 BottomRight = context.ContainerView.GetNextPoint(x, y, false, 0.0),
                 Style = context.ContainerView.CurrentContainer.CurrentStyle
@@ -5437,10 +5772,12 @@ namespace Draw2D.ViewModels.Tools
         }
     }
 
+    [DataContract(IsReference = true)]
     public class GuideToolSettings : Settings
     {
         private ShapeStyle _guideStyle;
 
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public ShapeStyle GuideStyle
         {
             get => _guideStyle;
@@ -5448,8 +5785,12 @@ namespace Draw2D.ViewModels.Tools
         }
     }
 
+    [DataContract(IsReference = true)]
     public class GuideTool : ViewModelBase, ITool
     {
+        private IList<PointIntersection> _intersections;
+        private IList<PointFilter> _filters;
+        private GuideToolSettings _settings;
         private LineShape _line = null;
 
         public enum State
@@ -5458,15 +5799,32 @@ namespace Draw2D.ViewModels.Tools
             Point
         }
 
+        [IgnoreDataMember]
         public State CurrentState { get; set; } = State.StartPoint;
 
+        [IgnoreDataMember]
         public string Title => "Guide";
 
-        public IList<PointIntersection> Intersections { get; set; }
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public IList<PointIntersection> Intersections
+        {
+            get => _intersections;
+            set => Update(ref _intersections, value);
+        }
 
-        public IList<PointFilter> Filters { get; set; }
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public IList<PointFilter> Filters
+        {
+            get => _filters;
+            set => Update(ref _filters, value);
+        }
 
-        public GuideToolSettings Settings { get; set; }
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public GuideToolSettings Settings
+        {
+            get => _settings;
+            set => Update(ref _settings, value);
+        }
 
         private void StartPointInternal(IToolContext context, double x, double y, Modifier modifier)
         {
@@ -5474,6 +5832,7 @@ namespace Draw2D.ViewModels.Tools
 
             _line = new LineShape()
             {
+                Points = new ObservableCollection<PointShape>(),
                 StartPoint = new PointShape(x, y, null),
                 Point = new PointShape(x, y, null),
                 Style = Settings?.GuideStyle
@@ -5599,24 +5958,28 @@ namespace Draw2D.ViewModels.Tools
         }
     }
 
+    [DataContract(IsReference = true)]
     public class LineToolSettings : Settings
     {
         private bool _connectPoints;
         private double _hitTestRadius;
         private bool _splitIntersections;
 
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public bool ConnectPoints
         {
             get => _connectPoints;
             set => Update(ref _connectPoints, value);
         }
 
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public double HitTestRadius
         {
             get => _hitTestRadius;
             set => Update(ref _hitTestRadius, value);
         }
 
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public bool SplitIntersections
         {
             get => _splitIntersections;
@@ -5641,6 +6004,7 @@ namespace Draw2D.ViewModels.Tools
             {
                 var line = new LineShape(unique[i], unique[i + 1])
                 {
+                    Points = new ObservableCollection<PointShape>(),
                     Style = context.ContainerView.CurrentContainer.CurrentStyle
                 };
                 context.ContainerView.CurrentContainer.Shapes.Add(line);
@@ -5651,8 +6015,12 @@ namespace Draw2D.ViewModels.Tools
         }
     }
 
+    [DataContract(IsReference = true)]
     public class LineTool : ViewModelBase, ITool
     {
+        private IList<PointIntersection> _intersections;
+        private IList<PointFilter> _filters;
+        private LineToolSettings _settings;
         private LineShape _line = null;
 
         public enum State
@@ -5661,15 +6029,32 @@ namespace Draw2D.ViewModels.Tools
             Point
         }
 
+        [IgnoreDataMember]
         public State CurrentState { get; set; } = State.StartPoint;
 
+        [IgnoreDataMember]
         public string Title => "Line";
 
-        public IList<PointIntersection> Intersections { get; set; }
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public IList<PointIntersection> Intersections
+        {
+            get => _intersections;
+            set => Update(ref _intersections, value);
+        }
 
-        public IList<PointFilter> Filters { get; set; }
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public IList<PointFilter> Filters
+        {
+            get => _filters;
+            set => Update(ref _filters, value);
+        }
 
-        public LineToolSettings Settings { get; set; }
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public LineToolSettings Settings
+        {
+            get => _settings;
+            set => Update(ref _settings, value);
+        }
 
         private void StartPointInternal(IToolContext context, double x, double y, Modifier modifier)
         {
@@ -5678,6 +6063,7 @@ namespace Draw2D.ViewModels.Tools
             var next = context.ContainerView.GetNextPoint(x, y, Settings?.ConnectPoints ?? false, Settings?.HitTestRadius ?? 0.0);
             _line = new LineShape()
             {
+                Points = new ObservableCollection<PointShape>(),
                 StartPoint = next,
                 Point = (PointShape)next.Copy(null),
                 Style = context.ContainerView.CurrentContainer.CurrentStyle
@@ -5829,21 +6215,49 @@ namespace Draw2D.ViewModels.Tools
         }
     }
 
+    [DataContract(IsReference = true)]
     public class MoveToolSettings : Settings
     {
     }
 
+    [DataContract(IsReference = true)]
     public class MoveTool : ViewModelBase, ITool
     {
-        public PathTool PathTool { get; set; }
+        private IList<PointIntersection> _intersections;
+        private IList<PointFilter> _filters;
+        private MoveToolSettings _settings;
+        private PathTool _pathTool;
 
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public PathTool PathTool
+        {
+            get => _pathTool;
+            set => Update(ref _pathTool, value);
+        }
+
+        [IgnoreDataMember]
         public string Title => "Move";
 
-        public IList<PointIntersection> Intersections { get; set; }
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public IList<PointIntersection> Intersections
+        {
+            get => _intersections;
+            set => Update(ref _intersections, value);
+        }
 
-        public IList<PointFilter> Filters { get; set; }
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public IList<PointFilter> Filters
+        {
+            get => _filters;
+            set => Update(ref _filters, value);
+        }
 
-        public MoveToolSettings Settings { get; set; }
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public MoveToolSettings Settings
+        {
+            get => _settings;
+            set => Update(ref _settings, value);
+        }
 
         public MoveTool(PathTool pathTool)
         {
@@ -5876,19 +6290,41 @@ namespace Draw2D.ViewModels.Tools
         }
     }
 
+    [DataContract(IsReference = true)]
     public class NoneToolSettings : Settings
     {
     }
 
+    [DataContract(IsReference = true)]
     public class NoneTool : ViewModelBase, ITool
     {
+        private IList<PointIntersection> _intersections;
+        private IList<PointFilter> _filters;
+        private NoneToolSettings _settings;
+
+        [IgnoreDataMember]
         public string Title => "None";
 
-        public IList<PointIntersection> Intersections { get; set; }
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public IList<PointIntersection> Intersections
+        {
+            get => _intersections;
+            set => Update(ref _intersections, value);
+        }
 
-        public IList<PointFilter> Filters { get; set; }
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public IList<PointFilter> Filters
+        {
+            get => _filters;
+            set => Update(ref _filters, value);
+        }
 
-        public NoneToolSettings Settings { get; set; }
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public NoneToolSettings Settings
+        {
+            get => _settings;
+            set => Update(ref _settings, value);
+        }
 
         public void LeftDown(IToolContext context, double x, double y, Modifier modifier)
         {
@@ -5915,6 +6351,7 @@ namespace Draw2D.ViewModels.Tools
         }
     }
 
+    [DataContract(IsReference = true)]
     public class PathToolSettings : Settings
     {
         private bool _connectPoints;
@@ -5922,46 +6359,53 @@ namespace Draw2D.ViewModels.Tools
         private PathFillRule _fillRule;
         private bool _isFilled;
         private bool _isClosed;
-        private ObservableCollection<ITool> _tools;
+        private IList<ITool> _tools;
         private ITool _currentTool;
         private ITool _previousTool;
 
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public bool ConnectPoints
         {
             get => _connectPoints;
             set => Update(ref _connectPoints, value);
         }
 
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public double HitTestRadius
         {
             get => _hitTestRadius;
             set => Update(ref _hitTestRadius, value);
         }
 
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public PathFillRule FillRule
         {
             get => _fillRule;
             set => Update(ref _fillRule, value);
         }
 
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public bool IsFilled
         {
             get => _isFilled;
             set => Update(ref _isFilled, value);
         }
 
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public bool IsClosed
         {
             get => _isClosed;
             set => Update(ref _isClosed, value);
         }
 
-        public ObservableCollection<ITool> Tools
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public IList<ITool> Tools
         {
             get => _tools;
             set => Update(ref _tools, value);
         }
 
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public ITool CurrentTool
         {
             get => _currentTool;
@@ -5972,6 +6416,7 @@ namespace Draw2D.ViewModels.Tools
             }
         }
 
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public ITool PreviousTool
         {
             get => _previousTool;
@@ -5979,6 +6424,7 @@ namespace Draw2D.ViewModels.Tools
         }
     }
 
+    [DataContract(IsReference = true)]
     internal class FigureContainerView : IContainerView
     {
         internal IToolContext _context;
@@ -5991,48 +6437,63 @@ namespace Draw2D.ViewModels.Tools
             _pathTool = pathTool;
         }
 
+        [IgnoreDataMember]
+        public string Title
+        {
+            get => _context.ContainerView.Title;
+            set => throw new InvalidOperationException($"Can not set {Title} property value.");
+        }
+
+        [IgnoreDataMember]
         public IInputService InputService
         {
             get => _context.ContainerView.InputService;
             set => throw new InvalidOperationException($"Can not set {InputService} property value.");
         }
 
+        [IgnoreDataMember]
         public IZoomService ZoomService
         {
             get => _context.ContainerView.ZoomService;
             set => throw new InvalidOperationException($"Can not set {ZoomService} property value.");
         }
 
+        [IgnoreDataMember]
         public IDrawContainerView DrawContainerView
         {
             get => _context.ContainerView.DrawContainerView;
             set => throw new InvalidOperationException($"Can not set {DrawContainerView} property value.");
         }
 
+        [IgnoreDataMember]
         public ICanvasPresenter Presenter
         {
             get => _context.ContainerView.Presenter;
             set => throw new InvalidOperationException($"Can not set {Presenter} property value.");
         }
 
+        [IgnoreDataMember]
         public ISelection Selection
         {
             get => _context.ContainerView.Selection;
             set => throw new InvalidOperationException($"Can not set {Selection} property value.");
         }
 
+        [IgnoreDataMember]
         public CanvasContainer CurrentContainer
         {
             get => _pathTool._figure;
             set => throw new InvalidOperationException($"Can not set {CurrentContainer} property value.");
         }
 
+        [IgnoreDataMember]
         public CanvasContainer WorkingContainer
         {
             get => _pathTool._figure;
             set => throw new InvalidOperationException($"Can not set {WorkingContainer} property value.");
         }
 
+        [IgnoreDataMember]
         public IHitTest HitTest
         {
             get => _context.ContainerView.HitTest;
@@ -6048,29 +6509,34 @@ namespace Draw2D.ViewModels.Tools
         }
     }
 
+    [DataContract(IsReference = true)]
     public partial class PathTool : IToolContext
     {
         internal IToolContext _context;
         internal FigureContainerView _containerView;
 
+        [IgnoreDataMember]
         public IContainerView ContainerView
         {
             get => _containerView;
             set => throw new InvalidOperationException($"Can not set {ContainerView} property value.");
         }
 
+        [IgnoreDataMember]
         public IList<ITool> Tools
         {
             get => _context.Tools;
             set => throw new InvalidOperationException($"Can not set {Tools} property value.");
         }
 
+        [IgnoreDataMember]
         public ITool CurrentTool
         {
             get => _context.CurrentTool;
             set => throw new InvalidOperationException($"Can not set {CurrentTool} property value.");
         }
 
+        [IgnoreDataMember]
         public EditMode Mode
         {
             get => _context.Mode;
@@ -6110,16 +6576,36 @@ namespace Draw2D.ViewModels.Tools
 
     public partial class PathTool : ViewModelBase, ITool
     {
+        private IList<PointIntersection> _intersections;
+        private IList<PointFilter> _filters;
+        private PathToolSettings _settings;
+
         internal PathShape _path;
         internal FigureShape _figure;
 
+        [IgnoreDataMember]
         public string Title => "Path";
 
-        public IList<PointIntersection> Intersections { get; set; }
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public IList<PointIntersection> Intersections
+        {
+            get => _intersections;
+            set => Update(ref _intersections, value);
+        }
 
-        public IList<PointFilter> Filters { get; set; }
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public IList<PointFilter> Filters
+        {
+            get => _filters;
+            set => Update(ref _filters, value);
+        }
 
-        public PathToolSettings Settings { get; set; }
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public PathToolSettings Settings
+        {
+            get => _settings;
+            set => Update(ref _settings, value);
+        }
 
         public PointShape GetLastPoint()
         {
@@ -6155,6 +6641,8 @@ namespace Draw2D.ViewModels.Tools
 
             _path = new PathShape()
             {
+                Points = new ObservableCollection<PointShape>(),
+                Figures = new ObservableCollection<FigureShape>(),
                 FillRule = Settings.FillRule,
                 Style = context.ContainerView.CurrentContainer.CurrentStyle
             };
@@ -6167,6 +6655,9 @@ namespace Draw2D.ViewModels.Tools
         {
             _figure = new FigureShape()
             {
+                Guides = new ObservableCollection<LineShape>(),
+                Shapes = new ObservableCollection<BaseShape>(),
+                Styles = new ObservableCollection<ShapeStyle>(),
                 IsFilled = Settings.IsFilled,
                 IsClosed = Settings.IsClosed
             };
@@ -6314,17 +6805,20 @@ namespace Draw2D.ViewModels.Tools
         }
     }
 
+    [DataContract(IsReference = true)]
     public class PointToolSettings : Settings
     {
         private bool _connectPoints;
         private double _hitTestRadius;
 
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public bool ConnectPoints
         {
             get => _connectPoints;
             set => Update(ref _connectPoints, value);
         }
 
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public double HitTestRadius
         {
             get => _hitTestRadius;
@@ -6332,15 +6826,36 @@ namespace Draw2D.ViewModels.Tools
         }
     }
 
+    [DataContract(IsReference = true)]
     public class PointTool : ViewModelBase, ITool
     {
+        private IList<PointIntersection> _intersections;
+        private IList<PointFilter> _filters;
+        private PointToolSettings _settings;
+
+        [IgnoreDataMember]
         public string Title => "Point";
 
-        public IList<PointIntersection> Intersections { get; set; }
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public IList<PointIntersection> Intersections
+        {
+            get => _intersections;
+            set => Update(ref _intersections, value);
+        }
 
-        public IList<PointFilter> Filters { get; set; }
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public IList<PointFilter> Filters
+        {
+            get => _filters;
+            set => Update(ref _filters, value);
+        }
 
-        public PointToolSettings Settings { get; set; }
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public PointToolSettings Settings
+        {
+            get => _settings;
+            set => Update(ref _settings, value);
+        }
 
         private void PointInternal(IToolContext context, double x, double y, Modifier modifier)
         {
@@ -6410,17 +6925,20 @@ namespace Draw2D.ViewModels.Tools
         }
     }
 
+    [DataContract(IsReference = true)]
     public class PolyLineToolSettings : Settings
     {
         private bool _connectPoints;
         private double _hitTestRadius;
 
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public bool ConnectPoints
         {
             get => _connectPoints;
             set => Update(ref _connectPoints, value);
         }
 
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public double HitTestRadius
         {
             get => _hitTestRadius;
@@ -6428,8 +6946,12 @@ namespace Draw2D.ViewModels.Tools
         }
     }
 
+    [DataContract(IsReference = true)]
     public class PolyLineTool : ViewModelBase, ITool
     {
+        private IList<PointIntersection> _intersections;
+        private IList<PointFilter> _filters;
+        private PolyLineToolSettings _settings;
         private LineShape _line = null;
         private IList<PointShape> _points = null;
 
@@ -6439,15 +6961,32 @@ namespace Draw2D.ViewModels.Tools
             Point
         }
 
+        [IgnoreDataMember]
         public State CurrentState { get; set; } = State.StartPoint;
 
+        [IgnoreDataMember]
         public string Title => "PolyLine";
 
-        public IList<PointIntersection> Intersections { get; set; }
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public IList<PointIntersection> Intersections
+        {
+            get => _intersections;
+            set => Update(ref _intersections, value);
+        }
 
-        public IList<PointFilter> Filters { get; set; }
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public IList<PointFilter> Filters
+        {
+            get => _filters;
+            set => Update(ref _filters, value);
+        }
 
-        public PolyLineToolSettings Settings { get; set; }
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public PolyLineToolSettings Settings
+        {
+            get => _settings;
+            set => Update(ref _settings, value);
+        }
 
         private void StartPointInternal(IToolContext context, double x, double y, Modifier modifier)
         {
@@ -6456,6 +6995,7 @@ namespace Draw2D.ViewModels.Tools
             _points = new ObservableCollection<PointShape>();
             _line = new LineShape()
             {
+                Points = new ObservableCollection<PointShape>(),
                 StartPoint = context.ContainerView.GetNextPoint(x, y, Settings?.ConnectPoints ?? false, Settings?.HitTestRadius ?? 7.0),
                 Point = context.ContainerView.GetNextPoint(x, y, false, 0.0),
                 Style = context?.ContainerView.CurrentContainer.CurrentStyle
@@ -6492,6 +7032,7 @@ namespace Draw2D.ViewModels.Tools
 
             _line = new LineShape()
             {
+                Points = new ObservableCollection<PointShape>(),
                 StartPoint = _points.Last(),
                 Point = context.ContainerView.GetNextPoint(x, y, false, 0.0),
                 Style = context.ContainerView.CurrentContainer.CurrentStyle
@@ -6613,17 +7154,20 @@ namespace Draw2D.ViewModels.Tools
         }
     }
 
+    [DataContract(IsReference = true)]
     public class QuadraticBezierToolSettings : Settings
     {
         private bool _connectPoints;
         private double _hitTestRadius;
 
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public bool ConnectPoints
         {
             get => _connectPoints;
             set => Update(ref _connectPoints, value);
         }
 
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public double HitTestRadius
         {
             get => _hitTestRadius;
@@ -6631,8 +7175,12 @@ namespace Draw2D.ViewModels.Tools
         }
     }
 
+    [DataContract(IsReference = true)]
     public class QuadraticBezierTool : ViewModelBase, ITool
     {
+        private IList<PointIntersection> _intersections;
+        private IList<PointFilter> _filters;
+        private QuadraticBezierToolSettings _settings;
         private QuadraticBezierShape _quadraticBezier = null;
 
         public enum State
@@ -6642,15 +7190,32 @@ namespace Draw2D.ViewModels.Tools
             Point2
         }
 
+        [IgnoreDataMember]
         public State CurrentState { get; set; } = State.StartPoint;
 
+        [IgnoreDataMember]
         public string Title => "QuadraticBezier";
 
-        public QuadraticBezierToolSettings Settings { get; set; }
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public IList<PointIntersection> Intersections
+        {
+            get => _intersections;
+            set => Update(ref _intersections, value);
+        }
 
-        public IList<PointIntersection> Intersections { get; set; }
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public IList<PointFilter> Filters
+        {
+            get => _filters;
+            set => Update(ref _filters, value);
+        }
 
-        public IList<PointFilter> Filters { get; set; }
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public QuadraticBezierToolSettings Settings
+        {
+            get => _settings;
+            set => Update(ref _settings, value);
+        }
 
         private void StartPointInternal(IToolContext context, double x, double y, Modifier modifier)
         {
@@ -6659,6 +7224,7 @@ namespace Draw2D.ViewModels.Tools
             var next = context.ContainerView.GetNextPoint(x, y, false, 0.0);
             _quadraticBezier = new QuadraticBezierShape()
             {
+                Points = new ObservableCollection<PointShape>(),
                 StartPoint = next,
                 Point1 = (PointShape)next.Copy(null),
                 Point2 = (PointShape)next.Copy(null),
@@ -6838,24 +7404,28 @@ namespace Draw2D.ViewModels.Tools
         }
     }
 
+    [DataContract(IsReference = true)]
     public class ConicToolSettings : Settings
     {
         private bool _connectPoints;
         private double _hitTestRadius;
         private double _weight;
 
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public bool ConnectPoints
         {
             get => _connectPoints;
             set => Update(ref _connectPoints, value);
         }
 
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public double HitTestRadius
         {
             get => _hitTestRadius;
             set => Update(ref _hitTestRadius, value);
         }
 
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public double Weight
         {
             get => _weight;
@@ -6863,8 +7433,12 @@ namespace Draw2D.ViewModels.Tools
         }
     }
 
+    [DataContract(IsReference = true)]
     public class ConicTool : ViewModelBase, ITool
     {
+        private IList<PointIntersection> _intersections;
+        private IList<PointFilter> _filters;
+        private ConicToolSettings _settings;
         private ConicShape _conic = null;
 
         public enum State
@@ -6874,15 +7448,32 @@ namespace Draw2D.ViewModels.Tools
             Point2
         }
 
+        [IgnoreDataMember]
         public State CurrentState { get; set; } = State.StartPoint;
 
+        [IgnoreDataMember]
         public string Title => "Conic";
 
-        public ConicToolSettings Settings { get; set; }
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public IList<PointIntersection> Intersections
+        {
+            get => _intersections;
+            set => Update(ref _intersections, value);
+        }
 
-        public IList<PointIntersection> Intersections { get; set; }
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public IList<PointFilter> Filters
+        {
+            get => _filters;
+            set => Update(ref _filters, value);
+        }
 
-        public IList<PointFilter> Filters { get; set; }
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public ConicToolSettings Settings
+        {
+            get => _settings;
+            set => Update(ref _settings, value);
+        }
 
         private void StartPointInternal(IToolContext context, double x, double y, Modifier modifier)
         {
@@ -6891,6 +7482,7 @@ namespace Draw2D.ViewModels.Tools
             var next = context.ContainerView.GetNextPoint(x, y, false, 0.0);
             _conic = new ConicShape()
             {
+                Points = new ObservableCollection<PointShape>(),
                 StartPoint = next,
                 Point1 = (PointShape)next.Copy(null),
                 Point2 = (PointShape)next.Copy(null),
@@ -7071,17 +7663,20 @@ namespace Draw2D.ViewModels.Tools
         }
     }
 
+    [DataContract(IsReference = true)]
     public class RectangleToolSettings : Settings
     {
         private bool _connectPoints;
         private double _hitTestRadius;
 
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public bool ConnectPoints
         {
             get => _connectPoints;
             set => Update(ref _connectPoints, value);
         }
 
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public double HitTestRadius
         {
             get => _hitTestRadius;
@@ -7089,8 +7684,12 @@ namespace Draw2D.ViewModels.Tools
         }
     }
 
+    [DataContract(IsReference = true)]
     public class RectangleTool : ViewModelBase, ITool
     {
+        private IList<PointIntersection> _intersections;
+        private IList<PointFilter> _filters;
+        private RectangleToolSettings _settings;
         private RectangleShape _rectangle = null;
 
         public enum State
@@ -7099,15 +7698,32 @@ namespace Draw2D.ViewModels.Tools
             BottomRight
         }
 
+        [IgnoreDataMember]
         public State CurrentState { get; set; } = State.TopLeft;
 
+        [IgnoreDataMember]
         public string Title => "Rectangle";
 
-        public IList<PointIntersection> Intersections { get; set; }
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public IList<PointIntersection> Intersections
+        {
+            get => _intersections;
+            set => Update(ref _intersections, value);
+        }
 
-        public IList<PointFilter> Filters { get; set; }
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public IList<PointFilter> Filters
+        {
+            get => _filters;
+            set => Update(ref _filters, value);
+        }
 
-        public RectangleToolSettings Settings { get; set; }
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public RectangleToolSettings Settings
+        {
+            get => _settings;
+            set => Update(ref _settings, value);
+        }
 
         private void TopLeftInternal(IToolContext context, double x, double y, Modifier modifier)
         {
@@ -7115,6 +7731,7 @@ namespace Draw2D.ViewModels.Tools
 
             _rectangle = new RectangleShape()
             {
+                Points = new ObservableCollection<PointShape>(),
                 TopLeft = context.ContainerView.GetNextPoint(x, y, Settings?.ConnectPoints ?? false, Settings?.HitTestRadius ?? 7.0),
                 BottomRight = context.ContainerView.GetNextPoint(x, y, false, 0.0),
                 Style = context.ContainerView.CurrentContainer.CurrentStyle
@@ -7249,6 +7866,7 @@ namespace Draw2D.ViewModels.Tools
         }
     }
 
+    [DataContract(IsReference = true)]
     public class ScribbleToolSettings : Settings
     {
         private bool _simplify;
@@ -7257,30 +7875,35 @@ namespace Draw2D.ViewModels.Tools
         private bool _isFilled;
         private bool _isClosed;
 
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public bool Simplify
         {
             get => _simplify;
             set => Update(ref _simplify, value);
         }
 
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public double Epsilon
         {
             get => _epsilon;
             set => Update(ref _epsilon, value);
         }
 
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public PathFillRule FillRule
         {
             get => _fillRule;
             set => Update(ref _fillRule, value);
         }
 
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public bool IsFilled
         {
             get => _isFilled;
             set => Update(ref _isFilled, value);
         }
 
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public bool IsClosed
         {
             get => _isClosed;
@@ -7288,8 +7911,12 @@ namespace Draw2D.ViewModels.Tools
         }
     }
 
+    [DataContract(IsReference = true)]
     public class ScribbleTool : ViewModelBase, ITool
     {
+        private IList<PointIntersection> _intersections;
+        private IList<PointFilter> _filters;
+        private ScribbleToolSettings _settings;
         private PathShape _path = null;
         private FigureShape _figure = null;
         private PointShape _previousPoint = null;
@@ -7301,15 +7928,32 @@ namespace Draw2D.ViewModels.Tools
             Points
         }
 
+        [IgnoreDataMember]
         public State CurrentState { get; set; } = State.Start;
 
+        [IgnoreDataMember]
         public string Title => "Scribble";
 
-        public IList<PointIntersection> Intersections { get; set; }
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public IList<PointIntersection> Intersections
+        {
+            get => _intersections;
+            set => Update(ref _intersections, value);
+        }
 
-        public IList<PointFilter> Filters { get; set; }
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public IList<PointFilter> Filters
+        {
+            get => _filters;
+            set => Update(ref _filters, value);
+        }
 
-        public ScribbleToolSettings Settings { get; set; }
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public ScribbleToolSettings Settings
+        {
+            get => _settings;
+            set => Update(ref _settings, value);
+        }
 
         private void StartInternal(IToolContext context, double x, double y, Modifier modifier)
         {
@@ -7317,12 +7961,17 @@ namespace Draw2D.ViewModels.Tools
 
             _path = new PathShape()
             {
+                Points = new ObservableCollection<PointShape>(),
+                Figures = new ObservableCollection<FigureShape>(),
                 FillRule = Settings.FillRule,
                 Style = context.ContainerView.CurrentContainer.CurrentStyle
             };
 
             _figure = new FigureShape()
             {
+                Guides = new ObservableCollection<LineShape>(),
+                Shapes = new ObservableCollection<BaseShape>(),
+                Styles = new ObservableCollection<ShapeStyle>(),
                 IsFilled = Settings.IsFilled,
                 IsClosed = Settings.IsClosed
             };
@@ -7369,6 +8018,7 @@ namespace Draw2D.ViewModels.Tools
                     {
                         var line = new LineShape()
                         {
+                            Points = new ObservableCollection<PointShape>(),
                             StartPoint = points[i],
                             Point = points[i + 1],
                             Style = context.ContainerView.CurrentContainer.CurrentStyle
@@ -7413,6 +8063,7 @@ namespace Draw2D.ViewModels.Tools
 
             var line = new LineShape()
             {
+                Points = new ObservableCollection<PointShape>(),
                 StartPoint = _previousPoint,
                 Point = _nextPoint,
                 Style = context.ContainerView.CurrentContainer.CurrentStyle
@@ -7524,6 +8175,7 @@ namespace Draw2D.ViewModels.Tools
         Guides = 2
     }
 
+    [DataContract(IsReference = true)]
     public class SelectionToolSettings : Settings
     {
         private SelectionMode _mode;
@@ -7538,66 +8190,77 @@ namespace Draw2D.ViewModels.Tools
         private bool _disconnectPoints;
         private double _disconnectTestRadius;
 
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public SelectionMode Mode
         {
             get => _mode;
             set => Update(ref _mode, value);
         }
 
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public SelectionTargets Targets
         {
             get => _targets;
             set => Update(ref _targets, value);
         }
 
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public Modifier SelectionModifier
         {
             get => _selectionModifier;
             set => Update(ref _selectionModifier, value);
         }
 
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public Modifier ConnectionModifier
         {
             get => _connectionModifier;
             set => Update(ref _connectionModifier, value);
         }
 
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public ShapeStyle SelectionStyle
         {
             get => _selectionStyle;
             set => Update(ref _selectionStyle, value);
         }
 
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public bool ClearSelectionOnClean
         {
             get => _clearSelectionOnClean;
             set => Update(ref _clearSelectionOnClean, value);
         }
 
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public double HitTestRadius
         {
             get => _hitTestRadius;
             set => Update(ref _hitTestRadius, value);
         }
 
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public bool ConnectPoints
         {
             get => _connectPoints;
             set => Update(ref _connectPoints, value);
         }
 
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public double ConnectTestRadius
         {
             get => _connectTestRadius;
             set => Update(ref _connectTestRadius, value);
         }
 
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public bool DisconnectPoints
         {
             get => _disconnectPoints;
             set => Update(ref _disconnectPoints, value);
         }
 
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public double DisconnectTestRadius
         {
             get => _disconnectTestRadius;
@@ -7605,8 +8268,12 @@ namespace Draw2D.ViewModels.Tools
         }
     }
 
+    [DataContract(IsReference = true)]
     public partial class SelectionTool : ViewModelBase, ITool, ISelection
     {
+        private IList<PointIntersection> _intersections;
+        private IList<PointFilter> _filters;
+        private SelectionToolSettings _settings;
         private RectangleShape _rectangle;
         private double _originX;
         private double _originY;
@@ -7625,22 +8292,41 @@ namespace Draw2D.ViewModels.Tools
             Move
         }
 
+        [IgnoreDataMember]
         public State CurrentState { get; set; } = State.None;
 
+        [IgnoreDataMember]
         public string Title => "Selection";
 
-        public IList<PointIntersection> Intersections { get; set; }
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public IList<PointIntersection> Intersections
+        {
+            get => _intersections;
+            set => Update(ref _intersections, value);
+        }
 
-        public IList<PointFilter> Filters { get; set; }
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public IList<PointFilter> Filters
+        {
+            get => _filters;
+            set => Update(ref _filters, value);
+        }
 
-        public SelectionToolSettings Settings { get; set; }
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public SelectionToolSettings Settings
+        {
+            get => _settings;
+            set => Update(ref _settings, value);
+        }
 
+        [IgnoreDataMember]
         public BaseShape Hovered
         {
             get => _hovered;
             set => Update(ref _hovered, value);
         }
 
+        [IgnoreDataMember]
         public ISet<BaseShape> Selected
         {
             get => _selected;
@@ -7689,6 +8375,7 @@ namespace Draw2D.ViewModels.Tools
                 {
                     _rectangle = new RectangleShape()
                     {
+                        Points = new ObservableCollection<PointShape>(),
                         TopLeft = new PointShape(),
                         BottomRight = new PointShape()
                     };
@@ -8030,7 +8717,11 @@ namespace Draw2D.ViewModels.Tools
 
                 Delete(context);
 
-                var group = new GroupShape();
+                var group = new GroupShape()
+                {
+                    Points = new ObservableCollection<PointShape>(),
+                    Shapes = new ObservableCollection<BaseShape>()
+                };
 
                 foreach (var shape in shapes)
                 {
@@ -8537,17 +9228,20 @@ namespace Draw2D.ViewModels.Tools
         }
     }
 
+    [DataContract(IsReference = true)]
     public class TextToolSettings : Settings
     {
         private bool _connectPoints;
         private double _hitTestRadius;
 
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public bool ConnectPoints
         {
             get => _connectPoints;
             set => Update(ref _connectPoints, value);
         }
 
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public double HitTestRadius
         {
             get => _hitTestRadius;
@@ -8555,8 +9249,12 @@ namespace Draw2D.ViewModels.Tools
         }
     }
 
+    [DataContract(IsReference = true)]
     public class TextTool : ViewModelBase, ITool
     {
+        private IList<PointIntersection> _intersections;
+        private IList<PointFilter> _filters;
+        private TextToolSettings _settings;
         private TextShape _text = null;
 
         public enum State
@@ -8565,15 +9263,32 @@ namespace Draw2D.ViewModels.Tools
             BottomRight
         }
 
+        [IgnoreDataMember]
         public State CurrentState { get; set; } = State.TopLeft;
 
+        [IgnoreDataMember]
         public string Title => "Text";
 
-        public IList<PointIntersection> Intersections { get; set; }
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public IList<PointIntersection> Intersections
+        {
+            get => _intersections;
+            set => Update(ref _intersections, value);
+        }
 
-        public IList<PointFilter> Filters { get; set; }
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public IList<PointFilter> Filters
+        {
+            get => _filters;
+            set => Update(ref _filters, value);
+        }
 
-        public TextToolSettings Settings { get; set; }
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public TextToolSettings Settings
+        {
+            get => _settings;
+            set => Update(ref _settings, value);
+        }
 
         private void TopLeftInternal(IToolContext context, double x, double y, Modifier modifier)
         {
@@ -8581,6 +9296,7 @@ namespace Draw2D.ViewModels.Tools
 
             _text = new TextShape()
             {
+                Points = new ObservableCollection<PointShape>(),
                 TopLeft = context.ContainerView.GetNextPoint(x, y, Settings?.ConnectPoints ?? false, Settings?.HitTestRadius ?? 7.0),
                 BottomRight = context.ContainerView.GetNextPoint(x, y, false, 0.0),
                 Text = new Text("Text"),

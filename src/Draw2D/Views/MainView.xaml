@@ -21,7 +21,7 @@
         <KeyBinding Command="{Binding SaveAs}" Gesture="Ctrl+S"/>
         <KeyBinding Command="{Binding Exit}" Gesture="Alt+F4"/>
     </UserControl.KeyBindings>
-    <Grid RowDefinitions="Auto,5,*,5" ColumnDefinitions="300,Auto,*">
+    <Grid RowDefinitions="Auto,5,*,5" ColumnDefinitions="340,Auto,*">
         <Menu Background="Transparent" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3">
             <MenuItem Header="_File">
                 <MenuItem Header="New" Command="{Binding New}"/>
@@ -236,6 +236,17 @@
                         <ContentControl Content="{Binding ContainerView.WorkingContainer}"/>
                     </Border>
                 </TabItem>
+                <TabItem Classes="default" Header="Views">
+                    <Border Classes="default">
+                        <ListBox Classes="default" Items="{Binding ContainerViews}" SelectedItem="{Binding ContainerView}">
+                            <ListBox.DataTemplates>
+                                <DataTemplate>
+                                    <TextBlock Classes="default" Text="{Binding Title}"/>
+                                </DataTemplate>
+                            </ListBox.DataTemplates>
+                        </ListBox>
+                    </Border>
+                </TabItem>    
                 <TabItem Classes="default" Header="Tools">
                     <Border Classes="default">
                         <ListBox Classes="default" Items="{Binding Tools}" SelectedItem="{Binding CurrentTool}">
@@ -278,32 +289,72 @@
             </TabControl>
         </Grid>
         <GridSplitter Grid.Row="2" Grid.Column="1"/>
-        <Border Classes="zoom" Grid.Row="2" Grid.Column="2">
-            <Border Classes="clip" ClipToBounds="True" Background="Transparent" Focusable="True">
-                <Border.KeyBindings>
-                    <!-- Edit -->
-                    <KeyBinding Command="{Binding ContainerView.Selection.Cut}" CommandParameter="{Binding}" Gesture="Ctrl+X"/>
-                    <KeyBinding Command="{Binding ContainerView.Selection.Copy}" CommandParameter="{Binding}" Gesture="Ctrl+C"/>
-                    <KeyBinding Command="{Binding ContainerView.Selection.Paste}" CommandParameter="{Binding}" Gesture="Ctrl+V"/>
-                    <KeyBinding Command="{Binding ContainerView.Selection.Delete}" CommandParameter="{Binding}" Gesture="Delete"/>
-                    <KeyBinding Command="{Binding ContainerView.Selection.Group}" CommandParameter="{Binding}" Gesture="Ctrl+G"/>
-                    <KeyBinding Command="{Binding ContainerView.Selection.SelectAll}" CommandParameter="{Binding}" Gesture="Ctrl+A"/>
-                    <!-- Tool -->
-                    <KeyBinding Command="{Binding SetTool}" CommandParameter="None" Gesture="N"/>
-                    <KeyBinding Command="{Binding SetTool}" CommandParameter="Selection" Gesture="S"/>
-                    <KeyBinding Command="{Binding SetTool}" CommandParameter="Line" Gesture="L"/>
-                    <KeyBinding Command="{Binding SetTool}" CommandParameter="Point" Gesture="P"/>
-                    <KeyBinding Command="{Binding SetTool}" CommandParameter="CubicBezier" Gesture="B"/>
-                    <KeyBinding Command="{Binding SetTool}" CommandParameter="QuadraticBezier" Gesture="Q"/>
-                    <KeyBinding Command="{Binding SetTool}" CommandParameter="Conic" Gesture="A"/>
-                    <KeyBinding Command="{Binding SetTool}" CommandParameter="Path" Gesture="H"/>
-                    <KeyBinding Command="{Binding SetTool}" CommandParameter="Move" Gesture="M"/>
-                    <KeyBinding Command="{Binding SetTool}" CommandParameter="Rectangle" Gesture="R"/>
-                    <KeyBinding Command="{Binding SetTool}" CommandParameter="Ellipse" Gesture="E"/>
-                    <KeyBinding Command="{Binding SetTool}" CommandParameter="Text" Gesture="T"/>
-                </Border.KeyBindings>
-                <controls:ZoomControl InputTarget="{Binding}" DrawTarget="{Binding ContainerView}" CustomDraw="True" Background="Transparent" ClipToBounds="False"/>
-            </Border>
-        </Border>
+        <DockPanel Classes="views" Grid.Row="2" Grid.Column="2">
+            <TabStrip Items="{Binding ContainerViews}" SelectedItem="{Binding ContainerView, Mode=TwoWay}" Focusable="false" DockPanel.Dock="Top">
+                <TabStrip.Styles>
+                    <Style Selector="TabStripItem">
+                        <Setter Property="Background" Value="Transparent"/>
+                        <Setter Property="FontSize" Value="{DynamicResource FontSizeNormal}"/>
+                        <Setter Property="Foreground" Value="{DynamicResource ThemeForegroundLightBrush}"/>
+                        <Setter Property="HorizontalContentAlignment" Value="Left"/>
+                        <Setter Property="Padding" Value="4"/>
+                        <Setter Property="Margin" Value="0" />
+                    </Style>
+                    <Style Selector="TabStripItem:pointerover">
+                        <Setter Property="Background" Value="{DynamicResource ThemeControlHighlightMidBrush}"/>
+                    </Style>
+                    <Style Selector="TabStripItem:selected">
+                        <Setter Property="Background" Value="{DynamicResource ThemeAccentBrush4}"/>
+                    </Style>
+                    <Style Selector="TabStripItem:selected:focus">
+                        <Setter Property="Background" Value="{DynamicResource ThemeAccentBrush3}"/>
+                    </Style>
+                    <Style Selector="TabStripItem:selected:pointerover">
+                        <Setter Property="Background" Value="{DynamicResource ThemeAccentBrush3}"/>
+                    </Style>
+                    <Style Selector="TabStripItem:selected:focus:pointerover">
+                        <Setter Property="Background" Value="{DynamicResource ThemeAccentBrush2}"/>
+                    </Style>
+                </TabStrip.Styles>
+                <TabStrip.DataTemplates>
+                    <DataTemplate>
+                        <TextBlock Classes="default" Text="{Binding Title}"/>
+                    </DataTemplate>
+                </TabStrip.DataTemplates>
+            </TabStrip>
+            <Carousel Items="{Binding ContainerViews}" SelectedItem="{Binding ContainerView, Mode=TwoWay}" IsVirtualized="False">
+                <Carousel.DataTemplates>
+                    <DataTemplate>
+                        <Border Classes="zoom">
+                            <Border Classes="clip" ClipToBounds="True" Background="Transparent" Focusable="True">
+                                <Border.KeyBindings>
+                                    <!-- Edit -->
+                                    <KeyBinding Command="{Binding Selection.Cut}" CommandParameter="{Binding $parent[UserControl].DataContext}" Gesture="Ctrl+X"/>
+                                    <KeyBinding Command="{Binding Selection.Copy}" CommandParameter="{Binding $parent[UserControl].DataContext}" Gesture="Ctrl+C"/>
+                                    <KeyBinding Command="{Binding Selection.Paste}" CommandParameter="{Binding $parent[UserControl].DataContext}" Gesture="Ctrl+V"/>
+                                    <KeyBinding Command="{Binding Selection.Delete}" CommandParameter="{Binding $parent[UserControl].DataContext}" Gesture="Delete"/>
+                                    <KeyBinding Command="{Binding Selection.Group}" CommandParameter="{Binding $parent[UserControl].DataContext}" Gesture="Ctrl+G"/>
+                                    <KeyBinding Command="{Binding Selection.SelectAll}" CommandParameter="{Binding $parent[UserControl].DataContext}" Gesture="Ctrl+A"/>
+                                    <!-- Tools -->
+                                    <KeyBinding Command="{Binding $parent[UserControl].DataContext.SetTool}" CommandParameter="None" Gesture="N"/>
+                                    <KeyBinding Command="{Binding $parent[UserControl].DataContext.SetTool}" CommandParameter="Selection" Gesture="S"/>
+                                    <KeyBinding Command="{Binding $parent[UserControl].DataContext.SetTool}" CommandParameter="Line" Gesture="L"/>
+                                    <KeyBinding Command="{Binding $parent[UserControl].DataContext.SetTool}" CommandParameter="Point" Gesture="P"/>
+                                    <KeyBinding Command="{Binding $parent[UserControl].DataContext.SetTool}" CommandParameter="CubicBezier" Gesture="B"/>
+                                    <KeyBinding Command="{Binding $parent[UserControl].DataContext.SetTool}" CommandParameter="QuadraticBezier" Gesture="Q"/>
+                                    <KeyBinding Command="{Binding $parent[UserControl].DataContext.SetTool}" CommandParameter="Conic" Gesture="A"/>
+                                    <KeyBinding Command="{Binding $parent[UserControl].DataContext.SetTool}" CommandParameter="Path" Gesture="H"/>
+                                    <KeyBinding Command="{Binding $parent[UserControl].DataContext.SetTool}" CommandParameter="Move" Gesture="M"/>
+                                    <KeyBinding Command="{Binding $parent[UserControl].DataContext.SetTool}" CommandParameter="Rectangle" Gesture="R"/>
+                                    <KeyBinding Command="{Binding $parent[UserControl].DataContext.SetTool}" CommandParameter="Ellipse" Gesture="E"/>
+                                    <KeyBinding Command="{Binding $parent[UserControl].DataContext.SetTool}" CommandParameter="Text" Gesture="T"/>
+                                </Border.KeyBindings>
+                                <controls:ZoomControl InputTarget="{Binding $parent[UserControl].DataContext}" DrawTarget="{Binding}" CustomDraw="True" Background="Transparent" ClipToBounds="False"/>
+                            </Border>
+                        </Border>
+                    </DataTemplate>
+                </Carousel.DataTemplates>
+            </Carousel>
+        </DockPanel>
     </Grid>
 </UserControl>
