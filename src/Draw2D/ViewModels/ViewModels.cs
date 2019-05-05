@@ -5250,6 +5250,9 @@ namespace Draw2D.ViewModels.Tools
     [DataContract(IsReference = true)]
     public class CubicBezierTool : ViewModelBase, ITool
     {
+        private IList<PointIntersection> _intersections;
+        private IList<PointFilter> _filters;
+        private CubicBezierToolSettings _settings;
         private CubicBezierShape _cubicBezier = null;
 
         public enum State
@@ -5267,13 +5270,25 @@ namespace Draw2D.ViewModels.Tools
         public string Title => "CubicBezier";
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public IList<PointIntersection> Intersections { get; set; }
+        public IList<PointIntersection> Intersections
+        {
+            get => _intersections;
+            set => Update(ref _intersections, value);
+        }
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public IList<PointFilter> Filters { get; set; }
+        public IList<PointFilter> Filters
+        {
+            get => _filters;
+            set => Update(ref _filters, value);
+        }
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public CubicBezierToolSettings Settings { get; set; }
+        public CubicBezierToolSettings Settings
+        {
+            get => _settings;
+            set => Update(ref _settings, value);
+        }
 
         private void StartPointInternal(IToolContext context, double x, double y, Modifier modifier)
         {
@@ -5530,6 +5545,9 @@ namespace Draw2D.ViewModels.Tools
     [DataContract(IsReference = true)]
     public class EllipseTool : ViewModelBase, ITool
     {
+        private IList<PointIntersection> _intersections;
+        private IList<PointFilter> _filters;
+        private EllipseToolSettings _settings;
         private EllipseShape _ellipse = null;
 
         public enum State
@@ -5544,14 +5562,27 @@ namespace Draw2D.ViewModels.Tools
         [IgnoreDataMember]
         public string Title => "Ellipse";
 
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public IList<PointIntersection> Intersections { get; set; }
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public IList<PointFilter> Filters { get; set; }
+        public IList<PointIntersection> Intersections
+        {
+            get => _intersections;
+            set => Update(ref _intersections, value);
+        }
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public EllipseToolSettings Settings { get; set; }
+        public IList<PointFilter> Filters
+        {
+            get => _filters;
+            set => Update(ref _filters, value);
+        }
+
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public EllipseToolSettings Settings
+        {
+            get => _settings;
+            set => Update(ref _settings, value);
+        }
 
         private void TopLeftInternal(IToolContext context, double x, double y, Modifier modifier)
         {
@@ -5709,6 +5740,9 @@ namespace Draw2D.ViewModels.Tools
     [DataContract(IsReference = true)]
     public class GuideTool : ViewModelBase, ITool
     {
+        private IList<PointIntersection> _intersections;
+        private IList<PointFilter> _filters;
+        private GuideToolSettings _settings;
         private LineShape _line = null;
 
         public enum State
@@ -5724,13 +5758,25 @@ namespace Draw2D.ViewModels.Tools
         public string Title => "Guide";
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public IList<PointIntersection> Intersections { get; set; }
+        public IList<PointIntersection> Intersections
+        {
+            get => _intersections;
+            set => Update(ref _intersections, value);
+        }
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public IList<PointFilter> Filters { get; set; }
+        public IList<PointFilter> Filters
+        {
+            get => _filters;
+            set => Update(ref _filters, value);
+        }
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public GuideToolSettings Settings { get; set; }
+        public GuideToolSettings Settings
+        {
+            get => _settings;
+            set => Update(ref _settings, value);
+        }
 
         private void StartPointInternal(IToolContext context, double x, double y, Modifier modifier)
         {
@@ -5924,6 +5970,9 @@ namespace Draw2D.ViewModels.Tools
     [DataContract(IsReference = true)]
     public class LineTool : ViewModelBase, ITool
     {
+        private IList<PointIntersection> _intersections;
+        private IList<PointFilter> _filters;
+        private LineToolSettings _settings;
         private LineShape _line = null;
 
         public enum State
@@ -5939,13 +5988,25 @@ namespace Draw2D.ViewModels.Tools
         public string Title => "Line";
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public IList<PointIntersection> Intersections { get; set; }
+        public IList<PointIntersection> Intersections
+        {
+            get => _intersections;
+            set => Update(ref _intersections, value);
+        }
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public IList<PointFilter> Filters { get; set; }
+        public IList<PointFilter> Filters
+        {
+            get => _filters;
+            set => Update(ref _filters, value);
+        }
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public LineToolSettings Settings { get; set; }
+        public LineToolSettings Settings
+        {
+            get => _settings;
+            set => Update(ref _settings, value);
+        }
 
         private void StartPointInternal(IToolContext context, double x, double y, Modifier modifier)
         {
@@ -6114,6 +6175,10 @@ namespace Draw2D.ViewModels.Tools
     [DataContract(IsReference = true)]
     public class MoveTool : ViewModelBase, ITool
     {
+        private IList<PointIntersection> _intersections;
+        private IList<PointFilter> _filters;
+        private MoveToolSettings _settings;
+
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public PathTool PathTool { get; set; }
 
@@ -6121,13 +6186,25 @@ namespace Draw2D.ViewModels.Tools
         public string Title => "Move";
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public IList<PointIntersection> Intersections { get; set; }
+        public IList<PointIntersection> Intersections
+        {
+            get => _intersections;
+            set => Update(ref _intersections, value);
+        }
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public IList<PointFilter> Filters { get; set; }
+        public IList<PointFilter> Filters
+        {
+            get => _filters;
+            set => Update(ref _filters, value);
+        }
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public MoveToolSettings Settings { get; set; }
+        public MoveToolSettings Settings
+        {
+            get => _settings;
+            set => Update(ref _settings, value);
+        }
 
         public MoveTool(PathTool pathTool)
         {
@@ -6168,17 +6245,33 @@ namespace Draw2D.ViewModels.Tools
     [DataContract(IsReference = true)]
     public class NoneTool : ViewModelBase, ITool
     {
+        private IList<PointIntersection> _intersections;
+        private IList<PointFilter> _filters;
+        private NoneToolSettings _settings;
+
         [IgnoreDataMember]
         public string Title => "None";
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public IList<PointIntersection> Intersections { get; set; }
+        public IList<PointIntersection> Intersections
+        {
+            get => _intersections;
+            set => Update(ref _intersections, value);
+        }
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public IList<PointFilter> Filters { get; set; }
+        public IList<PointFilter> Filters
+        {
+            get => _filters;
+            set => Update(ref _filters, value);
+        }
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public NoneToolSettings Settings { get; set; }
+        public NoneToolSettings Settings
+        {
+            get => _settings;
+            set => Update(ref _settings, value);
+        }
 
         public void LeftDown(IToolContext context, double x, double y, Modifier modifier)
         {
@@ -6430,6 +6523,10 @@ namespace Draw2D.ViewModels.Tools
 
     public partial class PathTool : ViewModelBase, ITool
     {
+        private IList<PointIntersection> _intersections;
+        private IList<PointFilter> _filters;
+        private PathToolSettings _settings;
+
         internal PathShape _path;
         internal FigureShape _figure;
 
@@ -6437,13 +6534,25 @@ namespace Draw2D.ViewModels.Tools
         public string Title => "Path";
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public IList<PointIntersection> Intersections { get; set; }
+        public IList<PointIntersection> Intersections
+        {
+            get => _intersections;
+            set => Update(ref _intersections, value);
+        }
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public IList<PointFilter> Filters { get; set; }
+        public IList<PointFilter> Filters
+        {
+            get => _filters;
+            set => Update(ref _filters, value);
+        }
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public PathToolSettings Settings { get; set; }
+        public PathToolSettings Settings
+        {
+            get => _settings;
+            set => Update(ref _settings, value);
+        }
 
         public PointShape GetLastPoint()
         {
@@ -6667,17 +6776,33 @@ namespace Draw2D.ViewModels.Tools
     [DataContract(IsReference = true)]
     public class PointTool : ViewModelBase, ITool
     {
+        private IList<PointIntersection> _intersections;
+        private IList<PointFilter> _filters;
+        private PointToolSettings _settings;
+
         [IgnoreDataMember]
         public string Title => "Point";
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public IList<PointIntersection> Intersections { get; set; }
+        public IList<PointIntersection> Intersections
+        {
+            get => _intersections;
+            set => Update(ref _intersections, value);
+        }
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public IList<PointFilter> Filters { get; set; }
+        public IList<PointFilter> Filters
+        {
+            get => _filters;
+            set => Update(ref _filters, value);
+        }
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public PointToolSettings Settings { get; set; }
+        public PointToolSettings Settings
+        {
+            get => _settings;
+            set => Update(ref _settings, value);
+        }
 
         private void PointInternal(IToolContext context, double x, double y, Modifier modifier)
         {
@@ -6771,6 +6896,9 @@ namespace Draw2D.ViewModels.Tools
     [DataContract(IsReference = true)]
     public class PolyLineTool : ViewModelBase, ITool
     {
+        private IList<PointIntersection> _intersections;
+        private IList<PointFilter> _filters;
+        private PolyLineToolSettings _settings;
         private LineShape _line = null;
         private IList<PointShape> _points = null;
 
@@ -6787,13 +6915,25 @@ namespace Draw2D.ViewModels.Tools
         public string Title => "PolyLine";
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public IList<PointIntersection> Intersections { get; set; }
+        public IList<PointIntersection> Intersections
+        {
+            get => _intersections;
+            set => Update(ref _intersections, value);
+        }
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public IList<PointFilter> Filters { get; set; }
+        public IList<PointFilter> Filters
+        {
+            get => _filters;
+            set => Update(ref _filters, value);
+        }
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public PolyLineToolSettings Settings { get; set; }
+        public PolyLineToolSettings Settings
+        {
+            get => _settings;
+            set => Update(ref _settings, value);
+        }
 
         private void StartPointInternal(IToolContext context, double x, double y, Modifier modifier)
         {
@@ -6985,6 +7125,9 @@ namespace Draw2D.ViewModels.Tools
     [DataContract(IsReference = true)]
     public class QuadraticBezierTool : ViewModelBase, ITool
     {
+        private IList<PointIntersection> _intersections;
+        private IList<PointFilter> _filters;
+        private QuadraticBezierToolSettings _settings;
         private QuadraticBezierShape _quadraticBezier = null;
 
         public enum State
@@ -7001,13 +7144,25 @@ namespace Draw2D.ViewModels.Tools
         public string Title => "QuadraticBezier";
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public QuadraticBezierToolSettings Settings { get; set; }
+        public IList<PointIntersection> Intersections
+        {
+            get => _intersections;
+            set => Update(ref _intersections, value);
+        }
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public IList<PointIntersection> Intersections { get; set; }
+        public IList<PointFilter> Filters
+        {
+            get => _filters;
+            set => Update(ref _filters, value);
+        }
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public IList<PointFilter> Filters { get; set; }
+        public QuadraticBezierToolSettings Settings
+        {
+            get => _settings;
+            set => Update(ref _settings, value);
+        }
 
         private void StartPointInternal(IToolContext context, double x, double y, Modifier modifier)
         {
@@ -7228,6 +7383,9 @@ namespace Draw2D.ViewModels.Tools
     [DataContract(IsReference = true)]
     public class ConicTool : ViewModelBase, ITool
     {
+        private IList<PointIntersection> _intersections;
+        private IList<PointFilter> _filters;
+        private ConicToolSettings _settings;
         private ConicShape _conic = null;
 
         public enum State
@@ -7244,13 +7402,25 @@ namespace Draw2D.ViewModels.Tools
         public string Title => "Conic";
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public ConicToolSettings Settings { get; set; }
+        public IList<PointIntersection> Intersections
+        {
+            get => _intersections;
+            set => Update(ref _intersections, value);
+        }
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public IList<PointIntersection> Intersections { get; set; }
+        public IList<PointFilter> Filters
+        {
+            get => _filters;
+            set => Update(ref _filters, value);
+        }
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public IList<PointFilter> Filters { get; set; }
+        public ConicToolSettings Settings
+        {
+            get => _settings;
+            set => Update(ref _settings, value);
+        }
 
         private void StartPointInternal(IToolContext context, double x, double y, Modifier modifier)
         {
@@ -7464,6 +7634,9 @@ namespace Draw2D.ViewModels.Tools
     [DataContract(IsReference = true)]
     public class RectangleTool : ViewModelBase, ITool
     {
+        private IList<PointIntersection> _intersections;
+        private IList<PointFilter> _filters;
+        private RectangleToolSettings _settings;
         private RectangleShape _rectangle = null;
 
         public enum State
@@ -7479,13 +7652,25 @@ namespace Draw2D.ViewModels.Tools
         public string Title => "Rectangle";
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public IList<PointIntersection> Intersections { get; set; }
+        public IList<PointIntersection> Intersections
+        {
+            get => _intersections;
+            set => Update(ref _intersections, value);
+        }
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public IList<PointFilter> Filters { get; set; }
+        public IList<PointFilter> Filters
+        {
+            get => _filters;
+            set => Update(ref _filters, value);
+        }
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public RectangleToolSettings Settings { get; set; }
+        public RectangleToolSettings Settings
+        {
+            get => _settings;
+            set => Update(ref _settings, value);
+        }
 
         private void TopLeftInternal(IToolContext context, double x, double y, Modifier modifier)
         {
@@ -7676,6 +7861,9 @@ namespace Draw2D.ViewModels.Tools
     [DataContract(IsReference = true)]
     public class ScribbleTool : ViewModelBase, ITool
     {
+        private IList<PointIntersection> _intersections;
+        private IList<PointFilter> _filters;
+        private ScribbleToolSettings _settings;
         private PathShape _path = null;
         private FigureShape _figure = null;
         private PointShape _previousPoint = null;
@@ -7694,13 +7882,25 @@ namespace Draw2D.ViewModels.Tools
         public string Title => "Scribble";
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public IList<PointIntersection> Intersections { get; set; }
+        public IList<PointIntersection> Intersections
+        {
+            get => _intersections;
+            set => Update(ref _intersections, value);
+        }
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public IList<PointFilter> Filters { get; set; }
+        public IList<PointFilter> Filters
+        {
+            get => _filters;
+            set => Update(ref _filters, value);
+        }
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public ScribbleToolSettings Settings { get; set; }
+        public ScribbleToolSettings Settings
+        {
+            get => _settings;
+            set => Update(ref _settings, value);
+        }
 
         private void StartInternal(IToolContext context, double x, double y, Modifier modifier)
         {
@@ -8984,6 +9184,9 @@ namespace Draw2D.ViewModels.Tools
     [DataContract(IsReference = true)]
     public class TextTool : ViewModelBase, ITool
     {
+        private IList<PointIntersection> _intersections;
+        private IList<PointFilter> _filters;
+        private TextToolSettings _settings;
         private TextShape _text = null;
 
         public enum State
@@ -8999,13 +9202,25 @@ namespace Draw2D.ViewModels.Tools
         public string Title => "Text";
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public IList<PointIntersection> Intersections { get; set; }
+        public IList<PointIntersection> Intersections
+        {
+            get => _intersections;
+            set => Update(ref _intersections, value);
+        }
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public IList<PointFilter> Filters { get; set; }
+        public IList<PointFilter> Filters
+        {
+            get => _filters;
+            set => Update(ref _filters, value);
+        }
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public TextToolSettings Settings { get; set; }
+        public TextToolSettings Settings
+        {
+            get => _settings;
+            set => Update(ref _settings, value);
+        }
 
         private void TopLeftInternal(IToolContext context, double x, double y, Modifier modifier)
         {
