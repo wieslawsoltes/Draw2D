@@ -177,19 +177,50 @@
         <Grid RowDefinitions="55*,Auto,45*" Grid.Row="2" Grid.Column="0">
             <TabControl Classes="default" Grid.Row="0" TabStripPlacement="Top">
                 <TabItem Classes="default" Header="Tool">
-                    <Border Classes="default">
-                        <ContentControl Content="{Binding CurrentTool.Settings}"/>
-                    </Border>
+                    <TabControl Classes="default" TabStripPlacement="Top">
+                        <TabItem Classes="default" Header="Current">
+                            <ContentControl Content="{Binding CurrentTool.Settings}"/>
+                        </TabItem>
+                        <TabItem Classes="default" Header="Intersections">
+                            <Grid RowDefinitions="Auto,*">
+                                <ComboBox Classes="default" Grid.Row="0" x:Name="Intersections" Items="{Binding CurrentTool.Intersections}" SelectedIndex="0">
+                                    <ComboBox.DataTemplates>
+                                        <DataTemplate>
+                                            <TextBlock Classes="default" Text="{Binding Title}"/>
+                                        </DataTemplate>
+                                    </ComboBox.DataTemplates>
+                                </ComboBox>
+                                <ContentControl Grid.Row="1" Content="{Binding ElementName=Intersections, Path=SelectedItem.Settings}"/>
+                            </Grid>
+                        </TabItem>
+                        <TabItem Classes="default" Header="Filters">
+                            <Grid RowDefinitions="Auto,*">
+                                <ComboBox Classes="default" Grid.Row="0" x:Name="Filters" Items="{Binding CurrentTool.Filters}" SelectedIndex="0">
+                                    <ComboBox.DataTemplates>
+                                        <DataTemplate>
+                                            <TextBlock Classes="default" Text="{Binding Title}"/>
+                                        </DataTemplate>
+                                    </ComboBox.DataTemplates>
+                                </ComboBox>
+                                <ContentControl Grid.Row="1" Content="{Binding ElementName=Filters, Path=SelectedItem.Settings}"/>
+                            </Grid>
+                        </TabItem>
+                        <TabItem Classes="default" Header="Tools">
+                            <ListBox Classes="default" Items="{Binding Tools}" SelectedItem="{Binding CurrentTool}">
+                                <ListBox.DataTemplates>
+                                    <DataTemplate>
+                                        <TextBlock Classes="default" Text="{Binding Title}"/>
+                                    </DataTemplate>
+                                </ListBox.DataTemplates>
+                            </ListBox>
+                        </TabItem>
+                    </TabControl>
                 </TabItem>
                 <TabItem Classes="default" Header="Style">
-                    <Border Classes="default">
-                        <ContentControl Content="{Binding ContainerView.CurrentContainer.CurrentStyle}"/>
-                    </Border>
+                    <ContentControl Content="{Binding ContainerView.CurrentContainer.CurrentStyle}"/>
                 </TabItem>
                 <TabItem Classes="default" Header="Hovered">
-                    <Border Classes="default">
-                        <ContentControl Content="{Binding ContainerView.Selection.Hovered}"/>
-                    </Border>
+                    <ContentControl Content="{Binding ContainerView.Selection.Hovered}"/>
                 </TabItem>
                 <TabItem Classes="default" Header="Renderer">
                     <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="*,150">
@@ -226,65 +257,24 @@
             </TabControl>
             <GridSplitter Grid.Row="1"/>
             <TabControl Classes="default" Grid.Row="2" TabStripPlacement="Top">
-                <TabItem Classes="default" Header="Container">
-                    <Border Classes="default">
-                        <ContentControl Content="{Binding ContainerView.CurrentContainer}"/>
-                    </Border>
-                </TabItem>
-                <TabItem Classes="default" Header="Working">
-                    <Border Classes="default">
-                        <ContentControl Content="{Binding ContainerView.WorkingContainer}"/>
-                    </Border>
-                </TabItem>
                 <TabItem Classes="default" Header="Views">
-                    <Border Classes="default">
-                        <ListBox Classes="default" Items="{Binding ContainerViews}" SelectedItem="{Binding ContainerView}">
-                            <ListBox.DataTemplates>
-                                <DataTemplate>
-                                    <TextBlock Classes="default" Text="{Binding Title}"/>
-                                </DataTemplate>
-                            </ListBox.DataTemplates>
-                        </ListBox>
-                    </Border>
-                </TabItem>    
-                <TabItem Classes="default" Header="Tools">
-                    <Border Classes="default">
-                        <ListBox Classes="default" Items="{Binding Tools}" SelectedItem="{Binding CurrentTool}">
-                            <ListBox.DataTemplates>
-                                <DataTemplate>
-                                    <TextBlock Classes="default" Text="{Binding Title}"/>
-                                </DataTemplate>
-                            </ListBox.DataTemplates>
-                        </ListBox>
-                    </Border>
-                </TabItem>
-                <TabItem Classes="default" Header="Intersections">
-                    <Border Classes="default">
-                        <Grid RowDefinitions="Auto,*">
-                            <ComboBox Classes="default" Grid.Row="0" x:Name="Intersections" Items="{Binding CurrentTool.Intersections}" SelectedIndex="0">
-                                <ComboBox.DataTemplates>
+                    <TabControl Classes="default" TabStripPlacement="Top">
+                        <TabItem Classes="default" Header="Current">
+                            <ContentControl Content="{Binding ContainerView.CurrentContainer}"/>
+                        </TabItem>
+                        <TabItem Classes="default" Header="Working">
+                            <ContentControl Content="{Binding ContainerView.WorkingContainer}"/>
+                        </TabItem>
+                        <TabItem Classes="default" Header="Views">
+                            <ListBox Classes="default" Items="{Binding ContainerViews}" SelectedItem="{Binding ContainerView}">
+                                <ListBox.DataTemplates>
                                     <DataTemplate>
                                         <TextBlock Classes="default" Text="{Binding Title}"/>
                                     </DataTemplate>
-                                </ComboBox.DataTemplates>
-                            </ComboBox>
-                            <ContentControl Grid.Row="1" Content="{Binding ElementName=Intersections, Path=SelectedItem.Settings}"/>
-                        </Grid>
-                    </Border>
-                </TabItem>
-                <TabItem Classes="default" Header="Filters">
-                    <Border Classes="default">
-                        <Grid RowDefinitions="Auto,*">
-                            <ComboBox Classes="default" Grid.Row="0" x:Name="Filters" Items="{Binding CurrentTool.Filters}" SelectedIndex="0">
-                                <ComboBox.DataTemplates>
-                                    <DataTemplate>
-                                        <TextBlock Classes="default" Text="{Binding Title}"/>
-                                    </DataTemplate>
-                                </ComboBox.DataTemplates>
-                            </ComboBox>
-                            <ContentControl Grid.Row="1" Content="{Binding ElementName=Filters, Path=SelectedItem.Settings}"/>
-                        </Grid>
-                    </Border>
+                                </ListBox.DataTemplates>
+                            </ListBox>
+                        </TabItem>
+                    </TabControl>
                 </TabItem>
             </TabControl>
         </Grid>
