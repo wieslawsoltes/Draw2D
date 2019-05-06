@@ -13,7 +13,6 @@
         <Style Selector="Border.default">
             <Setter Property="Padding" Value="0"/>
             <Setter Property="Margin" Value="0"/>
-            <Setter Property="BorderBrush" Value="{DynamicResource ThemeBorderLightBrush}"/>
             <Setter Property="BorderThickness" Value="0"/>
         </Style>
         <Style Selector="Border.zoom">
