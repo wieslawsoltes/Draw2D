@@ -21,7 +21,7 @@ using SkiaSharp;
 
 namespace Draw2D.Editor
 {
-    public class ContainerEditor : ToolContext, IContainerEditor
+    public class ContainerEditor : ToolContext
     {
         public static void CreateDemoGroup(IToolContext context)
         {
@@ -511,6 +511,11 @@ namespace Draw2D.Editor
             containerView.WorkingContainer = NewWorkingContainer();
 
             return containerView;
+        }
+
+        public void CloseContainerView(IContainerView view)
+        {
+            ContainerViews.Remove(view);
         }
 
         public T Load<T>(string path)
