@@ -289,7 +289,7 @@
                         <Setter Property="FontSize" Value="{DynamicResource FontSizeNormal}"/>
                         <Setter Property="Foreground" Value="{DynamicResource ThemeForegroundLowBrush}"/>
                         <Setter Property="HorizontalContentAlignment" Value="Left"/>
-                        <Setter Property="Padding" Value="4"/>
+                        <Setter Property="Padding" Value="2"/>
                         <Setter Property="Margin" Value="0" />
                     </Style>
                     <Style Selector="TabStripItem:pointerover">
@@ -326,7 +326,7 @@
                 <TabStrip.DataTemplates>
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal" Spacing="2">
-                            <StackPanel Orientation="Horizontal" TextBlock.FontSize="12">
+                            <StackPanel Orientation="Horizontal" Margin="2" TextBlock.FontSize="12">
                                 <TextBlock Classes="default" Text="{Binding Title}" />
                                 <!--<TextBlock Classes="default" Text="*" IsVisible="{Binding IsDirty, FallbackValue=False}" />-->
                             </StackPanel>
