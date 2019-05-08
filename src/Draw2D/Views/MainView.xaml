@@ -110,29 +110,29 @@
                     </MenuItem.Icon>
                 </MenuItem>
                 <MenuItem Header="Path T_ools" IsEnabled="{Binding CurrentTool, Converter={StaticResource IsToolConverter}, ConverterParameter=Path, Mode=OneWay}">
-                    <MenuItem Header="_Line" Command="{Binding SetTool}" CommandParameter="PolyLine">
+                    <MenuItem Header="_Line" Command="{Binding SetTool}" CommandParameter="Line">
                         <MenuItem.Icon>
-                            <CheckBox BorderThickness="0" IsHitTestVisible="False" IsChecked="{Binding CurrentTool.Settings.CurrentTool, Converter={StaticResource IsToolConverter}, ConverterParameter=PolyLine, Mode=OneWay}"/>
+                            <CheckBox BorderThickness="0" IsHitTestVisible="False" IsChecked="{Binding CurrentTool.Settings.CurrentTool, FallbackValue={x:Null}, Converter={StaticResource IsToolConverter}, ConverterParameter=PolyLine, Mode=OneWay}"/>
                         </MenuItem.Icon>
                     </MenuItem>
                     <MenuItem Header="_Cubic Bezier" Command="{Binding SetTool}" CommandParameter="CubicBezier">
                         <MenuItem.Icon>
-                            <CheckBox BorderThickness="0" IsHitTestVisible="False" IsChecked="{Binding CurrentTool.Settings.CurrentTool, Converter={StaticResource IsToolConverter}, ConverterParameter=CubicBezier, Mode=OneWay}"/>
+                            <CheckBox BorderThickness="0" IsHitTestVisible="False" IsChecked="{Binding CurrentTool.Settings.CurrentTool, FallbackValue={x:Null}, Converter={StaticResource IsToolConverter}, ConverterParameter=CubicBezier, Mode=OneWay}"/>
                         </MenuItem.Icon>
                     </MenuItem>
                     <MenuItem Header="_Quadratic Bezier" Command="{Binding SetTool}" CommandParameter="QuadraticBezier">
                         <MenuItem.Icon>
-                            <CheckBox BorderThickness="0" IsHitTestVisible="False" IsChecked="{Binding CurrentTool.Settings.CurrentTool, Converter={StaticResource IsToolConverter}, ConverterParameter=QuadraticBezier, Mode=OneWay}"/>
+                            <CheckBox BorderThickness="0" IsHitTestVisible="False" IsChecked="{Binding CurrentTool.Settings.CurrentTool, FallbackValue={x:Null}, Converter={StaticResource IsToolConverter}, ConverterParameter=QuadraticBezier, Mode=OneWay}"/>
                         </MenuItem.Icon>
                     </MenuItem>
                     <MenuItem Header="Con_ic" Command="{Binding SetTool}" CommandParameter="Conic">
                         <MenuItem.Icon>
-                            <CheckBox BorderThickness="0" IsHitTestVisible="False" IsChecked="{Binding CurrentTool.Settings.CurrentTool, Converter={StaticResource IsToolConverter}, ConverterParameter=Conic, Mode=OneWay}"/>
+                            <CheckBox BorderThickness="0" IsHitTestVisible="False" IsChecked="{Binding CurrentTool.Settings.CurrentTool, FallbackValue={x:Null}, Converter={StaticResource IsToolConverter}, ConverterParameter=Conic, Mode=OneWay}"/>
                         </MenuItem.Icon>
                     </MenuItem>
                     <MenuItem Header="_Move" Command="{Binding SetTool}" CommandParameter="Move">
                         <MenuItem.Icon>
-                            <CheckBox BorderThickness="0" IsHitTestVisible="False" IsChecked="{Binding CurrentTool.Settings.CurrentTool, Converter={StaticResource IsToolConverter}, ConverterParameter=Move, Mode=OneWay}"/>
+                            <CheckBox BorderThickness="0" IsHitTestVisible="False" IsChecked="{Binding CurrentTool.Settings.CurrentTool, FallbackValue={x:Null}, Converter={StaticResource IsToolConverter}, ConverterParameter=Move, Mode=OneWay}"/>
                         </MenuItem.Icon>
                     </MenuItem>
                 </MenuItem>
@@ -216,28 +216,6 @@
                         </TabItem>
                     </TabControl>
                 </TabItem>
-                <TabItem Classes="default" Header="Style">
-                    <ContentControl Content="{Binding ContainerView.CurrentContainer.CurrentStyle}"/>
-                </TabItem>
-                <TabItem Classes="default" Header="Hovered">
-                    <ContentControl Content="{Binding ContainerView.Selection.Hovered}"/>
-                </TabItem>
-                <TabItem Classes="default" Header="Renderer">
-                    <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="*,150">
-                        <TextBlock Classes="default" Grid.Column="0" Grid.Row="0" Text="ZoomSpeed"/>
-                        <TextBox Classes="default" Grid.Column="1" Grid.Row="0" Text="{Binding ContainerView.ZoomService.ZoomSpeed}"/>
-                        <TextBlock Classes="default" Grid.Column="0" Grid.Row="1" Text="ZoomX"/>
-                        <TextBox Classes="default" Grid.Column="1" Grid.Row="1" Text="{Binding ContainerView.ZoomService.ZoomX}"/>
-                        <TextBlock Classes="default" Grid.Column="0" Grid.Row="2" Text="ZoomY"/>
-                        <TextBox Classes="default" Grid.Column="1" Grid.Row="2" Text="{Binding ContainerView.ZoomService.ZoomY}"/>
-                        <TextBlock Classes="default" Grid.Column="0" Grid.Row="3" Text="OffsetX"/>
-                        <TextBox Classes="default" Grid.Column="1" Grid.Row="3" Text="{Binding ContainerView.ZoomService.OffsetX}"/>
-                        <TextBlock Classes="default" Grid.Column="0" Grid.Row="4" Text="OffsetY"/>
-                        <TextBox Classes="default" Grid.Column="1" Grid.Row="4" Text="{Binding ContainerView.ZoomService.OffsetY}"/>
-                        <TextBlock Classes="default" Grid.Column="0" Grid.Row="5" Text="CustomDraw"/>
-                        <CheckBox Classes="default" Grid.Column="1" Grid.Row="5" IsChecked="{Binding ContainerView.ZoomService.CustomDraw, Mode=TwoWay}"/>
-                    </Grid>
-                </TabItem>
                 <TabItem Classes="default" Header="Path">
                     <Grid RowDefinitions="Auto,*,Auto,Auto">
                         <TextBlock Classes="default" Text="SVG Path:" Grid.Row="0"/>
@@ -275,6 +253,28 @@
                             </ListBox>
                         </TabItem>
                     </TabControl>
+                </TabItem>
+                <TabItem Classes="default" Header="Hovered">
+                    <ContentControl Content="{Binding ContainerView.Selection.Hovered}"/>
+                </TabItem>
+                <TabItem Classes="default" Header="Style">
+                    <ContentControl Content="{Binding ContainerView.CurrentContainer.CurrentStyle}"/>
+                </TabItem>
+                <TabItem Classes="default" Header="Renderer">
+                    <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="*,150">
+                        <TextBlock Classes="default" Grid.Column="0" Grid.Row="0" Text="ZoomSpeed"/>
+                        <TextBox Classes="default" Grid.Column="1" Grid.Row="0" Text="{Binding ContainerView.ZoomService.ZoomSpeed}"/>
+                        <TextBlock Classes="default" Grid.Column="0" Grid.Row="1" Text="ZoomX"/>
+                        <TextBox Classes="default" Grid.Column="1" Grid.Row="1" Text="{Binding ContainerView.ZoomService.ZoomX}"/>
+                        <TextBlock Classes="default" Grid.Column="0" Grid.Row="2" Text="ZoomY"/>
+                        <TextBox Classes="default" Grid.Column="1" Grid.Row="2" Text="{Binding ContainerView.ZoomService.ZoomY}"/>
+                        <TextBlock Classes="default" Grid.Column="0" Grid.Row="3" Text="OffsetX"/>
+                        <TextBox Classes="default" Grid.Column="1" Grid.Row="3" Text="{Binding ContainerView.ZoomService.OffsetX}"/>
+                        <TextBlock Classes="default" Grid.Column="0" Grid.Row="4" Text="OffsetY"/>
+                        <TextBox Classes="default" Grid.Column="1" Grid.Row="4" Text="{Binding ContainerView.ZoomService.OffsetY}"/>
+                        <TextBlock Classes="default" Grid.Column="0" Grid.Row="5" Text="CustomDraw"/>
+                        <CheckBox Classes="default" Grid.Column="1" Grid.Row="5" IsChecked="{Binding ContainerView.ZoomService.CustomDraw, Mode=TwoWay}"/>
+                    </Grid>
                 </TabItem>
             </TabControl>
         </Grid>
