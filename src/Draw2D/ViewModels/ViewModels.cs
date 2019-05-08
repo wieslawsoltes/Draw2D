@@ -5360,8 +5360,8 @@ namespace Draw2D.ViewModels.Tools
             context.ContainerView.Selection.Selected.Add(_cubicBezier.Point2);
             context.ContainerView.Selection.Selected.Add(_cubicBezier.Point3);
 
-            context.ContainerView.InputService?.Capture?.Invoke();
-            context.ContainerView.InputService?.Redraw?.Invoke();
+            context.ContainerView?.InputService?.Capture?.Invoke();
+            context.ContainerView?.InputService?.Redraw?.Invoke();
 
             CurrentState = State.Point3;
         }
@@ -5385,8 +5385,8 @@ namespace Draw2D.ViewModels.Tools
 
             Filters?.ForEach(f => f.Clear(context));
 
-            context.ContainerView.InputService?.Release?.Invoke();
-            context.ContainerView.InputService?.Redraw?.Invoke();
+            context.ContainerView?.InputService?.Release?.Invoke();
+            context.ContainerView?.InputService?.Redraw?.Invoke();
         }
 
         private void Point2Internal(IToolContext context, double x, double y, Modifier modifier)
@@ -5402,7 +5402,7 @@ namespace Draw2D.ViewModels.Tools
 
             CurrentState = State.Point1;
 
-            context.ContainerView.InputService?.Redraw?.Invoke();
+            context.ContainerView?.InputService?.Redraw?.Invoke();
         }
 
         private void Point3Internal(IToolContext context, double x, double y, Modifier modifier)
@@ -5418,7 +5418,7 @@ namespace Draw2D.ViewModels.Tools
 
             CurrentState = State.Point2;
 
-            context.ContainerView.InputService?.Redraw?.Invoke();
+            context.ContainerView?.InputService?.Redraw?.Invoke();
         }
 
         private void MoveStartPointInternal(IToolContext context, double x, double y, Modifier modifier)
@@ -5426,7 +5426,7 @@ namespace Draw2D.ViewModels.Tools
             Filters?.ForEach(f => f.Clear(context));
             Filters?.Any(f => f.Process(context, ref x, ref y));
 
-            context.ContainerView.InputService?.Redraw?.Invoke();
+            context.ContainerView?.InputService?.Redraw?.Invoke();
         }
 
         private void MovePoint1Internal(IToolContext context, double x, double y, Modifier modifier)
@@ -5437,7 +5437,7 @@ namespace Draw2D.ViewModels.Tools
             _cubicBezier.Point1.X = x;
             _cubicBezier.Point1.Y = y;
 
-            context.ContainerView.InputService?.Redraw?.Invoke();
+            context.ContainerView?.InputService?.Redraw?.Invoke();
         }
 
         private void MovePoint2Internal(IToolContext context, double x, double y, Modifier modifier)
@@ -5450,7 +5450,7 @@ namespace Draw2D.ViewModels.Tools
             _cubicBezier.Point2.X = x;
             _cubicBezier.Point2.Y = y;
 
-            context.ContainerView.InputService?.Redraw?.Invoke();
+            context.ContainerView?.InputService?.Redraw?.Invoke();
         }
 
         private void MovePoint3Internal(IToolContext context, double x, double y, Modifier modifier)
@@ -5463,7 +5463,7 @@ namespace Draw2D.ViewModels.Tools
             _cubicBezier.Point3.X = x;
             _cubicBezier.Point3.Y = y;
 
-            context.ContainerView.InputService?.Redraw?.Invoke();
+            context.ContainerView?.InputService?.Redraw?.Invoke();
         }
 
         private void CleanInternal(IToolContext context)
@@ -5483,8 +5483,8 @@ namespace Draw2D.ViewModels.Tools
                 _cubicBezier = null;
             }
 
-            context.ContainerView.InputService?.Release?.Invoke();
-            context.ContainerView.InputService?.Redraw?.Invoke();
+            context.ContainerView?.InputService?.Release?.Invoke();
+            context.ContainerView?.InputService?.Redraw?.Invoke();
         }
 
         public void LeftDown(IToolContext context, double x, double y, Modifier modifier)
@@ -5648,8 +5648,8 @@ namespace Draw2D.ViewModels.Tools
             context.ContainerView.Selection.Selected.Add(_ellipse.TopLeft);
             context.ContainerView.Selection.Selected.Add(_ellipse.BottomRight);
 
-            context.ContainerView.InputService?.Capture?.Invoke();
-            context.ContainerView.InputService?.Redraw?.Invoke();
+            context.ContainerView?.InputService?.Capture?.Invoke();
+            context.ContainerView?.InputService?.Redraw?.Invoke();
 
             CurrentState = State.BottomRight;
         }
@@ -5670,8 +5670,8 @@ namespace Draw2D.ViewModels.Tools
 
             Filters?.ForEach(f => f.Clear(context));
 
-            context.ContainerView.InputService?.Release?.Invoke();
-            context.ContainerView.InputService?.Redraw?.Invoke();
+            context.ContainerView?.InputService?.Release?.Invoke();
+            context.ContainerView?.InputService?.Redraw?.Invoke();
         }
 
         private void MoveTopLeftInternal(IToolContext context, double x, double y, Modifier modifier)
@@ -5679,7 +5679,7 @@ namespace Draw2D.ViewModels.Tools
             Filters?.ForEach(f => f.Clear(context));
             Filters?.Any(f => f.Process(context, ref x, ref y));
 
-            context.ContainerView.InputService?.Redraw?.Invoke();
+            context.ContainerView?.InputService?.Redraw?.Invoke();
         }
 
         private void MoveBottomRightInternal(IToolContext context, double x, double y, Modifier modifier)
@@ -5690,7 +5690,7 @@ namespace Draw2D.ViewModels.Tools
             _ellipse.BottomRight.X = x;
             _ellipse.BottomRight.Y = y;
 
-            context.ContainerView.InputService?.Redraw?.Invoke();
+            context.ContainerView?.InputService?.Redraw?.Invoke();
         }
 
         private void CleanInternal(IToolContext context)
@@ -5708,8 +5708,8 @@ namespace Draw2D.ViewModels.Tools
                 _ellipse = null;
             }
 
-            context.ContainerView.InputService?.Release?.Invoke();
-            context.ContainerView.InputService?.Redraw?.Invoke();
+            context.ContainerView?.InputService?.Release?.Invoke();
+            context.ContainerView?.InputService?.Redraw?.Invoke();
         }
 
         public void LeftDown(IToolContext context, double x, double y, Modifier modifier)
@@ -5839,8 +5839,8 @@ namespace Draw2D.ViewModels.Tools
             };
             context.ContainerView.WorkingContainer.Shapes.Add(_line);
 
-            context.ContainerView.InputService?.Capture?.Invoke();
-            context.ContainerView.InputService?.Redraw?.Invoke();
+            context.ContainerView?.InputService?.Capture?.Invoke();
+            context.ContainerView?.InputService?.Redraw?.Invoke();
 
             CurrentState = State.Point;
         }
@@ -5859,8 +5859,8 @@ namespace Draw2D.ViewModels.Tools
 
             Filters?.ForEach(f => f.Clear(context));
 
-            context.ContainerView.InputService?.Release?.Invoke();
-            context.ContainerView.InputService?.Redraw?.Invoke();
+            context.ContainerView?.InputService?.Release?.Invoke();
+            context.ContainerView?.InputService?.Redraw?.Invoke();
         }
 
         private void MoveStratPointInternal(IToolContext context, double x, double y, Modifier modifier)
@@ -5868,7 +5868,7 @@ namespace Draw2D.ViewModels.Tools
             Filters?.ForEach(f => f.Clear(context));
             Filters?.Any(f => f.Process(context, ref x, ref y));
 
-            context.ContainerView.InputService?.Redraw?.Invoke();
+            context.ContainerView?.InputService?.Redraw?.Invoke();
         }
 
         private void MovePointInternal(IToolContext context, double x, double y, Modifier modifier)
@@ -5879,7 +5879,7 @@ namespace Draw2D.ViewModels.Tools
             _line.Point.X = x;
             _line.Point.Y = y;
 
-            context.ContainerView.InputService?.Redraw?.Invoke();
+            context.ContainerView?.InputService?.Redraw?.Invoke();
         }
 
         private void CleanInternal(IToolContext context)
@@ -5894,8 +5894,8 @@ namespace Draw2D.ViewModels.Tools
                 _line = null;
             }
 
-            context.ContainerView.InputService?.Release?.Invoke();
-            context.ContainerView.InputService?.Redraw?.Invoke();
+            context.ContainerView?.InputService?.Release?.Invoke();
+            context.ContainerView?.InputService?.Redraw?.Invoke();
         }
 
         public void LeftDown(IToolContext context, double x, double y, Modifier modifier)
@@ -6073,8 +6073,8 @@ namespace Draw2D.ViewModels.Tools
             context.ContainerView.Selection.Selected.Add(_line.StartPoint);
             context.ContainerView.Selection.Selected.Add(_line.Point);
 
-            context.ContainerView.InputService?.Capture?.Invoke();
-            context.ContainerView.InputService?.Redraw?.Invoke();
+            context.ContainerView?.InputService?.Capture?.Invoke();
+            context.ContainerView?.InputService?.Redraw?.Invoke();
 
             CurrentState = State.Point;
         }
@@ -6109,8 +6109,8 @@ namespace Draw2D.ViewModels.Tools
             Intersections?.ForEach(i => i.Clear(context));
             Filters?.ForEach(f => f.Clear(context));
 
-            context.ContainerView.InputService?.Release?.Invoke();
-            context.ContainerView.InputService?.Redraw?.Invoke();
+            context.ContainerView?.InputService?.Release?.Invoke();
+            context.ContainerView?.InputService?.Redraw?.Invoke();
         }
 
         private void MoveStartPointInternal(IToolContext context, double x, double y, Modifier modifier)
@@ -6118,7 +6118,7 @@ namespace Draw2D.ViewModels.Tools
             Filters?.ForEach(f => f.Clear(context));
             Filters?.Any(f => f.Process(context, ref x, ref y));
 
-            context.ContainerView.InputService?.Redraw?.Invoke();
+            context.ContainerView?.InputService?.Redraw?.Invoke();
         }
 
         private void MovePointInternal(IToolContext context, double x, double y, Modifier modifier)
@@ -6132,7 +6132,7 @@ namespace Draw2D.ViewModels.Tools
             Intersections?.ForEach(i => i.Clear(context));
             Intersections?.ForEach(i => i.Find(context, _line));
 
-            context.ContainerView.InputService?.Redraw?.Invoke();
+            context.ContainerView?.InputService?.Redraw?.Invoke();
         }
 
         private void CleanInternal(IToolContext context)
@@ -6151,8 +6151,8 @@ namespace Draw2D.ViewModels.Tools
                 _line = null;
             }
 
-            context.ContainerView.InputService?.Release?.Invoke();
-            context.ContainerView.InputService?.Redraw?.Invoke();
+            context.ContainerView?.InputService?.Release?.Invoke();
+            context.ContainerView?.InputService?.Redraw?.Invoke();
         }
 
         public void LeftDown(IToolContext context, double x, double y, Modifier modifier)
@@ -6447,7 +6447,7 @@ namespace Draw2D.ViewModels.Tools
         [IgnoreDataMember]
         public IInputService InputService
         {
-            get => _context.ContainerView.InputService;
+            get => _context.ContainerView?.InputService;
             set => throw new InvalidOperationException($"Can not set {InputService} property value.");
         }
 
@@ -6874,13 +6874,13 @@ namespace Draw2D.ViewModels.Tools
                 {
                     connectable.Points.Add(point);
                     context.ContainerView.Selection.Selected.Add(point);
-                    context.ContainerView.InputService?.Redraw?.Invoke();
+                    context.ContainerView?.InputService?.Redraw?.Invoke();
                 }
             }
             //else
             //{
             //    context.ContainerView.CurrentContainer.Shapes.Add(point);
-            //    context.ContainerView.InputService?.Redraw?.Invoke();
+            //    context.ContainerView?.InputService?.Redraw?.Invoke();
             //}
         }
 
@@ -6889,7 +6889,7 @@ namespace Draw2D.ViewModels.Tools
             Filters?.ForEach(f => f.Clear(context));
             Filters?.Any(f => f.Process(context, ref x, ref y));
 
-            context.ContainerView.InputService?.Redraw?.Invoke();
+            context.ContainerView?.InputService?.Redraw?.Invoke();
         }
 
         private void CleanInternal(IToolContext context)
@@ -7007,8 +7007,8 @@ namespace Draw2D.ViewModels.Tools
             context.ContainerView.Selection.Selected.Add(_line.StartPoint);
             context.ContainerView.Selection.Selected.Add(_line.Point);
 
-            context.ContainerView.InputService?.Capture?.Invoke();
-            context.ContainerView.InputService?.Redraw?.Invoke();
+            context.ContainerView?.InputService?.Capture?.Invoke();
+            context.ContainerView?.InputService?.Redraw?.Invoke();
 
             CurrentState = State.Point;
         }
@@ -7045,7 +7045,7 @@ namespace Draw2D.ViewModels.Tools
             Intersections?.ForEach(i => i.Clear(context));
             Filters?.ForEach(f => f.Clear(context));
 
-            context.ContainerView.InputService?.Redraw?.Invoke();
+            context.ContainerView?.InputService?.Redraw?.Invoke();
         }
 
         private void MoveStartPointInternal(IToolContext context, double x, double y, Modifier modifier)
@@ -7053,7 +7053,7 @@ namespace Draw2D.ViewModels.Tools
             Filters?.ForEach(f => f.Clear(context));
             Filters?.Any(f => f.Process(context, ref x, ref y));
 
-            context.ContainerView.InputService?.Redraw?.Invoke();
+            context.ContainerView?.InputService?.Redraw?.Invoke();
         }
 
         private void MovePointInternal(IToolContext context, double x, double y, Modifier modifier)
@@ -7067,7 +7067,7 @@ namespace Draw2D.ViewModels.Tools
             Intersections?.ForEach(i => i.Clear(context));
             Intersections?.ForEach(i => i.Find(context, _line));
 
-            context.ContainerView.InputService?.Redraw?.Invoke();
+            context.ContainerView?.InputService?.Redraw?.Invoke();
         }
 
         private void CleanInternal(IToolContext context)
@@ -7090,8 +7090,8 @@ namespace Draw2D.ViewModels.Tools
                 _points = null;
             }
 
-            context.ContainerView.InputService?.Release?.Invoke();
-            context.ContainerView.InputService?.Redraw?.Invoke();
+            context.ContainerView?.InputService?.Release?.Invoke();
+            context.ContainerView?.InputService?.Redraw?.Invoke();
         }
 
         public void LeftDown(IToolContext context, double x, double y, Modifier modifier)
@@ -7237,8 +7237,8 @@ namespace Draw2D.ViewModels.Tools
             context.ContainerView.Selection.Selected.Add(_quadraticBezier.Point1);
             context.ContainerView.Selection.Selected.Add(_quadraticBezier.Point2);
 
-            context.ContainerView.InputService?.Capture?.Invoke();
-            context.ContainerView.InputService?.Redraw?.Invoke();
+            context.ContainerView?.InputService?.Capture?.Invoke();
+            context.ContainerView?.InputService?.Redraw?.Invoke();
 
             CurrentState = State.Point2;
         }
@@ -7261,8 +7261,8 @@ namespace Draw2D.ViewModels.Tools
 
             Filters?.ForEach(f => f.Clear(context));
 
-            context.ContainerView.InputService?.Release?.Invoke();
-            context.ContainerView.InputService?.Redraw?.Invoke();
+            context.ContainerView?.InputService?.Release?.Invoke();
+            context.ContainerView?.InputService?.Redraw?.Invoke();
         }
 
         private void Point2Internal(IToolContext context, double x, double y, Modifier modifier)
@@ -7278,7 +7278,7 @@ namespace Draw2D.ViewModels.Tools
 
             CurrentState = State.Point1;
 
-            context.ContainerView.InputService?.Redraw?.Invoke();
+            context.ContainerView?.InputService?.Redraw?.Invoke();
         }
 
         private void MoveStartPointInternal(IToolContext context, double x, double y, Modifier modifier)
@@ -7286,7 +7286,7 @@ namespace Draw2D.ViewModels.Tools
             Filters?.ForEach(f => f.Clear(context));
             Filters?.Any(f => f.Process(context, ref x, ref y));
 
-            context.ContainerView.InputService?.Redraw?.Invoke();
+            context.ContainerView?.InputService?.Redraw?.Invoke();
         }
 
         private void MovePoint1Internal(IToolContext context, double x, double y, Modifier modifier)
@@ -7297,7 +7297,7 @@ namespace Draw2D.ViewModels.Tools
             _quadraticBezier.Point1.X = x;
             _quadraticBezier.Point1.Y = y;
 
-            context.ContainerView.InputService?.Redraw?.Invoke();
+            context.ContainerView?.InputService?.Redraw?.Invoke();
         }
 
         private void MovePoint2Internal(IToolContext context, double x, double y, Modifier modifier)
@@ -7310,7 +7310,7 @@ namespace Draw2D.ViewModels.Tools
             _quadraticBezier.Point2.X = x;
             _quadraticBezier.Point2.Y = y;
 
-            context.ContainerView.InputService?.Redraw?.Invoke();
+            context.ContainerView?.InputService?.Redraw?.Invoke();
         }
 
         private void CleanInternal(IToolContext context)
@@ -7329,8 +7329,8 @@ namespace Draw2D.ViewModels.Tools
                 _quadraticBezier = null;
             }
 
-            context.ContainerView.InputService?.Release?.Invoke();
-            context.ContainerView.InputService?.Redraw?.Invoke();
+            context.ContainerView?.InputService?.Release?.Invoke();
+            context.ContainerView?.InputService?.Redraw?.Invoke();
         }
 
         public void LeftDown(IToolContext context, double x, double y, Modifier modifier)
@@ -7496,8 +7496,8 @@ namespace Draw2D.ViewModels.Tools
             context.ContainerView.Selection.Selected.Add(_conic.Point1);
             context.ContainerView.Selection.Selected.Add(_conic.Point2);
 
-            context.ContainerView.InputService?.Capture?.Invoke();
-            context.ContainerView.InputService?.Redraw?.Invoke();
+            context.ContainerView?.InputService?.Capture?.Invoke();
+            context.ContainerView?.InputService?.Redraw?.Invoke();
 
             CurrentState = State.Point2;
         }
@@ -7520,8 +7520,8 @@ namespace Draw2D.ViewModels.Tools
 
             Filters?.ForEach(f => f.Clear(context));
 
-            context.ContainerView.InputService?.Release?.Invoke();
-            context.ContainerView.InputService?.Redraw?.Invoke();
+            context.ContainerView?.InputService?.Release?.Invoke();
+            context.ContainerView?.InputService?.Redraw?.Invoke();
         }
 
         private void Point2Internal(IToolContext context, double x, double y, Modifier modifier)
@@ -7537,7 +7537,7 @@ namespace Draw2D.ViewModels.Tools
 
             CurrentState = State.Point1;
 
-            context.ContainerView.InputService?.Redraw?.Invoke();
+            context.ContainerView?.InputService?.Redraw?.Invoke();
         }
 
         private void MoveStartPointInternal(IToolContext context, double x, double y, Modifier modifier)
@@ -7545,7 +7545,7 @@ namespace Draw2D.ViewModels.Tools
             Filters?.ForEach(f => f.Clear(context));
             Filters?.Any(f => f.Process(context, ref x, ref y));
 
-            context.ContainerView.InputService?.Redraw?.Invoke();
+            context.ContainerView?.InputService?.Redraw?.Invoke();
         }
 
         private void MovePoint1Internal(IToolContext context, double x, double y, Modifier modifier)
@@ -7556,7 +7556,7 @@ namespace Draw2D.ViewModels.Tools
             _conic.Point1.X = x;
             _conic.Point1.Y = y;
 
-            context.ContainerView.InputService?.Redraw?.Invoke();
+            context.ContainerView?.InputService?.Redraw?.Invoke();
         }
 
         private void MovePoint2Internal(IToolContext context, double x, double y, Modifier modifier)
@@ -7569,7 +7569,7 @@ namespace Draw2D.ViewModels.Tools
             _conic.Point2.X = x;
             _conic.Point2.Y = y;
 
-            context.ContainerView.InputService?.Redraw?.Invoke();
+            context.ContainerView?.InputService?.Redraw?.Invoke();
         }
 
         private void CleanInternal(IToolContext context)
@@ -7588,8 +7588,8 @@ namespace Draw2D.ViewModels.Tools
                 _conic = null;
             }
 
-            context.ContainerView.InputService?.Release?.Invoke();
-            context.ContainerView.InputService?.Redraw?.Invoke();
+            context.ContainerView?.InputService?.Release?.Invoke();
+            context.ContainerView?.InputService?.Redraw?.Invoke();
         }
 
         public void LeftDown(IToolContext context, double x, double y, Modifier modifier)
@@ -7741,8 +7741,8 @@ namespace Draw2D.ViewModels.Tools
             context.ContainerView.Selection.Selected.Add(_rectangle.TopLeft);
             context.ContainerView.Selection.Selected.Add(_rectangle.BottomRight);
 
-            context.ContainerView.InputService?.Capture?.Invoke();
-            context.ContainerView.InputService?.Redraw?.Invoke();
+            context.ContainerView?.InputService?.Capture?.Invoke();
+            context.ContainerView?.InputService?.Redraw?.Invoke();
 
             CurrentState = State.BottomRight;
         }
@@ -7764,8 +7764,8 @@ namespace Draw2D.ViewModels.Tools
 
             Filters?.ForEach(f => f.Clear(context));
 
-            context.ContainerView.InputService?.Release?.Invoke();
-            context.ContainerView.InputService?.Redraw?.Invoke();
+            context.ContainerView?.InputService?.Release?.Invoke();
+            context.ContainerView?.InputService?.Redraw?.Invoke();
         }
 
         private void MoveTopLeftInternal(IToolContext context, double x, double y, Modifier modifier)
@@ -7773,7 +7773,7 @@ namespace Draw2D.ViewModels.Tools
             Filters?.ForEach(f => f.Clear(context));
             Filters?.Any(f => f.Process(context, ref x, ref y));
 
-            context.ContainerView.InputService?.Redraw?.Invoke();
+            context.ContainerView?.InputService?.Redraw?.Invoke();
         }
 
         private void MoveBottomRightInternal(IToolContext context, double x, double y, Modifier modifier)
@@ -7784,7 +7784,7 @@ namespace Draw2D.ViewModels.Tools
             _rectangle.BottomRight.X = x;
             _rectangle.BottomRight.Y = y;
 
-            context.ContainerView.InputService?.Redraw?.Invoke();
+            context.ContainerView?.InputService?.Redraw?.Invoke();
         }
 
         private void CleanInternal(IToolContext context)
@@ -7802,8 +7802,8 @@ namespace Draw2D.ViewModels.Tools
                 _rectangle = null;
             }
 
-            context.ContainerView.InputService?.Release?.Invoke();
-            context.ContainerView.InputService?.Redraw?.Invoke();
+            context.ContainerView?.InputService?.Release?.Invoke();
+            context.ContainerView?.InputService?.Redraw?.Invoke();
         }
 
         public void LeftDown(IToolContext context, double x, double y, Modifier modifier)
@@ -7982,8 +7982,8 @@ namespace Draw2D.ViewModels.Tools
 
             context.ContainerView.WorkingContainer.Shapes.Add(_path);
 
-            context.ContainerView.InputService?.Capture?.Invoke();
-            context.ContainerView.InputService?.Redraw?.Invoke();
+            context.ContainerView?.InputService?.Capture?.Invoke();
+            context.ContainerView?.InputService?.Redraw?.Invoke();
 
             CurrentState = State.Points;
         }
@@ -8042,8 +8042,8 @@ namespace Draw2D.ViewModels.Tools
 
             Filters?.ForEach(f => f.Clear(context));
 
-            context.ContainerView.InputService?.Release?.Invoke();
-            context.ContainerView.InputService?.Redraw?.Invoke();
+            context.ContainerView?.InputService?.Release?.Invoke();
+            context.ContainerView?.InputService?.Redraw?.Invoke();
         }
 
         private void MoveStartInternal(IToolContext context, double x, double y, Modifier modifier)
@@ -8051,7 +8051,7 @@ namespace Draw2D.ViewModels.Tools
             Filters?.ForEach(f => f.Clear(context));
             Filters?.Any(f => f.Process(context, ref x, ref y));
 
-            context.ContainerView.InputService?.Redraw?.Invoke();
+            context.ContainerView?.InputService?.Redraw?.Invoke();
         }
 
         private void MovePointsInternal(IToolContext context, double x, double y, Modifier modifier)
@@ -8074,7 +8074,7 @@ namespace Draw2D.ViewModels.Tools
             _previousPoint = _nextPoint;
             _nextPoint = null;
 
-            context.ContainerView.InputService?.Redraw?.Invoke();
+            context.ContainerView?.InputService?.Redraw?.Invoke();
         }
 
         private void CleanInternal(IToolContext context)
@@ -8092,8 +8092,8 @@ namespace Draw2D.ViewModels.Tools
                 _nextPoint = null;
             }
 
-            context.ContainerView.InputService?.Release?.Invoke();
-            context.ContainerView.InputService?.Redraw?.Invoke();
+            context.ContainerView?.InputService?.Release?.Invoke();
+            context.ContainerView?.InputService?.Redraw?.Invoke();
         }
 
         public void LeftDown(IToolContext context, double x, double y, Modifier modifier)
@@ -8360,7 +8360,7 @@ namespace Draw2D.ViewModels.Tools
                 modifier);
             if (selected == true)
             {
-                context.ContainerView.InputService?.Capture?.Invoke();
+                context.ContainerView?.InputService?.Capture?.Invoke();
 
                 CurrentState = State.Move;
             }
@@ -8388,8 +8388,8 @@ namespace Draw2D.ViewModels.Tools
                 _rectangle.Style = Settings?.SelectionStyle;
                 context.ContainerView.WorkingContainer.Shapes.Add(_rectangle);
 
-                context.ContainerView.InputService?.Capture?.Invoke();
-                context.ContainerView.InputService?.Redraw?.Invoke();
+                context.ContainerView?.InputService?.Capture?.Invoke();
+                context.ContainerView?.InputService?.Redraw?.Invoke();
 
                 CurrentState = State.Selection;
             }
@@ -8402,8 +8402,8 @@ namespace Draw2D.ViewModels.Tools
             _rectangle.BottomRight.X = x;
             _rectangle.BottomRight.Y = y;
 
-            context.ContainerView.InputService?.Release?.Invoke();
-            context.ContainerView.InputService?.Redraw?.Invoke();
+            context.ContainerView?.InputService?.Release?.Invoke();
+            context.ContainerView?.InputService?.Redraw?.Invoke();
         }
 
         private void LeftUpSelectionInternal(IToolContext context, double x, double y, Modifier modifier)
@@ -8426,16 +8426,16 @@ namespace Draw2D.ViewModels.Tools
 
             CurrentState = State.None;
 
-            context.ContainerView.InputService?.Release?.Invoke();
-            context.ContainerView.InputService?.Redraw?.Invoke();
+            context.ContainerView?.InputService?.Release?.Invoke();
+            context.ContainerView?.InputService?.Redraw?.Invoke();
         }
 
         private void LeftUpMoveInternal(IToolContext context, double x, double y, Modifier modifier)
         {
             Filters?.ForEach(f => f.Clear(context));
 
-            context.ContainerView.InputService?.Release?.Invoke();
-            context.ContainerView.InputService?.Redraw?.Invoke();
+            context.ContainerView?.InputService?.Release?.Invoke();
+            context.ContainerView?.InputService?.Redraw?.Invoke();
 
             CurrentState = State.None;
         }
@@ -8444,8 +8444,8 @@ namespace Draw2D.ViewModels.Tools
         {
             Filters?.ForEach(f => f.Clear(context));
 
-            context.ContainerView.InputService?.Release?.Invoke();
-            context.ContainerView.InputService?.Redraw?.Invoke();
+            context.ContainerView?.InputService?.Release?.Invoke();
+            context.ContainerView?.InputService?.Redraw?.Invoke();
 
             CurrentState = State.None;
         }
@@ -8470,13 +8470,13 @@ namespace Draw2D.ViewModels.Tools
                     if (shape != null)
                     {
                         Hover(context, shape);
-                        context.ContainerView.InputService?.Redraw?.Invoke();
+                        context.ContainerView?.InputService?.Redraw?.Invoke();
                     }
                     else
                     {
                         if (previous != null)
                         {
-                            context.ContainerView.InputService?.Redraw?.Invoke();
+                            context.ContainerView?.InputService?.Redraw?.Invoke();
                         }
                     }
                 }
@@ -8488,7 +8488,7 @@ namespace Draw2D.ViewModels.Tools
             _rectangle.BottomRight.X = x;
             _rectangle.BottomRight.Y = y;
 
-            context.ContainerView.InputService?.Redraw?.Invoke();
+            context.ContainerView?.InputService?.Redraw?.Invoke();
         }
 
         private void MoveMoveInternal(IToolContext context, double x, double y, Modifier modifier)
@@ -8549,7 +8549,7 @@ namespace Draw2D.ViewModels.Tools
                 }
             }
 
-            context.ContainerView.InputService?.Redraw?.Invoke();
+            context.ContainerView?.InputService?.Redraw?.Invoke();
         }
 
         private void CleanInternal(IToolContext context)
@@ -8574,8 +8574,8 @@ namespace Draw2D.ViewModels.Tools
 
             Filters?.ForEach(f => f.Clear(context));
 
-            context.ContainerView.InputService?.Release?.Invoke();
-            context.ContainerView.InputService?.Redraw?.Invoke();
+            context.ContainerView?.InputService?.Release?.Invoke();
+            context.ContainerView?.InputService?.Redraw?.Invoke();
         }
 
         public void LeftDown(IToolContext context, double x, double y, Modifier modifier)
@@ -8685,7 +8685,7 @@ namespace Draw2D.ViewModels.Tools
 
                     Copy(context.ContainerView.CurrentContainer, _shapesToCopy, this);
 
-                    context.ContainerView.InputService?.Redraw?.Invoke();
+                    context.ContainerView?.InputService?.Redraw?.Invoke();
 
                     this.CurrentState = State.None;
                 }
@@ -8701,7 +8701,7 @@ namespace Draw2D.ViewModels.Tools
                 this.DeHover(context);
                 _selected.Clear();
 
-                context.ContainerView.InputService?.Redraw?.Invoke();
+                context.ContainerView?.InputService?.Redraw?.Invoke();
 
                 this.CurrentState = State.None;
             }
@@ -8734,7 +8734,7 @@ namespace Draw2D.ViewModels.Tools
                 group.Select(this);
                 context.ContainerView.CurrentContainer.Shapes.Add(group);
 
-                context.ContainerView.InputService?.Redraw?.Invoke();
+                context.ContainerView?.InputService?.Redraw?.Invoke();
 
                 this.CurrentState = State.None;
             }
@@ -8752,7 +8752,7 @@ namespace Draw2D.ViewModels.Tools
                     shape.Select(this);
                 }
 
-                context.ContainerView.InputService?.Redraw?.Invoke();
+                context.ContainerView?.InputService?.Redraw?.Invoke();
 
                 this.CurrentState = State.None;
             }
@@ -9307,8 +9307,8 @@ namespace Draw2D.ViewModels.Tools
             context.ContainerView.Selection.Selected.Add(_text.TopLeft);
             context.ContainerView.Selection.Selected.Add(_text.BottomRight);
 
-            context.ContainerView.InputService?.Capture?.Invoke();
-            context.ContainerView.InputService?.Redraw?.Invoke();
+            context.ContainerView?.InputService?.Capture?.Invoke();
+            context.ContainerView?.InputService?.Redraw?.Invoke();
 
             CurrentState = State.BottomRight;
         }
@@ -9330,8 +9330,8 @@ namespace Draw2D.ViewModels.Tools
 
             Filters?.ForEach(f => f.Clear(context));
 
-            context.ContainerView.InputService?.Release?.Invoke();
-            context.ContainerView.InputService?.Redraw?.Invoke();
+            context.ContainerView?.InputService?.Release?.Invoke();
+            context.ContainerView?.InputService?.Redraw?.Invoke();
         }
 
         private void MoveTopLeftInternal(IToolContext context, double x, double y, Modifier modifier)
@@ -9339,7 +9339,7 @@ namespace Draw2D.ViewModels.Tools
             Filters?.ForEach(f => f.Clear(context));
             Filters?.Any(f => f.Process(context, ref x, ref y));
 
-            context.ContainerView.InputService?.Redraw?.Invoke();
+            context.ContainerView?.InputService?.Redraw?.Invoke();
         }
 
         private void MoveBottomRightInternal(IToolContext context, double x, double y, Modifier modifier)
@@ -9350,7 +9350,7 @@ namespace Draw2D.ViewModels.Tools
             _text.BottomRight.X = x;
             _text.BottomRight.Y = y;
 
-            context.ContainerView.InputService?.Redraw?.Invoke();
+            context.ContainerView?.InputService?.Redraw?.Invoke();
         }
 
         private void CleanInternal(IToolContext context)
@@ -9368,8 +9368,8 @@ namespace Draw2D.ViewModels.Tools
                 _text = null;
             }
 
-            context.ContainerView.InputService?.Release?.Invoke();
-            context.ContainerView.InputService?.Redraw?.Invoke();
+            context.ContainerView?.InputService?.Release?.Invoke();
+            context.ContainerView?.InputService?.Redraw?.Invoke();
         }
 
         public void LeftDown(IToolContext context, double x, double y, Modifier modifier)

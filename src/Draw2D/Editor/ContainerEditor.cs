@@ -45,9 +45,25 @@ namespace Draw2D.Editor
             context.ContainerView.CurrentContainer.Shapes.Add(group);
         }
 
+        private IHitTest _hitTest;
+        private ISelection _selection;
+        private ICanvasPresenter _presenter;
+
         public ContainerEditor()
         {
             Initialize();
+        }
+
+        private T LoadFromJson<T>(string path)
+        {
+            var json = File.ReadAllText(path);
+            return JsonSerializer.FromJson<T>(json);
+        }
+
+        private void SaveAsjson<T>(string path, T value)
+        {
+            var json = JsonSerializer.ToJson<T>(value);
+            File.WriteAllText(path, json);
         }
 
         private void Initialize()
@@ -439,13 +455,13 @@ namespace Draw2D.Editor
 
             var containerViews = new ObservableCollection<IContainerView>();
 
-            var containerView0 = NewContainerView("View0", hitTest, selectionTool, presenter);
-            var containerView1 = NewContainerView("View1", hitTest, selectionTool, presenter);
-            var containerView2 = NewContainerView("View2", hitTest, selectionTool, presenter);
+            _hitTest = hitTest;
+            _selection = selectionTool;
+            _presenter = presenter;
 
-            containerViews.Add(containerView0);
-            containerViews.Add(containerView1);
-            containerViews.Add(containerView2);
+            containerViews.Add(CreateContainerView("View0"));
+            containerViews.Add(CreateContainerView("View1"));
+            containerViews.Add(CreateContainerView("View2"));
 
             ContainerViews = containerViews;
             ContainerView = containerViews.FirstOrDefault();
@@ -454,7 +470,7 @@ namespace Draw2D.Editor
             Mode = EditMode.Mouse;
         }
 
-        private CanvasContainer NewCurrentContainer()
+        private CanvasContainer CreateCurrentCanvasContainer()
         {
             return new CanvasContainer()
             {
@@ -483,7 +499,7 @@ namespace Draw2D.Editor
             };
         }
 
-        private CanvasContainer NewWorkingContainer()
+        private CanvasContainer CreateWorkingCanvasContainer()
         {
             return new CanvasContainer()
             {
@@ -493,72 +509,82 @@ namespace Draw2D.Editor
             };
         }
 
-        private IContainerView NewContainerView(string title, IHitTest hitTest, ISelection selection, ICanvasPresenter presenter)
+        public IContainerView CreateContainerView(string title)
         {
             var containerView = new ContainerView()
             {
                 Title = title,
                 InputService = null,
                 DrawContainerView = new DrawContainerView(),
-                Presenter = presenter,
-                Selection = selection,
+                Presenter = _presenter,
+                Selection = _selection,
                 CurrentContainer = null,
                 WorkingContainer = null,
-                HitTest = hitTest
+                HitTest = _hitTest
             };
 
-            containerView.CurrentContainer = NewCurrentContainer();
+            containerView.CurrentContainer = CreateCurrentCanvasContainer();
 
-            containerView.WorkingContainer = NewWorkingContainer();
+            containerView.WorkingContainer = CreateWorkingCanvasContainer();
 
             return containerView;
         }
 
-        public void CloseContainerView(IContainerView view)
+        public void CloseContainerView(IContainerView containerView)
         {
-            ContainerViews.Remove(view);
+            if (containerView != null)
+            {
+                int index = ContainerViews.IndexOf(containerView);
+                if (index >= 0)
+                {
+                    ContainerViews.Remove(containerView);
+                    if (ContainerViews.Count > 0)
+                    {
+                        ContainerView = (index == 0) ? ContainerViews[index + 1] : ContainerViews[index - 1];
+                    }
+                    else
+                    {
+                        ContainerView = null;
+                    }
+                }
+            }
         }
 
-        public T Load<T>(string path)
+        private void AddContainerView(IContainerView containerView)
         {
-            var json = File.ReadAllText(path);
-            return JsonSerializer.FromJson<T>(json);
-        }
-
-        public void Save<T>(string path, T value)
-        {
-            var json = JsonSerializer.ToJson<T>(value);
-            File.WriteAllText(path, json);
-        }
-
-        public void New()
-        {
-            var currentContainer = NewCurrentContainer();
-            var workingContainer = NewWorkingContainer();
             CurrentTool.Clean(this);
             ContainerView.Selection.Selected.Clear();
-            ContainerView.CurrentContainer = currentContainer;
-            ContainerView.WorkingContainer = workingContainer;
-            ContainerView.InputService?.Redraw?.Invoke();
+
+            ContainerViews.Add(containerView);
+            ContainerView = containerView;
+
+            ContainerView?.InputService?.Redraw?.Invoke();
         }
 
-        public void OpenContainer(string path)
+        public void NewContainerView()
         {
-            var currentContainer = Load<CanvasContainer>(path);
-            var workingContainer = NewWorkingContainer();
-            CurrentTool.Clean(this);
-            ContainerView.Selection.Selected.Clear();
-            ContainerView.CurrentContainer = currentContainer;
-            ContainerView.WorkingContainer = workingContainer;
-            ContainerView.InputService?.Redraw?.Invoke();
+            var containerView = CreateContainerView("View");
+
+            AddContainerView(containerView);
         }
 
-        public void SaveContainer(string path)
+        public void Open(string path)
         {
-            Save(path, ContainerView.CurrentContainer);
+            var containerView = LoadFromJson<ContainerView>(path);
+            containerView.Presenter = _presenter;
+            containerView.Selection = _selection;
+            containerView.HitTest = _hitTest;
+            containerView.WorkingContainer = CreateWorkingCanvasContainer();
+
+            AddContainerView(containerView);
         }
 
-        public async void Open()
+        public void Save(string path)
+        {
+            SaveAsjson(path, ContainerView);
+        }
+
+        public async void OpenContainerView()
         {
             var dlg = new OpenFileDialog();
             dlg.Filters.Add(new FileDialogFilter() { Name = "Json Files", Extensions = { "json" } });
@@ -567,11 +593,11 @@ namespace Draw2D.Editor
             if (result != null)
             {
                 var path = result.FirstOrDefault();
-                OpenContainer(path);
+                Open(path);
             }
         }
 
-        public async void SaveAs()
+        public async void SaveContainerViewAs()
         {
             var dlg = new SaveFileDialog();
             dlg.Filters.Add(new FileDialogFilter() { Name = "Json Files", Extensions = { "json" } });
@@ -582,7 +608,7 @@ namespace Draw2D.Editor
             if (result != null)
             {
                 var path = result;
-                SaveContainer(path);
+                Save(path);
             }
         }
 
@@ -778,7 +804,7 @@ namespace Draw2D.Editor
                 var path = SKPath.ParseSvgPathData(svgPathData);
                 var pathShape = ConvertSKPath(path);
                 ContainerView.CurrentContainer.Shapes.Add(pathShape);
-                ContainerView.InputService?.Redraw?.Invoke();
+                ContainerView?.InputService?.Redraw?.Invoke();
             }
         }
 

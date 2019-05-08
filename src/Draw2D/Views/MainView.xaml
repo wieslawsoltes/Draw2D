@@ -16,19 +16,21 @@
     </UserControl.Resources>
     <UserControl.KeyBindings>
         <!-- File -->
-        <KeyBinding Command="{Binding New}" Gesture="Ctrl+N"/>
-        <KeyBinding Command="{Binding Open}" Gesture="Ctrl+O"/>
-        <KeyBinding Command="{Binding SaveAs}" Gesture="Ctrl+S"/>
+        <KeyBinding Command="{Binding NewContainerView}" Gesture="Ctrl+N"/>
+        <KeyBinding Command="{Binding OpenContainerView}" Gesture="Ctrl+O"/>
+        <KeyBinding Command="{Binding SaveContainerViewAs}" Gesture="Ctrl+S"/>
         <KeyBinding Command="{Binding Exit}" Gesture="Alt+F4"/>
     </UserControl.KeyBindings>
     <Grid RowDefinitions="Auto,5,*,5" ColumnDefinitions="340,Auto,*">
         <Menu Background="Transparent" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3">
             <MenuItem Header="_File">
-                <MenuItem Header="New" Command="{Binding New}"/>
+                <MenuItem Header="_New View" Command="{Binding NewContainerView}"/>
                 <Separator/>
-                <MenuItem Header="_Open..." Command="{Binding Open}"/>
+                <MenuItem Header="_Close View" Command="{Binding CloseContainerView}" CommandParameter="{Binding ContainerView, FallbackValue={x:Null}}"/>
                 <Separator/>
-                <MenuItem Header="Save _As..." Command="{Binding SaveAs}"/>
+                <MenuItem Header="_Open View..." Command="{Binding OpenContainerView}"/>
+                <Separator/>
+                <MenuItem Header="Save View _As..." Command="{Binding SaveContainerViewAs}"/>
                 <Separator/>
                 <MenuItem Header="E_xit" Command="{Binding Exit}"/>
             </MenuItem>
