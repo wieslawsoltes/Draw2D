@@ -25,7 +25,7 @@ namespace Draw2D.Editor
     {
         public static void CreateDemoGroup(IToolContext context)
         {
-            var container = context.ContainerView.CurrentContainer;
+            var container = context.ContainerView?.CurrentContainer;
             var group = new GroupShape()
             {
                 Points = new ObservableCollection<PointShape>(),
@@ -42,7 +42,7 @@ namespace Draw2D.Editor
             group.Points.Add(new PointShape(45, 60, container.PointTemplate));
             group.Points.Add(new PointShape(30, 45, container.PointTemplate));
             group.Points.Add(new PointShape(60, 45, container.PointTemplate));
-            context.ContainerView.CurrentContainer.Shapes.Add(group);
+            context.ContainerView?.CurrentContainer.Shapes.Add(group);
         }
 
         private IHitTest _hitTest;
@@ -538,9 +538,11 @@ namespace Draw2D.Editor
                 if (index >= 0)
                 {
                     ContainerViews.Remove(containerView);
-                    if (ContainerViews.Count > 0)
+                    int count = ContainerViews.Count;
+                    if (count > 0)
                     {
-                        ContainerView = (index == 0) ? ContainerViews[index + 1] : ContainerViews[index - 1];
+                        int selectedIndex = (count == 1 || index == 0) ? 0 : index - 1;
+                        ContainerView = ContainerViews[selectedIndex];
                     }
                     else
                     {
@@ -553,7 +555,7 @@ namespace Draw2D.Editor
         private void AddContainerView(IContainerView containerView)
         {
             CurrentTool.Clean(this);
-            ContainerView.Selection.Selected.Clear();
+            ContainerView?.Selection.Selected.Clear();
 
             ContainerViews.Add(containerView);
             ContainerView = containerView;
@@ -563,7 +565,7 @@ namespace Draw2D.Editor
 
         public void NewContainerView()
         {
-            var containerView = CreateContainerView("View");
+            var containerView = CreateContainerView("View" + ContainerViews.Count.ToString());
 
             AddContainerView(containerView);
         }
