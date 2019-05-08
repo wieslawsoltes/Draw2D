@@ -440,11 +440,12 @@ namespace Draw2D.Editor
             var containerViews = new ObservableCollection<IContainerView>();
 
             var containerView0 = NewContainerView("View0", hitTest, selectionTool, presenter);
-
             var containerView1 = NewContainerView("View1", hitTest, selectionTool, presenter);
+            var containerView2 = NewContainerView("View2", hitTest, selectionTool, presenter);
 
             containerViews.Add(containerView0);
             containerViews.Add(containerView1);
+            containerViews.Add(containerView2);
 
             ContainerViews = containerViews;
             ContainerView = containerViews.FirstOrDefault();
