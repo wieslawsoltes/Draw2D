@@ -573,6 +573,7 @@ namespace Draw2D.Editor
         public void Open(string path)
         {
             var containerView = LoadFromJson<ContainerView>(path);
+            containerView.DrawContainerView = new DrawContainerView();
             containerView.Presenter = _presenter;
             containerView.Selection = _selection;
             containerView.HitTest = _hitTest;
