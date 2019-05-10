@@ -2531,7 +2531,7 @@ namespace Draw2D.ViewModels.Shapes
     [DataContract(IsReference = true)]
     public class PointShape : BaseShape, ICopyable
     {
-        private Matrix2 _templateTransform = Matrix2.Identity;
+        private readonly Matrix2 _templateTransform = Matrix2.Identity;
         private double _x;
         private double _y;
         private BaseShape _template;
@@ -3512,15 +3512,15 @@ namespace Draw2D.ViewModels.Decorators
     [DataContract(IsReference = true)]
     public abstract class CommonDecorator : IShapeDecorator
     {
-        private TextStyle _textStyle;
-        private ArgbColor _stroke;
-        private ArgbColor _fill;
-        private ShapeStyle _strokeStyle;
-        private ShapeStyle _fillStyle;
-        private LineShape _line;
-        private EllipseShape _ellipse;
-        private RectangleShape _rectangle;
-        private TextShape _text;
+        private readonly TextStyle _textStyle;
+        private readonly ArgbColor _stroke;
+        private readonly ArgbColor _fill;
+        private readonly ShapeStyle _strokeStyle;
+        private readonly ShapeStyle _fillStyle;
+        private readonly LineShape _line;
+        private readonly EllipseShape _ellipse;
+        private readonly RectangleShape _rectangle;
+        private readonly TextShape _text;
 
         public CommonDecorator()
         {
@@ -3706,10 +3706,10 @@ namespace Draw2D.ViewModels.Decorators
     [DataContract(IsReference = true)]
     public class PathDecorator : CommonDecorator
     {
-        private LineDecorator _lineDecorator;
-        private CubicBezierDecorator _cubiceBezierDecorator;
-        private QuadraticBezierDecorator _quadraticBezierDecorator;
-        private ConicDecorator _conicDecorator;
+        private readonly LineDecorator _lineDecorator;
+        private readonly CubicBezierDecorator _cubiceBezierDecorator;
+        private readonly QuadraticBezierDecorator _quadraticBezierDecorator;
+        private readonly ConicDecorator _conicDecorator;
 
         public PathDecorator()
         {
