@@ -102,6 +102,12 @@ namespace Draw2D.Editor
             _skiaRenderer.Scale = scale;
             _skiaRenderer.Selection = view.Selection;
 
+            if (view.CurrentContainer.WorkBackground != null)
+            {
+                GetSKPaintFill(view.CurrentContainer.WorkBackground, out var brush);
+                canvas.DrawRect(SkiaHelper.ToRect(0.0, 0.0, view.CurrentContainer.Width, view.CurrentContainer.Height), brush);
+            }
+
             Draw(view, canvas, _skiaRenderer);
 
             var picture = recorder.EndRecording();
@@ -122,15 +128,7 @@ namespace Draw2D.Editor
             canvas.Save();
             canvas.Translate((float)dx, (float)dy);
             canvas.Scale((float)zx, (float)zy);
-
-            if (view.CurrentContainer.WorkBackground != null)
-            {
-                GetSKPaintFill(view.CurrentContainer.WorkBackground, out var brush);
-                canvas.DrawRect(SkiaHelper.ToRect(0.0, 0.0, view.CurrentContainer.Width, view.CurrentContainer.Height), brush);
-            }
-
             canvas.DrawPicture(picture);
-
             canvas.Restore();
         }
 
