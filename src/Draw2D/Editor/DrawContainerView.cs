@@ -113,13 +113,13 @@ namespace Draw2D.Editor
 
         private void Draw(IContainerView view, SKCanvas canvas, SKPicture picture, double width, double height, double dx, double dy, double zx, double zy)
         {
+            canvas.Save();
+
             if (view.CurrentContainer.InputBackground != null)
             {
                 GetSKPaintFill(view.CurrentContainer.InputBackground, out var brush);
                 canvas.DrawRect(SkiaHelper.ToRect(0.0, 0.0, width, height), brush);
             }
-
-            canvas.Save();
 
             canvas.Translate((float)dx, (float)dy);
             canvas.Scale((float)zx, (float)zy);
