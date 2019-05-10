@@ -15,13 +15,13 @@ namespace Draw2D.Controls
 {
     internal struct CustomDrawOperation : ICustomDrawOperation
     {
-        private IDrawTarget _drawTarget;
-        private double _width;
-        private double _height;
-        private double _dx;
-        private double _dy;
-        private double _zx;
-        private double _zy;
+        private readonly IDrawTarget _drawTarget;
+        private readonly double _width;
+        private readonly double _height;
+        private readonly double _dx;
+        private readonly double _dy;
+        private readonly double _zx;
+        private readonly double _zy;
 
         public Rect Bounds { get; }
 
