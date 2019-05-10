@@ -325,7 +325,7 @@
                 </TabStrip.Styles>
                 <TabStrip.DataTemplates>
                     <DataTemplate>
-                        <StackPanel Orientation="Horizontal" Spacing="2">
+                        <StackPanel Orientation="Horizontal" Margin="4,0,4,0" Spacing="2">
                             <StackPanel Orientation="Horizontal" Margin="2" TextBlock.FontSize="12">
                                 <TextBlock Classes="default" Text="{Binding Title}" />
                                 <!--<TextBlock Classes="default" Text="*" IsVisible="{Binding IsDirty, FallbackValue=False}" />-->
