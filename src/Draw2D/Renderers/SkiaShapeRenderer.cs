@@ -2,7 +2,6 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using Draw2D.ViewModels;
 using Draw2D.ViewModels.Shapes;
@@ -55,22 +54,13 @@ namespace Draw2D.Renderers
 
         public static void ToSKPaintPenUpdate(SKPaint paint, ShapeStyle style, double scale)
         {
-            //paint.IsAntialias = true;
-            //paint.IsStroke = true;
             paint.StrokeWidth = (float)(style.Thickness / scale);
             paint.Color = ToSKColor(style.Stroke);
-            //paint.StrokeCap = SKStrokeCap.Butt;
-            //paint.PathEffect = null;
         }
 
         public static void ToSKPaintBrushUpdate(SKPaint paint, ArgbColor color)
         {
-            //paint.IsAntialias = true;
-            //paint.IsStroke = false;
-            //paint.LcdRenderText = true;
-            //paint.SubpixelText = true;
             paint.Color = ToSKColor(color);
-            //paint.TextAlign = SKTextAlign.Left;
         }
 
         public static SKPoint ToPoint(PointShape point, double dx, double dy)
