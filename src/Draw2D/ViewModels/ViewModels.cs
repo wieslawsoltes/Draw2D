@@ -4225,7 +4225,10 @@ namespace Draw2D.ViewModels.Filters
                 foreach (var line1 in lines)
                 {
                     if (line0 == line1)
+                    {
                         continue;
+                    }
+
                     if (Line2.LineIntersectWithLine(line0.StartPoint.ToPoint2(), line0.Point.ToPoint2(), line1.StartPoint.ToPoint2(), line1.Point.ToPoint2(), out var clip))
                     {
                         var distance = clip.DistanceTo(point);
@@ -4410,10 +4413,14 @@ namespace Draw2D.ViewModels.Intersections
         public override void Find(IToolContext context, BaseShape shape)
         {
             if (!(shape is LineShape line))
+            {
                 throw new ArgumentNullException("shape");
+            }
 
             if (!Settings.IsEnabled)
+            {
                 return;
+            }
 
             var ellipses = context.ContainerView?.CurrentContainer.Shapes.OfType<EllipseShape>();
             if (ellipses.Any())
@@ -4470,10 +4477,14 @@ namespace Draw2D.ViewModels.Intersections
         public override void Find(IToolContext context, BaseShape shape)
         {
             if (!(shape is LineShape line))
+            {
                 throw new ArgumentNullException("shape");
+            }
 
             if (!Settings.IsEnabled)
+            {
                 return;
+            }
 
             var lines = context.ContainerView?.CurrentContainer.Shapes.OfType<LineShape>();
             if (lines.Any())
@@ -4528,10 +4539,14 @@ namespace Draw2D.ViewModels.Intersections
         public override void Find(IToolContext context, BaseShape shape)
         {
             if (!(shape is LineShape line))
+            {
                 throw new ArgumentNullException("shape");
+            }
 
             if (!Settings.IsEnabled)
+            {
                 return;
+            }
 
             var rectangles = context.ContainerView?.CurrentContainer.Shapes.OfType<RectangleShape>();
             if (rectangles.Any())
@@ -4571,7 +4586,9 @@ namespace Draw2D.ViewModels.Bounds
         public PointShape TryToGetPoint(BaseShape shape, Point2 target, double radius, IHitTest hitTest)
         {
             if (!(shape is CubicBezierShape cubicBezier))
+            {
                 throw new ArgumentNullException("shape");
+            }
 
             var pointHitTest = hitTest.Registered[typeof(PointShape)];
 
@@ -4609,7 +4626,9 @@ namespace Draw2D.ViewModels.Bounds
         public BaseShape Contains(BaseShape shape, Point2 target, double radius, IHitTest hitTest)
         {
             if (!(shape is CubicBezierShape cubicBezier))
+            {
                 throw new ArgumentNullException("shape");
+            }
 
             var points = new List<PointShape>();
             cubicBezier.GetPoints(points);
@@ -4620,7 +4639,9 @@ namespace Draw2D.ViewModels.Bounds
         public BaseShape Overlaps(BaseShape shape, Rect2 target, double radius, IHitTest hitTest)
         {
             if (!(shape is CubicBezierShape cubicBezier))
+            {
                 throw new ArgumentNullException("shape");
+            }
 
             var points = new List<PointShape>();
             cubicBezier.GetPoints(points);
@@ -4693,7 +4714,9 @@ namespace Draw2D.ViewModels.Bounds
         public PointShape TryToGetPoint(BaseShape shape, Point2 target, double radius, IHitTest hitTest)
         {
             if (!(shape is GroupShape group))
+            {
                 throw new ArgumentNullException("shape");
+            }
 
             var pointHitTest = hitTest.Registered[typeof(PointShape)];
 
@@ -4721,7 +4744,9 @@ namespace Draw2D.ViewModels.Bounds
         public BaseShape Contains(BaseShape shape, Point2 target, double radius, IHitTest hitTest)
         {
             if (!(shape is GroupShape group))
+            {
                 throw new ArgumentNullException("shape");
+            }
 
             foreach (var groupShape in group.Shapes)
             {
@@ -4738,7 +4763,9 @@ namespace Draw2D.ViewModels.Bounds
         public BaseShape Overlaps(BaseShape shape, Rect2 target, double radius, IHitTest hitTest)
         {
             if (!(shape is GroupShape group))
+            {
                 throw new ArgumentNullException("shape");
+            }
 
             foreach (var groupShape in group.Shapes)
             {
@@ -4762,7 +4789,9 @@ namespace Draw2D.ViewModels.Bounds
         public PointShape TryToGetPoint(BaseShape shape, Point2 target, double radius, IHitTest hitTest)
         {
             if (!(shape is LineShape line))
+            {
                 throw new ArgumentNullException("shape");
+            }
 
             var pointHitTest = hitTest.Registered[typeof(PointShape)];
 
@@ -4790,7 +4819,9 @@ namespace Draw2D.ViewModels.Bounds
         public BaseShape Contains(BaseShape shape, Point2 target, double radius, IHitTest hitTest)
         {
             if (!(shape is LineShape line))
+            {
                 throw new ArgumentNullException("shape");
+            }
 
             var a = new Point2(line.StartPoint.X, line.StartPoint.Y);
             var b = new Point2(line.Point.X, line.Point.Y);
@@ -4802,7 +4833,9 @@ namespace Draw2D.ViewModels.Bounds
         public BaseShape Overlaps(BaseShape shape, Rect2 target, double radius, IHitTest hitTest)
         {
             if (!(shape is LineShape line))
+            {
                 throw new ArgumentNullException("shape");
+            }
 
             var a = new Point2(line.StartPoint.X, line.StartPoint.Y);
             var b = new Point2(line.Point.X, line.Point.Y);
@@ -4819,7 +4852,9 @@ namespace Draw2D.ViewModels.Bounds
         public PointShape TryToGetPoint(BaseShape shape, Point2 target, double radius, IHitTest hitTest)
         {
             if (!(shape is PathShape path))
+            {
                 throw new ArgumentNullException("shape");
+            }
 
             var pointHitTest = hitTest.Registered[typeof(PointShape)];
 
@@ -4850,7 +4885,9 @@ namespace Draw2D.ViewModels.Bounds
         public BaseShape Contains(BaseShape shape, Point2 target, double radius, IHitTest hitTest)
         {
             if (!(shape is PathShape path))
+            {
                 throw new ArgumentNullException("shape");
+            }
 
             foreach (var figure in path.Figures)
             {
@@ -4874,7 +4911,9 @@ namespace Draw2D.ViewModels.Bounds
         public BaseShape Overlaps(BaseShape shape, Rect2 target, double radius, IHitTest hitTest)
         {
             if (!(shape is PathShape path))
+            {
                 throw new ArgumentNullException("shape");
+            }
 
             foreach (var figure in path.Figures)
             {
@@ -4905,7 +4944,9 @@ namespace Draw2D.ViewModels.Bounds
         public PointShape TryToGetPoint(BaseShape shape, Point2 target, double radius, IHitTest hitTest)
         {
             if (!(shape is PointShape point))
+            {
                 throw new ArgumentNullException("shape");
+            }
 
             if (Point2.FromXY(point.X, point.Y).ExpandToRect(radius).Contains(target.X, target.Y))
             {
@@ -4918,7 +4959,9 @@ namespace Draw2D.ViewModels.Bounds
         public BaseShape Contains(BaseShape shape, Point2 target, double radius, IHitTest hitTest)
         {
             if (!(shape is PointShape point))
+            {
                 throw new ArgumentNullException("shape");
+            }
 
             return Point2.FromXY(point.X, point.Y).ExpandToRect(radius).Contains(target.X, target.Y) ? shape : null;
         }
@@ -4926,7 +4969,9 @@ namespace Draw2D.ViewModels.Bounds
         public BaseShape Overlaps(BaseShape shape, Rect2 target, double radius, IHitTest hitTest)
         {
             if (!(shape is PointShape point))
+            {
                 throw new ArgumentNullException("shape");
+            }
 
             return Point2.FromXY(point.X, point.Y).ExpandToRect(radius).IntersectsWith(target) ? shape : null;
         }
@@ -4941,7 +4986,9 @@ namespace Draw2D.ViewModels.Bounds
         public PointShape TryToGetPoint(BaseShape shape, Point2 target, double radius, IHitTest hitTest)
         {
             if (!(shape is QuadraticBezierShape quadraticBezier))
+            {
                 throw new ArgumentNullException("shape");
+            }
 
             var pointHitTest = hitTest.Registered[typeof(PointShape)];
 
@@ -4974,7 +5021,9 @@ namespace Draw2D.ViewModels.Bounds
         public BaseShape Contains(BaseShape shape, Point2 target, double radius, IHitTest hitTest)
         {
             if (!(shape is QuadraticBezierShape quadraticBezier))
+            {
                 throw new ArgumentNullException("shape");
+            }
 
             var points = new List<PointShape>();
             quadraticBezier.GetPoints(points);
@@ -4985,7 +5034,9 @@ namespace Draw2D.ViewModels.Bounds
         public BaseShape Overlaps(BaseShape shape, Rect2 target, double radius, IHitTest hitTest)
         {
             if (!(shape is QuadraticBezierShape quadraticBezier))
+            {
                 throw new ArgumentNullException("shape");
+            }
 
             var points = new List<PointShape>();
             quadraticBezier.GetPoints(points);
@@ -5003,7 +5054,9 @@ namespace Draw2D.ViewModels.Bounds
         public PointShape TryToGetPoint(BaseShape shape, Point2 target, double radius, IHitTest hitTest)
         {
             if (!(shape is ConicShape conic))
+            {
                 throw new ArgumentNullException("shape");
+            }
 
             var pointHitTest = hitTest.Registered[typeof(PointShape)];
 
@@ -5036,7 +5089,9 @@ namespace Draw2D.ViewModels.Bounds
         public BaseShape Contains(BaseShape shape, Point2 target, double radius, IHitTest hitTest)
         {
             if (!(shape is ConicShape conic))
+            {
                 throw new ArgumentNullException("shape");
+            }
 
             var points = new List<PointShape>();
             conic.GetPoints(points);
@@ -5047,7 +5102,9 @@ namespace Draw2D.ViewModels.Bounds
         public BaseShape Overlaps(BaseShape shape, Rect2 target, double radius, IHitTest hitTest)
         {
             if (!(shape is ConicShape conic))
+            {
                 throw new ArgumentNullException("shape");
+            }
 
             var points = new List<PointShape>();
             conic.GetPoints(points);
