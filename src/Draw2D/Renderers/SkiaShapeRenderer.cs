@@ -256,10 +256,10 @@ namespace Draw2D.Renderers
 
     public class SkiaShapeRenderer : IShapeRenderer
     {
-        private Dictionary<string, SKTypeface> _typefaceCache;
-        private Dictionary<TextStyle, (SKPaint, SKFontMetrics)> _textPaintCache;
-        private Dictionary<ShapeStyle, SKPaint> _fillPaintCache;
-        private Dictionary<ShapeStyle, SKPaint> _strokePaintCache;
+        private readonly Dictionary<string, SKTypeface> _typefaceCache;
+        private readonly Dictionary<TextStyle, (SKPaint, SKFontMetrics)> _textPaintCache;
+        private readonly Dictionary<ShapeStyle, SKPaint> _fillPaintCache;
+        private readonly Dictionary<ShapeStyle, SKPaint> _strokePaintCache;
 
         public double Scale { get; set; } = 1.0;
 
