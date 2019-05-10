@@ -92,18 +92,34 @@ namespace Draw2D.Editor
             state.Dispose();
         }
 
-        private void Draw(IContainerView view, SKCanvas canvas, double width, double height, double dx, double dy, double zx, double zy)
+        private SKPicture Record(IContainerView view, double width, double height, double scale)
         {
-            _skiaRenderer.Scale = zx;
+            var recorder = new SKPictureRecorder();
+            var rect = new SKRect(0f, 0f, (float)width, (float)height);
+
+            var canvas = recorder.BeginRecording(rect);
+
+            _skiaRenderer.Scale = scale;
             _skiaRenderer.Selection = view.Selection;
 
-            canvas.Save();
+            Draw(view, canvas, _skiaRenderer);
 
+            var picture = recorder.EndRecording();
+
+            canvas.Dispose();
+
+            return picture;
+        }
+
+        private void Draw(IContainerView view, SKCanvas canvas, SKPicture picture, double width, double height, double dx, double dy, double zx, double zy)
+        {
             if (view.CurrentContainer.InputBackground != null)
             {
                 GetSKPaintFill(view.CurrentContainer.InputBackground, out var brush);
                 canvas.DrawRect(SkiaHelper.ToRect(0.0, 0.0, width, height), brush);
             }
+
+            canvas.Save();
 
             canvas.Translate((float)dx, (float)dy);
             canvas.Scale((float)zx, (float)zy);
@@ -114,7 +130,7 @@ namespace Draw2D.Editor
                 canvas.DrawRect(SkiaHelper.ToRect(0.0, 0.0, view.CurrentContainer.Width, view.CurrentContainer.Height), brush);
             }
 
-            Draw(view, canvas, _skiaRenderer);
+            canvas.DrawPicture(picture);
 
             canvas.Restore();
         }
@@ -130,7 +146,11 @@ namespace Draw2D.Editor
                     break;
                 case SKCanvas canvas:
                     {
-                        Draw(view, canvas, width, height, dx, dy, zx, zy);
+                        var picture = Record(view, width, height, zx);
+
+                        Draw(view, canvas, picture, width, height, dx, dy, zx, zy);
+
+                        picture.Dispose();
                     }
                     break;
             }
