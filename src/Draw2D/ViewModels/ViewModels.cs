@@ -747,7 +747,7 @@ namespace Draw2D.ViewModels.Shapes
             set => Update(ref _transform, value);
         }
 
-        public abstract IEnumerable<PointShape> GetPoints();
+        public abstract void GetPoints(IList<PointShape> points);
 
         public virtual object BeginTransform(object dc, IShapeRenderer renderer)
         {
@@ -831,13 +831,13 @@ namespace Draw2D.ViewModels.Shapes
             this.BottomRight = bottomRight;
         }
 
-        public override IEnumerable<PointShape> GetPoints()
+        public override void GetPoints(IList<PointShape> points)
         {
-            yield return TopLeft;
-            yield return BottomRight;
+            points.Add(TopLeft);
+            points.Add(BottomRight);
             foreach (var point in Points)
             {
-                yield return point;
+                points.Add(point);
             }
         }
 
@@ -1135,14 +1135,14 @@ namespace Draw2D.ViewModels.Shapes
             this.Weight = weight;
         }
 
-        public override IEnumerable<PointShape> GetPoints()
+        public override void GetPoints(IList<PointShape> points)
         {
-            yield return StartPoint;
-            yield return Point1;
-            yield return Point2;
+            points.Add(StartPoint);
+            points.Add(Point1);
+            points.Add(Point2);
             foreach (var point in Points)
             {
-                yield return point;
+                points.Add(point);
             }
         }
 
@@ -1402,15 +1402,15 @@ namespace Draw2D.ViewModels.Shapes
             this.Point3 = point3;
         }
 
-        public override IEnumerable<PointShape> GetPoints()
+        public override void GetPoints(IList<PointShape> points)
         {
-            yield return StartPoint;
-            yield return Point1;
-            yield return Point2;
-            yield return Point3;
+            points.Add(StartPoint);
+            points.Add(Point1);
+            points.Add(Point2);
+            points.Add(Point3);
             foreach (var point in Points)
             {
-                yield return point;
+                points.Add(point);
             }
         }
 
@@ -1824,9 +1824,11 @@ namespace Draw2D.ViewModels.Shapes
 
         public override void Move(ISelection selection, double dx, double dy)
         {
-            var points = GetPoints().Distinct();
+            var points = new List<PointShape>();
+            GetPoints(points);
+            var distinct = points.Distinct();
 
-            foreach (var point in points)
+            foreach (var point in distinct)
             {
                 if (!selection.Selected.Contains(point))
                 {
@@ -1907,19 +1909,16 @@ namespace Draw2D.ViewModels.Shapes
             this.Shapes = shapes;
         }
 
-        public override IEnumerable<PointShape> GetPoints()
+        public override void GetPoints(IList<PointShape> points)
         {
             foreach (var point in Points)
             {
-                yield return point;
+                points.Add(point);
             }
 
             foreach (var shape in Shapes)
             {
-                foreach (var point in shape.GetPoints())
-                {
-                    yield return point;
-                }
+                shape.GetPoints(points);
             }
         }
 
@@ -1958,9 +1957,11 @@ namespace Draw2D.ViewModels.Shapes
 
         public override void Move(ISelection selection, double dx, double dy)
         {
-            var points = GetPoints().Distinct();
+            var points = new List<PointShape>();
+            GetPoints(points);
+            var distinct = points.Distinct();
 
-            foreach (var point in points)
+            foreach (var point in distinct)
             {
                 if (!selection.Selected.Contains(point))
                 {
@@ -2034,13 +2035,13 @@ namespace Draw2D.ViewModels.Shapes
             this.Point = point;
         }
 
-        public override IEnumerable<PointShape> GetPoints()
+        public override void GetPoints(IList<PointShape> points)
         {
-            yield return StartPoint;
-            yield return Point;
+            points.Add(StartPoint);
+            points.Add(Point);
             foreach (var point in Points)
             {
-                yield return point;
+                points.Add(point);
             }
         }
 
@@ -2282,19 +2283,16 @@ namespace Draw2D.ViewModels.Shapes
             this.Figures = figures;
         }
 
-        public override IEnumerable<PointShape> GetPoints()
+        public override void GetPoints(IList<PointShape> points)
         {
             foreach (var point in Points)
             {
-                yield return point;
+                points.Add(point);
             }
 
             foreach (var figure in Figures)
             {
-                foreach (var point in figure.GetPoints())
-                {
-                    yield return point;
-                }
+                figure.GetPoints(points);
             }
         }
 
@@ -2460,9 +2458,11 @@ namespace Draw2D.ViewModels.Shapes
 
         public override void Move(ISelection selection, double dx, double dy)
         {
-            var points = GetPoints().Distinct();
+            var points = new List<PointShape>();
+            GetPoints(points);
+            var distinct = points.Distinct();
 
-            foreach (var point in points)
+            foreach (var point in distinct)
             {
                 if (!selection.Selected.Contains(point))
                 {
@@ -2568,9 +2568,9 @@ namespace Draw2D.ViewModels.Shapes
             this.Template = template;
         }
 
-        public override IEnumerable<PointShape> GetPoints()
+        public override void GetPoints(IList<PointShape> points)
         {
-            yield return this;
+            points.Add(this);
         }
 
         public override void Invalidate()
@@ -2683,14 +2683,14 @@ namespace Draw2D.ViewModels.Shapes
             this.Point2 = point2;
         }
 
-        public override IEnumerable<PointShape> GetPoints()
+        public override void GetPoints(IList<PointShape> points)
         {
-            yield return StartPoint;
-            yield return Point1;
-            yield return Point2;
+            points.Add(StartPoint);
+            points.Add(Point1);
+            points.Add(Point2);
             foreach (var point in Points)
             {
-                yield return point;
+                points.Add(point);
             }
         }
 
@@ -3194,14 +3194,11 @@ namespace Draw2D.ViewModels.Containers
         {
         }
 
-        public override IEnumerable<PointShape> GetPoints()
+        public override void GetPoints(IList<PointShape> points)
         {
             foreach (var shape in Shapes)
             {
-                foreach (var point in shape.GetPoints())
-                {
-                    yield return point;
-                }
+                shape.GetPoints(points);
             }
         }
 
@@ -3227,7 +3224,8 @@ namespace Draw2D.ViewModels.Containers
 
         public override void Invalidate()
         {
-            var points = GetPoints();
+            var points = new List<PointShape>();
+            GetPoints(points);
 
             if (Guides != null)
             {
@@ -3288,9 +3286,11 @@ namespace Draw2D.ViewModels.Containers
 
         public override void Move(ISelection selection, double dx, double dy)
         {
-            var points = GetPoints().Distinct();
+            var points = new List<PointShape>();
+            GetPoints(points);
+            var distinct = points.Distinct();
 
-            foreach (var point in points)
+            foreach (var point in distinct)
             {
                 if (!selection.Selected.Contains(point))
                 {
@@ -4611,7 +4611,10 @@ namespace Draw2D.ViewModels.Bounds
             if (!(shape is CubicBezierShape cubicBezier))
                 throw new ArgumentNullException("shape");
 
-            return HitTestHelper.Contains(cubicBezier.GetPoints(), target) ? shape : null;
+            var points = new List<PointShape>();
+            cubicBezier.GetPoints(points);
+
+            return HitTestHelper.Contains(points, target) ? shape : null;
         }
 
         public BaseShape Overlaps(BaseShape shape, Rect2 target, double radius, IHitTest hitTest)
@@ -4619,7 +4622,10 @@ namespace Draw2D.ViewModels.Bounds
             if (!(shape is CubicBezierShape cubicBezier))
                 throw new ArgumentNullException("shape");
 
-            return HitTestHelper.Overlap(cubicBezier.GetPoints(), target) ? shape : null;
+            var points = new List<PointShape>();
+            cubicBezier.GetPoints(points);
+
+            return HitTestHelper.Overlap(points, target) ? shape : null;
         }
     }
 
@@ -4859,7 +4865,10 @@ namespace Draw2D.ViewModels.Bounds
                 }
             }
 
-            return HitTestHelper.Contains(path.GetPoints(), target) ? shape : null;
+            var points = new List<PointShape>();
+            path.GetPoints(points);
+
+            return HitTestHelper.Contains(points, target) ? shape : null;
         }
 
         public BaseShape Overlaps(BaseShape shape, Rect2 target, double radius, IHitTest hitTest)
@@ -4880,7 +4889,10 @@ namespace Draw2D.ViewModels.Bounds
                 }
             }
 
-            return HitTestHelper.Overlap(path.GetPoints(), target) ? shape : null;
+            var points = new List<PointShape>();
+            path.GetPoints(points);
+
+            return HitTestHelper.Overlap(points, target) ? shape : null;
         }
     }
 
@@ -4964,7 +4976,10 @@ namespace Draw2D.ViewModels.Bounds
             if (!(shape is QuadraticBezierShape quadraticBezier))
                 throw new ArgumentNullException("shape");
 
-            return HitTestHelper.Contains(quadraticBezier.GetPoints(), target) ? shape : null;
+            var points = new List<PointShape>();
+            quadraticBezier.GetPoints(points);
+
+            return HitTestHelper.Contains(points, target) ? shape : null;
         }
 
         public BaseShape Overlaps(BaseShape shape, Rect2 target, double radius, IHitTest hitTest)
@@ -4972,7 +4987,10 @@ namespace Draw2D.ViewModels.Bounds
             if (!(shape is QuadraticBezierShape quadraticBezier))
                 throw new ArgumentNullException("shape");
 
-            return HitTestHelper.Overlap(quadraticBezier.GetPoints(), target) ? shape : null;
+            var points = new List<PointShape>();
+            quadraticBezier.GetPoints(points);
+
+            return HitTestHelper.Overlap(points, target) ? shape : null;
         }
     }
 
@@ -5020,7 +5038,10 @@ namespace Draw2D.ViewModels.Bounds
             if (!(shape is ConicShape conic))
                 throw new ArgumentNullException("shape");
 
-            return HitTestHelper.Contains(conic.GetPoints(), target) ? shape : null;
+            var points = new List<PointShape>();
+            conic.GetPoints(points);
+
+            return HitTestHelper.Contains(points, target) ? shape : null;
         }
 
         public BaseShape Overlaps(BaseShape shape, Rect2 target, double radius, IHitTest hitTest)
@@ -5028,7 +5049,10 @@ namespace Draw2D.ViewModels.Bounds
             if (!(shape is ConicShape conic))
                 throw new ArgumentNullException("shape");
 
-            return HitTestHelper.Overlap(conic.GetPoints(), target) ? shape : null;
+            var points = new List<PointShape>();
+            conic.GetPoints(points);
+
+            return HitTestHelper.Overlap(points, target) ? shape : null;
         }
     }
 
@@ -7994,8 +8018,10 @@ namespace Draw2D.ViewModels.Tools
 
             if (Settings?.Simplify ?? true)
             {
-                IList<PointShape> points = _path.GetPoints().Distinct().ToList();
-                IList<Vector2> vectors = points.Select(p => new Vector2((float)p.X, (float)p.Y)).ToList();
+                var points = new List<PointShape>();
+                _path.GetPoints(points);
+                var distinct = points.Distinct().ToList();
+                IList<Vector2> vectors = distinct.Select(p => new Vector2((float)p.X, (float)p.Y)).ToList();
                 int count = vectors.Count;
                 RDP rdp = new RDP();
                 BitArray accepted = rdp.DouglasPeucker(vectors, 0, count - 1, Settings?.Epsilon ?? 1.0);
@@ -8004,7 +8030,7 @@ namespace Draw2D.ViewModels.Tools
                 {
                     if (!accepted[i])
                     {
-                        points.RemoveAt(i - removed);
+                        distinct.RemoveAt(i - removed);
                         ++removed;
                     }
                 }
@@ -8012,15 +8038,15 @@ namespace Draw2D.ViewModels.Tools
                 _figure.Shapes.Clear();
                 _figure.MarkAsDirty(true);
 
-                if (points.Count >= 2)
+                if (distinct.Count >= 2)
                 {
-                    for (int i = 0; i < points.Count - 1; i++)
+                    for (int i = 0; i < distinct.Count - 1; i++)
                     {
                         var line = new LineShape()
                         {
                             Points = new ObservableCollection<PointShape>(),
-                            StartPoint = points[i],
-                            Point = points[i + 1],
+                            StartPoint = distinct[i],
+                            Point = distinct[i + 1],
                             Style = context.ContainerView?.CurrentContainer.CurrentStyle
                         };
                         _figure.Shapes.Add(line);
@@ -8834,22 +8860,20 @@ namespace Draw2D.ViewModels.Tools
             }
         }
 
-        internal IEnumerable<PointShape> GetPoints(IEnumerable<BaseShape> shapes)
-        {
-            foreach (var shape in shapes)
-            {
-                foreach (var point in shape.GetPoints())
-                {
-                    yield return point;
-                }
-            }
-        }
-
         internal IDictionary<object, object> GetPointsCopyDict(IEnumerable<BaseShape> shapes)
         {
             var copy = new Dictionary<object, object>();
 
-            foreach (var point in GetPoints(shapes).Distinct())
+            var points = new List<PointShape>();
+
+            foreach (var shape in shapes)
+            {
+                shape.GetPoints(points);
+            }
+
+            var distinct = points.Distinct();
+
+            foreach (var point in distinct)
             {
                 copy[point] = point.Copy(null);
             }
