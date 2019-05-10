@@ -8901,17 +8901,20 @@ namespace Draw2D.ViewModels.Tools
 
         internal void Delete(CanvasContainer container, ISelection selection)
         {
-            var paths = container.Shapes.OfType<PathShape>();
-            var groups = container.Shapes.OfType<GroupShape>();
-            var connectables = container.Shapes.OfType<ConnectableShape>();
+            var paths = container.Shapes.OfType<PathShape>().ToList().AsReadOnly();
+            var groups = container.Shapes.OfType<GroupShape>().ToList().AsReadOnly();
+            var connectables = container.Shapes.OfType<ConnectableShape>().ToList().AsReadOnly();
+
+            var shapesHash = container.Shapes.ToHashSet();
+            var guidesHash = container.Guides.ToHashSet();
 
             foreach (var shape in selection.Selected)
             {
-                if (container.Shapes.Contains(shape))
+                if (shapesHash.Contains(shape))
                 {
                     container.Shapes.Remove(shape);
                 }
-                else if (container.Guides.Contains(shape))
+                else if (guidesHash.Contains(shape))
                 {
                     if (shape is LineShape guide)
                     {
@@ -8922,15 +8925,15 @@ namespace Draw2D.ViewModels.Tools
                 {
                     if (shape is PointShape point)
                     {
-                        TryToDelete(container, connectables, point);
+                        TryToDelete(connectables, point);
                     }
 
-                    if (paths.Count() > 0)
+                    if (paths.Count > 0)
                     {
                         TryToDelete(container, paths, shape);
                     }
 
-                    if (groups.Count() > 0)
+                    if (groups.Count > 0)
                     {
                         TryToDelete(container, groups, shape);
                     }
@@ -8938,7 +8941,7 @@ namespace Draw2D.ViewModels.Tools
             }
         }
 
-        internal bool TryToDelete(CanvasContainer container, IEnumerable<ConnectableShape> connectables, PointShape point)
+        internal bool TryToDelete(IReadOnlyList<ConnectableShape> connectables, PointShape point)
         {
             foreach (var connectable in connectables)
             {
@@ -8954,7 +8957,7 @@ namespace Draw2D.ViewModels.Tools
             return false;
         }
 
-        internal bool TryToDelete(CanvasContainer container, IEnumerable<PathShape> paths, BaseShape shape)
+        internal bool TryToDelete(CanvasContainer container, IReadOnlyList<PathShape> paths, BaseShape shape)
         {
             foreach (var path in paths)
             {
@@ -8984,7 +8987,7 @@ namespace Draw2D.ViewModels.Tools
             return false;
         }
 
-        internal bool TryToDelete(CanvasContainer container, IEnumerable<GroupShape> groups, BaseShape shape)
+        internal bool TryToDelete(CanvasContainer container, IReadOnlyList<GroupShape> groups, BaseShape shape)
         {
             foreach (var group in groups)
             {
