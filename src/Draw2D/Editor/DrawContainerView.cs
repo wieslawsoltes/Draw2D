@@ -124,10 +124,14 @@ namespace Draw2D.Editor
             switch (context)
             {
                 case DrawingContext drawingContext:
-                    Draw(view, drawingContext, width, height, dx, dy, zx, zy);
+                    {
+                        Draw(view, drawingContext, width, height, dx, dy, zx, zy);
+                    }
                     break;
                 case SKCanvas canvas:
-                    Draw(view, canvas, width, height, dx, dy, zx, zy);
+                    {
+                        Draw(view, canvas, width, height, dx, dy, zx, zy);
+                    }
                     break;
             }
         }
