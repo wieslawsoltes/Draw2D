@@ -13,10 +13,10 @@ namespace Draw2D.Editor
 {
     public class DrawContainerView : IDrawContainerView
     {
-        private SkiaShapeRenderer _skiaRenderer;
-        private AvaloniaShapeRenderer _avaloniaRenderer;
-        private Dictionary<ArgbColor, SKPaint> _fillSKPaintCache;
-        private Dictionary<ArgbColor, Brush> _fillBrushCache;
+        private readonly SkiaShapeRenderer _skiaRenderer;
+        private readonly AvaloniaShapeRenderer _avaloniaRenderer;
+        private readonly Dictionary<ArgbColor, SKPaint> _fillSKPaintCache;
+        private readonly Dictionary<ArgbColor, Brush> _fillBrushCache;
 
         private void GetSKPaintFill(ArgbColor color, out SKPaint brush)
         {
