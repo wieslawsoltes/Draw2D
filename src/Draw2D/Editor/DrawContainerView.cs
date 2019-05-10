@@ -92,15 +92,21 @@ namespace Draw2D.Editor
             state.Dispose();
         }
 
-        private SKPicture Record(IContainerView view, double width, double height, double scale)
+        private SKPicture Record(IContainerView view, double scale)
         {
             var recorder = new SKPictureRecorder();
-            var rect = new SKRect(0f, 0f, (float)width, (float)height);
+            var rect = new SKRect(0f, 0f, (float)view.CurrentContainer.Width, (float)view.CurrentContainer.Height);
 
             var canvas = recorder.BeginRecording(rect);
 
             _skiaRenderer.Scale = scale;
             _skiaRenderer.Selection = view.Selection;
+
+            if (view.CurrentContainer.WorkBackground != null)
+            {
+                GetSKPaintFill(view.CurrentContainer.WorkBackground, out var brush);
+                canvas.DrawRect(SkiaHelper.ToRect(0.0, 0.0, view.CurrentContainer.Width, view.CurrentContainer.Height), brush);
+            }
 
             Draw(view, canvas, _skiaRenderer);
 
@@ -113,25 +119,16 @@ namespace Draw2D.Editor
 
         private void Draw(IContainerView view, SKCanvas canvas, SKPicture picture, double width, double height, double dx, double dy, double zx, double zy)
         {
-            canvas.Save();
-
             if (view.CurrentContainer.InputBackground != null)
             {
                 GetSKPaintFill(view.CurrentContainer.InputBackground, out var brush);
                 canvas.DrawRect(SkiaHelper.ToRect(0.0, 0.0, width, height), brush);
             }
 
+            canvas.Save();
             canvas.Translate((float)dx, (float)dy);
             canvas.Scale((float)zx, (float)zy);
-
-            if (view.CurrentContainer.WorkBackground != null)
-            {
-                GetSKPaintFill(view.CurrentContainer.WorkBackground, out var brush);
-                canvas.DrawRect(SkiaHelper.ToRect(0.0, 0.0, view.CurrentContainer.Width, view.CurrentContainer.Height), brush);
-            }
-
             canvas.DrawPicture(picture);
-
             canvas.Restore();
         }
 
@@ -146,7 +143,7 @@ namespace Draw2D.Editor
                     break;
                 case SKCanvas canvas:
                     {
-                        var picture = Record(view, width, height, zx);
+                        var picture = Record(view, zx);
 
                         Draw(view, canvas, picture, width, height, dx, dy, zx, zy);
 
