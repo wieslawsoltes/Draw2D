@@ -1,5 +1,6 @@
 ﻿// Copyright (c) Wiesław Šoltés. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
+using System;
 using System.Collections.Generic;
 using Avalonia;
 using Avalonia.Media;
@@ -56,14 +57,20 @@ namespace Draw2D.Editor
             _fillBrushCache = new Dictionary<ArgbColor, Brush>();
         }
 
-        private void Draw(IContainerView view, object context, IShapeRenderer renderer)
+        private void DrawShapes(IContainerView view, object context, IShapeRenderer renderer)
         {
             view.Presenter.DrawContainer(context, view.CurrentContainer, renderer, 0.0, 0.0, DrawMode.Shape, null, null);
             view.Presenter.DrawContainer(context, view.WorkingContainer, renderer, 0.0, 0.0, DrawMode.Shape, null, null);
+        }
 
+        private void DrawDecorators(IContainerView view, object context, IShapeRenderer renderer)
+        {
             view.Presenter.DrawDecorators(context, view.CurrentContainer, renderer, 0.0, 0.0, DrawMode.Shape);
             view.Presenter.DrawDecorators(context, view.WorkingContainer, renderer, 0.0, 0.0, DrawMode.Shape);
+        }
 
+        private void DrawPoints(IContainerView view, object context, IShapeRenderer renderer)
+        {
             view.Presenter.DrawContainer(context, view.CurrentContainer, renderer, 0.0, 0.0, DrawMode.Point, null, null);
             view.Presenter.DrawContainer(context, view.WorkingContainer, renderer, 0.0, 0.0, DrawMode.Point, null, null);
         }
@@ -76,7 +83,7 @@ namespace Draw2D.Editor
             if (view.CurrentContainer.InputBackground != null)
             {
                 GetBrushFill(view.CurrentContainer.InputBackground, out var brush);
-                context.FillRectangle(brush, new Rect(0, 0, width, height));
+                context.FillRectangle(brush, new Rect(0.0, 0.0, width, height));
             }
 
             var state = context.PushPreTransform(new Matrix(zx, 0.0, 0.0, zy, dx, dy));
@@ -87,28 +94,23 @@ namespace Draw2D.Editor
                 context.FillRectangle(brush, new Rect(0.0, 0.0, view.CurrentContainer.Width, view.CurrentContainer.Height));
             }
 
-            Draw(view, context, _avaloniaRenderer);
+            DrawShapes(view, context, _avaloniaRenderer);
+            DrawDecorators(view, context, _avaloniaRenderer);
+            DrawPoints(view, context, _avaloniaRenderer);
 
             state.Dispose();
         }
 
-        private SKPicture Record(IContainerView view, double scale)
+        private SKPicture Record(IContainerView view, double scale, Action<IContainerView, object, IShapeRenderer> draw)
         {
-            var recorder = new SKPictureRecorder();
-            var rect = new SKRect(0f, 0f, (float)view.CurrentContainer.Width, (float)view.CurrentContainer.Height);
-
-            var canvas = recorder.BeginRecording(rect);
-
             _skiaRenderer.Scale = scale;
             _skiaRenderer.Selection = view.Selection;
 
-            if (view.CurrentContainer.WorkBackground != null)
-            {
-                GetSKPaintFill(view.CurrentContainer.WorkBackground, out var brush);
-                canvas.DrawRect(SkiaHelper.ToRect(0.0, 0.0, view.CurrentContainer.Width, view.CurrentContainer.Height), brush);
-            }
+            var recorder = new SKPictureRecorder();
+            var rect = new SKRect(0f, 0f, (float)view.CurrentContainer.Width, (float)view.CurrentContainer.Height);
+            var canvas = recorder.BeginRecording(rect);
 
-            Draw(view, canvas, _skiaRenderer);
+            draw(view, canvas, _skiaRenderer);
 
             var picture = recorder.EndRecording();
 
@@ -126,6 +128,37 @@ namespace Draw2D.Editor
             canvas.Restore();
         }
 
+        private void Draw(IContainerView view, SKCanvas canvas, double width, double height, double dx, double dy, double zx, double zy)
+        {
+            var pictureShapes = Record(view, zx, DrawShapes);
+            var pictureDecorators = Record(view, zx, DrawDecorators);
+            var picturePoints = Record(view, zx, DrawPoints);
+
+            if (view.CurrentContainer.InputBackground != null)
+            {
+                GetSKPaintFill(view.CurrentContainer.InputBackground, out var brush);
+                canvas.DrawRect(SkiaHelper.ToRect(0.0, 0.0, width, height), brush);
+            }
+
+            if (view.CurrentContainer.WorkBackground != null)
+            {
+                GetSKPaintFill(view.CurrentContainer.WorkBackground, out var brush);
+                canvas.Save();
+                canvas.Translate((float)dx, (float)dy);
+                canvas.Scale((float)zx, (float)zy);
+                canvas.DrawRect(SkiaHelper.ToRect(0.0, 0.0, view.CurrentContainer.Width, view.CurrentContainer.Height), brush);
+                canvas.Restore();
+            }
+
+            Draw(canvas, pictureShapes, dx, dy, zx, zy);
+            Draw(canvas, pictureDecorators, dx, dy, zx, zy);
+            Draw(canvas, picturePoints, dx, dy, zx, zy);
+
+            picturePoints.Dispose();
+            pictureDecorators.Dispose();
+            pictureShapes.Dispose();
+        }
+
         public void Draw(IContainerView view, object context, double width, double height, double dx, double dy, double zx, double zy)
         {
             switch (context)
@@ -137,17 +170,7 @@ namespace Draw2D.Editor
                     break;
                 case SKCanvas canvas:
                     {
-                        var picture = Record(view, zx);
-
-                        if (view.CurrentContainer.InputBackground != null)
-                        {
-                            GetSKPaintFill(view.CurrentContainer.InputBackground, out var brush);
-                            canvas.DrawRect(SkiaHelper.ToRect(0.0, 0.0, width, height), brush);
-                        }
-
-                        Draw(canvas, picture, dx, dy, zx, zy);
-
-                        picture.Dispose();
+                        Draw(view, canvas, width, height, dx, dy, zx, zy);
                     }
                     break;
             }
