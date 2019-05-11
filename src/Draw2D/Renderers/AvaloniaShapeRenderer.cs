@@ -257,7 +257,7 @@ namespace Draw2D.Renderers
         }
     }
 
-    public class AvaloniaShapeRenderer : ViewModelBase, IShapeRenderer
+    public class AvaloniaShapeRenderer : IShapeRenderer
     {
         private readonly IDictionary<ShapeStyle, AvaloniaBrushCache> _brushCache;
         private readonly IDictionary<Matrix2, Matrix> _matrixCache;
@@ -268,20 +268,9 @@ namespace Draw2D.Renderers
         private readonly IDictionary<EllipseShape, Geometry> _ellipseGeometryCache;
         private readonly IDictionary<TextShape, AvaloniaFormattedTextCache> _formattedTextCache;
 
-        private double _scale = 1.0;
-        private ISelection _selection = null;
+        public double Scale { get; set; } = 1.0;
 
-        public double Scale
-        {
-            get => _scale;
-            set => Update(ref _scale, value);
-        }
-
-        public ISelection Selection
-        {
-            get => _selection;
-            set => Update(ref _selection, value);
-        }
+        public ISelection Selection { get; set; } = null;
 
         public AvaloniaShapeRenderer()
         {
