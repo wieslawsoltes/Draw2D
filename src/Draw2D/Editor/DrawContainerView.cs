@@ -75,32 +75,6 @@ namespace Draw2D.Editor
             view.Presenter.DrawContainer(context, view.WorkingContainer, renderer, 0.0, 0.0, DrawMode.Point, null, null);
         }
 
-        private void DrawAvalonia(IContainerView view, DrawingContext context, double width, double height, double dx, double dy, double zx, double zy)
-        {
-            _avaloniaRenderer.Scale = zx;
-            _avaloniaRenderer.Selection = view.Selection;
-
-            if (view.CurrentContainer.InputBackground != null)
-            {
-                GetBrushFill(view.CurrentContainer.InputBackground, out var brush);
-                context.FillRectangle(brush, new Rect(0.0, 0.0, width, height));
-            }
-
-            var state = context.PushPreTransform(new Matrix(zx, 0.0, 0.0, zy, dx, dy));
-
-            if (view.CurrentContainer.WorkBackground != null)
-            {
-                GetBrushFill(view.CurrentContainer.WorkBackground, out var brush);
-                context.FillRectangle(brush, new Rect(0.0, 0.0, view.CurrentContainer.Width, view.CurrentContainer.Height));
-            }
-
-            DrawShapes(view, context, _avaloniaRenderer);
-            DrawDecorators(view, context, _avaloniaRenderer);
-            DrawPoints(view, context, _avaloniaRenderer);
-
-            state.Dispose();
-        }
-
         private SKPicture RecordPicture(IContainerView view, double scale, Action<IContainerView, object, IShapeRenderer> draw)
         {
             _skiaRenderer.Scale = scale;
@@ -157,6 +131,32 @@ namespace Draw2D.Editor
             picturePoints.Dispose();
             pictureDecorators.Dispose();
             pictureShapes.Dispose();
+        }
+
+        private void DrawAvalonia(IContainerView view, DrawingContext context, double width, double height, double dx, double dy, double zx, double zy)
+        {
+            _avaloniaRenderer.Scale = zx;
+            _avaloniaRenderer.Selection = view.Selection;
+
+            if (view.CurrentContainer.InputBackground != null)
+            {
+                GetBrushFill(view.CurrentContainer.InputBackground, out var brush);
+                context.FillRectangle(brush, new Rect(0.0, 0.0, width, height));
+            }
+
+            var state = context.PushPreTransform(new Matrix(zx, 0.0, 0.0, zy, dx, dy));
+
+            if (view.CurrentContainer.WorkBackground != null)
+            {
+                GetBrushFill(view.CurrentContainer.WorkBackground, out var brush);
+                context.FillRectangle(brush, new Rect(0.0, 0.0, view.CurrentContainer.Width, view.CurrentContainer.Height));
+            }
+
+            DrawShapes(view, context, _avaloniaRenderer);
+            DrawDecorators(view, context, _avaloniaRenderer);
+            DrawPoints(view, context, _avaloniaRenderer);
+
+            state.Dispose();
         }
 
         public void Draw(IContainerView view, object context, double width, double height, double dx, double dy, double zx, double zy)
