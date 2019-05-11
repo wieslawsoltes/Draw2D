@@ -71,6 +71,7 @@ namespace Draw2D.Editor
         {
             //view.CurrentContainer.Draw(context, renderer, 0.0, 0.0, DrawMode.Point, null, null);
             //view.WorkingContainer.Draw(context, renderer, 0.0, 0.0, DrawMode.Point, null, null);
+
             var selected = view.Selection.Selected.ToList();
 
             foreach (var shape in selected)
