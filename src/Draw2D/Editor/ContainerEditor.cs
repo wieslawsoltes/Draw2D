@@ -437,7 +437,7 @@ namespace Draw2D.Editor
 
             var decorators = new Dictionary<Type, IShapeDecorator>
             {
-                { typeof(PointShape), new PointDecorator() },
+                //{ typeof(PointShape), new PointDecorator() },
                 { typeof(LineShape), new LineDecorator() },
                 { typeof(CubicBezierShape), new CubicBezierDecorator() },
                 { typeof(QuadraticBezierShape), new QuadraticBezierDecorator() },
