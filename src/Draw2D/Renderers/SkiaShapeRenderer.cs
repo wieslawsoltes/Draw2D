@@ -290,7 +290,7 @@ namespace Draw2D.Renderers
         {
             if (style.Fill.IsDirty == true || !_fillPaintCache.TryGetValue(style, out var brushCached))
             {
-                style.Stroke.Invalidate();
+                style.Fill.Invalidate();
                 brushCached = SkiaHelper.ToSKPaintBrush(style.Fill);
                 _fillPaintCache[style] = brushCached;
             }
