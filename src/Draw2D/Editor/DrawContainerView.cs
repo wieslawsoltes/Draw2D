@@ -75,7 +75,7 @@ namespace Draw2D.Editor
             view.Presenter.DrawContainer(context, view.WorkingContainer, renderer, 0.0, 0.0, DrawMode.Point, null, null);
         }
 
-        private void Draw(IContainerView view, DrawingContext context, double width, double height, double dx, double dy, double zx, double zy)
+        private void DrawAvalonia(IContainerView view, DrawingContext context, double width, double height, double dx, double dy, double zx, double zy)
         {
             _avaloniaRenderer.Scale = zx;
             _avaloniaRenderer.Selection = view.Selection;
@@ -101,7 +101,7 @@ namespace Draw2D.Editor
             state.Dispose();
         }
 
-        private SKPicture Record(IContainerView view, double scale, Action<IContainerView, object, IShapeRenderer> draw)
+        private SKPicture RecordPicture(IContainerView view, double scale, Action<IContainerView, object, IShapeRenderer> draw)
         {
             _skiaRenderer.Scale = scale;
             _skiaRenderer.Selection = view.Selection;
@@ -119,7 +119,7 @@ namespace Draw2D.Editor
             return picture;
         }
 
-        private void Draw(SKCanvas canvas, SKPicture picture, double dx, double dy, double zx, double zy)
+        private void DrawPicture(SKCanvas canvas, SKPicture picture, double dx, double dy, double zx, double zy)
         {
             canvas.Save();
             canvas.Translate((float)dx, (float)dy);
@@ -128,11 +128,11 @@ namespace Draw2D.Editor
             canvas.Restore();
         }
 
-        private void Draw(IContainerView view, SKCanvas canvas, double width, double height, double dx, double dy, double zx, double zy)
+        private void DrawSkia(IContainerView view, SKCanvas canvas, double width, double height, double dx, double dy, double zx, double zy)
         {
-            var pictureShapes = Record(view, zx, DrawShapes);
-            var pictureDecorators = Record(view, zx, DrawDecorators);
-            var picturePoints = Record(view, zx, DrawPoints);
+            var pictureShapes = RecordPicture(view, zx, DrawShapes);
+            var pictureDecorators = RecordPicture(view, zx, DrawDecorators);
+            var picturePoints = RecordPicture(view, zx, DrawPoints);
 
             if (view.CurrentContainer.InputBackground != null)
             {
@@ -150,9 +150,9 @@ namespace Draw2D.Editor
                 canvas.Restore();
             }
 
-            Draw(canvas, pictureShapes, dx, dy, zx, zy);
-            Draw(canvas, pictureDecorators, dx, dy, zx, zy);
-            Draw(canvas, picturePoints, dx, dy, zx, zy);
+            DrawPicture(canvas, pictureShapes, dx, dy, zx, zy);
+            DrawPicture(canvas, pictureDecorators, dx, dy, zx, zy);
+            DrawPicture(canvas, picturePoints, dx, dy, zx, zy);
 
             picturePoints.Dispose();
             pictureDecorators.Dispose();
@@ -165,12 +165,12 @@ namespace Draw2D.Editor
             {
                 case DrawingContext drawingContext:
                     {
-                        Draw(view, drawingContext, width, height, dx, dy, zx, zy);
+                        DrawAvalonia(view, drawingContext, width, height, dx, dy, zx, zy);
                     }
                     break;
                 case SKCanvas canvas:
                     {
-                        Draw(view, canvas, width, height, dx, dy, zx, zy);
+                        DrawSkia(view, canvas, width, height, dx, dy, zx, zy);
                     }
                     break;
             }
