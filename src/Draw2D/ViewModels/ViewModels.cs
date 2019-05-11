@@ -9303,9 +9303,10 @@ namespace Draw2D.ViewModels.Tools
 
         internal void Delete(CanvasContainer container, ISelection selection)
         {
-            var paths = container.Shapes.OfType<PathShape>().ToList().AsReadOnly();
-            var groups = container.Shapes.OfType<GroupShape>().ToList().AsReadOnly();
-            var connectables = container.Shapes.OfType<ConnectableShape>().ToList().AsReadOnly();
+            // FIXME: Very slow when using Contains.
+            //var paths = container.Shapes.OfType<PathShape>().ToList().AsReadOnly();
+            //var groups = container.Shapes.OfType<GroupShape>().ToList().AsReadOnly();
+            //var connectables = container.Shapes.OfType<ConnectableShape>().ToList().AsReadOnly();
 
             var shapesHash = container.Shapes.ToHashSet();
             var guidesHash = container.Guides.ToHashSet();
@@ -9323,15 +9324,18 @@ namespace Draw2D.ViewModels.Tools
                         container.Guides.Remove(guide);
                     }
                 }
+                /*
                 else
                 {
                     if (shape is PointShape point)
                     {
+                        // FIXME: Very slow when using Contains.
                         TryToDelete(connectables, point);
                     }
 
                     if (paths.Count > 0)
                     {
+                        // FIXME: Very slow when using Contains.
                         TryToDelete(container, paths, shape);
                     }
 
@@ -9340,6 +9344,7 @@ namespace Draw2D.ViewModels.Tools
                         TryToDelete(container, groups, shape);
                     }
                 }
+                */
             }
         }
 
