@@ -2,11 +2,13 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Avalonia;
 using Avalonia.Media;
 using Draw2D.Renderers;
 using Draw2D.ViewModels;
 using Draw2D.ViewModels.Containers;
+using Draw2D.ViewModels.Shapes;
 using Draw2D.ViewModels.Style;
 using SkiaSharp;
 
@@ -59,38 +61,38 @@ namespace Draw2D.Editor
             _fillBrushCache = new Dictionary<ArgbColor, Brush>();
         }
 
-        private void DrawContainer(object dc, CanvasContainer container, IShapeRenderer renderer, double dx, double dy, DrawMode mode, object db, object r)
-        {
-            container.Draw(dc, renderer, dx, dy, mode, db, r);
-        }
-
-        private void DrawDecorators(object dc, ISelection selection, IShapeRenderer renderer, double dx, double dy, DrawMode mode)
-        {
-            foreach (var shape in selection.Selected)
-            {
-                if (Decorators.TryGetValue(shape.GetType(), out var helper))
-                {
-                    helper.Draw(dc, shape, renderer, selection, dx, dy, mode);
-                }
-            }
-        }
-
         private void DrawShapes(IContainerView view, object context, IShapeRenderer renderer)
         {
-
-            DrawContainer(context, view.CurrentContainer, renderer, 0.0, 0.0, DrawMode.Shape, null, null);
-            DrawContainer(context, view.WorkingContainer, renderer, 0.0, 0.0, DrawMode.Shape, null, null);
-        }
-
-        private void DrawDecorators(IContainerView view, object context, IShapeRenderer renderer)
-        {
-            DrawDecorators(context, view.Selection, renderer, 0.0, 0.0, DrawMode.Shape);
+            view.CurrentContainer.Draw(context, renderer, 0.0, 0.0, DrawMode.Shape, null, null);
+            view.WorkingContainer.Draw(context, renderer, 0.0, 0.0, DrawMode.Shape, null, null);
         }
 
         private void DrawPoints(IContainerView view, object context, IShapeRenderer renderer)
         {
-            DrawContainer(context, view.CurrentContainer, renderer, 0.0, 0.0, DrawMode.Point, null, null);
-            DrawContainer(context, view.WorkingContainer, renderer, 0.0, 0.0, DrawMode.Point, null, null);
+            //view.CurrentContainer.Draw(context, renderer, 0.0, 0.0, DrawMode.Point, null, null);
+            //view.WorkingContainer.Draw(context, renderer, 0.0, 0.0, DrawMode.Point, null, null);
+            var selected = view.Selection.Selected.ToList();
+
+            foreach (var shape in selected)
+            {
+                if (shape is PointShape point)
+                {
+                    point.Draw(context, renderer, 0.0, 0.0, DrawMode.Point, null, null);
+                }
+            }
+        }
+
+        private void DrawDecorators(IContainerView view, object context, IShapeRenderer renderer)
+        {
+            var selected = view.Selection.Selected.ToList();
+
+            foreach (var shape in selected)
+            {
+                if (Decorators.TryGetValue(shape.GetType(), out var helper))
+                {
+                    helper.Draw(context, shape, renderer, view.Selection, 0.0, 0.0, DrawMode.Shape);
+                }
+            }
         }
 
         private SKPicture RecordPicture(IContainerView view, double scale, Action<IContainerView, object, IShapeRenderer> draw)
