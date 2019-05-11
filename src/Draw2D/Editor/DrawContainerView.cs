@@ -19,6 +19,8 @@ namespace Draw2D.Editor
         private readonly Dictionary<ArgbColor, SKPaint> _fillSKPaintCache;
         private readonly Dictionary<ArgbColor, Brush> _fillBrushCache;
 
+        public IDictionary<Type, IShapeDecorator> Decorators { get; set; }
+
         private void GetSKPaintFill(ArgbColor color, out SKPaint brush)
         {
             if (color.IsDirty == true || !_fillSKPaintCache.TryGetValue(color, out var brushCached))
@@ -57,22 +59,38 @@ namespace Draw2D.Editor
             _fillBrushCache = new Dictionary<ArgbColor, Brush>();
         }
 
+        private void DrawContainer(object dc, CanvasContainer container, IShapeRenderer renderer, double dx, double dy, DrawMode mode, object db, object r)
+        {
+            container.Draw(dc, renderer, dx, dy, mode, db, r);
+        }
+
+        private void DrawDecorators(object dc, ISelection selection, IShapeRenderer renderer, double dx, double dy, DrawMode mode)
+        {
+            foreach (var shape in selection.Selected)
+            {
+                if (Decorators.TryGetValue(shape.GetType(), out var helper))
+                {
+                    helper.Draw(dc, shape, renderer, selection, dx, dy, mode);
+                }
+            }
+        }
+
         private void DrawShapes(IContainerView view, object context, IShapeRenderer renderer)
         {
-            view.Presenter.DrawContainer(context, view.CurrentContainer, renderer, 0.0, 0.0, DrawMode.Shape, null, null);
-            view.Presenter.DrawContainer(context, view.WorkingContainer, renderer, 0.0, 0.0, DrawMode.Shape, null, null);
+
+            DrawContainer(context, view.CurrentContainer, renderer, 0.0, 0.0, DrawMode.Shape, null, null);
+            DrawContainer(context, view.WorkingContainer, renderer, 0.0, 0.0, DrawMode.Shape, null, null);
         }
 
         private void DrawDecorators(IContainerView view, object context, IShapeRenderer renderer)
         {
-            view.Presenter.DrawDecorators(context, view.CurrentContainer, renderer, 0.0, 0.0, DrawMode.Shape);
-            view.Presenter.DrawDecorators(context, view.WorkingContainer, renderer, 0.0, 0.0, DrawMode.Shape);
+            DrawDecorators(context, view.Selection, renderer, 0.0, 0.0, DrawMode.Shape);
         }
 
         private void DrawPoints(IContainerView view, object context, IShapeRenderer renderer)
         {
-            view.Presenter.DrawContainer(context, view.CurrentContainer, renderer, 0.0, 0.0, DrawMode.Point, null, null);
-            view.Presenter.DrawContainer(context, view.WorkingContainer, renderer, 0.0, 0.0, DrawMode.Point, null, null);
+            DrawContainer(context, view.CurrentContainer, renderer, 0.0, 0.0, DrawMode.Point, null, null);
+            DrawContainer(context, view.WorkingContainer, renderer, 0.0, 0.0, DrawMode.Point, null, null);
         }
 
         private SKPicture RecordPicture(IContainerView view, double scale, Action<IContainerView, object, IShapeRenderer> draw)
@@ -104,6 +122,9 @@ namespace Draw2D.Editor
 
         private void DrawSkia(IContainerView view, SKCanvas canvas, double width, double height, double dx, double dy, double zx, double zy)
         {
+            view.CurrentContainer.Invalidate();
+            view.WorkingContainer.Invalidate();
+
             var pictureShapes = RecordPicture(view, zx, DrawShapes);
             var pictureDecorators = RecordPicture(view, zx, DrawDecorators);
             var picturePoints = RecordPicture(view, zx, DrawPoints);
@@ -137,6 +158,9 @@ namespace Draw2D.Editor
         {
             _avaloniaRenderer.Scale = zx;
             _avaloniaRenderer.Selection = view.Selection;
+
+            view.CurrentContainer.Invalidate();
+            view.WorkingContainer.Invalidate();
 
             if (view.CurrentContainer.InputBackground != null)
             {

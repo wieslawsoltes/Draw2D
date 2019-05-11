@@ -47,7 +47,7 @@ namespace Draw2D.Editor
 
         private IHitTest _hitTest;
         private ISelection _selection;
-        private ICanvasPresenter _presenter;
+        private IDictionary<Type, IShapeDecorator> _decorators;
 
         public ContainerEditor()
         {
@@ -448,16 +448,12 @@ namespace Draw2D.Editor
                 { typeof(TextShape), new TextDecorator() }
             };
 
-            var presenter = new CanvasPresenter()
-            {
-                Decorators = decorators
-            };
+            _decorators = decorators;
 
             var containerViews = new ObservableCollection<IContainerView>();
 
             _hitTest = hitTest;
             _selection = selectionTool;
-            _presenter = presenter;
 
             containerViews.Add(CreateContainerView("View0"));
             containerViews.Add(CreateContainerView("View1"));
@@ -515,8 +511,10 @@ namespace Draw2D.Editor
             {
                 Title = title,
                 InputService = null,
-                DrawContainerView = new DrawContainerView(),
-                Presenter = _presenter,
+                DrawContainerView = new DrawContainerView()
+                {
+                    Decorators = _decorators
+                },
                 Selection = _selection,
                 CurrentContainer = null,
                 WorkingContainer = null,
@@ -573,8 +571,10 @@ namespace Draw2D.Editor
         public void Open(string path)
         {
             var containerView = LoadFromJson<ContainerView>(path);
-            containerView.DrawContainerView = new DrawContainerView();
-            containerView.Presenter = _presenter;
+            containerView.DrawContainerView = new DrawContainerView()
+            {
+                Decorators = _decorators
+            };
             containerView.Selection = _selection;
             containerView.HitTest = _hitTest;
             containerView.WorkingContainer = CreateWorkingCanvasContainer();

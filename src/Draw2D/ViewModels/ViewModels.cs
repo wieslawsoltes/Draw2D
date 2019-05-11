@@ -159,13 +159,6 @@ namespace Draw2D.ViewModels
         void Draw(object dc, BaseShape shape, IShapeRenderer renderer, ISelection selected, double dx, double dy, DrawMode mode);
     }
 
-    public interface ICanvasPresenter
-    {
-        IDictionary<Type, IShapeDecorator> Decorators { get; set; }
-        void DrawContainer(object dc, CanvasContainer container, IShapeRenderer renderer, double dx, double dy, DrawMode mode, object db, object r);
-        void DrawDecorators(object dc, CanvasContainer container, IShapeRenderer renderer, double dx, double dy, DrawMode mode);
-    }
-
     public interface IHitTest
     {
         Dictionary<Type, IBounds> Registered { get; set; }
@@ -3091,6 +3084,7 @@ namespace Draw2D.ViewModels.Containers
 {
     public interface IDrawContainerView
     {
+        IDictionary<Type, IShapeDecorator> Decorators { get; set; }
         void Draw(IContainerView view, object context, double width, double height, double dx, double dy, double zx, double zy);
     }
 
@@ -3104,7 +3098,6 @@ namespace Draw2D.ViewModels.Containers
     {
         string Title { get; set; }
         IDrawContainerView DrawContainerView { get; set; }
-        ICanvasPresenter Presenter { get; set; }
         ISelection Selection { get; set; }
         CanvasContainer CurrentContainer { get; set; }
         CanvasContainer WorkingContainer { get; set; }
@@ -3320,7 +3313,6 @@ namespace Draw2D.ViewModels.Containers
         private IInputService _inputService;
         private IZoomService _zoomService;
         private IDrawContainerView _drawContainerView;
-        private ICanvasPresenter _presenter;
         private ISelection _selection;
         private CanvasContainer _currentContainer;
         private CanvasContainer _workingContainer;
@@ -3351,13 +3343,6 @@ namespace Draw2D.ViewModels.Containers
         {
             get => _drawContainerView;
             set => Update(ref _drawContainerView, value);
-        }
-
-        [IgnoreDataMember]
-        public ICanvasPresenter Presenter
-        {
-            get => _presenter;
-            set => Update(ref _presenter, value);
         }
 
         [IgnoreDataMember]
@@ -6763,13 +6748,6 @@ namespace Draw2D.ViewModels.Tools
         {
             get => _context.ContainerView.DrawContainerView;
             set => throw new InvalidOperationException($"Can not set {DrawContainerView} property value.");
-        }
-
-        [IgnoreDataMember]
-        public ICanvasPresenter Presenter
-        {
-            get => _context.ContainerView.Presenter;
-            set => throw new InvalidOperationException($"Can not set {Presenter} property value.");
         }
 
         [IgnoreDataMember]
