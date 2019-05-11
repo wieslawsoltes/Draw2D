@@ -55,9 +55,9 @@ namespace Draw2D.Editor
         {
             _skiaRenderer = new SkiaShapeRenderer();
             _avaloniaRenderer = new AvaloniaShapeRenderer();
-            // FIXME: Properly dispose SKPaint objects.
+            // TODO: Properly dispose SKPaint objects.
             _fillSKPaintCache = new Dictionary<ArgbColor, SKPaint>();
-            // FIXME: Properly dispose Brush objects.
+            // TODO: Properly dispose Brush objects.
             _fillBrushCache = new Dictionary<ArgbColor, Brush>();
         }
 

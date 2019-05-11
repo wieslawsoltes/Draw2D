@@ -267,13 +267,13 @@ namespace Draw2D.Renderers
 
         public SkiaShapeRenderer()
         {
-            // FIXME: Properly dispose SKTypeface objects.
+            // TODO: Properly dispose SKTypeface objects.
             _typefaceCache = new Dictionary<string, SKTypeface>();
-            // FIXME: Properly dispose SKPaint and SKFontMetrics objects.
+            // TODO: Properly dispose SKPaint and SKFontMetrics objects.
             _textPaintCache = new Dictionary<TextStyle, (SKPaint, SKFontMetrics)>();
-            // FIXME: Properly dispose SKPaint objects.
+            // TODO: Properly dispose SKPaint objects.
             _fillPaintCache = new Dictionary<ShapeStyle, SKPaint>();
-            // FIXME: Properly dispose SKPaint objects.
+            // TODO: Properly dispose SKPaint objects.
             _strokePaintCache = new Dictionary<ShapeStyle, SKPaint>();
         }
 

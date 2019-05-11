@@ -9303,7 +9303,7 @@ namespace Draw2D.ViewModels.Tools
 
         internal void Delete(CanvasContainer container, ISelection selection)
         {
-            // FIXME: Very slow when using Contains.
+            // TODO: Very slow when using Contains.
             //var paths = container.Shapes.OfType<PathShape>().ToList().AsReadOnly();
             //var groups = container.Shapes.OfType<GroupShape>().ToList().AsReadOnly();
             //var connectables = container.Shapes.OfType<ConnectableShape>().ToList().AsReadOnly();
@@ -9329,18 +9329,19 @@ namespace Draw2D.ViewModels.Tools
                 {
                     if (shape is PointShape point)
                     {
-                        // FIXME: Very slow when using Contains.
+                        // TODO: Very slow when using Contains.
                         TryToDelete(connectables, point);
                     }
 
                     if (paths.Count > 0)
                     {
-                        // FIXME: Very slow when using Contains.
+                        // TODO: Very slow when using Contains.
                         TryToDelete(container, paths, shape);
                     }
 
                     if (groups.Count > 0)
                     {
+                        // TODO: Very slow when using Contains.
                         TryToDelete(container, groups, shape);
                     }
                 }
