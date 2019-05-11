@@ -125,8 +125,8 @@ namespace Draw2D.Editor
 
         private void DrawSkia(IContainerView view, SKCanvas canvas, double width, double height, double dx, double dy, double zx, double zy)
         {
-            view.CurrentContainer.Invalidate();
-            view.WorkingContainer.Invalidate();
+            //view.CurrentContainer.Invalidate();
+            //view.WorkingContainer.Invalidate();
 
             var pictureShapes = RecordPicture(view, zx, DrawShapes);
             var pictureDecorators = RecordPicture(view, zx, DrawDecorators);
@@ -162,8 +162,8 @@ namespace Draw2D.Editor
             _avaloniaRenderer.Scale = zx;
             _avaloniaRenderer.Selection = view.Selection;
 
-            view.CurrentContainer.Invalidate();
-            view.WorkingContainer.Invalidate();
+            //view.CurrentContainer.Invalidate();
+            //view.WorkingContainer.Invalidate();
 
             if (view.CurrentContainer.InputBackground != null)
             {
