@@ -2479,6 +2479,34 @@ namespace Draw2D.ViewModels.Shapes
             base.Move(selection, dx, dy);
         }
 
+        public override void Select(ISelection selection)
+        {
+            base.Select(selection);
+
+            var points = new List<PointShape>();
+            GetPoints(points);
+            var distinct = points.Distinct();
+
+            foreach (var point in distinct)
+            {
+                point.Select(selection);
+            }
+        }
+
+        public override void Deselect(ISelection selection)
+        {
+            base.Deselect(selection);
+
+            var points = new List<PointShape>();
+            GetPoints(points);
+            var distinct = points.Distinct();
+
+            foreach (var point in distinct)
+            {
+                point.Deselect(selection);
+            }
+        }
+
         public bool Validate(bool removeEmptyFigures)
         {
             if (_figures.Count > 0 && _figures[0].Shapes.Count > 0)
