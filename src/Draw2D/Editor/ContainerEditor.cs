@@ -43,6 +43,7 @@ namespace Draw2D.Editor
             group.Points.Add(new PointShape(30, 45, container.PointTemplate));
             group.Points.Add(new PointShape(60, 45, container.PointTemplate));
             context.ContainerView?.CurrentContainer.Shapes.Add(group);
+            context.ContainerView?.CurrentContainer.MarkAsDirty(true);
         }
 
         private IHitTest _hitTest;
@@ -807,6 +808,7 @@ namespace Draw2D.Editor
                 var path = SKPath.ParseSvgPathData(svgPathData);
                 var pathShape = ConvertSKPath(path);
                 ContainerView.CurrentContainer.Shapes.Add(pathShape);
+                ContainerView.CurrentContainer.MarkAsDirty(true);
                 ContainerView?.InputService?.Redraw?.Invoke();
             }
         }

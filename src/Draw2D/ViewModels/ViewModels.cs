@@ -173,6 +173,9 @@ namespace Draw2D.ViewModels
     {
         BaseShape Hovered { get; set; }
         ISet<BaseShape> Selected { get; set; }
+        void MarkAsDirty(bool isDirty);
+        bool IsDirty { get; set; }
+        void Invalidate();
         void Cut(IToolContext context);
         void Copy(IToolContext context);
         void Paste(IToolContext context);
@@ -228,7 +231,7 @@ namespace Draw2D.ViewModels
         }
 
         [IgnoreDataMember]
-        internal bool IsDirty { get; set; }
+        public bool IsDirty { get; set; }
 
         public void MarkAsDirty(bool value) => IsDirty = value;
 
@@ -434,7 +437,9 @@ namespace Draw2D.ViewModels
             foreach (var guide in Guides)
             {
                 context.ContainerView?.WorkingContainer.Shapes.Remove(guide);
+                context.ContainerView?.WorkingContainer.MarkAsDirty(true);
                 context.ContainerView?.Selection.Selected.Remove(guide);
+                context.ContainerView?.Selection.MarkAsDirty(true);
             }
             Guides.Clear();
         }
@@ -461,7 +466,9 @@ namespace Draw2D.ViewModels
             foreach (var point in Intersections)
             {
                 context.ContainerView?.WorkingContainer.Shapes.Remove(point);
+                context.ContainerView?.WorkingContainer.MarkAsDirty(true);
                 context.ContainerView?.Selection.Selected.Remove(point);
+                context.ContainerView?.Selection.MarkAsDirty(true);
             }
             Intersections.Clear();
         }
@@ -793,6 +800,7 @@ namespace Draw2D.ViewModels.Shapes
             if (!selection.Selected.Contains(this))
             {
                 selection.Selected.Add(this);
+                selection.MarkAsDirty(true);
             }
         }
 
@@ -801,6 +809,7 @@ namespace Draw2D.ViewModels.Shapes
             if (selection.Selected.Contains(this))
             {
                 selection.Selected.Remove(this);
+                selection.MarkAsDirty(true);
             }
         }
     }
@@ -2520,6 +2529,7 @@ namespace Draw2D.ViewModels.Shapes
                         if (figure.Shapes.Count <= 0)
                         {
                             _figures.Remove(figure);
+                            this.MarkAsDirty(true);
                         }
                     }
                 }
@@ -4060,6 +4070,7 @@ namespace Draw2D.ViewModels.Filters
 
             context.ContainerView?.WorkingContainer.Shapes.Add(horizontal);
             context.ContainerView?.WorkingContainer.Shapes.Add(vertical);
+            context.ContainerView?.WorkingContainer.MarkAsDirty(true);
         }
 
         public static double SnapGrid(double value, double size)
@@ -4246,6 +4257,7 @@ namespace Draw2D.ViewModels.Filters
 
             context.ContainerView?.WorkingContainer.Shapes.Add(horizontal);
             context.ContainerView?.WorkingContainer.Shapes.Add(vertical);
+            context.ContainerView?.WorkingContainer.MarkAsDirty(true);
         }
 
         public static bool SnapLinesToPoint(IEnumerable<LineShape> lines, double threshold, Point2 point, out Point2 snap, out LineSnapMode result)
@@ -4531,7 +4543,9 @@ namespace Draw2D.ViewModels.Intersections
                             var point = new PointShape(p.X, p.Y, context.ContainerView?.CurrentContainer.PointTemplate);
                             Intersections.Add(point);
                             context.ContainerView?.WorkingContainer.Shapes.Add(point);
+                            context.ContainerView?.WorkingContainer.MarkAsDirty(true);
                             context.ContainerView?.Selection.Selected.Add(point);
+                            context.ContainerView?.Selection.MarkAsDirty(true);
                         }
                     }
                 }
@@ -4610,7 +4624,9 @@ namespace Draw2D.ViewModels.Intersections
                         var point = new PointShape(clip.X, clip.Y, context.ContainerView?.CurrentContainer.PointTemplate);
                         Intersections.Add(point);
                         context.ContainerView?.WorkingContainer.Shapes.Add(point);
+                        context.ContainerView?.WorkingContainer.MarkAsDirty(true);
                         context.ContainerView?.Selection.Selected.Add(point);
+                        context.ContainerView?.Selection.MarkAsDirty(true);
                     }
                 }
             }
@@ -4687,12 +4703,16 @@ namespace Draw2D.ViewModels.Intersections
                         var point1 = new PointShape(x0clip, y0clip, context.ContainerView?.CurrentContainer.PointTemplate);
                         Intersections.Add(point1);
                         context.ContainerView?.WorkingContainer.Shapes.Add(point1);
+                        context.ContainerView?.WorkingContainer.MarkAsDirty(true);
                         context.ContainerView?.Selection.Selected.Add(point1);
+                        context.ContainerView?.Selection.MarkAsDirty(true);
 
                         var point2 = new PointShape(x1clip, y1clip, context.ContainerView?.CurrentContainer.PointTemplate);
                         Intersections.Add(point2);
                         context.ContainerView?.WorkingContainer.Shapes.Add(point2);
+                        context.ContainerView?.WorkingContainer.MarkAsDirty(true);
                         context.ContainerView?.Selection.Selected.Add(point2);
+                        context.ContainerView?.Selection.MarkAsDirty(true);
                     }
                 }
             }
@@ -5584,11 +5604,13 @@ namespace Draw2D.ViewModels.Tools
                 Style = context.ContainerView?.CurrentContainer.CurrentStyle
             };
             context.ContainerView?.WorkingContainer.Shapes.Add(_cubicBezier);
+            context.ContainerView?.WorkingContainer.MarkAsDirty(true);
             context.ContainerView?.Selection.Selected.Add(_cubicBezier);
             context.ContainerView?.Selection.Selected.Add(_cubicBezier.StartPoint);
             context.ContainerView?.Selection.Selected.Add(_cubicBezier.Point1);
             context.ContainerView?.Selection.Selected.Add(_cubicBezier.Point2);
             context.ContainerView?.Selection.Selected.Add(_cubicBezier.Point3);
+            context.ContainerView?.Selection.MarkAsDirty(true);
 
             context.ContainerView?.InputService?.Capture?.Invoke();
             context.ContainerView?.InputService?.Redraw?.Invoke();
@@ -5607,10 +5629,13 @@ namespace Draw2D.ViewModels.Tools
             context.ContainerView?.Selection.Selected.Remove(_cubicBezier.Point1);
             context.ContainerView?.Selection.Selected.Remove(_cubicBezier.Point2);
             context.ContainerView?.Selection.Selected.Remove(_cubicBezier.Point3);
+            context.ContainerView?.Selection.MarkAsDirty(true);
             context.ContainerView?.WorkingContainer.Shapes.Remove(_cubicBezier);
+            context.ContainerView?.WorkingContainer.MarkAsDirty(true);
 
             _cubicBezier.Point1 = context.ContainerView?.GetNextPoint(x, y, false, 0.0);
             context.ContainerView?.CurrentContainer.Shapes.Add(_cubicBezier);
+            context.ContainerView?.CurrentContainer.MarkAsDirty(true);
             _cubicBezier = null;
 
             Filters?.ForEach(f => f.Clear(context));
@@ -5627,8 +5652,10 @@ namespace Draw2D.ViewModels.Tools
             _cubicBezier.Point1.Y = y;
 
             context.ContainerView?.Selection.Selected.Remove(_cubicBezier.Point2);
+            context.ContainerView?.Selection.MarkAsDirty(true);
             _cubicBezier.Point2 = context.ContainerView?.GetNextPoint(x, y, false, 0.0);
             context.ContainerView?.Selection.Selected.Add(_cubicBezier.Point2);
+            context.ContainerView?.Selection.MarkAsDirty(true);
 
             CurrentState = State.Point1;
 
@@ -5643,8 +5670,10 @@ namespace Draw2D.ViewModels.Tools
             _cubicBezier.Point2.Y = y;
 
             context.ContainerView?.Selection.Selected.Remove(_cubicBezier.Point3);
+            context.ContainerView?.Selection.MarkAsDirty(true);
             _cubicBezier.Point3 = context.ContainerView?.GetNextPoint(x, y, false, 0.0);
             context.ContainerView?.Selection.Selected.Add(_cubicBezier.Point3);
+            context.ContainerView?.Selection.MarkAsDirty(true);
 
             CurrentState = State.Point2;
 
@@ -5705,11 +5734,13 @@ namespace Draw2D.ViewModels.Tools
             if (_cubicBezier != null)
             {
                 context.ContainerView?.WorkingContainer.Shapes.Remove(_cubicBezier);
+                context.ContainerView?.WorkingContainer.MarkAsDirty(true);
                 context.ContainerView?.Selection.Selected.Remove(_cubicBezier);
                 context.ContainerView?.Selection.Selected.Remove(_cubicBezier.StartPoint);
                 context.ContainerView?.Selection.Selected.Remove(_cubicBezier.Point1);
                 context.ContainerView?.Selection.Selected.Remove(_cubicBezier.Point2);
                 context.ContainerView?.Selection.Selected.Remove(_cubicBezier.Point3);
+                context.ContainerView?.Selection.MarkAsDirty(true);
                 _cubicBezier = null;
             }
 
@@ -5890,9 +5921,11 @@ namespace Draw2D.ViewModels.Tools
                 Style = context.ContainerView?.CurrentContainer.CurrentStyle
             };
             context.ContainerView?.WorkingContainer.Shapes.Add(_ellipse);
+            context.ContainerView?.WorkingContainer.MarkAsDirty(true);
             context.ContainerView?.Selection.Selected.Add(_ellipse);
             context.ContainerView?.Selection.Selected.Add(_ellipse.TopLeft);
             context.ContainerView?.Selection.Selected.Add(_ellipse.BottomRight);
+            context.ContainerView?.Selection.MarkAsDirty(true);
 
             context.ContainerView?.InputService?.Capture?.Invoke();
             context.ContainerView?.InputService?.Redraw?.Invoke();
@@ -5907,11 +5940,15 @@ namespace Draw2D.ViewModels.Tools
             CurrentState = State.TopLeft;
 
             context.ContainerView?.Selection.Selected.Remove(_ellipse.BottomRight);
+            context.ContainerView?.Selection.MarkAsDirty(true);
             _ellipse.BottomRight = context.ContainerView?.GetNextPoint(x, y, Settings?.ConnectPoints ?? false, Settings?.HitTestRadius ?? 7.0);
             context.ContainerView?.WorkingContainer.Shapes.Remove(_ellipse);
+            context.ContainerView?.WorkingContainer.MarkAsDirty(true);
             context.ContainerView?.Selection.Selected.Remove(_ellipse);
             context.ContainerView?.Selection.Selected.Remove(_ellipse.TopLeft);
+            context.ContainerView?.Selection.MarkAsDirty(true);
             context.ContainerView?.CurrentContainer.Shapes.Add(_ellipse);
+            context.ContainerView?.CurrentContainer.MarkAsDirty(true);
             _ellipse = null;
 
             Filters?.ForEach(f => f.Clear(context));
@@ -5948,9 +5985,11 @@ namespace Draw2D.ViewModels.Tools
             if (_ellipse != null)
             {
                 context.ContainerView?.WorkingContainer.Shapes.Remove(_ellipse);
+                context.ContainerView?.WorkingContainer.MarkAsDirty(true);
                 context.ContainerView?.Selection.Selected.Remove(_ellipse);
                 context.ContainerView?.Selection.Selected.Remove(_ellipse.TopLeft);
                 context.ContainerView?.Selection.Selected.Remove(_ellipse.BottomRight);
+                context.ContainerView?.Selection.MarkAsDirty(true);
                 _ellipse = null;
             }
 
@@ -6100,6 +6139,7 @@ namespace Draw2D.ViewModels.Tools
                 Style = Settings?.GuideStyle
             };
             context.ContainerView?.WorkingContainer.Shapes.Add(_line);
+            context.ContainerView?.WorkingContainer.MarkAsDirty(true);
 
             context.ContainerView?.InputService?.Capture?.Invoke();
             context.ContainerView?.InputService?.Redraw?.Invoke();
@@ -6116,7 +6156,9 @@ namespace Draw2D.ViewModels.Tools
             _line.Point.X = x;
             _line.Point.Y = y;
             context.ContainerView?.WorkingContainer.Shapes.Remove(_line);
+            context.ContainerView?.WorkingContainer.MarkAsDirty(true);
             context.ContainerView?.CurrentContainer.Guides.Add(_line);
+            context.ContainerView?.CurrentContainer.MarkAsDirty(true);
             _line = null;
 
             Filters?.ForEach(f => f.Clear(context));
@@ -6153,6 +6195,7 @@ namespace Draw2D.ViewModels.Tools
             if (_line != null)
             {
                 context.ContainerView?.WorkingContainer.Shapes.Remove(_line);
+                context.ContainerView?.WorkingContainer.MarkAsDirty(true);
                 _line = null;
             }
 
@@ -6278,6 +6321,8 @@ namespace Draw2D.ViewModels.Tools
                     Style = context.ContainerView?.CurrentContainer.CurrentStyle
                 };
                 context.ContainerView?.CurrentContainer.Shapes.Add(line);
+                context.ContainerView?.CurrentContainer.MarkAsDirty(true);
+                context.ContainerView?.CurrentContainer.MarkAsDirty(true);
                 lines.Add(line);
             }
 
@@ -6347,9 +6392,11 @@ namespace Draw2D.ViewModels.Tools
                 Style = context.ContainerView?.CurrentContainer.CurrentStyle
             };
             context.ContainerView?.WorkingContainer.Shapes.Add(_line);
+            context.ContainerView?.WorkingContainer.MarkAsDirty(true);
             context.ContainerView?.Selection.Selected.Add(_line);
             context.ContainerView?.Selection.Selected.Add(_line.StartPoint);
             context.ContainerView?.Selection.Selected.Add(_line.Point);
+            context.ContainerView?.Selection.MarkAsDirty(true);
 
             context.ContainerView?.InputService?.Capture?.Invoke();
             context.ContainerView?.InputService?.Redraw?.Invoke();
@@ -6366,7 +6413,9 @@ namespace Draw2D.ViewModels.Tools
             context.ContainerView?.Selection.Selected.Remove(_line);
             context.ContainerView?.Selection.Selected.Remove(_line.StartPoint);
             context.ContainerView?.Selection.Selected.Remove(_line.Point);
+            context.ContainerView?.Selection.MarkAsDirty(true);
             context.ContainerView?.WorkingContainer.Shapes.Remove(_line);
+            context.ContainerView?.WorkingContainer.MarkAsDirty(true);
 
             _line.Point = context.ContainerView?.GetNextPoint(x, y, Settings?.ConnectPoints ?? false, Settings?.HitTestRadius ?? 0.0);
 
@@ -6380,6 +6429,7 @@ namespace Draw2D.ViewModels.Tools
             else
             {
                 context.ContainerView?.CurrentContainer.Shapes.Add(_line);
+                context.ContainerView?.CurrentContainer.MarkAsDirty(true);
             }
 
             _line = null;
@@ -6423,9 +6473,11 @@ namespace Draw2D.ViewModels.Tools
             if (_line != null)
             {
                 context.ContainerView?.WorkingContainer.Shapes.Remove(_line);
+                context.ContainerView?.WorkingContainer.MarkAsDirty(true);
                 context.ContainerView?.Selection.Selected.Remove(_line);
                 context.ContainerView?.Selection.Selected.Remove(_line.StartPoint);
                 context.ContainerView?.Selection.Selected.Remove(_line.Point);
+                context.ContainerView?.Selection.MarkAsDirty(true);
                 _line = null;
             }
 
@@ -6559,7 +6611,7 @@ namespace Draw2D.ViewModels.Tools
 
         public void LeftDown(IToolContext context, double x, double y, Modifier modifier)
         {
-            PathTool.Move();
+            PathTool.Move(context);
         }
 
         public void LeftUp(IToolContext context, double x, double y, Modifier modifier)
@@ -6965,10 +7017,12 @@ namespace Draw2D.ViewModels.Tools
             };
 
             context.ContainerView?.WorkingContainer.Shapes.Add(_path);
+            context.ContainerView?.WorkingContainer.MarkAsDirty(true);
             context.ContainerView?.Selection.Selected.Add(_path);
+            context.ContainerView?.Selection.MarkAsDirty(true);
         }
 
-        public void Move()
+        public void Move(IToolContext context)
         {
             _figure = new FigureShape()
             {
@@ -6979,6 +7033,7 @@ namespace Draw2D.ViewModels.Tools
                 IsClosed = Settings.IsClosed
             };
             _path.Figures.Add(_figure);
+            context.ContainerView?.WorkingContainer.MarkAsDirty(true);
 
             if (Settings.PreviousTool != null)
             {
@@ -7009,7 +7064,7 @@ namespace Draw2D.ViewModels.Tools
             if (_path == null)
             {
                 Create(context);
-                Move();
+                Move(context);
             }
 
             SetContext(context);
@@ -7076,11 +7131,14 @@ namespace Draw2D.ViewModels.Tools
             if (_path != null)
             {
                 context.ContainerView?.WorkingContainer.Shapes.Remove(_path);
+                context.ContainerView?.WorkingContainer.MarkAsDirty(true);
                 context.ContainerView?.Selection.Selected.Remove(_path);
+                context.ContainerView?.Selection.MarkAsDirty(true);
 
                 if (_path.Validate(true) == true)
                 {
                     context.ContainerView?.CurrentContainer.Shapes.Add(_path);
+                    context.ContainerView?.CurrentContainer.MarkAsDirty(true);
                 }
 
                 Settings.PreviousTool = null;
@@ -7206,7 +7264,9 @@ namespace Draw2D.ViewModels.Tools
                 if (shape is ConnectableShape connectable)
                 {
                     connectable.Points.Add(point);
+                    context.ContainerView?.WorkingContainer.MarkAsDirty(true);
                     context.ContainerView?.Selection.Selected.Add(point);
+                    context.ContainerView?.Selection.MarkAsDirty(true);
                     context.ContainerView?.InputService?.Redraw?.Invoke();
                 }
             }
@@ -7352,9 +7412,11 @@ namespace Draw2D.ViewModels.Tools
             _points.Add(_line.StartPoint);
             _points.Add(_line.Point);
             context.ContainerView?.WorkingContainer.Shapes.Add(_line);
+            context.ContainerView?.WorkingContainer.MarkAsDirty(true);
             context.ContainerView?.Selection.Selected.Add(_line);
             context.ContainerView?.Selection.Selected.Add(_line.StartPoint);
             context.ContainerView?.Selection.Selected.Add(_line.Point);
+            context.ContainerView?.Selection.MarkAsDirty(true);
 
             context.ContainerView?.InputService?.Capture?.Invoke();
             context.ContainerView?.InputService?.Redraw?.Invoke();
@@ -7368,16 +7430,20 @@ namespace Draw2D.ViewModels.Tools
 
             context.ContainerView?.Selection.Selected.Remove(_line);
             context.ContainerView?.Selection.Selected.Remove(_line.Point);
+            context.ContainerView?.Selection.MarkAsDirty(true);
             _line.Point = context.ContainerView?.GetNextPoint(x, y, Settings?.ConnectPoints ?? false, Settings?.HitTestRadius ?? 7.0);
             _points[_points.Count - 1] = _line.Point;
 
             if (!context.ContainerView?.Selection.Selected.Contains(_line.Point) ?? false)
             {
                 context.ContainerView?.Selection.Selected.Add(_line.Point);
+                context.ContainerView?.Selection.MarkAsDirty(true);
             }
 
             context.ContainerView?.WorkingContainer.Shapes.Remove(_line);
+            context.ContainerView?.WorkingContainer.MarkAsDirty(true);
             context.ContainerView?.CurrentContainer.Shapes.Add(_line);
+            context.ContainerView?.CurrentContainer.MarkAsDirty(true);
 
             _line = new LineShape()
             {
@@ -7388,8 +7454,10 @@ namespace Draw2D.ViewModels.Tools
             };
             _points.Add(_line.Point);
             context.ContainerView?.WorkingContainer.Shapes.Add(_line);
+            context.ContainerView?.WorkingContainer.MarkAsDirty(true);
             context.ContainerView?.Selection.Selected.Add(_line);
             context.ContainerView?.Selection.Selected.Add(_line.Point);
+            context.ContainerView?.Selection.MarkAsDirty(true);
 
             Intersections?.ForEach(i => i.Clear(context));
             Filters?.ForEach(f => f.Clear(context));
@@ -7435,7 +7503,11 @@ namespace Draw2D.ViewModels.Tools
 
             if (_points != null)
             {
-                _points.ForEach(point => context.ContainerView?.Selection.Selected.Remove(point));
+                _points.ForEach(point =>
+                {
+                    context.ContainerView?.Selection.Selected.Remove(point);
+                    context.ContainerView?.Selection.MarkAsDirty(true);
+                });
                 _points = null;
             }
 
@@ -7597,10 +7669,12 @@ namespace Draw2D.ViewModels.Tools
                 Style = context.ContainerView?.CurrentContainer.CurrentStyle
             };
             context.ContainerView?.WorkingContainer.Shapes.Add(_quadraticBezier);
+            context.ContainerView?.WorkingContainer.MarkAsDirty(true);
             context.ContainerView?.Selection.Selected.Add(_quadraticBezier);
             context.ContainerView?.Selection.Selected.Add(_quadraticBezier.StartPoint);
             context.ContainerView?.Selection.Selected.Add(_quadraticBezier.Point1);
             context.ContainerView?.Selection.Selected.Add(_quadraticBezier.Point2);
+            context.ContainerView?.Selection.MarkAsDirty(true);
 
             context.ContainerView?.InputService?.Capture?.Invoke();
             context.ContainerView?.InputService?.Redraw?.Invoke();
@@ -7618,10 +7692,13 @@ namespace Draw2D.ViewModels.Tools
             context.ContainerView?.Selection.Selected.Remove(_quadraticBezier.StartPoint);
             context.ContainerView?.Selection.Selected.Remove(_quadraticBezier.Point1);
             context.ContainerView?.Selection.Selected.Remove(_quadraticBezier.Point2);
+            context.ContainerView?.Selection.MarkAsDirty(true);
             context.ContainerView?.WorkingContainer.Shapes.Remove(_quadraticBezier);
+            context.ContainerView?.WorkingContainer.MarkAsDirty(true);
 
             _quadraticBezier.Point1 = context.ContainerView?.GetNextPoint(x, y, false, 0.0);
             context.ContainerView?.CurrentContainer.Shapes.Add(_quadraticBezier);
+            context.ContainerView?.CurrentContainer.MarkAsDirty(true);
             _quadraticBezier = null;
 
             Filters?.ForEach(f => f.Clear(context));
@@ -7638,8 +7715,10 @@ namespace Draw2D.ViewModels.Tools
             _quadraticBezier.Point1.Y = y;
 
             context.ContainerView?.Selection.Selected.Remove(_quadraticBezier.Point2);
+            context.ContainerView?.Selection.MarkAsDirty(true);
             _quadraticBezier.Point2 = context.ContainerView?.GetNextPoint(x, y, false, 0.0);
             context.ContainerView?.Selection.Selected.Add(_quadraticBezier.Point2);
+            context.ContainerView?.Selection.MarkAsDirty(true);
 
             CurrentState = State.Point1;
 
@@ -7687,10 +7766,12 @@ namespace Draw2D.ViewModels.Tools
             if (_quadraticBezier != null)
             {
                 context.ContainerView?.WorkingContainer.Shapes.Remove(_quadraticBezier);
+                context.ContainerView?.WorkingContainer.MarkAsDirty(true);
                 context.ContainerView?.Selection.Selected.Remove(_quadraticBezier);
                 context.ContainerView?.Selection.Selected.Remove(_quadraticBezier.StartPoint);
                 context.ContainerView?.Selection.Selected.Remove(_quadraticBezier.Point1);
                 context.ContainerView?.Selection.Selected.Remove(_quadraticBezier.Point2);
+                context.ContainerView?.Selection.MarkAsDirty(true);
                 _quadraticBezier = null;
             }
 
@@ -7872,10 +7953,12 @@ namespace Draw2D.ViewModels.Tools
                 Style = context.ContainerView?.CurrentContainer.CurrentStyle
             };
             context.ContainerView?.WorkingContainer.Shapes.Add(_conic);
+            context.ContainerView?.WorkingContainer.MarkAsDirty(true);
             context.ContainerView?.Selection.Selected.Add(_conic);
             context.ContainerView?.Selection.Selected.Add(_conic.StartPoint);
             context.ContainerView?.Selection.Selected.Add(_conic.Point1);
             context.ContainerView?.Selection.Selected.Add(_conic.Point2);
+            context.ContainerView?.Selection.MarkAsDirty(true);
 
             context.ContainerView?.InputService?.Capture?.Invoke();
             context.ContainerView?.InputService?.Redraw?.Invoke();
@@ -7893,10 +7976,13 @@ namespace Draw2D.ViewModels.Tools
             context.ContainerView?.Selection.Selected.Remove(_conic.StartPoint);
             context.ContainerView?.Selection.Selected.Remove(_conic.Point1);
             context.ContainerView?.Selection.Selected.Remove(_conic.Point2);
+            context.ContainerView?.Selection.MarkAsDirty(true);
             context.ContainerView?.WorkingContainer.Shapes.Remove(_conic);
+            context.ContainerView?.WorkingContainer.MarkAsDirty(true);
 
             _conic.Point1 = context.ContainerView?.GetNextPoint(x, y, false, 0.0);
             context.ContainerView?.CurrentContainer.Shapes.Add(_conic);
+            context.ContainerView?.CurrentContainer.MarkAsDirty(true);
             _conic = null;
 
             Filters?.ForEach(f => f.Clear(context));
@@ -7913,8 +7999,10 @@ namespace Draw2D.ViewModels.Tools
             _conic.Point1.Y = y;
 
             context.ContainerView?.Selection.Selected.Remove(_conic.Point2);
+            context.ContainerView?.Selection.MarkAsDirty(true);
             _conic.Point2 = context.ContainerView?.GetNextPoint(x, y, false, 0.0);
             context.ContainerView?.Selection.Selected.Add(_conic.Point2);
+            context.ContainerView?.Selection.MarkAsDirty(true);
 
             CurrentState = State.Point1;
 
@@ -7962,10 +8050,12 @@ namespace Draw2D.ViewModels.Tools
             if (_conic != null)
             {
                 context.ContainerView?.WorkingContainer.Shapes.Remove(_conic);
+                context.ContainerView?.WorkingContainer.MarkAsDirty(true);
                 context.ContainerView?.Selection.Selected.Remove(_conic);
                 context.ContainerView?.Selection.Selected.Remove(_conic.StartPoint);
                 context.ContainerView?.Selection.Selected.Remove(_conic.Point1);
                 context.ContainerView?.Selection.Selected.Remove(_conic.Point2);
+                context.ContainerView?.Selection.MarkAsDirty(true);
                 _conic = null;
             }
 
@@ -8134,9 +8224,11 @@ namespace Draw2D.ViewModels.Tools
                 Style = context.ContainerView?.CurrentContainer.CurrentStyle
             };
             context.ContainerView?.WorkingContainer.Shapes.Add(_rectangle);
+            context.ContainerView?.WorkingContainer.MarkAsDirty(true);
             context.ContainerView?.Selection.Selected.Add(_rectangle);
             context.ContainerView?.Selection.Selected.Add(_rectangle.TopLeft);
             context.ContainerView?.Selection.Selected.Add(_rectangle.BottomRight);
+            context.ContainerView?.Selection.MarkAsDirty(true);
 
             context.ContainerView?.InputService?.Capture?.Invoke();
             context.ContainerView?.InputService?.Redraw?.Invoke();
@@ -8152,11 +8244,16 @@ namespace Draw2D.ViewModels.Tools
 
             context.ContainerView?.Selection.Selected.Remove(_rectangle);
             context.ContainerView?.Selection.Selected.Remove(_rectangle.BottomRight);
+            context.ContainerView?.Selection.MarkAsDirty(true);
             _rectangle.BottomRight = context.ContainerView?.GetNextPoint(x, y, Settings?.ConnectPoints ?? false, Settings?.HitTestRadius ?? 7.0);
             _rectangle.BottomRight.Y = y;
             context.ContainerView?.WorkingContainer.Shapes.Remove(_rectangle);
+            context.ContainerView?.WorkingContainer.MarkAsDirty(true);
+            context.ContainerView?.WorkingContainer.MarkAsDirty(true);
             context.ContainerView?.Selection.Selected.Remove(_rectangle.TopLeft);
+            context.ContainerView?.Selection.MarkAsDirty(true);
             context.ContainerView?.CurrentContainer.Shapes.Add(_rectangle);
+            context.ContainerView?.CurrentContainer.MarkAsDirty(true);
             _rectangle = null;
 
             Filters?.ForEach(f => f.Clear(context));
@@ -8193,9 +8290,11 @@ namespace Draw2D.ViewModels.Tools
             if (_rectangle != null)
             {
                 context.ContainerView?.WorkingContainer.Shapes.Remove(_rectangle);
+                context.ContainerView?.WorkingContainer.MarkAsDirty(true);
                 context.ContainerView?.Selection.Selected.Remove(_rectangle);
                 context.ContainerView?.Selection.Selected.Remove(_rectangle.TopLeft);
                 context.ContainerView?.Selection.Selected.Remove(_rectangle.BottomRight);
+                context.ContainerView?.Selection.MarkAsDirty(true);
                 _rectangle = null;
             }
 
@@ -8394,6 +8493,7 @@ namespace Draw2D.ViewModels.Tools
             _previousPoint = new PointShape(x, y, context.ContainerView?.CurrentContainer.PointTemplate);
 
             context.ContainerView?.WorkingContainer.Shapes.Add(_path);
+            context.ContainerView?.WorkingContainer.MarkAsDirty(true);
 
             context.ContainerView?.InputService?.Capture?.Invoke();
             context.ContainerView?.InputService?.Redraw?.Invoke();
@@ -8444,10 +8544,12 @@ namespace Draw2D.ViewModels.Tools
             }
 
             context.ContainerView?.WorkingContainer.Shapes.Remove(_path);
+            context.ContainerView?.WorkingContainer.MarkAsDirty(true);
 
             if (_path.Validate(true) == true)
             {
                 context.ContainerView?.CurrentContainer.Shapes.Add(_path);
+                context.ContainerView?.CurrentContainer.MarkAsDirty(true);
             }
 
             _path = null;
@@ -8485,6 +8587,7 @@ namespace Draw2D.ViewModels.Tools
             };
 
             _figure.Shapes.Add(line);
+            context.ContainerView?.CurrentContainer.MarkAsDirty(true);
 
             _previousPoint = _nextPoint;
             _nextPoint = null;
@@ -8501,6 +8604,7 @@ namespace Draw2D.ViewModels.Tools
             if (_path != null)
             {
                 context.ContainerView?.WorkingContainer.Shapes.Remove(_path);
+                context.ContainerView?.WorkingContainer.MarkAsDirty(true);
                 _path = null;
                 _figure = null;
                 _previousPoint = null;
@@ -8818,6 +8922,7 @@ namespace Draw2D.ViewModels.Tools
                 _rectangle.BottomRight.Y = y;
                 _rectangle.Style = Settings?.SelectionStyle;
                 context.ContainerView?.WorkingContainer.Shapes.Add(_rectangle);
+                context.ContainerView?.WorkingContainer.MarkAsDirty(true);
 
                 context.ContainerView?.InputService?.Capture?.Invoke();
                 context.ContainerView?.InputService?.Redraw?.Invoke();
@@ -8853,6 +8958,7 @@ namespace Draw2D.ViewModels.Tools
                 modifier);
 
             context.ContainerView?.WorkingContainer.Shapes.Remove(_rectangle);
+            context.ContainerView?.WorkingContainer.MarkAsDirty(true);
             _rectangle = null;
 
             CurrentState = State.None;
@@ -8994,6 +9100,7 @@ namespace Draw2D.ViewModels.Tools
             if (_rectangle != null)
             {
                 context.ContainerView?.WorkingContainer.Shapes.Remove(_rectangle);
+                context.ContainerView?.WorkingContainer.MarkAsDirty(true);
                 _rectangle = null;
             }
 
@@ -9164,6 +9271,7 @@ namespace Draw2D.ViewModels.Tools
 
                 group.Select(this);
                 context.ContainerView?.CurrentContainer.Shapes.Add(group);
+                context.ContainerView?.CurrentContainer.MarkAsDirty(true);
 
                 context.ContainerView?.InputService?.Redraw?.Invoke();
 
@@ -9247,6 +9355,7 @@ namespace Draw2D.ViewModels.Tools
                             point.Y = _originY;
                             _selected.Remove(point);
                             _selected.Add(copy);
+                            this.MarkAsDirty(true);
                             _disconnected = true;
                         }
                         break;
@@ -9319,12 +9428,14 @@ namespace Draw2D.ViewModels.Tools
                 if (shapesHash.Contains(shape))
                 {
                     container.Shapes.Remove(shape);
+                    container.MarkAsDirty(true);
                 }
                 else if (guidesHash.Contains(shape))
                 {
                     if (shape is LineShape guide)
                     {
                         container.Guides.Remove(guide);
+                        container.MarkAsDirty(true);
                     }
                 }
                 /*
@@ -9387,6 +9498,7 @@ namespace Draw2D.ViewModels.Tools
                             if (path.Figures.Count <= 0)
                             {
                                 container.Shapes.Remove(path);
+                                container.MarkAsDirty(true);
                             }
                         }
 
@@ -9410,6 +9522,7 @@ namespace Draw2D.ViewModels.Tools
                     if (group.Shapes.Count <= 0)
                     {
                         container.Shapes.Remove(group);
+                        container.MarkAsDirty(true);
                     }
 
                     return true;
@@ -9757,9 +9870,11 @@ namespace Draw2D.ViewModels.Tools
                 Style = context.ContainerView?.CurrentContainer.CurrentStyle,
             };
             context.ContainerView?.WorkingContainer.Shapes.Add(_text);
+            context.ContainerView?.WorkingContainer.MarkAsDirty(true);
             context.ContainerView?.Selection.Selected.Add(_text);
             context.ContainerView?.Selection.Selected.Add(_text.TopLeft);
             context.ContainerView?.Selection.Selected.Add(_text.BottomRight);
+            context.ContainerView?.Selection.MarkAsDirty(true);
 
             context.ContainerView?.InputService?.Capture?.Invoke();
             context.ContainerView?.InputService?.Redraw?.Invoke();
@@ -9775,11 +9890,15 @@ namespace Draw2D.ViewModels.Tools
 
             context.ContainerView?.Selection.Selected.Remove(_text);
             context.ContainerView?.Selection.Selected.Remove(_text.BottomRight);
+            context.ContainerView?.Selection.MarkAsDirty(true);
             _text.BottomRight = context.ContainerView?.GetNextPoint(x, y, Settings?.ConnectPoints ?? false, Settings?.HitTestRadius ?? 7.0);
             _text.BottomRight.Y = y;
             context.ContainerView?.WorkingContainer.Shapes.Remove(_text);
+            context.ContainerView?.WorkingContainer.MarkAsDirty(true);
             context.ContainerView?.Selection.Selected.Remove(_text.TopLeft);
+            context.ContainerView?.Selection.MarkAsDirty(true);
             context.ContainerView?.CurrentContainer.Shapes.Add(_text);
+            context.ContainerView?.CurrentContainer.MarkAsDirty(true);
             _text = null;
 
             Filters?.ForEach(f => f.Clear(context));
@@ -9816,9 +9935,11 @@ namespace Draw2D.ViewModels.Tools
             if (_text != null)
             {
                 context.ContainerView?.WorkingContainer.Shapes.Remove(_text);
+                context.ContainerView?.WorkingContainer.MarkAsDirty(true);
                 context.ContainerView?.Selection.Selected.Remove(_text);
                 context.ContainerView?.Selection.Selected.Remove(_text.TopLeft);
                 context.ContainerView?.Selection.Selected.Remove(_text.BottomRight);
+                context.ContainerView?.Selection.MarkAsDirty(true);
                 _text = null;
             }
 

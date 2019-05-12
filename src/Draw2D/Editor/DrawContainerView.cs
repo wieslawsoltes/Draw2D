@@ -2,6 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Avalonia;
 using Avalonia.Media;
@@ -143,6 +144,11 @@ namespace Draw2D.Editor
 
         private bool IsCanvasContainerDirty(CanvasContainer canvasContainer)
         {
+            if (canvasContainer.IsDirty)
+            {
+                return true;
+            }
+
             if (canvasContainer.Guides != null)
             {
                 foreach (var guide in canvasContainer.Guides)
@@ -183,7 +189,6 @@ namespace Draw2D.Editor
 
         private double _previousZX = double.NaN;
         private double _previousZY = double.NaN;
-        private ISet<BaseShape> _previousSelected = null; // TODO: Dispose previous selected.
         private SKPicture _pictureShapesCurrent = null;
         private SKPicture _pictureShapesWorking = null;
         private SKPicture _pictureDecorators = null;
@@ -195,7 +200,6 @@ namespace Draw2D.Editor
             bool isWorkingContainerDirty = IsCanvasContainerDirty(view.WorkingContainer);
             bool isPointsCurrentContainerDirty = IsPointsDirty(view.CurrentContainer);
             bool isPointsWorkingContainerDirty = IsPointsDirty(view.WorkingContainer);
-
             bool isShapesCurrentDirty = isCurrentContainerDirty == true || isPointsCurrentContainerDirty == true || _previousZX != zx || _previousZY != zy;
 
             if (_pictureShapesCurrent == null || isShapesCurrentDirty == true)
@@ -224,7 +228,12 @@ namespace Draw2D.Editor
                 _pictureShapesWorking = RecordPicture(view, zx, _skiaRenderer, DrawShapesWorking);
             }
 
-            bool isSelectionDirty = view.Selection.Selected != _previousSelected || isShapesCurrentDirty == true || isShapesWorkingDirty == true;
+            bool isSelectionDirty = view.Selection.IsDirty == true || isShapesCurrentDirty == true || isShapesWorkingDirty == true;
+
+            if (view.Selection.IsDirty == true)
+            {
+                view.Selection.Invalidate();
+            }
 
             if (_pictureDecorators == null || isSelectionDirty == true)
             {
@@ -248,7 +257,6 @@ namespace Draw2D.Editor
 
             _previousZX = zx;
             _previousZY = zy;
-            _previousSelected = view.Selection.Selected;
 
             if (view.CurrentContainer.InputBackground != null)
             {
@@ -339,7 +347,6 @@ namespace Draw2D.Editor
         {
             _previousZX = double.NaN;
             _previousZY = double.NaN;
-            _previousSelected = null;
 
             if (_skiaRenderer != null)
             {
