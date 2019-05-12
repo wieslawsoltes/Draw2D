@@ -9311,8 +9311,8 @@ namespace Draw2D.ViewModels.Tools
             //var groups = container.Shapes.OfType<GroupShape>().ToList().AsReadOnly();
             //var connectables = container.Shapes.OfType<ConnectableShape>().ToList().AsReadOnly();
 
-            var shapesHash = container.Shapes.ToHashSet();
-            var guidesHash = container.Guides.ToHashSet();
+            var shapesHash = new HashSet<BaseShape>(container.Shapes);
+            var guidesHash = new HashSet<LineShape>(container.Guides);
 
             foreach (var shape in selection.Selected)
             {
