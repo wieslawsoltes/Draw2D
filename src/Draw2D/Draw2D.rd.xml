@@ -20,6 +20,8 @@
           <Type Name="SkiaSharp.SKSurface" Dynamic="Required All" />
           <Type Name="SkiaSharp.SKCanvas" Dynamic="Required All" />
           <Type Name="SkiaSharp.SKShader" Dynamic="Required All" />
+          <Type Name="SkiaSharp.SKPicture" Dynamic="Required All" />
+          <Type Name="SkiaSharp.SKPictureRecorder" Dynamic="Required All" />
         </Assembly>
 
         <!-- .NET Core -->
