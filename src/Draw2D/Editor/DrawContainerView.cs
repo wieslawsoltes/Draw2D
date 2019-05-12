@@ -101,16 +101,16 @@ namespace Draw2D.Editor
             }
         }
 
-        private SKPicture RecordPicture(IContainerView view, double scale, Action<IContainerView, object, IShapeRenderer> draw)
+        private SKPicture RecordPicture(IContainerView view, double scale, IShapeRenderer renderer, Action<IContainerView, object, IShapeRenderer> draw)
         {
-            _skiaRenderer.Scale = scale;
-            _skiaRenderer.Selection = view.Selection;
+            renderer.Scale = scale;
+            renderer.Selection = view.Selection;
 
             var recorder = new SKPictureRecorder();
             var rect = new SKRect(0f, 0f, (float)view.CurrentContainer.Width, (float)view.CurrentContainer.Height);
             var canvas = recorder.BeginRecording(rect);
 
-            draw(view, canvas, _skiaRenderer);
+            draw(view, canvas, renderer);
 
             var picture = recorder.EndRecording();
 
@@ -207,7 +207,7 @@ namespace Draw2D.Editor
                     _pictureShapesCurrent.Dispose();
                 }
 
-                _pictureShapesCurrent = RecordPicture(view, zx, DrawShapesCurrent);
+                _pictureShapesCurrent = RecordPicture(view, zx, _skiaRenderer, DrawShapesCurrent);
             }
 
             bool isShapesWorkingDirty = isWorkingContainerDirty == true || isPointsWorkingContainerDirty == true || _previousZX != zx || _previousZY != zy;
@@ -221,7 +221,7 @@ namespace Draw2D.Editor
                     _pictureShapesWorking.Dispose();
                 }
 
-                _pictureShapesWorking = RecordPicture(view, zx, DrawShapesWorking);
+                _pictureShapesWorking = RecordPicture(view, zx, _skiaRenderer, DrawShapesWorking);
             }
 
             bool isSelectionDirty = view.Selection.Selected != _previousSelected || isShapesCurrentDirty == true || isShapesWorkingDirty == true;
@@ -233,7 +233,7 @@ namespace Draw2D.Editor
                     _pictureDecorators.Dispose();
                 }
 
-                _pictureDecorators = RecordPicture(view, zx, DrawDecorators);
+                _pictureDecorators = RecordPicture(view, zx, _skiaRenderer, DrawDecorators);
             }
 
             if (_picturePoints == null || isSelectionDirty == true)
@@ -243,7 +243,7 @@ namespace Draw2D.Editor
                     _picturePoints.Dispose();
                 }
 
-                _picturePoints = RecordPicture(view, zx, DrawPoints);
+                _picturePoints = RecordPicture(view, zx, _skiaRenderer, DrawPoints);
             }
 
             _previousZX = zx;
