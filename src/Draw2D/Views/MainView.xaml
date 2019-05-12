@@ -227,11 +227,19 @@
                     </Grid>
                 </TabItem>
                 <TabItem Classes="default" Header="Json">
-                    <Grid RowDefinitions="Auto,Auto,Auto,Auto">
+                    <Grid RowDefinitions="Auto,Auto,Auto,Auto,*,Auto">
                         <TextBlock Classes="default" Text="Path:" Grid.Row="0"/>
                         <TextBox x:Name="path" Classes="default" Text="container.json" Grid.Row="1"/>
                         <Button Classes="default" Content="Open ContainerView" Command="{Binding Open}" CommandParameter="{Binding #path.Text}" Grid.Row="2"/>
                         <Button Classes="default" Content="Save ContainerView" Command="{Binding Save}" CommandParameter="{Binding #path.Text}" Grid.Row="3"/>
+                        <ListBox x:Name="files" Classes="default" Grid.Row="4" Items="{Binding Files}">
+                            <ListBox.DataTemplates>
+                                <DataTemplate>
+                                    <TextBlock Classes="default" Text="{Binding}"/>
+                                </DataTemplate>
+                            </ListBox.DataTemplates>
+                        </ListBox>
+                        <Button Classes="default" Content="Open File" Command="{Binding Open}" CommandParameter="{Binding #files.SelectedItem}" Grid.Row="5"/>
                     </Grid>
                 </TabItem>
             </TabControl>
