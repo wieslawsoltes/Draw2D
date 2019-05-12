@@ -3276,6 +3276,11 @@ namespace Draw2D.ViewModels.Containers
                 foreach (var guide in Guides)
                 {
                     guide.Invalidate();
+                    guide.Style.Invalidate();
+                    guide.Style.Stroke.Invalidate();
+                    guide.Style.Fill.Invalidate();
+                    guide.Style.TextStyle.Invalidate();
+                    guide.Style.TextStyle.Stroke.Invalidate();
                 }
             }
 
@@ -3284,12 +3289,32 @@ namespace Draw2D.ViewModels.Containers
                 foreach (var shape in Shapes)
                 {
                     shape.Invalidate();
+                    shape.Style.Invalidate();
+                    shape.Style.Stroke.Invalidate();
+                    shape.Style.Fill.Invalidate();
+                    shape.Style.TextStyle.Invalidate();
+                    shape.Style.TextStyle.Stroke.Invalidate();
                 }
             }
 
             foreach (var point in points)
             {
-                point.IsDirty = false;
+                point.Invalidate();
+
+                if (point.Style != null)
+                {
+                    point.Style.Invalidate();
+                }
+
+                if (point.Template != null)
+                {
+                    point.Template.Invalidate();
+                    point.Template.Style.Invalidate();
+                    point.Template.Style.Stroke.Invalidate();
+                    point.Template.Style.Fill.Invalidate();
+                    point.Template.Style.TextStyle.Invalidate();
+                    point.Template.Style.TextStyle.Stroke.Invalidate();
+                }
             }
 
             if (this.IsDirty)
