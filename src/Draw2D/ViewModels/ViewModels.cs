@@ -3269,9 +3269,12 @@ namespace Draw2D.ViewModels.Containers
                 }
             }
 
-            foreach (var shape in Shapes)
+            if (Shapes != null)
             {
-                shape.Invalidate();
+                foreach (var shape in Shapes)
+                {
+                    shape.Invalidate();
+                }
             }
 
             foreach (var point in points)

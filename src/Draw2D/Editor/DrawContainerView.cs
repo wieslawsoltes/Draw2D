@@ -61,9 +61,13 @@ namespace Draw2D.Editor
             _fillBrushCache = new Dictionary<ArgbColor, Brush>();
         }
 
-        private void DrawShapes(IContainerView view, object context, IShapeRenderer renderer)
+        private void DrawShapesCurrent(IContainerView view, object context, IShapeRenderer renderer)
         {
             view.CurrentContainer.Draw(context, renderer, 0.0, 0.0, DrawMode.Shape, null, null);
+        }
+
+        private void DrawShapesWorking(IContainerView view, object context, IShapeRenderer renderer)
+        {
             view.WorkingContainer.Draw(context, renderer, 0.0, 0.0, DrawMode.Shape, null, null);
         }
 
@@ -123,12 +127,62 @@ namespace Draw2D.Editor
             canvas.Restore();
         }
 
+        private bool IsShapeStyleDirty(ShapeStyle style)
+        {
+            if (style.IsDirty
+             || style.Stroke.IsDirty
+             || style.Fill.IsDirty
+             || style.TextStyle.IsDirty
+             || style.TextStyle.Stroke.IsDirty)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        private bool IsCanvasContainerDirty(CanvasContainer canvasContainer)
+        {
+            if (canvasContainer.Guides != null)
+            {
+                foreach (var guide in canvasContainer.Guides)
+                {
+                    if (guide.IsDirty || IsShapeStyleDirty(guide.Style))
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            if (canvasContainer.Shapes != null)
+            {
+                foreach (var shape in canvasContainer.Shapes)
+                {
+                    if (shape.IsDirty || IsShapeStyleDirty(shape.Style))
+                    {
+                        return true;
+                    }
+                }
+            }
+        }
+
+        private bool IsPointsDirty(CanvasContainer canvasContainer)
+        {
+            var points = new List<PointShape>();
+            canvasContainer.GetPoints(points);
+
+            foreach (var point in points)
+            {
+                point.IsDirty = false;
+            }
+        }
+
         private void DrawSkia(IContainerView view, SKCanvas canvas, double width, double height, double dx, double dy, double zx, double zy)
         {
             //view.CurrentContainer.Invalidate();
             //view.WorkingContainer.Invalidate();
 
-            var pictureShapes = RecordPicture(view, zx, DrawShapes);
+            var pictureShapesCurrent = RecordPicture(view, zx, DrawShapesCurrent);
+            var pictureShapesWorking = RecordPicture(view, zx, DrawShapesWorking);
             var pictureDecorators = RecordPicture(view, zx, DrawDecorators);
             var picturePoints = RecordPicture(view, zx, DrawPoints);
 
@@ -148,13 +202,15 @@ namespace Draw2D.Editor
                 canvas.Restore();
             }
 
-            DrawPicture(canvas, pictureShapes, dx, dy, zx, zy);
+            DrawPicture(canvas, pictureShapesCurrent, dx, dy, zx, zy);
+            DrawPicture(canvas, pictureShapesWorking, dx, dy, zx, zy);
             DrawPicture(canvas, pictureDecorators, dx, dy, zx, zy);
             DrawPicture(canvas, picturePoints, dx, dy, zx, zy);
 
             picturePoints.Dispose();
             pictureDecorators.Dispose();
-            pictureShapes.Dispose();
+            pictureShapesWorking.Dispose();
+            pictureShapesCurrent.Dispose();
         }
 
         private void DrawAvalonia(IContainerView view, DrawingContext context, double width, double height, double dx, double dy, double zx, double zy)
@@ -179,7 +235,8 @@ namespace Draw2D.Editor
                 context.FillRectangle(brush, new Rect(0.0, 0.0, view.CurrentContainer.Width, view.CurrentContainer.Height));
             }
 
-            DrawShapes(view, context, _avaloniaRenderer);
+            DrawShapesCurrent(view, context, _avaloniaRenderer);
+            DrawShapesWorking(view, context, _avaloniaRenderer);
             DrawDecorators(view, context, _avaloniaRenderer);
             DrawPoints(view, context, _avaloniaRenderer);
 
