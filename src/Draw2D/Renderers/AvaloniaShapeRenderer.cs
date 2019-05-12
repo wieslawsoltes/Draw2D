@@ -259,14 +259,14 @@ namespace Draw2D.Renderers
 
     public class AvaloniaShapeRenderer : IShapeRenderer
     {
-        private readonly IDictionary<ShapeStyle, AvaloniaBrushCache> _brushCache;
-        private readonly IDictionary<Matrix2, Matrix> _matrixCache;
-        private readonly IDictionary<CubicBezierShape, Geometry> _cubicGeometryCache;
-        private readonly IDictionary<QuadraticBezierShape, Geometry> _quadGeometryCache;
-        private readonly IDictionary<ConicShape, Geometry> _conicGeometryCache;
-        private readonly IDictionary<PathShape, Geometry> _pathGeometryCache;
-        private readonly IDictionary<EllipseShape, Geometry> _ellipseGeometryCache;
-        private readonly IDictionary<TextShape, AvaloniaFormattedTextCache> _formattedTextCache;
+        private IDictionary<ShapeStyle, AvaloniaBrushCache> _brushCache;
+        private IDictionary<Matrix2, Matrix> _matrixCache;
+        private IDictionary<CubicBezierShape, Geometry> _cubicGeometryCache;
+        private IDictionary<QuadraticBezierShape, Geometry> _quadGeometryCache;
+        private IDictionary<ConicShape, Geometry> _conicGeometryCache;
+        private IDictionary<PathShape, Geometry> _pathGeometryCache;
+        private IDictionary<EllipseShape, Geometry> _ellipseGeometryCache;
+        private IDictionary<TextShape, AvaloniaFormattedTextCache> _formattedTextCache;
 
         public double Scale { get; set; } = 1.0;
 
@@ -305,51 +305,11 @@ namespace Draw2D.Renderers
             }
 
             _matrixCache = null;
-
-            if (_cubicGeometryCache != null)
-            {
-                foreach (var cache in _cubicGeometryCache)
-                {
-                    cache.Value.Dispose();
-                }
-                _cubicGeometryCache = null;
-            }
-
-            if (_quadGeometryCache != null)
-            {
-                foreach (var cache in _quadGeometryCache)
-                {
-                    cache.Value.Dispose();
-                }
-                _quadGeometryCache = null;
-            }
-
-            if (_conicGeometryCache != null)
-            {
-                foreach (var cache in _conicGeometryCache)
-                {
-                    cache.Value.Dispose();
-                }
-                _conicGeometryCache = null;
-            }
-
-            if (_pathGeometryCache != null)
-            {
-                foreach (var cache in _pathGeometryCache)
-                {
-                    cache.Value.Dispose();
-                }
-                _pathGeometryCache = null;
-            }
-
-            if (_ellipseGeometryCache != null)
-            {
-                foreach (var cache in _ellipseGeometryCache)
-                {
-                    cache.Value.Dispose();
-                }
-                _ellipseGeometryCache = null;
-            }
+            _cubicGeometryCache = null;
+            _quadGeometryCache = null;
+            _conicGeometryCache = null;
+            _pathGeometryCache = null;
+            _ellipseGeometryCache = null;
         }
 
         private Matrix? GetMatrixCache(Matrix2 matrix)

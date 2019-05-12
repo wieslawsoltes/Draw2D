@@ -16,10 +16,10 @@ namespace Draw2D.Editor
 {
     public class DrawContainerView : IDrawContainerView
     {
-        private readonly SkiaShapeRenderer _skiaRenderer;
-        private readonly AvaloniaShapeRenderer _avaloniaRenderer;
-        private readonly Dictionary<ArgbColor, SKPaint> _fillSKPaintCache;
-        private readonly Dictionary<ArgbColor, Brush> _fillBrushCache;
+        private SkiaShapeRenderer _skiaRenderer;
+        private AvaloniaShapeRenderer _avaloniaRenderer;
+        private Dictionary<ArgbColor, SKPaint> _fillSKPaintCache;
+        private Dictionary<ArgbColor, Brush> _fillBrushCache;
 
         public IDictionary<Type, IShapeDecorator> Decorators { get; set; }
 
@@ -226,7 +226,7 @@ namespace Draw2D.Editor
 
             bool isSelectionDirty = view.Selection.Selected != _previousSelected || isShapesCurrentDirty == true || isShapesWorkingDirty == true;
 
-            if (_pictureDecorators == null || isSelectionDirty = true)
+            if (_pictureDecorators == null || isSelectionDirty == true)
             {
                 if (_pictureDecorators != null)
                 {
@@ -236,7 +236,7 @@ namespace Draw2D.Editor
                 _pictureDecorators = RecordPicture(view, zx, DrawDecorators);
             }
 
-            if (_picturePoints == null || isSelectionDirty = true)
+            if (_picturePoints == null || isSelectionDirty == true)
             {
                 if (_picturePoints != null)
                 {
