@@ -279,7 +279,7 @@ namespace Draw2D.Editor
             //_pictureDecorators.Dispose();
             //_pictureDecorators = null;
 
-             // TODO: Dispose cached picture.
+            // TODO: Dispose cached picture.
             //_pictureShapesWorking.Dispose();
             //_pictureShapesWorking = null;
 
