@@ -73,6 +73,7 @@ namespace Draw2D.Editor
 
         private void DrawPoints(IContainerView view, object context, IShapeRenderer renderer)
         {
+            // NOTE: Drawing only selected points.
             //view.CurrentContainer.Draw(context, renderer, 0.0, 0.0, DrawMode.Point, null, null);
             //view.WorkingContainer.Draw(context, renderer, 0.0, 0.0, DrawMode.Point, null, null);
 
@@ -180,15 +181,54 @@ namespace Draw2D.Editor
             return false;
         }
 
+        private double _previousScale = double.NaN;
+        private SKPicture _pictureShapesCurrent = null;
+        private SKPicture _pictureShapesWorking = null;
+        private SKPicture _pictureDecorators = null;
+        private SKPicture _picturePoints = null;
+
         private void DrawSkia(IContainerView view, SKCanvas canvas, double width, double height, double dx, double dy, double zx, double zy)
         {
-            //view.CurrentContainer.Invalidate();
-            //view.WorkingContainer.Invalidate();
+            bool isCurrentContainerDirty = IsCanvasContainerDirty(view.CurrentContainer);
+            bool isWorkingContainerDirty = IsCanvasContainerDirty(view.WorkingContainer);
+            bool isPointsCurrentContainerDirty = IsPointsDirty(view.CurrentContainer);
+            bool isPointsWorkingContainerDirty = IsPointsDirty(view.WorkingContainer);
 
-            var pictureShapesCurrent = RecordPicture(view, zx, DrawShapesCurrent);
-            var pictureShapesWorking = RecordPicture(view, zx, DrawShapesWorking);
-            var pictureDecorators = RecordPicture(view, zx, DrawDecorators);
-            var picturePoints = RecordPicture(view, zx, DrawPoints);
+            if (_pictureShapesCurrent == null
+             || isCurrentContainerDirty == true
+             || isPointsCurrentContainerDirty == true
+             || _previousScale != zx)
+            {
+                view.CurrentContainer.Invalidate();
+
+                if (_pictureShapesCurrent != null)
+                {
+                    _pictureShapesCurrent.Dispose();
+                }
+
+                _pictureShapesCurrent = RecordPicture(view, zx, DrawShapesCurrent);
+            }
+
+            if (_pictureShapesWorking == null
+             || isWorkingContainerDirty == true
+             || isPointsWorkingContainerDirty == true
+             || _previousScale != zx)
+            {
+                view.WorkingContainer.Invalidate();
+
+                if (_pictureShapesWorking != null)
+                {
+                    _pictureShapesWorking.Dispose();
+                }
+
+                _pictureShapesWorking = RecordPicture(view, zx, DrawShapesWorking);
+            }
+
+            _pictureDecorators = RecordPicture(view, zx, DrawDecorators);
+
+            _picturePoints = RecordPicture(view, zx, DrawPoints);
+
+            _previousScale = zx;
 
             if (view.CurrentContainer.InputBackground != null)
             {
@@ -206,15 +246,24 @@ namespace Draw2D.Editor
                 canvas.Restore();
             }
 
-            DrawPicture(canvas, pictureShapesCurrent, dx, dy, zx, zy);
-            DrawPicture(canvas, pictureShapesWorking, dx, dy, zx, zy);
-            DrawPicture(canvas, pictureDecorators, dx, dy, zx, zy);
-            DrawPicture(canvas, picturePoints, dx, dy, zx, zy);
+            DrawPicture(canvas, _pictureShapesCurrent, dx, dy, zx, zy);
+            DrawPicture(canvas, _pictureShapesWorking, dx, dy, zx, zy);
+            DrawPicture(canvas, _pictureDecorators, dx, dy, zx, zy);
+            DrawPicture(canvas, _picturePoints, dx, dy, zx, zy);
 
-            picturePoints.Dispose();
-            pictureDecorators.Dispose();
-            pictureShapesWorking.Dispose();
-            pictureShapesCurrent.Dispose();
+            _picturePoints.Dispose();
+            _picturePoints = null;
+
+            _pictureDecorators.Dispose();
+            _pictureDecorators = null;
+
+             // TODO: Dispose cached picture.
+            //_pictureShapesWorking.Dispose();
+            //_pictureShapesWorking = null;
+
+            // TODO: Dispose cached picture.
+            //_pictureShapesCurrent.Dispose();
+            //_pictureShapesCurrent = null;
         }
 
         private void DrawAvalonia(IContainerView view, DrawingContext context, double width, double height, double dx, double dy, double zx, double zy)
@@ -222,8 +271,8 @@ namespace Draw2D.Editor
             _avaloniaRenderer.Scale = zx;
             _avaloniaRenderer.Selection = view.Selection;
 
-            //view.CurrentContainer.Invalidate();
-            //view.WorkingContainer.Invalidate();
+            view.CurrentContainer.Invalidate();
+            view.WorkingContainer.Invalidate();
 
             if (view.CurrentContainer.InputBackground != null)
             {
