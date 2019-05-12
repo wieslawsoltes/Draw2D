@@ -137,6 +137,7 @@ namespace Draw2D.Editor
              || style.TextStyle.IsDirty
              || style.TextStyle.Stroke.IsDirty)
             {
+                Debug.WriteLine($"IsShapeStyleDirty: true");
                 return true;
             }
             return false;
@@ -146,6 +147,7 @@ namespace Draw2D.Editor
         {
             if (canvasContainer.IsDirty)
             {
+                Debug.WriteLine($"canvasContainer.IsDirty: true");
                 return true;
             }
 
@@ -153,8 +155,15 @@ namespace Draw2D.Editor
             {
                 foreach (var guide in canvasContainer.Guides)
                 {
-                    if (guide.IsDirty || IsShapeStyleDirty(guide.Style))
+                    if (guide.IsDirty)
                     {
+                        Debug.WriteLine($"guide.IsDirty: true");
+                        return true;
+                    }
+
+                    if (IsShapeStyleDirty(guide.Style))
+                    {
+                        Debug.WriteLine($"IsShapeStyleDirty(guide.Style): true");
                         return true;
                     }
                 }
@@ -164,8 +173,15 @@ namespace Draw2D.Editor
             {
                 foreach (var shape in canvasContainer.Shapes)
                 {
-                    if (shape.IsDirty || IsShapeStyleDirty(shape.Style))
+                    if (shape.IsDirty)
                     {
+                        Debug.WriteLine($"shape.IsDirty: true");
+                        return true;
+                    }
+
+                    if (IsShapeStyleDirty(shape.Style))
+                    {
+                        Debug.WriteLine($"IsShapeStyleDirty(shape.Style): true");
                         return true;
                     }
                 }
@@ -181,7 +197,38 @@ namespace Draw2D.Editor
 
             foreach (var point in points)
             {
-                point.IsDirty = false;
+                if (point.IsDirty)
+                {
+                    Debug.WriteLine($"point.IsDirty: true");
+                    return true;
+                }
+
+                if (point.Style != null)
+                {
+                    if (IsShapeStyleDirty(point.Style))
+                    {
+                        Debug.WriteLine($"IsShapeStyleDirty(point.Style): true");
+                        return true;
+                    }
+                }
+
+                if (point.Template != null)
+                {
+                    if (point.Template.IsDirty)
+                    {
+                        Debug.WriteLine($"point.Template.IsDirty: true");
+                        return true;
+                    }
+
+                    if (point.Template.Style != null)
+                    {
+                        if (IsShapeStyleDirty(point.Template.Style))
+                        {
+                            Debug.WriteLine($"IsShapeStyleDirty(point.Template.Style): true");
+                            return true;
+                        }
+                    }
+                }
             }
 
             return false;
@@ -204,8 +251,6 @@ namespace Draw2D.Editor
 
             if (_pictureShapesCurrent == null || isShapesCurrentDirty == true)
             {
-                view.CurrentContainer.Invalidate();
-
                 if (_pictureShapesCurrent != null)
                 {
                     _pictureShapesCurrent.Dispose();
@@ -218,8 +263,6 @@ namespace Draw2D.Editor
 
             if (_pictureShapesWorking == null || isShapesWorkingDirty == true)
             {
-                view.WorkingContainer.Invalidate();
-
                 if (_pictureShapesWorking != null)
                 {
                     _pictureShapesWorking.Dispose();
@@ -229,6 +272,11 @@ namespace Draw2D.Editor
             }
 
             bool isSelectionDirty = view.Selection.IsDirty == true || isShapesCurrentDirty == true || isShapesWorkingDirty == true;
+
+            Debug.WriteLine(
+                $"{nameof(isCurrentContainerDirty)}: {isCurrentContainerDirty}, " +
+                $"{nameof(isWorkingContainerDirty)}: {isWorkingContainerDirty}, " +
+                $"{nameof(isSelectionDirty)}: {isSelectionDirty}");
 
             if (view.Selection.IsDirty == true)
             {
@@ -294,6 +342,9 @@ namespace Draw2D.Editor
             // TODO: Dispose cached picture.
             //_pictureShapesCurrent.Dispose();
             //_pictureShapesCurrent = null;
+
+            view.CurrentContainer.Invalidate();
+            view.WorkingContainer.Invalidate();
         }
 
         private void DrawAvalonia(IContainerView view, DrawingContext context, double width, double height, double dx, double dy, double zx, double zy)
