@@ -163,6 +163,8 @@ namespace Draw2D.Editor
                     }
                 }
             }
+
+            return false;
         }
 
         private bool IsPointsDirty(CanvasContainer canvasContainer)
@@ -174,6 +176,8 @@ namespace Draw2D.Editor
             {
                 point.IsDirty = false;
             }
+
+            return false;
         }
 
         private void DrawSkia(IContainerView view, SKCanvas canvas, double width, double height, double dx, double dy, double zx, double zy)
