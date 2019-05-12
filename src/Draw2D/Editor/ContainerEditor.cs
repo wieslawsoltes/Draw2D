@@ -50,9 +50,12 @@ namespace Draw2D.Editor
         private ISelection _selection;
         private IDictionary<Type, IShapeDecorator> _decorators;
 
+        public IList<string> Files { get; set; }
+
         public ContainerEditor()
         {
             Initialize();
+            Files = Directory.EnumerateFiles(Directory.GetCurrentDirectory(), "*.json").Select(x => Path.GetFileName(x)).ToList();
         }
 
         private T LoadFromJson<T>(string path)
