@@ -274,6 +274,7 @@ namespace Draw2D.Editor
             bool isSelectionDirty = view.Selection.IsDirty == true || isShapesCurrentDirty == true || isShapesWorkingDirty == true;
 
             Debug.WriteLine(
+                $"{nameof(isShapesCurrentDirty)}: {isShapesCurrentDirty}, " +
                 $"{nameof(isCurrentContainerDirty)}: {isCurrentContainerDirty}, " +
                 $"{nameof(isWorkingContainerDirty)}: {isWorkingContainerDirty}, " +
                 $"{nameof(isSelectionDirty)}: {isSelectionDirty}");
