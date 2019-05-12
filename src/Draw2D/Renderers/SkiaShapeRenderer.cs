@@ -429,7 +429,7 @@ namespace Draw2D.Renderers
         public void DrawLine(object dc, LineShape line, ShapeStyle style, double dx, double dy)
         {
             var canvas = dc as SKCanvas;
-#if false
+#if true
             using (var geometry = SkiaHelper.ToGeometry(line, dx, dy))
             {
                 if (style.IsStroked)
