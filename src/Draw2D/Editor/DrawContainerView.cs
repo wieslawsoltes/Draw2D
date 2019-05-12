@@ -21,36 +21,14 @@ namespace Draw2D.Editor
         private AvaloniaShapeRenderer _avaloniaRenderer;
         private Dictionary<ArgbColor, SKPaint> _fillSKPaintCache;
         private Dictionary<ArgbColor, Brush> _fillBrushCache;
+        private double _previousZX = double.NaN;
+        private double _previousZY = double.NaN;
+        private SKPicture _pictureShapesCurrent = null;
+        private SKPicture _pictureShapesWorking = null;
+        private SKPicture _pictureDecorators = null;
+        private SKPicture _picturePoints = null;
 
         public IDictionary<Type, IShapeDecorator> Decorators { get; set; }
-
-        private void GetSKPaintFill(ArgbColor color, out SKPaint brush)
-        {
-            if (color.IsDirty == true || !_fillSKPaintCache.TryGetValue(color, out var brushCached))
-            {
-                color.Invalidate();
-                brushCached = SkiaHelper.ToSKPaintBrush(color);
-                _fillSKPaintCache[color] = brushCached;
-            }
-            else
-            {
-                SkiaHelper.ToSKPaintBrushUpdate(brushCached, color);
-            }
-
-            brush = brushCached;
-        }
-
-        private void GetBrushFill(ArgbColor color, out Brush brush)
-        {
-            if (color.IsDirty == true || !_fillBrushCache.TryGetValue(color, out var brushCached))
-            {
-                color.Invalidate();
-                brushCached = new SolidColorBrush(AvaloniaHelper.ToColor(color));
-                _fillBrushCache[color] = brushCached;
-            }
-
-            brush = brushCached;
-        }
 
         public DrawContainerView()
         {
@@ -62,71 +40,53 @@ namespace Draw2D.Editor
             _fillBrushCache = new Dictionary<ArgbColor, Brush>();
         }
 
-        private void DrawShapesCurrent(IContainerView view, object context, IShapeRenderer renderer)
+        public void Dispose()
         {
-            view.CurrentContainer.Draw(context, renderer, 0.0, 0.0, DrawMode.Shape, null, null);
-        }
+            _previousZX = double.NaN;
+            _previousZY = double.NaN;
 
-        private void DrawShapesWorking(IContainerView view, object context, IShapeRenderer renderer)
-        {
-            view.WorkingContainer.Draw(context, renderer, 0.0, 0.0, DrawMode.Shape, null, null);
-        }
-
-        private void DrawPoints(IContainerView view, object context, IShapeRenderer renderer)
-        {
-            // NOTE: Drawing only selected points.
-            //view.CurrentContainer.Draw(context, renderer, 0.0, 0.0, DrawMode.Point, null, null);
-            //view.WorkingContainer.Draw(context, renderer, 0.0, 0.0, DrawMode.Point, null, null);
-
-            var selected = view.Selection.Selected.ToList();
-
-            foreach (var shape in selected)
+            if (_skiaRenderer != null)
             {
-                if (shape is PointShape point)
-                {
-                    point.Draw(context, renderer, 0.0, 0.0, DrawMode.Point, null, null);
-                }
+                _skiaRenderer.Dispose();
             }
-        }
 
-        private void DrawDecorators(IContainerView view, object context, IShapeRenderer renderer)
-        {
-            var selected = view.Selection.Selected.ToList();
-
-            foreach (var shape in selected)
+            if (_avaloniaRenderer != null)
             {
-                if (Decorators.TryGetValue(shape.GetType(), out var helper))
-                {
-                    helper.Draw(context, shape, renderer, view.Selection, 0.0, 0.0, DrawMode.Shape);
-                }
+                _avaloniaRenderer.Dispose();
             }
-        }
 
-        private SKPicture RecordPicture(IContainerView view, double scale, IShapeRenderer renderer, Action<IContainerView, object, IShapeRenderer> draw)
-        {
-            renderer.Scale = scale;
-            renderer.Selection = view.Selection;
+            if (_fillSKPaintCache != null)
+            {
+                foreach (var cache in _fillSKPaintCache)
+                {
+                    cache.Value.Dispose();
+                }
+                _fillSKPaintCache = null;
+            }
 
-            var recorder = new SKPictureRecorder();
-            var rect = new SKRect(0f, 0f, (float)view.CurrentContainer.Width, (float)view.CurrentContainer.Height);
-            var canvas = recorder.BeginRecording(rect);
+            if (_picturePoints != null)
+            {
+                _picturePoints.Dispose();
+                _picturePoints = null;
+            }
 
-            draw(view, canvas, renderer);
+            if (_pictureDecorators != null)
+            {
+                _pictureDecorators.Dispose();
+                _pictureDecorators = null;
+            }
 
-            var picture = recorder.EndRecording();
+            if (_pictureShapesWorking != null)
+            {
+                _pictureShapesWorking.Dispose();
+                _pictureShapesWorking = null;
+            }
 
-            canvas.Dispose();
-
-            return picture;
-        }
-
-        private void DrawPicture(SKCanvas canvas, SKPicture picture, double dx, double dy, double zx, double zy)
-        {
-            canvas.Save();
-            canvas.Translate((float)dx, (float)dy);
-            canvas.Scale((float)zx, (float)zy);
-            canvas.DrawPicture(picture);
-            canvas.Restore();
+            if (_pictureShapesCurrent != null)
+            {
+                _pictureShapesCurrent.Dispose();
+                _pictureShapesCurrent = null;
+            }
         }
 
         private bool IsShapeStyleDirty(ShapeStyle style)
@@ -234,12 +194,100 @@ namespace Draw2D.Editor
             return false;
         }
 
-        private double _previousZX = double.NaN;
-        private double _previousZY = double.NaN;
-        private SKPicture _pictureShapesCurrent = null;
-        private SKPicture _pictureShapesWorking = null;
-        private SKPicture _pictureDecorators = null;
-        private SKPicture _picturePoints = null;
+        private void GetSKPaintFill(ArgbColor color, out SKPaint brush)
+        {
+            if (color.IsDirty == true || !_fillSKPaintCache.TryGetValue(color, out var brushCached))
+            {
+                color.Invalidate();
+                brushCached = SkiaHelper.ToSKPaintBrush(color);
+                _fillSKPaintCache[color] = brushCached;
+            }
+            else
+            {
+                SkiaHelper.ToSKPaintBrushUpdate(brushCached, color);
+            }
+
+            brush = brushCached;
+        }
+
+        private void GetBrushFill(ArgbColor color, out Brush brush)
+        {
+            if (color.IsDirty == true || !_fillBrushCache.TryGetValue(color, out var brushCached))
+            {
+                color.Invalidate();
+                brushCached = new SolidColorBrush(AvaloniaHelper.ToColor(color));
+                _fillBrushCache[color] = brushCached;
+            }
+
+            brush = brushCached;
+        }
+
+        private void DrawShapesCurrent(IContainerView view, object context, IShapeRenderer renderer)
+        {
+            view.CurrentContainer.Draw(context, renderer, 0.0, 0.0, DrawMode.Shape, null, null);
+        }
+
+        private void DrawShapesWorking(IContainerView view, object context, IShapeRenderer renderer)
+        {
+            view.WorkingContainer.Draw(context, renderer, 0.0, 0.0, DrawMode.Shape, null, null);
+        }
+
+        private void DrawPoints(IContainerView view, object context, IShapeRenderer renderer)
+        {
+            // NOTE: Drawing only selected points.
+            //view.CurrentContainer.Draw(context, renderer, 0.0, 0.0, DrawMode.Point, null, null);
+            //view.WorkingContainer.Draw(context, renderer, 0.0, 0.0, DrawMode.Point, null, null);
+
+            var selected = view.Selection.Selected.ToList();
+
+            foreach (var shape in selected)
+            {
+                if (shape is PointShape point)
+                {
+                    point.Draw(context, renderer, 0.0, 0.0, DrawMode.Point, null, null);
+                }
+            }
+        }
+
+        private void DrawDecorators(IContainerView view, object context, IShapeRenderer renderer)
+        {
+            var selected = view.Selection.Selected.ToList();
+
+            foreach (var shape in selected)
+            {
+                if (Decorators.TryGetValue(shape.GetType(), out var helper))
+                {
+                    helper.Draw(context, shape, renderer, view.Selection, 0.0, 0.0, DrawMode.Shape);
+                }
+            }
+        }
+
+        private SKPicture RecordPicture(IContainerView view, double scale, IShapeRenderer renderer, Action<IContainerView, object, IShapeRenderer> draw)
+        {
+            renderer.Scale = scale;
+            renderer.Selection = view.Selection;
+
+            var recorder = new SKPictureRecorder();
+            var rect = new SKRect(0f, 0f, (float)view.CurrentContainer.Width, (float)view.CurrentContainer.Height);
+            var canvas = recorder.BeginRecording(rect);
+
+            draw(view, canvas, renderer);
+
+            var picture = recorder.EndRecording();
+
+            canvas.Dispose();
+
+            return picture;
+        }
+
+        private void DrawPicture(SKCanvas canvas, SKPicture picture, double dx, double dy, double zx, double zy)
+        {
+            canvas.Save();
+            canvas.Translate((float)dx, (float)dy);
+            canvas.Scale((float)zx, (float)zy);
+            canvas.DrawPicture(picture);
+            canvas.Restore();
+        }
 
         private void DrawSkia(IContainerView view, SKCanvas canvas, double width, double height, double dx, double dy, double zx, double zy)
         {
@@ -248,6 +296,7 @@ namespace Draw2D.Editor
             bool isPointsCurrentContainerDirty = IsPointsDirty(view.CurrentContainer);
             bool isPointsWorkingContainerDirty = IsPointsDirty(view.WorkingContainer);
             bool isShapesCurrentDirty = isCurrentContainerDirty == true || isPointsCurrentContainerDirty == true || _previousZX != zx || _previousZY != zy;
+            bool isShapesWorkingDirty = isWorkingContainerDirty == true || isPointsWorkingContainerDirty == true || _previousZX != zx || _previousZY != zy;
 
             if (_pictureShapesCurrent == null || isShapesCurrentDirty == true)
             {
@@ -258,8 +307,6 @@ namespace Draw2D.Editor
 
                 _pictureShapesCurrent = RecordPicture(view, zx, _skiaRenderer, DrawShapesCurrent);
             }
-
-            bool isShapesWorkingDirty = isWorkingContainerDirty == true || isPointsWorkingContainerDirty == true || _previousZX != zx || _previousZY != zy;
 
             if (_pictureShapesWorking == null || isShapesWorkingDirty == true)
             {
@@ -275,6 +322,7 @@ namespace Draw2D.Editor
 
             Debug.WriteLine(
                 $"{nameof(isShapesCurrentDirty)}: {isShapesCurrentDirty}, " +
+                $"{nameof(isShapesWorkingDirty)}: {isShapesWorkingDirty}, " +
                 $"{nameof(isCurrentContainerDirty)}: {isCurrentContainerDirty}, " +
                 $"{nameof(isWorkingContainerDirty)}: {isWorkingContainerDirty}, " +
                 $"{nameof(isSelectionDirty)}: {isSelectionDirty}");
@@ -392,55 +440,6 @@ namespace Draw2D.Editor
                         DrawSkia(view, canvas, width, height, dx, dy, zx, zy);
                     }
                     break;
-            }
-        }
-
-        public void Dispose()
-        {
-            _previousZX = double.NaN;
-            _previousZY = double.NaN;
-
-            if (_skiaRenderer != null)
-            {
-                _skiaRenderer.Dispose();
-            }
-
-            if (_avaloniaRenderer != null)
-            {
-                _avaloniaRenderer.Dispose();
-            }
-
-            if (_fillSKPaintCache != null)
-            {
-                foreach (var cache in _fillSKPaintCache)
-                {
-                    cache.Value.Dispose();
-                }
-                _fillSKPaintCache = null;
-            }
-
-            if (_picturePoints != null)
-            {
-                _picturePoints.Dispose();
-                _picturePoints = null;
-            }
-
-            if (_pictureDecorators != null)
-            {
-                _pictureDecorators.Dispose();
-                _pictureDecorators = null;
-            }
-
-            if (_pictureShapesWorking != null)
-            {
-                _pictureShapesWorking.Dispose();
-                _pictureShapesWorking = null;
-            }
-
-            if (_pictureShapesCurrent != null)
-            {
-                _pictureShapesCurrent.Dispose();
-                _pictureShapesCurrent = null;
             }
         }
     }
