@@ -119,6 +119,14 @@ namespace Draw2D.Renderers
             return ToSKMatrix(m.M11, m.M12, m.M21, m.M22, m.OffsetX, m.OffsetY);
         }
 
+        public static SKPath ToGeometry(LineShape line, double dx, double dy)
+        {
+            var geometry = new SKPath();
+            geometry.MoveTo(ToPoint(line.StartPoint, dx, dy));
+            geometry.LineTo(ToPoint(line.Point, dx, dy));
+            return geometry;
+        }
+
         public static SKPath ToGeometry(CubicBezierShape cubicBezier, double dx, double dy)
         {
             var geometry = new SKPath();
@@ -421,11 +429,22 @@ namespace Draw2D.Renderers
         public void DrawLine(object dc, LineShape line, ShapeStyle style, double dx, double dy)
         {
             var canvas = dc as SKCanvas;
+#if false
+            using (var geometry = SkiaHelper.ToGeometry(line, dx, dy))
+            {
+                if (style.IsStroked)
+                {
+                    GetSKPaintStroke(style, out var pen, Scale);
+                    canvas.DrawPath(geometry, pen);
+                }
+            }
+#else
             if (style.IsStroked)
             {
                 GetSKPaintStroke(style, out var pen, Scale);
                 canvas.DrawLine(SkiaHelper.ToPoint(line.StartPoint, dx, dy), SkiaHelper.ToPoint(line.Point, dx, dy), pen);
             }
+#endif
         }
 
         public void DrawCubicBezier(object dc, CubicBezierShape cubicBezier, ShapeStyle style, double dx, double dy)
