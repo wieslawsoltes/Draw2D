@@ -181,7 +181,8 @@ namespace Draw2D.Editor
             return false;
         }
 
-        private double _previousScale = double.NaN;
+        private double _previousZX = double.NaN;
+        private double _previousZY = double.NaN;
         private SKPicture _pictureShapesCurrent = null;
         private SKPicture _pictureShapesWorking = null;
         private SKPicture _pictureDecorators = null;
@@ -194,10 +195,7 @@ namespace Draw2D.Editor
             bool isPointsCurrentContainerDirty = IsPointsDirty(view.CurrentContainer);
             bool isPointsWorkingContainerDirty = IsPointsDirty(view.WorkingContainer);
 
-            if (_pictureShapesCurrent == null
-             || isCurrentContainerDirty == true
-             || isPointsCurrentContainerDirty == true
-             || _previousScale != zx)
+            if (_pictureShapesCurrent == null || isCurrentContainerDirty == true || isPointsCurrentContainerDirty == true || _previousZX != zx || _previousZY != zy)
             {
                 view.CurrentContainer.Invalidate();
 
@@ -209,10 +207,7 @@ namespace Draw2D.Editor
                 _pictureShapesCurrent = RecordPicture(view, zx, DrawShapesCurrent);
             }
 
-            if (_pictureShapesWorking == null
-             || isWorkingContainerDirty == true
-             || isPointsWorkingContainerDirty == true
-             || _previousScale != zx)
+            if (_pictureShapesWorking == null || isWorkingContainerDirty == true || isPointsWorkingContainerDirty == true || _previousZX != zx || _previousZY != zy)
             {
                 view.WorkingContainer.Invalidate();
 
@@ -224,11 +219,18 @@ namespace Draw2D.Editor
                 _pictureShapesWorking = RecordPicture(view, zx, DrawShapesWorking);
             }
 
-            _pictureDecorators = RecordPicture(view, zx, DrawDecorators);
+            if (_pictureDecorators == null)
+            {
+                _pictureDecorators = RecordPicture(view, zx, DrawDecorators);
+            }
 
-            _picturePoints = RecordPicture(view, zx, DrawPoints);
+            if (_picturePoints == null)
+            {
+                _picturePoints = RecordPicture(view, zx, DrawPoints);
+            }
 
-            _previousScale = zx;
+            _previousZX = zx;
+            _previousZY = zy;
 
             if (view.CurrentContainer.InputBackground != null)
             {
