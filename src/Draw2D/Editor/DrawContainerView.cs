@@ -183,6 +183,7 @@ namespace Draw2D.Editor
 
         private double _previousZX = double.NaN;
         private double _previousZY = double.NaN;
+        private ISet<BaseShape> _previousSelected = null; // TODO: Dispose previous selected.
         private SKPicture _pictureShapesCurrent = null;
         private SKPicture _pictureShapesWorking = null;
         private SKPicture _pictureDecorators = null;
@@ -195,7 +196,9 @@ namespace Draw2D.Editor
             bool isPointsCurrentContainerDirty = IsPointsDirty(view.CurrentContainer);
             bool isPointsWorkingContainerDirty = IsPointsDirty(view.WorkingContainer);
 
-            if (_pictureShapesCurrent == null || isCurrentContainerDirty == true || isPointsCurrentContainerDirty == true || _previousZX != zx || _previousZY != zy)
+            bool isShapesCurrentDirty = isCurrentContainerDirty == true || isPointsCurrentContainerDirty == true || _previousZX != zx || _previousZY != zy;
+
+            if (_pictureShapesCurrent == null || isShapesCurrentDirty == true)
             {
                 view.CurrentContainer.Invalidate();
 
@@ -207,7 +210,9 @@ namespace Draw2D.Editor
                 _pictureShapesCurrent = RecordPicture(view, zx, DrawShapesCurrent);
             }
 
-            if (_pictureShapesWorking == null || isWorkingContainerDirty == true || isPointsWorkingContainerDirty == true || _previousZX != zx || _previousZY != zy)
+            bool isShapesWorkingDirty = isWorkingContainerDirty == true || isPointsWorkingContainerDirty == true || _previousZX != zx || _previousZY != zy;
+
+            if (_pictureShapesWorking == null || isShapesWorkingDirty == true)
             {
                 view.WorkingContainer.Invalidate();
 
@@ -219,18 +224,31 @@ namespace Draw2D.Editor
                 _pictureShapesWorking = RecordPicture(view, zx, DrawShapesWorking);
             }
 
-            if (_pictureDecorators == null)
+            bool isSelectionDirty = view.Selection.Selected != _previousSelected || isShapesCurrentDirty == true || isShapesWorkingDirty == true;
+
+            if (_pictureDecorators == null || isSelectionDirty = true)
             {
+                if (_pictureDecorators != null)
+                {
+                    _pictureDecorators.Dispose();
+                }
+
                 _pictureDecorators = RecordPicture(view, zx, DrawDecorators);
             }
 
-            if (_picturePoints == null)
+            if (_picturePoints == null || isSelectionDirty = true)
             {
+                if (_picturePoints != null)
+                {
+                    _picturePoints.Dispose();
+                }
+
                 _picturePoints = RecordPicture(view, zx, DrawPoints);
             }
 
             _previousZX = zx;
             _previousZY = zy;
+            _previousSelected = view.Selection.Selected;
 
             if (view.CurrentContainer.InputBackground != null)
             {
@@ -253,11 +271,13 @@ namespace Draw2D.Editor
             DrawPicture(canvas, _pictureDecorators, dx, dy, zx, zy);
             DrawPicture(canvas, _picturePoints, dx, dy, zx, zy);
 
-            _picturePoints.Dispose();
-            _picturePoints = null;
+            // TODO: Dispose cached picture.
+            //_picturePoints.Dispose();
+            //_picturePoints = null;
 
-            _pictureDecorators.Dispose();
-            _pictureDecorators = null;
+            // TODO: Dispose cached picture.
+            //_pictureDecorators.Dispose();
+            //_pictureDecorators = null;
 
              // TODO: Dispose cached picture.
             //_pictureShapesWorking.Dispose();
@@ -312,6 +332,56 @@ namespace Draw2D.Editor
                         DrawSkia(view, canvas, width, height, dx, dy, zx, zy);
                     }
                     break;
+            }
+        }
+
+        public void Dispose()
+        {
+            _previousZX = double.NaN;
+            _previousZY = double.NaN;
+            _previousSelected = null;
+
+            if (_skiaRenderer != null)
+            {
+                _skiaRenderer.Dispose();
+            }
+
+            if (_avaloniaRenderer != null)
+            {
+                _avaloniaRenderer.Dispose();
+            }
+
+            if (_fillSKPaintCache != null)
+            {
+                foreach (var cache in _fillSKPaintCache)
+                {
+                    cache.Value.Dispose();
+                }
+                _fillSKPaintCache = null;
+            }
+
+            if (_picturePoints != null)
+            {
+                _picturePoints.Dispose();
+                _picturePoints = null;
+            }
+
+            if (_pictureDecorators != null)
+            {
+                _pictureDecorators.Dispose();
+                _pictureDecorators = null;
+            }
+
+            if (_pictureShapesWorking != null)
+            {
+                _pictureShapesWorking.Dispose();
+                _pictureShapesWorking = null;
+            }
+
+            if (_pictureShapesCurrent != null)
+            {
+                _pictureShapesCurrent.Dispose();
+                _pictureShapesCurrent = null;
             }
         }
     }

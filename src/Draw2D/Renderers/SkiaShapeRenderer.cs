@@ -277,6 +277,45 @@ namespace Draw2D.Renderers
             _strokePaintCache = new Dictionary<ShapeStyle, SKPaint>();
         }
 
+        public void Dispose()
+        {
+            if (_typefaceCache != null)
+            {
+                foreach (var cache in _typefaceCache)
+                {
+                    cache.Value.Dispose();
+                }
+                _typefaceCache = null;
+            }
+
+            if (_textPaintCache != null)
+            {
+                foreach (KeyValuePair<TextStyle, (SKPaint paint, SKFontMetrics metrics)> cache in _textPaintCache)
+                {
+                    cache.paint.Dispose();
+                }
+                _textPaintCache = null;
+            }
+
+            if (_fillPaintCache != null)
+            {
+                foreach (var cache in _fillPaintCache)
+                {
+                    cache.Value.Dispose();
+                }
+                _fillPaintCache = null;
+            }
+
+            if (_strokePaintCache != null)
+            {
+                foreach (var cache in _strokePaintCache)
+                {
+                    cache.Value.Dispose();
+                }
+                _strokePaintCache = null;
+            }
+        }
+
         private void GetSKTypeface(string familyName, out SKTypeface typeface)
         {
             if (!_typefaceCache.TryGetValue(familyName, out typeface))

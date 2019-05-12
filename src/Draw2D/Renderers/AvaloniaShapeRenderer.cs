@@ -284,6 +284,74 @@ namespace Draw2D.Renderers
             _ellipseGeometryCache = new Dictionary<EllipseShape, Geometry>();
         }
 
+        public void Dispose()
+        {
+            if (_brushCache != null)
+            {
+                foreach (var cache in _brushCache)
+                {
+                    cache.Value.Dispose();
+                }
+                _brushCache = null;
+            }
+
+            if (_formattedTextCache != null)
+            {
+                foreach (var cache in _formattedTextCache)
+                {
+                    cache.Value.Dispose();
+                }
+                _formattedTextCache = null;
+            }
+
+            _matrixCache = null;
+
+            if (_cubicGeometryCache != null)
+            {
+                foreach (var cache in _cubicGeometryCache)
+                {
+                    cache.Value.Dispose();
+                }
+                _cubicGeometryCache = null;
+            }
+
+            if (_quadGeometryCache != null)
+            {
+                foreach (var cache in _quadGeometryCache)
+                {
+                    cache.Value.Dispose();
+                }
+                _quadGeometryCache = null;
+            }
+
+            if (_conicGeometryCache != null)
+            {
+                foreach (var cache in _conicGeometryCache)
+                {
+                    cache.Value.Dispose();
+                }
+                _conicGeometryCache = null;
+            }
+
+            if (_pathGeometryCache != null)
+            {
+                foreach (var cache in _pathGeometryCache)
+                {
+                    cache.Value.Dispose();
+                }
+                _pathGeometryCache = null;
+            }
+
+            if (_ellipseGeometryCache != null)
+            {
+                foreach (var cache in _ellipseGeometryCache)
+                {
+                    cache.Value.Dispose();
+                }
+                _ellipseGeometryCache = null;
+            }
+        }
+
         private Matrix? GetMatrixCache(Matrix2 matrix)
         {
             if (matrix == null)

@@ -138,7 +138,7 @@ namespace Draw2D.ViewModels
         void Deselect(ISelection selection);
     }
 
-    public interface IShapeRenderer
+    public interface IShapeRenderer : IDisposable
     {
         double Scale { get; set; }
         ISelection Selection { get; set; }
@@ -3110,7 +3110,7 @@ namespace Draw2D.ViewModels.Shapes
 
 namespace Draw2D.ViewModels.Containers
 {
-    public interface IDrawContainerView
+    public interface IDrawContainerView : IDisposable
     {
         IDictionary<Type, IShapeDecorator> Decorators { get; set; }
         void Draw(IContainerView view, object context, double width, double height, double dx, double dy, double zx, double zy);
