@@ -428,151 +428,176 @@ namespace Draw2D.Renderers
 
         public void DrawLine(object dc, LineShape line, ShapeStyle style, double dx, double dy)
         {
-            var canvas = dc as SKCanvas;
 #if true
-            using (var geometry = SkiaHelper.ToGeometry(line, dx, dy))
+            if (style.IsStroked)
             {
-                if (style.IsStroked)
+                var canvas = dc as SKCanvas;
+                using (var geometry = SkiaHelper.ToGeometry(line, dx, dy))
                 {
-                    GetSKPaintStroke(style, out var pen, Scale);
-                    canvas.DrawPath(geometry, pen);
+                    if (style.IsStroked)
+                    {
+                        GetSKPaintStroke(style, out var pen, Scale);
+                        canvas.DrawPath(geometry, pen);
+                    }
                 }
             }
 #else
             if (style.IsStroked)
             {
-                GetSKPaintStroke(style, out var pen, Scale);
-                canvas.DrawLine(SkiaHelper.ToPoint(line.StartPoint, dx, dy), SkiaHelper.ToPoint(line.Point, dx, dy), pen);
+                var canvas = dc as SKCanvas;
+                if (style.IsStroked)
+                {
+                    GetSKPaintStroke(style, out var pen, Scale);
+                    canvas.DrawLine(SkiaHelper.ToPoint(line.StartPoint, dx, dy), SkiaHelper.ToPoint(line.Point, dx, dy), pen);
+                }
             }
 #endif
         }
 
         public void DrawCubicBezier(object dc, CubicBezierShape cubicBezier, ShapeStyle style, double dx, double dy)
         {
-            var canvas = dc as SKCanvas;
-            using (var geometry = SkiaHelper.ToGeometry(cubicBezier, dx, dy))
+            if (style.IsFilled || style.IsStroked || style.TextStyle.IsStroked)
             {
-                if (style.IsFilled)
+                var canvas = dc as SKCanvas;
+                using (var geometry = SkiaHelper.ToGeometry(cubicBezier, dx, dy))
                 {
-                    GetSKPaintFill(style, out var brush);
-                    canvas.DrawPath(geometry, brush);
-                }
-                if (style.IsStroked)
-                {
-                    GetSKPaintStroke(style, out var pen, Scale);
-                    canvas.DrawPath(geometry, pen);
-                }
-                if (style.TextStyle.IsStroked && cubicBezier.Text is Text text && !string.IsNullOrEmpty(text.Value))
-                {
-                    DrawTextOnPath(canvas, geometry, text, style.TextStyle);
+                    if (style.IsFilled)
+                    {
+                        GetSKPaintFill(style, out var brush);
+                        canvas.DrawPath(geometry, brush);
+                    }
+                    if (style.IsStroked)
+                    {
+                        GetSKPaintStroke(style, out var pen, Scale);
+                        canvas.DrawPath(geometry, pen);
+                    }
+                    if (style.TextStyle.IsStroked && cubicBezier.Text is Text text && !string.IsNullOrEmpty(text.Value))
+                    {
+                        DrawTextOnPath(canvas, geometry, text, style.TextStyle);
+                    }
                 }
             }
         }
 
         public void DrawQuadraticBezier(object dc, QuadraticBezierShape quadraticBezier, ShapeStyle style, double dx, double dy)
         {
-            var canvas = dc as SKCanvas;
-            using (var geometry = SkiaHelper.ToGeometry(quadraticBezier, dx, dy))
+            if(style.IsFilled || style.IsStroked || style.TextStyle.IsStroked)
             {
-                if (style.IsFilled)
+                var canvas = dc as SKCanvas;
+                using (var geometry = SkiaHelper.ToGeometry(quadraticBezier, dx, dy))
                 {
-                    GetSKPaintFill(style, out var brush);
-                    canvas.DrawPath(geometry, brush);
-                }
-                if (style.IsStroked)
-                {
-                    GetSKPaintStroke(style, out var pen, Scale);
-                    canvas.DrawPath(geometry, pen);
-                }
-                if (style.TextStyle.IsStroked && quadraticBezier.Text is Text text && !string.IsNullOrEmpty(text.Value))
-                {
-                    DrawTextOnPath(canvas, geometry, text, style.TextStyle);
+                    if (style.IsFilled)
+                    {
+                        GetSKPaintFill(style, out var brush);
+                        canvas.DrawPath(geometry, brush);
+                    }
+                    if (style.IsStroked)
+                    {
+                        GetSKPaintStroke(style, out var pen, Scale);
+                        canvas.DrawPath(geometry, pen);
+                    }
+                    if (style.TextStyle.IsStroked && quadraticBezier.Text is Text text && !string.IsNullOrEmpty(text.Value))
+                    {
+                        DrawTextOnPath(canvas, geometry, text, style.TextStyle);
+                    }
                 }
             }
         }
 
         public void DrawConic(object dc, ConicShape conic, ShapeStyle style, double dx, double dy)
         {
-            var canvas = dc as SKCanvas;
-            using (var geometry = SkiaHelper.ToGeometry(conic, dx, dy))
+            if (style.IsFilled || style.IsStroked || style.TextStyle.IsStroked)
             {
-                if (style.IsFilled)
+                var canvas = dc as SKCanvas;
+                using (var geometry = SkiaHelper.ToGeometry(conic, dx, dy))
                 {
-                    GetSKPaintFill(style, out var brush);
-                    canvas.DrawPath(geometry, brush);
-                }
-                if (style.IsStroked)
-                {
-                    GetSKPaintStroke(style, out var pen, Scale);
-                    canvas.DrawPath(geometry, pen);
-                }
-                if (style.TextStyle.IsStroked && conic.Text is Text text && !string.IsNullOrEmpty(text.Value))
-                {
-                    DrawTextOnPath(canvas, geometry, text, style.TextStyle);
+                    if (style.IsFilled)
+                    {
+                        GetSKPaintFill(style, out var brush);
+                        canvas.DrawPath(geometry, brush);
+                    }
+                    if (style.IsStroked)
+                    {
+                        GetSKPaintStroke(style, out var pen, Scale);
+                        canvas.DrawPath(geometry, pen);
+                    }
+                    if (style.TextStyle.IsStroked && conic.Text is Text text && !string.IsNullOrEmpty(text.Value))
+                    {
+                        DrawTextOnPath(canvas, geometry, text, style.TextStyle);
+                    }
                 }
             }
         }
 
         public void DrawPath(object dc, PathShape path, ShapeStyle style, double dx, double dy)
         {
-            var canvas = dc as SKCanvas;
-            using (var geometry = SkiaHelper.ToGeometry(path, dx, dy))
+            if (style.IsFilled || style.IsStroked || style.TextStyle.IsStroked)
             {
-                if (style.IsFilled)
+                var canvas = dc as SKCanvas;
+                using (var geometry = SkiaHelper.ToGeometry(path, dx, dy))
                 {
-                    GetSKPaintFill(style, out var brush);
-                    canvas.DrawPath(geometry, brush);
-                }
-                if (style.IsStroked)
-                {
-                    GetSKPaintStroke(style, out var pen, Scale);
-                    canvas.DrawPath(geometry, pen);
-                }
-                if (style.TextStyle.IsStroked && path.Text is Text text && !string.IsNullOrEmpty(text.Value))
-                {
-                    DrawTextOnPath(canvas, geometry, text, style.TextStyle);
+                    if (style.IsFilled)
+                    {
+                        GetSKPaintFill(style, out var brush);
+                        canvas.DrawPath(geometry, brush);
+                    }
+                    if (style.IsStroked)
+                    {
+                        GetSKPaintStroke(style, out var pen, Scale);
+                        canvas.DrawPath(geometry, pen);
+                    }
+                    if (style.TextStyle.IsStroked && path.Text is Text text && !string.IsNullOrEmpty(text.Value))
+                    {
+                        DrawTextOnPath(canvas, geometry, text, style.TextStyle);
+                    }
                 }
             }
         }
 
         public void DrawRectangle(object dc, RectangleShape rectangle, ShapeStyle style, double dx, double dy)
         {
-            var canvas = dc as SKCanvas;
-            var rect = SkiaHelper.ToRect(rectangle.TopLeft, rectangle.BottomRight, dx, dy);
-            if (style.IsFilled)
+            if (style.IsFilled || style.IsStroked)
             {
-                GetSKPaintFill(style, out var brush);
-                canvas.DrawRect(rect, brush);
-            }
-            if (style.IsStroked)
-            {
-                GetSKPaintStroke(style, out var pen, Scale);
-                canvas.DrawRect(rect, pen);
+                var canvas = dc as SKCanvas;
+                var rect = SkiaHelper.ToRect(rectangle.TopLeft, rectangle.BottomRight, dx, dy);
+                if (style.IsFilled)
+                {
+                    GetSKPaintFill(style, out var brush);
+                    canvas.DrawRect(rect, brush);
+                }
+                if (style.IsStroked)
+                {
+                    GetSKPaintStroke(style, out var pen, Scale);
+                    canvas.DrawRect(rect, pen);
+                }
             }
         }
 
         public void DrawEllipse(object dc, EllipseShape ellipse, ShapeStyle style, double dx, double dy)
         {
-            var canvas = dc as SKCanvas;
-            var rect = SkiaHelper.ToRect(ellipse.TopLeft, ellipse.BottomRight, dx, dy);
-            if (style.IsFilled)
+            if (style.IsFilled || style.IsStroked)
             {
-                GetSKPaintFill(style, out var brush);
-                canvas.DrawOval(rect, brush);
-            }
-            if (style.IsStroked)
-            {
-                GetSKPaintStroke(style, out var pen, Scale);
-                canvas.DrawOval(rect, pen);
+                var canvas = dc as SKCanvas;
+                var rect = SkiaHelper.ToRect(ellipse.TopLeft, ellipse.BottomRight, dx, dy);
+                if (style.IsFilled)
+                {
+                    GetSKPaintFill(style, out var brush);
+                    canvas.DrawOval(rect, brush);
+                }
+                if (style.IsStroked)
+                {
+                    GetSKPaintStroke(style, out var pen, Scale);
+                    canvas.DrawOval(rect, pen);
+                }
             }
         }
 
         public void DrawText(object dc, TextShape text, ShapeStyle style, double dx, double dy)
         {
-            var canvas = dc as SKCanvas;
-            var rect = SkiaHelper.ToRect(text.TopLeft, text.BottomRight, dx, dy);
             if (style.TextStyle.IsStroked)
             {
+                var canvas = dc as SKCanvas;
+                var rect = SkiaHelper.ToRect(text.TopLeft, text.BottomRight, dx, dy);
                 GetSKPaintStrokeText(style.TextStyle, out var paint, out var offset);
                 var bounds = new SKRect();
                 paint.MeasureText(text.Text.Value, ref bounds);
