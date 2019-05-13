@@ -3257,10 +3257,12 @@ namespace Draw2D.ViewModels.Containers
                     shape.Draw(dc, renderer, dx, dy, mode, db, r);
                 }
             }
-
-            foreach (var shape in Shapes)
+            if (Shapes != null)
             {
-                shape.Draw(dc, renderer, dx, dy, mode, db, r);
+                foreach (var shape in Shapes)
+                {
+                    shape.Draw(dc, renderer, dx, dy, mode, db, r);
+                } 
             }
 
             EndTransform(dc, renderer, state);
