@@ -20,8 +20,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Avalonia" Version="0.8.1-cibuild0002263-beta" />
-    <PackageReference Include="Avalonia.Desktop" Version="0.8.1-cibuild0002263-beta" />
+    <PackageReference Include="Avalonia" Version="0.8.1-cibuild0002324-beta" />
+    <PackageReference Include="Avalonia.Desktop" Version="0.8.1-cibuild0002324-beta" />
     <PackageReference Include="Avalonia.Angle.Windows.Natives" Version="2.1.0.2019013001" />
     <PackageReference Include="Math.Spatial" Version="1.0.4" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
@@ -33,13 +33,13 @@
   </PropertyGroup>
   
   <!-- https://github.com/dotnet/corert -->
-  <ItemGroup  Condition="'$(CoreRT)' == 'True'">
+  <ItemGroup Condition="'$(CoreRT)' == 'True'">
     <RdXmlFile Include="Draw2D.rd.xml" />
     <PackageReference Include="Microsoft.DotNet.ILCompiler" Version="1.0.0-alpha-*" />
   </ItemGroup>
 
   <!-- https://github.com/dotnet/corert/blob/master/Documentation/using-corert/optimizing-corert.md -->
-  <PropertyGroup  Condition="'$(CoreRT)' == 'True'">
+  <PropertyGroup Condition="'$(CoreRT)' == 'True'">
     <RootAllApplicationAssemblies>False</RootAllApplicationAssemblies>
     <IlcGenerateCompleteTypeMetadata>False</IlcGenerateCompleteTypeMetadata>
     <IlcGenerateStackTraceData>False</IlcGenerateStackTraceData>
