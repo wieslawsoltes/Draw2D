@@ -32,16 +32,16 @@ namespace Draw2D.Editor
                 Shapes = new ObservableCollection<BaseShape>()
             };
             group.Shapes.Add(
-                new RectangleShape(new PointShape(30, 30, container.PointTemplate),
-                new PointShape(60, 60, container.PointTemplate))
+                new RectangleShape(new PointShape(30, 30, context.ContainerView?.PointTemplate),
+                new PointShape(60, 60, context.ContainerView?.PointTemplate))
                 {
                     Points = new ObservableCollection<PointShape>(),
-                    Style = container.CurrentStyle
+                    Style = context.ContainerView?.CurrentStyle
                 });
-            group.Points.Add(new PointShape(45, 30, container.PointTemplate));
-            group.Points.Add(new PointShape(45, 60, container.PointTemplate));
-            group.Points.Add(new PointShape(30, 45, container.PointTemplate));
-            group.Points.Add(new PointShape(60, 45, container.PointTemplate));
+            group.Points.Add(new PointShape(45, 30, context.ContainerView?.PointTemplate));
+            group.Points.Add(new PointShape(45, 60, context.ContainerView?.PointTemplate));
+            group.Points.Add(new PointShape(30, 45, context.ContainerView?.PointTemplate));
+            group.Points.Add(new PointShape(60, 45, context.ContainerView?.PointTemplate));
             context.ContainerView?.CurrentContainer.Shapes.Add(group);
             context.ContainerView?.CurrentContainer.MarkAsDirty(true);
         }
@@ -113,7 +113,7 @@ namespace Draw2D.Editor
                 {
                     IsEnabled = true,
                     EnableGuides = false,
-                    Target = LineSnapTarget.Guides | LineSnapTarget.Shapes,
+                    Target = LineSnapTarget.Shapes,
                     Mode = LineSnapMode.Point
                     | LineSnapMode.Middle
                     | LineSnapMode.Nearest
@@ -161,7 +161,7 @@ namespace Draw2D.Editor
                 Settings = new SelectionToolSettings()
                 {
                     Mode = ViewModels.Tools.SelectionMode.Point | ViewModels.Tools.SelectionMode.Shape,
-                    Targets = ViewModels.Tools.SelectionTargets.Shapes | ViewModels.Tools.SelectionTargets.Guides,
+                    Targets = ViewModels.Tools.SelectionTargets.Shapes,
                     SelectionModifier = Modifier.Control,
                     ConnectionModifier = Modifier.Shift,
                     SelectionStyle = new ShapeStyle(
@@ -178,23 +178,6 @@ namespace Draw2D.Editor
                 },
                 Hovered = null,
                 Selected = new HashSet<BaseShape>()
-            };
-
-            var guideTool = new GuideTool()
-            {
-                Filters = new ObservableCollection<PointFilter>
-                {
-                    lineSnapPointFilter,
-                    gridSnapPointFilter
-                },
-                Settings = new GuideToolSettings()
-                {
-                    GuideStyle = new ShapeStyle(
-                        new ArgbColor(128, 0, 255, 255),
-                        new ArgbColor(128, 0, 255, 255),
-                        2.0, true, true,
-                        new TextStyle("Calibri", 12.0, HAlign.Center, VAlign.Center, new ArgbColor(128, 0, 255, 255), true))
-                }
             };
 
             var pointTool = new PointTool()
@@ -424,7 +407,6 @@ namespace Draw2D.Editor
 
             tools.Add(noneTool);
             tools.Add(selectionTool);
-            tools.Add(guideTool);
             tools.Add(pointTool);
             tools.Add(lineTool);
             tools.Add(polyLineTool);
@@ -470,18 +452,33 @@ namespace Draw2D.Editor
             Mode = EditMode.Mouse;
         }
 
-        private CanvasContainer CreateCurrentCanvasContainer()
+        private ICanvasContainer CreateCurrentCanvasContainer()
         {
             return new CanvasContainer()
             {
-                Guides = new ObservableCollection<LineShape>(),
-                Shapes = new ObservableCollection<BaseShape>(),
-                Styles = new ObservableCollection<ShapeStyle>(),
+                Shapes = new ObservableCollection<BaseShape>()
+            };
+        }
+
+        private ICanvasContainer CreateWorkingCanvasContainer()
+        {
+            return new CanvasContainer()
+            {
+                Shapes = new ObservableCollection<BaseShape>()
+            };
+        }
+
+        public IContainerView CreateContainerView(string title)
+        {
+            var containerView = new ContainerView()
+            {
+                Title = title,
                 Width = 720,
                 Height = 630,
                 PrintBackground = new ArgbColor(0, 255, 255, 255),
                 WorkBackground = new ArgbColor(255, 128, 128, 128),
                 InputBackground = new ArgbColor(255, 211, 211, 211),
+                Styles = new ObservableCollection<ShapeStyle>(),
                 CurrentStyle = new ShapeStyle(
                                 new ArgbColor(255, 0, 255, 0),
                                 new ArgbColor(80, 0, 255, 0),
@@ -495,25 +492,7 @@ namespace Draw2D.Editor
                                     new ArgbColor(255, 255, 255, 0),
                                     2.0, true, true,
                                     new TextStyle("Calibri", 12.0, HAlign.Center, VAlign.Center, new ArgbColor(255, 255, 255, 0), true))
-                }
-            };
-        }
-
-        private CanvasContainer CreateWorkingCanvasContainer()
-        {
-            return new CanvasContainer()
-            {
-                Guides = new ObservableCollection<LineShape>(),
-                Shapes = new ObservableCollection<BaseShape>(),
-                Styles = new ObservableCollection<ShapeStyle>()
-            };
-        }
-
-        public IContainerView CreateContainerView(string title)
-        {
-            var containerView = new ContainerView()
-            {
-                Title = title,
+                },
                 InputService = null,
                 DrawContainerView = new DrawContainerView()
                 {
@@ -676,7 +655,7 @@ namespace Draw2D.Editor
                 Points = new ObservableCollection<PointShape>(),
                 Figures = new ObservableCollection<FigureShape>(),
                 FillRule = PathFillRule.EvenOdd,
-                Style = ContainerView.CurrentContainer.CurrentStyle
+                Style = ContainerView.CurrentStyle
             };
 
             var figureShape = default(FigureShape);
@@ -696,9 +675,7 @@ namespace Draw2D.Editor
                             {
                                 figureShape = new FigureShape()
                                 {
-                                    Guides = new ObservableCollection<LineShape>(),
                                     Shapes = new ObservableCollection<BaseShape>(),
-                                    Styles = new ObservableCollection<ShapeStyle>(),
                                     IsFilled = true,
                                     IsClosed = false
                                 };
@@ -711,14 +688,14 @@ namespace Draw2D.Editor
                                 var lastPointShape = GetLastPoint(pathShape);
                                 if (lastPointShape == null)
                                 {
-                                    lastPointShape = new PointShape(points[0].X, points[0].Y, ContainerView.CurrentContainer.PointTemplate);
+                                    lastPointShape = new PointShape(points[0].X, points[0].Y, ContainerView.PointTemplate);
                                 }
                                 var lineShape = new LineShape()
                                 {
                                     Points = new ObservableCollection<PointShape>(),
                                     StartPoint = lastPointShape,
-                                    Point = new PointShape(points[1].X, points[1].Y, ContainerView.CurrentContainer.PointTemplate),
-                                    Style = ContainerView.CurrentContainer.CurrentStyle
+                                    Point = new PointShape(points[1].X, points[1].Y, ContainerView.PointTemplate),
+                                    Style = ContainerView.CurrentStyle
                                 };
                                 figureShape.Shapes.Add(lineShape);
                                 lastPoint = points[1];
@@ -729,16 +706,16 @@ namespace Draw2D.Editor
                                 var lastPointShape = GetLastPoint(pathShape);
                                 if (lastPointShape == null)
                                 {
-                                    lastPointShape = new PointShape(points[0].X, points[0].Y, ContainerView.CurrentContainer.PointTemplate);
+                                    lastPointShape = new PointShape(points[0].X, points[0].Y, ContainerView.PointTemplate);
                                 }
                                 var cubicBezierShape = new CubicBezierShape()
                                 {
                                     Points = new ObservableCollection<PointShape>(),
                                     StartPoint = lastPointShape,
-                                    Point1 = new PointShape(points[1].X, points[1].Y, ContainerView.CurrentContainer.PointTemplate),
-                                    Point2 = new PointShape(points[2].X, points[2].Y, ContainerView.CurrentContainer.PointTemplate),
-                                    Point3 = new PointShape(points[3].X, points[3].Y, ContainerView.CurrentContainer.PointTemplate),
-                                    Style = ContainerView.CurrentContainer.CurrentStyle
+                                    Point1 = new PointShape(points[1].X, points[1].Y, ContainerView.PointTemplate),
+                                    Point2 = new PointShape(points[2].X, points[2].Y, ContainerView.PointTemplate),
+                                    Point3 = new PointShape(points[3].X, points[3].Y, ContainerView.PointTemplate),
+                                    Style = ContainerView.CurrentStyle
                                 };
                                 figureShape.Shapes.Add(cubicBezierShape);
                                 lastPoint = points[3];
@@ -749,15 +726,15 @@ namespace Draw2D.Editor
                                 var lastPointShape = GetLastPoint(pathShape);
                                 if (lastPointShape == null)
                                 {
-                                    lastPointShape = new PointShape(points[0].X, points[0].Y, ContainerView.CurrentContainer.PointTemplate);
+                                    lastPointShape = new PointShape(points[0].X, points[0].Y, ContainerView.PointTemplate);
                                 }
                                 var quadraticBezierShape = new QuadraticBezierShape()
                                 {
                                     Points = new ObservableCollection<PointShape>(),
                                     StartPoint = lastPointShape,
-                                    Point1 = new PointShape(points[1].X, points[1].Y, ContainerView.CurrentContainer.PointTemplate),
-                                    Point2 = new PointShape(points[2].X, points[2].Y, ContainerView.CurrentContainer.PointTemplate),
-                                    Style = ContainerView.CurrentContainer.CurrentStyle
+                                    Point1 = new PointShape(points[1].X, points[1].Y, ContainerView.PointTemplate),
+                                    Point2 = new PointShape(points[2].X, points[2].Y, ContainerView.PointTemplate),
+                                    Style = ContainerView.CurrentStyle
                                 };
                                 figureShape.Shapes.Add(quadraticBezierShape);
                                 lastPoint = points[2];
@@ -768,16 +745,16 @@ namespace Draw2D.Editor
                                 var lastPointShape = GetLastPoint(pathShape);
                                 if (lastPointShape == null)
                                 {
-                                    lastPointShape = new PointShape(points[0].X, points[0].Y, ContainerView.CurrentContainer.PointTemplate);
+                                    lastPointShape = new PointShape(points[0].X, points[0].Y, ContainerView.PointTemplate);
                                 }
                                 var quadraticBezierShape = new ConicShape()
                                 {
                                     Points = new ObservableCollection<PointShape>(),
                                     StartPoint = lastPointShape,
-                                    Point1 = new PointShape(points[1].X, points[1].Y, ContainerView.CurrentContainer.PointTemplate),
-                                    Point2 = new PointShape(points[2].X, points[2].Y, ContainerView.CurrentContainer.PointTemplate),
+                                    Point1 = new PointShape(points[1].X, points[1].Y, ContainerView.PointTemplate),
+                                    Point2 = new PointShape(points[2].X, points[2].Y, ContainerView.PointTemplate),
                                     Weight = iterator.ConicWeight(),
-                                    Style = ContainerView.CurrentContainer.CurrentStyle
+                                    Style = ContainerView.CurrentStyle
                                 };
                                 figureShape.Shapes.Add(quadraticBezierShape);
                                 lastPoint = points[2];
@@ -790,7 +767,7 @@ namespace Draw2D.Editor
                                 //    Points = new ObservableCollection<PointShape>(),
                                 //    StartPoint = GetLastPoint(pathShape),
                                 //    Point = GetFirstPoint(pathShape),
-                                //    Style = ContainerView.CurrentContainer.CurrentStyle
+                                //    Style = ContainerView.CurrentStyle
                                 //};
                                 //figureShape.Shapes.Add(line);
                                 figureShape.IsClosed = true;

@@ -128,7 +128,6 @@ namespace Draw2D.ViewModels
         object BeginTransform(object dc, IShapeRenderer renderer);
         void EndTransform(object dc, IShapeRenderer renderer, object state);
         void Draw(object dc, IShapeRenderer renderer, double dx, double dy, DrawMode mode, object db, object r);
-        void Invalidate();
     }
 
     public interface ISelectable
@@ -169,13 +168,17 @@ namespace Draw2D.ViewModels
         ISet<BaseShape> TryToGetShapes(IEnumerable<BaseShape> shapes, Rect2 target, double radius);
     }
 
-    public interface ISelection
+    public interface IDirty
+    {
+        bool IsDirty { get; set; }
+        void MarkAsDirty(bool isDirty);
+        void Invalidate();
+    }
+
+    public interface ISelection : IDirty
     {
         BaseShape Hovered { get; set; }
         ISet<BaseShape> Selected { get; set; }
-        void MarkAsDirty(bool isDirty);
-        bool IsDirty { get; set; }
-        void Invalidate();
         void Cut(IToolContext context);
         void Copy(IToolContext context);
         void Paste(IToolContext context);
@@ -211,7 +214,7 @@ namespace Draw2D.ViewModels
     }
 
     [DataContract(IsReference = true)]
-    public abstract class ViewModelBase : INotifyPropertyChanged
+    public abstract class ViewModelBase : INotifyPropertyChanged, IDirty
     {
         private string _id = null;
         private string _name = "";
@@ -741,7 +744,7 @@ namespace Draw2D.ViewModels.Style
 namespace Draw2D.ViewModels.Shapes
 {
     [DataContract(IsReference = true)]
-    public abstract class BaseShape : ViewModelBase, IDrawable, ISelectable
+    public abstract class BaseShape : ViewModelBase, IDrawable, ISelectable, ICopyable
     {
         private ShapeStyle _style;
         private Matrix2 _transform;
@@ -812,6 +815,8 @@ namespace Draw2D.ViewModels.Shapes
                 selection.MarkAsDirty(true);
             }
         }
+
+        public abstract object Copy(IDictionary<object, object> shared);
     }
 
     [DataContract(IsReference = true)]
@@ -1340,7 +1345,7 @@ namespace Draw2D.ViewModels.Shapes
             return result;
         }
 
-        public object Copy(IDictionary<object, object> shared)
+        public override object Copy(IDictionary<object, object> shared)
         {
             var copy = new ConicShape()
             {
@@ -1643,7 +1648,7 @@ namespace Draw2D.ViewModels.Shapes
             return result;
         }
 
-        public object Copy(IDictionary<object, object> shared)
+        public override object Copy(IDictionary<object, object> shared)
         {
             var copy = new CubicBezierShape()
             {
@@ -1719,7 +1724,7 @@ namespace Draw2D.ViewModels.Shapes
             base.EndTransform(dc, renderer, state);
         }
 
-        public object Copy(IDictionary<object, object> shared)
+        public override object Copy(IDictionary<object, object> shared)
         {
             var copy = new EllipseShape()
             {
@@ -1764,10 +1769,18 @@ namespace Draw2D.ViewModels.Shapes
     }
 
     [DataContract(IsReference = true)]
-    public class FigureShape : CanvasContainer, ICopyable
+    public class FigureShape : BaseShape, ICanvasContainer, ICopyable
     {
+        private IList<BaseShape> _shapes;
         private bool _isFilled;
         private bool _isClosed;
+
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public IList<BaseShape> Shapes
+        {
+            get => _shapes;
+            set => Update(ref _shapes, value);
+        }
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public bool IsFilled
@@ -1807,6 +1820,14 @@ namespace Draw2D.ViewModels.Shapes
             this.Shapes = shapes;
         }
 
+        public override void GetPoints(IList<PointShape> points)
+        {
+            foreach (var shape in Shapes)
+            {
+                shape.GetPoints(points);
+            }
+        }
+
         public override void Invalidate()
         {
             base.Invalidate();
@@ -1820,14 +1841,6 @@ namespace Draw2D.ViewModels.Shapes
         public override void Draw(object dc, IShapeRenderer renderer, double dx, double dy, DrawMode mode, object db, object r)
         {
             var state = base.BeginTransform(dc, renderer);
-
-            if (Guides != null)
-            {
-                foreach (var guide in Guides)
-                {
-                    guide.Draw(dc, renderer, dx, dy, mode, db, r);
-                }
-            }
 
             foreach (var shape in Shapes)
             {
@@ -1856,31 +1869,19 @@ namespace Draw2D.ViewModels.Shapes
         {
             var copy = new FigureShape()
             {
-                Guides = new ObservableCollection<LineShape>(),
                 Shapes = new ObservableCollection<BaseShape>(),
-                Styles = new ObservableCollection<ShapeStyle>(),
                 Name = this.Name,
                 Style = this.Style,
                 Transform = (Matrix2)this.Transform?.Copy(shared),
-                Width = this.Width,
-                Height = this.Height,
                 IsFilled = this.IsFilled,
                 IsClosed = this.IsClosed
             };
 
-            if (shared != null)
+            foreach (var shape in this.Shapes)
             {
-                foreach (var guide in this.Guides)
+                if (shape is ICopyable copyable)
                 {
-                    copy.Guides.Add((LineShape)guide.Copy(shared));
-                }
-
-                foreach (var shape in this.Shapes)
-                {
-                    if (shape is ICopyable copyable)
-                    {
-                        copy.Shapes.Add((BaseShape)copyable.Copy(shared));
-                    }
+                    copy.Shapes.Add((BaseShape)copyable.Copy(shared));
                 }
             }
 
@@ -1987,7 +1988,7 @@ namespace Draw2D.ViewModels.Shapes
             base.Move(selection, dx, dy);
         }
 
-        public object Copy(IDictionary<object, object> shared)
+        public override object Copy(IDictionary<object, object> shared)
         {
             var copy = new GroupShape()
             {
@@ -2204,7 +2205,7 @@ namespace Draw2D.ViewModels.Shapes
             return result;
         }
 
-        public object Copy(IDictionary<object, object> shared)
+        public override object Copy(IDictionary<object, object> shared)
         {
             var copy = new LineShape()
             {
@@ -2543,7 +2544,7 @@ namespace Draw2D.ViewModels.Shapes
             return false;
         }
 
-        public object Copy(IDictionary<object, object> shared)
+        public override object Copy(IDictionary<object, object> shared)
         {
             var copy = new PathShape()
             {
@@ -2660,7 +2661,7 @@ namespace Draw2D.ViewModels.Shapes
             Y += dy;
         }
 
-        public object Copy(IDictionary<object, object> shared)
+        public override object Copy(IDictionary<object, object> shared)
         {
             return new PointShape()
             {
@@ -2918,7 +2919,7 @@ namespace Draw2D.ViewModels.Shapes
             return result;
         }
 
-        public object Copy(IDictionary<object, object> shared)
+        public override object Copy(IDictionary<object, object> shared)
         {
             var copy = new QuadraticBezierShape()
             {
@@ -2993,7 +2994,7 @@ namespace Draw2D.ViewModels.Shapes
             base.EndTransform(dc, renderer, state);
         }
 
-        public object Copy(IDictionary<object, object> shared)
+        public override object Copy(IDictionary<object, object> shared)
         {
             var copy = new RectangleShape()
             {
@@ -3092,7 +3093,7 @@ namespace Draw2D.ViewModels.Shapes
             base.EndTransform(dc, renderer, state);
         }
 
-        public object Copy(IDictionary<object, object> shared)
+        public override object Copy(IDictionary<object, object> shared)
         {
             var copy = new TextShape()
             {
@@ -3132,13 +3133,27 @@ namespace Draw2D.ViewModels.Containers
         PointShape GetNextPoint(double x, double y, bool connect, double radius);
     }
 
+    public interface ICanvasContainer : IDirty, IDrawable, ISelectable, ICopyable
+    {
+        IList<BaseShape> Shapes { get; set; }
+        void GetPoints(IList<PointShape> points);
+    }
+
     public interface IContainerView : IDrawTarget, IHitTestable
     {
         string Title { get; set; }
+        double Width { get; set; }
+        double Height { get; set; }
+        ArgbColor PrintBackground { get; set; }
+        ArgbColor WorkBackground { get; set; }
+        ArgbColor InputBackground { get; set; }
+        IList<ShapeStyle> Styles { get; set; }
+        ShapeStyle CurrentStyle { get; set; }
+        BaseShape PointTemplate { get; set; }
         IDrawContainerView DrawContainerView { get; set; }
         ISelection Selection { get; set; }
-        CanvasContainer CurrentContainer { get; set; }
-        CanvasContainer WorkingContainer { get; set; }
+        ICanvasContainer CurrentContainer { get; set; }
+        ICanvasContainer WorkingContainer { get; set; }
     }
 
     public interface IToolContext : IInputTarget
@@ -3151,18 +3166,140 @@ namespace Draw2D.ViewModels.Containers
     }
 
     [DataContract(IsReference = true)]
-    public class CanvasContainer : BaseShape, ICopyable
+    public class CanvasContainer : BaseShape, ICanvasContainer
     {
+        private IList<BaseShape> _shapes;
+
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public IList<BaseShape> Shapes
+        {
+            get => _shapes;
+            set => Update(ref _shapes, value);
+        }
+
+        public CanvasContainer()
+        {
+        }
+
+        public override void GetPoints(IList<PointShape> points)
+        {
+            foreach (var shape in Shapes)
+            {
+                shape.GetPoints(points);
+            }
+        }
+
+        public override void Draw(object dc, IShapeRenderer renderer, double dx, double dy, DrawMode mode, object db, object r)
+        {
+            var state = BeginTransform(dc, renderer);
+
+            if (Shapes != null)
+            {
+                foreach (var shape in Shapes)
+                {
+                    shape.Draw(dc, renderer, dx, dy, mode, db, r);
+                }
+            }
+
+            EndTransform(dc, renderer, state);
+        }
+
+        public override void Invalidate()
+        {
+            var points = new List<PointShape>();
+            GetPoints(points);
+
+            if (Shapes != null)
+            {
+                foreach (var shape in Shapes)
+                {
+                    shape.Invalidate();
+                    shape.Style?.Invalidate();
+                    shape.Style?.Stroke?.Invalidate();
+                    shape.Style?.Fill?.Invalidate();
+                    shape.Style?.TextStyle?.Invalidate();
+                    shape.Style?.TextStyle?.Stroke?.Invalidate();
+                }
+            }
+
+            foreach (var point in points)
+            {
+                point.Invalidate();
+                point.Style?.Invalidate();
+                point.Template?.Invalidate();
+                point.Template?.Style?.Invalidate();
+                point.Template?.Style?.Stroke?.Invalidate();
+                point.Template?.Style?.Fill?.Invalidate();
+                point.Template?.Style?.TextStyle?.Invalidate();
+                point.Template?.Style?.TextStyle?.Stroke?.Invalidate();
+            }
+
+            if (this.IsDirty)
+            {
+                this.IsDirty = false;
+            }
+        }
+
+        public override object Copy(IDictionary<object, object> shared)
+        {
+            var copy = new CanvasContainer()
+            {
+                Shapes = new ObservableCollection<BaseShape>(),
+                Name = this.Name,
+                Style = this.Style,
+                Transform = (Matrix2)this.Transform?.Copy(shared)
+            };
+
+            foreach (var shape in this.Shapes)
+            {
+                copy.Shapes.Add((BaseShape)shape.Copy(shared));
+            }
+
+            return copy;
+        }
+
+        public override void Move(ISelection selection, double dx, double dy)
+        {
+            var points = new List<PointShape>();
+            GetPoints(points);
+            var distinct = points.Distinct();
+
+            foreach (var point in distinct)
+            {
+                if (!selection.Selected.Contains(point))
+                {
+                    point.Move(selection, dx, dy);
+                }
+            }
+        }
+    }
+
+    [DataContract(IsReference = true)]
+    public class ContainerView : ViewModelBase, IContainerView
+    {
+        private string _title;
         private double _width;
         private double _height;
         private ArgbColor _printBackground;
         private ArgbColor _workBackground;
         private ArgbColor _inputBackground;
-        private IList<LineShape> _guides;
-        private IList<BaseShape> _shapes;
         private IList<ShapeStyle> _styles;
         private ShapeStyle _currentStyle;
         private BaseShape _pointTemplate;
+        private IInputService _inputService;
+        private IZoomService _zoomService;
+        private IDrawContainerView _drawContainerView;
+        private ISelection _selection;
+        private ICanvasContainer _currentContainer;
+        private ICanvasContainer _workingContainer;
+        private IHitTest _hitTest;
+
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public string Title
+        {
+            get => _title;
+            set => Update(ref _title, value);
+        }
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public double Width
@@ -3200,20 +3337,6 @@ namespace Draw2D.ViewModels.Containers
         }
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public IList<LineShape> Guides
-        {
-            get => _guides;
-            set => Update(ref _guides, value);
-        }
-
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public IList<BaseShape> Shapes
-        {
-            get => _shapes;
-            set => Update(ref _shapes, value);
-        }
-
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public IList<ShapeStyle> Styles
         {
             get => _styles;
@@ -3232,157 +3355,6 @@ namespace Draw2D.ViewModels.Containers
         {
             get => _pointTemplate;
             set => Update(ref _pointTemplate, value);
-        }
-
-        public CanvasContainer()
-        {
-        }
-
-        public override void GetPoints(IList<PointShape> points)
-        {
-            foreach (var shape in Shapes)
-            {
-                shape.GetPoints(points);
-            }
-        }
-
-        public override void Draw(object dc, IShapeRenderer renderer, double dx, double dy, DrawMode mode, object db, object r)
-        {
-            var state = BeginTransform(dc, renderer);
-
-            if (Guides != null)
-            {
-                foreach (var shape in Guides)
-                {
-                    shape.Draw(dc, renderer, dx, dy, mode, db, r);
-                }
-            }
-            if (Shapes != null)
-            {
-                foreach (var shape in Shapes)
-                {
-                    shape.Draw(dc, renderer, dx, dy, mode, db, r);
-                }
-            }
-
-            EndTransform(dc, renderer, state);
-        }
-
-        public override void Invalidate()
-        {
-            var points = new List<PointShape>();
-            GetPoints(points);
-
-            if (Guides != null)
-            {
-                foreach (var guide in Guides)
-                {
-                    guide.Invalidate();
-                    guide.Style?.Invalidate();
-                    guide.Style?.Stroke?.Invalidate();
-                    guide.Style?.Fill?.Invalidate();
-                    guide.Style?.TextStyle?.Invalidate();
-                    guide.Style?.TextStyle?.Stroke?.Invalidate();
-                }
-            }
-
-            if (Shapes != null)
-            {
-                foreach (var shape in Shapes)
-                {
-                    shape.Invalidate();
-                    shape.Style?.Invalidate();
-                    shape.Style?.Stroke?.Invalidate();
-                    shape.Style?.Fill?.Invalidate();
-                    shape.Style?.TextStyle?.Invalidate();
-                    shape.Style?.TextStyle?.Stroke?.Invalidate();
-                }
-            }
-
-            foreach (var point in points)
-            {
-                point.Invalidate();
-                point.Style?.Invalidate();
-                point.Template?.Invalidate();
-                point.Template?.Style?.Invalidate();
-                point.Template?.Style?.Stroke?.Invalidate();
-                point.Template?.Style?.Fill?.Invalidate();
-                point.Template?.Style?.TextStyle?.Invalidate();
-                point.Template?.Style?.TextStyle?.Stroke?.Invalidate();
-            }
-
-            if (this.IsDirty)
-            {
-                this.IsDirty = false;
-            }
-        }
-
-        public virtual object Copy(IDictionary<object, object> shared)
-        {
-            var copy = new CanvasContainer()
-            {
-                Guides = new ObservableCollection<LineShape>(),
-                Shapes = new ObservableCollection<BaseShape>(),
-                Styles = new ObservableCollection<ShapeStyle>(),
-                Name = this.Name,
-                Style = this.Style,
-                Transform = (Matrix2)this.Transform?.Copy(shared),
-                Width = this.Width,
-                Height = this.Height,
-            };
-
-            if (shared != null)
-            {
-                foreach (var guide in this.Guides)
-                {
-                    copy.Guides.Add((LineShape)guide.Copy(shared));
-                }
-
-                foreach (var shape in this.Shapes)
-                {
-                    if (shape is ICopyable copyable)
-                    {
-                        copy.Shapes.Add((BaseShape)copyable.Copy(shared));
-                    }
-                }
-            }
-
-            return copy;
-        }
-
-        public override void Move(ISelection selection, double dx, double dy)
-        {
-            var points = new List<PointShape>();
-            GetPoints(points);
-            var distinct = points.Distinct();
-
-            foreach (var point in distinct)
-            {
-                if (!selection.Selected.Contains(point))
-                {
-                    point.Move(selection, dx, dy);
-                }
-            }
-        }
-    }
-
-    [DataContract(IsReference = true)]
-    public class ContainerView : ViewModelBase, IContainerView
-    {
-        private string _title;
-        private IInputService _inputService;
-        private IZoomService _zoomService;
-        private IDrawContainerView _drawContainerView;
-        private ISelection _selection;
-        private CanvasContainer _currentContainer;
-        private CanvasContainer _workingContainer;
-        private IHitTest _hitTest;
-
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public string Title
-        {
-            get => _title;
-            set => Update(ref _title, value);
         }
 
         [IgnoreDataMember]
@@ -3413,14 +3385,14 @@ namespace Draw2D.ViewModels.Containers
         }
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public CanvasContainer CurrentContainer
+        public ICanvasContainer CurrentContainer
         {
             get => _currentContainer;
             set => Update(ref _currentContainer, value);
         }
 
         [IgnoreDataMember]
-        public CanvasContainer WorkingContainer
+        public ICanvasContainer WorkingContainer
         {
             get => _workingContainer;
             set => Update(ref _workingContainer, value);
@@ -3451,12 +3423,43 @@ namespace Draw2D.ViewModels.Containers
                     return point;
                 }
             }
-            return new PointShape(x, y, _currentContainer.PointTemplate);
+            return new PointShape(x, y, _pointTemplate);
         }
 
         public void Draw(object context, double width, double height, double dx, double dy, double zx, double zy)
         {
             _drawContainerView?.Draw(this, context, width, height, dx, dy, zx, zy);
+        }
+
+        public virtual object Copy(IDictionary<object, object> shared)
+        {
+            var copy = new ContainerView()
+            {
+                Name = this.Name,
+                Title = this.Title,
+                Width = this.Width,
+                Height = this.Height,
+                PrintBackground = (ArgbColor)this.PrintBackground?.Copy(shared),
+                WorkBackground = (ArgbColor)this.WorkBackground?.Copy(shared),
+                InputBackground = (ArgbColor)this.InputBackground?.Copy(shared),
+                Styles = new ObservableCollection<ShapeStyle>(),
+                CurrentStyle = (ShapeStyle)this.CurrentStyle?.Copy(shared),
+                PointTemplate = (BaseShape)this.PointTemplate?.Copy(shared),
+                DrawContainerView = null,
+                Selection = null,
+                CurrentContainer = (ICanvasContainer)this.CurrentContainer?.Copy(shared),
+                WorkingContainer = null
+            };
+
+            foreach (var style in this.Styles)
+            {
+                if (style is ICopyable copyable)
+                {
+                    copy.Styles.Add((ShapeStyle)copyable.Copy(shared));
+                }
+            }
+
+            return copy;
         }
     }
 
@@ -3571,12 +3574,12 @@ namespace Draw2D.ViewModels.Containers
 
         public double GetWidth()
         {
-            return ContainerView.CurrentContainer?.Width ?? 0.0;
+            return ContainerView?.Width ?? 0.0;
         }
 
         public double GetHeight()
         {
-            return ContainerView.CurrentContainer?.Height ?? 0.0;
+            return ContainerView?.Height ?? 0.0;
         }
     }
 }
@@ -4072,7 +4075,7 @@ namespace Draw2D.ViewModels.Filters
             {
                 Points = new ObservableCollection<PointShape>(),
                 StartPoint = new PointShape(0, y, null),
-                Point = new PointShape(context.ContainerView?.CurrentContainer.Width ?? 0, y, null),
+                Point = new PointShape(context.ContainerView?.Width ?? 0, y, null),
                 Style = Settings.GuideStyle
             };
 
@@ -4080,7 +4083,7 @@ namespace Draw2D.ViewModels.Filters
             {
                 Points = new ObservableCollection<PointShape>(),
                 StartPoint = new PointShape(x, 0, null),
-                Point = new PointShape(x, context.ContainerView?.CurrentContainer.Height ?? 0, null),
+                Point = new PointShape(x, context.ContainerView?.Height ?? 0, null),
                 Style = Settings.GuideStyle
             };
 
@@ -4115,8 +4118,7 @@ namespace Draw2D.ViewModels.Filters
     public enum LineSnapTarget
     {
         None = 0,
-        Guides = 1,
-        Shapes = 2
+        Shapes = 1
     }
 
     [DataContract(IsReference = true)]
@@ -4210,14 +4212,6 @@ namespace Draw2D.ViewModels.Filters
                 return false;
             }
 
-            if (Settings.Target.HasFlag(LineSnapTarget.Guides))
-            {
-                if (Process(context, ref x, ref y, context.ContainerView?.CurrentContainer.Guides))
-                {
-                    return true;
-                }
-            }
-
             if (Settings.Target.HasFlag(LineSnapTarget.Shapes))
             {
                 if (Process(context, ref x, ref y, context.ContainerView?.CurrentContainer.Shapes.OfType<LineShape>()))
@@ -4259,7 +4253,7 @@ namespace Draw2D.ViewModels.Filters
             {
                 Points = new ObservableCollection<PointShape>(),
                 StartPoint = new PointShape(0, y, null),
-                Point = new PointShape(context.ContainerView?.CurrentContainer.Width ?? 0, y, null),
+                Point = new PointShape(context.ContainerView?.Width ?? 0, y, null),
                 Style = Settings.GuideStyle
             };
 
@@ -4267,7 +4261,7 @@ namespace Draw2D.ViewModels.Filters
             {
                 Points = new ObservableCollection<PointShape>(),
                 StartPoint = new PointShape(x, 0, null),
-                Point = new PointShape(x, context.ContainerView?.CurrentContainer.Height ?? 0, null),
+                Point = new PointShape(x, context.ContainerView?.Height ?? 0, null),
                 Style = Settings.GuideStyle
             };
 
@@ -4559,7 +4553,7 @@ namespace Draw2D.ViewModels.Intersections
                     {
                         foreach (var p in intersections)
                         {
-                            var point = new PointShape(p.X, p.Y, context.ContainerView?.CurrentContainer.PointTemplate);
+                            var point = new PointShape(p.X, p.Y, context.ContainerView?.PointTemplate);
                             Intersections.Add(point);
                             context.ContainerView?.WorkingContainer.Shapes.Add(point);
                             context.ContainerView?.WorkingContainer.MarkAsDirty(true);
@@ -4640,7 +4634,7 @@ namespace Draw2D.ViewModels.Intersections
                     bool intersection = Line2.LineIntersectWithLine(a0, b0, a1, b1, out var clip);
                     if (intersection)
                     {
-                        var point = new PointShape(clip.X, clip.Y, context.ContainerView?.CurrentContainer.PointTemplate);
+                        var point = new PointShape(clip.X, clip.Y, context.ContainerView?.PointTemplate);
                         Intersections.Add(point);
                         context.ContainerView?.WorkingContainer.Shapes.Add(point);
                         context.ContainerView?.WorkingContainer.MarkAsDirty(true);
@@ -4719,14 +4713,14 @@ namespace Draw2D.ViewModels.Intersections
                     var intersections = Line2.LineIntersectsWithRect(p1, p2, rect, out double x0clip, out double y0clip, out double x1clip, out double y1clip);
                     if (intersections)
                     {
-                        var point1 = new PointShape(x0clip, y0clip, context.ContainerView?.CurrentContainer.PointTemplate);
+                        var point1 = new PointShape(x0clip, y0clip, context.ContainerView?.PointTemplate);
                         Intersections.Add(point1);
                         context.ContainerView?.WorkingContainer.Shapes.Add(point1);
                         context.ContainerView?.WorkingContainer.MarkAsDirty(true);
                         context.ContainerView?.Selection.Selected.Add(point1);
                         context.ContainerView?.Selection.MarkAsDirty(true);
 
-                        var point2 = new PointShape(x1clip, y1clip, context.ContainerView?.CurrentContainer.PointTemplate);
+                        var point2 = new PointShape(x1clip, y1clip, context.ContainerView?.PointTemplate);
                         Intersections.Add(point2);
                         context.ContainerView?.WorkingContainer.Shapes.Add(point2);
                         context.ContainerView?.WorkingContainer.MarkAsDirty(true);
@@ -5620,7 +5614,7 @@ namespace Draw2D.ViewModels.Tools
                 Point2 = (PointShape)next.Copy(null),
                 Point3 = (PointShape)next.Copy(null),
                 Text = new Text(),
-                Style = context.ContainerView?.CurrentContainer.CurrentStyle
+                Style = context.ContainerView?.CurrentStyle
             };
             context.ContainerView?.WorkingContainer.Shapes.Add(_cubicBezier);
             context.ContainerView?.WorkingContainer.MarkAsDirty(true);
@@ -5937,7 +5931,7 @@ namespace Draw2D.ViewModels.Tools
                 Points = new ObservableCollection<PointShape>(),
                 TopLeft = context.ContainerView?.GetNextPoint(x, y, Settings?.ConnectPoints ?? false, Settings?.HitTestRadius ?? 7.0),
                 BottomRight = context.ContainerView?.GetNextPoint(x, y, false, 0.0),
-                Style = context.ContainerView?.CurrentContainer.CurrentStyle
+                Style = context.ContainerView?.CurrentStyle
             };
             context.ContainerView?.WorkingContainer.Shapes.Add(_ellipse);
             context.ContainerView?.WorkingContainer.MarkAsDirty(true);
@@ -6077,212 +6071,6 @@ namespace Draw2D.ViewModels.Tools
     }
 
     [DataContract(IsReference = true)]
-    public class GuideToolSettings : Settings
-    {
-        private ShapeStyle _guideStyle;
-
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public ShapeStyle GuideStyle
-        {
-            get => _guideStyle;
-            set => Update(ref _guideStyle, value);
-        }
-
-        public override void Invalidate()
-        {
-            if (this.IsDirty)
-            {
-                this.IsDirty = false;
-            }
-        }
-    }
-
-    [DataContract(IsReference = true)]
-    public class GuideTool : ViewModelBase, ITool
-    {
-        private IList<PointIntersection> _intersections;
-        private IList<PointFilter> _filters;
-        private GuideToolSettings _settings;
-        private LineShape _line = null;
-
-        public enum State
-        {
-            StartPoint,
-            Point
-        }
-
-        [IgnoreDataMember]
-        public State CurrentState { get; set; } = State.StartPoint;
-
-        [IgnoreDataMember]
-        public string Title => "Guide";
-
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public IList<PointIntersection> Intersections
-        {
-            get => _intersections;
-            set => Update(ref _intersections, value);
-        }
-
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public IList<PointFilter> Filters
-        {
-            get => _filters;
-            set => Update(ref _filters, value);
-        }
-
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public GuideToolSettings Settings
-        {
-            get => _settings;
-            set => Update(ref _settings, value);
-        }
-
-        public override void Invalidate()
-        {
-            if (this.IsDirty)
-            {
-                this.IsDirty = false;
-            }
-        }
-
-        private void StartPointInternal(IToolContext context, double x, double y, Modifier modifier)
-        {
-            Filters?.Any(f => f.Process(context, ref x, ref y));
-
-            _line = new LineShape()
-            {
-                Points = new ObservableCollection<PointShape>(),
-                StartPoint = new PointShape(x, y, null),
-                Point = new PointShape(x, y, null),
-                Style = Settings?.GuideStyle
-            };
-            context.ContainerView?.WorkingContainer.Shapes.Add(_line);
-            context.ContainerView?.WorkingContainer.MarkAsDirty(true);
-
-            context.ContainerView?.InputService?.Capture?.Invoke();
-            context.ContainerView?.InputService?.Redraw?.Invoke();
-
-            CurrentState = State.Point;
-        }
-
-        private void PointInternal(IToolContext context, double x, double y, Modifier modifier)
-        {
-            Filters?.Any(f => f.Process(context, ref x, ref y));
-
-            CurrentState = State.StartPoint;
-
-            _line.Point.X = x;
-            _line.Point.Y = y;
-            context.ContainerView?.WorkingContainer.Shapes.Remove(_line);
-            context.ContainerView?.WorkingContainer.MarkAsDirty(true);
-            context.ContainerView?.CurrentContainer.Guides.Add(_line);
-            context.ContainerView?.CurrentContainer.MarkAsDirty(true);
-            _line = null;
-
-            Filters?.ForEach(f => f.Clear(context));
-
-            context.ContainerView?.InputService?.Release?.Invoke();
-            context.ContainerView?.InputService?.Redraw?.Invoke();
-        }
-
-        private void MoveStratPointInternal(IToolContext context, double x, double y, Modifier modifier)
-        {
-            Filters?.ForEach(f => f.Clear(context));
-            Filters?.Any(f => f.Process(context, ref x, ref y));
-
-            context.ContainerView?.InputService?.Redraw?.Invoke();
-        }
-
-        private void MovePointInternal(IToolContext context, double x, double y, Modifier modifier)
-        {
-            Filters?.ForEach(f => f.Clear(context));
-            Filters?.Any(f => f.Process(context, ref x, ref y));
-
-            _line.Point.X = x;
-            _line.Point.Y = y;
-
-            context.ContainerView?.InputService?.Redraw?.Invoke();
-        }
-
-        private void CleanInternal(IToolContext context)
-        {
-            CurrentState = State.StartPoint;
-
-            Filters?.ForEach(f => f.Clear(context));
-
-            if (_line != null)
-            {
-                context.ContainerView?.WorkingContainer.Shapes.Remove(_line);
-                context.ContainerView?.WorkingContainer.MarkAsDirty(true);
-                _line = null;
-            }
-
-            context.ContainerView?.InputService?.Release?.Invoke();
-            context.ContainerView?.InputService?.Redraw?.Invoke();
-        }
-
-        public void LeftDown(IToolContext context, double x, double y, Modifier modifier)
-        {
-            switch (CurrentState)
-            {
-                case State.StartPoint:
-                    {
-                        StartPointInternal(context, x, y, modifier);
-                    }
-                    break;
-                case State.Point:
-                    {
-                        PointInternal(context, x, y, modifier);
-                    }
-                    break;
-            }
-        }
-
-        public void LeftUp(IToolContext context, double x, double y, Modifier modifier)
-        {
-        }
-
-        public void RightDown(IToolContext context, double x, double y, Modifier modifier)
-        {
-            switch (CurrentState)
-            {
-                case State.Point:
-                    {
-                        this.Clean(context);
-                    }
-                    break;
-            }
-        }
-
-        public void RightUp(IToolContext context, double x, double y, Modifier modifier)
-        {
-        }
-
-        public void Move(IToolContext context, double x, double y, Modifier modifier)
-        {
-            switch (CurrentState)
-            {
-                case State.StartPoint:
-                    {
-                        MoveStratPointInternal(context, x, y, modifier);
-                    }
-                    break;
-                case State.Point:
-                    {
-                        MovePointInternal(context, x, y, modifier);
-                    }
-                    break;
-            }
-        }
-
-        public void Clean(IToolContext context)
-        {
-            CleanInternal(context);
-        }
-    }
-
-    [DataContract(IsReference = true)]
     public class LineToolSettings : Settings
     {
         private bool _connectPoints;
@@ -6329,7 +6117,7 @@ namespace Draw2D.ViewModels.Tools
 
             var unique = points
                 .Select(p => new Point2(p.X, p.Y)).Distinct().OrderBy(p => p)
-                .Select(p => new PointShape(p.X, p.Y, context.ContainerView?.CurrentContainer.PointTemplate)).ToList();
+                .Select(p => new PointShape(p.X, p.Y, context.ContainerView?.PointTemplate)).ToList();
 
             var lines = new ObservableCollection<LineShape>();
             for (int i = 0; i < unique.Count - 1; i++)
@@ -6337,7 +6125,7 @@ namespace Draw2D.ViewModels.Tools
                 var line = new LineShape(unique[i], unique[i + 1])
                 {
                     Points = new ObservableCollection<PointShape>(),
-                    Style = context.ContainerView?.CurrentContainer.CurrentStyle
+                    Style = context.ContainerView?.CurrentStyle
                 };
                 context.ContainerView?.CurrentContainer.Shapes.Add(line);
                 context.ContainerView?.CurrentContainer.MarkAsDirty(true);
@@ -6408,7 +6196,7 @@ namespace Draw2D.ViewModels.Tools
                 Points = new ObservableCollection<PointShape>(),
                 StartPoint = next,
                 Point = (PointShape)next.Copy(null),
-                Style = context.ContainerView?.CurrentContainer.CurrentStyle
+                Style = context.ContainerView?.CurrentStyle
             };
             context.ContainerView?.WorkingContainer.Shapes.Add(_line);
             context.ContainerView?.WorkingContainer.MarkAsDirty(true);
@@ -6832,17 +6620,73 @@ namespace Draw2D.ViewModels.Tools
         }
 
         [IgnoreDataMember]
-        public IInputService InputService
+        public double Width
         {
-            get => _context.ContainerView?.InputService;
-            set => throw new InvalidOperationException($"Can not set {InputService} property value.");
+            get => _context.ContainerView.Width;
+            set => throw new InvalidOperationException($"Can not set {Width} property value.");
         }
 
         [IgnoreDataMember]
-        public IZoomService ZoomService
+        public double Height
         {
-            get => _context.ContainerView.ZoomService;
-            set => throw new InvalidOperationException($"Can not set {ZoomService} property value.");
+            get => _context.ContainerView.Width;
+            set => throw new InvalidOperationException($"Can not set {Height} property value.");
+        }
+
+        [IgnoreDataMember]
+        public ArgbColor PrintBackground
+        {
+            get => _context.ContainerView.PrintBackground;
+            set => throw new InvalidOperationException($"Can not set {PrintBackground} property value.");
+        }
+
+        [IgnoreDataMember]
+        public ArgbColor WorkBackground
+        {
+            get => _context.ContainerView.WorkBackground;
+            set => throw new InvalidOperationException($"Can not set {WorkBackground} property value.");
+        }
+
+        [IgnoreDataMember]
+        public ArgbColor InputBackground
+        {
+            get => _context.ContainerView.InputBackground;
+            set => throw new InvalidOperationException($"Can not set {InputBackground} property value.");
+        }
+
+        [IgnoreDataMember]
+        public IList<ShapeStyle> Styles
+        {
+            get => _context.ContainerView.Styles;
+            set => throw new InvalidOperationException($"Can not set {Styles} property value.");
+        }
+
+        [IgnoreDataMember]
+        public ShapeStyle CurrentStyle
+        {
+            get => _context.ContainerView.CurrentStyle;
+            set => throw new InvalidOperationException($"Can not set {CurrentStyle} property value.");
+        }
+
+        [IgnoreDataMember]
+        public BaseShape PointTemplate
+        {
+            get => _context.ContainerView.PointTemplate;
+            set => throw new InvalidOperationException($"Can not set {PointTemplate} property value.");
+        }
+
+        [IgnoreDataMember]
+        public ICanvasContainer CurrentContainer
+        {
+            get => _pathTool._figure;
+            set => throw new InvalidOperationException($"Can not set {CurrentContainer} property value.");
+        }
+
+        [IgnoreDataMember]
+        public ICanvasContainer WorkingContainer
+        {
+            get => _pathTool._figure;
+            set => throw new InvalidOperationException($"Can not set {WorkingContainer} property value.");
         }
 
         [IgnoreDataMember]
@@ -6860,17 +6704,17 @@ namespace Draw2D.ViewModels.Tools
         }
 
         [IgnoreDataMember]
-        public CanvasContainer CurrentContainer
+        public IInputService InputService
         {
-            get => _pathTool._figure;
-            set => throw new InvalidOperationException($"Can not set {CurrentContainer} property value.");
+            get => _context.ContainerView?.InputService;
+            set => throw new InvalidOperationException($"Can not set {InputService} property value.");
         }
 
         [IgnoreDataMember]
-        public CanvasContainer WorkingContainer
+        public IZoomService ZoomService
         {
-            get => _pathTool._figure;
-            set => throw new InvalidOperationException($"Can not set {WorkingContainer} property value.");
+            get => _context.ContainerView.ZoomService;
+            set => throw new InvalidOperationException($"Can not set {ZoomService} property value.");
         }
 
         [IgnoreDataMember]
@@ -7032,7 +6876,7 @@ namespace Draw2D.ViewModels.Tools
                 Points = new ObservableCollection<PointShape>(),
                 Figures = new ObservableCollection<FigureShape>(),
                 FillRule = Settings.FillRule,
-                Style = context.ContainerView?.CurrentContainer.CurrentStyle
+                Style = context.ContainerView?.CurrentStyle
             };
 
             context.ContainerView?.WorkingContainer.Shapes.Add(_path);
@@ -7045,9 +6889,7 @@ namespace Draw2D.ViewModels.Tools
         {
             _figure = new FigureShape()
             {
-                Guides = new ObservableCollection<LineShape>(),
                 Shapes = new ObservableCollection<BaseShape>(),
-                Styles = new ObservableCollection<ShapeStyle>(),
                 IsFilled = Settings.IsFilled,
                 IsClosed = Settings.IsClosed
             };
@@ -7272,7 +7114,7 @@ namespace Draw2D.ViewModels.Tools
             Filters?.ForEach(f => f.Clear(context));
             Filters?.Any(f => f.Process(context, ref x, ref y));
 
-            var point = new PointShape(x, y, context.ContainerView?.CurrentContainer.PointTemplate);
+            var point = new PointShape(x, y, context.ContainerView?.PointTemplate);
 
             var shape = context.ContainerView?.HitTest?.TryToGetShape(
                 context.ContainerView?.CurrentContainer.Shapes,
@@ -7426,7 +7268,7 @@ namespace Draw2D.ViewModels.Tools
                 Points = new ObservableCollection<PointShape>(),
                 StartPoint = context.ContainerView?.GetNextPoint(x, y, Settings?.ConnectPoints ?? false, Settings?.HitTestRadius ?? 7.0),
                 Point = context.ContainerView?.GetNextPoint(x, y, false, 0.0),
-                Style = context?.ContainerView.CurrentContainer.CurrentStyle
+                Style = context?.ContainerView.CurrentStyle
             };
             _points.Add(_line.StartPoint);
             _points.Add(_line.Point);
@@ -7469,7 +7311,7 @@ namespace Draw2D.ViewModels.Tools
                 Points = new ObservableCollection<PointShape>(),
                 StartPoint = _points.Last(),
                 Point = context.ContainerView?.GetNextPoint(x, y, false, 0.0),
-                Style = context.ContainerView?.CurrentContainer.CurrentStyle
+                Style = context.ContainerView?.CurrentStyle
             };
             _points.Add(_line.Point);
             context.ContainerView?.WorkingContainer.Shapes.Add(_line);
@@ -7685,7 +7527,7 @@ namespace Draw2D.ViewModels.Tools
                 Point1 = (PointShape)next.Copy(null),
                 Point2 = (PointShape)next.Copy(null),
                 Text = new Text(),
-                Style = context.ContainerView?.CurrentContainer.CurrentStyle
+                Style = context.ContainerView?.CurrentStyle
             };
             context.ContainerView?.WorkingContainer.Shapes.Add(_quadraticBezier);
             context.ContainerView?.WorkingContainer.MarkAsDirty(true);
@@ -7969,7 +7811,7 @@ namespace Draw2D.ViewModels.Tools
                 Point2 = (PointShape)next.Copy(null),
                 Weight = Settings.Weight,
                 Text = new Text(),
-                Style = context.ContainerView?.CurrentContainer.CurrentStyle
+                Style = context.ContainerView?.CurrentStyle
             };
             context.ContainerView?.WorkingContainer.Shapes.Add(_conic);
             context.ContainerView?.WorkingContainer.MarkAsDirty(true);
@@ -8240,7 +8082,7 @@ namespace Draw2D.ViewModels.Tools
                 Points = new ObservableCollection<PointShape>(),
                 TopLeft = context.ContainerView?.GetNextPoint(x, y, Settings?.ConnectPoints ?? false, Settings?.HitTestRadius ?? 7.0),
                 BottomRight = context.ContainerView?.GetNextPoint(x, y, false, 0.0),
-                Style = context.ContainerView?.CurrentContainer.CurrentStyle
+                Style = context.ContainerView?.CurrentStyle
             };
             context.ContainerView?.WorkingContainer.Shapes.Add(_rectangle);
             context.ContainerView?.WorkingContainer.MarkAsDirty(true);
@@ -8495,21 +8337,19 @@ namespace Draw2D.ViewModels.Tools
                 Points = new ObservableCollection<PointShape>(),
                 Figures = new ObservableCollection<FigureShape>(),
                 FillRule = Settings.FillRule,
-                Style = context.ContainerView?.CurrentContainer.CurrentStyle
+                Style = context.ContainerView?.CurrentStyle
             };
 
             _figure = new FigureShape()
             {
-                Guides = new ObservableCollection<LineShape>(),
                 Shapes = new ObservableCollection<BaseShape>(),
-                Styles = new ObservableCollection<ShapeStyle>(),
                 IsFilled = Settings.IsFilled,
                 IsClosed = Settings.IsClosed
             };
 
             _path.Figures.Add(_figure);
 
-            _previousPoint = new PointShape(x, y, context.ContainerView?.CurrentContainer.PointTemplate);
+            _previousPoint = new PointShape(x, y, context.ContainerView?.PointTemplate);
 
             context.ContainerView?.WorkingContainer.Shapes.Add(_path);
             context.ContainerView?.WorkingContainer.MarkAsDirty(true);
@@ -8555,7 +8395,7 @@ namespace Draw2D.ViewModels.Tools
                             Points = new ObservableCollection<PointShape>(),
                             StartPoint = distinct[i],
                             Point = distinct[i + 1],
-                            Style = context.ContainerView?.CurrentContainer.CurrentStyle
+                            Style = context.ContainerView?.CurrentStyle
                         };
                         _figure.Shapes.Add(line);
                     }
@@ -8595,14 +8435,14 @@ namespace Draw2D.ViewModels.Tools
             Filters?.ForEach(f => f.Clear(context));
             Filters?.Any(f => f.Process(context, ref x, ref y));
 
-            _nextPoint = new PointShape(x, y, context.ContainerView?.CurrentContainer.PointTemplate);
+            _nextPoint = new PointShape(x, y, context.ContainerView?.PointTemplate);
 
             var line = new LineShape()
             {
                 Points = new ObservableCollection<PointShape>(),
                 StartPoint = _previousPoint,
                 Point = _nextPoint,
-                Style = context.ContainerView?.CurrentContainer.CurrentStyle
+                Style = context.ContainerView?.CurrentStyle
             };
 
             _figure.Shapes.Add(line);
@@ -9414,7 +9254,7 @@ namespace Draw2D.ViewModels.Tools
             return copy;
         }
 
-        internal void Copy(CanvasContainer container, IEnumerable<BaseShape> shapes, ISelection selection)
+        internal void Copy(ICanvasContainer container, IEnumerable<BaseShape> shapes, ISelection selection)
         {
             var shared = GetPointsCopyDict(shapes);
 
@@ -9432,7 +9272,7 @@ namespace Draw2D.ViewModels.Tools
             }
         }
 
-        internal void Delete(CanvasContainer container, ISelection selection)
+        internal void Delete(ICanvasContainer container, ISelection selection)
         {
             // TODO: Very slow when using Contains.
             //var paths = container.Shapes.OfType<PathShape>().ToList().AsReadOnly();
@@ -9440,7 +9280,6 @@ namespace Draw2D.ViewModels.Tools
             //var connectables = container.Shapes.OfType<ConnectableShape>().ToList().AsReadOnly();
 
             var shapesHash = new HashSet<BaseShape>(container.Shapes);
-            var guidesHash = new HashSet<LineShape>(container.Guides);
 
             foreach (var shape in selection.Selected)
             {
@@ -9448,14 +9287,6 @@ namespace Draw2D.ViewModels.Tools
                 {
                     container.Shapes.Remove(shape);
                     container.MarkAsDirty(true);
-                }
-                else if (guidesHash.Contains(shape))
-                {
-                    if (shape is LineShape guide)
-                    {
-                        container.Guides.Remove(guide);
-                        container.MarkAsDirty(true);
-                    }
                 }
                 /*
                 else
@@ -9498,7 +9329,7 @@ namespace Draw2D.ViewModels.Tools
             return false;
         }
 
-        internal bool TryToDelete(CanvasContainer container, IReadOnlyList<PathShape> paths, BaseShape shape)
+        internal bool TryToDelete(ICanvasContainer container, IReadOnlyList<PathShape> paths, BaseShape shape)
         {
             foreach (var path in paths)
             {
@@ -9529,7 +9360,7 @@ namespace Draw2D.ViewModels.Tools
             return false;
         }
 
-        internal bool TryToDelete(CanvasContainer container, IReadOnlyList<GroupShape> groups, BaseShape shape)
+        internal bool TryToDelete(ICanvasContainer container, IReadOnlyList<GroupShape> groups, BaseShape shape)
         {
             foreach (var group in groups)
             {
@@ -9563,17 +9394,7 @@ namespace Draw2D.ViewModels.Tools
                 && targets.HasFlag(SelectionTargets.Shapes) ?
                 context.ContainerView?.HitTest?.TryToGetShape(context.ContainerView?.CurrentContainer.Shapes, target, radius) : null;
 
-            var guidePoint =
-                mode.HasFlag(SelectionMode.Point)
-                && targets.HasFlag(SelectionTargets.Guides) ?
-                context.ContainerView?.HitTest?.TryToGetPoint(context.ContainerView?.CurrentContainer.Guides, target, radius, null) : null;
-
-            var guide =
-                mode.HasFlag(SelectionMode.Shape)
-                && targets.HasFlag(SelectionTargets.Guides) ?
-                context.ContainerView?.HitTest?.TryToGetShape(context.ContainerView?.CurrentContainer.Guides, target, radius) : null;
-
-            if (shapePoint != null || shape != null || guide != null)
+            if (shapePoint != null || shape != null)
             {
                 if (shapePoint != null)
                 {
@@ -9582,14 +9403,6 @@ namespace Draw2D.ViewModels.Tools
                 else if (shape != null)
                 {
                     return shape;
-                }
-                else if (guidePoint != null)
-                {
-                    return guidePoint;
-                }
-                else if (guide != null)
-                {
-                    return guide;
                 }
             }
 
@@ -9608,23 +9421,11 @@ namespace Draw2D.ViewModels.Tools
                 && targets.HasFlag(SelectionTargets.Shapes) ?
                 context.ContainerView?.HitTest?.TryToGetShape(context.ContainerView?.CurrentContainer.Shapes, point, radius) : null;
 
-            var guidePoint =
-                mode.HasFlag(SelectionMode.Point)
-                && targets.HasFlag(SelectionTargets.Guides) ?
-                context.ContainerView?.HitTest?.TryToGetPoint(context.ContainerView?.CurrentContainer.Guides, point, radius, null) : null;
-
-            var guide =
-                mode.HasFlag(SelectionMode.Shape)
-                && targets.HasFlag(SelectionTargets.Guides) ?
-                context.ContainerView?.HitTest?.TryToGetShape(context.ContainerView?.CurrentContainer.Guides, point, radius) : null;
-
-            if (shapePoint != null || shape != null || guidePoint != null || guide != null)
+            if (shapePoint != null || shape != null)
             {
                 bool haveNewSelection =
                     (shapePoint != null && !_selected.Contains(shapePoint))
-                    || (shape != null && !_selected.Contains(shape))
-                    || (guidePoint != null && !_selected.Contains(guidePoint))
-                    || (guide != null && !_selected.Contains(guide));
+                    || (shape != null && !_selected.Contains(shape));
 
                 if (_selected.Count >= 1
                     && !haveNewSelection
@@ -9676,48 +9477,6 @@ namespace Draw2D.ViewModels.Tools
                             return true;
                         }
                     }
-                    else if (guidePoint != null)
-                    {
-                        if (modifier.HasFlag(selectionModifier))
-                        {
-                            if (_selected.Contains(guidePoint))
-                            {
-                                guidePoint.Deselect(this);
-                            }
-                            else
-                            {
-                                guidePoint.Select(this);
-                            }
-                            return _selected.Count > 0;
-                        }
-                        else
-                        {
-                            Selected.Clear();
-                            guidePoint.Select(this);
-                            return true;
-                        }
-                    }
-                    else if (guide != null)
-                    {
-                        if (modifier.HasFlag(selectionModifier))
-                        {
-                            if (_selected.Contains(guide))
-                            {
-                                guide.Deselect(this);
-                            }
-                            else
-                            {
-                                guide.Select(this);
-                            }
-                            return _selected.Count > 0;
-                        }
-                        else
-                        {
-                            Selected.Clear();
-                            guide.Select(this);
-                            return true;
-                        }
-                    }
                 }
             }
 
@@ -9731,12 +9490,7 @@ namespace Draw2D.ViewModels.Tools
                 && targets.HasFlag(SelectionTargets.Shapes) ?
                 context.ContainerView?.HitTest?.TryToGetShapes(context.ContainerView?.CurrentContainer.Shapes, rect, radius) : null;
 
-            var guides =
-                mode.HasFlag(SelectionMode.Shape)
-                && targets.HasFlag(SelectionTargets.Guides) ?
-                context.ContainerView?.HitTest?.TryToGetShapes(context.ContainerView?.CurrentContainer.Guides, rect, radius) : null;
-
-            if (shapes != null || guides != null)
+            if (shapes != null)
             {
                 if (shapes != null)
                 {
@@ -9761,33 +9515,6 @@ namespace Draw2D.ViewModels.Tools
                         foreach (var shape in shapes)
                         {
                             shape.Select(this);
-                        }
-                        return true;
-                    }
-                }
-                else if (guides != null)
-                {
-                    if (modifier.HasFlag(selectionModifier))
-                    {
-                        foreach (var guide in guides)
-                        {
-                            if (_selected.Contains(guide))
-                            {
-                                guide.Deselect(this);
-                            }
-                            else
-                            {
-                                guide.Select(this);
-                            }
-                        }
-                        return _selected.Count > 0;
-                    }
-                    else
-                    {
-                        Selected.Clear();
-                        foreach (var guide in guides)
-                        {
-                            guide.Select(this);
                         }
                         return true;
                     }
@@ -9886,7 +9613,7 @@ namespace Draw2D.ViewModels.Tools
                 TopLeft = context.ContainerView?.GetNextPoint(x, y, Settings?.ConnectPoints ?? false, Settings?.HitTestRadius ?? 7.0),
                 BottomRight = context.ContainerView?.GetNextPoint(x, y, false, 0.0),
                 Text = new Text("Text"),
-                Style = context.ContainerView?.CurrentContainer.CurrentStyle,
+                Style = context.ContainerView?.CurrentStyle,
             };
             context.ContainerView?.WorkingContainer.Shapes.Add(_text);
             context.ContainerView?.WorkingContainer.MarkAsDirty(true);

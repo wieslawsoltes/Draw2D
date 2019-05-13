@@ -103,30 +103,12 @@ namespace Draw2D.Editor
             return false;
         }
 
-        private bool IsCanvasContainerDirty(CanvasContainer canvasContainer)
+        private bool IsCanvasContainerDirty(ICanvasContainer canvasContainer)
         {
             if (canvasContainer.IsDirty)
             {
                 Debug.WriteLine($"canvasContainer.IsDirty: true");
                 return true;
-            }
-
-            if (canvasContainer.Guides != null)
-            {
-                foreach (var guide in canvasContainer.Guides)
-                {
-                    if (guide.IsDirty)
-                    {
-                        Debug.WriteLine($"guide.IsDirty: true");
-                        return true;
-                    }
-
-                    if (IsShapeStyleDirty(guide.Style))
-                    {
-                        Debug.WriteLine($"IsShapeStyleDirty(guide.Style): true");
-                        return true;
-                    }
-                }
             }
 
             if (canvasContainer.Shapes != null)
@@ -150,7 +132,7 @@ namespace Draw2D.Editor
             return false;
         }
 
-        private bool IsPointsDirty(CanvasContainer canvasContainer)
+        private bool IsPointsDirty(ICanvasContainer canvasContainer)
         {
             var points = new List<PointShape>();
             canvasContainer.GetPoints(points);
@@ -268,7 +250,7 @@ namespace Draw2D.Editor
             renderer.Selection = view.Selection;
 
             var recorder = new SKPictureRecorder();
-            var rect = new SKRect(0f, 0f, (float)view.CurrentContainer.Width, (float)view.CurrentContainer.Height);
+            var rect = new SKRect(0f, 0f, (float)view.Width, (float)view.Height);
             var canvas = recorder.BeginRecording(rect);
 
             draw(view, canvas, renderer);
@@ -355,19 +337,19 @@ namespace Draw2D.Editor
             _previousZX = zx;
             _previousZY = zy;
 
-            if (view.CurrentContainer.InputBackground != null)
+            if (view.InputBackground != null)
             {
-                GetSKPaintFill(view.CurrentContainer.InputBackground, out var brush);
+                GetSKPaintFill(view.InputBackground, out var brush);
                 canvas.DrawRect(SkiaHelper.ToRect(0.0, 0.0, width, height), brush);
             }
 
-            if (view.CurrentContainer.WorkBackground != null)
+            if (view.WorkBackground != null)
             {
-                GetSKPaintFill(view.CurrentContainer.WorkBackground, out var brush);
+                GetSKPaintFill(view.WorkBackground, out var brush);
                 canvas.Save();
                 canvas.Translate((float)dx, (float)dy);
                 canvas.Scale((float)zx, (float)zy);
-                canvas.DrawRect(SkiaHelper.ToRect(0.0, 0.0, view.CurrentContainer.Width, view.CurrentContainer.Height), brush);
+                canvas.DrawRect(SkiaHelper.ToRect(0.0, 0.0, view.Width, view.Height), brush);
                 canvas.Restore();
             }
 
@@ -404,18 +386,18 @@ namespace Draw2D.Editor
             view.CurrentContainer.Invalidate();
             view.WorkingContainer.Invalidate();
 
-            if (view.CurrentContainer.InputBackground != null)
+            if (view.InputBackground != null)
             {
-                GetBrushFill(view.CurrentContainer.InputBackground, out var brush);
+                GetBrushFill(view.InputBackground, out var brush);
                 context.FillRectangle(brush, new Rect(0.0, 0.0, width, height));
             }
 
             var state = context.PushPreTransform(new Matrix(zx, 0.0, 0.0, zy, dx, dy));
 
-            if (view.CurrentContainer.WorkBackground != null)
+            if (view.WorkBackground != null)
             {
-                GetBrushFill(view.CurrentContainer.WorkBackground, out var brush);
-                context.FillRectangle(brush, new Rect(0.0, 0.0, view.CurrentContainer.Width, view.CurrentContainer.Height));
+                GetBrushFill(view.WorkBackground, out var brush);
+                context.FillRectangle(brush, new Rect(0.0, 0.0, view.Width, view.Height));
             }
 
             DrawShapesCurrent(view, context, _avaloniaRenderer);
