@@ -17,6 +17,7 @@ using Draw2D.ViewModels.Intersections;
 using Draw2D.ViewModels.Shapes;
 using Draw2D.ViewModels.Style;
 using Draw2D.ViewModels.Tools;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using SkiaSharp;
 
 namespace Draw2D.Editor
@@ -154,7 +155,7 @@ namespace Draw2D.Editor
                     DisconnectTestRadius = 10.0
                 },
                 Hovered = null,
-                Selected = new HashSet<BaseShape>()
+                Selected = new ObservableHashSet<BaseShape>()
             };
 
             var pointTool = new PointTool()

@@ -13,6 +13,7 @@ using Draw2D.ViewModels.Containers;
 using Draw2D.ViewModels.Shapes;
 using Draw2D.ViewModels.Style;
 using Draw2D.ViewModels.Tools;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Spatial;
 using Spatial.ConvexHull;
 using Spatial.DouglasPeucker;
@@ -5505,7 +5506,7 @@ namespace Draw2D.ViewModels.Bounds
 
         public ISet<BaseShape> TryToGetShapes(IEnumerable<BaseShape> shapes, Rect2 target, double radius)
         {
-            var selected = new HashSet<BaseShape>();
+            var selected = new ObservableHashSet<BaseShape>();
             foreach (var shape in shapes.Reverse())
             {
                 var result = GetHitTest(shape)?.Overlaps(shape, target, radius, this);
