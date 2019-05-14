@@ -803,6 +803,10 @@ namespace Draw2D.Editor
                         break;
                     case LineShape lineShape:
                         {
+                            var path = SkiaHelper.ToGeometry(lineShape, 0.0, 0.0);
+                            var svgPathData = path.ToSvgPathData();
+                            textBox.Text = svgPathData;
+                            Application.Current.Clipboard.SetTextAsync(svgPathData);
                         }
                         break;
                     case PathShape pathShape:
