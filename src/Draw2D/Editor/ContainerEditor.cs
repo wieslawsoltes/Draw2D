@@ -23,29 +23,6 @@ namespace Draw2D.Editor
 {
     public class ContainerEditor : ToolContext
     {
-        public static void CreateDemoGroup(IToolContext context)
-        {
-            var container = context.ContainerView?.CurrentContainer;
-            var group = new GroupShape()
-            {
-                Points = new ObservableCollection<PointShape>(),
-                Shapes = new ObservableCollection<BaseShape>()
-            };
-            group.Shapes.Add(
-                new RectangleShape(new PointShape(30, 30, context.ContainerView?.PointTemplate),
-                new PointShape(60, 60, context.ContainerView?.PointTemplate))
-                {
-                    Points = new ObservableCollection<PointShape>(),
-                    Style = context.ContainerView?.CurrentStyle
-                });
-            group.Points.Add(new PointShape(45, 30, context.ContainerView?.PointTemplate));
-            group.Points.Add(new PointShape(45, 60, context.ContainerView?.PointTemplate));
-            group.Points.Add(new PointShape(30, 45, context.ContainerView?.PointTemplate));
-            group.Points.Add(new PointShape(60, 45, context.ContainerView?.PointTemplate));
-            context.ContainerView?.CurrentContainer.Shapes.Add(group);
-            context.ContainerView?.CurrentContainer.MarkAsDirty(true);
-        }
-
         private IHitTest _hitTest;
         private ISelection _selection;
         private IDictionary<Type, IShapeDecorator> _decorators;
@@ -864,6 +841,28 @@ namespace Draw2D.Editor
         public void Exit()
         {
             Application.Current.Windows.FirstOrDefault()?.Close();
+        }
+
+        public void CreateDemoGroup(IToolContext context)
+        {
+            var group = new GroupShape()
+            {
+                Points = new ObservableCollection<PointShape>(),
+                Shapes = new ObservableCollection<BaseShape>()
+            };
+            group.Shapes.Add(
+                new RectangleShape(new PointShape(30, 30, context.ContainerView?.PointTemplate),
+                new PointShape(60, 60, context.ContainerView?.PointTemplate))
+                {
+                    Points = new ObservableCollection<PointShape>(),
+                    Style = context.ContainerView?.CurrentStyle
+                });
+            group.Points.Add(new PointShape(45, 30, context.ContainerView?.PointTemplate));
+            group.Points.Add(new PointShape(45, 60, context.ContainerView?.PointTemplate));
+            group.Points.Add(new PointShape(30, 45, context.ContainerView?.PointTemplate));
+            group.Points.Add(new PointShape(60, 45, context.ContainerView?.PointTemplate));
+            context.ContainerView?.CurrentContainer.Shapes.Add(group);
+            context.ContainerView?.CurrentContainer.MarkAsDirty(true);
         }
     }
 }
