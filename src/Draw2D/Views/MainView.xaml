@@ -292,6 +292,18 @@
                         </TabItem>
                     </TabControl>
                 </TabItem>
+                <TabItem Classes="default" Header="Shape">
+                    <ContentControl Content="{Binding ContainerView.Selection.Selected[0], FallbackValue={x:Null}}"/>
+                </TabItem>
+                <TabItem Classes="default" Header="Selected">
+                    <ListBox Classes="default" Items="{Binding ContainerView.Selection.Selected, Mode=OneWay}">
+                        <ListBox.DataTemplates>
+                            <DataTemplate>
+                                <TextBlock Classes="default" Text="{Binding}"/>
+                            </DataTemplate>
+                        </ListBox.DataTemplates>
+                    </ListBox>
+                </TabItem>                
                 <TabItem Classes="default" Header="Hovered">
                     <ContentControl Content="{Binding ContainerView.Selection.Hovered}"/>
                 </TabItem>
