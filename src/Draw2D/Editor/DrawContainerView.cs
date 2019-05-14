@@ -121,10 +121,13 @@ namespace Draw2D.Editor
                         return true;
                     }
 
-                    if (IsShapeStyleDirty(shape.Style))
+                    if (shape.Style != null)
                     {
-                        Debug.WriteLine($"IsShapeStyleDirty(shape.Style): true");
-                        return true;
+                        if (IsShapeStyleDirty(shape.Style))
+                        {
+                            Debug.WriteLine($"IsShapeStyleDirty(shape.Style): true");
+                            return true;
+                        }
                     }
                 }
             }
