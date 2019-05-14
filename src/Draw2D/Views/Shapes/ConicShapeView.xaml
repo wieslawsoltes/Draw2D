@@ -8,7 +8,15 @@
              xmlns:local="clr-namespace:Draw2D.Views.Shapes"
              mc:Ignorable="d"
              d:DesignWidth="400" d:DesignHeight="300">
-    <Grid>
-        <TextBlock Text="Conic" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-    </Grid>
+    <TabControl Classes="default" TabStripPlacement="Top">
+        <TabItem Classes="default" Header="Conic">
+            <Grid RowDefinitions="Auto" ColumnDefinitions="Auto,*">
+                <TextBlock Classes="default" Grid.Column="0" Grid.Row="0" Text="Text"/>
+                <TextBox Classes="default" Grid.Column="1" Grid.Row="0" Text="{Binding Text.Value}"/>
+            </Grid>
+        </TabItem>
+        <TabItem Classes="default" Header="Style">
+            <ContentControl Content="{Binding Style}"/>
+        </TabItem>
+    </TabControl>
 </UserControl>
