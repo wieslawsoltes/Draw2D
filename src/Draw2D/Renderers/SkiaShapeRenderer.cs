@@ -429,7 +429,7 @@ namespace Draw2D.Renderers
         public void DrawLine(object dc, LineShape line, ShapeStyle style, double dx, double dy)
         {
 #if true
-            if (style.IsStroked)
+            if (style.IsStroked || style.TextStyle.IsStroked)
             {
                 var canvas = dc as SKCanvas;
                 using (var geometry = SkiaHelper.ToGeometry(line, dx, dy))
@@ -439,10 +439,14 @@ namespace Draw2D.Renderers
                         GetSKPaintStroke(style, out var pen, Scale);
                         canvas.DrawPath(geometry, pen);
                     }
+                    if (style.TextStyle.IsStroked && line.Text is Text text && !string.IsNullOrEmpty(text.Value))
+                    {
+                        DrawTextOnPath(canvas, geometry, text, style.TextStyle);
+                    }
                 }
             }
 #else
-            if (style.IsStroked)
+            if (style.IsStroked || style.TextStyle.IsStroked)
             {
                 var canvas = dc as SKCanvas;
                 if (style.IsStroked)
