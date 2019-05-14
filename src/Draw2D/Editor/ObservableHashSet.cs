@@ -456,8 +456,20 @@ namespace Microsoft.EntityFrameworkCore.ChangeTracking
         ///     Raises the <see cref="CollectionChanged" /> event.
         /// </summary>
         /// <param name="e"> Details of the change. </param>
+        //protected virtual void OnCollectionChanged([NotNull] NotifyCollectionChangedEventArgs e)
+        //    => CollectionChanged?.Invoke(this, e);
         protected virtual void OnCollectionChanged([NotNull] NotifyCollectionChangedEventArgs e)
-            => CollectionChanged?.Invoke(this, e);
+        {
+            try
+            {
+                CollectionChanged?.Invoke(this, e);
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+                System.Diagnostics.Debug.WriteLine(ex.StackTrace);
+            }
+        }
     }
 
     internal static class ObservableHashSetSingletons

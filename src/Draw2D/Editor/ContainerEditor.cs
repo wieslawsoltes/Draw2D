@@ -517,7 +517,11 @@ namespace Draw2D.Editor
         private void AddContainerView(IContainerView containerView)
         {
             CurrentTool.Clean(this);
-            ContainerView?.Selection.Selected.Clear();
+
+            if (ContainerView != null)
+            {
+                ContainerView.Selection.Selected = new ObservableHashSet<BaseShape>();
+            }
 
             ContainerViews.Add(containerView);
             ContainerView = containerView;
