@@ -519,7 +519,6 @@ namespace Draw2D.Editor
                 if (index >= 0)
                 {
                     ContainerViews.Remove(containerView);
-                    containerView.DrawContainerView.Dispose();
 
                     int count = ContainerViews.Count;
                     if (count > 0)
@@ -531,6 +530,8 @@ namespace Draw2D.Editor
                     {
                         ContainerView = null;
                     }
+
+                    containerView.DrawContainerView.Dispose();
                 }
             }
         }
