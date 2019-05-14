@@ -24,7 +24,7 @@
     <PackageReference Include="Avalonia.Desktop" Version="0.8.1-cibuild0002330-beta" />
     <PackageReference Include="Avalonia.Angle.Windows.Natives" Version="2.1.0.2019013001" />
     <PackageReference Include="Math.Spatial" Version="1.0.4" />
-    <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
     <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.0-preview.1" />
   </ItemGroup>
 
