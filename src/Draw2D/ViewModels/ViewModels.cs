@@ -8763,7 +8763,7 @@ namespace Draw2D.ViewModels.Tools
             {
                 if (!modifier.HasFlag(Settings?.SelectionModifier ?? Modifier.Control))
                 {
-                    Selected = new ObservableHashSet<BaseShape>();
+                    _selected.Clear();
                 }
 
                 if (_rectangle == null)
@@ -8967,7 +8967,7 @@ namespace Draw2D.ViewModels.Tools
             if (Settings?.ClearSelectionOnClean == true)
             {
                 Hovered = null;
-                Selected = new ObservableHashSet<BaseShape>();
+                Selected.Clear();
             }
 
             Filters?.ForEach(f => f.Clear(context));
@@ -9079,7 +9079,7 @@ namespace Draw2D.ViewModels.Tools
                 lock (_selected)
                 {
                     this.DeHover(context);
-                    Selected = new ObservableHashSet<BaseShape>();
+                    _selected.Clear();
 
                     Copy(context.ContainerView?.CurrentContainer, _shapesToCopy, this);
 
@@ -9097,7 +9097,7 @@ namespace Draw2D.ViewModels.Tools
                 Delete(context.ContainerView?.CurrentContainer, this);
 
                 this.DeHover(context);
-                Selected = new ObservableHashSet<BaseShape>();
+                _selected.Clear();
 
                 context.ContainerView?.InputService?.Redraw?.Invoke();
 
@@ -9144,7 +9144,7 @@ namespace Draw2D.ViewModels.Tools
             lock (_selected)
             {
                 this.DeHover(context);
-                Selected = new ObservableHashSet<BaseShape>();
+                _selected.Clear();
 
                 foreach (var shape in context.ContainerView?.CurrentContainer.Shapes)
                 {
@@ -9452,7 +9452,7 @@ namespace Draw2D.ViewModels.Tools
                         }
                         else
                         {
-                            Selected = new ObservableHashSet<BaseShape>();
+                            Selected.Clear();
                             shapePoint.Select(this);
                             return true;
                         }
@@ -9473,7 +9473,7 @@ namespace Draw2D.ViewModels.Tools
                         }
                         else
                         {
-                            Selected = new ObservableHashSet<BaseShape>();
+                            Selected.Clear();
                             shape.Select(this);
                             return true;
                         }
@@ -9512,7 +9512,7 @@ namespace Draw2D.ViewModels.Tools
                     }
                     else
                     {
-                        Selected = new ObservableHashSet<BaseShape>();
+                        Selected.Clear();
                         foreach (var shape in shapes)
                         {
                             shape.Select(this);
