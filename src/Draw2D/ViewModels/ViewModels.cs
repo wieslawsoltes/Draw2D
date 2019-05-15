@@ -142,6 +142,8 @@ namespace Draw2D.ViewModels
         BaseShape Hovered { get; set; }
         BaseShape Selected { get; set; }
         ISet<BaseShape> Shapes { get; set; }
+        void Hover(BaseShape shape);
+        void Dehover();
         bool IsSelected(BaseShape shape);
         void Select(BaseShape shape);
         void Deselect(BaseShape shape);
@@ -8713,6 +8715,18 @@ namespace Draw2D.ViewModels.Tools
             }
         }
 
+        public void Hover(BaseShape shape)
+        {
+            Hovered = shape;
+            this.MarkAsDirty(true);
+        }
+
+        public void Dehover()
+        {
+            Hovered = null;
+            this.MarkAsDirty(true);
+        }
+
         public bool IsSelected(BaseShape shape)
         {
             if (shape != null && _shapes.Contains(shape))
@@ -8726,6 +8740,10 @@ namespace Draw2D.ViewModels.Tools
         {
             if (shape != null)
             {
+                if (_shapes.Count == 0)
+                {
+                    Selected = shape;
+                }
                 _shapes.Add(shape);
                 this.MarkAsDirty(true);
             }
@@ -8736,6 +8754,10 @@ namespace Draw2D.ViewModels.Tools
             if (shape != null)
             {
                 _shapes.Remove(shape);
+                if (_shapes.Count == 0)
+                {
+                    Selected = null;
+                }
                 this.MarkAsDirty(true);
             }
         }
@@ -8743,6 +8765,7 @@ namespace Draw2D.ViewModels.Tools
         public void Clear()
         {
             _shapes.Clear();
+            Selected = null;
             this.MarkAsDirty(true);
         }
     }
@@ -9050,7 +9073,7 @@ namespace Draw2D.ViewModels.Tools
 
             if (Settings?.ClearSelectionOnClean == true)
             {
-                _selectionState.Hovered = null;
+                _selectionState.Dehover();
                 _selectionState.Clear();
             }
 
@@ -9243,7 +9266,7 @@ namespace Draw2D.ViewModels.Tools
 
         public void Hover(IToolContext context, BaseShape shape)
         {
-            _selectionState.Hovered = shape;
+            _selectionState.Hover(shape);
 
             if (shape != null)
             {
@@ -9254,7 +9277,7 @@ namespace Draw2D.ViewModels.Tools
 
         public void DeHover(IToolContext context)
         {
-            _selectionState.Hovered = null;
+            _selectionState.Dehover();
 
             if (_hover != null)
             {
