@@ -179,26 +179,26 @@
                         </TabItem>
                         <TabItem Classes="default" Header="Intersections">
                             <Grid RowDefinitions="Auto,*">
-                                <ComboBox Classes="default" Grid.Row="0" x:Name="Intersections" Items="{Binding CurrentTool.Intersections}" SelectedIndex="0">
+                                <ComboBox Classes="default" Grid.Row="0" x:Name="intersections" Items="{Binding CurrentTool.Intersections}" SelectedIndex="0">
                                     <ComboBox.DataTemplates>
                                         <DataTemplate>
                                             <TextBlock Classes="default" Text="{Binding Title}"/>
                                         </DataTemplate>
                                     </ComboBox.DataTemplates>
                                 </ComboBox>
-                                <ContentControl Grid.Row="1" Content="{Binding ElementName=Intersections, Path=SelectedItem.Settings}"/>
+                                <ContentControl Grid.Row="1" Content="{Binding #intersections.SelectedItem.Settings}"/>
                             </Grid>
                         </TabItem>
                         <TabItem Classes="default" Header="Filters">
                             <Grid RowDefinitions="Auto,*">
-                                <ComboBox Classes="default" Grid.Row="0" x:Name="Filters" Items="{Binding CurrentTool.Filters}" SelectedIndex="0">
+                                <ComboBox Classes="default" Grid.Row="0" x:Name="filters" Items="{Binding CurrentTool.Filters}" SelectedIndex="0">
                                     <ComboBox.DataTemplates>
                                         <DataTemplate>
                                             <TextBlock Classes="default" Text="{Binding Title}"/>
                                         </DataTemplate>
                                     </ComboBox.DataTemplates>
                                 </ComboBox>
-                                <ContentControl Grid.Row="1" Content="{Binding ElementName=Filters, Path=SelectedItem.Settings}"/>
+                                <ContentControl Grid.Row="1" Content="{Binding #filters.SelectedItem.Settings}"/>
                             </Grid>
                         </TabItem>
                         <TabItem Classes="default" Header="Tools">
