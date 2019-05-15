@@ -3436,7 +3436,7 @@ namespace Draw2D.ViewModels.Containers
             set => Update(ref _drawContainerView, value);
         }
 
-        [IgnoreDataMember]
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public ISelectionState SelectionState
         {
             get => _selectionState;
