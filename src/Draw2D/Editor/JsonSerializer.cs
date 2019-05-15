@@ -34,6 +34,12 @@ namespace Draw2D.Editor
                         .ResolveContract(typeof(ObservableCollection<>)
                         .MakeGenericType(type.GenericTypeArguments[0]));
                 }
+                if (type.GetTypeInfo().IsGenericType && type.GetGenericTypeDefinition() == typeof(ISet<>))
+                {
+                    return base
+                        .ResolveContract(typeof(ObservableHashSet<>)
+                        .MakeGenericType(type.GenericTypeArguments[0]));
+                }
                 return base.ResolveContract(type);
             }
 
