@@ -6931,6 +6931,7 @@ namespace Draw2D.ViewModels.Tools
                 Points = new ObservableCollection<PointShape>(),
                 Figures = new ObservableCollection<FigureShape>(),
                 FillRule = Settings.FillRule,
+                Text = new Text(),
                 Style = context.ContainerView?.CurrentStyle
             };
 
@@ -8392,6 +8393,7 @@ namespace Draw2D.ViewModels.Tools
                 Points = new ObservableCollection<PointShape>(),
                 Figures = new ObservableCollection<FigureShape>(),
                 FillRule = Settings.FillRule,
+                Text = new Text(),
                 Style = context.ContainerView?.CurrentStyle
             };
 
