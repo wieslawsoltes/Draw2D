@@ -91,6 +91,11 @@
             <Setter Property="TickFrequency" Value="0.1"/>
         </Style>
         <Style Selector="TabControl.default">
+            <Setter Property="ItemsPanel">
+                <ItemsPanelTemplate>
+                    <WrapPanel ClipToBounds="False" />
+                </ItemsPanelTemplate>
+            </Setter>
             <Setter Property="Padding" Value="0"/>
             <Setter Property="Margin" Value="0"/>
         </Style>
