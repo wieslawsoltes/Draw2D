@@ -5,7 +5,7 @@ using Avalonia.Markup.Xaml;
 
 namespace Draw2D.Views.Filters
 {
-    public partial class GridSnapSettingsView : UserControl
+    public class GridSnapSettingsView : UserControl
     {
         public GridSnapSettingsView()
         {

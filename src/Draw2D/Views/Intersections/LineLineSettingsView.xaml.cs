@@ -5,7 +5,7 @@ using Avalonia.Markup.Xaml;
 
 namespace Draw2D.Views.Intersections
 {
-    public partial class LineLineSettingsView : UserControl
+    public class LineLineSettingsView : UserControl
     {
         public LineLineSettingsView()
         {

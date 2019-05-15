@@ -5,7 +5,7 @@ using Avalonia.Markup.Xaml;
 
 namespace Draw2D.Views.Tools
 {
-    public partial class ScribbleToolSettingsView : UserControl
+    public class ScribbleToolSettingsView : UserControl
     {
         public ScribbleToolSettingsView()
         {

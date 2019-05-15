@@ -5,7 +5,7 @@ using Avalonia.Markup.Xaml;
 
 namespace Draw2D.Views.Shapes
 {
-    public partial class ConicShapeView : UserControl
+    public class ConicShapeView : UserControl
     {
         public ConicShapeView()
         {

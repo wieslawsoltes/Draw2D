@@ -5,7 +5,7 @@ using Avalonia.Markup.Xaml;
 
 namespace Draw2D.Views.Tools
 {
-    public partial class PointToolSettingsView : UserControl
+    public class PointToolSettingsView : UserControl
     {
         public PointToolSettingsView()
         {

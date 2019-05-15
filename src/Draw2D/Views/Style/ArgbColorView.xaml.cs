@@ -5,7 +5,7 @@ using Avalonia.Markup.Xaml;
 
 namespace Draw2D.Views.Style
 {
-    public partial class ArgbColorView : UserControl
+    public class ArgbColorView : UserControl
     {
         public ArgbColorView()
         {

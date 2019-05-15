@@ -5,7 +5,7 @@ using Avalonia.Markup.Xaml;
 
 namespace Draw2D.Views.Shapes
 {
-    public partial class TextShapeView : UserControl
+    public class TextShapeView : UserControl
     {
         public TextShapeView()
         {
