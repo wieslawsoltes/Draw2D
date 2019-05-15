@@ -157,29 +157,20 @@ namespace Draw2D
         /// </summary>
         /// <param name="item">The element to locate in the <see cref="ObservableHashSet`1" /> object.</param>
         /// <returns>true if the <see cref="ObservableHashSet`1" /> object contains the specified element; otherwise, false.</returns>
-        public bool Contains(T item)
-        {
-            return this._hashSet.Contains(item);
-        }
+        public bool Contains(T item) => this._hashSet.Contains(item);
 
         /// <summary>
         /// Copies the elements of a <see cref="ObservableHashSet`1" /> collection to an array.
         /// </summary>
         /// <param name="array">The one-dimensional array that is the destination of the elements copied from the <see cref="ObservableHashSet`1" /> object. The array must have zero-based indexing.</param>
-        public void CopyTo(T[] array)
-        {
-            this._hashSet.CopyTo(array);
-        }
+        public void CopyTo(T[] array) => this._hashSet.CopyTo(array);
 
         /// <summary>
         /// Copies the elements of a <see cref="ObservableHashSet`1" /> collection to an array.
         /// </summary>
         /// <param name="array">The one-dimensional array that is the destination of the elements copied from the <see cref="ObservableHashSet`1" /> object. The array must have zero-based indexing.</param>
         /// <param name="arrayIndex">The zero-based index in array at which copying begins.</param>
-        public void CopyTo(T[] array, int arrayIndex)
-        {
-            this._hashSet.CopyTo(array, arrayIndex);
-        }
+        public void CopyTo(T[] array, int arrayIndex) => this._hashSet.CopyTo(array, arrayIndex);
 
         /// <summary>
         /// Copies the elements of a <see cref="ObservableHashSet`1" /> collection to an array.
@@ -187,10 +178,7 @@ namespace Draw2D
         /// <param name="array">The one-dimensional array that is the destination of the elements copied from the <see cref="ObservableHashSet`1" /> object. The array must have zero-based indexing.</param>
         /// <param name="arrayIndex">The zero-based index in array at which copying begins.</param>
         /// <param name="count">The number of elements to copy to array.</param>
-        public void CopyTo(T[] array, int arrayIndex, int count)
-        {
-            this._hashSet.CopyTo(array, arrayIndex, count);
-        }
+        public void CopyTo(T[] array, int arrayIndex, int count) => this._hashSet.CopyTo(array, arrayIndex, count);
 
         /// <summary>
         /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
@@ -216,8 +204,8 @@ namespace Draw2D
             }
             this.CheckReentrancy();
             List<T> changedItems = (from x in other
-                where _hashSet.Contains(x)
-                select x).ToList<T>();
+                                    where _hashSet.Contains(x)
+                                    select x).ToList<T>();
             this._hashSet.ExceptWith(other);
             if (changedItems.Count > 0)
             {
@@ -230,10 +218,7 @@ namespace Draw2D
         /// Returns an enumerator that iterates through a <see cref="ObservableHashSet`1" />.
         /// </summary>
         /// <returns>A <see cref="ObservableHashSet`1" />.Enumerator object for the <see cref="ObservableHashSet`1" /> object.</returns>
-        public IEnumerator<T> GetEnumerator()
-        {
-            return this._hashSet.GetEnumerator();
-        }
+        public IEnumerator<T> GetEnumerator() => this._hashSet.GetEnumerator();
 
         /// <summary>
         /// Modifies the current <see cref="ObservableHashSet`1" /> object to contain only elements that are present in that object and in the specified collection.
@@ -247,8 +232,8 @@ namespace Draw2D
             }
             this.CheckReentrancy();
             List<T> changedItems = (from x in this._hashSet
-                where !other.Contains<T>(x)
-                select x).ToList<T>();
+                                    where !other.Contains<T>(x)
+                                    select x).ToList<T>();
             this._hashSet.IntersectWith(other);
             if (changedItems.Count > 0)
             {
@@ -262,50 +247,35 @@ namespace Draw2D
         /// </summary>
         /// <param name="other">The collection to compare to the current <see cref="ObservableHashSet`1" /> object.</param>
         /// <returns>true if the <see cref="ObservableHashSet`1" /> object is a proper subset of other; otherwise, false.</returns>
-        public bool IsProperSubsetOf(IEnumerable<T> other)
-        {
-            return this._hashSet.IsProperSubsetOf(other);
-        }
+        public bool IsProperSubsetOf(IEnumerable<T> other) => this._hashSet.IsProperSubsetOf(other);
 
         /// <summary>
         /// Determines whether a <see cref="ObservableHashSet`1" /> object is a proper subset of the specified collection.
         /// </summary>
         /// <param name="other">The collection to compare to the current <see cref="ObservableHashSet`1" /> object. </param>
         /// <returns>true if the <see cref="ObservableHashSet`1" /> object is a proper superset of other; otherwise, false.</returns>
-        public bool IsProperSupersetOf(IEnumerable<T> other)
-        {
-            return this._hashSet.IsProperSupersetOf(other);
-        }
+        public bool IsProperSupersetOf(IEnumerable<T> other) => this._hashSet.IsProperSupersetOf(other);
 
         /// <summary>
         /// Determines whether a <see cref="ObservableHashSet`1" /> object is a subset of the specified collection.
         /// </summary>
         /// <param name="other">The collection to compare to the current <see cref="ObservableHashSet`1" /> object. </param>
         /// <returns>true if the <see cref="ObservableHashSet`1" /> object is a subset of other; otherwise, false.</returns>
-        public bool IsSubsetOf(IEnumerable<T> other)
-        {
-            return this._hashSet.IsSubsetOf(other);
-        }
+        public bool IsSubsetOf(IEnumerable<T> other) => this._hashSet.IsSubsetOf(other);
 
         /// <summary>
         /// Determines whether a <see cref="ObservableHashSet`1" /> object is a superset of the specified collection.
         /// </summary>
         /// <param name="other">The collection to compare to the current <see cref="ObservableHashSet`1" /> object. </param>
         /// <returns>true if the <see cref="ObservableHashSet`1" /> object is a superset of other; otherwise, false.</returns>
-        public bool IsSupersetOf(IEnumerable<T> other)
-        {
-            return this._hashSet.IsSupersetOf(other);
-        }
+        public bool IsSupersetOf(IEnumerable<T> other) => this._hashSet.IsSupersetOf(other);
 
         /// <summary>
         /// Determines whether the current <see cref="ObservableHashSet`1" /> object and a specified collection share common elements.
         /// </summary>
         /// <param name="other">The collection to compare to the current <see cref="ObservableHashSet`1" /> object. </param>
         /// <returns>true if the <see cref="ObservableHashSet`1" /> object and other share at least one common element; otherwise, false.</returns>
-        public bool Overlaps(IEnumerable<T> other)
-        {
-            return this._hashSet.Overlaps(other);
-        }
+        public bool Overlaps(IEnumerable<T> other) => this._hashSet.Overlaps(other);
 
         private void RaiseCollectionChanged(NotifyCollectionChangedEventArgs e)
         {
@@ -320,10 +290,7 @@ namespace Draw2D
 
         private void RaisePropertyChanged(string propertyName)
         {
-            if (this.PropertyChanged != null)
-            {
-                this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-            }
+            this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
         /// <summary>
@@ -346,8 +313,8 @@ namespace Draw2D
         public int RemoveWhere(Predicate<T> match)
         {
             List<T> list = (from m in this._hashSet
-                where match(m)
-                select m).ToList<T>();
+                            where match(m)
+                            select m).ToList<T>();
             foreach (T local in list)
             {
                 this.Remove(local);
@@ -360,10 +327,7 @@ namespace Draw2D
         /// </summary>
         /// <param name="other">The collection to compare to the current <see cref="ObservableHashSet`1" /> object. </param>
         /// <returns>true if the <see cref="ObservableHashSet`1" /> object is equal to other; otherwise, false.</returns>
-        public bool SetEquals(IEnumerable<T> other)
-        {
-            return this._hashSet.SetEquals(other);
-        }
+        public bool SetEquals(IEnumerable<T> other) => this._hashSet.SetEquals(other);
 
         /// <summary>
         /// Modifies the current <see cref="ObservableHashSet`1" /> object to contain only elements that are present either in that object or in the specified collection, but not both.
@@ -377,11 +341,11 @@ namespace Draw2D
             }
             this.CheckReentrancy();
             List<T> changedItems = (from x in other
-                where !_hashSet.Contains(x)
-                select x).ToList<T>();
+                                    where !_hashSet.Contains(x)
+                                    select x).ToList<T>();
             List<T> list2 = (from x in other
-                where _hashSet.Contains(x)
-                select x).ToList<T>();
+                             where _hashSet.Contains(x)
+                             select x).ToList<T>();
             this._hashSet.SymmetricExceptWith(other);
             if (list2.Count > 0)
             {
@@ -398,10 +362,7 @@ namespace Draw2D
             }
         }
 
-        void ICollection<T>.Add(T item)
-        {
-            this.Add(item);
-        }
+        void ICollection<T>.Add(T item) => this.Add(item);
 
         /// <summary>
         /// Returns an enumerator that iterates through a collection.
@@ -409,18 +370,12 @@ namespace Draw2D
         /// <returns>
         /// An <see cref="T:System.Collections.IEnumerator" /> object that can be used to iterate through the collection.
         /// </returns>
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return this._hashSet.GetEnumerator();
-        }
+        IEnumerator IEnumerable.GetEnumerator() => this._hashSet.GetEnumerator();
 
         /// <summary>
         /// Sets the capacity of a <see cref="ObservableHashSet`1" /> object to the actual number of elements it contains, rounded up to a nearby, implementation-specific value.
         /// </summary>
-        public void TrimExcess()
-        {
-            this._hashSet.TrimExcess();
-        }
+        public void TrimExcess() => this._hashSet.TrimExcess();
 
         /// <summary>
         /// Modifies the current <see cref="ObservableHashSet`1" /> object to contain all elements that are present in itself, the specified collection, or both.
@@ -434,8 +389,8 @@ namespace Draw2D
             }
             this.CheckReentrancy();
             List<T> changedItems = (from x in other
-                where !_hashSet.Contains(x)
-                select x).ToList<T>();
+                                    where !_hashSet.Contains(x)
+                                    select x).ToList<T>();
             this._hashSet.UnionWith(other);
             if (changedItems.Count > 0)
             {
@@ -447,13 +402,7 @@ namespace Draw2D
         /// <summary>
         /// Gets the IEqualityComparer&lt;T&gt; object that is used to determine equality for the values in the set.
         /// </summary>
-        public IEqualityComparer<T> Comparer
-        {
-            get
-            {
-                return this._hashSet.Comparer;
-            }
-        }
+        public IEqualityComparer<T> Comparer => this._hashSet.Comparer;
 
         /// <summary>
         /// Gets the number of elements contained in the <see cref="ObservableHashSet`1" />.
@@ -461,21 +410,9 @@ namespace Draw2D
         /// <returns>
         /// The number of elements contained in the <see cref="ObservableHashSet`1" />.
         /// </returns>
-        public int Count
-        {
-            get
-            {
-                return this._hashSet.Count;
-            }
-        }
+        public int Count => this._hashSet.Count;
 
-        bool ICollection<T>.IsReadOnly
-        {
-            get
-            {
-                return ((ICollection<T>)this._hashSet).IsReadOnly;
-            }
-        }
+        bool ICollection<T>.IsReadOnly => ((ICollection<T>)this._hashSet).IsReadOnly;
 
         /// <summary>
         /// The property names used with INotifyPropertyChanged.
@@ -490,23 +427,11 @@ namespace Draw2D
         {
             private int _busyCount;
 
-            public void Dispose()
-            {
-                this._busyCount--;
-            }
+            public void Dispose() => this._busyCount--;
 
-            public void Enter()
-            {
-                this._busyCount++;
-            }
+            public void Enter() => this._busyCount++;
 
-            public bool Busy
-            {
-                get
-                {
-                    return (this._busyCount > 0);
-                }
-            }
+            public bool Busy => this._busyCount > 0;
         }
     }
 }
