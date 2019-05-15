@@ -6196,6 +6196,7 @@ namespace Draw2D.ViewModels.Tools
                 Points = new ObservableCollection<PointShape>(),
                 StartPoint = next,
                 Point = (PointShape)next.Copy(null),
+                Text = new Text(),
                 Style = context.ContainerView?.CurrentStyle
             };
             context.ContainerView?.WorkingContainer.Shapes.Add(_line);
