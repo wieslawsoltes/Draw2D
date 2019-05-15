@@ -461,7 +461,7 @@ namespace Draw2D.Editor
 
             containerViews.Add(containerView0);
             containerViews.Add(containerView1);
-            containerViews.Add(containerView1);
+            containerViews.Add(containerView2);
 
             ContainerViews = containerViews;
             ContainerView = containerViews.FirstOrDefault();
