@@ -342,6 +342,13 @@
         <DockPanel Classes="views" Grid.Row="2" Grid.Column="2">
             <TabStrip Items="{Binding ContainerViews}" SelectedItem="{Binding ContainerView, Mode=TwoWay}" Focusable="false" DockPanel.Dock="Top">
                 <TabStrip.Styles>
+                    <Style Selector="TabStrip">
+                        <Setter Property="ItemsPanel">
+                            <ItemsPanelTemplate>
+                                <WrapPanel ClipToBounds="False" />
+                            </ItemsPanelTemplate>
+                        </Setter>
+                    </Style>
                     <Style Selector="TabStripItem">
                         <Setter Property="Background" Value="{DynamicResource ThemeBackgroundBrush}"/>
                         <Setter Property="FontSize" Value="{DynamicResource FontSizeNormal}"/>
