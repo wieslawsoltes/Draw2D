@@ -23,7 +23,7 @@ using Draw2D.ViewModels.Tools;
 namespace Draw2D.Editor
 {
     [DataContract(IsReference = true)]
-    public class ContainerEditor : ToolContext
+    public class EditContainerView : ToolContext
     {
         private IHitTest _hitTest;
         private ISelection _selection;
@@ -58,7 +58,7 @@ namespace Draw2D.Editor
             set => Update(ref _files, value);
         }
 
-        public ContainerEditor()
+        public EditContainerView()
         {
         }
 

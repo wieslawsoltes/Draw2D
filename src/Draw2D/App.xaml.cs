@@ -21,36 +21,36 @@ namespace Draw2D
 
         static void AppMain(Application app, string[] args)
         {
-            ContainerEditor containerEditor = null;
+            EditContainerView editContainerView = null;
 
-            if (File.Exists("context.json"))
+            if (File.Exists("editor.json"))
             {
-                containerEditor = ContainerEditor.LoadFromJson<ContainerEditor>("context.json");
+                editContainerView = EditContainerView.LoadFromJson<EditContainerView>("editor.json");
                 
-                foreach (var containerView in containerEditor.ContainerViews)
+                foreach (var containerView in editContainerView.ContainerViews)
                 {
-                    containerEditor.InitContainerView(containerView);
+                    editContainerView.InitContainerView(containerView);
                 }
             }
             else
             {
-                containerEditor = new ContainerEditor();
-                containerEditor.Initialize();
+                editContainerView = new EditContainerView();
+                editContainerView.Initialize();
             }
 
-            containerEditor.Files = Directory
+            editContainerView.Files = Directory
                 .EnumerateFiles(Directory.GetCurrentDirectory(), "*.json")
                 .Select(x => Path.GetFileName(x))
                 .ToList();
 
             var window = new MainWindow
             {
-                DataContext = containerEditor
+                DataContext = editContainerView
             };
 
             app.Run(window);
 
-            ContainerEditor.SaveAsjson<ContainerEditor>("context.json", containerEditor);
+            EditContainerView.SaveAsjson<EditContainerView>("editor.json", editContainerView);
         }
 
         public static AppBuilder BuildAvaloniaApp()
