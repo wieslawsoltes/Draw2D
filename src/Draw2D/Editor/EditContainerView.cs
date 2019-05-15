@@ -438,6 +438,11 @@ namespace Draw2D.Editor
                 { typeof(TextShape), new TextDecorator() }
             };
 
+            HitTest = hitTest;
+            Selection = selectionTool;
+            Decorators = decorators;
+            Files = null;
+
             var containerViews = new ObservableCollection<IContainerView>();
 
             var containerView0 = CreateContainerView("View0");
@@ -458,11 +463,6 @@ namespace Draw2D.Editor
             Tools = tools;
             CurrentTool = currentTool;
             Mode = EditMode.Mouse;
-
-            HitTest = hitTest;
-            Selection = selectionTool;
-            Decorators = decorators;
-            Files = null;
         }
 
         public IContainerView CreateContainerView(string title)
