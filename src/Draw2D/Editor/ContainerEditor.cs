@@ -30,6 +30,27 @@ namespace Draw2D.Editor
         private IDictionary<Type, IShapeDecorator> _decorators;
         private IList<string> _files;
 
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public IHitTest HitTest
+        {
+            get => _hitTest;
+            set => Update(ref _hitTest, value);
+        }
+
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public ISelection Selection
+        {
+            get => _selection;
+            set => Update(ref _selection, value);
+        }
+
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public IDictionary<Type, IShapeDecorator> Decorators
+        {
+            get => _decorators;
+            set => Update(ref _decorators, value);
+        }
+
         [IgnoreDataMember]
         public IList<string> Files
         {
@@ -417,12 +438,7 @@ namespace Draw2D.Editor
                 { typeof(TextShape), new TextDecorator() }
             };
 
-            _decorators = decorators;
-
             var containerViews = new ObservableCollection<IContainerView>();
-
-            _hitTest = hitTest;
-            _selection = selectionTool;
 
             containerViews.Add(CreateContainerView("View0"));
             containerViews.Add(CreateContainerView("View1"));
@@ -433,22 +449,11 @@ namespace Draw2D.Editor
             Tools = tools;
             CurrentTool = currentTool;
             Mode = EditMode.Mouse;
-        }
 
-        private ICanvasContainer CreateCurrentCanvasContainer()
-        {
-            return new CanvasContainer()
-            {
-                Shapes = new ObservableCollection<BaseShape>()
-            };
-        }
-
-        private ICanvasContainer CreateWorkingCanvasContainer()
-        {
-            return new CanvasContainer()
-            {
-                Shapes = new ObservableCollection<BaseShape>()
-            };
+            HitTest = hitTest;
+            Selection = selectionTool;
+            Decorators = decorators;
+            Files = null;
         }
 
         public IContainerView CreateContainerView(string title)
@@ -479,7 +484,10 @@ namespace Draw2D.Editor
                 InputService = null,
                 DrawContainerView = null,
                 Selection = null,
-                CurrentContainer = CreateCurrentCanvasContainer(),
+                CurrentContainer = new CanvasContainer()
+                {
+                    Shapes = new ObservableCollection<BaseShape>()
+                },
                 WorkingContainer = null,
                 HitTest = null
             };
@@ -495,7 +503,10 @@ namespace Draw2D.Editor
                 };
                 containerView.Selection = _selection;
                 containerView.HitTest = _hitTest;
-                containerView.WorkingContainer = CreateWorkingCanvasContainer();
+                containerView.WorkingContainer = new CanvasContainer()
+                {
+                    Shapes = new ObservableCollection<BaseShape>()
+                };
             }
         }
 
@@ -661,6 +672,7 @@ namespace Draw2D.Editor
                         break;
                     case TextShape textShape:
                         {
+
                         }
                         break;
                 };
