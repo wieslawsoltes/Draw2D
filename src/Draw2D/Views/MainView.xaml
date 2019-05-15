@@ -271,6 +271,15 @@
                         <TabItem Classes="default" Header="Style">
                             <ContentControl Content="{Binding ContainerView.CurrentStyle}"/>
                         </TabItem>
+                        <TabItem Classes="default" Header="Styles">
+                            <ListBox Classes="default" Items="{Binding ContainerView.Styles}" SelectedItem="{Binding ContainerView.CurrentStyle}">
+                                <ListBox.DataTemplates>
+                                    <DataTemplate>
+                                        <TextBlock Classes="default" Text="{Binding Name}"/>
+                                    </DataTemplate>
+                                </ListBox.DataTemplates>
+                            </ListBox>
+                        </TabItem>
                         <TabItem Classes="default" Header="Shapes">
                             <TabControl Classes="default" TabStripPlacement="Top">
                                 <TabItem Classes="default" Header="Current">
@@ -292,20 +301,24 @@
                         </TabItem>
                     </TabControl>
                 </TabItem>
-                <TabItem Classes="default" Header="Selected">
-                    <ListBox Classes="default" x:Name="selected" Items="{Binding ContainerView.SelectionState.Selected, Mode=OneWay}">
-                        <ListBox.DataTemplates>
-                            <DataTemplate>
-                                <TextBlock Classes="default" Text="{Binding}"/>
-                            </DataTemplate>
-                        </ListBox.DataTemplates>
-                    </ListBox>
-                </TabItem>
-                <TabItem Classes="default" Header="Shape">
-                    <ContentControl Content="{Binding #selected.SelectedItem, Mode=OneWay, FallbackValue={x:Null}}"/>
-                </TabItem>          
-                <TabItem Classes="default" Header="Hovered">
-                    <ContentControl Content="{Binding ContainerView.SelectionState.Hovered}"/>
+                <TabItem Classes="default" Header="Selection">
+                    <TabControl Classes="default" TabStripPlacement="Top">
+                        <TabItem Classes="default" Header="Selected">
+                            <ContentControl Content="{Binding ContainerView.SelectionState.Selected}"/>
+                        </TabItem>
+                        <TabItem Classes="default" Header="Hovered">
+                            <ContentControl Content="{Binding ContainerView.SelectionState.Hovered}"/>
+                        </TabItem>
+                        <TabItem Classes="default" Header="Shapes">
+                            <ListBox Classes="default" Items="{Binding ContainerView.SelectionState.Shapes, Mode=OneWay}">
+                                <ListBox.DataTemplates>
+                                    <DataTemplate>
+                                        <TextBlock Classes="default" Text="{Binding}"/>
+                                    </DataTemplate>
+                                </ListBox.DataTemplates>
+                            </ListBox>
+                        </TabItem>
+                    </TabControl>
                 </TabItem>
                 <TabItem Classes="default" Header="Renderer">
                     <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="*,150">

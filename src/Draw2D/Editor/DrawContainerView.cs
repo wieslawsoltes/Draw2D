@@ -223,7 +223,7 @@ namespace Draw2D.Editor
             //view.CurrentContainer.Draw(context, renderer, 0.0, 0.0, DrawMode.Point, null, null);
             //view.WorkingContainer.Draw(context, renderer, 0.0, 0.0, DrawMode.Point, null, null);
 
-            var selected = view.SelectionState.Selected.ToList();
+            var selected = view.SelectionState.Shapes.ToList();
 
             foreach (var shape in selected)
             {
@@ -236,7 +236,7 @@ namespace Draw2D.Editor
 
         private void DrawDecorators(IContainerView view, object context, IShapeRenderer renderer)
         {
-            var selected = view.SelectionState.Selected.ToList();
+            var selected = view.SelectionState.Shapes.ToList();
 
             foreach (var shape in selected)
             {

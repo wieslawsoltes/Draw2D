@@ -87,7 +87,8 @@ namespace Draw2D.Editor
             var selectionState = new SelectionState()
             {
                 Hovered = null,
-                Selected = new ObservableHashSet<BaseShape>()
+                Selected = null,
+                Shapes = new ObservableHashSet<BaseShape>()
             };
 
             var hitTest = new HitTest()
@@ -538,7 +539,7 @@ namespace Draw2D.Editor
             if (containerView != null)
             {
                 CurrentTool.Clean(this);
-                ContainerView?.SelectionState.Selected.Clear();
+                ContainerView?.SelectionState.Clear();
     
                 ContainerViews.Add(containerView);
                 ContainerView = containerView;
@@ -638,7 +639,7 @@ namespace Draw2D.Editor
 
         public void ToSvgPathData(TextBox textBox)
         {
-            var selected = ContainerView.SelectionState.Selected;
+            var selected = ContainerView.SelectionState.Shapes;
             if (selected != null)
             {
                 var shape = selected.FirstOrDefault();
