@@ -440,9 +440,18 @@ namespace Draw2D.Editor
 
             var containerViews = new ObservableCollection<IContainerView>();
 
-            containerViews.Add(CreateContainerView("View0"));
-            containerViews.Add(CreateContainerView("View1"));
-            containerViews.Add(CreateContainerView("View2"));
+            var containerView0 = CreateContainerView("View0");
+            InitContainerView(containerView0);
+
+            var containerView1 = CreateContainerView("View1");
+            InitContainerView(containerView1);
+
+            var containerView2 = CreateContainerView("View2");
+            InitContainerView(containerView2);
+
+            containerViews.Add(containerView0);
+            containerViews.Add(containerView1);
+            containerViews.Add(containerView1);
 
             ContainerViews = containerViews;
             ContainerView = containerViews.FirstOrDefault();
@@ -510,6 +519,20 @@ namespace Draw2D.Editor
             }
         }
 
+        public void AddContainerView(IContainerView containerView)
+        {
+            if (containerView != null)
+            {
+                CurrentTool.Clean(this);
+                ContainerView?.Selection.Selected.Clear();
+    
+                ContainerViews.Add(containerView);
+                ContainerView = containerView;
+    
+                ContainerView?.InputService?.Redraw?.Invoke();
+            }
+        }
+
         public void CloseContainerView(IContainerView containerView)
         {
             if (containerView != null)
@@ -537,17 +560,6 @@ namespace Draw2D.Editor
                 containerView.HitTest = null;
                 containerView.WorkingContainer = null;
             }
-        }
-
-        private void AddContainerView(IContainerView containerView)
-        {
-            CurrentTool.Clean(this);
-            ContainerView?.Selection.Selected.Clear();
-
-            ContainerViews.Add(containerView);
-            ContainerView = containerView;
-
-            ContainerView?.InputService?.Redraw?.Invoke();
         }
 
         public void NewContainerView()
