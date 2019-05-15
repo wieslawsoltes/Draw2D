@@ -10,10 +10,28 @@
              d:DesignWidth="400" d:DesignHeight="300">
     <TabControl Classes="default" TabStripPlacement="Top">
         <TabItem Classes="default" Header="Conic">
-            <Grid RowDefinitions="Auto" ColumnDefinitions="Auto,*">
-                <TextBlock Classes="default" Grid.Column="0" Grid.Row="0" Text="Text"/>
-                <TextBox Classes="default" Grid.Column="1" Grid.Row="0" Text="{Binding Text.Value}"/>
+            <Grid RowDefinitions="Auto,Auto,Auto,Auto" ColumnDefinitions="Auto,*">
+                <TextBlock Classes="default" Grid.Column="0" Grid.Row="0" Text="Id"/>
+                <TextBox Classes="default" Grid.Column="1" Grid.Row="0" Text="{Binding Id}"/>
+                <TextBlock Classes="default" Grid.Column="0" Grid.Row="1" Text="Name"/>
+                <TextBox Classes="default" Grid.Column="1" Grid.Row="1" Text="{Binding Name}"/>
+                <TextBlock Classes="default" Grid.Column="0" Grid.Row="2" Text="Text"/>
+                <TextBox Classes="default" Grid.Column="1" Grid.Row="2" Text="{Binding Text.Value}"/>
+                <TextBlock Classes="default" Grid.Column="0" Grid.Row="3" Text="Weight"/>
+                <TextBox Classes="default" Grid.Column="1" Grid.Row="3" Text="{Binding Weight}"/>
             </Grid>
+        </TabItem>
+        <TabItem Classes="default" Header="StartPoint">
+            <ContentControl Content="{Binding StartPoint}"/>
+        </TabItem>
+        <TabItem Classes="default" Header="Point1">
+            <ContentControl Content="{Binding Point1}"/>
+        </TabItem>
+        <TabItem Classes="default" Header="Point2">
+            <ContentControl Content="{Binding Point2}"/>
+        </TabItem>
+        <TabItem Classes="default" Header="Transform">
+            <ContentControl Content="{Binding Transform}"/>
         </TabItem>
         <TabItem Classes="default" Header="Style">
             <ContentControl Content="{Binding Style}"/>

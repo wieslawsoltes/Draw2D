@@ -8,7 +8,27 @@
              xmlns:local="clr-namespace:Draw2D.Views.Shapes"
              mc:Ignorable="d"
              d:DesignWidth="400" d:DesignHeight="300">
-    <Grid>
-        <TextBlock Text="Point" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-    </Grid>
+    <TabControl Classes="default" TabStripPlacement="Top">
+        <TabItem Classes="default" Header="Point">
+            <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="Auto,*">
+                <TextBlock Classes="default" Grid.Column="0" Grid.Row="0" Text="Id"/>
+                <TextBox Classes="default" Grid.Column="1" Grid.Row="0" Text="{Binding Id}"/>
+                <TextBlock Classes="default" Grid.Column="0" Grid.Row="1" Text="Name"/>
+                <TextBox Classes="default" Grid.Column="1" Grid.Row="1" Text="{Binding Name}"/>
+                <TextBlock Classes="default" Grid.Column="0" Grid.Row="2" Text="X"/>
+                <TextBox Classes="default" Grid.Column="1" Grid.Row="2" Text="{Binding X}"/>
+                <TextBlock Classes="default" Grid.Column="0" Grid.Row="3" Text="Y"/>
+                <TextBox Classes="default" Grid.Column="1" Grid.Row="3" Text="{Binding Y}"/>
+            </Grid>
+        </TabItem>
+        <TabItem Classes="default" Header="Template">
+            <ContentControl Content="{Binding Template}"/>
+        </TabItem>
+        <TabItem Classes="default" Header="Transform">
+            <ContentControl Content="{Binding Transform}"/>
+        </TabItem>
+        <TabItem Classes="default" Header="Style">
+            <ContentControl Content="{Binding Style}"/>
+        </TabItem>
+    </TabControl>
 </UserControl>
