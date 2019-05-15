@@ -25,10 +25,18 @@ namespace Draw2D.Editor
     [DataContract(IsReference = true)]
     public class EditContainerView : ToolContext
     {
+        private ISelection _selection;
         private ISelectionState _selectionState;
         private IHitTest _hitTest;
         private IDictionary<Type, IShapeDecorator> _decorators;
         private IList<string> _files;
+
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public ISelection Selection
+        {
+            get => _selection;
+            set => Update(ref _selection, value);
+        }
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public ISelectionState SelectionState
@@ -443,6 +451,7 @@ namespace Draw2D.Editor
                 { typeof(TextShape), new TextDecorator() }
             };
 
+            Selection = selectionTool;
             SelectionState = selectionState;
             HitTest = hitTest;
             Decorators = decorators;
