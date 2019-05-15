@@ -413,7 +413,7 @@ namespace Draw2D.Renderers
 
         public double Scale { get; set; } = 1.0;
 
-        public ISelection Selection { get; set; } = null;
+        public ISelectionState SelectionState { get; set; } = null;
 
         public SkiaShapeRenderer()
         {

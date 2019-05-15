@@ -223,7 +223,7 @@ namespace Draw2D.Editor
             //view.CurrentContainer.Draw(context, renderer, 0.0, 0.0, DrawMode.Point, null, null);
             //view.WorkingContainer.Draw(context, renderer, 0.0, 0.0, DrawMode.Point, null, null);
 
-            var selected = view.Selection.Selected.ToList();
+            var selected = view.SelectionState.Selected.ToList();
 
             foreach (var shape in selected)
             {
@@ -236,13 +236,13 @@ namespace Draw2D.Editor
 
         private void DrawDecorators(IContainerView view, object context, IShapeRenderer renderer)
         {
-            var selected = view.Selection.Selected.ToList();
+            var selected = view.SelectionState.Selected.ToList();
 
             foreach (var shape in selected)
             {
                 if (Decorators.TryGetValue(shape.GetType(), out var helper))
                 {
-                    helper.Draw(context, shape, renderer, view.Selection, 0.0, 0.0, DrawMode.Shape);
+                    helper.Draw(context, shape, renderer, view.SelectionState, 0.0, 0.0, DrawMode.Shape);
                 }
             }
         }
@@ -250,7 +250,7 @@ namespace Draw2D.Editor
         private SKPicture RecordPicture(IContainerView view, double scale, IShapeRenderer renderer, Action<IContainerView, object, IShapeRenderer> draw)
         {
             renderer.Scale = scale;
-            renderer.Selection = view.Selection;
+            renderer.SelectionState = view.SelectionState;
 
             var recorder = new SKPictureRecorder();
             var rect = new SKRect(0f, 0f, (float)view.Width, (float)view.Height);
@@ -303,7 +303,7 @@ namespace Draw2D.Editor
                 _pictureShapesWorking = RecordPicture(view, zx, _skiaRenderer, DrawShapesWorking);
             }
 
-            bool isSelectionDirty = view.Selection.IsDirty == true || isShapesCurrentDirty == true || isShapesWorkingDirty == true;
+            bool isSelectionDirty = view.SelectionState.IsDirty == true || isShapesCurrentDirty == true || isShapesWorkingDirty == true;
 
             Debug.WriteLine(
                 $"{nameof(isShapesCurrentDirty)}: {isShapesCurrentDirty}, " +
@@ -312,9 +312,9 @@ namespace Draw2D.Editor
                 $"{nameof(isWorkingContainerDirty)}: {isWorkingContainerDirty}, " +
                 $"{nameof(isSelectionDirty)}: {isSelectionDirty}");
 
-            if (view.Selection.IsDirty == true)
+            if (view.SelectionState.IsDirty == true)
             {
-                view.Selection.Invalidate();
+                view.SelectionState.Invalidate();
             }
 
             if (_pictureDecorators == null || isSelectionDirty == true)
@@ -384,7 +384,7 @@ namespace Draw2D.Editor
         private void DrawAvalonia(IContainerView view, DrawingContext context, double width, double height, double dx, double dy, double zx, double zy)
         {
             _avaloniaRenderer.Scale = zx;
-            _avaloniaRenderer.Selection = view.Selection;
+            _avaloniaRenderer.SelectionState = view.SelectionState;
 
             view.CurrentContainer.Invalidate();
             view.WorkingContainer.Invalidate();

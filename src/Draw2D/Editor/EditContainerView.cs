@@ -25,23 +25,23 @@ namespace Draw2D.Editor
     [DataContract(IsReference = true)]
     public class EditContainerView : ToolContext
     {
+        private ISelectionState _selectionState;
         private IHitTest _hitTest;
-        private ISelection _selection;
         private IDictionary<Type, IShapeDecorator> _decorators;
         private IList<string> _files;
+
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public ISelectionState SelectionState
+        {
+            get => _selectionState;
+            set => Update(ref _selectionState, value);
+        }
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public IHitTest HitTest
         {
             get => _hitTest;
             set => Update(ref _hitTest, value);
-        }
-
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public ISelection Selection
-        {
-            get => _selection;
-            set => Update(ref _selection, value);
         }
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
@@ -76,6 +76,12 @@ namespace Draw2D.Editor
 
         public void Initialize()
         {
+            var selectionState = new SelectionState()
+            {
+                Hovered = null,
+                Selected = new ObservableHashSet<BaseShape>()
+            };
+
             var hitTest = new HitTest()
             {
                 Registered = new Dictionary<Type, IBounds>()
@@ -180,8 +186,7 @@ namespace Draw2D.Editor
                     DisconnectPoints = true,
                     DisconnectTestRadius = 10.0
                 },
-                Hovered = null,
-                Selected = new ObservableHashSet<BaseShape>()
+                SelectionState = selectionState
             };
 
             var pointTool = new PointTool()
@@ -438,8 +443,8 @@ namespace Draw2D.Editor
                 { typeof(TextShape), new TextDecorator() }
             };
 
+            SelectionState = selectionState;
             HitTest = hitTest;
-            Selection = selectionTool;
             Decorators = decorators;
             Files = null;
 
@@ -492,7 +497,7 @@ namespace Draw2D.Editor
                 },
                 InputService = null,
                 DrawContainerView = null,
-                Selection = null,
+                SelectionState = null,
                 CurrentContainer = new CanvasContainer()
                 {
                     Shapes = new ObservableCollection<BaseShape>()
@@ -510,7 +515,7 @@ namespace Draw2D.Editor
                 {
                     Decorators = _decorators
                 };
-                containerView.Selection = _selection;
+                containerView.SelectionState = _selectionState;
                 containerView.HitTest = _hitTest;
                 containerView.WorkingContainer = new CanvasContainer()
                 {
@@ -524,7 +529,7 @@ namespace Draw2D.Editor
             if (containerView != null)
             {
                 CurrentTool.Clean(this);
-                ContainerView?.Selection.Selected.Clear();
+                ContainerView?.SelectionState.Selected.Clear();
     
                 ContainerViews.Add(containerView);
                 ContainerView = containerView;
@@ -556,7 +561,7 @@ namespace Draw2D.Editor
                     containerView.DrawContainerView.Dispose();
                 }
                 containerView.DrawContainerView = null;
-                containerView.Selection = null;
+                containerView.SelectionState = null;
                 containerView.HitTest = null;
                 containerView.WorkingContainer = null;
             }
@@ -624,7 +629,7 @@ namespace Draw2D.Editor
 
         public void ToSvgPathData(TextBox textBox)
         {
-            var selected = ContainerView.Selection.Selected;
+            var selected = ContainerView.SelectionState.Selected;
             if (selected != null)
             {
                 var shape = selected.FirstOrDefault();

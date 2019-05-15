@@ -293,7 +293,7 @@
                     </TabControl>
                 </TabItem>
                 <TabItem Classes="default" Header="Selected">
-                    <ListBox Classes="default" x:Name="selected" Items="{Binding ContainerView.Selection.Selected, Mode=OneWay}">
+                    <ListBox Classes="default" x:Name="selected" Items="{Binding ContainerView.SelectionState.Selected, Mode=OneWay}">
                         <ListBox.DataTemplates>
                             <DataTemplate>
                                 <TextBlock Classes="default" Text="{Binding}"/>

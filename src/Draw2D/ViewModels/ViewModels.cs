@@ -130,17 +130,46 @@ namespace Draw2D.ViewModels
         void Draw(object dc, IShapeRenderer renderer, double dx, double dy, DrawMode mode, object db, object r);
     }
 
+    public interface IDirty
+    {
+        bool IsDirty { get; set; }
+        void MarkAsDirty(bool isDirty);
+        void Invalidate();
+    }
+
+    public interface ISelectionState : IDirty
+    {
+        BaseShape Hovered { get; set; }
+        ISet<BaseShape> Selected { get; set; }
+    }
+
+    public interface ISelection : IDirty
+    {
+        ISelectionState SelectionState { get; set; }
+        void Cut(IToolContext context);
+        void Copy(IToolContext context);
+        void Paste(IToolContext context);
+        void Delete(IToolContext context);
+        void Group(IToolContext context);
+        void SelectAll(IToolContext context);
+        void Hover(IToolContext context, BaseShape shape);
+        void DeHover(IToolContext context);
+        void Connect(IToolContext context, PointShape point);
+        void Disconnect(IToolContext context, PointShape point);
+        void Disconnect(IToolContext context, BaseShape shape);
+    }
+
     public interface ISelectable
     {
-        void Move(ISelection selection, double dx, double dy);
-        void Select(ISelection selection);
-        void Deselect(ISelection selection);
+        void Move(ISelectionState selectionState, double dx, double dy);
+        void Select(ISelectionState selectionState);
+        void Deselect(ISelectionState selectionState);
     }
 
     public interface IShapeRenderer : IDisposable
     {
         double Scale { get; set; }
-        ISelection Selection { get; set; }
+        ISelectionState SelectionState { get; set; }
         object PushMatrix(object dc, Matrix2 matrix);
         void PopMatrix(object dc, object state);
         void DrawLine(object dc, LineShape line, ShapeStyle style, double dx, double dy);
@@ -155,7 +184,7 @@ namespace Draw2D.ViewModels
 
     public interface IShapeDecorator
     {
-        void Draw(object dc, BaseShape shape, IShapeRenderer renderer, ISelection selected, double dx, double dy, DrawMode mode);
+        void Draw(object dc, BaseShape shape, IShapeRenderer renderer, ISelectionState selectionState, double dx, double dy, DrawMode mode);
     }
 
     public interface IHitTest
@@ -166,30 +195,6 @@ namespace Draw2D.ViewModels
         PointShape TryToGetPoint(BaseShape shape, Point2 target, double radius);
         BaseShape TryToGetShape(IEnumerable<BaseShape> shapes, Point2 target, double radius);
         ISet<BaseShape> TryToGetShapes(IEnumerable<BaseShape> shapes, Rect2 target, double radius);
-    }
-
-    public interface IDirty
-    {
-        bool IsDirty { get; set; }
-        void MarkAsDirty(bool isDirty);
-        void Invalidate();
-    }
-
-    public interface ISelection : IDirty
-    {
-        BaseShape Hovered { get; set; }
-        ISet<BaseShape> Selected { get; set; }
-        void Cut(IToolContext context);
-        void Copy(IToolContext context);
-        void Paste(IToolContext context);
-        void Delete(IToolContext context);
-        void Group(IToolContext context);
-        void SelectAll(IToolContext context);
-        void Hover(IToolContext context, BaseShape shape);
-        void DeHover(IToolContext context);
-        void Connect(IToolContext context, PointShape point);
-        void Disconnect(IToolContext context, PointShape point);
-        void Disconnect(IToolContext context, BaseShape shape);
     }
 
     public interface ITool
@@ -441,8 +446,8 @@ namespace Draw2D.ViewModels
             {
                 context.ContainerView?.WorkingContainer.Shapes.Remove(guide);
                 context.ContainerView?.WorkingContainer.MarkAsDirty(true);
-                context.ContainerView?.Selection.Selected.Remove(guide);
-                context.ContainerView?.Selection.MarkAsDirty(true);
+                context.ContainerView?.SelectionState.Selected.Remove(guide);
+                context.ContainerView?.SelectionState.MarkAsDirty(true);
             }
             Guides.Clear();
         }
@@ -470,8 +475,8 @@ namespace Draw2D.ViewModels
             {
                 context.ContainerView?.WorkingContainer.Shapes.Remove(point);
                 context.ContainerView?.WorkingContainer.MarkAsDirty(true);
-                context.ContainerView?.Selection.Selected.Remove(point);
-                context.ContainerView?.Selection.MarkAsDirty(true);
+                context.ContainerView?.SelectionState.Selected.Remove(point);
+                context.ContainerView?.SelectionState.MarkAsDirty(true);
             }
             Intersections.Clear();
         }
@@ -796,23 +801,23 @@ namespace Draw2D.ViewModels.Shapes
             }
         }
 
-        public abstract void Move(ISelection selection, double dx, double dy);
+        public abstract void Move(ISelectionState selectionState, double dx, double dy);
 
-        public virtual void Select(ISelection selection)
+        public virtual void Select(ISelectionState selectionState)
         {
-            if (!selection.Selected.Contains(this))
+            if (!selectionState.Selected.Contains(this))
             {
-                selection.Selected.Add(this);
-                selection.MarkAsDirty(true);
+                selectionState.Selected.Add(this);
+                selectionState.MarkAsDirty(true);
             }
         }
 
-        public virtual void Deselect(ISelection selection)
+        public virtual void Deselect(ISelectionState selectionState)
         {
-            if (selection.Selected.Contains(this))
+            if (selectionState.Selected.Contains(this))
             {
-                selection.Selected.Remove(this);
-                selection.MarkAsDirty(true);
+                selectionState.Selected.Remove(this);
+                selectionState.MarkAsDirty(true);
             }
         }
 
@@ -875,33 +880,33 @@ namespace Draw2D.ViewModels.Shapes
             }
         }
 
-        public override void Move(ISelection selection, double dx, double dy)
+        public override void Move(ISelectionState selectionState, double dx, double dy)
         {
-            if (!selection.Selected.Contains(_topLeft))
+            if (!selectionState.Selected.Contains(_topLeft))
             {
-                _topLeft.Move(selection, dx, dy);
+                _topLeft.Move(selectionState, dx, dy);
             }
 
-            if (!selection.Selected.Contains(_bottomRight))
+            if (!selectionState.Selected.Contains(_bottomRight))
             {
-                _bottomRight.Move(selection, dx, dy);
+                _bottomRight.Move(selectionState, dx, dy);
             }
 
-            base.Move(selection, dx, dy);
+            base.Move(selectionState, dx, dy);
         }
 
-        public override void Select(ISelection selection)
+        public override void Select(ISelectionState selectionState)
         {
-            base.Select(selection);
-            TopLeft.Select(selection);
-            BottomRight.Select(selection);
+            base.Select(selectionState);
+            TopLeft.Select(selectionState);
+            BottomRight.Select(selectionState);
         }
 
-        public override void Deselect(ISelection selection)
+        public override void Deselect(ISelectionState selectionState)
         {
-            base.Deselect(selection);
-            TopLeft.Deselect(selection);
-            BottomRight.Deselect(selection);
+            base.Deselect(selectionState);
+            TopLeft.Deselect(selectionState);
+            BottomRight.Deselect(selectionState);
         }
 
         private bool CanConnect(PointShape point)
@@ -1025,7 +1030,7 @@ namespace Draw2D.ViewModels.Shapes
             {
                 foreach (var point in Points)
                 {
-                    if (renderer.Selection.Selected.Contains(point))
+                    if (renderer.SelectionState.Selected.Contains(point))
                     {
                         point.Draw(dc, renderer, dx, dy, mode, db, r);
                     }
@@ -1033,34 +1038,34 @@ namespace Draw2D.ViewModels.Shapes
             }
         }
 
-        public override void Move(ISelection selection, double dx, double dy)
+        public override void Move(ISelectionState selectionState, double dx, double dy)
         {
             foreach (var point in Points)
             {
-                if (!selection.Selected.Contains(point))
+                if (!selectionState.Selected.Contains(point))
                 {
-                    point.Move(selection, dx, dy);
+                    point.Move(selectionState, dx, dy);
                 }
             }
         }
 
-        public override void Select(ISelection selection)
+        public override void Select(ISelectionState selectionState)
         {
-            base.Select(selection);
+            base.Select(selectionState);
 
             foreach (var point in Points)
             {
-                point.Select(selection);
+                point.Select(selectionState);
             }
         }
 
-        public override void Deselect(ISelection selection)
+        public override void Deselect(ISelectionState selectionState)
         {
-            base.Deselect(selection);
+            base.Deselect(selectionState);
 
             foreach (var point in Points)
             {
-                point.Deselect(selection);
+                point.Deselect(selectionState);
             }
         }
 
@@ -1193,17 +1198,17 @@ namespace Draw2D.ViewModels.Shapes
 
             if (mode.HasFlag(DrawMode.Point))
             {
-                if (renderer.Selection.Selected.Contains(_startPoint))
+                if (renderer.SelectionState.Selected.Contains(_startPoint))
                 {
                     _startPoint.Draw(dc, renderer, dx, dy, mode, db, r);
                 }
 
-                if (renderer.Selection.Selected.Contains(_point1))
+                if (renderer.SelectionState.Selected.Contains(_point1))
                 {
                     _point1.Draw(dc, renderer, dx, dy, mode, db, r);
                 }
 
-                if (renderer.Selection.Selected.Contains(_point2))
+                if (renderer.SelectionState.Selected.Contains(_point2))
                 {
                     _point2.Draw(dc, renderer, dx, dy, mode, db, r);
                 }
@@ -1213,40 +1218,40 @@ namespace Draw2D.ViewModels.Shapes
             base.EndTransform(dc, renderer, state);
         }
 
-        public override void Move(ISelection selection, double dx, double dy)
+        public override void Move(ISelectionState selectionState, double dx, double dy)
         {
-            if (!selection.Selected.Contains(_startPoint))
+            if (!selectionState.Selected.Contains(_startPoint))
             {
-                _startPoint.Move(selection, dx, dy);
+                _startPoint.Move(selectionState, dx, dy);
             }
 
-            if (!selection.Selected.Contains(_point1))
+            if (!selectionState.Selected.Contains(_point1))
             {
-                _point1.Move(selection, dx, dy);
+                _point1.Move(selectionState, dx, dy);
             }
 
-            if (!selection.Selected.Contains(_point2))
+            if (!selectionState.Selected.Contains(_point2))
             {
-                _point2.Move(selection, dx, dy);
+                _point2.Move(selectionState, dx, dy);
             }
 
-            base.Move(selection, dx, dy);
+            base.Move(selectionState, dx, dy);
         }
 
-        public override void Select(ISelection selection)
+        public override void Select(ISelectionState selectionState)
         {
-            base.Select(selection);
-            StartPoint.Select(selection);
-            Point1.Select(selection);
-            Point2.Select(selection);
+            base.Select(selectionState);
+            StartPoint.Select(selectionState);
+            Point1.Select(selectionState);
+            Point2.Select(selectionState);
         }
 
-        public override void Deselect(ISelection selection)
+        public override void Deselect(ISelectionState selectionState)
         {
-            base.Deselect(selection);
-            StartPoint.Deselect(selection);
-            Point1.Deselect(selection);
-            Point2.Deselect(selection);
+            base.Deselect(selectionState);
+            StartPoint.Deselect(selectionState);
+            Point1.Deselect(selectionState);
+            Point2.Deselect(selectionState);
         }
 
         private bool CanConnect(PointShape point)
@@ -1463,22 +1468,22 @@ namespace Draw2D.ViewModels.Shapes
 
             if (mode.HasFlag(DrawMode.Point))
             {
-                if (renderer.Selection.Selected.Contains(_startPoint))
+                if (renderer.SelectionState.Selected.Contains(_startPoint))
                 {
                     _startPoint.Draw(dc, renderer, dx, dy, mode, db, r);
                 }
 
-                if (renderer.Selection.Selected.Contains(_point1))
+                if (renderer.SelectionState.Selected.Contains(_point1))
                 {
                     _point1.Draw(dc, renderer, dx, dy, mode, db, r);
                 }
 
-                if (renderer.Selection.Selected.Contains(_point2))
+                if (renderer.SelectionState.Selected.Contains(_point2))
                 {
                     _point2.Draw(dc, renderer, dx, dy, mode, db, r);
                 }
 
-                if (renderer.Selection.Selected.Contains(_point3))
+                if (renderer.SelectionState.Selected.Contains(_point3))
                 {
                     _point3.Draw(dc, renderer, dx, dy, mode, db, r);
                 }
@@ -1488,47 +1493,47 @@ namespace Draw2D.ViewModels.Shapes
             base.EndTransform(dc, renderer, state);
         }
 
-        public override void Move(ISelection selection, double dx, double dy)
+        public override void Move(ISelectionState selectionState, double dx, double dy)
         {
-            if (!selection.Selected.Contains(_startPoint))
+            if (!selectionState.Selected.Contains(_startPoint))
             {
-                _startPoint.Move(selection, dx, dy);
+                _startPoint.Move(selectionState, dx, dy);
             }
 
-            if (!selection.Selected.Contains(_point1))
+            if (!selectionState.Selected.Contains(_point1))
             {
-                _point1.Move(selection, dx, dy);
+                _point1.Move(selectionState, dx, dy);
             }
 
-            if (!selection.Selected.Contains(_point2))
+            if (!selectionState.Selected.Contains(_point2))
             {
-                _point2.Move(selection, dx, dy);
+                _point2.Move(selectionState, dx, dy);
             }
 
-            if (!selection.Selected.Contains(_point3))
+            if (!selectionState.Selected.Contains(_point3))
             {
-                _point3.Move(selection, dx, dy);
+                _point3.Move(selectionState, dx, dy);
             }
 
-            base.Move(selection, dx, dy);
+            base.Move(selectionState, dx, dy);
         }
 
-        public override void Select(ISelection selection)
+        public override void Select(ISelectionState selectionState)
         {
-            base.Select(selection);
-            StartPoint.Select(selection);
-            Point1.Select(selection);
-            Point2.Select(selection);
-            Point3.Select(selection);
+            base.Select(selectionState);
+            StartPoint.Select(selectionState);
+            Point1.Select(selectionState);
+            Point2.Select(selectionState);
+            Point3.Select(selectionState);
         }
 
-        public override void Deselect(ISelection selection)
+        public override void Deselect(ISelectionState selectionState)
         {
-            base.Deselect(selection);
-            StartPoint.Deselect(selection);
-            Point1.Deselect(selection);
-            Point2.Deselect(selection);
-            Point3.Deselect(selection);
+            base.Deselect(selectionState);
+            StartPoint.Deselect(selectionState);
+            Point1.Deselect(selectionState);
+            Point2.Deselect(selectionState);
+            Point3.Deselect(selectionState);
         }
 
         private bool CanConnect(PointShape point)
@@ -1709,12 +1714,12 @@ namespace Draw2D.ViewModels.Shapes
 
             if (mode.HasFlag(DrawMode.Point))
             {
-                if (renderer.Selection.Selected.Contains(TopLeft))
+                if (renderer.SelectionState.Selected.Contains(TopLeft))
                 {
                     TopLeft.Draw(dc, renderer, dx, dy, mode, db, r);
                 }
 
-                if (renderer.Selection.Selected.Contains(BottomRight))
+                if (renderer.SelectionState.Selected.Contains(BottomRight))
                 {
                     BottomRight.Draw(dc, renderer, dx, dy, mode, db, r);
                 }
@@ -1850,7 +1855,7 @@ namespace Draw2D.ViewModels.Shapes
             base.EndTransform(dc, renderer, state);
         }
 
-        public override void Move(ISelection selection, double dx, double dy)
+        public override void Move(ISelectionState selectionState, double dx, double dy)
         {
             var points = new List<PointShape>();
             GetPoints(points);
@@ -1858,9 +1863,9 @@ namespace Draw2D.ViewModels.Shapes
 
             foreach (var point in distinct)
             {
-                if (!selection.Selected.Contains(point))
+                if (!selectionState.Selected.Contains(point))
                 {
-                    point.Move(selection, dx, dy);
+                    point.Move(selectionState, dx, dy);
                 }
             }
         }
@@ -1971,7 +1976,7 @@ namespace Draw2D.ViewModels.Shapes
             base.EndTransform(dc, renderer, state);
         }
 
-        public override void Move(ISelection selection, double dx, double dy)
+        public override void Move(ISelectionState selectionState, double dx, double dy)
         {
             var points = new List<PointShape>();
             GetPoints(points);
@@ -1979,13 +1984,13 @@ namespace Draw2D.ViewModels.Shapes
 
             foreach (var point in distinct)
             {
-                if (!selection.Selected.Contains(point))
+                if (!selectionState.Selected.Contains(point))
                 {
-                    point.Move(selection, dx, dy);
+                    point.Move(selectionState, dx, dy);
                 }
             }
 
-            base.Move(selection, dx, dy);
+            base.Move(selectionState, dx, dy);
         }
 
         public override object Copy(IDictionary<object, object> shared)
@@ -2086,12 +2091,12 @@ namespace Draw2D.ViewModels.Shapes
 
             if (mode.HasFlag(DrawMode.Point))
             {
-                if (renderer.Selection.Selected.Contains(_startPoint))
+                if (renderer.SelectionState.Selected.Contains(_startPoint))
                 {
                     _startPoint.Draw(dc, renderer, dx, dy, mode, db, r);
                 }
 
-                if (renderer.Selection.Selected.Contains(_point))
+                if (renderer.SelectionState.Selected.Contains(_point))
                 {
                     _point.Draw(dc, renderer, dx, dy, mode, db, r);
                 }
@@ -2101,33 +2106,33 @@ namespace Draw2D.ViewModels.Shapes
             base.EndTransform(dc, renderer, state);
         }
 
-        public override void Move(ISelection selection, double dx, double dy)
+        public override void Move(ISelectionState selectionState, double dx, double dy)
         {
-            if (!selection.Selected.Contains(_startPoint))
+            if (!selectionState.Selected.Contains(_startPoint))
             {
-                _startPoint.Move(selection, dx, dy);
+                _startPoint.Move(selectionState, dx, dy);
             }
 
-            if (!selection.Selected.Contains(_point))
+            if (!selectionState.Selected.Contains(_point))
             {
-                _point.Move(selection, dx, dy);
+                _point.Move(selectionState, dx, dy);
             }
 
-            base.Move(selection, dx, dy);
+            base.Move(selectionState, dx, dy);
         }
 
-        public override void Select(ISelection selection)
+        public override void Select(ISelectionState selectionState)
         {
-            base.Select(selection);
-            StartPoint.Select(selection);
-            Point.Select(selection);
+            base.Select(selectionState);
+            StartPoint.Select(selectionState);
+            Point.Select(selectionState);
         }
 
-        public override void Deselect(ISelection selection)
+        public override void Deselect(ISelectionState selectionState)
         {
-            base.Deselect(selection);
-            StartPoint.Deselect(selection);
-            Point.Deselect(selection);
+            base.Deselect(selectionState);
+            StartPoint.Deselect(selectionState);
+            Point.Deselect(selectionState);
         }
 
         private bool CanConnect(PointShape point)
@@ -2384,7 +2389,7 @@ namespace Draw2D.ViewModels.Shapes
         {
             var state = base.BeginTransform(dc, renderer);
 
-            var isPathSelected = renderer.Selection.Selected.Contains(this);
+            var isPathSelected = renderer.SelectionState.Selected.Contains(this);
 
             if (Style != null && mode.HasFlag(DrawMode.Shape))
             {
@@ -2411,21 +2416,21 @@ namespace Draw2D.ViewModels.Shapes
                 {
                     case LineShape line:
                         {
-                            var isSelected = renderer.Selection.Selected.Contains(line);
+                            var isSelected = renderer.SelectionState.Selected.Contains(line);
 
-                            if (isPathSelected || isSelected || renderer.Selection.Selected.Contains(line.StartPoint))
+                            if (isPathSelected || isSelected || renderer.SelectionState.Selected.Contains(line.StartPoint))
                             {
                                 line.StartPoint.Draw(dc, renderer, dx, dy, mode, db, r);
                             }
 
-                            if (isPathSelected || isSelected || renderer.Selection.Selected.Contains(line.Point))
+                            if (isPathSelected || isSelected || renderer.SelectionState.Selected.Contains(line.Point))
                             {
                                 line.Point.Draw(dc, renderer, dx, dy, mode, db, r);
                             }
 
                             foreach (var point in line.Points)
                             {
-                                if (isPathSelected || isSelected || renderer.Selection.Selected.Contains(point))
+                                if (isPathSelected || isSelected || renderer.SelectionState.Selected.Contains(point))
                                 {
                                     point.Draw(dc, renderer, dx, dy, mode, db, r);
                                 }
@@ -2434,31 +2439,31 @@ namespace Draw2D.ViewModels.Shapes
                         break;
                     case CubicBezierShape cubic:
                         {
-                            var isSelected = renderer.Selection.Selected.Contains(cubic);
+                            var isSelected = renderer.SelectionState.Selected.Contains(cubic);
 
-                            if (isPathSelected || isSelected || renderer.Selection.Selected.Contains(cubic.StartPoint))
+                            if (isPathSelected || isSelected || renderer.SelectionState.Selected.Contains(cubic.StartPoint))
                             {
                                 cubic.StartPoint.Draw(dc, renderer, dx, dy, mode, db, r);
                             }
 
-                            if (isPathSelected || isSelected || renderer.Selection.Selected.Contains(cubic.Point1))
+                            if (isPathSelected || isSelected || renderer.SelectionState.Selected.Contains(cubic.Point1))
                             {
                                 cubic.Point1.Draw(dc, renderer, dx, dy, mode, db, r);
                             }
 
-                            if (isPathSelected || isSelected || renderer.Selection.Selected.Contains(cubic.Point2))
+                            if (isPathSelected || isSelected || renderer.SelectionState.Selected.Contains(cubic.Point2))
                             {
                                 cubic.Point2.Draw(dc, renderer, dx, dy, mode, db, r);
                             }
 
-                            if (isPathSelected || isSelected || renderer.Selection.Selected.Contains(cubic.Point3))
+                            if (isPathSelected || isSelected || renderer.SelectionState.Selected.Contains(cubic.Point3))
                             {
                                 cubic.Point3.Draw(dc, renderer, dx, dy, mode, db, r);
                             }
 
                             foreach (var point in cubic.Points)
                             {
-                                if (isPathSelected || isSelected || renderer.Selection.Selected.Contains(point))
+                                if (isPathSelected || isSelected || renderer.SelectionState.Selected.Contains(point))
                                 {
                                     point.Draw(dc, renderer, dx, dy, mode, db, r);
                                 }
@@ -2467,26 +2472,26 @@ namespace Draw2D.ViewModels.Shapes
                         break;
                     case QuadraticBezierShape quadratic:
                         {
-                            var isSelected = renderer.Selection.Selected.Contains(quadratic);
+                            var isSelected = renderer.SelectionState.Selected.Contains(quadratic);
 
-                            if (isPathSelected || isSelected || renderer.Selection.Selected.Contains(quadratic.StartPoint))
+                            if (isPathSelected || isSelected || renderer.SelectionState.Selected.Contains(quadratic.StartPoint))
                             {
                                 quadratic.StartPoint.Draw(dc, renderer, dx, dy, mode, db, r);
                             }
 
-                            if (isPathSelected || isSelected || renderer.Selection.Selected.Contains(quadratic.Point1))
+                            if (isPathSelected || isSelected || renderer.SelectionState.Selected.Contains(quadratic.Point1))
                             {
                                 quadratic.Point1.Draw(dc, renderer, dx, dy, mode, db, r);
                             }
 
-                            if (isPathSelected || isSelected || renderer.Selection.Selected.Contains(quadratic.Point2))
+                            if (isPathSelected || isSelected || renderer.SelectionState.Selected.Contains(quadratic.Point2))
                             {
                                 quadratic.Point2.Draw(dc, renderer, dx, dy, mode, db, r);
                             }
 
                             foreach (var point in quadratic.Points)
                             {
-                                if (isPathSelected || isSelected || renderer.Selection.Selected.Contains(point))
+                                if (isPathSelected || isSelected || renderer.SelectionState.Selected.Contains(point))
                                 {
                                     point.Draw(dc, renderer, dx, dy, mode, db, r);
                                 }
@@ -2495,26 +2500,26 @@ namespace Draw2D.ViewModels.Shapes
                         break;
                     case ConicShape conic:
                         {
-                            var isSelected = renderer.Selection.Selected.Contains(conic);
+                            var isSelected = renderer.SelectionState.Selected.Contains(conic);
 
-                            if (isPathSelected || isSelected || renderer.Selection.Selected.Contains(conic.StartPoint))
+                            if (isPathSelected || isSelected || renderer.SelectionState.Selected.Contains(conic.StartPoint))
                             {
                                 conic.StartPoint.Draw(dc, renderer, dx, dy, mode, db, r);
                             }
 
-                            if (isPathSelected || isSelected || renderer.Selection.Selected.Contains(conic.Point1))
+                            if (isPathSelected || isSelected || renderer.SelectionState.Selected.Contains(conic.Point1))
                             {
                                 conic.Point1.Draw(dc, renderer, dx, dy, mode, db, r);
                             }
 
-                            if (isPathSelected || isSelected || renderer.Selection.Selected.Contains(conic.Point2))
+                            if (isPathSelected || isSelected || renderer.SelectionState.Selected.Contains(conic.Point2))
                             {
                                 conic.Point2.Draw(dc, renderer, dx, dy, mode, db, r);
                             }
 
                             foreach (var point in conic.Points)
                             {
-                                if (isPathSelected || isSelected || renderer.Selection.Selected.Contains(point))
+                                if (isPathSelected || isSelected || renderer.SelectionState.Selected.Contains(point))
                                 {
                                     point.Draw(dc, renderer, dx, dy, mode, db, r);
                                 }
@@ -2525,7 +2530,7 @@ namespace Draw2D.ViewModels.Shapes
             }
         }
 
-        public override void Move(ISelection selection, double dx, double dy)
+        public override void Move(ISelectionState selectionState, double dx, double dy)
         {
             var points = new List<PointShape>();
             GetPoints(points);
@@ -2533,18 +2538,18 @@ namespace Draw2D.ViewModels.Shapes
 
             foreach (var point in distinct)
             {
-                if (!selection.Selected.Contains(point))
+                if (!selectionState.Selected.Contains(point))
                 {
-                    point.Move(selection, dx, dy);
+                    point.Move(selectionState, dx, dy);
                 }
             }
 
-            base.Move(selection, dx, dy);
+            base.Move(selectionState, dx, dy);
         }
 
-        public override void Select(ISelection selection)
+        public override void Select(ISelectionState selectionState)
         {
-            base.Select(selection);
+            base.Select(selectionState);
 
             var points = new List<PointShape>();
             GetPoints(points);
@@ -2552,13 +2557,13 @@ namespace Draw2D.ViewModels.Shapes
 
             foreach (var point in distinct)
             {
-                point.Select(selection);
+                point.Select(selectionState);
             }
         }
 
-        public override void Deselect(ISelection selection)
+        public override void Deselect(ISelectionState selectionState)
         {
-            base.Deselect(selection);
+            base.Deselect(selectionState);
 
             var points = new List<PointShape>();
             GetPoints(points);
@@ -2566,7 +2571,7 @@ namespace Draw2D.ViewModels.Shapes
 
             foreach (var point in distinct)
             {
-                point.Deselect(selection);
+                point.Deselect(selectionState);
             }
         }
 
@@ -2708,7 +2713,7 @@ namespace Draw2D.ViewModels.Shapes
             }
         }
 
-        public override void Move(ISelection selection, double dx, double dy)
+        public override void Move(ISelectionState selectionState, double dx, double dy)
         {
             X += dx;
             Y += dy;
@@ -2820,17 +2825,17 @@ namespace Draw2D.ViewModels.Shapes
 
             if (mode.HasFlag(DrawMode.Point))
             {
-                if (renderer.Selection.Selected.Contains(_startPoint))
+                if (renderer.SelectionState.Selected.Contains(_startPoint))
                 {
                     _startPoint.Draw(dc, renderer, dx, dy, mode, db, r);
                 }
 
-                if (renderer.Selection.Selected.Contains(_point1))
+                if (renderer.SelectionState.Selected.Contains(_point1))
                 {
                     _point1.Draw(dc, renderer, dx, dy, mode, db, r);
                 }
 
-                if (renderer.Selection.Selected.Contains(_point2))
+                if (renderer.SelectionState.Selected.Contains(_point2))
                 {
                     _point2.Draw(dc, renderer, dx, dy, mode, db, r);
                 }
@@ -2840,40 +2845,40 @@ namespace Draw2D.ViewModels.Shapes
             base.EndTransform(dc, renderer, state);
         }
 
-        public override void Move(ISelection selection, double dx, double dy)
+        public override void Move(ISelectionState selectionState, double dx, double dy)
         {
-            if (!selection.Selected.Contains(_startPoint))
+            if (!selectionState.Selected.Contains(_startPoint))
             {
-                _startPoint.Move(selection, dx, dy);
+                _startPoint.Move(selectionState, dx, dy);
             }
 
-            if (!selection.Selected.Contains(_point1))
+            if (!selectionState.Selected.Contains(_point1))
             {
-                _point1.Move(selection, dx, dy);
+                _point1.Move(selectionState, dx, dy);
             }
 
-            if (!selection.Selected.Contains(_point2))
+            if (!selectionState.Selected.Contains(_point2))
             {
-                _point2.Move(selection, dx, dy);
+                _point2.Move(selectionState, dx, dy);
             }
 
-            base.Move(selection, dx, dy);
+            base.Move(selectionState, dx, dy);
         }
 
-        public override void Select(ISelection selection)
+        public override void Select(ISelectionState selectionState)
         {
-            base.Select(selection);
-            StartPoint.Select(selection);
-            Point1.Select(selection);
-            Point2.Select(selection);
+            base.Select(selectionState);
+            StartPoint.Select(selectionState);
+            Point1.Select(selectionState);
+            Point2.Select(selectionState);
         }
 
-        public override void Deselect(ISelection selection)
+        public override void Deselect(ISelectionState selectionState)
         {
-            base.Deselect(selection);
-            StartPoint.Deselect(selection);
-            Point1.Deselect(selection);
-            Point2.Deselect(selection);
+            base.Deselect(selectionState);
+            StartPoint.Deselect(selectionState);
+            Point1.Deselect(selectionState);
+            Point2.Deselect(selectionState);
         }
 
         private bool CanConnect(PointShape point)
@@ -3032,12 +3037,12 @@ namespace Draw2D.ViewModels.Shapes
 
             if (mode.HasFlag(DrawMode.Point))
             {
-                if (renderer.Selection.Selected.Contains(TopLeft))
+                if (renderer.SelectionState.Selected.Contains(TopLeft))
                 {
                     TopLeft.Draw(dc, renderer, dx, dy, mode, db, r);
                 }
 
-                if (renderer.Selection.Selected.Contains(BottomRight))
+                if (renderer.SelectionState.Selected.Contains(BottomRight))
                 {
                     BottomRight.Draw(dc, renderer, dx, dy, mode, db, r);
                 }
@@ -3131,12 +3136,12 @@ namespace Draw2D.ViewModels.Shapes
 
             if (mode.HasFlag(DrawMode.Point))
             {
-                if (renderer.Selection.Selected.Contains(TopLeft))
+                if (renderer.SelectionState.Selected.Contains(TopLeft))
                 {
                     TopLeft.Draw(dc, renderer, dx, dy, mode, db, r);
                 }
 
-                if (renderer.Selection.Selected.Contains(BottomRight))
+                if (renderer.SelectionState.Selected.Contains(BottomRight))
                 {
                     BottomRight.Draw(dc, renderer, dx, dy, mode, db, r);
                 }
@@ -3204,7 +3209,7 @@ namespace Draw2D.ViewModels.Containers
         ShapeStyle CurrentStyle { get; set; }
         BaseShape PointTemplate { get; set; }
         IDrawContainerView DrawContainerView { get; set; }
-        ISelection Selection { get; set; }
+        ISelectionState SelectionState { get; set; }
         ICanvasContainer CurrentContainer { get; set; }
         ICanvasContainer WorkingContainer { get; set; }
     }
@@ -3311,7 +3316,7 @@ namespace Draw2D.ViewModels.Containers
             return copy;
         }
 
-        public override void Move(ISelection selection, double dx, double dy)
+        public override void Move(ISelectionState selectionState, double dx, double dy)
         {
             var points = new List<PointShape>();
             GetPoints(points);
@@ -3319,9 +3324,9 @@ namespace Draw2D.ViewModels.Containers
 
             foreach (var point in distinct)
             {
-                if (!selection.Selected.Contains(point))
+                if (!selectionState.Selected.Contains(point))
                 {
-                    point.Move(selection, dx, dy);
+                    point.Move(selectionState, dx, dy);
                 }
             }
         }
@@ -3342,7 +3347,7 @@ namespace Draw2D.ViewModels.Containers
         private IInputService _inputService;
         private IZoomService _zoomService;
         private IDrawContainerView _drawContainerView;
-        private ISelection _selection;
+        private ISelectionState _selectionState;
         private ICanvasContainer _currentContainer;
         private ICanvasContainer _workingContainer;
         private IHitTest _hitTest;
@@ -3432,10 +3437,10 @@ namespace Draw2D.ViewModels.Containers
         }
 
         [IgnoreDataMember]
-        public ISelection Selection
+        public ISelectionState SelectionState
         {
-            get => _selection;
-            set => Update(ref _selection, value);
+            get => _selectionState;
+            set => Update(ref _selectionState, value);
         }
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
@@ -3500,7 +3505,7 @@ namespace Draw2D.ViewModels.Containers
                 CurrentStyle = (ShapeStyle)this.CurrentStyle?.Copy(shared),
                 PointTemplate = (BaseShape)this.PointTemplate?.Copy(shared),
                 DrawContainerView = null,
-                Selection = null,
+                SelectionState = null,
                 CurrentContainer = (ICanvasContainer)this.CurrentContainer?.Copy(shared),
                 WorkingContainer = null
             };
@@ -3778,7 +3783,7 @@ namespace Draw2D.ViewModels.Decorators
             _text.Draw(dc, renderer, dx, dy, mode, null, null);
         }
 
-        public abstract void Draw(object dc, BaseShape shape, IShapeRenderer renderer, ISelection selected, double dx, double dy, DrawMode mode);
+        public abstract void Draw(object dc, BaseShape shape, IShapeRenderer renderer, ISelectionState selectionState, double dx, double dy, DrawMode mode);
     }
 
     [DataContract(IsReference = true)]
@@ -3791,7 +3796,7 @@ namespace Draw2D.ViewModels.Decorators
             DrawLine(dc, renderer, cubicBezier.Point1, cubicBezier.Point2, dx, dy, mode);
         }
 
-        public override void Draw(object dc, BaseShape shape, IShapeRenderer renderer, ISelection selection, double dx, double dy, DrawMode mode)
+        public override void Draw(object dc, BaseShape shape, IShapeRenderer renderer, ISelectionState selectionState, double dx, double dy, DrawMode mode)
         {
             if (shape is CubicBezierShape cubicBezier)
             {
@@ -3808,7 +3813,7 @@ namespace Draw2D.ViewModels.Decorators
             DrawRectangle(dc, renderer, ellipseShape.TopLeft, ellipseShape.BottomRight, dx, dy, mode);
         }
 
-        public override void Draw(object dc, BaseShape shape, IShapeRenderer renderer, ISelection selection, double dx, double dy, DrawMode mode)
+        public override void Draw(object dc, BaseShape shape, IShapeRenderer renderer, ISelectionState selectionState, double dx, double dy, DrawMode mode)
         {
             if (shape is EllipseShape ellipseShape)
             {
@@ -3825,7 +3830,7 @@ namespace Draw2D.ViewModels.Decorators
             DrawRectangle(dc, renderer, lineShape.StartPoint, lineShape.Point, dx, dy, mode);
         }
 
-        public override void Draw(object dc, BaseShape shape, IShapeRenderer renderer, ISelection selection, double dx, double dy, DrawMode mode)
+        public override void Draw(object dc, BaseShape shape, IShapeRenderer renderer, ISelectionState selectionState, double dx, double dy, DrawMode mode)
         {
             if (shape is LineShape lineShape)
             {
@@ -3850,59 +3855,59 @@ namespace Draw2D.ViewModels.Decorators
             _conicDecorator = new ConicDecorator();
         }
 
-        public void DrawShape(object dc, IShapeRenderer renderer, BaseShape shape, ISelection selection, double dx, double dy, DrawMode mode)
+        public void DrawShape(object dc, IShapeRenderer renderer, BaseShape shape, ISelectionState selectionState, double dx, double dy, DrawMode mode)
         {
             if (shape is LineShape line)
             {
-                if (selection.Selected.Contains(line))
+                if (selectionState.Selected.Contains(line))
                 {
-                    _lineDecorator.Draw(dc, line, renderer, selection, dx, dy, mode);
+                    _lineDecorator.Draw(dc, line, renderer, selectionState, dx, dy, mode);
                 }
             }
             else if (shape is CubicBezierShape cubicBezier)
             {
-                if (selection.Selected.Contains(cubicBezier))
+                if (selectionState.Selected.Contains(cubicBezier))
                 {
-                    _cubiceBezierDecorator.Draw(dc, cubicBezier, renderer, selection, dx, dy, mode);
+                    _cubiceBezierDecorator.Draw(dc, cubicBezier, renderer, selectionState, dx, dy, mode);
                 }
             }
             else if (shape is QuadraticBezierShape quadraticBezier)
             {
-                if (selection.Selected.Contains(quadraticBezier))
+                if (selectionState.Selected.Contains(quadraticBezier))
                 {
-                    _quadraticBezierDecorator.Draw(dc, quadraticBezier, renderer, selection, dx, dy, mode);
+                    _quadraticBezierDecorator.Draw(dc, quadraticBezier, renderer, selectionState, dx, dy, mode);
                 }
             }
             else if (shape is ConicShape conicShape)
             {
-                if (selection.Selected.Contains(conicShape))
+                if (selectionState.Selected.Contains(conicShape))
                 {
-                    _conicDecorator.Draw(dc, conicShape, renderer, selection, dx, dy, mode);
+                    _conicDecorator.Draw(dc, conicShape, renderer, selectionState, dx, dy, mode);
                 }
             }
         }
 
-        public void DrawFigure(object dc, IShapeRenderer renderer, FigureShape figure, ISelection selection, double dx, double dy, DrawMode mode)
+        public void DrawFigure(object dc, IShapeRenderer renderer, FigureShape figure, ISelectionState selectionState, double dx, double dy, DrawMode mode)
         {
             foreach (var shape in figure.Shapes)
             {
-                DrawShape(dc, renderer, shape, selection, dx, dy, mode);
+                DrawShape(dc, renderer, shape, selectionState, dx, dy, mode);
             }
         }
 
-        public void Draw(object dc, IShapeRenderer renderer, PathShape path, ISelection selection, double dx, double dy, DrawMode mode)
+        public void Draw(object dc, IShapeRenderer renderer, PathShape path, ISelectionState selectionState, double dx, double dy, DrawMode mode)
         {
             foreach (var figure in path.Figures)
             {
-                DrawFigure(dc, renderer, figure, selection, dx, dy, mode);
+                DrawFigure(dc, renderer, figure, selectionState, dx, dy, mode);
             }
         }
 
-        public override void Draw(object dc, BaseShape shape, IShapeRenderer renderer, ISelection selection, double dx, double dy, DrawMode mode)
+        public override void Draw(object dc, BaseShape shape, IShapeRenderer renderer, ISelectionState selectionState, double dx, double dy, DrawMode mode)
         {
             if (shape is PathShape path)
             {
-                Draw(dc, renderer, path, selection, dx, dy, mode);
+                Draw(dc, renderer, path, selectionState, dx, dy, mode);
             }
         }
     }
@@ -3915,7 +3920,7 @@ namespace Draw2D.ViewModels.Decorators
             DrawRectangle(dc, renderer, pointShape, 10, dx, dy, mode);
         }
 
-        public override void Draw(object dc, BaseShape shape, IShapeRenderer renderer, ISelection selection, double dx, double dy, DrawMode mode)
+        public override void Draw(object dc, BaseShape shape, IShapeRenderer renderer, ISelectionState selectionState, double dx, double dy, DrawMode mode)
         {
             if (shape is PointShape pointShape)
             {
@@ -3933,7 +3938,7 @@ namespace Draw2D.ViewModels.Decorators
             DrawLine(dc, renderer, quadraticBezier.Point1, quadraticBezier.Point2, dx, dy, mode);
         }
 
-        public override void Draw(object dc, BaseShape shape, IShapeRenderer renderer, ISelection selection, double dx, double dy, DrawMode mode)
+        public override void Draw(object dc, BaseShape shape, IShapeRenderer renderer, ISelectionState selectionState, double dx, double dy, DrawMode mode)
         {
             if (shape is QuadraticBezierShape quadraticBezier)
             {
@@ -3951,7 +3956,7 @@ namespace Draw2D.ViewModels.Decorators
             DrawLine(dc, renderer, conic.Point1, conic.Point2, dx, dy, mode);
         }
 
-        public override void Draw(object dc, BaseShape shape, IShapeRenderer renderer, ISelection selection, double dx, double dy, DrawMode mode)
+        public override void Draw(object dc, BaseShape shape, IShapeRenderer renderer, ISelectionState selectionState, double dx, double dy, DrawMode mode)
         {
             if (shape is ConicShape conic)
             {
@@ -3968,7 +3973,7 @@ namespace Draw2D.ViewModels.Decorators
             DrawRectangle(dc, renderer, rectangleShape.TopLeft, rectangleShape.BottomRight, dx, dy, mode);
         }
 
-        public override void Draw(object dc, BaseShape shape, IShapeRenderer renderer, ISelection selection, double dx, double dy, DrawMode mode)
+        public override void Draw(object dc, BaseShape shape, IShapeRenderer renderer, ISelectionState selectionState, double dx, double dy, DrawMode mode)
         {
             if (shape is RectangleShape rectangleShape)
             {
@@ -3985,7 +3990,7 @@ namespace Draw2D.ViewModels.Decorators
             DrawRectangle(dc, renderer, textShape.TopLeft, textShape.BottomRight, dx, dy, mode);
         }
 
-        public override void Draw(object dc, BaseShape shape, IShapeRenderer renderer, ISelection selection, double dx, double dy, DrawMode mode)
+        public override void Draw(object dc, BaseShape shape, IShapeRenderer renderer, ISelectionState selectionState, double dx, double dy, DrawMode mode)
         {
             if (shape is TextShape textShape)
             {
@@ -4611,8 +4616,8 @@ namespace Draw2D.ViewModels.Intersections
                             Intersections.Add(point);
                             context.ContainerView?.WorkingContainer.Shapes.Add(point);
                             context.ContainerView?.WorkingContainer.MarkAsDirty(true);
-                            context.ContainerView?.Selection.Selected.Add(point);
-                            context.ContainerView?.Selection.MarkAsDirty(true);
+                            context.ContainerView?.SelectionState.Selected.Add(point);
+                            context.ContainerView?.SelectionState.MarkAsDirty(true);
                         }
                     }
                 }
@@ -4692,8 +4697,8 @@ namespace Draw2D.ViewModels.Intersections
                         Intersections.Add(point);
                         context.ContainerView?.WorkingContainer.Shapes.Add(point);
                         context.ContainerView?.WorkingContainer.MarkAsDirty(true);
-                        context.ContainerView?.Selection.Selected.Add(point);
-                        context.ContainerView?.Selection.MarkAsDirty(true);
+                        context.ContainerView?.SelectionState.Selected.Add(point);
+                        context.ContainerView?.SelectionState.MarkAsDirty(true);
                     }
                 }
             }
@@ -4771,15 +4776,15 @@ namespace Draw2D.ViewModels.Intersections
                         Intersections.Add(point1);
                         context.ContainerView?.WorkingContainer.Shapes.Add(point1);
                         context.ContainerView?.WorkingContainer.MarkAsDirty(true);
-                        context.ContainerView?.Selection.Selected.Add(point1);
-                        context.ContainerView?.Selection.MarkAsDirty(true);
+                        context.ContainerView?.SelectionState.Selected.Add(point1);
+                        context.ContainerView?.SelectionState.MarkAsDirty(true);
 
                         var point2 = new PointShape(x1clip, y1clip, context.ContainerView?.PointTemplate);
                         Intersections.Add(point2);
                         context.ContainerView?.WorkingContainer.Shapes.Add(point2);
                         context.ContainerView?.WorkingContainer.MarkAsDirty(true);
-                        context.ContainerView?.Selection.Selected.Add(point2);
-                        context.ContainerView?.Selection.MarkAsDirty(true);
+                        context.ContainerView?.SelectionState.Selected.Add(point2);
+                        context.ContainerView?.SelectionState.MarkAsDirty(true);
                     }
                 }
             }
@@ -5479,11 +5484,11 @@ namespace Draw2D.ViewModels.Bounds
             return contains;
         }
 
-        public static bool Overlap(IEnumerable<PointShape> points, Vector2[] selection)
+        public static bool Overlap(IEnumerable<PointShape> points, Vector2[] selectionState)
         {
             ToConvexHull(points, out int k, out Vector2[] convexHull);
             Vector2[] vertices = convexHull.Take(k).ToArray();
-            return SAT.Overlap(selection, vertices);
+            return SAT.Overlap(selectionState, vertices);
         }
 
         public static bool Overlap(IEnumerable<PointShape> points, Rect2 rect)
@@ -5672,12 +5677,12 @@ namespace Draw2D.ViewModels.Tools
             };
             context.ContainerView?.WorkingContainer.Shapes.Add(_cubicBezier);
             context.ContainerView?.WorkingContainer.MarkAsDirty(true);
-            context.ContainerView?.Selection.Selected.Add(_cubicBezier);
-            context.ContainerView?.Selection.Selected.Add(_cubicBezier.StartPoint);
-            context.ContainerView?.Selection.Selected.Add(_cubicBezier.Point1);
-            context.ContainerView?.Selection.Selected.Add(_cubicBezier.Point2);
-            context.ContainerView?.Selection.Selected.Add(_cubicBezier.Point3);
-            context.ContainerView?.Selection.MarkAsDirty(true);
+            context.ContainerView?.SelectionState.Selected.Add(_cubicBezier);
+            context.ContainerView?.SelectionState.Selected.Add(_cubicBezier.StartPoint);
+            context.ContainerView?.SelectionState.Selected.Add(_cubicBezier.Point1);
+            context.ContainerView?.SelectionState.Selected.Add(_cubicBezier.Point2);
+            context.ContainerView?.SelectionState.Selected.Add(_cubicBezier.Point3);
+            context.ContainerView?.SelectionState.MarkAsDirty(true);
 
             context.ContainerView?.InputService?.Capture?.Invoke();
             context.ContainerView?.InputService?.Redraw?.Invoke();
@@ -5691,12 +5696,12 @@ namespace Draw2D.ViewModels.Tools
 
             CurrentState = State.StartPoint;
 
-            context.ContainerView?.Selection.Selected.Remove(_cubicBezier);
-            context.ContainerView?.Selection.Selected.Remove(_cubicBezier.StartPoint);
-            context.ContainerView?.Selection.Selected.Remove(_cubicBezier.Point1);
-            context.ContainerView?.Selection.Selected.Remove(_cubicBezier.Point2);
-            context.ContainerView?.Selection.Selected.Remove(_cubicBezier.Point3);
-            context.ContainerView?.Selection.MarkAsDirty(true);
+            context.ContainerView?.SelectionState.Selected.Remove(_cubicBezier);
+            context.ContainerView?.SelectionState.Selected.Remove(_cubicBezier.StartPoint);
+            context.ContainerView?.SelectionState.Selected.Remove(_cubicBezier.Point1);
+            context.ContainerView?.SelectionState.Selected.Remove(_cubicBezier.Point2);
+            context.ContainerView?.SelectionState.Selected.Remove(_cubicBezier.Point3);
+            context.ContainerView?.SelectionState.MarkAsDirty(true);
             context.ContainerView?.WorkingContainer.Shapes.Remove(_cubicBezier);
             context.ContainerView?.WorkingContainer.MarkAsDirty(true);
 
@@ -5718,11 +5723,11 @@ namespace Draw2D.ViewModels.Tools
             _cubicBezier.Point1.X = x;
             _cubicBezier.Point1.Y = y;
 
-            context.ContainerView?.Selection.Selected.Remove(_cubicBezier.Point2);
-            context.ContainerView?.Selection.MarkAsDirty(true);
+            context.ContainerView?.SelectionState.Selected.Remove(_cubicBezier.Point2);
+            context.ContainerView?.SelectionState.MarkAsDirty(true);
             _cubicBezier.Point2 = context.ContainerView?.GetNextPoint(x, y, false, 0.0);
-            context.ContainerView?.Selection.Selected.Add(_cubicBezier.Point2);
-            context.ContainerView?.Selection.MarkAsDirty(true);
+            context.ContainerView?.SelectionState.Selected.Add(_cubicBezier.Point2);
+            context.ContainerView?.SelectionState.MarkAsDirty(true);
 
             CurrentState = State.Point1;
 
@@ -5736,11 +5741,11 @@ namespace Draw2D.ViewModels.Tools
             _cubicBezier.Point2.X = x;
             _cubicBezier.Point2.Y = y;
 
-            context.ContainerView?.Selection.Selected.Remove(_cubicBezier.Point3);
-            context.ContainerView?.Selection.MarkAsDirty(true);
+            context.ContainerView?.SelectionState.Selected.Remove(_cubicBezier.Point3);
+            context.ContainerView?.SelectionState.MarkAsDirty(true);
             _cubicBezier.Point3 = context.ContainerView?.GetNextPoint(x, y, false, 0.0);
-            context.ContainerView?.Selection.Selected.Add(_cubicBezier.Point3);
-            context.ContainerView?.Selection.MarkAsDirty(true);
+            context.ContainerView?.SelectionState.Selected.Add(_cubicBezier.Point3);
+            context.ContainerView?.SelectionState.MarkAsDirty(true);
 
             CurrentState = State.Point2;
 
@@ -5802,12 +5807,12 @@ namespace Draw2D.ViewModels.Tools
             {
                 context.ContainerView?.WorkingContainer.Shapes.Remove(_cubicBezier);
                 context.ContainerView?.WorkingContainer.MarkAsDirty(true);
-                context.ContainerView?.Selection.Selected.Remove(_cubicBezier);
-                context.ContainerView?.Selection.Selected.Remove(_cubicBezier.StartPoint);
-                context.ContainerView?.Selection.Selected.Remove(_cubicBezier.Point1);
-                context.ContainerView?.Selection.Selected.Remove(_cubicBezier.Point2);
-                context.ContainerView?.Selection.Selected.Remove(_cubicBezier.Point3);
-                context.ContainerView?.Selection.MarkAsDirty(true);
+                context.ContainerView?.SelectionState.Selected.Remove(_cubicBezier);
+                context.ContainerView?.SelectionState.Selected.Remove(_cubicBezier.StartPoint);
+                context.ContainerView?.SelectionState.Selected.Remove(_cubicBezier.Point1);
+                context.ContainerView?.SelectionState.Selected.Remove(_cubicBezier.Point2);
+                context.ContainerView?.SelectionState.Selected.Remove(_cubicBezier.Point3);
+                context.ContainerView?.SelectionState.MarkAsDirty(true);
                 _cubicBezier = null;
             }
 
@@ -5989,10 +5994,10 @@ namespace Draw2D.ViewModels.Tools
             };
             context.ContainerView?.WorkingContainer.Shapes.Add(_ellipse);
             context.ContainerView?.WorkingContainer.MarkAsDirty(true);
-            context.ContainerView?.Selection.Selected.Add(_ellipse);
-            context.ContainerView?.Selection.Selected.Add(_ellipse.TopLeft);
-            context.ContainerView?.Selection.Selected.Add(_ellipse.BottomRight);
-            context.ContainerView?.Selection.MarkAsDirty(true);
+            context.ContainerView?.SelectionState.Selected.Add(_ellipse);
+            context.ContainerView?.SelectionState.Selected.Add(_ellipse.TopLeft);
+            context.ContainerView?.SelectionState.Selected.Add(_ellipse.BottomRight);
+            context.ContainerView?.SelectionState.MarkAsDirty(true);
 
             context.ContainerView?.InputService?.Capture?.Invoke();
             context.ContainerView?.InputService?.Redraw?.Invoke();
@@ -6006,14 +6011,14 @@ namespace Draw2D.ViewModels.Tools
 
             CurrentState = State.TopLeft;
 
-            context.ContainerView?.Selection.Selected.Remove(_ellipse.BottomRight);
-            context.ContainerView?.Selection.MarkAsDirty(true);
+            context.ContainerView?.SelectionState.Selected.Remove(_ellipse.BottomRight);
+            context.ContainerView?.SelectionState.MarkAsDirty(true);
             _ellipse.BottomRight = context.ContainerView?.GetNextPoint(x, y, Settings?.ConnectPoints ?? false, Settings?.HitTestRadius ?? 7.0);
             context.ContainerView?.WorkingContainer.Shapes.Remove(_ellipse);
             context.ContainerView?.WorkingContainer.MarkAsDirty(true);
-            context.ContainerView?.Selection.Selected.Remove(_ellipse);
-            context.ContainerView?.Selection.Selected.Remove(_ellipse.TopLeft);
-            context.ContainerView?.Selection.MarkAsDirty(true);
+            context.ContainerView?.SelectionState.Selected.Remove(_ellipse);
+            context.ContainerView?.SelectionState.Selected.Remove(_ellipse.TopLeft);
+            context.ContainerView?.SelectionState.MarkAsDirty(true);
             context.ContainerView?.CurrentContainer.Shapes.Add(_ellipse);
             context.ContainerView?.CurrentContainer.MarkAsDirty(true);
             _ellipse = null;
@@ -6053,10 +6058,10 @@ namespace Draw2D.ViewModels.Tools
             {
                 context.ContainerView?.WorkingContainer.Shapes.Remove(_ellipse);
                 context.ContainerView?.WorkingContainer.MarkAsDirty(true);
-                context.ContainerView?.Selection.Selected.Remove(_ellipse);
-                context.ContainerView?.Selection.Selected.Remove(_ellipse.TopLeft);
-                context.ContainerView?.Selection.Selected.Remove(_ellipse.BottomRight);
-                context.ContainerView?.Selection.MarkAsDirty(true);
+                context.ContainerView?.SelectionState.Selected.Remove(_ellipse);
+                context.ContainerView?.SelectionState.Selected.Remove(_ellipse.TopLeft);
+                context.ContainerView?.SelectionState.Selected.Remove(_ellipse.BottomRight);
+                context.ContainerView?.SelectionState.MarkAsDirty(true);
                 _ellipse = null;
             }
 
@@ -6255,10 +6260,10 @@ namespace Draw2D.ViewModels.Tools
             };
             context.ContainerView?.WorkingContainer.Shapes.Add(_line);
             context.ContainerView?.WorkingContainer.MarkAsDirty(true);
-            context.ContainerView?.Selection.Selected.Add(_line);
-            context.ContainerView?.Selection.Selected.Add(_line.StartPoint);
-            context.ContainerView?.Selection.Selected.Add(_line.Point);
-            context.ContainerView?.Selection.MarkAsDirty(true);
+            context.ContainerView?.SelectionState.Selected.Add(_line);
+            context.ContainerView?.SelectionState.Selected.Add(_line.StartPoint);
+            context.ContainerView?.SelectionState.Selected.Add(_line.Point);
+            context.ContainerView?.SelectionState.MarkAsDirty(true);
 
             context.ContainerView?.InputService?.Capture?.Invoke();
             context.ContainerView?.InputService?.Redraw?.Invoke();
@@ -6272,10 +6277,10 @@ namespace Draw2D.ViewModels.Tools
 
             CurrentState = State.StartPoint;
 
-            context.ContainerView?.Selection.Selected.Remove(_line);
-            context.ContainerView?.Selection.Selected.Remove(_line.StartPoint);
-            context.ContainerView?.Selection.Selected.Remove(_line.Point);
-            context.ContainerView?.Selection.MarkAsDirty(true);
+            context.ContainerView?.SelectionState.Selected.Remove(_line);
+            context.ContainerView?.SelectionState.Selected.Remove(_line.StartPoint);
+            context.ContainerView?.SelectionState.Selected.Remove(_line.Point);
+            context.ContainerView?.SelectionState.MarkAsDirty(true);
             context.ContainerView?.WorkingContainer.Shapes.Remove(_line);
             context.ContainerView?.WorkingContainer.MarkAsDirty(true);
 
@@ -6336,10 +6341,10 @@ namespace Draw2D.ViewModels.Tools
             {
                 context.ContainerView?.WorkingContainer.Shapes.Remove(_line);
                 context.ContainerView?.WorkingContainer.MarkAsDirty(true);
-                context.ContainerView?.Selection.Selected.Remove(_line);
-                context.ContainerView?.Selection.Selected.Remove(_line.StartPoint);
-                context.ContainerView?.Selection.Selected.Remove(_line.Point);
-                context.ContainerView?.Selection.MarkAsDirty(true);
+                context.ContainerView?.SelectionState.Selected.Remove(_line);
+                context.ContainerView?.SelectionState.Selected.Remove(_line.StartPoint);
+                context.ContainerView?.SelectionState.Selected.Remove(_line.Point);
+                context.ContainerView?.SelectionState.MarkAsDirty(true);
                 _line = null;
             }
 
@@ -6752,10 +6757,10 @@ namespace Draw2D.ViewModels.Tools
         }
 
         [IgnoreDataMember]
-        public ISelection Selection
+        public ISelectionState SelectionState
         {
-            get => _context.ContainerView.Selection;
-            set => throw new InvalidOperationException($"Can not set {Selection} property value.");
+            get => _context.ContainerView.SelectionState;
+            set => throw new InvalidOperationException($"Can not set {SelectionState} property value.");
         }
 
         [IgnoreDataMember]
@@ -6937,8 +6942,8 @@ namespace Draw2D.ViewModels.Tools
 
             context.ContainerView?.WorkingContainer.Shapes.Add(_path);
             context.ContainerView?.WorkingContainer.MarkAsDirty(true);
-            context.ContainerView?.Selection.Selected.Add(_path);
-            context.ContainerView?.Selection.MarkAsDirty(true);
+            context.ContainerView?.SelectionState.Selected.Add(_path);
+            context.ContainerView?.SelectionState.MarkAsDirty(true);
         }
 
         public void Move(IToolContext context)
@@ -7049,8 +7054,8 @@ namespace Draw2D.ViewModels.Tools
             {
                 context.ContainerView?.WorkingContainer.Shapes.Remove(_path);
                 context.ContainerView?.WorkingContainer.MarkAsDirty(true);
-                context.ContainerView?.Selection.Selected.Remove(_path);
-                context.ContainerView?.Selection.MarkAsDirty(true);
+                context.ContainerView?.SelectionState.Selected.Remove(_path);
+                context.ContainerView?.SelectionState.MarkAsDirty(true);
 
                 if (_path.Validate(true) == true)
                 {
@@ -7182,8 +7187,8 @@ namespace Draw2D.ViewModels.Tools
                 {
                     connectable.Points.Add(point);
                     context.ContainerView?.WorkingContainer.MarkAsDirty(true);
-                    context.ContainerView?.Selection.Selected.Add(point);
-                    context.ContainerView?.Selection.MarkAsDirty(true);
+                    context.ContainerView?.SelectionState.Selected.Add(point);
+                    context.ContainerView?.SelectionState.MarkAsDirty(true);
                     context.ContainerView?.InputService?.Redraw?.Invoke();
                 }
             }
@@ -7330,10 +7335,10 @@ namespace Draw2D.ViewModels.Tools
             _points.Add(_line.Point);
             context.ContainerView?.WorkingContainer.Shapes.Add(_line);
             context.ContainerView?.WorkingContainer.MarkAsDirty(true);
-            context.ContainerView?.Selection.Selected.Add(_line);
-            context.ContainerView?.Selection.Selected.Add(_line.StartPoint);
-            context.ContainerView?.Selection.Selected.Add(_line.Point);
-            context.ContainerView?.Selection.MarkAsDirty(true);
+            context.ContainerView?.SelectionState.Selected.Add(_line);
+            context.ContainerView?.SelectionState.Selected.Add(_line.StartPoint);
+            context.ContainerView?.SelectionState.Selected.Add(_line.Point);
+            context.ContainerView?.SelectionState.MarkAsDirty(true);
 
             context.ContainerView?.InputService?.Capture?.Invoke();
             context.ContainerView?.InputService?.Redraw?.Invoke();
@@ -7345,16 +7350,16 @@ namespace Draw2D.ViewModels.Tools
         {
             Filters?.Any(f => f.Process(context, ref x, ref y));
 
-            context.ContainerView?.Selection.Selected.Remove(_line);
-            context.ContainerView?.Selection.Selected.Remove(_line.Point);
-            context.ContainerView?.Selection.MarkAsDirty(true);
+            context.ContainerView?.SelectionState.Selected.Remove(_line);
+            context.ContainerView?.SelectionState.Selected.Remove(_line.Point);
+            context.ContainerView?.SelectionState.MarkAsDirty(true);
             _line.Point = context.ContainerView?.GetNextPoint(x, y, Settings?.ConnectPoints ?? false, Settings?.HitTestRadius ?? 7.0);
             _points[_points.Count - 1] = _line.Point;
 
-            if (!context.ContainerView?.Selection.Selected.Contains(_line.Point) ?? false)
+            if (!context.ContainerView?.SelectionState.Selected.Contains(_line.Point) ?? false)
             {
-                context.ContainerView?.Selection.Selected.Add(_line.Point);
-                context.ContainerView?.Selection.MarkAsDirty(true);
+                context.ContainerView?.SelectionState.Selected.Add(_line.Point);
+                context.ContainerView?.SelectionState.MarkAsDirty(true);
             }
 
             context.ContainerView?.WorkingContainer.Shapes.Remove(_line);
@@ -7372,9 +7377,9 @@ namespace Draw2D.ViewModels.Tools
             _points.Add(_line.Point);
             context.ContainerView?.WorkingContainer.Shapes.Add(_line);
             context.ContainerView?.WorkingContainer.MarkAsDirty(true);
-            context.ContainerView?.Selection.Selected.Add(_line);
-            context.ContainerView?.Selection.Selected.Add(_line.Point);
-            context.ContainerView?.Selection.MarkAsDirty(true);
+            context.ContainerView?.SelectionState.Selected.Add(_line);
+            context.ContainerView?.SelectionState.Selected.Add(_line.Point);
+            context.ContainerView?.SelectionState.MarkAsDirty(true);
 
             Intersections?.ForEach(i => i.Clear(context));
             Filters?.ForEach(f => f.Clear(context));
@@ -7414,7 +7419,7 @@ namespace Draw2D.ViewModels.Tools
             if (_line != null)
             {
                 context.ContainerView?.WorkingContainer.Shapes.Remove(_line);
-                context.ContainerView?.Selection.Selected.Remove(_line);
+                context.ContainerView?.SelectionState.Selected.Remove(_line);
                 _line = null;
             }
 
@@ -7422,8 +7427,8 @@ namespace Draw2D.ViewModels.Tools
             {
                 _points.ForEach(point =>
                 {
-                    context.ContainerView?.Selection.Selected.Remove(point);
-                    context.ContainerView?.Selection.MarkAsDirty(true);
+                    context.ContainerView?.SelectionState.Selected.Remove(point);
+                    context.ContainerView?.SelectionState.MarkAsDirty(true);
                 });
                 _points = null;
             }
@@ -7587,11 +7592,11 @@ namespace Draw2D.ViewModels.Tools
             };
             context.ContainerView?.WorkingContainer.Shapes.Add(_quadraticBezier);
             context.ContainerView?.WorkingContainer.MarkAsDirty(true);
-            context.ContainerView?.Selection.Selected.Add(_quadraticBezier);
-            context.ContainerView?.Selection.Selected.Add(_quadraticBezier.StartPoint);
-            context.ContainerView?.Selection.Selected.Add(_quadraticBezier.Point1);
-            context.ContainerView?.Selection.Selected.Add(_quadraticBezier.Point2);
-            context.ContainerView?.Selection.MarkAsDirty(true);
+            context.ContainerView?.SelectionState.Selected.Add(_quadraticBezier);
+            context.ContainerView?.SelectionState.Selected.Add(_quadraticBezier.StartPoint);
+            context.ContainerView?.SelectionState.Selected.Add(_quadraticBezier.Point1);
+            context.ContainerView?.SelectionState.Selected.Add(_quadraticBezier.Point2);
+            context.ContainerView?.SelectionState.MarkAsDirty(true);
 
             context.ContainerView?.InputService?.Capture?.Invoke();
             context.ContainerView?.InputService?.Redraw?.Invoke();
@@ -7605,11 +7610,11 @@ namespace Draw2D.ViewModels.Tools
 
             CurrentState = State.StartPoint;
 
-            context.ContainerView?.Selection.Selected.Remove(_quadraticBezier);
-            context.ContainerView?.Selection.Selected.Remove(_quadraticBezier.StartPoint);
-            context.ContainerView?.Selection.Selected.Remove(_quadraticBezier.Point1);
-            context.ContainerView?.Selection.Selected.Remove(_quadraticBezier.Point2);
-            context.ContainerView?.Selection.MarkAsDirty(true);
+            context.ContainerView?.SelectionState.Selected.Remove(_quadraticBezier);
+            context.ContainerView?.SelectionState.Selected.Remove(_quadraticBezier.StartPoint);
+            context.ContainerView?.SelectionState.Selected.Remove(_quadraticBezier.Point1);
+            context.ContainerView?.SelectionState.Selected.Remove(_quadraticBezier.Point2);
+            context.ContainerView?.SelectionState.MarkAsDirty(true);
             context.ContainerView?.WorkingContainer.Shapes.Remove(_quadraticBezier);
             context.ContainerView?.WorkingContainer.MarkAsDirty(true);
 
@@ -7631,11 +7636,11 @@ namespace Draw2D.ViewModels.Tools
             _quadraticBezier.Point1.X = x;
             _quadraticBezier.Point1.Y = y;
 
-            context.ContainerView?.Selection.Selected.Remove(_quadraticBezier.Point2);
-            context.ContainerView?.Selection.MarkAsDirty(true);
+            context.ContainerView?.SelectionState.Selected.Remove(_quadraticBezier.Point2);
+            context.ContainerView?.SelectionState.MarkAsDirty(true);
             _quadraticBezier.Point2 = context.ContainerView?.GetNextPoint(x, y, false, 0.0);
-            context.ContainerView?.Selection.Selected.Add(_quadraticBezier.Point2);
-            context.ContainerView?.Selection.MarkAsDirty(true);
+            context.ContainerView?.SelectionState.Selected.Add(_quadraticBezier.Point2);
+            context.ContainerView?.SelectionState.MarkAsDirty(true);
 
             CurrentState = State.Point1;
 
@@ -7684,11 +7689,11 @@ namespace Draw2D.ViewModels.Tools
             {
                 context.ContainerView?.WorkingContainer.Shapes.Remove(_quadraticBezier);
                 context.ContainerView?.WorkingContainer.MarkAsDirty(true);
-                context.ContainerView?.Selection.Selected.Remove(_quadraticBezier);
-                context.ContainerView?.Selection.Selected.Remove(_quadraticBezier.StartPoint);
-                context.ContainerView?.Selection.Selected.Remove(_quadraticBezier.Point1);
-                context.ContainerView?.Selection.Selected.Remove(_quadraticBezier.Point2);
-                context.ContainerView?.Selection.MarkAsDirty(true);
+                context.ContainerView?.SelectionState.Selected.Remove(_quadraticBezier);
+                context.ContainerView?.SelectionState.Selected.Remove(_quadraticBezier.StartPoint);
+                context.ContainerView?.SelectionState.Selected.Remove(_quadraticBezier.Point1);
+                context.ContainerView?.SelectionState.Selected.Remove(_quadraticBezier.Point2);
+                context.ContainerView?.SelectionState.MarkAsDirty(true);
                 _quadraticBezier = null;
             }
 
@@ -7871,11 +7876,11 @@ namespace Draw2D.ViewModels.Tools
             };
             context.ContainerView?.WorkingContainer.Shapes.Add(_conic);
             context.ContainerView?.WorkingContainer.MarkAsDirty(true);
-            context.ContainerView?.Selection.Selected.Add(_conic);
-            context.ContainerView?.Selection.Selected.Add(_conic.StartPoint);
-            context.ContainerView?.Selection.Selected.Add(_conic.Point1);
-            context.ContainerView?.Selection.Selected.Add(_conic.Point2);
-            context.ContainerView?.Selection.MarkAsDirty(true);
+            context.ContainerView?.SelectionState.Selected.Add(_conic);
+            context.ContainerView?.SelectionState.Selected.Add(_conic.StartPoint);
+            context.ContainerView?.SelectionState.Selected.Add(_conic.Point1);
+            context.ContainerView?.SelectionState.Selected.Add(_conic.Point2);
+            context.ContainerView?.SelectionState.MarkAsDirty(true);
 
             context.ContainerView?.InputService?.Capture?.Invoke();
             context.ContainerView?.InputService?.Redraw?.Invoke();
@@ -7889,11 +7894,11 @@ namespace Draw2D.ViewModels.Tools
 
             CurrentState = State.StartPoint;
 
-            context.ContainerView?.Selection.Selected.Remove(_conic);
-            context.ContainerView?.Selection.Selected.Remove(_conic.StartPoint);
-            context.ContainerView?.Selection.Selected.Remove(_conic.Point1);
-            context.ContainerView?.Selection.Selected.Remove(_conic.Point2);
-            context.ContainerView?.Selection.MarkAsDirty(true);
+            context.ContainerView?.SelectionState.Selected.Remove(_conic);
+            context.ContainerView?.SelectionState.Selected.Remove(_conic.StartPoint);
+            context.ContainerView?.SelectionState.Selected.Remove(_conic.Point1);
+            context.ContainerView?.SelectionState.Selected.Remove(_conic.Point2);
+            context.ContainerView?.SelectionState.MarkAsDirty(true);
             context.ContainerView?.WorkingContainer.Shapes.Remove(_conic);
             context.ContainerView?.WorkingContainer.MarkAsDirty(true);
 
@@ -7915,11 +7920,11 @@ namespace Draw2D.ViewModels.Tools
             _conic.Point1.X = x;
             _conic.Point1.Y = y;
 
-            context.ContainerView?.Selection.Selected.Remove(_conic.Point2);
-            context.ContainerView?.Selection.MarkAsDirty(true);
+            context.ContainerView?.SelectionState.Selected.Remove(_conic.Point2);
+            context.ContainerView?.SelectionState.MarkAsDirty(true);
             _conic.Point2 = context.ContainerView?.GetNextPoint(x, y, false, 0.0);
-            context.ContainerView?.Selection.Selected.Add(_conic.Point2);
-            context.ContainerView?.Selection.MarkAsDirty(true);
+            context.ContainerView?.SelectionState.Selected.Add(_conic.Point2);
+            context.ContainerView?.SelectionState.MarkAsDirty(true);
 
             CurrentState = State.Point1;
 
@@ -7968,11 +7973,11 @@ namespace Draw2D.ViewModels.Tools
             {
                 context.ContainerView?.WorkingContainer.Shapes.Remove(_conic);
                 context.ContainerView?.WorkingContainer.MarkAsDirty(true);
-                context.ContainerView?.Selection.Selected.Remove(_conic);
-                context.ContainerView?.Selection.Selected.Remove(_conic.StartPoint);
-                context.ContainerView?.Selection.Selected.Remove(_conic.Point1);
-                context.ContainerView?.Selection.Selected.Remove(_conic.Point2);
-                context.ContainerView?.Selection.MarkAsDirty(true);
+                context.ContainerView?.SelectionState.Selected.Remove(_conic);
+                context.ContainerView?.SelectionState.Selected.Remove(_conic.StartPoint);
+                context.ContainerView?.SelectionState.Selected.Remove(_conic.Point1);
+                context.ContainerView?.SelectionState.Selected.Remove(_conic.Point2);
+                context.ContainerView?.SelectionState.MarkAsDirty(true);
                 _conic = null;
             }
 
@@ -8142,10 +8147,10 @@ namespace Draw2D.ViewModels.Tools
             };
             context.ContainerView?.WorkingContainer.Shapes.Add(_rectangle);
             context.ContainerView?.WorkingContainer.MarkAsDirty(true);
-            context.ContainerView?.Selection.Selected.Add(_rectangle);
-            context.ContainerView?.Selection.Selected.Add(_rectangle.TopLeft);
-            context.ContainerView?.Selection.Selected.Add(_rectangle.BottomRight);
-            context.ContainerView?.Selection.MarkAsDirty(true);
+            context.ContainerView?.SelectionState.Selected.Add(_rectangle);
+            context.ContainerView?.SelectionState.Selected.Add(_rectangle.TopLeft);
+            context.ContainerView?.SelectionState.Selected.Add(_rectangle.BottomRight);
+            context.ContainerView?.SelectionState.MarkAsDirty(true);
 
             context.ContainerView?.InputService?.Capture?.Invoke();
             context.ContainerView?.InputService?.Redraw?.Invoke();
@@ -8159,16 +8164,16 @@ namespace Draw2D.ViewModels.Tools
 
             CurrentState = State.TopLeft;
 
-            context.ContainerView?.Selection.Selected.Remove(_rectangle);
-            context.ContainerView?.Selection.Selected.Remove(_rectangle.BottomRight);
-            context.ContainerView?.Selection.MarkAsDirty(true);
+            context.ContainerView?.SelectionState.Selected.Remove(_rectangle);
+            context.ContainerView?.SelectionState.Selected.Remove(_rectangle.BottomRight);
+            context.ContainerView?.SelectionState.MarkAsDirty(true);
             _rectangle.BottomRight = context.ContainerView?.GetNextPoint(x, y, Settings?.ConnectPoints ?? false, Settings?.HitTestRadius ?? 7.0);
             _rectangle.BottomRight.Y = y;
             context.ContainerView?.WorkingContainer.Shapes.Remove(_rectangle);
             context.ContainerView?.WorkingContainer.MarkAsDirty(true);
             context.ContainerView?.WorkingContainer.MarkAsDirty(true);
-            context.ContainerView?.Selection.Selected.Remove(_rectangle.TopLeft);
-            context.ContainerView?.Selection.MarkAsDirty(true);
+            context.ContainerView?.SelectionState.Selected.Remove(_rectangle.TopLeft);
+            context.ContainerView?.SelectionState.MarkAsDirty(true);
             context.ContainerView?.CurrentContainer.Shapes.Add(_rectangle);
             context.ContainerView?.CurrentContainer.MarkAsDirty(true);
             _rectangle = null;
@@ -8208,10 +8213,10 @@ namespace Draw2D.ViewModels.Tools
             {
                 context.ContainerView?.WorkingContainer.Shapes.Remove(_rectangle);
                 context.ContainerView?.WorkingContainer.MarkAsDirty(true);
-                context.ContainerView?.Selection.Selected.Remove(_rectangle);
-                context.ContainerView?.Selection.Selected.Remove(_rectangle.TopLeft);
-                context.ContainerView?.Selection.Selected.Remove(_rectangle.BottomRight);
-                context.ContainerView?.Selection.MarkAsDirty(true);
+                context.ContainerView?.SelectionState.Selected.Remove(_rectangle);
+                context.ContainerView?.SelectionState.Selected.Remove(_rectangle.TopLeft);
+                context.ContainerView?.SelectionState.Selected.Remove(_rectangle.BottomRight);
+                context.ContainerView?.SelectionState.MarkAsDirty(true);
                 _rectangle = null;
             }
 
@@ -8712,6 +8717,35 @@ namespace Draw2D.ViewModels.Tools
     }
 
     [DataContract(IsReference = true)]
+    public partial class SelectionState : ViewModelBase, ISelectionState
+    {
+        private BaseShape _hovered;
+        private ISet<BaseShape> _selected;
+
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public BaseShape Hovered
+        {
+            get => _hovered;
+            set => Update(ref _hovered, value);
+        }
+
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public ISet<BaseShape> Selected
+        {
+            get => _selected;
+            set => Update(ref _selected, value);
+        }
+
+        public override void Invalidate()
+        {
+            if (this.IsDirty)
+            {
+                this.IsDirty = false;
+            }
+        }
+    }
+
+    [DataContract(IsReference = true)]
     public partial class SelectionTool : ViewModelBase, ITool, ISelection
     {
         private IList<PointIntersection> _intersections;
@@ -8725,8 +8759,7 @@ namespace Draw2D.ViewModels.Tools
         private IList<BaseShape> _shapesToCopy = null;
         private BaseShape _hover = null;
         private bool _disconnected = false;
-        private BaseShape _hovered;
-        private ISet<BaseShape> _selected;
+        private ISelectionState _selectionState;
 
         public enum State
         {
@@ -8762,18 +8795,11 @@ namespace Draw2D.ViewModels.Tools
             set => Update(ref _settings, value);
         }
 
-        [IgnoreDataMember]
-        public BaseShape Hovered
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public ISelectionState SelectionState
         {
-            get => _hovered;
-            set => Update(ref _hovered, value);
-        }
-
-        [IgnoreDataMember]
-        public ISet<BaseShape> Selected
-        {
-            get => _selected;
-            set => Update(ref _selected, value);
+            get => _selectionState;
+            set => Update(ref _selectionState, value);
         }
 
         public override void Invalidate()
@@ -8819,7 +8845,7 @@ namespace Draw2D.ViewModels.Tools
             {
                 if (!modifier.HasFlag(Settings?.SelectionModifier ?? Modifier.Control))
                 {
-                    _selected.Clear();
+                    _selectionState.Selected.Clear();
                 }
 
                 if (_rectangle == null)
@@ -8905,9 +8931,9 @@ namespace Draw2D.ViewModels.Tools
 
         private void MoveNoneInternal(IToolContext context, double x, double y, Modifier modifier)
         {
-            if (!(_hover == null && _selected.Count > 0))
+            if (!(_hover == null && _selectionState.Selected.Count > 0))
             {
-                lock (_selected)
+                lock (_selectionState.Selected)
                 {
                     var previous = _hover;
 
@@ -8955,9 +8981,9 @@ namespace Draw2D.ViewModels.Tools
             _previousX = x;
             _previousY = y;
 
-            if (_selected.Count == 1)
+            if (_selectionState.Selected.Count == 1)
             {
-                var shape = _selected.FirstOrDefault();
+                var shape = _selectionState.Selected.FirstOrDefault();
 
                 if (shape is PointShape source)
                 {
@@ -8981,11 +9007,11 @@ namespace Draw2D.ViewModels.Tools
                     }
                 }
 
-                shape.Move(this, dx, dy);
+                shape.Move(this.SelectionState, dx, dy);
             }
             else
             {
-                foreach (var shape in _selected.ToList())
+                foreach (var shape in _selectionState.Selected.ToList())
                 {
                     if (Settings.DisconnectPoints && modifier.HasFlag(Settings?.ConnectionModifier ?? Modifier.Shift))
                     {
@@ -8996,9 +9022,9 @@ namespace Draw2D.ViewModels.Tools
                     }
                 }
 
-                foreach (var shape in _selected.ToList())
+                foreach (var shape in _selectionState.Selected.ToList())
                 {
-                    shape.Move(this, dx, dy);
+                    shape.Move(this.SelectionState, dx, dy);
                 }
             }
 
@@ -9022,8 +9048,8 @@ namespace Draw2D.ViewModels.Tools
 
             if (Settings?.ClearSelectionOnClean == true)
             {
-                Hovered = null;
-                Selected.Clear();
+                _selectionState.Hovered = null;
+                _selectionState.Selected.Clear();
             }
 
             Filters?.ForEach(f => f.Clear(context));
@@ -9122,9 +9148,9 @@ namespace Draw2D.ViewModels.Tools
 
         public void Copy(IToolContext context)
         {
-            lock (_selected)
+            lock (_selectionState.Selected)
             {
-                _shapesToCopy = _selected.ToList();
+                _shapesToCopy = _selectionState.Selected.ToList();
             }
         }
 
@@ -9132,12 +9158,12 @@ namespace Draw2D.ViewModels.Tools
         {
             if (_shapesToCopy != null)
             {
-                lock (_selected)
+                lock (_selectionState.Selected)
                 {
                     this.DeHover(context);
-                    _selected.Clear();
+                    _selectionState.Selected.Clear();
 
-                    Copy(context.ContainerView?.CurrentContainer, _shapesToCopy, this);
+                    Copy(context.ContainerView?.CurrentContainer, _shapesToCopy, _selectionState);
 
                     context.ContainerView?.InputService?.Redraw?.Invoke();
 
@@ -9148,12 +9174,12 @@ namespace Draw2D.ViewModels.Tools
 
         public void Delete(IToolContext context)
         {
-            lock (_selected)
+            lock (_selectionState.Selected)
             {
-                Delete(context.ContainerView?.CurrentContainer, this);
+                Delete(context.ContainerView?.CurrentContainer, _selectionState);
 
                 this.DeHover(context);
-                _selected.Clear();
+                _selectionState.Selected.Clear();
 
                 context.ContainerView?.InputService?.Redraw?.Invoke();
 
@@ -9163,11 +9189,11 @@ namespace Draw2D.ViewModels.Tools
 
         public void Group(IToolContext context)
         {
-            lock (_selected)
+            lock (_selectionState.Selected)
             {
                 this.DeHover(context);
 
-                var shapes = _selected.ToList();
+                var shapes = _selectionState.Selected.ToList();
 
                 Delete(context);
 
@@ -9185,7 +9211,7 @@ namespace Draw2D.ViewModels.Tools
                     }
                 }
 
-                group.Select(this);
+                group.Select(_selectionState);
                 context.ContainerView?.CurrentContainer.Shapes.Add(group);
                 context.ContainerView?.CurrentContainer.MarkAsDirty(true);
 
@@ -9197,14 +9223,14 @@ namespace Draw2D.ViewModels.Tools
 
         public void SelectAll(IToolContext context)
         {
-            lock (_selected)
+            lock (_selectionState.Selected)
             {
                 this.DeHover(context);
-                _selected.Clear();
+                _selectionState.Selected.Clear();
 
                 foreach (var shape in context.ContainerView?.CurrentContainer.Shapes)
                 {
-                    shape.Select(this);
+                    shape.Select(_selectionState);
                 }
 
                 context.ContainerView?.InputService?.Redraw?.Invoke();
@@ -9215,22 +9241,22 @@ namespace Draw2D.ViewModels.Tools
 
         public void Hover(IToolContext context, BaseShape shape)
         {
-            Hovered = shape;
+            _selectionState.Hovered = shape;
 
             if (shape != null)
             {
                 _hover = shape;
-                _hover.Select(this);
+                _hover.Select(_selectionState);
             }
         }
 
         public void DeHover(IToolContext context)
         {
-            Hovered = null;
+            _selectionState.Hovered = null;
 
             if (_hover != null)
             {
-                _hover.Deselect(this);
+                _hover.Deselect(_selectionState);
                 _hover = null;
             }
         }
@@ -9269,9 +9295,9 @@ namespace Draw2D.ViewModels.Tools
                         {
                             point.X = _originX;
                             point.Y = _originY;
-                            _selected.Remove(point);
-                            _selected.Add(copy);
-                            this.MarkAsDirty(true);
+                            _selectionState.Selected.Remove(point);
+                            _selectionState.Selected.Add(copy);
+                            _selectionState.MarkAsDirty(true);
                             _disconnected = true;
                         }
                         break;
@@ -9284,9 +9310,9 @@ namespace Draw2D.ViewModels.Tools
         {
             if (shape is ConnectableShape connectable)
             {
-                connectable.Deselect(this);
+                connectable.Deselect(_selectionState);
                 _disconnected = connectable.Disconnect();
-                connectable.Select(this);
+                connectable.Select(_selectionState);
             }
         }
 
@@ -9311,7 +9337,7 @@ namespace Draw2D.ViewModels.Tools
             return copy;
         }
 
-        internal void Copy(ICanvasContainer container, IEnumerable<BaseShape> shapes, ISelection selection)
+        internal void Copy(ICanvasContainer container, IEnumerable<BaseShape> shapes, ISelectionState selectionState)
         {
             var shared = GetPointsCopyDict(shapes);
 
@@ -9322,14 +9348,14 @@ namespace Draw2D.ViewModels.Tools
                     var copy = (BaseShape)copyable.Copy(shared);
                     if (copy != null && !(copy is PointShape))
                     {
-                        copy.Select(selection);
+                        copy.Select(selectionState);
                         container.Shapes.Add(copy);
                     }
                 }
             }
         }
 
-        internal void Delete(ICanvasContainer container, ISelection selection)
+        internal void Delete(ICanvasContainer container, ISelectionState selectionState)
         {
             // TODO: Very slow when using Contains.
             //var paths = container.Shapes.OfType<PathShape>().ToList().AsReadOnly();
@@ -9338,7 +9364,7 @@ namespace Draw2D.ViewModels.Tools
 
             var shapesHash = new HashSet<BaseShape>(container.Shapes);
 
-            foreach (var shape in selection.Selected)
+            foreach (var shape in selectionState.Selected)
             {
                 if (shapesHash.Contains(shape))
                 {
@@ -9481,10 +9507,10 @@ namespace Draw2D.ViewModels.Tools
             if (shapePoint != null || shape != null)
             {
                 bool haveNewSelection =
-                    (shapePoint != null && !_selected.Contains(shapePoint))
-                    || (shape != null && !_selected.Contains(shape));
+                    (shapePoint != null && !_selectionState.Selected.Contains(shapePoint))
+                    || (shape != null && !_selectionState.Selected.Contains(shape));
 
-                if (_selected.Count >= 1
+                if (_selectionState.Selected.Count >= 1
                     && !haveNewSelection
                     && !modifier.HasFlag(selectionModifier))
                 {
@@ -9496,20 +9522,20 @@ namespace Draw2D.ViewModels.Tools
                     {
                         if (modifier.HasFlag(selectionModifier))
                         {
-                            if (_selected.Contains(shapePoint))
+                            if (_selectionState.Selected.Contains(shapePoint))
                             {
-                                shapePoint.Deselect(this);
+                                shapePoint.Deselect(_selectionState);
                             }
                             else
                             {
-                                shapePoint.Select(this);
+                                shapePoint.Select(_selectionState);
                             }
-                            return _selected.Count > 0;
+                            return _selectionState.Selected.Count > 0;
                         }
                         else
                         {
-                            Selected.Clear();
-                            shapePoint.Select(this);
+                            _selectionState.Selected.Clear();
+                            shapePoint.Select(_selectionState);
                             return true;
                         }
                     }
@@ -9517,20 +9543,20 @@ namespace Draw2D.ViewModels.Tools
                     {
                         if (modifier.HasFlag(selectionModifier))
                         {
-                            if (_selected.Contains(shape))
+                            if (_selectionState.Selected.Contains(shape))
                             {
-                                shape.Deselect(this);
+                                shape.Deselect(_selectionState);
                             }
                             else
                             {
-                                shape.Select(this);
+                                shape.Select(_selectionState);
                             }
-                            return _selected.Count > 0;
+                            return _selectionState.Selected.Count > 0;
                         }
                         else
                         {
-                            Selected.Clear();
-                            shape.Select(this);
+                            _selectionState.Selected.Clear();
+                            shape.Select(_selectionState);
                             return true;
                         }
                     }
@@ -9555,23 +9581,23 @@ namespace Draw2D.ViewModels.Tools
                     {
                         foreach (var shape in shapes)
                         {
-                            if (_selected.Contains(shape))
+                            if (_selectionState.Selected.Contains(shape))
                             {
-                                shape.Deselect(this);
+                                shape.Deselect(_selectionState);
                             }
                             else
                             {
-                                shape.Select(this);
+                                shape.Select(_selectionState);
                             }
                         }
-                        return _selected.Count > 0;
+                        return _selectionState.Selected.Count > 0;
                     }
                     else
                     {
-                        Selected.Clear();
+                        _selectionState.Selected.Clear();
                         foreach (var shape in shapes)
                         {
-                            shape.Select(this);
+                            shape.Select(_selectionState);
                         }
                         return true;
                     }
@@ -9674,10 +9700,10 @@ namespace Draw2D.ViewModels.Tools
             };
             context.ContainerView?.WorkingContainer.Shapes.Add(_text);
             context.ContainerView?.WorkingContainer.MarkAsDirty(true);
-            context.ContainerView?.Selection.Selected.Add(_text);
-            context.ContainerView?.Selection.Selected.Add(_text.TopLeft);
-            context.ContainerView?.Selection.Selected.Add(_text.BottomRight);
-            context.ContainerView?.Selection.MarkAsDirty(true);
+            context.ContainerView?.SelectionState.Selected.Add(_text);
+            context.ContainerView?.SelectionState.Selected.Add(_text.TopLeft);
+            context.ContainerView?.SelectionState.Selected.Add(_text.BottomRight);
+            context.ContainerView?.SelectionState.MarkAsDirty(true);
 
             context.ContainerView?.InputService?.Capture?.Invoke();
             context.ContainerView?.InputService?.Redraw?.Invoke();
@@ -9691,15 +9717,15 @@ namespace Draw2D.ViewModels.Tools
 
             CurrentState = State.TopLeft;
 
-            context.ContainerView?.Selection.Selected.Remove(_text);
-            context.ContainerView?.Selection.Selected.Remove(_text.BottomRight);
-            context.ContainerView?.Selection.MarkAsDirty(true);
+            context.ContainerView?.SelectionState.Selected.Remove(_text);
+            context.ContainerView?.SelectionState.Selected.Remove(_text.BottomRight);
+            context.ContainerView?.SelectionState.MarkAsDirty(true);
             _text.BottomRight = context.ContainerView?.GetNextPoint(x, y, Settings?.ConnectPoints ?? false, Settings?.HitTestRadius ?? 7.0);
             _text.BottomRight.Y = y;
             context.ContainerView?.WorkingContainer.Shapes.Remove(_text);
             context.ContainerView?.WorkingContainer.MarkAsDirty(true);
-            context.ContainerView?.Selection.Selected.Remove(_text.TopLeft);
-            context.ContainerView?.Selection.MarkAsDirty(true);
+            context.ContainerView?.SelectionState.Selected.Remove(_text.TopLeft);
+            context.ContainerView?.SelectionState.MarkAsDirty(true);
             context.ContainerView?.CurrentContainer.Shapes.Add(_text);
             context.ContainerView?.CurrentContainer.MarkAsDirty(true);
             _text = null;
@@ -9739,10 +9765,10 @@ namespace Draw2D.ViewModels.Tools
             {
                 context.ContainerView?.WorkingContainer.Shapes.Remove(_text);
                 context.ContainerView?.WorkingContainer.MarkAsDirty(true);
-                context.ContainerView?.Selection.Selected.Remove(_text);
-                context.ContainerView?.Selection.Selected.Remove(_text.TopLeft);
-                context.ContainerView?.Selection.Selected.Remove(_text.BottomRight);
-                context.ContainerView?.Selection.MarkAsDirty(true);
+                context.ContainerView?.SelectionState.Selected.Remove(_text);
+                context.ContainerView?.SelectionState.Selected.Remove(_text.TopLeft);
+                context.ContainerView?.SelectionState.Selected.Remove(_text.BottomRight);
+                context.ContainerView?.SelectionState.MarkAsDirty(true);
                 _text = null;
             }
 
