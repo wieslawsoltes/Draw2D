@@ -28,7 +28,7 @@ namespace Draw2D.Editor
         private ISelection _selection;
         private ISelectionState _selectionState;
         private IHitTest _hitTest;
-        private IDictionary<Type, IShapeDecorator> _decorators;
+        private Dictionary<string, IShapeDecorator> _decorators;
         private IList<string> _files;
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
@@ -53,7 +53,7 @@ namespace Draw2D.Editor
         }
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public IDictionary<Type, IShapeDecorator> Decorators
+        public Dictionary<string, IShapeDecorator> Decorators
         {
             get => _decorators;
             set => Update(ref _decorators, value);
@@ -92,7 +92,7 @@ namespace Draw2D.Editor
 
             var hitTest = new HitTest()
             {
-                Registered = new Dictionary<Type, IBounds>()
+                Registered = new Dictionary<string, IBounds>()
             };
 
             hitTest.Register(new PointBounds());
@@ -438,17 +438,17 @@ namespace Draw2D.Editor
 
             var currentTool = tools.FirstOrDefault(t => t.Title == "Selection");
 
-            var decorators = new Dictionary<Type, IShapeDecorator>
+            var decorators = new Dictionary<string, IShapeDecorator>
             {
-                //{ typeof(PointShape), new PointDecorator() },
-                { typeof(LineShape), new LineDecorator() },
-                { typeof(CubicBezierShape), new CubicBezierDecorator() },
-                { typeof(QuadraticBezierShape), new QuadraticBezierDecorator() },
-                { typeof(ConicShape), new ConicDecorator() },
-                { typeof(PathShape), new PathDecorator() },
-                { typeof(RectangleShape), new RectangleDecorator() },
-                { typeof(EllipseShape), new EllipseDecorator() },
-                { typeof(TextShape), new TextDecorator() }
+                //{ typeof(PointShape).Name, new PointDecorator() },
+                { typeof(LineShape).Name, new LineDecorator() },
+                { typeof(CubicBezierShape).Name, new CubicBezierDecorator() },
+                { typeof(QuadraticBezierShape).Name, new QuadraticBezierDecorator() },
+                { typeof(ConicShape).Name, new ConicDecorator() },
+                { typeof(PathShape).Name, new PathDecorator() },
+                { typeof(RectangleShape).Name, new RectangleDecorator() },
+                { typeof(EllipseShape).Name, new EllipseDecorator() },
+                { typeof(TextShape).Name, new TextDecorator() }
             };
 
             Selection = selectionTool;

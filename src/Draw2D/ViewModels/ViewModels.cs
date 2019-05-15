@@ -118,7 +118,7 @@ namespace Draw2D.ViewModels
 
     public interface ICopyable
     {
-        object Copy(IDictionary<object, object> shared);
+        object Copy(Dictionary<object, object> shared);
     }
 
     public interface IDrawable
@@ -189,7 +189,7 @@ namespace Draw2D.ViewModels
 
     public interface IHitTest
     {
-        Dictionary<Type, IBounds> Registered { get; set; }
+        Dictionary<string, IBounds> Registered { get; set; }
         void Register(IBounds hitTest);
         PointShape TryToGetPoint(IEnumerable<BaseShape> shapes, Point2 target, double radius, PointShape exclude);
         PointShape TryToGetPoint(BaseShape shape, Point2 target, double radius);
@@ -212,7 +212,7 @@ namespace Draw2D.ViewModels
 
     public interface IBounds
     {
-        Type TargetType { get; }
+        string TargetType { get; }
         PointShape TryToGetPoint(BaseShape shape, Point2 target, double radius, IHitTest hitTest);
         BaseShape Contains(BaseShape shape, Point2 target, double radius, IHitTest hitTest);
         BaseShape Overlaps(BaseShape shape, Rect2 target, double radius, IHitTest hitTest);
@@ -348,7 +348,7 @@ namespace Draw2D.ViewModels
             }
         }
 
-        public object Copy(IDictionary<object, object> shared)
+        public object Copy(Dictionary<object, object> shared)
         {
             return new Matrix2()
             {
@@ -410,7 +410,7 @@ namespace Draw2D.ViewModels
             }
         }
 
-        public object Copy(IDictionary<object, object> shared)
+        public object Copy(Dictionary<object, object> shared)
         {
             return new Text()
             {
@@ -541,7 +541,7 @@ namespace Draw2D.ViewModels.Style
             }
         }
 
-        public object Copy(IDictionary<object, object> shared)
+        public object Copy(Dictionary<object, object> shared)
         {
             return new ArgbColor()
             {
@@ -641,7 +641,7 @@ namespace Draw2D.ViewModels.Style
             }
         }
 
-        public object Copy(IDictionary<object, object> shared)
+        public object Copy(Dictionary<object, object> shared)
         {
             return new TextStyle()
             {
@@ -730,7 +730,7 @@ namespace Draw2D.ViewModels.Style
             }
         }
 
-        public object Copy(IDictionary<object, object> shared)
+        public object Copy(Dictionary<object, object> shared)
         {
             return new ShapeStyle()
             {
@@ -821,7 +821,7 @@ namespace Draw2D.ViewModels.Shapes
             }
         }
 
-        public abstract object Copy(IDictionary<object, object> shared);
+        public abstract object Copy(Dictionary<object, object> shared);
     }
 
     [DataContract(IsReference = true)]
@@ -1350,7 +1350,7 @@ namespace Draw2D.ViewModels.Shapes
             return result;
         }
 
-        public override object Copy(IDictionary<object, object> shared)
+        public override object Copy(Dictionary<object, object> shared)
         {
             var copy = new ConicShape()
             {
@@ -1653,7 +1653,7 @@ namespace Draw2D.ViewModels.Shapes
             return result;
         }
 
-        public override object Copy(IDictionary<object, object> shared)
+        public override object Copy(Dictionary<object, object> shared)
         {
             var copy = new CubicBezierShape()
             {
@@ -1729,7 +1729,7 @@ namespace Draw2D.ViewModels.Shapes
             base.EndTransform(dc, renderer, state);
         }
 
-        public override object Copy(IDictionary<object, object> shared)
+        public override object Copy(Dictionary<object, object> shared)
         {
             var copy = new EllipseShape()
             {
@@ -1870,7 +1870,7 @@ namespace Draw2D.ViewModels.Shapes
             }
         }
 
-        public override object Copy(IDictionary<object, object> shared)
+        public override object Copy(Dictionary<object, object> shared)
         {
             var copy = new FigureShape()
             {
@@ -1993,7 +1993,7 @@ namespace Draw2D.ViewModels.Shapes
             base.Move(selectionState, dx, dy);
         }
 
-        public override object Copy(IDictionary<object, object> shared)
+        public override object Copy(Dictionary<object, object> shared)
         {
             var copy = new GroupShape()
             {
@@ -2210,7 +2210,7 @@ namespace Draw2D.ViewModels.Shapes
             return result;
         }
 
-        public override object Copy(IDictionary<object, object> shared)
+        public override object Copy(Dictionary<object, object> shared)
         {
             var copy = new LineShape()
             {
@@ -2602,7 +2602,7 @@ namespace Draw2D.ViewModels.Shapes
             return false;
         }
 
-        public override object Copy(IDictionary<object, object> shared)
+        public override object Copy(Dictionary<object, object> shared)
         {
             var copy = new PathShape()
             {
@@ -2719,7 +2719,7 @@ namespace Draw2D.ViewModels.Shapes
             Y += dy;
         }
 
-        public override object Copy(IDictionary<object, object> shared)
+        public override object Copy(Dictionary<object, object> shared)
         {
             return new PointShape()
             {
@@ -2977,7 +2977,7 @@ namespace Draw2D.ViewModels.Shapes
             return result;
         }
 
-        public override object Copy(IDictionary<object, object> shared)
+        public override object Copy(Dictionary<object, object> shared)
         {
             var copy = new QuadraticBezierShape()
             {
@@ -3052,7 +3052,7 @@ namespace Draw2D.ViewModels.Shapes
             base.EndTransform(dc, renderer, state);
         }
 
-        public override object Copy(IDictionary<object, object> shared)
+        public override object Copy(Dictionary<object, object> shared)
         {
             var copy = new RectangleShape()
             {
@@ -3151,7 +3151,7 @@ namespace Draw2D.ViewModels.Shapes
             base.EndTransform(dc, renderer, state);
         }
 
-        public override object Copy(IDictionary<object, object> shared)
+        public override object Copy(Dictionary<object, object> shared)
         {
             var copy = new TextShape()
             {
@@ -3181,7 +3181,7 @@ namespace Draw2D.ViewModels.Containers
 {
     public interface IDrawContainerView : IDisposable
     {
-        IDictionary<Type, IShapeDecorator> Decorators { get; set; }
+        Dictionary<string, IShapeDecorator> Decorators { get; set; }
         void Draw(IContainerView view, object context, double width, double height, double dx, double dy, double zx, double zy);
     }
 
@@ -3298,7 +3298,7 @@ namespace Draw2D.ViewModels.Containers
             }
         }
 
-        public override object Copy(IDictionary<object, object> shared)
+        public override object Copy(Dictionary<object, object> shared)
         {
             var copy = new CanvasContainer()
             {
@@ -3490,7 +3490,7 @@ namespace Draw2D.ViewModels.Containers
             _drawContainerView?.Draw(this, context, width, height, dx, dy, zx, zy);
         }
 
-        public virtual object Copy(IDictionary<object, object> shared)
+        public virtual object Copy(Dictionary<object, object> shared)
         {
             var copy = new ContainerView()
             {
@@ -4798,7 +4798,7 @@ namespace Draw2D.ViewModels.Bounds
     public class CubicBezierBounds : IBounds
     {
         [IgnoreDataMember]
-        public Type TargetType => typeof(CubicBezierShape);
+        public string TargetType => typeof(CubicBezierShape).Name;
 
         public PointShape TryToGetPoint(BaseShape shape, Point2 target, double radius, IHitTest hitTest)
         {
@@ -4807,7 +4807,7 @@ namespace Draw2D.ViewModels.Bounds
                 throw new ArgumentNullException("shape");
             }
 
-            var pointHitTest = hitTest.Registered[typeof(PointShape)];
+            var pointHitTest = hitTest.Registered[typeof(PointShape).Name];
 
             if (pointHitTest.TryToGetPoint(cubicBezier.StartPoint, target, radius, hitTest) != null)
             {
@@ -4871,12 +4871,12 @@ namespace Draw2D.ViewModels.Bounds
     public class EllipseBounds : IBounds
     {
         [IgnoreDataMember]
-        public Type TargetType => typeof(EllipseShape);
+        public string TargetType => typeof(EllipseShape).Name;
 
         public PointShape TryToGetPoint(BaseShape shape, Point2 target, double radius, IHitTest hitTest)
         {
             var box = shape as BoxShape ?? throw new ArgumentNullException("shape");
-            var pointHitTest = hitTest.Registered[typeof(PointShape)];
+            var pointHitTest = hitTest.Registered[typeof(PointShape).Name];
 
             if (pointHitTest.TryToGetPoint(box.TopLeft, target, radius, hitTest) != null)
             {
@@ -4926,7 +4926,7 @@ namespace Draw2D.ViewModels.Bounds
     public class GroupBounds : IBounds
     {
         [IgnoreDataMember]
-        public Type TargetType => typeof(GroupShape);
+        public string TargetType => typeof(GroupShape).Name;
 
         public PointShape TryToGetPoint(BaseShape shape, Point2 target, double radius, IHitTest hitTest)
         {
@@ -4935,7 +4935,7 @@ namespace Draw2D.ViewModels.Bounds
                 throw new ArgumentNullException("shape");
             }
 
-            var pointHitTest = hitTest.Registered[typeof(PointShape)];
+            var pointHitTest = hitTest.Registered[typeof(PointShape).Name];
 
             foreach (var groupPoint in group.Points)
             {
@@ -4947,7 +4947,7 @@ namespace Draw2D.ViewModels.Bounds
 
             foreach (var groupShape in group.Shapes)
             {
-                var groupHitTest = hitTest.Registered[groupShape.GetType()];
+                var groupHitTest = hitTest.Registered[groupShape.GetType().Name];
                 var result = groupHitTest.TryToGetPoint(groupShape, target, radius, hitTest);
                 if (result != null)
                 {
@@ -4967,7 +4967,7 @@ namespace Draw2D.ViewModels.Bounds
 
             foreach (var groupShape in group.Shapes)
             {
-                var groupHitTest = hitTest.Registered[groupShape.GetType()];
+                var groupHitTest = hitTest.Registered[groupShape.GetType().Name];
                 var result = groupHitTest.Contains(groupShape, target, radius, hitTest);
                 if (result != null)
                 {
@@ -4986,7 +4986,7 @@ namespace Draw2D.ViewModels.Bounds
 
             foreach (var groupShape in group.Shapes)
             {
-                var groupHitTest = hitTest.Registered[groupShape.GetType()];
+                var groupHitTest = hitTest.Registered[groupShape.GetType().Name];
                 var result = groupHitTest.Overlaps(groupShape, target, radius, hitTest);
                 if (result != null)
                 {
@@ -5001,7 +5001,7 @@ namespace Draw2D.ViewModels.Bounds
     public class LineBounds : IBounds
     {
         [IgnoreDataMember]
-        public Type TargetType => typeof(LineShape);
+        public string TargetType => typeof(LineShape).Name;
 
         public PointShape TryToGetPoint(BaseShape shape, Point2 target, double radius, IHitTest hitTest)
         {
@@ -5010,7 +5010,7 @@ namespace Draw2D.ViewModels.Bounds
                 throw new ArgumentNullException("shape");
             }
 
-            var pointHitTest = hitTest.Registered[typeof(PointShape)];
+            var pointHitTest = hitTest.Registered[typeof(PointShape).Name];
 
             if (pointHitTest.TryToGetPoint(line.StartPoint, target, radius, hitTest) != null)
             {
@@ -5064,7 +5064,7 @@ namespace Draw2D.ViewModels.Bounds
     public class PathBounds : IBounds
     {
         [IgnoreDataMember]
-        public Type TargetType => typeof(PathShape);
+        public string TargetType => typeof(PathShape).Name;
 
         public PointShape TryToGetPoint(BaseShape shape, Point2 target, double radius, IHitTest hitTest)
         {
@@ -5073,7 +5073,7 @@ namespace Draw2D.ViewModels.Bounds
                 throw new ArgumentNullException("shape");
             }
 
-            var pointHitTest = hitTest.Registered[typeof(PointShape)];
+            var pointHitTest = hitTest.Registered[typeof(PointShape).Name];
 
             foreach (var pathPoint in path.Points)
             {
@@ -5087,7 +5087,7 @@ namespace Draw2D.ViewModels.Bounds
             {
                 foreach (var figureShape in figure.Shapes)
                 {
-                    var figureHitTest = hitTest.Registered[figureShape.GetType()];
+                    var figureHitTest = hitTest.Registered[figureShape.GetType().Name];
                     var result = figureHitTest.TryToGetPoint(figureShape, target, radius, hitTest);
                     if (result != null)
                     {
@@ -5110,7 +5110,7 @@ namespace Draw2D.ViewModels.Bounds
             {
                 foreach (var figureShape in figure.Shapes)
                 {
-                    var figureHitTest = hitTest.Registered[figureShape.GetType()];
+                    var figureHitTest = hitTest.Registered[figureShape.GetType().Name];
                     var result = figureHitTest.Contains(figureShape, target, radius, hitTest);
                     if (result != null)
                     {
@@ -5136,7 +5136,7 @@ namespace Draw2D.ViewModels.Bounds
             {
                 foreach (var figureShape in figure.Shapes)
                 {
-                    var figureHitTest = hitTest.Registered[figureShape.GetType()];
+                    var figureHitTest = hitTest.Registered[figureShape.GetType().Name];
                     var result = figureHitTest.Overlaps(figureShape, target, radius, hitTest);
                     if (result != null)
                     {
@@ -5156,7 +5156,7 @@ namespace Draw2D.ViewModels.Bounds
     public class PointBounds : IBounds
     {
         [IgnoreDataMember]
-        public Type TargetType => typeof(PointShape);
+        public string TargetType => typeof(PointShape).Name;
 
         public PointShape TryToGetPoint(BaseShape shape, Point2 target, double radius, IHitTest hitTest)
         {
@@ -5198,7 +5198,7 @@ namespace Draw2D.ViewModels.Bounds
     public class QuadraticBezierBounds : IBounds
     {
         [IgnoreDataMember]
-        public Type TargetType => typeof(QuadraticBezierShape);
+        public string TargetType => typeof(QuadraticBezierShape).Name;
 
         public PointShape TryToGetPoint(BaseShape shape, Point2 target, double radius, IHitTest hitTest)
         {
@@ -5207,7 +5207,7 @@ namespace Draw2D.ViewModels.Bounds
                 throw new ArgumentNullException("shape");
             }
 
-            var pointHitTest = hitTest.Registered[typeof(PointShape)];
+            var pointHitTest = hitTest.Registered[typeof(PointShape).Name];
 
             if (pointHitTest.TryToGetPoint(quadraticBezier.StartPoint, target, radius, hitTest) != null)
             {
@@ -5266,7 +5266,7 @@ namespace Draw2D.ViewModels.Bounds
     public class ConicBounds : IBounds
     {
         [IgnoreDataMember]
-        public Type TargetType => typeof(ConicShape);
+        public string TargetType => typeof(ConicShape).Name;
 
         public PointShape TryToGetPoint(BaseShape shape, Point2 target, double radius, IHitTest hitTest)
         {
@@ -5275,7 +5275,7 @@ namespace Draw2D.ViewModels.Bounds
                 throw new ArgumentNullException("shape");
             }
 
-            var pointHitTest = hitTest.Registered[typeof(PointShape)];
+            var pointHitTest = hitTest.Registered[typeof(PointShape).Name];
 
             if (pointHitTest.TryToGetPoint(conic.StartPoint, target, radius, hitTest) != null)
             {
@@ -5334,12 +5334,12 @@ namespace Draw2D.ViewModels.Bounds
     public class RectangleBounds : IBounds
     {
         [IgnoreDataMember]
-        public Type TargetType => typeof(RectangleShape);
+        public string TargetType => typeof(RectangleShape).Name;
 
         public PointShape TryToGetPoint(BaseShape shape, Point2 target, double radius, IHitTest hitTest)
         {
             var box = shape as BoxShape ?? throw new ArgumentNullException("shape");
-            var pointHitTest = hitTest.Registered[typeof(PointShape)];
+            var pointHitTest = hitTest.Registered[typeof(PointShape).Name];
 
             if (pointHitTest.TryToGetPoint(box.TopLeft, target, radius, hitTest) != null)
             {
@@ -5389,12 +5389,12 @@ namespace Draw2D.ViewModels.Bounds
     public class TextBounds : IBounds
     {
         [IgnoreDataMember]
-        public Type TargetType => typeof(TextShape);
+        public string TargetType => typeof(TextShape).Name;
 
         public PointShape TryToGetPoint(BaseShape shape, Point2 target, double radius, IHitTest hitTest)
         {
             var box = shape as BoxShape ?? throw new ArgumentNullException("shape");
-            var pointHitTest = hitTest.Registered[typeof(PointShape)];
+            var pointHitTest = hitTest.Registered[typeof(PointShape).Name];
 
             if (pointHitTest.TryToGetPoint(box.TopLeft, target, radius, hitTest) != null)
             {
@@ -5500,10 +5500,10 @@ namespace Draw2D.ViewModels.Bounds
     [DataContract(IsReference = true)]
     public class HitTest : ViewModelBase, IHitTest
     {
-        private Dictionary<Type, IBounds> _registered;
+        private Dictionary<string, IBounds> _registered;
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public Dictionary<Type, IBounds> Registered
+        public Dictionary<string, IBounds> Registered
         {
             get => _registered;
             set => Update(ref _registered, value);
@@ -5528,7 +5528,7 @@ namespace Draw2D.ViewModels.Bounds
 
         private IBounds GetHitTest(object target)
         {
-            return Registered.TryGetValue(target?.GetType(), out var hitTest) ? hitTest : null;
+            return Registered.TryGetValue(target?.GetType().Name, out var hitTest) ? hitTest : null;
         }
 
         public PointShape TryToGetPoint(BaseShape shape, Point2 target, double radius)
@@ -9316,7 +9316,7 @@ namespace Draw2D.ViewModels.Tools
             }
         }
 
-        internal IDictionary<object, object> GetPointsCopyDict(IEnumerable<BaseShape> shapes)
+        internal Dictionary<object, object> GetPointsCopyDict(IEnumerable<BaseShape> shapes)
         {
             var copy = new Dictionary<object, object>();
 

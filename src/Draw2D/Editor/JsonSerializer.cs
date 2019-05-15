@@ -14,7 +14,7 @@ namespace Draw2D.Editor
 {
     internal class JsonSerializer
     {
-        internal class CoreContractResolver : DefaultContractResolver
+        internal class CustomContractResolver : DefaultContractResolver
         {
             protected override JsonContract CreateContract(Type objectType)
             {
@@ -53,7 +53,7 @@ namespace Draw2D.Editor
                 TypeNameHandling = TypeNameHandling.Objects,
                 PreserveReferencesHandling = PreserveReferencesHandling.Objects,
                 ReferenceLoopHandling = ReferenceLoopHandling.Serialize,
-                ContractResolver = new CoreContractResolver(),
+                ContractResolver = new CustomContractResolver(),
                 NullValueHandling = NullValueHandling.Ignore,
                 Converters = { new KeyValuePairConverter() }
             };

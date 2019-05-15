@@ -259,14 +259,14 @@ namespace Draw2D.Renderers
 
     public class AvaloniaShapeRenderer : IShapeRenderer
     {
-        private IDictionary<ShapeStyle, AvaloniaBrushCache> _brushCache;
-        private IDictionary<Matrix2, Matrix> _matrixCache;
-        private IDictionary<CubicBezierShape, Geometry> _cubicGeometryCache;
-        private IDictionary<QuadraticBezierShape, Geometry> _quadGeometryCache;
-        private IDictionary<ConicShape, Geometry> _conicGeometryCache;
-        private IDictionary<PathShape, Geometry> _pathGeometryCache;
-        private IDictionary<EllipseShape, Geometry> _ellipseGeometryCache;
-        private IDictionary<TextShape, AvaloniaFormattedTextCache> _formattedTextCache;
+        private Dictionary<ShapeStyle, AvaloniaBrushCache> _brushCache;
+        private Dictionary<Matrix2, Matrix> _matrixCache;
+        private Dictionary<CubicBezierShape, Geometry> _cubicGeometryCache;
+        private Dictionary<QuadraticBezierShape, Geometry> _quadGeometryCache;
+        private Dictionary<ConicShape, Geometry> _conicGeometryCache;
+        private Dictionary<PathShape, Geometry> _pathGeometryCache;
+        private Dictionary<EllipseShape, Geometry> _ellipseGeometryCache;
+        private Dictionary<TextShape, AvaloniaFormattedTextCache> _formattedTextCache;
 
         public double Scale { get; set; } = 1.0;
 
@@ -342,7 +342,7 @@ namespace Draw2D.Renderers
             return cache;
         }
 
-        private Geometry GetGeometryCache<T>(T shape, IDictionary<T, Geometry> cacheDictionary, ShapeStyle style, double dx, double dy) where T : BaseShape
+        private Geometry GetGeometryCache<T>(T shape, Dictionary<T, Geometry> cacheDictionary, ShapeStyle style, double dx, double dy) where T : BaseShape
         {
             if (shape == null)
             {
