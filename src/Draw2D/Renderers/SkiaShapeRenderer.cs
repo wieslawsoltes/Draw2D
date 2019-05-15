@@ -2,6 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using Draw2D.ViewModels;
 using Draw2D.ViewModels.Shapes;
@@ -148,6 +149,11 @@ namespace Draw2D.Renderers
             return geometry;
         }
 
+        public static SKPath ToGeometry(string svgPathData)
+        {
+            return SKPath.ParseSvgPathData(svgPathData);
+        }
+
         public static SKPath ToGeometry(ConicShape conic, double dx, double dy)
         {
             var geometry = new SKPath();
@@ -157,6 +163,142 @@ namespace Draw2D.Renderers
                 ToPoint(conic.Point2, dx, dy),
                 (float)conic.Weight);
             return geometry;
+        }
+
+        public static PathShape FromGeometry(SKPath path, ShapeStyle style, BaseShape pointTemplate)
+        {
+            var pathShape = new PathShape()
+            {
+                Points = new ObservableCollection<PointShape>(),
+                Figures = new ObservableCollection<FigureShape>(),
+                FillRule = PathFillRule.EvenOdd,
+                Text = new Text(),
+                Style = style
+            };
+
+            var figureShape = default(FigureShape);
+
+            using (var iterator = path.CreateRawIterator())
+            {
+                var points = new SKPoint[4];
+                var pathVerb = SKPathVerb.Move;
+                var firstPoint = new SKPoint();
+                var lastPoint = new SKPoint();
+
+                while ((pathVerb = iterator.Next(points)) != SKPathVerb.Done)
+                {
+                    switch (pathVerb)
+                    {
+                        case SKPathVerb.Move:
+                            {
+                                figureShape = new FigureShape()
+                                {
+                                    Shapes = new ObservableCollection<BaseShape>(),
+                                    IsFilled = true,
+                                    IsClosed = false
+                                };
+                                pathShape.Figures.Add(figureShape);
+                                firstPoint = lastPoint = points[0];
+                            }
+                            break;
+                        case SKPathVerb.Line:
+                            {
+                                var lastPointShape = pathShape.GetLastPoint();
+                                if (lastPointShape == null)
+                                {
+                                    lastPointShape = new PointShape(points[0].X, points[0].Y, pointTemplate);
+                                }
+                                var lineShape = new LineShape()
+                                {
+                                    Points = new ObservableCollection<PointShape>(),
+                                    StartPoint = lastPointShape,
+                                    Point = new PointShape(points[1].X, points[1].Y, pointTemplate),
+                                    Style = style
+                                };
+                                figureShape.Shapes.Add(lineShape);
+                                lastPoint = points[1];
+                            }
+                            break;
+                        case SKPathVerb.Cubic:
+                            {
+                                var lastPointShape = pathShape.GetLastPoint();
+                                if (lastPointShape == null)
+                                {
+                                    lastPointShape = new PointShape(points[0].X, points[0].Y, pointTemplate);
+                                }
+                                var cubicBezierShape = new CubicBezierShape()
+                                {
+                                    Points = new ObservableCollection<PointShape>(),
+                                    StartPoint = lastPointShape,
+                                    Point1 = new PointShape(points[1].X, points[1].Y, pointTemplate),
+                                    Point2 = new PointShape(points[2].X, points[2].Y, pointTemplate),
+                                    Point3 = new PointShape(points[3].X, points[3].Y, pointTemplate),
+                                    Style = style
+                                };
+                                figureShape.Shapes.Add(cubicBezierShape);
+                                lastPoint = points[3];
+                            }
+                            break;
+                        case SKPathVerb.Quad:
+                            {
+                                var lastPointShape = pathShape.GetLastPoint();
+                                if (lastPointShape == null)
+                                {
+                                    lastPointShape = new PointShape(points[0].X, points[0].Y, pointTemplate);
+                                }
+                                var quadraticBezierShape = new QuadraticBezierShape()
+                                {
+                                    Points = new ObservableCollection<PointShape>(),
+                                    StartPoint = lastPointShape,
+                                    Point1 = new PointShape(points[1].X, points[1].Y, pointTemplate),
+                                    Point2 = new PointShape(points[2].X, points[2].Y, pointTemplate),
+                                    Style = style
+                                };
+                                figureShape.Shapes.Add(quadraticBezierShape);
+                                lastPoint = points[2];
+                            }
+                            break;
+                        case SKPathVerb.Conic:
+                            {
+                                var lastPointShape = pathShape.GetLastPoint();
+                                if (lastPointShape == null)
+                                {
+                                    lastPointShape = new PointShape(points[0].X, points[0].Y, pointTemplate);
+                                }
+                                var quadraticBezierShape = new ConicShape()
+                                {
+                                    Points = new ObservableCollection<PointShape>(),
+                                    StartPoint = lastPointShape,
+                                    Point1 = new PointShape(points[1].X, points[1].Y, pointTemplate),
+                                    Point2 = new PointShape(points[2].X, points[2].Y, pointTemplate),
+                                    Weight = iterator.ConicWeight(),
+                                    Style = style
+                                };
+                                figureShape.Shapes.Add(quadraticBezierShape);
+                                lastPoint = points[2];
+                            }
+                            break;
+                        case SKPathVerb.Close:
+                            {
+#if false
+                                var line = new LineShape()
+                                {
+                                    Points = new ObservableCollection<PointShape>(),
+                                    StartPoint = pathShape.GetLastPoint(),
+                                    Point = pathShape.GetFirstPoint(),
+                                    Style = style
+                                };
+                                figureShape.Shapes.Add(line);
+#else
+                                figureShape.IsClosed = true;
+                                firstPoint = lastPoint = new SKPoint(0, 0);
+#endif
+                            }
+                            break;
+                    }
+                }
+            }
+            return pathShape;
         }
 
         public static SKPath ToGeometry(PathShape path, double dx, double dy)

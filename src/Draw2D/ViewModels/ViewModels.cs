@@ -217,7 +217,7 @@ namespace Draw2D.ViewModels
     public abstract class ViewModelBase : INotifyPropertyChanged, IDirty
     {
         private string _id = null;
-        private string _name = "";
+        private string _name = null;
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public virtual string Id
@@ -2299,6 +2299,59 @@ namespace Draw2D.ViewModels.Shapes
             this.Figures = figures;
         }
 
+        public PointShape GetFirstPoint()
+        {
+            if (_figures.Count > 0)
+            {
+                var lastFigure = _figures[_figures.Count - 1];
+                var shapes = lastFigure.Shapes;
+                if (shapes.Count > 0)
+                {
+                    switch (shapes[0])
+                    {
+                        case LineShape line:
+                            return line.StartPoint;
+                        case CubicBezierShape cubicBezier:
+                            return cubicBezier.StartPoint;
+                        case QuadraticBezierShape quadraticBezier:
+                            return quadraticBezier.StartPoint;
+                        case ConicShape conic:
+                            return conic.StartPoint;
+                        default:
+                            throw new Exception("Could not find last path point.");
+                    }
+                }
+            }
+            return null;
+        }
+
+        public PointShape GetLastPoint()
+        {
+            if (_figures.Count > 0)
+            {
+                var lastFigure = _figures[_figures.Count - 1];
+                var shapes = lastFigure.Shapes;
+                if (shapes.Count > 0)
+                {
+                    switch (shapes[shapes.Count - 1])
+                    {
+                        case LineShape line:
+                            return line.Point;
+                        case CubicBezierShape cubicBezier:
+                            return cubicBezier.Point3;
+                        case QuadraticBezierShape quadraticBezier:
+                            return quadraticBezier.Point2;
+                        case ConicShape conic:
+                            return conic.Point2;
+                        default:
+                            throw new Exception("Could not find last path point.");
+                    }
+                }
+            }
+            return null;
+        }
+
+
         public override void GetPoints(IList<PointShape> points)
         {
             foreach (var point in Points)
@@ -3371,6 +3424,7 @@ namespace Draw2D.ViewModels.Containers
             set => Update(ref _zoomService, value);
         }
 
+        [IgnoreDataMember]
         public IDrawContainerView DrawContainerView
         {
             get => _drawContainerView;

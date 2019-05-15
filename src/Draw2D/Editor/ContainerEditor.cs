@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
+using System.Runtime.Serialization;
 using Avalonia;
 using Avalonia.Controls;
 using Draw2D.Renderers;
@@ -17,37 +19,41 @@ using Draw2D.ViewModels.Intersections;
 using Draw2D.ViewModels.Shapes;
 using Draw2D.ViewModels.Style;
 using Draw2D.ViewModels.Tools;
-using SkiaSharp;
 
 namespace Draw2D.Editor
 {
+    [DataContract(IsReference = true)]
     public class ContainerEditor : ToolContext
     {
         private IHitTest _hitTest;
         private ISelection _selection;
         private IDictionary<Type, IShapeDecorator> _decorators;
+        private IList<string> _files;
 
-        public IList<string> Files { get; set; }
+        [IgnoreDataMember]
+        public IList<string> Files
+        {
+            get => _files;
+            set => Update(ref _files, value);
+        }
 
         public ContainerEditor()
         {
-            Initialize();
-            Files = Directory.EnumerateFiles(Directory.GetCurrentDirectory(), "*.json").Select(x => Path.GetFileName(x)).ToList();
         }
 
-        private T LoadFromJson<T>(string path)
+        public static T LoadFromJson<T>(string path)
         {
             var json = File.ReadAllText(path);
             return JsonSerializer.FromJson<T>(json);
         }
 
-        private void SaveAsjson<T>(string path, T value)
+        public static void SaveAsjson<T>(string path, T value)
         {
             var json = JsonSerializer.ToJson<T>(value);
             File.WriteAllText(path, json);
         }
 
-        private void Initialize()
+        public void Initialize()
         {
             var hitTest = new HitTest()
             {
@@ -447,7 +453,7 @@ namespace Draw2D.Editor
 
         public IContainerView CreateContainerView(string title)
         {
-            var containerView = new ContainerView()
+            return new ContainerView()
             {
                 Title = title,
                 Width = 720,
@@ -471,21 +477,26 @@ namespace Draw2D.Editor
                                     new TextStyle("Calibri", 12.0, HAlign.Center, VAlign.Center, new ArgbColor(255, 255, 255, 0), true))
                 },
                 InputService = null,
-                DrawContainerView = new DrawContainerView()
+                DrawContainerView = null,
+                Selection = null,
+                CurrentContainer = CreateCurrentCanvasContainer(),
+                WorkingContainer = null,
+                HitTest = null
+            };
+        }
+
+        public void InitContainerView(IContainerView containerView)
+        {
+            if (containerView != null)
+            {
+                containerView.DrawContainerView = new DrawContainerView()
                 {
                     Decorators = _decorators
-                },
-                Selection = _selection,
-                CurrentContainer = null,
-                WorkingContainer = null,
-                HitTest = _hitTest
-            };
-
-            containerView.CurrentContainer = CreateCurrentCanvasContainer();
-
-            containerView.WorkingContainer = CreateWorkingCanvasContainer();
-
-            return containerView;
+                };
+                containerView.Selection = _selection;
+                containerView.HitTest = _hitTest;
+                containerView.WorkingContainer = CreateWorkingCanvasContainer();
+            }
         }
 
         public void CloseContainerView(IContainerView containerView)
@@ -510,6 +521,10 @@ namespace Draw2D.Editor
 
                     containerView.DrawContainerView.Dispose();
                 }
+                containerView.DrawContainerView = null;
+                containerView.Selection = null;
+                containerView.HitTest = null;
+                containerView.WorkingContainer = null;
             }
         }
 
@@ -526,22 +541,15 @@ namespace Draw2D.Editor
 
         public void NewContainerView()
         {
-            var containerView = CreateContainerView("View" + ContainerViews.Count.ToString());
-
+            var containerView = CreateContainerView("View");
+            InitContainerView(containerView);
             AddContainerView(containerView);
         }
 
         public void Open(string path)
         {
             var containerView = LoadFromJson<ContainerView>(path);
-            containerView.DrawContainerView = new DrawContainerView()
-            {
-                Decorators = _decorators
-            };
-            containerView.Selection = _selection;
-            containerView.HitTest = _hitTest;
-            containerView.WorkingContainer = CreateWorkingCanvasContainer();
-
+            InitContainerView(containerView);
             AddContainerView(containerView);
         }
 
@@ -578,195 +586,13 @@ namespace Draw2D.Editor
             }
         }
 
-        public PointShape GetFirstPoint(PathShape path)
-        {
-            if (path?.Figures.Count > 0)
-            {
-                var shapes = path.Figures[path.Figures.Count - 1].Shapes;
-                if (shapes.Count > 0)
-                {
-                    switch (shapes[0])
-                    {
-                        case LineShape line:
-                            return line.StartPoint;
-                        case CubicBezierShape cubicBezier:
-                            return cubicBezier.StartPoint;
-                        case QuadraticBezierShape quadraticBezier:
-                            return quadraticBezier.StartPoint;
-                        case ConicShape conic:
-                            return conic.StartPoint;
-                        default:
-                            throw new Exception("Could not find last path point.");
-                    }
-                }
-            }
-            return null;
-        }
-
-        public PointShape GetLastPoint(PathShape path)
-        {
-            if (path?.Figures.Count > 0)
-            {
-                var shapes = path.Figures[path.Figures.Count - 1].Shapes;
-                if (shapes.Count > 0)
-                {
-                    switch (shapes[shapes.Count - 1])
-                    {
-                        case LineShape line:
-                            return line.Point;
-                        case CubicBezierShape cubicBezier:
-                            return cubicBezier.Point3;
-                        case QuadraticBezierShape quadraticBezier:
-                            return quadraticBezier.Point2;
-                        case ConicShape conic:
-                            return conic.Point2;
-                        default:
-                            throw new Exception("Could not find last path point.");
-                    }
-                }
-            }
-            return null;
-        }
-
-        public PathShape ConvertSKPath(SKPath path)
-        {
-            var pathShape = new PathShape()
-            {
-                Points = new ObservableCollection<PointShape>(),
-                Figures = new ObservableCollection<FigureShape>(),
-                FillRule = PathFillRule.EvenOdd,
-                Style = ContainerView.CurrentStyle
-            };
-
-            var figureShape = default(FigureShape);
-
-            using (var iterator = path.CreateRawIterator())
-            {
-                var points = new SKPoint[4];
-                var pathVerb = SKPathVerb.Move;
-                var firstPoint = new SKPoint();
-                var lastPoint = new SKPoint();
-
-                while ((pathVerb = iterator.Next(points)) != SKPathVerb.Done)
-                {
-                    switch (pathVerb)
-                    {
-                        case SKPathVerb.Move:
-                            {
-                                figureShape = new FigureShape()
-                                {
-                                    Shapes = new ObservableCollection<BaseShape>(),
-                                    IsFilled = true,
-                                    IsClosed = false
-                                };
-                                pathShape.Figures.Add(figureShape);
-                                firstPoint = lastPoint = points[0];
-                            }
-                            break;
-                        case SKPathVerb.Line:
-                            {
-                                var lastPointShape = GetLastPoint(pathShape);
-                                if (lastPointShape == null)
-                                {
-                                    lastPointShape = new PointShape(points[0].X, points[0].Y, ContainerView.PointTemplate);
-                                }
-                                var lineShape = new LineShape()
-                                {
-                                    Points = new ObservableCollection<PointShape>(),
-                                    StartPoint = lastPointShape,
-                                    Point = new PointShape(points[1].X, points[1].Y, ContainerView.PointTemplate),
-                                    Style = ContainerView.CurrentStyle
-                                };
-                                figureShape.Shapes.Add(lineShape);
-                                lastPoint = points[1];
-                            }
-                            break;
-                        case SKPathVerb.Cubic:
-                            {
-                                var lastPointShape = GetLastPoint(pathShape);
-                                if (lastPointShape == null)
-                                {
-                                    lastPointShape = new PointShape(points[0].X, points[0].Y, ContainerView.PointTemplate);
-                                }
-                                var cubicBezierShape = new CubicBezierShape()
-                                {
-                                    Points = new ObservableCollection<PointShape>(),
-                                    StartPoint = lastPointShape,
-                                    Point1 = new PointShape(points[1].X, points[1].Y, ContainerView.PointTemplate),
-                                    Point2 = new PointShape(points[2].X, points[2].Y, ContainerView.PointTemplate),
-                                    Point3 = new PointShape(points[3].X, points[3].Y, ContainerView.PointTemplate),
-                                    Style = ContainerView.CurrentStyle
-                                };
-                                figureShape.Shapes.Add(cubicBezierShape);
-                                lastPoint = points[3];
-                            }
-                            break;
-                        case SKPathVerb.Quad:
-                            {
-                                var lastPointShape = GetLastPoint(pathShape);
-                                if (lastPointShape == null)
-                                {
-                                    lastPointShape = new PointShape(points[0].X, points[0].Y, ContainerView.PointTemplate);
-                                }
-                                var quadraticBezierShape = new QuadraticBezierShape()
-                                {
-                                    Points = new ObservableCollection<PointShape>(),
-                                    StartPoint = lastPointShape,
-                                    Point1 = new PointShape(points[1].X, points[1].Y, ContainerView.PointTemplate),
-                                    Point2 = new PointShape(points[2].X, points[2].Y, ContainerView.PointTemplate),
-                                    Style = ContainerView.CurrentStyle
-                                };
-                                figureShape.Shapes.Add(quadraticBezierShape);
-                                lastPoint = points[2];
-                            }
-                            break;
-                        case SKPathVerb.Conic:
-                            {
-                                var lastPointShape = GetLastPoint(pathShape);
-                                if (lastPointShape == null)
-                                {
-                                    lastPointShape = new PointShape(points[0].X, points[0].Y, ContainerView.PointTemplate);
-                                }
-                                var quadraticBezierShape = new ConicShape()
-                                {
-                                    Points = new ObservableCollection<PointShape>(),
-                                    StartPoint = lastPointShape,
-                                    Point1 = new PointShape(points[1].X, points[1].Y, ContainerView.PointTemplate),
-                                    Point2 = new PointShape(points[2].X, points[2].Y, ContainerView.PointTemplate),
-                                    Weight = iterator.ConicWeight(),
-                                    Style = ContainerView.CurrentStyle
-                                };
-                                figureShape.Shapes.Add(quadraticBezierShape);
-                                lastPoint = points[2];
-                            }
-                            break;
-                        case SKPathVerb.Close:
-                            {
-                                //var line = new LineShape()
-                                //{
-                                //    Points = new ObservableCollection<PointShape>(),
-                                //    StartPoint = GetLastPoint(pathShape),
-                                //    Point = GetFirstPoint(pathShape),
-                                //    Style = ContainerView.CurrentStyle
-                                //};
-                                //figureShape.Shapes.Add(line);
-                                figureShape.IsClosed = true;
-                                firstPoint = lastPoint = new SKPoint(0, 0);
-                            }
-                            break;
-                    }
-                }
-            }
-            return pathShape;
-        }
-
         public void FromSvgPathData(TextBox textBox)
         {
             var svgPathData = textBox.Text;
             if (!string.IsNullOrWhiteSpace(svgPathData))
             {
-                var path = SKPath.ParseSvgPathData(svgPathData);
-                var pathShape = ConvertSKPath(path);
+                var path = SkiaHelper.ToGeometry(svgPathData);
+                var pathShape = SkiaHelper.FromGeometry(path, ContainerView.CurrentStyle, ContainerView.PointTemplate);
                 ContainerView.CurrentContainer.Shapes.Add(pathShape);
                 ContainerView.CurrentContainer.MarkAsDirty(true);
                 ContainerView?.InputService?.Redraw?.Invoke();
@@ -835,7 +661,6 @@ namespace Draw2D.Editor
                         break;
                     case TextShape textShape:
                         {
-
                         }
                         break;
                 };
