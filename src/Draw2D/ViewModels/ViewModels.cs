@@ -13,7 +13,6 @@ using Draw2D.ViewModels.Containers;
 using Draw2D.ViewModels.Shapes;
 using Draw2D.ViewModels.Style;
 using Draw2D.ViewModels.Tools;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Spatial;
 using Spatial.ConvexHull;
 using Spatial.DouglasPeucker;

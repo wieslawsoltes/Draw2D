@@ -17,7 +17,6 @@ using Draw2D.ViewModels.Intersections;
 using Draw2D.ViewModels.Shapes;
 using Draw2D.ViewModels.Style;
 using Draw2D.ViewModels.Tools;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
 using SkiaSharp;
 
 namespace Draw2D.Editor
