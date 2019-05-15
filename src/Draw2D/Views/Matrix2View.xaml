@@ -1,0 +1,25 @@
+﻿<!-- Copyright (c) Wiesław Šoltés. All rights reserved. -->
+<!-- Licensed under the MIT license. See LICENSE file in the project root for full license information. -->
+<UserControl x:Class="Draw2D.Views.Matrix2View"
+             xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:Draw2D.Views"
+             mc:Ignorable="d"
+             d:DesignWidth="400" d:DesignHeight="300">
+    <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="Auto,*">
+        <TextBlock Classes="default" Grid.Column="0" Grid.Row="0" Text="M11"/>
+        <TextBox Classes="default" Grid.Column="1" Grid.Row="0" Text="{Binding M11}"/>
+        <TextBlock Classes="default" Grid.Column="0" Grid.Row="1" Text="M12"/>
+        <TextBox Classes="default" Grid.Column="1" Grid.Row="1" Text="{Binding M12}"/>
+        <TextBlock Classes="default" Grid.Column="0" Grid.Row="2" Text="M21"/>
+        <TextBox Classes="default" Grid.Column="1" Grid.Row="2" Text="{Binding M21}"/>
+        <TextBlock Classes="default" Grid.Column="0" Grid.Row="3" Text="M22"/>
+        <TextBox Classes="default" Grid.Column="1" Grid.Row="3" Text="{Binding M22}"/>
+        <TextBlock Classes="default" Grid.Column="0" Grid.Row="4" Text="OffsetX"/>
+        <TextBox Classes="default" Grid.Column="1" Grid.Row="4" Text="{Binding OffsetX}"/>
+        <TextBlock Classes="default" Grid.Column="0" Grid.Row="5" Text="OffsetY"/>
+        <TextBox Classes="default" Grid.Column="1" Grid.Row="5" Text="{Binding OffsetY}"/>
+    </Grid>
+</UserControl>
