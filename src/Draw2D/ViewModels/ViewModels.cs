@@ -8716,14 +8716,22 @@ namespace Draw2D.ViewModels.Tools
 
         public void Hover(BaseShape shape)
         {
-            Hovered = shape;
-            this.MarkAsDirty(true);
+            if (shape != null)
+            {
+                _shapes.Add(shape);
+                Hovered = shape;
+                this.MarkAsDirty(true);
+            }
         }
 
         public void Dehover()
         {
-            Hovered = null;
-            this.MarkAsDirty(true);
+            if (_hovered != null)
+            {
+                _shapes.Remove(_hovered);
+                Hovered = null;
+                this.MarkAsDirty(true);
+            }
         }
 
         public bool IsSelected(BaseShape shape)
