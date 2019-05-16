@@ -8365,7 +8365,7 @@ namespace Draw2D.ViewModels.Tools
         None = 0,
         Point = 1,
         Shape = 2,
-		All = Point | Shape
+        All = Point | Shape
     }
 
     [Flags]
@@ -8374,7 +8374,7 @@ namespace Draw2D.ViewModels.Tools
         None = 0,
         Shapes = 1,
         Guides = 2,
-		All = Shapes | Guides
+        All = Shapes | Guides
     }
 
     [DataContract(IsReference = true)]
