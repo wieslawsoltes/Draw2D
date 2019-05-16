@@ -607,7 +607,7 @@ namespace Draw2D.Renderers
 
         public void DrawQuadraticBezier(object dc, QuadraticBezierShape quadraticBezier, ShapeStyle style, double dx, double dy)
         {
-            if(style.IsFilled || style.IsStroked || style.TextStyle.IsStroked)
+            if (style.IsFilled || style.IsStroked || style.TextStyle.IsStroked)
             {
                 var canvas = dc as SKCanvas;
                 using (var geometry = SkiaHelper.ToGeometry(quadraticBezier, dx, dy))
