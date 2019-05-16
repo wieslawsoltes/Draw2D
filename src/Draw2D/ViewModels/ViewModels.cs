@@ -8757,7 +8757,7 @@ namespace Draw2D.ViewModels.Tools
                 {
                     Selected = shape;
                 }
-                //shape.Select(this);
+                shape.Select(this);
                 this.MarkAsDirty(true);
             }
         }
@@ -8766,7 +8766,7 @@ namespace Draw2D.ViewModels.Tools
         {
             if (shape != null)
             {
-                //shape.Deselect(this);
+                shape.Deselect(this);
                 if (_shapes.Count == 0)
                 {
                     Selected = null;
