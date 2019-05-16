@@ -82,7 +82,7 @@ namespace Draw2D.Renderers
                         using (var context = geometry.Open())
                         {
                             context.BeginFigure(ToPoint(conic.StartPoint, dx, dy), false);
-                            // TODO: Add support for ConicTo
+                            // TODO: Add support for ConicTo.
                             context.EndFigure(false);
                         }
                         return geometry;

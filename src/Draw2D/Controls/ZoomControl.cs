@@ -464,7 +464,7 @@ namespace Draw2D.Controls
 
             if (_inputTarget != null)
             {
-                // TODO:
+                // TODO: Do not inject dependencies.
                 _drawTarget.InputService = this;
                 _drawTarget.ZoomService = this;
             }
@@ -476,7 +476,7 @@ namespace Draw2D.Controls
 
             if (_inputTarget != null)
             {
-                // TODO:
+                // TODO: Do not inject dependencies.
                 _drawTarget.InputService = null;
                 _drawTarget.ZoomService = null;
             }

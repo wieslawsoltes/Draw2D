@@ -160,8 +160,6 @@ namespace Draw2D.ViewModels
         void Delete(IToolContext context);
         void Group(IToolContext context);
         void SelectAll(IToolContext context);
-        void Hover(IToolContext context, BaseShape shape);
-        void DeHover(IToolContext context);
         void Connect(IToolContext context, PointShape point);
         void Disconnect(IToolContext context, PointShape point);
         void Disconnect(IToolContext context, BaseShape shape);
@@ -8850,7 +8848,7 @@ namespace Draw2D.ViewModels.Tools
             _previousX = _originX;
             _previousY = _originY;
 
-            DeHover(context);
+            _selectionState.Dehover();
 
             var selected = TryToSelect(
                 context,
@@ -8913,7 +8911,7 @@ namespace Draw2D.ViewModels.Tools
         {
             Filters?.ForEach(f => f.Clear(context));
 
-            DeHover(context);
+            _selectionState.Dehover();
 
             TryToSelect(
                 context,
@@ -8960,7 +8958,7 @@ namespace Draw2D.ViewModels.Tools
             {
                 lock (_selectionState.Shapes)
                 {
-                    DeHover(context);
+                    _selectionState.Dehover();
 
                     var target = new Point2(x, y);
                     var shape = TryToHover(
@@ -8971,7 +8969,7 @@ namespace Draw2D.ViewModels.Tools
                         Settings?.HitTestRadius ?? 7.0);
                     if (shape != null)
                     {
-                        Hover(context, shape);
+                        _selectionState.Hover(shape);
                     }
                     context.ContainerView?.InputService?.Redraw?.Invoke();
                 }
@@ -9053,7 +9051,7 @@ namespace Draw2D.ViewModels.Tools
 
             _disconnected = false;
 
-            DeHover(context);
+            _selectionState.Dehover();
 
             if (_rectangle != null)
             {
@@ -9176,7 +9174,7 @@ namespace Draw2D.ViewModels.Tools
             {
                 lock (_selectionState.Shapes)
                 {
-                    this.DeHover(context);
+                    _selectionState.Dehover();
                     _selectionState.Clear();
 
                     Copy(context.ContainerView?.CurrentContainer, _shapesToCopy, _selectionState);
@@ -9194,7 +9192,7 @@ namespace Draw2D.ViewModels.Tools
             {
                 Delete(context.ContainerView?.CurrentContainer, _selectionState);
 
-                this.DeHover(context);
+                _selectionState.Dehover();
                 _selectionState.Clear();
 
                 context.ContainerView?.InputService?.Redraw?.Invoke();
@@ -9207,7 +9205,7 @@ namespace Draw2D.ViewModels.Tools
         {
             lock (_selectionState.Shapes)
             {
-                this.DeHover(context);
+                _selectionState.Dehover();
 
                 var shapes = _selectionState.Shapes.ToList();
 
@@ -9241,7 +9239,7 @@ namespace Draw2D.ViewModels.Tools
         {
             lock (_selectionState.Shapes)
             {
-                this.DeHover(context);
+                _selectionState.Dehover();
                 _selectionState.Clear();
 
                 foreach (var shape in context.ContainerView?.CurrentContainer.Shapes)
@@ -9253,16 +9251,6 @@ namespace Draw2D.ViewModels.Tools
 
                 this.CurrentState = State.None;
             }
-        }
-
-        public void Hover(IToolContext context, BaseShape shape)
-        {
-            _selectionState.Hover(shape);
-        }
-
-        public void DeHover(IToolContext context)
-        {
-            _selectionState.Dehover();
         }
 
         public void Connect(IToolContext context, PointShape point)
