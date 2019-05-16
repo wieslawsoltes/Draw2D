@@ -8,7 +8,7 @@
              xmlns:local="clr-namespace:Draw2D.Views.Filters"
              mc:Ignorable="d"
              d:DesignWidth="400" d:DesignHeight="300">
-    <TabControl Classes="default" Grid.Row="0" TabStripPlacement="Top">
+    <TabControl Classes="default" TabStripPlacement="Top">
         <TabItem Classes="default" Header="Settings">
             <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="Auto,*,50">
                 <TextBlock Classes="default" Grid.Column="0" Grid.Row="0" Text="IsEnabled"/>

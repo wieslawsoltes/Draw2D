@@ -9,6 +9,5 @@
              mc:Ignorable="d"
              d:DesignWidth="400" d:DesignHeight="300">
     <Grid>
-        <!-- TODO: -->
     </Grid>
 </UserControl>

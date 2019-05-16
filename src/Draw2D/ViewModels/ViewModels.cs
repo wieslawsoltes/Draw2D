@@ -81,6 +81,7 @@ namespace Draw2D.ViewModels
         double OffsetX { get; set; }
         double OffsetY { get; set; }
         bool IsPanning { get; set; }
+        bool CustomDraw { get; set; }
         void Wheel(double delta, double x, double y);
         void Pressed(double x, double y);
         void Released(double x, double y);

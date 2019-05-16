@@ -8,42 +8,35 @@
              xmlns:local="clr-namespace:Draw2D.Views.Tools"
              mc:Ignorable="d"
              d:DesignWidth="400" d:DesignHeight="300">
-    <TabControl Classes="default" Grid.Row="0" TabStripPlacement="Top">
+    <TabControl Classes="default" TabStripPlacement="Top">
         <TabItem Classes="default" Header="Settings">
-            <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="Auto,*,50">
-                <TextBlock Classes="default" Grid.Column="0" Grid.Row="0" Text="ClearSelectionOnClean"/>
-                <CheckBox Classes="default" Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="0" IsChecked="{Binding ClearSelectionOnClean}"/>
-                <TextBlock Classes="default" Grid.Column="0" Grid.Row="1" Text="HitTestRadius"/>
-                <Slider Classes="default" Grid.Column="1" Grid.Row="1" Value="{Binding HitTestRadius}" Minimum="0" Maximum="32"/>
-                <TextBox Classes="default" Grid.Column="2" Grid.Row="1" Text="{Binding HitTestRadius}"/>
-                <TextBlock Classes="default" Grid.Column="0" Grid.Row="2" Text="ConnectPoints"/>
-                <CheckBox Classes="default" Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="2" IsChecked="{Binding ConnectPoints}"/>
-                <TextBlock Classes="default" Grid.Column="0" Grid.Row="3" Text="ConnectTestRadius"/>
-                <Slider Classes="default" Grid.Column="1" Grid.Row="3" Value="{Binding ConnectTestRadius}" Minimum="0" Maximum="32"/>
-                <TextBox Classes="default" Grid.Column="2" Grid.Row="3" Text="{Binding ConnectTestRadius}"/>
-                <TextBlock Classes="default" Grid.Column="0" Grid.Row="4" Text="DisconnectPoints"/>
-                <CheckBox Classes="default" Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="4" IsChecked="{Binding DisconnectPoints}"/>
-                <TextBlock Classes="default" Grid.Column="0" Grid.Row="5" Text="DisconnectTestRadius"/>
-                <Slider Classes="default" Grid.Column="1" Grid.Row="5" Value="{Binding DisconnectTestRadius}" Minimum="0" Maximum="32"/>
-                <TextBox Classes="default" Grid.Column="2" Grid.Row="5" Text="{Binding DisconnectTestRadius}"/>
-                <TextBlock Classes="default" Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="6" Text="Hold Ctrl key to add/remove selected shapes."/>
-                <TextBlock Classes="default" Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="7" Text="Hold Shift key to connect/disconnect points."/>
+            <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="Auto,*">
+                <TextBlock Classes="default" Grid.Column="0" Grid.Row="0" Text="Mode"/>
+                <TextBox Classes="default" Grid.Column="1" Grid.Row="0" Text="{Binding Mode}"/>
+                <TextBlock Classes="default" Grid.Column="0" Grid.Row="1" Text="Targets"/>
+                <TextBox Classes="default" Grid.Column="1" Grid.Row="1" Text="{Binding Targets}"/>
+                <TextBlock Classes="default" Grid.Column="0" Grid.Row="2" Text="SelectionModifier"/>
+                <TextBox Classes="default" Grid.Column="1" Grid.Row="2" Text="{Binding SelectionModifier}"/>
+                <TextBlock Classes="default" Grid.Column="0" Grid.Row="3" Text="ConnectionModifier"/>
+                <TextBox Classes="default" Grid.Column="1" Grid.Row="3" Text="{Binding ConnectionModifier}"/>
+                <TextBlock Classes="default" Grid.Column="0" Grid.Row="4" Text="ClearSelectionOnClean"/>
+                <CheckBox Classes="default" Grid.Column="1" Grid.Row="4" IsChecked="{Binding ClearSelectionOnClean}"/>
+                <TextBlock Classes="default" Grid.Column="0" Grid.Row="5" Text="HitTestRadius"/>
+                <TextBox Classes="default" Grid.Column="1" Grid.Row="5" Text="{Binding HitTestRadius}"/>
+                <TextBlock Classes="default" Grid.Column="0" Grid.Row="6" Text="ConnectPoints"/>
+                <CheckBox Classes="default" Grid.Column="1" Grid.Row="6" IsChecked="{Binding ConnectPoints}"/>
+                <TextBlock Classes="default" Grid.Column="0" Grid.Row="7" Text="ConnectTestRadius"/>
+                <TextBox Classes="default" Grid.Column="1" Grid.Row="7" Text="{Binding ConnectTestRadius}"/>
+                <TextBlock Classes="default" Grid.Column="0" Grid.Row="8" Text="DisconnectPoints"/>
+                <CheckBox Classes="default" Grid.Column="1" Grid.Row="8" IsChecked="{Binding DisconnectPoints}"/>
+                <TextBlock Classes="default" Grid.Column="0" Grid.Row="9" Text="DisconnectTestRadius"/>
+                <TextBox Classes="default" Grid.Column="1" Grid.Row="9" Text="{Binding DisconnectTestRadius}"/>
+                <TextBlock Classes="default" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="10" Text="Hold Ctrl key to add/remove selected shapes."/>
+                <TextBlock Classes="default" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="11" Text="Hold Shift key to connect/disconnect points."/>
             </Grid>
         </TabItem>
         <TabItem Classes="default" Header="SelectionStyle">
             <ContentControl Content="{Binding SelectionStyle}"/>
-        </TabItem>
-        <TabItem Classes="default" Header="Other">
-            <Grid RowDefinitions="Auto,Auto,Auto,Auto" ColumnDefinitions="Auto,*,50">
-                <TextBlock Classes="default" Grid.Column="0" Grid.Row="0" Text="Mode"/>
-                <!-- TODO: Mode -->
-                <TextBlock Classes="default" Grid.Column="0" Grid.Row="1" Text="Targets"/>
-                <!-- TODO: Targets -->
-                <TextBlock Classes="default" Grid.Column="0" Grid.Row="2" Text="SelectionModifier"/>
-                <!-- TODO: SelectionModifier -->
-                <TextBlock Classes="default" Grid.Column="0" Grid.Row="3" Text="ConnectionModifier"/>
-                <!-- TODO: ConnectionModifier -->
-            </Grid>
         </TabItem>
     </TabControl>
 </UserControl>

@@ -8,7 +8,7 @@
              xmlns:local="clr-namespace:Draw2D.Views.Containers"
              mc:Ignorable="d"
              d:DesignWidth="400" d:DesignHeight="300">
-    <TabControl Classes="default" Grid.Row="1" TabStripPlacement="Top">
+    <TabControl Classes="default" TabStripPlacement="Top">
         <TabItem Classes="default" Header="Container">
             <Grid Grid.Row="0" RowDefinitions="Auto" ColumnDefinitions="Auto,*,50">
                 <TextBlock Classes="default" Grid.Column="0" Grid.Row="0" Text="Shapes"/>
