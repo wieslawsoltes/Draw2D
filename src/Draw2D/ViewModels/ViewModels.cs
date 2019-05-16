@@ -8783,7 +8783,6 @@ namespace Draw2D.ViewModels.Tools
         private double _previousX;
         private double _previousY;
         private IList<BaseShape> _shapesToCopy = null;
-        private BaseShape _hover = null;
         private bool _disconnected = false;
         private ISelectionState _selectionState;
 
@@ -8957,12 +8956,10 @@ namespace Draw2D.ViewModels.Tools
 
         private void MoveNoneInternal(IToolContext context, double x, double y, Modifier modifier)
         {
-            if (!(_hover == null && _selectionState.Shapes.Count > 0))
+            if (!(_selectionState.Hovered == null && _selectionState.Shapes.Count > 0))
             {
                 lock (_selectionState.Shapes)
                 {
-                    var previous = _hover;
-
                     DeHover(context);
 
                     var target = new Point2(x, y);
@@ -8975,15 +8972,8 @@ namespace Draw2D.ViewModels.Tools
                     if (shape != null)
                     {
                         Hover(context, shape);
-                        context.ContainerView?.InputService?.Redraw?.Invoke();
                     }
-                    else
-                    {
-                        if (previous != null)
-                        {
-                            context.ContainerView?.InputService?.Redraw?.Invoke();
-                        }
-                    }
+                    context.ContainerView?.InputService?.Redraw?.Invoke();
                 }
             }
         }
@@ -9268,23 +9258,11 @@ namespace Draw2D.ViewModels.Tools
         public void Hover(IToolContext context, BaseShape shape)
         {
             _selectionState.Hover(shape);
-
-            if (shape != null)
-            {
-                _hover = shape;
-                _hover.Select(_selectionState);
-            }
         }
 
         public void DeHover(IToolContext context)
         {
             _selectionState.Dehover();
-
-            if (_hover != null)
-            {
-                _hover.Deselect(_selectionState);
-                _hover = null;
-            }
         }
 
         public void Connect(IToolContext context, PointShape point)
