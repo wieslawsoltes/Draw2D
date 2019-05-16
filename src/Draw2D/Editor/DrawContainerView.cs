@@ -220,10 +220,11 @@ namespace Draw2D.Editor
 
         private void DrawPoints(IContainerView view, object context, IShapeRenderer renderer)
         {
-            // NOTE: Drawing only selected points.
-            //view.CurrentContainer.Draw(context, renderer, 0.0, 0.0, DrawMode.Point, null, null);
-            //view.WorkingContainer.Draw(context, renderer, 0.0, 0.0, DrawMode.Point, null, null);
-
+            // NOTE: Draw only selected points.
+#if false
+            view.CurrentContainer.Draw(context, renderer, 0.0, 0.0, DrawMode.Point, null, null);
+            view.WorkingContainer.Draw(context, renderer, 0.0, 0.0, DrawMode.Point, null, null);
+#else
             var selected = view.SelectionState.Shapes.ToList();
 
             foreach (var shape in selected)
@@ -233,6 +234,7 @@ namespace Draw2D.Editor
                     point.Draw(context, renderer, 0.0, 0.0, DrawMode.Point, null, null);
                 }
             }
+#endif
         }
 
         private void DrawDecorators(IContainerView view, object context, IShapeRenderer renderer)
