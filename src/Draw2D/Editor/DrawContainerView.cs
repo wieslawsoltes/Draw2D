@@ -260,8 +260,6 @@ namespace Draw2D.Editor
 
             var picture = recorder.EndRecording();
 
-            canvas.Dispose();
-
             return picture;
         }
 
@@ -273,6 +271,8 @@ namespace Draw2D.Editor
             canvas.DrawPicture(picture);
             canvas.Restore();
         }
+
+        private bool _enablePictureCache = false;
 
         private void DrawSkia(IContainerView view, SKCanvas canvas, double width, double height, double dx, double dy, double zx, double zy)
         {
@@ -361,21 +361,20 @@ namespace Draw2D.Editor
             DrawPicture(canvas, _pictureDecorators, dx, dy, zx, zy);
             DrawPicture(canvas, _picturePoints, dx, dy, zx, zy);
 
-            // TODO: Dispose cached picture.
-            //_picturePoints.Dispose();
-            //_picturePoints = null;
+            if (_enablePictureCache == false)
+            {
+                _picturePoints.Dispose();
+                _picturePoints = null;
 
-            // TODO: Dispose cached picture.
-            //_pictureDecorators.Dispose();
-            //_pictureDecorators = null;
+                _pictureDecorators.Dispose();
+                _pictureDecorators = null;
 
-            // TODO: Dispose cached picture.
-            //_pictureShapesWorking.Dispose();
-            //_pictureShapesWorking = null;
+                _pictureShapesWorking.Dispose();
+                _pictureShapesWorking = null;
 
-            // TODO: Dispose cached picture.
-            //_pictureShapesCurrent.Dispose();
-            //_pictureShapesCurrent = null;
+                _pictureShapesCurrent.Dispose();
+                _pictureShapesCurrent = null; 
+            }
 
             view.CurrentContainer.Invalidate();
             view.WorkingContainer.Invalidate();
