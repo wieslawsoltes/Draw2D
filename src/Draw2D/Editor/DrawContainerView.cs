@@ -373,7 +373,7 @@ namespace Draw2D.Editor
                 _pictureShapesWorking = null;
 
                 _pictureShapesCurrent.Dispose();
-                _pictureShapesCurrent = null; 
+                _pictureShapesCurrent = null;
             }
 
             view.CurrentContainer.Invalidate();
