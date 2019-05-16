@@ -30,9 +30,6 @@
         <TabItem Classes="default" Header="Point2">
             <ContentControl Content="{Binding Point2}"/>
         </TabItem>
-        <TabItem Classes="default" Header="Transform">
-            <ContentControl Content="{Binding Transform}"/>
-        </TabItem>
         <TabItem Classes="default" Header="Style">
             <ContentControl Content="{Binding Style}"/>
         </TabItem>

@@ -37,11 +37,6 @@ namespace Draw2D.Renderers
             return new Rect(x, y, width, height);
         }
 
-        public static Matrix ToMatrixTransform(Matrix2 m)
-        {
-            return new Matrix(m.M11, m.M12, m.M21, m.M22, m.OffsetX, m.OffsetY);
-        }
-
         public static Geometry ToGeometry<T>(T shape, ShapeStyle style, double dx, double dy) where T : BaseShape
         {
             switch (shape)
@@ -260,7 +255,6 @@ namespace Draw2D.Renderers
     public class AvaloniaShapeRenderer : IShapeRenderer
     {
         private Dictionary<ShapeStyle, AvaloniaBrushCache> _brushCache;
-        private Dictionary<Matrix2, Matrix> _matrixCache;
         private Dictionary<CubicBezierShape, Geometry> _cubicGeometryCache;
         private Dictionary<QuadraticBezierShape, Geometry> _quadGeometryCache;
         private Dictionary<ConicShape, Geometry> _conicGeometryCache;
@@ -276,7 +270,6 @@ namespace Draw2D.Renderers
         {
             _brushCache = new Dictionary<ShapeStyle, AvaloniaBrushCache>();
             _formattedTextCache = new Dictionary<TextShape, AvaloniaFormattedTextCache>();
-            _matrixCache = new Dictionary<Matrix2, Matrix>();
             _cubicGeometryCache = new Dictionary<CubicBezierShape, Geometry>();
             _quadGeometryCache = new Dictionary<QuadraticBezierShape, Geometry>();
             _conicGeometryCache = new Dictionary<ConicShape, Geometry>();
@@ -304,27 +297,11 @@ namespace Draw2D.Renderers
                 _formattedTextCache = null;
             }
 
-            _matrixCache = null;
             _cubicGeometryCache = null;
             _quadGeometryCache = null;
             _conicGeometryCache = null;
             _pathGeometryCache = null;
             _ellipseGeometryCache = null;
-        }
-
-        private Matrix? GetMatrixCache(Matrix2 matrix)
-        {
-            if (matrix == null)
-            {
-                return null;
-            }
-            Matrix cache = default;
-            if (matrix.IsDirty = true || !_matrixCache.TryGetValue(matrix, out cache))
-            {
-                _matrixCache[matrix] = AvaloniaHelper.ToMatrixTransform(matrix);
-                return _matrixCache[matrix];
-            }
-            return cache;
         }
 
         private AvaloniaBrushCache? GetBrushCache(ShapeStyle style)
@@ -371,18 +348,6 @@ namespace Draw2D.Renderers
                 return _formattedTextCache[text];
             }
             return cache;
-        }
-
-        public object PushMatrix(object dc, Matrix2 matrix)
-        {
-            var _dc = dc as DrawingContext;
-            return _dc.PushPreTransform(GetMatrixCache(matrix).Value);
-        }
-
-        public void PopMatrix(object dc, object state)
-        {
-            var _state = (DrawingContext.PushedState)state;
-            _state.Dispose();
         }
 
         public void DrawLine(object dc, LineShape line, ShapeStyle style, double dx, double dy)

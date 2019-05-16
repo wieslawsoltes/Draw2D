@@ -126,9 +126,6 @@ namespace Draw2D.ViewModels
     public interface IDrawable
     {
         ShapeStyle Style { get; set; }
-        Matrix2 Transform { get; set; }
-        object BeginTransform(object dc, IShapeRenderer renderer);
-        void EndTransform(object dc, IShapeRenderer renderer, object state);
         void Draw(object dc, IShapeRenderer renderer, double dx, double dy, DrawMode mode, object db, object r);
     }
 
@@ -177,8 +174,6 @@ namespace Draw2D.ViewModels
     {
         double Scale { get; set; }
         ISelectionState SelectionState { get; set; }
-        object PushMatrix(object dc, Matrix2 matrix);
-        void PopMatrix(object dc, object state);
         void DrawLine(object dc, LineShape line, ShapeStyle style, double dx, double dy);
         void DrawCubicBezier(object dc, CubicBezierShape cubicBezier, ShapeStyle style, double dx, double dy);
         void DrawQuadraticBezier(object dc, QuadraticBezierShape quadraticBezier, ShapeStyle style, double dx, double dy);
@@ -274,117 +269,6 @@ namespace Draw2D.ViewModels
                 return true;
             }
             return false;
-        }
-    }
-
-    [DataContract(IsReference = true)]
-    public class Matrix2 : ViewModelBase, ICopyable
-    {
-        private double _m11;
-        private double _m12;
-        private double _m21;
-        private double _m22;
-        private double _offsetX;
-        private double _offsetY;
-
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public double M11
-        {
-            get => _m11;
-            set => Update(ref _m11, value);
-        }
-
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public double M12
-        {
-            get => _m12;
-            set => Update(ref _m12, value);
-        }
-
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public double M21
-        {
-            get => _m21;
-            set => Update(ref _m21, value);
-        }
-
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public double M22
-        {
-            get => _m22;
-            set => Update(ref _m22, value);
-        }
-
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public double OffsetX
-        {
-            get => _offsetX;
-            set => Update(ref _offsetX, value);
-        }
-
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public double OffsetY
-        {
-            get => _offsetY;
-            set => Update(ref _offsetY, value);
-        }
-
-        public static Matrix2 Identity => new Matrix2(1.0, 0.0, 0.0, 1.0, 0.0, 0.0);
-
-        public Matrix2()
-            : base()
-        {
-        }
-
-        public Matrix2(double m11, double m12, double m21, double m22, double offsetX, double offsetY)
-            : base()
-        {
-            this.M11 = m11;
-            this.M12 = m12;
-            this.M21 = m21;
-            this.M22 = m22;
-            this.OffsetX = offsetX;
-            this.OffsetY = offsetY;
-        }
-
-        public override void Invalidate()
-        {
-            if (this.IsDirty)
-            {
-                this.IsDirty = false;
-            }
-        }
-
-        public object Copy(Dictionary<object, object> shared)
-        {
-            return new Matrix2()
-            {
-                M11 = this.M11,
-                M12 = this.M12,
-                M21 = this.M21,
-                M22 = this.M22,
-                OffsetX = this.OffsetX,
-                OffsetY = this.OffsetY
-            };
-        }
-    }
-
-    public static class Matrix2Extensions
-    {
-        public static Spatial.Matrix2 ToMatrix2(this Matrix2 matrix)
-        {
-            return new Spatial.Matrix2(
-                matrix.M11, matrix.M12,
-                matrix.M21, matrix.M22,
-                matrix.OffsetX, matrix.OffsetY);
-        }
-
-        public static Matrix2 FromMatrix2(this Spatial.Matrix2 matrix)
-        {
-            return new Matrix2(
-                matrix.M11, matrix.M12,
-                matrix.M21, matrix.M22,
-                matrix.OffsetX, matrix.OffsetY);
         }
     }
 
@@ -757,7 +641,6 @@ namespace Draw2D.ViewModels.Shapes
     public abstract class BaseShape : ViewModelBase, IDrawable, ISelectable, ICopyable
     {
         private ShapeStyle _style;
-        private Matrix2 _transform;
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public ShapeStyle Style
@@ -766,39 +649,13 @@ namespace Draw2D.ViewModels.Shapes
             set => Update(ref _style, value);
         }
 
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public Matrix2 Transform
-        {
-            get => _transform;
-            set => Update(ref _transform, value);
-        }
-
         public abstract void GetPoints(IList<PointShape> points);
-
-        public virtual object BeginTransform(object dc, IShapeRenderer renderer)
-        {
-            if (Transform != null)
-            {
-                return renderer.PushMatrix(dc, Transform);
-            }
-            return null;
-        }
-
-        public virtual void EndTransform(object dc, IShapeRenderer renderer, object state)
-        {
-            if (Transform != null)
-            {
-                renderer.PopMatrix(dc, state);
-            }
-        }
 
         public abstract void Draw(object dc, IShapeRenderer renderer, double dx, double dy, DrawMode mode, object db, object r);
 
         public override void Invalidate()
         {
             _style?.Invalidate();
-
-            _transform?.Invalidate();
 
             if (this.IsDirty)
             {
@@ -1192,8 +1049,6 @@ namespace Draw2D.ViewModels.Shapes
 
         public override void Draw(object dc, IShapeRenderer renderer, double dx, double dy, DrawMode mode, object db, object r)
         {
-            var state = base.BeginTransform(dc, renderer);
-
             if (Style != null && mode.HasFlag(DrawMode.Shape))
             {
                 renderer.DrawConic(dc, this, Style, dx, dy);
@@ -1218,7 +1073,6 @@ namespace Draw2D.ViewModels.Shapes
             }
 
             base.Draw(dc, renderer, dx, dy, mode, db, r);
-            base.EndTransform(dc, renderer, state);
         }
 
         public override void Move(ISelectionState selectionState, double dx, double dy)
@@ -1359,7 +1213,6 @@ namespace Draw2D.ViewModels.Shapes
             {
                 Points = new ObservableCollection<PointShape>(),
                 Style = this.Style,
-                Transform = (Matrix2)this.Transform?.Copy(shared),
                 Text = (Text)this.Text?.Copy(shared),
                 Weight = this.Weight
             };
@@ -1462,8 +1315,6 @@ namespace Draw2D.ViewModels.Shapes
 
         public override void Draw(object dc, IShapeRenderer renderer, double dx, double dy, DrawMode mode, object db, object r)
         {
-            var state = base.BeginTransform(dc, renderer);
-
             if (Style != null && mode.HasFlag(DrawMode.Shape))
             {
                 renderer.DrawCubicBezier(dc, this, Style, dx, dy);
@@ -1493,7 +1344,6 @@ namespace Draw2D.ViewModels.Shapes
             }
 
             base.Draw(dc, renderer, dx, dy, mode, db, r);
-            base.EndTransform(dc, renderer, state);
         }
 
         public override void Move(ISelectionState selectionState, double dx, double dy)
@@ -1662,7 +1512,6 @@ namespace Draw2D.ViewModels.Shapes
             {
                 Points = new ObservableCollection<PointShape>(),
                 Style = this.Style,
-                Transform = (Matrix2)this.Transform?.Copy(shared),
                 Text = (Text)this.Text?.Copy(shared)
             };
 
@@ -1708,8 +1557,6 @@ namespace Draw2D.ViewModels.Shapes
 
         public override void Draw(object dc, IShapeRenderer renderer, double dx, double dy, DrawMode mode, object db, object r)
         {
-            var state = base.BeginTransform(dc, renderer);
-
             if (Style != null && mode.HasFlag(DrawMode.Shape))
             {
                 renderer.DrawEllipse(dc, this, Style, dx, dy);
@@ -1729,7 +1576,6 @@ namespace Draw2D.ViewModels.Shapes
             }
 
             base.Draw(dc, renderer, dx, dy, mode, db, r);
-            base.EndTransform(dc, renderer, state);
         }
 
         public override object Copy(Dictionary<object, object> shared)
@@ -1738,7 +1584,6 @@ namespace Draw2D.ViewModels.Shapes
             {
                 Points = new ObservableCollection<PointShape>(),
                 Style = this.Style,
-                Transform = (Matrix2)this.Transform?.Copy(shared),
                 Text = (Text)this.Text?.Copy(shared)
             };
 
@@ -1848,14 +1693,10 @@ namespace Draw2D.ViewModels.Shapes
 
         public override void Draw(object dc, IShapeRenderer renderer, double dx, double dy, DrawMode mode, object db, object r)
         {
-            var state = base.BeginTransform(dc, renderer);
-
             foreach (var shape in Shapes)
             {
                 shape.Draw(dc, renderer, dx, dy, mode, db, r);
             }
-
-            base.EndTransform(dc, renderer, state);
         }
 
         public override void Move(ISelectionState selectionState, double dx, double dy)
@@ -1880,7 +1721,6 @@ namespace Draw2D.ViewModels.Shapes
                 Shapes = new ObservableCollection<BaseShape>(),
                 Name = this.Name,
                 Style = this.Style,
-                Transform = (Matrix2)this.Transform?.Copy(shared),
                 IsFilled = this.IsFilled,
                 IsClosed = this.IsClosed
             };
@@ -1968,15 +1808,12 @@ namespace Draw2D.ViewModels.Shapes
 
         public override void Draw(object dc, IShapeRenderer renderer, double dx, double dy, DrawMode mode, object db, object r)
         {
-            var state = base.BeginTransform(dc, renderer);
-
             foreach (var shape in Shapes)
             {
                 shape.Draw(dc, renderer, dx, dy, mode, db, r);
             }
 
             base.Draw(dc, renderer, dx, dy, mode, db, r);
-            base.EndTransform(dc, renderer, state);
         }
 
         public override void Move(ISelectionState selectionState, double dx, double dy)
@@ -2003,7 +1840,6 @@ namespace Draw2D.ViewModels.Shapes
                 Points = new ObservableCollection<PointShape>(),
                 Shapes = new ObservableCollection<BaseShape>(),
                 Style = this.Style,
-                Transform = (Matrix2)this.Transform?.Copy(shared),
                 Text = (Text)this.Text?.Copy(shared)
             };
 
@@ -2085,8 +1921,6 @@ namespace Draw2D.ViewModels.Shapes
 
         public override void Draw(object dc, IShapeRenderer renderer, double dx, double dy, DrawMode mode, object db, object r)
         {
-            var state = base.BeginTransform(dc, renderer);
-
             if (Style != null && mode.HasFlag(DrawMode.Shape))
             {
                 renderer.DrawLine(dc, this, Style, dx, dy);
@@ -2106,7 +1940,6 @@ namespace Draw2D.ViewModels.Shapes
             }
 
             base.Draw(dc, renderer, dx, dy, mode, db, r);
-            base.EndTransform(dc, renderer, state);
         }
 
         public override void Move(ISelectionState selectionState, double dx, double dy)
@@ -2219,7 +2052,6 @@ namespace Draw2D.ViewModels.Shapes
             {
                 Points = new ObservableCollection<PointShape>(),
                 Style = this.Style,
-                Transform = (Matrix2)this.Transform?.Copy(shared),
                 Text = (Text)this.Text?.Copy(shared)
             };
 
@@ -2390,8 +2222,6 @@ namespace Draw2D.ViewModels.Shapes
 
         public override void Draw(object dc, IShapeRenderer renderer, double dx, double dy, DrawMode mode, object db, object r)
         {
-            var state = base.BeginTransform(dc, renderer);
-
             var isPathSelected = renderer.SelectionState.IsSelected(this);
 
             if (Style != null && mode.HasFlag(DrawMode.Shape))
@@ -2408,7 +2238,6 @@ namespace Draw2D.ViewModels.Shapes
             }
 
             base.Draw(dc, renderer, dx, dy, mode, db, r);
-            base.EndTransform(dc, renderer, state);
         }
 
         private void DrawPoints(object dc, IShapeRenderer renderer, double dx, double dy, DrawMode mode, object db, object r, FigureShape figure, bool isPathSelected)
@@ -2612,7 +2441,6 @@ namespace Draw2D.ViewModels.Shapes
                 Points = new ObservableCollection<PointShape>(),
                 Figures = new ObservableCollection<FigureShape>(),
                 Style = this.Style,
-                Transform = (Matrix2)this.Transform?.Copy(shared),
                 FillRule = this.FillRule,
                 Text = (Text)this.Text?.Copy(shared)
             };
@@ -2637,7 +2465,6 @@ namespace Draw2D.ViewModels.Shapes
     [DataContract(IsReference = true)]
     public class PointShape : BaseShape, ICopyable
     {
-        private readonly Matrix2 _templateTransform = Matrix2.Identity;
         private double _x;
         private double _y;
         private BaseShape _template;
@@ -2695,24 +2522,9 @@ namespace Draw2D.ViewModels.Shapes
         {
             if (_template != null)
             {
-                var pointState = base.BeginTransform(dc, renderer);
-
                 double offsetX = X;
                 double offsetY = Y;
-
-                if (_templateTransform.OffsetX != offsetX || _templateTransform.OffsetY != offsetY)
-                {
-                    _templateTransform.OffsetX = offsetX;
-                    _templateTransform.OffsetY = offsetY;
-                }
-
-                var templateState = renderer.PushMatrix(dc, _templateTransform);
-
-                _template.Draw(dc, renderer, dx, dy, DrawMode.Shape, db, r);
-
-                renderer.PopMatrix(dc, templateState);
-
-                base.EndTransform(dc, renderer, pointState);
+                _template.Draw(dc, renderer, dx + offsetX, dy + offsetY, DrawMode.Shape, db, r);
             }
         }
 
@@ -2727,7 +2539,6 @@ namespace Draw2D.ViewModels.Shapes
             return new PointShape()
             {
                 Style = this.Style,
-                Transform = (Matrix2)this.Transform?.Copy(shared),
                 X = this.X,
                 Y = this.Y,
                 Template = this.Template
@@ -2819,8 +2630,6 @@ namespace Draw2D.ViewModels.Shapes
 
         public override void Draw(object dc, IShapeRenderer renderer, double dx, double dy, DrawMode mode, object db, object r)
         {
-            var state = base.BeginTransform(dc, renderer);
-
             if (Style != null && mode.HasFlag(DrawMode.Shape))
             {
                 renderer.DrawQuadraticBezier(dc, this, Style, dx, dy);
@@ -2845,7 +2654,6 @@ namespace Draw2D.ViewModels.Shapes
             }
 
             base.Draw(dc, renderer, dx, dy, mode, db, r);
-            base.EndTransform(dc, renderer, state);
         }
 
         public override void Move(ISelectionState selectionState, double dx, double dy)
@@ -2986,7 +2794,6 @@ namespace Draw2D.ViewModels.Shapes
             {
                 Points = new ObservableCollection<PointShape>(),
                 Style = this.Style,
-                Transform = (Matrix2)this.Transform?.Copy(shared),
                 Text = (Text)this.Text?.Copy(shared)
             };
 
@@ -3031,8 +2838,6 @@ namespace Draw2D.ViewModels.Shapes
 
         public override void Draw(object dc, IShapeRenderer renderer, double dx, double dy, DrawMode mode, object db, object r)
         {
-            var state = base.BeginTransform(dc, renderer);
-
             if (Style != null && mode.HasFlag(DrawMode.Shape))
             {
                 renderer.DrawRectangle(dc, this, Style, dx, dy);
@@ -3052,7 +2857,6 @@ namespace Draw2D.ViewModels.Shapes
             }
 
             base.Draw(dc, renderer, dx, dy, mode, db, r);
-            base.EndTransform(dc, renderer, state);
         }
 
         public override object Copy(Dictionary<object, object> shared)
@@ -3061,7 +2865,6 @@ namespace Draw2D.ViewModels.Shapes
             {
                 Points = new ObservableCollection<PointShape>(),
                 Style = this.Style,
-                Transform = (Matrix2)this.Transform?.Copy(shared),
                 Text = (Text)this.Text?.Copy(shared)
             };
 
@@ -3130,8 +2933,6 @@ namespace Draw2D.ViewModels.Shapes
 
         public override void Draw(object dc, IShapeRenderer renderer, double dx, double dy, DrawMode mode, object db, object r)
         {
-            var state = base.BeginTransform(dc, renderer);
-
             if (Style != null && mode.HasFlag(DrawMode.Shape))
             {
                 renderer.DrawText(dc, this, Style, dx, dy);
@@ -3151,7 +2952,6 @@ namespace Draw2D.ViewModels.Shapes
             }
 
             base.Draw(dc, renderer, dx, dy, mode, db, r);
-            base.EndTransform(dc, renderer, state);
         }
 
         public override object Copy(Dictionary<object, object> shared)
@@ -3160,7 +2960,6 @@ namespace Draw2D.ViewModels.Shapes
             {
                 Points = new ObservableCollection<PointShape>(),
                 Style = this.Style,
-                Transform = (Matrix2)this.Transform?.Copy(shared),
                 Text = (Text)this.Text?.Copy(shared)
             };
 
@@ -3252,8 +3051,6 @@ namespace Draw2D.ViewModels.Containers
 
         public override void Draw(object dc, IShapeRenderer renderer, double dx, double dy, DrawMode mode, object db, object r)
         {
-            var state = BeginTransform(dc, renderer);
-
             if (Shapes != null)
             {
                 foreach (var shape in Shapes)
@@ -3261,8 +3058,6 @@ namespace Draw2D.ViewModels.Containers
                     shape.Draw(dc, renderer, dx, dy, mode, db, r);
                 }
             }
-
-            EndTransform(dc, renderer, state);
         }
 
         public override void Invalidate()
@@ -3307,8 +3102,7 @@ namespace Draw2D.ViewModels.Containers
             {
                 Shapes = new ObservableCollection<BaseShape>(),
                 Name = this.Name,
-                Style = this.Style,
-                Transform = (Matrix2)this.Transform?.Copy(shared)
+                Style = this.Style
             };
 
             foreach (var shape in this.Shapes)

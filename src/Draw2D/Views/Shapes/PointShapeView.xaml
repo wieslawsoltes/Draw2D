@@ -24,9 +24,6 @@
         <TabItem Classes="default" Header="Template">
             <ContentControl Content="{Binding Template}"/>
         </TabItem>
-        <TabItem Classes="default" Header="Transform">
-            <ContentControl Content="{Binding Transform}"/>
-        </TabItem>
         <TabItem Classes="default" Header="Style">
             <ContentControl Content="{Binding Style}"/>
         </TabItem>

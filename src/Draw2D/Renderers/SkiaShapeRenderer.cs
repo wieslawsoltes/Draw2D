@@ -115,11 +115,6 @@ namespace Draw2D.Renderers
             };
         }
 
-        public static SKMatrix ToMatrixTransform(Matrix2 m)
-        {
-            return ToSKMatrix(m.M11, m.M12, m.M21, m.M22, m.OffsetX, m.OffsetY);
-        }
-
         public static SKPath ToGeometry(LineShape line, double dx, double dy)
         {
             var geometry = new SKPath();
@@ -551,21 +546,6 @@ namespace Draw2D.Renderers
             SKPathMeasure pathMeasure = new SKPathMeasure(path, false, 1);
             float hOffset = (pathMeasure.Length / 2f) - (baseTextWidth / 2f);
             canvas.DrawTextOnPath(text.Value, path, hOffset, 0f, paint);
-        }
-
-        public object PushMatrix(object dc, Matrix2 matrix)
-        {
-            var canvas = dc as SKCanvas;
-            int count = canvas.Save();
-            canvas.SetMatrix(SkiaHelper.Multiply(SkiaHelper.ToMatrixTransform(matrix), canvas.TotalMatrix));
-            return count;
-        }
-
-        public void PopMatrix(object dc, object state)
-        {
-            var canvas = dc as SKCanvas;
-            var count = (int)state;
-            canvas.RestoreToCount(count);
         }
 
         public void DrawLine(object dc, LineShape line, ShapeStyle style, double dx, double dy)
