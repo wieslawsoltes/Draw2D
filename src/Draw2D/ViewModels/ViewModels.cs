@@ -36,7 +36,8 @@ namespace Draw2D.ViewModels
     {
         None = 0,
         Point = 1,
-        Shape = 2
+        Shape = 2,
+        All = Point | Shape
     }
 
     public enum EditMode
@@ -4009,7 +4010,8 @@ namespace Draw2D.ViewModels.Filters
     {
         None = 0,
         Horizontal = 1,
-        Vertical = 2
+        Vertical = 2,
+        All = Horizontal | Vertical
     }
 
     [DataContract(IsReference = true)]
@@ -4172,14 +4174,16 @@ namespace Draw2D.ViewModels.Filters
         Intersection = 4,
         Horizontal = 8,
         Vertical = 16,
-        Nearest = 32
+        Nearest = 32,
+        All = Point | Middle | Intersection | Horizontal | Vertical | Nearest
     }
 
     [Flags]
     public enum LineSnapTarget
     {
         None = 0,
-        Shapes = 1
+        Shapes = 1,
+        All = Shapes
     }
 
     [DataContract(IsReference = true)]
@@ -8566,7 +8570,8 @@ namespace Draw2D.ViewModels.Tools
     {
         None = 0,
         Point = 1,
-        Shape = 2
+        Shape = 2,
+		All = Point | Shape
     }
 
     [Flags]
@@ -8574,7 +8579,8 @@ namespace Draw2D.ViewModels.Tools
     {
         None = 0,
         Shapes = 1,
-        Guides = 2
+        Guides = 2,
+		All = Shapes | Guides
     }
 
     [DataContract(IsReference = true)]
@@ -8718,7 +8724,7 @@ namespace Draw2D.ViewModels.Tools
         {
             if (shape != null)
             {
-                _shapes.Add(shape);
+                shape.Select(this);
                 Hovered = shape;
                 this.MarkAsDirty(true);
             }
@@ -8728,7 +8734,7 @@ namespace Draw2D.ViewModels.Tools
         {
             if (_hovered != null)
             {
-                _shapes.Remove(_hovered);
+                _hovered.Deselect(this);
                 Hovered = null;
                 this.MarkAsDirty(true);
             }
@@ -8751,7 +8757,7 @@ namespace Draw2D.ViewModels.Tools
                 {
                     Selected = shape;
                 }
-                _shapes.Add(shape);
+                shape.Select(this);
                 this.MarkAsDirty(true);
             }
         }
@@ -8760,7 +8766,7 @@ namespace Draw2D.ViewModels.Tools
         {
             if (shape != null)
             {
-                _shapes.Remove(shape);
+                shape.Deselect(this);
                 if (_shapes.Count == 0)
                 {
                     Selected = null;
