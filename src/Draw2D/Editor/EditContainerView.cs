@@ -699,7 +699,6 @@ namespace Draw2D.Editor
                         break;
                     case TextShape textShape:
                         {
-
                         }
                         break;
                 };
