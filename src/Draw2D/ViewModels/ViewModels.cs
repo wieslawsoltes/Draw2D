@@ -8972,8 +8972,7 @@ namespace Draw2D.ViewModels.Tools
             {
                 lock (_selectionState.Shapes)
                 {
-                    _selectionState.Dehover();
-
+                    var previous = _selectionState.Hovered;
                     var target = new Point2(x, y);
                     var shape = TryToHover(
                         context,
@@ -8983,9 +8982,21 @@ namespace Draw2D.ViewModels.Tools
                         Settings?.HitTestRadius ?? 7.0);
                     if (shape != null)
                     {
-                        _selectionState.Hover(shape);
+                        if (shape != previous)
+                        {
+                            _selectionState.Dehover();
+                            _selectionState.Hover(shape);
+                            context.ContainerView?.InputService?.Redraw?.Invoke();
+                        }
                     }
-                    context.ContainerView?.InputService?.Redraw?.Invoke();
+                    else
+                    {
+                        if (previous != null)
+                        {
+                            _selectionState.Dehover();
+                            context.ContainerView?.InputService?.Redraw?.Invoke();
+                        }
+                    }
                 }
             }
         }
