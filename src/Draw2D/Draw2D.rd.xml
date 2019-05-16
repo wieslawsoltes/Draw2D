@@ -3,7 +3,9 @@
 
         <!-- App -->
 
-        <Assembly Name="Draw2D" Dynamic="Required All" />
+        <Assembly Name="Draw2D" Dynamic="Required All">
+          <Type Name="Draw2D.ViewModels.Shapes.BaseShape" Dynamic="Required All" />
+        </Assembly>
 
         <!-- Avalonia -->
 
@@ -12,7 +14,7 @@
         <Assembly Name="Avalonia.Themes.Default" Dynamic="Required All"  />
         <Assembly Name="Avalonia.Diagnostics" Dynamic="Required All" />
 
-        <Assembly Name="SkiaSharp" >
+        <Assembly Name="SkiaSharp">
           <Type Name="SkiaSharp.SKData" Dynamic="Required All" />
           <Type Name="SkiaSharp.SKImage" Dynamic="Required All" />
           <Type Name="SkiaSharp.SKTypeface" Dynamic="Required All" />
@@ -26,7 +28,7 @@
 
         <!-- .NET Core -->
 
-        <Assembly Name="mscorlib"/>
+        <Assembly Name="mscorlib" />
 
     </Application>
 </Directives>
