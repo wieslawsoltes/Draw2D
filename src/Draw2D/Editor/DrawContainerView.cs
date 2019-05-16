@@ -17,6 +17,7 @@ namespace Draw2D.Editor
 {
     public class DrawContainerView : IDrawContainerView
     {
+        private bool _enablePictureCache = false;
         private SkiaShapeRenderer _skiaRenderer;
         private AvaloniaShapeRenderer _avaloniaRenderer;
         private Dictionary<ArgbColor, SKPaint> _fillSKPaintCache;
@@ -271,8 +272,6 @@ namespace Draw2D.Editor
             canvas.DrawPicture(picture);
             canvas.Restore();
         }
-
-        private bool _enablePictureCache = false;
 
         private void DrawSkia(IContainerView view, SKCanvas canvas, double width, double height, double dx, double dy, double zx, double zy)
         {
