@@ -145,22 +145,19 @@ namespace Draw2D.Controls
 
         private void HandlePointerPressed(PointerPressedEventArgs e)
         {
-            if (_zoomServiceState != null)
+            if (_zoomServiceState != null && _inputTarget != null)
             {
                 if (e.MouseButton == MouseButton.Left)
                 {
-                    if (_inputTarget != null)
-                    {
-                        var tpoint = AdjustTargetPoint(e.GetPosition(this));
-                        _inputTarget.LeftDown(tpoint.X, tpoint.Y, GetModifier(e.InputModifiers));
-                    }
+                    var tpoint = AdjustTargetPoint(e.GetPosition(this));
+                    _inputTarget.LeftDown(tpoint.X, tpoint.Y, GetModifier(e.InputModifiers));
                 }
                 else if (e.MouseButton == MouseButton.Right)
                 {
                     var zpoint = AdjustPanPoint(e.GetPosition(this));
                     Pressed(zpoint.X, zpoint.Y);
     
-                    if (_inputTarget != null && _zoomServiceState.IsPanning == false)
+                    if (_zoomServiceState.IsPanning == false)
                     {
                         var tpoint = AdjustTargetPoint(e.GetPosition(this));
                         _inputTarget.RightDown(tpoint.X, tpoint.Y, GetModifier(e.InputModifiers));
@@ -171,22 +168,19 @@ namespace Draw2D.Controls
 
         private void HandlePointerReleased(PointerReleasedEventArgs e)
         {
-            if (_zoomServiceState != null)
+            if (_zoomServiceState != null && _inputTarget != null)
             {
                 if (e.MouseButton == MouseButton.Left)
                 {
-                    if (_inputTarget != null)
-                    {
-                        var tpoint = AdjustTargetPoint(e.GetPosition(this));
-                        InputTarget.LeftUp(tpoint.X, tpoint.Y, GetModifier(e.InputModifiers));
-                    }
+                    var tpoint = AdjustTargetPoint(e.GetPosition(this));
+                    _inputTarget.LeftUp(tpoint.X, tpoint.Y, GetModifier(e.InputModifiers));
                 }
                 else if (e.MouseButton == MouseButton.Right)
                 {
                     var zpoint = AdjustPanPoint(e.GetPosition(this));
                     Released(zpoint.X, zpoint.Y);
     
-                    if (_inputTarget != null && _zoomServiceState.IsPanning == false)
+                    if (_zoomServiceState.IsPanning == false)
                     {
                         var tpoint = AdjustTargetPoint(e.GetPosition(this));
                         _inputTarget.RightUp(tpoint.X, tpoint.Y, GetModifier(e.InputModifiers));
@@ -197,12 +191,12 @@ namespace Draw2D.Controls
 
         private void HandlePointerMoved(PointerEventArgs e)
         {
-            if (_zoomServiceState != null)
+            if (_zoomServiceState != null && _inputTarget != null)
             {
                 var zpoint = AdjustPanPoint(e.GetPosition(this));
                 Moved(zpoint.X, zpoint.Y);
     
-                if (_inputTarget != null && _zoomServiceState.IsPanning == false)
+                if (_zoomServiceState.IsPanning == false)
                 {
                     var tpoint = AdjustTargetPoint(e.GetPosition(this));
                     _inputTarget.Move(tpoint.X, tpoint.Y, GetModifier(e.InputModifiers));
@@ -240,7 +234,7 @@ namespace Draw2D.Controls
 
         public void Pressed(double x, double y)
         {
-            if (IsCaptured?.Invoke() == false && _zoomServiceState != null && _zoomServiceState.IsPanning == false)
+            if (_zoomServiceState != null && _inputTarget != null && _zoomServiceState.IsPanning == false && IsCaptured?.Invoke() == false)
             {
                 _zoomServiceState.IsPanning = true;
                 Capture?.Invoke();
@@ -251,7 +245,7 @@ namespace Draw2D.Controls
 
         public void Released(double x, double y)
         {
-            if (_zoomServiceState != null && _zoomServiceState.IsPanning == true)
+            if (_zoomServiceState != null && _inputTarget != null && _zoomServiceState.IsPanning == true)
             {
                 Release?.Invoke();
                 Invalidate(true);
@@ -261,7 +255,7 @@ namespace Draw2D.Controls
 
         public void Moved(double x, double y)
         {
-            if (_zoomServiceState != null && _zoomServiceState.IsPanning == true)
+            if (_zoomServiceState != null && _inputTarget != null && _zoomServiceState.IsPanning == true)
             {
                 PanTo(x, y);
                 Invalidate(true);
@@ -270,7 +264,7 @@ namespace Draw2D.Controls
 
         public void Invalidate(bool redraw)
         {
-            if (_zoomServiceState != null)
+            if (_zoomServiceState != null && _inputTarget != null)
             {
                 _zoomServiceState.ZoomX = CurrentMatrix.M11;
                 _zoomServiceState.ZoomY = CurrentMatrix.M22;
@@ -285,7 +279,7 @@ namespace Draw2D.Controls
 
         public void ZoomTo(double zoom, double x, double y)
         {
-            if (_zoomServiceState != null)
+            if (_zoomServiceState != null && _inputTarget != null)
             {
                 CurrentMatrix = new Matrix(zoom, 0, 0, zoom, x - (zoom * x), y - (zoom * y)) * CurrentMatrix;
             }
@@ -293,7 +287,7 @@ namespace Draw2D.Controls
 
         public void ZoomDeltaTo(double delta, double x, double y)
         {
-            if (_zoomServiceState != null)
+            if (_zoomServiceState != null && _inputTarget != null)
             {
                 ZoomTo(delta > 0 ? _zoomServiceState.ZoomSpeed : 1 / _zoomServiceState.ZoomSpeed, x, y);
             }
@@ -301,7 +295,7 @@ namespace Draw2D.Controls
 
         public void StartPan(double x, double y)
         {
-            if (_zoomServiceState != null)
+            if (_zoomServiceState != null && _inputTarget != null)
             {
                 PanPosition = new Point(x, y);
             }
@@ -309,7 +303,7 @@ namespace Draw2D.Controls
 
         public void PanTo(double x, double y)
         {
-            if (_zoomServiceState != null)
+            if (_zoomServiceState != null && _inputTarget != null)
             {
                 double dx = x - PanPosition.X;
                 double dy = y - PanPosition.Y;
@@ -321,7 +315,7 @@ namespace Draw2D.Controls
 
         public void Reset()
         {
-            if (_zoomServiceState != null)
+            if (_zoomServiceState != null && _inputTarget != null)
             {
                 CurrentMatrix = new Matrix(1.0, 0.0, 0.0, 1.0, 0.0, 0.0);
             }
@@ -329,7 +323,7 @@ namespace Draw2D.Controls
 
         public void Center(double panelWidth, double panelHeight, double elementWidth, double elementHeight)
         {
-            if (_zoomServiceState != null)
+            if (_zoomServiceState != null && _inputTarget != null)
             {
                 double ox = (panelWidth - elementWidth) / 2;
                 double oy = (panelHeight - elementHeight) / 2;
@@ -339,7 +333,7 @@ namespace Draw2D.Controls
 
         public void Fill(double panelWidth, double panelHeight, double elementWidth, double elementHeight)
         {
-            if (_zoomServiceState != null)
+            if (_zoomServiceState != null && _inputTarget != null)
             {
                 double zx = panelWidth / elementWidth;
                 double zy = panelHeight / elementHeight;
@@ -351,7 +345,7 @@ namespace Draw2D.Controls
 
         public void Uniform(double panelWidth, double panelHeight, double elementWidth, double elementHeight)
         {
-            if (_zoomServiceState != null)
+            if (_zoomServiceState != null && _inputTarget != null)
             {
                 double zx = panelWidth / elementWidth;
                 double zy = panelHeight / elementHeight;
@@ -364,7 +358,7 @@ namespace Draw2D.Controls
 
         public void UniformToFill(double panelWidth, double panelHeight, double elementWidth, double elementHeight)
         {
-            if (_zoomServiceState != null)
+            if (_zoomServiceState != null && _inputTarget != null)
             {
                 double zx = panelWidth / elementWidth;
                 double zy = panelHeight / elementHeight;
@@ -377,7 +371,7 @@ namespace Draw2D.Controls
 
         public void ResetZoom(bool redraw)
         {
-            if (_zoomServiceState != null)
+            if (_zoomServiceState != null && _inputTarget != null)
             {
                 Reset();
                 Invalidate(redraw);
@@ -454,7 +448,7 @@ namespace Draw2D.Controls
                 };
             }
 
-            if (_inputTarget != null)
+            if (_inputTarget != null && _drawTarget != null)
             {
                 // TODO: Do not inject dependencies.
                 _drawTarget.InputService = this;
@@ -466,7 +460,7 @@ namespace Draw2D.Controls
         {
             base.OnDetachedFromVisualTree(e);
 
-            if (_inputTarget != null)
+            if (_inputTarget != null && _drawTarget != null)
             {
                 // TODO: Do not inject dependencies.
                 _drawTarget.InputService = null;
@@ -484,7 +478,7 @@ namespace Draw2D.Controls
         {
             base.Render(context);
 
-            if (_zoomServiceState != null && _drawTarget != null)
+            if (_zoomServiceState != null && _inputTarget != null && _drawTarget != null)
             {
                 bool isValidZoom = 
                     _zoomServiceState.ZoomX != double.NaN 
@@ -494,22 +488,22 @@ namespace Draw2D.Controls
 
                 if (isValidZoom == false)
                 {
-                    switch (_zoomServiceState.InitialAutoFitMode)
+                    switch (_zoomServiceState.InitFitMode)
                     {
-                        case AutoFitMode.None:
-                        case AutoFitMode.Reset:
+                        case FitMode.None:
+                        case FitMode.Reset:
                             ResetZoom(false);
                             break;
-                        case AutoFitMode.Center:
+                        case FitMode.Center:
                             CenterZoom(false);
                             break;
-                        case AutoFitMode.Fill:
+                        case FitMode.Fill:
                             FillZoom(false);
                             break;
-                        case AutoFitMode.Uniform:
+                        case FitMode.Uniform:
                             UniformZoom(false);
                             break;
-                        case AutoFitMode.UniformToFill:
+                        case FitMode.UniformToFill:
                             UniformToFillZoom(false);
                             break;
                     }
@@ -518,21 +512,21 @@ namespace Draw2D.Controls
                 {
                     switch (_zoomServiceState.AutoFitMode)
                     {
-                        case AutoFitMode.None:
+                        case FitMode.None:
                             break;
-                        case AutoFitMode.Reset:
+                        case FitMode.Reset:
                             ResetZoom(false);
                             break;
-                        case AutoFitMode.Center:
+                        case FitMode.Center:
                             CenterZoom(false);
                             break;
-                        case AutoFitMode.Fill:
+                        case FitMode.Fill:
                             FillZoom(false);
                             break;
-                        case AutoFitMode.Uniform:
+                        case FitMode.Uniform:
                             UniformZoom(false);
                             break;
-                        case AutoFitMode.UniformToFill:
+                        case FitMode.UniformToFill:
                             UniformToFillZoom(false);
                             break;
                     }

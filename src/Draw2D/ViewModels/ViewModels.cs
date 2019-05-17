@@ -74,7 +74,7 @@ namespace Draw2D.ViewModels
         Action Redraw { get; set; }
     }
 
-    public enum AutoFitMode
+    public enum FitMode
     {
         None,
         Reset,
@@ -93,8 +93,8 @@ namespace Draw2D.ViewModels
         double OffsetY { get; set; }
         bool IsPanning { get; set; }
         bool CustomDraw { get; set; }
-        AutoFitMode InitialAutoFitMode { get; set; }
-        AutoFitMode AutoFitMode { get; set; }
+        FitMode InitFitMode { get; set; }
+        FitMode AutoFitMode { get; set; }
     }
 
     public interface IZoomService
@@ -3156,8 +3156,8 @@ namespace Draw2D.ViewModels.Containers
         private double _offsetY;
         private bool _isPanning;
         private bool _customDraw;
-        private AutoFitMode _initialAutoFitMode;
-        private AutoFitMode _autoFitMode;
+        private FitMode _initFitMode;
+        private FitMode _autoFitMode;
 
         public ZoomServiceState()
         {
@@ -3213,14 +3213,14 @@ namespace Draw2D.ViewModels.Containers
         }
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public AutoFitMode InitialAutoFitMode
+        public FitMode InitFitMode
         {
-            get => _initialAutoFitMode;
-            set => Update(ref _initialAutoFitMode, value);
+            get => _initFitMode;
+            set => Update(ref _initFitMode, value);
         }
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public AutoFitMode AutoFitMode
+        public FitMode AutoFitMode
         {
             get => _autoFitMode;
             set => Update(ref _autoFitMode, value);
@@ -3246,6 +3246,8 @@ namespace Draw2D.ViewModels.Containers
                 OffsetY = this.OffsetY,
                 IsPanning = this.IsPanning,
                 CustomDraw = this.CustomDraw,
+                InitFitMode = this.InitFitMode,
+                AutoFitMode = this.AutoFitMode
             };
         }
     }
