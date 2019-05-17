@@ -93,7 +93,7 @@
         <Style Selector="TabControl.default">
             <Setter Property="ItemsPanel">
                 <ItemsPanelTemplate>
-                    <WrapPanel ClipToBounds="False" />
+                    <WrapPanel/>
                 </ItemsPanelTemplate>
             </Setter>
             <Setter Property="Padding" Value="0"/>
