@@ -516,8 +516,8 @@ namespace Draw2D.Controls
                                 UniformToFillZoom(false);
                                 break;
                         }
+                        _initializedZoom = true;
                     }
-                    _initializedZoom = true;
                 }
                 else
                 {
@@ -543,15 +543,18 @@ namespace Draw2D.Controls
                     }
                 }
 
-                GetOffset(out double dx, out double dy, out double zx, out double zy);
+                if (_initializedZoom == true)
+                {
+                    GetOffset(out double dx, out double dy, out double zx, out double zy);
 
-                if (_zoomServiceState.CustomDraw)
-                {
-                    context.Custom(new CustomDrawOperation(_drawTarget, width, height, dx, dy, zx, zy));
-                }
-                else
-                {
-                    _drawTarget.Draw(context, width, height, dx, dy, zx, zy);
+                    if (_zoomServiceState.CustomDraw)
+                    {
+                        context.Custom(new CustomDrawOperation(_drawTarget, width, height, dx, dy, zx, zy));
+                    }
+                    else
+                    {
+                        _drawTarget.Draw(context, width, height, dx, dy, zx, zy);
+                    }
                 }
             }
         }
