@@ -8,18 +8,20 @@
              xmlns:local="clr-namespace:Draw2D.Views"
              mc:Ignorable="d"
              d:DesignWidth="400" d:DesignHeight="300">
-    <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="Auto,*">
+    <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="Auto,*">
         <TextBlock Classes="default" Grid.Column="0" Grid.Row="0" Text="ZoomSpeed"/>
-        <TextBox Classes="default" Grid.Column="1" Grid.Row="0" Text="{Binding ZoomSpeed}"/>
+        <TextBox Classes="default" Grid.Column="1" Grid.Row="0" Text="{Binding ZoomServiceState.ZoomSpeed}"/>
         <TextBlock Classes="default" Grid.Column="0" Grid.Row="1" Text="ZoomX"/>
-        <TextBox Classes="default" Grid.Column="1" Grid.Row="1" Text="{Binding ZoomX}"/>
+        <TextBox Classes="default" Grid.Column="1" Grid.Row="1" Text="{Binding ZoomServiceState.ZoomX}"/>
         <TextBlock Classes="default" Grid.Column="0" Grid.Row="2" Text="ZoomY"/>
-        <TextBox Classes="default" Grid.Column="1" Grid.Row="2" Text="{Binding ZoomY}"/>
+        <TextBox Classes="default" Grid.Column="1" Grid.Row="2" Text="{Binding ZoomServiceState.ZoomY}"/>
         <TextBlock Classes="default" Grid.Column="0" Grid.Row="3" Text="OffsetX"/>
-        <TextBox Classes="default" Grid.Column="1" Grid.Row="3" Text="{Binding OffsetX}"/>
+        <TextBox Classes="default" Grid.Column="1" Grid.Row="3" Text="{Binding ZoomServiceState.OffsetX}"/>
         <TextBlock Classes="default" Grid.Column="0" Grid.Row="4" Text="OffsetY"/>
-        <TextBox Classes="default" Grid.Column="1" Grid.Row="4" Text="{Binding OffsetY}"/>
-        <TextBlock Classes="default" Grid.Column="0" Grid.Row="5" Text="CustomDraw"/>
-        <CheckBox Classes="default" Grid.Column="1" Grid.Row="5" IsChecked="{Binding CustomDraw, Mode=TwoWay}"/>
+        <TextBox Classes="default" Grid.Column="1" Grid.Row="4" Text="{Binding ZoomServiceState.OffsetY}"/>
+        <TextBlock Classes="default" Grid.Column="0" Grid.Row="5" Text="IsPanning"/>
+        <CheckBox Classes="default" Grid.Column="1" Grid.Row="5" IsEnabled="False" IsChecked="{Binding ZoomServiceState.IsPanning, Mode=OneWay}"/>
+        <TextBlock Classes="default" Grid.Column="0" Grid.Row="6" Text="CustomDraw"/>
+        <CheckBox Classes="default" Grid.Column="1" Grid.Row="6" IsChecked="{Binding ZoomServiceState.CustomDraw, Mode=TwoWay}"/>
     </Grid>
 </UserControl>

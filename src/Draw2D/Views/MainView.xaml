@@ -370,7 +370,7 @@
                                     <KeyBinding Command="{Binding $parent[UserControl].DataContext.SetTool}" CommandParameter="Ellipse" Gesture="E"/>
                                     <KeyBinding Command="{Binding $parent[UserControl].DataContext.SetTool}" CommandParameter="Text" Gesture="T"/>
                                 </Border.KeyBindings>
-                                <controls:ZoomControl InputTarget="{Binding $parent[UserControl].DataContext}" DrawTarget="{Binding}" CustomDraw="True" Background="Transparent" ClipToBounds="False"/>
+                                <controls:ZoomControl InputTarget="{Binding $parent[UserControl].DataContext}" ZoomServiceState="{Binding ZoomServiceState}" DrawTarget="{Binding}" Background="Transparent" ClipToBounds="False"/>
                             </Border>
                         </Border>
                     </DataTemplate>

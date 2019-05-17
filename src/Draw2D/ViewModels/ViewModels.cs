@@ -74,7 +74,7 @@ namespace Draw2D.ViewModels
         Action Redraw { get; set; }
     }
 
-    public interface IZoomService
+    public interface IZoomServiceState : IDirty, ICopyable
     {
         double ZoomSpeed { get; set; }
         double ZoomX { get; set; }
@@ -83,6 +83,11 @@ namespace Draw2D.ViewModels
         double OffsetY { get; set; }
         bool IsPanning { get; set; }
         bool CustomDraw { get; set; }
+    }
+
+    public interface IZoomService
+    {
+        IZoomServiceState ZoomServiceState { get; set; }
         void Wheel(double delta, double x, double y);
         void Pressed(double x, double y);
         void Released(double x, double y);
@@ -136,7 +141,7 @@ namespace Draw2D.ViewModels
         void Invalidate();
     }
 
-    public interface ISelectionState : IDirty
+    public interface ISelectionState : IDirty, ICopyable
     {
         BaseShape Hovered { get; set; }
         BaseShape Selected { get; set; }
@@ -3012,6 +3017,7 @@ namespace Draw2D.ViewModels.Containers
         BaseShape PointTemplate { get; set; }
         IDrawContainerView DrawContainerView { get; set; }
         ISelectionState SelectionState { get; set; }
+        IZoomServiceState ZoomServiceState { get; set; }
         ICanvasContainer CurrentContainer { get; set; }
         ICanvasContainer WorkingContainer { get; set; }
     }
@@ -3026,7 +3032,7 @@ namespace Draw2D.ViewModels.Containers
     }
 
     [DataContract(IsReference = true)]
-    public class CanvasContainer : BaseShape, ICanvasContainer
+    public class CanvasContainer : BaseShape, ICanvasContainer, ICopyable
     {
         private IList<BaseShape> _shapes;
 
@@ -3130,7 +3136,95 @@ namespace Draw2D.ViewModels.Containers
     }
 
     [DataContract(IsReference = true)]
-    public class ContainerView : ViewModelBase, IContainerView
+    public class ZoomServiceState : ViewModelBase, IZoomServiceState, ICopyable
+    {
+        private double _zoomSpeed = 1.2;
+        private double _zoomX = 1.0;
+        private double _zoomY = 1.0;
+        private double _offsetX = 0.0;
+        private double _offsetY = 0.0;
+        private bool _isPanning = false;
+        private bool _customDraw = true;
+
+        public ZoomServiceState()
+        {
+        }
+
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public double ZoomSpeed
+        {
+            get => _zoomSpeed;
+            set => Update(ref _zoomSpeed, value);
+        }
+
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public double ZoomX
+        {
+            get => _zoomX;
+            set => Update(ref _zoomX, value);
+        }
+
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public double ZoomY
+        {
+            get => _zoomY;
+            set => Update(ref _zoomY, value);
+        }
+
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public double OffsetX
+        {
+            get => _offsetX;
+            set => Update(ref _offsetX, value);
+        }
+
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public double OffsetY
+        {
+            get => _offsetY;
+            set => Update(ref _offsetY, value);
+        }
+
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public bool IsPanning
+        {
+            get => _isPanning;
+            set => Update(ref _isPanning, value);
+        }
+
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public bool CustomDraw
+        {
+            get => _customDraw;
+            set => Update(ref _customDraw, value);
+        }
+
+        public override void Invalidate()
+        {
+            if (this.IsDirty)
+            {
+                this.IsDirty = false;
+            }
+        }
+
+        public virtual object Copy(Dictionary<object, object> shared)
+        {
+            return new ZoomServiceState()
+            {
+                Name = this.Name,
+                ZoomSpeed = this.ZoomSpeed,
+                ZoomX = this.ZoomX,
+                ZoomY = this.ZoomY,
+                OffsetX = this.OffsetX,
+                OffsetY = this.OffsetY,
+                IsPanning = this.IsPanning,
+                CustomDraw = this.CustomDraw,
+            };
+        }
+    }
+
+    [DataContract(IsReference = true)]
+    public class ContainerView : ViewModelBase, IContainerView, ICopyable
     {
         private string _title;
         private double _width;
@@ -3145,6 +3239,7 @@ namespace Draw2D.ViewModels.Containers
         private IZoomService _zoomService;
         private IDrawContainerView _drawContainerView;
         private ISelectionState _selectionState;
+        private IZoomServiceState _zoomServiceState;
         private ICanvasContainer _currentContainer;
         private ICanvasContainer _workingContainer;
         private IHitTest _hitTest;
@@ -3240,6 +3335,13 @@ namespace Draw2D.ViewModels.Containers
             set => Update(ref _selectionState, value);
         }
 
+        [IgnoreDataMember]
+        public IZoomServiceState ZoomServiceState
+        {
+            get => _zoomServiceState;
+            set => Update(ref _zoomServiceState, value);
+        }
+
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public ICanvasContainer CurrentContainer
         {
@@ -3303,6 +3405,7 @@ namespace Draw2D.ViewModels.Containers
                 PointTemplate = (BaseShape)this.PointTemplate?.Copy(shared),
                 DrawContainerView = null,
                 SelectionState = null,
+                ZoomServiceState = (IZoomServiceState)this.ZoomServiceState?.Copy(shared),
                 CurrentContainer = (ICanvasContainer)this.CurrentContainer?.Copy(shared),
                 WorkingContainer = null
             };
@@ -6546,6 +6649,13 @@ namespace Draw2D.ViewModels.Tools
         }
 
         [IgnoreDataMember]
+        public IZoomServiceState ZoomServiceState
+        {
+            get => _context.ContainerView.ZoomServiceState;
+            set => throw new InvalidOperationException($"Can not set {ZoomServiceState} property value.");
+        }
+
+        [IgnoreDataMember]
         public IInputService InputService
         {
             get => _context.ContainerView?.InputService;
@@ -8479,7 +8589,7 @@ namespace Draw2D.ViewModels.Tools
     }
 
     [DataContract(IsReference = true)]
-    public class SelectionState : ViewModelBase, ISelectionState
+    public class SelectionState : ViewModelBase, ISelectionState, ICopyable
     {
         private BaseShape _hovered;
         private BaseShape _selected;
@@ -8512,6 +8622,24 @@ namespace Draw2D.ViewModels.Tools
             {
                 this.IsDirty = false;
             }
+        }
+
+        public virtual object Copy(Dictionary<object, object> shared)
+        {
+            var copy = new SelectionState()
+            {
+                Name = this.Name,
+                Hovered = this.Hovered,
+                Selected = this.Selected,
+                Shapes = new ObservableHashSet<BaseShape>()
+            };
+
+            foreach (var shape in this.Shapes)
+            {
+                copy.Shapes.Add(shape);
+            }
+
+            return copy;
         }
 
         public void Hover(BaseShape shape)

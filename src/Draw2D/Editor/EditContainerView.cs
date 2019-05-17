@@ -506,6 +506,7 @@ namespace Draw2D.Editor
                 InputService = null,
                 DrawContainerView = null,
                 SelectionState = null,
+                ZoomServiceState = new ZoomServiceState(),
                 CurrentContainer = new CanvasContainer()
                 {
                     Shapes = new ObservableCollection<BaseShape>()
