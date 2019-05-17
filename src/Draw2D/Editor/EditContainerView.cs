@@ -502,7 +502,16 @@ namespace Draw2D.Editor
                     Selected = null,
                     Shapes = new ObservableHashSet<BaseShape>()
                 },
-                ZoomServiceState = new ZoomServiceState(),
+                ZoomServiceState = new ZoomServiceState()
+                {
+                    ZoomSpeed = 1.2,
+                    ZoomX = 1.0,
+                    ZoomY = 1.0,
+                    OffsetX = 0.0,
+                    OffsetY = 0.0,
+                    IsPanning = false,
+                    CustomDraw = true
+                },
                 CurrentContainer = new CanvasContainer()
                 {
                     Shapes = new ObservableCollection<BaseShape>()

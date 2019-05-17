@@ -3137,13 +3137,13 @@ namespace Draw2D.ViewModels.Containers
     [DataContract(IsReference = true)]
     public class ZoomServiceState : ViewModelBase, IZoomServiceState, ICopyable
     {
-        private double _zoomSpeed = 1.2;
-        private double _zoomX = 1.0;
-        private double _zoomY = 1.0;
-        private double _offsetX = 0.0;
-        private double _offsetY = 0.0;
-        private bool _isPanning = false;
-        private bool _customDraw = true;
+        private double _zoomSpeed;
+        private double _zoomX;
+        private double _zoomY;
+        private double _offsetX;
+        private double _offsetY;
+        private bool _isPanning;
+        private bool _customDraw;
 
         public ZoomServiceState()
         {
