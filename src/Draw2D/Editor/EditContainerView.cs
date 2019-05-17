@@ -730,6 +730,7 @@ namespace Draw2D.Editor
         {
             var group = new GroupShape()
             {
+                Title = "Group",
                 Points = new ObservableCollection<PointShape>(),
                 Shapes = new ObservableCollection<BaseShape>()
             };
