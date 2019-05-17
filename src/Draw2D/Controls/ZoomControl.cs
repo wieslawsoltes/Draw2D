@@ -497,9 +497,50 @@ namespace Draw2D.Controls
                         || _zoomServiceState.OffsetX == double.NaN
                         || _zoomServiceState.OffsetY == double.NaN)
                     {
-                        CenterZoom(false);
+                        switch (_zoomServiceState.InitialAutoFitMode)
+                        {
+                            case AutoFitMode.None:
+                            case AutoFitMode.Reset:
+                                ResetZoom(false);
+                                break;
+                            case AutoFitMode.Center:
+                                CenterZoom(false);
+                                break;
+                            case AutoFitMode.Fill:
+                                FillZoom(false);
+                                break;
+                            case AutoFitMode.Uniform:
+                                UniformZoom(false);
+                                break;
+                            case AutoFitMode.UniformToFill:
+                                UniformToFillZoom(false);
+                                break;
+                        }
                     }
                     _initializedZoom = true;
+                }
+                else
+                {
+                    switch (_zoomServiceState.AutoFitMode)
+                    {
+                        case AutoFitMode.None:
+                            break;
+                        case AutoFitMode.Reset:
+                            ResetZoom(false);
+                            break;
+                        case AutoFitMode.Center:
+                            CenterZoom(false);
+                            break;
+                        case AutoFitMode.Fill:
+                            FillZoom(false);
+                            break;
+                        case AutoFitMode.Uniform:
+                            UniformZoom(false);
+                            break;
+                        case AutoFitMode.UniformToFill:
+                            UniformToFillZoom(false);
+                            break;
+                    }
                 }
 
                 GetOffset(out double dx, out double dy, out double zx, out double zy);

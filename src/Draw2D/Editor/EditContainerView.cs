@@ -510,7 +510,9 @@ namespace Draw2D.Editor
                     OffsetX = double.NaN,
                     OffsetY = double.NaN,
                     IsPanning = false,
-                    CustomDraw = true
+                    CustomDraw = true,
+                    InitialAutoFitMode = AutoFitMode.Center,
+                    AutoFitMode  = AutoFitMode.None
                 },
                 CurrentContainer = new CanvasContainer()
                 {

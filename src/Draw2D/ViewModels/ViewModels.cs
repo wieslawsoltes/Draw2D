@@ -74,6 +74,16 @@ namespace Draw2D.ViewModels
         Action Redraw { get; set; }
     }
 
+    public enum AutoFitMode
+    {
+        None,
+        Reset,
+        Center,
+        Fill,
+        Uniform,
+        UniformToFill
+    }
+
     public interface IZoomServiceState : IDirty, ICopyable
     {
         double ZoomSpeed { get; set; }
@@ -83,6 +93,8 @@ namespace Draw2D.ViewModels
         double OffsetY { get; set; }
         bool IsPanning { get; set; }
         bool CustomDraw { get; set; }
+        AutoFitMode InitialAutoFitMode { get; set; }
+        AutoFitMode AutoFitMode { get; set; }
     }
 
     public interface IZoomService
@@ -3144,6 +3156,8 @@ namespace Draw2D.ViewModels.Containers
         private double _offsetY;
         private bool _isPanning;
         private bool _customDraw;
+        private AutoFitMode _initialAutoFitMode;
+        private AutoFitMode _autoFitMode;
 
         public ZoomServiceState()
         {
@@ -3196,6 +3210,20 @@ namespace Draw2D.ViewModels.Containers
         {
             get => _customDraw;
             set => Update(ref _customDraw, value);
+        }
+
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public AutoFitMode InitialAutoFitMode
+        {
+            get => _initialAutoFitMode;
+            set => Update(ref _initialAutoFitMode, value);
+        }
+
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public AutoFitMode AutoFitMode
+        {
+            get => _autoFitMode;
+            set => Update(ref _autoFitMode, value);
         }
 
         public override void Invalidate()
