@@ -57,7 +57,8 @@ namespace Draw2D.Controls
 
     public class ZoomControl : Border, IInputService, IZoomService
     {
-        private IZoomServiceState _zoomServiceState;
+        private bool _skipAutoFit = false;
+        private IZoomServiceState _zoomServiceState = null;
         private IInputTarget _inputTarget = null;
         private IDrawTarget _drawTarget = null;
 
@@ -228,8 +229,12 @@ namespace Draw2D.Controls
 
         public void Wheel(double delta, double x, double y)
         {
-            ZoomDeltaTo(delta, x, y);
-            Invalidate(true);
+            if (_zoomServiceState != null && _inputTarget != null)
+            {
+                _zoomServiceState.IsZooming = true;
+                ZoomDeltaTo(delta, x, y);
+                Invalidate(true);
+            }
         }
 
         public void Pressed(double x, double y)
@@ -480,13 +485,13 @@ namespace Draw2D.Controls
 
             if (_zoomServiceState != null && _inputTarget != null && _drawTarget != null)
             {
-                bool isValidZoom =
-                    _zoomServiceState.ZoomX != double.NaN
-                    && _zoomServiceState.ZoomY != double.NaN
-                    && _zoomServiceState.OffsetX != double.NaN
-                    && _zoomServiceState.OffsetY != double.NaN;
+                bool initializeZoom =
+                    double.IsNaN(_zoomServiceState.ZoomX)
+                    || double.IsNaN(_zoomServiceState.ZoomY)
+                    || double.IsNaN(_zoomServiceState.OffsetX)
+                    || double.IsNaN(_zoomServiceState.OffsetY);
 
-                if (isValidZoom == false)
+                if (initializeZoom == true)
                 {
                     switch (_zoomServiceState.InitFitMode)
                     {
@@ -508,7 +513,8 @@ namespace Draw2D.Controls
                             break;
                     }
                 }
-                else
+
+                if (initializeZoom == false && _zoomServiceState.IsPanning == false && _zoomServiceState.IsZooming == false)
                 {
                     switch (_zoomServiceState.AutoFitMode)
                     {
@@ -541,6 +547,11 @@ namespace Draw2D.Controls
                 else
                 {
                     _drawTarget.Draw(context, Bounds.Width, Bounds.Height, dx, dy, zx, zy);
+                }
+
+                if (_zoomServiceState.IsZooming == true)
+                {
+                    _zoomServiceState.IsZooming = false;
                 }
             }
         }

@@ -510,6 +510,7 @@ namespace Draw2D.Editor
                     OffsetX = double.NaN,
                     OffsetY = double.NaN,
                     IsPanning = false,
+                    IsZooming = false,
                     CustomDraw = true,
                     InitFitMode = FitMode.Center,
                     AutoFitMode = FitMode.None

@@ -8,7 +8,7 @@
              xmlns:local="clr-namespace:Draw2D.Views"
              mc:Ignorable="d"
              d:DesignWidth="400" d:DesignHeight="300">
-    <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="Auto,*">
+    <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="Auto,*">
         <TextBlock Classes="default" Grid.Column="0" Grid.Row="0" Text="ZoomSpeed"/>
         <TextBox Classes="default" Grid.Column="1" Grid.Row="0" Text="{Binding ZoomServiceState.ZoomSpeed}"/>
         <TextBlock Classes="default" Grid.Column="0" Grid.Row="1" Text="ZoomX"/>
@@ -21,11 +21,13 @@
         <TextBox Classes="default" Grid.Column="1" Grid.Row="4" Text="{Binding ZoomServiceState.OffsetY}"/>
         <TextBlock Classes="default" Grid.Column="0" Grid.Row="5" Text="IsPanning"/>
         <CheckBox Classes="default" Grid.Column="1" Grid.Row="5" IsEnabled="False" IsChecked="{Binding ZoomServiceState.IsPanning, Mode=OneWay}"/>
-        <TextBlock Classes="default" Grid.Column="0" Grid.Row="6" Text="CustomDraw"/>
-        <CheckBox Classes="default" Grid.Column="1" Grid.Row="6" IsChecked="{Binding ZoomServiceState.CustomDraw, Mode=TwoWay}"/>
-        <TextBlock Classes="default" Grid.Column="0" Grid.Row="7" Text="InitFitMode"/>
-        <TextBox Classes="default" Grid.Column="1" Grid.Row="7" Text="{Binding ZoomServiceState.InitFitMode}"/>
-        <TextBlock Classes="default" Grid.Column="0" Grid.Row="8" Text="AutoFitMode"/>
-        <TextBox Classes="default" Grid.Column="1" Grid.Row="8" Text="{Binding ZoomServiceState.AutoFitMode}"/>
+        <TextBlock Classes="default" Grid.Column="0" Grid.Row="6" Text="IsZooming"/>
+        <CheckBox Classes="default" Grid.Column="1" Grid.Row="6" IsEnabled="False" IsChecked="{Binding ZoomServiceState.IsZooming, Mode=OneWay}"/>
+        <TextBlock Classes="default" Grid.Column="0" Grid.Row="7" Text="CustomDraw"/>
+        <CheckBox Classes="default" Grid.Column="1" Grid.Row="7" IsChecked="{Binding ZoomServiceState.CustomDraw, Mode=TwoWay}"/>
+        <TextBlock Classes="default" Grid.Column="0" Grid.Row="8" Text="InitFitMode"/>
+        <TextBox Classes="default" Grid.Column="1" Grid.Row="8" Text="{Binding ZoomServiceState.InitFitMode}"/>
+        <TextBlock Classes="default" Grid.Column="0" Grid.Row="9" Text="AutoFitMode"/>
+        <TextBox Classes="default" Grid.Column="1" Grid.Row="9" Text="{Binding ZoomServiceState.AutoFitMode}"/>
     </Grid>
 </UserControl>
