@@ -505,10 +505,10 @@ namespace Draw2D.Editor
                 ZoomServiceState = new ZoomServiceState()
                 {
                     ZoomSpeed = 1.2,
-                    ZoomX = 1.0,
-                    ZoomY = 1.0,
-                    OffsetX = 0.0,
-                    OffsetY = 0.0,
+                    ZoomX = double.NaN,
+                    ZoomY = double.NaN,
+                    OffsetX = double.NaN,
+                    OffsetY = double.NaN,
                     IsPanning = false,
                     CustomDraw = true
                 },

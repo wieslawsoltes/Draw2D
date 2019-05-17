@@ -492,7 +492,13 @@ namespace Draw2D.Controls
 
                 if (_initializedZoom == false)
                 {
-                    CenterZoom(false);
+                    if (_zoomServiceState.ZoomX == double.NaN
+                        || _zoomServiceState.ZoomY == double.NaN
+                        || _zoomServiceState.OffsetX == double.NaN
+                        || _zoomServiceState.OffsetY == double.NaN)
+                    {
+                        CenterZoom(false);
+                    }
                     _initializedZoom = true;
                 }
 
