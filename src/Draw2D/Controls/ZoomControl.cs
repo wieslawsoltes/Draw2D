@@ -232,6 +232,7 @@ namespace Draw2D.Controls
             if (_zoomServiceState != null && _inputTarget != null)
             {
                 _zoomServiceState.IsZooming = true;
+                _zoomServiceState.AutoFitMode = FitMode.None;
                 ZoomDeltaTo(delta, x, y);
                 Invalidate(true);
             }
@@ -242,6 +243,7 @@ namespace Draw2D.Controls
             if (_zoomServiceState != null && _inputTarget != null && _zoomServiceState.IsPanning == false && IsCaptured?.Invoke() == false)
             {
                 _zoomServiceState.IsPanning = true;
+                _zoomServiceState.AutoFitMode = FitMode.None;
                 Capture?.Invoke();
                 StartPan(x, y);
                 Invalidate(true);
