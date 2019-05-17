@@ -8,16 +8,28 @@
              xmlns:local="clr-namespace:Draw2D.Views.Tools"
              mc:Ignorable="d"
              d:DesignWidth="400" d:DesignHeight="300">
-    <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="Auto,*">
-        <TextBlock Classes="default" Grid.Column="0" Grid.Row="0" Text="Simplify"/>
-        <CheckBox Classes="default" Grid.Column="1" Grid.Row="0" IsChecked="{Binding Simplify}"/>
-        <TextBlock Classes="default" Grid.Column="0" Grid.Row="1" Text="Epsilon"/>
-        <TextBox Classes="default" Grid.Column="1" Grid.Row="1" Text="{Binding Epsilon}"/>
-        <TextBlock Classes="default" Grid.Column="0" Grid.Row="2" Text="FillRule"/>
-        <TextBox Classes="default" Grid.Column="1" Grid.Row="2" Text="{Binding FillRule}"/>
-        <TextBlock Classes="default" Grid.Column="0" Grid.Row="3" Text="IsFilled"/>
-        <CheckBox Classes="default" Grid.Column="1" Grid.Row="3" IsChecked="{Binding IsFilled}"/>
-        <TextBlock Classes="default" Grid.Column="0" Grid.Row="4" Text="IsClosed"/>
-        <CheckBox Classes="default" Grid.Column="1" Grid.Row="4" IsChecked="{Binding IsClosed}"/>
-    </Grid>
+    <TabControl Classes="default" TabStripPlacement="Top">
+        <TabItem Classes="default" Header="Settings">
+            <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="Auto,*">
+                <TextBlock Classes="default" Grid.Column="0" Grid.Row="0" Text="Simplify"/>
+                <CheckBox Classes="default" Grid.Column="1" Grid.Row="0" IsChecked="{Binding Simplify}"/>
+                <TextBlock Classes="default" Grid.Column="0" Grid.Row="1" Text="Epsilon"/>
+                <TextBox Classes="default" Grid.Column="1" Grid.Row="1" Text="{Binding Epsilon}"/>
+                <TextBlock Classes="default" Grid.Column="0" Grid.Row="2" Text="FillRule"/>
+                <TextBox Classes="default" Grid.Column="1" Grid.Row="2" Text="{Binding FillRule}"/>
+                <TextBlock Classes="default" Grid.Column="0" Grid.Row="3" Text="IsFilled"/>
+                <CheckBox Classes="default" Grid.Column="1" Grid.Row="3" IsChecked="{Binding IsFilled}"/>
+                <TextBlock Classes="default" Grid.Column="0" Grid.Row="4" Text="IsClosed"/>
+                <CheckBox Classes="default" Grid.Column="1" Grid.Row="4" IsChecked="{Binding IsClosed}"/>
+            </Grid>
+        </TabItem>
+        <TabItem Classes="default" Header="Object">
+            <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="Auto,*">
+                <TextBlock Classes="default" Grid.Column="0" Grid.Row="0" Text="Id"/>
+                <TextBox Classes="default" Grid.Column="1" Grid.Row="0" Text="{Binding Id}"/>
+                <TextBlock Classes="default" Grid.Column="0" Grid.Row="1" Text="Name"/>
+                <TextBox Classes="default" Grid.Column="1" Grid.Row="1" Text="{Binding Name}"/>
+            </Grid>
+        </TabItem>
+    </TabControl>
 </UserControl>

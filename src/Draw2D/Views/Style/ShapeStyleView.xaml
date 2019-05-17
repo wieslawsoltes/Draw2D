@@ -10,13 +10,15 @@
              d:DesignWidth="400" d:DesignHeight="300">
     <TabControl Classes="default" TabStripPlacement="Top">
         <TabItem Classes="default" Header="Style">
-            <Grid RowDefinitions="Auto,Auto,Auto" ColumnDefinitions="Auto,*">
-                <TextBlock Classes="default" Grid.Column="0" Grid.Row="0" Text="Thickness"/>
-                <TextBox Classes="default" Grid.Column="1" Grid.Row="0" Text="{Binding Thickness}"/>
-                <TextBlock Classes="default" Grid.Column="0" Grid.Row="1" Text="IsStroked"/>
-                <CheckBox Classes="default" Grid.Column="1" Grid.Row="1" IsChecked="{Binding IsStroked}"/>
-                <TextBlock Classes="default" Grid.Column="0" Grid.Row="2" Text="IsFilled"/>
-                <CheckBox Classes="default" Grid.Column="1" Grid.Row="2" IsChecked="{Binding IsFilled}"/>
+            <Grid RowDefinitions="Auto,Auto,Auto,Auto" ColumnDefinitions="Auto,*">
+                <TextBlock Classes="default" Grid.Column="0" Grid.Row="0" Text="Title"/>
+                <TextBox Classes="default" Grid.Column="1" Grid.Row="0" Text="{Binding Title, Mode=TwoWay}"/>
+                <TextBlock Classes="default" Grid.Column="0" Grid.Row="1" Text="Thickness"/>
+                <TextBox Classes="default" Grid.Column="1" Grid.Row="1" Text="{Binding Thickness}"/>
+                <TextBlock Classes="default" Grid.Column="0" Grid.Row="2" Text="IsStroked"/>
+                <CheckBox Classes="default" Grid.Column="1" Grid.Row="2" IsChecked="{Binding IsStroked}"/>
+                <TextBlock Classes="default" Grid.Column="0" Grid.Row="3" Text="IsFilled"/>
+                <CheckBox Classes="default" Grid.Column="1" Grid.Row="3" IsChecked="{Binding IsFilled}"/>
             </Grid>
         </TabItem>
         <TabItem Classes="default" Header="Stroke">
@@ -27,6 +29,14 @@
         </TabItem>
         <TabItem Classes="default" Header="Text">
             <ContentControl Content="{Binding TextStyle}"/>
+        </TabItem>
+        <TabItem Classes="default" Header="Object">
+            <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="Auto,*">
+                <TextBlock Classes="default" Grid.Column="0" Grid.Row="0" Text="Id"/>
+                <TextBox Classes="default" Grid.Column="1" Grid.Row="0" Text="{Binding Id}"/>
+                <TextBlock Classes="default" Grid.Column="0" Grid.Row="1" Text="Name"/>
+                <TextBox Classes="default" Grid.Column="1" Grid.Row="1" Text="{Binding Name}"/>
+            </Grid>
         </TabItem>
     </TabControl>
 </UserControl>

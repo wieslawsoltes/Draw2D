@@ -8,7 +8,40 @@
              xmlns:local="clr-namespace:Draw2D.Views.Shapes"
              mc:Ignorable="d"
              d:DesignWidth="400" d:DesignHeight="300">
-    <Grid>
-        <TextBlock Text="Group" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-    </Grid>
+    <TabControl Classes="default" TabStripPlacement="Top">
+        <TabItem Classes="default" Header="Group">
+            <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="Auto,*">
+                <TextBlock Classes="default" Grid.Column="0" Grid.Row="0" Text="Text"/>
+                <TextBox Classes="default" Grid.Column="1" Grid.Row="0" Text="{Binding Text.Value}"/>
+                <TextBlock Classes="default" Grid.Column="0" Grid.Row="1" Text="Title"/>
+                <TextBox Classes="default" Grid.Column="1" Grid.Row="1" Text="{Binding Title}"/>
+            </Grid>
+        </TabItem>
+        <TabItem Classes="default" Header="Shapes">
+            <ListBox Classes="default" Items="{Binding Shapes}">
+                <ListBox.DataTemplates>
+                    <DataTemplate>
+                        <TextBlock Classes="default" Text="{Binding}"/>
+                    </DataTemplate>
+                </ListBox.DataTemplates>
+            </ListBox>
+        </TabItem>
+        <TabItem Classes="default" Header="Points">
+            <ListBox Classes="default" Items="{Binding Points}">
+                <ListBox.DataTemplates>
+                    <DataTemplate>
+                        <TextBlock Classes="default" Text="{Binding}"/>
+                    </DataTemplate>
+                </ListBox.DataTemplates>
+            </ListBox>
+        </TabItem>
+        <TabItem Classes="default" Header="Object">
+            <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="Auto,*">
+                <TextBlock Classes="default" Grid.Column="0" Grid.Row="0" Text="Id"/>
+                <TextBox Classes="default" Grid.Column="1" Grid.Row="0" Text="{Binding Id}"/>
+                <TextBlock Classes="default" Grid.Column="0" Grid.Row="1" Text="Name"/>
+                <TextBox Classes="default" Grid.Column="1" Grid.Row="1" Text="{Binding Name}"/>
+            </Grid>
+        </TabItem>
+    </TabControl>
 </UserControl>

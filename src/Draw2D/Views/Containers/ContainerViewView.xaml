@@ -43,7 +43,7 @@
             <ListBox Classes="default" Items="{Binding Styles}" SelectedItem="{Binding CurrentStyle}">
                 <ListBox.DataTemplates>
                     <DataTemplate>
-                        <TextBlock Classes="default" Text="{Binding Name}"/>
+                        <TextBlock Classes="default" Text="{Binding Title}"/>
                     </DataTemplate>
                 </ListBox.DataTemplates>
             </ListBox>

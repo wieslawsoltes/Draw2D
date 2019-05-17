@@ -11,16 +11,42 @@
     <TabControl Classes="default" TabStripPlacement="Top">
         <TabItem Classes="default" Header="Path">
             <Grid RowDefinitions="Auto,Auto,Auto" ColumnDefinitions="Auto,*">
+                <TextBlock Classes="default" Grid.Column="0" Grid.Row="0" Text="Text"/>
+                <TextBox Classes="default" Grid.Column="1" Grid.Row="0" Text="{Binding Text.Value}"/>
+                <TextBlock Classes="default" Grid.Column="0" Grid.Row="1" Text="Title"/>
+                <TextBox Classes="default" Grid.Column="1" Grid.Row="1" Text="{Binding Title}"/>
+                <TextBlock Classes="default" Grid.Column="0" Grid.Row="2" Text="FillRule"/>
+                <TextBox Classes="default" Grid.Column="1" Grid.Row="2" Text="{Binding FillRule}"/>
+            </Grid>
+        </TabItem>
+        <TabItem Classes="default" Header="Figures">
+            <ListBox Classes="default" Items="{Binding Figures}">
+                <ListBox.DataTemplates>
+                    <DataTemplate>
+                        <TextBlock Classes="default" Text="{Binding}"/>
+                    </DataTemplate>
+                </ListBox.DataTemplates>
+            </ListBox>
+        </TabItem>
+        <TabItem Classes="default" Header="Points">
+            <ListBox Classes="default" Items="{Binding Points}">
+                <ListBox.DataTemplates>
+                    <DataTemplate>
+                        <TextBlock Classes="default" Text="{Binding}"/>
+                    </DataTemplate>
+                </ListBox.DataTemplates>
+            </ListBox>
+        </TabItem>
+        <TabItem Classes="default" Header="Style">
+            <ContentControl Content="{Binding Style}"/>
+        </TabItem>
+        <TabItem Classes="default" Header="Object">
+            <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="Auto,*">
                 <TextBlock Classes="default" Grid.Column="0" Grid.Row="0" Text="Id"/>
                 <TextBox Classes="default" Grid.Column="1" Grid.Row="0" Text="{Binding Id}"/>
                 <TextBlock Classes="default" Grid.Column="0" Grid.Row="1" Text="Name"/>
                 <TextBox Classes="default" Grid.Column="1" Grid.Row="1" Text="{Binding Name}"/>
-                <TextBlock Classes="default" Grid.Column="0" Grid.Row="2" Text="Text"/>
-                <TextBox Classes="default" Grid.Column="1" Grid.Row="2" Text="{Binding Text.Value}"/>
             </Grid>
-        </TabItem>
-        <TabItem Classes="default" Header="Style">
-            <ContentControl Content="{Binding Style}"/>
         </TabItem>
     </TabControl>
 </UserControl>

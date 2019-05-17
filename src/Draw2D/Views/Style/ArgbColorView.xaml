@@ -8,18 +8,30 @@
              xmlns:local="clr-namespace:Draw2D.Views.Style"
              mc:Ignorable="d"
              d:DesignWidth="400" d:DesignHeight="300">
-    <Grid RowDefinitions="Auto,Auto,Auto,Auto" ColumnDefinitions="Auto,*,50">
-        <TextBlock Classes="default" Grid.Column="0" Grid.Row="0" Text="A"/>
-        <Slider Classes="default" Grid.Column="1" Grid.Row="0" Value="{Binding A, Mode=TwoWay}" Minimum="0" Maximum="255"/>
-        <TextBox Classes="default" Grid.Column="2" Grid.Row="0" Text="{Binding A, Mode=TwoWay}"/>
-        <TextBlock Classes="default" Grid.Column="0" Grid.Row="1" Text="R"/>
-        <Slider Classes="default" Grid.Column="1" Grid.Row="1" Value="{Binding R, Mode=TwoWay}" Minimum="0" Maximum="255"/>
-        <TextBox Classes="default" Grid.Column="2" Grid.Row="1" Text="{Binding R, Mode=TwoWay}"/>
-        <TextBlock Classes="default" Grid.Column="0" Grid.Row="2" Text="G"/>
-        <Slider Classes="default" Grid.Column="1" Grid.Row="2" Value="{Binding G, Mode=TwoWay}" Minimum="0" Maximum="255"/>
-        <TextBox Classes="default" Grid.Column="2" Grid.Row="2" Text="{Binding G, Mode=TwoWay}"/>
-        <TextBlock Classes="default" Grid.Column="0" Grid.Row="3" Text="B"/>
-        <Slider Classes="default" Grid.Column="1" Grid.Row="3" Value="{Binding B, Mode=TwoWay}" Minimum="0" Maximum="255"/>
-        <TextBox Classes="default" Grid.Column="2" Grid.Row="3" Text="{Binding B, Mode=TwoWay}"/>
-    </Grid>
+    <TabControl Classes="default" TabStripPlacement="Top">
+        <TabItem Classes="default" Header="Color">
+            <Grid RowDefinitions="Auto,Auto,Auto,Auto" ColumnDefinitions="Auto,*,50">
+                <TextBlock Classes="default" Grid.Column="0" Grid.Row="0" Text="A"/>
+                <Slider Classes="default" Grid.Column="1" Grid.Row="0" Value="{Binding A, Mode=TwoWay}" Minimum="0" Maximum="255"/>
+                <TextBox Classes="default" Grid.Column="2" Grid.Row="0" Text="{Binding A, Mode=TwoWay}"/>
+                <TextBlock Classes="default" Grid.Column="0" Grid.Row="1" Text="R"/>
+                <Slider Classes="default" Grid.Column="1" Grid.Row="1" Value="{Binding R, Mode=TwoWay}" Minimum="0" Maximum="255"/>
+                <TextBox Classes="default" Grid.Column="2" Grid.Row="1" Text="{Binding R, Mode=TwoWay}"/>
+                <TextBlock Classes="default" Grid.Column="0" Grid.Row="2" Text="G"/>
+                <Slider Classes="default" Grid.Column="1" Grid.Row="2" Value="{Binding G, Mode=TwoWay}" Minimum="0" Maximum="255"/>
+                <TextBox Classes="default" Grid.Column="2" Grid.Row="2" Text="{Binding G, Mode=TwoWay}"/>
+                <TextBlock Classes="default" Grid.Column="0" Grid.Row="3" Text="B"/>
+                <Slider Classes="default" Grid.Column="1" Grid.Row="3" Value="{Binding B, Mode=TwoWay}" Minimum="0" Maximum="255"/>
+                <TextBox Classes="default" Grid.Column="2" Grid.Row="3" Text="{Binding B, Mode=TwoWay}"/>
+            </Grid>
+        </TabItem>
+        <TabItem Classes="default" Header="Object">
+            <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="Auto,*">
+                <TextBlock Classes="default" Grid.Column="0" Grid.Row="0" Text="Id"/>
+                <TextBox Classes="default" Grid.Column="1" Grid.Row="0" Text="{Binding Id}"/>
+                <TextBlock Classes="default" Grid.Column="0" Grid.Row="1" Text="Name"/>
+                <TextBox Classes="default" Grid.Column="1" Grid.Row="1" Text="{Binding Name}"/>
+            </Grid>
+        </TabItem>
+    </TabControl>
 </UserControl>
