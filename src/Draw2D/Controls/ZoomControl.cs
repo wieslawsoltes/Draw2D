@@ -272,10 +272,6 @@ namespace Draw2D.Controls
         {
             if (_zoomServiceState != null && _inputTarget != null)
             {
-                _zoomServiceState.ZoomX = CurrentMatrix.M11;
-                _zoomServiceState.ZoomY = CurrentMatrix.M22;
-                _zoomServiceState.OffsetX = CurrentMatrix.M31;
-                _zoomServiceState.OffsetY = CurrentMatrix.M32;
                 if (redraw)
                 {
                     Redraw?.Invoke();
@@ -283,11 +279,32 @@ namespace Draw2D.Controls
             }
         }
 
+        private void UpdateCurrentMatrix()
+        {
+            CurrentMatrix = new Matrix(
+                _zoomServiceState.ZoomX,
+                0,
+                0,
+                _zoomServiceState.ZoomY,
+                _zoomServiceState.OffsetX,
+                _zoomServiceState.OffsetY);
+        }
+
+        private void UpdateZoomServiceState()
+        {
+            _zoomServiceState.ZoomX = CurrentMatrix.M11;
+            _zoomServiceState.ZoomY = CurrentMatrix.M22;
+            _zoomServiceState.OffsetX = CurrentMatrix.M31;
+            _zoomServiceState.OffsetY = CurrentMatrix.M32;
+        }
+
         public void ZoomTo(double zoom, double x, double y)
         {
             if (_zoomServiceState != null && _inputTarget != null)
             {
+                UpdateCurrentMatrix();
                 CurrentMatrix = new Matrix(zoom, 0, 0, zoom, x - (zoom * x), y - (zoom * y)) * CurrentMatrix;
+                UpdateZoomServiceState();
             }
         }
 
@@ -315,7 +332,9 @@ namespace Draw2D.Controls
                 double dy = y - PanPosition.Y;
                 Point delta = new Point(dx, dy);
                 PanPosition = new Point(x, y);
+                UpdateCurrentMatrix();
                 CurrentMatrix = new Matrix(1.0, 0.0, 0.0, 1.0, delta.X, delta.Y) * CurrentMatrix;
+                UpdateZoomServiceState();
             }
         }
 
@@ -324,6 +343,7 @@ namespace Draw2D.Controls
             if (_zoomServiceState != null && _inputTarget != null)
             {
                 CurrentMatrix = new Matrix(1.0, 0.0, 0.0, 1.0, 0.0, 0.0);
+                UpdateZoomServiceState();
             }
         }
 
@@ -334,6 +354,7 @@ namespace Draw2D.Controls
                 double ox = (panelWidth - elementWidth) / 2;
                 double oy = (panelHeight - elementHeight) / 2;
                 CurrentMatrix = new Matrix(1.0, 0.0, 0.0, 1.0, ox, oy);
+                UpdateZoomServiceState();
             }
         }
 
@@ -346,6 +367,7 @@ namespace Draw2D.Controls
                 double ox = (panelWidth - elementWidth * zx) / 2;
                 double oy = (panelHeight - elementHeight * zy) / 2;
                 CurrentMatrix = new Matrix(zx, 0.0, 0.0, zy, ox, oy);
+                UpdateZoomServiceState();
             }
         }
 
@@ -359,6 +381,7 @@ namespace Draw2D.Controls
                 double ox = (panelWidth - elementWidth * zoom) / 2;
                 double oy = (panelHeight - elementHeight * zoom) / 2;
                 CurrentMatrix = new Matrix(zoom, 0.0, 0.0, zoom, ox, oy);
+                UpdateZoomServiceState();
             }
         }
 
@@ -372,6 +395,7 @@ namespace Draw2D.Controls
                 double ox = (panelWidth - elementWidth * zoom) / 2;
                 double oy = (panelHeight - elementHeight * zoom) / 2;
                 CurrentMatrix = new Matrix(zoom, 0.0, 0.0, zoom, ox, oy);
+                UpdateZoomServiceState();
             }
         }
 
