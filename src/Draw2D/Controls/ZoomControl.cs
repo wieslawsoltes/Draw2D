@@ -57,7 +57,6 @@ namespace Draw2D.Controls
 
     public class ZoomControl : Border, IInputService, IZoomService
     {
-        private bool _skipAutoFit = false;
         private IZoomServiceState _zoomServiceState = null;
         private IInputTarget _inputTarget = null;
         private IDrawTarget _drawTarget = null;
