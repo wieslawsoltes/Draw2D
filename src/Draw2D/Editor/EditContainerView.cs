@@ -82,13 +82,6 @@ namespace Draw2D.Editor
 
         public void Initialize()
         {
-            var selectionState = new SelectionState()
-            {
-                Hovered = null,
-                Selected = null,
-                Shapes = new ObservableHashSet<BaseShape>()
-            };
-
             var hitTest = new HitTest()
             {
                 Registered = new Dictionary<string, IBounds>()
@@ -192,8 +185,7 @@ namespace Draw2D.Editor
                     ConnectTestRadius = 10.0,
                     DisconnectPoints = true,
                     DisconnectTestRadius = 10.0
-                },
-                SelectionState = selectionState
+                }
             };
 
             var pointTool = new PointTool()
@@ -451,7 +443,6 @@ namespace Draw2D.Editor
             };
 
             Selection = selectionTool;
-            SelectionState = selectionState;
             HitTest = hitTest;
             Decorators = decorators;
             Files = null;
@@ -505,7 +496,12 @@ namespace Draw2D.Editor
                 },
                 InputService = null,
                 DrawContainerView = null,
-                SelectionState = null,
+                SelectionState = new SelectionState()
+                {
+                    Hovered = null,
+                    Selected = null,
+                    Shapes = new ObservableHashSet<BaseShape>()
+                },
                 ZoomServiceState = new ZoomServiceState(),
                 CurrentContainer = new CanvasContainer()
                 {
@@ -524,7 +520,6 @@ namespace Draw2D.Editor
                 {
                     Decorators = _decorators
                 };
-                containerView.SelectionState = _selectionState;
                 containerView.HitTest = _hitTest;
                 containerView.WorkingContainer = new CanvasContainer()
                 {
