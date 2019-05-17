@@ -518,6 +518,10 @@ namespace Draw2D.Controls
                         }
                         _initializedZoom = true;
                     }
+                    else
+                    {
+                        _initializedZoom = true;
+                    }
                 }
                 else
                 {
