@@ -1767,7 +1767,15 @@ namespace Draw2D.ViewModels.Shapes
     [DataContract(IsReference = true)]
     public class GroupShape : ConnectableShape, ICopyable
     {
+        private string _title;
         private IList<BaseShape> _shapes;
+
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public string Title
+        {
+            get => _title;
+            set => Update(ref _title, value);
+        }
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public IList<BaseShape> Shapes
@@ -1787,16 +1795,16 @@ namespace Draw2D.ViewModels.Shapes
             this.Shapes = shapes;
         }
 
-        public GroupShape(string name)
+        public GroupShape(string title)
             : this()
         {
-            this.Name = name;
+            this.Title = title;
         }
 
-        public GroupShape(string name, IList<BaseShape> shapes)
+        public GroupShape(string title, IList<BaseShape> shapes)
             : base()
         {
-            this.Name = name;
+            this.Title = title;
             this.Shapes = shapes;
         }
 
@@ -1864,6 +1872,8 @@ namespace Draw2D.ViewModels.Shapes
         {
             var copy = new GroupShape()
             {
+                Name = this.Name,
+                Title = this.Title,
                 Points = new ObservableCollection<PointShape>(),
                 Shapes = new ObservableCollection<BaseShape>(),
                 Style = this.Style,
@@ -2125,8 +2135,16 @@ namespace Draw2D.ViewModels.Shapes
     [DataContract(IsReference = true)]
     public class PathShape : ConnectableShape, ICopyable
     {
+        private string _title;
         private IList<FigureShape> _figures;
         private PathFillRule _fillRule;
+
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public string Title
+        {
+            get => _title;
+            set => Update(ref _title, value);
+        }
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public IList<FigureShape> Figures
@@ -2153,16 +2171,16 @@ namespace Draw2D.ViewModels.Shapes
             this.Figures = figures;
         }
 
-        public PathShape(string name)
+        public PathShape(string title)
             : this()
         {
-            this.Name = name;
+            this.Title = title;
         }
 
-        public PathShape(string name, IList<FigureShape> figures)
+        public PathShape(string title, IList<FigureShape> figures)
             : base()
         {
-            this.Name = name;
+            this.Title = title;
             this.Figures = figures;
         }
 
@@ -2217,7 +2235,6 @@ namespace Draw2D.ViewModels.Shapes
             }
             return null;
         }
-
 
         public override void GetPoints(IList<PointShape> points)
         {
@@ -2465,6 +2482,8 @@ namespace Draw2D.ViewModels.Shapes
         {
             var copy = new PathShape()
             {
+                Name = this.Name,
+                Title = this.Title,
                 Points = new ObservableCollection<PointShape>(),
                 Figures = new ObservableCollection<FigureShape>(),
                 Style = this.Style,
@@ -9215,6 +9234,7 @@ namespace Draw2D.ViewModels.Tools
 
                     var group = new GroupShape()
                     {
+                        Title = "Group",
                         Points = new ObservableCollection<PointShape>(),
                         Shapes = new ObservableCollection<BaseShape>()
                     };
