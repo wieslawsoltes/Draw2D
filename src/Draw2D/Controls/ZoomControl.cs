@@ -57,7 +57,6 @@ namespace Draw2D.Controls
 
     public class ZoomControl : Border, IInputService, IZoomService
     {
-        private bool _initializedZoom = false;
         private IZoomServiceState _zoomServiceState;
         private IInputTarget _inputTarget = null;
         private IDrawTarget _drawTarget = null;
@@ -487,40 +486,32 @@ namespace Draw2D.Controls
 
             if (_zoomServiceState != null && _drawTarget != null)
             {
-                double width = Bounds.Width;
-                double height = Bounds.Height;
+                bool isValidZoom = 
+                    _zoomServiceState.ZoomX != double.NaN 
+                    && _zoomServiceState.ZoomY != double.NaN 
+                    && _zoomServiceState.OffsetX != double.NaN 
+                    && _zoomServiceState.OffsetY != double.NaN;
 
-                if (_initializedZoom == false)
+                if (isValidZoom == false)
                 {
-                    if (_zoomServiceState.ZoomX == double.NaN
-                        || _zoomServiceState.ZoomY == double.NaN
-                        || _zoomServiceState.OffsetX == double.NaN
-                        || _zoomServiceState.OffsetY == double.NaN)
+                    switch (_zoomServiceState.InitialAutoFitMode)
                     {
-                        switch (_zoomServiceState.InitialAutoFitMode)
-                        {
-                            case AutoFitMode.None:
-                            case AutoFitMode.Reset:
-                                ResetZoom(false);
-                                break;
-                            case AutoFitMode.Center:
-                                CenterZoom(false);
-                                break;
-                            case AutoFitMode.Fill:
-                                FillZoom(false);
-                                break;
-                            case AutoFitMode.Uniform:
-                                UniformZoom(false);
-                                break;
-                            case AutoFitMode.UniformToFill:
-                                UniformToFillZoom(false);
-                                break;
-                        }
-                        _initializedZoom = true;
-                    }
-                    else
-                    {
-                        _initializedZoom = true;
+                        case AutoFitMode.None:
+                        case AutoFitMode.Reset:
+                            ResetZoom(false);
+                            break;
+                        case AutoFitMode.Center:
+                            CenterZoom(false);
+                            break;
+                        case AutoFitMode.Fill:
+                            FillZoom(false);
+                            break;
+                        case AutoFitMode.Uniform:
+                            UniformZoom(false);
+                            break;
+                        case AutoFitMode.UniformToFill:
+                            UniformToFillZoom(false);
+                            break;
                     }
                 }
                 else
@@ -547,18 +538,15 @@ namespace Draw2D.Controls
                     }
                 }
 
-                if (_initializedZoom == true)
-                {
-                    GetOffset(out double dx, out double dy, out double zx, out double zy);
+                GetOffset(out double dx, out double dy, out double zx, out double zy);
 
-                    if (_zoomServiceState.CustomDraw)
-                    {
-                        context.Custom(new CustomDrawOperation(_drawTarget, width, height, dx, dy, zx, zy));
-                    }
-                    else
-                    {
-                        _drawTarget.Draw(context, width, height, dx, dy, zx, zy);
-                    }
+                if (_zoomServiceState.CustomDraw)
+                {
+                    context.Custom(new CustomDrawOperation(_drawTarget, Bounds.Width, Bounds.Height, dx, dy, zx, zy));
+                }
+                else
+                {
+                    _drawTarget.Draw(context, Bounds.Width, Bounds.Height, dx, dy, zx, zy);
                 }
             }
         }
