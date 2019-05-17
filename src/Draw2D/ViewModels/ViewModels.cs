@@ -3335,7 +3335,7 @@ namespace Draw2D.ViewModels.Containers
             set => Update(ref _selectionState, value);
         }
 
-        [IgnoreDataMember]
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public IZoomServiceState ZoomServiceState
         {
             get => _zoomServiceState;
