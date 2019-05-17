@@ -274,7 +274,7 @@
                         </TabItem>
                     </TabControl>
                 </TabItem>
-                <TabItem Classes="default" Header="Renderer">
+                <TabItem Classes="default" Header="Zoom">
                     <local:ZoomServiceView DataContext="{Binding ContainerView.ZoomService}"/>
                 </TabItem>
             </TabControl>
