@@ -8968,14 +8968,14 @@ namespace Draw2D.ViewModels.Tools
                 if (context.ContainerView.SelectionState.Shapes.Count == 1)
                 {
                     var shape = context.ContainerView.SelectionState.Shapes.FirstOrDefault();
-    
+
                     if (shape is PointShape source)
                     {
                         if (Settings.ConnectPoints && modifier.HasFlag(Settings?.ConnectionModifier ?? Modifier.Shift))
                         {
                             Connect(context, source);
                         }
-    
+
                         if (Settings.DisconnectPoints && modifier.HasFlag(Settings?.ConnectionModifier ?? Modifier.Shift))
                         {
                             if (_disconnected == false)
@@ -8990,7 +8990,7 @@ namespace Draw2D.ViewModels.Tools
                             }
                         }
                     }
-    
+
                     shape.Move(context.ContainerView.SelectionState, dx, dy);
                 }
                 else
@@ -9005,13 +9005,13 @@ namespace Draw2D.ViewModels.Tools
                             }
                         }
                     }
-    
+
                     foreach (var shape in context.ContainerView.SelectionState.Shapes.ToList())
                     {
                         shape.Move(context.ContainerView.SelectionState, dx, dy);
                     }
                 }
-    
+
                 context.ContainerView?.InputService?.Redraw?.Invoke();
             }
         }
@@ -9152,11 +9152,11 @@ namespace Draw2D.ViewModels.Tools
                     {
                         context.ContainerView?.SelectionState.Dehover();
                         context.ContainerView?.SelectionState.Clear();
-    
+
                         Copy(context.ContainerView?.CurrentContainer, _shapesToCopy, context.ContainerView.SelectionState);
-    
+
                         context.ContainerView?.InputService?.Redraw?.Invoke();
-    
+
                         this.CurrentState = State.None;
                     }
                 }
@@ -9170,12 +9170,12 @@ namespace Draw2D.ViewModels.Tools
                 lock (context.ContainerView.SelectionState.Shapes)
                 {
                     Delete(context.ContainerView?.CurrentContainer, context.ContainerView.SelectionState);
-    
+
                     context.ContainerView?.SelectionState.Dehover();
                     context.ContainerView?.SelectionState.Clear();
-    
+
                     context.ContainerView?.InputService?.Redraw?.Invoke();
-    
+
                     this.CurrentState = State.None;
                 }
             }
@@ -9188,17 +9188,17 @@ namespace Draw2D.ViewModels.Tools
                 lock (context.ContainerView.SelectionState.Shapes)
                 {
                     context.ContainerView?.SelectionState.Dehover();
-    
+
                     var shapes = context.ContainerView.SelectionState.Shapes.ToList();
-    
+
                     Delete(context);
-    
+
                     var group = new GroupShape()
                     {
                         Points = new ObservableCollection<PointShape>(),
                         Shapes = new ObservableCollection<BaseShape>()
                     };
-    
+
                     foreach (var shape in shapes)
                     {
                         if (!(shape is PointShape))
@@ -9206,13 +9206,13 @@ namespace Draw2D.ViewModels.Tools
                             group.Shapes.Add(shape);
                         }
                     }
-    
+
                     group.Select(context.ContainerView.SelectionState);
                     context.ContainerView?.CurrentContainer.Shapes.Add(group);
                     context.ContainerView?.CurrentContainer.MarkAsDirty(true);
-    
+
                     context.ContainerView?.InputService?.Redraw?.Invoke();
-    
+
                     this.CurrentState = State.None;
                 }
             }
@@ -9226,14 +9226,14 @@ namespace Draw2D.ViewModels.Tools
                 {
                     context.ContainerView?.SelectionState.Dehover();
                     context.ContainerView?.SelectionState.Clear();
-    
+
                     foreach (var shape in context.ContainerView?.CurrentContainer.Shapes)
                     {
                         shape.Select(context.ContainerView.SelectionState);
                     }
-    
+
                     context.ContainerView?.InputService?.Redraw?.Invoke();
-    
+
                     this.CurrentState = State.None;
                 }
             }
@@ -9483,18 +9483,18 @@ namespace Draw2D.ViewModels.Tools
                     mode.HasFlag(SelectionMode.Point)
                     && targets.HasFlag(SelectionTargets.Shapes) ?
                     context.ContainerView?.HitTest?.TryToGetPoint(context.ContainerView?.CurrentContainer.Shapes, point, radius, null) : null;
-    
+
                 var shape =
                     mode.HasFlag(SelectionMode.Shape)
                     && targets.HasFlag(SelectionTargets.Shapes) ?
                     context.ContainerView?.HitTest?.TryToGetShape(context.ContainerView?.CurrentContainer.Shapes, point, radius) : null;
-    
+
                 if (shapePoint != null || shape != null)
                 {
                     bool haveNewSelection =
                         (shapePoint != null && !context.ContainerView.SelectionState.IsSelected(shapePoint))
                         || (shape != null && !context.ContainerView.SelectionState.IsSelected(shape));
-    
+
                     if (context.ContainerView.SelectionState.Shapes.Count >= 1
                         && !haveNewSelection
                         && !modifier.HasFlag(selectionModifier))
@@ -9559,7 +9559,7 @@ namespace Draw2D.ViewModels.Tools
                     mode.HasFlag(SelectionMode.Shape)
                     && targets.HasFlag(SelectionTargets.Shapes) ?
                     context.ContainerView?.HitTest?.TryToGetShapes(context.ContainerView?.CurrentContainer.Shapes, rect, radius) : null;
-    
+
                 if (shapes != null)
                 {
                     if (shapes != null)

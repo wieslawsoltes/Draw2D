@@ -512,7 +512,7 @@ namespace Draw2D.Editor
                     IsPanning = false,
                     CustomDraw = true,
                     InitFitMode = FitMode.Center,
-                    AutoFitMode  = FitMode.None
+                    AutoFitMode = FitMode.None
                 },
                 CurrentContainer = new CanvasContainer()
                 {

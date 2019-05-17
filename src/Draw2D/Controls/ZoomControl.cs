@@ -156,7 +156,7 @@ namespace Draw2D.Controls
                 {
                     var zpoint = AdjustPanPoint(e.GetPosition(this));
                     Pressed(zpoint.X, zpoint.Y);
-    
+
                     if (_zoomServiceState.IsPanning == false)
                     {
                         var tpoint = AdjustTargetPoint(e.GetPosition(this));
@@ -179,7 +179,7 @@ namespace Draw2D.Controls
                 {
                     var zpoint = AdjustPanPoint(e.GetPosition(this));
                     Released(zpoint.X, zpoint.Y);
-    
+
                     if (_zoomServiceState.IsPanning == false)
                     {
                         var tpoint = AdjustTargetPoint(e.GetPosition(this));
@@ -195,7 +195,7 @@ namespace Draw2D.Controls
             {
                 var zpoint = AdjustPanPoint(e.GetPosition(this));
                 Moved(zpoint.X, zpoint.Y);
-    
+
                 if (_zoomServiceState.IsPanning == false)
                 {
                     var tpoint = AdjustTargetPoint(e.GetPosition(this));
@@ -480,10 +480,10 @@ namespace Draw2D.Controls
 
             if (_zoomServiceState != null && _inputTarget != null && _drawTarget != null)
             {
-                bool isValidZoom = 
-                    _zoomServiceState.ZoomX != double.NaN 
-                    && _zoomServiceState.ZoomY != double.NaN 
-                    && _zoomServiceState.OffsetX != double.NaN 
+                bool isValidZoom =
+                    _zoomServiceState.ZoomX != double.NaN
+                    && _zoomServiceState.ZoomY != double.NaN
+                    && _zoomServiceState.OffsetX != double.NaN
                     && _zoomServiceState.OffsetY != double.NaN;
 
                 if (isValidZoom == false)
