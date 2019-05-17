@@ -565,12 +565,20 @@ namespace Draw2D.ViewModels.Style
     [DataContract(IsReference = true)]
     public class ShapeStyle : ViewModelBase, ICopyable
     {
+        private string _title;
         private ArgbColor _stroke;
         private ArgbColor _fill;
         private double _thickness;
         private bool _isStroked;
         private bool _isFilled;
         private TextStyle _textStyle;
+
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public string Title
+        {
+            get => _title;
+            set => Update(ref _title, value);
+        }
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public ArgbColor Stroke
@@ -618,8 +626,9 @@ namespace Draw2D.ViewModels.Style
         {
         }
 
-        public ShapeStyle(ArgbColor stroke, ArgbColor fill, double thickness, bool isStroked, bool isFilled, TextStyle textStyle)
+        public ShapeStyle(string title, ArgbColor stroke, ArgbColor fill, double thickness, bool isStroked, bool isFilled, TextStyle textStyle)
         {
+            this.Title = title;
             this.Stroke = stroke;
             this.Fill = fill;
             this.Thickness = thickness;
@@ -641,6 +650,7 @@ namespace Draw2D.ViewModels.Style
             return new ShapeStyle()
             {
                 Name = this.Name,
+                Title = this.Title,
                 Stroke = (ArgbColor)this.Stroke.Copy(shared),
                 Fill = (ArgbColor)this.Fill.Copy(shared),
                 Thickness = this.Thickness,
@@ -3602,8 +3612,8 @@ namespace Draw2D.ViewModels.Decorators
             _textStyle = new TextStyle("Calibri", 12.0, HAlign.Center, VAlign.Center, new ArgbColor(255, 0, 255, 255), true);
             _stroke = new ArgbColor(255, 0, 255, 255);
             _fill = new ArgbColor(255, 0, 255, 255);
-            _strokeStyle = new ShapeStyle(_stroke, _fill, 2.0, true, false, _textStyle);
-            _fillStyle = new ShapeStyle(_stroke, _fill, 2.0, false, true, _textStyle);
+            _strokeStyle = new ShapeStyle("Stroke", _stroke, _fill, 2.0, true, false, _textStyle);
+            _fillStyle = new ShapeStyle("Fill", _stroke, _fill, 2.0, false, true, _textStyle);
             _line = new LineShape(new PointShape(0, 0, null), new PointShape(0, 0, null))
             {
                 Points = new ObservableCollection<PointShape>()
