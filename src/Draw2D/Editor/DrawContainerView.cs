@@ -6,6 +6,9 @@ using System.Diagnostics;
 using System.Linq;
 using Avalonia;
 using Avalonia.Media;
+using Avalonia.Media.Imaging;
+using Avalonia.Platform;
+using Avalonia.Skia;
 using Draw2D.Renderers;
 using Draw2D.ViewModels;
 using Draw2D.ViewModels.Containers;
@@ -18,6 +21,7 @@ namespace Draw2D.Editor
     public class DrawContainerView : IDrawContainerView
     {
         private bool _enablePictureCache = false;
+        private RenderTargetBitmap _renderTarget = null;
         private SkiaShapeRenderer _skiaRenderer;
         private AvaloniaShapeRenderer _avaloniaRenderer;
         private Dictionary<ArgbColor, SKPaint> _fillSKPaintCache;
@@ -87,6 +91,12 @@ namespace Draw2D.Editor
             {
                 _pictureShapesCurrent.Dispose();
                 _pictureShapesCurrent = null;
+            }
+
+            if (_renderTarget != null)
+            {
+                _renderTarget.Dispose();
+                _renderTarget = null;
             }
         }
 
@@ -423,7 +433,33 @@ namespace Draw2D.Editor
             {
                 case DrawingContext drawingContext:
                     {
-                        DrawAvalonia(view, drawingContext, width, height, dx, dy, zx, zy);
+                        //*
+                        if (_renderTarget == null)
+                        {
+                            _renderTarget = new RenderTargetBitmap(new PixelSize((int)width, (int)height), new Vector(96, 96));
+                        }
+                        else
+                        {
+                            if (_renderTarget.PixelSize.Width != (int)width || _renderTarget.PixelSize.Width != (int)height)
+                            {
+                                _renderTarget.Dispose();
+                                _renderTarget = new RenderTargetBitmap(new PixelSize((int)width, (int)height), new Vector(96, 96));
+                            }
+                        }
+
+                        using (var _drawingContextImpl = _renderTarget.CreateDrawingContext(null))
+                        {
+                            var _skiaDrawingContextImpl = _drawingContextImpl as ISkiaDrawingContextImpl;
+
+                            DrawSkia(view, _skiaDrawingContextImpl.SkCanvas, width, height, dx, dy, zx, zy);
+
+                            drawingContext.DrawImage(_renderTarget, 1.0,
+                                new Rect(0, 0, _renderTarget.PixelSize.Width, _renderTarget.PixelSize.Height),
+                                new Rect(0, 0, width, height));
+                        }
+                        //*/
+                        // NOTE: This is much slower.
+                        //DrawAvalonia(view, drawingContext, width, height, dx, dy, zx, zy);
                     }
                     break;
                 case SKCanvas canvas:
