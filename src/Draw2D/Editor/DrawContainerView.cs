@@ -389,13 +389,17 @@ namespace Draw2D.Editor
             view.CurrentContainer.Invalidate();
             view.WorkingContainer.Invalidate();
 
+            var bounds = new Rect(0.0, 0.0, width, height);
+
+            var boundsState = context.PushClip(bounds);
+
             if (view.InputBackground != null)
             {
                 GetBrushFill(view.InputBackground, out var brush);
-                context.FillRectangle(brush, new Rect(0.0, 0.0, width, height));
+                context.FillRectangle(brush, bounds);
             }
 
-            var state = context.PushPreTransform(new Matrix(zx, 0.0, 0.0, zy, dx, dy));
+            var matrixState = context.PushPreTransform(new Matrix(zx, 0.0, 0.0, zy, dx, dy));
 
             if (view.WorkBackground != null)
             {
@@ -408,7 +412,9 @@ namespace Draw2D.Editor
             DrawDecorators(view, context, _avaloniaRenderer);
             DrawPoints(view, context, _avaloniaRenderer);
 
-            state.Dispose();
+            matrixState.Dispose();
+
+            boundsState.Dispose();
         }
 
         public void Draw(IContainerView view, object context, double width, double height, double dx, double dy, double zx, double zy)
