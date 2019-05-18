@@ -21,12 +21,58 @@ using Draw2D.ViewModels.Tools;
 namespace Draw2D.Editor
 {
     [DataContract(IsReference = true)]
+    public class WindowSettings : Settings
+    {
+        private double _width;
+        private double _height;
+        private WindowState _windowState;
+        private WindowStartupLocation _windowStartupLocation;
+
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public double Width
+        {
+            get => _width;
+            set => Update(ref _width, value);
+        }
+
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public double Height
+        {
+            get => _height;
+            set => Update(ref _height, value);
+        }
+
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public WindowState WindowState
+        {
+            get => _windowState;
+            set => Update(ref _windowState, value);
+        }
+
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public WindowStartupLocation WindowStartupLocation
+        {
+            get => _windowStartupLocation;
+            set => Update(ref _windowStartupLocation, value);
+        }
+
+        public override void Invalidate()
+        {
+            if (this.IsDirty)
+            {
+                this.IsDirty = false;
+            }
+        }
+    }
+
+    [DataContract(IsReference = true)]
     public class EditContainerView : ToolContext
     {
         private ISelection _selection;
         private IHitTest _hitTest;
         private Dictionary<string, IShapeDecorator> _decorators;
         private IList<string> _files;
+        private WindowSettings _mainWindowSettings;
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public ISelection Selection
@@ -54,6 +100,13 @@ namespace Draw2D.Editor
         {
             get => _files;
             set => Update(ref _files, value);
+        }
+
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public WindowSettings MainWindowSettings
+        {
+            get => _mainWindowSettings;
+            set => Update(ref _mainWindowSettings, value);
         }
 
         public EditContainerView()
@@ -442,6 +495,14 @@ namespace Draw2D.Editor
             HitTest = hitTest;
             Decorators = decorators;
             Files = null;
+
+            MainWindowSettings = new WindowSettings()
+            {
+                Width = 1320,
+                Height = 690,
+                WindowState = WindowState.Normal,
+                WindowStartupLocation = WindowStartupLocation.CenterScreen
+            };
 
             var containerViews = new ObservableCollection<IContainerView>();
 
