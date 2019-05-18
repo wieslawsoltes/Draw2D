@@ -118,6 +118,7 @@ namespace Draw2D
                          .With(new X11PlatformOptions { UseGpu = true, UseEGL = true })
                          .With(new AvaloniaNativePlatformOptions { UseGpu = true })
                          .UseSkia()
+                         //.UseDirect2D1()
                          .LogToDebug();
 
         public override void Initialize()
