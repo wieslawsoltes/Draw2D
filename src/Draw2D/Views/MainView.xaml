@@ -21,7 +21,7 @@
         <KeyBinding Command="{Binding SaveContainerViewAs}" Gesture="Ctrl+S"/>
         <KeyBinding Command="{Binding Exit}" Gesture="Alt+F4"/>
     </UserControl.KeyBindings>
-    <Grid RowDefinitions="Auto,Auto,*,5" ColumnDefinitions="Auto,Auto,*">
+    <Grid RowDefinitions="Auto,5,*,5" ColumnDefinitions="340,Auto,*">
         <Menu Background="Transparent" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3">
             <MenuItem Header="_File">
                 <MenuItem Header="_New View" Command="{Binding NewContainerView}"/>
@@ -170,195 +170,116 @@
                 </MenuItem>
             </MenuItem>
         </Menu>
-        <Expander x:Name="properties" Header="Properties" IsExpanded="True" ExpandDirection="Right" Grid.Row="2" Grid.Column="0">
-            <Expander.Styles>
-                <Style Selector="Expander">
-                    <Setter Property="ContentTransition">
-                        <Setter.Value>
-                            <CrossFade Duration="00:00:00.25" />
-                        </Setter.Value>
-                    </Setter>
-                </Style>
-                <Style Selector="Expander[ExpandDirection=Right]">
-                    <Setter Property="Template">
-                        <ControlTemplate>
-                            <Border Background="{TemplateBinding Background}">
-                                <Grid ColumnDefinitions="Auto,*">
-                                    <LayoutTransformControl Name="PART_LayoutTransformControl" Grid.Column="0">
-                                        <ToggleButton Name="PART_toggle" Content="{TemplateBinding Header}" IsChecked="{TemplateBinding IsExpanded, Mode=TwoWay}" />
-                                    </LayoutTransformControl>
-                                    <ContentPresenter Name="PART_ContentPresenter"
-                                                      Grid.Column="1"
-                                                      IsVisible="{TemplateBinding IsExpanded}"
-                                                      ContentTemplate="{TemplateBinding ContentTemplate}"
-                                                      Content="{TemplateBinding Content}"
-                                                      HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                                      VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
-                                                      Padding="{TemplateBinding Padding}" />
-                                </Grid>
-                            </Border>
-                        </ControlTemplate>
-                    </Setter>
-                </Style>
-                <Style Selector="Expander /template/ ToggleButton#PART_toggle">
-                    <Setter Property="Template">
-                        <ControlTemplate>
-                            <Border BorderThickness="1">
-                                <Grid ColumnDefinitions="Auto,Auto">
-                                    <Border Grid.Column="0" Width="20" Height="20" HorizontalAlignment="Center" VerticalAlignment="Center">
-                                        <Path Fill="{DynamicResource ThemeForegroundBrush}"
-                                                HorizontalAlignment="Center"
-                                                VerticalAlignment="Center"
-                                                Data="M 0 2 L 4 6 L 0 10 Z" />
-                                    </Border>
-                                    <ContentPresenter Name="PART_ContentPresenter"
-                                                      Grid.Column="1"
-                                                      Background="Transparent"
-                                                      Content="{TemplateBinding Content}"
-                                                      VerticalAlignment="Center"
-                                                      HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                                      VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
-                                                      Padding="{TemplateBinding Padding}"/>
-                                </Grid>
-                            </Border>
-                        </ControlTemplate>
-                    </Setter>
-                </Style>
-                <Style Selector="Expander /template/ ToggleButton#PART_toggle:pointerover /template/ Border">
-                    <Setter Property="BorderBrush" Value="{DynamicResource ThemeBorderLowBrush}" />
-                </Style>
-                <Style Selector="Expander:right /template/ ToggleButton#PART_toggle /template/ Path">
-                    <Setter Property="RenderTransform">
-                        <RotateTransform Angle="0" />
-                    </Setter>
-                </Style>
-                <Style Selector="Expander:right:expanded /template/ ToggleButton#PART_toggle /template/ Path">
-                    <Setter Property="RenderTransform">
-                        <RotateTransform Angle="-90" />
-                    </Setter>
-                </Style>
-                <Style Selector="Expander:right /template/ LayoutTransformControl#PART_LayoutTransformControl">
-                    <Setter Property="LayoutTransform">
-                        <RotateTransform Angle="90" />
-                    </Setter>
-                </Style>
-                <Style Selector="Expander:right:expanded /template/ LayoutTransformControl#PART_LayoutTransformControl">
-                    <Setter Property="LayoutTransform">
-                        <RotateTransform Angle="90" />
-                    </Setter>
-                </Style>
-            </Expander.Styles>
-            <Grid RowDefinitions="55*,Auto,45*">
-                <TabControl Classes="default" Grid.Row="0" TabStripPlacement="Top">
-                    <TabItem Classes="default" Header="Tool">
-                        <TabControl Classes="default" TabStripPlacement="Top">
-                            <TabItem Classes="default" Header="Current">
-                                <ContentControl Content="{Binding CurrentTool.Settings}"/>
-                            </TabItem>
-                            <TabItem Classes="default" Header="Intersections">
-                                <Grid RowDefinitions="Auto,*">
-                                    <ComboBox Classes="default" Grid.Row="0" x:Name="intersections" Items="{Binding CurrentTool.Intersections}" SelectedIndex="0">
-                                        <ComboBox.DataTemplates>
-                                            <DataTemplate>
-                                                <TextBlock Classes="default" Text="{Binding Title}"/>
-                                            </DataTemplate>
-                                        </ComboBox.DataTemplates>
-                                    </ComboBox>
-                                    <ContentControl Grid.Row="1" Content="{Binding #intersections.SelectedItem.Settings}"/>
-                                </Grid>
-                            </TabItem>
-                            <TabItem Classes="default" Header="Filters">
-                                <Grid RowDefinitions="Auto,*">
-                                    <ComboBox Classes="default" Grid.Row="0" x:Name="filters" Items="{Binding CurrentTool.Filters}" SelectedIndex="0">
-                                        <ComboBox.DataTemplates>
-                                            <DataTemplate>
-                                                <TextBlock Classes="default" Text="{Binding Title}"/>
-                                            </DataTemplate>
-                                        </ComboBox.DataTemplates>
-                                    </ComboBox>
-                                    <ContentControl Grid.Row="1" Content="{Binding #filters.SelectedItem.Settings}"/>
-                                </Grid>
-                            </TabItem>
-                            <TabItem Classes="default" Header="Tools">
-                                <ListBox Classes="default" Items="{Binding Tools}" SelectedItem="{Binding CurrentTool}">
-                                    <ListBox.DataTemplates>
+        <Grid RowDefinitions="55*,Auto,45*" Grid.Row="2" Grid.Column="0">
+            <TabControl Classes="default" Grid.Row="0" TabStripPlacement="Top">
+                <TabItem Classes="default" Header="Tool">
+                    <TabControl Classes="default" TabStripPlacement="Top">
+                        <TabItem Classes="default" Header="Current">
+                            <ContentControl Content="{Binding CurrentTool.Settings}"/>
+                        </TabItem>
+                        <TabItem Classes="default" Header="Intersections">
+                            <Grid RowDefinitions="Auto,*">
+                                <ComboBox Classes="default" Grid.Row="0" x:Name="intersections" Items="{Binding CurrentTool.Intersections}" SelectedIndex="0">
+                                    <ComboBox.DataTemplates>
                                         <DataTemplate>
                                             <TextBlock Classes="default" Text="{Binding Title}"/>
                                         </DataTemplate>
-                                    </ListBox.DataTemplates>
-                                </ListBox>
-                            </TabItem>
-                        </TabControl>
-                    </TabItem>
-                    <TabItem Classes="default" Header="Path">
-                        <Grid RowDefinitions="Auto,*,Auto,Auto">
-                            <TextBlock Classes="default" Text="SVG Path:" Grid.Row="0"/>
-                            <TextBox x:Name="svgPathData" Classes="default" AcceptsReturn="True" AcceptsTab="True" Text="" Grid.Row="1"/>
-                            <Button Classes="default" Content="From SVG Path Data" Command="{Binding FromSvgPathData}" CommandParameter="{Binding #svgPathData}" Grid.Row="2"/>
-                            <Button Classes="default" Content="To SVG Path Data" Command="{Binding ToSvgPathData}" CommandParameter="{Binding #svgPathData}" Grid.Row="3"/>
-                        </Grid>
-                    </TabItem>
-                    <TabItem Classes="default" Header="Json">
-                        <Grid RowDefinitions="Auto,Auto,Auto,Auto,*,Auto">
-                            <TextBlock Classes="default" Text="Path:" Grid.Row="0"/>
-                            <TextBox x:Name="path" Classes="default" Text="container.json" Grid.Row="1"/>
-                            <Button Classes="default" Content="Open File" Command="{Binding Open}" CommandParameter="{Binding #path.Text}" Grid.Row="2"/>
-                            <Button Classes="default" Content="Save File" Command="{Binding Save}" CommandParameter="{Binding #path.Text}" Grid.Row="3"/>
-                            <ListBox x:Name="files" Classes="default" Grid.Row="4" Items="{Binding Files}">
+                                    </ComboBox.DataTemplates>
+                                </ComboBox>
+                                <ContentControl Grid.Row="1" Content="{Binding #intersections.SelectedItem.Settings}"/>
+                            </Grid>
+                        </TabItem>
+                        <TabItem Classes="default" Header="Filters">
+                            <Grid RowDefinitions="Auto,*">
+                                <ComboBox Classes="default" Grid.Row="0" x:Name="filters" Items="{Binding CurrentTool.Filters}" SelectedIndex="0">
+                                    <ComboBox.DataTemplates>
+                                        <DataTemplate>
+                                            <TextBlock Classes="default" Text="{Binding Title}"/>
+                                        </DataTemplate>
+                                    </ComboBox.DataTemplates>
+                                </ComboBox>
+                                <ContentControl Grid.Row="1" Content="{Binding #filters.SelectedItem.Settings}"/>
+                            </Grid>
+                        </TabItem>
+                        <TabItem Classes="default" Header="Tools">
+                            <ListBox Classes="default" Items="{Binding Tools}" SelectedItem="{Binding CurrentTool}">
+                                <ListBox.DataTemplates>
+                                    <DataTemplate>
+                                        <TextBlock Classes="default" Text="{Binding Title}"/>
+                                    </DataTemplate>
+                                </ListBox.DataTemplates>
+                            </ListBox>
+                        </TabItem>
+                    </TabControl>
+                </TabItem>
+                <TabItem Classes="default" Header="Path">
+                    <Grid RowDefinitions="Auto,*,Auto,Auto">
+                        <TextBlock Classes="default" Text="SVG Path:" Grid.Row="0"/>
+                        <TextBox x:Name="svgPathData" Classes="default" AcceptsReturn="True" AcceptsTab="True" Text="" Grid.Row="1"/>
+                        <Button Classes="default" Content="From SVG Path Data" Command="{Binding FromSvgPathData}" CommandParameter="{Binding #svgPathData}" Grid.Row="2"/>
+                        <Button Classes="default" Content="To SVG Path Data" Command="{Binding ToSvgPathData}" CommandParameter="{Binding #svgPathData}" Grid.Row="3"/>
+                    </Grid>
+                </TabItem>
+                <TabItem Classes="default" Header="Json">
+                    <Grid RowDefinitions="Auto,Auto,Auto,Auto,*,Auto">
+                        <TextBlock Classes="default" Text="Path:" Grid.Row="0"/>
+                        <TextBox x:Name="path" Classes="default" Text="container.json" Grid.Row="1"/>
+                        <Button Classes="default" Content="Open File" Command="{Binding Open}" CommandParameter="{Binding #path.Text}" Grid.Row="2"/>
+                        <Button Classes="default" Content="Save File" Command="{Binding Save}" CommandParameter="{Binding #path.Text}" Grid.Row="3"/>
+                        <ListBox x:Name="files" Classes="default" Grid.Row="4" Items="{Binding Files}">
+                            <ListBox.DataTemplates>
+                                <DataTemplate>
+                                    <TextBlock Classes="default" Text="{Binding}"/>
+                                </DataTemplate>
+                            </ListBox.DataTemplates>
+                        </ListBox>
+                        <Button Classes="default" Content="Open File" Command="{Binding Open}" CommandParameter="{Binding #files.SelectedItem}" Grid.Row="5"/>
+                    </Grid>
+                </TabItem>
+            </TabControl>
+            <GridSplitter Grid.Row="1"/>
+            <TabControl Classes="default" Grid.Row="2" TabStripPlacement="Top">
+                <TabItem Classes="default" Header="View">
+                    <TabControl Classes="default" TabStripPlacement="Top">
+                        <TabItem Classes="default" Header="Current">
+                            <ContentControl Content="{Binding ContainerView}"/>
+                        </TabItem>
+                        <TabItem Classes="default" Header="Views">
+                            <ListBox Classes="default" Items="{Binding ContainerViews}" SelectedItem="{Binding ContainerView}">
+                                <ListBox.DataTemplates>
+                                    <DataTemplate>
+                                        <TextBlock Classes="default" Text="{Binding Title}"/>
+                                    </DataTemplate>
+                                </ListBox.DataTemplates>
+                            </ListBox>
+                        </TabItem>
+                    </TabControl>
+                </TabItem>
+                <TabItem Classes="default" Header="Selection">
+                    <TabControl Classes="default" TabStripPlacement="Top">
+                        <TabItem Classes="default" Header="Selected">
+                            <ContentControl Content="{Binding ContainerView.SelectionState.Selected}"/>
+                        </TabItem>
+                        <TabItem Classes="default" Header="Hovered">
+                            <ContentControl Content="{Binding ContainerView.SelectionState.Hovered}"/>
+                        </TabItem>
+                        <TabItem Classes="default" Header="Shapes">
+                            <ListBox Classes="default" Items="{Binding ContainerView.SelectionState.Shapes, Mode=OneWay}">
                                 <ListBox.DataTemplates>
                                     <DataTemplate>
                                         <TextBlock Classes="default" Text="{Binding}"/>
                                     </DataTemplate>
                                 </ListBox.DataTemplates>
                             </ListBox>
-                            <Button Classes="default" Content="Open File" Command="{Binding Open}" CommandParameter="{Binding #files.SelectedItem}" Grid.Row="5"/>
-                        </Grid>
-                    </TabItem>
-                </TabControl>
-                <GridSplitter Grid.Row="1"/>
-                <TabControl Classes="default" Grid.Row="2" TabStripPlacement="Top">
-                    <TabItem Classes="default" Header="View">
-                        <TabControl Classes="default" TabStripPlacement="Top">
-                            <TabItem Classes="default" Header="Current">
-                                <ContentControl Content="{Binding ContainerView}"/>
-                            </TabItem>
-                            <TabItem Classes="default" Header="Views">
-                                <ListBox Classes="default" Items="{Binding ContainerViews}" SelectedItem="{Binding ContainerView}">
-                                    <ListBox.DataTemplates>
-                                        <DataTemplate>
-                                            <TextBlock Classes="default" Text="{Binding Title}"/>
-                                        </DataTemplate>
-                                    </ListBox.DataTemplates>
-                                </ListBox>
-                            </TabItem>
-                        </TabControl>
-                    </TabItem>
-                    <TabItem Classes="default" Header="Selection">
-                        <TabControl Classes="default" TabStripPlacement="Top">
-                            <TabItem Classes="default" Header="Selected">
-                                <ContentControl Content="{Binding ContainerView.SelectionState.Selected}"/>
-                            </TabItem>
-                            <TabItem Classes="default" Header="Hovered">
-                                <ContentControl Content="{Binding ContainerView.SelectionState.Hovered}"/>
-                            </TabItem>
-                            <TabItem Classes="default" Header="Shapes">
-                                <ListBox Classes="default" Items="{Binding ContainerView.SelectionState.Shapes, Mode=OneWay}">
-                                    <ListBox.DataTemplates>
-                                        <DataTemplate>
-                                            <TextBlock Classes="default" Text="{Binding}"/>
-                                        </DataTemplate>
-                                    </ListBox.DataTemplates>
-                                </ListBox>
-                            </TabItem>
-                        </TabControl>
-                    </TabItem>
-                    <TabItem Classes="default" Header="Zoom">
-                        <local:ZoomServiceView DataContext="{Binding ContainerView.ZoomService}"/>
-                    </TabItem>
-                </TabControl>
-            </Grid>
-        </Expander>
-        <GridSplitter IsVisible="{Binding #properties.IsExpanded}" Grid.Row="2" Grid.Column="1"/>
+                        </TabItem>
+                    </TabControl>
+                </TabItem>
+                <TabItem Classes="default" Header="Zoom">
+                    <local:ZoomServiceView DataContext="{Binding ContainerView.ZoomService}"/>
+                </TabItem>
+            </TabControl>
+        </Grid>
+        <GridSplitter Grid.Row="2" Grid.Column="1"/>
         <DockPanel Classes="views" Grid.Row="2" Grid.Column="2">
             <TabStrip Items="{Binding ContainerViews}" SelectedItem="{Binding ContainerView, Mode=TwoWay}" Focusable="false" DockPanel.Dock="Top">
                 <TabStrip.Styles>

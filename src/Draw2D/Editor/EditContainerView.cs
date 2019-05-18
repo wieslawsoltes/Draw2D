@@ -24,7 +24,6 @@ namespace Draw2D.Editor
     public class EditContainerView : ToolContext
     {
         private ISelection _selection;
-        private ISelectionState _selectionState;
         private IHitTest _hitTest;
         private Dictionary<string, IShapeDecorator> _decorators;
         private IList<string> _files;
@@ -34,13 +33,6 @@ namespace Draw2D.Editor
         {
             get => _selection;
             set => Update(ref _selection, value);
-        }
-
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public ISelectionState SelectionState
-        {
-            get => _selectionState;
-            set => Update(ref _selectionState, value);
         }
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
