@@ -36,7 +36,7 @@ namespace Draw2D
             if (File.Exists("editor.json"))
             {
                 editContainerView = EditContainerView.LoadFromJson<EditContainerView>("editor.json");
-                
+
                 foreach (var containerView in editContainerView.ContainerViews)
                 {
                     editContainerView.InitContainerView(containerView);
