@@ -113,13 +113,15 @@ namespace Draw2D
         /// <returns>true if the element is added to the <see cref="ObservableHashSet`1" /> object; false if the element is already present.</returns>
         public bool Add(T item)
         {
-            this.CheckReentrancy();
+            // TODO:
+            //this.CheckReentrancy();
             bool flag = this._hashSet.Add(item);
             if (flag)
             {
-                int index = this._hashSet.IndexOf<T>(item);
-                this.RaiseCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, item, index));
-                this.RaisePropertyChanged("Count");
+                // TODO:
+                //int index = this._hashSet.IndexOf<T>(item);
+                //this.RaiseCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, item, index));
+                //this.RaisePropertyChanged("Count");
             }
             return flag;
         }
@@ -143,7 +145,8 @@ namespace Draw2D
         /// </summary>
         public void Clear()
         {
-            this.CheckReentrancy();
+            // TODO:
+            //this.CheckReentrancy();
             if (this._hashSet.Count > 0)
             {
                 this._hashSet.Clear();
@@ -202,7 +205,8 @@ namespace Draw2D
             {
                 throw new ArgumentNullException("other");
             }
-            this.CheckReentrancy();
+            // TODO:
+            //this.CheckReentrancy();
             List<T> changedItems = (from x in other
                                     where _hashSet.Contains(x)
                                     select x).ToList<T>();
@@ -230,7 +234,8 @@ namespace Draw2D
             {
                 throw new ArgumentNullException("other");
             }
-            this.CheckReentrancy();
+            // TODO:
+            //this.CheckReentrancy();
             List<T> changedItems = (from x in this._hashSet
                                     where !other.Contains<T>(x)
                                     select x).ToList<T>();
@@ -339,7 +344,8 @@ namespace Draw2D
             {
                 throw new ArgumentNullException("other");
             }
-            this.CheckReentrancy();
+            // TODO:
+            //this.CheckReentrancy();
             List<T> changedItems = (from x in other
                                     where !_hashSet.Contains(x)
                                     select x).ToList<T>();
@@ -387,7 +393,8 @@ namespace Draw2D
             {
                 throw new ArgumentNullException("other");
             }
-            this.CheckReentrancy();
+            // TODO:
+            //this.CheckReentrancy();
             List<T> changedItems = (from x in other
                                     where !_hashSet.Contains(x)
                                     select x).ToList<T>();
