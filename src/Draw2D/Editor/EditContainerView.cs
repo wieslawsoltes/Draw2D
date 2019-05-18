@@ -509,7 +509,7 @@ namespace Draw2D.Editor
                     OffsetY = double.NaN,
                     IsPanning = false,
                     IsZooming = false,
-                    CustomDraw = true,
+                    CustomDraw = false,
                     InitFitMode = FitMode.Center,
                     AutoFitMode = FitMode.None
                 },
@@ -622,7 +622,7 @@ namespace Draw2D.Editor
             var dlg = new SaveFileDialog();
             dlg.Filters.Add(new FileDialogFilter() { Name = "Json Files", Extensions = { "json" } });
             dlg.Filters.Add(new FileDialogFilter() { Name = "All Files", Extensions = { "*" } });
-            dlg.InitialFileName = "container";
+            dlg.InitialFileName = ContainerView.Title;
             dlg.DefaultExtension = "json";
             var result = await dlg.ShowAsync(Application.Current.Windows[0]);
             if (result != null)
