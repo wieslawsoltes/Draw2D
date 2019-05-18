@@ -4,6 +4,7 @@ using System;
 using System.IO;
 using System.Linq;
 using Avalonia;
+using Avalonia.Controls;
 using Avalonia.Logging.Serilog;
 using Avalonia.Markup.Xaml;
 using Draw2D.Editor;
@@ -30,6 +31,7 @@ namespace Draw2D
         static void AppMain(Application app, string[] args)
         {
             EditContainerView editContainerView = null;
+            WindowSettings mainWindowSettings = null;
 
             if (File.Exists("editor.json"))
             {
@@ -51,14 +53,62 @@ namespace Draw2D
                 .Select(x => Path.GetFileName(x))
                 .ToList();
 
+            if (File.Exists("window.json"))
+            {
+                mainWindowSettings = EditContainerView.LoadFromJson<WindowSettings>("window.json");
+            }
+            else
+            {
+                mainWindowSettings = new WindowSettings()
+                {
+                    Width = 1320,
+                    Height = 690,
+                    X = double.NaN,
+                    Y = double.NaN,
+                    WindowState = WindowState.Normal
+                };
+            }
+
             var window = new MainWindow
             {
                 DataContext = editContainerView
             };
 
+            if (!double.IsNaN(mainWindowSettings.Width))
+            {
+                window.Width = mainWindowSettings.Width;
+            }
+
+            if (!double.IsNaN(mainWindowSettings.Height))
+            {
+                window.Height = mainWindowSettings.Height;
+            }
+
+            if (!double.IsNaN(mainWindowSettings.X) && !double.IsNaN(mainWindowSettings.Y))
+            {
+                window.Position = new PixelPoint((int)mainWindowSettings.X, (int)mainWindowSettings.Y);
+                window.WindowStartupLocation = WindowStartupLocation.Manual;
+            }
+            else
+            {
+                window.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+            }
+
+            window.WindowState = mainWindowSettings.WindowState;
+
+            window.Closing += (sender, e) =>
+            {
+                mainWindowSettings.Width = window.Width;
+                mainWindowSettings.Height = window.Height;
+                mainWindowSettings.X = window.Position.X;
+                mainWindowSettings.Y = window.Position.Y;
+                mainWindowSettings.WindowState = window.WindowState;
+            };
+
             app.Run(window);
 
             EditContainerView.SaveAsjson<EditContainerView>("editor.json", editContainerView);
+            EditContainerView.SaveAsjson<WindowSettings>("window.json", mainWindowSettings);
         }
 
         public static AppBuilder BuildAvaloniaApp()
