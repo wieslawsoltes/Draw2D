@@ -34,7 +34,9 @@ namespace Draw2D.Renderers
                 IsAntialias = true,
                 IsStroke = true,
                 StrokeWidth = (float)(style.Thickness / scale),
-                Color = ToSKColor(style.Stroke),
+                //Color = ToSKColor(style.Stroke),
+                //Color = new SKColor(0, 0, 0),
+                Shader = SKShader.CreateColor(ToSKColor(style.Stroke)),
                 StrokeCap = SKStrokeCap.Butt,
                 PathEffect = null
             };
@@ -48,7 +50,9 @@ namespace Draw2D.Renderers
                 IsStroke = false,
                 LcdRenderText = true,
                 SubpixelText = true,
-                Color = ToSKColor(color),
+                //Color = ToSKColor(color),
+                //Color = new SKColor(0, 0, 0),
+                Shader = SKShader.CreateColor(ToSKColor(color)),
                 TextAlign = SKTextAlign.Left
             };
         }
@@ -56,12 +60,14 @@ namespace Draw2D.Renderers
         public static void ToSKPaintPenUpdate(SKPaint paint, ShapeStyle style, double scale)
         {
             paint.StrokeWidth = (float)(style.Thickness / scale);
-            paint.Color = ToSKColor(style.Stroke);
+            //paint.Color = ToSKColor(style.Stroke);
+            //paint.Shader = SKShader.CreateColor(ToSKColor(style.Stroke));
         }
 
         public static void ToSKPaintBrushUpdate(SKPaint paint, ArgbColor color)
         {
-            paint.Color = ToSKColor(color);
+            //paint.Color = ToSKColor(color);
+            //paint.Shader = SKShader.CreateColor(ToSKColor(color));
         }
 
         public static SKPoint ToPoint(PointShape point, double dx, double dy)
