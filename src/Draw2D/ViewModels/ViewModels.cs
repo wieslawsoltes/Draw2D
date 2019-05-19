@@ -5166,14 +5166,6 @@ namespace Draw2D.ViewModels.Bounds
                 {
                     return result;
                 }
-                //foreach (var figureShape in figure.Shapes)
-                //{
-                //    var result = figureShape.Bounds?.TryToGetPoint(figureShape, target, radius, hitTest);
-                //    if (result != null)
-                //    {
-                //        return result;
-                //    }
-                //}
             }
 
             return null;
@@ -5193,14 +5185,6 @@ namespace Draw2D.ViewModels.Bounds
                 {
                     return result;
                 }
-                //foreach (var figureShape in figure.Shapes)
-                //{
-                //    var result = figureShape.Bounds?.Contains(figureShape, target, radius, hitTest);
-                //    if (result != null)
-                //    {
-                //        return result;
-                //    }
-                //}
             }
 
             var points = new List<PointShape>();
@@ -5223,14 +5207,6 @@ namespace Draw2D.ViewModels.Bounds
                 {
                     return result;
                 }
-                //foreach (var figureShape in figure.Shapes)
-                //{
-                //    var result = figureShape.Bounds?.Overlaps(figureShape, target, radius, hitTest);
-                //    if (result != null)
-                //    {
-                //        return result;
-                //    }
-                //}
             }
 
             var points = new List<PointShape>();
