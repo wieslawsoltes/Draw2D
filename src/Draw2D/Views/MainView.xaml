@@ -19,6 +19,7 @@
         <KeyBinding Command="{Binding NewContainerView}" Gesture="Ctrl+N"/>
         <KeyBinding Command="{Binding OpenContainerView}" Gesture="Ctrl+O"/>
         <KeyBinding Command="{Binding SaveContainerViewAs}" Gesture="Ctrl+S"/>
+        <KeyBinding Command="{Binding ExportSvgFile}" Gesture="Ctrl+E"/>
         <KeyBinding Command="{Binding Exit}" Gesture="Alt+F4"/>
     </UserControl.KeyBindings>
     <Grid RowDefinitions="Auto,5,*,5" ColumnDefinitions="340,Auto,*">
