@@ -435,7 +435,7 @@ namespace Draw2D.Editor
                 Title = title,
                 Width = 720,
                 Height = 630,
-                PrintBackground = new ArgbColor(0, 255, 255, 255),
+                PrintBackground = new ArgbColor(255, 255, 255, 255),
                 WorkBackground = new ArgbColor(255, 128, 128, 128),
                 InputBackground = new ArgbColor(255, 211, 211, 211),
                 Styles = new ObservableCollection<ShapeStyle>(),
