@@ -74,21 +74,7 @@ namespace Draw2D.Editor
 
         public void Initialize()
         {
-            var hitTest = new HitTest()
-            {
-                Registered = new Dictionary<string, IBounds>()
-            };
-
-            hitTest.Register(new PointBounds());
-            hitTest.Register(new LineBounds());
-            hitTest.Register(new CubicBezierBounds());
-            hitTest.Register(new QuadraticBezierBounds());
-            hitTest.Register(new ConicBounds());
-            hitTest.Register(new GroupBounds());
-            hitTest.Register(new PathBounds());
-            hitTest.Register(new RectangleBounds());
-            hitTest.Register(new EllipseBounds());
-            hitTest.Register(new TextBounds());
+            var hitTest = new HitTest();
 
             var gridSnapPointFilter = new GridSnapPointFilter()
             {

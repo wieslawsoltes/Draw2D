@@ -9,6 +9,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
+using Draw2D.ViewModels.Bounds;
 using Draw2D.ViewModels.Containers;
 using Draw2D.ViewModels.Shapes;
 using Draw2D.ViewModels.Style;
@@ -207,8 +208,6 @@ namespace Draw2D.ViewModels
 
     public interface IHitTest
     {
-        Dictionary<string, IBounds> Registered { get; set; }
-        void Register(IBounds hitTest);
         PointShape TryToGetPoint(IEnumerable<BaseShape> shapes, Point2 target, double radius, PointShape exclude);
         PointShape TryToGetPoint(BaseShape shape, Point2 target, double radius);
         BaseShape TryToGetShape(IEnumerable<BaseShape> shapes, Point2 target, double radius);
@@ -666,6 +665,8 @@ namespace Draw2D.ViewModels.Shapes
     [DataContract(IsReference = true)]
     public abstract class BaseShape : ViewModelBase, IDrawable, ISelectable, ICopyable
     {
+        internal static IBounds s_bounds = null;
+
         private ShapeStyle _style;
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
@@ -674,6 +675,9 @@ namespace Draw2D.ViewModels.Shapes
             get => _style;
             set => Update(ref _style, value);
         }
+
+        [IgnoreDataMember]
+        public virtual IBounds Bounds { get; } = s_bounds;
 
         public abstract void GetPoints(IList<PointShape> points);
 
@@ -713,8 +717,13 @@ namespace Draw2D.ViewModels.Shapes
     [DataContract(IsReference = true)]
     public abstract class BoxShape : ConnectableShape
     {
+        internal new static IBounds s_bounds = null;
+
         private PointShape _topLeft;
         private PointShape _bottomRight;
+
+        [IgnoreDataMember]
+        public override IBounds Bounds { get; } = s_bounds;
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public PointShape TopLeft
@@ -874,8 +883,13 @@ namespace Draw2D.ViewModels.Shapes
     [DataContract(IsReference = true)]
     public abstract class ConnectableShape : BaseShape, IConnectable
     {
+        internal new static IBounds s_bounds = null;
+
         private IList<PointShape> _points;
         private Text _text;
+
+        [IgnoreDataMember]
+        public override IBounds Bounds { get; } = s_bounds;
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public IList<PointShape> Points
@@ -999,10 +1013,15 @@ namespace Draw2D.ViewModels.Shapes
     [DataContract(IsReference = true)]
     public class ConicShape : ConnectableShape, ICopyable
     {
+        internal new static IBounds s_bounds = new ConicBounds();
+
         private PointShape _startPoint;
         private PointShape _point1;
         private PointShape _point2;
         private double _weight;
+
+        [IgnoreDataMember]
+        public override IBounds Bounds { get; } = s_bounds;
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public PointShape StartPoint
@@ -1262,10 +1281,15 @@ namespace Draw2D.ViewModels.Shapes
     [DataContract(IsReference = true)]
     public class CubicBezierShape : ConnectableShape, ICopyable
     {
+        internal new static IBounds s_bounds = new CubicBezierBounds();
+
         private PointShape _startPoint;
         private PointShape _point1;
         private PointShape _point2;
         private PointShape _point3;
+
+        [IgnoreDataMember]
+        public override IBounds Bounds { get; } = s_bounds;
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public PointShape StartPoint
@@ -1561,6 +1585,11 @@ namespace Draw2D.ViewModels.Shapes
     [DataContract(IsReference = true)]
     public class EllipseShape : BoxShape, ICopyable
     {
+        internal new static IBounds s_bounds = new EllipseBounds();
+
+        [IgnoreDataMember]
+        public override IBounds Bounds { get; } = s_bounds;
+
         public EllipseShape()
             : base()
         {
@@ -1650,9 +1679,14 @@ namespace Draw2D.ViewModels.Shapes
     [DataContract(IsReference = true)]
     public class FigureShape : BaseShape, ICanvasContainer, ICopyable
     {
+        internal new static IBounds s_bounds = new FigureBounds();
+
         private IList<BaseShape> _shapes;
         private bool _isFilled;
         private bool _isClosed;
+
+        [IgnoreDataMember]
+        public override IBounds Bounds { get; } = s_bounds;
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public IList<BaseShape> Shapes
@@ -1766,8 +1800,13 @@ namespace Draw2D.ViewModels.Shapes
     [DataContract(IsReference = true)]
     public class GroupShape : ConnectableShape, ICopyable
     {
+        internal new static IBounds s_bounds = new GroupBounds();
+
         private string _title;
         private IList<BaseShape> _shapes;
+
+        [IgnoreDataMember]
+        public override IBounds Bounds { get; } = s_bounds;
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public string Title
@@ -1902,8 +1941,13 @@ namespace Draw2D.ViewModels.Shapes
     [DataContract(IsReference = true)]
     public class LineShape : ConnectableShape, ICopyable
     {
+        internal new static IBounds s_bounds = new LineBounds();
+
         private PointShape _startPoint;
         private PointShape _point;
+
+        [IgnoreDataMember]
+        public override IBounds Bounds { get; } = s_bounds;
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public PointShape StartPoint
@@ -2134,9 +2178,14 @@ namespace Draw2D.ViewModels.Shapes
     [DataContract(IsReference = true)]
     public class PathShape : ConnectableShape, ICopyable
     {
+        internal new static IBounds s_bounds = new PathBounds();
+
         private string _title;
         private IList<FigureShape> _figures;
         private PathFillRule _fillRule;
+
+        [IgnoreDataMember]
+        public override IBounds Bounds { get; } = s_bounds;
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public string Title
@@ -2510,9 +2559,14 @@ namespace Draw2D.ViewModels.Shapes
     [DataContract(IsReference = true)]
     public class PointShape : BaseShape, ICopyable
     {
+        internal new static IBounds s_bounds = new PointBounds();
+
         private double _x;
         private double _y;
         private BaseShape _template;
+
+        [IgnoreDataMember]
+        public override IBounds Bounds { get; } = s_bounds;
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public double X
@@ -2607,9 +2661,14 @@ namespace Draw2D.ViewModels.Shapes
     [DataContract(IsReference = true)]
     public class QuadraticBezierShape : ConnectableShape, ICopyable
     {
+        internal new static IBounds s_bounds = new QuadraticBezierBounds();
+
         private PointShape _startPoint;
         private PointShape _point1;
         private PointShape _point2;
+
+        [IgnoreDataMember]
+        public override IBounds Bounds { get; } = s_bounds;
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public PointShape StartPoint
@@ -2861,6 +2920,11 @@ namespace Draw2D.ViewModels.Shapes
     [DataContract(IsReference = true)]
     public class RectangleShape : BoxShape, ICopyable
     {
+        internal new static IBounds s_bounds = new RectangleBounds();
+
+        [IgnoreDataMember]
+        public override IBounds Bounds { get; } = s_bounds;
+
         public RectangleShape()
             : base()
         {
@@ -2950,6 +3014,11 @@ namespace Draw2D.ViewModels.Shapes
     [DataContract(IsReference = true)]
     public class TextShape : BoxShape, ICopyable
     {
+        internal new static IBounds s_bounds = new TextBounds();
+
+        [IgnoreDataMember]
+        public override IBounds Bounds { get; } = s_bounds;
+
         public TextShape()
             : base()
         {
@@ -4764,31 +4833,29 @@ namespace Draw2D.ViewModels.Bounds
                 throw new ArgumentNullException("shape");
             }
 
-            var pointHitTest = hitTest.Registered[typeof(PointShape).Name];
-
-            if (pointHitTest.TryToGetPoint(cubicBezier.StartPoint, target, radius, hitTest) != null)
+            if (cubicBezier.StartPoint.Bounds?.TryToGetPoint(cubicBezier.StartPoint, target, radius, hitTest) != null)
             {
                 return cubicBezier.StartPoint;
             }
-
-            if (pointHitTest.TryToGetPoint(cubicBezier.Point1, target, radius, hitTest) != null)
+            
+            if (cubicBezier.Point1.Bounds?.TryToGetPoint(cubicBezier.Point1, target, radius, hitTest) != null)
             {
                 return cubicBezier.Point1;
             }
 
-            if (pointHitTest.TryToGetPoint(cubicBezier.Point2, target, radius, hitTest) != null)
+            if (cubicBezier.Point2.Bounds?.TryToGetPoint(cubicBezier.Point2, target, radius, hitTest) != null)
             {
                 return cubicBezier.Point2;
             }
 
-            if (pointHitTest.TryToGetPoint(cubicBezier.Point3, target, radius, hitTest) != null)
+            if (cubicBezier.Point3.Bounds?.TryToGetPoint(cubicBezier.Point3, target, radius, hitTest) != null)
             {
                 return cubicBezier.Point3;
             }
 
             foreach (var point in cubicBezier.Points)
             {
-                if (pointHitTest.TryToGetPoint(point, target, radius, hitTest) != null)
+                if (point.Bounds?.TryToGetPoint(point, target, radius, hitTest) != null)
                 {
                     return point;
                 }
@@ -4833,21 +4900,20 @@ namespace Draw2D.ViewModels.Bounds
         public PointShape TryToGetPoint(BaseShape shape, Point2 target, double radius, IHitTest hitTest)
         {
             var box = shape as BoxShape ?? throw new ArgumentNullException("shape");
-            var pointHitTest = hitTest.Registered[typeof(PointShape).Name];
 
-            if (pointHitTest.TryToGetPoint(box.TopLeft, target, radius, hitTest) != null)
+            if (box.TopLeft.Bounds?.TryToGetPoint(box.TopLeft, target, radius, hitTest) != null)
             {
                 return box.TopLeft;
             }
 
-            if (pointHitTest.TryToGetPoint(box.BottomRight, target, radius, hitTest) != null)
+            if (box.BottomRight.Bounds?.TryToGetPoint(box.BottomRight, target, radius, hitTest) != null)
             {
                 return box.BottomRight;
             }
 
             foreach (var point in box.Points)
             {
-                if (pointHitTest.TryToGetPoint(point, target, radius, hitTest) != null)
+                if (point.Bounds?.TryToGetPoint(point, target, radius, hitTest) != null)
                 {
                     return point;
                 }
@@ -4880,6 +4946,71 @@ namespace Draw2D.ViewModels.Bounds
     }
 
     [DataContract(IsReference = true)]
+    public class FigureBounds : IBounds
+    {
+        [IgnoreDataMember]
+        public string TargetType => typeof(FigureShape).Name;
+
+        public PointShape TryToGetPoint(BaseShape shape, Point2 target, double radius, IHitTest hitTest)
+        {
+            if (!(shape is FigureShape figure))
+            {
+                throw new ArgumentNullException("shape");
+            }
+
+            foreach (var figureShape in figure.Shapes)
+            {
+                var figureHitTest = FigureShape.s_bounds;
+                var result = figureHitTest.TryToGetPoint(figureShape, target, radius, hitTest);
+                if (result != null)
+                {
+                    return result;
+                }
+            }
+
+            return null;
+        }
+
+        public BaseShape Contains(BaseShape shape, Point2 target, double radius, IHitTest hitTest)
+        {
+            if (!(shape is FigureShape figure))
+            {
+                throw new ArgumentNullException("shape");
+            }
+
+            foreach (var figureShape in figure.Shapes)
+            {
+                var figureHitTest = FigureShape.s_bounds;
+                var result = figureHitTest.Contains(figureShape, target, radius, hitTest);
+                if (result != null)
+                {
+                    return figure;
+                }
+            }
+            return null;
+        }
+
+        public BaseShape Overlaps(BaseShape shape, Rect2 target, double radius, IHitTest hitTest)
+        {
+            if (!(shape is FigureShape figure))
+            {
+                throw new ArgumentNullException("shape");
+            }
+
+            foreach (var figureShape in figure.Shapes)
+            {
+                var figureHitTest = FigureShape.s_bounds;
+                var result = figureHitTest.Overlaps(figureShape, target, radius, hitTest);
+                if (result != null)
+                {
+                    return figure;
+                }
+            }
+            return null;
+        }
+    }
+
+    [DataContract(IsReference = true)]
     public class GroupBounds : IBounds
     {
         [IgnoreDataMember]
@@ -4892,11 +5023,9 @@ namespace Draw2D.ViewModels.Bounds
                 throw new ArgumentNullException("shape");
             }
 
-            var pointHitTest = hitTest.Registered[typeof(PointShape).Name];
-
             foreach (var groupPoint in group.Points)
             {
-                if (pointHitTest.TryToGetPoint(groupPoint, target, radius, hitTest) != null)
+                if (groupPoint.Bounds?.TryToGetPoint(groupPoint, target, radius, hitTest) != null)
                 {
                     return groupPoint;
                 }
@@ -4904,8 +5033,7 @@ namespace Draw2D.ViewModels.Bounds
 
             foreach (var groupShape in group.Shapes)
             {
-                var groupHitTest = hitTest.Registered[groupShape.GetType().Name];
-                var result = groupHitTest.TryToGetPoint(groupShape, target, radius, hitTest);
+                var result = groupShape.Bounds?.TryToGetPoint(groupShape, target, radius, hitTest);
                 if (result != null)
                 {
                     return result;
@@ -4924,8 +5052,7 @@ namespace Draw2D.ViewModels.Bounds
 
             foreach (var groupShape in group.Shapes)
             {
-                var groupHitTest = hitTest.Registered[groupShape.GetType().Name];
-                var result = groupHitTest.Contains(groupShape, target, radius, hitTest);
+                var result = groupShape.Bounds?.Contains(groupShape, target, radius, hitTest);
                 if (result != null)
                 {
                     return group;
@@ -4943,8 +5070,7 @@ namespace Draw2D.ViewModels.Bounds
 
             foreach (var groupShape in group.Shapes)
             {
-                var groupHitTest = hitTest.Registered[groupShape.GetType().Name];
-                var result = groupHitTest.Overlaps(groupShape, target, radius, hitTest);
+                var result = groupShape.Bounds?.Overlaps(groupShape, target, radius, hitTest);
                 if (result != null)
                 {
                     return group;
@@ -4967,21 +5093,19 @@ namespace Draw2D.ViewModels.Bounds
                 throw new ArgumentNullException("shape");
             }
 
-            var pointHitTest = hitTest.Registered[typeof(PointShape).Name];
-
-            if (pointHitTest.TryToGetPoint(line.StartPoint, target, radius, hitTest) != null)
+            if (line.StartPoint.Bounds?.TryToGetPoint(line.StartPoint, target, radius, hitTest) != null)
             {
                 return line.StartPoint;
             }
 
-            if (pointHitTest.TryToGetPoint(line.Point, target, radius, hitTest) != null)
+            if (line.Point.Bounds?.TryToGetPoint(line.Point, target, radius, hitTest) != null)
             {
                 return line.Point;
             }
 
             foreach (var point in line.Points)
             {
-                if (pointHitTest.TryToGetPoint(point, target, radius, hitTest) != null)
+                if (point.Bounds?.TryToGetPoint(point, target, radius, hitTest) != null)
                 {
                     return point;
                 }
@@ -5030,11 +5154,9 @@ namespace Draw2D.ViewModels.Bounds
                 throw new ArgumentNullException("shape");
             }
 
-            var pointHitTest = hitTest.Registered[typeof(PointShape).Name];
-
             foreach (var pathPoint in path.Points)
             {
-                if (pointHitTest.TryToGetPoint(pathPoint, target, radius, hitTest) != null)
+                if (pathPoint.Bounds?.TryToGetPoint(pathPoint, target, radius, hitTest) != null)
                 {
                     return pathPoint;
                 }
@@ -5044,8 +5166,7 @@ namespace Draw2D.ViewModels.Bounds
             {
                 foreach (var figureShape in figure.Shapes)
                 {
-                    var figureHitTest = hitTest.Registered[figureShape.GetType().Name];
-                    var result = figureHitTest.TryToGetPoint(figureShape, target, radius, hitTest);
+                    var result = figureShape.Bounds?.TryToGetPoint(figureShape, target, radius, hitTest);
                     if (result != null)
                     {
                         return result;
@@ -5067,8 +5188,7 @@ namespace Draw2D.ViewModels.Bounds
             {
                 foreach (var figureShape in figure.Shapes)
                 {
-                    var figureHitTest = hitTest.Registered[figureShape.GetType().Name];
-                    var result = figureHitTest.Contains(figureShape, target, radius, hitTest);
+                    var result = figureShape.Bounds?.Contains(figureShape, target, radius, hitTest);
                     if (result != null)
                     {
                         return result;
@@ -5093,8 +5213,7 @@ namespace Draw2D.ViewModels.Bounds
             {
                 foreach (var figureShape in figure.Shapes)
                 {
-                    var figureHitTest = hitTest.Registered[figureShape.GetType().Name];
-                    var result = figureHitTest.Overlaps(figureShape, target, radius, hitTest);
+                    var result = figureShape.Bounds?.Overlaps(figureShape, target, radius, hitTest);
                     if (result != null)
                     {
                         return result;
@@ -5164,26 +5283,24 @@ namespace Draw2D.ViewModels.Bounds
                 throw new ArgumentNullException("shape");
             }
 
-            var pointHitTest = hitTest.Registered[typeof(PointShape).Name];
-
-            if (pointHitTest.TryToGetPoint(quadraticBezier.StartPoint, target, radius, hitTest) != null)
+            if (quadraticBezier.StartPoint.Bounds?.TryToGetPoint(quadraticBezier.StartPoint, target, radius, hitTest) != null)
             {
                 return quadraticBezier.StartPoint;
             }
 
-            if (pointHitTest.TryToGetPoint(quadraticBezier.Point1, target, radius, hitTest) != null)
+            if (quadraticBezier.Point1.Bounds?.TryToGetPoint(quadraticBezier.Point1, target, radius, hitTest) != null)
             {
                 return quadraticBezier.Point1;
             }
 
-            if (pointHitTest.TryToGetPoint(quadraticBezier.Point2, target, radius, hitTest) != null)
+            if (quadraticBezier.Point2.Bounds?.TryToGetPoint(quadraticBezier.Point2, target, radius, hitTest) != null)
             {
                 return quadraticBezier.Point2;
             }
 
             foreach (var point in quadraticBezier.Points)
             {
-                if (pointHitTest.TryToGetPoint(point, target, radius, hitTest) != null)
+                if (point.Bounds?.TryToGetPoint(point, target, radius, hitTest) != null)
                 {
                     return point;
                 }
@@ -5232,26 +5349,24 @@ namespace Draw2D.ViewModels.Bounds
                 throw new ArgumentNullException("shape");
             }
 
-            var pointHitTest = hitTest.Registered[typeof(PointShape).Name];
-
-            if (pointHitTest.TryToGetPoint(conic.StartPoint, target, radius, hitTest) != null)
+            if (conic.StartPoint.Bounds?.TryToGetPoint(conic.StartPoint, target, radius, hitTest) != null)
             {
                 return conic.StartPoint;
             }
 
-            if (pointHitTest.TryToGetPoint(conic.Point1, target, radius, hitTest) != null)
+            if (conic.Point1.Bounds?.TryToGetPoint(conic.Point1, target, radius, hitTest) != null)
             {
                 return conic.Point1;
             }
 
-            if (pointHitTest.TryToGetPoint(conic.Point2, target, radius, hitTest) != null)
+            if (conic.Point2.Bounds?.TryToGetPoint(conic.Point2, target, radius, hitTest) != null)
             {
                 return conic.Point2;
             }
 
             foreach (var point in conic.Points)
             {
-                if (pointHitTest.TryToGetPoint(point, target, radius, hitTest) != null)
+                if (point.Bounds?.TryToGetPoint(point, target, radius, hitTest) != null)
                 {
                     return point;
                 }
@@ -5296,21 +5411,20 @@ namespace Draw2D.ViewModels.Bounds
         public PointShape TryToGetPoint(BaseShape shape, Point2 target, double radius, IHitTest hitTest)
         {
             var box = shape as BoxShape ?? throw new ArgumentNullException("shape");
-            var pointHitTest = hitTest.Registered[typeof(PointShape).Name];
 
-            if (pointHitTest.TryToGetPoint(box.TopLeft, target, radius, hitTest) != null)
+            if (box.TopLeft.Bounds?.TryToGetPoint(box.TopLeft, target, radius, hitTest) != null)
             {
                 return box.TopLeft;
             }
 
-            if (pointHitTest.TryToGetPoint(box.BottomRight, target, radius, hitTest) != null)
+            if (box.BottomRight.Bounds?.TryToGetPoint(box.BottomRight, target, radius, hitTest) != null)
             {
                 return box.BottomRight;
             }
 
             foreach (var point in box.Points)
             {
-                if (pointHitTest.TryToGetPoint(point, target, radius, hitTest) != null)
+                if (point.Bounds?.TryToGetPoint(point, target, radius, hitTest) != null)
                 {
                     return point;
                 }
@@ -5351,21 +5465,20 @@ namespace Draw2D.ViewModels.Bounds
         public PointShape TryToGetPoint(BaseShape shape, Point2 target, double radius, IHitTest hitTest)
         {
             var box = shape as BoxShape ?? throw new ArgumentNullException("shape");
-            var pointHitTest = hitTest.Registered[typeof(PointShape).Name];
 
-            if (pointHitTest.TryToGetPoint(box.TopLeft, target, radius, hitTest) != null)
+            if (box.TopLeft.Bounds?.TryToGetPoint(box.TopLeft, target, radius, hitTest) != null)
             {
                 return box.TopLeft;
             }
 
-            if (pointHitTest.TryToGetPoint(box.BottomRight, target, radius, hitTest) != null)
+            if (box.BottomRight.Bounds?.TryToGetPoint(box.BottomRight, target, radius, hitTest) != null)
             {
                 return box.BottomRight;
             }
 
             foreach (var point in box.Points)
             {
-                if (pointHitTest.TryToGetPoint(point, target, radius, hitTest) != null)
+                if (point.Bounds?.TryToGetPoint(point, target, radius, hitTest) != null)
                 {
                     return point;
                 }
@@ -5457,15 +5570,6 @@ namespace Draw2D.ViewModels.Bounds
     [DataContract(IsReference = true)]
     public class HitTest : ViewModelBase, IHitTest
     {
-        private Dictionary<string, IBounds> _registered;
-
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public Dictionary<string, IBounds> Registered
-        {
-            get => _registered;
-            set => Update(ref _registered, value);
-        }
-
         public HitTest()
         {
         }
@@ -5478,19 +5582,9 @@ namespace Draw2D.ViewModels.Bounds
             }
         }
 
-        public void Register(IBounds hitTest)
-        {
-            Registered.Add(hitTest.TargetType, hitTest);
-        }
-
-        private IBounds GetHitTest(object target)
-        {
-            return Registered.TryGetValue(target?.GetType().Name, out var hitTest) ? hitTest : null;
-        }
-
         public PointShape TryToGetPoint(BaseShape shape, Point2 target, double radius)
         {
-            return GetHitTest(shape)?.TryToGetPoint(shape, target, radius, this);
+            return shape.Bounds?.TryToGetPoint(shape, target, radius, this);
         }
 
         public PointShape TryToGetPoint(IEnumerable<BaseShape> shapes, Point2 target, double radius, PointShape exclude)
@@ -5510,7 +5604,7 @@ namespace Draw2D.ViewModels.Bounds
         {
             foreach (var shape in shapes.Reverse())
             {
-                var result = GetHitTest(shape)?.Contains(shape, target, radius, this);
+                var result = shape.Bounds?.Contains(shape, target, radius, this);
                 if (result != null)
                 {
                     return result;
@@ -5524,7 +5618,7 @@ namespace Draw2D.ViewModels.Bounds
             var selected = new HashSet<BaseShape>();
             foreach (var shape in shapes.Reverse())
             {
-                var result = GetHitTest(shape)?.Overlaps(shape, target, radius, this);
+                var result = shape.Bounds?.Overlaps(shape, target, radius, this);
                 if (result != null)
                 {
                     selected.Add(shape);
