@@ -25,7 +25,6 @@ namespace Draw2D.Editor
     {
         private ISelection _selection;
         private IHitTest _hitTest;
-        private Dictionary<string, IShapeDecorator> _decorators;
         private IList<string> _files;
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
@@ -40,13 +39,6 @@ namespace Draw2D.Editor
         {
             get => _hitTest;
             set => Update(ref _hitTest, value);
-        }
-
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public Dictionary<string, IShapeDecorator> Decorators
-        {
-            get => _decorators;
-            set => Update(ref _decorators, value);
         }
 
         [IgnoreDataMember]
@@ -411,24 +403,8 @@ namespace Draw2D.Editor
 
             var currentTool = tools.FirstOrDefault(t => t.Title == "Selection");
 
-            var decorators = new Dictionary<string, IShapeDecorator>
-            {
-                //{ typeof(PointShape).Name, new PointDecorator() },
-                { typeof(LineShape).Name, new LineDecorator() },
-                { typeof(CubicBezierShape).Name, new CubicBezierDecorator() },
-                { typeof(QuadraticBezierShape).Name, new QuadraticBezierDecorator() },
-                { typeof(ConicShape).Name, new ConicDecorator() },
-                { typeof(GroupShape).Name, new GroupDecorator() },
-                { typeof(FigureShape).Name, new FigureDecorator() },
-                { typeof(PathShape).Name, new PathDecorator() },
-                { typeof(RectangleShape).Name, new RectangleDecorator() },
-                { typeof(EllipseShape).Name, new EllipseDecorator() },
-                { typeof(TextShape).Name, new TextDecorator() }
-            };
-
             Selection = selectionTool;
             HitTest = hitTest;
-            Decorators = decorators;
             Files = null;
 
             var containerViews = new ObservableCollection<IContainerView>();
@@ -517,10 +493,7 @@ namespace Draw2D.Editor
         {
             if (containerView != null)
             {
-                containerView.DrawContainerView = new DrawContainerView()
-                {
-                    Decorators = _decorators
-                };
+                containerView.DrawContainerView = new DrawContainerView();
                 containerView.HitTest = _hitTest;
                 containerView.WorkingContainer = new CanvasContainer()
                 {

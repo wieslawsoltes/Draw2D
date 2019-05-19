@@ -11,6 +11,7 @@ using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
 using Draw2D.ViewModels.Bounds;
 using Draw2D.ViewModels.Containers;
+using Draw2D.ViewModels.Decorators;
 using Draw2D.ViewModels.Shapes;
 using Draw2D.ViewModels.Style;
 using Draw2D.ViewModels.Tools;
@@ -666,6 +667,7 @@ namespace Draw2D.ViewModels.Shapes
     public abstract class BaseShape : ViewModelBase, IDrawable, ISelectable, ICopyable
     {
         internal static IBounds s_bounds = null;
+        internal static IShapeDecorator s_decorator = null;
 
         private ShapeStyle _style;
 
@@ -678,6 +680,9 @@ namespace Draw2D.ViewModels.Shapes
 
         [IgnoreDataMember]
         public virtual IBounds Bounds { get; } = s_bounds;
+
+        [IgnoreDataMember]
+        public virtual IShapeDecorator Decorator { get; } = s_decorator;
 
         public abstract void GetPoints(IList<PointShape> points);
 
@@ -718,12 +723,16 @@ namespace Draw2D.ViewModels.Shapes
     public abstract class BoxShape : ConnectableShape
     {
         internal static new IBounds s_bounds = null;
+        internal static new IShapeDecorator s_decorator = null;
 
         private PointShape _topLeft;
         private PointShape _bottomRight;
 
         [IgnoreDataMember]
         public override IBounds Bounds { get; } = s_bounds;
+
+        [IgnoreDataMember]
+        public override IShapeDecorator Decorator { get; } = s_decorator;
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public PointShape TopLeft
@@ -884,12 +893,16 @@ namespace Draw2D.ViewModels.Shapes
     public abstract class ConnectableShape : BaseShape, IConnectable
     {
         internal static new IBounds s_bounds = null;
+        internal static new IShapeDecorator s_decorator = null;
 
         private IList<PointShape> _points;
         private Text _text;
 
         [IgnoreDataMember]
         public override IBounds Bounds { get; } = s_bounds;
+
+        [IgnoreDataMember]
+        public override IShapeDecorator Decorator { get; } = s_decorator;
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public IList<PointShape> Points
@@ -1014,6 +1027,7 @@ namespace Draw2D.ViewModels.Shapes
     public class ConicShape : ConnectableShape, ICopyable
     {
         internal static new IBounds s_bounds = new ConicBounds();
+        internal static new IShapeDecorator s_decorator = new ConicDecorator();
 
         private PointShape _startPoint;
         private PointShape _point1;
@@ -1022,6 +1036,9 @@ namespace Draw2D.ViewModels.Shapes
 
         [IgnoreDataMember]
         public override IBounds Bounds { get; } = s_bounds;
+
+        [IgnoreDataMember]
+        public override IShapeDecorator Decorator { get; } = s_decorator;
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public PointShape StartPoint
@@ -1282,6 +1299,7 @@ namespace Draw2D.ViewModels.Shapes
     public class CubicBezierShape : ConnectableShape, ICopyable
     {
         internal static new IBounds s_bounds = new CubicBezierBounds();
+        internal static new IShapeDecorator s_decorator = new CubicBezierDecorator();
 
         private PointShape _startPoint;
         private PointShape _point1;
@@ -1290,6 +1308,9 @@ namespace Draw2D.ViewModels.Shapes
 
         [IgnoreDataMember]
         public override IBounds Bounds { get; } = s_bounds;
+
+        [IgnoreDataMember]
+        public override IShapeDecorator Decorator { get; } = s_decorator;
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public PointShape StartPoint
@@ -1586,9 +1607,13 @@ namespace Draw2D.ViewModels.Shapes
     public class EllipseShape : BoxShape, ICopyable
     {
         internal static new IBounds s_bounds = new EllipseBounds();
+        internal static new IShapeDecorator s_decorator = new EllipseDecorator();
 
         [IgnoreDataMember]
         public override IBounds Bounds { get; } = s_bounds;
+
+        [IgnoreDataMember]
+        public override IShapeDecorator Decorator { get; } = s_decorator;
 
         public EllipseShape()
             : base()
@@ -1680,6 +1705,7 @@ namespace Draw2D.ViewModels.Shapes
     public class FigureShape : BaseShape, ICanvasContainer, ICopyable
     {
         internal static new IBounds s_bounds = new FigureBounds();
+        internal static new IShapeDecorator s_decorator = new FigureDecorator();
 
         private IList<BaseShape> _shapes;
         private bool _isFilled;
@@ -1687,6 +1713,9 @@ namespace Draw2D.ViewModels.Shapes
 
         [IgnoreDataMember]
         public override IBounds Bounds { get; } = s_bounds;
+
+        [IgnoreDataMember]
+        public override IShapeDecorator Decorator { get; } = s_decorator;
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public IList<BaseShape> Shapes
@@ -1801,12 +1830,16 @@ namespace Draw2D.ViewModels.Shapes
     public class GroupShape : ConnectableShape, ICopyable
     {
         internal static new IBounds s_bounds = new GroupBounds();
+        internal static new IShapeDecorator s_decorator = new GroupDecorator();
 
         private string _title;
         private IList<BaseShape> _shapes;
 
         [IgnoreDataMember]
         public override IBounds Bounds { get; } = s_bounds;
+
+        [IgnoreDataMember]
+        public override IShapeDecorator Decorator { get; } = s_decorator;
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public string Title
@@ -1942,12 +1975,16 @@ namespace Draw2D.ViewModels.Shapes
     public class LineShape : ConnectableShape, ICopyable
     {
         internal static new IBounds s_bounds = new LineBounds();
+        internal static new IShapeDecorator s_decorator = new LineDecorator();
 
         private PointShape _startPoint;
         private PointShape _point;
 
         [IgnoreDataMember]
         public override IBounds Bounds { get; } = s_bounds;
+
+        [IgnoreDataMember]
+        public override IShapeDecorator Decorator { get; } = s_decorator;
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public PointShape StartPoint
@@ -2179,6 +2216,7 @@ namespace Draw2D.ViewModels.Shapes
     public class PathShape : ConnectableShape, ICopyable
     {
         internal static new IBounds s_bounds = new PathBounds();
+        internal static new IShapeDecorator s_decorator = new PathDecorator();
 
         private string _title;
         private IList<FigureShape> _figures;
@@ -2186,6 +2224,9 @@ namespace Draw2D.ViewModels.Shapes
 
         [IgnoreDataMember]
         public override IBounds Bounds { get; } = s_bounds;
+
+        [IgnoreDataMember]
+        public override IShapeDecorator Decorator { get; } = s_decorator;
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public string Title
@@ -2560,6 +2601,7 @@ namespace Draw2D.ViewModels.Shapes
     public class PointShape : BaseShape, ICopyable
     {
         internal static new IBounds s_bounds = new PointBounds();
+        internal static new IShapeDecorator s_decorator = new PointDecorator();
 
         private double _x;
         private double _y;
@@ -2567,6 +2609,9 @@ namespace Draw2D.ViewModels.Shapes
 
         [IgnoreDataMember]
         public override IBounds Bounds { get; } = s_bounds;
+
+        [IgnoreDataMember]
+        public override IShapeDecorator Decorator { get; } = s_decorator;
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public double X
@@ -2662,6 +2707,7 @@ namespace Draw2D.ViewModels.Shapes
     public class QuadraticBezierShape : ConnectableShape, ICopyable
     {
         internal static new IBounds s_bounds = new QuadraticBezierBounds();
+        internal static new IShapeDecorator s_decorator = new QuadraticBezierDecorator();
 
         private PointShape _startPoint;
         private PointShape _point1;
@@ -2669,6 +2715,9 @@ namespace Draw2D.ViewModels.Shapes
 
         [IgnoreDataMember]
         public override IBounds Bounds { get; } = s_bounds;
+
+        [IgnoreDataMember]
+        public override IShapeDecorator Decorator { get; } = s_decorator;
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public PointShape StartPoint
@@ -2921,9 +2970,13 @@ namespace Draw2D.ViewModels.Shapes
     public class RectangleShape : BoxShape, ICopyable
     {
         internal static new IBounds s_bounds = new RectangleBounds();
+        internal static new IShapeDecorator s_decorator = new RectangleDecorator();
 
         [IgnoreDataMember]
         public override IBounds Bounds { get; } = s_bounds;
+
+        [IgnoreDataMember]
+        public override IShapeDecorator Decorator { get; } = s_decorator;
 
         public RectangleShape()
             : base()
@@ -3015,9 +3068,13 @@ namespace Draw2D.ViewModels.Shapes
     public class TextShape : BoxShape, ICopyable
     {
         internal static new IBounds s_bounds = new TextBounds();
+        internal static new IShapeDecorator s_decorator = new TextDecorator();
 
         [IgnoreDataMember]
         public override IBounds Bounds { get; } = s_bounds;
+
+        [IgnoreDataMember]
+        public override IShapeDecorator Decorator { get; } = s_decorator;
 
         public TextShape()
             : base()
@@ -3097,7 +3154,6 @@ namespace Draw2D.ViewModels.Containers
 {
     public interface IDrawContainerView : IDisposable
     {
-        Dictionary<string, IShapeDecorator> Decorators { get; set; }
         void Draw(IContainerView view, object context, double width, double height, double dx, double dy, double zx, double zy);
     }
 
@@ -3985,10 +4041,12 @@ namespace Draw2D.ViewModels.Decorators
 
         public override void Draw(object dc, BaseShape shape, IShapeRenderer renderer, ISelectionState selectionState, double dx, double dy, DrawMode mode)
         {
+#if false
             if (shape is PointShape pointShape)
             {
                 Draw(dc, renderer, pointShape, dx, dy, mode);
             }
+#endif
         }
     }
 

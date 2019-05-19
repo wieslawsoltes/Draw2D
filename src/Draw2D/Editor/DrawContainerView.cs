@@ -32,8 +32,6 @@ namespace Draw2D.Editor
         private SKPicture _pictureDecorators = null;
         private SKPicture _picturePoints = null;
 
-        public Dictionary<string, IShapeDecorator> Decorators { get; set; }
-
         public DrawContainerView()
         {
             _skiaRenderer = new SkiaShapeRenderer();
@@ -252,10 +250,7 @@ namespace Draw2D.Editor
 
             foreach (var shape in selected)
             {
-                if (Decorators.TryGetValue(shape.GetType().Name, out var helper))
-                {
-                    helper.Draw(context, shape, renderer, view.SelectionState, 0.0, 0.0, DrawMode.Shape);
-                }
+                shape.Decorator?.Draw(context, shape, renderer, view.SelectionState, 0.0, 0.0, DrawMode.Shape);
             }
         }
 
