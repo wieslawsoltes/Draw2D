@@ -4960,8 +4960,7 @@ namespace Draw2D.ViewModels.Bounds
 
             foreach (var figureShape in figure.Shapes)
             {
-                var figureHitTest = FigureShape.s_bounds;
-                var result = figureHitTest.TryToGetPoint(figureShape, target, radius, hitTest);
+                var result = figureShape.Bounds?.TryToGetPoint(figureShape, target, radius, hitTest);
                 if (result != null)
                 {
                     return result;
@@ -4980,11 +4979,10 @@ namespace Draw2D.ViewModels.Bounds
 
             foreach (var figureShape in figure.Shapes)
             {
-                var figureHitTest = FigureShape.s_bounds;
-                var result = figureHitTest.Contains(figureShape, target, radius, hitTest);
+                var result = figureShape.Bounds?.Contains(figureShape, target, radius, hitTest);
                 if (result != null)
                 {
-                    return figure;
+                    return result;
                 }
             }
             return null;
@@ -4999,11 +4997,10 @@ namespace Draw2D.ViewModels.Bounds
 
             foreach (var figureShape in figure.Shapes)
             {
-                var figureHitTest = FigureShape.s_bounds;
-                var result = figureHitTest.Overlaps(figureShape, target, radius, hitTest);
+                var result = figureShape.Bounds?.Overlaps(figureShape, target, radius, hitTest);
                 if (result != null)
                 {
-                    return figure;
+                    return result;
                 }
             }
             return null;
@@ -5164,14 +5161,19 @@ namespace Draw2D.ViewModels.Bounds
 
             foreach (var figure in path.Figures)
             {
-                foreach (var figureShape in figure.Shapes)
+                var result = figure.Bounds?.TryToGetPoint(figure, target, radius, hitTest);
+                if (result != null)
                 {
-                    var result = figureShape.Bounds?.TryToGetPoint(figureShape, target, radius, hitTest);
-                    if (result != null)
-                    {
-                        return result;
-                    }
+                    return result;
                 }
+                //foreach (var figureShape in figure.Shapes)
+                //{
+                //    var result = figureShape.Bounds?.TryToGetPoint(figureShape, target, radius, hitTest);
+                //    if (result != null)
+                //    {
+                //        return result;
+                //    }
+                //}
             }
 
             return null;
@@ -5186,14 +5188,19 @@ namespace Draw2D.ViewModels.Bounds
 
             foreach (var figure in path.Figures)
             {
-                foreach (var figureShape in figure.Shapes)
+                var result = figure.Bounds?.Contains(figure, target, radius, hitTest);
+                if (result != null)
                 {
-                    var result = figureShape.Bounds?.Contains(figureShape, target, radius, hitTest);
-                    if (result != null)
-                    {
-                        return result;
-                    }
+                    return result;
                 }
+                //foreach (var figureShape in figure.Shapes)
+                //{
+                //    var result = figureShape.Bounds?.Contains(figureShape, target, radius, hitTest);
+                //    if (result != null)
+                //    {
+                //        return result;
+                //    }
+                //}
             }
 
             var points = new List<PointShape>();
@@ -5211,14 +5218,19 @@ namespace Draw2D.ViewModels.Bounds
 
             foreach (var figure in path.Figures)
             {
-                foreach (var figureShape in figure.Shapes)
+                var result = figure.Bounds?.Overlaps(figure, target, radius, hitTest);
+                if (result != null)
                 {
-                    var result = figureShape.Bounds?.Overlaps(figureShape, target, radius, hitTest);
-                    if (result != null)
-                    {
-                        return result;
-                    }
+                    return result;
                 }
+                //foreach (var figureShape in figure.Shapes)
+                //{
+                //    var result = figureShape.Bounds?.Overlaps(figureShape, target, radius, hitTest);
+                //    if (result != null)
+                //    {
+                //        return result;
+                //    }
+                //}
             }
 
             var points = new List<PointShape>();
