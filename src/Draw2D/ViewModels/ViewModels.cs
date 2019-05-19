@@ -93,6 +93,7 @@ namespace Draw2D.ViewModels
         double OffsetY { get; set; }
         bool IsPanning { get; set; }
         bool IsZooming { get; set; }
+        bool CustomDraw { get; set; }
         FitMode InitFitMode { get; set; }
         FitMode AutoFitMode { get; set; }
     }
@@ -3185,6 +3186,7 @@ namespace Draw2D.ViewModels.Containers
         private double _offsetY;
         private bool _isPanning;
         private bool _isZooming;
+        private bool _customDraw;
         private FitMode _initFitMode;
         private FitMode _autoFitMode;
 
@@ -3242,6 +3244,13 @@ namespace Draw2D.ViewModels.Containers
         }
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public bool CustomDraw
+        {
+            get => _customDraw;
+            set => Update(ref _customDraw, value);
+        }
+
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public FitMode InitFitMode
         {
             get => _initFitMode;
@@ -3275,6 +3284,7 @@ namespace Draw2D.ViewModels.Containers
                 OffsetY = this.OffsetY,
                 IsPanning = this.IsPanning,
                 IsZooming = this.IsZooming,
+                CustomDraw = this.CustomDraw,
                 InitFitMode = this.InitFitMode,
                 AutoFitMode = this.AutoFitMode
             };
