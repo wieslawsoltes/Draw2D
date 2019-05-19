@@ -423,7 +423,7 @@ namespace Draw2D.Editor
 
         public void Draw(IContainerView view, object context, double width, double height, double dx, double dy, double zx, double zy)
         {
-            if (context is DrawingContext drawingContext)
+            if (context is DrawingContext drawingContext && width > 0 && height > 0)
             {
 #if true
                 if (_renderTarget == null)
