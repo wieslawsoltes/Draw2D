@@ -11,7 +11,6 @@ using Draw2D.Renderers;
 using Draw2D.ViewModels;
 using Draw2D.ViewModels.Bounds;
 using Draw2D.ViewModels.Containers;
-using Draw2D.ViewModels.Decorators;
 using Draw2D.ViewModels.Filters;
 using Draw2D.ViewModels.Intersections;
 using Draw2D.ViewModels.Shapes;
