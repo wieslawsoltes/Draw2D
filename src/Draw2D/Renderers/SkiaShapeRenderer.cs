@@ -292,6 +292,7 @@ namespace Draw2D.Renderers
                     }
                 }
             }
+
             return pathShape;
         }
 
