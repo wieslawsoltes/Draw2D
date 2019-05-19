@@ -5,56 +5,11 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Media;
-using Avalonia.Platform;
-using Avalonia.Rendering.SceneGraph;
-using Avalonia.Skia;
 using Avalonia.VisualTree;
 using Draw2D.ViewModels;
 
 namespace Draw2D.Controls
 {
-    internal struct CustomDrawOperation : ICustomDrawOperation
-    {
-        private readonly IDrawTarget _drawTarget;
-        private readonly double _width;
-        private readonly double _height;
-        private readonly double _dx;
-        private readonly double _dy;
-        private readonly double _zx;
-        private readonly double _zy;
-
-        public Rect Bounds { get; }
-
-        public bool HitTest(Point p) => false;
-
-        public bool Equals(ICustomDrawOperation other) => false;
-
-        public CustomDrawOperation(IDrawTarget drawTarget, double width, double height, double dx, double dy, double zx, double zy)
-        {
-            _drawTarget = drawTarget;
-            _width = width;
-            _height = height;
-            _dx = dx;
-            _dy = dy;
-            _zx = zx;
-            _zy = zy;
-            Bounds = new Rect(0, 0, width, height);
-        }
-
-        public void Render(IDrawingContextImpl context)
-        {
-            var canvas = (context as ISkiaDrawingContextImpl)?.SkCanvas;
-            if (canvas != null && _drawTarget != null)
-            {
-                _drawTarget.Draw(canvas, _width, _height, _dx, _dy, _zx, _zy);
-            }
-        }
-
-        public void Dispose()
-        {
-        }
-    }
-
     public class ZoomControl : Border, IInputService, IZoomService
     {
         private IZoomServiceState _zoomServiceState = null;
@@ -565,14 +520,7 @@ namespace Draw2D.Controls
 
                 GetOffset(out double dx, out double dy, out double zx, out double zy);
 
-                if (_zoomServiceState.CustomDraw)
-                {
-                    context.Custom(new CustomDrawOperation(_drawTarget, Bounds.Width, Bounds.Height, dx, dy, zx, zy));
-                }
-                else
-                {
-                    _drawTarget.Draw(context, Bounds.Width, Bounds.Height, dx, dy, zx, zy);
-                }
+                _drawTarget.Draw(context, Bounds.Width, Bounds.Height, dx, dy, zx, zy);
 
                 if (_zoomServiceState.IsZooming == true)
                 {

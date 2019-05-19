@@ -429,44 +429,35 @@ namespace Draw2D.Editor
 
         public void Draw(IContainerView view, object context, double width, double height, double dx, double dy, double zx, double zy)
         {
-            switch (context)
+            if (context is DrawingContext drawingContext)
             {
-                case DrawingContext drawingContext:
+#if true
+                if (_renderTarget == null)
+                {
+                    _renderTarget = new RenderTargetBitmap(new PixelSize((int)width, (int)height), new Vector(96, 96));
+                }
+                else
+                {
+                    if (_renderTarget.PixelSize.Width != (int)width || _renderTarget.PixelSize.Height != (int)height)
                     {
-                        //*
-                        if (_renderTarget == null)
-                        {
-                            _renderTarget = new RenderTargetBitmap(new PixelSize((int)width, (int)height), new Vector(96, 96));
-                        }
-                        else
-                        {
-                            if (_renderTarget.PixelSize.Width != (int)width || _renderTarget.PixelSize.Width != (int)height)
-                            {
-                                _renderTarget.Dispose();
-                                _renderTarget = new RenderTargetBitmap(new PixelSize((int)width, (int)height), new Vector(96, 96));
-                            }
-                        }
-
-                        using (var _drawingContextImpl = _renderTarget.CreateDrawingContext(null))
-                        {
-                            var _skiaDrawingContextImpl = _drawingContextImpl as ISkiaDrawingContextImpl;
-
-                            DrawSkia(view, _skiaDrawingContextImpl.SkCanvas, width, height, dx, dy, zx, zy);
-
-                            drawingContext.DrawImage(_renderTarget, 1.0,
-                                new Rect(0, 0, _renderTarget.PixelSize.Width, _renderTarget.PixelSize.Height),
-                                new Rect(0, 0, width, height));
-                        }
-                        //*/
-                        // NOTE: This is much slower.
-                        //DrawAvalonia(view, drawingContext, width, height, dx, dy, zx, zy);
+                        _renderTarget.Dispose();
+                        _renderTarget = new RenderTargetBitmap(new PixelSize((int)width, (int)height), new Vector(96, 96));
                     }
-                    break;
-                case SKCanvas canvas:
-                    {
-                        DrawSkia(view, canvas, width, height, dx, dy, zx, zy);
-                    }
-                    break;
+                }
+
+                using (var _drawingContextImpl = _renderTarget.CreateDrawingContext(null))
+                {
+                    var _skiaDrawingContextImpl = _drawingContextImpl as ISkiaDrawingContextImpl;
+
+                    DrawSkia(view, _skiaDrawingContextImpl.SkCanvas, width, height, dx, dy, zx, zy);
+
+                    drawingContext.DrawImage(_renderTarget, 1.0,
+                        new Rect(0, 0, _renderTarget.PixelSize.Width, _renderTarget.PixelSize.Height),
+                        new Rect(0, 0, width, height));
+                }
+#else
+                DrawAvalonia(view, drawingContext, width, height, dx, dy, zx, zy);
+#endif
             }
         }
     }
