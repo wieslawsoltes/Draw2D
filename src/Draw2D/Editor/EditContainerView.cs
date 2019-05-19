@@ -674,7 +674,7 @@ namespace Draw2D.Editor
 
         public void Exit()
         {
-            Application.Current.Windows.FirstOrDefault()?.Close();
+            Application.Current.Shutdown();
         }
 
         public void CreateDemoGroup(IToolContext context)
