@@ -435,13 +435,10 @@ namespace Draw2D.Editor
                 {
                     _renderTarget = new RenderTargetBitmap(new PixelSize((int)width, (int)height), new Vector(96, 96));
                 }
-                else
+                else if (_renderTarget.PixelSize.Width != (int)width || _renderTarget.PixelSize.Height != (int)height)
                 {
-                    if (_renderTarget.PixelSize.Width != (int)width || _renderTarget.PixelSize.Height != (int)height)
-                    {
-                        _renderTarget.Dispose();
-                        _renderTarget = new RenderTargetBitmap(new PixelSize((int)width, (int)height), new Vector(96, 96));
-                    }
+                    _renderTarget.Dispose();
+                    _renderTarget = new RenderTargetBitmap(new PixelSize((int)width, (int)height), new Vector(96, 96));
                 }
 
                 using (var _drawingContextImpl = _renderTarget.CreateDrawingContext(null))
