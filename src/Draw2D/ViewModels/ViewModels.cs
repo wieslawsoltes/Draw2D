@@ -3766,7 +3766,7 @@ namespace Draw2D.ViewModels.Decorators
             };
         }
 
-        public void DrawLine(object dc, IShapeRenderer renderer, PointShape a, PointShape b, double dx, double dy, DrawMode mode)
+        internal void DrawLine(object dc, IShapeRenderer renderer, PointShape a, PointShape b, double dx, double dy, DrawMode mode)
         {
             _line.Style = _strokeStyle;
             _line.StartPoint.X = a.X;
@@ -3776,7 +3776,17 @@ namespace Draw2D.ViewModels.Decorators
             _line.Draw(dc, renderer, dx, dy, mode, null, null);
         }
 
-        public void FillEllipse(object dc, IShapeRenderer renderer, PointShape s, double radius, double dx, double dy, DrawMode mode)
+        internal void DrawLine(object dc, IShapeRenderer renderer, double ax, double ay, double bx, double by, double dx, double dy, DrawMode mode)
+        {
+            _line.Style = _strokeStyle;
+            _line.StartPoint.X = ax;
+            _line.StartPoint.Y = ay;
+            _line.Point.X = bx;
+            _line.Point.Y = by;
+            _line.Draw(dc, renderer, dx, dy, mode, null, null);
+        }
+
+        internal void FillEllipse(object dc, IShapeRenderer renderer, PointShape s, double radius, double dx, double dy, DrawMode mode)
         {
             _ellipse.Style = _fillStyle;
             _ellipse.TopLeft.X = s.X - radius;
@@ -3786,7 +3796,17 @@ namespace Draw2D.ViewModels.Decorators
             _ellipse.Draw(dc, renderer, dx, dy, mode, null, null);
         }
 
-        public void DrawEllipse(object dc, IShapeRenderer renderer, PointShape s, double radius, double dx, double dy, DrawMode mode)
+        internal void FillEllipse(object dc, IShapeRenderer renderer, double sx, double sy, double radius, double dx, double dy, DrawMode mode)
+        {
+            _ellipse.Style = _fillStyle;
+            _ellipse.TopLeft.X = sx - radius;
+            _ellipse.TopLeft.Y = sy - radius;
+            _ellipse.BottomRight.X = sx + radius;
+            _ellipse.BottomRight.Y = sy + radius;
+            _ellipse.Draw(dc, renderer, dx, dy, mode, null, null);
+        }
+
+        internal void DrawEllipse(object dc, IShapeRenderer renderer, PointShape s, double radius, double dx, double dy, DrawMode mode)
         {
             _ellipse.Style = _strokeStyle;
             _ellipse.TopLeft.X = s.X - radius;
@@ -3796,7 +3816,17 @@ namespace Draw2D.ViewModels.Decorators
             _ellipse.Draw(dc, renderer, dx, dy, mode, null, null);
         }
 
-        public void FillEllipse(object dc, IShapeRenderer renderer, PointShape a, PointShape b, double dx, double dy, DrawMode mode)
+        internal void DrawEllipse(object dc, IShapeRenderer renderer, double sx, double sy, double radius, double dx, double dy, DrawMode mode)
+        {
+            _ellipse.Style = _strokeStyle;
+            _ellipse.TopLeft.X = sx - radius;
+            _ellipse.TopLeft.Y = sy - radius;
+            _ellipse.BottomRight.X = sx+ radius;
+            _ellipse.BottomRight.Y = sy + radius;
+            _ellipse.Draw(dc, renderer, dx, dy, mode, null, null);
+        }
+
+        internal void FillEllipse(object dc, IShapeRenderer renderer, PointShape a, PointShape b, double dx, double dy, DrawMode mode)
         {
             _ellipse.Style = _fillStyle;
             _ellipse.TopLeft.X = a.X;
@@ -3806,7 +3836,17 @@ namespace Draw2D.ViewModels.Decorators
             _ellipse.Draw(dc, renderer, dx, dy, mode, null, null);
         }
 
-        public void DrawEllipse(object dc, IShapeRenderer renderer, PointShape a, PointShape b, double dx, double dy, DrawMode mode)
+        internal void FillEllipse(object dc, IShapeRenderer renderer, double ax, double ay, double bx, double by, double dx, double dy, DrawMode mode)
+        {
+            _ellipse.Style = _fillStyle;
+            _ellipse.TopLeft.X = ax;
+            _ellipse.TopLeft.Y = ay;
+            _ellipse.BottomRight.X = bx;
+            _ellipse.BottomRight.Y = by;
+            _ellipse.Draw(dc, renderer, dx, dy, mode, null, null);
+        }
+
+        internal void DrawEllipse(object dc, IShapeRenderer renderer, PointShape a, PointShape b, double dx, double dy, DrawMode mode)
         {
             _ellipse.Style = _strokeStyle;
             _ellipse.TopLeft.X = a.X;
@@ -3816,7 +3856,17 @@ namespace Draw2D.ViewModels.Decorators
             _ellipse.Draw(dc, renderer, dx, dy, mode, null, null);
         }
 
-        public void FillRectangle(object dc, IShapeRenderer renderer, PointShape s, double radius, double dx, double dy, DrawMode mode)
+        internal void DrawEllipse(object dc, IShapeRenderer renderer, double ax, double ay, double bx, double by, double dx, double dy, DrawMode mode)
+        {
+            _ellipse.Style = _strokeStyle;
+            _ellipse.TopLeft.X = ax;
+            _ellipse.TopLeft.Y = ay;
+            _ellipse.BottomRight.X = bx;
+            _ellipse.BottomRight.Y = by;
+            _ellipse.Draw(dc, renderer, dx, dy, mode, null, null);
+        }
+
+        internal void FillRectangle(object dc, IShapeRenderer renderer, PointShape s, double radius, double dx, double dy, DrawMode mode)
         {
             _rectangle.Style = _fillStyle;
             _rectangle.TopLeft.X = s.X - radius;
@@ -3826,7 +3876,17 @@ namespace Draw2D.ViewModels.Decorators
             _rectangle.Draw(dc, renderer, dx, dy, mode, null, null);
         }
 
-        public void DrawRectangle(object dc, IShapeRenderer renderer, PointShape s, double radius, double dx, double dy, DrawMode mode)
+        internal void FillRectangle(object dc, IShapeRenderer renderer, double sx, double sy, double radius, double dx, double dy, DrawMode mode)
+        {
+            _rectangle.Style = _fillStyle;
+            _rectangle.TopLeft.X = sx - radius;
+            _rectangle.TopLeft.Y = sy - radius;
+            _rectangle.BottomRight.X = sx + radius;
+            _rectangle.BottomRight.Y = sy + radius;
+            _rectangle.Draw(dc, renderer, dx, dy, mode, null, null);
+        }
+
+        internal void DrawRectangle(object dc, IShapeRenderer renderer, PointShape s, double radius, double dx, double dy, DrawMode mode)
         {
             _rectangle.Style = _strokeStyle;
             _rectangle.TopLeft.X = s.X - radius;
@@ -3836,7 +3896,17 @@ namespace Draw2D.ViewModels.Decorators
             _rectangle.Draw(dc, renderer, dx, dy, mode, null, null);
         }
 
-        public void FillRectangle(object dc, IShapeRenderer renderer, PointShape a, PointShape b, double dx, double dy, DrawMode mode)
+        internal void DrawRectangle(object dc, IShapeRenderer renderer, double sx, double sy, double radius, double dx, double dy, DrawMode mode)
+        {
+            _rectangle.Style = _strokeStyle;
+            _rectangle.TopLeft.X = sx - radius;
+            _rectangle.TopLeft.Y = sy - radius;
+            _rectangle.BottomRight.X = sx + radius;
+            _rectangle.BottomRight.Y = sy + radius;
+            _rectangle.Draw(dc, renderer, dx, dy, mode, null, null);
+        }
+
+        internal void FillRectangle(object dc, IShapeRenderer renderer, PointShape a, PointShape b, double dx, double dy, DrawMode mode)
         {
             _rectangle.Style = _fillStyle;
             _rectangle.TopLeft.X = a.X;
@@ -3846,7 +3916,17 @@ namespace Draw2D.ViewModels.Decorators
             _rectangle.Draw(dc, renderer, dx, dy, mode, null, null);
         }
 
-        public void DrawRectangle(object dc, IShapeRenderer renderer, PointShape a, PointShape b, double dx, double dy, DrawMode mode)
+        internal void FillRectangle(object dc, IShapeRenderer renderer, double ax, double ay, double bx, double by, double dx, double dy, DrawMode mode)
+        {
+            _rectangle.Style = _fillStyle;
+            _rectangle.TopLeft.X = ax;
+            _rectangle.TopLeft.Y = ay;
+            _rectangle.BottomRight.X = bx;
+            _rectangle.BottomRight.Y = by;
+            _rectangle.Draw(dc, renderer, dx, dy, mode, null, null);
+        }
+
+        internal void DrawRectangle(object dc, IShapeRenderer renderer, PointShape a, PointShape b, double dx, double dy, DrawMode mode)
         {
             _rectangle.Style = _strokeStyle;
             _rectangle.TopLeft.X = a.X;
@@ -3856,7 +3936,17 @@ namespace Draw2D.ViewModels.Decorators
             _rectangle.Draw(dc, renderer, dx, dy, mode, null, null);
         }
 
-        public void DrawText(object dc, IShapeRenderer renderer, string text, PointShape a, PointShape b, double dx, double dy, DrawMode mode)
+        internal void DrawRectangle(object dc, IShapeRenderer renderer, double ax, double ay, double bx, double by, double dx, double dy, DrawMode mode)
+        {
+            _rectangle.Style = _strokeStyle;
+            _rectangle.TopLeft.X = ax;
+            _rectangle.TopLeft.Y = ay;
+            _rectangle.BottomRight.X = bx;
+            _rectangle.BottomRight.Y = by;
+            _rectangle.Draw(dc, renderer, dx, dy, mode, null, null);
+        }
+
+        internal void DrawText(object dc, IShapeRenderer renderer, string text, PointShape a, PointShape b, double dx, double dy, DrawMode mode)
         {
             _text.Style = _strokeStyle;
             _text.TopLeft.X = a.X;
@@ -3864,6 +3954,44 @@ namespace Draw2D.ViewModels.Decorators
             _text.BottomRight.X = b.X;
             _text.BottomRight.Y = b.Y;
             _text.Draw(dc, renderer, dx, dy, mode, null, null);
+        }
+
+        internal void DrawText(object dc, IShapeRenderer renderer, string text, double ax, double ay, double bx, double by, double dx, double dy, DrawMode mode)
+        {
+            _text.Style = _strokeStyle;
+            _text.TopLeft.X = ax;
+            _text.TopLeft.Y = ay;
+            _text.BottomRight.X = bx;
+            _text.BottomRight.Y = by;
+            _text.Draw(dc, renderer, dx, dy, mode, null, null);
+        }
+
+        internal void GetBoxFromPoints(List<PointShape> points, out double ax, out double ay, out double bx, out double by)
+        {
+            ax = double.MaxValue;
+            ay = double.MaxValue;
+            bx = double.MinValue;
+            by = double.MinValue;
+
+            foreach (var point in points)
+            {
+                ax = Math.Min(ax, point.X);
+                ay = Math.Min(ay, point.Y);
+                bx = Math.Max(bx, point.X);
+                by = Math.Max(by, point.Y);
+            }
+        }
+
+        internal void DrawBoxFromPoints(object dc, IShapeRenderer renderer, BaseShape shape, double dx, double dy, DrawMode mode)
+        {
+            var points = new List<PointShape>();
+            shape.GetPoints(points);
+
+            if (points.Count >= 2)
+            {
+                GetBoxFromPoints(points, out double ax, out double ay, out double bx, out double by);
+                DrawRectangle(dc, renderer, ax, ay, bx, by, dx, dy, mode);
+            }
         }
 
         public abstract void Draw(object dc, BaseShape shape, IShapeRenderer renderer, ISelectionState selectionState, double dx, double dy, DrawMode mode);
@@ -3925,16 +4053,19 @@ namespace Draw2D.ViewModels.Decorators
     [DataContract(IsReference = true)]
     public class GroupDecorator : CommonDecorator
     {
-        public void Draw(object dc, IShapeRenderer renderer, GroupShape group, double dx, double dy, DrawMode mode)
+        public void Draw(object dc, IShapeRenderer renderer, GroupShape group, ISelectionState selectionState, double dx, double dy, DrawMode mode)
         {
-            // TODO: Draw group shape decorator.
+            if (selectionState.IsSelected(group))
+            {
+                DrawBoxFromPoints(dc, renderer, group, dx, dy, mode);
+            }
         }
 
         public override void Draw(object dc, BaseShape shape, IShapeRenderer renderer, ISelectionState selectionState, double dx, double dy, DrawMode mode)
         {
             if (shape is GroupShape group)
             {
-                Draw(dc, renderer, group, dx, dy, mode);
+                Draw(dc, renderer, group, selectionState, dx, dy, mode);
             }
         }
     }
@@ -3989,6 +4120,11 @@ namespace Draw2D.ViewModels.Decorators
 
         public void DrawFigure(object dc, IShapeRenderer renderer, FigureShape figure, ISelectionState selectionState, double dx, double dy, DrawMode mode)
         {
+            if (selectionState.IsSelected(figure))
+            {
+                DrawBoxFromPoints(dc, renderer, figure, dx, dy, mode);
+            }
+
             foreach (var shape in figure.Shapes)
             {
                 DrawShape(dc, renderer, shape, selectionState, dx, dy, mode);
@@ -4016,6 +4152,11 @@ namespace Draw2D.ViewModels.Decorators
 
         public void Draw(object dc, IShapeRenderer renderer, PathShape path, ISelectionState selectionState, double dx, double dy, DrawMode mode)
         {
+            if (selectionState.IsSelected(path))
+            {
+                DrawBoxFromPoints(dc, renderer, path, dx, dy, mode);
+            }
+
             foreach (var figure in path.Figures)
             {
                 _figureDecorator.Draw(dc, figure, renderer, selectionState, dx, dy, mode);
