@@ -7,7 +7,6 @@ using System.Linq;
 using Avalonia;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
-using Avalonia.Platform;
 using Avalonia.Skia;
 using Draw2D.Renderers;
 using Draw2D.ViewModels;
