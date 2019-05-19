@@ -16,6 +16,8 @@ using Draw2D.ViewModels.Intersections;
 using Draw2D.ViewModels.Shapes;
 using Draw2D.ViewModels.Style;
 using Draw2D.ViewModels.Tools;
+using SkiaSharp;
+using SkiaSharp.Extended.Svg;
 
 namespace Draw2D.Editor
 {
@@ -588,6 +590,124 @@ namespace Draw2D.Editor
             {
                 var path = result;
                 Save(path);
+            }
+        }
+
+        public void ImportSvg(string path)
+        {
+            var svg = new SkiaSharp.Extended.Svg.SKSvg();
+            var picture = svg.Load(path);
+            // TODO: Convert picture to shapes.
+        }
+
+        private void Export(SKCanvas canvas, IContainerView view)
+        {
+            using (var renderer = new SkiaShapeRenderer())
+            using (var background = SkiaHelper.ToSKPaintBrush(view.PrintBackground))
+            {
+                canvas.DrawRect(SkiaHelper.ToRect(0.0, 0.0, view.Width, view.Height), background);
+                view.CurrentContainer.Draw(canvas, renderer, 0.0, 0.0, DrawMode.Shape, null, null);
+            }
+        }
+
+        public void ExportSvg(string path, IContainerView view)
+        {
+            using (var stream = new SKFileWStream(path))
+            using (var writer = new SKXmlStreamWriter(stream))
+            using (var canvas = SKSvgCanvas.Create(SKRect.Create(0, 0, (int)view.Width, (int)view.Height), writer))
+            {
+                Export(canvas, view);
+            }
+        }
+
+        public void ExportPng(string path, IContainerView view)
+        {
+            var info = new SKImageInfo((int)view.Width, (int)view.Height);
+            using (var bitmap = new SKBitmap(info))
+            {
+                using (var canvas = new SKCanvas(bitmap))
+                {
+                    Export(canvas, view);
+                }
+                using (var image = SKImage.FromBitmap(bitmap))
+                using (var data = image.Encode(SKEncodedImageFormat.Png, 100))
+                using (var stream = File.OpenWrite(path))
+                {
+                    data.SaveTo(stream);
+                }
+            }
+        }
+
+        public void ExportPdf(string path, IContainerView view)
+        {
+            using (var stream = new SKFileWStream(path))
+            {
+                using (var pdf = SKDocument.CreatePdf(stream, 72.0f))
+                {
+                    using (var canvas = pdf.BeginPage((float)view.Width, (float)view.Height))
+                    {
+                        Export(canvas, view);
+                    }
+                    pdf.Close();
+                }
+            }
+        }
+
+        public async void ImportSvgFile()
+        {
+            var dlg = new OpenFileDialog();
+            dlg.Filters.Add(new FileDialogFilter() { Name = "Svg Files", Extensions = { "svg" } });
+            dlg.Filters.Add(new FileDialogFilter() { Name = "All Files", Extensions = { "*" } });
+            var result = await dlg.ShowAsync(Application.Current.Windows[0]);
+            if (result != null)
+            {
+                var path = result.FirstOrDefault();
+                ImportSvg(path);
+            }
+        }
+
+        public async void ExportSvgFile()
+        {
+            var dlg = new SaveFileDialog();
+            dlg.Filters.Add(new FileDialogFilter() { Name = "Svg Files", Extensions = { "svg" } });
+            dlg.Filters.Add(new FileDialogFilter() { Name = "All Files", Extensions = { "*" } });
+            dlg.InitialFileName = ContainerView.Title;
+            dlg.DefaultExtension = "svg";
+            var result = await dlg.ShowAsync(Application.Current.Windows[0]);
+            if (result != null)
+            {
+                var path = result;
+                ExportSvg(path, ContainerView);
+            }
+        }
+
+        public async void ExportPngFile()
+        {
+            var dlg = new SaveFileDialog();
+            dlg.Filters.Add(new FileDialogFilter() { Name = "Png Files", Extensions = { "png" } });
+            dlg.Filters.Add(new FileDialogFilter() { Name = "All Files", Extensions = { "*" } });
+            dlg.InitialFileName = ContainerView.Title;
+            dlg.DefaultExtension = "png";
+            var result = await dlg.ShowAsync(Application.Current.Windows[0]);
+            if (result != null)
+            {
+                var path = result;
+                ExportPng(path, ContainerView);
+            }
+        }
+
+        public async void ExportPdfFile()
+        {
+            var dlg = new SaveFileDialog();
+            dlg.Filters.Add(new FileDialogFilter() { Name = "Pdf Files", Extensions = { "pdf" } });
+            dlg.Filters.Add(new FileDialogFilter() { Name = "All Files", Extensions = { "*" } });
+            dlg.InitialFileName = ContainerView.Title;
+            dlg.DefaultExtension = "pdf";
+            var result = await dlg.ShowAsync(Application.Current.Windows[0]);
+            if (result != null)
+            {
+                var path = result;
+                ExportPdf(path, ContainerView);
             }
         }
 
