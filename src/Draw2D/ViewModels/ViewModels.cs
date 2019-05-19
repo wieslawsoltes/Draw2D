@@ -5531,7 +5531,7 @@ namespace Draw2D.ViewModels.Bounds
 
         public ISet<BaseShape> TryToGetShapes(IEnumerable<BaseShape> shapes, Rect2 target, double radius)
         {
-            var selected = new ObservableHashSet<BaseShape>();
+            var selected = new HashSet<BaseShape>();
             foreach (var shape in shapes.Reverse())
             {
                 var result = GetHitTest(shape)?.Overlaps(shape, target, radius, this);
@@ -8699,7 +8699,7 @@ namespace Draw2D.ViewModels.Tools
                 Name = this.Name,
                 Hovered = this.Hovered,
                 Selected = this.Selected,
-                Shapes = new ObservableHashSet<BaseShape>()
+                Shapes = new HashSet<BaseShape>()
             };
 
             foreach (var shape in this.Shapes)

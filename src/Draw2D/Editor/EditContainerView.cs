@@ -498,7 +498,7 @@ namespace Draw2D.Editor
                 {
                     Hovered = null,
                     Selected = null,
-                    Shapes = new ObservableHashSet<BaseShape>()
+                    Shapes = new HashSet<BaseShape>()
                 },
                 ZoomServiceState = new ZoomServiceState()
                 {
