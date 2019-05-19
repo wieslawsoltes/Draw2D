@@ -418,6 +418,8 @@ namespace Draw2D.Editor
                 { typeof(CubicBezierShape).Name, new CubicBezierDecorator() },
                 { typeof(QuadraticBezierShape).Name, new QuadraticBezierDecorator() },
                 { typeof(ConicShape).Name, new ConicDecorator() },
+                { typeof(GroupShape).Name, new GroupDecorator() },
+                { typeof(FigureShape).Name, new FigureDecorator() },
                 { typeof(PathShape).Name, new PathDecorator() },
                 { typeof(RectangleShape).Name, new RectangleDecorator() },
                 { typeof(EllipseShape).Name, new EllipseDecorator() },

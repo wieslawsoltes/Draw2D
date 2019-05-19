@@ -3867,14 +3867,31 @@ namespace Draw2D.ViewModels.Decorators
     }
 
     [DataContract(IsReference = true)]
-    public class PathDecorator : CommonDecorator
+    public class GroupDecorator : CommonDecorator
+    {
+        public void Draw(object dc, IShapeRenderer renderer, GroupShape group, double dx, double dy, DrawMode mode)
+        {
+            // TODO: Draw group shape decorator.
+        }
+
+        public override void Draw(object dc, BaseShape shape, IShapeRenderer renderer, ISelectionState selectionState, double dx, double dy, DrawMode mode)
+        {
+            if (shape is GroupShape group)
+            {
+                Draw(dc, renderer, group, dx, dy, mode);
+            }
+        }
+    }
+
+    [DataContract(IsReference = true)]
+    public class FigureDecorator : CommonDecorator
     {
         private readonly LineDecorator _lineDecorator;
         private readonly CubicBezierDecorator _cubiceBezierDecorator;
         private readonly QuadraticBezierDecorator _quadraticBezierDecorator;
         private readonly ConicDecorator _conicDecorator;
 
-        public PathDecorator()
+        public FigureDecorator()
         {
             _lineDecorator = new LineDecorator();
             _cubiceBezierDecorator = new CubicBezierDecorator();
@@ -3922,11 +3939,30 @@ namespace Draw2D.ViewModels.Decorators
             }
         }
 
+        public override void Draw(object dc, BaseShape shape, IShapeRenderer renderer, ISelectionState selectionState, double dx, double dy, DrawMode mode)
+        {
+            if (shape is FigureShape figure)
+            {
+                DrawFigure(dc, renderer, figure, selectionState, dx, dy, mode);
+            }
+        }
+    }
+
+    [DataContract(IsReference = true)]
+    public class PathDecorator : CommonDecorator
+    {
+        private readonly FigureDecorator _figureDecorator;
+
+        public PathDecorator()
+        {
+            _figureDecorator = new FigureDecorator();
+        }
+
         public void Draw(object dc, IShapeRenderer renderer, PathShape path, ISelectionState selectionState, double dx, double dy, DrawMode mode)
         {
             foreach (var figure in path.Figures)
             {
-                DrawFigure(dc, renderer, figure, selectionState, dx, dy, mode);
+                _figureDecorator.Draw(dc, figure, renderer, selectionState, dx, dy, mode);
             }
         }
 
@@ -5186,7 +5222,21 @@ namespace Draw2D.ViewModels.Bounds
                     return result;
                 }
             }
+#if false
+            if (path.Figures.Count > 1)
+            {
+                foreach (var figure in path.Figures)
+                {
+                    var figurePoints = new List<PointShape>();
+                    figure.GetPoints(figurePoints);
 
+                    if (HitTestHelper.Contains(figurePoints, target))
+                    {
+                        return figure;
+                    }
+                }
+            }
+#endif
             var points = new List<PointShape>();
             path.GetPoints(points);
 
