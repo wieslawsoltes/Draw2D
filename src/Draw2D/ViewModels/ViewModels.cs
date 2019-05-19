@@ -3821,7 +3821,7 @@ namespace Draw2D.ViewModels.Decorators
             _ellipse.Style = _strokeStyle;
             _ellipse.TopLeft.X = sx - radius;
             _ellipse.TopLeft.Y = sy - radius;
-            _ellipse.BottomRight.X = sx+ radius;
+            _ellipse.BottomRight.X = sx + radius;
             _ellipse.BottomRight.Y = sy + radius;
             _ellipse.Draw(dc, renderer, dx, dy, mode, null, null);
         }
