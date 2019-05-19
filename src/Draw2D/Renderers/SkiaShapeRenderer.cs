@@ -148,11 +148,6 @@ namespace Draw2D.Renderers
             return geometry;
         }
 
-        public static SKPath ToGeometry(string svgPathData)
-        {
-            return SKPath.ParseSvgPathData(svgPathData);
-        }
-
         public static SKPath ToGeometry(ConicShape conic, double dx, double dy)
         {
             var geometry = new SKPath();
@@ -365,6 +360,11 @@ namespace Draw2D.Renderers
             }
 
             return geometry;
+        }
+
+        public static SKPath ToGeometry(string svgPathData)
+        {
+            return SKPath.ParseSvgPathData(svgPathData);
         }
 
         public static SKPoint GetTextOrigin(HAlign hAlign, VAlign vAlign, ref SKRect rect, ref SKRect size)
