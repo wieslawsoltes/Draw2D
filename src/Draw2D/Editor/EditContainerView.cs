@@ -570,11 +570,14 @@ namespace Draw2D.Editor
             var dlg = new OpenFileDialog();
             dlg.Filters.Add(new FileDialogFilter() { Name = "Json Files", Extensions = { "json" } });
             dlg.Filters.Add(new FileDialogFilter() { Name = "All Files", Extensions = { "*" } });
+            dlg.AllowMultiple = true;
             var result = await dlg.ShowAsync(Application.Current.Windows[0]);
             if (result != null)
             {
-                var path = result.FirstOrDefault();
-                Open(path);
+                foreach (var path in result)
+                {
+                    Open(path);
+                }
             }
         }
 
@@ -658,11 +661,14 @@ namespace Draw2D.Editor
             var dlg = new OpenFileDialog();
             dlg.Filters.Add(new FileDialogFilter() { Name = "Svg Files", Extensions = { "svg" } });
             dlg.Filters.Add(new FileDialogFilter() { Name = "All Files", Extensions = { "*" } });
+            dlg.AllowMultiple = true;
             var result = await dlg.ShowAsync(Application.Current.Windows[0]);
             if (result != null)
             {
-                var path = result.FirstOrDefault();
-                ImportSvg(path);
+                foreach (var path in result)
+                {
+                    ImportSvg(path);
+                }
             }
         }
 
