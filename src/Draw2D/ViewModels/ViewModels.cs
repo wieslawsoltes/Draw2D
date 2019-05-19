@@ -5262,7 +5262,7 @@ namespace Draw2D.ViewModels.Bounds
                     return groupPoint;
                 }
             }
-
+#if false
             foreach (var groupShape in group.Shapes)
             {
                 var result = groupShape.Bounds?.TryToGetPoint(groupShape, target, radius, hitTest);
@@ -5271,7 +5271,7 @@ namespace Draw2D.ViewModels.Bounds
                     return result;
                 }
             }
-
+#endif
             return null;
         }
 
