@@ -717,7 +717,7 @@ namespace Draw2D.ViewModels.Shapes
     [DataContract(IsReference = true)]
     public abstract class BoxShape : ConnectableShape
     {
-        internal new static IBounds s_bounds = null;
+        internal static new IBounds s_bounds = null;
 
         private PointShape _topLeft;
         private PointShape _bottomRight;
@@ -883,7 +883,7 @@ namespace Draw2D.ViewModels.Shapes
     [DataContract(IsReference = true)]
     public abstract class ConnectableShape : BaseShape, IConnectable
     {
-        internal new static IBounds s_bounds = null;
+        internal static new IBounds s_bounds = null;
 
         private IList<PointShape> _points;
         private Text _text;
@@ -1013,7 +1013,7 @@ namespace Draw2D.ViewModels.Shapes
     [DataContract(IsReference = true)]
     public class ConicShape : ConnectableShape, ICopyable
     {
-        internal new static IBounds s_bounds = new ConicBounds();
+        internal static new IBounds s_bounds = new ConicBounds();
 
         private PointShape _startPoint;
         private PointShape _point1;
@@ -1281,7 +1281,7 @@ namespace Draw2D.ViewModels.Shapes
     [DataContract(IsReference = true)]
     public class CubicBezierShape : ConnectableShape, ICopyable
     {
-        internal new static IBounds s_bounds = new CubicBezierBounds();
+        internal static new IBounds s_bounds = new CubicBezierBounds();
 
         private PointShape _startPoint;
         private PointShape _point1;
@@ -1585,7 +1585,7 @@ namespace Draw2D.ViewModels.Shapes
     [DataContract(IsReference = true)]
     public class EllipseShape : BoxShape, ICopyable
     {
-        internal new static IBounds s_bounds = new EllipseBounds();
+        internal static new IBounds s_bounds = new EllipseBounds();
 
         [IgnoreDataMember]
         public override IBounds Bounds { get; } = s_bounds;
@@ -1679,7 +1679,7 @@ namespace Draw2D.ViewModels.Shapes
     [DataContract(IsReference = true)]
     public class FigureShape : BaseShape, ICanvasContainer, ICopyable
     {
-        internal new static IBounds s_bounds = new FigureBounds();
+        internal static new IBounds s_bounds = new FigureBounds();
 
         private IList<BaseShape> _shapes;
         private bool _isFilled;
@@ -1800,7 +1800,7 @@ namespace Draw2D.ViewModels.Shapes
     [DataContract(IsReference = true)]
     public class GroupShape : ConnectableShape, ICopyable
     {
-        internal new static IBounds s_bounds = new GroupBounds();
+        internal static new IBounds s_bounds = new GroupBounds();
 
         private string _title;
         private IList<BaseShape> _shapes;
@@ -1941,7 +1941,7 @@ namespace Draw2D.ViewModels.Shapes
     [DataContract(IsReference = true)]
     public class LineShape : ConnectableShape, ICopyable
     {
-        internal new static IBounds s_bounds = new LineBounds();
+        internal static new IBounds s_bounds = new LineBounds();
 
         private PointShape _startPoint;
         private PointShape _point;
@@ -2178,7 +2178,7 @@ namespace Draw2D.ViewModels.Shapes
     [DataContract(IsReference = true)]
     public class PathShape : ConnectableShape, ICopyable
     {
-        internal new static IBounds s_bounds = new PathBounds();
+        internal static new IBounds s_bounds = new PathBounds();
 
         private string _title;
         private IList<FigureShape> _figures;
@@ -2559,7 +2559,7 @@ namespace Draw2D.ViewModels.Shapes
     [DataContract(IsReference = true)]
     public class PointShape : BaseShape, ICopyable
     {
-        internal new static IBounds s_bounds = new PointBounds();
+        internal static new IBounds s_bounds = new PointBounds();
 
         private double _x;
         private double _y;
@@ -2661,7 +2661,7 @@ namespace Draw2D.ViewModels.Shapes
     [DataContract(IsReference = true)]
     public class QuadraticBezierShape : ConnectableShape, ICopyable
     {
-        internal new static IBounds s_bounds = new QuadraticBezierBounds();
+        internal static new IBounds s_bounds = new QuadraticBezierBounds();
 
         private PointShape _startPoint;
         private PointShape _point1;
@@ -2920,7 +2920,7 @@ namespace Draw2D.ViewModels.Shapes
     [DataContract(IsReference = true)]
     public class RectangleShape : BoxShape, ICopyable
     {
-        internal new static IBounds s_bounds = new RectangleBounds();
+        internal static new IBounds s_bounds = new RectangleBounds();
 
         [IgnoreDataMember]
         public override IBounds Bounds { get; } = s_bounds;
@@ -3014,7 +3014,7 @@ namespace Draw2D.ViewModels.Shapes
     [DataContract(IsReference = true)]
     public class TextShape : BoxShape, ICopyable
     {
-        internal new static IBounds s_bounds = new TextBounds();
+        internal static new IBounds s_bounds = new TextBounds();
 
         [IgnoreDataMember]
         public override IBounds Bounds { get; } = s_bounds;
@@ -4837,7 +4837,7 @@ namespace Draw2D.ViewModels.Bounds
             {
                 return cubicBezier.StartPoint;
             }
-            
+
             if (cubicBezier.Point1.Bounds?.TryToGetPoint(cubicBezier.Point1, target, radius, hitTest) != null)
             {
                 return cubicBezier.Point1;
