@@ -32,6 +32,14 @@
                 <Separator/>
                 <MenuItem Header="Save View _As..." Command="{Binding SaveContainerViewAs}"/>
                 <Separator/>
+                <MenuItem Header="_Import Svg..." Command="{Binding ImportSvgFile}"/>
+                <Separator/>
+                <MenuItem Header="_Export Svg..." Command="{Binding ExportSvgFile}"/>
+                <Separator/>
+                <MenuItem Header="Export Png..." Command="{Binding ExportPngFile}"/>
+                <Separator/>
+                <MenuItem Header="Export Pdf..." Command="{Binding ExportPdfFile}"/>
+                <Separator/>
                 <MenuItem Header="E_xit" Command="{Binding Exit}"/>
             </MenuItem>
             <MenuItem Header="_Edit">
