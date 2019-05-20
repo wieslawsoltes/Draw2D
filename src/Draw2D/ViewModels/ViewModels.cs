@@ -9549,7 +9549,7 @@ namespace Draw2D.ViewModels.Tools
                 {
                     context.ContainerView?.SelectionState?.Dehover();
 
-                    var shapes = context.ContainerView.SelectionState?.Shapes.ToList();
+                    var shapes = context.ContainerView.SelectionState?.Shapes.Reverse().ToList();
 
                     Delete(context);
 
