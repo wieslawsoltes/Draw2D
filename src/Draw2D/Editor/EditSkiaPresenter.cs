@@ -13,12 +13,7 @@ using SkiaSharp;
 
 namespace Draw2D.Editor
 {
-    public interface IPresenter : IDisposable
-    {
-        void Draw(IContainerView view, object context, double width, double height, double dx, double dy, double zx, double zy);
-    }
-
-    public class SkiaPresenter : IDisposable, IPresenter
+    public class EditSkiaPresenter : IDrawContainerView
     {
         private bool _enablePictureCache = false;
         private SkiaShapeRenderer _skiaRenderer;
@@ -30,7 +25,7 @@ namespace Draw2D.Editor
         private SKPicture _pictureDecorators = null;
         private SKPicture _picturePoints = null;
 
-        public SkiaPresenter()
+        public EditSkiaPresenter()
         {
             _skiaRenderer = new SkiaShapeRenderer();
             _paintCache = new Dictionary<ArgbColor, SKPaint>();

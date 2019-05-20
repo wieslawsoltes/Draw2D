@@ -8,15 +8,15 @@ using Draw2D.ViewModels.Containers;
 
 namespace Draw2D.Editor
 {
-    public class DrawContainerView : IDrawContainerView
+    public class AvaloniaSkiaView : IDrawContainerView
     {
         private RenderTargetBitmap _renderTarget;
-        private IPresenter _skiaPresenter;
+        private IDrawContainerView _skiaPresenter;
 
-        public DrawContainerView()
+        public AvaloniaSkiaView()
         {
             _renderTarget = null;
-            _skiaPresenter = new SkiaPresenter();
+            _skiaPresenter = new EditSkiaPresenter();
         }
 
         public void Dispose()

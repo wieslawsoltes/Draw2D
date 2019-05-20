@@ -503,7 +503,7 @@ namespace Draw2D.Editor
         {
             if (containerView != null)
             {
-                containerView.DrawContainerView = new DrawContainerView();
+                containerView.DrawContainerView = new AvaloniaSkiaView();
                 containerView.HitTest = _hitTest;
                 containerView.WorkingContainer = new CanvasContainer()
                 {
@@ -627,12 +627,8 @@ namespace Draw2D.Editor
 
         private void Export(SKCanvas canvas, IContainerView view)
         {
-            using (var renderer = new SkiaShapeRenderer())
-            using (var background = SkiaHelper.ToSKPaintBrush(view.PrintBackground))
-            {
-                canvas.DrawRect(SkiaHelper.ToRect(0.0, 0.0, view.Width, view.Height), background);
-                view.CurrentContainer.Draw(canvas, renderer, 0.0, 0.0, DrawMode.Shape, null, null);
-            }
+            var presenter = new ExportSkiaPresenter();
+            presenter.Draw(view, canvas, view.Width, view.Height, 0, 0, 1.0, 1.0);
         }
 
         public void ExportSvg(string path, IContainerView view)
