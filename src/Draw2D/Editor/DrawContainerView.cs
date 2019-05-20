@@ -22,9 +22,7 @@ namespace Draw2D.Editor
         private bool _enablePictureCache = false;
         private RenderTargetBitmap _renderTarget = null;
         private SkiaShapeRenderer _skiaRenderer;
-        private AvaloniaShapeRenderer _avaloniaRenderer;
         private Dictionary<ArgbColor, SKPaint> _fillSKPaintCache;
-        private Dictionary<ArgbColor, Brush> _fillBrushCache;
         private double _previousZX = double.NaN;
         private double _previousZY = double.NaN;
         private SKPicture _pictureShapesCurrent = null;
@@ -35,11 +33,7 @@ namespace Draw2D.Editor
         public DrawContainerView()
         {
             _skiaRenderer = new SkiaShapeRenderer();
-            _avaloniaRenderer = new AvaloniaShapeRenderer();
-            // TODO: Properly dispose SKPaint objects.
             _fillSKPaintCache = new Dictionary<ArgbColor, SKPaint>();
-            // TODO: Properly dispose Brush objects.
-            _fillBrushCache = new Dictionary<ArgbColor, Brush>();
         }
 
         public void Dispose()
@@ -50,11 +44,6 @@ namespace Draw2D.Editor
             if (_skiaRenderer != null)
             {
                 _skiaRenderer.Dispose();
-            }
-
-            if (_avaloniaRenderer != null)
-            {
-                _avaloniaRenderer.Dispose();
             }
 
             if (_fillSKPaintCache != null)
@@ -198,18 +187,6 @@ namespace Draw2D.Editor
             else
             {
                 SkiaHelper.ToSKPaintBrushUpdate(brushCached, color);
-            }
-
-            brush = brushCached;
-        }
-
-        private void GetBrushFill(ArgbColor color, out Brush brush)
-        {
-            if (color.IsDirty == true || !_fillBrushCache.TryGetValue(color, out var brushCached))
-            {
-                color.Invalidate();
-                brushCached = new SolidColorBrush(AvaloniaHelper.ToColor(color));
-                _fillBrushCache[color] = brushCached;
             }
 
             brush = brushCached;
@@ -385,47 +362,10 @@ namespace Draw2D.Editor
             view.WorkingContainer.Invalidate();
         }
 
-        private void DrawAvalonia(IContainerView view, DrawingContext context, double width, double height, double dx, double dy, double zx, double zy)
-        {
-            _avaloniaRenderer.Scale = zx;
-            _avaloniaRenderer.SelectionState = view.SelectionState;
-
-            view.CurrentContainer.Invalidate();
-            view.WorkingContainer.Invalidate();
-
-            var bounds = new Rect(0.0, 0.0, width, height);
-
-            var boundsState = context.PushClip(bounds);
-
-            if (view.InputBackground != null)
-            {
-                GetBrushFill(view.InputBackground, out var brush);
-                context.FillRectangle(brush, bounds);
-            }
-
-            var matrixState = context.PushPreTransform(new Matrix(zx, 0.0, 0.0, zy, dx, dy));
-
-            if (view.WorkBackground != null)
-            {
-                GetBrushFill(view.WorkBackground, out var brush);
-                context.FillRectangle(brush, new Rect(0.0, 0.0, view.Width, view.Height));
-            }
-
-            DrawShapesCurrent(view, context, _avaloniaRenderer);
-            DrawShapesWorking(view, context, _avaloniaRenderer);
-            DrawDecorators(view, context, _avaloniaRenderer);
-            DrawPoints(view, context, _avaloniaRenderer);
-
-            matrixState.Dispose();
-
-            boundsState.Dispose();
-        }
-
         public void Draw(IContainerView view, object context, double width, double height, double dx, double dy, double zx, double zy)
         {
             if (context is DrawingContext drawingContext && width > 0 && height > 0)
             {
-#if true
                 if (_renderTarget == null)
                 {
                     _renderTarget = new RenderTargetBitmap(new PixelSize((int)width, (int)height), new Vector(96, 96));
@@ -446,9 +386,6 @@ namespace Draw2D.Editor
                         new Rect(0, 0, _renderTarget.PixelSize.Width, _renderTarget.PixelSize.Height),
                         new Rect(0, 0, width, height));
                 }
-#else
-                DrawAvalonia(view, drawingContext, width, height, dx, dy, zx, zy);
-#endif
             }
         }
     }
