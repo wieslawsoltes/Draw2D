@@ -46,12 +46,10 @@ namespace Draw2D
             {
                 editContainerView = new EditContainerView();
                 editContainerView.Initialize();
-            }
 
-            editContainerView.Files = Directory
-                .EnumerateFiles(Directory.GetCurrentDirectory(), "*.json")
-                .Select(x => Path.GetFileName(x))
-                .ToList();
+                editContainerView.CurrentDirectory = Directory.GetCurrentDirectory();
+                editContainerView.AddFiles(editContainerView.CurrentDirectory);
+            }
 
             if (File.Exists("window.json"))
             {

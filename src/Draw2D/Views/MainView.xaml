@@ -230,9 +230,9 @@
                     </Grid>
                 </TabItem>
                 <TabItem Classes="default" Header="Json">
-                    <Grid RowDefinitions="Auto,Auto,Auto,Auto,*,Auto">
+                    <Grid RowDefinitions="Auto,Auto,Auto,Auto,*,Auto,Auto,Auto">
                         <TextBlock Classes="default" Text="Path:" Grid.Row="0"/>
-                        <TextBox x:Name="path" Classes="default" Text="container.json" Grid.Row="1"/>
+                        <TextBox x:Name="path" Classes="default" Text="{Binding #files.SelectedItem, Mode=OneWay, FallbackValue=View.json}" Grid.Row="1"/>
                         <Button Classes="default" Content="Open File" Command="{Binding Open}" CommandParameter="{Binding #path.Text}" Grid.Row="2"/>
                         <Button Classes="default" Content="Save File" Command="{Binding Save}" CommandParameter="{Binding #path.Text}" Grid.Row="3"/>
                         <ListBox x:Name="files" Classes="default" Grid.Row="4" Items="{Binding Files}">
@@ -242,7 +242,9 @@
                                 </DataTemplate>
                             </ListBox.DataTemplates>
                         </ListBox>
-                        <Button Classes="default" Content="Open File" Command="{Binding Open}" CommandParameter="{Binding #files.SelectedItem}" Grid.Row="5"/>
+                        <TextBox Classes="default" Text="{Binding CurrentDirectory}" Grid.Row="5"/>
+                        <Button Classes="default" Content="Add Files" Command="{Binding AddFiles}" CommandParameter="{Binding CurrentDirectory}" Grid.Row="6"/>
+                        <Button Classes="default" Content="Clear Files" Command="{Binding ClearFiles}" Grid.Row="7"/>
                     </Grid>
                 </TabItem>
             </TabControl>

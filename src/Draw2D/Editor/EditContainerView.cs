@@ -26,6 +26,7 @@ namespace Draw2D.Editor
     {
         private ISelection _selection;
         private IHitTest _hitTest;
+        private string _currentDirectory;
         private IList<string> _files;
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
@@ -42,7 +43,14 @@ namespace Draw2D.Editor
             set => Update(ref _hitTest, value);
         }
 
-        [IgnoreDataMember]
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public string CurrentDirectory
+        {
+            get => _currentDirectory;
+            set => Update(ref _currentDirectory, value);
+        }
+
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public IList<string> Files
         {
             get => _files;
@@ -406,7 +414,8 @@ namespace Draw2D.Editor
 
             Selection = selectionTool;
             HitTest = hitTest;
-            Files = null;
+            CurrentDirectory = null;
+            Files = new ObservableCollection<string>();
 
             var containerViews = new ObservableCollection<IContainerView>();
 
@@ -594,6 +603,19 @@ namespace Draw2D.Editor
                 var path = result;
                 Save(path);
             }
+        }
+
+        public void AddFiles(string path)
+        {
+            foreach (var file in Directory.EnumerateFiles(path, "*.json"))
+            {
+                Files.Add(file);
+            }
+        }
+
+        public void ClearFiles(string path)
+        {
+            Files.Clear();
         }
 
         public void ImportSvg(string path)
