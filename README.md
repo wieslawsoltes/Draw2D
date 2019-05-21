@@ -26,3 +26,18 @@ dotnet /home/ubuntu/environment/src/Draw2D/bin/Debug/netcoreapp3.0/Draw2D.dll Vi
 dotnet /home/ubuntu/environment/src/Draw2D/bin/Debug/netcoreapp3.0/Draw2D.dll View0.json View0.png
 dotnet /home/ubuntu/environment/src/Draw2D/bin/Debug/netcoreapp3.0/Draw2D.dll View0.json View0.pdf
 ```
+
+### Linux Fonts
+
+https://www.pcworld.com/article/2863497/how-to-install-microsoft-fonts-in-linux-office-suites.html
+
+```
+sudo apt-get install ttf-mscorefonts-installer
+
+cd ~/
+mkdir .fonts
+fc-cache -f -v
+
+sudo apt-get install cabextract
+wget -qO- http://plasmasturm.org/code/vistafonts-installer/vistafonts-installer | bash
+```
