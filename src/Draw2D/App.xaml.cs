@@ -30,30 +30,30 @@ namespace Draw2D
 
         static void AppMain(Application app, string[] args)
         {
-            EditContainerView editContainerView = null;
+            EditorToolContext editorToolContext = null;
             WindowSettings mainWindowSettings = null;
 
             if (File.Exists("editor.json"))
             {
-                editContainerView = EditContainerView.LoadFromJson<EditContainerView>("editor.json");
+                editorToolContext = EditorToolContext.LoadFromJson<EditorToolContext>("editor.json");
 
-                foreach (var containerView in editContainerView.ContainerViews)
+                foreach (var containerView in editorToolContext.ContainerViews)
                 {
-                    editContainerView.InitContainerView(containerView);
+                    editorToolContext.InitContainerView(containerView);
                 }
             }
             else
             {
-                editContainerView = new EditContainerView();
-                editContainerView.Initialize();
+                editorToolContext = new EditorToolContext();
+                editorToolContext.Initialize();
 
-                editContainerView.CurrentDirectory = Directory.GetCurrentDirectory();
-                editContainerView.AddFiles(editContainerView.CurrentDirectory);
+                editorToolContext.CurrentDirectory = Directory.GetCurrentDirectory();
+                editorToolContext.AddFiles(editorToolContext.CurrentDirectory);
             }
 
             if (File.Exists("window.json"))
             {
-                mainWindowSettings = EditContainerView.LoadFromJson<WindowSettings>("window.json");
+                mainWindowSettings = EditorToolContext.LoadFromJson<WindowSettings>("window.json");
             }
             else
             {
@@ -69,7 +69,7 @@ namespace Draw2D
 
             var window = new MainWindow
             {
-                DataContext = editContainerView
+                DataContext = editorToolContext
             };
 
             if (!double.IsNaN(mainWindowSettings.Width))
@@ -105,8 +105,8 @@ namespace Draw2D
 
             app.Run(window);
 
-            EditContainerView.SaveAsjson<EditContainerView>("editor.json", editContainerView);
-            EditContainerView.SaveAsjson<WindowSettings>("window.json", mainWindowSettings);
+            EditorToolContext.SaveAsjson<EditorToolContext>("editor.json", editorToolContext);
+            EditorToolContext.SaveAsjson<WindowSettings>("window.json", mainWindowSettings);
         }
 
         public static AppBuilder BuildAvaloniaApp()

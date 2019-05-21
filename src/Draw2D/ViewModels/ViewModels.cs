@@ -1190,19 +1190,19 @@ namespace Draw2D.ViewModels.Shapes
             {
                 if (StartPoint == target)
                 {
-                    Debug.WriteLine($"{nameof(QuadraticBezierShape)}: Connected to {nameof(StartPoint)}");
+                    Debug.WriteLine($"{nameof(ConicShape)}: Connected to {nameof(StartPoint)}");
                     this.StartPoint = point;
                     return true;
                 }
                 else if (Point1 == target)
                 {
-                    Debug.WriteLine($"{nameof(QuadraticBezierShape)}: Connected to {nameof(Point1)}");
+                    Debug.WriteLine($"{nameof(ConicShape)}: Connected to {nameof(Point1)}");
                     this.Point1 = point;
                     return true;
                 }
                 else if (Point2 == target)
                 {
-                    Debug.WriteLine($"{nameof(QuadraticBezierShape)}: Connected to {nameof(Point2)}");
+                    Debug.WriteLine($"{nameof(ConicShape)}: Connected to {nameof(Point2)}");
                     this.Point2 = point;
                     return true;
                 }
@@ -1218,21 +1218,21 @@ namespace Draw2D.ViewModels.Shapes
             }
             else if (StartPoint == point)
             {
-                Debug.WriteLine($"{nameof(QuadraticBezierShape)}: Disconnected from {nameof(StartPoint)}");
+                Debug.WriteLine($"{nameof(ConicShape)}: Disconnected from {nameof(StartPoint)}");
                 result = (PointShape)point.Copy(null);
                 this.StartPoint = result;
                 return true;
             }
             else if (Point1 == point)
             {
-                Debug.WriteLine($"{nameof(QuadraticBezierShape)}: Disconnected from {nameof(Point1)}");
+                Debug.WriteLine($"{nameof(ConicShape)}: Disconnected from {nameof(Point1)}");
                 result = (PointShape)point.Copy(null);
                 this.Point1 = result;
                 return true;
             }
             else if (Point2 == point)
             {
-                Debug.WriteLine($"{nameof(QuadraticBezierShape)}: Disconnected from {nameof(Point2)}");
+                Debug.WriteLine($"{nameof(ConicShape)}: Disconnected from {nameof(Point2)}");
                 result = (PointShape)point.Copy(null);
                 this.Point2 = result;
                 return true;
@@ -1247,21 +1247,21 @@ namespace Draw2D.ViewModels.Shapes
 
             if (this.StartPoint != null)
             {
-                Debug.WriteLine($"{nameof(QuadraticBezierShape)}: Disconnected from {nameof(StartPoint)}");
+                Debug.WriteLine($"{nameof(ConicShape)}: Disconnected from {nameof(StartPoint)}");
                 this.StartPoint = (PointShape)this.StartPoint.Copy(null);
                 result = true;
             }
 
             if (this.Point1 != null)
             {
-                Debug.WriteLine($"{nameof(QuadraticBezierShape)}: Disconnected from {nameof(Point1)}");
+                Debug.WriteLine($"{nameof(ConicShape)}: Disconnected from {nameof(Point1)}");
                 this.Point1 = (PointShape)this.Point1.Copy(null);
                 result = true;
             }
 
             if (this.Point2 != null)
             {
-                Debug.WriteLine($"{nameof(QuadraticBezierShape)}: Disconnected from {nameof(Point2)}");
+                Debug.WriteLine($"{nameof(ConicShape)}: Disconnected from {nameof(Point2)}");
                 this.Point2 = (PointShape)this.Point2.Copy(null);
                 result = true;
             }
