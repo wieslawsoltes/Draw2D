@@ -620,13 +620,13 @@ namespace Draw2D.Editor
             // TODO: Convert picture to shapes.
         }
 
-        private void Export(SKCanvas canvas, IContainerView view)
+        public static void Export(SKCanvas canvas, IContainerView view)
         {
             var skiaView = new ExportSkiaView();
             skiaView.Draw(view, canvas, view.Width, view.Height, 0, 0, 1.0, 1.0);
         }
 
-        public void ExportSvg(string path, IContainerView view)
+        public static void ExportSvg(string path, IContainerView view)
         {
             using (var stream = new SKFileWStream(path))
             using (var writer = new SKXmlStreamWriter(stream))
@@ -636,7 +636,7 @@ namespace Draw2D.Editor
             }
         }
 
-        public void ExportPng(string path, IContainerView view)
+        public static void ExportPng(string path, IContainerView view)
         {
             var info = new SKImageInfo((int)view.Width, (int)view.Height);
             using (var bitmap = new SKBitmap(info))
@@ -654,7 +654,7 @@ namespace Draw2D.Editor
             }
         }
 
-        public void ExportPdf(string path, IContainerView view)
+        public static void ExportPdf(string path, IContainerView view)
         {
             using (var stream = new SKFileWStream(path))
             {
