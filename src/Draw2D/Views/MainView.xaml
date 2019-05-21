@@ -19,7 +19,7 @@
         <KeyBinding Command="{Binding NewContainerView}" CommandParameter="View" Gesture="Ctrl+N"/>
         <KeyBinding Command="{Binding OpenContainerView}" Gesture="Ctrl+O"/>
         <KeyBinding Command="{Binding SaveContainerViewAs}" Gesture="Ctrl+S"/>
-        <KeyBinding Command="{Binding ExportSvgFile}" Gesture="Ctrl+E"/>
+        <KeyBinding Command="{Binding ExportFile}" Gesture="Ctrl+E"/>
         <KeyBinding Command="{Binding Exit}" Gesture="Alt+F4"/>
     </UserControl.KeyBindings>
     <Grid RowDefinitions="Auto,5,*,5" ColumnDefinitions="340,Auto,*">
@@ -33,13 +33,9 @@
                 <Separator/>
                 <MenuItem Header="Save View _As..." Command="{Binding SaveContainerViewAs}"/>
                 <Separator/>
-                <MenuItem Header="_Import Svg..." Command="{Binding ImportSvgFile}"/>
+                <MenuItem Header="_Import..." Command="{Binding ImportFile}"/>
                 <Separator/>
-                <MenuItem Header="_Export Svg..." Command="{Binding ExportSvgFile}"/>
-                <Separator/>
-                <MenuItem Header="Export Png..." Command="{Binding ExportPngFile}"/>
-                <Separator/>
-                <MenuItem Header="Export Pdf..." Command="{Binding ExportPdfFile}"/>
+                <MenuItem Header="_Export..." Command="{Binding ExportFile}"/>
                 <Separator/>
                 <MenuItem Header="E_xit" Command="{Binding Exit}"/>
             </MenuItem>
