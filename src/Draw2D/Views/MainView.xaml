@@ -221,15 +221,7 @@
                         </TabItem>
                     </TabControl>
                 </TabItem>
-                <TabItem Classes="default" Header="Path">
-                    <Grid RowDefinitions="Auto,*,Auto,Auto">
-                        <TextBlock Classes="default" Text="SVG Path:" Grid.Row="0"/>
-                        <TextBox x:Name="svgPathData" Classes="default" AcceptsReturn="True" AcceptsTab="True" Text="" Grid.Row="1"/>
-                        <Button Classes="default" Content="From SVG Path Data" Command="{Binding FromSvgPathData}" CommandParameter="{Binding #svgPathData}" Grid.Row="2"/>
-                        <Button Classes="default" Content="To SVG Path Data" Command="{Binding ToSvgPathData}" CommandParameter="{Binding #svgPathData}" Grid.Row="3"/>
-                    </Grid>
-                </TabItem>
-                <TabItem Classes="default" Header="Json">
+                <TabItem Classes="default" Header="Files">
                     <Grid RowDefinitions="Auto,Auto,Auto,Auto,*,Auto,Auto,Auto">
                         <TextBlock Classes="default" Text="Path:" Grid.Row="0"/>
                         <TextBox x:Name="path" Classes="default" Text="{Binding #files.SelectedItem, Mode=OneWay, FallbackValue=View.json}" Grid.Row="1"/>
@@ -245,6 +237,17 @@
                         <TextBox Classes="default" Text="{Binding CurrentDirectory}" Grid.Row="5"/>
                         <Button Classes="default" Content="Add Files" Command="{Binding AddFiles}" CommandParameter="{Binding CurrentDirectory}" Grid.Row="6"/>
                         <Button Classes="default" Content="Clear Files" Command="{Binding ClearFiles}" Grid.Row="7"/>
+                    </Grid>
+                </TabItem>
+                <TabItem Classes="default" Header="Point">
+                    <ContentControl Content="{Binding PointTemplate}"/>
+                </TabItem>
+                <TabItem Classes="default" Header="SVG">
+                    <Grid RowDefinitions="Auto,*,Auto,Auto">
+                        <TextBlock Classes="default" Text="SVG Path:" Grid.Row="0"/>
+                        <TextBox x:Name="svgPathData" Classes="default" AcceptsReturn="True" AcceptsTab="True" Text="" Grid.Row="1"/>
+                        <Button Classes="default" Content="From SVG Path Data" Command="{Binding FromSvgPathData}" CommandParameter="{Binding #svgPathData}" Grid.Row="2"/>
+                        <Button Classes="default" Content="To SVG Path Data" Command="{Binding ToSvgPathData}" CommandParameter="{Binding #svgPathData}" Grid.Row="3"/>
                     </Grid>
                 </TabItem>
             </TabControl>
@@ -265,6 +268,18 @@
                             </ListBox>
                         </TabItem>
                     </TabControl>
+                </TabItem>
+                <TabItem Classes="default" Header="Style">
+                    <ContentControl Content="{Binding CurrentStyle}"/>
+                </TabItem>
+                <TabItem Classes="default" Header="Styles">
+                    <ListBox Classes="default" Items="{Binding Styles}" SelectedItem="{Binding CurrentStyle}">
+                        <ListBox.DataTemplates>
+                            <DataTemplate>
+                                <TextBlock Classes="default" Text="{Binding Title}"/>
+                            </DataTemplate>
+                        </ListBox.DataTemplates>
+                    </ListBox>
                 </TabItem>
                 <TabItem Classes="default" Header="Selection">
                     <TabControl Classes="default" TabStripPlacement="Top">

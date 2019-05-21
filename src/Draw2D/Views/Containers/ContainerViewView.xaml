@@ -36,18 +36,6 @@
                 </TabItem>
             </TabControl>
         </TabItem>
-        <TabItem Classes="default" Header="Style">
-            <ContentControl Content="{Binding CurrentStyle}"/>
-        </TabItem>
-        <TabItem Classes="default" Header="Styles">
-            <ListBox Classes="default" Items="{Binding Styles}" SelectedItem="{Binding CurrentStyle}">
-                <ListBox.DataTemplates>
-                    <DataTemplate>
-                        <TextBlock Classes="default" Text="{Binding Title}"/>
-                    </DataTemplate>
-                </ListBox.DataTemplates>
-            </ListBox>
-        </TabItem>
         <TabItem Classes="default" Header="Shapes">
             <TabControl Classes="default" TabStripPlacement="Top">
                 <TabItem Classes="default" Header="Current">
