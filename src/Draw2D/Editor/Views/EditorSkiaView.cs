@@ -4,10 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using Avalonia;
-using Avalonia.Media;
-using Avalonia.Media.Imaging;
-using Avalonia.Skia;
 using Draw2D.Renderers;
 using Draw2D.ViewModels;
 using Draw2D.ViewModels.Containers;
@@ -15,16 +11,13 @@ using Draw2D.ViewModels.Shapes;
 using Draw2D.ViewModels.Style;
 using SkiaSharp;
 
-namespace Draw2D.Editor
+namespace Draw2D.Editor.Views
 {
-    public class DrawContainerView : IDrawContainerView
+    public class EditorSkiaView : IDrawContainerView
     {
         private bool _enablePictureCache = false;
-        private RenderTargetBitmap _renderTarget = null;
         private SkiaShapeRenderer _skiaRenderer;
-        private AvaloniaShapeRenderer _avaloniaRenderer;
-        private Dictionary<ArgbColor, SKPaint> _fillSKPaintCache;
-        private Dictionary<ArgbColor, Brush> _fillBrushCache;
+        private Dictionary<ArgbColor, SKPaint> _paintCache;
         private double _previousZX = double.NaN;
         private double _previousZY = double.NaN;
         private SKPicture _pictureShapesCurrent = null;
@@ -32,14 +25,10 @@ namespace Draw2D.Editor
         private SKPicture _pictureDecorators = null;
         private SKPicture _picturePoints = null;
 
-        public DrawContainerView()
+        public EditorSkiaView()
         {
             _skiaRenderer = new SkiaShapeRenderer();
-            _avaloniaRenderer = new AvaloniaShapeRenderer();
-            // TODO: Properly dispose SKPaint objects.
-            _fillSKPaintCache = new Dictionary<ArgbColor, SKPaint>();
-            // TODO: Properly dispose Brush objects.
-            _fillBrushCache = new Dictionary<ArgbColor, Brush>();
+            _paintCache = new Dictionary<ArgbColor, SKPaint>();
         }
 
         public void Dispose()
@@ -52,18 +41,13 @@ namespace Draw2D.Editor
                 _skiaRenderer.Dispose();
             }
 
-            if (_avaloniaRenderer != null)
+            if (_paintCache != null)
             {
-                _avaloniaRenderer.Dispose();
-            }
-
-            if (_fillSKPaintCache != null)
-            {
-                foreach (var cache in _fillSKPaintCache)
+                foreach (var cache in _paintCache)
                 {
                     cache.Value.Dispose();
                 }
-                _fillSKPaintCache = null;
+                _paintCache = null;
             }
 
             if (_picturePoints != null)
@@ -88,12 +72,6 @@ namespace Draw2D.Editor
             {
                 _pictureShapesCurrent.Dispose();
                 _pictureShapesCurrent = null;
-            }
-
-            if (_renderTarget != null)
-            {
-                _renderTarget.Dispose();
-                _renderTarget = null;
             }
         }
 
@@ -189,27 +167,15 @@ namespace Draw2D.Editor
 
         private void GetSKPaintFill(ArgbColor color, out SKPaint brush)
         {
-            if (color.IsDirty == true || !_fillSKPaintCache.TryGetValue(color, out var brushCached))
+            if (color.IsDirty == true || !_paintCache.TryGetValue(color, out var brushCached))
             {
                 color.Invalidate();
                 brushCached = SkiaHelper.ToSKPaintBrush(color);
-                _fillSKPaintCache[color] = brushCached;
+                _paintCache[color] = brushCached;
             }
             else
             {
                 SkiaHelper.ToSKPaintBrushUpdate(brushCached, color);
-            }
-
-            brush = brushCached;
-        }
-
-        private void GetBrushFill(ArgbColor color, out Brush brush)
-        {
-            if (color.IsDirty == true || !_fillBrushCache.TryGetValue(color, out var brushCached))
-            {
-                color.Invalidate();
-                brushCached = new SolidColorBrush(AvaloniaHelper.ToColor(color));
-                _fillBrushCache[color] = brushCached;
             }
 
             brush = brushCached;
@@ -279,7 +245,7 @@ namespace Draw2D.Editor
             canvas.Restore();
         }
 
-        private void DrawSkia(IContainerView view, SKCanvas canvas, double width, double height, double dx, double dy, double zx, double zy)
+        public void Draw(IContainerView view, object context, double width, double height, double dx, double dy, double zx, double zy)
         {
             bool isCurrentContainerDirty = IsCanvasContainerDirty(view.CurrentContainer);
             bool isWorkingContainerDirty = IsCanvasContainerDirty(view.WorkingContainer);
@@ -345,6 +311,8 @@ namespace Draw2D.Editor
             _previousZX = zx;
             _previousZY = zy;
 
+            var canvas = context as SKCanvas;
+
             if (view.InputBackground != null)
             {
                 GetSKPaintFill(view.InputBackground, out var brush);
@@ -383,73 +351,6 @@ namespace Draw2D.Editor
 
             view.CurrentContainer.Invalidate();
             view.WorkingContainer.Invalidate();
-        }
-
-        private void DrawAvalonia(IContainerView view, DrawingContext context, double width, double height, double dx, double dy, double zx, double zy)
-        {
-            _avaloniaRenderer.Scale = zx;
-            _avaloniaRenderer.SelectionState = view.SelectionState;
-
-            view.CurrentContainer.Invalidate();
-            view.WorkingContainer.Invalidate();
-
-            var bounds = new Rect(0.0, 0.0, width, height);
-
-            var boundsState = context.PushClip(bounds);
-
-            if (view.InputBackground != null)
-            {
-                GetBrushFill(view.InputBackground, out var brush);
-                context.FillRectangle(brush, bounds);
-            }
-
-            var matrixState = context.PushPreTransform(new Matrix(zx, 0.0, 0.0, zy, dx, dy));
-
-            if (view.WorkBackground != null)
-            {
-                GetBrushFill(view.WorkBackground, out var brush);
-                context.FillRectangle(brush, new Rect(0.0, 0.0, view.Width, view.Height));
-            }
-
-            DrawShapesCurrent(view, context, _avaloniaRenderer);
-            DrawShapesWorking(view, context, _avaloniaRenderer);
-            DrawDecorators(view, context, _avaloniaRenderer);
-            DrawPoints(view, context, _avaloniaRenderer);
-
-            matrixState.Dispose();
-
-            boundsState.Dispose();
-        }
-
-        public void Draw(IContainerView view, object context, double width, double height, double dx, double dy, double zx, double zy)
-        {
-            if (context is DrawingContext drawingContext && width > 0 && height > 0)
-            {
-#if true
-                if (_renderTarget == null)
-                {
-                    _renderTarget = new RenderTargetBitmap(new PixelSize((int)width, (int)height), new Vector(96, 96));
-                }
-                else if (_renderTarget.PixelSize.Width != (int)width || _renderTarget.PixelSize.Height != (int)height)
-                {
-                    _renderTarget.Dispose();
-                    _renderTarget = new RenderTargetBitmap(new PixelSize((int)width, (int)height), new Vector(96, 96));
-                }
-
-                using (var _drawingContextImpl = _renderTarget.CreateDrawingContext(null))
-                {
-                    var _skiaDrawingContextImpl = _drawingContextImpl as ISkiaDrawingContextImpl;
-
-                    DrawSkia(view, _skiaDrawingContextImpl.SkCanvas, width, height, dx, dy, zx, zy);
-
-                    drawingContext.DrawImage(_renderTarget, 1.0,
-                        new Rect(0, 0, _renderTarget.PixelSize.Width, _renderTarget.PixelSize.Height),
-                        new Rect(0, 0, width, height));
-                }
-#else
-                DrawAvalonia(view, drawingContext, width, height, dx, dy, zx, zy);
-#endif
-            }
         }
     }
 }

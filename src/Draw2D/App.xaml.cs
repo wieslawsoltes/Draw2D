@@ -8,6 +8,7 @@ using Avalonia.Controls;
 using Avalonia.Logging.Serilog;
 using Avalonia.Markup.Xaml;
 using Draw2D.Editor;
+using Draw2D.ViewModels.Containers;
 using Draw2D.Views;
 
 namespace Draw2D
@@ -19,6 +20,46 @@ namespace Draw2D
         {
             try
             {
+                if (args.Length == 1)
+                {
+                    var command = args[0];
+
+                    if (command == "--new")
+                    {
+                        var editorToolContext = EditorToolContext.Create();
+                        var containerView = editorToolContext.ContainerView;
+                        EditorToolContext.SaveAsjson(containerView.Title + ".json", containerView);
+                        return;
+                    }
+                }
+                else if (args.Length == 2)
+                {
+                    var inputPath = args[0];
+                    var outputPath = args[1];
+                    var inputExtension = Path.GetExtension(inputPath);
+                    var outputExtension = Path.GetExtension(outputPath);
+
+                    if (string.Compare(inputExtension, ".json", StringComparison.OrdinalIgnoreCase) == 0)
+                    {
+                        var containerView = EditorToolContext.LoadFromJson<ContainerView>(inputPath);
+
+                        if (string.Compare(outputExtension, ".svg", StringComparison.OrdinalIgnoreCase) == 0)
+                        {
+                             EditorToolContext.ExportSvg(outputPath, containerView);
+                        }
+                        else if (string.Compare(outputExtension, ".png", StringComparison.OrdinalIgnoreCase) == 0)
+                        {
+                             EditorToolContext.ExportPng(outputPath, containerView);
+                        }
+                        else if (string.Compare(outputExtension, ".pdf", StringComparison.OrdinalIgnoreCase) == 0)
+                        {
+                             EditorToolContext.ExportPdf(outputPath, containerView);
+                        }
+                    }
+
+                    return;
+                }
+
                 BuildAvaloniaApp().Start(AppMain, args);
             }
             catch (Exception ex)
@@ -30,30 +71,28 @@ namespace Draw2D
 
         static void AppMain(Application app, string[] args)
         {
-            EditContainerView editContainerView = null;
+            EditorToolContext editorToolContext = null;
             WindowSettings mainWindowSettings = null;
 
             if (File.Exists("editor.json"))
             {
-                editContainerView = EditContainerView.LoadFromJson<EditContainerView>("editor.json");
+                editorToolContext = EditorToolContext.LoadFromJson<EditorToolContext>("editor.json");
 
-                foreach (var containerView in editContainerView.ContainerViews)
+                foreach (var containerView in editorToolContext.ContainerViews)
                 {
-                    editContainerView.InitContainerView(containerView);
+                    editorToolContext.InitContainerView(containerView);
                 }
             }
             else
             {
-                editContainerView = new EditContainerView();
-                editContainerView.Initialize();
-
-                editContainerView.CurrentDirectory = Directory.GetCurrentDirectory();
-                editContainerView.AddFiles(editContainerView.CurrentDirectory);
+                editorToolContext = EditorToolContext.Create();
+                editorToolContext.CurrentDirectory = Directory.GetCurrentDirectory();
+                editorToolContext.AddFiles(editorToolContext.CurrentDirectory);
             }
 
             if (File.Exists("window.json"))
             {
-                mainWindowSettings = EditContainerView.LoadFromJson<WindowSettings>("window.json");
+                mainWindowSettings = EditorToolContext.LoadFromJson<WindowSettings>("window.json");
             }
             else
             {
@@ -69,7 +108,7 @@ namespace Draw2D
 
             var window = new MainWindow
             {
-                DataContext = editContainerView
+                DataContext = editorToolContext
             };
 
             if (!double.IsNaN(mainWindowSettings.Width))
@@ -105,8 +144,8 @@ namespace Draw2D
 
             app.Run(window);
 
-            EditContainerView.SaveAsjson<EditContainerView>("editor.json", editContainerView);
-            EditContainerView.SaveAsjson<WindowSettings>("window.json", mainWindowSettings);
+            EditorToolContext.SaveAsjson<EditorToolContext>("editor.json", editorToolContext);
+            EditorToolContext.SaveAsjson<WindowSettings>("window.json", mainWindowSettings);
         }
 
         public static AppBuilder BuildAvaloniaApp()

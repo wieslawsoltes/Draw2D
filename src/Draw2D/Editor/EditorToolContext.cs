@@ -7,6 +7,7 @@ using System.Linq;
 using System.Runtime.Serialization;
 using Avalonia;
 using Avalonia.Controls;
+using Draw2D.Editor.Views;
 using Draw2D.Renderers;
 using Draw2D.ViewModels;
 using Draw2D.ViewModels.Bounds;
@@ -22,10 +23,9 @@ using SkiaSharp.Extended.Svg;
 namespace Draw2D.Editor
 {
     [DataContract(IsReference = true)]
-    public class EditContainerView : ToolContext
+    public class EditorToolContext : ToolContext
     {
         private ISelection _selection;
-        private IHitTest _hitTest;
         private string _currentDirectory;
         private IList<string> _files;
 
@@ -34,13 +34,6 @@ namespace Draw2D.Editor
         {
             get => _selection;
             set => Update(ref _selection, value);
-        }
-
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public IHitTest HitTest
-        {
-            get => _hitTest;
-            set => Update(ref _hitTest, value);
         }
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
@@ -57,7 +50,7 @@ namespace Draw2D.Editor
             set => Update(ref _files, value);
         }
 
-        public EditContainerView()
+        public EditorToolContext()
         {
         }
 
@@ -73,8 +66,10 @@ namespace Draw2D.Editor
             File.WriteAllText(path, json);
         }
 
-        public void Initialize()
+        public static EditorToolContext Create()
         {
+            var editorToolContext = new EditorToolContext();
+
             var hitTest = new HitTest();
 
             var gridSnapPointFilter = new GridSnapPointFilter()
@@ -412,31 +407,33 @@ namespace Draw2D.Editor
 
             var currentTool = tools.FirstOrDefault(t => t.Title == "Selection");
 
-            Selection = selectionTool;
-            HitTest = hitTest;
-            CurrentDirectory = null;
-            Files = new ObservableCollection<string>();
+            editorToolContext.Selection = selectionTool;
+            editorToolContext.HitTest = hitTest;
+            editorToolContext.CurrentDirectory = null;
+            editorToolContext.Files = new ObservableCollection<string>();
 
             var containerViews = new ObservableCollection<IContainerView>();
 
-            var containerView0 = CreateContainerView("View0");
-            InitContainerView(containerView0);
+            var containerView0 = editorToolContext.CreateContainerView("View0");
+            editorToolContext.InitContainerView(containerView0);
 
-            var containerView1 = CreateContainerView("View1");
-            InitContainerView(containerView1);
+            var containerView1 = editorToolContext.CreateContainerView("View1");
+            editorToolContext.InitContainerView(containerView1);
 
-            var containerView2 = CreateContainerView("View2");
-            InitContainerView(containerView2);
+            var containerView2 = editorToolContext.CreateContainerView("View2");
+            editorToolContext.InitContainerView(containerView2);
 
             containerViews.Add(containerView0);
             containerViews.Add(containerView1);
             containerViews.Add(containerView2);
 
-            ContainerViews = containerViews;
-            ContainerView = containerViews.FirstOrDefault();
-            Tools = tools;
-            CurrentTool = currentTool;
-            Mode = EditMode.Mouse;
+            editorToolContext.ContainerViews = containerViews;
+            editorToolContext.ContainerView = containerViews.FirstOrDefault();
+            editorToolContext.Tools = tools;
+            editorToolContext.CurrentTool = currentTool;
+            editorToolContext.Mode = EditMode.Mouse;
+
+            return editorToolContext;
         }
 
         public IContainerView CreateContainerView(string title)
@@ -466,8 +463,11 @@ namespace Draw2D.Editor
                         2.0, true, true,
                         new TextStyle("Calibri", 12.0, HAlign.Center, VAlign.Center, new ArgbColor(255, 255, 255, 0), true))
                 },
-                InputService = null,
-                DrawContainerView = null,
+                CurrentContainer = new CanvasContainer()
+                {
+                    Shapes = new ObservableCollection<BaseShape>()
+                },
+                WorkingContainer = null,
                 SelectionState = new SelectionState()
                 {
                     Hovered = null,
@@ -486,12 +486,9 @@ namespace Draw2D.Editor
                     InitFitMode = FitMode.Center,
                     AutoFitMode = FitMode.None
                 },
-                CurrentContainer = new CanvasContainer()
-                {
-                    Shapes = new ObservableCollection<BaseShape>()
-                },
-                WorkingContainer = null,
-                HitTest = null
+                DrawContainerView = null,
+                InputService = null,
+                ZoomService = null
             };
 
             containerView.Styles.Add(containerView.CurrentStyle);
@@ -503,8 +500,7 @@ namespace Draw2D.Editor
         {
             if (containerView != null)
             {
-                containerView.DrawContainerView = new DrawContainerView();
-                containerView.HitTest = _hitTest;
+                containerView.DrawContainerView = new AvaloniaSkiaView();
                 containerView.WorkingContainer = new CanvasContainer()
                 {
                     Shapes = new ObservableCollection<BaseShape>()
@@ -550,7 +546,6 @@ namespace Draw2D.Editor
                 }
                 containerView.DrawContainerView = null;
                 containerView.SelectionState = null;
-                containerView.HitTest = null;
                 containerView.WorkingContainer = null;
             }
         }
@@ -625,17 +620,13 @@ namespace Draw2D.Editor
             // TODO: Convert picture to shapes.
         }
 
-        private void Export(SKCanvas canvas, IContainerView view)
+        public static void Export(SKCanvas canvas, IContainerView view)
         {
-            using (var renderer = new SkiaShapeRenderer())
-            using (var background = SkiaHelper.ToSKPaintBrush(view.PrintBackground))
-            {
-                canvas.DrawRect(SkiaHelper.ToRect(0.0, 0.0, view.Width, view.Height), background);
-                view.CurrentContainer.Draw(canvas, renderer, 0.0, 0.0, DrawMode.Shape, null, null);
-            }
+            var skiaView = new ExportSkiaView();
+            skiaView.Draw(view, canvas, view.Width, view.Height, 0, 0, 1.0, 1.0);
         }
 
-        public void ExportSvg(string path, IContainerView view)
+        public static void ExportSvg(string path, IContainerView view)
         {
             using (var stream = new SKFileWStream(path))
             using (var writer = new SKXmlStreamWriter(stream))
@@ -645,7 +636,7 @@ namespace Draw2D.Editor
             }
         }
 
-        public void ExportPng(string path, IContainerView view)
+        public static void ExportPng(string path, IContainerView view)
         {
             var info = new SKImageInfo((int)view.Width, (int)view.Height);
             using (var bitmap = new SKBitmap(info))
@@ -663,7 +654,7 @@ namespace Draw2D.Editor
             }
         }
 
-        public void ExportPdf(string path, IContainerView view)
+        public static void ExportPdf(string path, IContainerView view)
         {
             using (var stream = new SKFileWStream(path))
             {
@@ -834,12 +825,13 @@ namespace Draw2D.Editor
                 Shapes = new ObservableCollection<BaseShape>()
             };
             group.Shapes.Add(
-                new RectangleShape(new PointShape(30, 30, context.ContainerView?.PointTemplate),
-                new PointShape(60, 60, context.ContainerView?.PointTemplate))
-                {
-                    Points = new ObservableCollection<PointShape>(),
-                    Style = context.ContainerView?.CurrentStyle
-                });
+                new RectangleShape(
+                    new PointShape(30, 30, context.ContainerView?.PointTemplate),
+                    new PointShape(60, 60, context.ContainerView?.PointTemplate))
+                    {
+                        Points = new ObservableCollection<PointShape>(),
+                        Style = context.ContainerView?.CurrentStyle
+                    });
             group.Points.Add(new PointShape(45, 30, context.ContainerView?.PointTemplate));
             group.Points.Add(new PointShape(45, 60, context.ContainerView?.PointTemplate));
             group.Points.Add(new PointShape(30, 45, context.ContainerView?.PointTemplate));
