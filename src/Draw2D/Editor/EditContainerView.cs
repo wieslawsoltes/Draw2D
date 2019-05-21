@@ -7,6 +7,7 @@ using System.Linq;
 using System.Runtime.Serialization;
 using Avalonia;
 using Avalonia.Controls;
+using Draw2D.Editor.Views;
 using Draw2D.Renderers;
 using Draw2D.ViewModels;
 using Draw2D.ViewModels.Bounds;
@@ -627,8 +628,8 @@ namespace Draw2D.Editor
 
         private void Export(SKCanvas canvas, IContainerView view)
         {
-            var presenter = new ExportSkiaPresenter();
-            presenter.Draw(view, canvas, view.Width, view.Height, 0, 0, 1.0, 1.0);
+            var skiaView = new ExportSkiaView();
+            skiaView.Draw(view, canvas, view.Width, view.Height, 0, 0, 1.0, 1.0);
         }
 
         public void ExportSvg(string path, IContainerView view)
