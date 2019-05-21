@@ -40,11 +40,16 @@ namespace Draw2D
                         return;
                     }
                 }
-                else if (args.Length == 2)
+                else if (args.Length == 3)
                 {
-                    var containerView = EditorToolContext.LoadFromJson<ContainerView>(args[1]);
-                    EditorToolContext.Export(args[1], containerView);
-                    return;
+                    var command = args[0];
+
+                    if (command == "--export")
+                    {
+                        var containerView = EditorToolContext.LoadFromJson<ContainerView>(args[1]);
+                        EditorToolContext.Export(args[2], containerView);
+                        return;
+                    }
                 }
 
                 BuildAvaloniaApp().Start(AppMain, args);
