@@ -477,15 +477,8 @@ namespace Draw2D.Editor
                     new TextStyle("Calibri", 12.0, HAlign.Center, VAlign.Center, new ArgbColor(255, 255, 255, 0), true))
             };
 
-            var containerViews = new ObservableCollection<IContainerView>();
-
-            var containerView = editorToolContext.CreateContainerView("View");
-            editorToolContext.InitContainerView(containerView);
-
-            containerViews.Add(containerView);
-
-            editorToolContext.ContainerViews = containerViews;
-            editorToolContext.ContainerView = containerViews.FirstOrDefault();
+            editorToolContext.ContainerViews = new ObservableCollection<IContainerView>();
+            editorToolContext.ContainerView = null;
             editorToolContext.Tools = tools;
             editorToolContext.CurrentTool = currentTool;
             editorToolContext.Mode = EditMode.Mouse;
@@ -536,14 +529,12 @@ namespace Draw2D.Editor
 
         public void InitContainerView(IContainerView containerView)
         {
-            if (containerView != null)
+            containerView.DrawContainerView = new AvaloniaSkiaView();
+
+            containerView.WorkingContainer = new CanvasContainer()
             {
-                containerView.DrawContainerView = new AvaloniaSkiaView();
-                containerView.WorkingContainer = new CanvasContainer()
-                {
-                    Shapes = new ObservableCollection<BaseShape>()
-                };
-            }
+                Shapes = new ObservableCollection<BaseShape>()
+            };
         }
 
         public void AddContainerView(IContainerView containerView)
@@ -588,23 +579,32 @@ namespace Draw2D.Editor
             }
         }
 
-        public void NewContainerView()
+        public void NewContainerView(string title)
         {
-            var containerView = CreateContainerView("View");
-            InitContainerView(containerView);
-            AddContainerView(containerView);
+            var containerView = CreateContainerView(title);
+            if (containerView != null)
+            {
+                InitContainerView(containerView);
+                AddContainerView(containerView);
+            }
         }
 
         public void Open(string path)
         {
             var containerView = LoadFromJson<ContainerView>(path);
-            InitContainerView(containerView);
-            AddContainerView(containerView);
+            if (containerView != null)
+            {
+                InitContainerView(containerView);
+                AddContainerView(containerView);
+            }
         }
 
         public void Save(string path)
         {
-            SaveAsjson(path, ContainerView);
+            if (ContainerView != null)
+            {
+                SaveAsjson(path, ContainerView);
+            }
         }
 
         public async void OpenContainerView()

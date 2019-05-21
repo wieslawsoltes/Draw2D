@@ -27,7 +27,7 @@ namespace Draw2D
                     if (command == "--new-view")
                     {
                         var editorToolContext = EditorToolContext.Create();
-                        var containerView = editorToolContext.ContainerView;
+                        var containerView = editorToolContext.CreateContainerView("View");
                         EditorToolContext.SaveAsjson(containerView.Title + ".json", containerView);
                         return;
                     }
@@ -93,6 +93,7 @@ namespace Draw2D
             else
             {
                 editorToolContext = EditorToolContext.Create();
+                editorToolContext.NewContainerView("View");
                 editorToolContext.CurrentDirectory = Directory.GetCurrentDirectory();
                 editorToolContext.AddFiles(editorToolContext.CurrentDirectory);
             }

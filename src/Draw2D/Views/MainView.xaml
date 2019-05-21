@@ -16,7 +16,7 @@
     </UserControl.Resources>
     <UserControl.KeyBindings>
         <!-- File -->
-        <KeyBinding Command="{Binding NewContainerView}" Gesture="Ctrl+N"/>
+        <KeyBinding Command="{Binding NewContainerView}" CommandParameter="View" Gesture="Ctrl+N"/>
         <KeyBinding Command="{Binding OpenContainerView}" Gesture="Ctrl+O"/>
         <KeyBinding Command="{Binding SaveContainerViewAs}" Gesture="Ctrl+S"/>
         <KeyBinding Command="{Binding ExportSvgFile}" Gesture="Ctrl+E"/>
@@ -25,7 +25,7 @@
     <Grid RowDefinitions="Auto,5,*,5" ColumnDefinitions="340,Auto,*">
         <Menu Background="Transparent" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3">
             <MenuItem Header="_File">
-                <MenuItem Header="_New View" Command="{Binding NewContainerView}"/>
+                <MenuItem Header="_New View" Command="{Binding NewContainerView}" CommandParameter="View"/>
                 <Separator/>
                 <MenuItem Header="_Close View" Command="{Binding CloseContainerView}" CommandParameter="{Binding ContainerView, FallbackValue={x:Null}}"/>
                 <Separator/>
