@@ -27,11 +27,6 @@ namespace Draw2D
                     var inputExtension = Path.GetExtension(inputPath);
                     var outputExtension = Path.GetExtension(outputPath);
 
-                    Console.WriteLine($"inputPath: {inputPath}");
-                    Console.WriteLine($"outputPath: {outputPath}");
-                    Console.WriteLine($"inputExtension: {inputExtension}");
-                    Console.WriteLine($"outputExtension: {outputExtension}");
-
                     if (string.Compare(inputExtension, ".json", StringComparison.OrdinalIgnoreCase) == 0)
                     {
                         var containerView = EditorToolContext.LoadFromJson<ContainerView>(inputPath);
