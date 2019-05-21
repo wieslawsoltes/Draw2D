@@ -24,11 +24,18 @@ namespace Draw2D
                 {
                     var command = args[0];
 
-                    if (command == "--new")
+                    if (command == "--new-view")
                     {
                         var editorToolContext = EditorToolContext.Create();
                         var containerView = editorToolContext.ContainerView;
                         EditorToolContext.SaveAsjson(containerView.Title + ".json", containerView);
+                        return;
+                    }
+
+                    if (command == "--new-editor")
+                    {
+                        var editorToolContext = EditorToolContext.Create();
+                        EditorToolContext.SaveAsjson("editor.json", editorToolContext);
                         return;
                     }
                 }
