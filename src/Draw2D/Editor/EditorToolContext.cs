@@ -264,7 +264,7 @@ namespace Draw2D.Editor
                 ExportPdf(path, containerView);
             }
         }
-        
+
         public async void ImportFile()
         {
             var dlg = new OpenFileDialog();
@@ -396,10 +396,10 @@ namespace Draw2D.Editor
                 new RectangleShape(
                     new PointShape(30, 30, context.PointTemplate),
                     new PointShape(60, 60, context.PointTemplate))
-                    {
-                        Points = new ObservableCollection<PointShape>(),
-                        Style = context.CurrentStyle
-                    });
+                {
+                    Points = new ObservableCollection<PointShape>(),
+                    Style = context.CurrentStyle
+                });
             group.Points.Add(new PointShape(45, 30, context.PointTemplate));
             group.Points.Add(new PointShape(45, 60, context.PointTemplate));
             group.Points.Add(new PointShape(30, 45, context.PointTemplate));
