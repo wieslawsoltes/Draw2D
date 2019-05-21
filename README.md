@@ -16,3 +16,13 @@ dotnet publish ./src/Draw2D/Draw2D.csproj -f netcoreapp3.0 -c Release -r win-x64
 dotnet publish ./src/Draw2D/Draw2D.csproj -f netcoreapp3.0 -c Release -r linux-x64 -o Draw2D_netcoreapp3.0_linux-x64
 dotnet publish ./src/Draw2D/Draw2D.csproj -f netcoreapp3.0 -c Release -r osx-x64 -o Draw2D_netcoreapp3.0_osx-x64
 ```
+
+### Command-Line
+
+```
+dotnet build
+dotnet /home/ubuntu/environment/src/Draw2D/bin/Debug/netcoreapp3.0/Draw2D.dll --new
+dotnet /home/ubuntu/environment/src/Draw2D/bin/Debug/netcoreapp3.0/Draw2D.dll View0.json View0.svg
+dotnet /home/ubuntu/environment/src/Draw2D/bin/Debug/netcoreapp3.0/Draw2D.dll View0.json View0.png
+dotnet /home/ubuntu/environment/src/Draw2D/bin/Debug/netcoreapp3.0/Draw2D.dll View0.json View0.pdf
+```

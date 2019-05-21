@@ -825,12 +825,13 @@ namespace Draw2D.Editor
                 Shapes = new ObservableCollection<BaseShape>()
             };
             group.Shapes.Add(
-                new RectangleShape(new PointShape(30, 30, context.ContainerView?.PointTemplate),
-                new PointShape(60, 60, context.ContainerView?.PointTemplate))
-                {
-                    Points = new ObservableCollection<PointShape>(),
-                    Style = context.ContainerView?.CurrentStyle
-                });
+                new RectangleShape(
+                    new PointShape(30, 30, context.ContainerView?.PointTemplate),
+                    new PointShape(60, 60, context.ContainerView?.PointTemplate))
+                    {
+                        Points = new ObservableCollection<PointShape>(),
+                        Style = context.ContainerView?.CurrentStyle
+                    });
             group.Points.Add(new PointShape(45, 30, context.ContainerView?.PointTemplate));
             group.Points.Add(new PointShape(45, 60, context.ContainerView?.PointTemplate));
             group.Points.Add(new PointShape(30, 45, context.ContainerView?.PointTemplate));

@@ -20,7 +20,19 @@ namespace Draw2D
         {
             try
             {
-                if (args.Length == 2)
+                if (args.Length == 1)
+                {
+                    var command = args[0];
+
+                    if (command == "--new")
+                    {
+                        var editorToolContext = EditorToolContext.Create();
+                        var containerView = editorToolContext.ContainerView;
+                        EditorToolContext.SaveAsjson(containerView.Title + ".json", containerView);
+                        return;
+                    }
+                }
+                else if (args.Length == 2)
                 {
                     var inputPath = args[0];
                     var outputPath = args[1];
