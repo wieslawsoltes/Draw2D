@@ -646,7 +646,7 @@ namespace Draw2D.Editor
             }
         }
 
-        public void ClearFiles(string path)
+        public void ClearFiles()
         {
             Files.Clear();
         }
