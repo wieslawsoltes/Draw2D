@@ -459,8 +459,11 @@ namespace Draw2D.Editor
                         2.0, true, true,
                         new TextStyle("Calibri", 12.0, HAlign.Center, VAlign.Center, new ArgbColor(255, 255, 255, 0), true))
                 },
-                InputService = null,
-                DrawContainerView = null,
+                CurrentContainer = new CanvasContainer()
+                {
+                    Shapes = new ObservableCollection<BaseShape>()
+                },
+                WorkingContainer = null,
                 SelectionState = new SelectionState()
                 {
                     Hovered = null,
@@ -479,11 +482,9 @@ namespace Draw2D.Editor
                     InitFitMode = FitMode.Center,
                     AutoFitMode = FitMode.None
                 },
-                CurrentContainer = new CanvasContainer()
-                {
-                    Shapes = new ObservableCollection<BaseShape>()
-                },
-                WorkingContainer = null
+                DrawContainerView = null,
+                InputService = null,
+                ZoomService = null
             };
 
             containerView.Styles.Add(containerView.CurrentStyle);

@@ -3179,11 +3179,11 @@ namespace Draw2D.ViewModels.Containers
         IList<ShapeStyle> Styles { get; set; }
         ShapeStyle CurrentStyle { get; set; }
         BaseShape PointTemplate { get; set; }
-        IDrawContainerView DrawContainerView { get; set; }
-        ISelectionState SelectionState { get; set; }
-        IZoomServiceState ZoomServiceState { get; set; }
         ICanvasContainer CurrentContainer { get; set; }
         ICanvasContainer WorkingContainer { get; set; }
+        ISelectionState SelectionState { get; set; }
+        IZoomServiceState ZoomServiceState { get; set; }
+        IDrawContainerView DrawContainerView { get; set; }
     }
 
     public interface IToolContext : IInputTarget
@@ -3418,13 +3418,13 @@ namespace Draw2D.ViewModels.Containers
         private IList<ShapeStyle> _styles;
         private ShapeStyle _currentStyle;
         private BaseShape _pointTemplate;
-        private IInputService _inputService;
-        private IZoomService _zoomService;
-        private IDrawContainerView _drawContainerView;
-        private ISelectionState _selectionState;
-        private IZoomServiceState _zoomServiceState;
         private ICanvasContainer _currentContainer;
         private ICanvasContainer _workingContainer;
+        private ISelectionState _selectionState;
+        private IZoomServiceState _zoomServiceState;
+        private IDrawContainerView _drawContainerView;
+        private IInputService _inputService;
+        private IZoomService _zoomService;
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public string Title
@@ -3489,25 +3489,18 @@ namespace Draw2D.ViewModels.Containers
             set => Update(ref _pointTemplate, value);
         }
 
-        [IgnoreDataMember]
-        public IInputService InputService
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public ICanvasContainer CurrentContainer
         {
-            get => _inputService;
-            set => Update(ref _inputService, value);
+            get => _currentContainer;
+            set => Update(ref _currentContainer, value);
         }
 
         [IgnoreDataMember]
-        public IZoomService ZoomService
+        public ICanvasContainer WorkingContainer
         {
-            get => _zoomService;
-            set => Update(ref _zoomService, value);
-        }
-
-        [IgnoreDataMember]
-        public IDrawContainerView DrawContainerView
-        {
-            get => _drawContainerView;
-            set => Update(ref _drawContainerView, value);
+            get => _workingContainer;
+            set => Update(ref _workingContainer, value);
         }
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
@@ -3524,18 +3517,25 @@ namespace Draw2D.ViewModels.Containers
             set => Update(ref _zoomServiceState, value);
         }
 
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public ICanvasContainer CurrentContainer
+        [IgnoreDataMember]
+        public IDrawContainerView DrawContainerView
         {
-            get => _currentContainer;
-            set => Update(ref _currentContainer, value);
+            get => _drawContainerView;
+            set => Update(ref _drawContainerView, value);
         }
 
         [IgnoreDataMember]
-        public ICanvasContainer WorkingContainer
+        public IInputService InputService
         {
-            get => _workingContainer;
-            set => Update(ref _workingContainer, value);
+            get => _inputService;
+            set => Update(ref _inputService, value);
+        }
+
+        [IgnoreDataMember]
+        public IZoomService ZoomService
+        {
+            get => _zoomService;
+            set => Update(ref _zoomService, value);
         }
 
         public override void Invalidate()
@@ -3578,11 +3578,13 @@ namespace Draw2D.ViewModels.Containers
                 Styles = new ObservableCollection<ShapeStyle>(),
                 CurrentStyle = (ShapeStyle)this.CurrentStyle?.Copy(shared),
                 PointTemplate = (BaseShape)this.PointTemplate?.Copy(shared),
-                DrawContainerView = null,
+                CurrentContainer = (ICanvasContainer)this.CurrentContainer?.Copy(shared),
+                WorkingContainer = null,
                 SelectionState = (ISelectionState)this.SelectionState?.Copy(shared),
                 ZoomServiceState = (IZoomServiceState)this.ZoomServiceState?.Copy(shared),
-                CurrentContainer = (ICanvasContainer)this.CurrentContainer?.Copy(shared),
-                WorkingContainer = null
+                DrawContainerView = null,
+                InputService = null,
+                ZoomService = null
             };
 
             foreach (var style in this.Styles)
