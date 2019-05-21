@@ -8,6 +8,7 @@ using Avalonia.Controls;
 using Avalonia.Logging.Serilog;
 using Avalonia.Markup.Xaml;
 using Draw2D.Editor;
+using Draw2D.ViewModels.Containers;
 using Draw2D.Views;
 
 namespace Draw2D
@@ -19,6 +20,38 @@ namespace Draw2D
         {
             try
             {
+                if (args.Length == 2)
+                {
+                    var inputPath = args[0];
+                    var outputPath = args[1];
+                    var inputExtension = Path.GetExtension(inputPath);
+                    var outputExtension = Path.GetExtension(outputPath);
+
+                    Console.WriteLine($"inputPath: {inputPath}");
+                    Console.WriteLine($"outputPath: {outputPath}");
+                    Console.WriteLine($"inputExtension: {inputExtension}");
+                    Console.WriteLine($"outputExtension: {outputExtension}");
+
+                    if (string.Compare(inputExtension, ".json", StringComparison.OrdinalIgnoreCase) == 0)
+                    {
+                        var containerView = EditorToolContext.LoadFromJson<ContainerView>(inputPath);
+
+                        if (string.Compare(outputExtension, ".svg", StringComparison.OrdinalIgnoreCase) == 0)
+                        {
+                             EditorToolContext.ExportSvg(outputPath, containerView);
+                        }
+                        else if (string.Compare(outputExtension, ".png", StringComparison.OrdinalIgnoreCase) == 0)
+                        {
+                             EditorToolContext.ExportPng(outputPath, containerView);
+                        }
+                        else if (string.Compare(outputExtension, ".pdf", StringComparison.OrdinalIgnoreCase) == 0)
+                        {
+                             EditorToolContext.ExportPdf(outputPath, containerView);
+                        }
+                    }
+                    return;
+                }
+
                 BuildAvaloniaApp().Start(AppMain, args);
             }
             catch (Exception ex)
