@@ -66,8 +66,10 @@ namespace Draw2D.Editor
             File.WriteAllText(path, json);
         }
 
-        public void Initialize()
+        public static EditorToolContext Create()
         {
+            var editorToolContext = new EditorToolContext();
+
             var hitTest = new HitTest();
 
             var gridSnapPointFilter = new GridSnapPointFilter()
@@ -405,31 +407,33 @@ namespace Draw2D.Editor
 
             var currentTool = tools.FirstOrDefault(t => t.Title == "Selection");
 
-            Selection = selectionTool;
-            HitTest = hitTest;
-            CurrentDirectory = null;
-            Files = new ObservableCollection<string>();
+            editorToolContext.Selection = selectionTool;
+            editorToolContext.HitTest = hitTest;
+            editorToolContext.CurrentDirectory = null;
+            editorToolContext.Files = new ObservableCollection<string>();
 
             var containerViews = new ObservableCollection<IContainerView>();
 
-            var containerView0 = CreateContainerView("View0");
-            InitContainerView(containerView0);
+            var containerView0 = editorToolContext.CreateContainerView("View0");
+            editorToolContext.InitContainerView(containerView0);
 
-            var containerView1 = CreateContainerView("View1");
-            InitContainerView(containerView1);
+            var containerView1 = editorToolContext.CreateContainerView("View1");
+            editorToolContext.InitContainerView(containerView1);
 
-            var containerView2 = CreateContainerView("View2");
-            InitContainerView(containerView2);
+            var containerView2 = editorToolContext.CreateContainerView("View2");
+            editorToolContext.InitContainerView(containerView2);
 
             containerViews.Add(containerView0);
             containerViews.Add(containerView1);
             containerViews.Add(containerView2);
 
-            ContainerViews = containerViews;
-            ContainerView = containerViews.FirstOrDefault();
-            Tools = tools;
-            CurrentTool = currentTool;
-            Mode = EditMode.Mouse;
+            editorToolContext.ContainerViews = containerViews;
+            editorToolContext.ContainerView = containerViews.FirstOrDefault();
+            editorToolContext.Tools = tools;
+            editorToolContext.CurrentTool = currentTool;
+            editorToolContext.Mode = EditMode.Mouse;
+
+            return editorToolContext;
         }
 
         public IContainerView CreateContainerView(string title)

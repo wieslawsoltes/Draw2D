@@ -44,9 +44,7 @@ namespace Draw2D
             }
             else
             {
-                editorToolContext = new EditorToolContext();
-                editorToolContext.Initialize();
-
+                editorToolContext = EditorToolContext.Create();
                 editorToolContext.CurrentDirectory = Directory.GetCurrentDirectory();
                 editorToolContext.AddFiles(editorToolContext.CurrentDirectory);
             }
