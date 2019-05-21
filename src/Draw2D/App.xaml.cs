@@ -25,44 +25,25 @@ namespace Draw2D
 
                     if (command == "--new-view")
                     {
-                        var editorToolContext = EditorToolContext.Create();
-                        var containerView = editorToolContext.CreateContainerView("View");
+                        var factory = new Factory();
+                        var editorToolContext = factory.CreateToolContext();
+                        var containerView = factory.CreateContainerView("View");
                         EditorToolContext.SaveAsjson(containerView.Title + ".json", containerView);
                         return;
                     }
 
                     if (command == "--new-editor")
                     {
-                        var editorToolContext = EditorToolContext.Create();
+                        var factory = new Factory();
+                        var editorToolContext = factory.CreateToolContext();
                         EditorToolContext.SaveAsjson("editor.json", editorToolContext);
                         return;
                     }
                 }
                 else if (args.Length == 2)
                 {
-                    var inputPath = args[0];
-                    var outputPath = args[1];
-                    var inputExtension = Path.GetExtension(inputPath);
-                    var outputExtension = Path.GetExtension(outputPath);
-
-                    if (string.Compare(inputExtension, ".json", StringComparison.OrdinalIgnoreCase) == 0)
-                    {
-                        var containerView = EditorToolContext.LoadFromJson<ContainerView>(inputPath);
-
-                        if (string.Compare(outputExtension, ".svg", StringComparison.OrdinalIgnoreCase) == 0)
-                        {
-                             EditorToolContext.ExportSvg(outputPath, containerView);
-                        }
-                        else if (string.Compare(outputExtension, ".png", StringComparison.OrdinalIgnoreCase) == 0)
-                        {
-                             EditorToolContext.ExportPng(outputPath, containerView);
-                        }
-                        else if (string.Compare(outputExtension, ".pdf", StringComparison.OrdinalIgnoreCase) == 0)
-                        {
-                             EditorToolContext.ExportPdf(outputPath, containerView);
-                        }
-                    }
-
+                    var containerView = EditorToolContext.LoadFromJson<ContainerView>(args[1]);
+                    EditorToolContext.Export(args[1], containerView);
                     return;
                 }
 
@@ -77,33 +58,43 @@ namespace Draw2D
 
         static void AppMain(Application app, string[] args)
         {
-            EditorToolContext editorToolContext = null;
-            WindowSettings mainWindowSettings = null;
+            IToolContext toolContext = null;
+            WindowSettings windowSettings = null;
 
             if (File.Exists("editor.json"))
             {
-                editorToolContext = EditorToolContext.LoadFromJson<EditorToolContext>("editor.json");
+                toolContext = EditorToolContext.LoadFromJson<IToolContext>("editor.json");
 
-                foreach (var containerView in editorToolContext.ContainerViews)
+                // TODO: Refactor to not use concrete tool context type.
+                if (toolContext is EditorToolContext editorToolContext)
                 {
-                    editorToolContext.InitContainerView(containerView);
+                    foreach (var containerView in editorToolContext.ContainerViews)
+                    {
+                        editorToolContext.InitContainerView(containerView);
+                    }
                 }
             }
             else
             {
-                editorToolContext = EditorToolContext.Create();
-                editorToolContext.NewContainerView("View");
-                editorToolContext.CurrentDirectory = Directory.GetCurrentDirectory();
-                editorToolContext.AddFiles(editorToolContext.CurrentDirectory);
+                var factory = new Factory();
+                toolContext = factory.CreateToolContext();
+
+                // TODO: Refactor to not use concrete tool context type.
+                if (toolContext is EditorToolContext editorToolContext)
+                {
+                    editorToolContext.NewContainerView("View");
+                    editorToolContext.CurrentDirectory = Directory.GetCurrentDirectory();
+                    editorToolContext.AddFiles(editorToolContext.CurrentDirectory);
+                }
             }
 
             if (File.Exists("window.json"))
             {
-                mainWindowSettings = EditorToolContext.LoadFromJson<WindowSettings>("window.json");
+                windowSettings = EditorToolContext.LoadFromJson<WindowSettings>("window.json");
             }
             else
             {
-                mainWindowSettings = new WindowSettings()
+                windowSettings = new WindowSettings()
                 {
                     Width = 1320,
                     Height = 690,
@@ -115,22 +106,22 @@ namespace Draw2D
 
             var window = new MainWindow
             {
-                DataContext = editorToolContext
+                DataContext = toolContext
             };
 
-            if (!double.IsNaN(mainWindowSettings.Width))
+            if (!double.IsNaN(windowSettings.Width))
             {
-                window.Width = mainWindowSettings.Width;
+                window.Width = windowSettings.Width;
             }
 
-            if (!double.IsNaN(mainWindowSettings.Height))
+            if (!double.IsNaN(windowSettings.Height))
             {
-                window.Height = mainWindowSettings.Height;
+                window.Height = windowSettings.Height;
             }
 
-            if (!double.IsNaN(mainWindowSettings.X) && !double.IsNaN(mainWindowSettings.Y))
+            if (!double.IsNaN(windowSettings.X) && !double.IsNaN(windowSettings.Y))
             {
-                window.Position = new PixelPoint((int)mainWindowSettings.X, (int)mainWindowSettings.Y);
+                window.Position = new PixelPoint((int)windowSettings.X, (int)windowSettings.Y);
                 window.WindowStartupLocation = WindowStartupLocation.Manual;
             }
             else
@@ -138,21 +129,21 @@ namespace Draw2D
                 window.WindowStartupLocation = WindowStartupLocation.CenterScreen;
             }
 
-            window.WindowState = mainWindowSettings.WindowState;
+            window.WindowState = windowSettings.WindowState;
 
             window.Closing += (sender, e) =>
             {
-                mainWindowSettings.Width = window.Width;
-                mainWindowSettings.Height = window.Height;
-                mainWindowSettings.X = window.Position.X;
-                mainWindowSettings.Y = window.Position.Y;
-                mainWindowSettings.WindowState = window.WindowState;
+                windowSettings.Width = window.Width;
+                windowSettings.Height = window.Height;
+                windowSettings.X = window.Position.X;
+                windowSettings.Y = window.Position.Y;
+                windowSettings.WindowState = window.WindowState;
             };
 
             app.Run(window);
 
-            EditorToolContext.SaveAsjson<EditorToolContext>("editor.json", editorToolContext);
-            EditorToolContext.SaveAsjson<WindowSettings>("window.json", mainWindowSettings);
+            EditorToolContext.SaveAsjson("editor.json", toolContext);
+            EditorToolContext.SaveAsjson("window.json", windowSettings);
         }
 
         public static AppBuilder BuildAvaloniaApp()
@@ -162,7 +153,6 @@ namespace Draw2D
                          .With(new X11PlatformOptions { UseGpu = true, UseEGL = true })
                          .With(new AvaloniaNativePlatformOptions { UseGpu = true })
                          .UseSkia()
-                         //.UseDirect2D1()
                          .LogToDebug();
 
         public override void Initialize()
