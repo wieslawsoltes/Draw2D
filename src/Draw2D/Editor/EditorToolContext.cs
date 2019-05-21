@@ -50,6 +50,58 @@ namespace Draw2D.Editor
             set => Update(ref _files, value);
         }
 
+        private IList<ShapeStyle> DefaultStyles = new ObservableCollection<ShapeStyle>()
+        {
+            new ShapeStyle(
+                    "Default",
+                    new ArgbColor(255, 0, 0, 0),
+                    new ArgbColor(255, 255, 255, 255),
+                    2.0, true, true,
+                    new TextStyle("Calibri", 12.0, HAlign.Center, VAlign.Center, new ArgbColor(255, 0, 0, 0), true)),
+            new ShapeStyle(
+                    "Black",
+                    new ArgbColor(255, 0, 0, 0),
+                    new ArgbColor(255, 0, 0, 0),
+                    2.0, true, true,
+                    new TextStyle("Calibri", 12.0, HAlign.Center, VAlign.Center, new ArgbColor(255, 0, 0, 0), true)),
+            new ShapeStyle(
+                    "Black",
+                    new ArgbColor(255, 0, 0, 0),
+                    new ArgbColor(255, 0, 0, 0),
+                    2.0, true, true,
+                    new TextStyle("Calibri", 12.0, HAlign.Center, VAlign.Center, new ArgbColor(255, 0, 0, 0), true)),
+            new ShapeStyle(
+                    "Black",
+                    new ArgbColor(255, 0, 0, 0),
+                    new ArgbColor(255, 0, 0, 0),
+                    2.0, true, true,
+                    new TextStyle("Calibri", 12.0, HAlign.Center, VAlign.Center, new ArgbColor(255, 0, 0, 0), true)),
+            new ShapeStyle(
+                    "Cyan",
+                    new ArgbColor(255, 0, 255, 255),
+                    new ArgbColor(255, 0, 255, 255),
+                    2.0, true, true,
+                    new TextStyle("Calibri", 12.0, HAlign.Center, VAlign.Center, new ArgbColor(255, 0, 255, 255), true)),
+            new ShapeStyle(
+                    "Magenta",
+                    new ArgbColor(255, 255, 0, 255),
+                    new ArgbColor(255, 255, 0, 255),
+                    2.0, true, true,
+                    new TextStyle("Calibri", 12.0, HAlign.Center, VAlign.Center, new ArgbColor(255, 255, 0, 255), true)),
+            new ShapeStyle(
+                    "Yellow",
+                    new ArgbColor(255, 255, 255, 0),
+                    new ArgbColor(255, 255, 255, 0),
+                    2.0, true, true,
+                    new TextStyle("Calibri", 12.0, HAlign.Center, VAlign.Center, new ArgbColor(255, 255, 255, 0), true)),
+            new ShapeStyle(
+                    "Black",
+                    new ArgbColor(255, 0, 0, 0),
+                    new ArgbColor(255, 0, 0, 0),
+                    2.0, true, true,
+                    new TextStyle("Calibri", 12.0, HAlign.Center, VAlign.Center, new ArgbColor(255, 0, 0, 0), true))
+        };
+
         public EditorToolContext()
         {
         }
@@ -443,16 +495,11 @@ namespace Draw2D.Editor
                 Title = title,
                 Width = 720,
                 Height = 630,
-                PrintBackground = new ArgbColor(255, 255, 255, 255),
-                WorkBackground = new ArgbColor(255, 128, 128, 128),
-                InputBackground = new ArgbColor(255, 211, 211, 211),
-                Styles = new ObservableCollection<ShapeStyle>(),
-                CurrentStyle = new ShapeStyle(
-                    "CurrentStyle",
-                    new ArgbColor(255, 0, 255, 0),
-                    new ArgbColor(80, 0, 255, 0),
-                    2.0, true, true,
-                    new TextStyle("Calibri", 12.0, HAlign.Center, VAlign.Center, new ArgbColor(255, 0, 255, 0), true)),
+                PrintBackground = new ArgbColor(0, 255, 255, 255),
+                WorkBackground = new ArgbColor(255, 192, 192, 192),
+                InputBackground = new ArgbColor(255, 128, 128, 128),
+                Styles = DefaultStyles,
+                CurrentStyle = DefaultStyles.FirstOrDefault(),
                 PointTemplate = new EllipseShape(new PointShape(-3, -3, null), new PointShape(3, 3, null))
                 {
                     Points = new ObservableCollection<PointShape>(),
@@ -490,8 +537,6 @@ namespace Draw2D.Editor
                 InputService = null,
                 ZoomService = null
             };
-
-            containerView.Styles.Add(containerView.CurrentStyle);
 
             return containerView;
         }
