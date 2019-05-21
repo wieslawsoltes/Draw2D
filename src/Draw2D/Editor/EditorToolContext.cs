@@ -19,7 +19,6 @@ using Draw2D.ViewModels.Shapes;
 using Draw2D.ViewModels.Style;
 using Draw2D.ViewModels.Tools;
 using SkiaSharp;
-using SkiaSharp.Extended.Svg;
 
 namespace Draw2D.Editor
 {
