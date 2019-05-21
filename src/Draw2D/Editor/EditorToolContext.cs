@@ -26,7 +26,6 @@ namespace Draw2D.Editor
     public class EditorToolContext : ToolContext
     {
         private ISelection _selection;
-        private IHitTest _hitTest;
         private string _currentDirectory;
         private IList<string> _files;
 
@@ -35,13 +34,6 @@ namespace Draw2D.Editor
         {
             get => _selection;
             set => Update(ref _selection, value);
-        }
-
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public IHitTest HitTest
-        {
-            get => _hitTest;
-            set => Update(ref _hitTest, value);
         }
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
@@ -491,8 +483,7 @@ namespace Draw2D.Editor
                 {
                     Shapes = new ObservableCollection<BaseShape>()
                 },
-                WorkingContainer = null,
-                HitTest = null
+                WorkingContainer = null
             };
 
             containerView.Styles.Add(containerView.CurrentStyle);
@@ -505,7 +496,6 @@ namespace Draw2D.Editor
             if (containerView != null)
             {
                 containerView.DrawContainerView = new AvaloniaSkiaView();
-                containerView.HitTest = _hitTest;
                 containerView.WorkingContainer = new CanvasContainer()
                 {
                     Shapes = new ObservableCollection<BaseShape>()
@@ -551,7 +541,6 @@ namespace Draw2D.Editor
                 }
                 containerView.DrawContainerView = null;
                 containerView.SelectionState = null;
-                containerView.HitTest = null;
                 containerView.WorkingContainer = null;
             }
         }
