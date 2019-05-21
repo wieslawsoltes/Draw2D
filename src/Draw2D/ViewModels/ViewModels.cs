@@ -3176,9 +3176,6 @@ namespace Draw2D.ViewModels.Containers
         ArgbColor PrintBackground { get; set; }
         ArgbColor WorkBackground { get; set; }
         ArgbColor InputBackground { get; set; }
-        IList<ShapeStyle> Styles { get; set; }
-        ShapeStyle CurrentStyle { get; set; }
-        BaseShape PointTemplate { get; set; }
         ICanvasContainer CurrentContainer { get; set; }
         ICanvasContainer WorkingContainer { get; set; }
         ISelectionState SelectionState { get; set; }
@@ -3188,6 +3185,9 @@ namespace Draw2D.ViewModels.Containers
 
     public interface IToolContext : IInputTarget
     {
+        IList<ShapeStyle> Styles { get; set; }
+        ShapeStyle CurrentStyle { get; set; }
+        BaseShape PointTemplate { get; set; }
         IHitTest HitTest { get; set; }
         IContainerView ContainerView { get; set; }
         IList<ITool> Tools { get; set; }
@@ -3415,9 +3415,6 @@ namespace Draw2D.ViewModels.Containers
         private ArgbColor _printBackground;
         private ArgbColor _workBackground;
         private ArgbColor _inputBackground;
-        private IList<ShapeStyle> _styles;
-        private ShapeStyle _currentStyle;
-        private BaseShape _pointTemplate;
         private ICanvasContainer _currentContainer;
         private ICanvasContainer _workingContainer;
         private ISelectionState _selectionState;
@@ -3466,27 +3463,6 @@ namespace Draw2D.ViewModels.Containers
         {
             get => _inputBackground;
             set => Update(ref _inputBackground, value);
-        }
-
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public IList<ShapeStyle> Styles
-        {
-            get => _styles;
-            set => Update(ref _styles, value);
-        }
-
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public ShapeStyle CurrentStyle
-        {
-            get => _currentStyle;
-            set => Update(ref _currentStyle, value);
-        }
-
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public BaseShape PointTemplate
-        {
-            get => _pointTemplate;
-            set => Update(ref _pointTemplate, value);
         }
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
@@ -3575,9 +3551,6 @@ namespace Draw2D.ViewModels.Containers
                 PrintBackground = (ArgbColor)this.PrintBackground?.Copy(shared),
                 WorkBackground = (ArgbColor)this.WorkBackground?.Copy(shared),
                 InputBackground = (ArgbColor)this.InputBackground?.Copy(shared),
-                Styles = new ObservableCollection<ShapeStyle>(),
-                CurrentStyle = (ShapeStyle)this.CurrentStyle?.Copy(shared),
-                PointTemplate = (BaseShape)this.PointTemplate?.Copy(shared),
                 CurrentContainer = (ICanvasContainer)this.CurrentContainer?.Copy(shared),
                 WorkingContainer = null,
                 SelectionState = (ISelectionState)this.SelectionState?.Copy(shared),
@@ -3587,14 +3560,6 @@ namespace Draw2D.ViewModels.Containers
                 ZoomService = null
             };
 
-            foreach (var style in this.Styles)
-            {
-                if (style is ICopyable copyable)
-                {
-                    copy.Styles.Add((ShapeStyle)copyable.Copy(shared));
-                }
-            }
-
             return copy;
         }
     }
@@ -3602,12 +3567,36 @@ namespace Draw2D.ViewModels.Containers
     [DataContract(IsReference = true)]
     public class ToolContext : ViewModelBase, IToolContext
     {
+        private IList<ShapeStyle> _styles;
+        private ShapeStyle _currentStyle;
+        private BaseShape _pointTemplate;
         private IHitTest _hitTest;
         private IList<IContainerView> _containerViews;
         private IContainerView _containerView;
         private IList<ITool> _tools;
         private ITool _currentTool;
         private EditMode _mode;
+
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public IList<ShapeStyle> Styles
+        {
+            get => _styles;
+            set => Update(ref _styles, value);
+        }
+
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public ShapeStyle CurrentStyle
+        {
+            get => _currentStyle;
+            set => Update(ref _currentStyle, value);
+        }
+
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public BaseShape PointTemplate
+        {
+            get => _pointTemplate;
+            set => Update(ref _pointTemplate, value);
+        }
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public IHitTest HitTest
@@ -3724,6 +3713,27 @@ namespace Draw2D.ViewModels.Containers
         public double GetHeight()
         {
             return ContainerView?.Height ?? 0.0;
+        }
+
+        public virtual object Copy(Dictionary<object, object> shared)
+        {
+            // TODO: Copy all properties.
+            var copy = new ToolContext()
+            {
+                Name = this.Name,
+                CurrentStyle = (ShapeStyle)this.CurrentStyle?.Copy(shared),
+                Styles = new ObservableCollection<ShapeStyle>()
+            };
+
+            foreach (var style in this.Styles)
+            {
+                if (style is ICopyable copyable)
+                {
+                    copy.Styles.Add((ShapeStyle)copyable.Copy(shared));
+                }
+            }
+
+            return copy;
         }
     }
 }
