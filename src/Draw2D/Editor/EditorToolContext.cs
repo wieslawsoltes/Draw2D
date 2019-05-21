@@ -1,5 +1,6 @@
 ﻿// Copyright (c) Wiesław Šoltés. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
@@ -22,53 +23,17 @@ using SkiaSharp.Extended.Svg;
 
 namespace Draw2D.Editor
 {
-    [DataContract(IsReference = true)]
-    public class EditorToolContext : ToolContext
+    public interface IFactory
     {
-        private ISelection _selection;
-        private string _currentDirectory;
-        private IList<string> _files;
+        IToolContext CreateToolContext();
+        IContainerView CreateContainerView(string title);
+    }
 
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public ISelection Selection
+    public class Factory : IFactory
+    {
+        public IToolContext CreateToolContext()
         {
-            get => _selection;
-            set => Update(ref _selection, value);
-        }
-
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public string CurrentDirectory
-        {
-            get => _currentDirectory;
-            set => Update(ref _currentDirectory, value);
-        }
-
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public IList<string> Files
-        {
-            get => _files;
-            set => Update(ref _files, value);
-        }
-
-        public EditorToolContext()
-        {
-        }
-
-        public static T LoadFromJson<T>(string path)
-        {
-            var json = File.ReadAllText(path);
-            return JsonSerializer.FromJson<T>(json);
-        }
-
-        public static void SaveAsjson<T>(string path, T value)
-        {
-            var json = JsonSerializer.ToJson<T>(value);
-            File.WriteAllText(path, json);
-        }
-
-        public static EditorToolContext Create()
-        {
-            var editorToolContext = new EditorToolContext();
+            var editorToolContext = new EditorToolContext(this);
 
             var hitTest = new HitTest();
 
@@ -526,6 +491,64 @@ namespace Draw2D.Editor
 
             return containerView;
         }
+    }
+
+    [DataContract(IsReference = true)]
+    public class EditorToolContext : ToolContext
+    {
+        private IFactory _factory;
+        private ISelection _selection;
+        private string _currentDirectory;
+        private IList<string> _files;
+
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public ISelection Selection
+        {
+            get => _selection;
+            set => Update(ref _selection, value);
+        }
+
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public string CurrentDirectory
+        {
+            get => _currentDirectory;
+            set => Update(ref _currentDirectory, value);
+        }
+
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public IList<string> Files
+        {
+            get => _files;
+            set => Update(ref _files, value);
+        }
+
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public IFactory Factory
+        {
+            get => _factory;
+            set => Update(ref _factory, value);
+        }
+
+        public EditorToolContext()
+        {
+        }
+
+        public EditorToolContext(IFactory factory)
+        {
+            _factory = factory;
+        }
+
+        public static T LoadFromJson<T>(string path)
+        {
+            var json = File.ReadAllText(path);
+            return JsonSerializer.FromJson<T>(json);
+        }
+
+        public static void SaveAsjson<T>(string path, T value)
+        {
+            var json = JsonSerializer.ToJson<T>(value);
+            File.WriteAllText(path, json);
+        }
 
         public void InitContainerView(IContainerView containerView)
         {
@@ -581,7 +604,7 @@ namespace Draw2D.Editor
 
         public void NewContainerView(string title)
         {
-            var containerView = CreateContainerView(title);
+            var containerView = _factory?.CreateContainerView(title);
             if (containerView != null)
             {
                 InitContainerView(containerView);
@@ -658,30 +681,30 @@ namespace Draw2D.Editor
             // TODO: Convert picture to shapes.
         }
 
-        public static void Export(SKCanvas canvas, IContainerView view)
+        public static void Export(SKCanvas canvas, IContainerView containerView)
         {
             var skiaView = new ExportSkiaView();
-            skiaView.Draw(view, canvas, view.Width, view.Height, 0, 0, 1.0, 1.0);
+            skiaView.Draw(containerView, canvas, containerView.Width, containerView.Height, 0, 0, 1.0, 1.0);
         }
 
-        public static void ExportSvg(string path, IContainerView view)
+        public static void ExportSvg(string path, IContainerView containerView)
         {
             using (var stream = new SKFileWStream(path))
             using (var writer = new SKXmlStreamWriter(stream))
-            using (var canvas = SKSvgCanvas.Create(SKRect.Create(0, 0, (int)view.Width, (int)view.Height), writer))
+            using (var canvas = SKSvgCanvas.Create(SKRect.Create(0, 0, (int)containerView.Width, (int)containerView.Height), writer))
             {
-                Export(canvas, view);
+                Export(canvas, containerView);
             }
         }
 
-        public static void ExportPng(string path, IContainerView view)
+        public static void ExportPng(string path, IContainerView containerView)
         {
-            var info = new SKImageInfo((int)view.Width, (int)view.Height);
+            var info = new SKImageInfo((int)containerView.Width, (int)containerView.Height);
             using (var bitmap = new SKBitmap(info))
             {
                 using (var canvas = new SKCanvas(bitmap))
                 {
-                    Export(canvas, view);
+                    Export(canvas, containerView);
                 }
                 using (var image = SKImage.FromBitmap(bitmap))
                 using (var data = image.Encode(SKEncodedImageFormat.Png, 100))
@@ -692,18 +715,36 @@ namespace Draw2D.Editor
             }
         }
 
-        public static void ExportPdf(string path, IContainerView view)
+        public static void ExportPdf(string path, IContainerView containerView)
         {
             using (var stream = new SKFileWStream(path))
             {
                 using (var pdf = SKDocument.CreatePdf(stream, 72.0f))
                 {
-                    using (var canvas = pdf.BeginPage((float)view.Width, (float)view.Height))
+                    using (var canvas = pdf.BeginPage((float)containerView.Width, (float)containerView.Height))
                     {
-                        Export(canvas, view);
+                        Export(canvas, containerView);
                     }
                     pdf.Close();
                 }
+            }
+        }
+
+        public static void Export(string path, IContainerView containerView)
+        {
+            var outputExtension = Path.GetExtension(path);
+
+            if (string.Compare(outputExtension, ".svg", StringComparison.OrdinalIgnoreCase) == 0)
+            {
+                ExportSvg(path, containerView);
+            }
+            else if (string.Compare(outputExtension, ".png", StringComparison.OrdinalIgnoreCase) == 0)
+            {
+                ExportPng(path, containerView);
+            }
+            else if (string.Compare(outputExtension, ".pdf", StringComparison.OrdinalIgnoreCase) == 0)
+            {
+                ExportPdf(path, containerView);
             }
         }
 
