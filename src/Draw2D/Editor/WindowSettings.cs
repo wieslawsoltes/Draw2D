@@ -49,13 +49,5 @@ namespace Draw2D.Editor
             get => _windowState;
             set => Update(ref _windowState, value);
         }
-
-        public override void Invalidate()
-        {
-            if (this.IsDirty)
-            {
-                this.IsDirty = false;
-            }
-        }
     }
 }

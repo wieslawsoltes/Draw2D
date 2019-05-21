@@ -259,9 +259,15 @@ namespace Draw2D.ViewModels
         [IgnoreDataMember]
         public bool IsDirty { get; set; }
 
-        public void MarkAsDirty(bool value) => IsDirty = value;
+        public virtual void MarkAsDirty(bool value) => IsDirty = value;
 
-        public abstract void Invalidate();
+        public virtual void Invalidate()
+        {
+            if (this.IsDirty)
+            {
+                this.IsDirty = false;
+            }
+        }
 
         public void SetUniqueId()
         {
@@ -307,14 +313,6 @@ namespace Draw2D.ViewModels
         public Text(string value)
         {
             _value = value;
-        }
-
-        public override void Invalidate()
-        {
-            if (this.IsDirty)
-            {
-                this.IsDirty = false;
-            }
         }
 
         public object Copy(Dictionary<object, object> shared)
@@ -438,14 +436,6 @@ namespace Draw2D.ViewModels.Style
             this.B = b;
         }
 
-        public override void Invalidate()
-        {
-            if (this.IsDirty)
-            {
-                this.IsDirty = false;
-            }
-        }
-
         public object Copy(Dictionary<object, object> shared)
         {
             return new ArgbColor()
@@ -538,14 +528,6 @@ namespace Draw2D.ViewModels.Style
             this.IsStroked = isStroked;
         }
 
-        public override void Invalidate()
-        {
-            if (this.IsDirty)
-            {
-                this.IsDirty = false;
-            }
-        }
-
         public object Copy(Dictionary<object, object> shared)
         {
             return new TextStyle()
@@ -636,14 +618,6 @@ namespace Draw2D.ViewModels.Style
             this.TextStyle = textStyle;
         }
 
-        public override void Invalidate()
-        {
-            if (this.IsDirty)
-            {
-                this.IsDirty = false;
-            }
-        }
-
         public object Copy(Dictionary<object, object> shared)
         {
             return new ShapeStyle()
@@ -684,19 +658,23 @@ namespace Draw2D.ViewModels.Shapes
         [IgnoreDataMember]
         public virtual IShapeDecorator Decorator { get; } = s_decorator;
 
+        public override void Invalidate()
+        {
+            if (_style != null)
+            {
+                _style.Invalidate();
+                _style.Stroke?.Invalidate();
+                _style.Fill?.Invalidate();
+                _style.TextStyle?.Invalidate();
+                _style.TextStyle?.Stroke?.Invalidate();
+            }
+
+            base.Invalidate();
+        }
+
         public abstract void GetPoints(IList<PointShape> points);
 
         public abstract void Draw(object dc, IShapeRenderer renderer, double dx, double dy, DrawMode mode, object db, object r);
-
-        public override void Invalidate()
-        {
-            _style?.Invalidate();
-
-            if (this.IsDirty)
-            {
-                this.IsDirty = false;
-            }
-        }
 
         public abstract void Move(ISelectionState selectionState, double dx, double dy);
 
@@ -772,16 +750,11 @@ namespace Draw2D.ViewModels.Shapes
 
         public override void Invalidate()
         {
-            base.Invalidate();
-
             _topLeft?.Invalidate();
 
             _bottomRight?.Invalidate();
 
-            if (this.IsDirty)
-            {
-                this.IsDirty = false;
-            }
+            base.Invalidate();
         }
 
         public override void Move(ISelectionState selectionState, double dx, double dy)
@@ -929,12 +902,14 @@ namespace Draw2D.ViewModels.Shapes
 
         public override void Invalidate()
         {
-            base.Invalidate();
-
-            if (this.IsDirty)
+            foreach (var point in _points)
             {
-                this.IsDirty = false;
+                point.Invalidate();
             }
+
+            _text?.Invalidate();
+
+            base.Invalidate();
         }
 
         public override void Draw(object dc, IShapeRenderer renderer, double dx, double dy, DrawMode mode, object db, object r)
@@ -1095,18 +1070,13 @@ namespace Draw2D.ViewModels.Shapes
 
         public override void Invalidate()
         {
-            base.Invalidate();
-
             _startPoint?.Invalidate();
 
             _point1?.Invalidate();
 
             _point2?.Invalidate();
 
-            if (this.IsDirty)
-            {
-                this.IsDirty = false;
-            }
+            base.Invalidate();
         }
 
         public override void Draw(object dc, IShapeRenderer renderer, double dx, double dy, DrawMode mode, object db, object r)
@@ -1368,8 +1338,6 @@ namespace Draw2D.ViewModels.Shapes
 
         public override void Invalidate()
         {
-            base.Invalidate();
-
             _startPoint?.Invalidate();
 
             _point1?.Invalidate();
@@ -1378,10 +1346,7 @@ namespace Draw2D.ViewModels.Shapes
 
             _point3?.Invalidate();
 
-            if (this.IsDirty)
-            {
-                this.IsDirty = false;
-            }
+            base.Invalidate();
         }
 
         public override void Draw(object dc, IShapeRenderer renderer, double dx, double dy, DrawMode mode, object db, object r)
@@ -1625,16 +1590,6 @@ namespace Draw2D.ViewModels.Shapes
         {
         }
 
-        public override void Invalidate()
-        {
-            base.Invalidate();
-
-            if (this.IsDirty)
-            {
-                this.IsDirty = false;
-            }
-        }
-
         public override void Draw(object dc, IShapeRenderer renderer, double dx, double dy, DrawMode mode, object db, object r)
         {
             if (Style != null && mode.HasFlag(DrawMode.Shape))
@@ -1772,12 +1727,12 @@ namespace Draw2D.ViewModels.Shapes
 
         public override void Invalidate()
         {
-            base.Invalidate();
-
-            if (this.IsDirty)
+            foreach (var shape in Shapes)
             {
-                this.IsDirty = false;
+                shape.Invalidate();
             }
+
+            base.Invalidate();
         }
 
         public override void Draw(object dc, IShapeRenderer renderer, double dx, double dy, DrawMode mode, object db, object r)
@@ -1894,8 +1849,6 @@ namespace Draw2D.ViewModels.Shapes
 
         public override void Invalidate()
         {
-            base.Invalidate();
-
             foreach (var point in Points)
             {
                 point.Invalidate();
@@ -1906,10 +1859,7 @@ namespace Draw2D.ViewModels.Shapes
                 shape.Invalidate();
             }
 
-            if (this.IsDirty)
-            {
-                this.IsDirty = false;
-            }
+            base.Invalidate();
         }
 
         public override void Draw(object dc, IShapeRenderer renderer, double dx, double dy, DrawMode mode, object db, object r)
@@ -2024,16 +1974,11 @@ namespace Draw2D.ViewModels.Shapes
 
         public override void Invalidate()
         {
-            base.Invalidate();
-
             _startPoint?.Invalidate();
 
             _point?.Invalidate();
 
-            if (this.IsDirty)
-            {
-                this.IsDirty = false;
-            }
+            base.Invalidate();
         }
 
         public override void Draw(object dc, IShapeRenderer renderer, double dx, double dy, DrawMode mode, object db, object r)
@@ -2340,17 +2285,12 @@ namespace Draw2D.ViewModels.Shapes
 
         public override void Invalidate()
         {
-            base.Invalidate();
-
             foreach (var figure in Figures)
             {
                 figure.Invalidate();
             }
 
-            if (this.IsDirty)
-            {
-                this.IsDirty = false;
-            }
+            base.Invalidate();
         }
 
         public override void Draw(object dc, IShapeRenderer renderer, double dx, double dy, DrawMode mode, object db, object r)
@@ -2652,14 +2592,17 @@ namespace Draw2D.ViewModels.Shapes
 
         public override void Invalidate()
         {
-            base.Invalidate();
-
-            _template?.Invalidate();
-
-            if (this.IsDirty)
+            if (_template != null)
             {
-                this.IsDirty = false;
+                _template.Invalidate();
+                _template.Style?.Invalidate();
+                _template.Style?.Stroke?.Invalidate();
+                _template.Style?.Fill?.Invalidate();
+                _template.Style?.TextStyle?.Invalidate();
+                _template.Style?.TextStyle?.Stroke?.Invalidate();
             }
+
+            base.Invalidate();
         }
 
         public override void Draw(object dc, IShapeRenderer renderer, double dx, double dy, DrawMode mode, object db, object r)
@@ -2766,19 +2709,13 @@ namespace Draw2D.ViewModels.Shapes
 
         public override void Invalidate()
         {
-            base.Invalidate();
-
             _startPoint?.Invalidate();
 
             _point1?.Invalidate();
 
             _point2?.Invalidate();
 
-
-            if (this.IsDirty)
-            {
-                this.IsDirty = false;
-            }
+            base.Invalidate();
         }
 
         public override void Draw(object dc, IShapeRenderer renderer, double dx, double dy, DrawMode mode, object db, object r)
@@ -2988,16 +2925,6 @@ namespace Draw2D.ViewModels.Shapes
         {
         }
 
-        public override void Invalidate()
-        {
-            base.Invalidate();
-
-            if (this.IsDirty)
-            {
-                this.IsDirty = false;
-            }
-        }
-
         public override void Draw(object dc, IShapeRenderer renderer, double dx, double dy, DrawMode mode, object db, object r)
         {
             if (Style != null && mode.HasFlag(DrawMode.Shape))
@@ -3090,16 +3017,6 @@ namespace Draw2D.ViewModels.Shapes
             : base(topLeft, bottomRight)
         {
             this.Text = text;
-        }
-
-        public override void Invalidate()
-        {
-            base.Invalidate();
-
-            if (this.IsDirty)
-            {
-                this.IsDirty = false;
-            }
         }
 
         public override void Draw(object dc, IShapeRenderer renderer, double dx, double dy, DrawMode mode, object db, object r)
@@ -3233,12 +3150,9 @@ namespace Draw2D.ViewModels.Containers
 
         public override void Invalidate()
         {
-            var points = new List<PointShape>();
-            GetPoints(points);
-
-            if (Shapes != null)
+            if (_shapes != null)
             {
-                foreach (var shape in Shapes)
+                foreach (var shape in _shapes)
                 {
                     shape.Invalidate();
                     shape.Style?.Invalidate();
@@ -3249,22 +3163,7 @@ namespace Draw2D.ViewModels.Containers
                 }
             }
 
-            foreach (var point in points)
-            {
-                point.Invalidate();
-                point.Style?.Invalidate();
-                point.Template?.Invalidate();
-                point.Template?.Style?.Invalidate();
-                point.Template?.Style?.Stroke?.Invalidate();
-                point.Template?.Style?.Fill?.Invalidate();
-                point.Template?.Style?.TextStyle?.Invalidate();
-                point.Template?.Style?.TextStyle?.Stroke?.Invalidate();
-            }
-
-            if (this.IsDirty)
-            {
-                this.IsDirty = false;
-            }
+            base.Invalidate();
         }
 
         public override object Copy(Dictionary<object, object> shared)
@@ -3378,14 +3277,6 @@ namespace Draw2D.ViewModels.Containers
         {
             get => _autoFitMode;
             set => Update(ref _autoFitMode, value);
-        }
-
-        public override void Invalidate()
-        {
-            if (this.IsDirty)
-            {
-                this.IsDirty = false;
-            }
         }
 
         public virtual object Copy(Dictionary<object, object> shared)
@@ -3514,14 +3405,6 @@ namespace Draw2D.ViewModels.Containers
             set => Update(ref _zoomService, value);
         }
 
-        public override void Invalidate()
-        {
-            if (this.IsDirty)
-            {
-                this.IsDirty = false;
-            }
-        }
-
         public virtual PointShape GetNextPoint(IToolContext context, double x, double y, bool connect, double radius)
         {
             if (connect == true)
@@ -3642,14 +3525,6 @@ namespace Draw2D.ViewModels.Containers
         {
             get => _mode;
             set => Update(ref _mode, value);
-        }
-
-        public override void Invalidate()
-        {
-            if (this.IsDirty)
-            {
-                this.IsDirty = false;
-            }
         }
 
         public void SetTool(string title)
@@ -4337,14 +4212,6 @@ namespace Draw2D.ViewModels.Filters
             get => _guideStyle;
             set => Update(ref _guideStyle, value);
         }
-
-        public override void Invalidate()
-        {
-            if (this.IsDirty)
-            {
-                this.IsDirty = false;
-            }
-        }
     }
 
     [DataContract(IsReference = true)]
@@ -4360,14 +4227,6 @@ namespace Draw2D.ViewModels.Filters
         {
             get => _settings;
             set => Update(ref _settings, value);
-        }
-
-        public override void Invalidate()
-        {
-            if (this.IsDirty)
-            {
-                this.IsDirty = false;
-            }
         }
 
         public override bool Process(IToolContext context, ref double x, ref double y)
@@ -4509,14 +4368,6 @@ namespace Draw2D.ViewModels.Filters
             get => _guideStyle;
             set => Update(ref _guideStyle, value);
         }
-
-        public override void Invalidate()
-        {
-            if (this.IsDirty)
-            {
-                this.IsDirty = false;
-            }
-        }
     }
 
     [DataContract(IsReference = true)]
@@ -4532,14 +4383,6 @@ namespace Draw2D.ViewModels.Filters
         {
             get => _settings;
             set => Update(ref _settings, value);
-        }
-
-        public override void Invalidate()
-        {
-            if (this.IsDirty)
-            {
-                this.IsDirty = false;
-            }
         }
 
         public override bool Process(IToolContext context, ref double x, ref double y)
@@ -4832,14 +4675,6 @@ namespace Draw2D.ViewModels.Intersections
             get => _isEnabled;
             set => Update(ref _isEnabled, value);
         }
-
-        public override void Invalidate()
-        {
-            if (this.IsDirty)
-            {
-                this.IsDirty = false;
-            }
-        }
     }
 
     [DataContract(IsReference = true)]
@@ -4855,14 +4690,6 @@ namespace Draw2D.ViewModels.Intersections
         {
             get => _settings;
             set => Update(ref _settings, value);
-        }
-
-        public override void Invalidate()
-        {
-            if (this.IsDirty)
-            {
-                this.IsDirty = false;
-            }
         }
 
         public override void Find(IToolContext context, BaseShape shape)
@@ -4913,14 +4740,6 @@ namespace Draw2D.ViewModels.Intersections
             get => _isEnabled;
             set => Update(ref _isEnabled, value);
         }
-
-        public override void Invalidate()
-        {
-            if (this.IsDirty)
-            {
-                this.IsDirty = false;
-            }
-        }
     }
 
     [DataContract(IsReference = true)]
@@ -4936,14 +4755,6 @@ namespace Draw2D.ViewModels.Intersections
         {
             get => _settings;
             set => Update(ref _settings, value);
-        }
-
-        public override void Invalidate()
-        {
-            if (this.IsDirty)
-            {
-                this.IsDirty = false;
-            }
         }
 
         public override void Find(IToolContext context, BaseShape shape)
@@ -4992,14 +4803,6 @@ namespace Draw2D.ViewModels.Intersections
             get => _isEnabled;
             set => Update(ref _isEnabled, value);
         }
-
-        public override void Invalidate()
-        {
-            if (this.IsDirty)
-            {
-                this.IsDirty = false;
-            }
-        }
     }
 
     [DataContract(IsReference = true)]
@@ -5015,14 +4818,6 @@ namespace Draw2D.ViewModels.Intersections
         {
             get => _settings;
             set => Update(ref _settings, value);
-        }
-
-        public override void Invalidate()
-        {
-            if (this.IsDirty)
-            {
-                this.IsDirty = false;
-            }
         }
 
         public override void Find(IToolContext context, BaseShape shape)
@@ -5824,14 +5619,6 @@ namespace Draw2D.ViewModels.Bounds
         {
         }
 
-        public override void Invalidate()
-        {
-            if (this.IsDirty)
-            {
-                this.IsDirty = false;
-            }
-        }
-
         public PointShape TryToGetPoint(BaseShape shape, Point2 target, double radius)
         {
             return shape.Bounds?.TryToGetPoint(shape, target, radius, this);
@@ -5900,14 +5687,6 @@ namespace Draw2D.ViewModels.Tools
             get => _hitTestRadius;
             set => Update(ref _hitTestRadius, value);
         }
-
-        public override void Invalidate()
-        {
-            if (this.IsDirty)
-            {
-                this.IsDirty = false;
-            }
-        }
     }
 
     [DataContract(IsReference = true)]
@@ -5951,14 +5730,6 @@ namespace Draw2D.ViewModels.Tools
         {
             get => _settings;
             set => Update(ref _settings, value);
-        }
-
-        public override void Invalidate()
-        {
-            if (this.IsDirty)
-            {
-                this.IsDirty = false;
-            }
         }
 
         private void StartPointInternal(IToolContext context, double x, double y, Modifier modifier)
@@ -6215,14 +5986,6 @@ namespace Draw2D.ViewModels.Tools
             get => _hitTestRadius;
             set => Update(ref _hitTestRadius, value);
         }
-
-        public override void Invalidate()
-        {
-            if (this.IsDirty)
-            {
-                this.IsDirty = false;
-            }
-        }
     }
 
     [DataContract(IsReference = true)]
@@ -6265,14 +6028,6 @@ namespace Draw2D.ViewModels.Tools
         {
             get => _settings;
             set => Update(ref _settings, value);
-        }
-
-        public override void Invalidate()
-        {
-            if (this.IsDirty)
-            {
-                this.IsDirty = false;
-            }
         }
 
         private void TopLeftInternal(IToolContext context, double x, double y, Modifier modifier)
@@ -6446,14 +6201,6 @@ namespace Draw2D.ViewModels.Tools
             get => _splitIntersections;
             set => Update(ref _splitIntersections, value);
         }
-
-        public override void Invalidate()
-        {
-            if (this.IsDirty)
-            {
-                this.IsDirty = false;
-            }
-        }
     }
 
     public static class LineHelper
@@ -6525,14 +6272,6 @@ namespace Draw2D.ViewModels.Tools
         {
             get => _settings;
             set => Update(ref _settings, value);
-        }
-
-        public override void Invalidate()
-        {
-            if (this.IsDirty)
-            {
-                this.IsDirty = false;
-            }
         }
 
         private void StartPointInternal(IToolContext context, double x, double y, Modifier modifier)
@@ -6702,13 +6441,6 @@ namespace Draw2D.ViewModels.Tools
     [DataContract(IsReference = true)]
     public class MoveToolSettings : Settings
     {
-        public override void Invalidate()
-        {
-            if (this.IsDirty)
-            {
-                this.IsDirty = false;
-            }
-        }
     }
 
     [DataContract(IsReference = true)]
@@ -6755,14 +6487,6 @@ namespace Draw2D.ViewModels.Tools
             PathTool = pathTool;
         }
 
-        public override void Invalidate()
-        {
-            if (this.IsDirty)
-            {
-                this.IsDirty = false;
-            }
-        }
-
         public void LeftDown(IToolContext context, double x, double y, Modifier modifier)
         {
             PathTool.Move(context);
@@ -6792,13 +6516,6 @@ namespace Draw2D.ViewModels.Tools
     [DataContract(IsReference = true)]
     public class NoneToolSettings : Settings
     {
-        public override void Invalidate()
-        {
-            if (this.IsDirty)
-            {
-                this.IsDirty = false;
-            }
-        }
     }
 
     [DataContract(IsReference = true)]
@@ -6830,14 +6547,6 @@ namespace Draw2D.ViewModels.Tools
         {
             get => _settings;
             set => Update(ref _settings, value);
-        }
-
-        public override void Invalidate()
-        {
-            if (this.IsDirty)
-            {
-                this.IsDirty = false;
-            }
         }
 
         public void LeftDown(IToolContext context, double x, double y, Modifier modifier)
@@ -6935,14 +6644,6 @@ namespace Draw2D.ViewModels.Tools
         {
             get => _previousTool;
             set => Update(ref _previousTool, value);
-        }
-
-        public override void Invalidate()
-        {
-            if (this.IsDirty)
-            {
-                this.IsDirty = false;
-            }
         }
     }
 
@@ -7119,14 +6820,6 @@ namespace Draw2D.ViewModels.Tools
         {
             get => _context.Mode;
             set => throw new InvalidOperationException($"Can not set {Mode} property value.");
-        }
-
-        public override void Invalidate()
-        {
-            if (this.IsDirty)
-            {
-                this.IsDirty = false;
-            }
         }
 
         public void SetTool(string name)
@@ -7413,14 +7106,6 @@ namespace Draw2D.ViewModels.Tools
             get => _hitTestRadius;
             set => Update(ref _hitTestRadius, value);
         }
-
-        public override void Invalidate()
-        {
-            if (this.IsDirty)
-            {
-                this.IsDirty = false;
-            }
-        }
     }
 
     [DataContract(IsReference = true)]
@@ -7452,14 +7137,6 @@ namespace Draw2D.ViewModels.Tools
         {
             get => _settings;
             set => Update(ref _settings, value);
-        }
-
-        public override void Invalidate()
-        {
-            if (this.IsDirty)
-            {
-                this.IsDirty = false;
-            }
         }
 
         private void PointInternal(IToolContext context, double x, double y, Modifier modifier)
@@ -7550,14 +7227,6 @@ namespace Draw2D.ViewModels.Tools
             get => _hitTestRadius;
             set => Update(ref _hitTestRadius, value);
         }
-
-        public override void Invalidate()
-        {
-            if (this.IsDirty)
-            {
-                this.IsDirty = false;
-            }
-        }
     }
 
     [DataContract(IsReference = true)]
@@ -7600,14 +7269,6 @@ namespace Draw2D.ViewModels.Tools
         {
             get => _settings;
             set => Update(ref _settings, value);
-        }
-
-        public override void Invalidate()
-        {
-            if (this.IsDirty)
-            {
-                this.IsDirty = false;
-            }
         }
 
         private void StartPointInternal(IToolContext context, double x, double y, Modifier modifier)
@@ -7802,14 +7463,6 @@ namespace Draw2D.ViewModels.Tools
             get => _hitTestRadius;
             set => Update(ref _hitTestRadius, value);
         }
-
-        public override void Invalidate()
-        {
-            if (this.IsDirty)
-            {
-                this.IsDirty = false;
-            }
-        }
     }
 
     [DataContract(IsReference = true)]
@@ -7852,14 +7505,6 @@ namespace Draw2D.ViewModels.Tools
         {
             get => _settings;
             set => Update(ref _settings, value);
-        }
-
-        public override void Invalidate()
-        {
-            if (this.IsDirty)
-            {
-                this.IsDirty = false;
-            }
         }
 
         private void StartPointInternal(IToolContext context, double x, double y, Modifier modifier)
@@ -8080,14 +7725,6 @@ namespace Draw2D.ViewModels.Tools
             get => _weight;
             set => Update(ref _weight, value);
         }
-
-        public override void Invalidate()
-        {
-            if (this.IsDirty)
-            {
-                this.IsDirty = false;
-            }
-        }
     }
 
     [DataContract(IsReference = true)]
@@ -8130,14 +7767,6 @@ namespace Draw2D.ViewModels.Tools
         {
             get => _settings;
             set => Update(ref _settings, value);
-        }
-
-        public override void Invalidate()
-        {
-            if (this.IsDirty)
-            {
-                this.IsDirty = false;
-            }
         }
 
         private void StartPointInternal(IToolContext context, double x, double y, Modifier modifier)
@@ -8351,14 +7980,6 @@ namespace Draw2D.ViewModels.Tools
             get => _hitTestRadius;
             set => Update(ref _hitTestRadius, value);
         }
-
-        public override void Invalidate()
-        {
-            if (this.IsDirty)
-            {
-                this.IsDirty = false;
-            }
-        }
     }
 
     [DataContract(IsReference = true)]
@@ -8400,14 +8021,6 @@ namespace Draw2D.ViewModels.Tools
         {
             get => _settings;
             set => Update(ref _settings, value);
-        }
-
-        public override void Invalidate()
-        {
-            if (this.IsDirty)
-            {
-                this.IsDirty = false;
-            }
         }
 
         private void TopLeftInternal(IToolContext context, double x, double y, Modifier modifier)
@@ -8599,14 +8212,6 @@ namespace Draw2D.ViewModels.Tools
             get => _isClosed;
             set => Update(ref _isClosed, value);
         }
-
-        public override void Invalidate()
-        {
-            if (this.IsDirty)
-            {
-                this.IsDirty = false;
-            }
-        }
     }
 
     [DataContract(IsReference = true)]
@@ -8651,14 +8256,6 @@ namespace Draw2D.ViewModels.Tools
         {
             get => _settings;
             set => Update(ref _settings, value);
-        }
-
-        public override void Invalidate()
-        {
-            if (this.IsDirty)
-            {
-                this.IsDirty = false;
-            }
         }
 
         private void StartInternal(IToolContext context, double x, double y, Modifier modifier)
@@ -8980,14 +8577,6 @@ namespace Draw2D.ViewModels.Tools
             get => _disconnectTestRadius;
             set => Update(ref _disconnectTestRadius, value);
         }
-
-        public override void Invalidate()
-        {
-            if (this.IsDirty)
-            {
-                this.IsDirty = false;
-            }
-        }
     }
 
     [DataContract(IsReference = true)]
@@ -9016,14 +8605,6 @@ namespace Draw2D.ViewModels.Tools
         {
             get => _shapes;
             set => Update(ref _shapes, value);
-        }
-
-        public override void Invalidate()
-        {
-            if (this.IsDirty)
-            {
-                this.IsDirty = false;
-            }
         }
 
         public virtual object Copy(Dictionary<object, object> shared)
@@ -9153,14 +8734,6 @@ namespace Draw2D.ViewModels.Tools
         {
             get => _settings;
             set => Update(ref _settings, value);
-        }
-
-        public override void Invalidate()
-        {
-            if (this.IsDirty)
-            {
-                this.IsDirty = false;
-            }
         }
 
         private void LeftDownNoneInternal(IToolContext context, double x, double y, Modifier modifier)
@@ -9988,14 +9561,6 @@ namespace Draw2D.ViewModels.Tools
             get => _hitTestRadius;
             set => Update(ref _hitTestRadius, value);
         }
-
-        public override void Invalidate()
-        {
-            if (this.IsDirty)
-            {
-                this.IsDirty = false;
-            }
-        }
     }
 
     [DataContract(IsReference = true)]
@@ -10037,14 +9602,6 @@ namespace Draw2D.ViewModels.Tools
         {
             get => _settings;
             set => Update(ref _settings, value);
-        }
-
-        public override void Invalidate()
-        {
-            if (this.IsDirty)
-            {
-                this.IsDirty = false;
-            }
         }
 
         private void TopLeftInternal(IToolContext context, double x, double y, Modifier modifier)
