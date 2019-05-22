@@ -177,6 +177,9 @@ namespace Draw2D.Editor.Renderers
             var mCapHeight = cached.metrics.CapHeight;
             var mLineHeight = cached.metrics.Bottom - cached.metrics.Top;
 
+            var mXMax = cached.metrics.XMax;
+            var mXMin = cached.metrics.XMin;
+
             float x = rect.Left;
             float y = rect.Top;
             float width = rect.Width;
@@ -189,10 +192,10 @@ namespace Draw2D.Editor.Renderers
                     y = y - mAscent;
                     break;
                 case VAlign.Center:
-                    y = y + rect.Height / 2.0f - (mBottom - mDescent);
+                    y = y + height / 2.0f - (mBottom - mDescent);
                     break;
                 case VAlign.Bottom:
-                    y = y + rect.Height - (mBottom - mDescent);
+                    y = y + height - (mBottom - mDescent);
                     break;
             }
 
@@ -212,19 +215,36 @@ namespace Draw2D.Editor.Renderers
                 canvas.DrawLine(new SKPoint(x, y + mBottom), new SKPoint(x + width, y + mBottom), mBottomPen); // Bottom - Orange
             }
 
+            switch (style.TextStyle.HAlign)
+            {
+                default:
+                case HAlign.Left:
+                    x = x;
+                    break;
+                case HAlign.Center:
+                    x = x + width / 2.0f;
+                    break;
+                case HAlign.Right:
+                    x = x + width;
+                    break;
+            }
+
             canvas.DrawText(text.Value, x, y, cached.paint); // Text
 
             int line = 2;
 
-            canvas.DrawText($"mTop: {mTop}", x, y + mLineHeight * line++, cached.paint);
-            canvas.DrawText($"mAscent: {mAscent}", x, y + mLineHeight * line++, cached.paint);
-            canvas.DrawText($"mBaseline: {mBaseline}", x, y + mLineHeight * line++, cached.paint);
-            canvas.DrawText($"mDescent: {mDescent}", x, y + mLineHeight * line++, cached.paint);
-            canvas.DrawText($"mBottom: {mBottom}", x, y + mLineHeight * line++, cached.paint);
+            canvas.DrawText($"Top: {mTop}", x, y + mLineHeight * line++, cached.paint);
+            canvas.DrawText($"Ascent: {mAscent}", x, y + mLineHeight * line++, cached.paint);
+            canvas.DrawText($"Baseline: {mBaseline}", x, y + mLineHeight * line++, cached.paint);
+            canvas.DrawText($"Descent: {mDescent}", x, y + mLineHeight * line++, cached.paint);
+            canvas.DrawText($"Bottom: {mBottom}", x, y + mLineHeight * line++, cached.paint);
 
-            canvas.DrawText($"mLeading: {mLeading}", x, y + mLineHeight * line++, cached.paint);
-            canvas.DrawText($"mCapHeight: {mCapHeight}", x, y + mLineHeight * line++, cached.paint);
-            canvas.DrawText($"mLineHeight: {mLineHeight}", x, y + mLineHeight * line++, cached.paint);
+            canvas.DrawText($"Leading: {mLeading}", x, y + mLineHeight * line++, cached.paint);
+            canvas.DrawText($"CapHeight: {mCapHeight}", x, y + mLineHeight * line++, cached.paint);
+            canvas.DrawText($"LineHeight: {mLineHeight}", x, y + mLineHeight * line++, cached.paint);
+
+            canvas.DrawText($"XMax: {mXMax}", x, y + mLineHeight * line++, cached.paint);
+            canvas.DrawText($"XMin: {mXMin}", x, y + mLineHeight * line++, cached.paint);
 
             canvas.DrawText($"rect: {rect}", x, y + mLineHeight * line++, cached.paint);
             canvas.DrawText($"bounds: {bounds}", x, y + mLineHeight * line++, cached.paint);
