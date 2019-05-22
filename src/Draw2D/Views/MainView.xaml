@@ -239,11 +239,11 @@
                     <ContentControl Content="{Binding PointTemplate}"/>
                 </TabItem>
                 <TabItem Classes="default" Header="Svg">
-                    <Grid RowDefinitions="Auto,Auto,Auto,*">
-                        <TextBlock Classes="default" Text="SVG Path:" Grid.Row="0"/>
-                        <Button Classes="default" Content="From SVG Path Data" Command="{Binding FromSvgPathData}" CommandParameter="{Binding #svgPathData}" Grid.Row="1"/>
-                        <Button Classes="default" Content="To SVG Path Data" Command="{Binding ToSvgPathData}" CommandParameter="{Binding #svgPathData}" Grid.Row="2"/>
-                        <TextBox x:Name="svgPathData" Classes="default" AcceptsReturn="True" AcceptsTab="True" Text="" Grid.Row="3"/>
+                    <Grid RowDefinitions="Auto,Auto,*,Auto">
+                        <TextBlock Classes="default" Text="Svg Path:" Grid.Row="0"/>
+                        <Button Classes="default" Content="To Svg" Command="{Binding ToSvgPathData}" CommandParameter="{Binding #svgPathData}" Grid.Row="1"/>
+                        <TextBox x:Name="svgPathData" Classes="default" AcceptsReturn="True" AcceptsTab="True" Text="" Grid.Row="2"/>
+                        <Button Classes="default" Content="From Svg" Command="{Binding FromSvgPathData}" CommandParameter="{Binding #svgPathData}" Grid.Row="3"/>
                     </Grid>
                 </TabItem>
             </TabControl>

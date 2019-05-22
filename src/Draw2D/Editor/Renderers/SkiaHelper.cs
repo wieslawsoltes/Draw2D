@@ -247,6 +247,43 @@ namespace Draw2D.Editor.Renderers
             return geometry;
         }
 
+        public static SKPath ToGeometry(Text text, PointShape topLeft, PointShape bottomRight, ShapeStyle style,  double dx, double dy)
+        {
+            var typeface = SkiaHelper.ToSKTypeface(style.TextStyle.FontFamily);
+            var paint = SkiaHelper.ToSKPaintBrush(style.TextStyle.Stroke);
+            paint.Typeface = typeface;
+            paint.TextEncoding = SKTextEncoding.Utf16;
+            paint.TextSize = (float)style.TextStyle.FontSize;
+
+            var metrics = paint.FontMetrics;
+            var mTop = metrics.Top;
+            var mBottom = metrics.Bottom;
+            var mLeading = metrics.Leading;
+            var mDescent = metrics.Descent;
+            var mAscent = metrics.Ascent;
+            var lineHeight = mDescent - mAscent;
+            var lineOffset = (-mAscent);
+
+            float offset = -mDescent - mAscent;
+
+            var rect = SkiaHelper.ToRect(topLeft, bottomRight, dx, dy);
+            var bounds = new SKRect();
+            paint.MeasureText(text.Value, ref bounds);
+            var origin = SkiaHelper.GetTextOrigin(style.TextStyle.HAlign, style.TextStyle.VAlign, ref rect, ref bounds);
+
+            var geometry = paint.GetTextPath(text.Value, (float)origin.X, (float)(origin.Y + offset));
+
+            paint.Dispose();
+            typeface.Dispose();
+
+            return geometry;
+        }
+
+        public static SKPath ToGeometry(TextShape text, double dx, double dy)
+        {
+            return ToGeometry(text.Text, text.TopLeft, text.BottomRight, text.Style, dx, dy);
+        }
+
         public static SKPath ToGeometry(string svgPathData)
         {
             return SKPath.ParseSvgPathData(svgPathData);

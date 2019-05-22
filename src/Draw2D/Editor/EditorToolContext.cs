@@ -317,31 +317,46 @@ namespace Draw2D.Editor
             {
                 case LineShape line:
                     sb.AppendLine(SkiaHelper.ToGeometry(line, 0.0, 0.0).ToSvgPathData());
+                    // TODO: Convert Text on path to geometry.
                     break;
                 case CubicBezierShape cubicBezier:
                     sb.AppendLine(SkiaHelper.ToGeometry(cubicBezier, 0.0, 0.0).ToSvgPathData());
+                    // TODO: Convert Text on path to geometry.
                     break;
                 case QuadraticBezierShape quadraticBezier:
                     sb.AppendLine(SkiaHelper.ToGeometry(quadraticBezier, 0.0, 0.0).ToSvgPathData());
+                    // TODO: Convert Text on path to geometry.
                     break;
                 case ConicShape conic:
                     sb.AppendLine(SkiaHelper.ToGeometry(conic, 0.0, 0.0).ToSvgPathData());
+                    // TODO: Convert Text on path to geometry.
                     break;
                 case PathShape pathShape:
                     sb.AppendLine(SkiaHelper.ToGeometry(pathShape, 0.0, 0.0).ToSvgPathData());
+                    // TODO: Convert Text on path to geometry.
                     break;
                 case RectangleShape rectangle:
                     sb.AppendLine(SkiaHelper.ToGeometry(rectangle, 0.0, 0.0).ToSvgPathData());
+                    if (!string.IsNullOrEmpty(rectangle.Text?.Value))
+                    {
+                        SkiaHelper.ToGeometry(rectangle.Text, rectangle.TopLeft, rectangle.BottomRight, rectangle.Style, 0.0, 0.0);
+                    }
                     break;
                 case EllipseShape ellipse:
                     sb.AppendLine(SkiaHelper.ToGeometry(ellipse, 0.0, 0.0).ToSvgPathData());
+                    if (!string.IsNullOrEmpty(ellipse.Text?.Value))
+                    {
+                        SkiaHelper.ToGeometry(ellipse.Text, ellipse.TopLeft, ellipse.BottomRight, ellipse.Style, 0.0, 0.0);
+                    }
                     break;
+#if false
                 case PointShape point:
                     if (point.Template != null)
                     {
                         ToSvgPathDataImpl(point.Template, sb);
                     }
                     break;
+#endif
                 case GroupShape group:
                     foreach (var groupShape in group.Shapes)
                     {
@@ -349,7 +364,7 @@ namespace Draw2D.Editor
                     }
                     break;
                 case TextShape text:
-                    // TODO: Convert text to path using SKPaint.GetTextPath.
+                    sb.AppendLine(SkiaHelper.ToGeometry(text, 0.0, 0.0).ToSvgPathData());
                     break;
             };
         }
