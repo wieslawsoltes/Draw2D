@@ -226,9 +226,6 @@ namespace Draw2D.Editor.Renderers
                     x += width;
                     break;
             }
-
-            canvas.DrawText(text.Value, x, y, paint);
-
 #if DEBUG_DRAW_TEXT
             int line = 2;
             canvas.DrawText($"Top: {mTop}", x, y + mLineHeight * line++, paint);
@@ -244,6 +241,7 @@ namespace Draw2D.Editor.Renderers
             canvas.DrawText($"x: {x}", x, y + mLineHeight * line++, paint);
             canvas.DrawText($"y: {y}", x, y + mLineHeight * line++, paint);
 #endif
+            canvas.DrawText(text.Value, x, y, paint);
         }
 
         private void DrawTextOnPath(SKCanvas canvas, SKPath path, Text text, TextStyle style)
