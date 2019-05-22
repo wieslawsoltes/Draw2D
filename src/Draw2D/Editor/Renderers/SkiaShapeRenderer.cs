@@ -157,6 +157,7 @@ namespace Draw2D.Editor.Renderers
             var mLeading = cached.metrics.Leading;
             var mDescent = cached.metrics.Descent;
             var mAscent = cached.metrics.Ascent;
+            var mCapHeight = cached.metrics.mCapHeight;
             var lineHeight = mDescent - mAscent;
             var lineOffset = (-mAscent);
             var offset = -mDescent - mAscent;
@@ -165,9 +166,10 @@ namespace Draw2D.Editor.Renderers
             canvas.DrawText($"mLeading: {mLeading}", origin.X, origin.Y + lineOffset * 4, cached.paint);
             canvas.DrawText($"mDescent: {mDescent}", origin.X, origin.Y + lineOffset * 5, cached.paint);
             canvas.DrawText($"mAscent: {mAscent}", origin.X, origin.Y + lineOffset * 6, cached.paint);
-            canvas.DrawText($"lineHeight: {lineHeight}", origin.X, origin.Y + lineOffset * 7, cached.paint);
-            canvas.DrawText($"lineOffset: {lineOffset}", origin.X, origin.Y + lineOffset * 8, cached.paint);
-            canvas.DrawText($"offset: {offset}", origin.X, origin.Y + lineOffset * 9, cached.paint);
+            canvas.DrawText($"mCapHeight: {mCapHeight}", origin.X, origin.Y + lineOffset * 7, cached.paint);
+            canvas.DrawText($"lineHeight: {lineHeight}", origin.X, origin.Y + lineOffset * 8, cached.paint);
+            canvas.DrawText($"lineOffset: {lineOffset}", origin.X, origin.Y + lineOffset * 9, cached.paint);
+            canvas.DrawText($"offset: {offset}", origin.X, origin.Y + lineOffset * 10, cached.paint);
         }
 #endif
 
