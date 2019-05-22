@@ -3,7 +3,6 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using Draw2D.Editor.Renderers;
 using Draw2D.ViewModels;
 using Draw2D.ViewModels.Containers;
@@ -198,7 +197,7 @@ namespace Draw2D.Editor.Views
             view.CurrentContainer.Draw(context, renderer, 0.0, 0.0, DrawMode.Point, null, null);
             view.WorkingContainer.Draw(context, renderer, 0.0, 0.0, DrawMode.Point, null, null);
 #else
-            var selected = view.SelectionState.Shapes.ToList();
+            var selected = new List<BaseShape>(view.SelectionState.Shapes);
 
             foreach (var shape in selected)
             {
@@ -212,7 +211,7 @@ namespace Draw2D.Editor.Views
 
         private void DrawDecorators(IContainerView view, object context, IShapeRenderer renderer)
         {
-            var selected = view.SelectionState.Shapes.ToList();
+            var selected = new List<BaseShape>(view.SelectionState.Shapes);
 
             foreach (var shape in selected)
             {

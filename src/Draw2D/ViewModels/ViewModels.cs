@@ -2484,7 +2484,7 @@ namespace Draw2D.ViewModels.Shapes
         {
             if (_figures.Count > 0 && _figures[0].Shapes.Count > 0)
             {
-                var figures = _figures.ToList();
+                var figures = new List<FigureShape>(_figures);
 
                 if (removeEmptyFigures == true)
                 {
@@ -6207,13 +6207,13 @@ namespace Draw2D.ViewModels.Tools
     {
         public static IList<LineShape> SplitByIntersections(IToolContext context, IEnumerable<PointIntersection> intersections, LineShape target)
         {
-            var points = intersections.SelectMany(i => i.Intersections).ToList();
+            var points = new List<PointShape>(intersections.SelectMany(i => i.Intersections));
             points.Insert(0, target.StartPoint);
             points.Insert(points.Count, target.Point);
 
-            var unique = points
-                .Select(p => new Point2(p.X, p.Y)).Distinct().OrderBy(p => p)
-                .Select(p => new PointShape(p.X, p.Y, context.PointTemplate)).ToList();
+            var unique = new List<PointShape>(
+                points.Select(p => new Point2(p.X, p.Y)).Distinct().OrderBy(p => p)
+                      .Select(p => new PointShape(p.X, p.Y, context.PointTemplate)));
 
             var lines = new ObservableCollection<LineShape>();
             for (int i = 0; i < unique.Count - 1; i++)
@@ -8299,8 +8299,8 @@ namespace Draw2D.ViewModels.Tools
             {
                 var points = new List<PointShape>();
                 _path.GetPoints(points);
-                var distinct = points.Distinct().ToList();
-                IList<Vector2> vectors = distinct.Select(p => new Vector2((float)p.X, (float)p.Y)).ToList();
+                var distinct = new List<PointShape>(points.Distinct());
+                IList<Vector2> vectors = new List<Vector2>(distinct.Select(p => new Vector2((float)p.X, (float)p.Y)));
                 int count = vectors.Count;
                 RDP rdp = new RDP();
                 BitArray accepted = rdp.DouglasPeucker(vectors, 0, count - 1, Settings?.Epsilon ?? 1.0);
@@ -8941,7 +8941,8 @@ namespace Draw2D.ViewModels.Tools
                 }
                 else
                 {
-                    foreach (var shape in context.ContainerView.SelectionState?.Shapes.ToList())
+                    var selectedToDisconnect = new List<BaseShape>(context.ContainerView.SelectionState?.Shapes);
+                    foreach (var shape in selectedToDisconnect)
                     {
                         if (Settings.DisconnectPoints && modifier.HasFlag(Settings?.ConnectionModifier ?? Modifier.Shift))
                         {
@@ -8952,7 +8953,8 @@ namespace Draw2D.ViewModels.Tools
                         }
                     }
 
-                    foreach (var shape in context.ContainerView.SelectionState?.Shapes.ToList())
+                    var selectedToMove = new List<BaseShape>(context.ContainerView.SelectionState?.Shapes);
+                    foreach (var shape in selectedToMove)
                     {
                         shape.Move(context.ContainerView.SelectionState, dx, dy);
                     }
@@ -9083,7 +9085,7 @@ namespace Draw2D.ViewModels.Tools
             {
                 lock (context.ContainerView.SelectionState?.Shapes)
                 {
-                    _shapesToCopy = context.ContainerView.SelectionState?.Shapes.ToList();
+                    _shapesToCopy = new List<BaseShape>(context.ContainerView.SelectionState?.Shapes);
                 }
             }
         }
@@ -9135,7 +9137,7 @@ namespace Draw2D.ViewModels.Tools
                 {
                     context.ContainerView?.SelectionState?.Dehover();
 
-                    var shapes = context.ContainerView.SelectionState?.Shapes.Reverse().ToList();
+                    var shapes = new List<BaseShape>(context.ContainerView.SelectionState?.Shapes.Reverse());
 
                     Delete(context);
 
@@ -9288,9 +9290,9 @@ namespace Draw2D.ViewModels.Tools
         internal void Delete(ICanvasContainer container, ISelectionState selectionState)
         {
             // TODO: Very slow when using Contains.
-            //var paths = container.Shapes.OfType<PathShape>().ToList().AsReadOnly();
-            //var groups = container.Shapes.OfType<GroupShape>().ToList().AsReadOnly();
-            //var connectables = container.Shapes.OfType<ConnectableShape>().ToList().AsReadOnly();
+            //var paths = new List<PathShape>(container.Shapes.OfType<PathShape>());
+            //var groups = new List<GroupShape>(container.Shapes.OfType<GroupShape>());
+            //var connectables = new List<ConnectableShape>(container.Shapes.OfType<ConnectableShape>());
 
             var shapesHash = new HashSet<BaseShape>(container.Shapes);
 

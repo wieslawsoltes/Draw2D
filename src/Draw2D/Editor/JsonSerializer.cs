@@ -45,7 +45,7 @@ namespace Draw2D.Editor
 
             protected override IList<JsonProperty> CreateProperties(Type type, MemberSerialization memberSerialization)
             {
-                return base.CreateProperties(type, memberSerialization).Where(p => p.Writable).ToList();
+                return new List<JsonProperty>(base.CreateProperties(type, memberSerialization).Where(p => p.Writable));
             }
         }
 
