@@ -113,27 +113,16 @@ namespace Draw2D.Editor.Renderers
             };
         }
 
+        public static SKPathFillType ToFillType(PathFillRule fillRule)
+        {
+            return fillRule == PathFillRule.EvenOdd ? SKPathFillType.EvenOdd : SKPathFillType.Winding;
+        }
+
         public static SKPath ToGeometry(LineShape line, double dx, double dy)
         {
             var geometry = new SKPath();
             geometry.MoveTo(ToPoint(line.StartPoint, dx, dy));
             geometry.LineTo(ToPoint(line.Point, dx, dy));
-            return geometry;
-        }
-
-        public static SKPath ToGeometry(RectangleShape rectangle, double dx, double dy)
-        {
-            var rect = SkiaHelper.ToRect(rectangle.TopLeft, rectangle.BottomRight, dx, dy);
-            var geometry = new SKPath();
-            geometry.AddRect(rect, SKPathDirection.Clockwise);
-            return geometry;
-        }
-
-        public static SKPath ToGeometry(EllipseShape ellipse, double dx, double dy)
-        {
-            var rect = SkiaHelper.ToRect(ellipse.TopLeft, ellipse.BottomRight, dx, dy);
-            var geometry = new SKPath();
-            geometry.AddOval(rect, SKPathDirection.Clockwise);
             return geometry;
         }
 
@@ -167,6 +156,100 @@ namespace Draw2D.Editor.Renderers
                 ToPoint(conic.Point2, dx, dy),
                 (float)conic.Weight);
             return geometry;
+        }
+
+        public static void ToGeometry(FigureShape figure, double dx, double dy, SKPath geometry)
+        {
+            bool isFirstShape = true;
+
+            foreach (var shape in figure.Shapes)
+            {
+                if (shape is LineShape line)
+                {
+                    if (isFirstShape)
+                    {
+                        geometry.MoveTo(ToPoint(line.StartPoint, dx, dy));
+                        isFirstShape = false;
+                    }
+                    geometry.LineTo(ToPoint(line.Point, dx, dy));
+                }
+                else if (shape is CubicBezierShape cubicBezier)
+                {
+                    if (isFirstShape)
+                    {
+                        geometry.MoveTo(ToPoint(cubicBezier.StartPoint, dx, dy));
+                        isFirstShape = false;
+                    }
+                    geometry.CubicTo(
+                        ToPoint(cubicBezier.Point1, dx, dy),
+                        ToPoint(cubicBezier.Point2, dx, dy),
+                        ToPoint(cubicBezier.Point3, dx, dy));
+                }
+                else if (shape is QuadraticBezierShape quadraticBezier)
+                {
+                    if (isFirstShape)
+                    {
+                        geometry.MoveTo(ToPoint(quadraticBezier.StartPoint, dx, dy));
+                        isFirstShape = false;
+                    }
+                    geometry.QuadTo(
+                        ToPoint(quadraticBezier.Point1, dx, dy),
+                        ToPoint(quadraticBezier.Point2, dx, dy));
+                }
+                else if (shape is ConicShape conic)
+                {
+                    if (isFirstShape)
+                    {
+                        geometry.MoveTo(ToPoint(conic.StartPoint, dx, dy));
+                        isFirstShape = false;
+                    }
+                    geometry.ConicTo(
+                        ToPoint(conic.Point1, dx, dy),
+                        ToPoint(conic.Point2, dx, dy),
+                        (float)conic.Weight);
+                }
+            }
+
+            if (!isFirstShape && figure.IsClosed)
+            {
+                geometry.Close();
+            }
+        }
+
+        public static SKPath ToGeometry(PathShape path, double dx, double dy)
+        {
+            var geometry = new SKPath
+            {
+                FillType = ToFillType(path.FillRule)
+            };
+
+            foreach (var figure in path.Figures)
+            {
+                ToGeometry(figure, dx, dy, geometry);
+            }
+
+            return geometry;
+        }
+
+        public static SKPath ToGeometry(RectangleShape rectangle, double dx, double dy)
+        {
+            var rect = SkiaHelper.ToRect(rectangle.TopLeft, rectangle.BottomRight, dx, dy);
+            var geometry = new SKPath();
+            geometry.AddRect(rect, SKPathDirection.Clockwise);
+            return geometry;
+        }
+
+        public static SKPath ToGeometry(EllipseShape ellipse, double dx, double dy)
+        {
+            var rect = SkiaHelper.ToRect(ellipse.TopLeft, ellipse.BottomRight, dx, dy);
+            var geometry = new SKPath();
+            geometry.AddOval(rect, SKPathDirection.Clockwise);
+            return geometry;
+        }
+
+        public static SKPath ToGeometry(string svgPathData)
+        {
+            return SKPath.ParseSvgPathData(svgPathData);
         }
 
         public static PathShape FromGeometry(SKPath path, ShapeStyle style, BaseShape pointTemplate)
@@ -304,89 +387,6 @@ namespace Draw2D.Editor.Renderers
             }
 
             return pathShape;
-        }
-
-        public static void ToGeometry(FigureShape figure, double dx, double dy, SKPath geometry)
-        {
-            bool isFirstShape = true;
-
-            foreach (var shape in figure.Shapes)
-            {
-                if (shape is LineShape line)
-                {
-                    if (isFirstShape)
-                    {
-                        geometry.MoveTo(ToPoint(line.StartPoint, dx, dy));
-                        isFirstShape = false;
-                    }
-                    geometry.LineTo(ToPoint(line.Point, dx, dy));
-                }
-                else if (shape is CubicBezierShape cubicBezier)
-                {
-                    if (isFirstShape)
-                    {
-                        geometry.MoveTo(ToPoint(cubicBezier.StartPoint, dx, dy));
-                        isFirstShape = false;
-                    }
-                    geometry.CubicTo(
-                        ToPoint(cubicBezier.Point1, dx, dy),
-                        ToPoint(cubicBezier.Point2, dx, dy),
-                        ToPoint(cubicBezier.Point3, dx, dy));
-                }
-                else if (shape is QuadraticBezierShape quadraticBezier)
-                {
-                    if (isFirstShape)
-                    {
-                        geometry.MoveTo(ToPoint(quadraticBezier.StartPoint, dx, dy));
-                        isFirstShape = false;
-                    }
-                    geometry.QuadTo(
-                        ToPoint(quadraticBezier.Point1, dx, dy),
-                        ToPoint(quadraticBezier.Point2, dx, dy));
-                }
-                else if (shape is ConicShape conic)
-                {
-                    if (isFirstShape)
-                    {
-                        geometry.MoveTo(ToPoint(conic.StartPoint, dx, dy));
-                        isFirstShape = false;
-                    }
-                    geometry.ConicTo(
-                        ToPoint(conic.Point1, dx, dy),
-                        ToPoint(conic.Point2, dx, dy),
-                        (float)conic.Weight);
-                }
-            }
-
-            if (!isFirstShape && figure.IsClosed)
-            {
-                geometry.Close();
-            }
-        }
-
-        public static SKPathFillType ToFillType(PathFillRule fillRule)
-        {
-            return fillRule == PathFillRule.EvenOdd ? SKPathFillType.EvenOdd : SKPathFillType.Winding;
-        }
-
-        public static SKPath ToGeometry(PathShape path, double dx, double dy)
-        {
-            var geometry = new SKPath
-            {
-                FillType = ToFillType(path.FillRule)
-            };
-
-            foreach (var figure in path.Figures)
-            {
-                ToGeometry(figure, dx, dy, geometry);
-            }
-
-            return geometry;
-        }
-
-        public static SKPath ToGeometry(string svgPathData)
-        {
-            return SKPath.ParseSvgPathData(svgPathData);
         }
 
         public static SKPoint GetTextOrigin(HAlign hAlign, VAlign vAlign, ref SKRect rect, ref SKRect size)

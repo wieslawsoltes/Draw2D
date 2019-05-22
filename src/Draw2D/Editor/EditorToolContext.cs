@@ -311,6 +311,49 @@ namespace Draw2D.Editor
             }
         }
 
+        public void ToSvgPathData(BaseShape shape, StringBuilder sb)
+        {
+            switch (shape)
+            {
+                case LineShape line:
+                    sb.AppendLine(SkiaHelper.ToGeometry(line, 0.0, 0.0).ToSvgPathData());
+                    break;
+                case CubicBezierShape cubicBezier:
+                    sb.AppendLine(SkiaHelper.ToGeometry(cubicBezier, 0.0, 0.0).ToSvgPathData());
+                    break;
+                case QuadraticBezierShape quadraticBezier:
+                    sb.AppendLine(SkiaHelper.ToGeometry(quadraticBezier, 0.0, 0.0).ToSvgPathData());
+                    break;
+                case ConicShape conic:
+                    sb.AppendLine(SkiaHelper.ToGeometry(conic, 0.0, 0.0).ToSvgPathData());
+                    break;
+                case PathShape pathShape:
+                    sb.AppendLine(SkiaHelper.ToGeometry(pathShape, 0.0, 0.0).ToSvgPathData());
+                    break;
+                case RectangleShape rectangle:
+                    sb.AppendLine(SkiaHelper.ToGeometry(rectangle, 0.0, 0.0).ToSvgPathData());
+                    break;
+                case EllipseShape ellipse:
+                    sb.AppendLine(SkiaHelper.ToGeometry(ellipse, 0.0, 0.0).ToSvgPathData());
+                    break;
+                case PointShape point:
+                    if (point.Template != null)
+                    {
+                        ToSvgPathData(point.Template, sb);
+                    }
+                    break;
+                case GroupShape group:
+                    foreach (var groupShape in group.Shapes)
+                    {
+                        ToSvgPathData(groupShape, sb);
+                    }
+                    break;
+                case TextShape text:
+                    // TODO: Convert text to path using SKPaint.GetTextPath.
+                    break;
+            };
+        }
+
         public void ToSvgPathData(TextBox textBox)
         {
             if (ContainerView.SelectionState?.Shapes != null)
@@ -320,36 +363,7 @@ namespace Draw2D.Editor
 
                 foreach (var shape in selected)
                 {
-                    switch (shape)
-                    {
-                        case LineShape line:
-                            sb.AppendLine(SkiaHelper.ToGeometry(line, 0.0, 0.0).ToSvgPathData());
-                            break;
-                        case CubicBezierShape cubicBezier:
-                            sb.AppendLine(SkiaHelper.ToGeometry(cubicBezier, 0.0, 0.0).ToSvgPathData());
-                            break;
-                        case QuadraticBezierShape quadraticBezier:
-                            sb.AppendLine(SkiaHelper.ToGeometry(quadraticBezier, 0.0, 0.0).ToSvgPathData());
-                            break;
-                        case ConicShape conic:
-                            sb.AppendLine(SkiaHelper.ToGeometry(conic, 0.0, 0.0).ToSvgPathData());
-                            break;
-                        case PathShape pathShape:
-                            sb.AppendLine(SkiaHelper.ToGeometry(pathShape, 0.0, 0.0).ToSvgPathData());
-                            break;
-                        case RectangleShape rectangle:
-                            sb.AppendLine(SkiaHelper.ToGeometry(rectangle, 0.0, 0.0).ToSvgPathData());
-                            break;
-                        case EllipseShape ellipse:
-                            sb.AppendLine(SkiaHelper.ToGeometry(ellipse, 0.0, 0.0).ToSvgPathData());
-                            break;
-                        case PointShape pointShape:
-                            break;
-                        case GroupShape groupShape:
-                            break;
-                        case TextShape textShape:
-                            break;
-                    };
+                    ToSvgPathData(shape, sb);
                 }
 
                 var svgPathData = sb.ToString();

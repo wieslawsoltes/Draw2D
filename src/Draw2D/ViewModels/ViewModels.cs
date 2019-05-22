@@ -6039,6 +6039,7 @@ namespace Draw2D.ViewModels.Tools
                 Points = new ObservableCollection<PointShape>(),
                 TopLeft = context.ContainerView?.GetNextPoint(context, x, y, Settings?.ConnectPoints ?? false, Settings?.HitTestRadius ?? 7.0),
                 BottomRight = context.ContainerView?.GetNextPoint(context, x, y, false, 0.0),
+                Text = new Text(),
                 Style = context.CurrentStyle
             };
             context.ContainerView?.WorkingContainer.Shapes.Add(_ellipse);
@@ -8032,6 +8033,7 @@ namespace Draw2D.ViewModels.Tools
                 Points = new ObservableCollection<PointShape>(),
                 TopLeft = context.ContainerView?.GetNextPoint(context, x, y, Settings?.ConnectPoints ?? false, Settings?.HitTestRadius ?? 7.0),
                 BottomRight = context.ContainerView?.GetNextPoint(context, x, y, false, 0.0),
+                Text = new Text(),
                 Style = context.CurrentStyle
             };
             context.ContainerView?.WorkingContainer.Shapes.Add(_rectangle);
