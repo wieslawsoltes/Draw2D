@@ -246,37 +246,18 @@ namespace Draw2D.Editor.Renderers
             return geometry;
         }
 
-        public static SKPath ToGeometry(Text text, PointShape topLeft, PointShape bottomRight, ShapeStyle style,  double dx, double dy)
+        public static SKPath ToGeometry(Text text, PointShape topLeft, PointShape bottomRight, ShapeStyle style, double dx, double dy)
         {
-            var typeface = SkiaHelper.ToSKTypeface(style.TextStyle.FontFamily);
-            var paint = SkiaHelper.ToSKPaintBrush(style.TextStyle.Stroke);
-            paint.Typeface = typeface;
-            paint.TextEncoding = SKTextEncoding.Utf16;
-            paint.TextSize = (float)style.TextStyle.FontSize;
-
-            var metrics = paint.FontMetrics;
-            var mTop = metrics.Top;
-            var mBottom = metrics.Bottom;
-            var mLeading = metrics.Leading;
-            var mDescent = metrics.Descent;
-            var mAscent = metrics.Ascent;
-            var lineHeight = mDescent - mAscent;
-            var lineOffset = (-mAscent);
-
-            float offset = -mDescent - mAscent;
-
-            var rect = SkiaHelper.ToRect(topLeft, bottomRight, dx, dy);
-            var bounds = new SKRect();
-            paint.MeasureText(text.Value, ref bounds);
-            var origin = SkiaHelper.GetTextOrigin(style.TextStyle.HAlign, style.TextStyle.VAlign, ref rect, ref bounds);
-
-            var outlineGeometry = paint.GetTextPath(text.Value, (float)origin.X, (float)(origin.Y + offset));
-            var fillGeometry = paint.GetFillPath(outlineGeometry);
-
-            paint.Dispose();
-            typeface.Dispose();
-
-            return fillGeometry;
+            using (var typeface = SkiaHelper.ToSKTypeface(style.TextStyle.FontFamily))
+            using (var paint = SkiaHelper.ToSKPaintBrush(style.TextStyle.Stroke))
+            {
+                paint.Typeface = typeface;
+                paint.TextEncoding = SKTextEncoding.Utf16;
+                paint.TextSize = (float)style.TextStyle.FontSize;
+                var outlineGeometry = paint.GetTextPath(text.Value, 0.0f, 0.0f);
+                var fillGeometry = paint.GetFillPath(outlineGeometry);
+                return fillGeometry;
+            }
         }
 
         public static SKPath ToGeometry(TextShape text, double dx, double dy)
@@ -424,41 +405,6 @@ namespace Draw2D.Editor.Renderers
             }
 
             return pathShape;
-        }
-
-        public static SKPoint GetTextOrigin(HAlign hAlign, VAlign vAlign, ref SKRect rect, ref SKRect bounds)
-        {
-            double ox, oy;
-
-            switch (hAlign)
-            {
-                case HAlign.Left:
-                    ox = rect.Left;
-                    break;
-                case HAlign.Center:
-                default:
-                    ox = (rect.Left + rect.Width / 2f) - (bounds.Width / 2f);
-                    break;
-                case HAlign.Right:
-                    ox = rect.Right - bounds.Width;
-                    break;
-            }
-
-            switch (vAlign)
-            {
-                case VAlign.Top:
-                    oy = rect.Top;
-                    break;
-                case VAlign.Center:
-                default:
-                    oy = (rect.Bottom - rect.Height / 2f) - (bounds.Height / 2f);
-                    break;
-                case VAlign.Bottom:
-                    oy = rect.Bottom - bounds.Height;
-                    break;
-            }
-
-            return new SKPoint((float)ox, (float)oy);
         }
     }
 }
