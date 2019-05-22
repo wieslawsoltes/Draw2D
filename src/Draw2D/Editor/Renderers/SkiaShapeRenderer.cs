@@ -192,10 +192,10 @@ namespace Draw2D.Editor.Renderers
                     y = y - mAscent;
                     break;
                 case VAlign.Center:
-                    y = y + height / 2.0f - (mBottom - mDescent);
+                    y = y - mAscent + (height / 2.0f);
                     break;
                 case VAlign.Bottom:
-                    y = y + height - (mBottom - mDescent);
+                    y = y + height - mDescent;
                     break;
             }
 
@@ -248,6 +248,9 @@ namespace Draw2D.Editor.Renderers
 
             canvas.DrawText($"rect: {rect}", x, y + mLineHeight * line++, cached.paint);
             canvas.DrawText($"bounds: {bounds}", x, y + mLineHeight * line++, cached.paint);
+
+            canvas.DrawText($"x: {x}", x, y + mLineHeight * line++, cached.paint);
+            canvas.DrawText($"y: {y}", x, y + mLineHeight * line++, cached.paint);
         }
 #endif
 
