@@ -160,14 +160,14 @@ namespace Draw2D.Editor.Renderers
             var lineHeight = mDescent - mAscent;
             var lineOffset = (-mAscent);
             var offset = -mDescent - mAscent;
-            canvas.DrawText($"mTop: {mTop}", origin.X, origin.Y + lineOffset * 1, cached.paint);
-            canvas.DrawText($"mBottom: {mBottom}", origin.X, origin.Y + lineOffset * 2, cached.paint);
-            canvas.DrawText($"mLeading: {mLeading}", origin.X, origin.Y + lineOffset * 3, cached.paint);
-            canvas.DrawText($"mDescent: {mDescent}", origin.X, origin.Y + lineOffset * 4, cached.paint);
-            canvas.DrawText($"mAscent: {mAscent}", origin.X, origin.Y + lineOffset * 5, cached.paint);
-            canvas.DrawText($"lineHeight: {lineHeight}", origin.X, origin.Y + lineOffset * 6, cached.paint);
-            canvas.DrawText($"lineOffset: {lineOffset}", origin.X, origin.Y + lineOffset * 7, cached.paint);
-            canvas.DrawText($"offset: {offset}", origin.X, origin.Y + lineOffset * 8, cached.paint);
+            canvas.DrawText($"mTop: {mTop}", origin.X, origin.Y + lineOffset * 2, cached.paint);
+            canvas.DrawText($"mBottom: {mBottom}", origin.X, origin.Y + lineOffset * 3, cached.paint);
+            canvas.DrawText($"mLeading: {mLeading}", origin.X, origin.Y + lineOffset * 4, cached.paint);
+            canvas.DrawText($"mDescent: {mDescent}", origin.X, origin.Y + lineOffset * 5, cached.paint);
+            canvas.DrawText($"mAscent: {mAscent}", origin.X, origin.Y + lineOffset * 6, cached.paint);
+            canvas.DrawText($"lineHeight: {lineHeight}", origin.X, origin.Y + lineOffset * 7, cached.paint);
+            canvas.DrawText($"lineOffset: {lineOffset}", origin.X, origin.Y + lineOffset * 8, cached.paint);
+            canvas.DrawText($"offset: {offset}", origin.X, origin.Y + lineOffset * 9, cached.paint);
         }
 #endif
 
