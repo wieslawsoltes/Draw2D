@@ -368,49 +368,49 @@ namespace Draw2D.Editor
                         "Default",
                         new ArgbColor(255, 0, 0, 0),
                         new ArgbColor(255, 255, 255, 255),
-                        2.0, true, true,
+                        2.0, true, false,
                         new TextStyle("Calibri", 12.0, HAlign.Center, VAlign.Center, new ArgbColor(255, 0, 0, 0), true)),
                 new ShapeStyle(
                         "Red",
                         new ArgbColor(255, 255, 0, 0),
                         new ArgbColor(255, 255, 0, 0),
-                        2.0, true, true,
+                        2.0, true, false,
                         new TextStyle("Calibri", 12.0, HAlign.Center, VAlign.Center, new ArgbColor(255, 255, 0, 0), true)),
                 new ShapeStyle(
                         "Green",
                         new ArgbColor(255, 0, 255, 0),
                         new ArgbColor(255, 0, 255, 0),
-                        2.0, true, true,
+                        2.0, true, false,
                         new TextStyle("Calibri", 12.0, HAlign.Center, VAlign.Center, new ArgbColor(255, 0, 255, 0), true)),
                 new ShapeStyle(
                         "Blue",
                         new ArgbColor(255, 0, 0, 255),
                         new ArgbColor(255, 0, 0, 255),
-                        2.0, true, true,
+                        2.0, true, false,
                         new TextStyle("Calibri", 12.0, HAlign.Center, VAlign.Center, new ArgbColor(255, 0, 0, 255), true)),
                 new ShapeStyle(
                         "Cyan",
                         new ArgbColor(255, 0, 255, 255),
                         new ArgbColor(255, 0, 255, 255),
-                        2.0, true, true,
+                        2.0, true, false,
                         new TextStyle("Calibri", 12.0, HAlign.Center, VAlign.Center, new ArgbColor(255, 0, 255, 255), true)),
                 new ShapeStyle(
                         "Magenta",
                         new ArgbColor(255, 255, 0, 255),
                         new ArgbColor(255, 255, 0, 255),
-                        2.0, true, true,
+                        2.0, true, false,
                         new TextStyle("Calibri", 12.0, HAlign.Center, VAlign.Center, new ArgbColor(255, 255, 0, 255), true)),
                 new ShapeStyle(
                         "Yellow",
                         new ArgbColor(255, 255, 255, 0),
                         new ArgbColor(255, 255, 255, 0),
-                        2.0, true, true,
+                        2.0, true, false,
                         new TextStyle("Calibri", 12.0, HAlign.Center, VAlign.Center, new ArgbColor(255, 255, 255, 0), true)),
                 new ShapeStyle(
                         "Black",
                         new ArgbColor(255, 0, 0, 0),
                         new ArgbColor(255, 0, 0, 0),
-                        2.0, true, true,
+                        2.0, true, false,
                         new TextStyle("Calibri", 12.0, HAlign.Center, VAlign.Center, new ArgbColor(255, 0, 0, 0), true))
             };
 
