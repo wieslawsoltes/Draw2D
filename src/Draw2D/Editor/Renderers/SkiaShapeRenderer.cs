@@ -1,5 +1,9 @@
 ﻿// Copyright (c) Wiesław Šoltés. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
+//#define DEBUG_DRAW_TEXT
+//#define USE_DRAW_LINE
+//#define USE_DRAW_RECT
+//#define USE_DRAW_OVAL
 using System.Collections.Generic;
 using Draw2D.ViewModels;
 using Draw2D.ViewModels.Shapes;
@@ -161,7 +165,9 @@ namespace Draw2D.Editor.Renderers
             GetSKPaintStrokeText(style.TextStyle, out var paint, out var metrics);
             var mTop = metrics.Top;
             var mAscent = metrics.Ascent;
-            // NOTE: var mBaseline = 0.0f;
+#if DEBUG_DRAW_TEXT
+            var mBaseline = 0.0f;
+#endif
             var mDescent = metrics.Descent;
             var mBottom = metrics.Bottom;
             var mLeading = metrics.Leading;
@@ -188,10 +194,7 @@ namespace Draw2D.Editor.Renderers
                     y += height - mDescent;
                     break;
             }
-#if false
-            var bounds = new SKRect();
-            paint.MeasureText(text.Value, ref bounds);
-
+#if DEBUG_DRAW_TEXT
             using (var boundsPen = new SKPaint() { IsAntialias = true, IsStroke = true, StrokeWidth = (float)(style.Thickness / Scale), Color = new SKColor(255, 255, 255, 255) })
             using (var mTopPen = new SKPaint() { IsAntialias = true, IsStroke = true, StrokeWidth = (float)(style.Thickness / Scale), Color = new SKColor(128, 0, 128, 255) })
             using (var mAscentPen = new SKPaint() { IsAntialias = true, IsStroke = true, StrokeWidth = (float)(style.Thickness / Scale), Color = new SKColor(0, 255, 0, 255) })
@@ -199,6 +202,8 @@ namespace Draw2D.Editor.Renderers
             using (var mDescentPen = new SKPaint() { IsAntialias = true, IsStroke = true, StrokeWidth = (float)(style.Thickness / Scale), Color = new SKColor(0, 0, 255, 255) })
             using (var mBottomPen = new SKPaint() { IsAntialias = true, IsStroke = true, StrokeWidth = (float)(style.Thickness / Scale), Color = new SKColor(255, 127, 0, 255) })
             {
+                var bounds = new SKRect();
+                paint.MeasureText(text.Value, ref bounds);
                 var boundsAdjusted = new SKRect(x + bounds.Left, y + bounds.Top, x + bounds.Right, y + bounds.Bottom);
                 canvas.DrawRect(boundsAdjusted, boundsPen);
                 canvas.DrawLine(new SKPoint(x, y + mTop), new SKPoint(x + width, y + mTop), mTopPen);
@@ -223,9 +228,9 @@ namespace Draw2D.Editor.Renderers
             }
 
             canvas.DrawText(text.Value, x, y, paint);
-#if false
-            int line = 2;
 
+#if DEBUG_DRAW_TEXT
+            int line = 2;
             canvas.DrawText($"Top: {mTop}", x, y + mLineHeight * line++, paint);
             canvas.DrawText($"Ascent: {mAscent}", x, y + mLineHeight * line++, paint);
             canvas.DrawText($"Baseline: {mBaseline}", x, y + mLineHeight * line++, paint);
@@ -253,7 +258,17 @@ namespace Draw2D.Editor.Renderers
 
         public void DrawLine(object dc, LineShape line, ShapeStyle style, double dx, double dy)
         {
-#if true
+#if USE_DRAW_LINE
+            if (style.IsStroked || style.TextStyle.IsStroked)
+            {
+                var canvas = dc as SKCanvas;
+                if (style.IsStroked)
+                {
+                    GetSKPaintStroke(style, out var pen, Scale);
+                    canvas.DrawLine(SkiaHelper.ToPoint(line.StartPoint, dx, dy), SkiaHelper.ToPoint(line.Point, dx, dy), pen);
+                }
+            }
+#else
             if (style.IsStroked || style.TextStyle.IsStroked)
             {
                 var canvas = dc as SKCanvas;
@@ -268,16 +283,6 @@ namespace Draw2D.Editor.Renderers
                     {
                         DrawTextOnPath(canvas, geometry, line.Text, style.TextStyle);
                     }
-                }
-            }
-#else
-            if (style.IsStroked || style.TextStyle.IsStroked)
-            {
-                var canvas = dc as SKCanvas;
-                if (style.IsStroked)
-                {
-                    GetSKPaintStroke(style, out var pen, Scale);
-                    canvas.DrawLine(SkiaHelper.ToPoint(line.StartPoint, dx, dy), SkiaHelper.ToPoint(line.Point, dx, dy), pen);
                 }
             }
 #endif
@@ -385,7 +390,27 @@ namespace Draw2D.Editor.Renderers
 
         public void DrawRectangle(object dc, RectangleShape rectangle, ShapeStyle style, double dx, double dy)
         {
-#if true
+#if USE_DRAW_RECT
+            if (style.IsFilled || style.IsStroked || style.TextStyle.IsStroked)
+            {
+                var canvas = dc as SKCanvas;
+                var rect = SkiaHelper.ToRect(rectangle.TopLeft, rectangle.BottomRight, dx, dy);
+                if (style.IsFilled)
+                {
+                    GetSKPaintFill(style, out var brush);
+                    canvas.DrawRect(rect, brush);
+                }
+                if (style.IsStroked)
+                {
+                    GetSKPaintStroke(style, out var pen, Scale);
+                    canvas.DrawRect(rect, pen);
+                }
+                if (style.TextStyle.IsStroked && !string.IsNullOrEmpty(rectangle.Text?.Value))
+                {
+                    DrawText(canvas, rectangle.Text, rectangle.TopLeft, rectangle.BottomRight, style, dx, dy);
+                }
+            }
+#else
             if (style.IsFilled || style.IsStroked || style.TextStyle.IsStroked)
             {
                 var canvas = dc as SKCanvas;
@@ -407,32 +432,32 @@ namespace Draw2D.Editor.Renderers
                     }
                 }
             }
-#else
-            if (style.IsFilled || style.IsStroked || style.TextStyle.IsStroked)
-            {
-                var canvas = dc as SKCanvas;
-                var rect = SkiaHelper.ToRect(rectangle.TopLeft, rectangle.BottomRight, dx, dy);
-                if (style.IsFilled)
-                {
-                    GetSKPaintFill(style, out var brush);
-                    canvas.DrawRect(rect, brush);
-                }
-                if (style.IsStroked)
-                {
-                    GetSKPaintStroke(style, out var pen, Scale);
-                    canvas.DrawRect(rect, pen);
-                }
-                if (style.TextStyle.IsStroked && !string.IsNullOrEmpty(rectangle.Text?.Value))
-                {
-                    DrawText(canvas, rectangle.Text, rectangle.TopLeft, rectangle.BottomRight, style, dx, dy);
-                }
-            }
 #endif
         }
 
         public void DrawEllipse(object dc, EllipseShape ellipse, ShapeStyle style, double dx, double dy)
         {
-#if true
+#if USE_DRAW_OVAL
+            if (style.IsFilled || style.IsStroked || style.TextStyle.IsStroked)
+            {
+                var canvas = dc as SKCanvas;
+                var rect = SkiaHelper.ToRect(ellipse.TopLeft, ellipse.BottomRight, dx, dy);
+                if (style.IsFilled)
+                {
+                    GetSKPaintFill(style, out var brush);
+                    canvas.DrawOval(rect, brush);
+                }
+                if (style.IsStroked)
+                {
+                    GetSKPaintStroke(style, out var pen, Scale);
+                    canvas.DrawOval(rect, pen);
+                }
+                if (style.TextStyle.IsStroked && !string.IsNullOrEmpty(ellipse.Text?.Value))
+                {
+                    DrawText(canvas, ellipse.Text, ellipse.TopLeft, ellipse.BottomRight, style, dx, dy);
+                }
+            }
+#else
             if (style.IsFilled || style.IsStroked || style.TextStyle.IsStroked)
             {
                 var canvas = dc as SKCanvas;
@@ -452,26 +477,6 @@ namespace Draw2D.Editor.Renderers
                     {
                         DrawText(canvas, ellipse.Text, ellipse.TopLeft, ellipse.BottomRight, style, dx, dy);
                     }
-                }
-            }
-#else
-            if (style.IsFilled || style.IsStroked || style.TextStyle.IsStroked)
-            {
-                var canvas = dc as SKCanvas;
-                var rect = SkiaHelper.ToRect(ellipse.TopLeft, ellipse.BottomRight, dx, dy);
-                if (style.IsFilled)
-                {
-                    GetSKPaintFill(style, out var brush);
-                    canvas.DrawOval(rect, brush);
-                }
-                if (style.IsStroked)
-                {
-                    GetSKPaintStroke(style, out var pen, Scale);
-                    canvas.DrawOval(rect, pen);
-                }
-                if (style.TextStyle.IsStroked && !string.IsNullOrEmpty(ellipse.Text?.Value))
-                {
-                    DrawText(canvas, ellipse.Text, ellipse.TopLeft, ellipse.BottomRight, style, dx, dy);
                 }
             }
 #endif
