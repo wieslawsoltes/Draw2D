@@ -1,5 +1,6 @@
 ﻿// Copyright (c) Wiesław Šoltés. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
+//#define USE_DRAW_POINTS
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -192,11 +193,11 @@ namespace Draw2D.Editor.Views
 
         private void DrawPoints(IContainerView view, object context, IShapeRenderer renderer)
         {
-            // NOTE: Draw only selected points.
-#if false
+#if USE_DRAW_POINTS
             view.CurrentContainer.Draw(context, renderer, 0.0, 0.0, DrawMode.Point, null, null);
             view.WorkingContainer.Draw(context, renderer, 0.0, 0.0, DrawMode.Point, null, null);
 #else
+            // NOTE: Draw only selected points.
             var selected = new List<BaseShape>(view.SelectionState.Shapes);
 
             foreach (var shape in selected)

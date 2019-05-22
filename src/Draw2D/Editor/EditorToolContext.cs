@@ -1,5 +1,6 @@
 ﻿// Copyright (c) Wiesław Šoltés. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
+//#define USE_SVG_POINT
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -349,7 +350,7 @@ namespace Draw2D.Editor
                         SkiaHelper.ToGeometry(ellipse.Text, ellipse.TopLeft, ellipse.BottomRight, ellipse.Style, 0.0, 0.0);
                     }
                     break;
-#if false
+#if USE_SVG_POINT
                 case PointShape point:
                     if (point.Template != null)
                     {

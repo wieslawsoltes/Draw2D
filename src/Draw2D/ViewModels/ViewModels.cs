@@ -1,5 +1,8 @@
 ﻿// Copyright (c) Wiesław Šoltés. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
+//#define USE_POINT_DECORATOR
+//#define USE_GROUP_SHAPES
+//#define USE_PATH_FIGURES
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -4070,7 +4073,7 @@ namespace Draw2D.ViewModels.Decorators
 
         public override void Draw(object dc, BaseShape shape, IShapeRenderer renderer, ISelectionState selectionState, double dx, double dy, DrawMode mode)
         {
-#if false
+#if USE_POINT_DECORATOR
             if (shape is PointShape pointShape)
             {
                 Draw(dc, renderer, pointShape, dx, dy, mode);
@@ -5070,7 +5073,7 @@ namespace Draw2D.ViewModels.Bounds
                     return groupPoint;
                 }
             }
-#if false
+#if USE_GROUP_SHAPES
             foreach (var groupShape in group.Shapes)
             {
                 var result = groupShape.Bounds?.TryToGetPoint(groupShape, target, radius, hitTest);
@@ -5229,7 +5232,7 @@ namespace Draw2D.ViewModels.Bounds
                     return result;
                 }
             }
-#if false
+#if USE_PATH_FIGURES
             if (path.Figures.Count > 1)
             {
                 foreach (var figure in path.Figures)
