@@ -148,7 +148,7 @@ namespace Draw2D.Editor.Renderers
         }
 
 #if true
-        private void DrawTextSKFontMetrics(SKCanvas canvas, ShapeStyle style, ref SKRect rect, ref SKRect bounds, ref SKPoint origin)
+        private void DrawTextSKFontMetrics(SKCanvas canvas, Text text, ShapeStyle style, ref SKRect rect, ref SKRect bounds, ref SKPoint origin)
         {
             (SKPaint paint, SKFontMetrics metrics) cached = _textPaintCache[style.TextStyle];
 
@@ -163,45 +163,37 @@ namespace Draw2D.Editor.Renderers
             var mLineHeight = cached.metrics.Bottom - cached.metrics.Top;
 
             using (var boundsPen = new SKPaint() { IsAntialias = true, IsStroke = true, StrokeWidth = (float)(style.Thickness / Scale), Color = new SKColor(0, 0, 0, 255) })
-            {
-                canvas.DrawRect(bounds, boundsPen);
-            }
-
             using (var mTopPen = new SKPaint() { IsAntialias = true, IsStroke = true, StrokeWidth = (float)(style.Thickness / Scale), Color = new SKColor(128, 0, 128, 255) })
-            {
-                canvas.DrawLine(new SKPoint(rect.Left, mTop), new SKPoint(rect.Left + rect.Width, mTop), mTopPen);
-            }
-
+            using (var mAscentPen = new SKPaint() { IsAntialias = true, IsStroke = true, StrokeWidth = (float)(style.Thickness / Scale), Color = new SKColor(0, 255, 0, 255) })
             using (var mBaselinePen = new SKPaint() { IsAntialias = true, IsStroke = true, StrokeWidth = (float)(style.Thickness / Scale), Color = new SKColor(255, 0, 0, 255) })
-            {
-                canvas.DrawLine(new SKPoint(rect.Left, mBaseline), new SKPoint(rect.Left + rect.Width, mBaseline), mBaselinePen);
-            }
-
             using (var mDescentPen = new SKPaint() { IsAntialias = true, IsStroke = true, StrokeWidth = (float)(style.Thickness / Scale), Color = new SKColor(0, 0, 255, 255) })
-            {
-                canvas.DrawLine(new SKPoint(rect.Left, mDescent), new SKPoint(rect.Left + rect.Width, mDescent), mDescentPen);
-            }
-
             using (var mBottomPen = new SKPaint() { IsAntialias = true, IsStroke = true, StrokeWidth = (float)(style.Thickness / Scale), Color = new SKColor(255, 127, 0, 255) })
             {
-                canvas.DrawLine(new SKPoint(rect.Left, mBottom), new SKPoint(rect.Left + rect.Width, mBottom), mBottomPen);
+                canvas.DrawRect(bounds, boundsPen);
+                canvas.DrawLine(new SKPoint(rect.Left, rect.Top + mTop), new SKPoint(rect.Left + rect.Width, rect.Top + mTop), mTopPen);
+                canvas.DrawLine(new SKPoint(rect.Left, rect.Top + mAscent), new SKPoint(rect.Left + rect.Width, rect.Top + mAscent), mAscentPen);
+                canvas.DrawLine(new SKPoint(rect.Left, rect.Top + mBaseline), new SKPoint(rect.Left + rect.Width, rect.Top + mBaseline), mBaselinePen);
+                canvas.DrawLine(new SKPoint(rect.Left, rect.Top + mDescent), new SKPoint(rect.Left + rect.Width, rect.Top + mDescent), mDescentPen);
+                canvas.DrawLine(new SKPoint(rect.Left, rect.Top + mBottom), new SKPoint(rect.Left + rect.Width, rect.Top + mBottom), mBottomPen);
             }
+
+            canvas.DrawText($"{text.Value}", rect.Left, rect.Top, cached.paint);
 
             int line = 2;
 
-            canvas.DrawText($"mTop: {mTop}", origin.X, origin.Y + mLineHeight * line++, cached.paint);
-            canvas.DrawText($"mAscent: {mAscent}", origin.X, origin.Y + mLineHeight * line++, cached.paint);
-            canvas.DrawText($"mBaseline: {mBaseline}", origin.X, origin.Y + mLineHeight * line++, cached.paint);
-            canvas.DrawText($"mDescent: {mDescent}", origin.X, origin.Y + mLineHeight * line++, cached.paint);
-            canvas.DrawText($"mBottom: {mBottom}", origin.X, origin.Y + mLineHeight * line++, cached.paint);
+            canvas.DrawText($"mTop: {mTop}", rect.Left, rect.Top + mLineHeight * line++, cached.paint);
+            canvas.DrawText($"mAscent: {mAscent}", rect.Left, rect.Top + mLineHeight * line++, cached.paint);
+            canvas.DrawText($"mBaseline: {mBaseline}", rect.Left, rect.Top + mLineHeight * line++, cached.paint);
+            canvas.DrawText($"mDescent: {mDescent}", rect.Left, rect.Top + mLineHeight * line++, cached.paint);
+            canvas.DrawText($"mBottom: {mBottom}", rect.Left, rect.Top + mLineHeight * line++, cached.paint);
 
-            canvas.DrawText($"mLeading: {mLeading}", origin.X, origin.Y + mLineHeight * line++, cached.paint);
-            canvas.DrawText($"mCapHeight: {mCapHeight}", origin.X, origin.Y + mLineHeight * line++, cached.paint);
-            canvas.DrawText($"mLineHeight: {mLineHeight}", origin.X, origin.Y + mLineHeight * line++, cached.paint);
+            canvas.DrawText($"mLeading: {mLeading}", rect.Left, rect.Top + mLineHeight * line++, cached.paint);
+            canvas.DrawText($"mCapHeight: {mCapHeight}", rect.Left, rect.Top + mLineHeight * line++, cached.paint);
+            canvas.DrawText($"mLineHeight: {mLineHeight}", rect.Left, rect.Top + mLineHeight * line++, cached.paint);
 
-            canvas.DrawText($"rect: {rect}", origin.X, origin.Y + mLineHeight * line++, cached.paint);
-            canvas.DrawText($"bounds: {bounds}", origin.X, origin.Y + mLineHeight * line++, cached.paint);
-            canvas.DrawText($"origin: {origin}", origin.X, origin.Y + mLineHeight * line++, cached.paint);
+            canvas.DrawText($"rect: {rect}", rect.Left, rect.Top + mLineHeight * line++, cached.paint);
+            canvas.DrawText($"bounds: {bounds}", rect.Left, rect.Top + mLineHeight * line++, cached.paint);
+            canvas.DrawText($"origin: {origin}", rect.Left, rect.Top + mLineHeight * line++, cached.paint);
 
         }
 #endif
@@ -215,7 +207,7 @@ namespace Draw2D.Editor.Renderers
             var origin = SkiaHelper.GetTextOrigin(style.TextStyle.HAlign, style.TextStyle.VAlign, ref rect, ref bounds);
             canvas.DrawText(text.Value, origin.X - bounds.Left, origin.Y - bounds.Top, paint);
 #if true
-            DrawTextSKFontMetrics(canvas, style, ref rect, ref bounds, ref origin);
+            DrawTextSKFontMetrics(canvas, text, style, ref rect, ref bounds, ref origin);
 #endif
         }
 
