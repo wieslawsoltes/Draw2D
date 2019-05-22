@@ -1,5 +1,6 @@
 ﻿// Copyright (c) Wiesław Šoltés. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
+//#define USE_CLOSE_SHAPE
 using System;
 using System.Collections.ObjectModel;
 using Draw2D.ViewModels;
@@ -385,7 +386,7 @@ namespace Draw2D.Editor.Renderers
                             break;
                         case SKPathVerb.Close:
                             {
-#if false
+#if USE_CLOSE_SHAPE
                                 var line = new LineShape()
                                 {
                                     Points = new ObservableCollection<PointShape>(),
