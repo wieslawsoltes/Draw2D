@@ -151,25 +151,58 @@ namespace Draw2D.Editor.Renderers
         private void DrawTextSKFontMetrics(SKCanvas canvas, ShapeStyle style, ref SKRect rect, ref SKRect bounds, ref SKPoint origin)
         {
             (SKPaint paint, SKFontMetrics metrics) cached = _textPaintCache[style.TextStyle];
+
             var mTop = cached.metrics.Top;
-            var mBottom = cached.metrics.Bottom;
-            var mLeading = cached.metrics.Leading;
-            var mDescent = cached.metrics.Descent;
             var mAscent = cached.metrics.Ascent;
+            var mBaseline = (-cached.metrics.Ascent);
+            var mDescent = cached.metrics.Descent;
+            var mBottom = cached.metrics.Bottom;
+
+            var mLeading = cached.metrics.Leading;
             var mCapHeight = cached.metrics.CapHeight;
-            var lineHeight = mDescent - mAscent;
-            var lineOffset = (-mAscent);
-            canvas.DrawText($"mTop: {mTop}", origin.X, origin.Y + lineOffset * 2, cached.paint);
-            canvas.DrawText($"mBottom: {mBottom}", origin.X, origin.Y + lineOffset * 3, cached.paint);
-            canvas.DrawText($"mLeading: {mLeading}", origin.X, origin.Y + lineOffset * 4, cached.paint);
-            canvas.DrawText($"mDescent: {mDescent}", origin.X, origin.Y + lineOffset * 5, cached.paint);
-            canvas.DrawText($"mAscent: {mAscent}", origin.X, origin.Y + lineOffset * 6, cached.paint);
-            canvas.DrawText($"mCapHeight: {mCapHeight}", origin.X, origin.Y + lineOffset * 7, cached.paint);
-            canvas.DrawText($"lineHeight: {lineHeight}", origin.X, origin.Y + lineOffset * 8, cached.paint);
-            canvas.DrawText($"lineOffset: {lineOffset}", origin.X, origin.Y + lineOffset * 9, cached.paint);
-            canvas.DrawText($"rect: {rect}", origin.X, origin.Y + lineOffset * 10, cached.paint);
-            canvas.DrawText($"bounds: {bounds}", origin.X, origin.Y + lineOffset * 11, cached.paint);
-            canvas.DrawText($"origin: {origin}", origin.X, origin.Y + lineOffset * 12, cached.paint);
+            var mLineHeight = cached.metrics.Bottom - cached.metrics.Top;
+
+            using (var boundsPen = new SKPaint() { IsAntialias = true, IsStroke = true, StrokeWidth = (float)(style.Thickness / Scale), Color = new SKColor(0, 0, 0, 255) })
+            {
+                canvas.DrawRect(bounds, boundsPen);
+            }
+
+            using (var mTopPen = new SKPaint() { IsAntialias = true, IsStroke = true, StrokeWidth = (float)(style.Thickness / Scale), Color = new SKColor(128, 0, 128, 255) })
+            {
+                canvas.DrawLine(new SKPoint(rect.Left, mTop), new SKPoint(rect.Left + rect.Width, mTop), mTopPen);
+            }
+
+            using (var mBaselinePen = new SKPaint() { IsAntialias = true, IsStroke = true, StrokeWidth = (float)(style.Thickness / Scale), Color = new SKColor(255, 0, 0, 255) })
+            {
+                canvas.DrawLine(new SKPoint(rect.Left, mBaseline), new SKPoint(rect.Left + rect.Width, mBaseline), mBaselinePen);
+            }
+
+            using (var mDescentPen = new SKPaint() { IsAntialias = true, IsStroke = true, StrokeWidth = (float)(style.Thickness / Scale), Color = new SKColor(0, 0, 255, 255) })
+            {
+                canvas.DrawLine(new SKPoint(rect.Left, mDescent), new SKPoint(rect.Left + rect.Width, mDescent), mDescentPen);
+            }
+
+            using (var mBottomPen = new SKPaint() { IsAntialias = true, IsStroke = true, StrokeWidth = (float)(style.Thickness / Scale), Color = new SKColor(255, 127, 0, 255) })
+            {
+                canvas.DrawLine(new SKPoint(rect.Left, mBottom), new SKPoint(rect.Left + rect.Width, mBottom), mBottomPen);
+            }
+
+            int line = 2;
+
+            canvas.DrawText($"mTop: {mTop}", origin.X, origin.Y + mLineHeight * line++, cached.paint);
+            canvas.DrawText($"mAscent: {mAscent}", origin.X, origin.Y + mLineHeight * line++, cached.paint);
+            canvas.DrawText($"mBaseline: {mBaseline}", origin.X, origin.Y + mLineHeight * line++, cached.paint);
+            canvas.DrawText($"mDescent: {mDescent}", origin.X, origin.Y + mLineHeight * line++, cached.paint);
+            canvas.DrawText($"mBottom: {mBottom}", origin.X, origin.Y + mLineHeight * line++, cached.paint);
+
+            canvas.DrawText($"mLeading: {mLeading}", origin.X, origin.Y + mLineHeight * line++, cached.paint);
+            canvas.DrawText($"mCapHeight: {mCapHeight}", origin.X, origin.Y + mLineHeight * line++, cached.paint);
+            canvas.DrawText($"mLineHeight: {mLineHeight}", origin.X, origin.Y + mLineHeight * line++, cached.paint);
+
+            canvas.DrawText($"rect: {rect}", origin.X, origin.Y + mLineHeight * line++, cached.paint);
+            canvas.DrawText($"bounds: {bounds}", origin.X, origin.Y + mLineHeight * line++, cached.paint);
+            canvas.DrawText($"origin: {origin}", origin.X, origin.Y + mLineHeight * line++, cached.paint);
+
         }
 #endif
 
