@@ -163,11 +163,11 @@ namespace Draw2D.Editor.Renderers
         {
             var rect = SkiaHelper.ToRect(topLeft, bottomRight, dx, dy);
             GetSKPaintStrokeText(style.TextStyle, out var paint, out var metrics);
-            var mTop = metrics.Top;
-            var mAscent = metrics.Ascent;
 #if DEBUG_DRAW_TEXT
             var mBaseline = 0.0f;
 #endif
+            var mTop = metrics.Top;
+            var mAscent = metrics.Ascent;
             var mDescent = metrics.Descent;
             var mBottom = metrics.Bottom;
             var mLeading = metrics.Leading;
