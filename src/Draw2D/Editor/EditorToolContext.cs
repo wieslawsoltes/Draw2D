@@ -311,7 +311,7 @@ namespace Draw2D.Editor
             }
         }
 
-        public void ToSvgPathData(BaseShape shape, StringBuilder sb)
+        private void ToSvgPathDataImpl(BaseShape shape, StringBuilder sb)
         {
             switch (shape)
             {
@@ -339,13 +339,13 @@ namespace Draw2D.Editor
                 case PointShape point:
                     if (point.Template != null)
                     {
-                        ToSvgPathData(point.Template, sb);
+                        ToSvgPathDataImpl(point.Template, sb);
                     }
                     break;
                 case GroupShape group:
                     foreach (var groupShape in group.Shapes)
                     {
-                        ToSvgPathData(groupShape, sb);
+                        ToSvgPathDataImpl(groupShape, sb);
                     }
                     break;
                 case TextShape text:
@@ -363,7 +363,7 @@ namespace Draw2D.Editor
 
                 foreach (var shape in selected)
                 {
-                    ToSvgPathData(shape, sb);
+                    ToSvgPathDataImpl(shape, sb);
                 }
 
                 var svgPathData = sb.ToString();
