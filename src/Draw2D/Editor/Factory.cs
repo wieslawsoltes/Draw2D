@@ -2,7 +2,6 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
 using Draw2D.ViewModels;
 using Draw2D.ViewModels.Bounds;
 using Draw2D.ViewModels.Containers;
@@ -355,8 +354,6 @@ namespace Draw2D.Editor
             tools.Add(ellipseTool);
             tools.Add(textTool);
 
-            var currentTool = tools.FirstOrDefault(t => t.Title == "Selection");
-
             editorToolContext.Selection = selectionTool;
             editorToolContext.HitTest = hitTest;
             editorToolContext.CurrentDirectory = null;
@@ -414,7 +411,7 @@ namespace Draw2D.Editor
                         new TextStyle("Calibri", 12.0, HAlign.Center, VAlign.Center, new ArgbColor(255, 0, 0, 0), true))
             };
 
-            editorToolContext.CurrentStyle = editorToolContext.Styles.FirstOrDefault();
+            editorToolContext.CurrentStyle = editorToolContext.Styles[0];
 
             editorToolContext.PointTemplate = new EllipseShape(new PointShape(-3, -3, null), new PointShape(3, 3, null))
             {
@@ -430,7 +427,7 @@ namespace Draw2D.Editor
             editorToolContext.ContainerViews = new ObservableCollection<IContainerView>();
             editorToolContext.ContainerView = null;
             editorToolContext.Tools = tools;
-            editorToolContext.CurrentTool = currentTool;
+            editorToolContext.CurrentTool = selectionTool;
             editorToolContext.Mode = EditMode.Mouse;
 
             return editorToolContext;
