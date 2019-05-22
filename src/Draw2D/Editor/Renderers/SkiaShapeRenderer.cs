@@ -149,7 +149,7 @@ namespace Draw2D.Editor.Renderers
         }
 
 #if true
-        private void DrawTextSKFontMetrics(SKCanvas canvas, ShapeStyle style, ref SKPoint origin)
+        private void DrawTextSKFontMetrics(SKCanvas canvas, ShapeStyle style, ref SKRect rect, ref SKRect size, ref SKPoint origin)
         {
             (SKPaint paint, SKFontMetrics metrics) cached = _textPaintCache[style.TextStyle];
             var mTop = cached.metrics.Top;
@@ -157,7 +157,7 @@ namespace Draw2D.Editor.Renderers
             var mLeading = cached.metrics.Leading;
             var mDescent = cached.metrics.Descent;
             var mAscent = cached.metrics.Ascent;
-            var mCapHeight = cached.metrics.mCapHeight;
+            var mCapHeight = cached.metrics.CapHeight;
             var lineHeight = mDescent - mAscent;
             var lineOffset = (-mAscent);
             var offset = -mDescent - mAscent;
@@ -170,6 +170,9 @@ namespace Draw2D.Editor.Renderers
             canvas.DrawText($"lineHeight: {lineHeight}", origin.X, origin.Y + lineOffset * 8, cached.paint);
             canvas.DrawText($"lineOffset: {lineOffset}", origin.X, origin.Y + lineOffset * 9, cached.paint);
             canvas.DrawText($"offset: {offset}", origin.X, origin.Y + lineOffset * 10, cached.paint);
+            canvas.DrawText($"rect: {rect}", origin.X, origin.Y + lineOffset * 11, cached.paint);
+            canvas.DrawText($"size: {size}", origin.X, origin.Y + lineOffset * 12, cached.paint);
+            canvas.DrawText($"origin: {origin}", origin.X, origin.Y + lineOffset * 13, cached.paint);
         }
 #endif
 
@@ -182,7 +185,7 @@ namespace Draw2D.Editor.Renderers
             var origin = SkiaHelper.GetTextOrigin(style.TextStyle.HAlign, style.TextStyle.VAlign, ref rect, ref bounds);
             canvas.DrawText(text.Value, origin.X, origin.Y + offset, paint);
 #if true
-            DrawTextSKFontMetrics(canvas, style, ref origin);
+            DrawTextSKFontMetrics(canvas, style, ref rect, ref bounds, ref origin);
 #endif
         }
 
