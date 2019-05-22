@@ -192,7 +192,7 @@ namespace Draw2D.Editor.Renderers
                     y = y - mAscent;
                     break;
                 case VAlign.Center:
-                    y = y - mAscent + (height / 2.0f);
+                    y = y + (height / 2.0f) - mDescent;
                     break;
                 case VAlign.Bottom:
                     y = y + height - mDescent;
