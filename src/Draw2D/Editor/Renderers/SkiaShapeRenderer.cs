@@ -154,7 +154,7 @@ namespace Draw2D.Editor.Renderers
 
             var mTop = cached.metrics.Top;
             var mAscent = cached.metrics.Ascent;
-            var mBaseline = (-cached.metrics.Ascent);
+            var mBaseline = 0.0f;
             var mDescent = cached.metrics.Descent;
             var mBottom = cached.metrics.Bottom;
 
@@ -170,15 +170,15 @@ namespace Draw2D.Editor.Renderers
             using (var mBottomPen = new SKPaint() { IsAntialias = true, IsStroke = true, StrokeWidth = (float)(style.Thickness / Scale), Color = new SKColor(255, 127, 0, 255) })
             {
                 var boundsAdjusted = new SKRect(bounds.Left + rect.Left, bounds.Top + rect.Top, bounds.Right + rect.Left, bounds.Bottom + rect.Top);
-                canvas.DrawRect(boundsAdjusted, boundsPen);
-                canvas.DrawLine(new SKPoint(rect.Left, rect.Top + mTop), new SKPoint(rect.Left + rect.Width, rect.Top + mTop), mTopPen);
-                canvas.DrawLine(new SKPoint(rect.Left, rect.Top + mAscent), new SKPoint(rect.Left + rect.Width, rect.Top + mAscent), mAscentPen);
-                canvas.DrawLine(new SKPoint(rect.Left, rect.Top + mBaseline), new SKPoint(rect.Left + rect.Width, rect.Top + mBaseline), mBaselinePen);
-                canvas.DrawLine(new SKPoint(rect.Left, rect.Top + mDescent), new SKPoint(rect.Left + rect.Width, rect.Top + mDescent), mDescentPen);
-                canvas.DrawLine(new SKPoint(rect.Left, rect.Top + mBottom), new SKPoint(rect.Left + rect.Width, rect.Top + mBottom), mBottomPen);
+                canvas.DrawRect(boundsAdjusted, boundsPen); // Bounds - White
+                canvas.DrawLine(new SKPoint(rect.Left, rect.Top + mTop), new SKPoint(rect.Left + rect.Width, rect.Top + mTop), mTopPen); // Top - Purple
+                canvas.DrawLine(new SKPoint(rect.Left, rect.Top + mAscent), new SKPoint(rect.Left + rect.Width, rect.Top + mAscent), mAscentPen); // Ascent - Green
+                canvas.DrawLine(new SKPoint(rect.Left, rect.Top + mBaseline), new SKPoint(rect.Left + rect.Width, rect.Top + mBaseline), mBaselinePen); // Baseline - Red
+                canvas.DrawLine(new SKPoint(rect.Left, rect.Top + mDescent), new SKPoint(rect.Left + rect.Width, rect.Top + mDescent), mDescentPen); // Descent - Blue
+                canvas.DrawLine(new SKPoint(rect.Left, rect.Top + mBottom), new SKPoint(rect.Left + rect.Width, rect.Top + mBottom), mBottomPen); // Bottom - Orange
             }
 
-            canvas.DrawText($"{text.Value}", rect.Left, rect.Top, cached.paint);
+            canvas.DrawText($"{text.Value}", rect.Left, rect.Top, cached.paint); // Text
 
             int line = 2;
 
