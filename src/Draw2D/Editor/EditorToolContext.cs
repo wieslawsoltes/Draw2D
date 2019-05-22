@@ -322,27 +322,30 @@ namespace Draw2D.Editor
                 {
                     switch (shape)
                     {
-                        case CubicBezierShape cubicBezierShape:
-                            sb.AppendLine(SkiaHelper.ToGeometry(cubicBezierShape, 0.0, 0.0).ToSvgPathData());
+                        case LineShape line:
+                            sb.AppendLine(SkiaHelper.ToGeometry(line, 0.0, 0.0).ToSvgPathData());
                             break;
-                        case EllipseShape ellipseShape:
+                        case CubicBezierShape cubicBezier:
+                            sb.AppendLine(SkiaHelper.ToGeometry(cubicBezier, 0.0, 0.0).ToSvgPathData());
                             break;
-                        case FigureShape figureShape:
+                        case QuadraticBezierShape quadraticBezier:
+                            sb.AppendLine(SkiaHelper.ToGeometry(quadraticBezier, 0.0, 0.0).ToSvgPathData());
                             break;
-                        case GroupShape groupShape:
-                            break;
-                        case LineShape lineShape:
-                            sb.AppendLine(SkiaHelper.ToGeometry(lineShape, 0.0, 0.0).ToSvgPathData());
+                        case ConicShape conic:
+                            sb.AppendLine(SkiaHelper.ToGeometry(conic, 0.0, 0.0).ToSvgPathData());
                             break;
                         case PathShape pathShape:
                             sb.AppendLine(SkiaHelper.ToGeometry(pathShape, 0.0, 0.0).ToSvgPathData());
                             break;
+                        case RectangleShape rectangle:
+                            sb.AppendLine(SkiaHelper.ToGeometry(rectangle, 0.0, 0.0).ToSvgPathData());
+                            break;
+                        case EllipseShape ellipse:
+                            sb.AppendLine(SkiaHelper.ToGeometry(ellipse, 0.0, 0.0).ToSvgPathData());
+                            break;
                         case PointShape pointShape:
                             break;
-                        case QuadraticBezierShape quadraticBezierShape:
-                            sb.AppendLine(SkiaHelper.ToGeometry(quadraticBezierShape, 0.0, 0.0).ToSvgPathData());
-                            break;
-                        case RectangleShape rectangleShape:
+                        case GroupShape groupShape:
                             break;
                         case TextShape textShape:
                             break;

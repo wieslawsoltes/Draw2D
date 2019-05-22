@@ -121,6 +121,22 @@ namespace Draw2D.Editor.Renderers
             return geometry;
         }
 
+        public static SKPath ToGeometry(RectangleShape rectangle, double dx, double dy)
+        {
+            var rect = SkiaHelper.ToRect(rectangle.TopLeft, rectangle.BottomRight, dx, dy);
+            var geometry = new SKPath();
+            geometry.AddRect(rect, SKPathDirection.Clockwise);
+            return geometry;
+        }
+
+        public static SKPath ToGeometry(EllipseShape ellipse, double dx, double dy)
+        {
+            var rect = SkiaHelper.ToRect(ellipse.TopLeft, ellipse.BottomRight, dx, dy);
+            var geometry = new SKPath();
+            geometry.AddOval(rect, SKPathDirection.Clockwise);
+            return geometry;
+        }
+
         public static SKPath ToGeometry(CubicBezierShape cubicBezier, double dx, double dy)
         {
             var geometry = new SKPath();
