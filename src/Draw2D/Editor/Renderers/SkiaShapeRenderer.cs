@@ -124,10 +124,26 @@ namespace Draw2D.Editor.Renderers
                 style.Invalidate();
                 style.Stroke.Invalidate();
                 GetSKTypeface(style.FontFamily, out var typeface);
+
                 cached.paint = SkiaHelper.ToSKPaintBrush(style.Stroke);
                 cached.paint.Typeface = typeface;
                 cached.paint.TextEncoding = SKTextEncoding.Utf16;
                 cached.paint.TextSize = (float)style.FontSize;
+
+                switch (style.HAlign)
+                {
+                    default:
+                    case HAlign.Left:
+                        cached.paint.TextAlign = SKTextAlign.Left;
+                        break;
+                    case HAlign.Center:
+                        cached.paint.TextAlign = SKTextAlign.Center;
+                        break;
+                    case HAlign.Right:
+                        cached.paint.TextAlign = SKTextAlign.Right;
+                        break;
+                }
+
                 cached.metrics = cached.paint.FontMetrics;
                 _textPaintCache[style] = cached;
             }
@@ -163,33 +179,21 @@ namespace Draw2D.Editor.Renderers
             var mLineHeight = cached.metrics.Bottom - cached.metrics.Top;
 
             float x = rect.Left;
-            float y = rect.Top - mAscent;
+            float y = rect.Top;
             float width = rect.Width;
             float height = rect.Height;
 
-            switch (style.TextStyle.HAlign)
-            {
-                case HAlign.Left:;
-                    break;
-                case HAlign.Center:
-                default:
-                    x += (rect.Width / 2f - bounds.Width / 2f);
-                    break;
-                case HAlign.Right:
-                    x += (rect.Width - bounds.Width) - (rect.Left - bounds.Left);
-                    break;
-            }
-
             switch (style.TextStyle.VAlign)
             {
+                default:
                 case VAlign.Top:
+                    y = y - mAscent;
                     break;
                 case VAlign.Center:
-                default:
-                    y += rect.Height / 2f - mDescent;
+                    y = y + rect.Height / 2.0f - (mBottom - mDescent);
                     break;
                 case VAlign.Bottom:
-                    y += rect.Height - mDescent;
+                    y = y + rect.Height - (mBottom - mDescent);
                     break;
             }
 
