@@ -161,7 +161,7 @@ namespace Draw2D.Editor.Renderers
             GetSKPaintStrokeText(style.TextStyle, out var paint, out var metrics);
             var mTop = metrics.Top;
             var mAscent = metrics.Ascent;
-            var mBaseline = 0.0f;
+            // NOTE: var mBaseline = 0.0f;
             var mDescent = metrics.Descent;
             var mBottom = metrics.Bottom;
             var mLeading = metrics.Leading;
