@@ -1,10 +1,10 @@
 ﻿// Copyright (c) Wiesław Šoltés. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using System;
+using System.Text;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
-using System.Linq;
 using System.Runtime.Serialization;
 using Avalonia;
 using Avalonia.Controls;
@@ -313,69 +313,45 @@ namespace Draw2D.Editor
 
         public void ToSvgPathData(TextBox textBox)
         {
-            var selected = ContainerView.SelectionState.Shapes;
-            if (selected != null)
+            if (ContainerView.SelectionState?.Shapes != null)
             {
-                var shape = selected.FirstOrDefault();
-                switch (shape)
+                var selected = new List<BaseShape>(ContainerView.SelectionState?.Shapes);
+                var sb = new StringBuilder();
+
+                foreach (var shape in selected)
                 {
-                    case CubicBezierShape cubicBezierShape:
-                        {
-                            var path = SkiaHelper.ToGeometry(cubicBezierShape, 0.0, 0.0);
-                            var svgPathData = path.ToSvgPathData();
-                            textBox.Text = svgPathData;
-                            Application.Current.Clipboard.SetTextAsync(svgPathData);
-                        }
-                        break;
-                    case EllipseShape ellipseShape:
-                        {
-                        }
-                        break;
-                    case FigureShape figureShape:
-                        {
-                        }
-                        break;
-                    case GroupShape groupShape:
-                        {
-                        }
-                        break;
-                    case LineShape lineShape:
-                        {
-                            var path = SkiaHelper.ToGeometry(lineShape, 0.0, 0.0);
-                            var svgPathData = path.ToSvgPathData();
-                            textBox.Text = svgPathData;
-                            Application.Current.Clipboard.SetTextAsync(svgPathData);
-                        }
-                        break;
-                    case PathShape pathShape:
-                        {
-                            var path = SkiaHelper.ToGeometry(pathShape, 0.0, 0.0);
-                            var svgPathData = path.ToSvgPathData();
-                            textBox.Text = svgPathData;
-                            Application.Current.Clipboard.SetTextAsync(svgPathData);
-                        }
-                        break;
-                    case PointShape pointShape:
-                        {
-                        }
-                        break;
-                    case QuadraticBezierShape quadraticBezierShape:
-                        {
-                            var path = SkiaHelper.ToGeometry(quadraticBezierShape, 0.0, 0.0);
-                            var svgPathData = path.ToSvgPathData();
-                            textBox.Text = svgPathData;
-                            Application.Current.Clipboard.SetTextAsync(svgPathData);
-                        }
-                        break;
-                    case RectangleShape rectangleShape:
-                        {
-                        }
-                        break;
-                    case TextShape textShape:
-                        {
-                        }
-                        break;
-                };
+                    switch (shape)
+                    {
+                        case CubicBezierShape cubicBezierShape:
+                            sb.AppendLine(SkiaHelper.ToGeometry(cubicBezierShape, 0.0, 0.0).ToSvgPathData());
+                            break;
+                        case EllipseShape ellipseShape:
+                            break;
+                        case FigureShape figureShape:
+                            break;
+                        case GroupShape groupShape:
+                            break;
+                        case LineShape lineShape:
+                            sb.AppendLine(SkiaHelper.ToGeometry(lineShape, 0.0, 0.0).ToSvgPathData());
+                            break;
+                        case PathShape pathShape:
+                            sb.AppendLine(SkiaHelper.ToGeometry(pathShape, 0.0, 0.0).ToSvgPathData());
+                            break;
+                        case PointShape pointShape:
+                            break;
+                        case QuadraticBezierShape quadraticBezierShape:
+                            sb.AppendLine(SkiaHelper.ToGeometry(quadraticBezierShape, 0.0, 0.0).ToSvgPathData());
+                            break;
+                        case RectangleShape rectangleShape:
+                            break;
+                        case TextShape textShape:
+                            break;
+                    };
+                }
+
+                var svgPathData = sb.ToString();
+                textBox.Text = svgPathData;
+                Application.Current.Clipboard.SetTextAsync(svgPathData);
             }
         }
 
