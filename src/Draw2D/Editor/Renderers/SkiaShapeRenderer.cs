@@ -148,6 +148,29 @@ namespace Draw2D.Editor.Renderers
             paint = cached.paint;
         }
 
+#if true
+        private void DrawTextSKFontMetrics(SKCanvas canvas, ShapeStyle style, ref SKPoint origin)
+        {
+            (SKPaint paint, SKFontMetrics metrics) cached = _textPaintCache[style.TextStyle];
+            var mTop = cached.metrics.Top;
+            var mBottom = cached.metrics.Bottom;
+            var mLeading = cached.metrics.Leading;
+            var mDescent = cached.metrics.Descent;
+            var mAscent = cached.metrics.Ascent;
+            var lineHeight = mDescent - mAscent;
+            var lineOffset = (-mAscent);
+            var offset = -mDescent - mAscent;
+            canvas.DrawText($"mTop: {mTop}", origin.X, origin.Y + lineOffset * 1, cached.paint);
+            canvas.DrawText($"mBottom: {mBottom}", origin.X, origin.Y + lineOffset * 2, cached.paint);
+            canvas.DrawText($"mLeading: {mLeading}", origin.X, origin.Y + lineOffset * 3, cached.paint);
+            canvas.DrawText($"mDescent: {mDescent}", origin.X, origin.Y + lineOffset * 4, cached.paint);
+            canvas.DrawText($"mAscent: {mAscent}", origin.X, origin.Y + lineOffset * 5, cached.paint);
+            canvas.DrawText($"lineHeight: {lineHeight}", origin.X, origin.Y + lineOffset * 6, cached.paint);
+            canvas.DrawText($"lineOffset: {lineOffset}", origin.X, origin.Y + lineOffset * 7, cached.paint);
+            canvas.DrawText($"offset: {offset}", origin.X, origin.Y + lineOffset * 8, cached.paint);
+        }
+#endif
+
         private void DrawText(SKCanvas canvas, Text text, PointShape topLeft, PointShape bottomRight, ShapeStyle style, double dx, double dy)
         {
             var rect = SkiaHelper.ToRect(topLeft, bottomRight, dx, dy);
@@ -156,6 +179,9 @@ namespace Draw2D.Editor.Renderers
             paint.MeasureText(text.Value, ref bounds);
             var origin = SkiaHelper.GetTextOrigin(style.TextStyle.HAlign, style.TextStyle.VAlign, ref rect, ref bounds);
             canvas.DrawText(text.Value, origin.X, origin.Y + offset, paint);
+#if true
+            DrawTextSKFontMetrics(canvas, style, ref origin);
+#endif
         }
 
         private void DrawTextOnPath(SKCanvas canvas, SKPath path, Text text, TextStyle style)
