@@ -271,12 +271,13 @@ namespace Draw2D.Editor.Renderers
             paint.MeasureText(text.Value, ref bounds);
             var origin = SkiaHelper.GetTextOrigin(style.TextStyle.HAlign, style.TextStyle.VAlign, ref rect, ref bounds);
 
-            var geometry = paint.GetTextPath(text.Value, (float)origin.X, (float)(origin.Y + offset));
+            var outlineGeometry = paint.GetTextPath(text.Value, (float)origin.X, (float)(origin.Y + offset));
+            var fillGeometry = paint.GetFillPath(outlineGeometry);
 
             paint.Dispose();
             typeface.Dispose();
 
-            return geometry;
+            return fillGeometry;
         }
 
         public static SKPath ToGeometry(TextShape text, double dx, double dy)
