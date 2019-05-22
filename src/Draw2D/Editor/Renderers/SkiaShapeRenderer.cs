@@ -113,7 +113,7 @@ namespace Draw2D.Editor.Renderers
             pen = penCached;
         }
 
-        private void GetSKPaintStrokeText(TextStyle style, out SKPaint paint, out float offset)
+        private void GetSKPaintStrokeText(TextStyle style, out SKPaint paint)
         {
             (SKPaint paint, SKFontMetrics metrics) cached;
             cached.paint = null;
@@ -144,12 +144,11 @@ namespace Draw2D.Editor.Renderers
             var lineHeight = mDescent - mAscent;
             var lineOffset = (-mAscent);
 
-            offset = -mDescent - mAscent;
             paint = cached.paint;
         }
 
 #if true
-        private void DrawTextSKFontMetrics(SKCanvas canvas, ShapeStyle style, ref SKRect rect, ref SKRect size, ref SKPoint origin)
+        private void DrawTextSKFontMetrics(SKCanvas canvas, ShapeStyle style, ref SKRect rect, ref SKRect bounds, ref SKPoint origin)
         {
             (SKPaint paint, SKFontMetrics metrics) cached = _textPaintCache[style.TextStyle];
             var mTop = cached.metrics.Top;
@@ -160,7 +159,6 @@ namespace Draw2D.Editor.Renderers
             var mCapHeight = cached.metrics.CapHeight;
             var lineHeight = mDescent - mAscent;
             var lineOffset = (-mAscent);
-            var offset = -mDescent - mAscent;
             canvas.DrawText($"mTop: {mTop}", origin.X, origin.Y + lineOffset * 2, cached.paint);
             canvas.DrawText($"mBottom: {mBottom}", origin.X, origin.Y + lineOffset * 3, cached.paint);
             canvas.DrawText($"mLeading: {mLeading}", origin.X, origin.Y + lineOffset * 4, cached.paint);
@@ -169,21 +167,20 @@ namespace Draw2D.Editor.Renderers
             canvas.DrawText($"mCapHeight: {mCapHeight}", origin.X, origin.Y + lineOffset * 7, cached.paint);
             canvas.DrawText($"lineHeight: {lineHeight}", origin.X, origin.Y + lineOffset * 8, cached.paint);
             canvas.DrawText($"lineOffset: {lineOffset}", origin.X, origin.Y + lineOffset * 9, cached.paint);
-            canvas.DrawText($"offset: {offset}", origin.X, origin.Y + lineOffset * 10, cached.paint);
-            canvas.DrawText($"rect: {rect}", origin.X, origin.Y + lineOffset * 11, cached.paint);
-            canvas.DrawText($"size: {size}", origin.X, origin.Y + lineOffset * 12, cached.paint);
-            canvas.DrawText($"origin: {origin}", origin.X, origin.Y + lineOffset * 13, cached.paint);
+            canvas.DrawText($"rect: {rect}", origin.X, origin.Y + lineOffset * 10, cached.paint);
+            canvas.DrawText($"bounds: {bounds}", origin.X, origin.Y + lineOffset * 11, cached.paint);
+            canvas.DrawText($"origin: {origin}", origin.X, origin.Y + lineOffset * 12, cached.paint);
         }
 #endif
 
         private void DrawText(SKCanvas canvas, Text text, PointShape topLeft, PointShape bottomRight, ShapeStyle style, double dx, double dy)
         {
             var rect = SkiaHelper.ToRect(topLeft, bottomRight, dx, dy);
-            GetSKPaintStrokeText(style.TextStyle, out var paint, out var offset);
+            GetSKPaintStrokeText(style.TextStyle, out var paint);
             var bounds = new SKRect();
             paint.MeasureText(text.Value, ref bounds);
             var origin = SkiaHelper.GetTextOrigin(style.TextStyle.HAlign, style.TextStyle.VAlign, ref rect, ref bounds);
-            canvas.DrawText(text.Value, origin.X, origin.Y + offset, paint);
+            canvas.DrawText(text.Value, origin.X - bounds.Left, origin.Y - bounds.Top, paint);
 #if true
             DrawTextSKFontMetrics(canvas, style, ref rect, ref bounds, ref origin);
 #endif
@@ -191,7 +188,7 @@ namespace Draw2D.Editor.Renderers
 
         private void DrawTextOnPath(SKCanvas canvas, SKPath path, Text text, TextStyle style)
         {
-            GetSKPaintStrokeText(style, out var paint, out _);
+            GetSKPaintStrokeText(style, out var paint);
             var bounds = new SKRect();
             float baseTextWidth = paint.MeasureText(text.Value, ref bounds);
             SKPathMeasure pathMeasure = new SKPathMeasure(path, false, 1);

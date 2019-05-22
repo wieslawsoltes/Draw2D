@@ -427,7 +427,7 @@ namespace Draw2D.Editor.Renderers
             return pathShape;
         }
 
-        public static SKPoint GetTextOrigin(HAlign hAlign, VAlign vAlign, ref SKRect rect, ref SKRect size)
+        public static SKPoint GetTextOrigin(HAlign hAlign, VAlign vAlign, ref SKRect rect, ref SKRect bounds)
         {
             double ox, oy;
 
@@ -438,10 +438,10 @@ namespace Draw2D.Editor.Renderers
                     break;
                 case HAlign.Center:
                 default:
-                    ox = (rect.Left + rect.Width / 2f) - (size.Width / 2f);
+                    ox = (rect.Left + rect.Width / 2f) - (bounds.Width / 2f);
                     break;
                 case HAlign.Right:
-                    ox = rect.Right - size.Width;
+                    ox = rect.Right - bounds.Width;
                     break;
             }
 
@@ -452,10 +452,10 @@ namespace Draw2D.Editor.Renderers
                     break;
                 case VAlign.Center:
                 default:
-                    oy = (rect.Bottom - rect.Height / 2f) - (size.Height / 2f);
+                    oy = (rect.Bottom - rect.Height / 2f) - (bounds.Height / 2f);
                     break;
                 case VAlign.Bottom:
-                    oy = rect.Bottom - size.Height;
+                    oy = rect.Bottom - bounds.Height;
                     break;
             }
 
