@@ -148,7 +148,7 @@ namespace Draw2D.Editor.Renderers
         }
 
 #if true
-        private void DrawTextSKFontMetrics(SKCanvas canvas, Text text, ShapeStyle style, ref SKRect rect, ref SKRect bounds, ref SKPoint origin)
+        private void DrawTextSKFontMetrics(SKCanvas canvas, Text text, ShapeStyle style, ref SKRect rect, ref SKRect bounds)
         {
             (SKPaint paint, SKFontMetrics metrics) cached = _textPaintCache[style.TextStyle];
 
@@ -167,10 +167,31 @@ namespace Draw2D.Editor.Renderers
             float width = rect.Width;
             float height = rect.Height;
 
-            //double alignLeft = x;
-            //double alignRight = x + width;
-            //double alightTop = y - mAscent;
-            //double alightBottom = y + height;
+            switch (style.TextStyle.HAlign)
+            {
+                case HAlign.Left:;
+                    break;
+                case HAlign.Center:
+                default:
+                    x += (rect.Width / 2f - bounds.Width / 2f);
+                    break;
+                case HAlign.Right:
+                    x += (rect.Width - bounds.Width) - (rect.Left - bounds.Left);
+                    break;
+            }
+
+            switch (style.TextStyle.VAlign)
+            {
+                case VAlign.Top:
+                    break;
+                case VAlign.Center:
+                default:
+                    y += rect.Height / 2f - mDescent;
+                    break;
+                case VAlign.Bottom:
+                    y += rect.Height - mDescent;
+                    break;
+            }
 
             using (var boundsPen = new SKPaint() { IsAntialias = true, IsStroke = true, StrokeWidth = (float)(style.Thickness / Scale), Color = new SKColor(255, 255, 255, 255) })
             using (var mTopPen = new SKPaint() { IsAntialias = true, IsStroke = true, StrokeWidth = (float)(style.Thickness / Scale), Color = new SKColor(128, 0, 128, 255) })
@@ -202,9 +223,8 @@ namespace Draw2D.Editor.Renderers
             canvas.DrawText($"mCapHeight: {mCapHeight}", x, y + mLineHeight * line++, cached.paint);
             canvas.DrawText($"mLineHeight: {mLineHeight}", x, y + mLineHeight * line++, cached.paint);
 
-            //canvas.DrawText($"rect: {rect}", x, y + mLineHeight * line++, cached.paint);
-            //canvas.DrawText($"bounds: {bounds}", x, y + mLineHeight * line++, cached.paint);
-            //canvas.DrawText($"origin: {origin}", x, y + mLineHeight * line++, cached.paint);
+            canvas.DrawText($"rect: {rect}", x, y + mLineHeight * line++, cached.paint);
+            canvas.DrawText($"bounds: {bounds}", x, y + mLineHeight * line++, cached.paint);
         }
 #endif
 
@@ -217,7 +237,7 @@ namespace Draw2D.Editor.Renderers
             var origin = SkiaHelper.GetTextOrigin(style.TextStyle.HAlign, style.TextStyle.VAlign, ref rect, ref bounds);
             //canvas.DrawText(text.Value, origin.X - bounds.Left, origin.Y - bounds.Top, paint);
 #if true
-            DrawTextSKFontMetrics(canvas, text, style, ref rect, ref bounds, ref origin);
+            DrawTextSKFontMetrics(canvas, text, style, ref rect, ref bounds);
 #endif
         }
 
