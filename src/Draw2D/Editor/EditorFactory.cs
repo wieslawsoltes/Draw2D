@@ -199,8 +199,8 @@ namespace Draw2D.Editor
                 },
                 Settings = new SelectionToolSettings()
                 {
-                    Mode = ViewModels.Tools.SelectionMode.Point | ViewModels.Tools.SelectionMode.Shape,
-                    Targets = ViewModels.Tools.SelectionTargets.Shapes,
+                    Mode = SelectionMode.Point | SelectionMode.Shape,
+                    Targets = SelectionTargets.Shapes,
                     SelectionModifier = Modifier.Control,
                     ConnectionModifier = Modifier.Shift,
                     SelectionStyle = "Selection",
