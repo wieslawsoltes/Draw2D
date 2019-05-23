@@ -319,6 +319,7 @@ namespace Draw2D.Editor.Renderers
                                     Points = new ObservableCollection<PointShape>(),
                                     StartPoint = lastPointShape,
                                     Point = new PointShape(points[1].X, points[1].Y, pointTemplate),
+                                    Text = new Text(),
                                     Style = style
                                 };
                                 figureShape.Shapes.Add(lineShape);
@@ -339,6 +340,7 @@ namespace Draw2D.Editor.Renderers
                                     Point1 = new PointShape(points[1].X, points[1].Y, pointTemplate),
                                     Point2 = new PointShape(points[2].X, points[2].Y, pointTemplate),
                                     Point3 = new PointShape(points[3].X, points[3].Y, pointTemplate),
+                                    Text = new Text(),
                                     Style = style
                                 };
                                 figureShape.Shapes.Add(cubicBezierShape);
@@ -358,6 +360,7 @@ namespace Draw2D.Editor.Renderers
                                     StartPoint = lastPointShape,
                                     Point1 = new PointShape(points[1].X, points[1].Y, pointTemplate),
                                     Point2 = new PointShape(points[2].X, points[2].Y, pointTemplate),
+                                    Text = new Text(),
                                     Style = style
                                 };
                                 figureShape.Shapes.Add(quadraticBezierShape);
@@ -371,16 +374,17 @@ namespace Draw2D.Editor.Renderers
                                 {
                                     lastPointShape = new PointShape(points[0].X, points[0].Y, pointTemplate);
                                 }
-                                var quadraticBezierShape = new ConicShape()
+                                var conicShape = new ConicShape()
                                 {
                                     Points = new ObservableCollection<PointShape>(),
                                     StartPoint = lastPointShape,
                                     Point1 = new PointShape(points[1].X, points[1].Y, pointTemplate),
                                     Point2 = new PointShape(points[2].X, points[2].Y, pointTemplate),
                                     Weight = iterator.ConicWeight(),
+                                    Text = new Text(),
                                     Style = style
                                 };
-                                figureShape.Shapes.Add(quadraticBezierShape);
+                                figureShape.Shapes.Add(conicShape);
                                 lastPoint = points[2];
                             }
                             break;
@@ -392,6 +396,7 @@ namespace Draw2D.Editor.Renderers
                                     Points = new ObservableCollection<PointShape>(),
                                     StartPoint = pathShape.GetLastPoint(),
                                     Point = pathShape.GetFirstPoint(),
+                                    Text = new Text(),
                                     Style = style
                                 };
                                 figureShape.Shapes.Add(line);

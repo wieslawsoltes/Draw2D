@@ -416,6 +416,7 @@ namespace Draw2D.Editor
             editorToolContext.PointTemplate = new EllipseShape(new PointShape(-3, -3, null), new PointShape(3, 3, null))
             {
                 Points = new ObservableCollection<PointShape>(),
+                Text = new Text(),
                 Style = new ShapeStyle(
                     "Style",
                     new ArgbColor(255, 255, 255, 0),

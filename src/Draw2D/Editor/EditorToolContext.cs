@@ -407,6 +407,7 @@ namespace Draw2D.Editor
                     new PointShape(60, 60, context.PointTemplate))
                 {
                     Points = new ObservableCollection<PointShape>(),
+                    Text = new Text(),
                     Style = context.CurrentStyle
                 });
             group.Points.Add(new PointShape(45, 30, context.PointTemplate));

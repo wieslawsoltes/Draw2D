@@ -2956,8 +2956,8 @@ namespace Draw2D.ViewModels.Shapes
             var copy = new RectangleShape()
             {
                 Points = new ObservableCollection<PointShape>(),
-                Style = this.Style,
-                Text = (Text)this.Text?.Copy(shared)
+                Text = (Text)this.Text?.Copy(shared),
+                Style = this.Style
             };
 
             if (shared != null)
@@ -3651,7 +3651,7 @@ namespace Draw2D.ViewModels.Decorators
             {
                 Points = new ObservableCollection<PointShape>(),
             };
-            _text = new TextShape(new Text(""), new PointShape(0, 0, null), new PointShape(0, 0, null))
+            _text = new TextShape(new Text(), new PointShape(0, 0, null), new PointShape(0, 0, null))
             {
                 Points = new ObservableCollection<PointShape>(),
             };
@@ -7285,6 +7285,7 @@ namespace Draw2D.ViewModels.Tools
                 Points = new ObservableCollection<PointShape>(),
                 StartPoint = context.ContainerView?.GetNextPoint(context, x, y, Settings?.ConnectPoints ?? false, Settings?.HitTestRadius ?? 7.0),
                 Point = context.ContainerView?.GetNextPoint(context, x, y, false, 0.0),
+                Text = new Text(),
                 Style = context.CurrentStyle
             };
             _points.Add(_line.StartPoint);
@@ -7325,6 +7326,7 @@ namespace Draw2D.ViewModels.Tools
                 Points = new ObservableCollection<PointShape>(),
                 StartPoint = _points.Last(),
                 Point = context.ContainerView?.GetNextPoint(context, x, y, false, 0.0),
+                Text = new Text(),
                 Style = context.CurrentStyle
             };
             _points.Add(_line.Point);
@@ -8331,6 +8333,7 @@ namespace Draw2D.ViewModels.Tools
                             Points = new ObservableCollection<PointShape>(),
                             StartPoint = distinct[i],
                             Point = distinct[i + 1],
+                            Text = new Text(),
                             Style = context.CurrentStyle
                         };
                         _figure.Shapes.Add(line);
@@ -8378,6 +8381,7 @@ namespace Draw2D.ViewModels.Tools
                 Points = new ObservableCollection<PointShape>(),
                 StartPoint = _previousPoint,
                 Point = _nextPoint,
+                Text = new Text(),
                 Style = context.CurrentStyle
             };
 
