@@ -276,6 +276,14 @@
                             </DataTemplate>
                         </ListBox.DataTemplates>
                     </ListBox>
+                    <!--<DataGrid Items="{Binding StyleLibrary.Styles}" SelectedItem="{Binding StyleLibrary.CurrentStyle}" RowBackground="Transparent" AlternatingRowBackground="Transparent" CanUserResizeColumns="True" CanUserReorderColumns="True" AutoGenerateColumns="False">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Title" Binding="{Binding Title}"/>
+                            <DataGridTextColumn Header="Thickness" Binding="{Binding Thickness}"/>
+                            <DataGridCheckBoxColumn Header="IsStroked" Binding="{Binding IsStroked}"/>
+                            <DataGridCheckBoxColumn Header="IsFilled" Binding="{Binding IsFilled}"/>
+                        </DataGrid.Columns>
+                    </DataGrid>-->
                 </TabItem>
                 <TabItem Classes="default" Header="Selection">
                     <TabControl Classes="default" TabStripPlacement="Top">
