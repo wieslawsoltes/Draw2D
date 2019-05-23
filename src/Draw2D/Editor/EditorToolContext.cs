@@ -211,8 +211,8 @@ namespace Draw2D.Editor
             using (var stream = new SKFileWStream(path))
             using (var writer = new SKXmlStreamWriter(stream))
             using (var canvas = SKSvgCanvas.Create(SKRect.Create(0, 0, (int)containerView.Width, (int)containerView.Height), writer))
+            using (var skiaView = new ExportSkiaView())
             {
-                var skiaView = new ExportSkiaView();
                 skiaView.Draw(containerView, canvas, containerView.Width, containerView.Height, 0, 0, 1.0, 1.0);
             }
         }
@@ -223,8 +223,8 @@ namespace Draw2D.Editor
             using (var bitmap = new SKBitmap(info))
             {
                 using (var canvas = new SKCanvas(bitmap))
+                using (var skiaView = new ExportSkiaView())
                 {
-                    var skiaView = new ExportSkiaView();
                     skiaView.Draw(containerView, canvas, containerView.Width, containerView.Height, 0, 0, 1.0, 1.0);
                 }
                 using (var image = SKImage.FromBitmap(bitmap))
@@ -241,8 +241,8 @@ namespace Draw2D.Editor
             using (var stream = new SKFileWStream(path))
             using (var pdf = SKDocument.CreatePdf(stream, 72.0f))
             using (var canvas = pdf.BeginPage((float)containerView.Width, (float)containerView.Height))
+            using (var skiaView = new ExportSkiaView())
             {
-                var skiaView = new ExportSkiaView();
                 skiaView.Draw(containerView, canvas, containerView.Width, containerView.Height, 0, 0, 1.0, 1.0);
                 pdf.Close();
             }

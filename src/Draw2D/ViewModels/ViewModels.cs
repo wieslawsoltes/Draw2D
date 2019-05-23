@@ -3185,7 +3185,7 @@ namespace Draw2D.ViewModels.Containers
         IDrawContainerView DrawContainerView { get; set; }
     }
 
-    public interface IToolContext : IInputTarget
+    public interface IToolContext : IInputTarget, IDisposable
     {
         IList<ShapeStyle> Styles { get; set; }
         ShapeStyle CurrentStyle { get; set; }
@@ -3714,6 +3714,20 @@ namespace Draw2D.ViewModels.Containers
         {
             get => _mode;
             set => Update(ref _mode, value);
+        }
+
+        public void Dispose()
+        {
+            if (_containerViews != null)
+            {
+                foreach (var containerView in _containerViews)
+                {
+                    containerView.DrawContainerView?.Dispose();
+                    containerView.DrawContainerView = null;
+                    containerView.SelectionState = null;
+                    containerView.WorkingContainer = null;
+                }
+            }
         }
 
         public void SetTool(string title)
@@ -7010,6 +7024,10 @@ namespace Draw2D.ViewModels.Tools
         {
             get => _context.Mode;
             set => throw new InvalidOperationException($"Can not set {Mode} property value.");
+        }
+
+        public void Dispose()
+        {
         }
 
         private void SetNextPoint(PointShape point) => _containerView._nextPoint = point;

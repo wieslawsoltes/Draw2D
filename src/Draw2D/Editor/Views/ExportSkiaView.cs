@@ -9,6 +9,14 @@ namespace Draw2D.Editor.Views
 {
     public class ExportSkiaView : IDrawContainerView
     {
+        public ExportSkiaView()
+        {
+        }
+
+        public void Dispose()
+        {
+        }
+
         public void Draw(IContainerView view, object context, double width, double height, double dx, double dy, double zx, double zy)
         {
             using (var renderer = new SkiaShapeRenderer())
@@ -18,10 +26,6 @@ namespace Draw2D.Editor.Views
                 canvas.DrawRect(SkiaHelper.ToRect(0.0, 0.0, view.Width, view.Height), background);
                 view.CurrentContainer.Draw(canvas, renderer, 0.0, 0.0, DrawMode.Shape, null, null);
             }
-        }
-
-        public void Dispose()
-        {
         }
     }
 }

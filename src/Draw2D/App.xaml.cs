@@ -149,6 +149,8 @@ namespace Draw2D
 
             EditorToolContext.SaveAsjson("editor.json", toolContext);
             EditorToolContext.SaveAsjson("window.json", windowSettings);
+
+            toolContext.Dispose();
         }
 
         public static AppBuilder BuildAvaloniaApp()
