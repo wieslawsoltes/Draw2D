@@ -3142,8 +3142,11 @@ namespace Draw2D.ViewModels.Containers
 {
     public interface IStyleLibrary : IDirty
     {
-        IList<ShapeStyle> Styles { get; set; }
+        IList<ShapeStyle> Styles { get; }
         ShapeStyle CurrentStyle { get; set; }
+        void Add(ShapeStyle style);
+        void Remove(ShapeStyle value);
+        bool Get(string styleId, out ShapeStyle value);
     }
 
     public interface IDrawContainerView : IDisposable
@@ -3193,6 +3196,7 @@ namespace Draw2D.ViewModels.Containers
     [DataContract(IsReference = true)]
     public class StyleLibrary : ViewModelBase, IStyleLibrary
     {
+        private Dictionary<string, ShapeStyle> _styleLibraryCache;
         private IList<ShapeStyle> _styles;
         private ShapeStyle _currentStyle;
 
@@ -3247,6 +3251,71 @@ namespace Draw2D.ViewModels.Containers
             }
 
             return copy;
+        }
+
+        private void UpdateCache()
+        {
+            if (_styles != null)
+            {
+                if (_styleLibraryCache == null)
+                {
+                    _styleLibraryCache = new Dictionary<string, ShapeStyle>();
+                }
+                else
+                {
+                    _styleLibraryCache.Clear();
+                }
+
+                foreach (var style in _styles)
+                {
+                    _styleLibraryCache[style.Title] = style;
+                }
+            }
+        }
+
+        public void Add(ShapeStyle value)
+        {
+            _styles.Add(value);
+
+            if (_styleLibraryCache == null)
+            {
+                _styleLibraryCache = new Dictionary<string, ShapeStyle>();
+            }
+
+            _styleLibraryCache[value.Title] = value;
+        }
+
+        public void Remove(ShapeStyle value)
+        {
+            _styles.Remove(value);
+
+            if (_styleLibraryCache != null)
+            {
+                _styleLibraryCache.Remove(value.Title);
+            }
+        }
+
+        public bool Get(string styleId, out ShapeStyle value)
+        {
+            if (_styleLibraryCache == null)
+            {
+                UpdateCache();
+            }
+
+            if (!_styleLibraryCache.TryGetValue(styleId, out value))
+            {
+                foreach (var style in _styles)
+                {
+                    if (style.Title == styleId)
+                    {
+                        _styleLibraryCache[style.Title] = style;
+                        value = style;
+                        return true;
+                    }
+                }
+                return false;
+            }
+            return true;
         }
     }
 
