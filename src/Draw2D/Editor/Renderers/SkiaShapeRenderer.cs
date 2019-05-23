@@ -25,13 +25,9 @@ namespace Draw2D.Editor.Renderers
 
         public SkiaShapeRenderer()
         {
-            // TODO: Properly dispose SKTypeface objects.
             _typefaceCache = new Dictionary<string, SKTypeface>();
-            // TODO: Properly dispose SKPaint and SKFontMetrics objects.
             _textPaintCache = new Dictionary<TextStyle, (SKPaint, SKFontMetrics)>();
-            // TODO: Properly dispose SKPaint objects.
             _fillPaintCache = new Dictionary<ShapeStyle, SKPaint>();
-            // TODO: Properly dispose SKPaint objects.
             _strokePaintCache = new Dictionary<ShapeStyle, SKPaint>();
         }
 
