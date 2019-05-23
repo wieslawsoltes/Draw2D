@@ -26,6 +26,13 @@ namespace Draw2D.Editor
         private string _currentDirectory;
         private IList<string> _files;
 
+        [IgnoreDataMember]
+        public IFactory Factory
+        {
+            get => _factory;
+            set => Update(ref _factory, value);
+        }
+
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public ISelection Selection
         {
@@ -45,13 +52,6 @@ namespace Draw2D.Editor
         {
             get => _files;
             set => Update(ref _files, value);
-        }
-
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public IFactory Factory
-        {
-            get => _factory;
-            set => Update(ref _factory, value);
         }
 
         public EditorToolContext()
@@ -305,7 +305,7 @@ namespace Draw2D.Editor
             if (!string.IsNullOrWhiteSpace(svgPathData))
             {
                 var path = SkiaHelper.ToGeometry(svgPathData);
-                var pathShape = SkiaHelper.FromGeometry(path, CurrentStyle, PointTemplate);
+                var pathShape = SkiaHelper.FromGeometry(path, StyleLibrary.CurrentStyle, PointTemplate);
                 ContainerView.CurrentContainer.Shapes.Add(pathShape);
                 ContainerView.CurrentContainer.MarkAsDirty(true);
                 ContainerView?.InputService?.Redraw?.Invoke();
@@ -408,7 +408,7 @@ namespace Draw2D.Editor
                 {
                     Points = new ObservableCollection<PointShape>(),
                     Text = new Text(),
-                    Style = context.CurrentStyle
+                    Style = context.StyleLibrary.CurrentStyle
                 });
             group.Points.Add(new PointShape(45, 30, context.PointTemplate));
             group.Points.Add(new PointShape(45, 60, context.PointTemplate));

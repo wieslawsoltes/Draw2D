@@ -6,6 +6,7 @@ namespace Draw2D.Editor
 {
     public interface IFactory
     {
+        IStyleLibrary CreateStyleLibrary();
         IToolContext CreateToolContext();
         IContainerView CreateContainerView(string title);
     }

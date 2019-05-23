@@ -14,28 +14,43 @@ namespace Draw2D
 {
     public class App : Application
     {
+        private static string s_stylesPath = "styles.json";
+        private static string s_editorPath = "editor.json";
+        private static string s_windowPath = "window.json";
+        private static IFactory s_factory = null;
+        private static IStyleLibrary s_styleLibrary = null;
+        private static IToolContext s_toolContext = null;
+        private static WindowSettings s_windowSettings = null;
+
         [STAThread]
         static void Main(string[] args)
         {
             try
             {
+                s_factory = new Factory();
+
                 if (args.Length == 1)
                 {
                     var command = args[0];
 
+                    if (command == "--new-styles")
+                    {
+                        var styleLibrary = s_factory.CreateStyleLibrary();
+                        EditorToolContext.SaveAsjson("styles.json", styleLibrary);
+                        return;
+                    }
+
                     if (command == "--new-view")
                     {
-                        var factory = new Factory();
-                        var editorToolContext = factory.CreateToolContext();
-                        var containerView = factory.CreateContainerView("View");
+                        var editorToolContext = s_factory.CreateToolContext();
+                        var containerView = s_factory.CreateContainerView("View");
                         EditorToolContext.SaveAsjson(containerView.Title + ".json", containerView);
                         return;
                     }
 
                     if (command == "--new-editor")
                     {
-                        var factory = new Factory();
-                        var editorToolContext = factory.CreateToolContext();
+                        var editorToolContext = s_factory.CreateToolContext();
                         EditorToolContext.SaveAsjson("editor.json", editorToolContext);
                         return;
                     }
@@ -63,16 +78,23 @@ namespace Draw2D
 
         static void AppMain(Application app, string[] args)
         {
-            IToolContext toolContext = null;
-            WindowSettings windowSettings = null;
-
-            if (File.Exists("editor.json"))
+            if (File.Exists(s_stylesPath))
             {
-                toolContext = EditorToolContext.LoadFromJson<IToolContext>("editor.json");
+                s_styleLibrary = EditorToolContext.LoadFromJson<IStyleLibrary>(s_stylesPath);
+            }
+            else
+            {
+                s_styleLibrary = s_factory.CreateStyleLibrary();
+            }
 
-                // TODO: Refactor to not use concrete tool context type.
-                if (toolContext is EditorToolContext editorToolContext)
+            if (File.Exists(s_editorPath))
+            {
+                s_toolContext = EditorToolContext.LoadFromJson<IToolContext>(s_editorPath);
+                s_toolContext.StyleLibrary = s_styleLibrary;
+
+                if (s_toolContext is EditorToolContext editorToolContext)
                 {
+                    editorToolContext.Factory = s_factory;
                     foreach (var containerView in editorToolContext.ContainerViews)
                     {
                         editorToolContext.InitContainerView(containerView);
@@ -81,25 +103,25 @@ namespace Draw2D
             }
             else
             {
-                var factory = new Factory();
-                toolContext = factory.CreateToolContext();
+                s_toolContext = s_factory.CreateToolContext();
+                s_toolContext.StyleLibrary = s_styleLibrary;
 
-                // TODO: Refactor to not use concrete tool context type.
-                if (toolContext is EditorToolContext editorToolContext)
+                if (s_toolContext is EditorToolContext editorToolContext)
                 {
+                    editorToolContext.Factory = s_factory;
                     editorToolContext.NewContainerView("View");
                     editorToolContext.CurrentDirectory = Directory.GetCurrentDirectory();
                     editorToolContext.AddFiles(editorToolContext.CurrentDirectory);
                 }
             }
 
-            if (File.Exists("window.json"))
+            if (File.Exists(s_windowPath))
             {
-                windowSettings = EditorToolContext.LoadFromJson<WindowSettings>("window.json");
+                s_windowSettings = EditorToolContext.LoadFromJson<WindowSettings>(s_windowPath);
             }
             else
             {
-                windowSettings = new WindowSettings()
+                s_windowSettings = new WindowSettings()
                 {
                     Width = 1320,
                     Height = 690,
@@ -111,22 +133,22 @@ namespace Draw2D
 
             var window = new MainWindow
             {
-                DataContext = toolContext
+                DataContext = s_toolContext
             };
 
-            if (!double.IsNaN(windowSettings.Width))
+            if (!double.IsNaN(s_windowSettings.Width))
             {
-                window.Width = windowSettings.Width;
+                window.Width = s_windowSettings.Width;
             }
 
-            if (!double.IsNaN(windowSettings.Height))
+            if (!double.IsNaN(s_windowSettings.Height))
             {
-                window.Height = windowSettings.Height;
+                window.Height = s_windowSettings.Height;
             }
 
-            if (!double.IsNaN(windowSettings.X) && !double.IsNaN(windowSettings.Y))
+            if (!double.IsNaN(s_windowSettings.X) && !double.IsNaN(s_windowSettings.Y))
             {
-                window.Position = new PixelPoint((int)windowSettings.X, (int)windowSettings.Y);
+                window.Position = new PixelPoint((int)s_windowSettings.X, (int)s_windowSettings.Y);
                 window.WindowStartupLocation = WindowStartupLocation.Manual;
             }
             else
@@ -134,23 +156,28 @@ namespace Draw2D
                 window.WindowStartupLocation = WindowStartupLocation.CenterScreen;
             }
 
-            window.WindowState = windowSettings.WindowState;
+            window.WindowState = s_windowSettings.WindowState;
 
             window.Closing += (sender, e) =>
             {
-                windowSettings.Width = window.Width;
-                windowSettings.Height = window.Height;
-                windowSettings.X = window.Position.X;
-                windowSettings.Y = window.Position.Y;
-                windowSettings.WindowState = window.WindowState;
+                s_windowSettings.Width = window.Width;
+                s_windowSettings.Height = window.Height;
+                s_windowSettings.X = window.Position.X;
+                s_windowSettings.Y = window.Position.Y;
+                s_windowSettings.WindowState = window.WindowState;
             };
 
             app.Run(window);
 
-            EditorToolContext.SaveAsjson("editor.json", toolContext);
-            EditorToolContext.SaveAsjson("window.json", windowSettings);
+            EditorToolContext.SaveAsjson(s_stylesPath, s_toolContext.StyleLibrary);
+            EditorToolContext.SaveAsjson(s_editorPath, s_toolContext);
+            EditorToolContext.SaveAsjson(s_windowPath, s_windowSettings);
 
-            toolContext.Dispose();
+            s_windowSettings = null;
+            s_toolContext.Dispose();
+            s_toolContext = null;
+            s_styleLibrary = null;
+            s_factory = null;
         }
 
         public static AppBuilder BuildAvaloniaApp()

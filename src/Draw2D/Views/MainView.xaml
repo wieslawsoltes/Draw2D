@@ -266,10 +266,10 @@
                     </TabControl>
                 </TabItem>
                 <TabItem Classes="default" Header="Style">
-                    <ContentControl Content="{Binding CurrentStyle}"/>
+                    <ContentControl Content="{Binding StyleLibrary.CurrentStyle}"/>
                 </TabItem>
                 <TabItem Classes="default" Header="Styles">
-                    <ListBox Classes="default" Items="{Binding Styles}" SelectedItem="{Binding CurrentStyle}">
+                    <ListBox Classes="default" Items="{Binding StyleLibrary.Styles}" SelectedItem="{Binding StyleLibrary.CurrentStyle}">
                         <ListBox.DataTemplates>
                             <DataTemplate>
                                 <TextBlock Classes="default" Text="{Binding Title}"/>

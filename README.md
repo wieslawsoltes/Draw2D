@@ -19,6 +19,12 @@ dotnet publish ./src/Draw2D/Draw2D.csproj -f netcoreapp3.0 -c Release -r osx-x64
 
 ### Command-Line
 
+Create styles.
+```
+dotnet build
+dotnet /home/ubuntu/environment/src/Draw2D/bin/Debug/netcoreapp3.0/Draw2D.dll --new-styles
+```
+
 Create view.
 ```
 dotnet build

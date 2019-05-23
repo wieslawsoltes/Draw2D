@@ -15,6 +15,82 @@ namespace Draw2D.Editor
 {
     public class Factory : IFactory
     {
+        public IStyleLibrary CreateStyleLibrary()
+        {
+            var styleLibrary = new StyleLibrary()
+            {
+                Styles = new ObservableCollection<ShapeStyle>()
+            };
+
+            styleLibrary.Styles.Add(
+                new ShapeStyle(
+                    "Default",
+                    new ArgbColor(255, 0, 0, 0),
+                    new ArgbColor(255, 255, 255, 255),
+                    2.0, true, false,
+                    new TextStyle("Calibri", 12.0, HAlign.Center, VAlign.Center, new ArgbColor(255, 0, 0, 0), true)));
+
+            styleLibrary.Styles.Add(
+                new ShapeStyle(
+                    "Red",
+                    new ArgbColor(255, 255, 0, 0),
+                    new ArgbColor(255, 255, 0, 0),
+                    2.0, true, false,
+                    new TextStyle("Calibri", 12.0, HAlign.Center, VAlign.Center, new ArgbColor(255, 255, 0, 0), true)));
+
+            styleLibrary.Styles.Add(
+                new ShapeStyle(
+                    "Green",
+                    new ArgbColor(255, 0, 255, 0),
+                    new ArgbColor(255, 0, 255, 0),
+                    2.0, true, false,
+                    new TextStyle("Calibri", 12.0, HAlign.Center, VAlign.Center, new ArgbColor(255, 0, 255, 0), true)));
+
+            styleLibrary.Styles.Add(
+                new ShapeStyle(
+                    "Blue",
+                    new ArgbColor(255, 0, 0, 255),
+                    new ArgbColor(255, 0, 0, 255),
+                    2.0, true, false,
+                    new TextStyle("Calibri", 12.0, HAlign.Center, VAlign.Center, new ArgbColor(255, 0, 0, 255), true)));
+
+            styleLibrary.Styles.Add(
+                new ShapeStyle(
+                    "Cyan",
+                    new ArgbColor(255, 0, 255, 255),
+                    new ArgbColor(255, 0, 255, 255),
+                    2.0, true, false,
+                    new TextStyle("Calibri", 12.0, HAlign.Center, VAlign.Center, new ArgbColor(255, 0, 255, 255), true)));
+
+            styleLibrary.Styles.Add(
+                new ShapeStyle(
+                    "Magenta",
+                    new ArgbColor(255, 255, 0, 255),
+                    new ArgbColor(255, 255, 0, 255),
+                    2.0, true, false,
+                    new TextStyle("Calibri", 12.0, HAlign.Center, VAlign.Center, new ArgbColor(255, 255, 0, 255), true)));
+
+            styleLibrary.Styles.Add(
+                new ShapeStyle(
+                    "Yellow",
+                    new ArgbColor(255, 255, 255, 0),
+                    new ArgbColor(255, 255, 255, 0),
+                    2.0, true, false,
+                    new TextStyle("Calibri", 12.0, HAlign.Center, VAlign.Center, new ArgbColor(255, 255, 255, 0), true)));
+
+            styleLibrary.Styles.Add(
+                new ShapeStyle(
+                    "Black",
+                    new ArgbColor(255, 0, 0, 0),
+                    new ArgbColor(255, 0, 0, 0),
+                    2.0, true, false,
+                    new TextStyle("Calibri", 12.0, HAlign.Center, VAlign.Center, new ArgbColor(255, 0, 0, 0), true)));
+
+            styleLibrary.CurrentStyle = styleLibrary.Styles[0];
+
+            return styleLibrary;
+        }
+
         public IToolContext CreateToolContext()
         {
             var editorToolContext = new EditorToolContext(this);
@@ -359,59 +435,7 @@ namespace Draw2D.Editor
             editorToolContext.CurrentDirectory = null;
             editorToolContext.Files = new ObservableCollection<string>();
 
-            editorToolContext.Styles = new ObservableCollection<ShapeStyle>()
-            {
-                new ShapeStyle(
-                        "Default",
-                        new ArgbColor(255, 0, 0, 0),
-                        new ArgbColor(255, 255, 255, 255),
-                        2.0, true, false,
-                        new TextStyle("Calibri", 12.0, HAlign.Center, VAlign.Center, new ArgbColor(255, 0, 0, 0), true)),
-                new ShapeStyle(
-                        "Red",
-                        new ArgbColor(255, 255, 0, 0),
-                        new ArgbColor(255, 255, 0, 0),
-                        2.0, true, false,
-                        new TextStyle("Calibri", 12.0, HAlign.Center, VAlign.Center, new ArgbColor(255, 255, 0, 0), true)),
-                new ShapeStyle(
-                        "Green",
-                        new ArgbColor(255, 0, 255, 0),
-                        new ArgbColor(255, 0, 255, 0),
-                        2.0, true, false,
-                        new TextStyle("Calibri", 12.0, HAlign.Center, VAlign.Center, new ArgbColor(255, 0, 255, 0), true)),
-                new ShapeStyle(
-                        "Blue",
-                        new ArgbColor(255, 0, 0, 255),
-                        new ArgbColor(255, 0, 0, 255),
-                        2.0, true, false,
-                        new TextStyle("Calibri", 12.0, HAlign.Center, VAlign.Center, new ArgbColor(255, 0, 0, 255), true)),
-                new ShapeStyle(
-                        "Cyan",
-                        new ArgbColor(255, 0, 255, 255),
-                        new ArgbColor(255, 0, 255, 255),
-                        2.0, true, false,
-                        new TextStyle("Calibri", 12.0, HAlign.Center, VAlign.Center, new ArgbColor(255, 0, 255, 255), true)),
-                new ShapeStyle(
-                        "Magenta",
-                        new ArgbColor(255, 255, 0, 255),
-                        new ArgbColor(255, 255, 0, 255),
-                        2.0, true, false,
-                        new TextStyle("Calibri", 12.0, HAlign.Center, VAlign.Center, new ArgbColor(255, 255, 0, 255), true)),
-                new ShapeStyle(
-                        "Yellow",
-                        new ArgbColor(255, 255, 255, 0),
-                        new ArgbColor(255, 255, 255, 0),
-                        2.0, true, false,
-                        new TextStyle("Calibri", 12.0, HAlign.Center, VAlign.Center, new ArgbColor(255, 255, 255, 0), true)),
-                new ShapeStyle(
-                        "Black",
-                        new ArgbColor(255, 0, 0, 0),
-                        new ArgbColor(255, 0, 0, 0),
-                        2.0, true, false,
-                        new TextStyle("Calibri", 12.0, HAlign.Center, VAlign.Center, new ArgbColor(255, 0, 0, 0), true))
-            };
-
-            editorToolContext.CurrentStyle = editorToolContext.Styles[0];
+            editorToolContext.StyleLibrary = null;
 
             editorToolContext.PointTemplate = new EllipseShape(new PointShape(-3, -3, null), new PointShape(3, 3, null))
             {
