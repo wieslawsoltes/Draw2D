@@ -4,6 +4,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using Newtonsoft.Json;
@@ -73,6 +74,18 @@ namespace Draw2D.Editor
         public static T FromJson<T>(string json)
         {
             return JsonConvert.DeserializeObject<T>(json, Settings);
+        }
+
+        public static T FromJsonFile<T>(string path)
+        {
+            var json = File.ReadAllText(path);
+            return FromJson<T>(json);
+        }
+
+        public static void ToJsonFile<T>(string path, T value)
+        {
+            var json = ToJson<T>(value);
+            File.WriteAllText(path, json);
         }
     }
 }

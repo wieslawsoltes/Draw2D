@@ -36,21 +36,21 @@ namespace Draw2D
                     if (command == "--new-styles")
                     {
                         var styleLibrary = s_factory.CreateStyleLibrary();
-                        EditorToolContext.SaveAsjson("styles.json", styleLibrary);
+                        JsonSerializer.ToJsonFile("styles.json", styleLibrary);
                         return;
                     }
 
                     if (command == "--new-view")
                     {
                         var containerView = s_factory.CreateContainerView("View");
-                        EditorToolContext.SaveAsjson(containerView.Title + ".json", containerView);
+                        JsonSerializer.ToJsonFile(containerView.Title + ".json", containerView);
                         return;
                     }
 
                     if (command == "--new-editor")
                     {
                         var toolContext = s_factory.CreateToolContext();
-                        EditorToolContext.SaveAsjson("editor.json", toolContext);
+                        JsonSerializer.ToJsonFile("editor.json", toolContext);
                         return;
                     }
 
@@ -63,7 +63,7 @@ namespace Draw2D
                         {
                             editorToolContext.NewContainerView("Demo");
                             editorToolContext.CreateDemoGroup(editorToolContext);
-                            EditorToolContext.SaveAsjson("Demo.json", editorToolContext.ContainerView);
+                            JsonSerializer.ToJsonFile("Demo.json", editorToolContext.ContainerView);
                         }
                         return;
                     }
@@ -74,8 +74,8 @@ namespace Draw2D
 
                     if (command == "--export")
                     {
-                        var styleLibrary = EditorToolContext.LoadFromJson<IStyleLibrary>(args[1]);
-                        var containerView = EditorToolContext.LoadFromJson<ContainerView>(args[2]);
+                        var styleLibrary = JsonSerializer.FromJsonFile<IStyleLibrary>(args[1]);
+                        var containerView = JsonSerializer.FromJsonFile<ContainerView>(args[2]);
                         EditorToolContext.Export(args[3], containerView, styleLibrary);
                         return;
                     }
@@ -94,7 +94,7 @@ namespace Draw2D
         {
             if (File.Exists(s_stylesPath))
             {
-                s_styleLibrary = EditorToolContext.LoadFromJson<IStyleLibrary>(s_stylesPath);
+                s_styleLibrary = JsonSerializer.FromJsonFile<IStyleLibrary>(s_stylesPath);
             }
             else
             {
@@ -103,7 +103,7 @@ namespace Draw2D
 
             if (File.Exists(s_editorPath))
             {
-                s_toolContext = EditorToolContext.LoadFromJson<IToolContext>(s_editorPath);
+                s_toolContext = JsonSerializer.FromJsonFile<IToolContext>(s_editorPath);
                 s_toolContext.StyleLibrary = s_styleLibrary;
 
                 if (s_toolContext is EditorToolContext editorToolContext)
@@ -131,7 +131,7 @@ namespace Draw2D
 
             if (File.Exists(s_windowPath))
             {
-                s_windowSettings = EditorToolContext.LoadFromJson<WindowSettings>(s_windowPath);
+                s_windowSettings = JsonSerializer.FromJsonFile<WindowSettings>(s_windowPath);
             }
             else
             {
@@ -183,9 +183,9 @@ namespace Draw2D
 
             app.Run(window);
 
-            EditorToolContext.SaveAsjson(s_stylesPath, s_toolContext.StyleLibrary);
-            EditorToolContext.SaveAsjson(s_editorPath, s_toolContext);
-            EditorToolContext.SaveAsjson(s_windowPath, s_windowSettings);
+            JsonSerializer.ToJsonFile(s_stylesPath, s_toolContext.StyleLibrary);
+            JsonSerializer.ToJsonFile(s_editorPath, s_toolContext);
+            JsonSerializer.ToJsonFile(s_windowPath, s_windowSettings);
 
             s_windowSettings = null;
             s_toolContext.Dispose();

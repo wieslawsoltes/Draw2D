@@ -64,18 +64,6 @@ namespace Draw2D.Editor
             _factory = factory;
         }
 
-        public static T LoadFromJson<T>(string path)
-        {
-            var json = File.ReadAllText(path);
-            return JsonSerializer.FromJson<T>(json);
-        }
-
-        public static void SaveAsjson<T>(string path, T value)
-        {
-            var json = JsonSerializer.ToJson<T>(value);
-            File.WriteAllText(path, json);
-        }
-
         private ShapeStyle GetShapeStyle(string styleId)
         {
             if (StyleLibrary?.Styles != null)
@@ -155,7 +143,7 @@ namespace Draw2D.Editor
 
         public void Open(string path)
         {
-            var containerView = LoadFromJson<ContainerView>(path);
+            var containerView = JsonSerializer.FromJsonFile<ContainerView>(path);
             if (containerView != null)
             {
                 InitContainerView(containerView);
@@ -167,7 +155,7 @@ namespace Draw2D.Editor
         {
             if (ContainerView != null)
             {
-                SaveAsjson(path, ContainerView);
+                JsonSerializer.ToJsonFile(path, ContainerView);
             }
         }
 
