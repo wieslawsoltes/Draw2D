@@ -16,7 +16,6 @@ namespace Draw2D.Editor.Renderers
     public class SkiaShapeRenderer : IShapeRenderer
     {
         private IStyleLibrary _styleLibrary;
-        private Dictionary<string, ShapeStyle> _styleLibraryCache;
         private Dictionary<string, SKTypeface> _typefaceCache;
         private Dictionary<TextStyle, (SKPaint, SKFontMetrics)> _textPaintCache;
         private Dictionary<ShapeStyle, SKPaint> _fillPaintCache;
@@ -29,10 +28,6 @@ namespace Draw2D.Editor.Renderers
         public SkiaShapeRenderer(IStyleLibrary styleLibrary)
         {
             _styleLibrary = styleLibrary;
-            _styleLibraryCache = new Dictionary<string, ShapeStyle>();
-
-            UpdateStyleLibraryCache();
-
             _typefaceCache = new Dictionary<string, SKTypeface>();
             _textPaintCache = new Dictionary<TextStyle, (SKPaint, SKFontMetrics)>();
             _fillPaintCache = new Dictionary<ShapeStyle, SKPaint>();
@@ -42,7 +37,6 @@ namespace Draw2D.Editor.Renderers
         public void Dispose()
         {
             _styleLibrary = null;
-            _styleLibraryCache = null;
 
             if (_typefaceCache != null)
             {
@@ -79,35 +73,6 @@ namespace Draw2D.Editor.Renderers
                 }
                 _strokePaintCache = null;
             }
-        }
-
-        private void UpdateStyleLibraryCache()
-        {
-            if (_styleLibrary != null)
-            {
-                foreach (var style in _styleLibrary.Styles)
-                {
-                    _styleLibraryCache[style.Title] = style;
-                }
-            }
-        }
-
-        private bool GetShapeStyle(string styleId, out ShapeStyle value)
-        {
-            if (!_styleLibraryCache.TryGetValue(styleId, out value))
-            {
-                foreach (var style in _styleLibrary.Styles)
-                {
-                    if (style.Title == styleId)
-                    {
-                        _styleLibraryCache[style.Title] = style;
-                        value = style;
-                        return true;
-                    }
-                }
-                return false;
-            }
-            return true;
         }
 
         private void GetSKTypeface(string familyName, out SKTypeface typeface)
@@ -292,7 +257,7 @@ namespace Draw2D.Editor.Renderers
 
         public void DrawLine(object dc, LineShape line, string styleId, double dx, double dy)
         {
-            if (GetShapeStyle(styleId, out var style) == false)
+            if (_styleLibrary.Get(styleId, out var style) == false)
             {
                 return;
             }
@@ -328,7 +293,7 @@ namespace Draw2D.Editor.Renderers
 
         public void DrawCubicBezier(object dc, CubicBezierShape cubicBezier, string styleId, double dx, double dy)
         {
-            if (GetShapeStyle(styleId, out var style) == false)
+            if (_styleLibrary.Get(styleId, out var style) == false)
             {
                 return;
             }
@@ -357,7 +322,7 @@ namespace Draw2D.Editor.Renderers
 
         public void DrawQuadraticBezier(object dc, QuadraticBezierShape quadraticBezier, string styleId, double dx, double dy)
         {
-            if (GetShapeStyle(styleId, out var style) == false)
+            if (_styleLibrary.Get(styleId, out var style) == false)
             {
                 return;
             }
@@ -386,7 +351,7 @@ namespace Draw2D.Editor.Renderers
 
         public void DrawConic(object dc, ConicShape conic, string styleId, double dx, double dy)
         {
-            if (GetShapeStyle(styleId, out var style) == false)
+            if (_styleLibrary.Get(styleId, out var style) == false)
             {
                 return;
             }
@@ -415,7 +380,7 @@ namespace Draw2D.Editor.Renderers
 
         public void DrawPath(object dc, PathShape path, string styleId, double dx, double dy)
         {
-            if (GetShapeStyle(styleId, out var style) == false)
+            if (_styleLibrary.Get(styleId, out var style) == false)
             {
                 return;
             }
@@ -444,7 +409,7 @@ namespace Draw2D.Editor.Renderers
 
         public void DrawRectangle(object dc, RectangleShape rectangle, string styleId, double dx, double dy)
         {
-            if (GetShapeStyle(styleId, out var style) == false)
+            if (_styleLibrary.Get(styleId, out var style) == false)
             {
                 return;
             }
@@ -495,7 +460,7 @@ namespace Draw2D.Editor.Renderers
 
         public void DrawEllipse(object dc, EllipseShape ellipse, string styleId, double dx, double dy)
         {
-            if (GetShapeStyle(styleId, out var style) == false)
+            if (_styleLibrary.Get(styleId, out var style) == false)
             {
                 return;
             }
@@ -546,7 +511,7 @@ namespace Draw2D.Editor.Renderers
 
         public void DrawText(object dc, TextShape text, string styleId, double dx, double dy)
         {
-            if (GetShapeStyle(styleId, out var style) == false)
+            if (_styleLibrary.Get(styleId, out var style) == false)
             {
                 return;
             }
