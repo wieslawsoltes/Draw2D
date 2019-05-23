@@ -3142,7 +3142,7 @@ namespace Draw2D.ViewModels.Containers
 {
     public interface IStyleLibrary : IDirty
     {
-        IList<ShapeStyle> Styles { get; }
+        IList<ShapeStyle> Styles { get; set; }
         ShapeStyle CurrentStyle { get; set; }
         void Add(ShapeStyle style);
         void Remove(ShapeStyle value);
