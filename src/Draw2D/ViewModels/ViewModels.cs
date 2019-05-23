@@ -2643,11 +2643,6 @@ namespace Draw2D.ViewModels.Shapes
             if (_template != null)
             {
                 _template.Invalidate();
-                _template.Style?.Invalidate();
-                _template.Style?.Stroke?.Invalidate();
-                _template.Style?.Fill?.Invalidate();
-                _template.Style?.TextStyle?.Invalidate();
-                _template.Style?.TextStyle?.Stroke?.Invalidate();
             }
 
             base.Invalidate();
@@ -3245,11 +3240,6 @@ namespace Draw2D.ViewModels.Containers
                 foreach (var shape in _shapes)
                 {
                     shape.Invalidate();
-                    shape.Style?.Invalidate();
-                    shape.Style?.Stroke?.Invalidate();
-                    shape.Style?.Fill?.Invalidate();
-                    shape.Style?.TextStyle?.Invalidate();
-                    shape.Style?.TextStyle?.Stroke?.Invalidate();
                 }
             }
 
