@@ -5,6 +5,7 @@
 //#define USE_DRAW_RECT
 //#define USE_DRAW_OVAL
 using System.Collections.Generic;
+using System.Diagnostics;
 using Draw2D.ViewModels;
 using Draw2D.ViewModels.Containers;
 using Draw2D.ViewModels.Shapes;
@@ -81,6 +82,7 @@ namespace Draw2D.Editor.Renderers
             {
                 typeface = SkiaHelper.ToSKTypeface(familyName);
                 _typefaceCache[familyName] = typeface;
+                Debug.WriteLine($"ToSKTypeface: ctor()");
             }
         }
 
@@ -91,6 +93,7 @@ namespace Draw2D.Editor.Renderers
                 style.Fill.Invalidate();
                 brushCached = SkiaHelper.ToSKPaintBrush(style.Fill);
                 _fillPaintCache[style] = brushCached;
+                Debug.WriteLine($"ToSKPaintBrush: ctor()");
             }
             else
             {
@@ -108,6 +111,7 @@ namespace Draw2D.Editor.Renderers
                 style.Stroke.Invalidate();
                 penCached = SkiaHelper.ToSKPaintPen(style, scale);
                 _strokePaintCache[style] = penCached;
+                Debug.WriteLine($"ToSKPaintPen: ctor()");
             }
             else
             {
@@ -133,6 +137,7 @@ namespace Draw2D.Editor.Renderers
                 cached.paint.Typeface = typeface;
                 cached.paint.TextEncoding = SKTextEncoding.Utf16;
                 cached.paint.TextSize = (float)style.FontSize;
+                Debug.WriteLine($"ToSKPaintBrush: ctor()");
 
                 switch (style.HAlign)
                 {
