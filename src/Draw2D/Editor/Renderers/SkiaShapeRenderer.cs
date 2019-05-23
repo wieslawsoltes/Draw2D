@@ -94,7 +94,6 @@ namespace Draw2D.Editor.Renderers
 
         private bool GetShapeStyle(string styleId, out ShapeStyle value)
         {
-            value = null;
             if (!_styleLibraryCache.TryGetValue(styleId, out value))
             {
                 foreach (var style in _styleLibrary.Styles)
