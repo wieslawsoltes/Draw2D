@@ -17,7 +17,7 @@ namespace Draw2D.Editor.Renderers
     {
         private IStyleLibrary _styleLibrary;
         private Dictionary<string, SKTypeface> _typefaceCache;
-        private Dictionary<TextStyle, (SKPaint, SKFontMetrics)> _textPaintCache;
+        private Dictionary<TextStyle, (SKPaint paint, SKFontMetrics metrics)> _textPaintCache;
         private Dictionary<ShapeStyle, SKPaint> _fillPaintCache;
         private Dictionary<ShapeStyle, SKPaint> _strokePaintCache;
 
@@ -29,7 +29,7 @@ namespace Draw2D.Editor.Renderers
         {
             _styleLibrary = styleLibrary;
             _typefaceCache = new Dictionary<string, SKTypeface>();
-            _textPaintCache = new Dictionary<TextStyle, (SKPaint, SKFontMetrics)>();
+            _textPaintCache = new Dictionary<TextStyle, (SKPaint paint, SKFontMetrics metrics)>();
             _fillPaintCache = new Dictionary<ShapeStyle, SKPaint>();
             _strokePaintCache = new Dictionary<ShapeStyle, SKPaint>();
         }
@@ -49,7 +49,7 @@ namespace Draw2D.Editor.Renderers
 
             if (_textPaintCache != null)
             {
-                foreach (KeyValuePair<TextStyle, (SKPaint paint, SKFontMetrics metrics)> cache in _textPaintCache)
+                foreach (var cache in _textPaintCache)
                 {
                     cache.Value.paint.Dispose();
                 }
