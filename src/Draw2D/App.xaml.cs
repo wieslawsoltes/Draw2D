@@ -42,7 +42,6 @@ namespace Draw2D
 
                     if (command == "--new-view")
                     {
-                        var editorToolContext = s_factory.CreateToolContext();
                         var containerView = s_factory.CreateContainerView("View");
                         EditorToolContext.SaveAsjson(containerView.Title + ".json", containerView);
                         return;
@@ -50,8 +49,22 @@ namespace Draw2D
 
                     if (command == "--new-editor")
                     {
-                        var editorToolContext = s_factory.CreateToolContext();
-                        EditorToolContext.SaveAsjson("editor.json", editorToolContext);
+                        var toolContext = s_factory.CreateToolContext();
+                        EditorToolContext.SaveAsjson("editor.json", toolContext);
+                        return;
+                    }
+
+                    if (command == "--demo")
+                    {
+                        var toolContext = s_factory.CreateToolContext();
+                        var styleLibrary = s_factory.CreateStyleLibrary();
+                        toolContext.StyleLibrary = styleLibrary;
+                        if (toolContext is EditorToolContext editorToolContext)
+                        {
+                            editorToolContext.NewContainerView("Demo");
+                            editorToolContext.CreateDemoGroup(editorToolContext);
+                            EditorToolContext.SaveAsjson("Demo.json", editorToolContext.ContainerView);
+                        }
                         return;
                     }
                 }

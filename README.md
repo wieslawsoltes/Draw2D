@@ -45,6 +45,13 @@ dotnet /home/ubuntu/environment/src/Draw2D/bin/Debug/netcoreapp3.0/Draw2D.dll --
 dotnet /home/ubuntu/environment/src/Draw2D/bin/Debug/netcoreapp3.0/Draw2D.dll --export styles.json View0.json View.pdf
 ```
 
+Demo view.
+```
+dotnet build
+dotnet /home/ubuntu/environment/src/Draw2D/bin/Debug/netcoreapp3.0/Draw2D.dll --demo
+```
+
+
 ### Linux Fonts
 
 https://www.pcworld.com/article/2863497/how-to-install-microsoft-fonts-in-linux-office-suites.html

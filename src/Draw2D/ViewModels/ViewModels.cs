@@ -3182,6 +3182,7 @@ namespace Draw2D.ViewModels.Containers
         IStyleLibrary StyleLibrary { get; set; }
         BaseShape PointTemplate { get; set; }
         IHitTest HitTest { get; set; }
+        IList<IContainerView> ContainerViews { get; set; }
         IContainerView ContainerView { get; set; }
         IList<ITool> Tools { get; set; }
         ITool CurrentTool { get; set; }
@@ -7016,6 +7017,13 @@ namespace Draw2D.ViewModels.Tools
         {
             get => _context.HitTest;
             set => throw new InvalidOperationException($"Can not set {HitTest} property value.");
+        }
+
+        [IgnoreDataMember]
+        public IList<IContainerView> ContainerViews
+        {
+            get => _context.ContainerViews;
+            set => throw new InvalidOperationException($"Can not set {ContainerViews} property value.");
         }
 
         [IgnoreDataMember]
