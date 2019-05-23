@@ -6,6 +6,7 @@
 //#define USE_DRAW_OVAL
 using System.Collections.Generic;
 using Draw2D.ViewModels;
+using Draw2D.ViewModels.Containers;
 using Draw2D.ViewModels.Shapes;
 using Draw2D.ViewModels.Style;
 using SkiaSharp;
@@ -14,6 +15,8 @@ namespace Draw2D.Editor.Renderers
 {
     public class SkiaShapeRenderer : IShapeRenderer
     {
+        private IStyleLibrary _styleLibrary;
+        private Dictionary<string, ShapeStyle> _styleLibraryCache;
         private Dictionary<string, SKTypeface> _typefaceCache;
         private Dictionary<TextStyle, (SKPaint, SKFontMetrics)> _textPaintCache;
         private Dictionary<ShapeStyle, SKPaint> _fillPaintCache;
@@ -21,10 +24,15 @@ namespace Draw2D.Editor.Renderers
 
         public double Scale { get; set; } = 1.0;
 
-        public ISelectionState SelectionState { get; set; } = null;
+        public ISelectionState SelectionState { get; set; }
 
-        public SkiaShapeRenderer()
+        public SkiaShapeRenderer(IStyleLibrary styleLibrary)
         {
+            _styleLibrary = styleLibrary;
+            _styleLibraryCache = new Dictionary<string, ShapeStyle>();
+
+            UpdateStyleLibraryCache();
+
             _typefaceCache = new Dictionary<string, SKTypeface>();
             _textPaintCache = new Dictionary<TextStyle, (SKPaint, SKFontMetrics)>();
             _fillPaintCache = new Dictionary<ShapeStyle, SKPaint>();
@@ -33,6 +41,9 @@ namespace Draw2D.Editor.Renderers
 
         public void Dispose()
         {
+            _styleLibrary = null;
+            _styleLibraryCache = null;
+
             if (_typefaceCache != null)
             {
                 foreach (var cache in _typefaceCache)
@@ -68,6 +79,36 @@ namespace Draw2D.Editor.Renderers
                 }
                 _strokePaintCache = null;
             }
+        }
+
+        private void UpdateStyleLibraryCache()
+        {
+            if (_styleLibrary != null)
+            {
+                foreach (var style in _styleLibrary.Styles)
+                {
+                    _styleLibraryCache[style.Title] = style;
+                }
+            }
+        }
+
+        private bool GetShapeStyle(string styleId, out ShapeStyle value)
+        {
+            value = null;
+            if (!_styleLibraryCache.TryGetValue(styleId, out value))
+            {
+                foreach (var style in _styleLibrary.Styles)
+                {
+                    if (style.Title == styleId)
+                    {
+                        _styleLibraryCache[style.Title] = style;
+                        value = style;
+                        return true;
+                    }
+                }
+                return false;
+            }
+            return true;
         }
 
         private void GetSKTypeface(string familyName, out SKTypeface typeface)
@@ -250,8 +291,12 @@ namespace Draw2D.Editor.Renderers
             canvas.DrawTextOnPath(text.Value, path, hOffset, metrics.Bottom - metrics.Top, paint);
         }
 
-        public void DrawLine(object dc, LineShape line, ShapeStyle style, double dx, double dy)
+        public void DrawLine(object dc, LineShape line, string styleId, double dx, double dy)
         {
+            if (GetShapeStyle(styleId, out var style) == false)
+            {
+                return;
+            }
 #if USE_DRAW_LINE
             if (style.IsStroked || style.TextStyle.IsStroked)
             {
@@ -282,8 +327,12 @@ namespace Draw2D.Editor.Renderers
 #endif
         }
 
-        public void DrawCubicBezier(object dc, CubicBezierShape cubicBezier, ShapeStyle style, double dx, double dy)
+        public void DrawCubicBezier(object dc, CubicBezierShape cubicBezier, string styleId, double dx, double dy)
         {
+            if (GetShapeStyle(styleId, out var style) == false)
+            {
+                return;
+            }
             if (style.IsFilled || style.IsStroked || style.TextStyle.IsStroked)
             {
                 var canvas = dc as SKCanvas;
@@ -307,8 +356,12 @@ namespace Draw2D.Editor.Renderers
             }
         }
 
-        public void DrawQuadraticBezier(object dc, QuadraticBezierShape quadraticBezier, ShapeStyle style, double dx, double dy)
+        public void DrawQuadraticBezier(object dc, QuadraticBezierShape quadraticBezier, string styleId, double dx, double dy)
         {
+            if (GetShapeStyle(styleId, out var style) == false)
+            {
+                return;
+            }
             if (style.IsFilled || style.IsStroked || style.TextStyle.IsStroked)
             {
                 var canvas = dc as SKCanvas;
@@ -332,8 +385,12 @@ namespace Draw2D.Editor.Renderers
             }
         }
 
-        public void DrawConic(object dc, ConicShape conic, ShapeStyle style, double dx, double dy)
+        public void DrawConic(object dc, ConicShape conic, string styleId, double dx, double dy)
         {
+            if (GetShapeStyle(styleId, out var style) == false)
+            {
+                return;
+            }
             if (style.IsFilled || style.IsStroked || style.TextStyle.IsStroked)
             {
                 var canvas = dc as SKCanvas;
@@ -357,8 +414,12 @@ namespace Draw2D.Editor.Renderers
             }
         }
 
-        public void DrawPath(object dc, PathShape path, ShapeStyle style, double dx, double dy)
+        public void DrawPath(object dc, PathShape path, string styleId, double dx, double dy)
         {
+            if (GetShapeStyle(styleId, out var style) == false)
+            {
+                return;
+            }
             if (style.IsFilled || style.IsStroked || style.TextStyle.IsStroked)
             {
                 var canvas = dc as SKCanvas;
@@ -382,8 +443,12 @@ namespace Draw2D.Editor.Renderers
             }
         }
 
-        public void DrawRectangle(object dc, RectangleShape rectangle, ShapeStyle style, double dx, double dy)
+        public void DrawRectangle(object dc, RectangleShape rectangle, string styleId, double dx, double dy)
         {
+            if (GetShapeStyle(styleId, out var style) == false)
+            {
+                return;
+            }
 #if USE_DRAW_RECT
             if (style.IsFilled || style.IsStroked || style.TextStyle.IsStroked)
             {
@@ -429,8 +494,12 @@ namespace Draw2D.Editor.Renderers
 #endif
         }
 
-        public void DrawEllipse(object dc, EllipseShape ellipse, ShapeStyle style, double dx, double dy)
+        public void DrawEllipse(object dc, EllipseShape ellipse, string styleId, double dx, double dy)
         {
+            if (GetShapeStyle(styleId, out var style) == false)
+            {
+                return;
+            }
 #if USE_DRAW_OVAL
             if (style.IsFilled || style.IsStroked || style.TextStyle.IsStroked)
             {
@@ -476,8 +545,12 @@ namespace Draw2D.Editor.Renderers
 #endif
         }
 
-        public void DrawText(object dc, TextShape text, ShapeStyle style, double dx, double dy)
+        public void DrawText(object dc, TextShape text, string styleId, double dx, double dy)
         {
+            if (GetShapeStyle(styleId, out var style) == false)
+            {
+                return;
+            }
             if (style.TextStyle.IsStroked && !string.IsNullOrEmpty(text.Text?.Value))
             {
                 var canvas = dc as SKCanvas;

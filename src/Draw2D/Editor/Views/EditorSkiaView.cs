@@ -15,6 +15,7 @@ namespace Draw2D.Editor.Views
 {
     public class EditorSkiaView : IDrawContainerView
     {
+        private IStyleLibrary _styleLibrary;
         private bool _enablePictureCache = false;
         private SkiaShapeRenderer _skiaRenderer;
         private Dictionary<ArgbColor, SKPaint> _paintCache;
@@ -25,9 +26,10 @@ namespace Draw2D.Editor.Views
         private SKPicture _pictureDecorators = null;
         private SKPicture _picturePoints = null;
 
-        public EditorSkiaView()
+        public EditorSkiaView(IStyleLibrary styleLibrary)
         {
-            _skiaRenderer = new SkiaShapeRenderer();
+            _styleLibrary = styleLibrary;
+            _skiaRenderer = new SkiaShapeRenderer(_styleLibrary);
             _paintCache = new Dictionary<ArgbColor, SKPaint>();
         }
 
@@ -89,6 +91,28 @@ namespace Draw2D.Editor.Views
             return false;
         }
 
+        private bool IsStyleLibraryDirty(IStyleLibrary styleLibrary)
+        {
+            if (styleLibrary.IsDirty)
+            {
+                Debug.WriteLine($"styleLibrary.IsDirty: true");
+                return true;
+            }
+
+            if (styleLibrary.Styles != null)
+            {
+                foreach (var style in styleLibrary.Styles)
+                {
+                    if (IsShapeStyleDirty(style))
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
         private bool IsCanvasContainerDirty(ICanvasContainer canvasContainer)
         {
             if (canvasContainer.IsDirty)
@@ -105,15 +129,6 @@ namespace Draw2D.Editor.Views
                     {
                         Debug.WriteLine($"shape.IsDirty: true");
                         return true;
-                    }
-
-                    if (shape.Style != null)
-                    {
-                        if (IsShapeStyleDirty(shape.Style))
-                        {
-                            Debug.WriteLine($"IsShapeStyleDirty(shape.Style): true");
-                            return true;
-                        }
                     }
                 }
             }
@@ -134,30 +149,12 @@ namespace Draw2D.Editor.Views
                     return true;
                 }
 
-                if (point.Style != null)
-                {
-                    if (IsShapeStyleDirty(point.Style))
-                    {
-                        Debug.WriteLine($"IsShapeStyleDirty(point.Style): true");
-                        return true;
-                    }
-                }
-
                 if (point.Template != null)
                 {
                     if (point.Template.IsDirty)
                     {
                         Debug.WriteLine($"point.Template.IsDirty: true");
                         return true;
-                    }
-
-                    if (point.Template.Style != null)
-                    {
-                        if (IsShapeStyleDirty(point.Template.Style))
-                        {
-                            Debug.WriteLine($"IsShapeStyleDirty(point.Template.Style): true");
-                            return true;
-                        }
                     }
                 }
             }
@@ -247,6 +244,7 @@ namespace Draw2D.Editor.Views
 
         public void Draw(IContainerView view, object context, double width, double height, double dx, double dy, double zx, double zy)
         {
+            bool isStyleLibraryDirty = IsStyleLibraryDirty(_styleLibrary);
             bool isCurrentContainerDirty = IsCanvasContainerDirty(view.CurrentContainer);
             bool isWorkingContainerDirty = IsCanvasContainerDirty(view.WorkingContainer);
             bool isPointsCurrentContainerDirty = IsPointsDirty(view.CurrentContainer);
@@ -254,7 +252,7 @@ namespace Draw2D.Editor.Views
             bool isShapesCurrentDirty = isCurrentContainerDirty == true || isPointsCurrentContainerDirty == true || _previousZX != zx || _previousZY != zy;
             bool isShapesWorkingDirty = isWorkingContainerDirty == true || isPointsWorkingContainerDirty == true || _previousZX != zx || _previousZY != zy;
 
-            if (_pictureShapesCurrent == null || isShapesCurrentDirty == true)
+            if (_pictureShapesCurrent == null || isShapesCurrentDirty == true || isStyleLibraryDirty == true)
             {
                 if (_pictureShapesCurrent != null)
                 {
@@ -264,7 +262,7 @@ namespace Draw2D.Editor.Views
                 _pictureShapesCurrent = RecordPicture(view, zx, _skiaRenderer, DrawShapesCurrent);
             }
 
-            if (_pictureShapesWorking == null || isShapesWorkingDirty == true)
+            if (_pictureShapesWorking == null || isShapesWorkingDirty == true || isStyleLibraryDirty == true)
             {
                 if (_pictureShapesWorking != null)
                 {
@@ -277,6 +275,7 @@ namespace Draw2D.Editor.Views
             bool isSelectionDirty = view.SelectionState.IsDirty == true || isShapesCurrentDirty == true || isShapesWorkingDirty == true;
 
             Debug.WriteLine(
+                $"{nameof(isStyleLibraryDirty)}: {isStyleLibraryDirty}, " +
                 $"{nameof(isShapesCurrentDirty)}: {isShapesCurrentDirty}, " +
                 $"{nameof(isShapesWorkingDirty)}: {isShapesWorkingDirty}, " +
                 $"{nameof(isCurrentContainerDirty)}: {isCurrentContainerDirty}, " +
@@ -288,7 +287,7 @@ namespace Draw2D.Editor.Views
                 view.SelectionState.Invalidate();
             }
 
-            if (_pictureDecorators == null || isSelectionDirty == true)
+            if (_pictureDecorators == null || isSelectionDirty == true || isStyleLibraryDirty == true)
             {
                 if (_pictureDecorators != null)
                 {
@@ -298,7 +297,7 @@ namespace Draw2D.Editor.Views
                 _pictureDecorators = RecordPicture(view, zx, _skiaRenderer, DrawDecorators);
             }
 
-            if (_picturePoints == null || isSelectionDirty == true)
+            if (_picturePoints == null || isSelectionDirty == true || isStyleLibraryDirty == true)
             {
                 if (_picturePoints != null)
                 {
@@ -349,8 +348,20 @@ namespace Draw2D.Editor.Views
                 _pictureShapesCurrent = null;
             }
 
-            view.CurrentContainer.Invalidate();
-            view.WorkingContainer.Invalidate();
+            if (isCurrentContainerDirty == true)
+            {
+                view.CurrentContainer.Invalidate();
+            }
+
+            if (isWorkingContainerDirty == true)
+            {
+                view.WorkingContainer.Invalidate();
+            }
+
+            if (isStyleLibraryDirty == true)
+            {
+                _styleLibrary.Invalidate();
+            }
         }
     }
 }

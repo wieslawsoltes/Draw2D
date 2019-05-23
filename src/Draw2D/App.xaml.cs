@@ -55,14 +55,15 @@ namespace Draw2D
                         return;
                     }
                 }
-                else if (args.Length == 3)
+                else if (args.Length == 4)
                 {
                     var command = args[0];
 
                     if (command == "--export")
                     {
-                        var containerView = EditorToolContext.LoadFromJson<ContainerView>(args[1]);
-                        EditorToolContext.Export(args[2], containerView);
+                        var styleLibrary = EditorToolContext.LoadFromJson<IStyleLibrary>(args[1]);
+                        var containerView = EditorToolContext.LoadFromJson<ContainerView>(args[2]);
+                        EditorToolContext.Export(args[3], containerView, styleLibrary);
                         return;
                     }
                 }

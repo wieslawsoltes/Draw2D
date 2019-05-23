@@ -14,6 +14,7 @@ using Draw2D.Editor.Views;
 using Draw2D.ViewModels;
 using Draw2D.ViewModels.Containers;
 using Draw2D.ViewModels.Shapes;
+using Draw2D.ViewModels.Style;
 using SkiaSharp;
 
 namespace Draw2D.Editor
@@ -75,9 +76,24 @@ namespace Draw2D.Editor
             File.WriteAllText(path, json);
         }
 
+        private ShapeStyle GetShapeStyle(string styleId)
+        {
+            if (StyleLibrary?.Styles != null)
+            {
+                foreach (var style in StyleLibrary.Styles)
+                {
+                    if (style.Title == styleId)
+                    {
+                        return style;
+                    }
+                }
+            }
+            return null;
+        }
+
         public void InitContainerView(IContainerView containerView)
         {
-            containerView.DrawContainerView = new AvaloniaSkiaView();
+            containerView.DrawContainerView = new AvaloniaSkiaView(StyleLibrary);
 
             containerView.WorkingContainer = new CanvasContainer()
             {
@@ -206,24 +222,24 @@ namespace Draw2D.Editor
             // TODO: Convert picture to shapes.
         }
 
-        public static void ExportSvg(string path, IContainerView containerView)
+        public static void ExportSvg(string path, IContainerView containerView, IStyleLibrary styleLibrary)
         {
             using (var stream = new SKFileWStream(path))
             using (var writer = new SKXmlStreamWriter(stream))
             using (var canvas = SKSvgCanvas.Create(SKRect.Create(0, 0, (int)containerView.Width, (int)containerView.Height), writer))
-            using (var skiaView = new ExportSkiaView())
+            using (var skiaView = new ExportSkiaView(styleLibrary))
             {
                 skiaView.Draw(containerView, canvas, containerView.Width, containerView.Height, 0, 0, 1.0, 1.0);
             }
         }
 
-        public static void ExportPng(string path, IContainerView containerView)
+        public static void ExportPng(string path, IContainerView containerView, IStyleLibrary styleLibrary)
         {
             var info = new SKImageInfo((int)containerView.Width, (int)containerView.Height);
             using (var bitmap = new SKBitmap(info))
             {
                 using (var canvas = new SKCanvas(bitmap))
-                using (var skiaView = new ExportSkiaView())
+                using (var skiaView = new ExportSkiaView(styleLibrary))
                 {
                     skiaView.Draw(containerView, canvas, containerView.Width, containerView.Height, 0, 0, 1.0, 1.0);
                 }
@@ -236,33 +252,33 @@ namespace Draw2D.Editor
             }
         }
 
-        public static void ExportPdf(string path, IContainerView containerView)
+        public static void ExportPdf(string path, IContainerView containerView, IStyleLibrary styleLibrary)
         {
             using (var stream = new SKFileWStream(path))
             using (var pdf = SKDocument.CreatePdf(stream, 72.0f))
             using (var canvas = pdf.BeginPage((float)containerView.Width, (float)containerView.Height))
-            using (var skiaView = new ExportSkiaView())
+            using (var skiaView = new ExportSkiaView(styleLibrary))
             {
                 skiaView.Draw(containerView, canvas, containerView.Width, containerView.Height, 0, 0, 1.0, 1.0);
                 pdf.Close();
             }
         }
 
-        public static void Export(string path, IContainerView containerView)
+        public static void Export(string path, IContainerView containerView, IStyleLibrary styleLibrary)
         {
             var outputExtension = Path.GetExtension(path);
 
             if (string.Compare(outputExtension, ".svg", StringComparison.OrdinalIgnoreCase) == 0)
             {
-                ExportSvg(path, containerView);
+                ExportSvg(path, containerView, styleLibrary);
             }
             else if (string.Compare(outputExtension, ".png", StringComparison.OrdinalIgnoreCase) == 0)
             {
-                ExportPng(path, containerView);
+                ExportPng(path, containerView, styleLibrary);
             }
             else if (string.Compare(outputExtension, ".pdf", StringComparison.OrdinalIgnoreCase) == 0)
             {
-                ExportPdf(path, containerView);
+                ExportPdf(path, containerView, styleLibrary);
             }
         }
 
@@ -295,7 +311,7 @@ namespace Draw2D.Editor
             if (result != null)
             {
                 var path = result;
-                Export(path, ContainerView);
+                Export(path, ContainerView, StyleLibrary);
             }
         }
 
@@ -317,55 +333,87 @@ namespace Draw2D.Editor
             switch (shape)
             {
                 case LineShape line:
-                    sb.AppendLine(SkiaHelper.ToGeometry(line, 0.0, 0.0).ToSvgPathData());
-                    // TODO: Convert Text on path to geometry.
+                    {
+                        sb.AppendLine(SkiaHelper.ToGeometry(line, 0.0, 0.0).ToSvgPathData());
+                        // TODO: Convert Text on path to geometry.
+                    }
                     break;
                 case CubicBezierShape cubicBezier:
-                    sb.AppendLine(SkiaHelper.ToGeometry(cubicBezier, 0.0, 0.0).ToSvgPathData());
-                    // TODO: Convert Text on path to geometry.
+                    {
+                        sb.AppendLine(SkiaHelper.ToGeometry(cubicBezier, 0.0, 0.0).ToSvgPathData());
+                        // TODO: Convert Text on path to geometry.
+                    }
                     break;
                 case QuadraticBezierShape quadraticBezier:
-                    sb.AppendLine(SkiaHelper.ToGeometry(quadraticBezier, 0.0, 0.0).ToSvgPathData());
-                    // TODO: Convert Text on path to geometry.
+                    {
+                        sb.AppendLine(SkiaHelper.ToGeometry(quadraticBezier, 0.0, 0.0).ToSvgPathData());
+                        // TODO: Convert Text on path to geometry.
+                    }
                     break;
                 case ConicShape conic:
-                    sb.AppendLine(SkiaHelper.ToGeometry(conic, 0.0, 0.0).ToSvgPathData());
-                    // TODO: Convert Text on path to geometry.
+                    {
+                        sb.AppendLine(SkiaHelper.ToGeometry(conic, 0.0, 0.0).ToSvgPathData());
+                        // TODO: Convert Text on path to geometry.
+                    }
                     break;
                 case PathShape pathShape:
-                    sb.AppendLine(SkiaHelper.ToGeometry(pathShape, 0.0, 0.0).ToSvgPathData());
-                    // TODO: Convert Text on path to geometry.
+                    {
+                        sb.AppendLine(SkiaHelper.ToGeometry(pathShape, 0.0, 0.0).ToSvgPathData());
+                        // TODO: Convert Text on path to geometry.
+                    }
                     break;
                 case RectangleShape rectangle:
-                    sb.AppendLine(SkiaHelper.ToGeometry(rectangle, 0.0, 0.0).ToSvgPathData());
-                    if (!string.IsNullOrEmpty(rectangle.Text?.Value))
                     {
-                        SkiaHelper.ToGeometry(rectangle.Text, rectangle.TopLeft, rectangle.BottomRight, rectangle.Style, 0.0, 0.0);
+                        sb.AppendLine(SkiaHelper.ToGeometry(rectangle, 0.0, 0.0).ToSvgPathData());
+                        if (!string.IsNullOrEmpty(rectangle.Text?.Value))
+                        {
+                            var style = GetShapeStyle(rectangle.Style);
+                            if (style != null)
+                            {
+                                SkiaHelper.ToGeometry(rectangle.Text, rectangle.TopLeft, rectangle.BottomRight, style.TextStyle, 0.0, 0.0);
+                            }
+                        }
                     }
                     break;
                 case EllipseShape ellipse:
-                    sb.AppendLine(SkiaHelper.ToGeometry(ellipse, 0.0, 0.0).ToSvgPathData());
-                    if (!string.IsNullOrEmpty(ellipse.Text?.Value))
                     {
-                        SkiaHelper.ToGeometry(ellipse.Text, ellipse.TopLeft, ellipse.BottomRight, ellipse.Style, 0.0, 0.0);
+                        sb.AppendLine(SkiaHelper.ToGeometry(ellipse, 0.0, 0.0).ToSvgPathData());
+                        if (!string.IsNullOrEmpty(ellipse.Text?.Value))
+                        {
+                            var style = GetShapeStyle(ellipse.Style);
+                            if (style != null)
+                            {
+                                SkiaHelper.ToGeometry(ellipse.Text, ellipse.TopLeft, ellipse.BottomRight, style.TextStyle, 0.0, 0.0);
+                            }
+                        }
                     }
                     break;
 #if USE_SVG_POINT
                 case PointShape point:
-                    if (point.Template != null)
                     {
-                        ToSvgPathDataImpl(point.Template, sb);
+                        if (point.Template != null)
+                        {
+                            ToSvgPathDataImpl(point.Template, sb);
+                        }
                     }
                     break;
 #endif
                 case GroupShape group:
-                    foreach (var groupShape in group.Shapes)
                     {
-                        ToSvgPathDataImpl(groupShape, sb);
+                        foreach (var groupShape in group.Shapes)
+                        {
+                            ToSvgPathDataImpl(groupShape, sb);
+                        }
                     }
                     break;
                 case TextShape text:
-                    sb.AppendLine(SkiaHelper.ToGeometry(text, 0.0, 0.0).ToSvgPathData());
+                    {
+                        var style = GetShapeStyle(text.Style);
+                        if (style != null)
+                        {
+                            sb.AppendLine(SkiaHelper.ToGeometry(text, style.TextStyle, 0.0, 0.0).ToSvgPathData());
+                        }
+                    }
                     break;
             };
         }
@@ -408,7 +456,7 @@ namespace Draw2D.Editor
                 {
                     Points = new ObservableCollection<PointShape>(),
                     Text = new Text(),
-                    Style = context.StyleLibrary.CurrentStyle
+                    Style = context.StyleLibrary.CurrentStyle.Title
                 });
             group.Points.Add(new PointShape(45, 30, context.PointTemplate));
             group.Points.Add(new PointShape(45, 60, context.PointTemplate));

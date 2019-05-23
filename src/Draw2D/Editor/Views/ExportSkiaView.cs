@@ -9,8 +9,11 @@ namespace Draw2D.Editor.Views
 {
     public class ExportSkiaView : IDrawContainerView
     {
-        public ExportSkiaView()
+        private IStyleLibrary _styleLibrary;
+
+        public ExportSkiaView(IStyleLibrary styleLibrary)
         {
+            _styleLibrary = styleLibrary;
         }
 
         public void Dispose()
@@ -19,7 +22,7 @@ namespace Draw2D.Editor.Views
 
         public void Draw(IContainerView view, object context, double width, double height, double dx, double dy, double zx, double zy)
         {
-            using (var renderer = new SkiaShapeRenderer())
+            using (var renderer = new SkiaShapeRenderer(_styleLibrary))
             using (var background = SkiaHelper.ToSKPaintBrush(view.PrintBackground))
             {
                 var canvas = context as SKCanvas;

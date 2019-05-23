@@ -10,13 +10,15 @@ namespace Draw2D.Editor.Views
 {
     public class AvaloniaSkiaView : IDrawContainerView
     {
+        private IStyleLibrary _styleLibrary;
         private RenderTargetBitmap _renderTarget;
         private IDrawContainerView _editorSkiaView;
 
-        public AvaloniaSkiaView()
+        public AvaloniaSkiaView(IStyleLibrary styleLibrary)
         {
+            _styleLibrary = styleLibrary;
             _renderTarget = null;
-            _editorSkiaView = new EditorSkiaView();
+            _editorSkiaView = new EditorSkiaView(_styleLibrary);
         }
 
         public void Dispose()
