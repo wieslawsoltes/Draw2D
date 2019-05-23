@@ -3290,6 +3290,115 @@ namespace Draw2D.ViewModels.Containers
     }
 
     [DataContract(IsReference = true)]
+    public class SelectionState : ViewModelBase, ISelectionState, ICopyable
+    {
+        private BaseShape _hovered;
+        private BaseShape _selected;
+        private ISet<BaseShape> _shapes;
+
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public BaseShape Hovered
+        {
+            get => _hovered;
+            set => Update(ref _hovered, value);
+        }
+
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public BaseShape Selected
+        {
+            get => _selected;
+            set => Update(ref _selected, value);
+        }
+
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public ISet<BaseShape> Shapes
+        {
+            get => _shapes;
+            set => Update(ref _shapes, value);
+        }
+
+        public virtual object Copy(Dictionary<object, object> shared)
+        {
+            var copy = new SelectionState()
+            {
+                Name = this.Name,
+                Hovered = this.Hovered,
+                Selected = this.Selected,
+                Shapes = new HashSet<BaseShape>()
+            };
+
+            foreach (var shape in this.Shapes)
+            {
+                copy.Shapes.Add(shape);
+            }
+
+            return copy;
+        }
+
+        public void Hover(BaseShape shape)
+        {
+            if (shape != null)
+            {
+                shape.Select(this);
+                Hovered = shape;
+                this.MarkAsDirty(true);
+            }
+        }
+
+        public void Dehover()
+        {
+            if (_hovered != null)
+            {
+                _hovered.Deselect(this);
+                Hovered = null;
+                this.MarkAsDirty(true);
+            }
+        }
+
+        public bool IsSelected(BaseShape shape)
+        {
+            if (shape != null && _shapes.Contains(shape))
+            {
+                return true;
+            }
+            return false;
+        }
+
+        public void Select(BaseShape shape)
+        {
+            if (shape != null)
+            {
+                if (_shapes.Count == 0)
+                {
+                    Selected = shape;
+                }
+                _shapes.Add(shape);
+                this.MarkAsDirty(true);
+            }
+        }
+
+        public void Deselect(BaseShape shape)
+        {
+            if (shape != null)
+            {
+                _shapes.Remove(shape);
+                if (_shapes.Count == 0)
+                {
+                    Selected = null;
+                }
+                this.MarkAsDirty(true);
+            }
+        }
+
+        public void Clear()
+        {
+            _shapes.Clear();
+            Selected = null;
+            this.MarkAsDirty(true);
+        }
+    }
+
+    [DataContract(IsReference = true)]
     public class ZoomServiceState : ViewModelBase, IZoomServiceState, ICopyable
     {
         private double _zoomSpeed;
@@ -6913,35 +7022,25 @@ namespace Draw2D.ViewModels.Tools
             set => throw new InvalidOperationException($"Can not set {Mode} property value.");
         }
 
-        public void SetTool(string name)
-            => _context.SetTool(name);
+        private void SetNextPoint(PointShape point) => _containerView._nextPoint = point;
 
-        public double GetWidth()
-            => _context.GetWidth();
+        private void SetContext(IToolContext context) => _context = context;
 
-        public double GetHeight()
-            => _context.GetHeight();
+        public void SetTool(string name) => _context.SetTool(name);
 
-        public void LeftDown(double x, double y, Modifier modifier)
-            => _context.LeftDown(x, y, modifier);
+        public double GetWidth() => _context.GetWidth();
 
-        public void LeftUp(double x, double y, Modifier modifier)
-            => _context.LeftUp(x, y, modifier);
+        public double GetHeight() => _context.GetHeight();
 
-        public void RightDown(double x, double y, Modifier modifier)
-            => _context.RightDown(x, y, modifier);
+        public void LeftDown(double x, double y, Modifier modifier) => _context.LeftDown(x, y, modifier);
 
-        public void RightUp(double x, double y, Modifier modifier)
-            => _context.RightUp(x, y, modifier);
+        public void LeftUp(double x, double y, Modifier modifier) => _context.LeftUp(x, y, modifier);
 
-        public void Move(double x, double y, Modifier modifier)
-            => _context.Move(x, y, modifier);
+        public void RightDown(double x, double y, Modifier modifier) => _context.RightDown(x, y, modifier);
 
-        private void SetContext(IToolContext context)
-            => _context = context;
+        public void RightUp(double x, double y, Modifier modifier) => _context.RightUp(x, y, modifier);
 
-        private void SetNextPoint(PointShape point)
-            => _containerView._nextPoint = point;
+        public void Move(double x, double y, Modifier modifier) => _context.Move(x, y, modifier);
     }
 
     public partial class PathTool : ViewModelBase, ITool
@@ -8672,115 +8771,6 @@ namespace Draw2D.ViewModels.Tools
         {
             get => _disconnectTestRadius;
             set => Update(ref _disconnectTestRadius, value);
-        }
-    }
-
-    [DataContract(IsReference = true)]
-    public class SelectionState : ViewModelBase, ISelectionState, ICopyable
-    {
-        private BaseShape _hovered;
-        private BaseShape _selected;
-        private ISet<BaseShape> _shapes;
-
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public BaseShape Hovered
-        {
-            get => _hovered;
-            set => Update(ref _hovered, value);
-        }
-
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public BaseShape Selected
-        {
-            get => _selected;
-            set => Update(ref _selected, value);
-        }
-
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public ISet<BaseShape> Shapes
-        {
-            get => _shapes;
-            set => Update(ref _shapes, value);
-        }
-
-        public virtual object Copy(Dictionary<object, object> shared)
-        {
-            var copy = new SelectionState()
-            {
-                Name = this.Name,
-                Hovered = this.Hovered,
-                Selected = this.Selected,
-                Shapes = new HashSet<BaseShape>()
-            };
-
-            foreach (var shape in this.Shapes)
-            {
-                copy.Shapes.Add(shape);
-            }
-
-            return copy;
-        }
-
-        public void Hover(BaseShape shape)
-        {
-            if (shape != null)
-            {
-                shape.Select(this);
-                Hovered = shape;
-                this.MarkAsDirty(true);
-            }
-        }
-
-        public void Dehover()
-        {
-            if (_hovered != null)
-            {
-                _hovered.Deselect(this);
-                Hovered = null;
-                this.MarkAsDirty(true);
-            }
-        }
-
-        public bool IsSelected(BaseShape shape)
-        {
-            if (shape != null && _shapes.Contains(shape))
-            {
-                return true;
-            }
-            return false;
-        }
-
-        public void Select(BaseShape shape)
-        {
-            if (shape != null)
-            {
-                if (_shapes.Count == 0)
-                {
-                    Selected = shape;
-                }
-                _shapes.Add(shape);
-                this.MarkAsDirty(true);
-            }
-        }
-
-        public void Deselect(BaseShape shape)
-        {
-            if (shape != null)
-            {
-                _shapes.Remove(shape);
-                if (_shapes.Count == 0)
-                {
-                    Selected = null;
-                }
-                this.MarkAsDirty(true);
-            }
-        }
-
-        public void Clear()
-        {
-            _shapes.Clear();
-            Selected = null;
-            this.MarkAsDirty(true);
         }
     }
 
