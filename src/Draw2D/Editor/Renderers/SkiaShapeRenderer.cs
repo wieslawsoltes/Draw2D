@@ -257,7 +257,8 @@ namespace Draw2D.Editor.Renderers
 
         public void DrawLine(object dc, LineShape line, string styleId, double dx, double dy)
         {
-            if (_styleLibrary.Get(styleId, out var style) == false)
+            var style = _styleLibrary.Get(styleId);
+            if (style == null)
             {
                 return;
             }
@@ -293,7 +294,8 @@ namespace Draw2D.Editor.Renderers
 
         public void DrawCubicBezier(object dc, CubicBezierShape cubicBezier, string styleId, double dx, double dy)
         {
-            if (_styleLibrary.Get(styleId, out var style) == false)
+            var style = _styleLibrary.Get(styleId);
+            if (style == null)
             {
                 return;
             }
@@ -322,7 +324,8 @@ namespace Draw2D.Editor.Renderers
 
         public void DrawQuadraticBezier(object dc, QuadraticBezierShape quadraticBezier, string styleId, double dx, double dy)
         {
-            if (_styleLibrary.Get(styleId, out var style) == false)
+            var style = _styleLibrary.Get(styleId);
+            if (style == null)
             {
                 return;
             }
@@ -351,7 +354,8 @@ namespace Draw2D.Editor.Renderers
 
         public void DrawConic(object dc, ConicShape conic, string styleId, double dx, double dy)
         {
-            if (_styleLibrary.Get(styleId, out var style) == false)
+            var style = _styleLibrary.Get(styleId);
+            if (style == null)
             {
                 return;
             }
@@ -380,7 +384,8 @@ namespace Draw2D.Editor.Renderers
 
         public void DrawPath(object dc, PathShape path, string styleId, double dx, double dy)
         {
-            if (_styleLibrary.Get(styleId, out var style) == false)
+            var style = _styleLibrary.Get(styleId);
+            if (style == null)
             {
                 return;
             }
@@ -409,7 +414,8 @@ namespace Draw2D.Editor.Renderers
 
         public void DrawRectangle(object dc, RectangleShape rectangle, string styleId, double dx, double dy)
         {
-            if (_styleLibrary.Get(styleId, out var style) == false)
+            var style = _styleLibrary.Get(styleId);
+            if (style == null)
             {
                 return;
             }
@@ -460,7 +466,8 @@ namespace Draw2D.Editor.Renderers
 
         public void DrawEllipse(object dc, EllipseShape ellipse, string styleId, double dx, double dy)
         {
-            if (_styleLibrary.Get(styleId, out var style) == false)
+            var style = _styleLibrary.Get(styleId);
+            if (style == null)
             {
                 return;
             }
@@ -511,7 +518,8 @@ namespace Draw2D.Editor.Renderers
 
         public void DrawText(object dc, TextShape text, string styleId, double dx, double dy)
         {
-            if (_styleLibrary.Get(styleId, out var style) == false)
+            var style = _styleLibrary.Get(styleId);
+            if (style == null)
             {
                 return;
             }
