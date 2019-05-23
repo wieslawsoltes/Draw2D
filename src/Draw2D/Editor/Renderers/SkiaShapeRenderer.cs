@@ -247,7 +247,7 @@ namespace Draw2D.Editor.Renderers
             float baseTextWidth = paint.MeasureText(text.Value, ref bounds);
             SKPathMeasure pathMeasure = new SKPathMeasure(path, false, 1);
             float hOffset = (pathMeasure.Length / 2f) - (baseTextWidth / 2f);
-            canvas.DrawTextOnPath(text.Value, path, hOffset, metrics.Descent, paint);
+            canvas.DrawTextOnPath(text.Value, path, hOffset, metrics.Bottom - metrics.Top, paint);
         }
 
         public void DrawLine(object dc, LineShape line, ShapeStyle style, double dx, double dy)
