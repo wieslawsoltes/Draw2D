@@ -27,7 +27,7 @@ namespace Draw2D
         {
             try
             {
-                s_factory = new Factory();
+                s_factory = new EditorFactory();
 
                 if (args.Length == 1)
                 {

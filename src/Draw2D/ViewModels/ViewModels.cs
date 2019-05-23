@@ -3193,6 +3193,13 @@ namespace Draw2D.ViewModels.Containers
         void SetTool(string name);
     }
 
+    public interface IFactory
+    {
+        IStyleLibrary CreateStyleLibrary();
+        IToolContext CreateToolContext();
+        IContainerView CreateContainerView(string title);
+    }
+
     [DataContract(IsReference = true)]
     public class StyleLibrary : ViewModelBase, IStyleLibrary
     {
