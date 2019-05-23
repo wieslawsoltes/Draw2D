@@ -872,7 +872,6 @@ namespace Draw2D.ViewModels.Shapes
         internal static new IShapeDecorator s_decorator = null;
 
         private IList<PointShape> _points;
-        private Text _text;
 
         [IgnoreDataMember]
         public override IBounds Bounds { get; } = s_bounds;
@@ -885,13 +884,6 @@ namespace Draw2D.ViewModels.Shapes
         {
             get => _points;
             set => Update(ref _points, value);
-        }
-
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public Text Text
-        {
-            get => _text;
-            set => Update(ref _text, value);
         }
 
         public ConnectableShape()
@@ -909,8 +901,6 @@ namespace Draw2D.ViewModels.Shapes
             {
                 point.Invalidate();
             }
-
-            _text?.Invalidate();
 
             base.Invalidate();
         }
@@ -1011,6 +1001,7 @@ namespace Draw2D.ViewModels.Shapes
         private PointShape _point1;
         private PointShape _point2;
         private double _weight;
+        private Text _text;
 
         [IgnoreDataMember]
         public override IBounds Bounds { get; } = s_bounds;
@@ -1046,6 +1037,13 @@ namespace Draw2D.ViewModels.Shapes
             set => Update(ref _weight, value);
         }
 
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public Text Text
+        {
+            get => _text;
+            set => Update(ref _text, value);
+        }
+
         public ConicShape()
             : base()
         {
@@ -1078,6 +1076,8 @@ namespace Draw2D.ViewModels.Shapes
             _point1?.Invalidate();
 
             _point2?.Invalidate();
+
+            _text?.Invalidate();
 
             base.Invalidate();
         }
@@ -1278,6 +1278,7 @@ namespace Draw2D.ViewModels.Shapes
         private PointShape _point1;
         private PointShape _point2;
         private PointShape _point3;
+        private Text _text;
 
         [IgnoreDataMember]
         public override IBounds Bounds { get; } = s_bounds;
@@ -1311,6 +1312,13 @@ namespace Draw2D.ViewModels.Shapes
         {
             get => _point3;
             set => Update(ref _point3, value);
+        }
+
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public Text Text
+        {
+            get => _text;
+            set => Update(ref _text, value);
         }
 
         public CubicBezierShape()
@@ -1348,6 +1356,8 @@ namespace Draw2D.ViewModels.Shapes
             _point2?.Invalidate();
 
             _point3?.Invalidate();
+
+            _text?.Invalidate();
 
             base.Invalidate();
         }
@@ -1577,11 +1587,20 @@ namespace Draw2D.ViewModels.Shapes
         internal static new IBounds s_bounds = new EllipseBounds();
         internal static new IShapeDecorator s_decorator = new EllipseDecorator();
 
+        private Text _text;
+
         [IgnoreDataMember]
         public override IBounds Bounds { get; } = s_bounds;
 
         [IgnoreDataMember]
         public override IShapeDecorator Decorator { get; } = s_decorator;
+
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public Text Text
+        {
+            get => _text;
+            set => Update(ref _text, value);
+        }
 
         public EllipseShape()
             : base()
@@ -1591,6 +1610,13 @@ namespace Draw2D.ViewModels.Shapes
         public EllipseShape(PointShape topLeft, PointShape bottomRight)
             : base(topLeft, bottomRight)
         {
+        }
+
+        public override void Invalidate()
+        {
+            _text?.Invalidate();
+
+            base.Invalidate();
         }
 
         public override void Draw(object dc, IShapeRenderer renderer, double dx, double dy, DrawMode mode, object db, object r)
@@ -1900,8 +1926,7 @@ namespace Draw2D.ViewModels.Shapes
                 Title = this.Title,
                 Points = new ObservableCollection<PointShape>(),
                 Shapes = new ObservableCollection<BaseShape>(),
-                Style = this.Style,
-                Text = (Text)this.Text?.Copy(shared)
+                Style = this.Style
             };
 
             if (shared != null)
@@ -1932,6 +1957,7 @@ namespace Draw2D.ViewModels.Shapes
 
         private PointShape _startPoint;
         private PointShape _point;
+        private Text _text;
 
         [IgnoreDataMember]
         public override IBounds Bounds { get; } = s_bounds;
@@ -1951,6 +1977,13 @@ namespace Draw2D.ViewModels.Shapes
         {
             get => _point;
             set => Update(ref _point, value);
+        }
+
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public Text Text
+        {
+            get => _text;
+            set => Update(ref _text, value);
         }
 
         public LineShape()
@@ -1980,6 +2013,8 @@ namespace Draw2D.ViewModels.Shapes
             _startPoint?.Invalidate();
 
             _point?.Invalidate();
+
+            _text?.Invalidate();
 
             base.Invalidate();
         }
@@ -2169,6 +2204,7 @@ namespace Draw2D.ViewModels.Shapes
         private string _title;
         private IList<FigureShape> _figures;
         private PathFillRule _fillRule;
+        private Text _text;
 
         [IgnoreDataMember]
         public override IBounds Bounds { get; } = s_bounds;
@@ -2195,6 +2231,13 @@ namespace Draw2D.ViewModels.Shapes
         {
             get => _fillRule;
             set => Update(ref _fillRule, value);
+        }
+
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public Text Text
+        {
+            get => _text;
+            set => Update(ref _text, value);
         }
 
         public PathShape()
@@ -2292,6 +2335,8 @@ namespace Draw2D.ViewModels.Shapes
             {
                 figure.Invalidate();
             }
+
+            _text?.Invalidate();
 
             base.Invalidate();
         }
@@ -2658,6 +2703,7 @@ namespace Draw2D.ViewModels.Shapes
         private PointShape _startPoint;
         private PointShape _point1;
         private PointShape _point2;
+        private Text _text;
 
         [IgnoreDataMember]
         public override IBounds Bounds { get; } = s_bounds;
@@ -2684,6 +2730,13 @@ namespace Draw2D.ViewModels.Shapes
         {
             get => _point2;
             set => Update(ref _point2, value);
+        }
+
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public Text Text
+        {
+            get => _text;
+            set => Update(ref _text, value);
         }
 
         public QuadraticBezierShape()
@@ -2717,6 +2770,8 @@ namespace Draw2D.ViewModels.Shapes
             _point1?.Invalidate();
 
             _point2?.Invalidate();
+
+            _text?.Invalidate();
 
             base.Invalidate();
         }
@@ -2912,11 +2967,20 @@ namespace Draw2D.ViewModels.Shapes
         internal static new IBounds s_bounds = new RectangleBounds();
         internal static new IShapeDecorator s_decorator = new RectangleDecorator();
 
+        private Text _text;
+
         [IgnoreDataMember]
         public override IBounds Bounds { get; } = s_bounds;
 
         [IgnoreDataMember]
         public override IShapeDecorator Decorator { get; } = s_decorator;
+
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public Text Text
+        {
+            get => _text;
+            set => Update(ref _text, value);
+        }
 
         public RectangleShape()
             : base()
@@ -2926,6 +2990,13 @@ namespace Draw2D.ViewModels.Shapes
         public RectangleShape(PointShape topLeft, PointShape bottomRight)
             : base(topLeft, bottomRight)
         {
+        }
+
+        public override void Invalidate()
+        {
+            _text?.Invalidate();
+
+            base.Invalidate();
         }
 
         public override void Draw(object dc, IShapeRenderer renderer, double dx, double dy, DrawMode mode, object db, object r)
@@ -3000,11 +3071,20 @@ namespace Draw2D.ViewModels.Shapes
         internal static new IBounds s_bounds = new TextBounds();
         internal static new IShapeDecorator s_decorator = new TextDecorator();
 
+        private Text _text;
+
         [IgnoreDataMember]
         public override IBounds Bounds { get; } = s_bounds;
 
         [IgnoreDataMember]
         public override IShapeDecorator Decorator { get; } = s_decorator;
+
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public Text Text
+        {
+            get => _text;
+            set => Update(ref _text, value);
+        }
 
         public TextShape()
             : base()
@@ -3020,6 +3100,13 @@ namespace Draw2D.ViewModels.Shapes
             : base(topLeft, bottomRight)
         {
             this.Text = text;
+        }
+
+        public override void Invalidate()
+        {
+            _text?.Invalidate();
+
+            base.Invalidate();
         }
 
         public override void Draw(object dc, IShapeRenderer renderer, double dx, double dy, DrawMode mode, object db, object r)

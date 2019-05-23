@@ -25,13 +25,20 @@
             <ContentControl Content="{Binding Point2}"/>
         </TabItem>
         <TabItem Classes="default" Header="Points">
-            <ListBox Classes="default" Items="{Binding Points}">
-                <ListBox.DataTemplates>
-                    <DataTemplate>
-                        <TextBlock Classes="default" Text="{Binding}"/>
-                    </DataTemplate>
-                </ListBox.DataTemplates>
-            </ListBox>
+            <TabControl Classes="default" TabStripPlacement="Top">
+                <TabItem Classes="default" Header="Points">
+                    <ListBox x:Name="points" Classes="default" Items="{Binding Points}">
+                        <ListBox.DataTemplates>
+                            <DataTemplate>
+                                <TextBlock Classes="default" Text="{Binding}"/>
+                            </DataTemplate>
+                        </ListBox.DataTemplates>
+                    </ListBox>
+                </TabItem>
+                <TabItem Classes="default" Header="Selected">
+                    <ContentControl Content="{Binding #points.SelectedItem}"/>
+                </TabItem>
+            </TabControl>
         </TabItem>
         <TabItem Classes="default" Header="Style">
             <ContentControl Content="{Binding Style}"/>
