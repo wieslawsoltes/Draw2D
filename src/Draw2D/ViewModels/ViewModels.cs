@@ -147,7 +147,7 @@ namespace Draw2D.ViewModels
 
     public interface IDrawable
     {
-        string Style { get; set; }
+        string StyleId { get; set; }
         void Draw(object dc, IShapeRenderer renderer, double dx, double dy, DrawMode mode, object db, object r);
     }
 
@@ -646,13 +646,13 @@ namespace Draw2D.ViewModels.Shapes
         internal static IBounds s_bounds = null;
         internal static IShapeDecorator s_decorator = null;
 
-        private string _style;
+        private string _styleId;
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public string Style
+        public string StyleId
         {
-            get => _style;
-            set => Update(ref _style, value);
+            get => _styleId;
+            set => Update(ref _styleId, value);
         }
 
         [IgnoreDataMember]
@@ -1070,9 +1070,9 @@ namespace Draw2D.ViewModels.Shapes
 
         public override void Draw(object dc, IShapeRenderer renderer, double dx, double dy, DrawMode mode, object db, object r)
         {
-            if (Style != null && mode.HasFlag(DrawMode.Shape))
+            if (StyleId != null && mode.HasFlag(DrawMode.Shape))
             {
-                renderer.DrawConic(dc, this, Style, dx, dy);
+                renderer.DrawConic(dc, this, StyleId, dx, dy);
             }
 
             if (mode.HasFlag(DrawMode.Point))
@@ -1233,7 +1233,7 @@ namespace Draw2D.ViewModels.Shapes
             var copy = new ConicShape()
             {
                 Points = new ObservableCollection<PointShape>(),
-                Style = this.Style,
+                StyleId = this.StyleId,
                 Text = (Text)this.Text?.Copy(shared),
                 Weight = this.Weight
             };
@@ -1350,9 +1350,9 @@ namespace Draw2D.ViewModels.Shapes
 
         public override void Draw(object dc, IShapeRenderer renderer, double dx, double dy, DrawMode mode, object db, object r)
         {
-            if (Style != null && mode.HasFlag(DrawMode.Shape))
+            if (StyleId != null && mode.HasFlag(DrawMode.Shape))
             {
-                renderer.DrawCubicBezier(dc, this, Style, dx, dy);
+                renderer.DrawCubicBezier(dc, this, StyleId, dx, dy);
             }
 
             if (mode.HasFlag(DrawMode.Point))
@@ -1546,7 +1546,7 @@ namespace Draw2D.ViewModels.Shapes
             var copy = new CubicBezierShape()
             {
                 Points = new ObservableCollection<PointShape>(),
-                Style = this.Style,
+                StyleId = this.StyleId,
                 Text = (Text)this.Text?.Copy(shared)
             };
 
@@ -1607,9 +1607,9 @@ namespace Draw2D.ViewModels.Shapes
 
         public override void Draw(object dc, IShapeRenderer renderer, double dx, double dy, DrawMode mode, object db, object r)
         {
-            if (Style != null && mode.HasFlag(DrawMode.Shape))
+            if (StyleId != null && mode.HasFlag(DrawMode.Shape))
             {
-                renderer.DrawEllipse(dc, this, Style, dx, dy);
+                renderer.DrawEllipse(dc, this, StyleId, dx, dy);
             }
 
             if (mode.HasFlag(DrawMode.Point))
@@ -1633,7 +1633,7 @@ namespace Draw2D.ViewModels.Shapes
             var copy = new EllipseShape()
             {
                 Points = new ObservableCollection<PointShape>(),
-                Style = this.Style,
+                StyleId = this.StyleId,
                 Text = (Text)this.Text?.Copy(shared)
             };
 
@@ -1779,7 +1779,7 @@ namespace Draw2D.ViewModels.Shapes
             {
                 Shapes = new ObservableCollection<BaseShape>(),
                 Name = this.Name,
-                Style = this.Style,
+                StyleId = this.StyleId,
                 IsFilled = this.IsFilled,
                 IsClosed = this.IsClosed
             };
@@ -1912,7 +1912,7 @@ namespace Draw2D.ViewModels.Shapes
                 Title = this.Title,
                 Points = new ObservableCollection<PointShape>(),
                 Shapes = new ObservableCollection<BaseShape>(),
-                Style = this.Style
+                StyleId = this.StyleId
             };
 
             if (shared != null)
@@ -2007,9 +2007,9 @@ namespace Draw2D.ViewModels.Shapes
 
         public override void Draw(object dc, IShapeRenderer renderer, double dx, double dy, DrawMode mode, object db, object r)
         {
-            if (Style != null && mode.HasFlag(DrawMode.Shape))
+            if (StyleId != null && mode.HasFlag(DrawMode.Shape))
             {
-                renderer.DrawLine(dc, this, Style, dx, dy);
+                renderer.DrawLine(dc, this, StyleId, dx, dy);
             }
 
             if (mode.HasFlag(DrawMode.Point))
@@ -2137,7 +2137,7 @@ namespace Draw2D.ViewModels.Shapes
             var copy = new LineShape()
             {
                 Points = new ObservableCollection<PointShape>(),
-                Style = this.Style,
+                StyleId = this.StyleId,
                 Text = (Text)this.Text?.Copy(shared)
             };
 
@@ -2331,9 +2331,9 @@ namespace Draw2D.ViewModels.Shapes
         {
             var isPathSelected = renderer.SelectionState?.IsSelected(this) ?? false;
 
-            if (Style != null && mode.HasFlag(DrawMode.Shape))
+            if (StyleId != null && mode.HasFlag(DrawMode.Shape))
             {
-                renderer.DrawPath(dc, this, Style, dx, dy);
+                renderer.DrawPath(dc, this, StyleId, dx, dy);
             }
 
             if (mode.HasFlag(DrawMode.Point))
@@ -2549,7 +2549,7 @@ namespace Draw2D.ViewModels.Shapes
                 Title = this.Title,
                 Points = new ObservableCollection<PointShape>(),
                 Figures = new ObservableCollection<FigureShape>(),
-                Style = this.Style,
+                StyleId = this.StyleId,
                 FillRule = this.FillRule,
                 Text = (Text)this.Text?.Copy(shared)
             };
@@ -2654,7 +2654,7 @@ namespace Draw2D.ViewModels.Shapes
         {
             return new PointShape()
             {
-                Style = this.Style,
+                StyleId = this.StyleId,
                 X = this.X,
                 Y = this.Y,
                 Template = this.Template
@@ -2759,9 +2759,9 @@ namespace Draw2D.ViewModels.Shapes
 
         public override void Draw(object dc, IShapeRenderer renderer, double dx, double dy, DrawMode mode, object db, object r)
         {
-            if (Style != null && mode.HasFlag(DrawMode.Shape))
+            if (StyleId != null && mode.HasFlag(DrawMode.Shape))
             {
-                renderer.DrawQuadraticBezier(dc, this, Style, dx, dy);
+                renderer.DrawQuadraticBezier(dc, this, StyleId, dx, dy);
             }
 
             if (mode.HasFlag(DrawMode.Point))
@@ -2922,7 +2922,7 @@ namespace Draw2D.ViewModels.Shapes
             var copy = new QuadraticBezierShape()
             {
                 Points = new ObservableCollection<PointShape>(),
-                Style = this.Style,
+                StyleId = this.StyleId,
                 Text = (Text)this.Text?.Copy(shared)
             };
 
@@ -2982,9 +2982,9 @@ namespace Draw2D.ViewModels.Shapes
 
         public override void Draw(object dc, IShapeRenderer renderer, double dx, double dy, DrawMode mode, object db, object r)
         {
-            if (Style != null && mode.HasFlag(DrawMode.Shape))
+            if (StyleId != null && mode.HasFlag(DrawMode.Shape))
             {
-                renderer.DrawRectangle(dc, this, Style, dx, dy);
+                renderer.DrawRectangle(dc, this, StyleId, dx, dy);
             }
 
             if (mode.HasFlag(DrawMode.Point))
@@ -3009,7 +3009,7 @@ namespace Draw2D.ViewModels.Shapes
             {
                 Points = new ObservableCollection<PointShape>(),
                 Text = (Text)this.Text?.Copy(shared),
-                Style = this.Style
+                StyleId = this.StyleId
             };
 
             if (shared != null)
@@ -3092,9 +3092,9 @@ namespace Draw2D.ViewModels.Shapes
 
         public override void Draw(object dc, IShapeRenderer renderer, double dx, double dy, DrawMode mode, object db, object r)
         {
-            if (Style != null && mode.HasFlag(DrawMode.Shape))
+            if (StyleId != null && mode.HasFlag(DrawMode.Shape))
             {
-                renderer.DrawText(dc, this, Style, dx, dy);
+                renderer.DrawText(dc, this, StyleId, dx, dy);
             }
 
             if (mode.HasFlag(DrawMode.Point))
@@ -3118,7 +3118,7 @@ namespace Draw2D.ViewModels.Shapes
             var copy = new TextShape()
             {
                 Points = new ObservableCollection<PointShape>(),
-                Style = this.Style,
+                StyleId = this.StyleId,
                 Text = (Text)this.Text?.Copy(shared)
             };
 
@@ -3380,7 +3380,7 @@ namespace Draw2D.ViewModels.Containers
             {
                 Shapes = new ObservableCollection<BaseShape>(),
                 Name = this.Name,
-                Style = this.Style
+                StyleId = this.StyleId
             };
 
             foreach (var shape in this.Shapes)
@@ -3932,8 +3932,8 @@ namespace Draw2D.ViewModels.Decorators
     [DataContract(IsReference = true)]
     public abstract class CommonDecorator : IShapeDecorator
     {
-        private readonly string _strokeStyle;
-        private readonly string _fillStyle;
+        private readonly string _strokeStyleId;
+        private readonly string _fillStyleId;
         private readonly LineShape _line;
         private readonly EllipseShape _ellipse;
         private readonly RectangleShape _rectangle;
@@ -3941,8 +3941,8 @@ namespace Draw2D.ViewModels.Decorators
 
         public CommonDecorator()
         {
-            _strokeStyle = "Decorator-Stroke";
-            _fillStyle = "Decorator-Fill";
+            _strokeStyleId = "Decorator-Stroke";
+            _fillStyleId = "Decorator-Fill";
             _line = new LineShape(new PointShape(0, 0, null), new PointShape(0, 0, null))
             {
                 Points = new ObservableCollection<PointShape>()
@@ -3963,7 +3963,7 @@ namespace Draw2D.ViewModels.Decorators
 
         internal void DrawLine(object dc, IShapeRenderer renderer, PointShape a, PointShape b, double dx, double dy, DrawMode mode)
         {
-            _line.Style = _strokeStyle;
+            _line.StyleId = _strokeStyleId;
             _line.StartPoint.X = a.X;
             _line.StartPoint.Y = a.Y;
             _line.Point.X = b.X;
@@ -3973,7 +3973,7 @@ namespace Draw2D.ViewModels.Decorators
 
         internal void DrawLine(object dc, IShapeRenderer renderer, double ax, double ay, double bx, double by, double dx, double dy, DrawMode mode)
         {
-            _line.Style = _strokeStyle;
+            _line.StyleId = _strokeStyleId;
             _line.StartPoint.X = ax;
             _line.StartPoint.Y = ay;
             _line.Point.X = bx;
@@ -3983,7 +3983,7 @@ namespace Draw2D.ViewModels.Decorators
 
         internal void FillEllipse(object dc, IShapeRenderer renderer, PointShape s, double radius, double dx, double dy, DrawMode mode)
         {
-            _ellipse.Style = _fillStyle;
+            _ellipse.StyleId = _fillStyleId;
             _ellipse.TopLeft.X = s.X - radius;
             _ellipse.TopLeft.Y = s.Y - radius;
             _ellipse.BottomRight.X = s.X + radius;
@@ -3993,7 +3993,7 @@ namespace Draw2D.ViewModels.Decorators
 
         internal void FillEllipse(object dc, IShapeRenderer renderer, double sx, double sy, double radius, double dx, double dy, DrawMode mode)
         {
-            _ellipse.Style = _fillStyle;
+            _ellipse.StyleId = _fillStyleId;
             _ellipse.TopLeft.X = sx - radius;
             _ellipse.TopLeft.Y = sy - radius;
             _ellipse.BottomRight.X = sx + radius;
@@ -4003,7 +4003,7 @@ namespace Draw2D.ViewModels.Decorators
 
         internal void DrawEllipse(object dc, IShapeRenderer renderer, PointShape s, double radius, double dx, double dy, DrawMode mode)
         {
-            _ellipse.Style = _strokeStyle;
+            _ellipse.StyleId = _strokeStyleId;
             _ellipse.TopLeft.X = s.X - radius;
             _ellipse.TopLeft.Y = s.Y - radius;
             _ellipse.BottomRight.X = s.X + radius;
@@ -4013,7 +4013,7 @@ namespace Draw2D.ViewModels.Decorators
 
         internal void DrawEllipse(object dc, IShapeRenderer renderer, double sx, double sy, double radius, double dx, double dy, DrawMode mode)
         {
-            _ellipse.Style = _strokeStyle;
+            _ellipse.StyleId = _strokeStyleId;
             _ellipse.TopLeft.X = sx - radius;
             _ellipse.TopLeft.Y = sy - radius;
             _ellipse.BottomRight.X = sx + radius;
@@ -4023,7 +4023,7 @@ namespace Draw2D.ViewModels.Decorators
 
         internal void FillEllipse(object dc, IShapeRenderer renderer, PointShape a, PointShape b, double dx, double dy, DrawMode mode)
         {
-            _ellipse.Style = _fillStyle;
+            _ellipse.StyleId = _fillStyleId;
             _ellipse.TopLeft.X = a.X;
             _ellipse.TopLeft.Y = a.Y;
             _ellipse.BottomRight.X = b.X;
@@ -4033,7 +4033,7 @@ namespace Draw2D.ViewModels.Decorators
 
         internal void FillEllipse(object dc, IShapeRenderer renderer, double ax, double ay, double bx, double by, double dx, double dy, DrawMode mode)
         {
-            _ellipse.Style = _fillStyle;
+            _ellipse.StyleId = _fillStyleId;
             _ellipse.TopLeft.X = ax;
             _ellipse.TopLeft.Y = ay;
             _ellipse.BottomRight.X = bx;
@@ -4043,7 +4043,7 @@ namespace Draw2D.ViewModels.Decorators
 
         internal void DrawEllipse(object dc, IShapeRenderer renderer, PointShape a, PointShape b, double dx, double dy, DrawMode mode)
         {
-            _ellipse.Style = _strokeStyle;
+            _ellipse.StyleId = _strokeStyleId;
             _ellipse.TopLeft.X = a.X;
             _ellipse.TopLeft.Y = a.Y;
             _ellipse.BottomRight.X = b.X;
@@ -4053,7 +4053,7 @@ namespace Draw2D.ViewModels.Decorators
 
         internal void DrawEllipse(object dc, IShapeRenderer renderer, double ax, double ay, double bx, double by, double dx, double dy, DrawMode mode)
         {
-            _ellipse.Style = _strokeStyle;
+            _ellipse.StyleId = _strokeStyleId;
             _ellipse.TopLeft.X = ax;
             _ellipse.TopLeft.Y = ay;
             _ellipse.BottomRight.X = bx;
@@ -4063,7 +4063,7 @@ namespace Draw2D.ViewModels.Decorators
 
         internal void FillRectangle(object dc, IShapeRenderer renderer, PointShape s, double radius, double dx, double dy, DrawMode mode)
         {
-            _rectangle.Style = _fillStyle;
+            _rectangle.StyleId = _fillStyleId;
             _rectangle.TopLeft.X = s.X - radius;
             _rectangle.TopLeft.Y = s.Y - radius;
             _rectangle.BottomRight.X = s.X + radius;
@@ -4073,7 +4073,7 @@ namespace Draw2D.ViewModels.Decorators
 
         internal void FillRectangle(object dc, IShapeRenderer renderer, double sx, double sy, double radius, double dx, double dy, DrawMode mode)
         {
-            _rectangle.Style = _fillStyle;
+            _rectangle.StyleId = _fillStyleId;
             _rectangle.TopLeft.X = sx - radius;
             _rectangle.TopLeft.Y = sy - radius;
             _rectangle.BottomRight.X = sx + radius;
@@ -4083,7 +4083,7 @@ namespace Draw2D.ViewModels.Decorators
 
         internal void DrawRectangle(object dc, IShapeRenderer renderer, PointShape s, double radius, double dx, double dy, DrawMode mode)
         {
-            _rectangle.Style = _strokeStyle;
+            _rectangle.StyleId = _strokeStyleId;
             _rectangle.TopLeft.X = s.X - radius;
             _rectangle.TopLeft.Y = s.Y - radius;
             _rectangle.BottomRight.X = s.X + radius;
@@ -4093,7 +4093,7 @@ namespace Draw2D.ViewModels.Decorators
 
         internal void DrawRectangle(object dc, IShapeRenderer renderer, double sx, double sy, double radius, double dx, double dy, DrawMode mode)
         {
-            _rectangle.Style = _strokeStyle;
+            _rectangle.StyleId = _strokeStyleId;
             _rectangle.TopLeft.X = sx - radius;
             _rectangle.TopLeft.Y = sy - radius;
             _rectangle.BottomRight.X = sx + radius;
@@ -4103,7 +4103,7 @@ namespace Draw2D.ViewModels.Decorators
 
         internal void FillRectangle(object dc, IShapeRenderer renderer, PointShape a, PointShape b, double dx, double dy, DrawMode mode)
         {
-            _rectangle.Style = _fillStyle;
+            _rectangle.StyleId = _fillStyleId;
             _rectangle.TopLeft.X = a.X;
             _rectangle.TopLeft.Y = a.Y;
             _rectangle.BottomRight.X = b.X;
@@ -4113,7 +4113,7 @@ namespace Draw2D.ViewModels.Decorators
 
         internal void FillRectangle(object dc, IShapeRenderer renderer, double ax, double ay, double bx, double by, double dx, double dy, DrawMode mode)
         {
-            _rectangle.Style = _fillStyle;
+            _rectangle.StyleId = _fillStyleId;
             _rectangle.TopLeft.X = ax;
             _rectangle.TopLeft.Y = ay;
             _rectangle.BottomRight.X = bx;
@@ -4123,7 +4123,7 @@ namespace Draw2D.ViewModels.Decorators
 
         internal void DrawRectangle(object dc, IShapeRenderer renderer, PointShape a, PointShape b, double dx, double dy, DrawMode mode)
         {
-            _rectangle.Style = _strokeStyle;
+            _rectangle.StyleId = _strokeStyleId;
             _rectangle.TopLeft.X = a.X;
             _rectangle.TopLeft.Y = a.Y;
             _rectangle.BottomRight.X = b.X;
@@ -4133,7 +4133,7 @@ namespace Draw2D.ViewModels.Decorators
 
         internal void DrawRectangle(object dc, IShapeRenderer renderer, double ax, double ay, double bx, double by, double dx, double dy, DrawMode mode)
         {
-            _rectangle.Style = _strokeStyle;
+            _rectangle.StyleId = _strokeStyleId;
             _rectangle.TopLeft.X = ax;
             _rectangle.TopLeft.Y = ay;
             _rectangle.BottomRight.X = bx;
@@ -4143,7 +4143,7 @@ namespace Draw2D.ViewModels.Decorators
 
         internal void DrawText(object dc, IShapeRenderer renderer, string text, PointShape a, PointShape b, double dx, double dy, DrawMode mode)
         {
-            _text.Style = _strokeStyle;
+            _text.StyleId = _strokeStyleId;
             _text.TopLeft.X = a.X;
             _text.TopLeft.Y = a.Y;
             _text.BottomRight.X = b.X;
@@ -4153,7 +4153,7 @@ namespace Draw2D.ViewModels.Decorators
 
         internal void DrawText(object dc, IShapeRenderer renderer, string text, double ax, double ay, double bx, double by, double dx, double dy, DrawMode mode)
         {
-            _text.Style = _strokeStyle;
+            _text.StyleId = _strokeStyleId;
             _text.TopLeft.X = ax;
             _text.TopLeft.Y = ay;
             _text.BottomRight.X = bx;
@@ -4577,7 +4577,7 @@ namespace Draw2D.ViewModels.Filters
                 Points = new ObservableCollection<PointShape>(),
                 StartPoint = new PointShape(0, y, null),
                 Point = new PointShape(context.ContainerView?.Width ?? 0, y, null),
-                Style = Settings.GuideStyle
+                StyleId = Settings.GuideStyle
             };
 
             var vertical = new LineShape()
@@ -4585,7 +4585,7 @@ namespace Draw2D.ViewModels.Filters
                 Points = new ObservableCollection<PointShape>(),
                 StartPoint = new PointShape(x, 0, null),
                 Point = new PointShape(x, context.ContainerView?.Height ?? 0, null),
-                Style = Settings.GuideStyle
+                StyleId = Settings.GuideStyle
             };
 
             Guides.Add(horizontal);
@@ -4741,7 +4741,7 @@ namespace Draw2D.ViewModels.Filters
                 Points = new ObservableCollection<PointShape>(),
                 StartPoint = new PointShape(0, y, null),
                 Point = new PointShape(context.ContainerView?.Width ?? 0, y, null),
-                Style = Settings.GuideStyle
+                StyleId = Settings.GuideStyle
             };
 
             var vertical = new LineShape()
@@ -4749,7 +4749,7 @@ namespace Draw2D.ViewModels.Filters
                 Points = new ObservableCollection<PointShape>(),
                 StartPoint = new PointShape(x, 0, null),
                 Point = new PointShape(x, context.ContainerView?.Height ?? 0, null),
-                Style = Settings.GuideStyle
+                StyleId = Settings.GuideStyle
             };
 
             Guides.Add(horizontal);
@@ -6052,7 +6052,7 @@ namespace Draw2D.ViewModels.Tools
                 Point2 = (PointShape)next.Copy(null),
                 Point3 = (PointShape)next.Copy(null),
                 Text = new Text(),
-                Style = context.StyleLibrary.CurrentStyle.Title
+                StyleId = context.StyleLibrary.CurrentStyle.Title
             };
             context.ContainerView?.WorkingContainer.Shapes.Add(_cubicBezier);
             context.ContainerView?.WorkingContainer.MarkAsDirty(true);
@@ -6347,7 +6347,7 @@ namespace Draw2D.ViewModels.Tools
                 TopLeft = context.ContainerView?.GetNextPoint(context, x, y, Settings?.ConnectPoints ?? false, Settings?.HitTestRadius ?? 7.0),
                 BottomRight = context.ContainerView?.GetNextPoint(context, x, y, false, 0.0),
                 Text = new Text(),
-                Style = context.StyleLibrary.CurrentStyle.Title
+                StyleId = context.StyleLibrary.CurrentStyle.Title
             };
             context.ContainerView?.WorkingContainer.Shapes.Add(_ellipse);
             context.ContainerView?.WorkingContainer.MarkAsDirty(true);
@@ -6529,7 +6529,7 @@ namespace Draw2D.ViewModels.Tools
                 var line = new LineShape(unique[i], unique[i + 1])
                 {
                     Points = new ObservableCollection<PointShape>(),
-                    Style = context.StyleLibrary.CurrentStyle.Title
+                    StyleId = context.StyleLibrary.CurrentStyle.Title
                 };
                 context.ContainerView?.CurrentContainer.Shapes.Add(line);
                 context.ContainerView?.CurrentContainer.MarkAsDirty(true);
@@ -6593,7 +6593,7 @@ namespace Draw2D.ViewModels.Tools
                 StartPoint = next,
                 Point = (PointShape)next.Copy(null),
                 Text = new Text(),
-                Style = context.StyleLibrary.CurrentStyle.Title
+                StyleId = context.StyleLibrary.CurrentStyle.Title
             };
             context.ContainerView?.WorkingContainer.Shapes.Add(_line);
             context.ContainerView?.WorkingContainer.MarkAsDirty(true);
@@ -7226,7 +7226,7 @@ namespace Draw2D.ViewModels.Tools
                 Figures = new ObservableCollection<FigureShape>(),
                 FillRule = Settings.FillRule,
                 Text = new Text(),
-                Style = context.StyleLibrary.CurrentStyle.Title
+                StyleId = context.StyleLibrary.CurrentStyle.Title
             };
 
             context.ContainerView?.WorkingContainer.Shapes.Add(_path);
@@ -7584,7 +7584,7 @@ namespace Draw2D.ViewModels.Tools
                 StartPoint = context.ContainerView?.GetNextPoint(context, x, y, Settings?.ConnectPoints ?? false, Settings?.HitTestRadius ?? 7.0),
                 Point = context.ContainerView?.GetNextPoint(context, x, y, false, 0.0),
                 Text = new Text(),
-                Style = context.StyleLibrary.CurrentStyle.Title
+                StyleId = context.StyleLibrary.CurrentStyle.Title
             };
             _points.Add(_line.StartPoint);
             _points.Add(_line.Point);
@@ -7625,7 +7625,7 @@ namespace Draw2D.ViewModels.Tools
                 StartPoint = _points.Last(),
                 Point = context.ContainerView?.GetNextPoint(context, x, y, false, 0.0),
                 Text = new Text(),
-                Style = context.StyleLibrary.CurrentStyle.Title
+                StyleId = context.StyleLibrary.CurrentStyle.Title
             };
             _points.Add(_line.Point);
             context.ContainerView?.WorkingContainer.Shapes.Add(_line);
@@ -7823,7 +7823,7 @@ namespace Draw2D.ViewModels.Tools
                 Point1 = (PointShape)next.Copy(null),
                 Point2 = (PointShape)next.Copy(null),
                 Text = new Text(),
-                Style = context.StyleLibrary.CurrentStyle.Title
+                StyleId = context.StyleLibrary.CurrentStyle.Title
             };
             context.ContainerView?.WorkingContainer.Shapes.Add(_quadraticBezier);
             context.ContainerView?.WorkingContainer.MarkAsDirty(true);
@@ -8086,7 +8086,7 @@ namespace Draw2D.ViewModels.Tools
                 Point2 = (PointShape)next.Copy(null),
                 Weight = Settings.Weight,
                 Text = new Text(),
-                Style = context.StyleLibrary.CurrentStyle.Title
+                StyleId = context.StyleLibrary.CurrentStyle.Title
             };
             context.ContainerView?.WorkingContainer.Shapes.Add(_conic);
             context.ContainerView?.WorkingContainer.MarkAsDirty(true);
@@ -8337,7 +8337,7 @@ namespace Draw2D.ViewModels.Tools
                 TopLeft = context.ContainerView?.GetNextPoint(context, x, y, Settings?.ConnectPoints ?? false, Settings?.HitTestRadius ?? 7.0),
                 BottomRight = context.ContainerView?.GetNextPoint(context, x, y, false, 0.0),
                 Text = new Text(),
-                Style = context.StyleLibrary.CurrentStyle.Title
+                StyleId = context.StyleLibrary.CurrentStyle.Title
             };
             context.ContainerView?.WorkingContainer.Shapes.Add(_rectangle);
             context.ContainerView?.WorkingContainer.MarkAsDirty(true);
@@ -8573,7 +8573,7 @@ namespace Draw2D.ViewModels.Tools
                 Figures = new ObservableCollection<FigureShape>(),
                 FillRule = Settings.FillRule,
                 Text = new Text(),
-                Style = context.StyleLibrary.CurrentStyle.Title
+                StyleId = context.StyleLibrary.CurrentStyle.Title
             };
 
             _figure = new FigureShape()
@@ -8632,7 +8632,7 @@ namespace Draw2D.ViewModels.Tools
                             StartPoint = distinct[i],
                             Point = distinct[i + 1],
                             Text = new Text(),
-                            Style = context.StyleLibrary.CurrentStyle.Title
+                            StyleId = context.StyleLibrary.CurrentStyle.Title
                         };
                         _figure.Shapes.Add(line);
                     }
@@ -8680,7 +8680,7 @@ namespace Draw2D.ViewModels.Tools
                 StartPoint = _previousPoint,
                 Point = _nextPoint,
                 Text = new Text(),
-                Style = context.StyleLibrary.CurrentStyle.Title
+                StyleId = context.StyleLibrary.CurrentStyle.Title
             };
 
             _figure.Shapes.Add(line);
@@ -8986,7 +8986,7 @@ namespace Draw2D.ViewModels.Tools
                 _rectangle.TopLeft.Y = y;
                 _rectangle.BottomRight.X = x;
                 _rectangle.BottomRight.Y = y;
-                _rectangle.Style = Settings?.SelectionStyle;
+                _rectangle.StyleId = Settings?.SelectionStyle;
                 context.ContainerView?.WorkingContainer.Shapes.Add(_rectangle);
                 context.ContainerView?.WorkingContainer.MarkAsDirty(true);
 
@@ -9814,7 +9814,7 @@ namespace Draw2D.ViewModels.Tools
                 TopLeft = context.ContainerView?.GetNextPoint(context, x, y, Settings?.ConnectPoints ?? false, Settings?.HitTestRadius ?? 7.0),
                 BottomRight = context.ContainerView?.GetNextPoint(context, x, y, false, 0.0),
                 Text = new Text("Text"),
-                Style = context.StyleLibrary.CurrentStyle.Title
+                StyleId = context.StyleLibrary.CurrentStyle.Title
             };
             context.ContainerView?.WorkingContainer.Shapes.Add(_text);
             context.ContainerView?.WorkingContainer.MarkAsDirty(true);

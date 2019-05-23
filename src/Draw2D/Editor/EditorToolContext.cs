@@ -355,7 +355,7 @@ namespace Draw2D.Editor
                         sb.AppendLine(SkiaHelper.ToGeometry(rectangle, 0.0, 0.0).ToSvgPathData());
                         if (!string.IsNullOrEmpty(rectangle.Text?.Value))
                         {
-                            var style = GetShapeStyle(rectangle.Style);
+                            var style = GetShapeStyle(rectangle.StyleId);
                             if (style != null)
                             {
                                 SkiaHelper.ToGeometry(rectangle.Text, rectangle.TopLeft, rectangle.BottomRight, style.TextStyle, 0.0, 0.0);
@@ -368,7 +368,7 @@ namespace Draw2D.Editor
                         sb.AppendLine(SkiaHelper.ToGeometry(ellipse, 0.0, 0.0).ToSvgPathData());
                         if (!string.IsNullOrEmpty(ellipse.Text?.Value))
                         {
-                            var style = GetShapeStyle(ellipse.Style);
+                            var style = GetShapeStyle(ellipse.StyleId);
                             if (style != null)
                             {
                                 SkiaHelper.ToGeometry(ellipse.Text, ellipse.TopLeft, ellipse.BottomRight, style.TextStyle, 0.0, 0.0);
@@ -396,7 +396,7 @@ namespace Draw2D.Editor
                     break;
                 case TextShape text:
                     {
-                        var style = GetShapeStyle(text.Style);
+                        var style = GetShapeStyle(text.StyleId);
                         if (style != null)
                         {
                             sb.AppendLine(SkiaHelper.ToGeometry(text, style.TextStyle, 0.0, 0.0).ToSvgPathData());
@@ -443,7 +443,7 @@ namespace Draw2D.Editor
             {
                 Points = new ObservableCollection<PointShape>(),
                 Text = new Text(),
-                Style = context.StyleLibrary.CurrentStyle.Title
+                StyleId = context.StyleLibrary.CurrentStyle.Title
             };
             group.Shapes.Add(rectangle);
             group.Points.Add(new PointShape(45, 30, context.PointTemplate));

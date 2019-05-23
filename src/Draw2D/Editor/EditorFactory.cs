@@ -463,7 +463,7 @@ namespace Draw2D.Editor
             {
                 Points = new ObservableCollection<PointShape>(),
                 Text = new Text(),
-                Style = "PointTemplate"
+                StyleId = "PointTemplate"
             };
 
             editorToolContext.ContainerViews = new ObservableCollection<IContainerView>();

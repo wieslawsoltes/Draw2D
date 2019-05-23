@@ -279,7 +279,7 @@ namespace Draw2D.Editor.Renderers
                 Figures = new ObservableCollection<FigureShape>(),
                 FillRule = PathFillRule.EvenOdd,
                 Text = new Text(),
-                Style = style.Title
+                StyleId = style.Title
             };
 
             var figureShape = default(FigureShape);
@@ -320,7 +320,7 @@ namespace Draw2D.Editor.Renderers
                                     StartPoint = lastPointShape,
                                     Point = new PointShape(points[1].X, points[1].Y, pointTemplate),
                                     Text = new Text(),
-                                    Style = style.Title
+                                    StyleId = style.Title
                                 };
                                 figureShape.Shapes.Add(lineShape);
                                 lastPoint = points[1];
@@ -341,7 +341,7 @@ namespace Draw2D.Editor.Renderers
                                     Point2 = new PointShape(points[2].X, points[2].Y, pointTemplate),
                                     Point3 = new PointShape(points[3].X, points[3].Y, pointTemplate),
                                     Text = new Text(),
-                                    Style = style.Title
+                                    StyleId = style.Title
                                 };
                                 figureShape.Shapes.Add(cubicBezierShape);
                                 lastPoint = points[3];
@@ -361,7 +361,7 @@ namespace Draw2D.Editor.Renderers
                                     Point1 = new PointShape(points[1].X, points[1].Y, pointTemplate),
                                     Point2 = new PointShape(points[2].X, points[2].Y, pointTemplate),
                                     Text = new Text(),
-                                    Style = style.Title
+                                    StyleId = style.Title
                                 };
                                 figureShape.Shapes.Add(quadraticBezierShape);
                                 lastPoint = points[2];
@@ -382,7 +382,7 @@ namespace Draw2D.Editor.Renderers
                                     Point2 = new PointShape(points[2].X, points[2].Y, pointTemplate),
                                     Weight = iterator.ConicWeight(),
                                     Text = new Text(),
-                                    Style = style.Title
+                                    StyleId = style.Title
                                 };
                                 figureShape.Shapes.Add(conicShape);
                                 lastPoint = points[2];
