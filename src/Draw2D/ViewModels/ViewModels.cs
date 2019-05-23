@@ -3146,7 +3146,7 @@ namespace Draw2D.ViewModels.Containers
         ShapeStyle CurrentStyle { get; set; }
         void Add(ShapeStyle style);
         void Remove(ShapeStyle value);
-        bool Get(string styleId, out ShapeStyle value);
+        ShapeStyle Get(string styleId);
     }
 
     public interface IDrawContainerView : IDisposable
@@ -3295,27 +3295,27 @@ namespace Draw2D.ViewModels.Containers
             }
         }
 
-        public bool Get(string styleId, out ShapeStyle value)
+        public ShapeStyle Get(string styleId)
         {
             if (_styleLibraryCache == null)
             {
                 UpdateCache();
             }
 
-            if (!_styleLibraryCache.TryGetValue(styleId, out value))
+            if (!_styleLibraryCache.TryGetValue(styleId, out var value))
             {
                 foreach (var style in _styles)
                 {
                     if (style.Title == styleId)
                     {
                         _styleLibraryCache[style.Title] = style;
-                        value = style;
-                        return true;
+                        return style;
                     }
                 }
-                return false;
+                return null;
             }
-            return true;
+
+            return value;
         }
     }
 
