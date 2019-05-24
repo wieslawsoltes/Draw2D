@@ -7,12 +7,13 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:Draw2D.Views"
              xmlns:controls="clr-namespace:Draw2D.Controls"
+             xmlns:converters="clr-namespace:Draw2D.Converters"
              UseLayoutRounding="True" RenderOptions.BitmapInterpolationMode="HighQuality"
              Focusable="True"
              mc:Ignorable="d"
              d:DesignWidth="800" d:DesignHeight="600">
     <UserControl.Resources>
-        <local:IsToolConverter x:Key="IsToolConverter"/>
+        <converters:IsToolConverter x:Key="IsToolConverter"/>
     </UserControl.Resources>
     <UserControl.KeyBindings>
         <!-- File -->
