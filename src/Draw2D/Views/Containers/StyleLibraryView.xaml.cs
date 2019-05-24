@@ -3,11 +3,11 @@
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 
-namespace Draw2D.Views
+namespace Draw2D.Views.Containers
 {
-    public class ZoomServiceView : UserControl
+    public class StyleLibraryView : UserControl
     {
-        public ZoomServiceView()
+        public StyleLibraryView()
         {
             InitializeComponent();
         }

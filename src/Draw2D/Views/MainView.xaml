@@ -266,49 +266,8 @@
                         </TabItem>
                     </TabControl>
                 </TabItem>
-                <TabItem Classes="default" Header="Style">
-                    <ContentControl Content="{Binding StyleLibrary.CurrentStyle}"/>
-                </TabItem>
-                <TabItem Classes="default" Header="Styles">
-                    <ListBox Classes="default" Items="{Binding StyleLibrary.Styles}" SelectedItem="{Binding StyleLibrary.CurrentStyle}">
-                        <ListBox.DataTemplates>
-                            <DataTemplate>
-                                <TextBlock Classes="default" Text="{Binding Title}"/>
-                            </DataTemplate>
-                        </ListBox.DataTemplates>
-                    </ListBox>
-                    <!--
-                    <DataGrid Items="{Binding StyleLibrary.Styles}" SelectedItem="{Binding StyleLibrary.CurrentStyle}" RowBackground="Transparent" AlternatingRowBackground="Transparent" CanUserResizeColumns="True" CanUserReorderColumns="True" AutoGenerateColumns="False">
-                        <DataGrid.Columns>
-                            <DataGridTextColumn Header="Title" Binding="{Binding Title}"/>
-                            <DataGridTextColumn Header="Thickness" Binding="{Binding Thickness}"/>
-                            <DataGridCheckBoxColumn Header="IsStroked" Binding="{Binding IsStroked}"/>
-                            <DataGridCheckBoxColumn Header="IsFilled" Binding="{Binding IsFilled}"/>
-                        </DataGrid.Columns>
-                    </DataGrid>
-                    -->
-                </TabItem>
-                <TabItem Classes="default" Header="Selection">
-                    <TabControl Classes="default" TabStripPlacement="Top">
-                        <TabItem Classes="default" Header="Selected">
-                            <ContentControl Content="{Binding ContainerView.SelectionState.Selected}"/>
-                        </TabItem>
-                        <TabItem Classes="default" Header="Hovered">
-                            <ContentControl Content="{Binding ContainerView.SelectionState.Hovered}"/>
-                        </TabItem>
-                        <TabItem Classes="default" Header="Shapes">
-                            <ListBox Classes="default" Items="{Binding ContainerView.SelectionState.Shapes, Mode=OneWay}">
-                                <ListBox.DataTemplates>
-                                    <DataTemplate>
-                                        <TextBlock Classes="default" Text="{Binding}"/>
-                                    </DataTemplate>
-                                </ListBox.DataTemplates>
-                            </ListBox>
-                        </TabItem>
-                    </TabControl>
-                </TabItem>
-                <TabItem Classes="default" Header="Zoom">
-                    <local:ZoomServiceView DataContext="{Binding ContainerView.ZoomService}"/>
+                <TabItem Classes="default" Header="StyleLibrary">
+                    <ContentControl Content="{Binding StyleLibrary}"/>
                 </TabItem>
             </TabControl>
         </Grid>

@@ -1,21 +1,44 @@
 ﻿<!-- Copyright (c) Wiesław Šoltés. All rights reserved. -->
 <!-- Licensed under the MIT license. See LICENSE file in the project root for full license information. -->
-<UserControl x:Class="Draw2D.Views.Tools.CubicBezierToolSettingsView"
+<UserControl x:Class="Draw2D.Views.Containers.StyleLibraryView"
              xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:local="clr-namespace:Draw2D.Views.Tools"
+             xmlns:local="clr-namespace:Draw2D.Views.Containers"
              mc:Ignorable="d"
              d:DesignWidth="400" d:DesignHeight="300">
     <TabControl Classes="default" TabStripPlacement="Top">
-        <TabItem Classes="default" Header="Settings">
-            <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="Auto,*">
-                <TextBlock Classes="default" Grid.Column="0" Grid.Row="0" Text="ConnectPoints"/>
-                <CheckBox Classes="default" Grid.Column="1" Grid.Row="0" IsChecked="{Binding ConnectPoints}"/>
-                <TextBlock Classes="default" Grid.Column="0" Grid.Row="1" Text="HitTestRadius"/>
-                <TextBox Classes="default" Grid.Column="1" Grid.Row="1" Text="{Binding HitTestRadius}"/>
-            </Grid>
+        <TabItem Classes="default" Header="Styles">
+            <ListBox x:Name="styles"  Classes="default" Items="{Binding Styles}" SelectedItem="{Binding CurrentStyle}">
+                <ListBox.DataTemplates>
+                    <DataTemplate>
+                        <TextBlock Classes="default" Text="{Binding Title}"/>
+                    </DataTemplate>
+                </ListBox.DataTemplates>
+            </ListBox>
+            <!--
+            <DataGrid x:Name="styles" Items="{Binding Styles}" SelectedItem="{Binding CurrentStyle}">
+                <DataGrid.Styles>
+                    <Style Selector="DataGrid">
+                        <Setter Property="RowBackground" Value="Transparent"/>
+                        <Setter Property="AlternatingRowBackground" Value="Transparent"/>
+                        <Setter Property="CanUserResizeColumns" Value="True"/>
+                        <Setter Property="CanUserReorderColumns" Value="True"/>
+                        <Setter Property="AutoGenerateColumns" Value="False"/>
+                    </Style>
+                </DataGrid.Styles>
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Title" Binding="{Binding Title}"/>
+                    <DataGridTextColumn Header="Thickness" Binding="{Binding Thickness}"/>
+                    <DataGridCheckBoxColumn Header="IsStroked" Binding="{Binding IsStroked}"/>
+                    <DataGridCheckBoxColumn Header="IsFilled" Binding="{Binding IsFilled}"/>
+                </DataGrid.Columns>
+            </DataGrid>
+            -->
+        </TabItem>
+        <TabItem Classes="default" Header="Selected">
+            <ContentControl Content="{Binding #styles.SelectedItem}"/>
         </TabItem>
         <TabItem Classes="default" Header="Object">
             <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="Auto,*">

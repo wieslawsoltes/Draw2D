@@ -1,20 +1,34 @@
 ﻿<!-- Copyright (c) Wiesław Šoltés. All rights reserved. -->
 <!-- Licensed under the MIT license. See LICENSE file in the project root for full license information. -->
-<UserControl x:Class="Draw2D.Views.Tools.CubicBezierToolSettingsView"
+<UserControl x:Class="Draw2D.Views.Containers.ZoomServiceStateView"
              xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:local="clr-namespace:Draw2D.Views.Tools"
+             xmlns:local="clr-namespace:Draw2D.Views.Containers"
              mc:Ignorable="d"
              d:DesignWidth="400" d:DesignHeight="300">
     <TabControl Classes="default" TabStripPlacement="Top">
         <TabItem Classes="default" Header="Settings">
-            <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="Auto,*">
-                <TextBlock Classes="default" Grid.Column="0" Grid.Row="0" Text="ConnectPoints"/>
-                <CheckBox Classes="default" Grid.Column="1" Grid.Row="0" IsChecked="{Binding ConnectPoints}"/>
-                <TextBlock Classes="default" Grid.Column="0" Grid.Row="1" Text="HitTestRadius"/>
-                <TextBox Classes="default" Grid.Column="1" Grid.Row="1" Text="{Binding HitTestRadius}"/>
+            <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="Auto,*">
+                <TextBlock Classes="default" Grid.Column="0" Grid.Row="0" Text="ZoomSpeed"/>
+                <TextBox Classes="default" Grid.Column="1" Grid.Row="0" Text="{Binding ZoomSpeed}"/>
+                <TextBlock Classes="default" Grid.Column="0" Grid.Row="1" Text="ZoomX"/>
+                <TextBox Classes="default" Grid.Column="1" Grid.Row="1" Text="{Binding ZoomX}"/>
+                <TextBlock Classes="default" Grid.Column="0" Grid.Row="2" Text="ZoomY"/>
+                <TextBox Classes="default" Grid.Column="1" Grid.Row="2" Text="{Binding ZoomY}"/>
+                <TextBlock Classes="default" Grid.Column="0" Grid.Row="3" Text="OffsetX"/>
+                <TextBox Classes="default" Grid.Column="1" Grid.Row="3" Text="{Binding OffsetX}"/>
+                <TextBlock Classes="default" Grid.Column="0" Grid.Row="4" Text="OffsetY"/>
+                <TextBox Classes="default" Grid.Column="1" Grid.Row="4" Text="{Binding OffsetY}"/>
+                <TextBlock Classes="default" Grid.Column="0" Grid.Row="5" Text="IsPanning"/>
+                <CheckBox Classes="default" Grid.Column="1" Grid.Row="5" IsEnabled="False" IsChecked="{Binding IsPanning, Mode=OneWay}"/>
+                <TextBlock Classes="default" Grid.Column="0" Grid.Row="6" Text="IsZooming"/>
+                <CheckBox Classes="default" Grid.Column="1" Grid.Row="6" IsEnabled="False" IsChecked="{Binding IsZooming, Mode=OneWay}"/>
+                <TextBlock Classes="default" Grid.Column="0" Grid.Row="7" Text="InitFitMode"/>
+                <TextBox Classes="default" Grid.Column="1" Grid.Row="7" Text="{Binding InitFitMode}"/>
+                <TextBlock Classes="default" Grid.Column="0" Grid.Row="8" Text="AutoFitMode"/>
+                <TextBox Classes="default" Grid.Column="1" Grid.Row="8" Text="{Binding AutoFitMode}"/>
             </Grid>
         </TabItem>
         <TabItem Classes="default" Header="Object">
