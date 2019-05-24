@@ -314,8 +314,11 @@ namespace Draw2D.Editor.Views
 
             if (view.InputBackground != null)
             {
-                GetSKPaintFill(view.InputBackground, out var brush);
-                canvas.DrawRect(SkiaHelper.ToRect(0.0, 0.0, width, height), brush);
+                canvas.Clear(SkiaHelper.ToSKColor(view.InputBackground));
+            }
+            else
+            {
+                canvas.Clear();
             }
 
             if (view.WorkBackground != null)

@@ -483,7 +483,7 @@ namespace Draw2D.Editor
                 Width = 720,
                 Height = 630,
                 PrintBackground = new ArgbColor(0, 255, 255, 255),
-                WorkBackground = new ArgbColor(255, 192, 192, 192),
+                WorkBackground = new ArgbColor(255, 222, 222, 222),
                 InputBackground = new ArgbColor(0, 128, 128, 128),
                 CurrentContainer = new CanvasContainer()
                 {
