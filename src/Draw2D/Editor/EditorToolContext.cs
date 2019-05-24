@@ -437,15 +437,20 @@ namespace Draw2D.Editor
                 Points = new ObservableCollection<PointShape>(),
                 Shapes = new ObservableCollection<BaseShape>()
             };
-            var topLeft = new PointShape(30, 30, context.PointTemplate);
-            var bottomRight = new PointShape(60, 60, context.PointTemplate);
-            var rectangle = new RectangleShape(topLeft, bottomRight)
-            {
-                Points = new ObservableCollection<PointShape>(),
-                Text = new Text(),
-                StyleId = context.StyleLibrary.CurrentStyle.Title
-            };
-            group.Shapes.Add(rectangle);
+            group.Shapes.Add(
+                new RectangleShape(new PointShape(30, 30, context.PointTemplate), new PointShape(60, 60, context.PointTemplate))
+                {
+                    Points = new ObservableCollection<PointShape>(),
+                    Text = new Text(),
+                    StyleId = context.StyleLibrary.CurrentStyle.Title
+                });
+            group.Shapes.Add(
+                new TextShape(new PointShape(30, 30, context.PointTemplate), new PointShape(60, 60, context.PointTemplate))
+                {
+                    Points = new ObservableCollection<PointShape>(),
+                    Text = new Text("&"),
+                    StyleId = context.StyleLibrary.CurrentStyle.Title
+                });
             group.Points.Add(new PointShape(45, 30, context.PointTemplate));
             group.Points.Add(new PointShape(45, 60, context.PointTemplate));
             group.Points.Add(new PointShape(30, 45, context.PointTemplate));

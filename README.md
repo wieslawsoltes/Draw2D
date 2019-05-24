@@ -40,15 +40,19 @@ dotnet /home/ubuntu/environment/src/Draw2D/bin/Debug/netcoreapp3.0/Draw2D.dll --
 Export view.
 ```
 dotnet build
-dotnet /home/ubuntu/environment/src/Draw2D/bin/Debug/netcoreapp3.0/Draw2D.dll --export styles.json View.json View0.svg
-dotnet /home/ubuntu/environment/src/Draw2D/bin/Debug/netcoreapp3.0/Draw2D.dll --export styles.json View0.json View.png
-dotnet /home/ubuntu/environment/src/Draw2D/bin/Debug/netcoreapp3.0/Draw2D.dll --export styles.json View0.json View.pdf
+dotnet /home/ubuntu/environment/src/Draw2D/bin/Debug/netcoreapp3.0/Draw2D.dll --new-styles
+dotnet /home/ubuntu/environment/src/Draw2D/bin/Debug/netcoreapp3.0/Draw2D.dll --new-view
+dotnet /home/ubuntu/environment/src/Draw2D/bin/Debug/netcoreapp3.0/Draw2D.dll --export styles.json View.json View.svg
+dotnet /home/ubuntu/environment/src/Draw2D/bin/Debug/netcoreapp3.0/Draw2D.dll --export styles.json View.json View.png
+dotnet /home/ubuntu/environment/src/Draw2D/bin/Debug/netcoreapp3.0/Draw2D.dll --export styles.json View.json View.pdf
 ```
 
 Demo view.
 ```
 dotnet build
+dotnet /home/ubuntu/environment/src/Draw2D/bin/Debug/netcoreapp3.0/Draw2D.dll --new-styles
 dotnet /home/ubuntu/environment/src/Draw2D/bin/Debug/netcoreapp3.0/Draw2D.dll --demo
+dotnet /home/ubuntu/environment/src/Draw2D/bin/Debug/netcoreapp3.0/Draw2D.dll --export styles.json Demo.json Demo.png
 ```
 
 
