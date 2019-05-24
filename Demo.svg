@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8" ?>
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="720" height="630">
-	<rect fill="rgb(255,255,255)" fill-opacity="0" stroke="none" width="720" height="630"/>
-	<path fill="none" stroke="rgb(0,0,0)" stroke-width="2" stroke-miterlimit="4" d="M30 30L60 30L60 60L30 60L30 30Z"/>
-	<text fill="rgb(0,0,0)" stroke="none" font-size="12" text-anchor="middle" font-family="Calibri" x="45" y="48">
-			&amp;
-	</text>
-</svg>
