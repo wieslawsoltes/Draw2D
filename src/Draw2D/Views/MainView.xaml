@@ -178,7 +178,7 @@
         </Menu>
         <Grid RowDefinitions="55*,Auto,45*" Grid.Row="2" Grid.Column="0">
             <TabControl Classes="default" Grid.Row="0" TabStripPlacement="Top">
-                <TabItem Classes="default" Header="Tool">
+                <TabItem Classes="default" Header="Tools">
                     <TabControl Classes="default" TabStripPlacement="Top">
                         <TabItem Classes="default" Header="Current">
                             <ContentControl Content="{Binding CurrentTool.Settings}"/>
@@ -250,7 +250,7 @@
             </TabControl>
             <GridSplitter Grid.Row="1"/>
             <TabControl Classes="default" Grid.Row="2" TabStripPlacement="Top">
-                <TabItem Classes="default" Header="View">
+                <TabItem Classes="default" Header="Views">
                     <TabControl Classes="default" TabStripPlacement="Top">
                         <TabItem Classes="default" Header="Current">
                             <ContentControl Content="{Binding ContainerView}"/>
