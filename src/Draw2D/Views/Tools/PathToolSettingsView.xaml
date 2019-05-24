@@ -51,6 +51,5 @@
                 <Button Classes="default" Content="SetUniqueId" Command="{Binding SetUniqueId}" Grid.Column="1" Grid.Row="6"/>
             </Grid>
         </TabItem>
-        </TabItem>
     </TabControl>
 </UserControl>
