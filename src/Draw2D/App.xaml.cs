@@ -12,157 +12,79 @@ using Draw2D.Views;
 
 namespace Draw2D
 {
-    public class App : Application
+    public class AppData
     {
-        private static string s_stylesPath = "styles.json";
-        private static string s_editorPath = "editor.json";
-        private static string s_windowPath = "window.json";
-        private static IFactory s_factory = null;
-        private static IStyleLibrary s_styleLibrary = null;
-        private static IToolContext s_toolContext = null;
-        private static WindowSettings s_windowSettings = null;
+        public static string StylesPath { get; set; }
+        public static string EditorPath { get; set; }
+        public static string WindowPath { get; set; }
+        public static IFactory Factory { get; set; }
+        public static IStyleLibrary StyleLibrary { get; set; }
+        public static IToolContext ToolContext { get; set; }
+        public static WindowSettings WindowSettings { get; set; }
 
-        [STAThread]
-        static void Main(string[] args)
+        public static void CreateFactory()
         {
-            try
+            Factory = new EditorFactory();
+        }
+
+        public static void CreateStyleLibrary()
+        {
+            StyleLibrary = Factory.CreateStyleLibrary();
+        }
+
+        public static void CreateToolContext()
+        {
+            ToolContext = Factory.CreateToolContext();
+            ToolContext.StyleLibrary = StyleLibrary;
+
+            if (ToolContext is EditorToolContext editorToolContext)
             {
-                s_factory = new EditorFactory();
-
-                if (args.Length == 1)
-                {
-                    var command = args[0];
-
-                    if (command == "--new-styles")
-                    {
-                        var styleLibrary = s_factory.CreateStyleLibrary();
-                        JsonSerializer.ToJsonFile("styles.json", styleLibrary);
-                        return;
-                    }
-
-                    if (command == "--new-view")
-                    {
-                        var containerView = s_factory.CreateContainerView("View");
-                        JsonSerializer.ToJsonFile(containerView.Title + ".json", containerView);
-                        return;
-                    }
-
-                    if (command == "--new-editor")
-                    {
-                        var toolContext = s_factory.CreateToolContext();
-                        JsonSerializer.ToJsonFile("editor.json", toolContext);
-                        return;
-                    }
-
-                    if (command == "--demo")
-                    {
-                        var toolContext = s_factory.CreateToolContext();
-                        var styleLibrary = s_factory.CreateStyleLibrary();
-                        toolContext.StyleLibrary = styleLibrary;
-                        if (toolContext is EditorToolContext editorToolContext)
-                        {
-                            editorToolContext.NewContainerView("Demo");
-                            editorToolContext.CreateDemoGroup(editorToolContext);
-                            JsonSerializer.ToJsonFile("Demo.json", editorToolContext.ContainerView);
-                        }
-                        return;
-                    }
-                }
-                else if (args.Length == 4)
-                {
-                    var command = args[0];
-
-                    if (command == "--export")
-                    {
-                        var styleLibrary = JsonSerializer.FromJsonFile<IStyleLibrary>(args[1]);
-                        var containerView = JsonSerializer.FromJsonFile<ContainerView>(args[2]);
-                        EditorToolContext.Export(args[3], containerView, styleLibrary);
-                        return;
-                    }
-                }
-
-                BuildAvaloniaApp().Start(AppMain, args);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                Console.WriteLine(ex.StackTrace);
+                editorToolContext.Factory = Factory;
+                editorToolContext.NewContainerView("View");
+                editorToolContext.CurrentDirectory = Directory.GetCurrentDirectory();
+                editorToolContext.AddFiles(editorToolContext.CurrentDirectory);
             }
         }
 
-        static void AppMain(Application app, string[] args)
+        public static void InitContainerViews()
         {
-            if (File.Exists(s_stylesPath))
+            if (ToolContext is EditorToolContext editorToolContext)
             {
-                s_styleLibrary = JsonSerializer.FromJsonFile<IStyleLibrary>(s_stylesPath);
-            }
-            else
-            {
-                s_styleLibrary = s_factory.CreateStyleLibrary();
-            }
-
-            if (File.Exists(s_editorPath))
-            {
-                s_toolContext = JsonSerializer.FromJsonFile<IToolContext>(s_editorPath);
-                s_toolContext.StyleLibrary = s_styleLibrary;
-
-                if (s_toolContext is EditorToolContext editorToolContext)
+                editorToolContext.Factory = Factory;
+                foreach (var containerView in editorToolContext.ContainerViews)
                 {
-                    editorToolContext.Factory = s_factory;
-                    foreach (var containerView in editorToolContext.ContainerViews)
-                    {
-                        editorToolContext.InitContainerView(containerView);
-                    }
+                    editorToolContext.InitContainerView(containerView);
                 }
             }
-            else
-            {
-                s_toolContext = s_factory.CreateToolContext();
-                s_toolContext.StyleLibrary = s_styleLibrary;
+        }
 
-                if (s_toolContext is EditorToolContext editorToolContext)
-                {
-                    editorToolContext.Factory = s_factory;
-                    editorToolContext.NewContainerView("View");
-                    editorToolContext.CurrentDirectory = Directory.GetCurrentDirectory();
-                    editorToolContext.AddFiles(editorToolContext.CurrentDirectory);
-                }
-            }
-
-            if (File.Exists(s_windowPath))
+        public static void CreateWindowSettings()
+        {
+            WindowSettings = new WindowSettings()
             {
-                s_windowSettings = JsonSerializer.FromJsonFile<WindowSettings>(s_windowPath);
-            }
-            else
-            {
-                s_windowSettings = new WindowSettings()
-                {
-                    Width = 1320,
-                    Height = 690,
-                    X = double.NaN,
-                    Y = double.NaN,
-                    WindowState = WindowState.Normal
-                };
-            }
-
-            var window = new MainWindow
-            {
-                DataContext = s_toolContext
+                Width = 1320,
+                Height = 690,
+                X = double.NaN,
+                Y = double.NaN,
+                WindowState = WindowState.Normal
             };
+        }
 
-            if (!double.IsNaN(s_windowSettings.Width))
+        public static void SetWindowSettings(Window window)
+        {
+            if (!double.IsNaN(WindowSettings.Width))
             {
-                window.Width = s_windowSettings.Width;
+                window.Width = WindowSettings.Width;
             }
 
-            if (!double.IsNaN(s_windowSettings.Height))
+            if (!double.IsNaN(WindowSettings.Height))
             {
-                window.Height = s_windowSettings.Height;
+                window.Height = WindowSettings.Height;
             }
 
-            if (!double.IsNaN(s_windowSettings.X) && !double.IsNaN(s_windowSettings.Y))
+            if (!double.IsNaN(WindowSettings.X) && !double.IsNaN(WindowSettings.Y))
             {
-                window.Position = new PixelPoint((int)s_windowSettings.X, (int)s_windowSettings.Y);
+                window.Position = new PixelPoint((int)WindowSettings.X, (int)WindowSettings.Y);
                 window.WindowStartupLocation = WindowStartupLocation.Manual;
             }
             else
@@ -170,28 +92,150 @@ namespace Draw2D
                 window.WindowStartupLocation = WindowStartupLocation.CenterScreen;
             }
 
-            window.WindowState = s_windowSettings.WindowState;
+            window.WindowState = WindowSettings.WindowState;
+        }
+
+        public static void GetWindowSettings(Window window)
+        {
+            WindowSettings.Width = window.Width;
+            WindowSettings.Height = window.Height;
+            WindowSettings.X = window.Position.X;
+            WindowSettings.Y = window.Position.Y;
+            WindowSettings.WindowState = window.WindowState;
+        }
+    }
+
+    public class App : Application
+    {
+        static App()
+        {
+            AppData.StylesPath = "styles.json";
+            AppData.EditorPath = "editor.json";
+            AppData.WindowPath = "window.json";
+
+            AppData.CreateFactory();
+
+            if (Design.IsDesignMode)
+            {
+                AppData.CreateStyleLibrary();
+                AppData.CreateToolContext();
+                AppData.InitContainerViews();
+                AppData.CreateWindowSettings();
+            }
+        }
+
+        [STAThread]
+        static void Main(string[] args)
+        {
+            if (args.Length == 1)
+            {
+                var command = args[0];
+
+                if (command == "--new-styles")
+                {
+                    var styleLibrary = AppData.Factory.CreateStyleLibrary();
+                    JsonSerializer.ToJsonFile("styles.json", styleLibrary);
+                    return;
+                }
+
+                if (command == "--new-view")
+                {
+                    var containerView = AppData.Factory.CreateContainerView("View");
+                    JsonSerializer.ToJsonFile(containerView.Title + ".json", containerView);
+                    return;
+                }
+
+                if (command == "--new-editor")
+                {
+                    var toolContext = AppData.Factory.CreateToolContext();
+                    JsonSerializer.ToJsonFile("editor.json", toolContext);
+                    return;
+                }
+
+                if (command == "--demo")
+                {
+                    var toolContext = AppData.Factory.CreateToolContext();
+                    var styleLibrary = AppData.Factory.CreateStyleLibrary();
+                    toolContext.StyleLibrary = styleLibrary;
+                    if (toolContext is EditorToolContext editorToolContext)
+                    {
+                        editorToolContext.NewContainerView("Demo");
+                        editorToolContext.CreateDemoGroup(editorToolContext);
+                        JsonSerializer.ToJsonFile("Demo.json", editorToolContext.ContainerView);
+                    }
+                    return;
+                }
+            }
+            else if (args.Length == 4)
+            {
+                var command = args[0];
+
+                if (command == "--export")
+                {
+                    var styleLibrary = JsonSerializer.FromJsonFile<IStyleLibrary>(args[1]);
+                    var containerView = JsonSerializer.FromJsonFile<ContainerView>(args[2]);
+                    EditorToolContext.Export(args[3], containerView, styleLibrary);
+                    return;
+                }
+            }
+
+            BuildAvaloniaApp().Start(AppMain, args);
+        }
+
+        static void AppMain(Application app, string[] args)
+        {
+            if (File.Exists(AppData.StylesPath))
+            {
+                AppData.StyleLibrary = JsonSerializer.FromJsonFile<IStyleLibrary>(AppData.StylesPath);
+            }
+            else
+            {
+                AppData.CreateStyleLibrary();
+            }
+
+            if (File.Exists(AppData.EditorPath))
+            {
+                AppData.ToolContext = JsonSerializer.FromJsonFile<IToolContext>(AppData.EditorPath);
+                AppData.ToolContext.StyleLibrary = AppData.StyleLibrary;
+                AppData.InitContainerViews();
+            }
+            else
+            {
+                AppData.CreateToolContext();
+            }
+
+            if (File.Exists(AppData.WindowPath))
+            {
+                AppData.WindowSettings = JsonSerializer.FromJsonFile<WindowSettings>(AppData.WindowPath);
+            }
+            else
+            {
+                AppData.CreateWindowSettings();
+            }
+
+            var window = new MainWindow
+            {
+                DataContext = AppData.ToolContext
+            };
+
+            AppData.SetWindowSettings(window);
 
             window.Closing += (sender, e) =>
             {
-                s_windowSettings.Width = window.Width;
-                s_windowSettings.Height = window.Height;
-                s_windowSettings.X = window.Position.X;
-                s_windowSettings.Y = window.Position.Y;
-                s_windowSettings.WindowState = window.WindowState;
+                AppData.GetWindowSettings(window);
             };
 
             app.Run(window);
 
-            JsonSerializer.ToJsonFile(s_stylesPath, s_toolContext.StyleLibrary);
-            JsonSerializer.ToJsonFile(s_editorPath, s_toolContext);
-            JsonSerializer.ToJsonFile(s_windowPath, s_windowSettings);
+            JsonSerializer.ToJsonFile(AppData.StylesPath, AppData.ToolContext.StyleLibrary);
+            JsonSerializer.ToJsonFile(AppData.EditorPath, AppData.ToolContext);
+            JsonSerializer.ToJsonFile(AppData.WindowPath, AppData.WindowSettings);
 
-            s_windowSettings = null;
-            s_toolContext.Dispose();
-            s_toolContext = null;
-            s_styleLibrary = null;
-            s_factory = null;
+            AppData.WindowSettings = null;
+            AppData.ToolContext.Dispose();
+            AppData.ToolContext = null;
+            AppData.StyleLibrary = null;
+            AppData.Factory = null;
         }
 
         public static AppBuilder BuildAvaloniaApp()

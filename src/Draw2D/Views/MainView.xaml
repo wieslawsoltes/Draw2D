@@ -6,12 +6,14 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:Draw2D.Views"
+             xmlns:app="clr-namespace:Draw2D"
              xmlns:controls="clr-namespace:Draw2D.Controls"
              xmlns:converters="clr-namespace:Draw2D.Converters"
              UseLayoutRounding="True" RenderOptions.BitmapInterpolationMode="HighQuality"
              Focusable="True"
              mc:Ignorable="d"
-             d:DesignWidth="800" d:DesignHeight="600">
+             d:DataContext="{x:Static app:AppData.ToolContext}"
+             d:DesignWidth="1320" d:DesignHeight="690">
     <UserControl.Resources>
         <converters:IsToolConverter x:Key="IsToolConverter"/>
     </UserControl.Resources>

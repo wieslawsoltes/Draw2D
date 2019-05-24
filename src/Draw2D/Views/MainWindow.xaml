@@ -6,11 +6,13 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:local="clr-namespace:Draw2D.Views"
+        xmlns:app="clr-namespace:Draw2D"
         WindowState="Normal" WindowStartupLocation="CenterScreen"
         UseLayoutRounding="True" RenderOptions.BitmapInterpolationMode="HighQuality"
         Foreground="{DynamicResource ThemeForegroundBrush}"
         Title="Draw2D" Height="690" Width="1320"
         mc:Ignorable="d"
-        d:DesignWidth="1000" d:DesignHeight="700">
+        d:DataContext="{x:Static app:AppData.ToolContext}"
+        d:DesignWidth="1320" d:DesignHeight="690">
     <local:MainView/>
 </Window>
