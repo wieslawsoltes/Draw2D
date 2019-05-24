@@ -50,11 +50,11 @@ namespace Draw2D.Editor.Views
                     _renderTarget = new RenderTargetBitmap(new PixelSize((int)width, (int)height), new Vector(96, 96));
                 }
 
-                using (var _drawingContextImpl = _renderTarget.CreateDrawingContext(null))
+                using (var drawingContextImpl = _renderTarget.CreateDrawingContext(null))
                 {
-                    var _skiaDrawingContextImpl = _drawingContextImpl as ISkiaDrawingContextImpl;
+                    var skiaDrawingContextImpl = drawingContextImpl as ISkiaDrawingContextImpl;
 
-                    _editorSkiaView.Draw(view, _skiaDrawingContextImpl.SkCanvas, width, height, dx, dy, zx, zy);
+                    _editorSkiaView.Draw(view, skiaDrawingContextImpl.SkCanvas, width, height, dx, dy, zx, zy);
 
                     drawingContext.DrawImage(_renderTarget, 1.0,
                         new Rect(0, 0, _renderTarget.PixelSize.Width, _renderTarget.PixelSize.Height),
