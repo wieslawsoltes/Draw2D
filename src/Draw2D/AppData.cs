@@ -118,7 +118,7 @@ namespace Draw2D
             WindowSettings.WindowState = window.WindowState;
         }
 
-        public static Window Open()
+        public static Window Load()
         {
             if (File.Exists(StylesPath))
             {

@@ -28,7 +28,7 @@ namespace Draw2D
 
         private static void AppMain(Application app, string[] args)
         {
-            var window = AppData.Open();
+            var window = AppData.Load();
             if (window != null)
             {
                 app.Run(window);
