@@ -81,7 +81,7 @@ namespace Draw2D.Editor
 
         public void InitContainerView(IContainerView containerView)
         {
-            containerView.DrawContainerView = new AvaloniaSkiaView(StyleLibrary);
+            containerView.DrawContainerView = new AvaloniaSkiaView(this);
 
             containerView.WorkingContainer = new CanvasContainer()
             {
@@ -141,7 +141,7 @@ namespace Draw2D.Editor
             }
         }
 
-        public void Open(string path)
+        public void OpenView(string path)
         {
             var containerView = JsonSerializer.FromJsonFile<ContainerView>(path);
             if (containerView != null)
@@ -151,11 +151,29 @@ namespace Draw2D.Editor
             }
         }
 
-        public void Save(string path)
+        public void SaveView(string path)
         {
             if (ContainerView != null)
             {
                 JsonSerializer.ToJsonFile(path, ContainerView);
+            }
+        }
+
+        public void OpenStyles(string path)
+        {
+            var styleLibrary = JsonSerializer.FromJsonFile<IStyleLibrary>(path);
+            if (styleLibrary != null)
+            {
+                StyleLibrary = styleLibrary;
+                StyleLibrary.UpdateCache();
+            }
+        }
+
+        public void SaveStyles(string path)
+        {
+            if (StyleLibrary != null)
+            {
+                JsonSerializer.ToJsonFile(path, StyleLibrary);
             }
         }
 
@@ -170,7 +188,7 @@ namespace Draw2D.Editor
             {
                 foreach (var path in result)
                 {
-                    Open(path);
+                    OpenView(path);
                 }
             }
         }
@@ -186,7 +204,38 @@ namespace Draw2D.Editor
             if (result != null)
             {
                 var path = result;
-                Save(path);
+                SaveView(path);
+            }
+        }
+
+        public async void OpenStyleLibrary()
+        {
+            var dlg = new OpenFileDialog();
+            dlg.Filters.Add(new FileDialogFilter() { Name = "Json Files", Extensions = { "json" } });
+            dlg.Filters.Add(new FileDialogFilter() { Name = "All Files", Extensions = { "*" } });
+            dlg.AllowMultiple = false;
+            var result = await dlg.ShowAsync(Application.Current.Windows[0]);
+            if (result != null)
+            {
+                foreach (var path in result)
+                {
+                    OpenStyles(path);
+                }
+            }
+        }
+
+        public async void SaveStyleLibraryAs()
+        {
+            var dlg = new SaveFileDialog();
+            dlg.Filters.Add(new FileDialogFilter() { Name = "Json Files", Extensions = { "json" } });
+            dlg.Filters.Add(new FileDialogFilter() { Name = "All Files", Extensions = { "*" } });
+            dlg.InitialFileName = "styles";
+            dlg.DefaultExtension = "json";
+            var result = await dlg.ShowAsync(Application.Current.Windows[0]);
+            if (result != null)
+            {
+                var path = result;
+                SaveStyles(path);
             }
         }
 
@@ -210,24 +259,24 @@ namespace Draw2D.Editor
             // TODO: Convert picture to shapes.
         }
 
-        public static void ExportSvg(string path, IContainerView containerView, IStyleLibrary styleLibrary)
+        public static void ExportSvg(string path, IContainerView containerView, IToolContext context)
         {
             using (var stream = new SKFileWStream(path))
             using (var writer = new SKXmlStreamWriter(stream))
             using (var canvas = SKSvgCanvas.Create(SKRect.Create(0, 0, (int)containerView.Width, (int)containerView.Height), writer))
-            using (var skiaView = new ExportSkiaView(styleLibrary))
+            using (var skiaView = new ExportSkiaView(context))
             {
                 skiaView.Draw(containerView, canvas, containerView.Width, containerView.Height, 0, 0, 1.0, 1.0);
             }
         }
 
-        public static void ExportPng(string path, IContainerView containerView, IStyleLibrary styleLibrary)
+        public static void ExportPng(string path, IContainerView containerView, IToolContext context)
         {
             var info = new SKImageInfo((int)containerView.Width, (int)containerView.Height);
             using (var bitmap = new SKBitmap(info))
             {
                 using (var canvas = new SKCanvas(bitmap))
-                using (var skiaView = new ExportSkiaView(styleLibrary))
+                using (var skiaView = new ExportSkiaView(context))
                 {
                     skiaView.Draw(containerView, canvas, containerView.Width, containerView.Height, 0, 0, 1.0, 1.0);
                 }
@@ -240,33 +289,33 @@ namespace Draw2D.Editor
             }
         }
 
-        public static void ExportPdf(string path, IContainerView containerView, IStyleLibrary styleLibrary)
+        public static void ExportPdf(string path, IContainerView containerView, IToolContext context)
         {
             using (var stream = new SKFileWStream(path))
             using (var pdf = SKDocument.CreatePdf(stream, 72.0f))
             using (var canvas = pdf.BeginPage((float)containerView.Width, (float)containerView.Height))
-            using (var skiaView = new ExportSkiaView(styleLibrary))
+            using (var skiaView = new ExportSkiaView(context))
             {
                 skiaView.Draw(containerView, canvas, containerView.Width, containerView.Height, 0, 0, 1.0, 1.0);
                 pdf.Close();
             }
         }
 
-        public static void Export(string path, IContainerView containerView, IStyleLibrary styleLibrary)
+        public static void Export(string path, IContainerView containerView, IToolContext context)
         {
             var outputExtension = Path.GetExtension(path);
 
             if (string.Compare(outputExtension, ".svg", StringComparison.OrdinalIgnoreCase) == 0)
             {
-                ExportSvg(path, containerView, styleLibrary);
+                ExportSvg(path, containerView, context);
             }
             else if (string.Compare(outputExtension, ".png", StringComparison.OrdinalIgnoreCase) == 0)
             {
-                ExportPng(path, containerView, styleLibrary);
+                ExportPng(path, containerView, context);
             }
             else if (string.Compare(outputExtension, ".pdf", StringComparison.OrdinalIgnoreCase) == 0)
             {
-                ExportPdf(path, containerView, styleLibrary);
+                ExportPdf(path, containerView, context);
             }
         }
 
@@ -299,7 +348,7 @@ namespace Draw2D.Editor
             if (result != null)
             {
                 var path = result;
-                Export(path, ContainerView, StyleLibrary);
+                Export(path, ContainerView, this);
             }
         }
 

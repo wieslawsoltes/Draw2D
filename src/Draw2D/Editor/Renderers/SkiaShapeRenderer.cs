@@ -16,7 +16,7 @@ namespace Draw2D.Editor.Renderers
 {
     public class SkiaShapeRenderer : IShapeRenderer
     {
-        private IStyleLibrary _styleLibrary;
+        private IToolContext _context;
         private Dictionary<string, SKTypeface> _typefaceCache;
         private Dictionary<TextStyle, (SKPaint paint, SKFontMetrics metrics)> _textPaintCache;
         private Dictionary<ShapeStyle, SKPaint> _fillPaintCache;
@@ -26,9 +26,9 @@ namespace Draw2D.Editor.Renderers
 
         public ISelectionState SelectionState { get; set; }
 
-        public SkiaShapeRenderer(IStyleLibrary styleLibrary)
+        public SkiaShapeRenderer(IToolContext context)
         {
-            _styleLibrary = styleLibrary;
+            _context = context;
             _typefaceCache = new Dictionary<string, SKTypeface>();
             _textPaintCache = new Dictionary<TextStyle, (SKPaint paint, SKFontMetrics metrics)>();
             _fillPaintCache = new Dictionary<ShapeStyle, SKPaint>();
@@ -37,7 +37,7 @@ namespace Draw2D.Editor.Renderers
 
         public void Dispose()
         {
-            _styleLibrary = null;
+            _context = null;
 
             if (_typefaceCache != null)
             {
@@ -262,7 +262,7 @@ namespace Draw2D.Editor.Renderers
 
         public void DrawLine(object dc, LineShape line, string styleId, double dx, double dy)
         {
-            var style = _styleLibrary.Get(styleId);
+            var style = _context?.StyleLibrary?.Get(styleId);
             if (style == null)
             {
                 return;
@@ -299,7 +299,7 @@ namespace Draw2D.Editor.Renderers
 
         public void DrawCubicBezier(object dc, CubicBezierShape cubicBezier, string styleId, double dx, double dy)
         {
-            var style = _styleLibrary.Get(styleId);
+            var style = _context?.StyleLibrary?.Get(styleId);
             if (style == null)
             {
                 return;
@@ -329,7 +329,7 @@ namespace Draw2D.Editor.Renderers
 
         public void DrawQuadraticBezier(object dc, QuadraticBezierShape quadraticBezier, string styleId, double dx, double dy)
         {
-            var style = _styleLibrary.Get(styleId);
+            var style = _context?.StyleLibrary?.Get(styleId);
             if (style == null)
             {
                 return;
@@ -359,7 +359,7 @@ namespace Draw2D.Editor.Renderers
 
         public void DrawConic(object dc, ConicShape conic, string styleId, double dx, double dy)
         {
-            var style = _styleLibrary.Get(styleId);
+            var style = _context?.StyleLibrary?.Get(styleId);
             if (style == null)
             {
                 return;
@@ -389,7 +389,7 @@ namespace Draw2D.Editor.Renderers
 
         public void DrawPath(object dc, PathShape path, string styleId, double dx, double dy)
         {
-            var style = _styleLibrary.Get(styleId);
+            var style = _context?.StyleLibrary?.Get(styleId);
             if (style == null)
             {
                 return;
@@ -419,7 +419,7 @@ namespace Draw2D.Editor.Renderers
 
         public void DrawRectangle(object dc, RectangleShape rectangle, string styleId, double dx, double dy)
         {
-            var style = _styleLibrary.Get(styleId);
+            var style = _context?.StyleLibrary?.Get(styleId);
             if (style == null)
             {
                 return;
@@ -471,7 +471,7 @@ namespace Draw2D.Editor.Renderers
 
         public void DrawEllipse(object dc, EllipseShape ellipse, string styleId, double dx, double dy)
         {
-            var style = _styleLibrary.Get(styleId);
+            var style = _context?.StyleLibrary?.Get(styleId);
             if (style == null)
             {
                 return;
@@ -523,7 +523,7 @@ namespace Draw2D.Editor.Renderers
 
         public void DrawText(object dc, TextShape text, string styleId, double dx, double dy)
         {
-            var style = _styleLibrary.Get(styleId);
+            var style = _context?.StyleLibrary?.Get(styleId);
             if (style == null)
             {
                 return;

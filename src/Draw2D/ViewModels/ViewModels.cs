@@ -3144,6 +3144,7 @@ namespace Draw2D.ViewModels.Containers
     {
         IList<ShapeStyle> Styles { get; set; }
         ShapeStyle CurrentStyle { get; set; }
+        void UpdateCache();
         void Add(ShapeStyle style);
         void Remove(ShapeStyle value);
         ShapeStyle Get(string styleId);
@@ -3260,7 +3261,7 @@ namespace Draw2D.ViewModels.Containers
             return copy;
         }
 
-        private void UpdateCache()
+        public void UpdateCache()
         {
             if (_styles != null)
             {

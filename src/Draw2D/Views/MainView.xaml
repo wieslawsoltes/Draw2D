@@ -36,6 +36,10 @@
                 <Separator/>
                 <MenuItem Header="Save View _As..." Command="{Binding SaveContainerViewAs}"/>
                 <Separator/>
+                <MenuItem Header="Open Styles..." Command="{Binding OpenStyleLibrary}"/>
+                <Separator/>
+                <MenuItem Header="Save Styles..." Command="{Binding SaveStyleLibraryAs}"/>
+                <Separator/>
                 <MenuItem Header="_Import..." Command="{Binding ImportFile}"/>
                 <Separator/>
                 <MenuItem Header="_Export..." Command="{Binding ExportFile}"/>
@@ -221,21 +225,23 @@
                     </TabControl>
                 </TabItem>
                 <TabItem Classes="default" Header="Files">
-                    <Grid RowDefinitions="Auto,Auto,Auto,Auto,*,Auto,Auto,Auto">
-                        <TextBlock Classes="default" Text="Path:" Grid.Row="0"/>
-                        <TextBox x:Name="path" Classes="default" Text="{Binding #files.SelectedItem, Mode=OneWay, FallbackValue=View.json}" Grid.Row="1"/>
-                        <Button Classes="default" Content="Open File" Command="{Binding Open}" CommandParameter="{Binding #path.Text}" Grid.Row="2"/>
-                        <Button Classes="default" Content="Save File" Command="{Binding Save}" CommandParameter="{Binding #path.Text}" Grid.Row="3"/>
-                        <ListBox x:Name="files" Classes="default" Grid.Row="4" Items="{Binding Files}">
+                    <Grid RowDefinitions="Auto,Auto,Auto,Auto,*,Auto,Auto" ColumnDefinitions="50*,50*">
+                        <TextBlock Classes="default" Text="Path:" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"/>
+                        <TextBox x:Name="path" Classes="default" Text="{Binding #files.SelectedItem, Mode=OneWay, FallbackValue=View.json}" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"/>
+                        <Button Classes="default" Content="Save View" Command="{Binding SaveView}" CommandParameter="{Binding #path.Text}" Grid.Row="2" Grid.Column="0"/>
+                        <Button Classes="default" Content="Open View" Command="{Binding OpenView}" CommandParameter="{Binding #path.Text}" Grid.Row="2" Grid.Column="1"/>
+                        <Button Classes="default" Content="Save Styles" Command="{Binding SaveStyles}" CommandParameter="{Binding #path.Text}" Grid.Row="3" Grid.Column="0"/>
+                        <Button Classes="default" Content="Open Styles" Command="{Binding OpenStyles}" CommandParameter="{Binding #path.Text}" Grid.Row="3" Grid.Column="1"/>
+                        <ListBox x:Name="files" Classes="default" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Items="{Binding Files}">
                             <ListBox.DataTemplates>
                                 <DataTemplate>
                                     <TextBlock Classes="default" Text="{Binding}"/>
                                 </DataTemplate>
                             </ListBox.DataTemplates>
                         </ListBox>
-                        <TextBox Classes="default" Text="{Binding CurrentDirectory}" Grid.Row="5"/>
-                        <Button Classes="default" Content="Add Files" Command="{Binding AddFiles}" CommandParameter="{Binding CurrentDirectory}" Grid.Row="6"/>
-                        <Button Classes="default" Content="Clear Files" Command="{Binding ClearFiles}" Grid.Row="7"/>
+                        <Button Classes="default" Content="Clear Files" Command="{Binding ClearFiles}" Grid.Row="5" Grid.Column="0"/>
+                        <Button Classes="default" Content="Add Files" Command="{Binding AddFiles}" CommandParameter="{Binding CurrentDirectory}" Grid.Row="5" Grid.Column="1"/>
+                        <TextBox Classes="default" Text="{Binding CurrentDirectory}" Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2"/>
                     </Grid>
                 </TabItem>
                 <TabItem Classes="default" Header="Point">

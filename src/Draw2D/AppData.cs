@@ -223,9 +223,11 @@ namespace Draw2D
 
                 if (command == "--export")
                 {
+                    var toolContext = Factory.CreateToolContext();
                     var styleLibrary = JsonSerializer.FromJsonFile<IStyleLibrary>(args[1]);
+                    toolContext.StyleLibrary = styleLibrary;
                     var containerView = JsonSerializer.FromJsonFile<ContainerView>(args[2]);
-                    EditorToolContext.Export(args[3], containerView, styleLibrary);
+                    EditorToolContext.Export(args[3], containerView, toolContext);
                     return false;
                 }
             }

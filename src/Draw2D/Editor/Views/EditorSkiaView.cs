@@ -15,7 +15,7 @@ namespace Draw2D.Editor.Views
 {
     public class EditorSkiaView : IDrawContainerView
     {
-        private IStyleLibrary _styleLibrary;
+        private IToolContext _context;
         private bool _enablePictureCache = false;
         private SkiaShapeRenderer _skiaRenderer;
         private Dictionary<ArgbColor, SKPaint> _paintCache;
@@ -26,10 +26,10 @@ namespace Draw2D.Editor.Views
         private SKPicture _pictureDecorators = null;
         private SKPicture _picturePoints = null;
 
-        public EditorSkiaView(IStyleLibrary styleLibrary)
+        public EditorSkiaView(IToolContext context)
         {
-            _styleLibrary = styleLibrary;
-            _skiaRenderer = new SkiaShapeRenderer(_styleLibrary);
+            _context = context;
+            _skiaRenderer = new SkiaShapeRenderer(_context);
             _paintCache = new Dictionary<ArgbColor, SKPaint>();
         }
 
@@ -244,7 +244,7 @@ namespace Draw2D.Editor.Views
 
         public void Draw(IContainerView view, object context, double width, double height, double dx, double dy, double zx, double zy)
         {
-            bool isStyleLibraryDirty = IsStyleLibraryDirty(_styleLibrary);
+            bool isStyleLibraryDirty = IsStyleLibraryDirty(_context.StyleLibrary);
             bool isCurrentContainerDirty = IsCanvasContainerDirty(view.CurrentContainer);
             bool isWorkingContainerDirty = IsCanvasContainerDirty(view.WorkingContainer);
             bool isPointsCurrentContainerDirty = IsPointsDirty(view.CurrentContainer);
@@ -363,7 +363,7 @@ namespace Draw2D.Editor.Views
 
             if (isStyleLibraryDirty == true)
             {
-                _styleLibrary.Invalidate();
+                _context.StyleLibrary.Invalidate();
             }
         }
     }

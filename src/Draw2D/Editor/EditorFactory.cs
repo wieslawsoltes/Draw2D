@@ -484,7 +484,7 @@ namespace Draw2D.Editor
                 Height = 630,
                 PrintBackground = new ArgbColor(0, 255, 255, 255),
                 WorkBackground = new ArgbColor(255, 255, 255, 255),
-                InputBackground = new ArgbColor(0, 192, 192, 192),
+                InputBackground = new ArgbColor(0, 255, 255, 255),
                 CurrentContainer = new CanvasContainer()
                 {
                     Shapes = new ObservableCollection<BaseShape>()
