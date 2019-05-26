@@ -3187,14 +3187,13 @@ namespace Draw2D.ViewModels.Shapes
 
         public override object Copy(Dictionary<object, object> shared)
         {
-            var copy = new ReferencePointShape()
+            return new ReferencePointShape()
             {
                 StyleId = this.StyleId,
                 Point = this.Point,
                 Reference = this.Reference,
                 Owner = this.Owner
             };
-            return copy;
         }
     }
 
