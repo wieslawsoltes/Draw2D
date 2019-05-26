@@ -2,7 +2,9 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using System;
 using Avalonia;
+using Avalonia.Controls;
 using Avalonia.Logging.Serilog;
+using Draw2D.Views;
 
 namespace Draw2D
 {
@@ -28,16 +30,23 @@ namespace Draw2D
 
         private static void AppMain(Application app, string[] args)
         {
-            var window = AppData.Load();
-            if (window != null)
+            AppData.Load();
+
+            var window = new MainWindow
             {
-                app.Run(window);
-                AppData.Save();
-            }
-            else
+                DataContext = AppData.ToolContext
+            };
+
+            AppData.SetWindowSettings(window);
+
+            window.Closing += (sender, e) =>
             {
-                app.Shutdown();
-            }
+                AppData.GetWindowSettings(window);
+            };
+
+            app.Run(window);
+
+            AppData.Save();
         }
     }
 }

@@ -25,63 +25,24 @@ namespace Draw2D
             EditorPath = "editor.json";
             WindowPath = "window.json";
 
-            CreateFactory();
+            Factory = new EditorFactory();
 
             if (Design.IsDesignMode)
             {
-                CreateStyleLibrary();
-                CreateToolContext();
-                InitContainerViews();
-                CreateWindowSettings();
-            }
-        }
+                StyleLibrary = Factory.CreateStyleLibrary();
 
-        public static void CreateFactory()
-        {
-            Factory = new EditorFactory();
-        }
+                ToolContext = Factory.CreateToolContext();
+                ToolContext.StyleLibrary = StyleLibrary;
 
-        public static void CreateStyleLibrary()
-        {
-            StyleLibrary = Factory.CreateStyleLibrary();
-        }
-
-        public static void CreateToolContext()
-        {
-            ToolContext = Factory.CreateToolContext();
-            ToolContext.StyleLibrary = StyleLibrary;
-
-            if (ToolContext is EditorToolContext editorToolContext)
-            {
-                editorToolContext.Factory = Factory;
-                editorToolContext.NewContainerView("View");
-                editorToolContext.CurrentDirectory = Directory.GetCurrentDirectory();
-                editorToolContext.AddFiles(editorToolContext.CurrentDirectory);
-            }
-        }
-
-        public static void InitContainerViews()
-        {
-            if (ToolContext is EditorToolContext editorToolContext)
-            {
-                editorToolContext.Factory = Factory;
-                foreach (var containerView in editorToolContext.ContainerViews)
+                if (ToolContext is EditorToolContext editorToolContext)
                 {
-                    editorToolContext.InitContainerView(containerView);
+                    editorToolContext.Factory = Factory;
+                    editorToolContext.NewContainerView("View");
+
+                    editorToolContext.CurrentDirectory = Directory.GetCurrentDirectory();
+                    editorToolContext.AddFiles(editorToolContext.CurrentDirectory);
                 }
             }
-        }
-
-        public static void CreateWindowSettings()
-        {
-            WindowSettings = new WindowSettings()
-            {
-                Width = 1320,
-                Height = 690,
-                X = double.NaN,
-                Y = double.NaN,
-                WindowState = WindowState.Normal
-            };
         }
 
         public static void SetWindowSettings(Window window)
@@ -118,7 +79,7 @@ namespace Draw2D
             WindowSettings.WindowState = window.WindowState;
         }
 
-        public static Window Load()
+        public static void Load()
         {
             if (File.Exists(StylesPath))
             {
@@ -126,18 +87,36 @@ namespace Draw2D
             }
             else
             {
-                CreateStyleLibrary();
+                StyleLibrary = Factory.CreateStyleLibrary();
             }
 
             if (File.Exists(EditorPath))
             {
                 ToolContext = JsonSerializer.FromJsonFile<IToolContext>(EditorPath);
                 ToolContext.StyleLibrary = StyleLibrary;
-                InitContainerViews();
+
+                if (ToolContext is EditorToolContext editorToolContext)
+                {
+                    editorToolContext.Factory = Factory;
+                    foreach (var containerView in editorToolContext.ContainerViews)
+                    {
+                        editorToolContext.InitContainerView(containerView);
+                    }
+                }
             }
             else
             {
-                CreateToolContext();
+                ToolContext = Factory.CreateToolContext();
+                ToolContext.StyleLibrary = StyleLibrary;
+
+                if (ToolContext is EditorToolContext editorToolContext)
+                {
+                    editorToolContext.Factory = Factory;
+                    editorToolContext.NewContainerView("View");
+
+                    editorToolContext.CurrentDirectory = Directory.GetCurrentDirectory();
+                    editorToolContext.AddFiles(editorToolContext.CurrentDirectory);
+                }
             }
 
             if (File.Exists(WindowPath))
@@ -146,21 +125,15 @@ namespace Draw2D
             }
             else
             {
-                CreateWindowSettings();
+                WindowSettings = new WindowSettings()
+                {
+                    Width = 1320,
+                    Height = 690,
+                    X = double.NaN,
+                    Y = double.NaN,
+                    WindowState = WindowState.Normal
+                };
             }
-
-            var window = new MainWindow
-            {
-                DataContext = ToolContext
-            };
-
-            SetWindowSettings(window);
-
-            window.Closing += (sender, e) =>
-            {
-                GetWindowSettings(window);
-            };
-            return window;
         }
 
         public static void Save()
