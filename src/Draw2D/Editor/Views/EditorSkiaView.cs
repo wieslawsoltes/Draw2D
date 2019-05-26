@@ -138,7 +138,7 @@ namespace Draw2D.Editor.Views
 
         private bool IsPointsDirty(ICanvasContainer canvasContainer)
         {
-            var points = new List<PointShape>();
+            var points = new List<BaseShape>();
             canvasContainer.GetPoints(points);
 
             foreach (var point in points)
@@ -149,11 +149,11 @@ namespace Draw2D.Editor.Views
                     return true;
                 }
 
-                if (point.Template != null)
+                if (point is PointShape pointShape && pointShape.Template != null)
                 {
-                    if (point.Template.IsDirty)
+                    if (pointShape.Template.IsDirty)
                     {
-                        Debug.WriteLine($"point.Template.IsDirty: true");
+                        Debug.WriteLine($"pointShape.Template.IsDirty: true");
                         return true;
                     }
                 }
