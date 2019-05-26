@@ -81,5 +81,8 @@
                 <Button Classes="default" Content="SetUniqueId" Command="{Binding SetUniqueId}" Grid.Column="1" Grid.Row="6"/>
             </Grid>
         </TabItem>
+        <TabItem Classes="default" Header="Owner">
+            <ContentControl Content="{Binding Owner}"/>
+        </TabItem>
     </TabControl>
 </UserControl>
