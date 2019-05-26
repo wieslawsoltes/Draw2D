@@ -3124,10 +3124,10 @@ namespace Draw2D.ViewModels.Shapes
                 points.Add(point);
             }
 
-            if (_template != null)
-            {
-                _template.GetPoints(points);
-            }
+            //if (_template != null)
+            //{
+            //    _template.GetPoints(points);
+            //}
         }
 
         public override void Invalidate()
