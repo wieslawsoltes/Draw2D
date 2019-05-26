@@ -149,9 +149,9 @@ namespace Draw2D.Editor.Views
                     return true;
                 }
 
-                if (point is PointShape pointShape && pointShape.Template != null)
+                if (point.Template != null)
                 {
-                    if (pointShape.Template.IsDirty)
+                    if (point.Template.IsDirty)
                     {
                         Debug.WriteLine($"pointShape.Template.IsDirty: true");
                         return true;
