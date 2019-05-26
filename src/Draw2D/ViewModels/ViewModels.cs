@@ -3076,25 +3076,64 @@ namespace Draw2D.ViewModels.Shapes
         [IgnoreDataMember]
         public override IShapeDecorator Decorator { get; } = s_decorator;
 
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        [IgnoreDataMember]
         public override double X
         {
-            get => _point.X;
-            set => _point.X = value;
+            get
+            {
+                if (_point != null && _reference != null)
+                {
+                    return _point.X + _reference.X;
+                }
+                return double.NaN;
+            }
+            set
+            {
+                if (_point != null && _reference != null)
+                {
+                    _point.X = value;
+                }
+            }
         }
 
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        [IgnoreDataMember]
         public override double Y
         {
-            get => _point.Y;
-            set => _point.Y = value;
+            get
+            {
+                if (_point != null && _reference != null)
+                {
+                    return _point.Y + _reference.Y;
+                }
+                return double.NaN;
+            }
+            set
+            {
+                if (_point != null && _reference != null)
+                {
+                    _point.Y = value;
+                }
+            }
         }
 
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        [IgnoreDataMember]
         public override BaseShape Template
         {
-            get => _point.Template;
-            set => _point.Template = value;
+            get
+            {
+                if (_point != null && _reference != null)
+                {
+                    return _point.Template;
+                }
+                return null;
+            }
+            set
+            {
+                if (_point != null && _reference != null)
+                {
+                    _point.Template = value;
+                }
+            }
         }
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
@@ -3119,6 +3158,7 @@ namespace Draw2D.ViewModels.Shapes
         {
             this.Point = point;
             this.Reference = reference;
+            this.Owner = reference;
         }
 
         public override void GetPoints(IList<PointShape> points)
@@ -3300,7 +3340,8 @@ namespace Draw2D.ViewModels.Shapes
                 Title = this.Title,
                 X = this.X,
                 Y = this.Y,
-                Template = this.Template
+                Template = this.Template,
+                Points = new ObservableCollection<PointShape>()
             };
 
             if (shared != null)
@@ -6144,13 +6185,11 @@ namespace Draw2D.ViewModels.Bounds
                 throw new ArgumentNullException("shape");
             }
 
-            if (reference.Template?.Bounds != null)
+            foreach (var point in reference.Points)
             {
-                var adjustedTarget = new Point2(target.X - reference.X, target.Y - reference.Y);
-                var result = reference.Template.Bounds.TryToGetPoint(reference.Template, adjustedTarget, radius, hitTest);
-                if (result != null)
+                if (point.Bounds?.TryToGetPoint(point, target, radius, hitTest) != null)
                 {
-                    return result;
+                    return point;
                 }
             }
 
