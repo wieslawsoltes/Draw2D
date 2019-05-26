@@ -529,7 +529,7 @@ namespace Draw2D.Editor
 
             var reference2 = new ReferenceShape()
             {
-                Title = "Reference1",
+                Title = "Reference2",
                 Points = new ObservableCollection<PointShape>(),
                 X = 0,
                 Y = 120,
