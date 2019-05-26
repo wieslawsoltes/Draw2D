@@ -3124,6 +3124,7 @@ namespace Draw2D.ViewModels.Shapes
                 points.Add(point);
             }
 
+            // TODO: Fix reference shape template points selection.
             //if (_template != null)
             //{
             //    _template.GetPoints(points);
@@ -3163,13 +3164,14 @@ namespace Draw2D.ViewModels.Shapes
                 selectionState.Select(this);
             }
 
-            if (_template is ConnectableShape connectableShape)
-            {
-                foreach (var point in connectableShape.Points)
-                {
-                    point.Select(selectionState);
-                }
-            }
+            // TODO: Fix reference shape template points selection.
+            //if (_template is ConnectableShape connectableShape)
+            //{
+            //    foreach (var point in connectableShape.Points)
+            //    {
+            //        point.Select(selectionState);
+            //    }
+            //}
         }
 
         public override void Deselect(ISelectionState selectionState)
@@ -3179,13 +3181,14 @@ namespace Draw2D.ViewModels.Shapes
                 selectionState.Deselect(this);
             }
 
-            if (_template is ConnectableShape connectableShape)
-            {
-                foreach (var point in connectableShape.Points)
-                {
-                    point.Deselect(selectionState);
-                }
-            }
+            // TODO: Fix reference shape template points selection.
+            //if (_template is ConnectableShape connectableShape)
+            //{
+            //    foreach (var point in connectableShape.Points)
+            //    {
+            //        point.Deselect(selectionState);
+            //    }
+            //}
         }
 
         private bool CanConnectTemplate(PointShape point)
