@@ -3188,7 +3188,7 @@ namespace Draw2D.ViewModels.Shapes
             }
         }
 
-        private bool CanConnect(PointShape point)
+        private bool CanConnectTemplate(PointShape point)
         {
             if (_template is ConnectableShape connectableShape)
             {
@@ -3197,11 +3197,11 @@ namespace Draw2D.ViewModels.Shapes
             return false;
         }
 
-        public virtual bool Connect(PointShape point, PointShape target)
+        public override bool Connect(PointShape point, PointShape target)
         {
             if (_template is ConnectableShape connectableShape)
             {
-                if (CanConnect(point))
+                if (CanConnectTemplate(point))
                 {
                     int index = connectableShape.Points.IndexOf(target);
                     if (index >= 0)
@@ -3215,13 +3215,13 @@ namespace Draw2D.ViewModels.Shapes
             return false;
         }
 
-        public virtual bool Disconnect(PointShape point, out PointShape result)
+        public override bool Disconnect(PointShape point, out PointShape result)
         {
             result = null;
             return false;
         }
 
-        public virtual bool Disconnect()
+        public override bool Disconnect()
         {
             bool result = false;
 
@@ -3230,7 +3230,7 @@ namespace Draw2D.ViewModels.Shapes
                 for (int i = 0; i < connectableShape.Points.Count; i++)
                 {
                     Debug.WriteLine($"{nameof(ReferenceShape)}: Disconnected from {nameof(connectableShape.Points)} #{i}");
-                    _points[i] = (PointShape)_points[i].Copy(null);
+                    connectableShape.Points[i] = (PointShape)connectableShape.Points[i].Copy(null);
                     result = true;
                 }
             }
