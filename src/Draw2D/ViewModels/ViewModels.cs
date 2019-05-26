@@ -6479,14 +6479,13 @@ namespace Draw2D.ViewModels.Tools
         {
             Filters?.Any(f => f.Process(context, ref x, ref y));
 
-            var next = context.ContainerView?.GetNextPoint(context, x, y, false, 0.0);
             _cubicBezier = new CubicBezierShape()
             {
                 Points = new ObservableCollection<PointShape>(),
-                StartPoint = next,
-                Point1 = (PointShape)next.Copy(null),
-                Point2 = (PointShape)next.Copy(null),
-                Point3 = (PointShape)next.Copy(null),
+                StartPoint = context.ContainerView?.GetNextPoint(context, x, y, Settings?.ConnectPoints ?? false, Settings?.HitTestRadius ?? 0.0),
+                Point1 = context.ContainerView?.GetNextPoint(context, x, y, false, 0.0),
+                Point2 = context.ContainerView?.GetNextPoint(context, x, y, false, 0.0),
+                Point3 = context.ContainerView?.GetNextPoint(context, x, y, false, 0.0),
                 Text = new Text(),
                 StyleId = context.StyleLibrary.CurrentStyle.Title
             };
@@ -7026,12 +7025,11 @@ namespace Draw2D.ViewModels.Tools
         {
             Filters?.Any(f => f.Process(context, ref x, ref y));
 
-            var next = context.ContainerView?.GetNextPoint(context, x, y, Settings?.ConnectPoints ?? false, Settings?.HitTestRadius ?? 0.0);
             _line = new LineShape()
             {
                 Points = new ObservableCollection<PointShape>(),
-                StartPoint = next,
-                Point = (PointShape)next.Copy(null),
+                StartPoint = context.ContainerView?.GetNextPoint(context, x, y, Settings?.ConnectPoints ?? false, Settings?.HitTestRadius ?? 0.0),
+                Point = context.ContainerView?.GetNextPoint(context, x, y, false, 0.0),
                 Text = new Text(),
                 StyleId = context.StyleLibrary.CurrentStyle.Title
             };
@@ -8263,13 +8261,12 @@ namespace Draw2D.ViewModels.Tools
         {
             Filters?.Any(f => f.Process(context, ref x, ref y));
 
-            var next = context.ContainerView?.GetNextPoint(context, x, y, false, 0.0);
             _quadraticBezier = new QuadraticBezierShape()
             {
                 Points = new ObservableCollection<PointShape>(),
-                StartPoint = next,
-                Point1 = (PointShape)next.Copy(null),
-                Point2 = (PointShape)next.Copy(null),
+                StartPoint = context.ContainerView?.GetNextPoint(context, x, y, Settings?.ConnectPoints ?? false, Settings?.HitTestRadius ?? 0.0),
+                Point1 = context.ContainerView?.GetNextPoint(context, x, y, false, 0.0),
+                Point2 = context.ContainerView?.GetNextPoint(context, x, y, false, 0.0),
                 Text = new Text(),
                 StyleId = context.StyleLibrary.CurrentStyle.Title
             };
@@ -8525,13 +8522,12 @@ namespace Draw2D.ViewModels.Tools
         {
             Filters?.Any(f => f.Process(context, ref x, ref y));
 
-            var next = context.ContainerView?.GetNextPoint(context, x, y, false, 0.0);
             _conic = new ConicShape()
             {
                 Points = new ObservableCollection<PointShape>(),
-                StartPoint = next,
-                Point1 = (PointShape)next.Copy(null),
-                Point2 = (PointShape)next.Copy(null),
+                StartPoint = context.ContainerView?.GetNextPoint(context, x, y, Settings?.ConnectPoints ?? false, Settings?.HitTestRadius ?? 0.0),
+                Point1 = context.ContainerView?.GetNextPoint(context, x, y, false, 0.0),
+                Point2 = context.ContainerView?.GetNextPoint(context, x, y, false, 0.0),
                 Weight = Settings.Weight,
                 Text = new Text(),
                 StyleId = context.StyleLibrary.CurrentStyle.Title
