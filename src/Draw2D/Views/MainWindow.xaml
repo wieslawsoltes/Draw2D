@@ -12,7 +12,7 @@
         Foreground="{DynamicResource ThemeForegroundBrush}"
         Title="Draw2D" Height="690" Width="1320"
         mc:Ignorable="d"
-        d:DataContext="{x:Static app:AppData.ToolContext}"
+        d:DataContext="{x:Static app:AppState.ToolContext}"
         d:DesignWidth="1320" d:DesignHeight="690">
     <local:MainView/>
 </Window>

@@ -9,7 +9,7 @@ using Draw2D.Views;
 
 namespace Draw2D
 {
-    public static class AppData
+    public static class AppState
     {
         public static string StylesPath { get; set; }
         public static string EditorPath { get; set; }
@@ -19,7 +19,7 @@ namespace Draw2D
         public static IToolContext ToolContext { get; set; }
         public static WindowSettings WindowSettings { get; set; }
 
-        static AppData()
+        static AppState()
         {
             StylesPath = "styles.json";
             EditorPath = "editor.json";
