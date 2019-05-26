@@ -165,7 +165,7 @@ namespace Draw2D
                 if (command == "--new-view")
                 {
                     var containerView = Factory.CreateContainerView("View");
-                    JsonSerializer.ToJsonFile(containerView.Title + ".json", containerView);
+                    JsonSerializer.ToJsonFile("View.json", containerView);
                     return false;
                 }
 
