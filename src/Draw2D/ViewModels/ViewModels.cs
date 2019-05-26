@@ -6501,6 +6501,22 @@ namespace Draw2D.ViewModels.Tools
                 Text = new Text(),
                 StyleId = context.StyleLibrary.CurrentStyle.Title
             };
+            if (_cubicBezier.StartPoint.Owner == null)
+            {
+                _cubicBezier.StartPoint.Owner = _cubicBezier;
+            }
+            if (_cubicBezier.Point1.Owner == null)
+            {
+                _cubicBezier.Point1.Owner = _cubicBezier;
+            }
+            if (_cubicBezier.Point2.Owner == null)
+            {
+                _cubicBezier.Point2.Owner = _cubicBezier;
+            }
+            if (_cubicBezier.Point3.Owner == null)
+            {
+                _cubicBezier.Point3.Owner = _cubicBezier;
+            }
             context.ContainerView?.WorkingContainer.Shapes.Add(_cubicBezier);
             context.ContainerView?.WorkingContainer.MarkAsDirty(true);
             context.ContainerView?.SelectionState?.Select(_cubicBezier);
@@ -6530,6 +6546,10 @@ namespace Draw2D.ViewModels.Tools
             context.ContainerView?.WorkingContainer.MarkAsDirty(true);
 
             _cubicBezier.Point1 = context.ContainerView?.GetNextPoint(context, x, y, false, 0.0);
+            if (_cubicBezier.Point1.Owner == null)
+            {
+                _cubicBezier.Point1.Owner = _cubicBezier;
+            }
             context.ContainerView?.CurrentContainer.Shapes.Add(_cubicBezier);
             context.ContainerView?.CurrentContainer.MarkAsDirty(true);
             _cubicBezier = null;
@@ -6549,6 +6569,10 @@ namespace Draw2D.ViewModels.Tools
 
             context.ContainerView?.SelectionState?.Deselect(_cubicBezier.Point2);
             _cubicBezier.Point2 = context.ContainerView?.GetNextPoint(context, x, y, false, 0.0);
+            if (_cubicBezier.Point2.Owner == null)
+            {
+                _cubicBezier.Point2.Owner = _cubicBezier;
+            }
             context.ContainerView?.SelectionState?.Select(_cubicBezier.Point2);
 
             CurrentState = State.Point1;
@@ -6565,6 +6589,10 @@ namespace Draw2D.ViewModels.Tools
 
             context.ContainerView?.SelectionState?.Deselect(_cubicBezier.Point3);
             _cubicBezier.Point3 = context.ContainerView?.GetNextPoint(context, x, y, false, 0.0);
+            if (_cubicBezier.Point3.Owner == null)
+            {
+                _cubicBezier.Point3.Owner = _cubicBezier;
+            }
             context.ContainerView?.SelectionState?.Select(_cubicBezier.Point3);
 
             CurrentState = State.Point2;
@@ -6796,6 +6824,14 @@ namespace Draw2D.ViewModels.Tools
                 Text = new Text(),
                 StyleId = context.StyleLibrary.CurrentStyle.Title
             };
+            if (_ellipse.TopLeft.Owner == null)
+            {
+                _ellipse.TopLeft.Owner = _ellipse;
+            }
+            if (_ellipse.BottomRight.Owner == null)
+            {
+                _ellipse.BottomRight.Owner = _ellipse;
+            }
             context.ContainerView?.WorkingContainer.Shapes.Add(_ellipse);
             context.ContainerView?.WorkingContainer.MarkAsDirty(true);
             context.ContainerView?.SelectionState?.Select(_ellipse);
@@ -6816,6 +6852,10 @@ namespace Draw2D.ViewModels.Tools
 
             context.ContainerView?.SelectionState?.Deselect(_ellipse.BottomRight);
             _ellipse.BottomRight = context.ContainerView?.GetNextPoint(context, x, y, Settings?.ConnectPoints ?? false, Settings?.HitTestRadius ?? 7.0);
+            if (_ellipse.BottomRight.Owner == null)
+            {
+                _ellipse.BottomRight.Owner = _ellipse;
+            }
             context.ContainerView?.WorkingContainer.Shapes.Remove(_ellipse);
             context.ContainerView?.WorkingContainer.MarkAsDirty(true);
             context.ContainerView?.SelectionState?.Deselect(_ellipse);
@@ -7045,6 +7085,14 @@ namespace Draw2D.ViewModels.Tools
                 Text = new Text(),
                 StyleId = context.StyleLibrary.CurrentStyle.Title
             };
+            if (_line.StartPoint.Owner == null)
+            {
+                _line.StartPoint.Owner = _line;
+            }
+            if (_line.Point.Owner == null)
+            {
+                _line.Point.Owner = _line;
+            }
             context.ContainerView?.WorkingContainer.Shapes.Add(_line);
             context.ContainerView?.WorkingContainer.MarkAsDirty(true);
             context.ContainerView?.SelectionState?.Select(_line);
@@ -7070,6 +7118,10 @@ namespace Draw2D.ViewModels.Tools
             context.ContainerView?.WorkingContainer.MarkAsDirty(true);
 
             _line.Point = context.ContainerView?.GetNextPoint(context, x, y, Settings?.ConnectPoints ?? false, Settings?.HitTestRadius ?? 0.0);
+            if (_line.Point.Owner == null)
+            {
+                _line.Point.Owner = _line;
+            }
 
             Intersections?.ForEach(i => i.Clear(context));
             Intersections?.ForEach(i => i.Find(context, _line));
@@ -8044,6 +8096,14 @@ namespace Draw2D.ViewModels.Tools
                 Text = new Text(),
                 StyleId = context.StyleLibrary.CurrentStyle.Title
             };
+            if (_line.StartPoint.Owner == null)
+            {
+                _line.StartPoint.Owner = _line;
+            }
+            if (_line.Point.Owner == null)
+            {
+                _line.Point.Owner = _line;
+            }
             _points.Add(_line.StartPoint);
             _points.Add(_line.Point);
             context.ContainerView?.WorkingContainer.Shapes.Add(_line);
@@ -8065,6 +8125,10 @@ namespace Draw2D.ViewModels.Tools
             context.ContainerView?.SelectionState?.Deselect(_line);
             context.ContainerView?.SelectionState?.Deselect(_line.Point);
             _line.Point = context.ContainerView?.GetNextPoint(context, x, y, Settings?.ConnectPoints ?? false, Settings?.HitTestRadius ?? 7.0);
+            if (_line.Point.Owner == null)
+            {
+                _line.Point.Owner = _line;
+            }
             _points[_points.Count - 1] = _line.Point;
 
             if (!context.ContainerView?.SelectionState?.IsSelected(_line.Point) ?? false)
@@ -8085,6 +8149,10 @@ namespace Draw2D.ViewModels.Tools
                 Text = new Text(),
                 StyleId = context.StyleLibrary.CurrentStyle.Title
             };
+            if (_line.Point.Owner == null)
+            {
+                _line.Point.Owner = _line;
+            }
             _points.Add(_line.Point);
             context.ContainerView?.WorkingContainer.Shapes.Add(_line);
             context.ContainerView?.WorkingContainer.MarkAsDirty(true);
@@ -8282,6 +8350,18 @@ namespace Draw2D.ViewModels.Tools
                 Text = new Text(),
                 StyleId = context.StyleLibrary.CurrentStyle.Title
             };
+            if (_quadraticBezier.StartPoint.Owner == null)
+            {
+                _quadraticBezier.StartPoint.Owner = _quadraticBezier;
+            }
+            if (_quadraticBezier.Point1.Owner == null)
+            {
+                _quadraticBezier.Point1.Owner = _quadraticBezier;
+            }
+            if (_quadraticBezier.Point2.Owner == null)
+            {
+                _quadraticBezier.Point2.Owner = _quadraticBezier;
+            }
             context.ContainerView?.WorkingContainer.Shapes.Add(_quadraticBezier);
             context.ContainerView?.WorkingContainer.MarkAsDirty(true);
             context.ContainerView?.SelectionState?.Select(_quadraticBezier);
@@ -8309,6 +8389,10 @@ namespace Draw2D.ViewModels.Tools
             context.ContainerView?.WorkingContainer.MarkAsDirty(true);
 
             _quadraticBezier.Point1 = context.ContainerView?.GetNextPoint(context, x, y, false, 0.0);
+            if (_quadraticBezier.Point1.Owner == null)
+            {
+                _quadraticBezier.Point1.Owner = _quadraticBezier;
+            }
             context.ContainerView?.CurrentContainer.Shapes.Add(_quadraticBezier);
             context.ContainerView?.CurrentContainer.MarkAsDirty(true);
             _quadraticBezier = null;
@@ -8328,6 +8412,10 @@ namespace Draw2D.ViewModels.Tools
 
             context.ContainerView?.SelectionState?.Deselect(_quadraticBezier.Point2);
             _quadraticBezier.Point2 = context.ContainerView?.GetNextPoint(context, x, y, false, 0.0);
+            if (_quadraticBezier.Point2.Owner == null)
+            {
+                _quadraticBezier.Point2.Owner = _quadraticBezier;
+            }
             context.ContainerView?.SelectionState?.Select(_quadraticBezier.Point2);
 
             CurrentState = State.Point1;
@@ -8544,6 +8632,18 @@ namespace Draw2D.ViewModels.Tools
                 Text = new Text(),
                 StyleId = context.StyleLibrary.CurrentStyle.Title
             };
+            if (_conic.StartPoint.Owner == null)
+            {
+                _conic.StartPoint.Owner = _conic;
+            }
+            if (_conic.Point1.Owner == null)
+            {
+                _conic.Point1.Owner = _conic;
+            }
+            if (_conic.Point2.Owner == null)
+            {
+                _conic.Point2.Owner = _conic;
+            }
             context.ContainerView?.WorkingContainer.Shapes.Add(_conic);
             context.ContainerView?.WorkingContainer.MarkAsDirty(true);
             context.ContainerView?.SelectionState?.Select(_conic);
@@ -8571,6 +8671,10 @@ namespace Draw2D.ViewModels.Tools
             context.ContainerView?.WorkingContainer.MarkAsDirty(true);
 
             _conic.Point1 = context.ContainerView?.GetNextPoint(context, x, y, false, 0.0);
+            if (_conic.Point1.Owner == null)
+            {
+                _conic.Point1.Owner = _conic;
+            }
             context.ContainerView?.CurrentContainer.Shapes.Add(_conic);
             context.ContainerView?.CurrentContainer.MarkAsDirty(true);
             _conic = null;
@@ -8590,6 +8694,10 @@ namespace Draw2D.ViewModels.Tools
 
             context.ContainerView?.SelectionState?.Deselect(_conic.Point2);
             _conic.Point2 = context.ContainerView?.GetNextPoint(context, x, y, false, 0.0);
+            if (_conic.Point2.Owner == null)
+            {
+                _conic.Point2.Owner = _conic;
+            }
             context.ContainerView?.SelectionState?.Select(_conic.Point2);
 
             CurrentState = State.Point1;
@@ -8795,6 +8903,14 @@ namespace Draw2D.ViewModels.Tools
                 Text = new Text(),
                 StyleId = context.StyleLibrary.CurrentStyle.Title
             };
+            if (_rectangle.TopLeft.Owner == null)
+            {
+                _rectangle.TopLeft.Owner = _rectangle;
+            }
+            if (_rectangle.BottomRight.Owner == null)
+            {
+                _rectangle.BottomRight.Owner = _rectangle;
+            }
             context.ContainerView?.WorkingContainer.Shapes.Add(_rectangle);
             context.ContainerView?.WorkingContainer.MarkAsDirty(true);
             context.ContainerView?.SelectionState?.Select(_rectangle);
@@ -8817,6 +8933,10 @@ namespace Draw2D.ViewModels.Tools
             context.ContainerView?.SelectionState?.Deselect(_rectangle.BottomRight);
             _rectangle.BottomRight = context.ContainerView?.GetNextPoint(context, x, y, Settings?.ConnectPoints ?? false, Settings?.HitTestRadius ?? 7.0);
             _rectangle.BottomRight.Y = y;
+            if (_rectangle.BottomRight.Owner == null)
+            {
+                _rectangle.BottomRight.Owner = _rectangle;
+            }
             context.ContainerView?.WorkingContainer.Shapes.Remove(_rectangle);
             context.ContainerView?.WorkingContainer.MarkAsDirty(true);
             context.ContainerView?.WorkingContainer.MarkAsDirty(true);
@@ -9139,8 +9259,14 @@ namespace Draw2D.ViewModels.Tools
                 Text = new Text(),
                 StyleId = context.StyleLibrary.CurrentStyle.Title
             };
-            line.StartPoint.Owner = line;
-            line.Point.Owner = line;
+            if (line.StartPoint.Owner == null)
+            {
+                line.StartPoint.Owner = line;
+            }
+            if (line.Point.Owner == null)
+            {
+                line.Point.Owner = line;
+            }
 
             _figure.Shapes.Add(line);
             context.ContainerView?.CurrentContainer.MarkAsDirty(true);
@@ -10287,6 +10413,14 @@ namespace Draw2D.ViewModels.Tools
                 Text = new Text("Text"),
                 StyleId = context.StyleLibrary.CurrentStyle.Title
             };
+            if (_text.TopLeft.Owner == null)
+            {
+                _text.TopLeft.Owner = _text;
+            }
+            if (_text.BottomRight.Owner == null)
+            {
+                _text.BottomRight.Owner = _text;
+            }
             context.ContainerView?.WorkingContainer.Shapes.Add(_text);
             context.ContainerView?.WorkingContainer.MarkAsDirty(true);
             context.ContainerView?.SelectionState?.Select(_text);
@@ -10309,6 +10443,10 @@ namespace Draw2D.ViewModels.Tools
             context.ContainerView?.SelectionState?.Deselect(_text.BottomRight);
             _text.BottomRight = context.ContainerView?.GetNextPoint(context, x, y, Settings?.ConnectPoints ?? false, Settings?.HitTestRadius ?? 7.0);
             _text.BottomRight.Y = y;
+            if (_text.BottomRight.Owner == null)
+            {
+                _text.BottomRight.Owner = _text;
+            }
             context.ContainerView?.WorkingContainer.Shapes.Remove(_text);
             context.ContainerView?.WorkingContainer.MarkAsDirty(true);
             context.ContainerView?.SelectionState?.Deselect(_text.TopLeft);
