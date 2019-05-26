@@ -2561,9 +2561,17 @@ namespace Draw2D.ViewModels.Shapes
         internal static new IBounds s_bounds = new PointBounds();
         internal static new IShapeDecorator s_decorator = new PointDecorator();
 
+        private BaseShape _owner;
         private double _x;
         private double _y;
         private BaseShape _template;
+
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public BaseShape Owner
+        {
+            get => _owner;
+            set => Update(ref _owner, value);
+        }
 
         [IgnoreDataMember]
         public override IBounds Bounds { get; } = s_bounds;
@@ -2592,11 +2600,12 @@ namespace Draw2D.ViewModels.Shapes
             set => Update(ref _template, value);
         }
 
-        public PointShape()
+        public PointShape(BaseShape owner)
         {
+            this.Owner = owner;
         }
 
-        public PointShape(double x, double y, BaseShape template)
+        public PointShape(BaseShape owner, double x, double y, BaseShape template) : this(owner)
         {
             this.X = x;
             this.Y = y;
