@@ -3190,11 +3190,10 @@ namespace Draw2D.ViewModels.Shapes
             var copy = new ReferencePointShape()
             {
                 StyleId = this.StyleId,
-                Owner = this.Owner,
                 Point = this.Point,
-                Reference = this.Reference
+                Reference = this.Reference,
+                Owner = this.Owner
             };
-
             return copy;
         }
     }
@@ -3262,7 +3261,6 @@ namespace Draw2D.ViewModels.Shapes
             this.X = x;
             this.Y = y;
             this.Template = template;
-
             this.Points = new ObservableCollection<PointShape>();
 
             foreach (var point in template.Points)
@@ -3348,7 +3346,16 @@ namespace Draw2D.ViewModels.Shapes
             {
                 foreach (var point in this.Points)
                 {
-                    copy.Points.Add((PointShape)shared[point]);
+                    if (point is ReferencePointShape referencePoint)
+                    {
+                        var referencePointCopy = (ReferencePointShape)referencePoint.Copy(shared);
+                        referencePointCopy.Reference = copy;
+                        copy.Points.Add(referencePointCopy);
+                    }
+                    else
+                    {
+                        copy.Points.Add((PointShape)shared[point]);
+                    }
                 }
 
                 shared[this] = copy;
@@ -9934,7 +9941,10 @@ namespace Draw2D.ViewModels.Tools
 
             foreach (var point in points)
             {
-                point.Owner = (BaseShape)shared[point.Owner];
+                if (point.Owner != null)
+                {
+                    point.Owner = (BaseShape)shared[point.Owner];
+                }
             }
         }
 
