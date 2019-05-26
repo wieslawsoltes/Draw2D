@@ -10077,7 +10077,14 @@ namespace Draw2D.ViewModels.Tools
             {
                 if (point.Owner != null)
                 {
-                    point.Owner = (BaseShape)shared[point.Owner];
+                    if (shared.TryGetValue(point.Owner, out var owner))
+                    {
+                        point.Owner = owner;
+                    }
+                    else
+                    {
+                        Debug.WriteLine($"Failed to find owner shape: {point.Owner} for point: {point}.");
+                    }
                 }
             }
         }
