@@ -4600,9 +4600,9 @@ namespace Draw2D.ViewModels.Decorators
     {
         public void Draw(object dc, IShapeRenderer renderer, ReferenceShape reference, ISelectionState selectionState, double dx, double dy, DrawMode mode)
         {
-            if (selectionState.IsSelected(reference))
+            if (selectionState.IsSelected(reference) && reference.Template != null)
             {
-                DrawBoxFromPoints(dc, renderer, reference, dx + reference.X, dy + reference.Y, mode);
+                DrawBoxFromPoints(dc, renderer, reference.Template, dx + reference.X, dy + reference.Y, mode);
             }
         }
 
