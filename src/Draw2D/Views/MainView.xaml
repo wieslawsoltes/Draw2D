@@ -52,7 +52,9 @@
                 <MenuItem Header="_Paste" Command="{Binding Selection.Paste}" CommandParameter="{Binding}"/>
                 <MenuItem Header="_Delete" Command="{Binding Selection.Delete}" CommandParameter="{Binding}"/>
                 <Separator/>
-                <MenuItem Header="_Group" Command="{Binding Selection.Group}" CommandParameter="{Binding}"/>
+                <MenuItem Header="Create _Group" Command="{Binding Selection.Group}" CommandParameter="{Binding}"/>
+                <Separator/>
+                <MenuItem Header="Create _Reference" Command="{Binding Selection.Reference}" CommandParameter="{Binding}"/>
                 <Separator/>
                 <MenuItem Header="Select _All" Command="{Binding Selection.SelectAll}" CommandParameter="{Binding}"/>
             </MenuItem>
@@ -355,6 +357,7 @@
                                     <KeyBinding Command="{Binding $parent[UserControl].DataContext.Selection.Paste}" CommandParameter="{Binding $parent[UserControl].DataContext}" Gesture="Ctrl+V"/>
                                     <KeyBinding Command="{Binding $parent[UserControl].DataContext.Selection.Delete}" CommandParameter="{Binding $parent[UserControl].DataContext}" Gesture="Delete"/>
                                     <KeyBinding Command="{Binding $parent[UserControl].DataContext.Selection.Group}" CommandParameter="{Binding $parent[UserControl].DataContext}" Gesture="Ctrl+G"/>
+                                    <KeyBinding Command="{Binding $parent[UserControl].DataContext.Selection.Reference}" CommandParameter="{Binding $parent[UserControl].DataContext}" Gesture="Ctrl+R"/>
                                     <KeyBinding Command="{Binding $parent[UserControl].DataContext.Selection.SelectAll}" CommandParameter="{Binding $parent[UserControl].DataContext}" Gesture="Ctrl+A"/>
                                     <!-- Tools -->
                                     <KeyBinding Command="{Binding $parent[UserControl].DataContext.SetTool}" CommandParameter="None" Gesture="N"/>
