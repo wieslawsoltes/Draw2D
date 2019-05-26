@@ -635,7 +635,7 @@ namespace Draw2D.ViewModels.Style
             return new ShapeStyle()
             {
                 Name = this.Name,
-                Title = this.Title,
+                Title = this.Title + "_copy",
                 Stroke = (ArgbColor)this.Stroke.Copy(shared),
                 Fill = (ArgbColor)this.Fill.Copy(shared),
                 Thickness = this.Thickness,
@@ -1259,6 +1259,7 @@ namespace Draw2D.ViewModels.Shapes
                 }
 
                 shared[this] = copy;
+                shared[copy] = this;
             }
 
             return copy;
@@ -1661,6 +1662,7 @@ namespace Draw2D.ViewModels.Shapes
                 }
 
                 shared[this] = copy;
+                shared[copy] = this;
             }
 
             return copy;
@@ -1810,6 +1812,7 @@ namespace Draw2D.ViewModels.Shapes
             if (shared != null)
             {
                 shared[this] = copy;
+                shared[copy] = this;
             }
 
             return copy;
@@ -1929,7 +1932,7 @@ namespace Draw2D.ViewModels.Shapes
             var copy = new GroupShape()
             {
                 Name = this.Name,
-                Title = this.Title,
+                Title = this.Title + "_copy",
                 Points = new ObservableCollection<PointShape>(),
                 Shapes = new ObservableCollection<BaseShape>(),
                 StyleId = this.StyleId
@@ -1951,6 +1954,7 @@ namespace Draw2D.ViewModels.Shapes
                 }
 
                 shared[this] = copy;
+                shared[copy] = this;
             }
 
             return copy;
@@ -2174,6 +2178,7 @@ namespace Draw2D.ViewModels.Shapes
                 }
 
                 shared[this] = copy;
+                shared[copy] = this;
             }
 
             return copy;
@@ -2575,6 +2580,7 @@ namespace Draw2D.ViewModels.Shapes
                 }
 
                 shared[this] = copy;
+                shared[copy] = this;
             }
 
             return copy;
@@ -2949,6 +2955,7 @@ namespace Draw2D.ViewModels.Shapes
                 }
 
                 shared[this] = copy;
+                shared[copy] = this;
             }
 
             return copy;
@@ -3036,6 +3043,7 @@ namespace Draw2D.ViewModels.Shapes
                 }
 
                 shared[this] = copy;
+                shared[copy] = this;
             }
 
             return copy;
@@ -3334,7 +3342,7 @@ namespace Draw2D.ViewModels.Shapes
             {
                 StyleId = this.StyleId,
                 Owner = this.Owner,
-                Title = this.Title,
+                Title = this.Title + "_copy",
                 X = this.X,
                 Y = this.Y,
                 Template = this.Template,
@@ -3347,7 +3355,9 @@ namespace Draw2D.ViewModels.Shapes
                 {
                     if (point is ReferencePointShape referencePoint)
                     {
-                        var referencePointCopy = (ReferencePointShape)referencePoint.Copy(shared);
+                        var referencePointCopy = (ReferencePointShape)shared[referencePoint];
+                        //var referencePointCopy = (ReferencePointShape)referencePoint.Copy(shared);
+                        referencePointCopy.Owner = copy;
                         referencePointCopy.Reference = copy;
                         copy.Points.Add(referencePointCopy);
                     }
@@ -3358,6 +3368,7 @@ namespace Draw2D.ViewModels.Shapes
                 }
 
                 shared[this] = copy;
+                shared[copy] = this;
             }
 
             return copy;
@@ -3451,6 +3462,7 @@ namespace Draw2D.ViewModels.Shapes
                 }
 
                 shared[this] = copy;
+                shared[copy] = this;
             }
 
             return copy;
@@ -3712,6 +3724,7 @@ namespace Draw2D.ViewModels.Containers
             if (shared != null)
             {
                 shared[this] = copy;
+                shared[copy] = this;
             }
 
             return copy;
@@ -4071,7 +4084,7 @@ namespace Draw2D.ViewModels.Containers
             var copy = new ContainerView()
             {
                 Name = this.Name,
-                Title = this.Title,
+                Title = this.Title + "_copy",
                 Width = this.Width,
                 Height = this.Height,
                 PrintBackground = (ArgbColor)this.PrintBackground?.Copy(shared),
