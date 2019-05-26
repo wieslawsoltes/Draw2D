@@ -179,6 +179,7 @@ namespace Draw2D.ViewModels
         void Paste(IToolContext context);
         void Delete(IToolContext context);
         void Group(IToolContext context);
+        void Reference(IToolContext context);
         void SelectAll(IToolContext context);
         void Connect(IToolContext context, PointShape point);
         void Disconnect(IToolContext context, PointShape point);
@@ -693,6 +694,32 @@ namespace Draw2D.ViewModels.Shapes
         }
 
         public abstract object Copy(Dictionary<object, object> shared);
+    }
+
+    public static class BaseShapeExtensions
+    {
+        public static void GetBox(this IList<PointShape> points, out double ax, out double ay, out double bx, out double by)
+        {
+            ax = double.MaxValue;
+            ay = double.MaxValue;
+            bx = double.MinValue;
+            by = double.MinValue;
+
+            foreach (var point in points)
+            {
+                ax = Math.Min(ax, point.X);
+                ay = Math.Min(ay, point.Y);
+                bx = Math.Max(bx, point.X);
+                by = Math.Max(by, point.Y);
+            }
+        }
+
+        public static void GetBox(this BaseShape shape, out double ax, out double ay, out double bx, out double by)
+        {
+            var points = new List<PointShape>();
+            shape.GetPoints(points);
+            GetBox(points, out ax, out ay, out bx, out by);
+        }
     }
 
     [DataContract(IsReference = true)]
@@ -4511,22 +4538,6 @@ namespace Draw2D.ViewModels.Decorators
             _text.Draw(dc, renderer, dx, dy, mode, null, null);
         }
 
-        internal void GetBoxFromPoints(List<PointShape> points, out double ax, out double ay, out double bx, out double by)
-        {
-            ax = double.MaxValue;
-            ay = double.MaxValue;
-            bx = double.MinValue;
-            by = double.MinValue;
-
-            foreach (var point in points)
-            {
-                ax = Math.Min(ax, point.X);
-                ay = Math.Min(ay, point.Y);
-                bx = Math.Max(bx, point.X);
-                by = Math.Max(by, point.Y);
-            }
-        }
-
         internal void DrawBoxFromPoints(object dc, IShapeRenderer renderer, BaseShape shape, double dx, double dy, DrawMode mode)
         {
             var points = new List<PointShape>();
@@ -4534,7 +4545,7 @@ namespace Draw2D.ViewModels.Decorators
 
             if (points.Count >= 2)
             {
-                GetBoxFromPoints(points, out double ax, out double ay, out double bx, out double by);
+                points.GetBox(out double ax, out double ay, out double bx, out double by);
                 DrawRectangle(dc, renderer, ax, ay, bx, by, dx, dy, mode);
             }
         }
@@ -9943,6 +9954,36 @@ namespace Draw2D.ViewModels.Tools
                     group.Select(context.ContainerView.SelectionState);
                     context.ContainerView?.CurrentContainer.Shapes.Add(group);
                     context.ContainerView?.CurrentContainer.MarkAsDirty(true);
+
+                    context.ContainerView?.InputService?.Redraw?.Invoke();
+
+                    this.CurrentState = State.None;
+                }
+            }
+        }
+
+        public void Reference(IToolContext context)
+        {
+            if (context.ContainerView?.SelectionState != null)
+            {
+                lock (context.ContainerView.SelectionState?.Shapes)
+                {
+                    context.ContainerView?.SelectionState?.Dehover();
+
+                    var shapes = new List<BaseShape>(context.ContainerView.SelectionState?.Shapes);
+
+                    foreach (var shape in shapes)
+                    {
+                        if (shape is GroupShape group)
+                        {
+                            group.Deselect(context.ContainerView.SelectionState);
+                            group.GetBox(out double ax, out double ay, out _, out _);
+                            var reference = new ReferenceShape(group.Title + "_Reference", ax, ay, group);
+                            reference.Select(context.ContainerView.SelectionState);
+                            context.ContainerView?.CurrentContainer.Shapes.Add(reference);
+                            context.ContainerView?.CurrentContainer.MarkAsDirty(true);
+                        }
+                    }
 
                     context.ContainerView?.InputService?.Redraw?.Invoke();
 
