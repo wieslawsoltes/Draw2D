@@ -3181,7 +3181,7 @@ namespace Draw2D.ViewModels.Shapes
 
             if (_template is ConnectableShape connectableShape)
             {
-                foreach (var point in Points)
+                foreach (var point in connectableShape.Points)
                 {
                     point.Deselect(selectionState);
                 }
