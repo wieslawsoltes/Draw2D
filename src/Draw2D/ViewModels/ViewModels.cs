@@ -6011,7 +6011,7 @@ namespace Draw2D.ViewModels.Bounds
 
             if (reference.Template?.Bounds != null)
             {
-                var adjustedTarget = new Point2(reference.X - target.X, reference.Y - target.Y);
+                var adjustedTarget = new Point2(target.X - reference.X, target.Y - reference.Y);
                 return reference.Template.Bounds.TryToGetPoint(reference.Template, adjustedTarget, radius, hitTest);
             }
 
@@ -6027,7 +6027,7 @@ namespace Draw2D.ViewModels.Bounds
 
             if (reference.Template?.Bounds != null)
             {
-                var adjustedTarget = new Point2(reference.X - target.X, reference.Y - target.Y);
+                var adjustedTarget = new Point2(target.X - reference.X, target.Y - reference.Y);
                 return reference.Template.Bounds.Contains(reference.Template, adjustedTarget, radius, hitTest);
             }
 
@@ -6043,7 +6043,7 @@ namespace Draw2D.ViewModels.Bounds
 
             if (reference.Template?.Bounds != null)
             {
-                var adjustedTarget = new Rect2(reference.X - target.X, reference.Y - target.Y, target.Width, target.Height);
+                var adjustedTarget = new Rect2(target.X - reference.X, target.Y - reference.Y, target.Width, target.Height);
                 return reference.Template.Bounds.Overlaps(reference.Template, adjustedTarget, radius, hitTest);
             }
 
