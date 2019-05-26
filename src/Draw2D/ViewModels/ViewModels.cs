@@ -2187,7 +2187,6 @@ namespace Draw2D.ViewModels.Shapes
         internal static new IBounds s_bounds = new PathBounds();
         internal static new IShapeDecorator s_decorator = new PathDecorator();
 
-        private string _title;
         private IList<FigureShape> _figures;
         private PathFillRule _fillRule;
         private Text _text;
@@ -2197,13 +2196,6 @@ namespace Draw2D.ViewModels.Shapes
 
         [IgnoreDataMember]
         public override IShapeDecorator Decorator { get; } = s_decorator;
-
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public string Title
-        {
-            get => _title;
-            set => Update(ref _title, value);
-        }
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public IList<FigureShape> Figures
@@ -2237,16 +2229,9 @@ namespace Draw2D.ViewModels.Shapes
             this.Figures = figures;
         }
 
-        public PathShape(string title)
-            : this()
-        {
-            this.Title = title;
-        }
-
         public PathShape(string title, IList<FigureShape> figures)
             : base()
         {
-            this.Title = title;
             this.Figures = figures;
         }
 
@@ -2546,7 +2531,6 @@ namespace Draw2D.ViewModels.Shapes
             var copy = new PathShape()
             {
                 Name = this.Name,
-                Title = this.Title,
                 Points = new ObservableCollection<PointShape>(),
                 Figures = new ObservableCollection<FigureShape>(),
                 StyleId = this.StyleId,
