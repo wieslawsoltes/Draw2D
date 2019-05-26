@@ -4602,7 +4602,7 @@ namespace Draw2D.ViewModels.Decorators
         {
             if (selectionState.IsSelected(reference))
             {
-                DrawBoxFromPoints(dc, renderer, reference, dx, dy, mode);
+                DrawBoxFromPoints(dc, renderer, reference, dx + reference.X, dy + reference.Y, mode);
             }
         }
 
@@ -4610,7 +4610,7 @@ namespace Draw2D.ViewModels.Decorators
         {
             if (shape is ReferenceShape reference)
             {
-                Draw(dc, renderer, reference, selectionState, dx, dy, mode);
+                Draw(dc, renderer, reference, selectionState, dx + reference.X, dy + reference.Y, mode);
             }
         }
     }
@@ -6009,7 +6009,13 @@ namespace Draw2D.ViewModels.Bounds
                 throw new ArgumentNullException("shape");
             }
 
-            return reference.Template?.Bounds?.TryToGetPoint(shape, target, radius, hitTest);
+            if (reference.Template?.Bounds != null)
+            {
+                var adjustedTarget = new Point2(reference.X - target.X, reference.Y - target.Y);
+                return reference.Template.Bounds.TryToGetPoint(reference.Template, adjustedTarget, radius, hitTest);
+            }
+
+            return null;
         }
 
         public BaseShape Contains(BaseShape shape, Point2 target, double radius, IHitTest hitTest)
@@ -6019,7 +6025,13 @@ namespace Draw2D.ViewModels.Bounds
                 throw new ArgumentNullException("shape");
             }
 
-            return reference.Template?.Bounds?.Contains(shape, target, radius, hitTest);
+            if (reference.Template?.Bounds != null)
+            {
+                var adjustedTarget = new Point2(reference.X - target.X, reference.Y - target.Y);
+                return reference.Template.Bounds.Contains(reference.Template, adjustedTarget, radius, hitTest);
+            }
+
+            return null;
         }
 
         public BaseShape Overlaps(BaseShape shape, Rect2 target, double radius, IHitTest hitTest)
@@ -6029,7 +6041,13 @@ namespace Draw2D.ViewModels.Bounds
                 throw new ArgumentNullException("shape");
             }
 
-            return reference.Template?.Bounds?.Overlaps(shape, target, radius, hitTest);
+            if (reference.Template?.Bounds != null)
+            {
+                var adjustedTarget = new Rect2(reference.X - target.X, reference.Y - target.Y, target.Width, target.Height);
+                return reference.Template.Bounds.Overlaps(reference.Template, adjustedTarget, radius, hitTest);
+            }
+
+            return null;
         }
     }
 

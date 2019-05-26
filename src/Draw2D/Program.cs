@@ -13,9 +13,17 @@ namespace Draw2D
         [STAThread]
         public static void Main(string[] args)
         {
-            if (AppState.ParseArgs(args) == true)
+            try
             {
-                BuildAvaloniaApp().Start(AppMain, args);
+                if (AppState.ParseArgs(args) == true)
+                {
+                    BuildAvaloniaApp().Start(AppMain, args);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                Console.WriteLine(ex.StackTrace);
             }
         }
 
