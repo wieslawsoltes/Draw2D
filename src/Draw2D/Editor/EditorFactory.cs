@@ -459,12 +459,16 @@ namespace Draw2D.Editor
 
             editorToolContext.StyleLibrary = null;
 
-            editorToolContext.PointTemplate = new EllipseShape(new PointShape(-3, -3, null), new PointShape(3, 3, null))
+            var pointTemplate = new EllipseShape(new PointShape(-3, -3, null), new PointShape(3, 3, null))
             {
                 Points = new ObservableCollection<PointShape>(),
                 Text = new Text(),
                 StyleId = "PointTemplate"
             };
+            pointTemplate.TopLeft.Owner = pointTemplate;
+            pointTemplate.BottomRight.Owner = pointTemplate;
+
+            editorToolContext.PointTemplate = pointTemplate;
 
             editorToolContext.ContainerViews = new ObservableCollection<IContainerView>();
             editorToolContext.ContainerView = null;

@@ -486,24 +486,38 @@ namespace Draw2D.Editor
                 Points = new ObservableCollection<PointShape>(),
                 Shapes = new ObservableCollection<BaseShape>()
             };
-            group.Shapes.Add(
-                new RectangleShape(new PointShape(30, 30, context.PointTemplate), new PointShape(60, 60, context.PointTemplate))
-                {
-                    Points = new ObservableCollection<PointShape>(),
-                    Text = new Text(),
-                    StyleId = context.StyleLibrary.CurrentStyle.Title
-                });
-            group.Shapes.Add(
-                new TextShape(new PointShape(30, 30, context.PointTemplate), new PointShape(60, 60, context.PointTemplate))
-                {
-                    Points = new ObservableCollection<PointShape>(),
-                    Text = new Text("&"),
-                    StyleId = context.StyleLibrary.CurrentStyle.Title
-                });
+
+            var rectangle = new RectangleShape(new PointShape(30, 30, context.PointTemplate), new PointShape(60, 60, context.PointTemplate))
+            {
+                Points = new ObservableCollection<PointShape>(),
+                Text = new Text(),
+                StyleId = context.StyleLibrary.CurrentStyle.Title
+            };
+            rectangle.TopLeft.Owner = rectangle;
+            rectangle.BottomRight.Owner = rectangle;
+
+            var text = new TextShape(new PointShape(30, 30, context.PointTemplate), new PointShape(60, 60, context.PointTemplate))
+            {
+                Points = new ObservableCollection<PointShape>(),
+                Text = new Text("&"),
+                StyleId = context.StyleLibrary.CurrentStyle.Title
+            };
+            text.TopLeft.Owner = text;
+            text.BottomRight.Owner = text;
+
+            group.Shapes.Add(rectangle);
+            group.Shapes.Add(text);
+
             group.Points.Add(new PointShape(45, 30, context.PointTemplate));
             group.Points.Add(new PointShape(45, 60, context.PointTemplate));
             group.Points.Add(new PointShape(30, 45, context.PointTemplate));
             group.Points.Add(new PointShape(60, 45, context.PointTemplate));
+
+            foreach (var point in group.Points)
+            {
+                point.Owner = group;
+            }
+
             context.ContainerView?.CurrentContainer.Shapes.Add(group);
             context.ContainerView?.CurrentContainer.MarkAsDirty(true);
         }

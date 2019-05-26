@@ -3,6 +3,7 @@
 //#define USE_POINT_DECORATOR
 //#define USE_GROUP_SHAPES
 //#define USE_PATH_FIGURES
+//#define USE_CONTAINER_POINTS
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -244,6 +245,7 @@ namespace Draw2D.ViewModels
     {
         private string _id = null;
         private string _name = null;
+        private object _owner;
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public virtual string Id
@@ -257,6 +259,13 @@ namespace Draw2D.ViewModels
         {
             get => _name;
             set => Update(ref _name, value);
+        }
+
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public object Owner
+        {
+            get => _owner;
+            set => Update(ref _owner, value);
         }
 
         [IgnoreDataMember]
@@ -1248,6 +1257,8 @@ namespace Draw2D.ViewModels.Shapes
                 {
                     copy.Points.Add((PointShape)shared[point]);
                 }
+
+                shared[this] = copy;
             }
 
             return copy;
@@ -1561,6 +1572,8 @@ namespace Draw2D.ViewModels.Shapes
                 {
                     copy.Points.Add((PointShape)shared[point]);
                 }
+
+                shared[this] = copy;
             }
 
             return copy;
@@ -1646,6 +1659,8 @@ namespace Draw2D.ViewModels.Shapes
                 {
                     copy.Points.Add((PointShape)shared[point]);
                 }
+
+                shared[this] = copy;
             }
 
             return copy;
@@ -1792,6 +1807,11 @@ namespace Draw2D.ViewModels.Shapes
                 }
             }
 
+            if (shared != null)
+            {
+                shared[this] = copy;
+            }
+
             return copy;
         }
     }
@@ -1929,6 +1949,8 @@ namespace Draw2D.ViewModels.Shapes
                         copy.Shapes.Add((BaseShape)copyable.Copy(shared));
                     }
                 }
+
+                shared[this] = copy;
             }
 
             return copy;
@@ -2150,6 +2172,8 @@ namespace Draw2D.ViewModels.Shapes
                 {
                     copy.Points.Add((PointShape)shared[point]);
                 }
+
+                shared[this] = copy;
             }
 
             return copy;
@@ -2549,6 +2573,8 @@ namespace Draw2D.ViewModels.Shapes
                 {
                     copy.Points.Add((PointShape)shared[point]);
                 }
+
+                shared[this] = copy;
             }
 
             return copy;
@@ -2561,17 +2587,9 @@ namespace Draw2D.ViewModels.Shapes
         internal static new IBounds s_bounds = new PointBounds();
         internal static new IShapeDecorator s_decorator = new PointDecorator();
 
-        private BaseShape _owner;
         private double _x;
         private double _y;
         private BaseShape _template;
-
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public BaseShape Owner
-        {
-            get => _owner;
-            set => Update(ref _owner, value);
-        }
 
         [IgnoreDataMember]
         public override IBounds Bounds { get; } = s_bounds;
@@ -2600,12 +2618,11 @@ namespace Draw2D.ViewModels.Shapes
             set => Update(ref _template, value);
         }
 
-        public PointShape(BaseShape owner)
+        public PointShape()
         {
-            this.Owner = owner;
         }
 
-        public PointShape(BaseShape owner, double x, double y, BaseShape template) : this(owner)
+        public PointShape(double x, double y, BaseShape template)
         {
             this.X = x;
             this.Y = y;
@@ -2648,6 +2665,7 @@ namespace Draw2D.ViewModels.Shapes
             return new PointShape()
             {
                 StyleId = this.StyleId,
+                Owner = this.Owner,
                 X = this.X,
                 Y = this.Y,
                 Template = this.Template
@@ -2929,6 +2947,8 @@ namespace Draw2D.ViewModels.Shapes
                 {
                     copy.Points.Add((PointShape)shared[point]);
                 }
+
+                shared[this] = copy;
             }
 
             return copy;
@@ -3014,6 +3034,8 @@ namespace Draw2D.ViewModels.Shapes
                 {
                     copy.Points.Add((PointShape)shared[point]);
                 }
+
+                shared[this] = copy;
             }
 
             return copy;
@@ -3124,6 +3146,8 @@ namespace Draw2D.ViewModels.Shapes
                 {
                     copy.Points.Add((PointShape)shared[point]);
                 }
+
+                shared[this] = copy;
             }
 
             return copy;
@@ -3380,6 +3404,11 @@ namespace Draw2D.ViewModels.Containers
             foreach (var shape in this.Shapes)
             {
                 copy.Shapes.Add((BaseShape)shape.Copy(shared));
+            }
+
+            if (shared != null)
+            {
+                shared[this] = copy;
             }
 
             return copy;
@@ -3937,22 +3966,34 @@ namespace Draw2D.ViewModels.Decorators
         {
             _strokeStyleId = "Decorator-Stroke";
             _fillStyleId = "Decorator-Fill";
+
             _line = new LineShape(new PointShape(0, 0, null), new PointShape(0, 0, null))
             {
                 Points = new ObservableCollection<PointShape>()
             };
+            _line.StartPoint.Owner = _line;
+            _line.Point.Owner = _line;
+
             _ellipse = new EllipseShape(new PointShape(0, 0, null), new PointShape(0, 0, null))
             {
                 Points = new ObservableCollection<PointShape>(),
             };
+            _ellipse.TopLeft.Owner = _ellipse;
+            _ellipse.BottomRight.Owner = _ellipse;
+
             _rectangle = new RectangleShape(new PointShape(0, 0, null), new PointShape(0, 0, null))
             {
                 Points = new ObservableCollection<PointShape>(),
             };
+            _rectangle.TopLeft.Owner = _rectangle;
+            _rectangle.BottomRight.Owner = _rectangle;
+
             _text = new TextShape(new Text(), new PointShape(0, 0, null), new PointShape(0, 0, null))
             {
                 Points = new ObservableCollection<PointShape>(),
             };
+            _text.TopLeft.Owner = _text;
+            _text.BottomRight.Owner = _text;
         }
 
         internal void DrawLine(object dc, IShapeRenderer renderer, PointShape a, PointShape b, double dx, double dy, DrawMode mode)
@@ -4573,6 +4614,8 @@ namespace Draw2D.ViewModels.Filters
                 Point = new PointShape(context.ContainerView?.Width ?? 0, y, null),
                 StyleId = Settings.GuideStyle
             };
+            horizontal.StartPoint.Owner = horizontal;
+            horizontal.Point.Owner = horizontal;
 
             var vertical = new LineShape()
             {
@@ -4581,6 +4624,8 @@ namespace Draw2D.ViewModels.Filters
                 Point = new PointShape(x, context.ContainerView?.Height ?? 0, null),
                 StyleId = Settings.GuideStyle
             };
+            vertical.StartPoint.Owner = vertical;
+            vertical.Point.Owner = vertical;
 
             Guides.Add(horizontal);
             Guides.Add(vertical);
@@ -4737,6 +4782,8 @@ namespace Draw2D.ViewModels.Filters
                 Point = new PointShape(context.ContainerView?.Width ?? 0, y, null),
                 StyleId = Settings.GuideStyle
             };
+            horizontal.StartPoint.Owner = horizontal;
+            horizontal.Point.Owner = horizontal;
 
             var vertical = new LineShape()
             {
@@ -4745,6 +4792,8 @@ namespace Draw2D.ViewModels.Filters
                 Point = new PointShape(x, context.ContainerView?.Height ?? 0, null),
                 StyleId = Settings.GuideStyle
             };
+            vertical.StartPoint.Owner = vertical;
+            vertical.Point.Owner = vertical;
 
             Guides.Add(horizontal);
             Guides.Add(vertical);
@@ -5019,6 +5068,7 @@ namespace Draw2D.ViewModels.Intersections
                         foreach (var p in intersections)
                         {
                             var point = new PointShape(p.X, p.Y, context.PointTemplate);
+                            point.Owner = context.ContainerView?.WorkingContainer;
                             Intersections.Add(point);
                             context.ContainerView?.WorkingContainer.Shapes.Add(point);
                             context.ContainerView?.WorkingContainer.MarkAsDirty(true);
@@ -5083,6 +5133,7 @@ namespace Draw2D.ViewModels.Intersections
                     if (intersection)
                     {
                         var point = new PointShape(clip.X, clip.Y, context.PointTemplate);
+                        point.Owner = context.ContainerView?.WorkingContainer;
                         Intersections.Add(point);
                         context.ContainerView?.WorkingContainer.Shapes.Add(point);
                         context.ContainerView?.WorkingContainer.MarkAsDirty(true);
@@ -5145,12 +5196,14 @@ namespace Draw2D.ViewModels.Intersections
                     if (intersections)
                     {
                         var point1 = new PointShape(x0clip, y0clip, context.PointTemplate);
+                        point1.Owner = context.ContainerView?.WorkingContainer;
                         Intersections.Add(point1);
                         context.ContainerView?.WorkingContainer.Shapes.Add(point1);
                         context.ContainerView?.WorkingContainer.MarkAsDirty(true);
                         context.ContainerView?.SelectionState?.Select(point1);
 
                         var point2 = new PointShape(x1clip, y1clip, context.PointTemplate);
+                        point2.Owner = context.ContainerView?.WorkingContainer;
                         Intersections.Add(point2);
                         context.ContainerView?.WorkingContainer.Shapes.Add(point2);
                         context.ContainerView?.WorkingContainer.MarkAsDirty(true);
@@ -6520,11 +6573,15 @@ namespace Draw2D.ViewModels.Tools
             var lines = new ObservableCollection<LineShape>();
             for (int i = 0; i < unique.Count - 1; i++)
             {
-                var line = new LineShape(unique[i], unique[i + 1])
+                var startPoint = unique[i];
+                var point = unique[i + 1];
+                var line = new LineShape(startPoint, point)
                 {
                     Points = new ObservableCollection<PointShape>(),
                     StyleId = context.StyleLibrary.CurrentStyle.Title
                 };
+                line.StartPoint.Owner = line;
+                line.Point.Owner = line;
                 context.ContainerView?.CurrentContainer.Shapes.Add(line);
                 context.ContainerView?.CurrentContainer.MarkAsDirty(true);
                 context.ContainerView?.CurrentContainer.MarkAsDirty(true);
@@ -7440,8 +7497,6 @@ namespace Draw2D.ViewModels.Tools
             Filters?.ForEach(f => f.Clear(context));
             Filters?.Any(f => f.Process(context, ref x, ref y));
 
-            var point = new PointShape(x, y, context.PointTemplate);
-
             var shape = context.HitTest?.TryToGetShape(
                 context.ContainerView?.CurrentContainer.Shapes,
                 new Point2(x, y),
@@ -7450,17 +7505,27 @@ namespace Draw2D.ViewModels.Tools
             {
                 if (shape is ConnectableShape connectable)
                 {
+                    var point = new PointShape(x, y, context.PointTemplate);
+                    point.Owner = connectable;
                     connectable.Points.Add(point);
                     context.ContainerView?.WorkingContainer.MarkAsDirty(true);
                     context.ContainerView?.SelectionState?.Select(point);
                     context.ContainerView?.InputService?.Redraw?.Invoke();
                 }
             }
-            //else
-            //{
-            //    context.ContainerView?.CurrentContainer.Shapes.Add(point);
-            //    context.ContainerView?.InputService?.Redraw?.Invoke();
-            //}
+#if USE_CONTAINER_POINTS
+            else
+            {
+                if (context.ContainerView?.CurrentContainer != null)
+                {
+                    var point = new PointShape(x, y, context.PointTemplate)
+                    point.Owner = context.ContainerView?.CurrentContainer;
+
+                    context.ContainerView?.CurrentContainer.Shapes.Add(point);
+                    context.ContainerView?.InputService?.Redraw?.Invoke();
+                }
+            }
+#endif
         }
 
         private void MoveInternal(IToolContext context, double x, double y, Modifier modifier)
@@ -8580,6 +8645,7 @@ namespace Draw2D.ViewModels.Tools
             _path.Figures.Add(_figure);
 
             _previousPoint = new PointShape(x, y, context.PointTemplate);
+            _previousPoint.Owner = null;
 
             context.ContainerView?.WorkingContainer.Shapes.Add(_path);
             context.ContainerView?.WorkingContainer.MarkAsDirty(true);
@@ -8676,6 +8742,8 @@ namespace Draw2D.ViewModels.Tools
                 Text = new Text(),
                 StyleId = context.StyleLibrary.CurrentStyle.Title
             };
+            line.StartPoint.Owner = line;
+            line.Point.Owner = line;
 
             _figure.Shapes.Add(line);
             context.ContainerView?.CurrentContainer.MarkAsDirty(true);
@@ -8974,6 +9042,8 @@ namespace Draw2D.ViewModels.Tools
                         TopLeft = new PointShape(),
                         BottomRight = new PointShape()
                     };
+                    _rectangle.TopLeft.Owner = _rectangle;
+                    _rectangle.BottomRight.Owner = _rectangle;
                 }
 
                 _rectangle.TopLeft.X = x;
@@ -9464,6 +9534,7 @@ namespace Draw2D.ViewModels.Tools
         internal void Copy(ICanvasContainer container, IEnumerable<BaseShape> shapes, ISelectionState selectionState)
         {
             var shared = GetPointsCopyDict(shapes);
+            var points = new List<PointShape>();
 
             foreach (var shape in shapes)
             {
@@ -9472,10 +9543,16 @@ namespace Draw2D.ViewModels.Tools
                     var copy = (BaseShape)copyable.Copy(shared);
                     if (copy != null && !(copy is PointShape))
                     {
+                        copy.GetPoints(points);
                         copy.Select(selectionState);
                         container.Shapes.Add(copy);
                     }
                 }
+            }
+
+            foreach (var point in points)
+            {
+                point.Owner = (BaseShape)shared[point.Owner];
             }
         }
 

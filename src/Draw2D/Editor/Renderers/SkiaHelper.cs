@@ -322,6 +322,8 @@ namespace Draw2D.Editor.Renderers
                                     Text = new Text(),
                                     StyleId = style.Title
                                 };
+                                lineShape.StartPoint.Owner = lineShape;
+                                lineShape.Point.Owner = lineShape;
                                 figureShape.Shapes.Add(lineShape);
                                 lastPoint = points[1];
                             }
@@ -343,6 +345,10 @@ namespace Draw2D.Editor.Renderers
                                     Text = new Text(),
                                     StyleId = style.Title
                                 };
+                                cubicBezierShape.StartPoint.Owner = cubicBezierShape;
+                                cubicBezierShape.Point1.Owner = cubicBezierShape;
+                                cubicBezierShape.Point2.Owner = cubicBezierShape;
+                                cubicBezierShape.Point3.Owner = cubicBezierShape;
                                 figureShape.Shapes.Add(cubicBezierShape);
                                 lastPoint = points[3];
                             }
@@ -363,6 +369,9 @@ namespace Draw2D.Editor.Renderers
                                     Text = new Text(),
                                     StyleId = style.Title
                                 };
+                                quadraticBezierShape.StartPoint.Owner = quadraticBezierShape;
+                                quadraticBezierShape.Point1.Owner = quadraticBezierShape;
+                                quadraticBezierShape.Point2.Owner = quadraticBezierShape;
                                 figureShape.Shapes.Add(quadraticBezierShape);
                                 lastPoint = points[2];
                             }
@@ -384,6 +393,9 @@ namespace Draw2D.Editor.Renderers
                                     Text = new Text(),
                                     StyleId = style.Title
                                 };
+                                conicShape.StartPoint.Owner = conicShape;
+                                conicShape.Point1.Owner = conicShape;
+                                conicShape.Point2.Owner = conicShape;
                                 figureShape.Shapes.Add(conicShape);
                                 lastPoint = points[2];
                             }
@@ -399,6 +411,8 @@ namespace Draw2D.Editor.Renderers
                                     Text = new Text(),
                                     Style = style.Title
                                 };
+                                line.StartPoint.Owner = line;
+                                line.Point.Owner = line;
                                 figureShape.Shapes.Add(line);
 #else
                                 figureShape.IsClosed = true;
