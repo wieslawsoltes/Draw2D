@@ -153,7 +153,7 @@ namespace Draw2D.Editor.Views
                 {
                     if (point.Template.IsDirty)
                     {
-                        Debug.WriteLine($"pointShape.Template.IsDirty: true");
+                        Debug.WriteLine($"point.Template.IsDirty: true");
                         return true;
                     }
                 }
