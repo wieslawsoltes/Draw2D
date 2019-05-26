@@ -372,12 +372,12 @@ namespace Draw2D.ViewModels
     [DataContract(IsReference = true)]
     public abstract class PointIntersection : ViewModelBase
     {
-        private IList<BaseShape> _intersections;
+        private IList<PointShape> _intersections;
 
         public abstract string Title { get; }
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public IList<BaseShape> Intersections
+        public IList<PointShape> Intersections
         {
             get => _intersections;
             set => Update(ref _intersections, value);
@@ -670,7 +670,7 @@ namespace Draw2D.ViewModels.Shapes
         [IgnoreDataMember]
         public virtual IShapeDecorator Decorator { get; } = s_decorator;
 
-        public abstract void GetPoints(IList<BaseShape> points);
+        public abstract void GetPoints(IList<PointShape> points);
 
         public abstract void Draw(object dc, IShapeRenderer renderer, double dx, double dy, DrawMode mode, object db, object r);
 
@@ -736,7 +736,7 @@ namespace Draw2D.ViewModels.Shapes
             this.BottomRight = bottomRight;
         }
 
-        public override void GetPoints(IList<BaseShape> points)
+        public override void GetPoints(IList<PointShape> points)
         {
             points.Add(TopLeft);
             points.Add(BottomRight);
@@ -866,7 +866,7 @@ namespace Draw2D.ViewModels.Shapes
         internal static new IBounds s_bounds = null;
         internal static new IShapeDecorator s_decorator = null;
 
-        private IList<BaseShape> _points;
+        private IList<PointShape> _points;
 
         [IgnoreDataMember]
         public override IBounds Bounds { get; } = s_bounds;
@@ -875,7 +875,7 @@ namespace Draw2D.ViewModels.Shapes
         public override IShapeDecorator Decorator { get; } = s_decorator;
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public IList<BaseShape> Points
+        public IList<PointShape> Points
         {
             get => _points;
             set => Update(ref _points, value);
@@ -885,7 +885,7 @@ namespace Draw2D.ViewModels.Shapes
         {
         }
 
-        public ConnectableShape(IList<BaseShape> points)
+        public ConnectableShape(IList<PointShape> points)
         {
             this.Points = points;
         }
@@ -1053,7 +1053,7 @@ namespace Draw2D.ViewModels.Shapes
             this.Weight = weight;
         }
 
-        public override void GetPoints(IList<BaseShape> points)
+        public override void GetPoints(IList<PointShape> points)
         {
             points.Add(StartPoint);
             points.Add(Point1);
@@ -1332,7 +1332,7 @@ namespace Draw2D.ViewModels.Shapes
             this.Point3 = point3;
         }
 
-        public override void GetPoints(IList<BaseShape> points)
+        public override void GetPoints(IList<PointShape> points)
         {
             points.Add(StartPoint);
             points.Add(Point1);
@@ -1747,7 +1747,7 @@ namespace Draw2D.ViewModels.Shapes
             this.Shapes = shapes;
         }
 
-        public override void GetPoints(IList<BaseShape> points)
+        public override void GetPoints(IList<PointShape> points)
         {
             foreach (var shape in Shapes)
             {
@@ -1775,7 +1775,7 @@ namespace Draw2D.ViewModels.Shapes
 
         public override void Move(ISelectionState selectionState, double dx, double dy)
         {
-            var points = new List<BaseShape>();
+            var points = new List<PointShape>();
             GetPoints(points);
             var distinct = points.Distinct();
 
@@ -1869,7 +1869,7 @@ namespace Draw2D.ViewModels.Shapes
             this.Shapes = shapes;
         }
 
-        public override void GetPoints(IList<BaseShape> points)
+        public override void GetPoints(IList<PointShape> points)
         {
             foreach (var point in Points)
             {
@@ -1909,7 +1909,7 @@ namespace Draw2D.ViewModels.Shapes
 
         public override void Move(ISelectionState selectionState, double dx, double dy)
         {
-            var points = new List<BaseShape>();
+            var points = new List<PointShape>();
             GetPoints(points);
             var distinct = points.Distinct();
 
@@ -2006,7 +2006,7 @@ namespace Draw2D.ViewModels.Shapes
             this.Point = point;
         }
 
-        public override void GetPoints(IList<BaseShape> points)
+        public override void GetPoints(IList<PointShape> points)
         {
             points.Add(StartPoint);
             points.Add(Point);
@@ -2311,7 +2311,7 @@ namespace Draw2D.ViewModels.Shapes
             return null;
         }
 
-        public override void GetPoints(IList<BaseShape> points)
+        public override void GetPoints(IList<PointShape> points)
         {
             foreach (var point in Points)
             {
@@ -2480,7 +2480,7 @@ namespace Draw2D.ViewModels.Shapes
 
         public override void Move(ISelectionState selectionState, double dx, double dy)
         {
-            var points = new List<BaseShape>();
+            var points = new List<PointShape>();
             GetPoints(points);
             var distinct = points.Distinct();
 
@@ -2499,7 +2499,7 @@ namespace Draw2D.ViewModels.Shapes
         {
             base.Select(selectionState);
 
-            var points = new List<BaseShape>();
+            var points = new List<PointShape>();
             GetPoints(points);
             var distinct = points.Distinct();
 
@@ -2513,7 +2513,7 @@ namespace Draw2D.ViewModels.Shapes
         {
             base.Deselect(selectionState);
 
-            var points = new List<BaseShape>();
+            var points = new List<PointShape>();
             GetPoints(points);
             var distinct = points.Distinct();
 
@@ -2598,21 +2598,21 @@ namespace Draw2D.ViewModels.Shapes
         public override IShapeDecorator Decorator { get; } = s_decorator;
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public double X
+        public virtual double X
         {
             get => _x;
             set => Update(ref _x, value);
         }
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public double Y
+        public virtual double Y
         {
             get => _y;
             set => Update(ref _y, value);
         }
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public BaseShape Template
+        public virtual BaseShape Template
         {
             get => _template;
             set => Update(ref _template, value);
@@ -2629,7 +2629,7 @@ namespace Draw2D.ViewModels.Shapes
             this.Template = template;
         }
 
-        public override void GetPoints(IList<BaseShape> points)
+        public override void GetPoints(IList<PointShape> points)
         {
             points.Add(this);
         }
@@ -2744,7 +2744,7 @@ namespace Draw2D.ViewModels.Shapes
             this.Point2 = point2;
         }
 
-        public override void GetPoints(IList<BaseShape> points)
+        public override void GetPoints(IList<PointShape> points)
         {
             points.Add(StartPoint);
             points.Add(Point1);
@@ -3062,12 +3062,12 @@ namespace Draw2D.ViewModels.Shapes
     }
 
     [DataContract(IsReference = true)]
-    public class ReferencePointShape : BaseShape, ICopyable
+    public class ReferencePointShape : PointShape, ICopyable
     {
         internal static new IBounds s_bounds = new PointBounds();
         internal static new IShapeDecorator s_decorator = new PointDecorator();
 
-        private BaseShape _point;
+        private PointShape _point;
         private ReferenceShape _reference;
 
         [IgnoreDataMember]
@@ -3077,7 +3077,28 @@ namespace Draw2D.ViewModels.Shapes
         public override IShapeDecorator Decorator { get; } = s_decorator;
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public BaseShape Point
+        public override double X
+        {
+            get => _point.X;
+            set => _point.X = value;
+        }
+
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public override double Y
+        {
+            get => _point.Y;
+            set => _point.Y = value;
+        }
+
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public override BaseShape Template
+        {
+            get => _point.Template;
+            set => _point.Template = value;
+        }
+
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public PointShape Point
         {
             get => _point;
             set => Update(ref _point, value);
@@ -3090,13 +3111,17 @@ namespace Draw2D.ViewModels.Shapes
             set => Update(ref _reference, value);
         }
 
-        public ReferencePointShape(BaseShape point, ReferenceShape reference)
+        public ReferencePointShape()
         {
-            this.Point = point;
-            this.Reference = template;
         }
 
-        public override void GetPoints(IList<BaseShape> points)
+        public ReferencePointShape(PointShape point, ReferenceShape reference)
+        {
+            this.Point = point;
+            this.Reference = reference;
+        }
+
+        public override void GetPoints(IList<PointShape> points)
         {
             points.Add(this);
         }
@@ -3127,7 +3152,7 @@ namespace Draw2D.ViewModels.Shapes
                 StyleId = this.StyleId,
                 Owner = this.Owner,
                 Point = this.Point,
-                ReferenceShape = this.ReferenceShape
+                Reference = this.Reference
             };
 
             return copy;
@@ -3143,8 +3168,8 @@ namespace Draw2D.ViewModels.Shapes
         private string _title;
         private double _x;
         private double _y;
-        private BaseShape _template;
-        private IList<ReferencePointShape> _points;
+        private GroupShape _template;
+        private IList<PointShape> _points;
 
         [IgnoreDataMember]
         public override IBounds Bounds { get; } = s_bounds;
@@ -3174,37 +3199,39 @@ namespace Draw2D.ViewModels.Shapes
         }
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public BaseShape Template
+        public GroupShape Template
         {
             get => _template;
             set => Update(ref _template, value);
         }
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public IList<ReferencePointShape> Points
+        public IList<PointShape> Points
         {
             get => _points;
             set => Update(ref _points, value);
         }
 
-        public ReferenceShape(string title, double x, double y, BaseShape template)
+        public ReferenceShape()
+        {
+        }
+
+        public ReferenceShape(string title, double x, double y, GroupShape template)
         {
             this.Title = title;
             this.X = x;
             this.Y = y;
             this.Template = template;
-            this.Points = new ObservableCollection<ReferencePointShape>();
 
-            var points = new List<BaseShape>();
-            template.GetPoints(points);
+            this.Points = new ObservableCollection<PointShape>();
 
-            foreach (var point in points)
+            foreach (var point in template.Points)
             {
-                _points.Add(new ReferencePointShape(point, this));
+                Points.Add(new ReferencePointShape(point, this));
             }
         }
 
-        public override void GetPoints(IList<BaseShape> points)
+        public override void GetPoints(IList<PointShape> points)
         {
             foreach (var point in Points)
             {
@@ -3280,7 +3307,7 @@ namespace Draw2D.ViewModels.Shapes
             {
                 foreach (var point in this.Points)
                 {
-                    copy.Points.Add((BaseShape)shared[point]);
+                    copy.Points.Add((PointShape)shared[point]);
                 }
 
                 shared[this] = copy;
@@ -3409,7 +3436,7 @@ namespace Draw2D.ViewModels.Containers
     public interface ICanvasContainer : IDirty, IDrawable, ISelectable, ICopyable
     {
         IList<BaseShape> Shapes { get; set; }
-        void GetPoints(IList<BaseShape> points);
+        void GetPoints(IList<PointShape> points);
     }
 
     public interface IContainerView : IDrawTarget, IHitTestable
@@ -3589,7 +3616,7 @@ namespace Draw2D.ViewModels.Containers
         {
         }
 
-        public override void GetPoints(IList<BaseShape> points)
+        public override void GetPoints(IList<PointShape> points)
         {
             foreach (var shape in Shapes)
             {
@@ -3645,7 +3672,7 @@ namespace Draw2D.ViewModels.Containers
 
         public override void Move(ISelectionState selectionState, double dx, double dy)
         {
-            var points = new List<BaseShape>();
+            var points = new List<PointShape>();
             GetPoints(points);
             var distinct = points.Distinct();
 
@@ -4425,7 +4452,7 @@ namespace Draw2D.ViewModels.Decorators
             _text.Draw(dc, renderer, dx, dy, mode, null, null);
         }
 
-        internal void GetBoxFromPoints(List<BaseShape> points, out double ax, out double ay, out double bx, out double by)
+        internal void GetBoxFromPoints(List<PointShape> points, out double ax, out double ay, out double bx, out double by)
         {
             ax = double.MaxValue;
             ay = double.MaxValue;
@@ -4443,7 +4470,7 @@ namespace Draw2D.ViewModels.Decorators
 
         internal void DrawBoxFromPoints(object dc, IShapeRenderer renderer, BaseShape shape, double dx, double dy, DrawMode mode)
         {
-            var points = new List<BaseShape>();
+            var points = new List<PointShape>();
             shape.GetPoints(points);
 
             if (points.Count >= 2)
@@ -5517,7 +5544,7 @@ namespace Draw2D.ViewModels.Bounds
                 throw new ArgumentNullException("shape");
             }
 
-            var points = new List<BaseShape>();
+            var points = new List<PointShape>();
             cubicBezier.GetPoints(points);
 
             return HitTestHelper.Contains(points, target) ? shape : null;
@@ -5530,7 +5557,7 @@ namespace Draw2D.ViewModels.Bounds
                 throw new ArgumentNullException("shape");
             }
 
-            var points = new List<BaseShape>();
+            var points = new List<PointShape>();
             cubicBezier.GetPoints(points);
 
             return HitTestHelper.Overlap(points, target) ? shape : null;
@@ -5847,7 +5874,7 @@ namespace Draw2D.ViewModels.Bounds
                 }
             }
 #endif
-            var points = new List<BaseShape>();
+            var points = new List<PointShape>();
             path.GetPoints(points);
 
             return HitTestHelper.Contains(points, target) ? shape : null;
@@ -5869,7 +5896,7 @@ namespace Draw2D.ViewModels.Bounds
                 }
             }
 
-            var points = new List<BaseShape>();
+            var points = new List<PointShape>();
             path.GetPoints(points);
 
             return HitTestHelper.Overlap(points, target) ? shape : null;
@@ -5964,7 +5991,7 @@ namespace Draw2D.ViewModels.Bounds
                 throw new ArgumentNullException("shape");
             }
 
-            var points = new List<BaseShape>();
+            var points = new List<PointShape>();
             quadraticBezier.GetPoints(points);
 
             return HitTestHelper.Contains(points, target) ? shape : null;
@@ -5977,7 +6004,7 @@ namespace Draw2D.ViewModels.Bounds
                 throw new ArgumentNullException("shape");
             }
 
-            var points = new List<BaseShape>();
+            var points = new List<PointShape>();
             quadraticBezier.GetPoints(points);
 
             return HitTestHelper.Overlap(points, target) ? shape : null;
@@ -6030,7 +6057,7 @@ namespace Draw2D.ViewModels.Bounds
                 throw new ArgumentNullException("shape");
             }
 
-            var points = new List<BaseShape>();
+            var points = new List<PointShape>();
             conic.GetPoints(points);
 
             return HitTestHelper.Contains(points, target) ? shape : null;
@@ -6043,7 +6070,7 @@ namespace Draw2D.ViewModels.Bounds
                 throw new ArgumentNullException("shape");
             }
 
-            var points = new List<BaseShape>();
+            var points = new List<PointShape>();
             conic.GetPoints(points);
 
             return HitTestHelper.Overlap(points, target) ? shape : null;
@@ -6878,11 +6905,11 @@ namespace Draw2D.ViewModels.Tools
     {
         public static IList<LineShape> SplitByIntersections(IToolContext context, IEnumerable<PointIntersection> intersections, LineShape target)
         {
-            var points = new List<BaseShape>(intersections.SelectMany(i => i.Intersections));
+            var points = new List<PointShape>(intersections.SelectMany(i => i.Intersections));
             points.Insert(0, target.StartPoint);
             points.Insert(points.Count, target.Point);
 
-            var unique = new List<BaseShape>(
+            var unique = new List<PointShape>(
                 points.Select(p => new Point2(p.X, p.Y)).Distinct().OrderBy(p => p)
                       .Select(p => new PointShape(p.X, p.Y, context.PointTemplate)));
 
@@ -7913,7 +7940,7 @@ namespace Draw2D.ViewModels.Tools
         private IList<PointFilter> _filters;
         private PolyLineToolSettings _settings;
         private LineShape _line = null;
-        private IList<BaseShape> _points = null;
+        private IList<PointShape> _points = null;
 
         public enum State
         {
@@ -8978,9 +9005,9 @@ namespace Draw2D.ViewModels.Tools
 
             if (Settings?.Simplify ?? true)
             {
-                var points = new List<BaseShape>();
+                var points = new List<PointShape>();
                 _path.GetPoints(points);
-                var distinct = new List<BaseShape>(points.Distinct());
+                var distinct = new List<PointShape>(points.Distinct());
                 IList<Vector2> vectors = new List<Vector2>(distinct.Select(p => new Vector2((float)p.X, (float)p.Y)));
                 int count = vectors.Count;
                 RDP rdp = new RDP();
@@ -9830,7 +9857,7 @@ namespace Draw2D.ViewModels.Tools
         {
             var copy = new Dictionary<object, object>();
 
-            var points = new List<BaseShape>();
+            var points = new List<PointShape>();
 
             foreach (var shape in shapes)
             {
@@ -9850,7 +9877,7 @@ namespace Draw2D.ViewModels.Tools
         internal void Copy(ICanvasContainer container, IEnumerable<BaseShape> shapes, ISelectionState selectionState)
         {
             var shared = GetPointsCopyDict(shapes);
-            var points = new List<BaseShape>();
+            var points = new List<PointShape>();
 
             foreach (var shape in shapes)
             {
