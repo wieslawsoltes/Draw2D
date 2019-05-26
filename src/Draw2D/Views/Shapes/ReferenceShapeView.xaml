@@ -14,11 +14,13 @@
     </UserControl.Resources>
     <TabControl Classes="default" TabStripPlacement="Top">
         <TabItem Classes="default" Header="Reference">
-            <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="Auto,*">
-                <TextBlock Classes="default" Grid.Column="0" Grid.Row="0" Text="X"/>
-                <TextBox Classes="default" Grid.Column="1" Grid.Row="0" Text="{Binding X}"/>
-                <TextBlock Classes="default" Grid.Column="0" Grid.Row="1" Text="Y"/>
-                <TextBox Classes="default" Grid.Column="1" Grid.Row="1" Text="{Binding Y}"/>
+            <Grid RowDefinitions="Auto,Auto,Auto" ColumnDefinitions="Auto,*">
+                <TextBlock Classes="default" Grid.Column="0" Grid.Row="0" Text="Title"/>
+                <TextBox Classes="default" Grid.Column="1" Grid.Row="0" Text="{Binding Title}"/>
+                <TextBlock Classes="default" Grid.Column="0" Grid.Row="1" Text="X"/>
+                <TextBox Classes="default" Grid.Column="1" Grid.Row="1" Text="{Binding X}"/>
+                <TextBlock Classes="default" Grid.Column="0" Grid.Row="2" Text="Y"/>
+                <TextBox Classes="default" Grid.Column="1" Grid.Row="2" Text="{Binding Y}"/>
             </Grid>
         </TabItem>
         <TabItem Classes="default" Header="Template">
