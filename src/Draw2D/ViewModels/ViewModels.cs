@@ -5864,7 +5864,7 @@ namespace Draw2D.ViewModels.Bounds
             {
                 foreach (var figure in path.Figures)
                 {
-                    var figurePoints = new List<BaseShape>();
+                    var figurePoints = new List<PointShape>();
                     figure.GetPoints(figurePoints);
 
                     if (HitTestHelper.Contains(figurePoints, target))
