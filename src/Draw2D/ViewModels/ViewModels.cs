@@ -3198,9 +3198,9 @@ namespace Draw2D.ViewModels.Shapes
             return new ReferencePointShape()
             {
                 StyleId = this.StyleId,
+                Owner = this.Owner,
                 Point = this.Point,
                 Reference = this.Reference,
-                Owner = this.Owner
             };
         }
     }
@@ -3356,7 +3356,6 @@ namespace Draw2D.ViewModels.Shapes
                     if (point is ReferencePointShape referencePoint)
                     {
                         var referencePointCopy = (ReferencePointShape)shared[referencePoint];
-                        //var referencePointCopy = (ReferencePointShape)referencePoint.Copy(shared);
                         referencePointCopy.Owner = copy;
                         referencePointCopy.Reference = copy;
                         copy.Points.Add(referencePointCopy);
