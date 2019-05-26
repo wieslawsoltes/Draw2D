@@ -3156,10 +3156,93 @@ namespace Draw2D.ViewModels.Shapes
             Y += dy;
         }
 
+        public override void Select(ISelectionState selectionState)
+        {
+            if (!selectionState.IsSelected(this))
+            {
+                selectionState.Select(this);
+            }
+
+            if (_template is ConnectableShape connectableShape)
+            {
+                foreach (var point in connectableShape.Points)
+                {
+                    point.Select(selectionState);
+                }
+            }
+        }
+
+        public override void Deselect(ISelectionState selectionState)
+        {
+            if (selectionState.IsSelected(this))
+            {
+                selectionState.Deselect(this);
+            }
+
+            if (_template is ConnectableShape connectableShape)
+            {
+                foreach (var point in Points)
+                {
+                    point.Deselect(selectionState);
+                }
+            }
+        }
+
+        private bool CanConnect(PointShape point)
+        {
+            if (_template is ConnectableShape connectableShape)
+            {
+                return connectableShape.Points.Contains(point) == false;
+            }
+            return false;
+        }
+
+        public virtual bool Connect(PointShape point, PointShape target)
+        {
+            if (_template is ConnectableShape connectableShape)
+            {
+                if (CanConnect(point))
+                {
+                    int index = connectableShape.Points.IndexOf(target);
+                    if (index >= 0)
+                    {
+                        Debug.WriteLine($"ConnectableShape Connected to Points");
+                        connectableShape.Points[index] = point;
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
+        public virtual bool Disconnect(PointShape point, out PointShape result)
+        {
+            result = null;
+            return false;
+        }
+
+        public virtual bool Disconnect()
+        {
+            bool result = false;
+
+            if (_template is ConnectableShape connectableShape)
+            {
+                for (int i = 0; i < connectableShape.Points.Count; i++)
+                {
+                    Debug.WriteLine($"{nameof(ReferenceShape)}: Disconnected from {nameof(connectableShape.Points)} #{i}");
+                    _points[i] = (PointShape)_points[i].Copy(null);
+                    result = true;
+                }
+            }
+
+            return result;
+        }
+
         public override object Copy(Dictionary<object, object> shared)
         {
             var copy = new ReferenceShape()
             {
+                Points = new ObservableCollection<PointShape>(),
                 StyleId = this.StyleId,
                 Owner = this.Owner,
                 Title = this.Title,
@@ -4610,7 +4693,7 @@ namespace Draw2D.ViewModels.Decorators
         {
             if (shape is ReferenceShape reference)
             {
-                Draw(dc, renderer, reference, selectionState, dx + reference.X, dy + reference.Y, mode);
+                Draw(dc, renderer, reference, selectionState, dx, dy, mode);
             }
         }
     }
