@@ -3062,7 +3062,7 @@ namespace Draw2D.ViewModels.Shapes
     }
 
     [DataContract(IsReference = true)]
-    public class ReferenceShape : ConnectableShape, ICopyable
+    public class ReferenceShape : BaseShape, ICopyable
     {
         internal static new IBounds s_bounds = new ReferenceBounds();
         internal static new IShapeDecorator s_decorator = new ReferenceDecorator();
@@ -3117,12 +3117,21 @@ namespace Draw2D.ViewModels.Shapes
             this.Template = template;
         }
 
+        public ReferenceShape(string title, double x, double y, BaseShape template)
+        {
+            this.Title = title;
+            this.X = x;
+            this.Y = y;
+            this.Template = template;
+        }
+
         public override void GetPoints(IList<PointShape> points)
         {
-            foreach (var point in Points)
-            {
-                points.Add(point);
-            }
+            // TODO: Add reference points.
+            //foreach (var point in Points)
+            //{
+            //    points.Add(point);
+            //}
 
             // TODO: Fix reference shape template points selection.
             //if (_template != null)
@@ -3191,61 +3200,11 @@ namespace Draw2D.ViewModels.Shapes
             //}
         }
 
-        private bool CanConnectTemplate(PointShape point)
-        {
-            if (_template is ConnectableShape connectableShape)
-            {
-                return connectableShape.Points.Contains(point) == false;
-            }
-            return false;
-        }
-
-        public override bool Connect(PointShape point, PointShape target)
-        {
-            if (_template is ConnectableShape connectableShape)
-            {
-                if (CanConnectTemplate(point))
-                {
-                    int index = connectableShape.Points.IndexOf(target);
-                    if (index >= 0)
-                    {
-                        Debug.WriteLine($"{nameof(ReferenceShape)} Connected to Points");
-                        connectableShape.Points[index] = point;
-                        return true;
-                    }
-                }
-            }
-            return false;
-        }
-
-        public override bool Disconnect(PointShape point, out PointShape result)
-        {
-            result = null;
-            return false;
-        }
-
-        public override bool Disconnect()
-        {
-            bool result = false;
-
-            if (_template is ConnectableShape connectableShape)
-            {
-                for (int i = 0; i < connectableShape.Points.Count; i++)
-                {
-                    Debug.WriteLine($"{nameof(ReferenceShape)}: Disconnected from {nameof(connectableShape.Points)} #{i}");
-                    connectableShape.Points[i] = (PointShape)connectableShape.Points[i].Copy(null);
-                    result = true;
-                }
-            }
-
-            return result;
-        }
 
         public override object Copy(Dictionary<object, object> shared)
         {
             var copy = new ReferenceShape()
             {
-                Points = new ObservableCollection<PointShape>(),
                 StyleId = this.StyleId,
                 Owner = this.Owner,
                 Title = this.Title,
@@ -3256,10 +3215,11 @@ namespace Draw2D.ViewModels.Shapes
 
             if (shared != null)
             {
-                foreach (var point in this.Points)
-                {
-                    copy.Points.Add((PointShape)shared[point]);
-                }
+                // TODO: Copy reference points.
+                //foreach (var point in this.Points)
+                //{
+                //    copy.Points.Add((PointShape)shared[point]);
+                //}
 
                 shared[this] = copy;
             }
