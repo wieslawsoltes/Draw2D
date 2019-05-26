@@ -3067,6 +3067,7 @@ namespace Draw2D.ViewModels.Shapes
         internal static new IBounds s_bounds = new ReferenceBounds();
         internal static new IShapeDecorator s_decorator = new ReferenceDecorator();
 
+        private string _title;
         private double _x;
         private double _y;
         private BaseShape _template;
@@ -3076,6 +3077,13 @@ namespace Draw2D.ViewModels.Shapes
 
         [IgnoreDataMember]
         public override IShapeDecorator Decorator { get; } = s_decorator;
+
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public string Title
+        {
+            get => _title;
+            set => Update(ref _title, value);
+        }
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public double X
@@ -3111,7 +3119,15 @@ namespace Draw2D.ViewModels.Shapes
 
         public override void GetPoints(IList<PointShape> points)
         {
-            points.Add(this);
+            foreach (var point in Points)
+            {
+                points.Add(point);
+            }
+
+            if (_template != null)
+            {
+                _template.GetPoints(points);
+            }
         }
 
         public override void Invalidate()
@@ -3142,10 +3158,11 @@ namespace Draw2D.ViewModels.Shapes
 
         public override object Copy(Dictionary<object, object> shared)
         {
-            var cpoy = new ReferenceShapeShape()
+            var copy = new ReferenceShape()
             {
                 StyleId = this.StyleId,
                 Owner = this.Owner,
+                Title = this.Title,
                 X = this.X,
                 Y = this.Y,
                 Template = this.Template
@@ -4591,7 +4608,7 @@ namespace Draw2D.ViewModels.Decorators
 
         public override void Draw(object dc, BaseShape shape, IShapeRenderer renderer, ISelectionState selectionState, double dx, double dy, DrawMode mode)
         {
-            if (shape is ReferenceShape group)
+            if (shape is ReferenceShape reference)
             {
                 Draw(dc, renderer, reference, selectionState, dx, dy, mode);
             }
@@ -5992,7 +6009,7 @@ namespace Draw2D.ViewModels.Bounds
                 throw new ArgumentNullException("shape");
             }
 
-            return reference.TryToGetPoint(shape, target, radius, hitTest);
+            return reference.Template?.Bounds?.TryToGetPoint(shape, target, radius, hitTest);
         }
 
         public BaseShape Contains(BaseShape shape, Point2 target, double radius, IHitTest hitTest)
@@ -6002,17 +6019,17 @@ namespace Draw2D.ViewModels.Bounds
                 throw new ArgumentNullException("shape");
             }
 
-            return reference.Contains(shape, target, radius, hitTest);
+            return reference.Template?.Bounds?.Contains(shape, target, radius, hitTest);
         }
 
         public BaseShape Overlaps(BaseShape shape, Rect2 target, double radius, IHitTest hitTest)
         {
-            if (!(shape is GroupShape group))
+            if (!(shape is ReferenceShape reference))
             {
                 throw new ArgumentNullException("shape");
             }
 
-            return reference.Overlaps(shape, target, radius, hitTest);
+            return reference.Template?.Bounds?.Overlaps(shape, target, radius, hitTest);
         }
     }
 

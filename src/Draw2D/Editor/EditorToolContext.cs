@@ -487,7 +487,7 @@ namespace Draw2D.Editor
                 Shapes = new ObservableCollection<BaseShape>()
             };
 
-            var rectangle = new RectangleShape(new PointShape(30, 30, context.PointTemplate), new PointShape(60, 60, context.PointTemplate))
+            var rectangle = new RectangleShape(new PointShape(0, 0, context.PointTemplate), new PointShape(30, 30, context.PointTemplate))
             {
                 Points = new ObservableCollection<PointShape>(),
                 Text = new Text(),
@@ -496,7 +496,7 @@ namespace Draw2D.Editor
             rectangle.TopLeft.Owner = rectangle;
             rectangle.BottomRight.Owner = rectangle;
 
-            var text = new TextShape(new PointShape(30, 30, context.PointTemplate), new PointShape(60, 60, context.PointTemplate))
+            var text = new TextShape(new PointShape(0, 0, context.PointTemplate), new PointShape(30, 30, context.PointTemplate))
             {
                 Points = new ObservableCollection<PointShape>(),
                 Text = new Text("&"),
@@ -508,10 +508,10 @@ namespace Draw2D.Editor
             group.Shapes.Add(rectangle);
             group.Shapes.Add(text);
 
-            group.Points.Add(new PointShape(45, 30, context.PointTemplate));
-            group.Points.Add(new PointShape(45, 60, context.PointTemplate));
-            group.Points.Add(new PointShape(30, 45, context.PointTemplate));
-            group.Points.Add(new PointShape(60, 45, context.PointTemplate));
+            group.Points.Add(new PointShape(15, 0, context.PointTemplate));
+            group.Points.Add(new PointShape(15, 30, context.PointTemplate));
+            group.Points.Add(new PointShape(0, 15, context.PointTemplate));
+            group.Points.Add(new PointShape(30, 15, context.PointTemplate));
 
             foreach (var point in group.Points)
             {
@@ -522,8 +522,8 @@ namespace Draw2D.Editor
             {
                 Title = "Reference1",
                 Points = new ObservableCollection<PointShape>(),
-                X = 30,
-                Y = 120,
+                X = 0,
+                Y = 60,
                 Template = group
             };
 
@@ -531,12 +531,12 @@ namespace Draw2D.Editor
             {
                 Title = "Reference1",
                 Points = new ObservableCollection<PointShape>(),
-                X = 30,
-                Y = 180,
+                X = 0,
+                Y = 120,
                 Template = group
             };
 
-            //context.ContainerView?.CurrentContainer.Shapes.Add(group);
+            context.ContainerView?.CurrentContainer.Shapes.Add(group);
             context.ContainerView?.CurrentContainer.Shapes.Add(reference1);
             context.ContainerView?.CurrentContainer.Shapes.Add(reference2);
             context.ContainerView?.CurrentContainer.MarkAsDirty(true);
