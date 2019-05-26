@@ -518,7 +518,27 @@ namespace Draw2D.Editor
                 point.Owner = group;
             }
 
-            context.ContainerView?.CurrentContainer.Shapes.Add(group);
+            var reference1 = new ReferenceShape()
+            {
+                Title = "Reference1",
+                Points = new ObservableCollection<PointShape>(),
+                X = 30,
+                Y = 120,
+                Template = group
+            };
+
+            var reference2 = new ReferenceShape()
+            {
+                Title = "Reference1",
+                Points = new ObservableCollection<PointShape>(),
+                X = 30,
+                Y = 180,
+                Template = group
+            };
+
+            //context.ContainerView?.CurrentContainer.Shapes.Add(group);
+            context.ContainerView?.CurrentContainer.Shapes.Add(reference1);
+            context.ContainerView?.CurrentContainer.Shapes.Add(reference2);
             context.ContainerView?.CurrentContainer.MarkAsDirty(true);
         }
     }

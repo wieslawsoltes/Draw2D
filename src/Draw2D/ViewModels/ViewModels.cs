@@ -3062,6 +3062,110 @@ namespace Draw2D.ViewModels.Shapes
     }
 
     [DataContract(IsReference = true)]
+    public class ReferenceShape : ConnectableShape, ICopyable
+    {
+        internal static new IBounds s_bounds = new ReferenceBounds();
+        internal static new IShapeDecorator s_decorator = new ReferenceDecorator();
+
+        private double _x;
+        private double _y;
+        private BaseShape _template;
+
+        [IgnoreDataMember]
+        public override IBounds Bounds { get; } = s_bounds;
+
+        [IgnoreDataMember]
+        public override IShapeDecorator Decorator { get; } = s_decorator;
+
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public double X
+        {
+            get => _x;
+            set => Update(ref _x, value);
+        }
+
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public double Y
+        {
+            get => _y;
+            set => Update(ref _y, value);
+        }
+
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public BaseShape Template
+        {
+            get => _template;
+            set => Update(ref _template, value);
+        }
+
+        public ReferenceShape()
+        {
+        }
+
+        public ReferenceShape(double x, double y, BaseShape template)
+        {
+            this.X = x;
+            this.Y = y;
+            this.Template = template;
+        }
+
+        public override void GetPoints(IList<PointShape> points)
+        {
+            points.Add(this);
+        }
+
+        public override void Invalidate()
+        {
+            if (_template != null)
+            {
+                _template.Invalidate();
+            }
+
+            base.Invalidate();
+        }
+
+        public override void Draw(object dc, IShapeRenderer renderer, double dx, double dy, DrawMode mode, object db, object r)
+        {
+            if (_template != null)
+            {
+                double offsetX = X;
+                double offsetY = Y;
+                _template.Draw(dc, renderer, dx + offsetX, dy + offsetY, DrawMode.Shape, db, r);
+            }
+        }
+
+        public override void Move(ISelectionState selectionState, double dx, double dy)
+        {
+            X += dx;
+            Y += dy;
+        }
+
+        public override object Copy(Dictionary<object, object> shared)
+        {
+            var cpoy = new ReferenceShapeShape()
+            {
+                StyleId = this.StyleId,
+                Owner = this.Owner,
+                X = this.X,
+                Y = this.Y,
+                Template = this.Template
+            };
+
+            if (shared != null)
+            {
+                foreach (var point in this.Points)
+                {
+                    copy.Points.Add((PointShape)shared[point]);
+                }
+
+                shared[this] = copy;
+            }
+
+            return copy;
+        }
+    }
+
+    [DataContract(IsReference = true)]
     public class TextShape : BoxShape, ICopyable
     {
         internal static new IBounds s_bounds = new TextBounds();
@@ -4475,6 +4579,26 @@ namespace Draw2D.ViewModels.Decorators
     }
 
     [DataContract(IsReference = true)]
+    public class ReferenceDecorator : CommonDecorator
+    {
+        public void Draw(object dc, IShapeRenderer renderer, ReferenceShape reference, ISelectionState selectionState, double dx, double dy, DrawMode mode)
+        {
+            if (selectionState.IsSelected(reference))
+            {
+                DrawBoxFromPoints(dc, renderer, reference, dx, dy, mode);
+            }
+        }
+
+        public override void Draw(object dc, BaseShape shape, IShapeRenderer renderer, ISelectionState selectionState, double dx, double dy, DrawMode mode)
+        {
+            if (shape is ReferenceShape group)
+            {
+                Draw(dc, renderer, reference, selectionState, dx, dy, mode);
+            }
+        }
+    }
+
+    [DataContract(IsReference = true)]
     public class TextDecorator : CommonDecorator
     {
         public void Draw(object dc, IShapeRenderer renderer, TextShape textShape, double dx, double dy, DrawMode mode)
@@ -5852,6 +5976,43 @@ namespace Draw2D.ViewModels.Bounds
                 box.TopLeft.Y,
                 box.BottomRight.X,
                 box.BottomRight.Y).IntersectsWith(target) ? shape : null;
+        }
+    }
+
+    [DataContract(IsReference = true)]
+    public class ReferenceBounds : IBounds
+    {
+        [IgnoreDataMember]
+        public string TargetType => typeof(ReferenceShape).Name;
+
+        public PointShape TryToGetPoint(BaseShape shape, Point2 target, double radius, IHitTest hitTest)
+        {
+            if (!(shape is ReferenceShape reference))
+            {
+                throw new ArgumentNullException("shape");
+            }
+
+            return reference.TryToGetPoint(shape, target, radius, hitTest);
+        }
+
+        public BaseShape Contains(BaseShape shape, Point2 target, double radius, IHitTest hitTest)
+        {
+            if (!(shape is ReferenceShape reference))
+            {
+                throw new ArgumentNullException("shape");
+            }
+
+            return reference.Contains(shape, target, radius, hitTest);
+        }
+
+        public BaseShape Overlaps(BaseShape shape, Rect2 target, double radius, IHitTest hitTest)
+        {
+            if (!(shape is GroupShape group))
+            {
+                throw new ArgumentNullException("shape");
+            }
+
+            return reference.Overlaps(shape, target, radius, hitTest);
         }
     }
 
