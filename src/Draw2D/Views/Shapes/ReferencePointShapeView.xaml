@@ -1,6 +1,6 @@
 ﻿<!-- Copyright (c) Wiesław Šoltés. All rights reserved. -->
 <!-- Licensed under the MIT license. See LICENSE file in the project root for full license information. -->
-<UserControl x:Class="Draw2D.Views.Shapes.ReferenceShapeView"
+<UserControl x:Class="Draw2D.Views.Shapes.ReferencePointShapeView"
              xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -13,34 +13,11 @@
         <converters:StyleIdToStyleConverter x:Key="StyleIdToStyleConverter"/>
     </UserControl.Resources>
     <TabControl Classes="default" TabStripPlacement="Top">
+        <TabItem Classes="default" Header="Point">
+            <ContentControl Content="{Binding Point}"/>
+        </TabItem>
         <TabItem Classes="default" Header="Reference">
-            <Grid RowDefinitions="Auto,Auto,Auto" ColumnDefinitions="Auto,*">
-                <TextBlock Classes="default" Grid.Column="0" Grid.Row="0" Text="Title"/>
-                <TextBox Classes="default" Grid.Column="1" Grid.Row="0" Text="{Binding Title}"/>
-                <TextBlock Classes="default" Grid.Column="0" Grid.Row="1" Text="X"/>
-                <TextBox Classes="default" Grid.Column="1" Grid.Row="1" Text="{Binding X}"/>
-                <TextBlock Classes="default" Grid.Column="0" Grid.Row="2" Text="Y"/>
-                <TextBox Classes="default" Grid.Column="1" Grid.Row="2" Text="{Binding Y}"/>
-            </Grid>
-        </TabItem>
-        <TabItem Classes="default" Header="Points">
-            <TabControl Classes="default" TabStripPlacement="Top">
-                <TabItem Classes="default" Header="Points">
-                    <ListBox x:Name="points" Classes="default" Items="{Binding Points}">
-                        <ListBox.DataTemplates>
-                            <DataTemplate>
-                                <TextBlock Classes="default" Text="{Binding}"/>
-                            </DataTemplate>
-                        </ListBox.DataTemplates>
-                    </ListBox>
-                </TabItem>
-                <TabItem Classes="default" Header="Selected">
-                    <ContentControl Content="{Binding #points.SelectedItem}"/>
-                </TabItem>
-            </TabControl>
-        </TabItem>
-        <TabItem Classes="default" Header="Template">
-            <ContentControl Content="{Binding Template}"/>
+            <ContentControl Content="{Binding Reference}"/>
         </TabItem>
         <TabItem Classes="default" Header="Style">
             <Grid RowDefinitions="Auto,*" ColumnDefinitions="Auto,*">
