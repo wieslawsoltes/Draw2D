@@ -138,7 +138,7 @@ namespace Draw2D.Editor.Views
 
         private bool IsPointsDirty(ICanvasContainer canvasContainer)
         {
-            var points = new List<BaseShape>();
+            var points = new List<PointShape>();
             canvasContainer.GetPoints(points);
 
             foreach (var point in points)
