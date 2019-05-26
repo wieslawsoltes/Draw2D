@@ -957,7 +957,7 @@ namespace Draw2D.ViewModels.Shapes
                 int index = _points.IndexOf(target);
                 if (index >= 0)
                 {
-                    Debug.WriteLine($"ConnectableShape Connected to Points");
+                    Debug.WriteLine($"{nameof(ConnectableShape)} Connected to Points");
                     _points[index] = point;
                     return true;
                 }
@@ -3206,7 +3206,7 @@ namespace Draw2D.ViewModels.Shapes
                     int index = connectableShape.Points.IndexOf(target);
                     if (index >= 0)
                     {
-                        Debug.WriteLine($"ConnectableShape Connected to Points");
+                        Debug.WriteLine($"{nameof(ReferenceShape)} Connected to Points");
                         connectableShape.Points[index] = point;
                         return true;
                     }
