@@ -133,6 +133,18 @@ namespace Draw2D.Editor
             return styleLibrary;
         }
 
+        public IGroupLibrary CreateGroupLibrary()
+        {
+            var groupsLibrary = new GroupLibrary()
+            {
+                Groups = new ObservableCollection<GroupShape>()
+            };
+
+            groupsLibrary.CurrentGroup = null;
+
+            return groupsLibrary;
+        }
+
         public IToolContext CreateToolContext()
         {
             var editorToolContext = new EditorToolContext(this);
