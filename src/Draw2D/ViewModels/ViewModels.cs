@@ -3547,6 +3547,9 @@ namespace Draw2D.ViewModels.Containers
         ISelectionState SelectionState { get; set; }
         IZoomServiceState ZoomServiceState { get; set; }
         IDrawContainerView DrawContainerView { get; set; }
+        void Add(BaseShape shape);
+        void Remove(BaseShape shape);
+        void Reference(GroupShape group);
     }
 
     public interface IToolContext : IInputTarget, IDisposable
@@ -3653,23 +3656,29 @@ namespace Draw2D.ViewModels.Containers
 
         public void Add(ShapeStyle value)
         {
-            _styles.Add(value);
-
-            if (_styleLibraryCache == null)
+            if (value != null)
             {
-                _styleLibraryCache = new Dictionary<string, ShapeStyle>();
-            }
+                _styles.Add(value);
 
-            _styleLibraryCache[value.Title] = value;
+                if (_styleLibraryCache == null)
+                {
+                    _styleLibraryCache = new Dictionary<string, ShapeStyle>();
+                }
+
+                _styleLibraryCache[value.Title] = value; 
+            }
         }
 
         public void Remove(ShapeStyle value)
         {
-            _styles.Remove(value);
-
-            if (_styleLibraryCache != null)
+            if (value != null)
             {
-                _styleLibraryCache.Remove(value.Title);
+                _styles.Remove(value);
+
+                if (_styleLibraryCache != null)
+                {
+                    _styleLibraryCache.Remove(value.Title);
+                } 
             }
         }
 
@@ -3775,23 +3784,29 @@ namespace Draw2D.ViewModels.Containers
 
         public void Add(GroupShape value)
         {
-            _groups.Add(value);
-
-            if (_groupLibraryCache == null)
+            if (value != null)
             {
-                _groupLibraryCache = new Dictionary<string, GroupShape>();
-            }
+                _groups.Add(value);
 
-            _groupLibraryCache[value.Title] = value;
+                if (_groupLibraryCache == null)
+                {
+                    _groupLibraryCache = new Dictionary<string, GroupShape>();
+                }
+
+                _groupLibraryCache[value.Title] = value; 
+            }
         }
 
         public void Remove(GroupShape value)
         {
-            _groups.Remove(value);
-
-            if (_groupLibraryCache != null)
+            if (value != null)
             {
-                _groupLibraryCache.Remove(value.Title);
+                _groups.Remove(value);
+
+                if (_groupLibraryCache != null)
+                {
+                    _groupLibraryCache.Remove(value.Title);
+                } 
             }
         }
 
@@ -4237,6 +4252,40 @@ namespace Draw2D.ViewModels.Containers
         public void Draw(object context, double width, double height, double dx, double dy, double zx, double zy)
         {
             _drawContainerView?.Draw(this, context, width, height, dx, dy, zx, zy);
+        }
+
+        public void Add(BaseShape shape)
+        {
+            if (shape != null)
+            {
+                _currentContainer.Shapes.Add(shape);
+                _currentContainer.MarkAsDirty(true);
+                _inputService?.Redraw?.Invoke();
+            }
+        }
+
+        public void Remove(BaseShape shape)
+        {
+            if (shape != null)
+            {
+                _currentContainer.Shapes.Remove(shape);
+                _currentContainer.MarkAsDirty(true);
+                _inputService?.Redraw?.Invoke();
+            }
+        }
+
+        public void Reference(GroupShape group)
+        {
+            if (group != null)
+            {
+                _selectionState?.Clear();
+                group.GetBox(out double ax, out double ay, out _, out _);
+                var reference = new ReferenceShape(group.Title + "_Reference", ax, ay, group);
+                reference.Select(_selectionState);
+                _currentContainer.Shapes.Add(reference);
+                _currentContainer.MarkAsDirty(true);
+                _inputService?.Redraw?.Invoke();
+            }
         }
 
         public virtual object Copy(Dictionary<object, object> shared)
@@ -7720,6 +7769,21 @@ namespace Draw2D.ViewModels.Tools
         {
             _context.ContainerView.Draw(context, width, height, dx, dy, zx, zy);
         }
+
+        public void Add(BaseShape shape)
+        {
+            _context.ContainerView.Add(shape);
+        }
+
+        public void Remove(BaseShape shape)
+        {
+            _context.ContainerView.Remove(shape);
+        }
+
+        public void Reference(GroupShape group)
+        {
+            _context.ContainerView.Reference(group);
+        }
     }
 
     [DataContract(IsReference = true)]
@@ -10125,12 +10189,7 @@ namespace Draw2D.ViewModels.Tools
                     {
                         if (shape is GroupShape group)
                         {
-                            group.Deselect(context.ContainerView.SelectionState);
-                            group.GetBox(out double ax, out double ay, out _, out _);
-                            var reference = new ReferenceShape(group.Title + "_Reference", ax, ay, group);
-                            reference.Select(context.ContainerView.SelectionState);
-                            context.ContainerView?.CurrentContainer.Shapes.Add(reference);
-                            context.ContainerView?.CurrentContainer.MarkAsDirty(true);
+                            context.ContainerView?.Reference(group);
                         }
                     }
 
