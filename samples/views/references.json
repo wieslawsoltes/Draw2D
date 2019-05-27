@@ -299,7 +299,7 @@
         "$id": "36",
         "$type": "Draw2D.ViewModels.Shapes.ReferenceShape, Draw2D",
         "Title": "AND_Reference",
-        "X": 240.0,
+        "X": 225.0,
         "Y": 90.0,
         "Template": {
           "$ref": "6"
@@ -308,7 +308,7 @@
           {
             "$id": "37",
             "$type": "Draw2D.ViewModels.Shapes.ReferencePointShape, Draw2D",
-            "X": 255.0,
+            "X": 240.0,
             "Y": 90.0,
             "Template": {
               "$ref": "10"
@@ -326,7 +326,7 @@
           {
             "$id": "38",
             "$type": "Draw2D.ViewModels.Shapes.ReferencePointShape, Draw2D",
-            "X": 255.0,
+            "X": 240.0,
             "Y": 120.0,
             "Template": {
               "$ref": "10"
@@ -344,7 +344,7 @@
           {
             "$id": "39",
             "$type": "Draw2D.ViewModels.Shapes.ReferencePointShape, Draw2D",
-            "X": 240.0,
+            "X": 225.0,
             "Y": 105.0,
             "Template": {
               "$ref": "10"
@@ -362,7 +362,7 @@
           {
             "$id": "40",
             "$type": "Draw2D.ViewModels.Shapes.ReferencePointShape, Draw2D",
-            "X": 270.0,
+            "X": 255.0,
             "Y": 105.0,
             "Template": {
               "$ref": "10"
@@ -554,7 +554,7 @@
         "$id": "61",
         "$type": "Draw2D.ViewModels.Shapes.ReferenceShape, Draw2D",
         "Title": "INPUT_Reference",
-        "X": 60.0,
+        "X": 45.0,
         "Y": 90.0,
         "Template": {
           "$ref": "41"
@@ -563,7 +563,7 @@
           {
             "$id": "62",
             "$type": "Draw2D.ViewModels.Shapes.ReferencePointShape, Draw2D",
-            "X": 120.0,
+            "X": 105.0,
             "Y": 105.0,
             "Template": {
               "$ref": "10"
@@ -583,9 +583,9 @@
       {
         "$id": "63",
         "$type": "Draw2D.ViewModels.Shapes.ReferenceShape, Draw2D",
-        "Title": "INPUT_Reference_copy",
-        "X": 60.0,
-        "Y": 195.0,
+        "Title": "INPUT_Reference",
+        "X": 45.0,
+        "Y": 150.0,
         "Template": {
           "$ref": "41"
         },
@@ -593,8 +593,8 @@
           {
             "$id": "64",
             "$type": "Draw2D.ViewModels.Shapes.ReferencePointShape, Draw2D",
-            "X": 120.0,
-            "Y": 210.0,
+            "X": 105.0,
+            "Y": 165.0,
             "Template": {
               "$ref": "10"
             },
@@ -635,8 +635,8 @@
         "Point": {
           "$id": "68",
           "$type": "Draw2D.ViewModels.Shapes.PointShape, Draw2D",
-          "X": 255.0,
-          "Y": 210.0,
+          "X": 240.0,
+          "Y": 165.0,
           "Template": {
             "$ref": "10"
           },
@@ -673,8 +673,8 @@
         "StartPoint": {
           "$id": "73",
           "$type": "Draw2D.ViewModels.Shapes.ReferencePointShape, Draw2D",
-          "X": 420.0,
-          "Y": 300.0,
+          "X": 405.0,
+          "Y": 225.0,
           "Template": {
             "$ref": "10"
           },
@@ -684,9 +684,9 @@
           "Reference": {
             "$id": "74",
             "$type": "Draw2D.ViewModels.Shapes.ReferenceShape, Draw2D",
-            "Title": "OR_Reference_copy_copy",
-            "X": 390.0,
-            "Y": 285.0,
+            "Title": "OR_Reference",
+            "X": 375.0,
+            "Y": 210.0,
             "Template": {
               "$ref": "23"
             },
@@ -694,8 +694,8 @@
               {
                 "$id": "75",
                 "$type": "Draw2D.ViewModels.Shapes.ReferencePointShape, Draw2D",
-                "X": 405.0,
-                "Y": 285.0,
+                "X": 390.0,
+                "Y": 210.0,
                 "Template": {
                   "$ref": "10"
                 },
@@ -712,8 +712,8 @@
               {
                 "$id": "76",
                 "$type": "Draw2D.ViewModels.Shapes.ReferencePointShape, Draw2D",
-                "X": 405.0,
-                "Y": 315.0,
+                "X": 390.0,
+                "Y": 240.0,
                 "Template": {
                   "$ref": "10"
                 },
@@ -892,8 +892,8 @@
               {
                 "$id": "87",
                 "$type": "Draw2D.ViewModels.Shapes.ReferencePointShape, Draw2D",
-                "X": 390.0,
-                "Y": 300.0,
+                "X": 375.0,
+                "Y": 225.0,
                 "Template": {
                   "$ref": "10"
                 },
@@ -919,8 +919,8 @@
         "Point": {
           "$id": "88",
           "$type": "Draw2D.ViewModels.Shapes.ReferencePointShape, Draw2D",
-          "X": 600.0,
-          "Y": 300.0,
+          "X": 585.0,
+          "Y": 225.0,
           "Template": {
             "$ref": "10"
           },
@@ -930,9 +930,9 @@
           "Reference": {
             "$id": "89",
             "$type": "Draw2D.ViewModels.Shapes.ReferenceShape, Draw2D",
-            "Title": "OUTPUT_Reference_copy",
-            "X": 600.0,
-            "Y": 285.0,
+            "Title": "OUTPUT_Reference",
+            "X": 585.0,
+            "Y": 210.0,
             "Template": {
               "$ref": "51"
             },
@@ -959,7 +959,7 @@
         "StartPoint": {
           "$id": "92",
           "$type": "Draw2D.ViewModels.Shapes.PointShape, Draw2D",
-          "X": 405.0,
+          "X": 390.0,
           "Y": 105.0,
           "Template": {
             "$ref": "10"
@@ -997,8 +997,8 @@
         "StartPoint": {
           "$id": "97",
           "$type": "Draw2D.ViewModels.Shapes.ReferencePointShape, Draw2D",
-          "X": 120.0,
-          "Y": 300.0,
+          "X": 105.0,
+          "Y": 225.0,
           "Template": {
             "$ref": "10"
           },
@@ -1008,9 +1008,9 @@
           "Reference": {
             "$id": "98",
             "$type": "Draw2D.ViewModels.Shapes.ReferenceShape, Draw2D",
-            "Title": "INPUT_Reference_copy_copy_copy",
-            "X": 60.0,
-            "Y": 285.0,
+            "Title": "INPUT_Reference",
+            "X": 45.0,
+            "Y": 210.0,
             "Template": {
               "$ref": "41"
             },
@@ -1046,9 +1046,9 @@
       {
         "$id": "100",
         "$type": "Draw2D.ViewModels.Shapes.ReferenceShape, Draw2D",
-        "Title": "INPUT_Reference_copy_copy_copy_copy",
-        "X": 60.0,
-        "Y": 405.0,
+        "Title": "INPUT_Reference",
+        "X": 45.0,
+        "Y": 300.0,
         "Template": {
           "$ref": "41"
         },
@@ -1056,8 +1056,8 @@
           {
             "$id": "101",
             "$type": "Draw2D.ViewModels.Shapes.ReferencePointShape, Draw2D",
-            "X": 120.0,
-            "Y": 420.0,
+            "X": 105.0,
+            "Y": 315.0,
             "Template": {
               "$ref": "10"
             },
@@ -1076,9 +1076,9 @@
       {
         "$id": "102",
         "$type": "Draw2D.ViewModels.Shapes.ReferenceShape, Draw2D",
-        "Title": "OUTPUT_Reference_copy_copy_copy",
-        "X": 600.0,
-        "Y": 525.0,
+        "Title": "OUTPUT_Reference",
+        "X": 585.0,
+        "Y": 360.0,
         "Template": {
           "$ref": "51"
         },
@@ -1086,8 +1086,8 @@
           {
             "$id": "103",
             "$type": "Draw2D.ViewModels.Shapes.ReferencePointShape, Draw2D",
-            "X": 600.0,
-            "Y": 540.0,
+            "X": 585.0,
+            "Y": 375.0,
             "Template": {
               "$ref": "10"
             },
@@ -1106,48 +1106,18 @@
       {
         "$id": "104",
         "$type": "Draw2D.ViewModels.Shapes.ReferenceShape, Draw2D",
-        "Title": "INPUT_Reference_copy_copy_copy_copy_copy",
-        "X": 60.0,
-        "Y": 525.0,
-        "Template": {
-          "$ref": "41"
-        },
-        "Points": [
-          {
-            "$id": "105",
-            "$type": "Draw2D.ViewModels.Shapes.ReferencePointShape, Draw2D",
-            "X": 120.0,
-            "Y": 540.0,
-            "Template": {
-              "$ref": "10"
-            },
-            "Point": {
-              "$ref": "50"
-            },
-            "Reference": {
-              "$ref": "104"
-            },
-            "Owner": {
-              "$ref": "104"
-            }
-          }
-        ]
-      },
-      {
-        "$id": "106",
-        "$type": "Draw2D.ViewModels.Shapes.ReferenceShape, Draw2D",
-        "Title": "AND_Reference_copy",
-        "X": 390.0,
-        "Y": 525.0,
+        "Title": "AND_Reference",
+        "X": 375.0,
+        "Y": 360.0,
         "Template": {
           "$ref": "6"
         },
         "Points": [
           {
-            "$id": "107",
+            "$id": "105",
             "$type": "Draw2D.ViewModels.Shapes.ReferencePointShape, Draw2D",
-            "X": 405.0,
-            "Y": 525.0,
+            "X": 390.0,
+            "Y": 360.0,
             "Template": {
               "$ref": "10"
             },
@@ -1155,7 +1125,43 @@
               "$ref": "19"
             },
             "Reference": {
-              "$ref": "106"
+              "$ref": "104"
+            },
+            "Owner": {
+              "$ref": "36"
+            }
+          },
+          {
+            "$id": "106",
+            "$type": "Draw2D.ViewModels.Shapes.ReferencePointShape, Draw2D",
+            "X": 390.0,
+            "Y": 390.0,
+            "Template": {
+              "$ref": "10"
+            },
+            "Point": {
+              "$ref": "20"
+            },
+            "Reference": {
+              "$ref": "104"
+            },
+            "Owner": {
+              "$ref": "36"
+            }
+          },
+          {
+            "$id": "107",
+            "$type": "Draw2D.ViewModels.Shapes.ReferencePointShape, Draw2D",
+            "X": 375.0,
+            "Y": 375.0,
+            "Template": {
+              "$ref": "10"
+            },
+            "Point": {
+              "$ref": "21"
+            },
+            "Reference": {
+              "$ref": "104"
             },
             "Owner": {
               "$ref": "36"
@@ -1165,43 +1171,7 @@
             "$id": "108",
             "$type": "Draw2D.ViewModels.Shapes.ReferencePointShape, Draw2D",
             "X": 405.0,
-            "Y": 555.0,
-            "Template": {
-              "$ref": "10"
-            },
-            "Point": {
-              "$ref": "20"
-            },
-            "Reference": {
-              "$ref": "106"
-            },
-            "Owner": {
-              "$ref": "36"
-            }
-          },
-          {
-            "$id": "109",
-            "$type": "Draw2D.ViewModels.Shapes.ReferencePointShape, Draw2D",
-            "X": 390.0,
-            "Y": 540.0,
-            "Template": {
-              "$ref": "10"
-            },
-            "Point": {
-              "$ref": "21"
-            },
-            "Reference": {
-              "$ref": "106"
-            },
-            "Owner": {
-              "$ref": "36"
-            }
-          },
-          {
-            "$id": "110",
-            "$type": "Draw2D.ViewModels.Shapes.ReferencePointShape, Draw2D",
-            "X": 420.0,
-            "Y": 540.0,
+            "Y": 375.0,
             "Template": {
               "$ref": "10"
             },
@@ -1209,7 +1179,7 @@
               "$ref": "22"
             },
             "Reference": {
-              "$ref": "106"
+              "$ref": "104"
             },
             "Owner": {
               "$ref": "36"
@@ -1218,24 +1188,24 @@
         ]
       },
       {
-        "$id": "111",
+        "$id": "109",
         "$type": "Draw2D.ViewModels.Shapes.LineShape, Draw2D",
         "StartPoint": {
-          "$ref": "107"
+          "$ref": "105"
         },
         "Point": {
-          "$id": "112",
+          "$id": "110",
           "$type": "Draw2D.ViewModels.Shapes.PointShape, Draw2D",
-          "X": 405.0,
-          "Y": 420.0,
+          "X": 390.0,
+          "Y": 315.0,
           "Template": {
             "$ref": "10"
           },
           "Owner": {
-            "$id": "113",
+            "$id": "111",
             "$type": "Draw2D.ViewModels.Shapes.LineShape, Draw2D",
             "StartPoint": {
-              "$id": "114",
+              "$id": "112",
               "$type": "Draw2D.ViewModels.Shapes.ReferencePointShape, Draw2D",
               "X": 300.0,
               "Y": 390.0,
@@ -1246,7 +1216,7 @@
                 "$ref": "35"
               },
               "Reference": {
-                "$id": "115",
+                "$id": "113",
                 "$type": "Draw2D.ViewModels.Shapes.ReferenceShape, Draw2D",
                 "Title": "OR_Reference_copy_copy_copy",
                 "X": 270.0,
@@ -1256,7 +1226,7 @@
                 },
                 "Points": [
                   {
-                    "$id": "116",
+                    "$id": "114",
                     "$type": "Draw2D.ViewModels.Shapes.ReferencePointShape, Draw2D",
                     "X": 285.0,
                     "Y": 375.0,
@@ -1267,14 +1237,14 @@
                       "$ref": "32"
                     },
                     "Reference": {
-                      "$ref": "115"
+                      "$ref": "113"
                     },
                     "Owner": {
                       "$ref": "74"
                     }
                   },
                   {
-                    "$id": "117",
+                    "$id": "115",
                     "$type": "Draw2D.ViewModels.Shapes.ReferencePointShape, Draw2D",
                     "X": 285.0,
                     "Y": 405.0,
@@ -1285,14 +1255,14 @@
                       "$ref": "33"
                     },
                     "Reference": {
-                      "$ref": "115"
+                      "$ref": "113"
                     },
                     "Owner": {
                       "$ref": "74"
                     }
                   },
                   {
-                    "$id": "118",
+                    "$id": "116",
                     "$type": "Draw2D.ViewModels.Shapes.ReferencePointShape, Draw2D",
                     "X": 270.0,
                     "Y": 390.0,
@@ -1303,14 +1273,14 @@
                       "$ref": "34"
                     },
                     "Reference": {
-                      "$ref": "115"
+                      "$ref": "113"
                     },
                     "Owner": {
                       "$ref": "74"
                     }
                   },
                   {
-                    "$ref": "114"
+                    "$ref": "112"
                   }
                 ]
               },
@@ -1319,15 +1289,31 @@
               }
             },
             "Point": {
-              "$ref": "112"
+              "$ref": "110"
             },
             "Text": {
-              "$id": "119",
+              "$id": "117",
               "$type": "Draw2D.ViewModels.Text, Draw2D"
             },
             "Points": [],
             "StyleId": "Default"
           }
+        },
+        "Text": {
+          "$id": "118",
+          "$type": "Draw2D.ViewModels.Text, Draw2D"
+        },
+        "Points": [],
+        "StyleId": "Default"
+      },
+      {
+        "$id": "119",
+        "$type": "Draw2D.ViewModels.Shapes.LineShape, Draw2D",
+        "StartPoint": {
+          "$ref": "108"
+        },
+        "Point": {
+          "$ref": "103"
         },
         "Text": {
           "$id": "120",
@@ -1340,10 +1326,10 @@
         "$id": "121",
         "$type": "Draw2D.ViewModels.Shapes.LineShape, Draw2D",
         "StartPoint": {
-          "$ref": "110"
+          "$ref": "101"
         },
         "Point": {
-          "$ref": "103"
+          "$ref": "110"
         },
         "Text": {
           "$id": "122",
@@ -1356,10 +1342,10 @@
         "$id": "123",
         "$type": "Draw2D.ViewModels.Shapes.LineShape, Draw2D",
         "StartPoint": {
-          "$ref": "101"
+          "$ref": "40"
         },
         "Point": {
-          "$ref": "112"
+          "$ref": "92"
         },
         "Text": {
           "$id": "124",
@@ -1372,29 +1358,290 @@
         "$id": "125",
         "$type": "Draw2D.ViewModels.Shapes.LineShape, Draw2D",
         "StartPoint": {
-          "$ref": "105"
+          "$id": "126",
+          "$type": "Draw2D.ViewModels.Shapes.ReferencePointShape, Draw2D",
+          "X": 105.0,
+          "Y": 540.0,
+          "Template": {
+            "$ref": "10"
+          },
+          "Point": {
+            "$ref": "50"
+          },
+          "Reference": {
+            "$id": "127",
+            "$type": "Draw2D.ViewModels.Shapes.ReferenceShape, Draw2D",
+            "Title": "INPUT_Reference",
+            "X": 45.0,
+            "Y": 525.0,
+            "Template": {
+              "$ref": "41"
+            },
+            "Points": [
+              {
+                "$ref": "126"
+              }
+            ]
+          },
+          "Owner": {
+            "$ref": "127"
+          }
         },
         "Point": {
-          "$ref": "109"
+          "$id": "128",
+          "$type": "Draw2D.ViewModels.Shapes.ReferencePointShape, Draw2D",
+          "X": 375.0,
+          "Y": 540.0,
+          "Template": {
+            "$ref": "10"
+          },
+          "Point": {
+            "$ref": "21"
+          },
+          "Reference": {
+            "$id": "129",
+            "$type": "Draw2D.ViewModels.Shapes.ReferenceShape, Draw2D",
+            "Title": "AND_Reference",
+            "X": 375.0,
+            "Y": 525.0,
+            "Template": {
+              "$ref": "6"
+            },
+            "Points": [
+              {
+                "$id": "130",
+                "$type": "Draw2D.ViewModels.Shapes.ReferencePointShape, Draw2D",
+                "X": 390.0,
+                "Y": 525.0,
+                "Template": {
+                  "$ref": "10"
+                },
+                "Point": {
+                  "$ref": "19"
+                },
+                "Reference": {
+                  "$ref": "129"
+                },
+                "Owner": {
+                  "$ref": "129"
+                }
+              },
+              {
+                "$id": "131",
+                "$type": "Draw2D.ViewModels.Shapes.ReferencePointShape, Draw2D",
+                "X": 390.0,
+                "Y": 555.0,
+                "Template": {
+                  "$ref": "10"
+                },
+                "Point": {
+                  "$ref": "20"
+                },
+                "Reference": {
+                  "$ref": "129"
+                },
+                "Owner": {
+                  "$ref": "104"
+                }
+              },
+              {
+                "$ref": "128"
+              },
+              {
+                "$id": "132",
+                "$type": "Draw2D.ViewModels.Shapes.ReferencePointShape, Draw2D",
+                "X": 405.0,
+                "Y": 540.0,
+                "Template": {
+                  "$ref": "10"
+                },
+                "Point": {
+                  "$ref": "22"
+                },
+                "Reference": {
+                  "$ref": "129"
+                },
+                "Owner": {
+                  "$ref": "129"
+                }
+              }
+            ]
+          },
+          "Owner": {
+            "$ref": "129"
+          }
         },
         "Text": {
-          "$id": "126",
+          "$id": "133",
           "$type": "Draw2D.ViewModels.Text, Draw2D"
         },
         "Points": [],
         "StyleId": "Default"
       },
       {
-        "$id": "127",
+        "$id": "134",
         "$type": "Draw2D.ViewModels.Shapes.LineShape, Draw2D",
         "StartPoint": {
-          "$ref": "40"
+          "$id": "135",
+          "$type": "Draw2D.ViewModels.Shapes.ReferencePointShape, Draw2D",
+          "X": 105.0,
+          "Y": 480.0,
+          "Template": {
+            "$ref": "10"
+          },
+          "Point": {
+            "$ref": "50"
+          },
+          "Reference": {
+            "$id": "136",
+            "$type": "Draw2D.ViewModels.Shapes.ReferenceShape, Draw2D",
+            "Title": "INPUT_Reference",
+            "X": 45.0,
+            "Y": 465.0,
+            "Template": {
+              "$ref": "41"
+            },
+            "Points": [
+              {
+                "$ref": "135"
+              }
+            ]
+          },
+          "Owner": {
+            "$ref": "136"
+          }
         },
         "Point": {
-          "$ref": "92"
+          "$id": "137",
+          "$type": "Draw2D.ViewModels.Shapes.PointShape, Draw2D",
+          "X": 390.0,
+          "Y": 480.0,
+          "Template": {
+            "$ref": "10"
+          },
+          "Owner": {
+            "$ref": "111"
+          }
         },
         "Text": {
-          "$id": "128",
+          "$id": "138",
+          "$type": "Draw2D.ViewModels.Text, Draw2D"
+        },
+        "Points": [],
+        "StyleId": "Default"
+      },
+      {
+        "$id": "139",
+        "$type": "Draw2D.ViewModels.Shapes.LineShape, Draw2D",
+        "StartPoint": {
+          "$ref": "132"
+        },
+        "Point": {
+          "$id": "140",
+          "$type": "Draw2D.ViewModels.Shapes.ReferencePointShape, Draw2D",
+          "X": 585.0,
+          "Y": 540.0,
+          "Template": {
+            "$ref": "10"
+          },
+          "Point": {
+            "$ref": "60"
+          },
+          "Reference": {
+            "$id": "141",
+            "$type": "Draw2D.ViewModels.Shapes.ReferenceShape, Draw2D",
+            "Title": "OUTPUT_Reference",
+            "X": 585.0,
+            "Y": 525.0,
+            "Template": {
+              "$ref": "51"
+            },
+            "Points": [
+              {
+                "$ref": "140"
+              }
+            ]
+          },
+          "Owner": {
+            "$ref": "141"
+          }
+        },
+        "Text": {
+          "$id": "142",
+          "$type": "Draw2D.ViewModels.Text, Draw2D"
+        },
+        "Points": [],
+        "StyleId": "Default"
+      },
+      {
+        "$id": "143",
+        "$type": "Draw2D.ViewModels.Shapes.LineShape, Draw2D",
+        "StartPoint": {
+          "$ref": "130"
+        },
+        "Point": {
+          "$ref": "137"
+        },
+        "Text": {
+          "$id": "144",
+          "$type": "Draw2D.ViewModels.Text, Draw2D"
+        },
+        "Points": [],
+        "StyleId": "Default"
+      },
+      {
+        "$ref": "129"
+      },
+      {
+        "$ref": "127"
+      },
+      {
+        "$ref": "141"
+      },
+      {
+        "$ref": "136"
+      },
+      {
+        "$id": "145",
+        "$type": "Draw2D.ViewModels.Shapes.ReferenceShape, Draw2D",
+        "Title": "INPUT_Reference",
+        "X": 45.0,
+        "Y": 360.0,
+        "Template": {
+          "$ref": "41"
+        },
+        "Points": [
+          {
+            "$id": "146",
+            "$type": "Draw2D.ViewModels.Shapes.ReferencePointShape, Draw2D",
+            "X": 105.0,
+            "Y": 375.0,
+            "Template": {
+              "$ref": "10"
+            },
+            "Point": {
+              "$ref": "50"
+            },
+            "Reference": {
+              "$ref": "145"
+            },
+            "Owner": {
+              "$ref": "100"
+            }
+          }
+        ]
+      },
+      {
+        "$id": "147",
+        "$type": "Draw2D.ViewModels.Shapes.LineShape, Draw2D",
+        "StartPoint": {
+          "$ref": "146"
+        },
+        "Point": {
+          "$ref": "107"
+        },
+        "Text": {
+          "$id": "148",
           "$type": "Draw2D.ViewModels.Text, Draw2D"
         },
         "Points": [],
@@ -1403,12 +1650,12 @@
     ]
   },
   "SelectionState": {
-    "$id": "129",
+    "$id": "149",
     "$type": "Draw2D.ViewModels.Containers.SelectionState, Draw2D",
     "Shapes": []
   },
   "ZoomServiceState": {
-    "$id": "130",
+    "$id": "150",
     "$type": "Draw2D.ViewModels.Containers.ZoomServiceState, Draw2D",
     "ZoomSpeed": 1.2,
     "ZoomX": 1.0,
