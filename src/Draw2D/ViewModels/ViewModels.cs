@@ -3369,7 +3369,7 @@ namespace Draw2D.ViewModels.Shapes
             {
                 StyleId = this.StyleId,
                 Owner = this.Owner,
-                Title = this.Title + "_copy",
+                Title = this.Title,
                 X = this.X,
                 Y = this.Y,
                 Template = this.Template,
