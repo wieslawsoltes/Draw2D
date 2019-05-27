@@ -24,7 +24,7 @@ namespace Draw2D
         static AppState()
         {
             StylesPath = "styles.json";
-            StylesPath = "groups.json";
+            GroupsPath = "groups.json";
             EditorPath = "editor.json";
             WindowPath = "window.json";
 
@@ -205,7 +205,9 @@ namespace Draw2D
                 {
                     var toolContext = Factory.CreateToolContext();
                     var styleLibrary = Factory.CreateStyleLibrary();
+                    var groupLibrary = Factory.CreateGroupLibrary();
                     toolContext.StyleLibrary = styleLibrary;
+                    toolContext.GroupLibrary = groupLibrary;
                     if (toolContext is EditorToolContext editorToolContext)
                     {
                         editorToolContext.NewContainerView("Demo");
