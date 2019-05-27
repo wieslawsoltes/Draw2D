@@ -3503,9 +3503,19 @@ namespace Draw2D.ViewModels.Containers
         IList<ShapeStyle> Styles { get; set; }
         ShapeStyle CurrentStyle { get; set; }
         void UpdateCache();
-        void Add(ShapeStyle style);
+        void Add(ShapeStyle value);
         void Remove(ShapeStyle value);
         ShapeStyle Get(string styleId);
+    }
+
+    public interface IGroupLibrary : IDirty
+    {
+        IList<GroupShape> Groups { get; set; }
+        GroupShape CurrentGroup { get; set; }
+        void UpdateCache();
+        void Add(GroupShape value);
+        void Remove(GroupShape value);
+        GroupShape Get(string groupId);
     }
 
     public interface IDrawContainerView : IDisposable
@@ -3675,6 +3685,128 @@ namespace Draw2D.ViewModels.Containers
                     if (style.Title == styleId)
                     {
                         _styleLibraryCache[style.Title] = style;
+                        return style;
+                    }
+                }
+                return null;
+            }
+
+            return value;
+        }
+    }
+
+    [DataContract(IsReference = true)]
+    public class GroupLibrary : ViewModelBase, IGroupLibrary
+    {
+        private Dictionary<string, GroupShape> _groupLibraryCache;
+        private IList<GroupShape> _groups;
+        private GroupShape _currentGroup;
+
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public IList<GroupShape> Groups
+        {
+            get => _groups;
+            set => Update(ref _groups, value);
+        }
+
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public GroupShape CurrentGroup
+        {
+            get => _currentGroup;
+            set => Update(ref _currentGroup, value);
+        }
+
+        public override void Invalidate()
+        {
+            if (_groups != null)
+            {
+                foreach (var group in _groups)
+                {
+                    group.Invalidate();
+                }
+            }
+
+            _currentGroup?.Invalidate();
+
+            base.Invalidate();
+        }
+
+        public virtual object Copy(Dictionary<object, object> shared)
+        {
+            var copy = new GroupLibrary()
+            {
+                Name = this.Name,
+                CurrentGroup = (GroupShape)this.CurrentGroup?.Copy(shared),
+                Groups = new ObservableCollection<GroupShape>()
+            };
+
+            foreach (var style in this.Groups)
+            {
+                if (style is ICopyable copyable)
+                {
+                    copy.Groups.Add((GroupShape)copyable.Copy(shared));
+                }
+            }
+
+            return copy;
+        }
+
+        public void UpdateCache()
+        {
+            if (_groups != null)
+            {
+                if (_groupLibraryCache == null)
+                {
+                    _groupLibraryCache = new Dictionary<string, GroupShape>();
+                }
+                else
+                {
+                    _groupLibraryCache.Clear();
+                }
+
+                foreach (var style in _groups)
+                {
+                    _groupLibraryCache[style.Title] = style;
+                }
+            }
+        }
+
+        public void Add(GroupShape value)
+        {
+            _groups.Add(value);
+
+            if (_groupLibraryCache == null)
+            {
+                _groupLibraryCache = new Dictionary<string, GroupShape>();
+            }
+
+            _groupLibraryCache[value.Title] = value;
+        }
+
+        public void Remove(GroupShape value)
+        {
+            _groups.Remove(value);
+
+            if (_groupLibraryCache != null)
+            {
+                _groupLibraryCache.Remove(value.Title);
+            }
+        }
+
+        public GroupShape Get(string groupId)
+        {
+            if (_groupLibraryCache == null)
+            {
+                UpdateCache();
+            }
+
+            if (!_groupLibraryCache.TryGetValue(groupId, out var value))
+            {
+                foreach (var style in _groups)
+                {
+                    if (style.Title == groupId)
+                    {
+                        _groupLibraryCache[style.Title] = style;
                         return style;
                     }
                 }
