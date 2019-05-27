@@ -40,6 +40,10 @@
                 <Separator/>
                 <MenuItem Header="Save Styles..." Command="{Binding SaveStyleLibraryAs}"/>
                 <Separator/>
+                <MenuItem Header="Open Groups..." Command="{Binding OpenGroupLibrary}"/>
+                <Separator/>
+                <MenuItem Header="Save Groups..." Command="{Binding SaveGroupLibraryAs}"/>
+                <Separator/>
                 <MenuItem Header="_Import..." Command="{Binding ImportFile}"/>
                 <Separator/>
                 <MenuItem Header="_Export..." Command="{Binding ExportFile}"/>
