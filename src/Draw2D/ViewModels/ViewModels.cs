@@ -4930,13 +4930,13 @@ namespace Draw2D.ViewModels.Filters
 
                 if (Settings.Mode.HasFlag(GridSnapMode.Horizontal))
                 {
-                    x = SnapGrid(x, Settings.GridSizeX);
+                    x = (double)SnapGrid((decimal)x, (decimal)Settings.GridSizeX);
                     haveSnapToGrid = true;
                 }
 
                 if (Settings.Mode.HasFlag(GridSnapMode.Vertical))
                 {
-                    y = SnapGrid(y, Settings.GridSizeY);
+                    y = (double)SnapGrid((decimal)y, (decimal)Settings.GridSizeY);
                     haveSnapToGrid = true;
                 }
 
@@ -4981,10 +4981,10 @@ namespace Draw2D.ViewModels.Filters
             context.ContainerView?.WorkingContainer.MarkAsDirty(true);
         }
 
-        public static double SnapGrid(double value, double size)
+        public static decimal SnapGrid(decimal value, decimal size)
         {
-            double r = value % size;
-            return r >= size / 2.0 ? value + size - r : value - r;
+            decimal r = value % size;
+            return r >= size / 2.0m ? value + size - r : value - r;
         }
     }
 
