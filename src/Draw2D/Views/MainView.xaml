@@ -231,23 +231,25 @@
                     </TabControl>
                 </TabItem>
                 <TabItem Classes="default" Header="Files">
-                    <Grid RowDefinitions="Auto,Auto,Auto,Auto,*,Auto,Auto" ColumnDefinitions="50*,50*">
+                    <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,*,Auto,Auto" ColumnDefinitions="50*,50*">
                         <TextBlock Classes="default" Text="Path:" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"/>
                         <TextBox x:Name="path" Classes="default" Text="{Binding #files.SelectedItem, Mode=OneWay, FallbackValue=View.json}" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"/>
                         <Button Classes="default" Content="Save View" Command="{Binding SaveView}" CommandParameter="{Binding #path.Text}" Grid.Row="2" Grid.Column="0"/>
                         <Button Classes="default" Content="Open View" Command="{Binding OpenView}" CommandParameter="{Binding #path.Text}" Grid.Row="2" Grid.Column="1"/>
                         <Button Classes="default" Content="Save Styles" Command="{Binding SaveStyles}" CommandParameter="{Binding #path.Text}" Grid.Row="3" Grid.Column="0"/>
                         <Button Classes="default" Content="Open Styles" Command="{Binding OpenStyles}" CommandParameter="{Binding #path.Text}" Grid.Row="3" Grid.Column="1"/>
-                        <ListBox x:Name="files" Classes="default" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Items="{Binding Files}">
+                        <Button Classes="default" Content="Save Groups" Command="{Binding SaveGroups}" CommandParameter="{Binding #path.Text}" Grid.Row="4" Grid.Column="0"/>
+                        <Button Classes="default" Content="Open Groups" Command="{Binding OpenGroups}" CommandParameter="{Binding #path.Text}" Grid.Row="4" Grid.Column="1"/>
+                        <ListBox x:Name="files" Classes="default" Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" Items="{Binding Files}">
                             <ListBox.DataTemplates>
                                 <DataTemplate>
                                     <TextBlock Classes="default" Text="{Binding}"/>
                                 </DataTemplate>
                             </ListBox.DataTemplates>
                         </ListBox>
-                        <Button Classes="default" Content="Clear Files" Command="{Binding ClearFiles}" Grid.Row="5" Grid.Column="0"/>
-                        <Button Classes="default" Content="Add Files" Command="{Binding AddFiles}" CommandParameter="{Binding CurrentDirectory}" Grid.Row="5" Grid.Column="1"/>
-                        <TextBox Classes="default" Text="{Binding CurrentDirectory}" Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2"/>
+                        <Button Classes="default" Content="Clear Files" Command="{Binding ClearFiles}" Grid.Row="6" Grid.Column="0"/>
+                        <Button Classes="default" Content="Add Files" Command="{Binding AddFiles}" CommandParameter="{Binding CurrentDirectory}" Grid.Row="6" Grid.Column="1"/>
+                        <TextBox Classes="default" Text="{Binding CurrentDirectory}" Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="2"/>
                     </Grid>
                 </TabItem>
                 <TabItem Classes="default" Header="Point">
@@ -284,7 +286,12 @@
                     <ContentControl Content="{Binding StyleLibrary}"/>
                 </TabItem>
                 <TabItem Classes="default" Header="GroupLibrary">
-                    <ContentControl Content="{Binding GroupLibrary}"/>
+                    <Grid RowDefinitions="Auto,*" ColumnDefinitions="3*,3*,3*">
+                        <Button Classes="default" Content="Remove" Command="{Binding GroupLibrary.Remove}" CommandParameter="{Binding GroupLibrary.CurrentGroup}" Grid.Row="0" Grid.Column="0"/>
+                        <Button Classes="default" Content="Add" Command="{Binding GroupLibrary.Add}" CommandParameter="{Binding ContainerView.SelectionState.Selected}" Grid.Row="0" Grid.Column="1"/>
+                        <Button Classes="default" Content="Insert" Command="{Binding ContainerView.Reference}" CommandParameter="{Binding GroupLibrary.CurrentGroup}" Grid.Row="0" Grid.Column="2"/>
+                        <ContentControl Content="{Binding GroupLibrary}" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3"/>
+                    </Grid>
                 </TabItem>
             </TabControl>
         </Grid>
