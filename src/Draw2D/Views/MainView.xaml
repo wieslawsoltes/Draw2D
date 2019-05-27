@@ -279,6 +279,9 @@
                 <TabItem Classes="default" Header="StyleLibrary">
                     <ContentControl Content="{Binding StyleLibrary}"/>
                 </TabItem>
+                <TabItem Classes="default" Header="GroupLibrary">
+                    <ContentControl Content="{Binding GroupLibrary}"/>
+                </TabItem>
             </TabControl>
         </Grid>
         <GridSplitter Grid.Row="2" Grid.Column="1"/>
