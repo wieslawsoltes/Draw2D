@@ -3552,6 +3552,7 @@ namespace Draw2D.ViewModels.Containers
     public interface IToolContext : IInputTarget, IDisposable
     {
         IStyleLibrary StyleLibrary { get; set; }
+        IGroupLibrary GroupLibrary { get; set; }
         BaseShape PointTemplate { get; set; }
         IHitTest HitTest { get; set; }
         IList<IContainerView> ContainerViews { get; set; }
@@ -3565,6 +3566,7 @@ namespace Draw2D.ViewModels.Containers
     public interface IFactory
     {
         IStyleLibrary CreateStyleLibrary();
+        IGroupLibrary CreateGroupLibrary();
         IToolContext CreateToolContext();
         IContainerView CreateContainerView(string title);
     }
@@ -4265,6 +4267,7 @@ namespace Draw2D.ViewModels.Containers
     public class ToolContext : ViewModelBase, IToolContext
     {
         private IStyleLibrary _styleLibrary;
+        private IGroupLibrary _groupLibrary;
         private BaseShape _pointTemplate;
         private IHitTest _hitTest;
         private IList<IContainerView> _containerViews;
@@ -4278,6 +4281,13 @@ namespace Draw2D.ViewModels.Containers
         {
             get => _styleLibrary;
             set => Update(ref _styleLibrary, value);
+        }
+
+        [IgnoreDataMember]
+        public IGroupLibrary GroupLibrary
+        {
+            get => _groupLibrary;
+            set => Update(ref _groupLibrary, value);
         }
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
@@ -7723,6 +7733,13 @@ namespace Draw2D.ViewModels.Tools
         {
             get => _context.StyleLibrary;
             set => throw new InvalidOperationException($"Can not set {StyleLibrary} property value.");
+        }
+
+        [IgnoreDataMember]
+        public IGroupLibrary GroupLibrary
+        {
+            get => _context.GroupLibrary;
+            set => throw new InvalidOperationException($"Can not set {GroupLibrary} property value.");
         }
 
         [IgnoreDataMember]
