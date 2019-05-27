@@ -470,6 +470,7 @@ namespace Draw2D.Editor
             editorToolContext.Files = new ObservableCollection<string>();
 
             editorToolContext.StyleLibrary = null;
+            editorToolContext.GroupLibrary = null;
 
             var pointTemplate = new EllipseShape(new PointShape(-3, -3, null), new PointShape(3, 3, null))
             {
