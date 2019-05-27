@@ -177,6 +177,24 @@ namespace Draw2D.Editor
             }
         }
 
+        public void OpenGroups(string path)
+        {
+            var groupLibrary = JsonSerializer.FromJsonFile<IGroupLibrary>(path);
+            if (groupLibrary != null)
+            {
+                GroupLibrary = groupLibrary;
+                GroupLibrary.UpdateCache();
+            }
+        }
+
+        public void SaveGroups(string path)
+        {
+            if (GroupLibrary != null)
+            {
+                JsonSerializer.ToJsonFile(path, GroupLibrary);
+            }
+        }
+
         public async void OpenContainerView()
         {
             var dlg = new OpenFileDialog();
@@ -236,6 +254,37 @@ namespace Draw2D.Editor
             {
                 var path = result;
                 SaveStyles(path);
+            }
+        }
+
+        public async void OpenGroupLibrary()
+        {
+            var dlg = new OpenFileDialog();
+            dlg.Filters.Add(new FileDialogFilter() { Name = "Json Files", Extensions = { "json" } });
+            dlg.Filters.Add(new FileDialogFilter() { Name = "All Files", Extensions = { "*" } });
+            dlg.AllowMultiple = false;
+            var result = await dlg.ShowAsync(Application.Current.Windows[0]);
+            if (result != null)
+            {
+                foreach (var path in result)
+                {
+                    OpenGroups(path);
+                }
+            }
+        }
+
+        public async void SaveGroupLibraryAs()
+        {
+            var dlg = new SaveFileDialog();
+            dlg.Filters.Add(new FileDialogFilter() { Name = "Json Files", Extensions = { "json" } });
+            dlg.Filters.Add(new FileDialogFilter() { Name = "All Files", Extensions = { "*" } });
+            dlg.InitialFileName = "groups";
+            dlg.DefaultExtension = "json";
+            var result = await dlg.ShowAsync(Application.Current.Windows[0]);
+            if (result != null)
+            {
+                var path = result;
+                SaveGroups(path);
             }
         }
 
