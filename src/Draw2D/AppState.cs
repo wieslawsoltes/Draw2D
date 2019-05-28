@@ -1,11 +1,18 @@
 ﻿// Copyright (c) Wiesław Šoltés. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
+#define USE_LOAD_EDITOR
+#define USE_SAVE_EDITOR
+//#define USE_LOAD_STYLES
+//#define USE_SAVE_STYLES
+//#define USE_LOAD_GROUPS
+//#define USE_SAVE_GROUPS
+#define USE_LOAD_WINDOW
+#define USE_SAVE_WINDOW
 using System.IO;
 using Avalonia;
 using Avalonia.Controls;
 using Draw2D.Editor;
 using Draw2D.ViewModels.Containers;
-using Draw2D.Views;
 
 namespace Draw2D
 {
@@ -85,30 +92,35 @@ namespace Draw2D
 
         public static void Load()
         {
-            //if (File.Exists(StylesPath))
-            //{
-            //    StyleLibrary = JsonSerializer.FromJsonFile<IStyleLibrary>(StylesPath);
-            //}
-            //else
-            //{
-            //    StyleLibrary = Factory.CreateStyleLibrary();
-            //}
+#if USE_LOAD_STYLES
+            if (File.Exists(StylesPath))
+            {
+                StyleLibrary = JsonSerializer.FromJsonFile<IStyleLibrary>(StylesPath);
+            }
+#endif
+#if USE_LOAD_GROUPS
+            if (File.Exists(GroupsPath))
+            {
+                GroupLibrary = JsonSerializer.FromJsonFile<IGroupLibrary>(GroupsPath);
+            }
+#endif
 
-            //if (File.Exists(GroupsPath))
-            //{
-            //    GroupLibrary = JsonSerializer.FromJsonFile<IGroupLibrary>(GroupsPath);
-            //}
-            //else
-            //{
-            //    GroupLibrary = Factory.CreateGroupLibrary();
-            //}
-
+#if USE_LOAD_EDITOR
             if (File.Exists(EditorPath))
             {
                 ToolContext = JsonSerializer.FromJsonFile<IToolContext>(EditorPath);
-                //ToolContext.StyleLibrary = StyleLibrary;
-                //ToolContext.GroupLibrary = GroupLibrary;
-
+#if USE_LOAD_STYLES
+                if (StyleLibrary != null)
+                {
+                    ToolContext.StyleLibrary = StyleLibrary;
+                }
+#endif
+#if USE_LOAD_GROUPS
+                if (GroupLibrary != null)
+                {
+                    ToolContext.GroupLibrary = GroupLibrary;
+                }
+#endif
                 if (ToolContext is EditorToolContext editorToolContext)
                 {
                     editorToolContext.Factory = Factory;
@@ -118,13 +130,31 @@ namespace Draw2D
                     }
                 }
             }
-            else
+#endif
+            if (ToolContext == null)
             {
                 ToolContext = Factory.CreateToolContext();
-                //ToolContext.StyleLibrary = StyleLibrary;
-                //ToolContext.GroupLibrary = GroupLibrary;
-                ToolContext.StyleLibrary = Factory.CreateStyleLibrary();
-                ToolContext.GroupLibrary = Factory.CreateGroupLibrary();
+#if USE_LOAD_STYLES
+                if (StyleLibrary != null)
+                {
+                    ToolContext.StyleLibrary = StyleLibrary;
+                }
+#endif
+#if USE_LOAD_GROUPS
+                if (GroupLibrary != null)
+                {
+                    ToolContext.GroupLibrary = GroupLibrary;
+                }
+#endif
+                if (ToolContext.StyleLibrary == null)
+                {
+                    ToolContext.StyleLibrary = Factory.CreateStyleLibrary();
+                }
+
+                if (ToolContext.GroupLibrary == null)
+                {
+                    ToolContext.GroupLibrary = Factory.CreateGroupLibrary();
+                }
 
                 if (ToolContext is EditorToolContext editorToolContext)
                 {
@@ -136,11 +166,13 @@ namespace Draw2D
                 }
             }
 
+#if USE_LOAD_WINDOW
             if (File.Exists(WindowPath))
             {
                 WindowSettings = JsonSerializer.FromJsonFile<WindowSettings>(WindowPath);
             }
-            else
+#endif
+            if (WindowSettings == null)
             {
                 WindowSettings = new WindowSettings()
                 {
@@ -155,11 +187,18 @@ namespace Draw2D
 
         public static void Save()
         {
-            //JsonSerializer.ToJsonFile(StylesPath, ToolContext.StyleLibrary);
-            //JsonSerializer.ToJsonFile(GroupsPath, ToolContext.GroupLibrary);
+#if USE_SAVE_STYLES
+            JsonSerializer.ToJsonFile(StylesPath, ToolContext.StyleLibrary);
+#endif
+#if USE_SAVE_GROUPS
+            JsonSerializer.ToJsonFile(GroupsPath, ToolContext.GroupLibrary);
+#endif
+#if USE_SAVE_EDITOR
             JsonSerializer.ToJsonFile(EditorPath, ToolContext);
+#endif
+#if USE_SAVE_WINDOW
             JsonSerializer.ToJsonFile(WindowPath, WindowSettings);
-
+#endif
             WindowSettings = null;
             ToolContext.Dispose();
             ToolContext = null;
