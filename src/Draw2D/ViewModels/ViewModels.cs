@@ -2607,7 +2607,7 @@ namespace Draw2D.ViewModels.Shapes
                     }
                 }
 
-                if (figures.Count > 0 && figures[0].Shapes.Count > 0)
+                if (_shapes.Count > 0 && _shapes[0] is FigureShape figureShape && figureShape.Shapes.Count > 0)
                 {
                     return true;
                 }
@@ -8013,8 +8013,8 @@ namespace Draw2D.ViewModels.Tools
         {
             if (_path?.Shapes.Count > 0)
             {
-                var shape = _path.Shapes[_path.Shapes.Count - 1];
-                if (shape is FigureShape figure)
+                var pathShape = _path.Shapes[_path.Shapes.Count - 1];
+                if (pathShape is FigureShape figure)
                 {
                     var lastFigureShapes = figure.Shapes;
                     if (lastFigureShapes.Count > 0)
@@ -8076,6 +8076,16 @@ namespace Draw2D.ViewModels.Tools
                 case QuadraticBezierTool quadraticBezierTool:
                     {
                         if (quadraticBezierTool.CurrentState == QuadraticBezierTool.State.StartPoint)
+                        {
+                            SetNextPoint(GetLastPoint());
+                            Settings.CurrentTool?.LeftDown(this, x, y, modifier);
+                            SetNextPoint(null);
+                        }
+                    }
+                    break;
+                case ConicTool conicTool:
+                    {
+                        if (conicTool.CurrentState == ConicTool.State.StartPoint)
                         {
                             SetNextPoint(GetLastPoint());
                             Settings.CurrentTool?.LeftDown(this, x, y, modifier);
