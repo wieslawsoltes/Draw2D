@@ -85,6 +85,7 @@ namespace Draw2D.Editor
 
             containerView.WorkingContainer = new CanvasContainer()
             {
+                Points = new ObservableCollection<IPointShape>(),
                 Shapes = new ObservableCollection<IBaseShape>()
             };
         }
