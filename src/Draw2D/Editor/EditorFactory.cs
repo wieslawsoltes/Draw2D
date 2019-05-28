@@ -504,6 +504,7 @@ namespace Draw2D.Editor
                 InputBackground = new ArgbColor(0, 255, 255, 255),
                 CurrentContainer = new CanvasContainer()
                 {
+                    Points = new ObservableCollection<IPointShape>(),
                     Shapes = new ObservableCollection<IBaseShape>()
                 },
                 WorkingContainer = null,
