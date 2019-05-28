@@ -144,6 +144,13 @@ namespace Draw2D.ViewModels
         bool Disconnect();
     }
 
+    public interface INode
+    {
+        string Id { get; set; }
+        string Name { get; set; }
+        object Owner { get; set; }
+    }
+
     public interface ICopyable
     {
         object Copy(Dictionary<object, object> shared);
@@ -151,6 +158,8 @@ namespace Draw2D.ViewModels
 
     public interface IDrawable
     {
+        IBounds Bounds { get; }
+        IShapeDecorator Decorator { get; }
         string StyleId { get; set; }
         void Draw(object dc, IShapeRenderer renderer, double dx, double dy, DrawMode mode, object db, object r);
     }
@@ -167,7 +176,7 @@ namespace Draw2D.ViewModels
         IPointShape GetNextPoint(IToolContext context, double x, double y, bool connect, double radius);
     }
 
-    public interface ISelectionState : IDirty, ICopyable
+    public interface ISelectionState : INode, IDirty, ICopyable
     {
         IBaseShape Hovered { get; set; }
         IBaseShape Selected { get; set; }
@@ -250,7 +259,7 @@ namespace Draw2D.ViewModels
     }
 
     [DataContract(IsReference = true)]
-    public abstract class ViewModelBase : INotifyPropertyChanged, IDirty
+    public abstract class ViewModelBase : INode, IDirty, INotifyPropertyChanged
     {
         private string _id = null;
         private string _name = null;
@@ -658,11 +667,8 @@ namespace Draw2D.ViewModels.Style
 
 namespace Draw2D.ViewModels.Shapes
 {
-    public interface IBaseShape : IDrawable, ISelectable, ICopyable, IDirty
+    public interface IBaseShape : INode, ICopyable, IDirty, ISelectable, IDrawable
     {
-        object Owner { get; set; }
-        IBounds Bounds { get; }
-        IShapeDecorator Decorator { get; }
         void GetPoints(IList<IPointShape> points);
     }
 
