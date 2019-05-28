@@ -3560,10 +3560,9 @@ namespace Draw2D.ViewModels.Containers
         IPointShape GetNextPoint(IToolContext context, double x, double y, bool connect, double radius);
     }
 
-    public interface ICanvasContainer : IDirty, IDrawable, ISelectable, ICopyable
+    public interface ICanvasContainer : IBaseShape
     {
         IList<IBaseShape> Shapes { get; set; }
-        void GetPoints(IList<IPointShape> points);
     }
 
     public interface IContainerView : IDrawTarget, IHitTestable
