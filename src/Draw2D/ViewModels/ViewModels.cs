@@ -8009,35 +8009,6 @@ namespace Draw2D.ViewModels.Tools
             }
         }
 
-        public PointShape GetLastPoint()
-        {
-            if (_path?.Shapes.Count > 0)
-            {
-                var pathShape = _path.Shapes[_path.Shapes.Count - 1];
-                if (pathShape is FigureShape figure)
-                {
-                    var lastFigureShapes = figure.Shapes;
-                    if (lastFigureShapes.Count > 0)
-                    {
-                        switch (lastFigureShapes[lastFigureShapes.Count - 1])
-                        {
-                            case LineShape line:
-                                return line.Point;
-                            case CubicBezierShape cubicBezier:
-                                return cubicBezier.Point3;
-                            case QuadraticBezierShape quadraticBezier:
-                                return quadraticBezier.Point2;
-                            case ConicShape conic:
-                                return conic.Point2;
-                            default:
-                                throw new Exception("Could not find last path point.");
-                        }
-                    }
-                }
-            }
-            return null;
-        }
-
         private void DownInternal(IToolContext context, double x, double y, Modifier modifier)
         {
             Filters?.Any(f => f.Process(context, ref x, ref y));
@@ -8057,7 +8028,7 @@ namespace Draw2D.ViewModels.Tools
                     {
                         if (lineTool.CurrentState == LineTool.State.StartPoint)
                         {
-                            SetNextPoint(GetLastPoint());
+                            SetNextPoint(_path?.GetLastPoint());
                             Settings.CurrentTool?.LeftDown(this, x, y, modifier);
                             SetNextPoint(null);
                         }
@@ -8067,7 +8038,7 @@ namespace Draw2D.ViewModels.Tools
                     {
                         if (cubicBezierTool.CurrentState == CubicBezierTool.State.StartPoint)
                         {
-                            SetNextPoint(GetLastPoint());
+                            SetNextPoint(_path?.GetLastPoint());
                             Settings.CurrentTool?.LeftDown(this, x, y, modifier);
                             SetNextPoint(null);
                         }
@@ -8077,7 +8048,7 @@ namespace Draw2D.ViewModels.Tools
                     {
                         if (quadraticBezierTool.CurrentState == QuadraticBezierTool.State.StartPoint)
                         {
-                            SetNextPoint(GetLastPoint());
+                            SetNextPoint(_path?.GetLastPoint());
                             Settings.CurrentTool?.LeftDown(this, x, y, modifier);
                             SetNextPoint(null);
                         }
@@ -8087,7 +8058,7 @@ namespace Draw2D.ViewModels.Tools
                     {
                         if (conicTool.CurrentState == ConicTool.State.StartPoint)
                         {
-                            SetNextPoint(GetLastPoint());
+                            SetNextPoint(_path?.GetLastPoint());
                             Settings.CurrentTool?.LeftDown(this, x, y, modifier);
                             SetNextPoint(null);
                         }
