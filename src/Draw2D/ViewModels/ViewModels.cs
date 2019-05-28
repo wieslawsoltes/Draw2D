@@ -7829,7 +7829,15 @@ namespace Draw2D.ViewModels.Tools
         }
 
         public PointShape GetNextPoint(IToolContext context, double x, double y, bool connect, double radius)
-            => _nextPoint ?? _context.ContainerView.GetNextPoint(_context, x, y, connect, radius);
+        { 
+            if (_nextPoint != null)
+            {
+                var nextPointTemp = _nextPoint;
+                _nextPoint = null;
+                return nextPointTemp;
+            }
+            return _context.ContainerView.GetNextPoint(_context, x, y, connect, radius);
+        }
 
         public void Draw(object context, double width, double height, double dx, double dy, double zx, double zy)
         {
