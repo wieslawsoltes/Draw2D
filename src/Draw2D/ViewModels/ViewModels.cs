@@ -4,6 +4,8 @@
 //#define USE_GROUP_SHAPES
 //#define USE_PATH_FIGURES
 //#define USE_CONTAINER_POINTS
+#define USE_SERIALIZE_STYLES
+#define USE_SERIALIZE_GROUPS
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -4325,16 +4327,22 @@ namespace Draw2D.ViewModels.Containers
         private ITool _currentTool;
         private EditMode _mode;
 
-        //[IgnoreDataMember]
+#if USE_SERIALIZE_STYLES
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
+#else
+        [IgnoreDataMember]
+#endif
         public IStyleLibrary StyleLibrary
         {
             get => _styleLibrary;
             set => Update(ref _styleLibrary, value);
         }
 
-        //[IgnoreDataMember]
+#if USE_SERIALIZE_GROUPS
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
+#else
+        [IgnoreDataMember]
+#endif
         public IGroupLibrary GroupLibrary
         {
             get => _groupLibrary;
@@ -6702,7 +6710,7 @@ namespace Draw2D.ViewModels.Tools
                 Point2 = context.ContainerView?.GetNextPoint(context, x, y, false, 0.0),
                 Point3 = context.ContainerView?.GetNextPoint(context, x, y, false, 0.0),
                 Text = new Text(),
-                StyleId = context.StyleLibrary.CurrentStyle.Title
+                StyleId = context.StyleLibrary?.CurrentStyle?.Title
             };
             if (_cubicBezier.StartPoint.Owner == null)
             {
@@ -7025,7 +7033,7 @@ namespace Draw2D.ViewModels.Tools
                 TopLeft = context.ContainerView?.GetNextPoint(context, x, y, Settings?.ConnectPoints ?? false, Settings?.HitTestRadius ?? 7.0),
                 BottomRight = context.ContainerView?.GetNextPoint(context, x, y, false, 0.0),
                 Text = new Text(),
-                StyleId = context.StyleLibrary.CurrentStyle.Title
+                StyleId = context.StyleLibrary?.CurrentStyle?.Title
             };
             if (_ellipse.TopLeft.Owner == null)
             {
@@ -7221,7 +7229,7 @@ namespace Draw2D.ViewModels.Tools
                 var line = new LineShape(startPoint, point)
                 {
                     Points = new ObservableCollection<PointShape>(),
-                    StyleId = context.StyleLibrary.CurrentStyle.Title
+                    StyleId = context.StyleLibrary?.CurrentStyle?.Title
                 };
                 line.StartPoint.Owner = line;
                 line.Point.Owner = line;
@@ -7286,7 +7294,7 @@ namespace Draw2D.ViewModels.Tools
                 StartPoint = context.ContainerView?.GetNextPoint(context, x, y, Settings?.ConnectPoints ?? false, Settings?.HitTestRadius ?? 0.0),
                 Point = context.ContainerView?.GetNextPoint(context, x, y, false, 0.0),
                 Text = new Text(),
-                StyleId = context.StyleLibrary.CurrentStyle.Title
+                StyleId = context.StyleLibrary?.CurrentStyle?.Title
             };
             if (_line.StartPoint.Owner == null)
             {
@@ -7953,7 +7961,7 @@ namespace Draw2D.ViewModels.Tools
                 Figures = new ObservableCollection<FigureShape>(),
                 FillRule = Settings.FillRule,
                 Text = new Text(),
-                StyleId = context.StyleLibrary.CurrentStyle.Title
+                StyleId = context.StyleLibrary?.CurrentStyle?.Title
             };
 
             context.ContainerView?.WorkingContainer.Shapes.Add(_path);
@@ -8319,7 +8327,7 @@ namespace Draw2D.ViewModels.Tools
                 StartPoint = context.ContainerView?.GetNextPoint(context, x, y, Settings?.ConnectPoints ?? false, Settings?.HitTestRadius ?? 7.0),
                 Point = context.ContainerView?.GetNextPoint(context, x, y, false, 0.0),
                 Text = new Text(),
-                StyleId = context.StyleLibrary.CurrentStyle.Title
+                StyleId = context.StyleLibrary?.CurrentStyle?.Title
             };
             if (_line.StartPoint.Owner == null)
             {
@@ -8372,7 +8380,7 @@ namespace Draw2D.ViewModels.Tools
                 StartPoint = _points.Last(),
                 Point = context.ContainerView?.GetNextPoint(context, x, y, false, 0.0),
                 Text = new Text(),
-                StyleId = context.StyleLibrary.CurrentStyle.Title
+                StyleId = context.StyleLibrary?.CurrentStyle?.Title
             };
             if (_line.Point.Owner == null)
             {
@@ -8573,7 +8581,7 @@ namespace Draw2D.ViewModels.Tools
                 Point1 = context.ContainerView?.GetNextPoint(context, x, y, false, 0.0),
                 Point2 = context.ContainerView?.GetNextPoint(context, x, y, false, 0.0),
                 Text = new Text(),
-                StyleId = context.StyleLibrary.CurrentStyle.Title
+                StyleId = context.StyleLibrary?.CurrentStyle?.Title
             };
             if (_quadraticBezier.StartPoint.Owner == null)
             {
@@ -8855,7 +8863,7 @@ namespace Draw2D.ViewModels.Tools
                 Point2 = context.ContainerView?.GetNextPoint(context, x, y, false, 0.0),
                 Weight = Settings.Weight,
                 Text = new Text(),
-                StyleId = context.StyleLibrary.CurrentStyle.Title
+                StyleId = context.StyleLibrary?.CurrentStyle?.Title
             };
             if (_conic.StartPoint.Owner == null)
             {
@@ -9126,7 +9134,7 @@ namespace Draw2D.ViewModels.Tools
                 TopLeft = context.ContainerView?.GetNextPoint(context, x, y, Settings?.ConnectPoints ?? false, Settings?.HitTestRadius ?? 7.0),
                 BottomRight = context.ContainerView?.GetNextPoint(context, x, y, false, 0.0),
                 Text = new Text(),
-                StyleId = context.StyleLibrary.CurrentStyle.Title
+                StyleId = context.StyleLibrary?.CurrentStyle?.Title
             };
             if (_rectangle.TopLeft.Owner == null)
             {
@@ -9374,7 +9382,7 @@ namespace Draw2D.ViewModels.Tools
                 Figures = new ObservableCollection<FigureShape>(),
                 FillRule = Settings.FillRule,
                 Text = new Text(),
-                StyleId = context.StyleLibrary.CurrentStyle.Title
+                StyleId = context.StyleLibrary?.CurrentStyle?.Title
             };
 
             _figure = new FigureShape()
@@ -9434,7 +9442,7 @@ namespace Draw2D.ViewModels.Tools
                             StartPoint = distinct[i],
                             Point = distinct[i + 1],
                             Text = new Text(),
-                            StyleId = context.StyleLibrary.CurrentStyle.Title
+                            StyleId = context.StyleLibrary?.CurrentStyle?.Title
                         };
                         _figure.Shapes.Add(line);
                     }
@@ -9482,7 +9490,7 @@ namespace Draw2D.ViewModels.Tools
                 StartPoint = _previousPoint,
                 Point = _nextPoint,
                 Text = new Text(),
-                StyleId = context.StyleLibrary.CurrentStyle.Title
+                StyleId = context.StyleLibrary?.CurrentStyle?.Title
             };
             if (line.StartPoint.Owner == null)
             {
@@ -10668,7 +10676,7 @@ namespace Draw2D.ViewModels.Tools
                 TopLeft = context.ContainerView?.GetNextPoint(context, x, y, Settings?.ConnectPoints ?? false, Settings?.HitTestRadius ?? 7.0),
                 BottomRight = context.ContainerView?.GetNextPoint(context, x, y, false, 0.0),
                 Text = new Text("Text"),
-                StyleId = context.StyleLibrary.CurrentStyle.Title
+                StyleId = context.StyleLibrary?.CurrentStyle?.Title
             };
             if (_text.TopLeft.Owner == null)
             {
