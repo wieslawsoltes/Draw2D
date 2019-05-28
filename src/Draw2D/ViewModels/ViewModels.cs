@@ -4325,14 +4325,16 @@ namespace Draw2D.ViewModels.Containers
         private ITool _currentTool;
         private EditMode _mode;
 
-        [IgnoreDataMember]
+        //[IgnoreDataMember]
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public IStyleLibrary StyleLibrary
         {
             get => _styleLibrary;
             set => Update(ref _styleLibrary, value);
         }
 
-        [IgnoreDataMember]
+        //[IgnoreDataMember]
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public IGroupLibrary GroupLibrary
         {
             get => _groupLibrary;

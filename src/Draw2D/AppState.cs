@@ -34,7 +34,6 @@ namespace Draw2D
             {
                 StyleLibrary = Factory.CreateStyleLibrary();
                 GroupLibrary = Factory.CreateGroupLibrary();
-
                 ToolContext = Factory.CreateToolContext();
                 ToolContext.StyleLibrary = StyleLibrary;
                 ToolContext.GroupLibrary = GroupLibrary;
@@ -86,29 +85,29 @@ namespace Draw2D
 
         public static void Load()
         {
-            if (File.Exists(StylesPath))
-            {
-                StyleLibrary = JsonSerializer.FromJsonFile<IStyleLibrary>(StylesPath);
-            }
-            else
-            {
-                StyleLibrary = Factory.CreateStyleLibrary();
-            }
+            //if (File.Exists(StylesPath))
+            //{
+            //    StyleLibrary = JsonSerializer.FromJsonFile<IStyleLibrary>(StylesPath);
+            //}
+            //else
+            //{
+            //    StyleLibrary = Factory.CreateStyleLibrary();
+            //}
 
-            if (File.Exists(GroupsPath))
-            {
-                GroupLibrary = JsonSerializer.FromJsonFile<IGroupLibrary>(GroupsPath);
-            }
-            else
-            {
-                GroupLibrary = Factory.CreateGroupLibrary();
-            }
+            //if (File.Exists(GroupsPath))
+            //{
+            //    GroupLibrary = JsonSerializer.FromJsonFile<IGroupLibrary>(GroupsPath);
+            //}
+            //else
+            //{
+            //    GroupLibrary = Factory.CreateGroupLibrary();
+            //}
 
             if (File.Exists(EditorPath))
             {
                 ToolContext = JsonSerializer.FromJsonFile<IToolContext>(EditorPath);
-                ToolContext.StyleLibrary = StyleLibrary;
-                ToolContext.GroupLibrary = GroupLibrary;
+                //ToolContext.StyleLibrary = StyleLibrary;
+                //ToolContext.GroupLibrary = GroupLibrary;
 
                 if (ToolContext is EditorToolContext editorToolContext)
                 {
@@ -122,8 +121,10 @@ namespace Draw2D
             else
             {
                 ToolContext = Factory.CreateToolContext();
-                ToolContext.StyleLibrary = StyleLibrary;
-                ToolContext.GroupLibrary = GroupLibrary;
+                //ToolContext.StyleLibrary = StyleLibrary;
+                //ToolContext.GroupLibrary = GroupLibrary;
+                ToolContext.StyleLibrary = Factory.CreateStyleLibrary();
+                ToolContext.GroupLibrary = Factory.CreateGroupLibrary();
 
                 if (ToolContext is EditorToolContext editorToolContext)
                 {
@@ -154,8 +155,8 @@ namespace Draw2D
 
         public static void Save()
         {
-            JsonSerializer.ToJsonFile(StylesPath, ToolContext.StyleLibrary);
-            JsonSerializer.ToJsonFile(GroupsPath, ToolContext.GroupLibrary);
+            //JsonSerializer.ToJsonFile(StylesPath, ToolContext.StyleLibrary);
+            //JsonSerializer.ToJsonFile(GroupsPath, ToolContext.GroupLibrary);
             JsonSerializer.ToJsonFile(EditorPath, ToolContext);
             JsonSerializer.ToJsonFile(WindowPath, WindowSettings);
 
@@ -203,9 +204,9 @@ namespace Draw2D
 
                 if (command == "--demo")
                 {
-                    var toolContext = Factory.CreateToolContext();
                     var styleLibrary = Factory.CreateStyleLibrary();
                     var groupLibrary = Factory.CreateGroupLibrary();
+                    var toolContext = Factory.CreateToolContext();
                     toolContext.StyleLibrary = styleLibrary;
                     toolContext.GroupLibrary = groupLibrary;
                     if (toolContext is EditorToolContext editorToolContext)
@@ -223,12 +224,12 @@ namespace Draw2D
 
                 if (command == "--export")
                 {
-                    var toolContext = Factory.CreateToolContext();
                     var styleLibrary = JsonSerializer.FromJsonFile<IStyleLibrary>(args[1]);
-                    toolContext.StyleLibrary = styleLibrary;
                     var groupLibrary = JsonSerializer.FromJsonFile<IGroupLibrary>(args[2]);
-                    toolContext.GroupLibrary = groupLibrary;
                     var containerView = JsonSerializer.FromJsonFile<ContainerView>(args[3]);
+                    var toolContext = Factory.CreateToolContext();
+                    toolContext.StyleLibrary = styleLibrary;
+                    toolContext.GroupLibrary = groupLibrary;
                     EditorToolContext.Export(args[4], containerView, toolContext);
                     return false;
                 }
