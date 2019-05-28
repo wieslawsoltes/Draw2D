@@ -153,7 +153,7 @@ namespace Draw2D.Editor
 
             var gridSnapPointFilter = new GridSnapPointFilter()
             {
-                Guides = new ObservableCollection<BaseShape>(),
+                Guides = new ObservableCollection<IBaseShape>(),
                 Settings = new GridSnapSettings()
                 {
                     IsEnabled = true,
@@ -167,7 +167,7 @@ namespace Draw2D.Editor
 
             var lineSnapPointFilter = new LineSnapPointFilter()
             {
-                Guides = new ObservableCollection<BaseShape>(),
+                Guides = new ObservableCollection<IBaseShape>(),
                 Settings = new LineSnapSettings()
                 {
                     IsEnabled = true,
@@ -197,7 +197,7 @@ namespace Draw2D.Editor
                 {
                     new GridSnapPointFilter()
                     {
-                        Guides = new ObservableCollection<BaseShape>(),
+                        Guides = new ObservableCollection<IBaseShape>(),
                         Settings = new GridSnapSettings()
                         {
                             IsEnabled = true,
@@ -504,14 +504,14 @@ namespace Draw2D.Editor
                 InputBackground = new ArgbColor(0, 255, 255, 255),
                 CurrentContainer = new CanvasContainer()
                 {
-                    Shapes = new ObservableCollection<BaseShape>()
+                    Shapes = new ObservableCollection<IBaseShape>()
                 },
                 WorkingContainer = null,
                 SelectionState = new SelectionState()
                 {
                     Hovered = null,
                     Selected = null,
-                    Shapes = new HashSet<BaseShape>()
+                    Shapes = new HashSet<IBaseShape>()
                 },
                 ZoomServiceState = new ZoomServiceState()
                 {

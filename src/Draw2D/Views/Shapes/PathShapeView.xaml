@@ -21,10 +21,10 @@
                 <TextBox Classes="default" Grid.Column="1" Grid.Row="1" Text="{Binding FillRule}"/>
             </Grid>
         </TabItem>
-        <TabItem Classes="default" Header="Figures">
+        <TabItem Classes="default" Header="Shapes">
             <TabControl Classes="default" TabStripPlacement="Top">
-                <TabItem Classes="default" Header="Figures">
-                    <ListBox x:Name="figures" Classes="default" Items="{Binding Figures}">
+                <TabItem Classes="default" Header="Shapes">
+                    <ListBox x:Name="shapes" Classes="default" Items="{Binding Shapes}">
                         <ListBox.DataTemplates>
                             <DataTemplate>
                                 <TextBlock Classes="default" Text="{Binding}"/>
@@ -33,7 +33,7 @@
                     </ListBox>
                 </TabItem>
                 <TabItem Classes="default" Header="Selected">
-                    <ContentControl Content="{Binding #figures.SelectedItem}"/>
+                    <ContentControl Content="{Binding #shapes.SelectedItem}"/>
                 </TabItem>
             </TabControl>
         </TabItem>

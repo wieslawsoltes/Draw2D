@@ -223,9 +223,12 @@ namespace Draw2D.Editor.Renderers
                 FillType = ToFillType(path.FillRule)
             };
 
-            foreach (var figure in path.Figures)
+            foreach (var shape in path.Shapes)
             {
-                ToGeometry(figure, dx, dy, geometry);
+                if (shape is FigureShape figure)
+                {
+                    ToGeometry(figure, dx, dy, geometry);
+                }
             }
 
             return geometry;
@@ -271,12 +274,12 @@ namespace Draw2D.Editor.Renderers
             return SKPath.ParseSvgPathData(svgPathData);
         }
 
-        public static PathShape FromGeometry(SKPath path, ShapeStyle style, BaseShape pointTemplate)
+        public static PathShape FromGeometry(SKPath path, ShapeStyle style, IBaseShape pointTemplate)
         {
             var pathShape = new PathShape()
             {
                 Points = new ObservableCollection<PointShape>(),
-                Figures = new ObservableCollection<FigureShape>(),
+                Shapes = new ObservableCollection<IBaseShape>(),
                 FillRule = PathFillRule.EvenOdd,
                 Text = new Text(),
                 StyleId = style.Title
@@ -299,11 +302,11 @@ namespace Draw2D.Editor.Renderers
                             {
                                 figureShape = new FigureShape()
                                 {
-                                    Shapes = new ObservableCollection<BaseShape>(),
+                                    Shapes = new ObservableCollection<IBaseShape>(),
                                     IsFilled = true,
                                     IsClosed = false
                                 };
-                                pathShape.Figures.Add(figureShape);
+                                pathShape.Shapes.Add(figureShape);
                                 firstPoint = lastPoint = points[0];
                             }
                             break;

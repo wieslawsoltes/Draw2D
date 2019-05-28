@@ -85,7 +85,7 @@ namespace Draw2D.Editor
 
             containerView.WorkingContainer = new CanvasContainer()
             {
-                Shapes = new ObservableCollection<BaseShape>()
+                Shapes = new ObservableCollection<IBaseShape>()
             };
         }
 
@@ -414,7 +414,7 @@ namespace Draw2D.Editor
             }
         }
 
-        private void ToSvgPathDataImpl(BaseShape shape, StringBuilder sb)
+        private void ToSvgPathDataImpl(IBaseShape shape, StringBuilder sb)
         {
             switch (shape)
             {
@@ -508,7 +508,7 @@ namespace Draw2D.Editor
         {
             if (ContainerView.SelectionState?.Shapes != null)
             {
-                var selected = new List<BaseShape>(ContainerView.SelectionState?.Shapes);
+                var selected = new List<IBaseShape>(ContainerView.SelectionState?.Shapes);
                 var sb = new StringBuilder();
 
                 foreach (var shape in selected)
@@ -533,7 +533,7 @@ namespace Draw2D.Editor
             {
                 Title = "Group",
                 Points = new ObservableCollection<PointShape>(),
-                Shapes = new ObservableCollection<BaseShape>()
+                Shapes = new ObservableCollection<IBaseShape>()
             };
 
             var rectangle = new RectangleShape(new PointShape(0, 0, context.PointTemplate), new PointShape(30, 30, context.PointTemplate))
