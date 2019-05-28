@@ -2524,6 +2524,7 @@ namespace Draw2D.ViewModels.Shapes
                 point.Deselect(selectionState);
             }
         }
+
         public bool Validate(bool removeEmptyFigures)
         {
             var figures = new List<FigureShape>();
