@@ -2541,7 +2541,7 @@ namespace Draw2D.ViewModels.Shapes
             var points = new List<IPointShape>();
             GetPoints(points);
 
-            foreach (var point in distinct)
+            foreach (var point in points)
             {
                 point.Select(selectionState);
             }
@@ -2553,14 +2553,12 @@ namespace Draw2D.ViewModels.Shapes
 
             var points = new List<IPointShape>();
             GetPoints(points);
-            var distinct = points.Distinct();
 
-            foreach (var point in distinct)
+            foreach (var point in points)
             {
                 point.Deselect(selectionState);
             }
         }
-
         public bool Validate(bool removeEmptyFigures)
         {
             var figures = new List<FigureShape>();
