@@ -785,6 +785,14 @@ namespace Draw2D.ViewModels.Shapes
             base.Invalidate();
         }
 
+        public override void GetPoints(IList<IPointShape> points)
+        {
+            foreach (var point in Points)
+            {
+                points.Add(point);
+            }
+        }
+
         public override void Draw(object dc, IShapeRenderer renderer, double dx, double dy, DrawMode mode, object db, object r)
         {
             if (mode.HasFlag(DrawMode.Point))
@@ -1924,10 +1932,7 @@ namespace Draw2D.ViewModels.Shapes
 
         public override void GetPoints(IList<IPointShape> points)
         {
-            foreach (var point in Points)
-            {
-                points.Add(point);
-            }
+            base.GetPoints(points);
 
             foreach (var shape in Shapes)
             {
@@ -1952,9 +1957,12 @@ namespace Draw2D.ViewModels.Shapes
 
         public override void Draw(object dc, IShapeRenderer renderer, double dx, double dy, DrawMode mode, object db, object r)
         {
-            foreach (var shape in Shapes)
+            if (Shapes != null)
             {
-                shape.Draw(dc, renderer, dx, dy, mode, db, r);
+                foreach (var shape in Shapes)
+                {
+                    shape.Draw(dc, renderer, dx, dy, mode, db, r);
+                }
             }
 
             base.Draw(dc, renderer, dx, dy, mode, db, r);
@@ -2365,26 +2373,8 @@ namespace Draw2D.ViewModels.Shapes
             return null;
         }
 
-        public override void GetPoints(IList<IPointShape> points)
-        {
-            foreach (var point in Points)
-            {
-                points.Add(point);
-            }
-
-            foreach (var shape in Shapes)
-            {
-                shape.GetPoints(points);
-            }
-        }
-
         public override void Invalidate()
         {
-            foreach (var shape in Shapes)
-            {
-                shape.Invalidate();
-            }
-
             _text?.Invalidate();
 
             base.Invalidate();
@@ -2544,30 +2534,12 @@ namespace Draw2D.ViewModels.Shapes
             }
         }
 
-        public override void Move(ISelectionState selectionState, double dx, double dy)
-        {
-            var points = new List<IPointShape>();
-            GetPoints(points);
-            var distinct = points.Distinct();
-
-            foreach (var point in distinct)
-            {
-                if (!selectionState.IsSelected(point))
-                {
-                    point.Move(selectionState, dx, dy);
-                }
-            }
-
-            base.Move(selectionState, dx, dy);
-        }
-
         public override void Select(ISelectionState selectionState)
         {
             base.Select(selectionState);
 
             var points = new List<IPointShape>();
             GetPoints(points);
-            var distinct = points.Distinct();
 
             foreach (var point in distinct)
             {
@@ -3894,30 +3866,6 @@ namespace Draw2D.ViewModels.Containers
         {
         }
 
-        public override void GetPoints(IList<IPointShape> points)
-        {
-            foreach (var point in Points)
-            {
-                points.Add(point);
-            }
-
-            foreach (var shape in Shapes)
-            {
-                shape.GetPoints(points);
-            }
-        }
-
-        public override void Draw(object dc, IShapeRenderer renderer, double dx, double dy, DrawMode mode, object db, object r)
-        {
-            if (Shapes != null)
-            {
-                foreach (var shape in Shapes)
-                {
-                    shape.Draw(dc, renderer, dx, dy, mode, db, r);
-                }
-            }
-        }
-
         public override object Copy(Dictionary<object, object> shared)
         {
             var copy = new CanvasContainer()
@@ -3949,21 +3897,6 @@ namespace Draw2D.ViewModels.Containers
             }
 
             return copy;
-        }
-
-        public override void Move(ISelectionState selectionState, double dx, double dy)
-        {
-            var points = new List<IPointShape>();
-            GetPoints(points);
-            var distinct = points.Distinct();
-
-            foreach (var point in distinct)
-            {
-                if (!selectionState.IsSelected(point))
-                {
-                    point.Move(selectionState, dx, dy);
-                }
-            }
         }
     }
 
