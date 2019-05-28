@@ -123,10 +123,10 @@ namespace Draw2D.Editor
             styleLibrary.Styles.Add(
                 new ShapeStyle(
                     "PointTemplate",
-                    new ArgbColor(255, 255, 255, 0),
-                    new ArgbColor(255, 255, 255, 0),
-                    2.0, true, true,
-                    new TextStyle(fontFamily, 12.0, HAlign.Center, VAlign.Center, new ArgbColor(255, 255, 255, 0), true)));
+                    new ArgbColor(255, 255, 0, 255),
+                    new ArgbColor(255, 255, 0, 255),
+                    2.0, false, true,
+                    new TextStyle(fontFamily, 12.0, HAlign.Center, VAlign.Center, new ArgbColor(255, 255, 0, 255), true)));
 
             styleLibrary.CurrentStyle = styleLibrary.Styles[0];
 
@@ -472,7 +472,7 @@ namespace Draw2D.Editor
             editorToolContext.StyleLibrary = null;
             editorToolContext.GroupLibrary = null;
 
-            var pointTemplate = new EllipseShape(new PointShape(-3, -3, null), new PointShape(3, 3, null))
+            var pointTemplate = new RectangleShape(new PointShape(-4, -4, null), new PointShape(4, 4, null))
             {
                 Points = new ObservableCollection<PointShape>(),
                 Text = new Text(),
