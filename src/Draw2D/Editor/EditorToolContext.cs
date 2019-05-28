@@ -22,16 +22,16 @@ namespace Draw2D.Editor
     [DataContract(IsReference = true)]
     public class EditorToolContext : ToolContext
     {
-        private IFactory _factory;
+        private IContainerFactory _containerFactory;
         private ISelection _selection;
         private string _currentDirectory;
         private IList<string> _files;
 
         [IgnoreDataMember]
-        public IFactory Factory
+        public IContainerFactory ContainerFactory
         {
-            get => _factory;
-            set => Update(ref _factory, value);
+            get => _containerFactory;
+            set => Update(ref _containerFactory, value);
         }
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
@@ -59,9 +59,9 @@ namespace Draw2D.Editor
         {
         }
 
-        public EditorToolContext(IFactory factory)
+        public EditorToolContext(IContainerFactory containerFactory)
         {
-            _factory = factory;
+            _containerFactory = containerFactory;
         }
 
         private ShapeStyle GetShapeStyle(string styleId)
@@ -134,7 +134,7 @@ namespace Draw2D.Editor
 
         public void NewContainerView(string title)
         {
-            var containerView = _factory?.CreateContainerView(title);
+            var containerView = _containerFactory?.CreateContainerView(title);
             if (containerView != null)
             {
                 InitContainerView(containerView);

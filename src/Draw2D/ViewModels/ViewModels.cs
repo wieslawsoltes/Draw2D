@@ -162,6 +162,11 @@ namespace Draw2D.ViewModels
         void Invalidate();
     }
 
+    public interface IHitTestable
+    {
+        IPointShape GetNextPoint(IToolContext context, double x, double y, bool connect, double radius);
+    }
+
     public interface ISelectionState : IDirty, ICopyable
     {
         IBaseShape Hovered { get; set; }
@@ -2405,7 +2410,16 @@ namespace Draw2D.ViewModels.Shapes
                 }
             }
 
-            base.Draw(dc, renderer, dx, dy, mode, db, r);
+            if (mode.HasFlag(DrawMode.Point))
+            {
+                foreach (var point in Points)
+                {
+                    if (renderer.SelectionState?.IsSelected(point) ?? false)
+                    {
+                        point.Draw(dc, renderer, dx, dy, mode, db, r);
+                    }
+                }
+            }
         }
 
         private void DrawPoints(object dc, IShapeRenderer renderer, double dx, double dy, DrawMode mode, object db, object r, FigureShape figure, bool isPathSelected)
@@ -3555,11 +3569,6 @@ namespace Draw2D.ViewModels.Containers
         void Draw(IContainerView view, object context, double width, double height, double dx, double dy, double zx, double zy);
     }
 
-    public interface IHitTestable
-    {
-        IPointShape GetNextPoint(IToolContext context, double x, double y, bool connect, double radius);
-    }
-
     public interface ICanvasContainer : IBaseShape
     {
         IList<IBaseShape> Shapes { get; set; }
@@ -3581,6 +3590,7 @@ namespace Draw2D.ViewModels.Containers
         void Add(IBaseShape shape);
         void Remove(IBaseShape shape);
         void Reference(GroupShape group);
+        void Style(string styleId);
     }
 
     public interface IToolContext : IInputTarget, IDisposable
@@ -3597,7 +3607,7 @@ namespace Draw2D.ViewModels.Containers
         void SetTool(string name);
     }
 
-    public interface IFactory
+    public interface IContainerFactory
     {
         IStyleLibrary CreateStyleLibrary();
         IGroupLibrary CreateGroupLibrary();
@@ -3886,6 +3896,11 @@ namespace Draw2D.ViewModels.Containers
 
         public override void GetPoints(IList<IPointShape> points)
         {
+            foreach (var point in Points)
+            {
+                points.Add(point);
+            }
+
             foreach (var shape in Shapes)
             {
                 shape.GetPoints(points);
@@ -4314,6 +4329,22 @@ namespace Draw2D.ViewModels.Containers
                 var reference = new ReferenceShape(group.Title, ax, ay, group);
                 reference.Select(_selectionState);
                 _currentContainer.Shapes.Add(reference);
+                _currentContainer.MarkAsDirty(true);
+                _inputService?.Redraw?.Invoke();
+            }
+        }
+
+        public void Style(string styleId)
+        {
+            if (_selectionState?.Shapes != null && !string.IsNullOrEmpty(styleId))
+            {
+                foreach (var shape in _selectionState.Shapes)
+                {
+                    if (!(shape is IPointShape))
+                    {
+                        shape.StyleId = styleId;
+                    }
+                }
                 _currentContainer.MarkAsDirty(true);
                 _inputService?.Redraw?.Invoke();
             }
@@ -7851,6 +7882,11 @@ namespace Draw2D.ViewModels.Tools
         public void Reference(GroupShape group)
         {
             _context.ContainerView.Reference(group);
+        }
+
+        public void Style(string styleId)
+        {
+            _context.ContainerView.Style(styleId);
         }
     }
 

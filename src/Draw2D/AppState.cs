@@ -22,7 +22,7 @@ namespace Draw2D
         public static string GroupsPath { get; set; }
         public static string EditorPath { get; set; }
         public static string WindowPath { get; set; }
-        public static IFactory Factory { get; set; }
+        public static IContainerFactory ContainerFactory { get; set; }
         public static IStyleLibrary StyleLibrary { get; set; }
         public static IGroupLibrary GroupLibrary { get; set; }
         public static IToolContext ToolContext { get; set; }
@@ -35,19 +35,19 @@ namespace Draw2D
             EditorPath = "editor.json";
             WindowPath = "window.json";
 
-            Factory = new EditorFactory();
+            ContainerFactory = new EditorContainerFactory();
 
             if (Design.IsDesignMode)
             {
-                StyleLibrary = Factory.CreateStyleLibrary();
-                GroupLibrary = Factory.CreateGroupLibrary();
-                ToolContext = Factory.CreateToolContext();
+                StyleLibrary = ContainerFactory.CreateStyleLibrary();
+                GroupLibrary = ContainerFactory.CreateGroupLibrary();
+                ToolContext = ContainerFactory.CreateToolContext();
                 ToolContext.StyleLibrary = StyleLibrary;
                 ToolContext.GroupLibrary = GroupLibrary;
 
                 if (ToolContext is EditorToolContext editorToolContext)
                 {
-                    editorToolContext.Factory = Factory;
+                    editorToolContext.ContainerFactory = ContainerFactory;
                     editorToolContext.NewContainerView("View");
 
                     editorToolContext.CurrentDirectory = Directory.GetCurrentDirectory();
@@ -123,7 +123,7 @@ namespace Draw2D
 #endif
                 if (ToolContext is EditorToolContext editorToolContext)
                 {
-                    editorToolContext.Factory = Factory;
+                    editorToolContext.ContainerFactory = ContainerFactory;
                     foreach (var containerView in editorToolContext.ContainerViews)
                     {
                         editorToolContext.InitContainerView(containerView);
@@ -133,7 +133,7 @@ namespace Draw2D
 #endif
             if (ToolContext == null)
             {
-                ToolContext = Factory.CreateToolContext();
+                ToolContext = ContainerFactory.CreateToolContext();
 #if USE_LOAD_STYLES
                 if (StyleLibrary != null)
                 {
@@ -148,17 +148,17 @@ namespace Draw2D
 #endif
                 if (ToolContext.StyleLibrary == null)
                 {
-                    ToolContext.StyleLibrary = Factory.CreateStyleLibrary();
+                    ToolContext.StyleLibrary = ContainerFactory.CreateStyleLibrary();
                 }
 
                 if (ToolContext.GroupLibrary == null)
                 {
-                    ToolContext.GroupLibrary = Factory.CreateGroupLibrary();
+                    ToolContext.GroupLibrary = ContainerFactory.CreateGroupLibrary();
                 }
 
                 if (ToolContext is EditorToolContext editorToolContext)
                 {
-                    editorToolContext.Factory = Factory;
+                    editorToolContext.ContainerFactory = ContainerFactory;
                     editorToolContext.NewContainerView("View");
 
                     editorToolContext.CurrentDirectory = Directory.GetCurrentDirectory();
@@ -204,7 +204,7 @@ namespace Draw2D
             ToolContext = null;
             StyleLibrary = null;
             GroupLibrary = null;
-            Factory = null;
+            ContainerFactory = null;
         }
 
         public static bool ParseArgs(string[] args)
@@ -215,37 +215,37 @@ namespace Draw2D
 
                 if (command == "--new-styles")
                 {
-                    var styleLibrary = Factory.CreateStyleLibrary();
+                    var styleLibrary = ContainerFactory.CreateStyleLibrary();
                     JsonSerializer.ToJsonFile("styles.json", styleLibrary);
                     return false;
                 }
 
                 if (command == "--new-groups")
                 {
-                    var groupLibrary = Factory.CreateGroupLibrary();
+                    var groupLibrary = ContainerFactory.CreateGroupLibrary();
                     JsonSerializer.ToJsonFile("groups.json", groupLibrary);
                     return false;
                 }
 
                 if (command == "--new-view")
                 {
-                    var containerView = Factory.CreateContainerView("View");
+                    var containerView = ContainerFactory.CreateContainerView("View");
                     JsonSerializer.ToJsonFile("View.json", containerView);
                     return false;
                 }
 
                 if (command == "--new-editor")
                 {
-                    var toolContext = Factory.CreateToolContext();
+                    var toolContext = ContainerFactory.CreateToolContext();
                     JsonSerializer.ToJsonFile("editor.json", toolContext);
                     return false;
                 }
 
                 if (command == "--demo")
                 {
-                    var styleLibrary = Factory.CreateStyleLibrary();
-                    var groupLibrary = Factory.CreateGroupLibrary();
-                    var toolContext = Factory.CreateToolContext();
+                    var styleLibrary = ContainerFactory.CreateStyleLibrary();
+                    var groupLibrary = ContainerFactory.CreateGroupLibrary();
+                    var toolContext = ContainerFactory.CreateToolContext();
                     toolContext.StyleLibrary = styleLibrary;
                     toolContext.GroupLibrary = groupLibrary;
                     if (toolContext is EditorToolContext editorToolContext)
@@ -266,7 +266,7 @@ namespace Draw2D
                     var styleLibrary = JsonSerializer.FromJsonFile<IStyleLibrary>(args[1]);
                     var groupLibrary = JsonSerializer.FromJsonFile<IGroupLibrary>(args[2]);
                     var containerView = JsonSerializer.FromJsonFile<ContainerView>(args[3]);
-                    var toolContext = Factory.CreateToolContext();
+                    var toolContext = ContainerFactory.CreateToolContext();
                     toolContext.StyleLibrary = styleLibrary;
                     toolContext.GroupLibrary = groupLibrary;
                     EditorToolContext.Export(args[4], containerView, toolContext);
