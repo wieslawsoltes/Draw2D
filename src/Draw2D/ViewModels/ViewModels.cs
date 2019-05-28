@@ -777,9 +777,12 @@ namespace Draw2D.ViewModels.Shapes
 
         public override void Invalidate()
         {
-            foreach (var point in _points)
+            if (_points != null)
             {
-                point.Invalidate();
+                foreach (var point in _points)
+                {
+                    point.Invalidate();
+                } 
             }
 
             base.Invalidate();
@@ -787,9 +790,12 @@ namespace Draw2D.ViewModels.Shapes
 
         public override void GetPoints(IList<IPointShape> points)
         {
-            foreach (var point in Points)
+            if (_points != null)
             {
-                points.Add(point);
+                foreach (var point in _points)
+                {
+                    points.Add(point);
+                } 
             }
         }
 
@@ -1747,12 +1753,11 @@ namespace Draw2D.ViewModels.Shapes
     }
 
     [DataContract(IsReference = true)]
-    public class FigureShape : BaseShape, ICanvasContainer
+    public class FigureShape : GroupShape, ICanvasContainer
     {
         internal static new IBounds s_bounds = new FigureBounds();
         internal static new IShapeDecorator s_decorator = new FigureDecorator();
 
-        private IList<IBaseShape> _shapes;
         private bool _isFilled;
         private bool _isClosed;
 
@@ -1761,13 +1766,6 @@ namespace Draw2D.ViewModels.Shapes
 
         [IgnoreDataMember]
         public override IShapeDecorator Decorator { get; } = s_decorator;
-
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public IList<IBaseShape> Shapes
-        {
-            get => _shapes;
-            set => Update(ref _shapes, value);
-        }
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public bool IsFilled
@@ -1794,81 +1792,53 @@ namespace Draw2D.ViewModels.Shapes
             this.Shapes = shapes;
         }
 
-        public FigureShape(string name)
+        public FigureShape(string title)
             : this()
         {
-            this.Name = name;
+            this.Title = title;
         }
 
-        public FigureShape(string name, IList<IBaseShape> shapes)
+        public FigureShape(string title, IList<IBaseShape> shapes)
             : base()
         {
-            this.Name = name;
+            this.Title = title;
             this.Shapes = shapes;
-        }
-
-        public override void GetPoints(IList<IPointShape> points)
-        {
-            foreach (var shape in Shapes)
-            {
-                shape.GetPoints(points);
-            }
-        }
-
-        public override void Invalidate()
-        {
-            foreach (var shape in Shapes)
-            {
-                shape.Invalidate();
-            }
-
-            base.Invalidate();
-        }
-
-        public override void Draw(object dc, IShapeRenderer renderer, double dx, double dy, DrawMode mode, object db, object r)
-        {
-            foreach (var shape in Shapes)
-            {
-                shape.Draw(dc, renderer, dx, dy, mode, db, r);
-            }
-        }
-
-        public override void Move(ISelectionState selectionState, double dx, double dy)
-        {
-            var points = new List<IPointShape>();
-            GetPoints(points);
-            var distinct = points.Distinct();
-
-            foreach (var point in distinct)
-            {
-                if (!selectionState.IsSelected(point))
-                {
-                    point.Move(selectionState, dx, dy);
-                }
-            }
         }
 
         public override object Copy(Dictionary<object, object> shared)
         {
             var copy = new FigureShape()
             {
-                Shapes = new ObservableCollection<IBaseShape>(),
                 Name = this.Name,
+                Title = this.Title,
+                Points = new ObservableCollection<IPointShape>(),
+                Shapes = new ObservableCollection<IBaseShape>(),
                 StyleId = this.StyleId,
                 IsFilled = this.IsFilled,
                 IsClosed = this.IsClosed
             };
 
-            foreach (var shape in this.Shapes)
-            {
-                if (shape is ICopyable copyable)
-                {
-                    copy.Shapes.Add((IBaseShape)copyable.Copy(shared));
-                }
-            }
-
             if (shared != null)
             {
+                if (this.Points != null)
+                {
+                    foreach (var point in this.Points)
+                    {
+                        copy.Points.Add((IPointShape)shared[point]);
+                    } 
+                }
+
+                if (this.Shapes != null)
+                {
+                    foreach (var shape in this.Shapes)
+                    {
+                        if (shape is ICopyable copyable)
+                        {
+                            copy.Shapes.Add((IBaseShape)copyable.Copy(shared));
+                        }
+                    } 
+                }
+
                 shared[this] = copy;
                 shared[copy] = this;
             }
@@ -1942,11 +1912,6 @@ namespace Draw2D.ViewModels.Shapes
 
         public override void Invalidate()
         {
-            foreach (var point in Points)
-            {
-                point.Invalidate();
-            }
-
             foreach (var shape in Shapes)
             {
                 shape.Invalidate();
