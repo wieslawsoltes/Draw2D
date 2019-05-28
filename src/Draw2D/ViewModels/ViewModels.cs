@@ -782,7 +782,7 @@ namespace Draw2D.ViewModels.Shapes
                 foreach (var point in _points)
                 {
                     point.Invalidate();
-                } 
+                }
             }
 
             base.Invalidate();
@@ -795,7 +795,7 @@ namespace Draw2D.ViewModels.Shapes
                 foreach (var point in _points)
                 {
                     points.Add(point);
-                } 
+                }
             }
         }
 
@@ -1825,7 +1825,7 @@ namespace Draw2D.ViewModels.Shapes
                     foreach (var point in this.Points)
                     {
                         copy.Points.Add((IPointShape)shared[point]);
-                    } 
+                    }
                 }
 
                 if (this.Shapes != null)
@@ -1836,7 +1836,7 @@ namespace Draw2D.ViewModels.Shapes
                         {
                             copy.Shapes.Add((IBaseShape)copyable.Copy(shared));
                         }
-                    } 
+                    }
                 }
 
                 shared[this] = copy;
