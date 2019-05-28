@@ -4282,7 +4282,7 @@ namespace Draw2D.ViewModels.Containers
             {
                 _selectionState?.Clear();
                 group.GetBox(out double ax, out double ay, out _, out _);
-                var reference = new ReferenceShape(group.Title + "_Reference", ax, ay, group);
+                var reference = new ReferenceShape(group.Title, ax, ay, group);
                 reference.Select(_selectionState);
                 _currentContainer.Shapes.Add(reference);
                 _currentContainer.MarkAsDirty(true);
