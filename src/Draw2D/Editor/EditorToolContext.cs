@@ -567,8 +567,8 @@ namespace Draw2D.Editor
                 point.Owner = group;
             }
 
-            var reference1 = new ReferenceShape("Reference1", 0, 60, group);
-            var reference2 = new ReferenceShape("Reference2", 0, 120, group);
+            var reference1 = new ReferenceShape(group.Title, 0, 60, group);
+            var reference2 = new ReferenceShape(group.Title, 0, 120, group);
 
             context.ContainerView?.CurrentContainer.Shapes.Add(group);
             context.ContainerView?.CurrentContainer.Shapes.Add(reference1);
