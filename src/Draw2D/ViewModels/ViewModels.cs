@@ -8402,9 +8402,9 @@ namespace Draw2D.ViewModels.Tools
             context.ContainerView?.SelectionState?.Deselect(_line);
             context.ContainerView?.SelectionState?.Deselect(_line.Point);
 
-            PointShape point = context.ContainerView?.GetNextPoint(context, x, y, Settings?.ConnectPoints ?? false, Settings?.HitTestRadius ?? 0.0);
+            PointShape firstPoint = context.ContainerView?.GetNextPoint(context, x, y, Settings?.ConnectPoints ?? false, Settings?.HitTestRadius ?? 0.0);
 
-            _line.Point = point;
+            _line.Point = firstPoint;
             if (_line.Point.Owner == null)
             {
                 _line.Point.Owner = _line;
@@ -8422,13 +8422,13 @@ namespace Draw2D.ViewModels.Tools
             context.ContainerView?.CurrentContainer.MarkAsDirty(true);
 
             PointShape startPoint = _points.Last();
-            PointShape point = context.ContainerView?.GetNextPoint(context, x, y, false, 0.0);
+            PointShape nextPoint = context.ContainerView?.GetNextPoint(context, x, y, false, 0.0);
 
             _line = new LineShape()
             {
                 Points = new ObservableCollection<PointShape>(),
                 StartPoint = startPoint,
-                Point = point,
+                Point = nextPoint,
                 Text = new Text(),
                 StyleId = context.StyleLibrary?.CurrentStyle?.Title
             };
