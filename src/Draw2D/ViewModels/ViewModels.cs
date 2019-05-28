@@ -2644,7 +2644,7 @@ namespace Draw2D.ViewModels.Shapes
     }
 
     [DataContract(IsReference = true)]
-    public class PointShape : BaseShape, ICopyable, IPointShape
+    public class PointShape : BaseShape, IPointShape
     {
         internal static new IBounds s_bounds = new PointBounds();
         internal static new IShapeDecorator s_decorator = new PointDecorator();
@@ -2749,7 +2749,7 @@ namespace Draw2D.ViewModels.Shapes
     }
 
     [DataContract(IsReference = true)]
-    public class QuadraticBezierShape : ConnectableShape, ICopyable
+    public class QuadraticBezierShape : ConnectableShape
     {
         internal static new IBounds s_bounds = new QuadraticBezierBounds();
         internal static new IShapeDecorator s_decorator = new QuadraticBezierDecorator();
@@ -3019,7 +3019,7 @@ namespace Draw2D.ViewModels.Shapes
     }
 
     [DataContract(IsReference = true)]
-    public class RectangleShape : BoxShape, ICopyable
+    public class RectangleShape : BoxShape
     {
         internal static new IBounds s_bounds = new RectangleBounds();
         internal static new IShapeDecorator s_decorator = new RectangleDecorator();
@@ -3262,7 +3262,7 @@ namespace Draw2D.ViewModels.Shapes
     }
 
     [DataContract(IsReference = true)]
-    public class ReferenceShape : BaseShape, ICopyable
+    public class ReferenceShape : BaseShape
     {
         internal static new IBounds s_bounds = new ReferenceBounds();
         internal static new IShapeDecorator s_decorator = new ReferenceDecorator();
@@ -3434,7 +3434,7 @@ namespace Draw2D.ViewModels.Shapes
     }
 
     [DataContract(IsReference = true)]
-    public class TextShape : BoxShape, ICopyable
+    public class TextShape : BoxShape
     {
         internal static new IBounds s_bounds = new TextBounds();
         internal static new IShapeDecorator s_decorator = new TextDecorator();
