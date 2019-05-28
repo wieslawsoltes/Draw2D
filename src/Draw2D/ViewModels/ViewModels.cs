@@ -3867,30 +3867,19 @@ namespace Draw2D.ViewModels.Containers
     }
 
     [DataContract(IsReference = true)]
-    public class CanvasContainer : BaseShape, ICanvasContainer, ICopyable
+    public class CanvasContainer : GroupShape, ICanvasContainer
     {
         // TODO: Implement canvas container bounds.
-        internal static IBounds s_bounds = null;
+        internal static new IBounds s_bounds = null;
 
         // TODO: Implement canvas container bounds.
-        internal static IShapeDecorator s_decorator = null;
-
-        private IList<IBaseShape> _shapes;
-
-        private IList<IPointShape> _points;
+        internal static new IShapeDecorator s_decorator = null;
 
         [IgnoreDataMember]
         public override IBounds Bounds { get; } = s_bounds;
 
         [IgnoreDataMember]
         public override IShapeDecorator Decorator { get; } = s_decorator;
-
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public IList<IBaseShape> Shapes
-        {
-            get => _shapes;
-            set => Update(ref _shapes, value);
-        }
 
         public CanvasContainer()
         {
@@ -3915,35 +3904,32 @@ namespace Draw2D.ViewModels.Containers
             }
         }
 
-        public override void Invalidate()
-        {
-            if (_shapes != null)
-            {
-                foreach (var shape in _shapes)
-                {
-                    shape.Invalidate();
-                }
-            }
-
-            base.Invalidate();
-        }
-
         public override object Copy(Dictionary<object, object> shared)
         {
             var copy = new CanvasContainer()
             {
-                Shapes = new ObservableCollection<IBaseShape>(),
                 Name = this.Name,
+                Title = this.Title + "_copy",
+                Points = new ObservableCollection<IPointShape>(),
+                Shapes = new ObservableCollection<IBaseShape>(),
                 StyleId = this.StyleId
             };
 
-            foreach (var shape in this.Shapes)
-            {
-                copy.Shapes.Add((IBaseShape)shape.Copy(shared));
-            }
-
             if (shared != null)
             {
+                foreach (var point in this.Points)
+                {
+                    copy.Points.Add((IPointShape)shared[point]);
+                }
+
+                foreach (var shape in this.Shapes)
+                {
+                    if (shape is ICopyable copyable)
+                    {
+                        copy.Shapes.Add((IBaseShape)copyable.Copy(shared));
+                    }
+                }
+
                 shared[this] = copy;
                 shared[copy] = this;
             }
