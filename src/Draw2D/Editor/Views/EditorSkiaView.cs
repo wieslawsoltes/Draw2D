@@ -158,7 +158,7 @@ namespace Draw2D.Editor.Views
                 return false;
             }
 
-            var points = new List<PointShape>();
+            var points = new List<IPointShape>();
             canvasContainer.GetPoints(points);
 
             foreach (var point in points)
@@ -219,7 +219,7 @@ namespace Draw2D.Editor.Views
 
             foreach (var shape in selected)
             {
-                if (shape is PointShape point)
+                if (shape is IPointShape point)
                 {
                     point.Draw(context, renderer, 0.0, 0.0, DrawMode.Point, null, null);
                 }

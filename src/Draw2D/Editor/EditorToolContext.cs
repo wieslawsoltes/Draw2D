@@ -475,7 +475,7 @@ namespace Draw2D.Editor
                     }
                     break;
 #if USE_SVG_POINT
-                case PointShape point:
+                case IPointShape point:
                     {
                         if (point.Template != null)
                         {
@@ -532,13 +532,13 @@ namespace Draw2D.Editor
             var group = new GroupShape()
             {
                 Title = "Group",
-                Points = new ObservableCollection<PointShape>(),
+                Points = new ObservableCollection<IPointShape>(),
                 Shapes = new ObservableCollection<IBaseShape>()
             };
 
             var rectangle = new RectangleShape(new PointShape(0, 0, context.PointTemplate), new PointShape(30, 30, context.PointTemplate))
             {
-                Points = new ObservableCollection<PointShape>(),
+                Points = new ObservableCollection<IPointShape>(),
                 Text = new Text(),
                 StyleId = context.StyleLibrary?.CurrentStyle?.Title
             };
@@ -547,7 +547,7 @@ namespace Draw2D.Editor
 
             var text = new TextShape(new PointShape(0, 0, context.PointTemplate), new PointShape(30, 30, context.PointTemplate))
             {
-                Points = new ObservableCollection<PointShape>(),
+                Points = new ObservableCollection<IPointShape>(),
                 Text = new Text("&"),
                 StyleId = context.StyleLibrary?.CurrentStyle?.Title
             };

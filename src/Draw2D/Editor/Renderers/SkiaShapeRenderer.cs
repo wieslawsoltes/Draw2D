@@ -165,7 +165,7 @@ namespace Draw2D.Editor.Renderers
             metrics = cached.metrics;
         }
 
-        private void DrawText(SKCanvas canvas, Text text, PointShape topLeft, PointShape bottomRight, ShapeStyle style, double dx, double dy)
+        private void DrawText(SKCanvas canvas, Text text, IPointShape topLeft, IPointShape bottomRight, ShapeStyle style, double dx, double dy)
         {
             var rect = SkiaHelper.ToRect(topLeft, bottomRight, dx, dy);
             GetSKPaintStrokeText(style.TextStyle, out var paint, out var metrics);

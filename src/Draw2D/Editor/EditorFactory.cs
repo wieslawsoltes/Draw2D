@@ -245,7 +245,7 @@ namespace Draw2D.Editor
                 {
                     new LineLineIntersection()
                     {
-                        Intersections = new ObservableCollection<PointShape>(),
+                        Intersections = new ObservableCollection<IPointShape>(),
                         Settings = new LineLineSettings()
                         {
                             IsEnabled = true
@@ -253,7 +253,7 @@ namespace Draw2D.Editor
                     },
                     new RectangleLineIntersection()
                     {
-                        Intersections = new ObservableCollection<PointShape>(),
+                        Intersections = new ObservableCollection<IPointShape>(),
                         Settings = new RectangleLineSettings()
                         {
                             IsEnabled = true
@@ -261,7 +261,7 @@ namespace Draw2D.Editor
                     },
                     new EllipseLineIntersection()
                     {
-                        Intersections = new ObservableCollection<PointShape>(),
+                        Intersections = new ObservableCollection<IPointShape>(),
                         Settings = new EllipseLineSettings()
                         {
                             IsEnabled = true
@@ -287,7 +287,7 @@ namespace Draw2D.Editor
                 {
                     new LineLineIntersection()
                     {
-                        Intersections = new ObservableCollection<PointShape>(),
+                        Intersections = new ObservableCollection<IPointShape>(),
                         Settings = new LineLineSettings()
                         {
                             IsEnabled = true
@@ -295,7 +295,7 @@ namespace Draw2D.Editor
                     },
                     new RectangleLineIntersection()
                     {
-                        Intersections = new ObservableCollection<PointShape>(),
+                        Intersections = new ObservableCollection<IPointShape>(),
                         Settings = new RectangleLineSettings()
                         {
                             IsEnabled = true
@@ -303,7 +303,7 @@ namespace Draw2D.Editor
                     },
                     new EllipseLineIntersection()
                     {
-                        Intersections = new ObservableCollection<PointShape>(),
+                        Intersections = new ObservableCollection<IPointShape>(),
                         Settings = new EllipseLineSettings()
                         {
                             IsEnabled = true
@@ -474,7 +474,7 @@ namespace Draw2D.Editor
 
             var pointTemplate = new RectangleShape(new PointShape(-4, -4, null), new PointShape(4, 4, null))
             {
-                Points = new ObservableCollection<PointShape>(),
+                Points = new ObservableCollection<IPointShape>(),
                 Text = new Text(),
                 StyleId = "PointTemplate"
             };

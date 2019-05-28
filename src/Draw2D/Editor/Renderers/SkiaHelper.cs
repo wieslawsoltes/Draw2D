@@ -67,7 +67,7 @@ namespace Draw2D.Editor.Renderers
             //paint.Shader = SKShader.CreateColor(ToSKColor(color));
         }
 
-        public static SKPoint ToPoint(PointShape point, double dx, double dy)
+        public static SKPoint ToPoint(IPointShape point, double dx, double dy)
         {
             return new SKPoint((float)(point.X + dx), (float)(point.Y + dy));
         }
@@ -77,7 +77,7 @@ namespace Draw2D.Editor.Renderers
             return new SKRect((float)left, (float)top, (float)right, (float)bottom);
         }
 
-        public static SKRect ToRect(PointShape p1, PointShape p2, double dx, double dy)
+        public static SKRect ToRect(IPointShape p1, IPointShape p2, double dx, double dy)
         {
             double left = Math.Min(p1.X + dx, p2.X + dx);
             double top = Math.Min(p1.Y + dy, p2.Y + dy);
@@ -250,7 +250,7 @@ namespace Draw2D.Editor.Renderers
             return geometry;
         }
 
-        public static SKPath ToGeometry(Text text, PointShape topLeft, PointShape bottomRight, TextStyle style, double dx, double dy)
+        public static SKPath ToGeometry(Text text, IPointShape topLeft, IPointShape bottomRight, TextStyle style, double dx, double dy)
         {
             using (var typeface = SkiaHelper.ToSKTypeface(style.FontFamily))
             using (var paint = SkiaHelper.ToSKPaintBrush(style.Stroke))
@@ -278,7 +278,7 @@ namespace Draw2D.Editor.Renderers
         {
             var pathShape = new PathShape()
             {
-                Points = new ObservableCollection<PointShape>(),
+                Points = new ObservableCollection<IPointShape>(),
                 Shapes = new ObservableCollection<IBaseShape>(),
                 FillRule = PathFillRule.EvenOdd,
                 Text = new Text(),
@@ -319,7 +319,7 @@ namespace Draw2D.Editor.Renderers
                                 }
                                 var lineShape = new LineShape()
                                 {
-                                    Points = new ObservableCollection<PointShape>(),
+                                    Points = new ObservableCollection<IPointShape>(),
                                     StartPoint = lastPointShape,
                                     Point = new PointShape(points[1].X, points[1].Y, pointTemplate),
                                     Text = new Text(),
@@ -340,7 +340,7 @@ namespace Draw2D.Editor.Renderers
                                 }
                                 var cubicBezierShape = new CubicBezierShape()
                                 {
-                                    Points = new ObservableCollection<PointShape>(),
+                                    Points = new ObservableCollection<IPointShape>(),
                                     StartPoint = lastPointShape,
                                     Point1 = new PointShape(points[1].X, points[1].Y, pointTemplate),
                                     Point2 = new PointShape(points[2].X, points[2].Y, pointTemplate),
@@ -365,7 +365,7 @@ namespace Draw2D.Editor.Renderers
                                 }
                                 var quadraticBezierShape = new QuadraticBezierShape()
                                 {
-                                    Points = new ObservableCollection<PointShape>(),
+                                    Points = new ObservableCollection<IPointShape>(),
                                     StartPoint = lastPointShape,
                                     Point1 = new PointShape(points[1].X, points[1].Y, pointTemplate),
                                     Point2 = new PointShape(points[2].X, points[2].Y, pointTemplate),
@@ -388,7 +388,7 @@ namespace Draw2D.Editor.Renderers
                                 }
                                 var conicShape = new ConicShape()
                                 {
-                                    Points = new ObservableCollection<PointShape>(),
+                                    Points = new ObservableCollection<IPointShape>(),
                                     StartPoint = lastPointShape,
                                     Point1 = new PointShape(points[1].X, points[1].Y, pointTemplate),
                                     Point2 = new PointShape(points[2].X, points[2].Y, pointTemplate),
@@ -408,7 +408,7 @@ namespace Draw2D.Editor.Renderers
 #if USE_CLOSE_SHAPE
                                 var line = new LineShape()
                                 {
-                                    Points = new ObservableCollection<PointShape>(),
+                                    Points = new ObservableCollection<IPointShape>(),
                                     StartPoint = pathShape.GetLastPoint(),
                                     Point = pathShape.GetFirstPoint(),
                                     Text = new Text(),
