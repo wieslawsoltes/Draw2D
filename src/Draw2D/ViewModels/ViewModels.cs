@@ -3869,7 +3869,21 @@ namespace Draw2D.ViewModels.Containers
     [DataContract(IsReference = true)]
     public class CanvasContainer : BaseShape, ICanvasContainer, ICopyable
     {
+        // TODO: Implement canvas container bounds.
+        internal static IBounds s_bounds = null;
+
+        // TODO: Implement canvas container bounds.
+        internal static IShapeDecorator s_decorator = null;
+
         private IList<IBaseShape> _shapes;
+
+        private IList<IPointShape> _points;
+
+        [IgnoreDataMember]
+        public override IBounds Bounds { get; } = s_bounds;
+
+        [IgnoreDataMember]
+        public override IShapeDecorator Decorator { get; } = s_decorator;
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public IList<IBaseShape> Shapes
@@ -7824,7 +7838,7 @@ namespace Draw2D.ViewModels.Tools
         }
 
         public IPointShape GetNextPoint(IToolContext context, double x, double y, bool connect, double radius)
-        { 
+        {
             if (_nextPoint != null)
             {
                 var nextPointTemp = _nextPoint;
