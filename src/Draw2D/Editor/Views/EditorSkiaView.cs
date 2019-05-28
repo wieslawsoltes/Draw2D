@@ -79,6 +79,11 @@ namespace Draw2D.Editor.Views
 
         private bool IsShapeStyleDirty(ShapeStyle style)
         {
+            if (style == null)
+            {
+                return false;
+            }
+
             if (style.IsDirty
              || style.Stroke.IsDirty
              || style.Fill.IsDirty
@@ -93,6 +98,11 @@ namespace Draw2D.Editor.Views
 
         private bool IsStyleLibraryDirty(IStyleLibrary styleLibrary)
         {
+            if (styleLibrary == null)
+            {
+                return false;
+            }
+
             if (styleLibrary.IsDirty)
             {
                 Debug.WriteLine($"styleLibrary.IsDirty: true");
@@ -115,6 +125,11 @@ namespace Draw2D.Editor.Views
 
         private bool IsCanvasContainerDirty(ICanvasContainer canvasContainer)
         {
+            if (canvasContainer == null)
+            {
+                return false;
+            }
+
             if (canvasContainer.IsDirty)
             {
                 Debug.WriteLine($"canvasContainer.IsDirty: true");
@@ -138,6 +153,11 @@ namespace Draw2D.Editor.Views
 
         private bool IsPointsDirty(ICanvasContainer canvasContainer)
         {
+            if (canvasContainer == null)
+            {
+                return false;
+            }
+
             var points = new List<PointShape>();
             canvasContainer.GetPoints(points);
 
@@ -353,17 +373,17 @@ namespace Draw2D.Editor.Views
 
             if (isCurrentContainerDirty == true)
             {
-                view.CurrentContainer.Invalidate();
+                view.CurrentContainer?.Invalidate();
             }
 
             if (isWorkingContainerDirty == true)
             {
-                view.WorkingContainer.Invalidate();
+                view.WorkingContainer?.Invalidate();
             }
 
             if (isStyleLibraryDirty == true)
             {
-                _context.StyleLibrary.Invalidate();
+                _context.StyleLibrary?.Invalidate();
             }
         }
     }
