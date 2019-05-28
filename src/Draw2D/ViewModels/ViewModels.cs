@@ -3246,7 +3246,7 @@ namespace Draw2D.ViewModels.Shapes
     }
 
     [DataContract(IsReference = true)]
-    public class ReferenceShape : BaseShape
+    public class ReferenceShape : ConnectableShape
     {
         internal static new IBounds s_bounds = new ReferenceBounds();
         internal static new IShapeDecorator s_decorator = new ReferenceDecorator();
@@ -3255,7 +3255,6 @@ namespace Draw2D.ViewModels.Shapes
         private double _x;
         private double _y;
         private IBaseShape _template;
-        private IList<IPointShape> _points;
 
         [IgnoreDataMember]
         public override IBounds Bounds { get; } = s_bounds;
@@ -3291,13 +3290,6 @@ namespace Draw2D.ViewModels.Shapes
             set => Update(ref _template, value);
         }
 
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public IList<IPointShape> Points
-        {
-            get => _points;
-            set => Update(ref _points, value);
-        }
-
         public ReferenceShape()
         {
         }
@@ -3316,14 +3308,6 @@ namespace Draw2D.ViewModels.Shapes
                 {
                     Points.Add(new ReferencePointShape(point, this));
                 }
-            }
-        }
-
-        public override void GetPoints(IList<IPointShape> points)
-        {
-            foreach (var point in Points)
-            {
-                points.Add(point);
             }
         }
 
@@ -3351,32 +3335,6 @@ namespace Draw2D.ViewModels.Shapes
         {
             X += dx;
             Y += dy;
-        }
-
-        public override void Select(ISelectionState selectionState)
-        {
-            if (!selectionState.IsSelected(this))
-            {
-                selectionState.Select(this);
-            }
-
-            foreach (var point in _points)
-            {
-                point.Select(selectionState);
-            }
-        }
-
-        public override void Deselect(ISelectionState selectionState)
-        {
-            if (selectionState.IsSelected(this))
-            {
-                selectionState.Deselect(this);
-            }
-
-            foreach (var point in _points)
-            {
-                point.Deselect(selectionState);
-            }
         }
 
         public override object Copy(Dictionary<object, object> shared)
