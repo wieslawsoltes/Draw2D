@@ -70,21 +70,20 @@ namespace Draw2D.ViewModels
 
     public interface IShapeDecorator
     {
-        void Draw(object dc, IBaseShape shape, IShapeRenderer renderer, ISelectionState selectionState, double dx, double dy, DrawMode mode);
+        void Draw(object dc, IBaseShape shape, IShapeRenderer renderer, ISelectionState selectionState, double dx, double dy, double scale, DrawMode mode);
     }
 
     public interface IShapeRenderer : IDisposable
     {
-        double Scale { get; set; }
-        ISelectionState SelectionState { get; set; }
-        void DrawLine(object dc, LineShape line, string styleId, double dx, double dy);
-        void DrawCubicBezier(object dc, CubicBezierShape cubicBezier, string styleId, double dx, double dy);
-        void DrawQuadraticBezier(object dc, QuadraticBezierShape quadraticBezier, string styleId, double dx, double dy);
-        void DrawConic(object dc, ConicShape conic, string styleId, double dx, double dy);
-        void DrawPath(object dc, PathShape path, string styleId, double dx, double dy);
-        void DrawRectangle(object dc, RectangleShape rectangle, string styleId, double dx, double dy);
-        void DrawEllipse(object dc, EllipseShape ellipse, string styleId, double dx, double dy);
-        void DrawText(object dc, TextShape text, string styleId, double dx, double dy);
+        ISelectionState SelectionState { get; }
+        void DrawLine(object dc, LineShape line, string styleId, double dx, double dy, double scale);
+        void DrawCubicBezier(object dc, CubicBezierShape cubicBezier, string styleId, double dx, double dy, double scale);
+        void DrawQuadraticBezier(object dc, QuadraticBezierShape quadraticBezier, string styleId, double dx, double dy, double scale);
+        void DrawConic(object dc, ConicShape conic, string styleId, double dx, double dy, double scale);
+        void DrawPath(object dc, PathShape path, string styleId, double dx, double dy, double scale);
+        void DrawRectangle(object dc, RectangleShape rectangle, string styleId, double dx, double dy, double scale);
+        void DrawEllipse(object dc, EllipseShape ellipse, string styleId, double dx, double dy, double scale);
+        void DrawText(object dc, TextShape text, string styleId, double dx, double dy, double scale);
     }
 
     public interface IDrawable
@@ -92,7 +91,7 @@ namespace Draw2D.ViewModels
         IBounds Bounds { get; }
         IShapeDecorator Decorator { get; }
         string StyleId { get; set; }
-        void Draw(object dc, IShapeRenderer renderer, double dx, double dy, DrawMode mode, object db, object r);
+        void Draw(object dc, IShapeRenderer renderer, double dx, double dy, double scale, DrawMode mode, object db, object r);
     }
 
     public interface IDirty
@@ -545,7 +544,7 @@ namespace Draw2D.ViewModels.Shapes
 
         public abstract void GetPoints(IList<IPointShape> points);
 
-        public abstract void Draw(object dc, IShapeRenderer renderer, double dx, double dy, DrawMode mode, object db, object r);
+        public abstract void Draw(object dc, IShapeRenderer renderer, double dx, double dy, double scale, DrawMode mode, object db, object r);
 
         public abstract void Move(ISelectionState selectionState, double dx, double dy);
 
@@ -622,7 +621,7 @@ namespace Draw2D.ViewModels.Shapes
             }
         }
 
-        public override void Draw(object dc, IShapeRenderer renderer, double dx, double dy, DrawMode mode, object db, object r)
+        public override void Draw(object dc, IShapeRenderer renderer, double dx, double dy, double scale, DrawMode mode, object db, object r)
         {
             if (mode.HasFlag(DrawMode.Point))
             {
@@ -630,7 +629,7 @@ namespace Draw2D.ViewModels.Shapes
                 {
                     if (renderer.SelectionState?.IsSelected(point) ?? false)
                     {
-                        point.Draw(dc, renderer, dx, dy, mode, db, r);
+                        point.Draw(dc, renderer, dx, dy, scale, mode, db, r);
                     }
                 }
             }
@@ -964,32 +963,32 @@ namespace Draw2D.ViewModels.Shapes
             base.Invalidate();
         }
 
-        public override void Draw(object dc, IShapeRenderer renderer, double dx, double dy, DrawMode mode, object db, object r)
+        public override void Draw(object dc, IShapeRenderer renderer, double dx, double dy, double scale, DrawMode mode, object db, object r)
         {
             if (StyleId != null && mode.HasFlag(DrawMode.Shape))
             {
-                renderer.DrawConic(dc, this, StyleId, dx, dy);
+                renderer.DrawConic(dc, this, StyleId, dx, dy, scale);
             }
 
             if (mode.HasFlag(DrawMode.Point))
             {
                 if (renderer.SelectionState?.IsSelected(_startPoint) ?? false)
                 {
-                    _startPoint.Draw(dc, renderer, dx, dy, mode, db, r);
+                    _startPoint.Draw(dc, renderer, dx, dy, scale, mode, db, r);
                 }
 
                 if (renderer.SelectionState?.IsSelected(_point1) ?? false)
                 {
-                    _point1.Draw(dc, renderer, dx, dy, mode, db, r);
+                    _point1.Draw(dc, renderer, dx, dy, scale, mode, db, r);
                 }
 
                 if (renderer.SelectionState?.IsSelected(_point2) ?? false)
                 {
-                    _point2.Draw(dc, renderer, dx, dy, mode, db, r);
+                    _point2.Draw(dc, renderer, dx, dy, scale, mode, db, r);
                 }
             }
 
-            base.Draw(dc, renderer, dx, dy, mode, db, r);
+            base.Draw(dc, renderer, dx, dy, scale, mode, db, r);
         }
 
         public override void Move(ISelectionState selectionState, double dx, double dy)
@@ -1247,37 +1246,37 @@ namespace Draw2D.ViewModels.Shapes
             base.Invalidate();
         }
 
-        public override void Draw(object dc, IShapeRenderer renderer, double dx, double dy, DrawMode mode, object db, object r)
+        public override void Draw(object dc, IShapeRenderer renderer, double dx, double dy, double scale, DrawMode mode, object db, object r)
         {
             if (StyleId != null && mode.HasFlag(DrawMode.Shape))
             {
-                renderer.DrawCubicBezier(dc, this, StyleId, dx, dy);
+                renderer.DrawCubicBezier(dc, this, StyleId, dx, dy, scale);
             }
 
             if (mode.HasFlag(DrawMode.Point))
             {
                 if (renderer.SelectionState?.IsSelected(_startPoint) ?? false)
                 {
-                    _startPoint.Draw(dc, renderer, dx, dy, mode, db, r);
+                    _startPoint.Draw(dc, renderer, dx, dy, scale, mode, db, r);
                 }
 
                 if (renderer.SelectionState?.IsSelected(_point1) ?? false)
                 {
-                    _point1.Draw(dc, renderer, dx, dy, mode, db, r);
+                    _point1.Draw(dc, renderer, dx, dy, scale, mode, db, r);
                 }
 
                 if (renderer.SelectionState?.IsSelected(_point2) ?? false)
                 {
-                    _point2.Draw(dc, renderer, dx, dy, mode, db, r);
+                    _point2.Draw(dc, renderer, dx, dy, scale, mode, db, r);
                 }
 
                 if (renderer.SelectionState?.IsSelected(_point3) ?? false)
                 {
-                    _point3.Draw(dc, renderer, dx, dy, mode, db, r);
+                    _point3.Draw(dc, renderer, dx, dy, scale, mode, db, r);
                 }
             }
 
-            base.Draw(dc, renderer, dx, dy, mode, db, r);
+            base.Draw(dc, renderer, dx, dy, scale, mode, db, r);
         }
 
         public override void Move(ISelectionState selectionState, double dx, double dy)
@@ -1506,27 +1505,27 @@ namespace Draw2D.ViewModels.Shapes
             base.Invalidate();
         }
 
-        public override void Draw(object dc, IShapeRenderer renderer, double dx, double dy, DrawMode mode, object db, object r)
+        public override void Draw(object dc, IShapeRenderer renderer, double dx, double dy, double scale, DrawMode mode, object db, object r)
         {
             if (StyleId != null && mode.HasFlag(DrawMode.Shape))
             {
-                renderer.DrawEllipse(dc, this, StyleId, dx, dy);
+                renderer.DrawEllipse(dc, this, StyleId, dx, dy, scale);
             }
 
             if (mode.HasFlag(DrawMode.Point))
             {
                 if (renderer.SelectionState?.IsSelected(TopLeft) ?? false)
                 {
-                    TopLeft.Draw(dc, renderer, dx, dy, mode, db, r);
+                    TopLeft.Draw(dc, renderer, dx, dy, scale, mode, db, r);
                 }
 
                 if (renderer.SelectionState?.IsSelected(BottomRight) ?? false)
                 {
-                    BottomRight.Draw(dc, renderer, dx, dy, mode, db, r);
+                    BottomRight.Draw(dc, renderer, dx, dy, scale, mode, db, r);
                 }
             }
 
-            base.Draw(dc, renderer, dx, dy, mode, db, r);
+            base.Draw(dc, renderer, dx, dy, scale, mode, db, r);
         }
 
         public override object Copy(Dictionary<object, object> shared)
@@ -1724,17 +1723,17 @@ namespace Draw2D.ViewModels.Shapes
             base.Invalidate();
         }
 
-        public override void Draw(object dc, IShapeRenderer renderer, double dx, double dy, DrawMode mode, object db, object r)
+        public override void Draw(object dc, IShapeRenderer renderer, double dx, double dy, double scale, DrawMode mode, object db, object r)
         {
             if (Shapes != null)
             {
                 foreach (var shape in Shapes)
                 {
-                    shape.Draw(dc, renderer, dx, dy, mode, db, r);
+                    shape.Draw(dc, renderer, dx, dy, scale, mode, db, r);
                 }
             }
 
-            base.Draw(dc, renderer, dx, dy, mode, db, r);
+            base.Draw(dc, renderer, dx, dy, scale, mode, db, r);
         }
 
         public override void Move(ISelectionState selectionState, double dx, double dy)
@@ -1858,27 +1857,27 @@ namespace Draw2D.ViewModels.Shapes
             base.Invalidate();
         }
 
-        public override void Draw(object dc, IShapeRenderer renderer, double dx, double dy, DrawMode mode, object db, object r)
+        public override void Draw(object dc, IShapeRenderer renderer, double dx, double dy, double scale, DrawMode mode, object db, object r)
         {
             if (StyleId != null && mode.HasFlag(DrawMode.Shape))
             {
-                renderer.DrawLine(dc, this, StyleId, dx, dy);
+                renderer.DrawLine(dc, this, StyleId, dx, dy, scale);
             }
 
             if (mode.HasFlag(DrawMode.Point))
             {
                 if (renderer.SelectionState?.IsSelected(_startPoint) ?? false)
                 {
-                    _startPoint.Draw(dc, renderer, dx, dy, mode, db, r);
+                    _startPoint.Draw(dc, renderer, dx, dy, scale, mode, db, r);
                 }
 
                 if (renderer.SelectionState?.IsSelected(_point) ?? false)
                 {
-                    _point.Draw(dc, renderer, dx, dy, mode, db, r);
+                    _point.Draw(dc, renderer, dx, dy, scale, mode, db, r);
                 }
             }
 
-            base.Draw(dc, renderer, dx, dy, mode, db, r);
+            base.Draw(dc, renderer, dx, dy, scale, mode, db, r);
         }
 
         public override void Move(ISelectionState selectionState, double dx, double dy)
@@ -2124,13 +2123,13 @@ namespace Draw2D.ViewModels.Shapes
             base.Invalidate();
         }
 
-        public override void Draw(object dc, IShapeRenderer renderer, double dx, double dy, DrawMode mode, object db, object r)
+        public override void Draw(object dc, IShapeRenderer renderer, double dx, double dy, double scale, DrawMode mode, object db, object r)
         {
             var isPathSelected = renderer.SelectionState?.IsSelected(this) ?? false;
 
             if (StyleId != null && mode.HasFlag(DrawMode.Shape))
             {
-                renderer.DrawPath(dc, this, StyleId, dx, dy);
+                renderer.DrawPath(dc, this, StyleId, dx, dy, scale);
             }
 
             if (mode.HasFlag(DrawMode.Point))
@@ -2139,7 +2138,7 @@ namespace Draw2D.ViewModels.Shapes
                 {
                     if (shape is FigureShape figure)
                     {
-                        DrawPoints(dc, renderer, dx, dy, mode, db, r, figure, isPathSelected);
+                        DrawPoints(dc, renderer, dx, dy, scale, mode, db, r, figure, isPathSelected);
                     }
                 }
             }
@@ -2150,13 +2149,13 @@ namespace Draw2D.ViewModels.Shapes
                 {
                     if (renderer.SelectionState?.IsSelected(point) ?? false)
                     {
-                        point.Draw(dc, renderer, dx, dy, mode, db, r);
+                        point.Draw(dc, renderer, dx, dy, scale, mode, db, r);
                     }
                 }
             }
         }
 
-        private void DrawPoints(object dc, IShapeRenderer renderer, double dx, double dy, DrawMode mode, object db, object r, FigureShape figure, bool isPathSelected)
+        private void DrawPoints(object dc, IShapeRenderer renderer, double dx, double dy, double scale, DrawMode mode, object db, object r, FigureShape figure, bool isPathSelected)
         {
             foreach (var shape in figure.Shapes)
             {
@@ -2168,19 +2167,19 @@ namespace Draw2D.ViewModels.Shapes
 
                             if (isPathSelected || isSelected || (renderer.SelectionState?.IsSelected(line.StartPoint) ?? false))
                             {
-                                line.StartPoint.Draw(dc, renderer, dx, dy, mode, db, r);
+                                line.StartPoint.Draw(dc, renderer, dx, dy, scale, mode, db, r);
                             }
 
                             if (isPathSelected || isSelected || (renderer.SelectionState?.IsSelected(line.Point) ?? false))
                             {
-                                line.Point.Draw(dc, renderer, dx, dy, mode, db, r);
+                                line.Point.Draw(dc, renderer, dx, dy, scale, mode, db, r);
                             }
 
                             foreach (var point in line.Points)
                             {
                                 if (isPathSelected || isSelected || (renderer.SelectionState?.IsSelected(point) ?? false))
                                 {
-                                    point.Draw(dc, renderer, dx, dy, mode, db, r);
+                                    point.Draw(dc, renderer, dx, dy, scale, mode, db, r);
                                 }
                             }
                         }
@@ -2191,29 +2190,29 @@ namespace Draw2D.ViewModels.Shapes
 
                             if (isPathSelected || isSelected || (renderer.SelectionState?.IsSelected(cubic.StartPoint) ?? false))
                             {
-                                cubic.StartPoint.Draw(dc, renderer, dx, dy, mode, db, r);
+                                cubic.StartPoint.Draw(dc, renderer, dx, dy, scale, mode, db, r);
                             }
 
                             if (isPathSelected || isSelected || (renderer.SelectionState?.IsSelected(cubic.Point1) ?? false))
                             {
-                                cubic.Point1.Draw(dc, renderer, dx, dy, mode, db, r);
+                                cubic.Point1.Draw(dc, renderer, dx, dy, scale, mode, db, r);
                             }
 
                             if (isPathSelected || isSelected || (renderer.SelectionState?.IsSelected(cubic.Point2) ?? false))
                             {
-                                cubic.Point2.Draw(dc, renderer, dx, dy, mode, db, r);
+                                cubic.Point2.Draw(dc, renderer, dx, dy, scale, mode, db, r);
                             }
 
                             if (isPathSelected || isSelected || (renderer.SelectionState?.IsSelected(cubic.Point3) ?? false))
                             {
-                                cubic.Point3.Draw(dc, renderer, dx, dy, mode, db, r);
+                                cubic.Point3.Draw(dc, renderer, dx, dy, scale, mode, db, r);
                             }
 
                             foreach (var point in cubic.Points)
                             {
                                 if (isPathSelected || isSelected || (renderer.SelectionState?.IsSelected(point) ?? false))
                                 {
-                                    point.Draw(dc, renderer, dx, dy, mode, db, r);
+                                    point.Draw(dc, renderer, dx, dy, scale, mode, db, r);
                                 }
                             }
                         }
@@ -2224,24 +2223,24 @@ namespace Draw2D.ViewModels.Shapes
 
                             if (isPathSelected || isSelected || (renderer.SelectionState?.IsSelected(quadratic.StartPoint) ?? false))
                             {
-                                quadratic.StartPoint.Draw(dc, renderer, dx, dy, mode, db, r);
+                                quadratic.StartPoint.Draw(dc, renderer, dx, dy, scale, mode, db, r);
                             }
 
                             if (isPathSelected || isSelected || (renderer.SelectionState?.IsSelected(quadratic.Point1) ?? false))
                             {
-                                quadratic.Point1.Draw(dc, renderer, dx, dy, mode, db, r);
+                                quadratic.Point1.Draw(dc, renderer, dx, dy, scale, mode, db, r);
                             }
 
                             if (isPathSelected || isSelected || (renderer.SelectionState?.IsSelected(quadratic.Point2) ?? false))
                             {
-                                quadratic.Point2.Draw(dc, renderer, dx, dy, mode, db, r);
+                                quadratic.Point2.Draw(dc, renderer, dx, dy, scale, mode, db, r);
                             }
 
                             foreach (var point in quadratic.Points)
                             {
                                 if (isPathSelected || isSelected || (renderer.SelectionState?.IsSelected(point) ?? false))
                                 {
-                                    point.Draw(dc, renderer, dx, dy, mode, db, r);
+                                    point.Draw(dc, renderer, dx, dy, scale, mode, db, r);
                                 }
                             }
                         }
@@ -2252,24 +2251,24 @@ namespace Draw2D.ViewModels.Shapes
 
                             if (isPathSelected || isSelected || (renderer.SelectionState?.IsSelected(conic.StartPoint) ?? false))
                             {
-                                conic.StartPoint.Draw(dc, renderer, dx, dy, mode, db, r);
+                                conic.StartPoint.Draw(dc, renderer, dx, dy, scale, mode, db, r);
                             }
 
                             if (isPathSelected || isSelected || (renderer.SelectionState?.IsSelected(conic.Point1) ?? false))
                             {
-                                conic.Point1.Draw(dc, renderer, dx, dy, mode, db, r);
+                                conic.Point1.Draw(dc, renderer, dx, dy, scale, mode, db, r);
                             }
 
                             if (isPathSelected || isSelected || (renderer.SelectionState?.IsSelected(conic.Point2) ?? false))
                             {
-                                conic.Point2.Draw(dc, renderer, dx, dy, mode, db, r);
+                                conic.Point2.Draw(dc, renderer, dx, dy, scale, mode, db, r);
                             }
 
                             foreach (var point in conic.Points)
                             {
                                 if (isPathSelected || isSelected || (renderer.SelectionState?.IsSelected(point) ?? false))
                                 {
-                                    point.Draw(dc, renderer, dx, dy, mode, db, r);
+                                    point.Draw(dc, renderer, dx, dy, scale, mode, db, r);
                                 }
                             }
                         }
@@ -2435,13 +2434,13 @@ namespace Draw2D.ViewModels.Shapes
             base.Invalidate();
         }
 
-        public override void Draw(object dc, IShapeRenderer renderer, double dx, double dy, DrawMode mode, object db, object r)
+        public override void Draw(object dc, IShapeRenderer renderer, double dx, double dy, double scale, DrawMode mode, object db, object r)
         {
             if (_template != null)
             {
                 double offsetX = X;
                 double offsetY = Y;
-                _template.Draw(dc, renderer, dx + offsetX, dy + offsetY, DrawMode.Shape, db, r);
+                _template.Draw(dc, renderer, dx + offsetX, dy + offsetY, scale, DrawMode.Shape, db, r);
             }
         }
 
@@ -2546,32 +2545,32 @@ namespace Draw2D.ViewModels.Shapes
             base.Invalidate();
         }
 
-        public override void Draw(object dc, IShapeRenderer renderer, double dx, double dy, DrawMode mode, object db, object r)
+        public override void Draw(object dc, IShapeRenderer renderer, double dx, double dy, double scale, DrawMode mode, object db, object r)
         {
             if (StyleId != null && mode.HasFlag(DrawMode.Shape))
             {
-                renderer.DrawQuadraticBezier(dc, this, StyleId, dx, dy);
+                renderer.DrawQuadraticBezier(dc, this, StyleId, dx, dy, scale);
             }
 
             if (mode.HasFlag(DrawMode.Point))
             {
                 if (renderer.SelectionState?.IsSelected(_startPoint) ?? false)
                 {
-                    _startPoint.Draw(dc, renderer, dx, dy, mode, db, r);
+                    _startPoint.Draw(dc, renderer, dx, dy, scale, mode, db, r);
                 }
 
                 if (renderer.SelectionState?.IsSelected(_point1) ?? false)
                 {
-                    _point1.Draw(dc, renderer, dx, dy, mode, db, r);
+                    _point1.Draw(dc, renderer, dx, dy, scale, mode, db, r);
                 }
 
                 if (renderer.SelectionState?.IsSelected(_point2) ?? false)
                 {
-                    _point2.Draw(dc, renderer, dx, dy, mode, db, r);
+                    _point2.Draw(dc, renderer, dx, dy, scale, mode, db, r);
                 }
             }
 
-            base.Draw(dc, renderer, dx, dy, mode, db, r);
+            base.Draw(dc, renderer, dx, dy, scale, mode, db, r);
         }
 
         public override void Move(ISelectionState selectionState, double dx, double dy)
@@ -2772,27 +2771,27 @@ namespace Draw2D.ViewModels.Shapes
             base.Invalidate();
         }
 
-        public override void Draw(object dc, IShapeRenderer renderer, double dx, double dy, DrawMode mode, object db, object r)
+        public override void Draw(object dc, IShapeRenderer renderer, double dx, double dy, double scale, DrawMode mode, object db, object r)
         {
             if (StyleId != null && mode.HasFlag(DrawMode.Shape))
             {
-                renderer.DrawRectangle(dc, this, StyleId, dx, dy);
+                renderer.DrawRectangle(dc, this, StyleId, dx, dy, scale);
             }
 
             if (mode.HasFlag(DrawMode.Point))
             {
                 if (renderer.SelectionState?.IsSelected(TopLeft) ?? false)
                 {
-                    TopLeft.Draw(dc, renderer, dx, dy, mode, db, r);
+                    TopLeft.Draw(dc, renderer, dx, dy, scale, mode, db, r);
                 }
 
                 if (renderer.SelectionState?.IsSelected(BottomRight) ?? false)
                 {
-                    BottomRight.Draw(dc, renderer, dx, dy, mode, db, r);
+                    BottomRight.Draw(dc, renderer, dx, dy, scale, mode, db, r);
                 }
             }
 
-            base.Draw(dc, renderer, dx, dy, mode, db, r);
+            base.Draw(dc, renderer, dx, dy, scale, mode, db, r);
         }
 
         public override object Copy(Dictionary<object, object> shared)
@@ -2932,13 +2931,13 @@ namespace Draw2D.ViewModels.Shapes
             base.Invalidate();
         }
 
-        public override void Draw(object dc, IShapeRenderer renderer, double dx, double dy, DrawMode mode, object db, object r)
+        public override void Draw(object dc, IShapeRenderer renderer, double dx, double dy, double scale, DrawMode mode, object db, object r)
         {
             if (_point != null && _reference != null)
             {
                 double offsetX = _reference.X;
                 double offsetY = _reference.Y;
-                _point.Draw(dc, renderer, dx + offsetX, dy + offsetY, DrawMode.Shape, db, r);
+                _point.Draw(dc, renderer, dx + offsetX, dy + offsetY, scale, DrawMode.Shape, db, r);
             }
         }
 
@@ -3034,13 +3033,13 @@ namespace Draw2D.ViewModels.Shapes
             base.Invalidate();
         }
 
-        public override void Draw(object dc, IShapeRenderer renderer, double dx, double dy, DrawMode mode, object db, object r)
+        public override void Draw(object dc, IShapeRenderer renderer, double dx, double dy, double scale, DrawMode mode, object db, object r)
         {
             if (_template != null)
             {
                 double offsetX = X;
                 double offsetY = Y;
-                _template.Draw(dc, renderer, dx + offsetX, dy + offsetY, DrawMode.Shape, db, r);
+                _template.Draw(dc, renderer, dx + offsetX, dy + offsetY, scale, DrawMode.Shape, db, r);
             }
         }
 
@@ -3132,27 +3131,27 @@ namespace Draw2D.ViewModels.Shapes
             base.Invalidate();
         }
 
-        public override void Draw(object dc, IShapeRenderer renderer, double dx, double dy, DrawMode mode, object db, object r)
+        public override void Draw(object dc, IShapeRenderer renderer, double dx, double dy, double scale, DrawMode mode, object db, object r)
         {
             if (StyleId != null && mode.HasFlag(DrawMode.Shape))
             {
-                renderer.DrawText(dc, this, StyleId, dx, dy);
+                renderer.DrawText(dc, this, StyleId, dx, dy, scale);
             }
 
             if (mode.HasFlag(DrawMode.Point))
             {
                 if (renderer.SelectionState?.IsSelected(TopLeft) ?? false)
                 {
-                    TopLeft.Draw(dc, renderer, dx, dy, mode, db, r);
+                    TopLeft.Draw(dc, renderer, dx, dy, scale, mode, db, r);
                 }
 
                 if (renderer.SelectionState?.IsSelected(BottomRight) ?? false)
                 {
-                    BottomRight.Draw(dc, renderer, dx, dy, mode, db, r);
+                    BottomRight.Draw(dc, renderer, dx, dy, scale, mode, db, r);
                 }
             }
 
-            base.Draw(dc, renderer, dx, dy, mode, db, r);
+            base.Draw(dc, renderer, dx, dy, scale, mode, db, r);
         }
 
         public override object Copy(Dictionary<object, object> shared)
@@ -3308,7 +3307,7 @@ namespace Draw2D.ViewModels.Containers
 
     public interface IDrawContainerView : IDisposable
     {
-        void Draw(IContainerView view, object context, double width, double height, double dx, double dy, double zx, double zy);
+        void Draw(object context, double width, double height, double dx, double dy, double zx, double zy);
     }
 
     public interface IContainerView : IDrawTarget, IHitTestable, ICopyable
@@ -3996,7 +3995,7 @@ namespace Draw2D.ViewModels.Containers
 
         public void Draw(object context, double width, double height, double dx, double dy, double zx, double zy)
         {
-            _drawContainerView?.Draw(this, context, width, height, dx, dy, zx, zy);
+            _drawContainerView?.Draw(context, width, height, dx, dy, zx, zy);
         }
 
         public void Add(IBaseShape shape)
@@ -4314,207 +4313,207 @@ namespace Draw2D.ViewModels.Decorators
             _text.BottomRight.Owner = _text;
         }
 
-        internal void DrawLine(object dc, IShapeRenderer renderer, IPointShape a, IPointShape b, double dx, double dy, DrawMode mode)
+        internal void DrawLine(object dc, IShapeRenderer renderer, IPointShape a, IPointShape b, double dx, double dy, double scale, DrawMode mode)
         {
             _line.StyleId = _strokeStyleId;
             _line.StartPoint.X = a.X;
             _line.StartPoint.Y = a.Y;
             _line.Point.X = b.X;
             _line.Point.Y = b.Y;
-            _line.Draw(dc, renderer, dx, dy, mode, null, null);
+            _line.Draw(dc, renderer, dx, dy, scale, mode, null, null);
         }
 
-        internal void DrawLine(object dc, IShapeRenderer renderer, double ax, double ay, double bx, double by, double dx, double dy, DrawMode mode)
+        internal void DrawLine(object dc, IShapeRenderer renderer, double ax, double ay, double bx, double by, double dx, double dy, double scale, DrawMode mode)
         {
             _line.StyleId = _strokeStyleId;
             _line.StartPoint.X = ax;
             _line.StartPoint.Y = ay;
             _line.Point.X = bx;
             _line.Point.Y = by;
-            _line.Draw(dc, renderer, dx, dy, mode, null, null);
+            _line.Draw(dc, renderer, dx, dy, scale, mode, null, null);
         }
 
-        internal void FillEllipse(object dc, IShapeRenderer renderer, IPointShape s, double radius, double dx, double dy, DrawMode mode)
+        internal void FillEllipse(object dc, IShapeRenderer renderer, IPointShape s, double radius, double dx, double dy, double scale, DrawMode mode)
         {
             _ellipse.StyleId = _fillStyleId;
             _ellipse.TopLeft.X = s.X - radius;
             _ellipse.TopLeft.Y = s.Y - radius;
             _ellipse.BottomRight.X = s.X + radius;
             _ellipse.BottomRight.Y = s.Y + radius;
-            _ellipse.Draw(dc, renderer, dx, dy, mode, null, null);
+            _ellipse.Draw(dc, renderer, dx, dy, scale, mode, null, null);
         }
 
-        internal void FillEllipse(object dc, IShapeRenderer renderer, double sx, double sy, double radius, double dx, double dy, DrawMode mode)
+        internal void FillEllipse(object dc, IShapeRenderer renderer, double sx, double sy, double radius, double dx, double dy, double scale, DrawMode mode)
         {
             _ellipse.StyleId = _fillStyleId;
             _ellipse.TopLeft.X = sx - radius;
             _ellipse.TopLeft.Y = sy - radius;
             _ellipse.BottomRight.X = sx + radius;
             _ellipse.BottomRight.Y = sy + radius;
-            _ellipse.Draw(dc, renderer, dx, dy, mode, null, null);
+            _ellipse.Draw(dc, renderer, dx, dy, scale, mode, null, null);
         }
 
-        internal void DrawEllipse(object dc, IShapeRenderer renderer, IPointShape s, double radius, double dx, double dy, DrawMode mode)
+        internal void DrawEllipse(object dc, IShapeRenderer renderer, IPointShape s, double radius, double dx, double dy, double scale, DrawMode mode)
         {
             _ellipse.StyleId = _strokeStyleId;
             _ellipse.TopLeft.X = s.X - radius;
             _ellipse.TopLeft.Y = s.Y - radius;
             _ellipse.BottomRight.X = s.X + radius;
             _ellipse.BottomRight.Y = s.Y + radius;
-            _ellipse.Draw(dc, renderer, dx, dy, mode, null, null);
+            _ellipse.Draw(dc, renderer, dx, dy, scale, mode, null, null);
         }
 
-        internal void DrawEllipse(object dc, IShapeRenderer renderer, double sx, double sy, double radius, double dx, double dy, DrawMode mode)
+        internal void DrawEllipse(object dc, IShapeRenderer renderer, double sx, double sy, double radius, double dx, double dy, double scale, DrawMode mode)
         {
             _ellipse.StyleId = _strokeStyleId;
             _ellipse.TopLeft.X = sx - radius;
             _ellipse.TopLeft.Y = sy - radius;
             _ellipse.BottomRight.X = sx + radius;
             _ellipse.BottomRight.Y = sy + radius;
-            _ellipse.Draw(dc, renderer, dx, dy, mode, null, null);
+            _ellipse.Draw(dc, renderer, dx, dy, scale, mode, null, null);
         }
 
-        internal void FillEllipse(object dc, IShapeRenderer renderer, IPointShape a, IPointShape b, double dx, double dy, DrawMode mode)
+        internal void FillEllipse(object dc, IShapeRenderer renderer, IPointShape a, IPointShape b, double dx, double dy, double scale, DrawMode mode)
         {
             _ellipse.StyleId = _fillStyleId;
             _ellipse.TopLeft.X = a.X;
             _ellipse.TopLeft.Y = a.Y;
             _ellipse.BottomRight.X = b.X;
             _ellipse.BottomRight.Y = b.Y;
-            _ellipse.Draw(dc, renderer, dx, dy, mode, null, null);
+            _ellipse.Draw(dc, renderer, dx, dy, scale, mode, null, null);
         }
 
-        internal void FillEllipse(object dc, IShapeRenderer renderer, double ax, double ay, double bx, double by, double dx, double dy, DrawMode mode)
+        internal void FillEllipse(object dc, IShapeRenderer renderer, double ax, double ay, double bx, double by, double dx, double dy, double scale, DrawMode mode)
         {
             _ellipse.StyleId = _fillStyleId;
             _ellipse.TopLeft.X = ax;
             _ellipse.TopLeft.Y = ay;
             _ellipse.BottomRight.X = bx;
             _ellipse.BottomRight.Y = by;
-            _ellipse.Draw(dc, renderer, dx, dy, mode, null, null);
+            _ellipse.Draw(dc, renderer, dx, dy, scale, mode, null, null);
         }
 
-        internal void DrawEllipse(object dc, IShapeRenderer renderer, IPointShape a, IPointShape b, double dx, double dy, DrawMode mode)
+        internal void DrawEllipse(object dc, IShapeRenderer renderer, IPointShape a, IPointShape b, double dx, double dy, double scale, DrawMode mode)
         {
             _ellipse.StyleId = _strokeStyleId;
             _ellipse.TopLeft.X = a.X;
             _ellipse.TopLeft.Y = a.Y;
             _ellipse.BottomRight.X = b.X;
             _ellipse.BottomRight.Y = b.Y;
-            _ellipse.Draw(dc, renderer, dx, dy, mode, null, null);
+            _ellipse.Draw(dc, renderer, dx, dy, scale, mode, null, null);
         }
 
-        internal void DrawEllipse(object dc, IShapeRenderer renderer, double ax, double ay, double bx, double by, double dx, double dy, DrawMode mode)
+        internal void DrawEllipse(object dc, IShapeRenderer renderer, double ax, double ay, double bx, double by, double dx, double dy, double scale, DrawMode mode)
         {
             _ellipse.StyleId = _strokeStyleId;
             _ellipse.TopLeft.X = ax;
             _ellipse.TopLeft.Y = ay;
             _ellipse.BottomRight.X = bx;
             _ellipse.BottomRight.Y = by;
-            _ellipse.Draw(dc, renderer, dx, dy, mode, null, null);
+            _ellipse.Draw(dc, renderer, dx, dy, scale, mode, null, null);
         }
 
-        internal void FillRectangle(object dc, IShapeRenderer renderer, IPointShape s, double radius, double dx, double dy, DrawMode mode)
+        internal void FillRectangle(object dc, IShapeRenderer renderer, IPointShape s, double radius, double dx, double dy, double scale, DrawMode mode)
         {
             _rectangle.StyleId = _fillStyleId;
             _rectangle.TopLeft.X = s.X - radius;
             _rectangle.TopLeft.Y = s.Y - radius;
             _rectangle.BottomRight.X = s.X + radius;
             _rectangle.BottomRight.Y = s.Y + radius;
-            _rectangle.Draw(dc, renderer, dx, dy, mode, null, null);
+            _rectangle.Draw(dc, renderer, dx, dy, scale, mode, null, null);
         }
 
-        internal void FillRectangle(object dc, IShapeRenderer renderer, double sx, double sy, double radius, double dx, double dy, DrawMode mode)
+        internal void FillRectangle(object dc, IShapeRenderer renderer, double sx, double sy, double radius, double dx, double dy, double scale, DrawMode mode)
         {
             _rectangle.StyleId = _fillStyleId;
             _rectangle.TopLeft.X = sx - radius;
             _rectangle.TopLeft.Y = sy - radius;
             _rectangle.BottomRight.X = sx + radius;
             _rectangle.BottomRight.Y = sy + radius;
-            _rectangle.Draw(dc, renderer, dx, dy, mode, null, null);
+            _rectangle.Draw(dc, renderer, dx, dy, scale, mode, null, null);
         }
 
-        internal void DrawRectangle(object dc, IShapeRenderer renderer, IPointShape s, double radius, double dx, double dy, DrawMode mode)
+        internal void DrawRectangle(object dc, IShapeRenderer renderer, IPointShape s, double radius, double dx, double dy, double scale, DrawMode mode)
         {
             _rectangle.StyleId = _strokeStyleId;
             _rectangle.TopLeft.X = s.X - radius;
             _rectangle.TopLeft.Y = s.Y - radius;
             _rectangle.BottomRight.X = s.X + radius;
             _rectangle.BottomRight.Y = s.Y + radius;
-            _rectangle.Draw(dc, renderer, dx, dy, mode, null, null);
+            _rectangle.Draw(dc, renderer, dx, dy, scale, mode, null, null);
         }
 
-        internal void DrawRectangle(object dc, IShapeRenderer renderer, double sx, double sy, double radius, double dx, double dy, DrawMode mode)
+        internal void DrawRectangle(object dc, IShapeRenderer renderer, double sx, double sy, double radius, double dx, double dy, double scale, DrawMode mode)
         {
             _rectangle.StyleId = _strokeStyleId;
             _rectangle.TopLeft.X = sx - radius;
             _rectangle.TopLeft.Y = sy - radius;
             _rectangle.BottomRight.X = sx + radius;
             _rectangle.BottomRight.Y = sy + radius;
-            _rectangle.Draw(dc, renderer, dx, dy, mode, null, null);
+            _rectangle.Draw(dc, renderer, dx, dy, scale, mode, null, null);
         }
 
-        internal void FillRectangle(object dc, IShapeRenderer renderer, IPointShape a, IPointShape b, double dx, double dy, DrawMode mode)
+        internal void FillRectangle(object dc, IShapeRenderer renderer, IPointShape a, IPointShape b, double dx, double dy, double scale, DrawMode mode)
         {
             _rectangle.StyleId = _fillStyleId;
             _rectangle.TopLeft.X = a.X;
             _rectangle.TopLeft.Y = a.Y;
             _rectangle.BottomRight.X = b.X;
             _rectangle.BottomRight.Y = b.Y;
-            _rectangle.Draw(dc, renderer, dx, dy, mode, null, null);
+            _rectangle.Draw(dc, renderer, dx, dy, scale, mode, null, null);
         }
 
-        internal void FillRectangle(object dc, IShapeRenderer renderer, double ax, double ay, double bx, double by, double dx, double dy, DrawMode mode)
+        internal void FillRectangle(object dc, IShapeRenderer renderer, double ax, double ay, double bx, double by, double dx, double dy, double scale, DrawMode mode)
         {
             _rectangle.StyleId = _fillStyleId;
             _rectangle.TopLeft.X = ax;
             _rectangle.TopLeft.Y = ay;
             _rectangle.BottomRight.X = bx;
             _rectangle.BottomRight.Y = by;
-            _rectangle.Draw(dc, renderer, dx, dy, mode, null, null);
+            _rectangle.Draw(dc, renderer, dx, dy, scale, mode, null, null);
         }
 
-        internal void DrawRectangle(object dc, IShapeRenderer renderer, IPointShape a, IPointShape b, double dx, double dy, DrawMode mode)
+        internal void DrawRectangle(object dc, IShapeRenderer renderer, IPointShape a, IPointShape b, double dx, double dy, double scale, DrawMode mode)
         {
             _rectangle.StyleId = _strokeStyleId;
             _rectangle.TopLeft.X = a.X;
             _rectangle.TopLeft.Y = a.Y;
             _rectangle.BottomRight.X = b.X;
             _rectangle.BottomRight.Y = b.Y;
-            _rectangle.Draw(dc, renderer, dx, dy, mode, null, null);
+            _rectangle.Draw(dc, renderer, dx, dy, scale, mode, null, null);
         }
 
-        internal void DrawRectangle(object dc, IShapeRenderer renderer, double ax, double ay, double bx, double by, double dx, double dy, DrawMode mode)
+        internal void DrawRectangle(object dc, IShapeRenderer renderer, double ax, double ay, double bx, double by, double dx, double dy, double scale, DrawMode mode)
         {
             _rectangle.StyleId = _strokeStyleId;
             _rectangle.TopLeft.X = ax;
             _rectangle.TopLeft.Y = ay;
             _rectangle.BottomRight.X = bx;
             _rectangle.BottomRight.Y = by;
-            _rectangle.Draw(dc, renderer, dx, dy, mode, null, null);
+            _rectangle.Draw(dc, renderer, dx, dy, scale, mode, null, null);
         }
 
-        internal void DrawText(object dc, IShapeRenderer renderer, string text, IPointShape a, IPointShape b, double dx, double dy, DrawMode mode)
+        internal void DrawText(object dc, IShapeRenderer renderer, string text, IPointShape a, IPointShape b, double dx, double dy, double scale, DrawMode mode)
         {
             _text.StyleId = _strokeStyleId;
             _text.TopLeft.X = a.X;
             _text.TopLeft.Y = a.Y;
             _text.BottomRight.X = b.X;
             _text.BottomRight.Y = b.Y;
-            _text.Draw(dc, renderer, dx, dy, mode, null, null);
+            _text.Draw(dc, renderer, dx, dy, scale, mode, null, null);
         }
 
-        internal void DrawText(object dc, IShapeRenderer renderer, string text, double ax, double ay, double bx, double by, double dx, double dy, DrawMode mode)
+        internal void DrawText(object dc, IShapeRenderer renderer, string text, double ax, double ay, double bx, double by, double dx, double dy, double scale, DrawMode mode)
         {
             _text.StyleId = _strokeStyleId;
             _text.TopLeft.X = ax;
             _text.TopLeft.Y = ay;
             _text.BottomRight.X = bx;
             _text.BottomRight.Y = by;
-            _text.Draw(dc, renderer, dx, dy, mode, null, null);
+            _text.Draw(dc, renderer, dx, dy, scale, mode, null, null);
         }
 
-        internal void DrawBoxFromPoints(object dc, IShapeRenderer renderer, IBaseShape shape, double dx, double dy, DrawMode mode)
+        internal void DrawBoxFromPoints(object dc, IShapeRenderer renderer, IBaseShape shape, double dx, double dy, double scale, DrawMode mode)
         {
             var points = new List<IPointShape>();
             shape.GetPoints(points);
@@ -4522,28 +4521,28 @@ namespace Draw2D.ViewModels.Decorators
             if (points.Count >= 2)
             {
                 points.GetBox(out double ax, out double ay, out double bx, out double by);
-                DrawRectangle(dc, renderer, ax, ay, bx, by, dx, dy, mode);
+                DrawRectangle(dc, renderer, ax, ay, bx, by, dx, dy, scale, mode);
             }
         }
 
-        public abstract void Draw(object dc, IBaseShape shape, IShapeRenderer renderer, ISelectionState selectionState, double dx, double dy, DrawMode mode);
+        public abstract void Draw(object dc, IBaseShape shape, IShapeRenderer renderer, ISelectionState selectionState, double dx, double dy, double scale, DrawMode mode);
     }
 
     [DataContract(IsReference = true)]
     public class CubicBezierDecorator : CommonDecorator
     {
-        public void Draw(object dc, IShapeRenderer renderer, CubicBezierShape cubicBezier, double dx, double dy, DrawMode mode)
+        public void Draw(object dc, IShapeRenderer renderer, CubicBezierShape cubicBezier, double dx, double dy, double scale, DrawMode mode)
         {
-            DrawLine(dc, renderer, cubicBezier.StartPoint, cubicBezier.Point1, dx, dy, mode);
-            DrawLine(dc, renderer, cubicBezier.Point3, cubicBezier.Point2, dx, dy, mode);
-            DrawLine(dc, renderer, cubicBezier.Point1, cubicBezier.Point2, dx, dy, mode);
+            DrawLine(dc, renderer, cubicBezier.StartPoint, cubicBezier.Point1, dx, dy, scale, mode);
+            DrawLine(dc, renderer, cubicBezier.Point3, cubicBezier.Point2, dx, dy, scale, mode);
+            DrawLine(dc, renderer, cubicBezier.Point1, cubicBezier.Point2, dx, dy, scale, mode);
         }
 
-        public override void Draw(object dc, IBaseShape shape, IShapeRenderer renderer, ISelectionState selectionState, double dx, double dy, DrawMode mode)
+        public override void Draw(object dc, IBaseShape shape, IShapeRenderer renderer, ISelectionState selectionState, double dx, double dy, double scale, DrawMode mode)
         {
             if (shape is CubicBezierShape cubicBezier)
             {
-                Draw(dc, renderer, cubicBezier, dx, dy, mode);
+                Draw(dc, renderer, cubicBezier, dx, dy, scale, mode);
             }
         }
     }
@@ -4551,16 +4550,16 @@ namespace Draw2D.ViewModels.Decorators
     [DataContract(IsReference = true)]
     public class EllipseDecorator : CommonDecorator
     {
-        public void Draw(object dc, IShapeRenderer renderer, EllipseShape ellipseShape, double dx, double dy, DrawMode mode)
+        public void Draw(object dc, IShapeRenderer renderer, EllipseShape ellipseShape, double dx, double dy, double scale, DrawMode mode)
         {
-            DrawRectangle(dc, renderer, ellipseShape.TopLeft, ellipseShape.BottomRight, dx, dy, mode);
+            DrawRectangle(dc, renderer, ellipseShape.TopLeft, ellipseShape.BottomRight, dx, dy, scale, mode);
         }
 
-        public override void Draw(object dc, IBaseShape shape, IShapeRenderer renderer, ISelectionState selectionState, double dx, double dy, DrawMode mode)
+        public override void Draw(object dc, IBaseShape shape, IShapeRenderer renderer, ISelectionState selectionState, double dx, double dy, double scale, DrawMode mode)
         {
             if (shape is EllipseShape ellipseShape)
             {
-                Draw(dc, renderer, ellipseShape, dx, dy, mode);
+                Draw(dc, renderer, ellipseShape, dx, dy, scale, mode);
             }
         }
     }
@@ -4568,16 +4567,16 @@ namespace Draw2D.ViewModels.Decorators
     [DataContract(IsReference = true)]
     public class LineDecorator : CommonDecorator
     {
-        public void Draw(object dc, IShapeRenderer renderer, LineShape lineShape, double dx, double dy, DrawMode mode)
+        public void Draw(object dc, IShapeRenderer renderer, LineShape lineShape, double dx, double dy, double scale, DrawMode mode)
         {
-            DrawRectangle(dc, renderer, lineShape.StartPoint, lineShape.Point, dx, dy, mode);
+            DrawRectangle(dc, renderer, lineShape.StartPoint, lineShape.Point, dx, dy, scale, mode);
         }
 
-        public override void Draw(object dc, IBaseShape shape, IShapeRenderer renderer, ISelectionState selectionState, double dx, double dy, DrawMode mode)
+        public override void Draw(object dc, IBaseShape shape, IShapeRenderer renderer, ISelectionState selectionState, double dx, double dy, double scale, DrawMode mode)
         {
             if (shape is LineShape lineShape)
             {
-                Draw(dc, renderer, lineShape, dx, dy, mode);
+                Draw(dc, renderer, lineShape, dx, dy, scale, mode);
             }
         }
     }
@@ -4585,19 +4584,19 @@ namespace Draw2D.ViewModels.Decorators
     [DataContract(IsReference = true)]
     public class GroupDecorator : CommonDecorator
     {
-        public void Draw(object dc, IShapeRenderer renderer, GroupShape group, ISelectionState selectionState, double dx, double dy, DrawMode mode)
+        public void Draw(object dc, IShapeRenderer renderer, GroupShape group, ISelectionState selectionState, double dx, double dy, double scale, DrawMode mode)
         {
             if (selectionState.IsSelected(group))
             {
-                DrawBoxFromPoints(dc, renderer, group, dx, dy, mode);
+                DrawBoxFromPoints(dc, renderer, group, dx, dy, scale, mode);
             }
         }
 
-        public override void Draw(object dc, IBaseShape shape, IShapeRenderer renderer, ISelectionState selectionState, double dx, double dy, DrawMode mode)
+        public override void Draw(object dc, IBaseShape shape, IShapeRenderer renderer, ISelectionState selectionState, double dx, double dy, double scale, DrawMode mode)
         {
             if (shape is GroupShape group)
             {
-                Draw(dc, renderer, group, selectionState, dx, dy, mode);
+                Draw(dc, renderer, group, selectionState, dx, dy, scale, mode);
             }
         }
     }
@@ -4618,56 +4617,56 @@ namespace Draw2D.ViewModels.Decorators
             _conicDecorator = new ConicDecorator();
         }
 
-        public void DrawShape(object dc, IShapeRenderer renderer, IBaseShape shape, ISelectionState selectionState, double dx, double dy, DrawMode mode)
+        public void DrawShape(object dc, IShapeRenderer renderer, IBaseShape shape, ISelectionState selectionState, double dx, double dy, double scale, DrawMode mode)
         {
             if (shape is LineShape line)
             {
                 if (selectionState.IsSelected(line))
                 {
-                    _lineDecorator.Draw(dc, line, renderer, selectionState, dx, dy, mode);
+                    _lineDecorator.Draw(dc, line, renderer, selectionState, dx, dy, scale, mode);
                 }
             }
             else if (shape is CubicBezierShape cubicBezier)
             {
                 if (selectionState.IsSelected(cubicBezier))
                 {
-                    _cubiceBezierDecorator.Draw(dc, cubicBezier, renderer, selectionState, dx, dy, mode);
+                    _cubiceBezierDecorator.Draw(dc, cubicBezier, renderer, selectionState, dx, dy, scale, mode);
                 }
             }
             else if (shape is QuadraticBezierShape quadraticBezier)
             {
                 if (selectionState.IsSelected(quadraticBezier))
                 {
-                    _quadraticBezierDecorator.Draw(dc, quadraticBezier, renderer, selectionState, dx, dy, mode);
+                    _quadraticBezierDecorator.Draw(dc, quadraticBezier, renderer, selectionState, dx, dy, scale, mode);
                 }
             }
             else if (shape is ConicShape conicShape)
             {
                 if (selectionState.IsSelected(conicShape))
                 {
-                    _conicDecorator.Draw(dc, conicShape, renderer, selectionState, dx, dy, mode);
+                    _conicDecorator.Draw(dc, conicShape, renderer, selectionState, dx, dy, scale, mode);
                 }
             }
         }
 
-        public void DrawFigure(object dc, IShapeRenderer renderer, FigureShape figure, ISelectionState selectionState, double dx, double dy, DrawMode mode)
+        public void DrawFigure(object dc, IShapeRenderer renderer, FigureShape figure, ISelectionState selectionState, double dx, double dy, double scale, DrawMode mode)
         {
             if (selectionState.IsSelected(figure))
             {
-                DrawBoxFromPoints(dc, renderer, figure, dx, dy, mode);
+                DrawBoxFromPoints(dc, renderer, figure, dx, dy, scale, mode);
             }
 
             foreach (var shape in figure.Shapes)
             {
-                DrawShape(dc, renderer, shape, selectionState, dx, dy, mode);
+                DrawShape(dc, renderer, shape, selectionState, dx, dy, scale, mode);
             }
         }
 
-        public override void Draw(object dc, IBaseShape shape, IShapeRenderer renderer, ISelectionState selectionState, double dx, double dy, DrawMode mode)
+        public override void Draw(object dc, IBaseShape shape, IShapeRenderer renderer, ISelectionState selectionState, double dx, double dy, double scale, DrawMode mode)
         {
             if (shape is FigureShape figure)
             {
-                DrawFigure(dc, renderer, figure, selectionState, dx, dy, mode);
+                DrawFigure(dc, renderer, figure, selectionState, dx, dy, scale, mode);
             }
         }
     }
@@ -4679,24 +4678,24 @@ namespace Draw2D.ViewModels.Decorators
         {
         }
 
-        public void Draw(object dc, IShapeRenderer renderer, PathShape path, ISelectionState selectionState, double dx, double dy, DrawMode mode)
+        public void Draw(object dc, IShapeRenderer renderer, PathShape path, ISelectionState selectionState, double dx, double dy, double scale, DrawMode mode)
         {
             if (selectionState.IsSelected(path))
             {
-                DrawBoxFromPoints(dc, renderer, path, dx, dy, mode);
+                DrawBoxFromPoints(dc, renderer, path, dx, dy, scale, mode);
             }
 
             foreach (var shape in path.Shapes)
             {
-                shape.Decorator?.Draw(dc, shape, renderer, selectionState, dx, dy, mode);
+                shape.Decorator?.Draw(dc, shape, renderer, selectionState, dx, dy, scale, mode);
             }
         }
 
-        public override void Draw(object dc, IBaseShape shape, IShapeRenderer renderer, ISelectionState selectionState, double dx, double dy, DrawMode mode)
+        public override void Draw(object dc, IBaseShape shape, IShapeRenderer renderer, ISelectionState selectionState, double dx, double dy, double scale, DrawMode mode)
         {
             if (shape is PathShape path)
             {
-                Draw(dc, renderer, path, selectionState, dx, dy, mode);
+                Draw(dc, renderer, path, selectionState, dx, dy, scale, mode);
             }
         }
     }
@@ -4704,17 +4703,17 @@ namespace Draw2D.ViewModels.Decorators
     [DataContract(IsReference = true)]
     public class PointDecorator : CommonDecorator
     {
-        public void Draw(object dc, IShapeRenderer renderer, IPointShape pointShape, double dx, double dy, DrawMode mode)
+        public void Draw(object dc, IShapeRenderer renderer, IPointShape pointShape, double dx, double dy, double scale, DrawMode mode)
         {
-            DrawRectangle(dc, renderer, pointShape, 10, dx, dy, mode);
+            DrawRectangle(dc, renderer, pointShape, 10, dx, dy, scale, mode);
         }
 
-        public override void Draw(object dc, IBaseShape shape, IShapeRenderer renderer, ISelectionState selectionState, double dx, double dy, DrawMode mode)
+        public override void Draw(object dc, IBaseShape shape, IShapeRenderer renderer, ISelectionState selectionState, double dx, double dy, double scale, DrawMode mode)
         {
 #if USE_POINT_DECORATOR
             if (shape is IPointShape pointShape)
             {
-                Draw(dc, renderer, pointShape, dx, dy, mode);
+                Draw(dc, renderer, pointShape, dx, dy, scale, mode);
             }
 #endif
         }
@@ -4723,17 +4722,17 @@ namespace Draw2D.ViewModels.Decorators
     [DataContract(IsReference = true)]
     public class QuadraticBezierDecorator : CommonDecorator
     {
-        public void Draw(object dc, IShapeRenderer renderer, QuadraticBezierShape quadraticBezier, double dx, double dy, DrawMode mode)
+        public void Draw(object dc, IShapeRenderer renderer, QuadraticBezierShape quadraticBezier, double dx, double dy, double scale, DrawMode mode)
         {
-            DrawLine(dc, renderer, quadraticBezier.StartPoint, quadraticBezier.Point1, dx, dy, mode);
-            DrawLine(dc, renderer, quadraticBezier.Point1, quadraticBezier.Point2, dx, dy, mode);
+            DrawLine(dc, renderer, quadraticBezier.StartPoint, quadraticBezier.Point1, dx, dy, scale, mode);
+            DrawLine(dc, renderer, quadraticBezier.Point1, quadraticBezier.Point2, dx, dy, scale, mode);
         }
 
-        public override void Draw(object dc, IBaseShape shape, IShapeRenderer renderer, ISelectionState selectionState, double dx, double dy, DrawMode mode)
+        public override void Draw(object dc, IBaseShape shape, IShapeRenderer renderer, ISelectionState selectionState, double dx, double dy, double scale, DrawMode mode)
         {
             if (shape is QuadraticBezierShape quadraticBezier)
             {
-                Draw(dc, renderer, quadraticBezier, dx, dy, mode);
+                Draw(dc, renderer, quadraticBezier, dx, dy, scale, mode);
             }
         }
     }
@@ -4741,17 +4740,17 @@ namespace Draw2D.ViewModels.Decorators
     [DataContract(IsReference = true)]
     public class ConicDecorator : CommonDecorator
     {
-        public void Draw(object dc, IShapeRenderer renderer, ConicShape conic, double dx, double dy, DrawMode mode)
+        public void Draw(object dc, IShapeRenderer renderer, ConicShape conic, double dx, double dy, double scale, DrawMode mode)
         {
-            DrawLine(dc, renderer, conic.StartPoint, conic.Point1, dx, dy, mode);
-            DrawLine(dc, renderer, conic.Point1, conic.Point2, dx, dy, mode);
+            DrawLine(dc, renderer, conic.StartPoint, conic.Point1, dx, dy, scale, mode);
+            DrawLine(dc, renderer, conic.Point1, conic.Point2, dx, dy, scale, mode);
         }
 
-        public override void Draw(object dc, IBaseShape shape, IShapeRenderer renderer, ISelectionState selectionState, double dx, double dy, DrawMode mode)
+        public override void Draw(object dc, IBaseShape shape, IShapeRenderer renderer, ISelectionState selectionState, double dx, double dy, double scale, DrawMode mode)
         {
             if (shape is ConicShape conic)
             {
-                Draw(dc, renderer, conic, dx, dy, mode);
+                Draw(dc, renderer, conic, dx, dy, scale, mode);
             }
         }
     }
@@ -4759,16 +4758,16 @@ namespace Draw2D.ViewModels.Decorators
     [DataContract(IsReference = true)]
     public class RectangleDecorator : CommonDecorator
     {
-        public void Draw(object dc, IShapeRenderer renderer, RectangleShape rectangleShape, double dx, double dy, DrawMode mode)
+        public void Draw(object dc, IShapeRenderer renderer, RectangleShape rectangleShape, double dx, double dy, double scale, DrawMode mode)
         {
-            DrawRectangle(dc, renderer, rectangleShape.TopLeft, rectangleShape.BottomRight, dx, dy, mode);
+            DrawRectangle(dc, renderer, rectangleShape.TopLeft, rectangleShape.BottomRight, dx, dy, scale, mode);
         }
 
-        public override void Draw(object dc, IBaseShape shape, IShapeRenderer renderer, ISelectionState selectionState, double dx, double dy, DrawMode mode)
+        public override void Draw(object dc, IBaseShape shape, IShapeRenderer renderer, ISelectionState selectionState, double dx, double dy, double scale, DrawMode mode)
         {
             if (shape is RectangleShape rectangleShape)
             {
-                Draw(dc, renderer, rectangleShape, dx, dy, mode);
+                Draw(dc, renderer, rectangleShape, dx, dy, scale, mode);
             }
         }
     }
@@ -4776,19 +4775,19 @@ namespace Draw2D.ViewModels.Decorators
     [DataContract(IsReference = true)]
     public class ReferenceDecorator : CommonDecorator
     {
-        public void Draw(object dc, IShapeRenderer renderer, ReferenceShape reference, ISelectionState selectionState, double dx, double dy, DrawMode mode)
+        public void Draw(object dc, IShapeRenderer renderer, ReferenceShape reference, ISelectionState selectionState, double dx, double dy, double scale, DrawMode mode)
         {
             if (selectionState.IsSelected(reference) && reference.Template != null)
             {
-                DrawBoxFromPoints(dc, renderer, reference.Template, dx + reference.X, dy + reference.Y, mode);
+                DrawBoxFromPoints(dc, renderer, reference.Template, dx + reference.X, dy + reference.Y, scale, mode);
             }
         }
 
-        public override void Draw(object dc, IBaseShape shape, IShapeRenderer renderer, ISelectionState selectionState, double dx, double dy, DrawMode mode)
+        public override void Draw(object dc, IBaseShape shape, IShapeRenderer renderer, ISelectionState selectionState, double dx, double dy, double scale, DrawMode mode)
         {
             if (shape is ReferenceShape reference)
             {
-                Draw(dc, renderer, reference, selectionState, dx, dy, mode);
+                Draw(dc, renderer, reference, selectionState, dx, dy, scale, mode);
             }
         }
     }
@@ -4796,16 +4795,16 @@ namespace Draw2D.ViewModels.Decorators
     [DataContract(IsReference = true)]
     public class TextDecorator : CommonDecorator
     {
-        public void Draw(object dc, IShapeRenderer renderer, TextShape textShape, double dx, double dy, DrawMode mode)
+        public void Draw(object dc, IShapeRenderer renderer, TextShape textShape, double dx, double dy, double scale, DrawMode mode)
         {
-            DrawRectangle(dc, renderer, textShape.TopLeft, textShape.BottomRight, dx, dy, mode);
+            DrawRectangle(dc, renderer, textShape.TopLeft, textShape.BottomRight, dx, dy, scale, mode);
         }
 
-        public override void Draw(object dc, IBaseShape shape, IShapeRenderer renderer, ISelectionState selectionState, double dx, double dy, DrawMode mode)
+        public override void Draw(object dc, IBaseShape shape, IShapeRenderer renderer, ISelectionState selectionState, double dx, double dy, double scale, DrawMode mode)
         {
             if (shape is TextShape textShape)
             {
-                Draw(dc, renderer, textShape, dx, dy, mode);
+                Draw(dc, renderer, textShape, dx, dy, scale, mode);
             }
         }
     }
@@ -4813,19 +4812,19 @@ namespace Draw2D.ViewModels.Decorators
     [DataContract(IsReference = true)]
     public class ContainerDecorator : CommonDecorator
     {
-        public void Draw(object dc, IShapeRenderer renderer, ICanvasContainer container, ISelectionState selectionState, double dx, double dy, DrawMode mode)
+        public void Draw(object dc, IShapeRenderer renderer, ICanvasContainer container, ISelectionState selectionState, double dx, double dy, double scale, DrawMode mode)
         {
             if (selectionState.IsSelected(container))
             {
-                DrawBoxFromPoints(dc, renderer, container, dx, dy, mode);
+                DrawBoxFromPoints(dc, renderer, container, dx, dy, scale, mode);
             }
         }
 
-        public override void Draw(object dc, IBaseShape shape, IShapeRenderer renderer, ISelectionState selectionState, double dx, double dy, DrawMode mode)
+        public override void Draw(object dc, IBaseShape shape, IShapeRenderer renderer, ISelectionState selectionState, double dx, double dy, double scale, DrawMode mode)
         {
             if (shape is ICanvasContainer container)
             {
-                Draw(dc, renderer, container, selectionState, dx, dy, mode);
+                Draw(dc, renderer, container, selectionState, dx, dy, scale, mode);
             }
         }
     }

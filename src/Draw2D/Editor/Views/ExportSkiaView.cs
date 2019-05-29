@@ -9,25 +9,27 @@ namespace Draw2D.Editor.Views
 {
     public class ExportSkiaView : IDrawContainerView
     {
-        private IToolContext _context;
+        private readonly IToolContext _context;
+        private readonly IContainerView _view;
 
-        public ExportSkiaView(IToolContext context)
+        public ExportSkiaView(IToolContext context, IContainerView view)
         {
             _context = context;
+            _view = view;
         }
 
         public void Dispose()
         {
         }
 
-        public void Draw(IContainerView view, object context, double width, double height, double dx, double dy, double zx, double zy)
+        public void Draw(object context, double width, double height, double dx, double dy, double zx, double zy)
         {
-            using (var renderer = new SkiaShapeRenderer(_context))
-            using (var background = SkiaHelper.ToSKPaintBrush(view.PrintBackground))
+            using (var renderer = new SkiaShapeRenderer(_context, _view.SelectionState))
+            using (var background = SkiaHelper.ToSKPaintBrush(_view.PrintBackground))
             {
                 var canvas = context as SKCanvas;
-                canvas.DrawRect(SkiaHelper.ToRect(0.0, 0.0, view.Width, view.Height), background);
-                view.CurrentContainer.Draw(canvas, renderer, 0.0, 0.0, DrawMode.Shape, null, null);
+                canvas.DrawRect(SkiaHelper.ToRect(0.0, 0.0, _view.Width, _view.Height), background);
+                _view.CurrentContainer.Draw(canvas, renderer, 0.0, 0.0, zx, DrawMode.Shape, null, null);
             }
         }
     }

@@ -15,8 +15,8 @@ namespace Draw2D.Editor.Views
 {
     public class EditorSkiaView : IDrawContainerView
     {
-        private IToolContext _context;
-        private bool _enablePictureCache = false;
+        private readonly IToolContext _context;
+        private readonly IContainerView _view;
         private SkiaShapeRenderer _skiaRenderer;
         private Dictionary<ArgbColor, SKPaint> _paintCache;
         private double _previousZX = double.NaN;
@@ -25,11 +25,13 @@ namespace Draw2D.Editor.Views
         private SKPicture _pictureShapesWorking = null;
         private SKPicture _pictureDecorators = null;
         private SKPicture _picturePoints = null;
+        private bool _enablePictureCache = false;
 
-        public EditorSkiaView(IToolContext context)
+        public EditorSkiaView(IToolContext context, IContainerView view)
         {
             _context = context;
-            _skiaRenderer = new SkiaShapeRenderer(_context);
+            _view = view;
+            _skiaRenderer = new SkiaShapeRenderer(_context, _view.SelectionState);
             _paintCache = new Dictionary<ArgbColor, SKPaint>();
         }
 
@@ -198,21 +200,21 @@ namespace Draw2D.Editor.Views
             brush = brushCached;
         }
 
-        private void DrawShapesCurrent(IContainerView view, object context, IShapeRenderer renderer)
+        private void DrawShapesCurrent(IContainerView view, object context, IShapeRenderer renderer, double scale)
         {
-            view.CurrentContainer.Draw(context, renderer, 0.0, 0.0, DrawMode.Shape, null, null);
+            view.CurrentContainer.Draw(context, renderer, 0.0, 0.0, scale, DrawMode.Shape, null, null);
         }
 
-        private void DrawShapesWorking(IContainerView view, object context, IShapeRenderer renderer)
+        private void DrawShapesWorking(IContainerView view, object context, IShapeRenderer renderer, double scale)
         {
-            view.WorkingContainer.Draw(context, renderer, 0.0, 0.0, DrawMode.Shape, null, null);
+            view.WorkingContainer.Draw(context, renderer, 0.0, 0.0, scale, DrawMode.Shape, null, null);
         }
 
-        private void DrawPoints(IContainerView view, object context, IShapeRenderer renderer)
+        private void DrawPoints(IContainerView view, object context, IShapeRenderer renderer, double scale)
         {
 #if USE_DRAW_POINTS
-            view.CurrentContainer.Draw(context, renderer, 0.0, 0.0, DrawMode.Point, null, null);
-            view.WorkingContainer.Draw(context, renderer, 0.0, 0.0, DrawMode.Point, null, null);
+            view.CurrentContainer.Draw(context, renderer, 0.0, 0.0, scale, DrawMode.Point, null, null);
+            view.WorkingContainer.Draw(context, renderer, 0.0, 0.0, scale, DrawMode.Point, null, null);
 #else
             // NOTE: Draw only selected points.
             var selected = new List<IBaseShape>(view.SelectionState.Shapes);
@@ -221,28 +223,28 @@ namespace Draw2D.Editor.Views
             {
                 if (shape is IPointShape point)
                 {
-                    point.Draw(context, renderer, 0.0, 0.0, DrawMode.Point, null, null);
+                    point.Draw(context, renderer, 0.0, 0.0, scale, DrawMode.Point, null, null);
                 }
             }
 #endif
         }
 
-        private void DrawDecorators(IContainerView view, object context, IShapeRenderer renderer)
+        private void DrawDecorators(IContainerView view, object context, IShapeRenderer renderer, double scale)
         {
             var selected = new List<IBaseShape>(view.SelectionState.Shapes);
 
             foreach (var shape in selected)
             {
-                shape.Decorator?.Draw(context, shape, renderer, view.SelectionState, 0.0, 0.0, DrawMode.Shape);
+                shape.Decorator?.Draw(context, shape, renderer, view.SelectionState, 0.0, 0.0, scale, DrawMode.Shape);
             }
         }
 
-        private SKPicture RecordPicture(IContainerView view, IShapeRenderer renderer, Action<IContainerView, object, IShapeRenderer> draw)
+        private SKPicture RecordPicture(IContainerView view, IShapeRenderer renderer, double scale, Action<IContainerView, object, IShapeRenderer, double> draw)
         {
             var recorder = new SKPictureRecorder();
             var rect = new SKRect(0f, 0f, (float)view.Width, (float)view.Height);
             var canvas = recorder.BeginRecording(rect);
-            draw(view, canvas, renderer);
+            draw(view, canvas, renderer, scale);
             return recorder.EndRecording();
         }
 
@@ -255,18 +257,15 @@ namespace Draw2D.Editor.Views
             canvas.Restore();
         }
 
-        public void Draw(IContainerView view, object context, double width, double height, double dx, double dy, double zx, double zy)
+        public void Draw(object context, double width, double height, double dx, double dy, double zx, double zy)
         {
             bool isStyleLibraryDirty = IsStyleLibraryDirty(_context.StyleLibrary);
-            bool isCurrentContainerDirty = IsCanvasContainerDirty(view.CurrentContainer);
-            bool isWorkingContainerDirty = IsCanvasContainerDirty(view.WorkingContainer);
-            bool isPointsCurrentContainerDirty = IsPointsDirty(view.CurrentContainer);
-            bool isPointsWorkingContainerDirty = IsPointsDirty(view.WorkingContainer);
+            bool isCurrentContainerDirty = IsCanvasContainerDirty(_view.CurrentContainer);
+            bool isWorkingContainerDirty = IsCanvasContainerDirty(_view.WorkingContainer);
+            bool isPointsCurrentContainerDirty = IsPointsDirty(_view.CurrentContainer);
+            bool isPointsWorkingContainerDirty = IsPointsDirty(_view.WorkingContainer);
             bool isShapesCurrentDirty = isCurrentContainerDirty == true || isPointsCurrentContainerDirty == true || _previousZX != zx || _previousZY != zy;
             bool isShapesWorkingDirty = isWorkingContainerDirty == true || isPointsWorkingContainerDirty == true || _previousZX != zx || _previousZY != zy;
-
-            _skiaRenderer.Scale = zx;
-            _skiaRenderer.SelectionState = view.SelectionState;
 
             if (_pictureShapesCurrent == null || isShapesCurrentDirty == true || isStyleLibraryDirty == true)
             {
@@ -275,7 +274,7 @@ namespace Draw2D.Editor.Views
                     _pictureShapesCurrent.Dispose();
                 }
 
-                _pictureShapesCurrent = RecordPicture(view, _skiaRenderer, DrawShapesCurrent);
+                _pictureShapesCurrent = RecordPicture(_view, _skiaRenderer, zx, DrawShapesCurrent);
             }
 
             if (_pictureShapesWorking == null || isShapesWorkingDirty == true || isStyleLibraryDirty == true)
@@ -285,10 +284,10 @@ namespace Draw2D.Editor.Views
                     _pictureShapesWorking.Dispose();
                 }
 
-                _pictureShapesWorking = RecordPicture(view, _skiaRenderer, DrawShapesWorking);
+                _pictureShapesWorking = RecordPicture(_view, _skiaRenderer, zx, DrawShapesWorking);
             }
 
-            bool isSelectionDirty = view.SelectionState.IsDirty == true || isShapesCurrentDirty == true || isShapesWorkingDirty == true;
+            bool isSelectionDirty = _view.SelectionState.IsDirty == true || isShapesCurrentDirty == true || isShapesWorkingDirty == true;
 
             Debug.WriteLine(
                 $"{nameof(isStyleLibraryDirty)}: {isStyleLibraryDirty}, " +
@@ -298,9 +297,9 @@ namespace Draw2D.Editor.Views
                 $"{nameof(isWorkingContainerDirty)}: {isWorkingContainerDirty}, " +
                 $"{nameof(isSelectionDirty)}: {isSelectionDirty}");
 
-            if (view.SelectionState.IsDirty == true)
+            if (_view.SelectionState.IsDirty == true)
             {
-                view.SelectionState.Invalidate();
+                _view.SelectionState.Invalidate();
             }
 
             if (_pictureDecorators == null || isSelectionDirty == true || isStyleLibraryDirty == true)
@@ -310,7 +309,7 @@ namespace Draw2D.Editor.Views
                     _pictureDecorators.Dispose();
                 }
 
-                _pictureDecorators = RecordPicture(view, _skiaRenderer, DrawDecorators);
+                _pictureDecorators = RecordPicture(_view, _skiaRenderer, zx, DrawDecorators);
             }
 
             if (_picturePoints == null || isSelectionDirty == true || isStyleLibraryDirty == true)
@@ -320,7 +319,7 @@ namespace Draw2D.Editor.Views
                     _picturePoints.Dispose();
                 }
 
-                _picturePoints = RecordPicture(view, _skiaRenderer, DrawPoints);
+                _picturePoints = RecordPicture(_view, _skiaRenderer, zx, DrawPoints);
             }
 
             _previousZX = zx;
@@ -328,22 +327,22 @@ namespace Draw2D.Editor.Views
 
             var canvas = context as SKCanvas;
 
-            if (view.InputBackground != null)
+            if (_view.InputBackground != null)
             {
-                canvas.Clear(SkiaHelper.ToSKColor(view.InputBackground));
+                canvas.Clear(SkiaHelper.ToSKColor(_view.InputBackground));
             }
             else
             {
                 canvas.Clear();
             }
 
-            if (view.WorkBackground != null)
+            if (_view.WorkBackground != null)
             {
-                GetSKPaintFill(view.WorkBackground, out var brush);
+                GetSKPaintFill(_view.WorkBackground, out var brush);
                 canvas.Save();
                 canvas.Translate((float)dx, (float)dy);
                 canvas.Scale((float)zx, (float)zy);
-                canvas.DrawRect(SkiaHelper.ToRect(0.0, 0.0, view.Width, view.Height), brush);
+                canvas.DrawRect(SkiaHelper.ToRect(0.0, 0.0, _view.Width, _view.Height), brush);
                 canvas.Restore();
             }
 
@@ -369,12 +368,12 @@ namespace Draw2D.Editor.Views
 
             if (isCurrentContainerDirty == true)
             {
-                view.CurrentContainer?.Invalidate();
+                _view.CurrentContainer?.Invalidate();
             }
 
             if (isWorkingContainerDirty == true)
             {
-                view.WorkingContainer?.Invalidate();
+                _view.WorkingContainer?.Invalidate();
             }
 
             if (isStyleLibraryDirty == true)

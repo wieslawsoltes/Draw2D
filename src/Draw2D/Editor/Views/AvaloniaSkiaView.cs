@@ -10,15 +10,17 @@ namespace Draw2D.Editor.Views
 {
     public class AvaloniaSkiaView : IDrawContainerView
     {
-        private IToolContext _context;
+        private readonly IToolContext _context;
+        private readonly IContainerView _view;
         private RenderTargetBitmap _renderTarget;
         private IDrawContainerView _editorSkiaView;
 
-        public AvaloniaSkiaView(IToolContext context)
+        public AvaloniaSkiaView(IToolContext context, IContainerView view)
         {
             _context = context;
+            _view = view;
             _renderTarget = null;
-            _editorSkiaView = new EditorSkiaView(_context);
+            _editorSkiaView = new EditorSkiaView(_context, _view);
         }
 
         public void Dispose()
@@ -36,7 +38,7 @@ namespace Draw2D.Editor.Views
             }
         }
 
-        public void Draw(IContainerView view, object context, double width, double height, double dx, double dy, double zx, double zy)
+        public void Draw(object context, double width, double height, double dx, double dy, double zx, double zy)
         {
             if (context is DrawingContext drawingContext && width > 0 && height > 0)
             {
@@ -54,7 +56,7 @@ namespace Draw2D.Editor.Views
                 {
                     var skiaDrawingContextImpl = drawingContextImpl as ISkiaDrawingContextImpl;
 
-                    _editorSkiaView.Draw(view, skiaDrawingContextImpl.SkCanvas, width, height, dx, dy, zx, zy);
+                    _editorSkiaView.Draw(skiaDrawingContextImpl.SkCanvas, width, height, dx, dy, zx, zy);
 
                     drawingContext.DrawImage(_renderTarget, 1.0,
                         new Rect(0, 0, _renderTarget.PixelSize.Width, _renderTarget.PixelSize.Height),
