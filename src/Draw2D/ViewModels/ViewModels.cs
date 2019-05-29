@@ -4957,7 +4957,7 @@ namespace Draw2D.ViewModels.Decorators
     [DataContract(IsReference = true)]
     public class ContainerDecorator : CommonDecorator
     {
-        public void Draw(object dc, IShapeRenderer renderer, CanvasContainer container, ISelectionState selectionState, double dx, double dy, DrawMode mode)
+        public void Draw(object dc, IShapeRenderer renderer, ICanvasContainer container, ISelectionState selectionState, double dx, double dy, DrawMode mode)
         {
             if (selectionState.IsSelected(container))
             {
@@ -4967,7 +4967,7 @@ namespace Draw2D.ViewModels.Decorators
 
         public override void Draw(object dc, IBaseShape shape, IShapeRenderer renderer, ISelectionState selectionState, double dx, double dy, DrawMode mode)
         {
-            if (shape is CanvasContainer container)
+            if (shape is ICanvasContainer container)
             {
                 Draw(dc, renderer, container, selectionState, dx, dy, mode);
             }
