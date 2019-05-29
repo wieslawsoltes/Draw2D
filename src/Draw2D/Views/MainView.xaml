@@ -197,26 +197,26 @@
                         </TabItem>
                         <TabItem Classes="default" Header="Intersections">
                             <Grid RowDefinitions="Auto,*" IsVisible="{Binding !!CurrentTool.Intersections.Count}">
-                                <ComboBox Classes="default" Grid.Row="0" x:Name="intersections" Items="{Binding CurrentTool.Intersections}" SelectedItem="{Binding CurrentTool.CurrentIntersection}">
+                                <ComboBox Classes="default" Grid.Row="0" x:Name="intersections" Items="{Binding CurrentTool.Intersections}" SelectedItem="{Binding CurrentTool.CurrentIntersection, Mode=TwoWay}">
                                     <ComboBox.DataTemplates>
                                         <DataTemplate>
                                             <TextBlock Classes="default" Text="{Binding Title}"/>
                                         </DataTemplate>
                                     </ComboBox.DataTemplates>
                                 </ComboBox>
-                                <ContentControl Grid.Row="1" Content="{Binding #intersections.SelectedItem.Settings}"/>
+                                <ContentControl Grid.Row="1" Content="{Binding CurrentTool.CurrentIntersection.Settings}"/>
                             </Grid>
                         </TabItem>
                         <TabItem Classes="default" Header="Filters">
                             <Grid RowDefinitions="Auto,*" IsVisible="{Binding !!CurrentTool.Filters.Count}">
-                                <ComboBox Classes="default" Grid.Row="0" x:Name="filters" Items="{Binding CurrentTool.Filters}" SelectedItem="{Binding CurrentTool.CurrentFilter}">
+                                <ComboBox Classes="default" Grid.Row="0" x:Name="filters" Items="{Binding CurrentTool.Filters}" SelectedItem="{Binding CurrentTool.CurrentFilter, Mode=TwoWay}">
                                     <ComboBox.DataTemplates>
                                         <DataTemplate>
                                             <TextBlock Classes="default" Text="{Binding Title}"/>
                                         </DataTemplate>
                                     </ComboBox.DataTemplates>
                                 </ComboBox>
-                                <ContentControl Grid.Row="1" Content="{Binding #filters.SelectedItem.Settings}"/>
+                                <ContentControl Grid.Row="1" Content="{Binding CurrentTool.CurrentFilter.Settings}"/>
                             </Grid>
                         </TabItem>
                         <TabItem Classes="default" Header="Tools">
