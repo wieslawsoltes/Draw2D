@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Wiesław Šoltés. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 //#define DEBUG_DRAW_TEXT
+//#define DEBUG_DICT_CACHE
 //#define USE_DRAW_LINE
 //#define USE_DRAW_RECT
 //#define USE_DRAW_OVAL
@@ -83,7 +84,9 @@ namespace Draw2D.Editor.Renderers
             {
                 typeface = SkiaHelper.ToSKTypeface(familyName);
                 _typefaceCache[familyName] = typeface;
+#if DEBUG_DICT_CACHE
                 Debug.WriteLine($"ToSKTypeface: ctor()");
+#endif
             }
         }
 
@@ -94,7 +97,9 @@ namespace Draw2D.Editor.Renderers
                 style.Fill.Invalidate();
                 brushCached = SkiaHelper.ToSKPaintBrush(style.Fill);
                 _fillPaintCache[style] = brushCached;
+#if DEBUG_DICT_CACHE
                 Debug.WriteLine($"ToSKPaintBrush: ctor()");
+#endif
             }
             else
             {
@@ -112,7 +117,9 @@ namespace Draw2D.Editor.Renderers
                 style.Stroke.Invalidate();
                 penCached = SkiaHelper.ToSKPaintPen(style, scale);
                 _strokePaintCache[style] = penCached;
+#if DEBUG_DICT_CACHE
                 Debug.WriteLine($"ToSKPaintPen: ctor()");
+#endif
             }
             else
             {
@@ -138,8 +145,9 @@ namespace Draw2D.Editor.Renderers
                 cached.paint.Typeface = typeface;
                 cached.paint.TextEncoding = SKTextEncoding.Utf16;
                 cached.paint.TextSize = (float)style.FontSize;
+#if DEBUG_DICT_CACHE
                 Debug.WriteLine($"ToSKPaintBrush: ctor()");
-
+#endif
                 switch (style.HAlign)
                 {
                     default:
