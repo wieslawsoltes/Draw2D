@@ -47,10 +47,6 @@
     <RdXmlFile Include="Draw2D.rd.xml" />
     <PackageReference Include="Microsoft.DotNet.ILCompiler" Version="1.0.0-alpha-*" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Views\Bounds\" />
-    <Folder Include="Views\Decorators\" />
-  </ItemGroup>
 
   <!-- https://github.com/dotnet/corert/blob/master/Documentation/using-corert/optimizing-corert.md -->
   <PropertyGroup Condition="'$(CoreRT)' == 'True'">
