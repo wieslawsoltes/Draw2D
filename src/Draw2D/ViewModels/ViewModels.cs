@@ -3464,14 +3464,14 @@ namespace Draw2D.ViewModels.Containers
         GroupShape Get(string groupId);
     }
 
-    public interface IDrawContainerView : IDisposable
-    {
-        void Draw(IContainerView view, object context, double width, double height, double dx, double dy, double zx, double zy);
-    }
-
     public interface ICanvasContainer : IBaseShape
     {
         IList<IBaseShape> Shapes { get; set; }
+    }
+
+    public interface IDrawContainerView : IDisposable
+    {
+        void Draw(IContainerView view, object context, double width, double height, double dx, double dy, double zx, double zy);
     }
 
     public interface IContainerView : IDrawTarget, IHitTestable
