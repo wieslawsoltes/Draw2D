@@ -93,7 +93,7 @@ namespace Draw2D.ViewModels
         UniformToFill
     }
 
-    public interface IZoomServiceState : IDirty, ICopyable
+    public interface IZoomServiceState : INode, IDirty, ICopyable
     {
         double ZoomSpeed { get; set; }
         double ZoomX { get; set; }
@@ -190,7 +190,7 @@ namespace Draw2D.ViewModels
         void Clear();
     }
 
-    public interface ISelection : IDirty, ICopyable
+    public interface ISelection : IDirty
     {
         void Cut(IToolContext context);
         void Copy(IToolContext context);
@@ -7837,6 +7837,11 @@ namespace Draw2D.ViewModels.Tools
         public void Style(string styleId)
         {
             _context.ContainerView.Style(styleId);
+        }
+
+        public object Copy(Dictionary<object, object> shared)
+        {
+            return null;
         }
     }
 
