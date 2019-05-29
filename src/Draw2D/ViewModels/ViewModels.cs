@@ -6600,7 +6600,7 @@ namespace Draw2D.ViewModels.Tools
                     {
                         return;
                     }
-                } 
+                }
             }
         }
 
