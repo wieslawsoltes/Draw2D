@@ -1,10 +1,13 @@
 ﻿// Copyright (c) Wiesław Šoltés. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Media;
+using Avalonia.Media.Immutable;
 using Avalonia.VisualTree;
 using Draw2D.Input;
 
@@ -15,6 +18,10 @@ namespace Draw2D.Controls
         private IZoomServiceState _zoomServiceState = null;
         private IInputTarget _inputTarget = null;
         private IDrawTarget _drawTarget = null;
+        private Dictionary<IPointer, (IPointer Pointer, Point Point, InputModifiers InputModifiers)> _pointers = new Dictionary<IPointer, (IPointer, Point, InputModifiers)>();
+        private bool _isCaptured = false;
+        private InputModifiers _capturedInputModifiers = InputModifiers.None;
+        private IPointer _capturedPointer = null;
 
         public static readonly DirectProperty<ZoomControl, IZoomServiceState> ZoomServiceStateProperty =
            AvaloniaProperty.RegisterDirect<ZoomControl, IZoomServiceState>(nameof(ZoomServiceState), o => o.ZoomServiceState, (o, v) => o.ZoomServiceState = v);
@@ -89,6 +96,18 @@ namespace Draw2D.Controls
             return new Point((point.X - dx) / zx, (point.Y - dy) / zy);
         }
 
+        private void UpdatePointer(PointerEventArgs e)
+        {
+            if (!_pointers.TryGetValue(e.Pointer, out var _))
+            {
+                if (e.RoutedEvent == PointerMovedEvent)
+                {
+                    return;
+                }
+            }
+            _pointers[e.Pointer] = (e.Pointer, e.GetPosition(this), e.InputModifiers);
+        }
+
         private void HandlePointerWheelChanged(PointerWheelEventArgs e)
         {
             if (_zoomServiceState != null)
@@ -98,16 +117,96 @@ namespace Draw2D.Controls
             }
         }
 
+        private void GetPointerType(PointerPressedEventArgs e, out bool isLeft, out bool isRight)
+        {
+            isLeft = false;
+            isRight = false;
+
+            if (e.Pointer.Type == PointerType.Mouse)
+            {
+                if (e.InputModifiers.HasFlag(InputModifiers.LeftMouseButton))
+                {
+                    isLeft = true;
+                }
+                else if (e.InputModifiers.HasFlag(InputModifiers.RightMouseButton))
+                {
+                    isRight = true;
+                }
+            }
+            else if (e.Pointer.Type == PointerType.Touch)
+            {
+                if (e.Pointer.IsPrimary == true)
+                {
+                    isLeft = true;
+                }
+                else
+                {
+                    isRight = true;
+                }
+            }
+
+            Debug.WriteLine($"[PointerPressed] Pointer.Type: {e.Pointer.Type}, InputModifiers: {e.InputModifiers}, Pointer.IsPrimary: {e.Pointer.IsPrimary}, Point: {e.GetPosition(this)}");
+        }
+
+        private void GetPointerType(PointerReleasedEventArgs e, out bool isLeft, out bool isRight)
+        {
+            isLeft = false;
+            isRight = false;
+
+            if (e.Pointer.Type == PointerType.Mouse)
+            {
+                if (_isCaptured == false)
+                {
+                    if (e.InputModifiers.HasFlag(InputModifiers.LeftMouseButton))
+                    {
+                        isLeft = true;
+                    }
+                    else if (e.InputModifiers.HasFlag(InputModifiers.RightMouseButton))
+                    {
+                        isRight = true;
+                    }
+                }
+                else
+                {
+                    if (_capturedInputModifiers.HasFlag(InputModifiers.LeftMouseButton))
+                    {
+                        isLeft = true;
+                    }
+                    else if (_capturedInputModifiers.HasFlag(InputModifiers.RightMouseButton))
+                    {
+                        isRight = true;
+                    }
+                }
+            }
+            else if (e.Pointer.Type == PointerType.Touch)
+            {
+                if (e.Pointer.IsPrimary == true)
+                {
+                    isLeft = true;
+                }
+                else
+                {
+                    isRight = true;
+                }
+            }
+
+            Debug.WriteLine($"[PointerPressed] Pointer.Type: {e.Pointer.Type}, InputModifiers: {e.InputModifiers}, Pointer.IsPrimary: {e.Pointer.IsPrimary}, Point: {e.GetPosition(this)}");
+        }
+
         private void HandlePointerPressed(PointerPressedEventArgs e)
         {
+            UpdatePointer(e);
+
             if (_zoomServiceState != null && _inputTarget != null)
             {
-                if (e.MouseButton == MouseButton.Left)
+                GetPointerType(e, out var isLeft, out var isRight);
+
+                if (isLeft)
                 {
                     var tpoint = AdjustTargetPoint(e.GetPosition(this));
                     _inputTarget.LeftDown(tpoint.X, tpoint.Y, GetModifier(e.InputModifiers));
                 }
-                else if (e.MouseButton == MouseButton.Right)
+                else if (isRight)
                 {
                     var zpoint = AdjustPanPoint(e.GetPosition(this));
                     Pressed(zpoint.X, zpoint.Y);
@@ -125,12 +224,14 @@ namespace Draw2D.Controls
         {
             if (_zoomServiceState != null && _inputTarget != null)
             {
-                if (e.MouseButton == MouseButton.Left)
+                GetPointerType(e, out var isLeft, out var isRight);
+
+                if (isLeft)
                 {
                     var tpoint = AdjustTargetPoint(e.GetPosition(this));
                     _inputTarget.LeftUp(tpoint.X, tpoint.Y, GetModifier(e.InputModifiers));
                 }
-                else if (e.MouseButton == MouseButton.Right)
+                else if (isRight)
                 {
                     var zpoint = AdjustPanPoint(e.GetPosition(this));
                     Released(zpoint.X, zpoint.Y);
@@ -142,14 +243,21 @@ namespace Draw2D.Controls
                     }
                 }
             }
+
+            _pointers.Remove(e.Pointer);
         }
 
         private void HandlePointerMoved(PointerEventArgs e)
         {
+            UpdatePointer(e);
+
             if (_zoomServiceState != null && _inputTarget != null)
             {
-                var zpoint = AdjustPanPoint(e.GetPosition(this));
-                Moved(zpoint.X, zpoint.Y);
+                if (IsCaptured?.Invoke() == true)
+                {
+                    var zpoint = AdjustPanPoint(e.GetPosition(this));
+                    Moved(zpoint.X, zpoint.Y);
+                }
 
                 if (_zoomServiceState.IsPanning == false)
                 {
@@ -408,23 +516,67 @@ namespace Draw2D.Controls
             {
                 this.Capture = () =>
                 {
-                    if (md.Captured == null)
+                    foreach (var value in _pointers.Values)
                     {
-                        md.Capture(this);
+                        if (value.Pointer.IsPrimary)
+                        {
+                            if (value.Pointer.Captured == null)
+                            {
+                                value.Pointer.Capture(this);
+                                _capturedPointer = value.Pointer;
+                                _capturedInputModifiers = value.InputModifiers;
+                                _isCaptured = true;
+                            }
+                            break;
+                        }
                     }
                 };
 
                 this.Release = () =>
                 {
-                    if (md.Captured != null)
+                    if (_capturedPointer != null)
                     {
-                        md.Capture(null);
+                        _capturedPointer.Capture(null);
+                        _capturedPointer = null;
+                        _capturedInputModifiers = InputModifiers.None;
+                        _isCaptured = false;
+                    }
+                    else
+                    {
+                        foreach (var value in _pointers.Values)
+                        {
+                            if (value.Pointer.IsPrimary)
+                            {
+                                if (value.Pointer.Captured != null)
+                                {
+                                    value.Pointer.Capture(null);
+                                    _capturedPointer = null;
+                                    _capturedInputModifiers = InputModifiers.None;
+                                    _isCaptured = false;
+                                }
+                                break;
+                            }
+                        }
                     }
                 };
 
                 this.IsCaptured = () =>
                 {
-                    return md.Captured != null;
+                    if (_capturedPointer != null && _isCaptured == true)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        foreach (var value in _pointers.Values)
+                        {
+                            if (value.Pointer.IsPrimary)
+                            {
+                                return value.Pointer.Captured != null;
+                            }
+                        }
+                    }
+                    return false;
                 };
 
                 this.Redraw = () =>
@@ -527,6 +679,13 @@ namespace Draw2D.Controls
                     _zoomServiceState.IsZooming = false;
                 }
             }
+#if false
+            var brush = new ImmutableSolidColorBrush(Colors.Magenta);
+            foreach (var value in _pointers.Values)
+            {
+                context.DrawGeometry(brush, null, new EllipseGeometry(new Rect(value.Point.X - 25, value.Point.Y - 25, 50, 50)));
+            }
+#endif
         }
     }
 }
