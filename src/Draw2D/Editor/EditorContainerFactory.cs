@@ -193,7 +193,7 @@ namespace Draw2D.Editor
 
             var selectionTool = new SelectionTool()
             {
-                Filters = new ObservableCollection<PointFilter>
+                Filters = new ObservableCollection<IPointFilter>
                 {
                     new GridSnapPointFilter()
                     {
@@ -227,7 +227,7 @@ namespace Draw2D.Editor
 
             var pointTool = new PointTool()
             {
-                Filters = new ObservableCollection<PointFilter>
+                Filters = new ObservableCollection<IPointFilter>
                 {
                     lineSnapPointFilter,
                     gridSnapPointFilter
@@ -241,7 +241,7 @@ namespace Draw2D.Editor
 
             var lineTool = new LineTool()
             {
-                Intersections = new ObservableCollection<PointIntersection>
+                Intersections = new ObservableCollection<IPointIntersection>
                 {
                     new LineLineIntersection()
                     {
@@ -268,7 +268,7 @@ namespace Draw2D.Editor
                         }
                     }
                 },
-                Filters = new ObservableCollection<PointFilter>
+                Filters = new ObservableCollection<IPointFilter>
                 {
                     lineSnapPointFilter,
                     gridSnapPointFilter
@@ -283,7 +283,7 @@ namespace Draw2D.Editor
 
             var polyLineTool = new PolyLineTool()
             {
-                Intersections = new ObservableCollection<PointIntersection>
+                Intersections = new ObservableCollection<IPointIntersection>
                 {
                     new LineLineIntersection()
                     {
@@ -310,7 +310,7 @@ namespace Draw2D.Editor
                         }
                     }
                 },
-                Filters = new ObservableCollection<PointFilter>
+                Filters = new ObservableCollection<IPointFilter>
                 {
                     lineSnapPointFilter,
                     gridSnapPointFilter
@@ -324,7 +324,7 @@ namespace Draw2D.Editor
 
             var cubicBezierTool = new CubicBezierTool()
             {
-                Filters = new ObservableCollection<PointFilter>
+                Filters = new ObservableCollection<IPointFilter>
                 {
                     lineSnapPointFilter,
                     gridSnapPointFilter
@@ -338,7 +338,7 @@ namespace Draw2D.Editor
 
             var quadraticBezierTool = new QuadraticBezierTool()
             {
-                Filters = new ObservableCollection<PointFilter>
+                Filters = new ObservableCollection<IPointFilter>
                 {
                     lineSnapPointFilter,
                     gridSnapPointFilter
@@ -352,7 +352,7 @@ namespace Draw2D.Editor
 
             var conicTool = new ConicTool()
             {
-                Filters = new ObservableCollection<PointFilter>
+                Filters = new ObservableCollection<IPointFilter>
                 {
                     lineSnapPointFilter,
                     gridSnapPointFilter
@@ -367,7 +367,7 @@ namespace Draw2D.Editor
 
             var pathTool = new PathTool()
             {
-                Filters = new ObservableCollection<PointFilter>
+                Filters = new ObservableCollection<IPointFilter>
                 {
                     lineSnapPointFilter,
                     gridSnapPointFilter
@@ -394,7 +394,7 @@ namespace Draw2D.Editor
 
             var scribbleTool = new ScribbleTool()
             {
-                Filters = new ObservableCollection<PointFilter>
+                Filters = new ObservableCollection<IPointFilter>
                 {
                     lineSnapPointFilter
                 },
@@ -410,7 +410,7 @@ namespace Draw2D.Editor
 
             var rectangleTool = new RectangleTool()
             {
-                Filters = new ObservableCollection<PointFilter>
+                Filters = new ObservableCollection<IPointFilter>
                 {
                     lineSnapPointFilter,
                     gridSnapPointFilter
@@ -424,7 +424,7 @@ namespace Draw2D.Editor
 
             var ellipseTool = new EllipseTool()
             {
-                Filters = new ObservableCollection<PointFilter>
+                Filters = new ObservableCollection<IPointFilter>
                 {
                     lineSnapPointFilter,
                     gridSnapPointFilter
@@ -438,7 +438,7 @@ namespace Draw2D.Editor
 
             var textTool = new TextTool()
             {
-                Filters = new ObservableCollection<PointFilter>
+                Filters = new ObservableCollection<IPointFilter>
                 {
                     lineSnapPointFilter,
                     gridSnapPointFilter

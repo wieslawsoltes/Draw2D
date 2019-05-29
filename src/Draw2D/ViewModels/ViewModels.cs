@@ -64,6 +64,138 @@ namespace Draw2D.ViewModels
         Shift = 4
     }
 
+    public enum FitMode
+    {
+        None,
+        Reset,
+        Center,
+        Fill,
+        Uniform,
+        UniformToFill
+    }
+
+    public interface INode
+    {
+        string Id { get; set; }
+        string Name { get; set; }
+        object Owner { get; set; }
+    }
+
+    public interface ICopyable
+    {
+        object Copy(Dictionary<object, object> shared);
+    }
+
+    public interface IDrawable
+    {
+        IBounds Bounds { get; }
+        IShapeDecorator Decorator { get; }
+        string StyleId { get; set; }
+        void Draw(object dc, IShapeRenderer renderer, double dx, double dy, DrawMode mode, object db, object r);
+    }
+
+    public interface IDirty
+    {
+        bool IsDirty { get; set; }
+        void MarkAsDirty(bool isDirty);
+        void Invalidate();
+    }
+
+    public interface IConnectable
+    {
+        IList<IPointShape> Points { get; set; }
+        bool Connect(IPointShape point, IPointShape target);
+        bool Disconnect(IPointShape point, out IPointShape result);
+        bool Disconnect();
+    }
+
+    public interface ISelectable
+    {
+        void Move(ISelectionState selectionState, double dx, double dy);
+        void Select(ISelectionState selectionState);
+        void Deselect(ISelectionState selectionState);
+    }
+
+    public interface IHitTestable
+    {
+        IPointShape GetNextPoint(IToolContext context, double x, double y, bool connect, double radius);
+    }
+
+    public interface IHitTest
+    {
+        IPointShape TryToGetPoint(IEnumerable<IBaseShape> shapes, Point2 target, double radius, IPointShape exclude);
+        IPointShape TryToGetPoint(IBaseShape shape, Point2 target, double radius);
+        IBaseShape TryToGetShape(IEnumerable<IBaseShape> shapes, Point2 target, double radius);
+        ISet<IBaseShape> TryToGetShapes(IEnumerable<IBaseShape> shapes, Rect2 target, double radius);
+    }
+
+    public interface ITool
+    {
+        string Title { get; }
+        IList<IPointIntersection> Intersections { get; set; }
+        IList<IPointFilter> Filters { get; set; }
+        void LeftDown(IToolContext context, double x, double y, Modifier modifier);
+        void LeftUp(IToolContext context, double x, double y, Modifier modifier);
+        void RightDown(IToolContext context, double x, double y, Modifier modifier);
+        void RightUp(IToolContext context, double x, double y, Modifier modifier);
+        void Move(IToolContext context, double x, double y, Modifier modifier);
+        void Clean(IToolContext context);
+    }
+
+    public interface IBounds
+    {
+        string TargetType { get; }
+        IPointShape TryToGetPoint(IBaseShape shape, Point2 target, double radius, IHitTest hitTest);
+        IBaseShape Contains(IBaseShape shape, Point2 target, double radius, IHitTest hitTest);
+        IBaseShape Overlaps(IBaseShape shape, Rect2 target, double radius, IHitTest hitTest);
+    }
+
+    public interface ISelectionState : INode, IDirty, ICopyable
+    {
+        IBaseShape Hovered { get; set; }
+        IBaseShape Selected { get; set; }
+        ISet<IBaseShape> Shapes { get; set; }
+        void Hover(IBaseShape shape);
+        void Dehover();
+        bool IsSelected(IBaseShape shape);
+        void Select(IBaseShape shape);
+        void Deselect(IBaseShape shape);
+        void Clear();
+    }
+
+    public interface ISelection : IDirty
+    {
+        void Cut(IToolContext context);
+        void Copy(IToolContext context);
+        void Paste(IToolContext context);
+        void Delete(IToolContext context);
+        void Group(IToolContext context);
+        void Reference(IToolContext context);
+        void SelectAll(IToolContext context);
+        void Connect(IToolContext context, IPointShape point);
+        void Disconnect(IToolContext context, IPointShape point);
+        void Disconnect(IToolContext context, IBaseShape shape);
+    }
+
+    public interface IShapeRenderer : IDisposable
+    {
+        double Scale { get; set; }
+        ISelectionState SelectionState { get; set; }
+        void DrawLine(object dc, LineShape line, string styleId, double dx, double dy);
+        void DrawCubicBezier(object dc, CubicBezierShape cubicBezier, string styleId, double dx, double dy);
+        void DrawQuadraticBezier(object dc, QuadraticBezierShape quadraticBezier, string styleId, double dx, double dy);
+        void DrawConic(object dc, ConicShape conic, string styleId, double dx, double dy);
+        void DrawPath(object dc, PathShape path, string styleId, double dx, double dy);
+        void DrawRectangle(object dc, RectangleShape rectangle, string styleId, double dx, double dy);
+        void DrawEllipse(object dc, EllipseShape ellipse, string styleId, double dx, double dy);
+        void DrawText(object dc, TextShape text, string styleId, double dx, double dy);
+    }
+
+    public interface IShapeDecorator
+    {
+        void Draw(object dc, IBaseShape shape, IShapeRenderer renderer, ISelectionState selectionState, double dx, double dy, DrawMode mode);
+    }
+
     public interface IInputTarget
     {
         void LeftDown(double x, double y, Modifier modifier);
@@ -81,16 +213,6 @@ namespace Draw2D.ViewModels
         Action Release { get; set; }
         Func<bool> IsCaptured { get; set; }
         Action Redraw { get; set; }
-    }
-
-    public enum FitMode
-    {
-        None,
-        Reset,
-        Center,
-        Fill,
-        Uniform,
-        UniformToFill
     }
 
     public interface IZoomServiceState : INode, IDirty, ICopyable
@@ -137,126 +259,20 @@ namespace Draw2D.ViewModels
         void Draw(object context, double width, double height, double dx, double dy, double zx, double zy);
     }
 
-    public interface IConnectable
-    {
-        IList<IPointShape> Points { get; set; }
-        bool Connect(IPointShape point, IPointShape target);
-        bool Disconnect(IPointShape point, out IPointShape result);
-        bool Disconnect();
-    }
-
-    public interface INode
-    {
-        string Id { get; set; }
-        string Name { get; set; }
-        object Owner { get; set; }
-    }
-
-    public interface ICopyable
-    {
-        object Copy(Dictionary<object, object> shared);
-    }
-
-    public interface IDrawable
-    {
-        IBounds Bounds { get; }
-        IShapeDecorator Decorator { get; }
-        string StyleId { get; set; }
-        void Draw(object dc, IShapeRenderer renderer, double dx, double dy, DrawMode mode, object db, object r);
-    }
-
-    public interface IDirty
-    {
-        bool IsDirty { get; set; }
-        void MarkAsDirty(bool isDirty);
-        void Invalidate();
-    }
-
-    public interface IHitTestable
-    {
-        IPointShape GetNextPoint(IToolContext context, double x, double y, bool connect, double radius);
-    }
-
-    public interface ISelectionState : INode, IDirty, ICopyable
-    {
-        IBaseShape Hovered { get; set; }
-        IBaseShape Selected { get; set; }
-        ISet<IBaseShape> Shapes { get; set; }
-        void Hover(IBaseShape shape);
-        void Dehover();
-        bool IsSelected(IBaseShape shape);
-        void Select(IBaseShape shape);
-        void Deselect(IBaseShape shape);
-        void Clear();
-    }
-
-    public interface ISelection : IDirty
-    {
-        void Cut(IToolContext context);
-        void Copy(IToolContext context);
-        void Paste(IToolContext context);
-        void Delete(IToolContext context);
-        void Group(IToolContext context);
-        void Reference(IToolContext context);
-        void SelectAll(IToolContext context);
-        void Connect(IToolContext context, IPointShape point);
-        void Disconnect(IToolContext context, IPointShape point);
-        void Disconnect(IToolContext context, IBaseShape shape);
-    }
-
-    public interface ISelectable
-    {
-        void Move(ISelectionState selectionState, double dx, double dy);
-        void Select(ISelectionState selectionState);
-        void Deselect(ISelectionState selectionState);
-    }
-
-    public interface IShapeRenderer : IDisposable
-    {
-        double Scale { get; set; }
-        ISelectionState SelectionState { get; set; }
-        void DrawLine(object dc, LineShape line, string styleId, double dx, double dy);
-        void DrawCubicBezier(object dc, CubicBezierShape cubicBezier, string styleId, double dx, double dy);
-        void DrawQuadraticBezier(object dc, QuadraticBezierShape quadraticBezier, string styleId, double dx, double dy);
-        void DrawConic(object dc, ConicShape conic, string styleId, double dx, double dy);
-        void DrawPath(object dc, PathShape path, string styleId, double dx, double dy);
-        void DrawRectangle(object dc, RectangleShape rectangle, string styleId, double dx, double dy);
-        void DrawEllipse(object dc, EllipseShape ellipse, string styleId, double dx, double dy);
-        void DrawText(object dc, TextShape text, string styleId, double dx, double dy);
-    }
-
-    public interface IShapeDecorator
-    {
-        void Draw(object dc, IBaseShape shape, IShapeRenderer renderer, ISelectionState selectionState, double dx, double dy, DrawMode mode);
-    }
-
-    public interface IHitTest
-    {
-        IPointShape TryToGetPoint(IEnumerable<IBaseShape> shapes, Point2 target, double radius, IPointShape exclude);
-        IPointShape TryToGetPoint(IBaseShape shape, Point2 target, double radius);
-        IBaseShape TryToGetShape(IEnumerable<IBaseShape> shapes, Point2 target, double radius);
-        ISet<IBaseShape> TryToGetShapes(IEnumerable<IBaseShape> shapes, Rect2 target, double radius);
-    }
-
-    public interface ITool
+    public interface IPointFilter : INode, IDirty
     {
         string Title { get; }
-        IList<PointIntersection> Intersections { get; set; }
-        IList<PointFilter> Filters { get; set; }
-        void LeftDown(IToolContext context, double x, double y, Modifier modifier);
-        void LeftUp(IToolContext context, double x, double y, Modifier modifier);
-        void RightDown(IToolContext context, double x, double y, Modifier modifier);
-        void RightUp(IToolContext context, double x, double y, Modifier modifier);
-        void Move(IToolContext context, double x, double y, Modifier modifier);
-        void Clean(IToolContext context);
+        IList<IBaseShape> Guides { get; set; }
+        bool Process(IToolContext context, ref double x, ref double y);
+        void Clear(IToolContext context);
     }
 
-    public interface IBounds
+    public interface IPointIntersection : INode, IDirty
     {
-        string TargetType { get; }
-        IPointShape TryToGetPoint(IBaseShape shape, Point2 target, double radius, IHitTest hitTest);
-        IBaseShape Contains(IBaseShape shape, Point2 target, double radius, IHitTest hitTest);
-        IBaseShape Overlaps(IBaseShape shape, Rect2 target, double radius, IHitTest hitTest);
+        string Title { get; }
+        IList<IPointShape> Intersections { get; set; }
+        void Find(IToolContext context, IBaseShape shape);
+        void Clear(IToolContext context);
     }
 
     [DataContract(IsReference = true)]
@@ -326,6 +342,11 @@ namespace Draw2D.ViewModels
     }
 
     [DataContract(IsReference = true)]
+    public abstract class Settings : ViewModelBase
+    {
+    }
+
+    [DataContract(IsReference = true)]
     public class Text : ViewModelBase, ICopyable
     {
         private string _value;
@@ -354,71 +375,24 @@ namespace Draw2D.ViewModels
             };
         }
     }
-
-    [DataContract(IsReference = true)]
-    public abstract class Settings : ViewModelBase
-    {
-    }
-
-    [DataContract(IsReference = true)]
-    public abstract class PointFilter : ViewModelBase
-    {
-        private IList<IBaseShape> _guides;
-
-        public abstract string Title { get; }
-
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public IList<IBaseShape> Guides
-        {
-            get => _guides;
-            set => Update(ref _guides, value);
-        }
-
-        public abstract bool Process(IToolContext context, ref double x, ref double y);
-
-        public virtual void Clear(IToolContext context)
-        {
-            foreach (var guide in Guides)
-            {
-                context.ContainerView?.WorkingContainer.Shapes.Remove(guide);
-                context.ContainerView?.WorkingContainer.MarkAsDirty(true);
-                context.ContainerView?.SelectionState?.Deselect(guide);
-            }
-            Guides.Clear();
-        }
-    }
-
-    [DataContract(IsReference = true)]
-    public abstract class PointIntersection : ViewModelBase
-    {
-        private IList<IPointShape> _intersections;
-
-        public abstract string Title { get; }
-
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public IList<IPointShape> Intersections
-        {
-            get => _intersections;
-            set => Update(ref _intersections, value);
-        }
-
-        public abstract void Find(IToolContext context, IBaseShape shape);
-
-        public virtual void Clear(IToolContext context)
-        {
-            foreach (var point in Intersections)
-            {
-                context.ContainerView?.WorkingContainer.Shapes.Remove(point);
-                context.ContainerView?.WorkingContainer.MarkAsDirty(true);
-                context.ContainerView?.SelectionState?.Deselect(point);
-            }
-            Intersections.Clear();
-        }
-    }
 }
 
 namespace Draw2D.ViewModels.Style
 {
+    public enum HAlign
+    {
+        Left,
+        Center,
+        Right
+    }
+
+    public enum VAlign
+    {
+        Top,
+        Center,
+        Bottom
+    }
+
     [DataContract(IsReference = true)]
     public class ArgbColor : ViewModelBase, ICopyable
     {
@@ -477,20 +451,6 @@ namespace Draw2D.ViewModels.Style
                 B = this.B
             };
         }
-    }
-
-    public enum HAlign
-    {
-        Left,
-        Center,
-        Right
-    }
-
-    public enum VAlign
-    {
-        Top,
-        Center,
-        Bottom
     }
 
     [DataContract(IsReference = true)]
@@ -668,6 +628,12 @@ namespace Draw2D.ViewModels.Style
 
 namespace Draw2D.ViewModels.Shapes
 {
+    public enum PathFillRule
+    {
+        EvenOdd,
+        Nonzero
+    }
+
     public interface IBaseShape : INode, ICopyable, IDirty, ISelectable, IDrawable
     {
         void GetPoints(IList<IPointShape> points);
@@ -724,32 +690,6 @@ namespace Draw2D.ViewModels.Shapes
         }
 
         public abstract object Copy(Dictionary<object, object> shared);
-    }
-
-    public static class BaseShapeExtensions
-    {
-        public static void GetBox(this IList<IPointShape> points, out double ax, out double ay, out double bx, out double by)
-        {
-            ax = double.MaxValue;
-            ay = double.MaxValue;
-            bx = double.MinValue;
-            by = double.MinValue;
-
-            foreach (var point in points)
-            {
-                ax = Math.Min(ax, point.X);
-                ay = Math.Min(ay, point.Y);
-                bx = Math.Max(bx, point.X);
-                by = Math.Max(by, point.Y);
-            }
-        }
-
-        public static void GetBox(this IBaseShape shape, out double ax, out double ay, out double bx, out double by)
-        {
-            var points = new List<IPointShape>();
-            shape.GetPoints(points);
-            GetBox(points, out ax, out ay, out bx, out by);
-        }
     }
 
     [DataContract(IsReference = true)]
@@ -1740,25 +1680,6 @@ namespace Draw2D.ViewModels.Shapes
         }
     }
 
-    public static class EllipseShapeExtensions
-    {
-        public static Rect2 ToRect2(this EllipseShape ellipse, double dx = 0.0, double dy = 0.0)
-        {
-            return Rect2.FromPoints(
-                ellipse.TopLeft.X, ellipse.TopLeft.Y,
-                ellipse.BottomRight.X, ellipse.BottomRight.Y,
-                dx, dy);
-        }
-
-        public static EllipseShape FromRect2(this Rect2 rect)
-        {
-            return new EllipseShape(rect.TopLeft.FromPoint2(), rect.BottomRight.FromPoint2())
-            {
-                Points = new ObservableCollection<IPointShape>()
-            };
-        }
-    }
-
     [DataContract(IsReference = true)]
     public class FigureShape : GroupShape, ICanvasContainer
     {
@@ -2215,31 +2136,6 @@ namespace Draw2D.ViewModels.Shapes
         }
     }
 
-    public static class LineShapeExtensions
-    {
-        public static Line2 ToLine2(this LineShape line, double dx = 0.0, double dy = 0.0)
-        {
-            return Line2.FromPoints(
-                line.StartPoint.X, line.StartPoint.Y,
-                line.Point.X, line.Point.Y,
-                dx, dy);
-        }
-
-        public static LineShape FromLine2(this Line2 line)
-        {
-            return new LineShape(line.A.FromPoint2(), line.B.FromPoint2())
-            {
-                Points = new ObservableCollection<IPointShape>()
-            };
-        }
-    }
-
-    public enum PathFillRule
-    {
-        EvenOdd,
-        Nonzero
-    }
-
     [DataContract(IsReference = true)]
     public class PathShape : GroupShape, ICanvasContainer
     {
@@ -2692,19 +2588,6 @@ namespace Draw2D.ViewModels.Shapes
         }
     }
 
-    public static class PointShapeExtensions
-    {
-        public static Point2 ToPoint2(this IPointShape point)
-        {
-            return new Point2(point.X, point.Y);
-        }
-
-        public static IPointShape FromPoint2(this Point2 point, IBaseShape template = null)
-        {
-            return new PointShape(point.X, point.Y, template);
-        }
-    }
-
     [DataContract(IsReference = true)]
     public class QuadraticBezierShape : ConnectableShape
     {
@@ -3060,25 +2943,6 @@ namespace Draw2D.ViewModels.Shapes
             }
 
             return copy;
-        }
-    }
-
-    public static class RectangleShapeExtensions
-    {
-        public static Rect2 ToRect2(this RectangleShape rectangle, double dx = 0.0, double dy = 0.0)
-        {
-            return Rect2.FromPoints(
-                rectangle.TopLeft.X, rectangle.TopLeft.Y,
-                rectangle.BottomRight.X, rectangle.BottomRight.Y,
-                dx, dy);
-        }
-
-        public static RectangleShape FromRect2(this Rect2 rect)
-        {
-            return new RectangleShape(rect.TopLeft.FromPoint2(), rect.BottomRight.FromPoint2())
-            {
-                Points = new ObservableCollection<IPointShape>()
-            };
         }
     }
 
@@ -3439,6 +3303,109 @@ namespace Draw2D.ViewModels.Shapes
             }
 
             return copy;
+        }
+    }
+
+
+
+
+
+
+
+
+    public static class BaseShapeExtensions
+    {
+        public static void GetBox(this IList<IPointShape> points, out double ax, out double ay, out double bx, out double by)
+        {
+            ax = double.MaxValue;
+            ay = double.MaxValue;
+            bx = double.MinValue;
+            by = double.MinValue;
+
+            foreach (var point in points)
+            {
+                ax = Math.Min(ax, point.X);
+                ay = Math.Min(ay, point.Y);
+                bx = Math.Max(bx, point.X);
+                by = Math.Max(by, point.Y);
+            }
+        }
+
+        public static void GetBox(this IBaseShape shape, out double ax, out double ay, out double bx, out double by)
+        {
+            var points = new List<IPointShape>();
+            shape.GetPoints(points);
+            GetBox(points, out ax, out ay, out bx, out by);
+        }
+    }
+
+    public static class EllipseShapeExtensions
+    {
+        public static Rect2 ToRect2(this EllipseShape ellipse, double dx = 0.0, double dy = 0.0)
+        {
+            return Rect2.FromPoints(
+                ellipse.TopLeft.X, ellipse.TopLeft.Y,
+                ellipse.BottomRight.X, ellipse.BottomRight.Y,
+                dx, dy);
+        }
+
+        public static EllipseShape FromRect2(this Rect2 rect)
+        {
+            return new EllipseShape(rect.TopLeft.FromPoint2(), rect.BottomRight.FromPoint2())
+            {
+                Points = new ObservableCollection<IPointShape>()
+            };
+        }
+    }
+
+    public static class LineShapeExtensions
+    {
+        public static Line2 ToLine2(this LineShape line, double dx = 0.0, double dy = 0.0)
+        {
+            return Line2.FromPoints(
+                line.StartPoint.X, line.StartPoint.Y,
+                line.Point.X, line.Point.Y,
+                dx, dy);
+        }
+
+        public static LineShape FromLine2(this Line2 line)
+        {
+            return new LineShape(line.A.FromPoint2(), line.B.FromPoint2())
+            {
+                Points = new ObservableCollection<IPointShape>()
+            };
+        }
+    }
+
+    public static class PointShapeExtensions
+    {
+        public static Point2 ToPoint2(this IPointShape point)
+        {
+            return new Point2(point.X, point.Y);
+        }
+
+        public static IPointShape FromPoint2(this Point2 point, IBaseShape template = null)
+        {
+            return new PointShape(point.X, point.Y, template);
+        }
+    }
+
+    public static class RectangleShapeExtensions
+    {
+        public static Rect2 ToRect2(this RectangleShape rectangle, double dx = 0.0, double dy = 0.0)
+        {
+            return Rect2.FromPoints(
+                rectangle.TopLeft.X, rectangle.TopLeft.Y,
+                rectangle.BottomRight.X, rectangle.BottomRight.Y,
+                dx, dy);
+        }
+
+        public static RectangleShape FromRect2(this Rect2 rect)
+        {
+            return new RectangleShape(rect.TopLeft.FromPoint2(), rect.BottomRight.FromPoint2())
+            {
+                Points = new ObservableCollection<IPointShape>()
+            };
         }
     }
 }
@@ -4978,6 +4945,34 @@ namespace Draw2D.ViewModels.Decorators
 
 namespace Draw2D.ViewModels.Filters
 {
+    [DataContract(IsReference = true)]
+    public abstract class PointFilter : ViewModelBase, IPointFilter
+    {
+        private IList<IBaseShape> _guides;
+
+        public abstract string Title { get; }
+
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public IList<IBaseShape> Guides
+        {
+            get => _guides;
+            set => Update(ref _guides, value);
+        }
+
+        public abstract bool Process(IToolContext context, ref double x, ref double y);
+
+        public virtual void Clear(IToolContext context)
+        {
+            foreach (var guide in Guides)
+            {
+                context.ContainerView?.WorkingContainer.Shapes.Remove(guide);
+                context.ContainerView?.WorkingContainer.MarkAsDirty(true);
+                context.ContainerView?.SelectionState?.Deselect(guide);
+            }
+            Guides.Clear();
+        }
+    }
+
     [Flags]
     public enum GridSnapMode
     {
@@ -5499,6 +5494,34 @@ namespace Draw2D.ViewModels.Filters
 
 namespace Draw2D.ViewModels.Intersections
 {
+    [DataContract(IsReference = true)]
+    public abstract class PointIntersection : ViewModelBase, IPointIntersection
+    {
+        private IList<IPointShape> _intersections;
+
+        public abstract string Title { get; }
+
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public IList<IPointShape> Intersections
+        {
+            get => _intersections;
+            set => Update(ref _intersections, value);
+        }
+
+        public abstract void Find(IToolContext context, IBaseShape shape);
+
+        public virtual void Clear(IToolContext context)
+        {
+            foreach (var point in Intersections)
+            {
+                context.ContainerView?.WorkingContainer.Shapes.Remove(point);
+                context.ContainerView?.WorkingContainer.MarkAsDirty(true);
+                context.ContainerView?.SelectionState?.Deselect(point);
+            }
+            Intersections.Clear();
+        }
+    }
+
     [DataContract(IsReference = true)]
     public class EllipseLineSettings : Settings
     {
@@ -6665,8 +6688,8 @@ namespace Draw2D.ViewModels.Tools
     [DataContract(IsReference = true)]
     public class CubicBezierTool : ViewModelBase, ITool
     {
-        private IList<PointIntersection> _intersections;
-        private IList<PointFilter> _filters;
+        private IList<IPointIntersection> _intersections;
+        private IList<IPointFilter> _filters;
         private CubicBezierToolSettings _settings;
         private CubicBezierShape _cubicBezier = null;
 
@@ -6685,14 +6708,14 @@ namespace Draw2D.ViewModels.Tools
         public string Title => "CubicBezier";
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public IList<PointIntersection> Intersections
+        public IList<IPointIntersection> Intersections
         {
             get => _intersections;
             set => Update(ref _intersections, value);
         }
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public IList<PointFilter> Filters
+        public IList<IPointFilter> Filters
         {
             get => _filters;
             set => Update(ref _filters, value);
@@ -7004,8 +7027,8 @@ namespace Draw2D.ViewModels.Tools
     [DataContract(IsReference = true)]
     public class EllipseTool : ViewModelBase, ITool
     {
-        private IList<PointIntersection> _intersections;
-        private IList<PointFilter> _filters;
+        private IList<IPointIntersection> _intersections;
+        private IList<IPointFilter> _filters;
         private EllipseToolSettings _settings;
         private EllipseShape _ellipse = null;
 
@@ -7023,14 +7046,14 @@ namespace Draw2D.ViewModels.Tools
 
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public IList<PointIntersection> Intersections
+        public IList<IPointIntersection> Intersections
         {
             get => _intersections;
             set => Update(ref _intersections, value);
         }
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public IList<PointFilter> Filters
+        public IList<IPointFilter> Filters
         {
             get => _filters;
             set => Update(ref _filters, value);
@@ -7237,7 +7260,7 @@ namespace Draw2D.ViewModels.Tools
 
     public static class LineHelper
     {
-        public static IList<LineShape> SplitByIntersections(IToolContext context, IEnumerable<PointIntersection> intersections, LineShape target)
+        public static IList<LineShape> SplitByIntersections(IToolContext context, IEnumerable<IPointIntersection> intersections, LineShape target)
         {
             var points = new List<IPointShape>(intersections.SelectMany(i => i.Intersections));
             points.Insert(0, target.StartPoint);
@@ -7272,8 +7295,8 @@ namespace Draw2D.ViewModels.Tools
     [DataContract(IsReference = true)]
     public class LineTool : ViewModelBase, ITool
     {
-        private IList<PointIntersection> _intersections;
-        private IList<PointFilter> _filters;
+        private IList<IPointIntersection> _intersections;
+        private IList<IPointFilter> _filters;
         private LineToolSettings _settings;
         private LineShape _line = null;
 
@@ -7290,14 +7313,14 @@ namespace Draw2D.ViewModels.Tools
         public string Title => "Line";
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public IList<PointIntersection> Intersections
+        public IList<IPointIntersection> Intersections
         {
             get => _intersections;
             set => Update(ref _intersections, value);
         }
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public IList<PointFilter> Filters
+        public IList<IPointFilter> Filters
         {
             get => _filters;
             set => Update(ref _filters, value);
@@ -7498,8 +7521,8 @@ namespace Draw2D.ViewModels.Tools
     [DataContract(IsReference = true)]
     public class MoveTool : ViewModelBase, ITool
     {
-        private IList<PointIntersection> _intersections;
-        private IList<PointFilter> _filters;
+        private IList<IPointIntersection> _intersections;
+        private IList<IPointFilter> _filters;
         private MoveToolSettings _settings;
         private PathTool _pathTool;
 
@@ -7514,14 +7537,14 @@ namespace Draw2D.ViewModels.Tools
         public string Title => "Move";
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public IList<PointIntersection> Intersections
+        public IList<IPointIntersection> Intersections
         {
             get => _intersections;
             set => Update(ref _intersections, value);
         }
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public IList<PointFilter> Filters
+        public IList<IPointFilter> Filters
         {
             get => _filters;
             set => Update(ref _filters, value);
@@ -7573,22 +7596,22 @@ namespace Draw2D.ViewModels.Tools
     [DataContract(IsReference = true)]
     public class NoneTool : ViewModelBase, ITool
     {
-        private IList<PointIntersection> _intersections;
-        private IList<PointFilter> _filters;
+        private IList<IPointIntersection> _intersections;
+        private IList<IPointFilter> _filters;
         private NoneToolSettings _settings;
 
         [IgnoreDataMember]
         public string Title => "None";
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public IList<PointIntersection> Intersections
+        public IList<IPointIntersection> Intersections
         {
             get => _intersections;
             set => Update(ref _intersections, value);
         }
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public IList<PointFilter> Filters
+        public IList<IPointFilter> Filters
         {
             get => _filters;
             set => Update(ref _filters, value);
@@ -7941,8 +7964,8 @@ namespace Draw2D.ViewModels.Tools
 
     public partial class PathTool : ViewModelBase, ITool
     {
-        private IList<PointIntersection> _intersections;
-        private IList<PointFilter> _filters;
+        private IList<IPointIntersection> _intersections;
+        private IList<IPointFilter> _filters;
         private PathToolSettings _settings;
 
         internal PathShape _path;
@@ -7952,14 +7975,14 @@ namespace Draw2D.ViewModels.Tools
         public string Title => "Path";
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public IList<PointIntersection> Intersections
+        public IList<IPointIntersection> Intersections
         {
             get => _intersections;
             set => Update(ref _intersections, value);
         }
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public IList<PointFilter> Filters
+        public IList<IPointFilter> Filters
         {
             get => _filters;
             set => Update(ref _filters, value);
@@ -8182,22 +8205,22 @@ namespace Draw2D.ViewModels.Tools
     [DataContract(IsReference = true)]
     public class PointTool : ViewModelBase, ITool
     {
-        private IList<PointIntersection> _intersections;
-        private IList<PointFilter> _filters;
+        private IList<IPointIntersection> _intersections;
+        private IList<IPointFilter> _filters;
         private PointToolSettings _settings;
 
         [IgnoreDataMember]
         public string Title => "Point";
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public IList<PointIntersection> Intersections
+        public IList<IPointIntersection> Intersections
         {
             get => _intersections;
             set => Update(ref _intersections, value);
         }
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public IList<PointFilter> Filters
+        public IList<IPointFilter> Filters
         {
             get => _filters;
             set => Update(ref _filters, value);
@@ -8311,8 +8334,8 @@ namespace Draw2D.ViewModels.Tools
     [DataContract(IsReference = true)]
     public class PolyLineTool : ViewModelBase, ITool
     {
-        private IList<PointIntersection> _intersections;
-        private IList<PointFilter> _filters;
+        private IList<IPointIntersection> _intersections;
+        private IList<IPointFilter> _filters;
         private PolyLineToolSettings _settings;
         private LineShape _line = null;
         private IList<IPointShape> _points = null;
@@ -8330,14 +8353,14 @@ namespace Draw2D.ViewModels.Tools
         public string Title => "PolyLine";
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public IList<PointIntersection> Intersections
+        public IList<IPointIntersection> Intersections
         {
             get => _intersections;
             set => Update(ref _intersections, value);
         }
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public IList<PointFilter> Filters
+        public IList<IPointFilter> Filters
         {
             get => _filters;
             set => Update(ref _filters, value);
@@ -8574,8 +8597,8 @@ namespace Draw2D.ViewModels.Tools
     [DataContract(IsReference = true)]
     public class QuadraticBezierTool : ViewModelBase, ITool
     {
-        private IList<PointIntersection> _intersections;
-        private IList<PointFilter> _filters;
+        private IList<IPointIntersection> _intersections;
+        private IList<IPointFilter> _filters;
         private QuadraticBezierToolSettings _settings;
         private QuadraticBezierShape _quadraticBezier = null;
 
@@ -8593,14 +8616,14 @@ namespace Draw2D.ViewModels.Tools
         public string Title => "QuadraticBezier";
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public IList<PointIntersection> Intersections
+        public IList<IPointIntersection> Intersections
         {
             get => _intersections;
             set => Update(ref _intersections, value);
         }
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public IList<PointFilter> Filters
+        public IList<IPointFilter> Filters
         {
             get => _filters;
             set => Update(ref _filters, value);
@@ -8864,8 +8887,8 @@ namespace Draw2D.ViewModels.Tools
     [DataContract(IsReference = true)]
     public class ConicTool : ViewModelBase, ITool
     {
-        private IList<PointIntersection> _intersections;
-        private IList<PointFilter> _filters;
+        private IList<IPointIntersection> _intersections;
+        private IList<IPointFilter> _filters;
         private ConicToolSettings _settings;
         private ConicShape _conic = null;
 
@@ -8883,14 +8906,14 @@ namespace Draw2D.ViewModels.Tools
         public string Title => "Conic";
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public IList<PointIntersection> Intersections
+        public IList<IPointIntersection> Intersections
         {
             get => _intersections;
             set => Update(ref _intersections, value);
         }
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public IList<PointFilter> Filters
+        public IList<IPointFilter> Filters
         {
             get => _filters;
             set => Update(ref _filters, value);
@@ -9147,8 +9170,8 @@ namespace Draw2D.ViewModels.Tools
     [DataContract(IsReference = true)]
     public class RectangleTool : ViewModelBase, ITool
     {
-        private IList<PointIntersection> _intersections;
-        private IList<PointFilter> _filters;
+        private IList<IPointIntersection> _intersections;
+        private IList<IPointFilter> _filters;
         private RectangleToolSettings _settings;
         private RectangleShape _rectangle = null;
 
@@ -9165,14 +9188,14 @@ namespace Draw2D.ViewModels.Tools
         public string Title => "Rectangle";
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public IList<PointIntersection> Intersections
+        public IList<IPointIntersection> Intersections
         {
             get => _intersections;
             set => Update(ref _intersections, value);
         }
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public IList<PointFilter> Filters
+        public IList<IPointFilter> Filters
         {
             get => _filters;
             set => Update(ref _filters, value);
@@ -9398,8 +9421,8 @@ namespace Draw2D.ViewModels.Tools
     [DataContract(IsReference = true)]
     public class ScribbleTool : ViewModelBase, ITool
     {
-        private IList<PointIntersection> _intersections;
-        private IList<PointFilter> _filters;
+        private IList<IPointIntersection> _intersections;
+        private IList<IPointFilter> _filters;
         private ScribbleToolSettings _settings;
         private PathShape _path = null;
         private FigureShape _figure = null;
@@ -9419,14 +9442,14 @@ namespace Draw2D.ViewModels.Tools
         public string Title => "Scribble";
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public IList<PointIntersection> Intersections
+        public IList<IPointIntersection> Intersections
         {
             get => _intersections;
             set => Update(ref _intersections, value);
         }
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public IList<PointFilter> Filters
+        public IList<IPointFilter> Filters
         {
             get => _filters;
             set => Update(ref _filters, value);
@@ -9774,8 +9797,8 @@ namespace Draw2D.ViewModels.Tools
     [DataContract(IsReference = true)]
     public class SelectionTool : ViewModelBase, ITool, ISelection
     {
-        private IList<PointIntersection> _intersections;
-        private IList<PointFilter> _filters;
+        private IList<IPointIntersection> _intersections;
+        private IList<IPointFilter> _filters;
         private SelectionToolSettings _settings;
         private RectangleShape _rectangle;
         private double _originX;
@@ -9799,14 +9822,14 @@ namespace Draw2D.ViewModels.Tools
         public string Title => "Selection";
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public IList<PointIntersection> Intersections
+        public IList<IPointIntersection> Intersections
         {
             get => _intersections;
             set => Update(ref _intersections, value);
         }
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public IList<PointFilter> Filters
+        public IList<IPointFilter> Filters
         {
             get => _filters;
             set => Update(ref _filters, value);
@@ -10698,8 +10721,8 @@ namespace Draw2D.ViewModels.Tools
     [DataContract(IsReference = true)]
     public class TextTool : ViewModelBase, ITool
     {
-        private IList<PointIntersection> _intersections;
-        private IList<PointFilter> _filters;
+        private IList<IPointIntersection> _intersections;
+        private IList<IPointFilter> _filters;
         private TextToolSettings _settings;
         private TextShape _text = null;
 
@@ -10716,14 +10739,14 @@ namespace Draw2D.ViewModels.Tools
         public string Title => "Text";
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public IList<PointIntersection> Intersections
+        public IList<IPointIntersection> Intersections
         {
             get => _intersections;
             set => Update(ref _intersections, value);
         }
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public IList<PointFilter> Filters
+        public IList<IPointFilter> Filters
         {
             get => _filters;
             set => Update(ref _filters, value);
