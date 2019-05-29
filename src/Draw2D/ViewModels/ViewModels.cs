@@ -4,6 +4,7 @@
 //#define USE_GROUP_SHAPES
 //#define USE_PATH_FIGURES
 //#define USE_CONTAINER_POINTS
+//#define USE_CONTAINER_SHAPES
 #define USE_SERIALIZE_STYLES
 #define USE_SERIALIZE_GROUPS
 using System;
@@ -189,7 +190,7 @@ namespace Draw2D.ViewModels
         void Clear();
     }
 
-    public interface ISelection : IDirty
+    public interface ISelection : IDirty, ICopyable
     {
         void Cut(IToolContext context);
         void Copy(IToolContext context);
@@ -3474,7 +3475,7 @@ namespace Draw2D.ViewModels.Containers
         void Draw(IContainerView view, object context, double width, double height, double dx, double dy, double zx, double zy);
     }
 
-    public interface IContainerView : IDrawTarget, IHitTestable
+    public interface IContainerView : IDrawTarget, IHitTestable, ICopyable
     {
         string Title { get; set; }
         double Width { get; set; }
@@ -3778,11 +3779,8 @@ namespace Draw2D.ViewModels.Containers
     [DataContract(IsReference = true)]
     public class CanvasContainer : GroupShape, ICanvasContainer
     {
-        // TODO: Implement canvas container bounds.
-        internal static new IBounds s_bounds = null;
-
-        // TODO: Implement canvas container bounds.
-        internal static new IShapeDecorator s_decorator = null;
+        internal static new IBounds s_bounds = new ContainerBounds();
+        internal static new IShapeDecorator s_decorator = new ContainerDecorator();
 
         [IgnoreDataMember]
         public override IBounds Bounds { get; } = s_bounds;
@@ -3829,7 +3827,7 @@ namespace Draw2D.ViewModels.Containers
     }
 
     [DataContract(IsReference = true)]
-    public class SelectionState : ViewModelBase, ISelectionState, ICopyable
+    public class SelectionState : ViewModelBase, ISelectionState
     {
         private IBaseShape _hovered;
         private IBaseShape _selected;
@@ -3938,7 +3936,7 @@ namespace Draw2D.ViewModels.Containers
     }
 
     [DataContract(IsReference = true)]
-    public class ZoomServiceState : ViewModelBase, IZoomServiceState, ICopyable
+    public class ZoomServiceState : ViewModelBase, IZoomServiceState
     {
         private double _zoomSpeed;
         private double _zoomX;
@@ -4036,7 +4034,7 @@ namespace Draw2D.ViewModels.Containers
     }
 
     [DataContract(IsReference = true)]
-    public class ContainerView : ViewModelBase, IContainerView, ICopyable
+    public class ContainerView : ViewModelBase, IContainerView
     {
         private string _title;
         private double _width;
@@ -4955,6 +4953,27 @@ namespace Draw2D.ViewModels.Decorators
             }
         }
     }
+
+    [DataContract(IsReference = true)]
+    public class ContainerDecorator : CommonDecorator
+    {
+        public void Draw(object dc, IShapeRenderer renderer, CanvasContainer container, ISelectionState selectionState, double dx, double dy, DrawMode mode)
+        {
+            if (selectionState.IsSelected(container))
+            {
+                DrawBoxFromPoints(dc, renderer, container, dx, dy, mode);
+            }
+        }
+
+        public override void Draw(object dc, IBaseShape shape, IShapeRenderer renderer, ISelectionState selectionState, double dx, double dy, DrawMode mode)
+        {
+            if (shape is CanvasContainer container)
+            {
+                Draw(dc, renderer, container, selectionState, dx, dy, mode);
+            }
+        }
+    }
+
 }
 
 namespace Draw2D.ViewModels.Filters
@@ -6436,6 +6455,76 @@ namespace Draw2D.ViewModels.Bounds
                 box.TopLeft.Y,
                 box.BottomRight.X,
                 box.BottomRight.Y).IntersectsWith(target) ? shape : null;
+        }
+    }
+
+    [DataContract(IsReference = true)]
+    public class ContainerBounds : IBounds
+    {
+        [IgnoreDataMember]
+        public string TargetType => typeof(CanvasContainer).Name;
+
+        public IPointShape TryToGetPoint(IBaseShape shape, Point2 target, double radius, IHitTest hitTest)
+        {
+            if (!(shape is CanvasContainer container))
+            {
+                throw new ArgumentNullException("shape");
+            }
+
+            foreach (var containerPoint in container.Points)
+            {
+                if (containerPoint.Bounds?.TryToGetPoint(containerPoint, target, radius, hitTest) != null)
+                {
+                    return containerPoint;
+                }
+            }
+#if USE_CONTAINER_SHAPES
+            foreach (var containerShape in container.Shapes)
+            {
+                var result = containerShape.Bounds?.TryToGetPoint(containerShape, target, radius, hitTest);
+                if (result != null)
+                {
+                    return result;
+                }
+            }
+#endif
+            return null;
+        }
+
+        public IBaseShape Contains(IBaseShape shape, Point2 target, double radius, IHitTest hitTest)
+        {
+            if (!(shape is CanvasContainer container))
+            {
+                throw new ArgumentNullException("shape");
+            }
+
+            foreach (var containerShape in container.Shapes)
+            {
+                var result = containerShape.Bounds?.Contains(containerShape, target, radius, hitTest);
+                if (result != null)
+                {
+                    return container;
+                }
+            }
+            return null;
+        }
+
+        public IBaseShape Overlaps(IBaseShape shape, Rect2 target, double radius, IHitTest hitTest)
+        {
+            if (!(shape is CanvasContainer container))
+            {
+                throw new ArgumentNullException("shape");
+            }
+
+            foreach (var containerShape in container.Shapes)
+            {
+                var result = containerShape.Bounds?.Overlaps(containerShape, target, radius, hitTest);
+                if (result != null)
+                {
+                    return container;
+                }
+            }
+            return null;
         }
     }
 
