@@ -1,5 +1,7 @@
 ﻿// Copyright (c) Wiesław Šoltés. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
+//#define DEBUG_POINTER_EVENTS
+//#define USE_DRAW_POINTERS
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -144,8 +146,15 @@ namespace Draw2D.Controls
                     isRight = true;
                 }
             }
-
-            Debug.WriteLine($"[PointerPressed] Pointer.Type: {e.Pointer.Type}, InputModifiers: {e.InputModifiers}, Pointer.IsPrimary: {e.Pointer.IsPrimary}, Point: {e.GetPosition(this)}");
+#if DEBUG_POINTER_EVENTS
+            Debug.WriteLine(
+                $"[PointerPressed] Type: {e.Pointer.Type}, " +
+                $"Modifiers: {e.InputModifiers}, " +
+                $"IsPrimary: {e.Pointer.IsPrimary}, " +
+                $"Point: {e.GetPosition(this)}" +
+                $"_isCaptured: {_isCaptured}, " +
+                $"_capturedInputModifiers: {_capturedInputModifiers}");
+#endif
         }
 
         private void GetPointerType(PointerReleasedEventArgs e, out bool isLeft, out bool isRight)
@@ -189,8 +198,15 @@ namespace Draw2D.Controls
                     isRight = true;
                 }
             }
-
-            Debug.WriteLine($"[PointerPressed] Pointer.Type: {e.Pointer.Type}, InputModifiers: {e.InputModifiers}, Pointer.IsPrimary: {e.Pointer.IsPrimary}, Point: {e.GetPosition(this)}");
+#if DEBUG_POINTER_EVENTS
+            Debug.WriteLine(
+                $"[PointerReleased] Type: {e.Pointer.Type}, " +
+                $"Modifiers: {e.InputModifiers}, " +
+                $"IsPrimary: {e.Pointer.IsPrimary}, " +
+                $"Point: {e.GetPosition(this)}" +
+                $"_isCaptured: {_isCaptured}, " +
+                $"_capturedInputModifiers: {_capturedInputModifiers}");
+#endif
         }
 
         private void HandlePointerPressed(PointerPressedEventArgs e)
@@ -679,7 +695,7 @@ namespace Draw2D.Controls
                     _zoomServiceState.IsZooming = false;
                 }
             }
-#if false
+#if USE_DRAW_POINTERS
             var brush = new ImmutableSolidColorBrush(Colors.Magenta);
             foreach (var value in _pointers.Values)
             {
