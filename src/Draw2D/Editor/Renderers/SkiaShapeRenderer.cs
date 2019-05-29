@@ -23,10 +23,7 @@ namespace Draw2D.Editor.Renderers
         private Dictionary<ShapeStyle, SKPaint> _fillPaintCache;
         private Dictionary<ShapeStyle, SKPaint> _strokePaintCache;
 
-        public ISelectionState SelectionState 
-        { 
-            get => _selectionState;
-        }
+        public ISelectionState SelectionState => _selectionState;
 
         public SkiaShapeRenderer(IToolContext context, ISelectionState selectionState)
         {
@@ -41,6 +38,7 @@ namespace Draw2D.Editor.Renderers
         public void Dispose()
         {
             _context = null;
+            _selectionState = null;
 
             if (_typefaceCache != null)
             {
