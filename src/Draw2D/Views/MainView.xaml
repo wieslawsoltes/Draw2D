@@ -283,7 +283,12 @@
                     </TabControl>
                 </TabItem>
                 <TabItem Classes="default" Header="StyleLibrary">
-                    <ContentControl Content="{Binding StyleLibrary}"/>
+                    <Grid RowDefinitions="Auto,*" ColumnDefinitions="3*,3*,3*">
+                        <Button Classes="default" Content="Remove" Command="{Binding StyleLibrary.Remove}" CommandParameter="{Binding StyleLibrary.CurrentStyle}" Grid.Row="0" Grid.Column="0"/>
+                        <Button Classes="default" Content="Add" Command="{Binding StyleLibrary.Add}" CommandParameter="{x:Null}" Grid.Row="0" Grid.Column="1"/>
+                        <Button Classes="default" Content="Set" Command="{Binding ContainerView.Style}" CommandParameter="{Binding StyleLibrary.CurrentStyle.Title}" Grid.Row="0" Grid.Column="2"/>
+                        <ContentControl Content="{Binding StyleLibrary}" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3"/>
+                    </Grid>
                 </TabItem>
                 <TabItem Classes="default" Header="GroupLibrary">
                     <Grid RowDefinitions="Auto,*" ColumnDefinitions="3*,3*,3*">

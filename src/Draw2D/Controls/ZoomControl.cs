@@ -6,7 +6,7 @@ using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Media;
 using Avalonia.VisualTree;
-using Draw2D.ViewModels;
+using Draw2D.Input;
 
 namespace Draw2D.Controls
 {

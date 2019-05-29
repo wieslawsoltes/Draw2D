@@ -22,16 +22,16 @@ namespace Draw2D.Editor
     [DataContract(IsReference = true)]
     public class EditorToolContext : ToolContext
     {
-        private IFactory _factory;
+        private IContainerFactory _containerFactory;
         private ISelection _selection;
         private string _currentDirectory;
         private IList<string> _files;
 
         [IgnoreDataMember]
-        public IFactory Factory
+        public IContainerFactory ContainerFactory
         {
-            get => _factory;
-            set => Update(ref _factory, value);
+            get => _containerFactory;
+            set => Update(ref _containerFactory, value);
         }
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
@@ -59,9 +59,9 @@ namespace Draw2D.Editor
         {
         }
 
-        public EditorToolContext(IFactory factory)
+        public EditorToolContext(IContainerFactory containerFactory)
         {
-            _factory = factory;
+            _containerFactory = containerFactory;
         }
 
         private ShapeStyle GetShapeStyle(string styleId)
@@ -85,7 +85,8 @@ namespace Draw2D.Editor
 
             containerView.WorkingContainer = new CanvasContainer()
             {
-                Shapes = new ObservableCollection<BaseShape>()
+                Points = new ObservableCollection<IPointShape>(),
+                Shapes = new ObservableCollection<IBaseShape>()
             };
         }
 
@@ -133,7 +134,7 @@ namespace Draw2D.Editor
 
         public void NewContainerView(string title)
         {
-            var containerView = _factory?.CreateContainerView(title);
+            var containerView = _containerFactory?.CreateContainerView(title);
             if (containerView != null)
             {
                 InitContainerView(containerView);
@@ -414,7 +415,7 @@ namespace Draw2D.Editor
             }
         }
 
-        private void ToSvgPathDataImpl(BaseShape shape, StringBuilder sb)
+        private void ToSvgPathDataImpl(IBaseShape shape, StringBuilder sb)
         {
             switch (shape)
             {
@@ -475,7 +476,7 @@ namespace Draw2D.Editor
                     }
                     break;
 #if USE_SVG_POINT
-                case PointShape point:
+                case IPointShape point:
                     {
                         if (point.Template != null)
                         {
@@ -508,7 +509,7 @@ namespace Draw2D.Editor
         {
             if (ContainerView.SelectionState?.Shapes != null)
             {
-                var selected = new List<BaseShape>(ContainerView.SelectionState?.Shapes);
+                var selected = new List<IBaseShape>(ContainerView.SelectionState?.Shapes);
                 var sb = new StringBuilder();
 
                 foreach (var shape in selected)
@@ -532,13 +533,13 @@ namespace Draw2D.Editor
             var group = new GroupShape()
             {
                 Title = "Group",
-                Points = new ObservableCollection<PointShape>(),
-                Shapes = new ObservableCollection<BaseShape>()
+                Points = new ObservableCollection<IPointShape>(),
+                Shapes = new ObservableCollection<IBaseShape>()
             };
 
             var rectangle = new RectangleShape(new PointShape(0, 0, context.PointTemplate), new PointShape(30, 30, context.PointTemplate))
             {
-                Points = new ObservableCollection<PointShape>(),
+                Points = new ObservableCollection<IPointShape>(),
                 Text = new Text(),
                 StyleId = context.StyleLibrary?.CurrentStyle?.Title
             };
@@ -547,7 +548,7 @@ namespace Draw2D.Editor
 
             var text = new TextShape(new PointShape(0, 0, context.PointTemplate), new PointShape(30, 30, context.PointTemplate))
             {
-                Points = new ObservableCollection<PointShape>(),
+                Points = new ObservableCollection<IPointShape>(),
                 Text = new Text("&"),
                 StyleId = context.StyleLibrary?.CurrentStyle?.Title
             };

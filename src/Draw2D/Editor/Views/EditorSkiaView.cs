@@ -158,7 +158,7 @@ namespace Draw2D.Editor.Views
                 return false;
             }
 
-            var points = new List<PointShape>();
+            var points = new List<IPointShape>();
             canvasContainer.GetPoints(points);
 
             foreach (var point in points)
@@ -215,11 +215,11 @@ namespace Draw2D.Editor.Views
             view.WorkingContainer.Draw(context, renderer, 0.0, 0.0, DrawMode.Point, null, null);
 #else
             // NOTE: Draw only selected points.
-            var selected = new List<BaseShape>(view.SelectionState.Shapes);
+            var selected = new List<IBaseShape>(view.SelectionState.Shapes);
 
             foreach (var shape in selected)
             {
-                if (shape is PointShape point)
+                if (shape is IPointShape point)
                 {
                     point.Draw(context, renderer, 0.0, 0.0, DrawMode.Point, null, null);
                 }
@@ -229,7 +229,7 @@ namespace Draw2D.Editor.Views
 
         private void DrawDecorators(IContainerView view, object context, IShapeRenderer renderer)
         {
-            var selected = new List<BaseShape>(view.SelectionState.Shapes);
+            var selected = new List<IBaseShape>(view.SelectionState.Shapes);
 
             foreach (var shape in selected)
             {
