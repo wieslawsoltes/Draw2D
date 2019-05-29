@@ -16,6 +16,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
+using Draw2D.Input;
 using Draw2D.ViewModels.Bounds;
 using Draw2D.ViewModels.Containers;
 using Draw2D.ViewModels.Decorators;
@@ -55,25 +56,6 @@ namespace Draw2D.ViewModels
         Mouse
     }
 
-    [Flags]
-    public enum Modifier
-    {
-        None = 0,
-        Alt = 1,
-        Control = 2,
-        Shift = 4
-    }
-
-    public enum FitMode
-    {
-        None,
-        Reset,
-        Center,
-        Fill,
-        Uniform,
-        UniformToFill
-    }
-
     public interface INode
     {
         string Id { get; set; }
@@ -84,6 +66,25 @@ namespace Draw2D.ViewModels
     public interface ICopyable
     {
         object Copy(Dictionary<object, object> shared);
+    }
+
+    public interface IShapeDecorator
+    {
+        void Draw(object dc, IBaseShape shape, IShapeRenderer renderer, ISelectionState selectionState, double dx, double dy, DrawMode mode);
+    }
+
+    public interface IShapeRenderer : IDisposable
+    {
+        double Scale { get; set; }
+        ISelectionState SelectionState { get; set; }
+        void DrawLine(object dc, LineShape line, string styleId, double dx, double dy);
+        void DrawCubicBezier(object dc, CubicBezierShape cubicBezier, string styleId, double dx, double dy);
+        void DrawQuadraticBezier(object dc, QuadraticBezierShape quadraticBezier, string styleId, double dx, double dy);
+        void DrawConic(object dc, ConicShape conic, string styleId, double dx, double dy);
+        void DrawPath(object dc, PathShape path, string styleId, double dx, double dy);
+        void DrawRectangle(object dc, RectangleShape rectangle, string styleId, double dx, double dy);
+        void DrawEllipse(object dc, EllipseShape ellipse, string styleId, double dx, double dy);
+        void DrawText(object dc, TextShape text, string styleId, double dx, double dy);
     }
 
     public interface IDrawable
@@ -101,6 +102,18 @@ namespace Draw2D.ViewModels
         void Invalidate();
     }
 
+    public interface IBaseShape : INode, ICopyable, IDirty, ISelectable, IDrawable
+    {
+        void GetPoints(IList<IPointShape> points);
+    }
+
+    public interface IPointShape : IBaseShape
+    {
+        double X { get; set; }
+        double Y { get; set; }
+        IBaseShape Template { get; set; }
+    }
+
     public interface IConnectable
     {
         IList<IPointShape> Points { get; set; }
@@ -109,37 +122,9 @@ namespace Draw2D.ViewModels
         bool Disconnect();
     }
 
-    public interface ISelectable
-    {
-        void Move(ISelectionState selectionState, double dx, double dy);
-        void Select(ISelectionState selectionState);
-        void Deselect(ISelectionState selectionState);
-    }
-
     public interface IHitTestable
     {
         IPointShape GetNextPoint(IToolContext context, double x, double y, bool connect, double radius);
-    }
-
-    public interface IHitTest
-    {
-        IPointShape TryToGetPoint(IEnumerable<IBaseShape> shapes, Point2 target, double radius, IPointShape exclude);
-        IPointShape TryToGetPoint(IBaseShape shape, Point2 target, double radius);
-        IBaseShape TryToGetShape(IEnumerable<IBaseShape> shapes, Point2 target, double radius);
-        ISet<IBaseShape> TryToGetShapes(IEnumerable<IBaseShape> shapes, Rect2 target, double radius);
-    }
-
-    public interface ITool
-    {
-        string Title { get; }
-        IList<IPointIntersection> Intersections { get; set; }
-        IList<IPointFilter> Filters { get; set; }
-        void LeftDown(IToolContext context, double x, double y, Modifier modifier);
-        void LeftUp(IToolContext context, double x, double y, Modifier modifier);
-        void RightDown(IToolContext context, double x, double y, Modifier modifier);
-        void RightUp(IToolContext context, double x, double y, Modifier modifier);
-        void Move(IToolContext context, double x, double y, Modifier modifier);
-        void Clean(IToolContext context);
     }
 
     public interface IBounds
@@ -150,7 +135,15 @@ namespace Draw2D.ViewModels
         IBaseShape Overlaps(IBaseShape shape, Rect2 target, double radius, IHitTest hitTest);
     }
 
-    public interface ISelectionState : INode, IDirty, ICopyable
+    public interface IHitTest
+    {
+        IPointShape TryToGetPoint(IEnumerable<IBaseShape> shapes, Point2 target, double radius, IPointShape exclude);
+        IPointShape TryToGetPoint(IBaseShape shape, Point2 target, double radius);
+        IBaseShape TryToGetShape(IEnumerable<IBaseShape> shapes, Point2 target, double radius);
+        ISet<IBaseShape> TryToGetShapes(IEnumerable<IBaseShape> shapes, Rect2 target, double radius);
+    }
+
+    public interface ISelectionState : INode, IDirty
     {
         IBaseShape Hovered { get; set; }
         IBaseShape Selected { get; set; }
@@ -163,116 +156,11 @@ namespace Draw2D.ViewModels
         void Clear();
     }
 
-    public interface ISelection : IDirty
+    public interface ISelectable
     {
-        void Cut(IToolContext context);
-        void Copy(IToolContext context);
-        void Paste(IToolContext context);
-        void Delete(IToolContext context);
-        void Group(IToolContext context);
-        void Reference(IToolContext context);
-        void SelectAll(IToolContext context);
-        void Connect(IToolContext context, IPointShape point);
-        void Disconnect(IToolContext context, IPointShape point);
-        void Disconnect(IToolContext context, IBaseShape shape);
-    }
-
-    public interface IShapeRenderer : IDisposable
-    {
-        double Scale { get; set; }
-        ISelectionState SelectionState { get; set; }
-        void DrawLine(object dc, LineShape line, string styleId, double dx, double dy);
-        void DrawCubicBezier(object dc, CubicBezierShape cubicBezier, string styleId, double dx, double dy);
-        void DrawQuadraticBezier(object dc, QuadraticBezierShape quadraticBezier, string styleId, double dx, double dy);
-        void DrawConic(object dc, ConicShape conic, string styleId, double dx, double dy);
-        void DrawPath(object dc, PathShape path, string styleId, double dx, double dy);
-        void DrawRectangle(object dc, RectangleShape rectangle, string styleId, double dx, double dy);
-        void DrawEllipse(object dc, EllipseShape ellipse, string styleId, double dx, double dy);
-        void DrawText(object dc, TextShape text, string styleId, double dx, double dy);
-    }
-
-    public interface IShapeDecorator
-    {
-        void Draw(object dc, IBaseShape shape, IShapeRenderer renderer, ISelectionState selectionState, double dx, double dy, DrawMode mode);
-    }
-
-    public interface IInputTarget
-    {
-        void LeftDown(double x, double y, Modifier modifier);
-        void LeftUp(double x, double y, Modifier modifier);
-        void RightDown(double x, double y, Modifier modifier);
-        void RightUp(double x, double y, Modifier modifier);
-        void Move(double x, double y, Modifier modifier);
-        double GetWidth();
-        double GetHeight();
-    }
-
-    public interface IInputService
-    {
-        Action Capture { get; set; }
-        Action Release { get; set; }
-        Func<bool> IsCaptured { get; set; }
-        Action Redraw { get; set; }
-    }
-
-    public interface IZoomServiceState : INode, IDirty, ICopyable
-    {
-        double ZoomSpeed { get; set; }
-        double ZoomX { get; set; }
-        double ZoomY { get; set; }
-        double OffsetX { get; set; }
-        double OffsetY { get; set; }
-        bool IsPanning { get; set; }
-        bool IsZooming { get; set; }
-        FitMode InitFitMode { get; set; }
-        FitMode AutoFitMode { get; set; }
-    }
-
-    public interface IZoomService
-    {
-        IZoomServiceState ZoomServiceState { get; set; }
-        void Wheel(double delta, double x, double y);
-        void Pressed(double x, double y);
-        void Released(double x, double y);
-        void Moved(double x, double y);
-        void Invalidate(bool redraw);
-        void ZoomTo(double zoom, double x, double y);
-        void ZoomDeltaTo(double delta, double x, double y);
-        void StartPan(double x, double y);
-        void PanTo(double x, double y);
-        void Reset();
-        void Center(double panelWidth, double panelHeight, double elementWidth, double elementHeight);
-        void Fill(double panelWidth, double panelHeight, double elementWidth, double elementHeight);
-        void Uniform(double panelWidth, double panelHeight, double elementWidth, double elementHeight);
-        void UniformToFill(double panelWidth, double panelHeight, double elementWidth, double elementHeight);
-        void ResetZoom(bool redraw);
-        void CenterZoom(bool redraw);
-        void FillZoom(bool redraw);
-        void UniformZoom(bool redraw);
-        void UniformToFillZoom(bool redraw);
-    }
-
-    public interface IDrawTarget
-    {
-        IInputService InputService { get; set; }
-        IZoomService ZoomService { get; set; }
-        void Draw(object context, double width, double height, double dx, double dy, double zx, double zy);
-    }
-
-    public interface IPointFilter : INode, IDirty
-    {
-        string Title { get; }
-        IList<IBaseShape> Guides { get; set; }
-        bool Process(IToolContext context, ref double x, ref double y);
-        void Clear(IToolContext context);
-    }
-
-    public interface IPointIntersection : INode, IDirty
-    {
-        string Title { get; }
-        IList<IPointShape> Intersections { get; set; }
-        void Find(IToolContext context, IBaseShape shape);
-        void Clear(IToolContext context);
+        void Move(ISelectionState selectionState, double dx, double dy);
+        void Select(ISelectionState selectionState);
+        void Deselect(ISelectionState selectionState);
     }
 
     [DataContract(IsReference = true)]
@@ -528,7 +416,7 @@ namespace Draw2D.ViewModels.Style
                 FontSize = this.FontSize,
                 HAlign = this.HAlign,
                 VAlign = this.VAlign,
-                Stroke = (ArgbColor)this.Stroke.Copy(shared),
+                Stroke = (ArgbColor)(this.Stroke.Copy(shared)),
                 IsStroked = this.IsStroked
             };
         }
@@ -615,12 +503,12 @@ namespace Draw2D.ViewModels.Style
             {
                 Name = this.Name,
                 Title = this.Title + "_copy",
-                Stroke = (ArgbColor)this.Stroke.Copy(shared),
-                Fill = (ArgbColor)this.Fill.Copy(shared),
+                Stroke = (ArgbColor)(this.Stroke.Copy(shared)),
+                Fill = (ArgbColor)(this.Fill.Copy(shared)),
                 Thickness = this.Thickness,
                 IsStroked = this.IsStroked,
                 IsFilled = this.IsFilled,
-                TextStyle = (TextStyle)this.TextStyle.Copy(shared)
+                TextStyle = (TextStyle)(this.TextStyle.Copy(shared))
             };
         }
     }
@@ -632,18 +520,6 @@ namespace Draw2D.ViewModels.Shapes
     {
         EvenOdd,
         Nonzero
-    }
-
-    public interface IBaseShape : INode, ICopyable, IDirty, ISelectable, IDrawable
-    {
-        void GetPoints(IList<IPointShape> points);
-    }
-
-    public interface IPointShape : IBaseShape
-    {
-        double X { get; set; }
-        double Y { get; set; }
-        IBaseShape Template { get; set; }
     }
 
     [DataContract(IsReference = true)]
@@ -960,14 +836,14 @@ namespace Draw2D.ViewModels.Shapes
             else if (TopLeft == point)
             {
                 Debug.WriteLine($"{nameof(BoxShape)}: Disconnected from {nameof(TopLeft)}");
-                result = (IPointShape)point.Copy(null);
+                result = (IPointShape)(point.Copy(null));
                 this.TopLeft = result;
                 return true;
             }
             else if (BottomRight == point)
             {
                 Debug.WriteLine($"{nameof(BoxShape)}: Disconnected from {nameof(BottomRight)}");
-                result = (IPointShape)point.Copy(null);
+                result = (IPointShape)(point.Copy(null));
                 this.BottomRight = result;
                 return true;
             }
@@ -982,14 +858,14 @@ namespace Draw2D.ViewModels.Shapes
             if (this.TopLeft != null)
             {
                 Debug.WriteLine($"{nameof(BoxShape)}: Disconnected from {nameof(TopLeft)}");
-                this.TopLeft = (IPointShape)this.TopLeft.Copy(null);
+                this.TopLeft = (IPointShape)(this.TopLeft.Copy(null));
                 result = true;
             }
 
             if (this.BottomRight != null)
             {
                 Debug.WriteLine($"{nameof(BoxShape)}: Disconnected from {nameof(BottomRight)}");
-                this.BottomRight = (IPointShape)this.BottomRight.Copy(null);
+                this.BottomRight = (IPointShape)(this.BottomRight.Copy(null));
                 result = true;
             }
 
@@ -1198,21 +1074,21 @@ namespace Draw2D.ViewModels.Shapes
             else if (StartPoint == point)
             {
                 Debug.WriteLine($"{nameof(ConicShape)}: Disconnected from {nameof(StartPoint)}");
-                result = (IPointShape)point.Copy(null);
+                result = (IPointShape)(point.Copy(null));
                 this.StartPoint = result;
                 return true;
             }
             else if (Point1 == point)
             {
                 Debug.WriteLine($"{nameof(ConicShape)}: Disconnected from {nameof(Point1)}");
-                result = (IPointShape)point.Copy(null);
+                result = (IPointShape)(point.Copy(null));
                 this.Point1 = result;
                 return true;
             }
             else if (Point2 == point)
             {
                 Debug.WriteLine($"{nameof(ConicShape)}: Disconnected from {nameof(Point2)}");
-                result = (IPointShape)point.Copy(null);
+                result = (IPointShape)(point.Copy(null));
                 this.Point2 = result;
                 return true;
             }
@@ -1227,21 +1103,21 @@ namespace Draw2D.ViewModels.Shapes
             if (this.StartPoint != null)
             {
                 Debug.WriteLine($"{nameof(ConicShape)}: Disconnected from {nameof(StartPoint)}");
-                this.StartPoint = (IPointShape)this.StartPoint.Copy(null);
+                this.StartPoint = (IPointShape)(this.StartPoint.Copy(null));
                 result = true;
             }
 
             if (this.Point1 != null)
             {
                 Debug.WriteLine($"{nameof(ConicShape)}: Disconnected from {nameof(Point1)}");
-                this.Point1 = (IPointShape)this.Point1.Copy(null);
+                this.Point1 = (IPointShape)(this.Point1.Copy(null));
                 result = true;
             }
 
             if (this.Point2 != null)
             {
                 Debug.WriteLine($"{nameof(ConicShape)}: Disconnected from {nameof(Point2)}");
-                this.Point2 = (IPointShape)this.Point2.Copy(null);
+                this.Point2 = (IPointShape)(this.Point2.Copy(null));
                 result = true;
             }
 
@@ -1500,28 +1376,28 @@ namespace Draw2D.ViewModels.Shapes
             else if (StartPoint == point)
             {
                 Debug.WriteLine($"{nameof(CubicBezierShape)}: Disconnected from {nameof(StartPoint)}");
-                result = (IPointShape)point.Copy(null);
+                result = (IPointShape)(point.Copy(null));
                 this.StartPoint = result;
                 return true;
             }
             else if (Point1 == point)
             {
                 Debug.WriteLine($"{nameof(CubicBezierShape)}: Disconnected from {nameof(Point1)}");
-                result = (IPointShape)point.Copy(null);
+                result = (IPointShape)(point.Copy(null));
                 this.Point1 = result;
                 return true;
             }
             else if (Point2 == point)
             {
                 Debug.WriteLine($"{nameof(CubicBezierShape)}: Disconnected from {nameof(Point2)}");
-                result = (IPointShape)point.Copy(null);
+                result = (IPointShape)(point.Copy(null));
                 this.Point2 = result;
                 return true;
             }
             else if (Point3 == point)
             {
                 Debug.WriteLine($"{nameof(CubicBezierShape)}: Disconnected from {nameof(Point3)}");
-                result = (IPointShape)point.Copy(null);
+                result = (IPointShape)(point.Copy(null));
                 this.Point3 = result;
                 return true;
             }
@@ -1536,21 +1412,21 @@ namespace Draw2D.ViewModels.Shapes
             if (this.StartPoint != null)
             {
                 Debug.WriteLine($"{nameof(CubicBezierShape)}: Disconnected from {nameof(StartPoint)}");
-                this.StartPoint = (IPointShape)this.StartPoint.Copy(null);
+                this.StartPoint = (IPointShape)(this.StartPoint.Copy(null));
                 result = true;
             }
 
             if (this.Point1 != null)
             {
                 Debug.WriteLine($"{nameof(CubicBezierShape)}: Disconnected from {nameof(Point1)}");
-                this.Point1 = (IPointShape)this.Point1.Copy(null);
+                this.Point1 = (IPointShape)(this.Point1.Copy(null));
                 result = true;
             }
 
             if (this.Point2 != null)
             {
                 Debug.WriteLine($"{nameof(CubicBezierShape)}: Disconnected from {nameof(Point2)}");
-                this.Point2 = (IPointShape)this.Point2.Copy(null);
+                this.Point2 = (IPointShape)(this.Point2.Copy(null));
                 result = true;
             }
 
@@ -1762,7 +1638,7 @@ namespace Draw2D.ViewModels.Shapes
                     {
                         if (shape is ICopyable copyable)
                         {
-                            copy.Shapes.Add((IBaseShape)copyable.Copy(shared));
+                            copy.Shapes.Add((IBaseShape)(copyable.Copy(shared)));
                         }
                     }
                 }
@@ -1900,7 +1776,7 @@ namespace Draw2D.ViewModels.Shapes
                 {
                     if (shape is ICopyable copyable)
                     {
-                        copy.Shapes.Add((IBaseShape)copyable.Copy(shared));
+                        copy.Shapes.Add((IBaseShape)(copyable.Copy(shared)));
                     }
                 }
 
@@ -2073,14 +1949,14 @@ namespace Draw2D.ViewModels.Shapes
             else if (StartPoint == point)
             {
                 Debug.WriteLine($"{nameof(LineShape)}: Disconnected from {nameof(StartPoint)}");
-                result = (IPointShape)point.Copy(null);
+                result = (IPointShape)(point.Copy(null));
                 this.StartPoint = result;
                 return true;
             }
             else if (Point == point)
             {
                 Debug.WriteLine($"{nameof(LineShape)}: Disconnected from {nameof(Point)}");
-                result = (IPointShape)point.Copy(null);
+                result = (IPointShape)(point.Copy(null));
                 this.Point = result;
                 return true;
             }
@@ -2095,14 +1971,14 @@ namespace Draw2D.ViewModels.Shapes
             if (this.StartPoint != null)
             {
                 Debug.WriteLine($"{nameof(LineShape)}: Disconnected from {nameof(StartPoint)}");
-                this.StartPoint = (IPointShape)this.StartPoint.Copy(null);
+                this.StartPoint = (IPointShape)(this.StartPoint.Copy(null));
                 result = true;
             }
 
             if (this.Point != null)
             {
                 Debug.WriteLine($"{nameof(LineShape)}: Disconnected from {nameof(Point)}");
-                this.Point = (IPointShape)this.Point.Copy(null);
+                this.Point = (IPointShape)(this.Point.Copy(null));
                 result = true;
             }
 
@@ -2480,7 +2356,7 @@ namespace Draw2D.ViewModels.Shapes
             {
                 foreach (var shape in this.Shapes)
                 {
-                    copy.Shapes.Add((IBaseShape)shape.Copy(shared));
+                    copy.Shapes.Add((IBaseShape)(shape.Copy(shared)));
                 }
 
                 foreach (var point in this.Points)
@@ -2780,21 +2656,21 @@ namespace Draw2D.ViewModels.Shapes
             else if (StartPoint == point)
             {
                 Debug.WriteLine($"{nameof(QuadraticBezierShape)}: Disconnected from {nameof(StartPoint)}");
-                result = (IPointShape)point.Copy(null);
+                result = (IPointShape)(point.Copy(null));
                 this.StartPoint = result;
                 return true;
             }
             else if (Point1 == point)
             {
                 Debug.WriteLine($"{nameof(QuadraticBezierShape)}: Disconnected from {nameof(Point1)}");
-                result = (IPointShape)point.Copy(null);
+                result = (IPointShape)(point.Copy(null));
                 this.Point1 = result;
                 return true;
             }
             else if (Point2 == point)
             {
                 Debug.WriteLine($"{nameof(QuadraticBezierShape)}: Disconnected from {nameof(Point2)}");
-                result = (IPointShape)point.Copy(null);
+                result = (IPointShape)(point.Copy(null));
                 this.Point2 = result;
                 return true;
             }
@@ -2809,21 +2685,21 @@ namespace Draw2D.ViewModels.Shapes
             if (this.StartPoint != null)
             {
                 Debug.WriteLine($"{nameof(QuadraticBezierShape)}: Disconnected from {nameof(StartPoint)}");
-                this.StartPoint = (IPointShape)this.StartPoint.Copy(null);
+                this.StartPoint = (IPointShape)(this.StartPoint.Copy(null));
                 result = true;
             }
 
             if (this.Point1 != null)
             {
                 Debug.WriteLine($"{nameof(QuadraticBezierShape)}: Disconnected from {nameof(Point1)}");
-                this.Point1 = (IPointShape)this.Point1.Copy(null);
+                this.Point1 = (IPointShape)(this.Point1.Copy(null));
                 result = true;
             }
 
             if (this.Point2 != null)
             {
                 Debug.WriteLine($"{nameof(QuadraticBezierShape)}: Disconnected from {nameof(Point2)}");
-                this.Point2 = (IPointShape)this.Point2.Copy(null);
+                this.Point2 = (IPointShape)(this.Point2.Copy(null));
                 result = true;
             }
 
@@ -3454,6 +3330,49 @@ namespace Draw2D.ViewModels.Containers
         void Style(string styleId);
     }
 
+    public interface ISelection : IDirty
+    {
+        void Cut(IToolContext context);
+        void Copy(IToolContext context);
+        void Paste(IToolContext context);
+        void Delete(IToolContext context);
+        void Group(IToolContext context);
+        void Reference(IToolContext context);
+        void SelectAll(IToolContext context);
+        void Connect(IToolContext context, IPointShape point);
+        void Disconnect(IToolContext context, IPointShape point);
+        void Disconnect(IToolContext context, IBaseShape shape);
+    }
+
+    public interface IPointFilter : INode, IDirty
+    {
+        string Title { get; }
+        IList<IBaseShape> Guides { get; set; }
+        bool Process(IToolContext context, ref double x, ref double y);
+        void Clear(IToolContext context);
+    }
+
+    public interface IPointIntersection : INode, IDirty
+    {
+        string Title { get; }
+        IList<IPointShape> Intersections { get; set; }
+        void Find(IToolContext context, IBaseShape shape);
+        void Clear(IToolContext context);
+    }
+
+    public interface ITool
+    {
+        string Title { get; }
+        IList<IPointIntersection> Intersections { get; set; }
+        IList<IPointFilter> Filters { get; set; }
+        void LeftDown(IToolContext context, double x, double y, Modifier modifier);
+        void LeftUp(IToolContext context, double x, double y, Modifier modifier);
+        void RightDown(IToolContext context, double x, double y, Modifier modifier);
+        void RightUp(IToolContext context, double x, double y, Modifier modifier);
+        void Move(IToolContext context, double x, double y, Modifier modifier);
+        void Clean(IToolContext context);
+    }
+
     public interface IToolContext : IInputTarget, IDisposable
     {
         IStyleLibrary StyleLibrary { get; set; }
@@ -3529,7 +3448,7 @@ namespace Draw2D.ViewModels.Containers
             {
                 if (style is ICopyable copyable)
                 {
-                    copy.Styles.Add((ShapeStyle)copyable.Copy(shared));
+                    copy.Styles.Add((ShapeStyle)(copyable.Copy(shared)));
                 }
             }
 
@@ -3657,7 +3576,7 @@ namespace Draw2D.ViewModels.Containers
             {
                 if (style is ICopyable copyable)
                 {
-                    copy.Groups.Add((GroupShape)copyable.Copy(shared));
+                    copy.Groups.Add((GroupShape)(copyable.Copy(shared)));
                 }
             }
 
@@ -3774,7 +3693,7 @@ namespace Draw2D.ViewModels.Containers
                 {
                     if (shape is ICopyable copyable)
                     {
-                        copy.Shapes.Add((IBaseShape)copyable.Copy(shared));
+                        copy.Shapes.Add((IBaseShape)(copyable.Copy(shared)));
                     }
                 }
 
@@ -3812,24 +3731,6 @@ namespace Draw2D.ViewModels.Containers
         {
             get => _shapes;
             set => Update(ref _shapes, value);
-        }
-
-        public virtual object Copy(Dictionary<object, object> shared)
-        {
-            var copy = new SelectionState()
-            {
-                Name = this.Name,
-                Hovered = this.Hovered,
-                Selected = this.Selected,
-                Shapes = new HashSet<IBaseShape>()
-            };
-
-            foreach (var shape in this.Shapes)
-            {
-                copy.Shapes.Add(shape);
-            }
-
-            return copy;
         }
 
         public void Hover(IBaseShape shape)
@@ -3908,10 +3809,6 @@ namespace Draw2D.ViewModels.Containers
         private FitMode _initFitMode;
         private FitMode _autoFitMode;
 
-        public ZoomServiceState()
-        {
-        }
-
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public double ZoomSpeed
         {
@@ -3973,23 +3870,6 @@ namespace Draw2D.ViewModels.Containers
         {
             get => _autoFitMode;
             set => Update(ref _autoFitMode, value);
-        }
-
-        public virtual object Copy(Dictionary<object, object> shared)
-        {
-            return new ZoomServiceState()
-            {
-                Name = this.Name,
-                ZoomSpeed = this.ZoomSpeed,
-                ZoomX = this.ZoomX,
-                ZoomY = this.ZoomY,
-                OffsetX = this.OffsetX,
-                OffsetY = this.OffsetY,
-                IsPanning = this.IsPanning,
-                IsZooming = this.IsZooming,
-                InitFitMode = this.InitFitMode,
-                AutoFitMode = this.AutoFitMode
-            };
         }
     }
 
@@ -4182,8 +4062,24 @@ namespace Draw2D.ViewModels.Containers
                 InputBackground = (ArgbColor)this.InputBackground?.Copy(shared),
                 CurrentContainer = (ICanvasContainer)this.CurrentContainer?.Copy(shared),
                 WorkingContainer = null,
-                SelectionState = (ISelectionState)this.SelectionState?.Copy(shared),
-                ZoomServiceState = (IZoomServiceState)this.ZoomServiceState?.Copy(shared),
+                SelectionState = new SelectionState()
+                {
+                    Hovered = null,
+                    Selected = null,
+                    Shapes = new HashSet<IBaseShape>()
+                },
+                ZoomServiceState = new ZoomServiceState()
+                {
+                    ZoomSpeed = 1.2,
+                    ZoomX = double.NaN,
+                    ZoomY = double.NaN,
+                    OffsetX = double.NaN,
+                    OffsetY = double.NaN,
+                    IsPanning = false,
+                    IsZooming = false,
+                    InitFitMode = FitMode.Center,
+                    AutoFitMode = FitMode.None
+                },
                 DrawContainerView = null,
                 InputService = null,
                 ZoomService = null
@@ -10404,7 +10300,7 @@ namespace Draw2D.ViewModels.Tools
             {
                 if (shape is ICopyable copyable)
                 {
-                    var copy = (IBaseShape)copyable.Copy(shared);
+                    var copy = (IBaseShape)(copyable.Copy(shared));
                     if (copy != null && !(copy is IPointShape))
                     {
                         copy.GetPoints(points);
