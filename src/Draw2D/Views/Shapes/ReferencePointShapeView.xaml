@@ -33,6 +33,12 @@
                 </ContentControl>
             </Grid>
         </TabItem>
+        <TabItem Classes="default" Header="Decorator">
+            <ContentControl Content="{Binding Decorator}"/>
+        </TabItem>
+        <TabItem Classes="default" Header="Bounds">
+            <ContentControl Content="{Binding Bounds}"/>
+        </TabItem>
         <TabItem Classes="default" Header="Object">
             <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="Auto,*">
                 <TextBlock Classes="default" Grid.Column="0" Grid.Row="0" Text="Id"/>
