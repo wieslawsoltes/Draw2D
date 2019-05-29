@@ -19,8 +19,16 @@ using SkiaSharp;
 
 namespace Draw2D.Editor
 {
+    public interface IEditorToolContext : IToolContext
+    {
+        IContainerFactory ContainerFactory { get; set; }
+        ISelection Selection { get; set; }
+        string CurrentDirectory { get; set; }
+        IList<string> Files { get; set; }
+    }
+
     [DataContract(IsReference = true)]
-    public class EditorToolContext : ToolContext
+    public class EditorToolContext : ToolContext, IEditorToolContext
     {
         private IContainerFactory _containerFactory;
         private ISelection _selection;
