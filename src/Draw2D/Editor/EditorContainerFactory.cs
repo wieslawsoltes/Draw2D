@@ -152,50 +152,71 @@ namespace Draw2D.Editor
 
             var hitTest = new HitTest();
 
-            var gridSnapPointFilter = new GridSnapPointFilter()
-            {
-                Guides = new ObservableCollection<IBaseShape>(),
-                Settings = new GridSnapSettings()
-                {
-                    IsEnabled = true,
-                    EnableGuides = false,
-                    Mode = GridSnapMode.Horizontal | GridSnapMode.Vertical,
-                    GridSizeX = 15.0,
-                    GridSizeY = 15.0,
-                    GuideStyle = "Guide"
-                }
-            };
-
-            var lineSnapPointFilter = new LineSnapPointFilter()
-            {
-                Guides = new ObservableCollection<IBaseShape>(),
-                Settings = new LineSnapSettings()
-                {
-                    IsEnabled = true,
-                    EnableGuides = false,
-                    Target = LineSnapTarget.Shapes,
-                    Mode = LineSnapMode.Point
-                    | LineSnapMode.Middle
-                    | LineSnapMode.Nearest
-                    | LineSnapMode.Intersection
-                    | LineSnapMode.Horizontal
-                    | LineSnapMode.Vertical,
-                    Threshold = 10.0,
-                    GuideStyle = "Guide"
-                }
-            };
-
             var tools = new ObservableCollection<ITool>();
 
             var noneTool = new NoneTool()
             {
+                Intersections = new ObservableCollection<IPointIntersection>(),
+                Filters = new ObservableCollection<IPointFilter>
+                {
+                    new LineSnapPointFilter()
+                    {
+                        Guides = new ObservableCollection<IBaseShape>(),
+                        Settings = new LineSnapSettings()
+                        {
+                            IsEnabled = false,
+                            EnableGuides = false,
+                            Target = LineSnapTarget.Shapes,
+                            Mode = LineSnapMode.Point
+                            | LineSnapMode.Middle
+                            | LineSnapMode.Nearest
+                            | LineSnapMode.Intersection
+                            | LineSnapMode.Horizontal
+                            | LineSnapMode.Vertical,
+                            Threshold = 10.0,
+                            GuideStyle = "Guide"
+                        }
+                    },
+                    new GridSnapPointFilter()
+                    {
+                        Guides = new ObservableCollection<IBaseShape>(),
+                        Settings = new GridSnapSettings()
+                        {
+                            IsEnabled = false,
+                            EnableGuides = false,
+                            Mode = GridSnapMode.Horizontal | GridSnapMode.Vertical,
+                            GridSizeX = 15.0,
+                            GridSizeY = 15.0,
+                            GuideStyle = "Guide"
+                        }
+                    }
+                },
                 Settings = new NoneToolSettings()
             };
 
             var selectionTool = new SelectionTool()
             {
+                Intersections = new ObservableCollection<IPointIntersection>(),
                 Filters = new ObservableCollection<IPointFilter>
                 {
+                    new LineSnapPointFilter()
+                    {
+                        Guides = new ObservableCollection<IBaseShape>(),
+                        Settings = new LineSnapSettings()
+                        {
+                            IsEnabled = false,
+                            EnableGuides = false,
+                            Target = LineSnapTarget.Shapes,
+                            Mode = LineSnapMode.Point
+                            | LineSnapMode.Middle
+                            | LineSnapMode.Nearest
+                            | LineSnapMode.Intersection
+                            | LineSnapMode.Horizontal
+                            | LineSnapMode.Vertical,
+                            Threshold = 10.0,
+                            GuideStyle = "Guide"
+                        }
+                    },
                     new GridSnapPointFilter()
                     {
                         Guides = new ObservableCollection<IBaseShape>(),
@@ -228,10 +249,40 @@ namespace Draw2D.Editor
 
             var pointTool = new PointTool()
             {
+                Intersections = new ObservableCollection<IPointIntersection>(),
                 Filters = new ObservableCollection<IPointFilter>
                 {
-                    lineSnapPointFilter,
-                    gridSnapPointFilter
+                    new LineSnapPointFilter()
+                    {
+                        Guides = new ObservableCollection<IBaseShape>(),
+                        Settings = new LineSnapSettings()
+                        {
+                            IsEnabled = true,
+                            EnableGuides = false,
+                            Target = LineSnapTarget.Shapes,
+                            Mode = LineSnapMode.Point
+                            | LineSnapMode.Middle
+                            | LineSnapMode.Nearest
+                            | LineSnapMode.Intersection
+                            | LineSnapMode.Horizontal
+                            | LineSnapMode.Vertical,
+                            Threshold = 10.0,
+                            GuideStyle = "Guide"
+                        }
+                    },
+                    new GridSnapPointFilter()
+                    {
+                        Guides = new ObservableCollection<IBaseShape>(),
+                        Settings = new GridSnapSettings()
+                        {
+                            IsEnabled = true,
+                            EnableGuides = false,
+                            Mode = GridSnapMode.Horizontal | GridSnapMode.Vertical,
+                            GridSizeX = 15.0,
+                            GridSizeY = 15.0,
+                            GuideStyle = "Guide"
+                        }
+                    }
                 },
                 Settings = new PointToolSettings()
                 {
@@ -271,8 +322,37 @@ namespace Draw2D.Editor
                 },
                 Filters = new ObservableCollection<IPointFilter>
                 {
-                    lineSnapPointFilter,
-                    gridSnapPointFilter
+                    new LineSnapPointFilter()
+                    {
+                        Guides = new ObservableCollection<IBaseShape>(),
+                        Settings = new LineSnapSettings()
+                        {
+                            IsEnabled = true,
+                            EnableGuides = false,
+                            Target = LineSnapTarget.Shapes,
+                            Mode = LineSnapMode.Point
+                            | LineSnapMode.Middle
+                            | LineSnapMode.Nearest
+                            | LineSnapMode.Intersection
+                            | LineSnapMode.Horizontal
+                            | LineSnapMode.Vertical,
+                            Threshold = 10.0,
+                            GuideStyle = "Guide"
+                        }
+                    },
+                    new GridSnapPointFilter()
+                    {
+                        Guides = new ObservableCollection<IBaseShape>(),
+                        Settings = new GridSnapSettings()
+                        {
+                            IsEnabled = true,
+                            EnableGuides = false,
+                            Mode = GridSnapMode.Horizontal | GridSnapMode.Vertical,
+                            GridSizeX = 15.0,
+                            GridSizeY = 15.0,
+                            GuideStyle = "Guide"
+                        }
+                    }
                 },
                 Settings = new LineToolSettings()
                 {
@@ -313,8 +393,37 @@ namespace Draw2D.Editor
                 },
                 Filters = new ObservableCollection<IPointFilter>
                 {
-                    lineSnapPointFilter,
-                    gridSnapPointFilter
+                    new LineSnapPointFilter()
+                    {
+                        Guides = new ObservableCollection<IBaseShape>(),
+                        Settings = new LineSnapSettings()
+                        {
+                            IsEnabled = true,
+                            EnableGuides = false,
+                            Target = LineSnapTarget.Shapes,
+                            Mode = LineSnapMode.Point
+                            | LineSnapMode.Middle
+                            | LineSnapMode.Nearest
+                            | LineSnapMode.Intersection
+                            | LineSnapMode.Horizontal
+                            | LineSnapMode.Vertical,
+                            Threshold = 10.0,
+                            GuideStyle = "Guide"
+                        }
+                    },
+                    new GridSnapPointFilter()
+                    {
+                        Guides = new ObservableCollection<IBaseShape>(),
+                        Settings = new GridSnapSettings()
+                        {
+                            IsEnabled = true,
+                            EnableGuides = false,
+                            Mode = GridSnapMode.Horizontal | GridSnapMode.Vertical,
+                            GridSizeX = 15.0,
+                            GridSizeY = 15.0,
+                            GuideStyle = "Guide"
+                        }
+                    }
                 },
                 Settings = new PolyLineToolSettings()
                 {
@@ -325,10 +434,40 @@ namespace Draw2D.Editor
 
             var cubicBezierTool = new CubicBezierTool()
             {
+                Intersections = new ObservableCollection<IPointIntersection>(),
                 Filters = new ObservableCollection<IPointFilter>
                 {
-                    lineSnapPointFilter,
-                    gridSnapPointFilter
+                    new LineSnapPointFilter()
+                    {
+                        Guides = new ObservableCollection<IBaseShape>(),
+                        Settings = new LineSnapSettings()
+                        {
+                            IsEnabled = true,
+                            EnableGuides = false,
+                            Target = LineSnapTarget.Shapes,
+                            Mode = LineSnapMode.Point
+                            | LineSnapMode.Middle
+                            | LineSnapMode.Nearest
+                            | LineSnapMode.Intersection
+                            | LineSnapMode.Horizontal
+                            | LineSnapMode.Vertical,
+                            Threshold = 10.0,
+                            GuideStyle = "Guide"
+                        }
+                    },
+                    new GridSnapPointFilter()
+                    {
+                        Guides = new ObservableCollection<IBaseShape>(),
+                        Settings = new GridSnapSettings()
+                        {
+                            IsEnabled = true,
+                            EnableGuides = false,
+                            Mode = GridSnapMode.Horizontal | GridSnapMode.Vertical,
+                            GridSizeX = 15.0,
+                            GridSizeY = 15.0,
+                            GuideStyle = "Guide"
+                        }
+                    }
                 },
                 Settings = new CubicBezierToolSettings()
                 {
@@ -339,10 +478,40 @@ namespace Draw2D.Editor
 
             var quadraticBezierTool = new QuadraticBezierTool()
             {
+                Intersections = new ObservableCollection<IPointIntersection>(),
                 Filters = new ObservableCollection<IPointFilter>
                 {
-                    lineSnapPointFilter,
-                    gridSnapPointFilter
+                    new LineSnapPointFilter()
+                    {
+                        Guides = new ObservableCollection<IBaseShape>(),
+                        Settings = new LineSnapSettings()
+                        {
+                            IsEnabled = true,
+                            EnableGuides = false,
+                            Target = LineSnapTarget.Shapes,
+                            Mode = LineSnapMode.Point
+                            | LineSnapMode.Middle
+                            | LineSnapMode.Nearest
+                            | LineSnapMode.Intersection
+                            | LineSnapMode.Horizontal
+                            | LineSnapMode.Vertical,
+                            Threshold = 10.0,
+                            GuideStyle = "Guide"
+                        }
+                    },
+                    new GridSnapPointFilter()
+                    {
+                        Guides = new ObservableCollection<IBaseShape>(),
+                        Settings = new GridSnapSettings()
+                        {
+                            IsEnabled = true,
+                            EnableGuides = false,
+                            Mode = GridSnapMode.Horizontal | GridSnapMode.Vertical,
+                            GridSizeX = 15.0,
+                            GridSizeY = 15.0,
+                            GuideStyle = "Guide"
+                        }
+                    }
                 },
                 Settings = new QuadraticBezierToolSettings()
                 {
@@ -353,10 +522,40 @@ namespace Draw2D.Editor
 
             var conicTool = new ConicTool()
             {
+                Intersections = new ObservableCollection<IPointIntersection>(),
                 Filters = new ObservableCollection<IPointFilter>
                 {
-                    lineSnapPointFilter,
-                    gridSnapPointFilter
+                    new LineSnapPointFilter()
+                    {
+                        Guides = new ObservableCollection<IBaseShape>(),
+                        Settings = new LineSnapSettings()
+                        {
+                            IsEnabled = true,
+                            EnableGuides = false,
+                            Target = LineSnapTarget.Shapes,
+                            Mode = LineSnapMode.Point
+                            | LineSnapMode.Middle
+                            | LineSnapMode.Nearest
+                            | LineSnapMode.Intersection
+                            | LineSnapMode.Horizontal
+                            | LineSnapMode.Vertical,
+                            Threshold = 10.0,
+                            GuideStyle = "Guide"
+                        }
+                    },
+                    new GridSnapPointFilter()
+                    {
+                        Guides = new ObservableCollection<IBaseShape>(),
+                        Settings = new GridSnapSettings()
+                        {
+                            IsEnabled = true,
+                            EnableGuides = false,
+                            Mode = GridSnapMode.Horizontal | GridSnapMode.Vertical,
+                            GridSizeX = 15.0,
+                            GridSizeY = 15.0,
+                            GuideStyle = "Guide"
+                        }
+                    }
                 },
                 Settings = new ConicToolSettings()
                 {
@@ -368,10 +567,40 @@ namespace Draw2D.Editor
 
             var pathTool = new PathTool()
             {
+                Intersections = new ObservableCollection<IPointIntersection>(),
                 Filters = new ObservableCollection<IPointFilter>
                 {
-                    lineSnapPointFilter,
-                    gridSnapPointFilter
+                    new LineSnapPointFilter()
+                    {
+                        Guides = new ObservableCollection<IBaseShape>(),
+                        Settings = new LineSnapSettings()
+                        {
+                            IsEnabled = true,
+                            EnableGuides = false,
+                            Target = LineSnapTarget.Shapes,
+                            Mode = LineSnapMode.Point
+                            | LineSnapMode.Middle
+                            | LineSnapMode.Nearest
+                            | LineSnapMode.Intersection
+                            | LineSnapMode.Horizontal
+                            | LineSnapMode.Vertical,
+                            Threshold = 10.0,
+                            GuideStyle = "Guide"
+                        }
+                    },
+                    new GridSnapPointFilter()
+                    {
+                        Guides = new ObservableCollection<IBaseShape>(),
+                        Settings = new GridSnapSettings()
+                        {
+                            IsEnabled = true,
+                            EnableGuides = false,
+                            Mode = GridSnapMode.Horizontal | GridSnapMode.Vertical,
+                            GridSizeX = 15.0,
+                            GridSizeY = 15.0,
+                            GuideStyle = "Guide"
+                        }
+                    }
                 },
                 Settings = new PathToolSettings()
                 {
@@ -395,9 +624,40 @@ namespace Draw2D.Editor
 
             var scribbleTool = new ScribbleTool()
             {
+                Intersections = new ObservableCollection<IPointIntersection>(),
                 Filters = new ObservableCollection<IPointFilter>
                 {
-                    lineSnapPointFilter
+                    new LineSnapPointFilter()
+                    {
+                        Guides = new ObservableCollection<IBaseShape>(),
+                        Settings = new LineSnapSettings()
+                        {
+                            IsEnabled = true,
+                            EnableGuides = false,
+                            Target = LineSnapTarget.Shapes,
+                            Mode = LineSnapMode.Point
+                            | LineSnapMode.Middle
+                            | LineSnapMode.Nearest
+                            | LineSnapMode.Intersection
+                            | LineSnapMode.Horizontal
+                            | LineSnapMode.Vertical,
+                            Threshold = 10.0,
+                            GuideStyle = "Guide"
+                        }
+                    },
+                    new GridSnapPointFilter()
+                    {
+                        Guides = new ObservableCollection<IBaseShape>(),
+                        Settings = new GridSnapSettings()
+                        {
+                            IsEnabled = false,
+                            EnableGuides = false,
+                            Mode = GridSnapMode.Horizontal | GridSnapMode.Vertical,
+                            GridSizeX = 15.0,
+                            GridSizeY = 15.0,
+                            GuideStyle = "Guide"
+                        }
+                    }
                 },
                 Settings = new ScribbleToolSettings()
                 {
@@ -411,10 +671,40 @@ namespace Draw2D.Editor
 
             var rectangleTool = new RectangleTool()
             {
+                Intersections = new ObservableCollection<IPointIntersection>(),
                 Filters = new ObservableCollection<IPointFilter>
                 {
-                    lineSnapPointFilter,
-                    gridSnapPointFilter
+                    new LineSnapPointFilter()
+                    {
+                        Guides = new ObservableCollection<IBaseShape>(),
+                        Settings = new LineSnapSettings()
+                        {
+                            IsEnabled = true,
+                            EnableGuides = false,
+                            Target = LineSnapTarget.Shapes,
+                            Mode = LineSnapMode.Point
+                            | LineSnapMode.Middle
+                            | LineSnapMode.Nearest
+                            | LineSnapMode.Intersection
+                            | LineSnapMode.Horizontal
+                            | LineSnapMode.Vertical,
+                            Threshold = 10.0,
+                            GuideStyle = "Guide"
+                        }
+                    },
+                    new GridSnapPointFilter()
+                    {
+                        Guides = new ObservableCollection<IBaseShape>(),
+                        Settings = new GridSnapSettings()
+                        {
+                            IsEnabled = true,
+                            EnableGuides = false,
+                            Mode = GridSnapMode.Horizontal | GridSnapMode.Vertical,
+                            GridSizeX = 15.0,
+                            GridSizeY = 15.0,
+                            GuideStyle = "Guide"
+                        }
+                    }
                 },
                 Settings = new RectangleToolSettings()
                 {
@@ -425,10 +715,40 @@ namespace Draw2D.Editor
 
             var ellipseTool = new EllipseTool()
             {
+                Intersections = new ObservableCollection<IPointIntersection>(),
                 Filters = new ObservableCollection<IPointFilter>
                 {
-                    lineSnapPointFilter,
-                    gridSnapPointFilter
+                    new LineSnapPointFilter()
+                    {
+                        Guides = new ObservableCollection<IBaseShape>(),
+                        Settings = new LineSnapSettings()
+                        {
+                            IsEnabled = true,
+                            EnableGuides = false,
+                            Target = LineSnapTarget.Shapes,
+                            Mode = LineSnapMode.Point
+                            | LineSnapMode.Middle
+                            | LineSnapMode.Nearest
+                            | LineSnapMode.Intersection
+                            | LineSnapMode.Horizontal
+                            | LineSnapMode.Vertical,
+                            Threshold = 10.0,
+                            GuideStyle = "Guide"
+                        }
+                    },
+                    new GridSnapPointFilter()
+                    {
+                        Guides = new ObservableCollection<IBaseShape>(),
+                        Settings = new GridSnapSettings()
+                        {
+                            IsEnabled = true,
+                            EnableGuides = false,
+                            Mode = GridSnapMode.Horizontal | GridSnapMode.Vertical,
+                            GridSizeX = 15.0,
+                            GridSizeY = 15.0,
+                            GuideStyle = "Guide"
+                        }
+                    }
                 },
                 Settings = new EllipseToolSettings()
                 {
@@ -439,10 +759,40 @@ namespace Draw2D.Editor
 
             var textTool = new TextTool()
             {
+                Intersections = new ObservableCollection<IPointIntersection>(),
                 Filters = new ObservableCollection<IPointFilter>
                 {
-                    lineSnapPointFilter,
-                    gridSnapPointFilter
+                    new LineSnapPointFilter()
+                    {
+                        Guides = new ObservableCollection<IBaseShape>(),
+                        Settings = new LineSnapSettings()
+                        {
+                            IsEnabled = true,
+                            EnableGuides = false,
+                            Target = LineSnapTarget.Shapes,
+                            Mode = LineSnapMode.Point
+                            | LineSnapMode.Middle
+                            | LineSnapMode.Nearest
+                            | LineSnapMode.Intersection
+                            | LineSnapMode.Horizontal
+                            | LineSnapMode.Vertical,
+                            Threshold = 10.0,
+                            GuideStyle = "Guide"
+                        }
+                    },
+                    new GridSnapPointFilter()
+                    {
+                        Guides = new ObservableCollection<IBaseShape>(),
+                        Settings = new GridSnapSettings()
+                        {
+                            IsEnabled = true,
+                            EnableGuides = false,
+                            Mode = GridSnapMode.Horizontal | GridSnapMode.Vertical,
+                            GridSizeX = 15.0,
+                            GridSizeY = 15.0,
+                            GuideStyle = "Guide"
+                        }
+                    }
                 },
                 Settings = new TextToolSettings()
                 {
@@ -450,6 +800,27 @@ namespace Draw2D.Editor
                     HitTestRadius = 7.0
                 }
             };
+
+            void SetDefaults(ITool tool)
+            {
+                tool.CurrentIntersection = tool.Intersections.Count > 0 ? tool.Intersections[0] : null;
+                tool.CurrentFilter = tool.Filters.Count > 0 ? tool.Filters[0] : null;
+            }
+
+            SetDefaults(noneTool);
+            SetDefaults(selectionTool);
+            SetDefaults(pointTool);
+            SetDefaults(lineTool);
+            SetDefaults(polyLineTool);
+            SetDefaults(cubicBezierTool);
+            SetDefaults(quadraticBezierTool);
+            SetDefaults(conicTool);
+            SetDefaults(pathTool);
+            SetDefaults(scribbleTool);
+            SetDefaults(rectangleTool);
+            SetDefaults(ellipseTool);
+            SetDefaults(textTool);
+
 
             tools.Add(noneTool);
             tools.Add(selectionTool);
