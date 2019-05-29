@@ -1,6 +1,6 @@
 ﻿<!-- Copyright (c) Wiesław Šoltés. All rights reserved. -->
 <!-- Licensed under the MIT license. See LICENSE file in the project root for full license information. -->
-<UserControl x:Class="Draw2D.Views.Tools.PathToolSettingsView"
+<UserControl x:Class="Draw2D.Views.Tools.PointToolView"
              xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -9,46 +9,32 @@
              mc:Ignorable="d"
              d:DesignWidth="400" d:DesignHeight="300">
     <TabControl Classes="default" TabStripPlacement="Top">
-        <TabItem Classes="default" Header="Settings">
-            <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="Auto,*">
-                <TextBlock Classes="default" Grid.Column="0" Grid.Row="0" Text="ConnectPoints"/>
-                <CheckBox Classes="default" Grid.Column="1" Grid.Row="0" IsChecked="{Binding ConnectPoints}"/>
-                <TextBlock Classes="default" Grid.Column="0" Grid.Row="1" Text="HitTestRadius"/>
-                <TextBox Classes="default" Grid.Column="1" Grid.Row="1" Text="{Binding HitTestRadius}"/>
-                <TextBlock Classes="default" Grid.Column="0" Grid.Row="2" Text="FillRule"/>
-                <TextBox Classes="default" Grid.Column="1" Grid.Row="2" Text="{Binding FillRule}"/>
-                <TextBlock Classes="default" Grid.Column="0" Grid.Row="3" Text="IsFilled"/>
-                <CheckBox Classes="default" Grid.Column="1" Grid.Row="3" IsChecked="{Binding IsFilled}"/>
-                <TextBlock Classes="default" Grid.Column="0" Grid.Row="4" Text="IsClosed"/>
-                <CheckBox Classes="default" Grid.Column="1" Grid.Row="4" IsChecked="{Binding IsClosed}"/>
-                <TextBlock Classes="default" Grid.Column="0" Grid.Row="5" Text="CurrentTool"/>
-                <ComboBox Classes="default" Grid.Column="1" Grid.Row="5" Items="{Binding Tools}" SelectedItem="{Binding CurrentTool, Mode=OneWay}">
+        <TabItem Classes="default" Header="Point">
+            <ContentControl Content="{Binding Settings}"/>
+        </TabItem>
+        <TabItem Classes="default" Header="Intersections">
+            <Grid RowDefinitions="Auto,*" IsVisible="{Binding !!Intersections.Count}">
+                <ComboBox Classes="default" Grid.Row="0" x:Name="intersections" Items="{Binding Intersections}" SelectedItem="{Binding CurrentIntersection, Mode=TwoWay}">
                     <ComboBox.DataTemplates>
                         <DataTemplate>
                             <TextBlock Classes="default" Text="{Binding Title}"/>
                         </DataTemplate>
                     </ComboBox.DataTemplates>
                 </ComboBox>
+                <ContentControl Grid.Row="1" Content="{Binding CurrentIntersection.Settings}"/>
             </Grid>
         </TabItem>
-        <TabItem Classes="default" Header="Tools">
-            <TabControl Classes="default" TabStripPlacement="Top">
-                <TabItem Classes="default" Header="Current">
-                    <ContentControl Content="{Binding CurrentTool}"/>
-                </TabItem>
-                <TabItem Classes="default" Header="Previous">
-                    <ContentControl Content="{Binding PreviousTool}"/>
-                </TabItem>
-                <TabItem Classes="default" Header="Tools">
-                    <ListBox Classes="default" Items="{Binding Tools}" SelectedItem="{Binding CurrentTool}">
-                        <ListBox.DataTemplates>
-                            <DataTemplate>
-                                <TextBlock Classes="default" Text="{Binding Title}"/>
-                            </DataTemplate>
-                        </ListBox.DataTemplates>
-                    </ListBox>
-                </TabItem>
-            </TabControl>
+        <TabItem Classes="default" Header="Filters">
+            <Grid RowDefinitions="Auto,*" IsVisible="{Binding !!Filters.Count}">
+                <ComboBox Classes="default" Grid.Row="0" x:Name="filters" Items="{Binding Filters}" SelectedItem="{Binding CurrentFilter, Mode=TwoWay}">
+                    <ComboBox.DataTemplates>
+                        <DataTemplate>
+                            <TextBlock Classes="default" Text="{Binding Title}"/>
+                        </DataTemplate>
+                    </ComboBox.DataTemplates>
+                </ComboBox>
+                <ContentControl Grid.Row="1" Content="{Binding CurrentFilter.Settings}"/>
+            </Grid>
         </TabItem>
         <TabItem Classes="default" Header="Object">
             <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="Auto,*">
