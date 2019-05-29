@@ -128,7 +128,6 @@ namespace Draw2D.ViewModels
 
     public interface IBounds
     {
-        string TargetType { get; }
         IPointShape TryToGetPoint(IBaseShape shape, Point2 target, double radius, IHitTest hitTest);
         IBaseShape Contains(IBaseShape shape, Point2 target, double radius, IHitTest hitTest);
         IBaseShape Overlaps(IBaseShape shape, Rect2 target, double radius, IHitTest hitTest);
@@ -5616,9 +5615,6 @@ namespace Draw2D.ViewModels.Bounds
     [DataContract(IsReference = true)]
     public class CubicBezierBounds : IBounds
     {
-        [IgnoreDataMember]
-        public string TargetType => typeof(CubicBezierShape).Name;
-
         public IPointShape TryToGetPoint(IBaseShape shape, Point2 target, double radius, IHitTest hitTest)
         {
             if (!(shape is CubicBezierShape cubicBezier))
@@ -5687,9 +5683,6 @@ namespace Draw2D.ViewModels.Bounds
     [DataContract(IsReference = true)]
     public class EllipseBounds : IBounds
     {
-        [IgnoreDataMember]
-        public string TargetType => typeof(EllipseShape).Name;
-
         public IPointShape TryToGetPoint(IBaseShape shape, Point2 target, double radius, IHitTest hitTest)
         {
             var box = shape as BoxShape ?? throw new ArgumentNullException("shape");
@@ -5741,9 +5734,6 @@ namespace Draw2D.ViewModels.Bounds
     [DataContract(IsReference = true)]
     public class FigureBounds : IBounds
     {
-        [IgnoreDataMember]
-        public string TargetType => typeof(FigureShape).Name;
-
         public IPointShape TryToGetPoint(IBaseShape shape, Point2 target, double radius, IHitTest hitTest)
         {
             if (!(shape is FigureShape figure))
@@ -5803,9 +5793,6 @@ namespace Draw2D.ViewModels.Bounds
     [DataContract(IsReference = true)]
     public class GroupBounds : IBounds
     {
-        [IgnoreDataMember]
-        public string TargetType => typeof(GroupShape).Name;
-
         public IPointShape TryToGetPoint(IBaseShape shape, Point2 target, double radius, IHitTest hitTest)
         {
             if (!(shape is GroupShape group))
@@ -5873,9 +5860,6 @@ namespace Draw2D.ViewModels.Bounds
     [DataContract(IsReference = true)]
     public class LineBounds : IBounds
     {
-        [IgnoreDataMember]
-        public string TargetType => typeof(LineShape).Name;
-
         public IPointShape TryToGetPoint(IBaseShape shape, Point2 target, double radius, IHitTest hitTest)
         {
             if (!(shape is LineShape line))
@@ -5934,9 +5918,6 @@ namespace Draw2D.ViewModels.Bounds
     [DataContract(IsReference = true)]
     public class PathBounds : IBounds
     {
-        [IgnoreDataMember]
-        public string TargetType => typeof(PathShape).Name;
-
         public IPointShape TryToGetPoint(IBaseShape shape, Point2 target, double radius, IHitTest hitTest)
         {
             if (!(shape is PathShape path))
@@ -6026,9 +6007,6 @@ namespace Draw2D.ViewModels.Bounds
     [DataContract(IsReference = true)]
     public class PointBounds : IBounds
     {
-        [IgnoreDataMember]
-        public string TargetType => typeof(IPointShape).Name;
-
         public IPointShape TryToGetPoint(IBaseShape shape, Point2 target, double radius, IHitTest hitTest)
         {
             if (!(shape is IPointShape point))
@@ -6068,9 +6046,6 @@ namespace Draw2D.ViewModels.Bounds
     [DataContract(IsReference = true)]
     public class QuadraticBezierBounds : IBounds
     {
-        [IgnoreDataMember]
-        public string TargetType => typeof(QuadraticBezierShape).Name;
-
         public IPointShape TryToGetPoint(IBaseShape shape, Point2 target, double radius, IHitTest hitTest)
         {
             if (!(shape is QuadraticBezierShape quadraticBezier))
@@ -6134,9 +6109,6 @@ namespace Draw2D.ViewModels.Bounds
     [DataContract(IsReference = true)]
     public class ConicBounds : IBounds
     {
-        [IgnoreDataMember]
-        public string TargetType => typeof(ConicShape).Name;
-
         public IPointShape TryToGetPoint(IBaseShape shape, Point2 target, double radius, IHitTest hitTest)
         {
             if (!(shape is ConicShape conic))
@@ -6200,9 +6172,6 @@ namespace Draw2D.ViewModels.Bounds
     [DataContract(IsReference = true)]
     public class RectangleBounds : IBounds
     {
-        [IgnoreDataMember]
-        public string TargetType => typeof(RectangleShape).Name;
-
         public IPointShape TryToGetPoint(IBaseShape shape, Point2 target, double radius, IHitTest hitTest)
         {
             var box = shape as BoxShape ?? throw new ArgumentNullException("shape");
@@ -6254,9 +6223,6 @@ namespace Draw2D.ViewModels.Bounds
     [DataContract(IsReference = true)]
     public class ReferenceBounds : IBounds
     {
-        [IgnoreDataMember]
-        public string TargetType => typeof(ReferenceShape).Name;
-
         public IPointShape TryToGetPoint(IBaseShape shape, Point2 target, double radius, IHitTest hitTest)
         {
             if (!(shape is ReferenceShape reference))
@@ -6319,9 +6285,6 @@ namespace Draw2D.ViewModels.Bounds
     [DataContract(IsReference = true)]
     public class TextBounds : IBounds
     {
-        [IgnoreDataMember]
-        public string TargetType => typeof(TextShape).Name;
-
         public IPointShape TryToGetPoint(IBaseShape shape, Point2 target, double radius, IHitTest hitTest)
         {
             var box = shape as BoxShape ?? throw new ArgumentNullException("shape");
@@ -6373,9 +6336,6 @@ namespace Draw2D.ViewModels.Bounds
     [DataContract(IsReference = true)]
     public class ContainerBounds : IBounds
     {
-        [IgnoreDataMember]
-        public string TargetType => typeof(CanvasContainer).Name;
-
         public IPointShape TryToGetPoint(IBaseShape shape, Point2 target, double radius, IHitTest hitTest)
         {
             if (!(shape is CanvasContainer container))
