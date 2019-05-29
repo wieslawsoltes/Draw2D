@@ -199,6 +199,19 @@ namespace Draw2D.Editor
                 Intersections = new ObservableCollection<IPointIntersection>(),
                 Filters = new ObservableCollection<IPointFilter>
                 {
+                    new GridSnapPointFilter()
+                    {
+                        Guides = new ObservableCollection<IBaseShape>(),
+                        Settings = new GridSnapSettings()
+                        {
+                            IsEnabled = true,
+                            EnableGuides = false,
+                            Mode = GridSnapMode.Horizontal | GridSnapMode.Vertical,
+                            GridSizeX = 15.0,
+                            GridSizeY = 15.0,
+                            GuideStyle = "Guide"
+                        }
+                    },
                     new LineSnapPointFilter()
                     {
                         Guides = new ObservableCollection<IBaseShape>(),
@@ -214,19 +227,6 @@ namespace Draw2D.Editor
                             | LineSnapMode.Horizontal
                             | LineSnapMode.Vertical,
                             Threshold = 10.0,
-                            GuideStyle = "Guide"
-                        }
-                    },
-                    new GridSnapPointFilter()
-                    {
-                        Guides = new ObservableCollection<IBaseShape>(),
-                        Settings = new GridSnapSettings()
-                        {
-                            IsEnabled = true,
-                            EnableGuides = false,
-                            Mode = GridSnapMode.Horizontal | GridSnapMode.Vertical,
-                            GridSizeX = 15.0,
-                            GridSizeY = 15.0,
                             GuideStyle = "Guide"
                         }
                     }
@@ -252,6 +252,19 @@ namespace Draw2D.Editor
                 Intersections = new ObservableCollection<IPointIntersection>(),
                 Filters = new ObservableCollection<IPointFilter>
                 {
+                    new GridSnapPointFilter()
+                    {
+                        Guides = new ObservableCollection<IBaseShape>(),
+                        Settings = new GridSnapSettings()
+                        {
+                            IsEnabled = true,
+                            EnableGuides = false,
+                            Mode = GridSnapMode.Horizontal | GridSnapMode.Vertical,
+                            GridSizeX = 15.0,
+                            GridSizeY = 15.0,
+                            GuideStyle = "Guide"
+                        }
+                    },
                     new LineSnapPointFilter()
                     {
                         Guides = new ObservableCollection<IBaseShape>(),
@@ -267,19 +280,6 @@ namespace Draw2D.Editor
                             | LineSnapMode.Horizontal
                             | LineSnapMode.Vertical,
                             Threshold = 10.0,
-                            GuideStyle = "Guide"
-                        }
-                    },
-                    new GridSnapPointFilter()
-                    {
-                        Guides = new ObservableCollection<IBaseShape>(),
-                        Settings = new GridSnapSettings()
-                        {
-                            IsEnabled = true,
-                            EnableGuides = false,
-                            Mode = GridSnapMode.Horizontal | GridSnapMode.Vertical,
-                            GridSizeX = 15.0,
-                            GridSizeY = 15.0,
                             GuideStyle = "Guide"
                         }
                     }
@@ -322,6 +322,19 @@ namespace Draw2D.Editor
                 },
                 Filters = new ObservableCollection<IPointFilter>
                 {
+                    new GridSnapPointFilter()
+                    {
+                        Guides = new ObservableCollection<IBaseShape>(),
+                        Settings = new GridSnapSettings()
+                        {
+                            IsEnabled = true,
+                            EnableGuides = false,
+                            Mode = GridSnapMode.Horizontal | GridSnapMode.Vertical,
+                            GridSizeX = 15.0,
+                            GridSizeY = 15.0,
+                            GuideStyle = "Guide"
+                        }
+                    },
                     new LineSnapPointFilter()
                     {
                         Guides = new ObservableCollection<IBaseShape>(),
@@ -337,19 +350,6 @@ namespace Draw2D.Editor
                             | LineSnapMode.Horizontal
                             | LineSnapMode.Vertical,
                             Threshold = 10.0,
-                            GuideStyle = "Guide"
-                        }
-                    },
-                    new GridSnapPointFilter()
-                    {
-                        Guides = new ObservableCollection<IBaseShape>(),
-                        Settings = new GridSnapSettings()
-                        {
-                            IsEnabled = true,
-                            EnableGuides = false,
-                            Mode = GridSnapMode.Horizontal | GridSnapMode.Vertical,
-                            GridSizeX = 15.0,
-                            GridSizeY = 15.0,
                             GuideStyle = "Guide"
                         }
                     }
@@ -393,6 +393,19 @@ namespace Draw2D.Editor
                 },
                 Filters = new ObservableCollection<IPointFilter>
                 {
+                    new GridSnapPointFilter()
+                    {
+                        Guides = new ObservableCollection<IBaseShape>(),
+                        Settings = new GridSnapSettings()
+                        {
+                            IsEnabled = true,
+                            EnableGuides = false,
+                            Mode = GridSnapMode.Horizontal | GridSnapMode.Vertical,
+                            GridSizeX = 15.0,
+                            GridSizeY = 15.0,
+                            GuideStyle = "Guide"
+                        }
+                    },
                     new LineSnapPointFilter()
                     {
                         Guides = new ObservableCollection<IBaseShape>(),
@@ -408,19 +421,6 @@ namespace Draw2D.Editor
                             | LineSnapMode.Horizontal
                             | LineSnapMode.Vertical,
                             Threshold = 10.0,
-                            GuideStyle = "Guide"
-                        }
-                    },
-                    new GridSnapPointFilter()
-                    {
-                        Guides = new ObservableCollection<IBaseShape>(),
-                        Settings = new GridSnapSettings()
-                        {
-                            IsEnabled = true,
-                            EnableGuides = false,
-                            Mode = GridSnapMode.Horizontal | GridSnapMode.Vertical,
-                            GridSizeX = 15.0,
-                            GridSizeY = 15.0,
                             GuideStyle = "Guide"
                         }
                     }
@@ -437,6 +437,19 @@ namespace Draw2D.Editor
                 Intersections = new ObservableCollection<IPointIntersection>(),
                 Filters = new ObservableCollection<IPointFilter>
                 {
+                    new GridSnapPointFilter()
+                    {
+                        Guides = new ObservableCollection<IBaseShape>(),
+                        Settings = new GridSnapSettings()
+                        {
+                            IsEnabled = true,
+                            EnableGuides = false,
+                            Mode = GridSnapMode.Horizontal | GridSnapMode.Vertical,
+                            GridSizeX = 15.0,
+                            GridSizeY = 15.0,
+                            GuideStyle = "Guide"
+                        }
+                    },
                     new LineSnapPointFilter()
                     {
                         Guides = new ObservableCollection<IBaseShape>(),
@@ -452,19 +465,6 @@ namespace Draw2D.Editor
                             | LineSnapMode.Horizontal
                             | LineSnapMode.Vertical,
                             Threshold = 10.0,
-                            GuideStyle = "Guide"
-                        }
-                    },
-                    new GridSnapPointFilter()
-                    {
-                        Guides = new ObservableCollection<IBaseShape>(),
-                        Settings = new GridSnapSettings()
-                        {
-                            IsEnabled = true,
-                            EnableGuides = false,
-                            Mode = GridSnapMode.Horizontal | GridSnapMode.Vertical,
-                            GridSizeX = 15.0,
-                            GridSizeY = 15.0,
                             GuideStyle = "Guide"
                         }
                     }
@@ -481,6 +481,19 @@ namespace Draw2D.Editor
                 Intersections = new ObservableCollection<IPointIntersection>(),
                 Filters = new ObservableCollection<IPointFilter>
                 {
+                    new GridSnapPointFilter()
+                    {
+                        Guides = new ObservableCollection<IBaseShape>(),
+                        Settings = new GridSnapSettings()
+                        {
+                            IsEnabled = true,
+                            EnableGuides = false,
+                            Mode = GridSnapMode.Horizontal | GridSnapMode.Vertical,
+                            GridSizeX = 15.0,
+                            GridSizeY = 15.0,
+                            GuideStyle = "Guide"
+                        }
+                    },
                     new LineSnapPointFilter()
                     {
                         Guides = new ObservableCollection<IBaseShape>(),
@@ -496,19 +509,6 @@ namespace Draw2D.Editor
                             | LineSnapMode.Horizontal
                             | LineSnapMode.Vertical,
                             Threshold = 10.0,
-                            GuideStyle = "Guide"
-                        }
-                    },
-                    new GridSnapPointFilter()
-                    {
-                        Guides = new ObservableCollection<IBaseShape>(),
-                        Settings = new GridSnapSettings()
-                        {
-                            IsEnabled = true,
-                            EnableGuides = false,
-                            Mode = GridSnapMode.Horizontal | GridSnapMode.Vertical,
-                            GridSizeX = 15.0,
-                            GridSizeY = 15.0,
                             GuideStyle = "Guide"
                         }
                     }
@@ -525,6 +525,19 @@ namespace Draw2D.Editor
                 Intersections = new ObservableCollection<IPointIntersection>(),
                 Filters = new ObservableCollection<IPointFilter>
                 {
+                    new GridSnapPointFilter()
+                    {
+                        Guides = new ObservableCollection<IBaseShape>(),
+                        Settings = new GridSnapSettings()
+                        {
+                            IsEnabled = true,
+                            EnableGuides = false,
+                            Mode = GridSnapMode.Horizontal | GridSnapMode.Vertical,
+                            GridSizeX = 15.0,
+                            GridSizeY = 15.0,
+                            GuideStyle = "Guide"
+                        }
+                    },
                     new LineSnapPointFilter()
                     {
                         Guides = new ObservableCollection<IBaseShape>(),
@@ -540,19 +553,6 @@ namespace Draw2D.Editor
                             | LineSnapMode.Horizontal
                             | LineSnapMode.Vertical,
                             Threshold = 10.0,
-                            GuideStyle = "Guide"
-                        }
-                    },
-                    new GridSnapPointFilter()
-                    {
-                        Guides = new ObservableCollection<IBaseShape>(),
-                        Settings = new GridSnapSettings()
-                        {
-                            IsEnabled = true,
-                            EnableGuides = false,
-                            Mode = GridSnapMode.Horizontal | GridSnapMode.Vertical,
-                            GridSizeX = 15.0,
-                            GridSizeY = 15.0,
                             GuideStyle = "Guide"
                         }
                     }
@@ -570,6 +570,19 @@ namespace Draw2D.Editor
                 Intersections = new ObservableCollection<IPointIntersection>(),
                 Filters = new ObservableCollection<IPointFilter>
                 {
+                    new GridSnapPointFilter()
+                    {
+                        Guides = new ObservableCollection<IBaseShape>(),
+                        Settings = new GridSnapSettings()
+                        {
+                            IsEnabled = true,
+                            EnableGuides = false,
+                            Mode = GridSnapMode.Horizontal | GridSnapMode.Vertical,
+                            GridSizeX = 15.0,
+                            GridSizeY = 15.0,
+                            GuideStyle = "Guide"
+                        }
+                    },
                     new LineSnapPointFilter()
                     {
                         Guides = new ObservableCollection<IBaseShape>(),
@@ -585,19 +598,6 @@ namespace Draw2D.Editor
                             | LineSnapMode.Horizontal
                             | LineSnapMode.Vertical,
                             Threshold = 10.0,
-                            GuideStyle = "Guide"
-                        }
-                    },
-                    new GridSnapPointFilter()
-                    {
-                        Guides = new ObservableCollection<IBaseShape>(),
-                        Settings = new GridSnapSettings()
-                        {
-                            IsEnabled = true,
-                            EnableGuides = false,
-                            Mode = GridSnapMode.Horizontal | GridSnapMode.Vertical,
-                            GridSizeX = 15.0,
-                            GridSizeY = 15.0,
                             GuideStyle = "Guide"
                         }
                     }
@@ -627,6 +627,19 @@ namespace Draw2D.Editor
                 Intersections = new ObservableCollection<IPointIntersection>(),
                 Filters = new ObservableCollection<IPointFilter>
                 {
+                    new GridSnapPointFilter()
+                    {
+                        Guides = new ObservableCollection<IBaseShape>(),
+                        Settings = new GridSnapSettings()
+                        {
+                            IsEnabled = false,
+                            EnableGuides = false,
+                            Mode = GridSnapMode.Horizontal | GridSnapMode.Vertical,
+                            GridSizeX = 15.0,
+                            GridSizeY = 15.0,
+                            GuideStyle = "Guide"
+                        }
+                    },
                     new LineSnapPointFilter()
                     {
                         Guides = new ObservableCollection<IBaseShape>(),
@@ -642,19 +655,6 @@ namespace Draw2D.Editor
                             | LineSnapMode.Horizontal
                             | LineSnapMode.Vertical,
                             Threshold = 10.0,
-                            GuideStyle = "Guide"
-                        }
-                    },
-                    new GridSnapPointFilter()
-                    {
-                        Guides = new ObservableCollection<IBaseShape>(),
-                        Settings = new GridSnapSettings()
-                        {
-                            IsEnabled = false,
-                            EnableGuides = false,
-                            Mode = GridSnapMode.Horizontal | GridSnapMode.Vertical,
-                            GridSizeX = 15.0,
-                            GridSizeY = 15.0,
                             GuideStyle = "Guide"
                         }
                     }
@@ -674,6 +674,19 @@ namespace Draw2D.Editor
                 Intersections = new ObservableCollection<IPointIntersection>(),
                 Filters = new ObservableCollection<IPointFilter>
                 {
+                    new GridSnapPointFilter()
+                    {
+                        Guides = new ObservableCollection<IBaseShape>(),
+                        Settings = new GridSnapSettings()
+                        {
+                            IsEnabled = true,
+                            EnableGuides = false,
+                            Mode = GridSnapMode.Horizontal | GridSnapMode.Vertical,
+                            GridSizeX = 15.0,
+                            GridSizeY = 15.0,
+                            GuideStyle = "Guide"
+                        }
+                    },
                     new LineSnapPointFilter()
                     {
                         Guides = new ObservableCollection<IBaseShape>(),
@@ -689,19 +702,6 @@ namespace Draw2D.Editor
                             | LineSnapMode.Horizontal
                             | LineSnapMode.Vertical,
                             Threshold = 10.0,
-                            GuideStyle = "Guide"
-                        }
-                    },
-                    new GridSnapPointFilter()
-                    {
-                        Guides = new ObservableCollection<IBaseShape>(),
-                        Settings = new GridSnapSettings()
-                        {
-                            IsEnabled = true,
-                            EnableGuides = false,
-                            Mode = GridSnapMode.Horizontal | GridSnapMode.Vertical,
-                            GridSizeX = 15.0,
-                            GridSizeY = 15.0,
                             GuideStyle = "Guide"
                         }
                     }
@@ -718,6 +718,19 @@ namespace Draw2D.Editor
                 Intersections = new ObservableCollection<IPointIntersection>(),
                 Filters = new ObservableCollection<IPointFilter>
                 {
+                    new GridSnapPointFilter()
+                    {
+                        Guides = new ObservableCollection<IBaseShape>(),
+                        Settings = new GridSnapSettings()
+                        {
+                            IsEnabled = true,
+                            EnableGuides = false,
+                            Mode = GridSnapMode.Horizontal | GridSnapMode.Vertical,
+                            GridSizeX = 15.0,
+                            GridSizeY = 15.0,
+                            GuideStyle = "Guide"
+                        }
+                    },
                     new LineSnapPointFilter()
                     {
                         Guides = new ObservableCollection<IBaseShape>(),
@@ -733,19 +746,6 @@ namespace Draw2D.Editor
                             | LineSnapMode.Horizontal
                             | LineSnapMode.Vertical,
                             Threshold = 10.0,
-                            GuideStyle = "Guide"
-                        }
-                    },
-                    new GridSnapPointFilter()
-                    {
-                        Guides = new ObservableCollection<IBaseShape>(),
-                        Settings = new GridSnapSettings()
-                        {
-                            IsEnabled = true,
-                            EnableGuides = false,
-                            Mode = GridSnapMode.Horizontal | GridSnapMode.Vertical,
-                            GridSizeX = 15.0,
-                            GridSizeY = 15.0,
                             GuideStyle = "Guide"
                         }
                     }
@@ -762,6 +762,19 @@ namespace Draw2D.Editor
                 Intersections = new ObservableCollection<IPointIntersection>(),
                 Filters = new ObservableCollection<IPointFilter>
                 {
+                    new GridSnapPointFilter()
+                    {
+                        Guides = new ObservableCollection<IBaseShape>(),
+                        Settings = new GridSnapSettings()
+                        {
+                            IsEnabled = true,
+                            EnableGuides = false,
+                            Mode = GridSnapMode.Horizontal | GridSnapMode.Vertical,
+                            GridSizeX = 15.0,
+                            GridSizeY = 15.0,
+                            GuideStyle = "Guide"
+                        }
+                    },
                     new LineSnapPointFilter()
                     {
                         Guides = new ObservableCollection<IBaseShape>(),
@@ -779,19 +792,6 @@ namespace Draw2D.Editor
                             Threshold = 10.0,
                             GuideStyle = "Guide"
                         }
-                    },
-                    new GridSnapPointFilter()
-                    {
-                        Guides = new ObservableCollection<IBaseShape>(),
-                        Settings = new GridSnapSettings()
-                        {
-                            IsEnabled = true,
-                            EnableGuides = false,
-                            Mode = GridSnapMode.Horizontal | GridSnapMode.Vertical,
-                            GridSizeX = 15.0,
-                            GridSizeY = 15.0,
-                            GuideStyle = "Guide"
-                        }
                     }
                 },
                 Settings = new TextToolSettings()
@@ -801,26 +801,25 @@ namespace Draw2D.Editor
                 }
             };
 
-            void SetDefaults(ITool tool)
+            void SetToolDefaults(ITool tool)
             {
                 tool.CurrentIntersection = tool.Intersections.Count > 0 ? tool.Intersections[0] : null;
                 tool.CurrentFilter = tool.Filters.Count > 0 ? tool.Filters[0] : null;
             }
 
-            SetDefaults(noneTool);
-            SetDefaults(selectionTool);
-            SetDefaults(pointTool);
-            SetDefaults(lineTool);
-            SetDefaults(polyLineTool);
-            SetDefaults(cubicBezierTool);
-            SetDefaults(quadraticBezierTool);
-            SetDefaults(conicTool);
-            SetDefaults(pathTool);
-            SetDefaults(scribbleTool);
-            SetDefaults(rectangleTool);
-            SetDefaults(ellipseTool);
-            SetDefaults(textTool);
-
+            SetToolDefaults(noneTool);
+            SetToolDefaults(selectionTool);
+            SetToolDefaults(pointTool);
+            SetToolDefaults(lineTool);
+            SetToolDefaults(polyLineTool);
+            SetToolDefaults(cubicBezierTool);
+            SetToolDefaults(quadraticBezierTool);
+            SetToolDefaults(conicTool);
+            SetToolDefaults(pathTool);
+            SetToolDefaults(scribbleTool);
+            SetToolDefaults(rectangleTool);
+            SetToolDefaults(ellipseTool);
+            SetToolDefaults(textTool);
 
             tools.Add(noneTool);
             tools.Add(selectionTool);
