@@ -250,26 +250,21 @@ namespace Draw2D
                     toolContext.GroupLibrary = groupLibrary;
                     if (toolContext is EditorToolContext editorToolContext)
                     {
-                        editorToolContext.NewContainerView("Demo");
+                        editorToolContext.NewContainerView("demo");
                         editorToolContext.CreateDemoGroup(editorToolContext);
-                        JsonSerializer.ToJsonFile("Demo.json", editorToolContext.ContainerView);
+                        JsonSerializer.ToJsonFile("demo.json", editorToolContext);
                     }
                     return false;
                 }
             }
-            else if (args.Length == 5)
+            else if (args.Length == 3)
             {
                 var command = args[0];
 
                 if (command == "--export")
                 {
-                    var styleLibrary = JsonSerializer.FromJsonFile<IStyleLibrary>(args[1]);
-                    var groupLibrary = JsonSerializer.FromJsonFile<IGroupLibrary>(args[2]);
-                    var containerView = JsonSerializer.FromJsonFile<ContainerView>(args[3]);
-                    var toolContext = ContainerFactory.CreateToolContext();
-                    toolContext.StyleLibrary = styleLibrary;
-                    toolContext.GroupLibrary = groupLibrary;
-                    EditorToolContext.Export(args[4], containerView, toolContext);
+                    var toolContext = JsonSerializer.FromJsonFile<IToolContext>(args[1]);
+                    EditorToolContext.Export(args[2], toolContext.ContainerView, toolContext);
                     return false;
                 }
             }

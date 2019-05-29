@@ -328,7 +328,56 @@ namespace Draw2D.Editor
             }
         }
 
-        public static void ExportPng(string path, IContainerView containerView, IToolContext context)
+        public static void ExportPdf(string path, IContainerView containerView, IToolContext context)
+        {
+            using (var stream = new SKFileWStream(path))
+            using (var pdf = SKDocument.CreatePdf(stream, SKDocument.DefaultRasterDpi))
+            using (var canvas = pdf.BeginPage((float)containerView.Width, (float)containerView.Height))
+            using (var skiaView = new ExportSkiaView(context, containerView))
+            {
+                skiaView.Draw(canvas, containerView.Width, containerView.Height, 0, 0, 1.0, 1.0);
+                pdf.Close();
+            }
+        }
+
+        public static void ExportXps(string path, IContainerView containerView, IToolContext context)
+        {
+            using (var stream = new SKFileWStream(path))
+            using (var xps = SKDocument.CreateXps(stream, SKDocument.DefaultRasterDpi))
+            using (var canvas = xps.BeginPage((float)containerView.Width, (float)containerView.Height))
+            using (var skiaView = new ExportSkiaView(context, containerView))
+            {
+                skiaView.Draw(canvas, containerView.Width, containerView.Height, 0, 0, 1.0, 1.0);
+                xps.Close();
+            }
+        }
+
+        public static void ExportSkp(string path, IContainerView containerView, IToolContext context)
+        {
+            var recorder = new SKPictureRecorder();
+            var rect = new SKRect(0f, 0f, (float)containerView.Width, (float)containerView.Height);
+            var canvas = recorder.BeginRecording(rect);
+            using (var skiaView = new ExportSkiaView(context, containerView))
+            {
+                skiaView.Draw(canvas, containerView.Width, containerView.Height, 0, 0, 1.0, 1.0);
+            }
+            var picture = recorder.EndRecording();
+            var dimensions = new SKSizeI((int)containerView.Width, (int)containerView.Height);
+			using (var image = SKImage.FromPicture(picture, dimensions))
+			{
+				var data = image.EncodedData;
+				if (data != null)
+				{
+                    using (var stream = File.OpenWrite(path))
+                    {
+                        data.SaveTo(stream);
+                    }
+				}
+			}
+            picture.Dispose();
+        }
+
+        public static void ExportImage(string path, IContainerView containerView, IToolContext context, SKEncodedImageFormat format, int quality)
         {
             var info = new SKImageInfo((int)containerView.Width, (int)containerView.Height);
             using (var bitmap = new SKBitmap(info))
@@ -339,23 +388,16 @@ namespace Draw2D.Editor
                     skiaView.Draw(canvas, containerView.Width, containerView.Height, 0, 0, 1.0, 1.0);
                 }
                 using (var image = SKImage.FromBitmap(bitmap))
-                using (var data = image.Encode(SKEncodedImageFormat.Png, 100))
-                using (var stream = File.OpenWrite(path))
+                using (var data = image.Encode(format, quality))
                 {
-                    data.SaveTo(stream);
+    				if (data != null)
+    				{
+                        using (var stream = File.OpenWrite(path))
+                        {
+                            data.SaveTo(stream);
+                        }
+    				}
                 }
-            }
-        }
-
-        public static void ExportPdf(string path, IContainerView containerView, IToolContext context)
-        {
-            using (var stream = new SKFileWStream(path))
-            using (var pdf = SKDocument.CreatePdf(stream, 72.0f))
-            using (var canvas = pdf.BeginPage((float)containerView.Width, (float)containerView.Height))
-            using (var skiaView = new ExportSkiaView(context, containerView))
-            {
-                skiaView.Draw(canvas, containerView.Width, containerView.Height, 0, 0, 1.0, 1.0);
-                pdf.Close();
             }
         }
 
@@ -367,13 +409,61 @@ namespace Draw2D.Editor
             {
                 ExportSvg(path, containerView, context);
             }
-            else if (string.Compare(outputExtension, ".png", StringComparison.OrdinalIgnoreCase) == 0)
-            {
-                ExportPng(path, containerView, context);
-            }
             else if (string.Compare(outputExtension, ".pdf", StringComparison.OrdinalIgnoreCase) == 0)
             {
                 ExportPdf(path, containerView, context);
+            }
+            else if (string.Compare(outputExtension, ".xps", StringComparison.OrdinalIgnoreCase) == 0)
+            {
+                ExportXps(path, containerView, context);
+            }
+            else if (string.Compare(outputExtension, ".skp", StringComparison.OrdinalIgnoreCase) == 0)
+            {
+                ExportSkp(path, containerView, context);
+            }
+            else if (string.Compare(outputExtension, ".bmp", StringComparison.OrdinalIgnoreCase) == 0)
+            {
+                ExportImage(path, containerView, context, SKEncodedImageFormat.Bmp, 100);
+            }
+            else if (string.Compare(outputExtension, ".gif", StringComparison.OrdinalIgnoreCase) == 0)
+            {
+                ExportImage(path, containerView, context, SKEncodedImageFormat.Gif, 100);
+            }
+            else if (string.Compare(outputExtension, ".ico", StringComparison.OrdinalIgnoreCase) == 0)
+            {
+                ExportImage(path, containerView, context, SKEncodedImageFormat.Ico, 100);
+            }
+            else if (string.Compare(outputExtension, ".jpeg", StringComparison.OrdinalIgnoreCase) == 0)
+            {
+                ExportImage(path, containerView, context, SKEncodedImageFormat.Jpeg, 100);
+            }
+            else if (string.Compare(outputExtension, ".png", StringComparison.OrdinalIgnoreCase) == 0)
+            {
+                ExportImage(path, containerView, context, SKEncodedImageFormat.Png, 100);
+            }
+            else if (string.Compare(outputExtension, ".wbmp", StringComparison.OrdinalIgnoreCase) == 0)
+            {
+                ExportImage(path, containerView, context, SKEncodedImageFormat.Wbmp, 100);
+            }
+            else if (string.Compare(outputExtension, ".webp", StringComparison.OrdinalIgnoreCase) == 0)
+            {
+                ExportImage(path, containerView, context, SKEncodedImageFormat.Webp, 100);
+            }
+            else if (string.Compare(outputExtension, ".pkm", StringComparison.OrdinalIgnoreCase) == 0)
+            {
+                ExportImage(path, containerView, context, SKEncodedImageFormat.Pkm, 100);
+            }
+            else if (string.Compare(outputExtension, ".ktx", StringComparison.OrdinalIgnoreCase) == 0)
+            {
+                ExportImage(path, containerView, context, SKEncodedImageFormat.Ktx, 100);
+            }
+            else if (string.Compare(outputExtension, ".astc", StringComparison.OrdinalIgnoreCase) == 0)
+            {
+                ExportImage(path, containerView, context, SKEncodedImageFormat.Astc, 100);
+            }
+            else if (string.Compare(outputExtension, ".dng", StringComparison.OrdinalIgnoreCase) == 0)
+            {
+                ExportImage(path, containerView, context, SKEncodedImageFormat.Dng, 100);
             }
         }
 
@@ -397,8 +487,20 @@ namespace Draw2D.Editor
         {
             var dlg = new SaveFileDialog();
             dlg.Filters.Add(new FileDialogFilter() { Name = "Pdf Files", Extensions = { "pdf" } });
+            dlg.Filters.Add(new FileDialogFilter() { Name = "Pdf Files", Extensions = { "xps" } });
             dlg.Filters.Add(new FileDialogFilter() { Name = "Svg Files", Extensions = { "svg" } });
+            dlg.Filters.Add(new FileDialogFilter() { Name = "Skp Files", Extensions = { "skp" } });
+            dlg.Filters.Add(new FileDialogFilter() { Name = "Bmp Files", Extensions = { "bmp" } });
+            dlg.Filters.Add(new FileDialogFilter() { Name = "Gif Files", Extensions = { "gif" } });
+            dlg.Filters.Add(new FileDialogFilter() { Name = "Ico Files", Extensions = { "ico" } });
+            dlg.Filters.Add(new FileDialogFilter() { Name = "Jpeg Files", Extensions = { "jpeg" } });
             dlg.Filters.Add(new FileDialogFilter() { Name = "Png Files", Extensions = { "png" } });
+            dlg.Filters.Add(new FileDialogFilter() { Name = "Wbmp Files", Extensions = { "wbmp" } });
+            dlg.Filters.Add(new FileDialogFilter() { Name = "Webp Files", Extensions = { "webp" } });
+            dlg.Filters.Add(new FileDialogFilter() { Name = "Pkm Files", Extensions = { "pkm" } });
+            dlg.Filters.Add(new FileDialogFilter() { Name = "Ktx Files", Extensions = { "ktx" } });
+            dlg.Filters.Add(new FileDialogFilter() { Name = "Astc Files", Extensions = { "astc" } });
+            dlg.Filters.Add(new FileDialogFilter() { Name = "Dng Files", Extensions = { "dng" } });
             dlg.Filters.Add(new FileDialogFilter() { Name = "All Files", Extensions = { "*" } });
             dlg.InitialFileName = ContainerView.Title;
             dlg.DefaultExtension = "pdf";
