@@ -4271,7 +4271,7 @@ namespace Draw2D.ViewModels.Containers
 namespace Draw2D.ViewModels.Decorators
 {
     [DataContract(IsReference = true)]
-    public abstract class CommonDecorator : IShapeDecorator
+    public abstract class CommonDecorator : ViewModelBase, IShapeDecorator
     {
         private readonly string _strokeStyleId;
         private readonly string _fillStyleId;
@@ -5613,7 +5613,7 @@ namespace Draw2D.ViewModels.Intersections
 namespace Draw2D.ViewModels.Bounds
 {
     [DataContract(IsReference = true)]
-    public class CubicBezierBounds : IBounds
+    public class CubicBezierBounds : ViewModelBase, IBounds
     {
         public IPointShape TryToGetPoint(IBaseShape shape, Point2 target, double radius, IHitTest hitTest)
         {
@@ -5681,7 +5681,7 @@ namespace Draw2D.ViewModels.Bounds
     }
 
     [DataContract(IsReference = true)]
-    public class EllipseBounds : IBounds
+    public class EllipseBounds : ViewModelBase, IBounds
     {
         public IPointShape TryToGetPoint(IBaseShape shape, Point2 target, double radius, IHitTest hitTest)
         {
@@ -5732,7 +5732,7 @@ namespace Draw2D.ViewModels.Bounds
     }
 
     [DataContract(IsReference = true)]
-    public class FigureBounds : IBounds
+    public class FigureBounds : ViewModelBase, IBounds
     {
         public IPointShape TryToGetPoint(IBaseShape shape, Point2 target, double radius, IHitTest hitTest)
         {
@@ -5791,7 +5791,7 @@ namespace Draw2D.ViewModels.Bounds
     }
 
     [DataContract(IsReference = true)]
-    public class GroupBounds : IBounds
+    public class GroupBounds : ViewModelBase, IBounds
     {
         public IPointShape TryToGetPoint(IBaseShape shape, Point2 target, double radius, IHitTest hitTest)
         {
@@ -5858,7 +5858,7 @@ namespace Draw2D.ViewModels.Bounds
     }
 
     [DataContract(IsReference = true)]
-    public class LineBounds : IBounds
+    public class LineBounds : ViewModelBase, IBounds
     {
         public IPointShape TryToGetPoint(IBaseShape shape, Point2 target, double radius, IHitTest hitTest)
         {
@@ -5916,7 +5916,7 @@ namespace Draw2D.ViewModels.Bounds
     }
 
     [DataContract(IsReference = true)]
-    public class PathBounds : IBounds
+    public class PathBounds : ViewModelBase, IBounds
     {
         public IPointShape TryToGetPoint(IBaseShape shape, Point2 target, double radius, IHitTest hitTest)
         {
@@ -6005,7 +6005,7 @@ namespace Draw2D.ViewModels.Bounds
     }
 
     [DataContract(IsReference = true)]
-    public class PointBounds : IBounds
+    public class PointBounds : ViewModelBase, IBounds
     {
         public IPointShape TryToGetPoint(IBaseShape shape, Point2 target, double radius, IHitTest hitTest)
         {
@@ -6044,7 +6044,7 @@ namespace Draw2D.ViewModels.Bounds
     }
 
     [DataContract(IsReference = true)]
-    public class QuadraticBezierBounds : IBounds
+    public class QuadraticBezierBounds : ViewModelBase, IBounds
     {
         public IPointShape TryToGetPoint(IBaseShape shape, Point2 target, double radius, IHitTest hitTest)
         {
@@ -6107,7 +6107,7 @@ namespace Draw2D.ViewModels.Bounds
     }
 
     [DataContract(IsReference = true)]
-    public class ConicBounds : IBounds
+    public class ConicBounds : ViewModelBase, IBounds
     {
         public IPointShape TryToGetPoint(IBaseShape shape, Point2 target, double radius, IHitTest hitTest)
         {
@@ -6170,7 +6170,7 @@ namespace Draw2D.ViewModels.Bounds
     }
 
     [DataContract(IsReference = true)]
-    public class RectangleBounds : IBounds
+    public class RectangleBounds : ViewModelBase, IBounds
     {
         public IPointShape TryToGetPoint(IBaseShape shape, Point2 target, double radius, IHitTest hitTest)
         {
@@ -6221,7 +6221,7 @@ namespace Draw2D.ViewModels.Bounds
     }
 
     [DataContract(IsReference = true)]
-    public class ReferenceBounds : IBounds
+    public class ReferenceBounds : ViewModelBase, IBounds
     {
         public IPointShape TryToGetPoint(IBaseShape shape, Point2 target, double radius, IHitTest hitTest)
         {
@@ -6283,7 +6283,7 @@ namespace Draw2D.ViewModels.Bounds
     }
 
     [DataContract(IsReference = true)]
-    public class TextBounds : IBounds
+    public class TextBounds : ViewModelBase, IBounds
     {
         public IPointShape TryToGetPoint(IBaseShape shape, Point2 target, double radius, IHitTest hitTest)
         {
@@ -6334,7 +6334,7 @@ namespace Draw2D.ViewModels.Bounds
     }
 
     [DataContract(IsReference = true)]
-    public class ContainerBounds : IBounds
+    public class ContainerBounds : ViewModelBase, IBounds
     {
         public IPointShape TryToGetPoint(IBaseShape shape, Point2 target, double radius, IHitTest hitTest)
         {
