@@ -3306,13 +3306,6 @@ namespace Draw2D.ViewModels.Shapes
         }
     }
 
-
-
-
-
-
-
-
     public static class BaseShapeExtensions
     {
         public static void GetBox(this IList<IPointShape> points, out double ax, out double ay, out double bx, out double by)
