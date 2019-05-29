@@ -2958,7 +2958,7 @@ namespace Draw2D.ViewModels.Shapes
     }
 
     [DataContract(IsReference = true)]
-    public class ReferenceShape : ConnectableShape
+    public class ReferenceShape : ConnectableShape, IPointShape
     {
         internal static new IBounds s_bounds = new ReferenceBounds();
         internal static new IShapeDecorator s_decorator = new ReferenceDecorator();
