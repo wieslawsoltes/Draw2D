@@ -3363,7 +3363,9 @@ namespace Draw2D.ViewModels.Containers
     {
         string Title { get; }
         IList<IPointIntersection> Intersections { get; set; }
+        IPointIntersection CurrentIntersection { get; set; }
         IList<IPointFilter> Filters { get; set; }
+        IPointFilter CurrentFilter { get; set; }
         void LeftDown(IToolContext context, double x, double y, Modifier modifier);
         void LeftUp(IToolContext context, double x, double y, Modifier modifier);
         void RightDown(IToolContext context, double x, double y, Modifier modifier);
@@ -6553,6 +6555,105 @@ namespace Draw2D.ViewModels.Bounds
 namespace Draw2D.ViewModels.Tools
 {
     [DataContract(IsReference = true)]
+    public abstract class BaseTool : ViewModelBase
+    {
+        private IList<IPointIntersection> _intersections;
+        private IPointIntersection _currentIntersection;
+        private IList<IPointFilter> _filters;
+        private IPointFilter _currentFilter;
+
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public IList<IPointIntersection> Intersections
+        {
+            get => _intersections;
+            set => Update(ref _intersections, value);
+        }
+
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public IPointIntersection CurrentIntersection
+        {
+            get => _currentIntersection;
+            set => Update(ref _currentIntersection, value);
+        }
+
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public IList<IPointFilter> Filters
+        {
+            get => _filters;
+            set => Update(ref _filters, value);
+        }
+
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public IPointFilter CurrentFilter
+        {
+            get => _currentFilter;
+            set => Update(ref _currentFilter, value);
+        }
+
+        internal void FiltersProcess(IToolContext context, ref double x, ref double y)
+        {
+            if (_filters != null)
+            {
+                foreach (var filter in _filters)
+                {
+                    if (filter.Process(context, ref x, ref y))
+                    {
+                        return;
+                    }
+                } 
+            }
+        }
+
+        internal void FiltersClear(IToolContext context)
+        {
+            if (_filters != null)
+            {
+                foreach (var filter in _filters)
+                {
+                    filter.Clear(context);
+                }
+            }
+        }
+
+        internal void IntersectionsFind(IToolContext context, IBaseShape shape)
+        {
+            if (_intersections != null)
+            {
+                foreach (var intersection in _intersections)
+                {
+                    intersection.Find(context, shape);
+                }
+            }
+        }
+
+        internal void IntersectionsClear(IToolContext context)
+        {
+            if (_intersections != null)
+            {
+                foreach (var intersection in _intersections)
+                {
+                    intersection.Clear(context);
+                }
+            }
+        }
+
+        internal bool HaveIntersections()
+        {
+            if (_intersections != null)
+            {
+                foreach (var intersection in _intersections)
+                {
+                    if (intersection.Intersections.Count > 0)
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+    }
+
+    [DataContract(IsReference = true)]
     public class CubicBezierToolSettings : Settings
     {
         private bool _connectPoints;
@@ -6574,10 +6675,8 @@ namespace Draw2D.ViewModels.Tools
     }
 
     [DataContract(IsReference = true)]
-    public class CubicBezierTool : ViewModelBase, ITool
+    public class CubicBezierTool : BaseTool, ITool
     {
-        private IList<IPointIntersection> _intersections;
-        private IList<IPointFilter> _filters;
         private CubicBezierToolSettings _settings;
         private CubicBezierShape _cubicBezier = null;
 
@@ -6596,20 +6695,6 @@ namespace Draw2D.ViewModels.Tools
         public string Title => "CubicBezier";
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public IList<IPointIntersection> Intersections
-        {
-            get => _intersections;
-            set => Update(ref _intersections, value);
-        }
-
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public IList<IPointFilter> Filters
-        {
-            get => _filters;
-            set => Update(ref _filters, value);
-        }
-
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public CubicBezierToolSettings Settings
         {
             get => _settings;
@@ -6618,7 +6703,7 @@ namespace Draw2D.ViewModels.Tools
 
         private void StartPointInternal(IToolContext context, double x, double y, Modifier modifier)
         {
-            Filters?.Any(f => f.Process(context, ref x, ref y));
+            FiltersProcess(context, ref x, ref y);
 
             IPointShape startPoint = context.ContainerView?.GetNextPoint(context, x, y, Settings?.ConnectPoints ?? false, Settings?.HitTestRadius ?? 0.0);
             IPointShape point1 = context.ContainerView?.GetNextPoint(context, x, y, false, 0.0);
@@ -6667,7 +6752,7 @@ namespace Draw2D.ViewModels.Tools
 
         private void Point1Internal(IToolContext context, double x, double y, Modifier modifier)
         {
-            Filters?.Any(f => f.Process(context, ref x, ref y));
+            FiltersProcess(context, ref x, ref y);
 
             CurrentState = State.StartPoint;
 
@@ -6690,7 +6775,7 @@ namespace Draw2D.ViewModels.Tools
             context.ContainerView?.CurrentContainer.MarkAsDirty(true);
             _cubicBezier = null;
 
-            Filters?.ForEach(f => f.Clear(context));
+            FiltersClear(context);
 
             context.ContainerView?.InputService?.Release?.Invoke();
             context.ContainerView?.InputService?.Redraw?.Invoke();
@@ -6698,7 +6783,7 @@ namespace Draw2D.ViewModels.Tools
 
         private void Point2Internal(IToolContext context, double x, double y, Modifier modifier)
         {
-            Filters?.Any(f => f.Process(context, ref x, ref y));
+            FiltersProcess(context, ref x, ref y);
 
             _cubicBezier.Point1.X = x;
             _cubicBezier.Point1.Y = y;
@@ -6721,7 +6806,7 @@ namespace Draw2D.ViewModels.Tools
 
         private void Point3Internal(IToolContext context, double x, double y, Modifier modifier)
         {
-            Filters?.Any(f => f.Process(context, ref x, ref y));
+            FiltersProcess(context, ref x, ref y);
 
             _cubicBezier.Point2.X = x;
             _cubicBezier.Point2.Y = y;
@@ -6744,16 +6829,16 @@ namespace Draw2D.ViewModels.Tools
 
         private void MoveStartPointInternal(IToolContext context, double x, double y, Modifier modifier)
         {
-            Filters?.ForEach(f => f.Clear(context));
-            Filters?.Any(f => f.Process(context, ref x, ref y));
+            FiltersClear(context);
+            FiltersProcess(context, ref x, ref y);
 
             context.ContainerView?.InputService?.Redraw?.Invoke();
         }
 
         private void MovePoint1Internal(IToolContext context, double x, double y, Modifier modifier)
         {
-            Filters?.ForEach(f => f.Clear(context));
-            Filters?.Any(f => f.Process(context, ref x, ref y));
+            FiltersClear(context);
+            FiltersProcess(context, ref x, ref y);
 
             _cubicBezier.Point1.X = x;
             _cubicBezier.Point1.Y = y;
@@ -6763,8 +6848,8 @@ namespace Draw2D.ViewModels.Tools
 
         private void MovePoint2Internal(IToolContext context, double x, double y, Modifier modifier)
         {
-            Filters?.ForEach(f => f.Clear(context));
-            Filters?.Any(f => f.Process(context, ref x, ref y));
+            FiltersClear(context);
+            FiltersProcess(context, ref x, ref y);
 
             _cubicBezier.Point1.X = x;
             _cubicBezier.Point1.Y = y;
@@ -6776,8 +6861,8 @@ namespace Draw2D.ViewModels.Tools
 
         private void MovePoint3Internal(IToolContext context, double x, double y, Modifier modifier)
         {
-            Filters?.ForEach(f => f.Clear(context));
-            Filters?.Any(f => f.Process(context, ref x, ref y));
+            FiltersClear(context);
+            FiltersProcess(context, ref x, ref y);
 
             _cubicBezier.Point2.X = x;
             _cubicBezier.Point2.Y = y;
@@ -6789,7 +6874,7 @@ namespace Draw2D.ViewModels.Tools
 
         private void CleanInternal(IToolContext context)
         {
-            Filters?.ForEach(f => f.Clear(context));
+            FiltersClear(context);
 
             CurrentState = State.StartPoint;
 
@@ -6913,10 +6998,8 @@ namespace Draw2D.ViewModels.Tools
     }
 
     [DataContract(IsReference = true)]
-    public class EllipseTool : ViewModelBase, ITool
+    public class EllipseTool : BaseTool, ITool
     {
-        private IList<IPointIntersection> _intersections;
-        private IList<IPointFilter> _filters;
         private EllipseToolSettings _settings;
         private EllipseShape _ellipse = null;
 
@@ -6932,21 +7015,6 @@ namespace Draw2D.ViewModels.Tools
         [IgnoreDataMember]
         public string Title => "Ellipse";
 
-
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public IList<IPointIntersection> Intersections
-        {
-            get => _intersections;
-            set => Update(ref _intersections, value);
-        }
-
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public IList<IPointFilter> Filters
-        {
-            get => _filters;
-            set => Update(ref _filters, value);
-        }
-
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public EllipseToolSettings Settings
         {
@@ -6956,7 +7024,7 @@ namespace Draw2D.ViewModels.Tools
 
         private void TopLeftInternal(IToolContext context, double x, double y, Modifier modifier)
         {
-            Filters?.Any(f => f.Process(context, ref x, ref y));
+            FiltersProcess(context, ref x, ref y);
 
             IPointShape topLeft = context.ContainerView?.GetNextPoint(context, x, y, Settings?.ConnectPoints ?? false, Settings?.HitTestRadius ?? 7.0);
             IPointShape bottomRight = context.ContainerView?.GetNextPoint(context, x, y, false, 0.0);
@@ -6991,7 +7059,7 @@ namespace Draw2D.ViewModels.Tools
 
         private void BottomRightInternal(IToolContext context, double x, double y, Modifier modifier)
         {
-            Filters?.Any(f => f.Process(context, ref x, ref y));
+            FiltersProcess(context, ref x, ref y);
 
             CurrentState = State.TopLeft;
 
@@ -7012,7 +7080,7 @@ namespace Draw2D.ViewModels.Tools
             context.ContainerView?.CurrentContainer.MarkAsDirty(true);
             _ellipse = null;
 
-            Filters?.ForEach(f => f.Clear(context));
+            FiltersClear(context);
 
             context.ContainerView?.InputService?.Release?.Invoke();
             context.ContainerView?.InputService?.Redraw?.Invoke();
@@ -7020,16 +7088,16 @@ namespace Draw2D.ViewModels.Tools
 
         private void MoveTopLeftInternal(IToolContext context, double x, double y, Modifier modifier)
         {
-            Filters?.ForEach(f => f.Clear(context));
-            Filters?.Any(f => f.Process(context, ref x, ref y));
+            FiltersClear(context);
+            FiltersProcess(context, ref x, ref y);
 
             context.ContainerView?.InputService?.Redraw?.Invoke();
         }
 
         private void MoveBottomRightInternal(IToolContext context, double x, double y, Modifier modifier)
         {
-            Filters?.ForEach(f => f.Clear(context));
-            Filters?.Any(f => f.Process(context, ref x, ref y));
+            FiltersClear(context);
+            FiltersProcess(context, ref x, ref y);
 
             _ellipse.BottomRight.X = x;
             _ellipse.BottomRight.Y = y;
@@ -7041,7 +7109,7 @@ namespace Draw2D.ViewModels.Tools
         {
             CurrentState = State.TopLeft;
 
-            Filters?.ForEach(f => f.Clear(context));
+            FiltersClear(context);
 
             if (_ellipse != null)
             {
@@ -7181,10 +7249,8 @@ namespace Draw2D.ViewModels.Tools
     }
 
     [DataContract(IsReference = true)]
-    public class LineTool : ViewModelBase, ITool
+    public class LineTool : BaseTool, ITool
     {
-        private IList<IPointIntersection> _intersections;
-        private IList<IPointFilter> _filters;
         private LineToolSettings _settings;
         private LineShape _line = null;
 
@@ -7201,20 +7267,6 @@ namespace Draw2D.ViewModels.Tools
         public string Title => "Line";
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public IList<IPointIntersection> Intersections
-        {
-            get => _intersections;
-            set => Update(ref _intersections, value);
-        }
-
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public IList<IPointFilter> Filters
-        {
-            get => _filters;
-            set => Update(ref _filters, value);
-        }
-
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public LineToolSettings Settings
         {
             get => _settings;
@@ -7223,7 +7275,7 @@ namespace Draw2D.ViewModels.Tools
 
         private void StartPointInternal(IToolContext context, double x, double y, Modifier modifier)
         {
-            Filters?.Any(f => f.Process(context, ref x, ref y));
+            FiltersProcess(context, ref x, ref y);
 
             IPointShape startPoint = context.ContainerView?.GetNextPoint(context, x, y, Settings?.ConnectPoints ?? false, Settings?.HitTestRadius ?? 0.0);
             IPointShape point = context.ContainerView?.GetNextPoint(context, x, y, false, 0.0);
@@ -7258,7 +7310,7 @@ namespace Draw2D.ViewModels.Tools
 
         private void PointInternal(IToolContext context, double x, double y, Modifier modifier)
         {
-            Filters?.Any(f => f.Process(context, ref x, ref y));
+            FiltersProcess(context, ref x, ref y);
 
             CurrentState = State.StartPoint;
 
@@ -7276,10 +7328,10 @@ namespace Draw2D.ViewModels.Tools
                 _line.Point.Owner = _line;
             }
 
-            Intersections?.ForEach(i => i.Clear(context));
-            Intersections?.ForEach(i => i.Find(context, _line));
+            IntersectionsClear(context);
+            IntersectionsFind(context, _line);
 
-            if ((Settings?.SplitIntersections ?? false) && (Intersections?.Any(i => i.Intersections.Count > 0) ?? false))
+            if ((Settings?.SplitIntersections ?? false) && HaveIntersections())
             {
                 LineHelper.SplitByIntersections(context, Intersections, _line);
             }
@@ -7291,8 +7343,8 @@ namespace Draw2D.ViewModels.Tools
 
             _line = null;
 
-            Intersections?.ForEach(i => i.Clear(context));
-            Filters?.ForEach(f => f.Clear(context));
+            IntersectionsClear(context);
+            FiltersClear(context);
 
             context.ContainerView?.InputService?.Release?.Invoke();
             context.ContainerView?.InputService?.Redraw?.Invoke();
@@ -7300,30 +7352,30 @@ namespace Draw2D.ViewModels.Tools
 
         private void MoveStartPointInternal(IToolContext context, double x, double y, Modifier modifier)
         {
-            Filters?.ForEach(f => f.Clear(context));
-            Filters?.Any(f => f.Process(context, ref x, ref y));
+            FiltersClear(context);
+            FiltersProcess(context, ref x, ref y);
 
             context.ContainerView?.InputService?.Redraw?.Invoke();
         }
 
         private void MovePointInternal(IToolContext context, double x, double y, Modifier modifier)
         {
-            Filters?.ForEach(f => f.Clear(context));
-            Filters?.Any(f => f.Process(context, ref x, ref y));
+            FiltersClear(context);
+            FiltersProcess(context, ref x, ref y);
 
             _line.Point.X = x;
             _line.Point.Y = y;
 
-            Intersections?.ForEach(i => i.Clear(context));
-            Intersections?.ForEach(i => i.Find(context, _line));
+            IntersectionsClear(context);
+            IntersectionsFind(context, _line);
 
             context.ContainerView?.InputService?.Redraw?.Invoke();
         }
 
         private void CleanInternal(IToolContext context)
         {
-            Intersections?.ForEach(i => i.Clear(context));
-            Filters?.ForEach(f => f.Clear(context));
+            IntersectionsClear(context);
+            FiltersClear(context);
 
             CurrentState = State.StartPoint;
 
@@ -7407,10 +7459,8 @@ namespace Draw2D.ViewModels.Tools
     }
 
     [DataContract(IsReference = true)]
-    public class MoveTool : ViewModelBase, ITool
+    public class MoveTool : BaseTool, ITool
     {
-        private IList<IPointIntersection> _intersections;
-        private IList<IPointFilter> _filters;
         private MoveToolSettings _settings;
         private PathTool _pathTool;
 
@@ -7423,20 +7473,6 @@ namespace Draw2D.ViewModels.Tools
 
         [IgnoreDataMember]
         public string Title => "Move";
-
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public IList<IPointIntersection> Intersections
-        {
-            get => _intersections;
-            set => Update(ref _intersections, value);
-        }
-
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public IList<IPointFilter> Filters
-        {
-            get => _filters;
-            set => Update(ref _filters, value);
-        }
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public MoveToolSettings Settings
@@ -7482,28 +7518,12 @@ namespace Draw2D.ViewModels.Tools
     }
 
     [DataContract(IsReference = true)]
-    public class NoneTool : ViewModelBase, ITool
+    public class NoneTool : BaseTool, ITool
     {
-        private IList<IPointIntersection> _intersections;
-        private IList<IPointFilter> _filters;
         private NoneToolSettings _settings;
 
         [IgnoreDataMember]
         public string Title => "None";
-
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public IList<IPointIntersection> Intersections
-        {
-            get => _intersections;
-            set => Update(ref _intersections, value);
-        }
-
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public IList<IPointFilter> Filters
-        {
-            get => _filters;
-            set => Update(ref _filters, value);
-        }
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public NoneToolSettings Settings
@@ -7850,10 +7870,8 @@ namespace Draw2D.ViewModels.Tools
         public void Move(double x, double y, Modifier modifier) => _context.Move(x, y, modifier);
     }
 
-    public partial class PathTool : ViewModelBase, ITool
+    public partial class PathTool : BaseTool, ITool
     {
-        private IList<IPointIntersection> _intersections;
-        private IList<IPointFilter> _filters;
         private PathToolSettings _settings;
 
         internal PathShape _path;
@@ -7861,20 +7879,6 @@ namespace Draw2D.ViewModels.Tools
 
         [IgnoreDataMember]
         public string Title => "Path";
-
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public IList<IPointIntersection> Intersections
-        {
-            get => _intersections;
-            set => Update(ref _intersections, value);
-        }
-
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public IList<IPointFilter> Filters
-        {
-            get => _filters;
-            set => Update(ref _filters, value);
-        }
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public PathToolSettings Settings
@@ -7939,7 +7943,7 @@ namespace Draw2D.ViewModels.Tools
 
         private void DownInternal(IToolContext context, double x, double y, Modifier modifier)
         {
-            Filters?.Any(f => f.Process(context, ref x, ref y));
+            FiltersProcess(context, ref x, ref y);
 
             if (_path == null)
             {
@@ -7999,8 +8003,8 @@ namespace Draw2D.ViewModels.Tools
 
         private void MoveInternal(IToolContext context, double x, double y, Modifier modifier)
         {
-            Filters?.ForEach(f => f.Clear(context));
-            Filters?.Any(f => f.Process(context, ref x, ref y));
+            FiltersClear(context);
+            FiltersProcess(context, ref x, ref y);
 
             if (_containerView == null)
             {
@@ -8016,7 +8020,7 @@ namespace Draw2D.ViewModels.Tools
         {
             CleanCurrentTool(context);
 
-            Filters?.ForEach(f => f.Clear(context));
+            FiltersClear(context);
 
             if (_path != null)
             {
@@ -8091,28 +8095,12 @@ namespace Draw2D.ViewModels.Tools
     }
 
     [DataContract(IsReference = true)]
-    public class PointTool : ViewModelBase, ITool
+    public class PointTool : BaseTool, ITool
     {
-        private IList<IPointIntersection> _intersections;
-        private IList<IPointFilter> _filters;
         private PointToolSettings _settings;
 
         [IgnoreDataMember]
         public string Title => "Point";
-
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public IList<IPointIntersection> Intersections
-        {
-            get => _intersections;
-            set => Update(ref _intersections, value);
-        }
-
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public IList<IPointFilter> Filters
-        {
-            get => _filters;
-            set => Update(ref _filters, value);
-        }
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public PointToolSettings Settings
@@ -8123,8 +8111,8 @@ namespace Draw2D.ViewModels.Tools
 
         private void PointInternal(IToolContext context, double x, double y, Modifier modifier)
         {
-            Filters?.ForEach(f => f.Clear(context));
-            Filters?.Any(f => f.Process(context, ref x, ref y));
+            FiltersClear(context);
+            FiltersProcess(context, ref x, ref y);
 
             var shape = context.HitTest?.TryToGetShape(
                 context.ContainerView?.CurrentContainer.Shapes,
@@ -8159,15 +8147,15 @@ namespace Draw2D.ViewModels.Tools
 
         private void MoveInternal(IToolContext context, double x, double y, Modifier modifier)
         {
-            Filters?.ForEach(f => f.Clear(context));
-            Filters?.Any(f => f.Process(context, ref x, ref y));
+            FiltersClear(context);
+            FiltersProcess(context, ref x, ref y);
 
             context.ContainerView?.InputService?.Redraw?.Invoke();
         }
 
         private void CleanInternal(IToolContext context)
         {
-            Filters?.ForEach(f => f.Clear(context));
+            FiltersClear(context);
         }
 
         public void LeftDown(IToolContext context, double x, double y, Modifier modifier)
@@ -8220,10 +8208,8 @@ namespace Draw2D.ViewModels.Tools
     }
 
     [DataContract(IsReference = true)]
-    public class PolyLineTool : ViewModelBase, ITool
+    public class PolyLineTool : BaseTool, ITool
     {
-        private IList<IPointIntersection> _intersections;
-        private IList<IPointFilter> _filters;
         private PolyLineToolSettings _settings;
         private LineShape _line = null;
         private IList<IPointShape> _points = null;
@@ -8241,20 +8227,6 @@ namespace Draw2D.ViewModels.Tools
         public string Title => "PolyLine";
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public IList<IPointIntersection> Intersections
-        {
-            get => _intersections;
-            set => Update(ref _intersections, value);
-        }
-
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public IList<IPointFilter> Filters
-        {
-            get => _filters;
-            set => Update(ref _filters, value);
-        }
-
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public PolyLineToolSettings Settings
         {
             get => _settings;
@@ -8263,7 +8235,7 @@ namespace Draw2D.ViewModels.Tools
 
         private void StartPointInternal(IToolContext context, double x, double y, Modifier modifier)
         {
-            Filters?.Any(f => f.Process(context, ref x, ref y));
+            FiltersProcess(context, ref x, ref y);
 
             IPointShape startPoint = context.ContainerView?.GetNextPoint(context, x, y, Settings?.ConnectPoints ?? false, Settings?.HitTestRadius ?? 7.0);
             IPointShape point = context.ContainerView?.GetNextPoint(context, x, y, false, 0.0);
@@ -8301,7 +8273,7 @@ namespace Draw2D.ViewModels.Tools
 
         private void PointInternal(IToolContext context, double x, double y, Modifier modifier)
         {
-            Filters?.Any(f => f.Process(context, ref x, ref y));
+            FiltersProcess(context, ref x, ref y);
 
             context.ContainerView?.SelectionState?.Deselect(_line);
             context.ContainerView?.SelectionState?.Deselect(_line.Point);
@@ -8346,38 +8318,38 @@ namespace Draw2D.ViewModels.Tools
             context.ContainerView?.SelectionState?.Select(_line);
             context.ContainerView?.SelectionState?.Select(_line.Point);
 
-            Intersections?.ForEach(i => i.Clear(context));
-            Filters?.ForEach(f => f.Clear(context));
+            IntersectionsClear(context);
+            FiltersClear(context);
 
             context.ContainerView?.InputService?.Redraw?.Invoke();
         }
 
         private void MoveStartPointInternal(IToolContext context, double x, double y, Modifier modifier)
         {
-            Filters?.ForEach(f => f.Clear(context));
-            Filters?.Any(f => f.Process(context, ref x, ref y));
+            FiltersClear(context);
+            FiltersProcess(context, ref x, ref y);
 
             context.ContainerView?.InputService?.Redraw?.Invoke();
         }
 
         private void MovePointInternal(IToolContext context, double x, double y, Modifier modifier)
         {
-            Filters?.ForEach(f => f.Clear(context));
-            Filters?.Any(f => f.Process(context, ref x, ref y));
+            FiltersClear(context);
+            FiltersProcess(context, ref x, ref y);
 
             _line.Point.X = x;
             _line.Point.Y = y;
 
-            Intersections?.ForEach(i => i.Clear(context));
-            Intersections?.ForEach(i => i.Find(context, _line));
+            IntersectionsClear(context);
+            IntersectionsFind(context, _line);
 
             context.ContainerView?.InputService?.Redraw?.Invoke();
         }
 
         private void CleanInternal(IToolContext context)
         {
-            Intersections?.ForEach(i => i.Clear(context));
-            Filters?.ForEach(f => f.Clear(context));
+            IntersectionsClear(context);
+            FiltersClear(context);
 
             CurrentState = State.StartPoint;
 
@@ -8483,10 +8455,8 @@ namespace Draw2D.ViewModels.Tools
     }
 
     [DataContract(IsReference = true)]
-    public class QuadraticBezierTool : ViewModelBase, ITool
+    public class QuadraticBezierTool : BaseTool, ITool
     {
-        private IList<IPointIntersection> _intersections;
-        private IList<IPointFilter> _filters;
         private QuadraticBezierToolSettings _settings;
         private QuadraticBezierShape _quadraticBezier = null;
 
@@ -8504,20 +8474,6 @@ namespace Draw2D.ViewModels.Tools
         public string Title => "QuadraticBezier";
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public IList<IPointIntersection> Intersections
-        {
-            get => _intersections;
-            set => Update(ref _intersections, value);
-        }
-
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public IList<IPointFilter> Filters
-        {
-            get => _filters;
-            set => Update(ref _filters, value);
-        }
-
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public QuadraticBezierToolSettings Settings
         {
             get => _settings;
@@ -8526,7 +8482,7 @@ namespace Draw2D.ViewModels.Tools
 
         private void StartPointInternal(IToolContext context, double x, double y, Modifier modifier)
         {
-            Filters?.Any(f => f.Process(context, ref x, ref y));
+            FiltersProcess(context, ref x, ref y);
 
             IPointShape startPoint = context.ContainerView?.GetNextPoint(context, x, y, Settings?.ConnectPoints ?? false, Settings?.HitTestRadius ?? 0.0);
             IPointShape point1 = context.ContainerView?.GetNextPoint(context, x, y, false, 0.0);
@@ -8568,7 +8524,7 @@ namespace Draw2D.ViewModels.Tools
 
         private void Point1Internal(IToolContext context, double x, double y, Modifier modifier)
         {
-            Filters?.Any(f => f.Process(context, ref x, ref y));
+            FiltersProcess(context, ref x, ref y);
 
             CurrentState = State.StartPoint;
 
@@ -8590,7 +8546,7 @@ namespace Draw2D.ViewModels.Tools
             context.ContainerView?.CurrentContainer.MarkAsDirty(true);
             _quadraticBezier = null;
 
-            Filters?.ForEach(f => f.Clear(context));
+            FiltersClear(context);
 
             context.ContainerView?.InputService?.Release?.Invoke();
             context.ContainerView?.InputService?.Redraw?.Invoke();
@@ -8598,7 +8554,7 @@ namespace Draw2D.ViewModels.Tools
 
         private void Point2Internal(IToolContext context, double x, double y, Modifier modifier)
         {
-            Filters?.Any(f => f.Process(context, ref x, ref y));
+            FiltersProcess(context, ref x, ref y);
 
             _quadraticBezier.Point1.X = x;
             _quadraticBezier.Point1.Y = y;
@@ -8621,16 +8577,16 @@ namespace Draw2D.ViewModels.Tools
 
         private void MoveStartPointInternal(IToolContext context, double x, double y, Modifier modifier)
         {
-            Filters?.ForEach(f => f.Clear(context));
-            Filters?.Any(f => f.Process(context, ref x, ref y));
+            FiltersClear(context);
+            FiltersProcess(context, ref x, ref y);
 
             context.ContainerView?.InputService?.Redraw?.Invoke();
         }
 
         private void MovePoint1Internal(IToolContext context, double x, double y, Modifier modifier)
         {
-            Filters?.ForEach(f => f.Clear(context));
-            Filters?.Any(f => f.Process(context, ref x, ref y));
+            FiltersClear(context);
+            FiltersProcess(context, ref x, ref y);
 
             _quadraticBezier.Point1.X = x;
             _quadraticBezier.Point1.Y = y;
@@ -8640,8 +8596,8 @@ namespace Draw2D.ViewModels.Tools
 
         private void MovePoint2Internal(IToolContext context, double x, double y, Modifier modifier)
         {
-            Filters?.ForEach(f => f.Clear(context));
-            Filters?.Any(f => f.Process(context, ref x, ref y));
+            FiltersClear(context);
+            FiltersProcess(context, ref x, ref y);
 
             _quadraticBezier.Point1.X = x;
             _quadraticBezier.Point1.Y = y;
@@ -8653,7 +8609,7 @@ namespace Draw2D.ViewModels.Tools
 
         private void CleanInternal(IToolContext context)
         {
-            Filters?.ForEach(f => f.Clear(context));
+            FiltersClear(context);
 
             CurrentState = State.StartPoint;
 
@@ -8773,10 +8729,8 @@ namespace Draw2D.ViewModels.Tools
     }
 
     [DataContract(IsReference = true)]
-    public class ConicTool : ViewModelBase, ITool
+    public class ConicTool : BaseTool, ITool
     {
-        private IList<IPointIntersection> _intersections;
-        private IList<IPointFilter> _filters;
         private ConicToolSettings _settings;
         private ConicShape _conic = null;
 
@@ -8794,20 +8748,6 @@ namespace Draw2D.ViewModels.Tools
         public string Title => "Conic";
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public IList<IPointIntersection> Intersections
-        {
-            get => _intersections;
-            set => Update(ref _intersections, value);
-        }
-
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public IList<IPointFilter> Filters
-        {
-            get => _filters;
-            set => Update(ref _filters, value);
-        }
-
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public ConicToolSettings Settings
         {
             get => _settings;
@@ -8816,7 +8756,7 @@ namespace Draw2D.ViewModels.Tools
 
         private void StartPointInternal(IToolContext context, double x, double y, Modifier modifier)
         {
-            Filters?.Any(f => f.Process(context, ref x, ref y));
+            FiltersProcess(context, ref x, ref y);
 
             IPointShape startPoint = context.ContainerView?.GetNextPoint(context, x, y, Settings?.ConnectPoints ?? false, Settings?.HitTestRadius ?? 0.0);
             IPointShape point1 = context.ContainerView?.GetNextPoint(context, x, y, false, 0.0);
@@ -8859,7 +8799,7 @@ namespace Draw2D.ViewModels.Tools
 
         private void Point1Internal(IToolContext context, double x, double y, Modifier modifier)
         {
-            Filters?.Any(f => f.Process(context, ref x, ref y));
+            FiltersProcess(context, ref x, ref y);
 
             CurrentState = State.StartPoint;
 
@@ -8881,7 +8821,7 @@ namespace Draw2D.ViewModels.Tools
             context.ContainerView?.CurrentContainer.MarkAsDirty(true);
             _conic = null;
 
-            Filters?.ForEach(f => f.Clear(context));
+            FiltersClear(context);
 
             context.ContainerView?.InputService?.Release?.Invoke();
             context.ContainerView?.InputService?.Redraw?.Invoke();
@@ -8889,7 +8829,7 @@ namespace Draw2D.ViewModels.Tools
 
         private void Point2Internal(IToolContext context, double x, double y, Modifier modifier)
         {
-            Filters?.Any(f => f.Process(context, ref x, ref y));
+            FiltersProcess(context, ref x, ref y);
 
             _conic.Point1.X = x;
             _conic.Point1.Y = y;
@@ -8912,16 +8852,16 @@ namespace Draw2D.ViewModels.Tools
 
         private void MoveStartPointInternal(IToolContext context, double x, double y, Modifier modifier)
         {
-            Filters?.ForEach(f => f.Clear(context));
-            Filters?.Any(f => f.Process(context, ref x, ref y));
+            FiltersClear(context);
+            FiltersProcess(context, ref x, ref y);
 
             context.ContainerView?.InputService?.Redraw?.Invoke();
         }
 
         private void MovePoint1Internal(IToolContext context, double x, double y, Modifier modifier)
         {
-            Filters?.ForEach(f => f.Clear(context));
-            Filters?.Any(f => f.Process(context, ref x, ref y));
+            FiltersClear(context);
+            FiltersProcess(context, ref x, ref y);
 
             _conic.Point1.X = x;
             _conic.Point1.Y = y;
@@ -8931,8 +8871,8 @@ namespace Draw2D.ViewModels.Tools
 
         private void MovePoint2Internal(IToolContext context, double x, double y, Modifier modifier)
         {
-            Filters?.ForEach(f => f.Clear(context));
-            Filters?.Any(f => f.Process(context, ref x, ref y));
+            FiltersClear(context);
+            FiltersProcess(context, ref x, ref y);
 
             _conic.Point1.X = x;
             _conic.Point1.Y = y;
@@ -8944,7 +8884,7 @@ namespace Draw2D.ViewModels.Tools
 
         private void CleanInternal(IToolContext context)
         {
-            Filters?.ForEach(f => f.Clear(context));
+            FiltersClear(context);
 
             CurrentState = State.StartPoint;
 
@@ -9056,10 +8996,8 @@ namespace Draw2D.ViewModels.Tools
     }
 
     [DataContract(IsReference = true)]
-    public class RectangleTool : ViewModelBase, ITool
+    public class RectangleTool : BaseTool, ITool
     {
-        private IList<IPointIntersection> _intersections;
-        private IList<IPointFilter> _filters;
         private RectangleToolSettings _settings;
         private RectangleShape _rectangle = null;
 
@@ -9076,20 +9014,6 @@ namespace Draw2D.ViewModels.Tools
         public string Title => "Rectangle";
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public IList<IPointIntersection> Intersections
-        {
-            get => _intersections;
-            set => Update(ref _intersections, value);
-        }
-
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public IList<IPointFilter> Filters
-        {
-            get => _filters;
-            set => Update(ref _filters, value);
-        }
-
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public RectangleToolSettings Settings
         {
             get => _settings;
@@ -9098,7 +9022,7 @@ namespace Draw2D.ViewModels.Tools
 
         private void TopLeftInternal(IToolContext context, double x, double y, Modifier modifier)
         {
-            Filters?.Any(f => f.Process(context, ref x, ref y));
+            FiltersProcess(context, ref x, ref y);
 
             IPointShape topLeft = context.ContainerView?.GetNextPoint(context, x, y, Settings?.ConnectPoints ?? false, Settings?.HitTestRadius ?? 7.0);
             IPointShape bottomRight = context.ContainerView?.GetNextPoint(context, x, y, false, 0.0);
@@ -9133,7 +9057,7 @@ namespace Draw2D.ViewModels.Tools
 
         private void BottomRightInternal(IToolContext context, double x, double y, Modifier modifier)
         {
-            Filters?.Any(f => f.Process(context, ref x, ref y));
+            FiltersProcess(context, ref x, ref y);
 
             CurrentState = State.TopLeft;
 
@@ -9156,7 +9080,7 @@ namespace Draw2D.ViewModels.Tools
             context.ContainerView?.CurrentContainer.MarkAsDirty(true);
             _rectangle = null;
 
-            Filters?.ForEach(f => f.Clear(context));
+            FiltersClear(context);
 
             context.ContainerView?.InputService?.Release?.Invoke();
             context.ContainerView?.InputService?.Redraw?.Invoke();
@@ -9164,16 +9088,16 @@ namespace Draw2D.ViewModels.Tools
 
         private void MoveTopLeftInternal(IToolContext context, double x, double y, Modifier modifier)
         {
-            Filters?.ForEach(f => f.Clear(context));
-            Filters?.Any(f => f.Process(context, ref x, ref y));
+            FiltersClear(context);
+            FiltersProcess(context, ref x, ref y);
 
             context.ContainerView?.InputService?.Redraw?.Invoke();
         }
 
         private void MoveBottomRightInternal(IToolContext context, double x, double y, Modifier modifier)
         {
-            Filters?.ForEach(f => f.Clear(context));
-            Filters?.Any(f => f.Process(context, ref x, ref y));
+            FiltersClear(context);
+            FiltersProcess(context, ref x, ref y);
 
             _rectangle.BottomRight.X = x;
             _rectangle.BottomRight.Y = y;
@@ -9185,7 +9109,7 @@ namespace Draw2D.ViewModels.Tools
         {
             CurrentState = State.TopLeft;
 
-            Filters?.ForEach(f => f.Clear(context));
+            FiltersClear(context);
 
             if (_rectangle != null)
             {
@@ -9307,10 +9231,8 @@ namespace Draw2D.ViewModels.Tools
     }
 
     [DataContract(IsReference = true)]
-    public class ScribbleTool : ViewModelBase, ITool
+    public class ScribbleTool : BaseTool, ITool
     {
-        private IList<IPointIntersection> _intersections;
-        private IList<IPointFilter> _filters;
         private ScribbleToolSettings _settings;
         private PathShape _path = null;
         private FigureShape _figure = null;
@@ -9330,20 +9252,6 @@ namespace Draw2D.ViewModels.Tools
         public string Title => "Scribble";
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public IList<IPointIntersection> Intersections
-        {
-            get => _intersections;
-            set => Update(ref _intersections, value);
-        }
-
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public IList<IPointFilter> Filters
-        {
-            get => _filters;
-            set => Update(ref _filters, value);
-        }
-
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public ScribbleToolSettings Settings
         {
             get => _settings;
@@ -9352,7 +9260,7 @@ namespace Draw2D.ViewModels.Tools
 
         private void StartInternal(IToolContext context, double x, double y, Modifier modifier)
         {
-            Filters?.Any(f => f.Process(context, ref x, ref y));
+            FiltersProcess(context, ref x, ref y);
 
             _path = new PathShape()
             {
@@ -9441,7 +9349,7 @@ namespace Draw2D.ViewModels.Tools
             _previousPoint = null;
             _nextPoint = null;
 
-            Filters?.ForEach(f => f.Clear(context));
+            FiltersClear(context);
 
             context.ContainerView?.InputService?.Release?.Invoke();
             context.ContainerView?.InputService?.Redraw?.Invoke();
@@ -9449,16 +9357,16 @@ namespace Draw2D.ViewModels.Tools
 
         private void MoveStartInternal(IToolContext context, double x, double y, Modifier modifier)
         {
-            Filters?.ForEach(f => f.Clear(context));
-            Filters?.Any(f => f.Process(context, ref x, ref y));
+            FiltersClear(context);
+            FiltersProcess(context, ref x, ref y);
 
             context.ContainerView?.InputService?.Redraw?.Invoke();
         }
 
         private void MovePointsInternal(IToolContext context, double x, double y, Modifier modifier)
         {
-            Filters?.ForEach(f => f.Clear(context));
-            Filters?.Any(f => f.Process(context, ref x, ref y));
+            FiltersClear(context);
+            FiltersProcess(context, ref x, ref y);
 
             _nextPoint = new PointShape(x, y, context.PointTemplate);
 
@@ -9492,7 +9400,7 @@ namespace Draw2D.ViewModels.Tools
         {
             CurrentState = State.Start;
 
-            Filters?.ForEach(f => f.Clear(context));
+            FiltersClear(context);
 
             if (_path != null)
             {
@@ -9683,10 +9591,8 @@ namespace Draw2D.ViewModels.Tools
     }
 
     [DataContract(IsReference = true)]
-    public class SelectionTool : ViewModelBase, ITool, ISelection
+    public class SelectionTool : BaseTool, ITool, ISelection
     {
-        private IList<IPointIntersection> _intersections;
-        private IList<IPointFilter> _filters;
         private SelectionToolSettings _settings;
         private RectangleShape _rectangle;
         private double _originX;
@@ -9710,20 +9616,6 @@ namespace Draw2D.ViewModels.Tools
         public string Title => "Selection";
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public IList<IPointIntersection> Intersections
-        {
-            get => _intersections;
-            set => Update(ref _intersections, value);
-        }
-
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public IList<IPointFilter> Filters
-        {
-            get => _filters;
-            set => Update(ref _filters, value);
-        }
-
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public SelectionToolSettings Settings
         {
             get => _settings;
@@ -9739,7 +9631,7 @@ namespace Draw2D.ViewModels.Tools
             _previousX = x;
             _previousY = y;
 
-            Filters?.ForEach(f => f.Clear(context));
+            FiltersClear(context);
             Filters?.Any(f => f.Process(context, ref _originX, ref _originY));
 
             _previousX = _originX;
@@ -9808,7 +9700,7 @@ namespace Draw2D.ViewModels.Tools
 
         private void LeftUpSelectionInternal(IToolContext context, double x, double y, Modifier modifier)
         {
-            Filters?.ForEach(f => f.Clear(context));
+            FiltersClear(context);
 
             context.ContainerView?.SelectionState?.Dehover();
 
@@ -9833,7 +9725,7 @@ namespace Draw2D.ViewModels.Tools
 
         private void LeftUpMoveInternal(IToolContext context, double x, double y, Modifier modifier)
         {
-            Filters?.ForEach(f => f.Clear(context));
+            FiltersClear(context);
 
             context.ContainerView?.InputService?.Release?.Invoke();
             context.ContainerView?.InputService?.Redraw?.Invoke();
@@ -9843,7 +9735,7 @@ namespace Draw2D.ViewModels.Tools
 
         private void RightDownMoveInternal(IToolContext context, double x, double y, Modifier modifier)
         {
-            Filters?.ForEach(f => f.Clear(context));
+            FiltersClear(context);
 
             context.ContainerView?.InputService?.Release?.Invoke();
             context.ContainerView?.InputService?.Redraw?.Invoke();
@@ -9896,8 +9788,8 @@ namespace Draw2D.ViewModels.Tools
 
         private void MoveMoveInternal(IToolContext context, double x, double y, Modifier modifier)
         {
-            Filters?.ForEach(f => f.Clear(context));
-            Filters?.Any(f => f.Process(context, ref x, ref y));
+            FiltersClear(context);
+            FiltersProcess(context, ref x, ref y);
 
             double dx = x - _previousX;
             double dy = y - _previousY;
@@ -9981,7 +9873,7 @@ namespace Draw2D.ViewModels.Tools
                 context.ContainerView?.SelectionState?.Clear();
             }
 
-            Filters?.ForEach(f => f.Clear(context));
+            FiltersClear(context);
 
             context.ContainerView?.InputService?.Release?.Invoke();
             context.ContainerView?.InputService?.Redraw?.Invoke();
@@ -10607,10 +10499,8 @@ namespace Draw2D.ViewModels.Tools
     }
 
     [DataContract(IsReference = true)]
-    public class TextTool : ViewModelBase, ITool
+    public class TextTool : BaseTool, ITool
     {
-        private IList<IPointIntersection> _intersections;
-        private IList<IPointFilter> _filters;
         private TextToolSettings _settings;
         private TextShape _text = null;
 
@@ -10627,20 +10517,6 @@ namespace Draw2D.ViewModels.Tools
         public string Title => "Text";
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public IList<IPointIntersection> Intersections
-        {
-            get => _intersections;
-            set => Update(ref _intersections, value);
-        }
-
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public IList<IPointFilter> Filters
-        {
-            get => _filters;
-            set => Update(ref _filters, value);
-        }
-
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public TextToolSettings Settings
         {
             get => _settings;
@@ -10649,7 +10525,7 @@ namespace Draw2D.ViewModels.Tools
 
         private void TopLeftInternal(IToolContext context, double x, double y, Modifier modifier)
         {
-            Filters?.Any(f => f.Process(context, ref x, ref y));
+            FiltersProcess(context, ref x, ref y);
 
             IPointShape topLeft = context.ContainerView?.GetNextPoint(context, x, y, Settings?.ConnectPoints ?? false, Settings?.HitTestRadius ?? 7.0);
             IPointShape bottomRight = context.ContainerView?.GetNextPoint(context, x, y, false, 0.0);
@@ -10684,7 +10560,7 @@ namespace Draw2D.ViewModels.Tools
 
         private void BottomRightInternal(IToolContext context, double x, double y, Modifier modifier)
         {
-            Filters?.Any(f => f.Process(context, ref x, ref y));
+            FiltersProcess(context, ref x, ref y);
 
             CurrentState = State.TopLeft;
 
@@ -10706,7 +10582,7 @@ namespace Draw2D.ViewModels.Tools
             context.ContainerView?.CurrentContainer.MarkAsDirty(true);
             _text = null;
 
-            Filters?.ForEach(f => f.Clear(context));
+            FiltersClear(context);
 
             context.ContainerView?.InputService?.Release?.Invoke();
             context.ContainerView?.InputService?.Redraw?.Invoke();
@@ -10714,16 +10590,16 @@ namespace Draw2D.ViewModels.Tools
 
         private void MoveTopLeftInternal(IToolContext context, double x, double y, Modifier modifier)
         {
-            Filters?.ForEach(f => f.Clear(context));
-            Filters?.Any(f => f.Process(context, ref x, ref y));
+            FiltersClear(context);
+            FiltersProcess(context, ref x, ref y);
 
             context.ContainerView?.InputService?.Redraw?.Invoke();
         }
 
         private void MoveBottomRightInternal(IToolContext context, double x, double y, Modifier modifier)
         {
-            Filters?.ForEach(f => f.Clear(context));
-            Filters?.Any(f => f.Process(context, ref x, ref y));
+            FiltersClear(context);
+            FiltersProcess(context, ref x, ref y);
 
             _text.BottomRight.X = x;
             _text.BottomRight.Y = y;
@@ -10735,7 +10611,7 @@ namespace Draw2D.ViewModels.Tools
         {
             CurrentState = State.TopLeft;
 
-            Filters?.ForEach(f => f.Clear(context));
+            FiltersClear(context);
 
             if (_text != null)
             {
