@@ -196,8 +196,8 @@
                             <ContentControl Content="{Binding CurrentTool.Settings}"/>
                         </TabItem>
                         <TabItem Classes="default" Header="Intersections">
-                            <Grid RowDefinitions="Auto,*">
-                                <ComboBox Classes="default" Grid.Row="0" x:Name="intersections" Items="{Binding CurrentTool.Intersections}" SelectedIndex="0">
+                            <Grid RowDefinitions="Auto,*" IsVisible="{Binding !!CurrentTool.Intersections.Count}">
+                                <ComboBox Classes="default" Grid.Row="0" x:Name="intersections" Items="{Binding CurrentTool.Intersections}" SelectedItem="{Binding CurrentTool.CurrentIntersection}">
                                     <ComboBox.DataTemplates>
                                         <DataTemplate>
                                             <TextBlock Classes="default" Text="{Binding Title}"/>
@@ -208,8 +208,8 @@
                             </Grid>
                         </TabItem>
                         <TabItem Classes="default" Header="Filters">
-                            <Grid RowDefinitions="Auto,*">
-                                <ComboBox Classes="default" Grid.Row="0" x:Name="filters" Items="{Binding CurrentTool.Filters}" SelectedIndex="0">
+                            <Grid RowDefinitions="Auto,*" IsVisible="{Binding !!CurrentTool.Filters.Count}">
+                                <ComboBox Classes="default" Grid.Row="0" x:Name="filters" Items="{Binding CurrentTool.Filters}" SelectedItem="{Binding CurrentTool.CurrentFilter}">
                                     <ComboBox.DataTemplates>
                                         <DataTemplate>
                                             <TextBlock Classes="default" Text="{Binding Title}"/>
