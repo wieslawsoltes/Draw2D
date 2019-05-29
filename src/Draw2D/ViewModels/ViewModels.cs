@@ -4830,7 +4830,6 @@ namespace Draw2D.ViewModels.Decorators
             }
         }
     }
-
 }
 
 namespace Draw2D.ViewModels.Filters
