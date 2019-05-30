@@ -5,8 +5,8 @@
 //#define USE_DRAW_LINE
 //#define USE_DRAW_RECT
 //#define USE_DRAW_OVAL
+using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using Draw2D.ViewModels;
 using Draw2D.ViewModels.Containers;
 using Draw2D.ViewModels.Shapes;
@@ -85,7 +85,7 @@ namespace Draw2D.Editor.Renderers
                 typeface = SkiaHelper.ToSKTypeface(familyName);
                 _typefaceCache[familyName] = typeface;
 #if DEBUG_DICT_CACHE
-                Debug.WriteLine($"ToSKTypeface: ctor()");
+                Console.WriteLine($"ToSKTypeface: ctor()");
 #endif
             }
         }
@@ -98,7 +98,7 @@ namespace Draw2D.Editor.Renderers
                 brushCached = SkiaHelper.ToSKPaintBrush(style.Fill);
                 _fillPaintCache[style] = brushCached;
 #if DEBUG_DICT_CACHE
-                Debug.WriteLine($"ToSKPaintBrush: ctor()");
+                Console.WriteLine($"ToSKPaintBrush: ctor()");
 #endif
             }
             else
@@ -118,7 +118,7 @@ namespace Draw2D.Editor.Renderers
                 penCached = SkiaHelper.ToSKPaintPen(style, scale);
                 _strokePaintCache[style] = penCached;
 #if DEBUG_DICT_CACHE
-                Debug.WriteLine($"ToSKPaintPen: ctor()");
+                Console.WriteLine($"ToSKPaintPen: ctor()");
 #endif
             }
             else
@@ -146,7 +146,7 @@ namespace Draw2D.Editor.Renderers
                 cached.paint.TextEncoding = SKTextEncoding.Utf16;
                 cached.paint.TextSize = (float)style.FontSize;
 #if DEBUG_DICT_CACHE
-                Debug.WriteLine($"ToSKPaintBrush: ctor()");
+                Console.WriteLine($"ToSKPaintBrush: ctor()");
 #endif
                 switch (style.HAlign)
                 {

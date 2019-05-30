@@ -4,7 +4,6 @@
 //#define USE_DEBUG_DIRTY
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using Draw2D.Editor.Renderers;
 using Draw2D.ViewModels;
 using Draw2D.ViewModels.Containers;
@@ -94,7 +93,7 @@ namespace Draw2D.Editor.Views
              || style.TextStyle.Stroke.IsDirty)
             {
 #if USE_DEBUG_DIRTY
-                Debug.WriteLine($"IsShapeStyleDirty: true");
+                Console.WriteLine($"IsShapeStyleDirty: true");
 #endif
                 return true;
             }
@@ -111,7 +110,7 @@ namespace Draw2D.Editor.Views
             if (styleLibrary.IsDirty)
             {
 #if USE_DEBUG_DIRTY
-                Debug.WriteLine($"styleLibrary.IsDirty: true");
+                Console.WriteLine($"styleLibrary.IsDirty: true");
 #endif
                 return true;
             }
@@ -140,7 +139,7 @@ namespace Draw2D.Editor.Views
             if (canvasContainer.IsDirty)
             {
 #if USE_DEBUG_DIRTY
-                Debug.WriteLine($"canvasContainer.IsDirty: true");
+                Console.WriteLine($"canvasContainer.IsDirty: true");
 #endif
                 return true;
             }
@@ -152,7 +151,7 @@ namespace Draw2D.Editor.Views
                     if (shape.IsDirty)
                     {
 #if USE_DEBUG_DIRTY
-                        Debug.WriteLine($"shape.IsDirty: true");
+                        Console.WriteLine($"shape.IsDirty: true");
 #endif
                         return true;
                     }
@@ -177,7 +176,7 @@ namespace Draw2D.Editor.Views
                 if (point.IsDirty)
                 {
 #if USE_DEBUG_DIRTY
-                    Debug.WriteLine($"point.IsDirty: true");
+                    Console.WriteLine($"point.IsDirty: true");
 #endif
                     return true;
                 }
@@ -187,7 +186,7 @@ namespace Draw2D.Editor.Views
                     if (point.Template.IsDirty)
                     {
 #if USE_DEBUG_DIRTY
-                        Debug.WriteLine($"point.Template.IsDirty: true");
+                        Console.WriteLine($"point.Template.IsDirty: true");
 #endif
                         return true;
                     }
@@ -302,7 +301,7 @@ namespace Draw2D.Editor.Views
 
             bool isSelectionDirty = _view.SelectionState.IsDirty == true || isShapesCurrentDirty == true || isShapesWorkingDirty == true;
 #if USE_DEBUG_DIRTY
-            Debug.WriteLine(
+            Console.WriteLine(
                 $"{nameof(isStyleLibraryDirty)}: {isStyleLibraryDirty}, " +
                 $"{nameof(isShapesCurrentDirty)}: {isShapesCurrentDirty}, " +
                 $"{nameof(isShapesWorkingDirty)}: {isShapesWorkingDirty}, " +

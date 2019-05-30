@@ -1,10 +1,9 @@
 ﻿// Copyright (c) Wiesław Šoltés. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
-#define DEBUG_POINTER_EVENTS
+//#define DEBUG_POINTER_EVENTS
 //#define USE_DRAW_POINTERS
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
@@ -148,12 +147,12 @@ namespace Draw2D.Controls
             }
 #if DEBUG_POINTER_EVENTS
             Console.WriteLine(
-                $"[PointerPressed] Type: {e.Pointer.Type}, " +
-                $"Modifiers: {e.InputModifiers}, " +
-                $"IsPrimary: {e.Pointer.IsPrimary}, " +
-                $"Point: {e.GetPosition(this)}" +
-                $"_isCaptured: {_isCaptured}, " +
-                $"_capturedInputModifiers: {_capturedInputModifiers}");
+                $"[PointerPressed] type: {e.Pointer.Type}, " +
+                $"modifiers: {e.InputModifiers}, " +
+                $"isPrimary: {e.Pointer.IsPrimary}, " +
+                $"point: {e.GetPosition(this)}, " +
+                $"isCaptured: {_isCaptured}, " +
+                $"capturedInputModifiers: {_capturedInputModifiers}");
 #endif
         }
 
@@ -200,12 +199,12 @@ namespace Draw2D.Controls
             }
 #if DEBUG_POINTER_EVENTS
             Console.WriteLine(
-                $"[PointerReleased] Type: {e.Pointer.Type}, " +
-                $"Modifiers: {e.InputModifiers}, " +
-                $"IsPrimary: {e.Pointer.IsPrimary}, " +
-                $"Point: {e.GetPosition(this)}" +
-                $"_isCaptured: {_isCaptured}, " +
-                $"_capturedInputModifiers: {_capturedInputModifiers}");
+                $"[PointerReleased] type: {e.Pointer.Type}, " +
+                $"modifiers: {e.InputModifiers}, " +
+                $"isPrimary: {e.Pointer.IsPrimary}, " +
+                $"point: {e.GetPosition(this)}, " +
+                $"isCaptured: {_isCaptured}, " +
+                $"capturedInputModifiers: {_capturedInputModifiers}");
 #endif
         }
 
