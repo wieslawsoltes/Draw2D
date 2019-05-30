@@ -8213,7 +8213,6 @@ namespace Draw2D.ViewModels.Tools
         }
     }
 
-    [DataContract(IsReference = true)]
     public partial class PathTool : IToolContext
     {
         internal class FigureContainerView : IContainerView
@@ -8439,6 +8438,7 @@ namespace Draw2D.ViewModels.Tools
         public void Move(double x, double y, Modifier modifier) => _context.Move(x, y, modifier);
     }
 
+    [DataContract(IsReference = true)]
     public partial class PathTool : BaseTool, ITool
     {
         private PathToolSettings _settings;
