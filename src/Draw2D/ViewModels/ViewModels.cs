@@ -10722,8 +10722,6 @@ namespace Draw2D.ViewModels.Tools
                 Name = this.Name
             };
 
-            // TODO: Copy all tool context properties.
-
             return copy;
         }
     }
