@@ -6620,6 +6620,35 @@ namespace Draw2D.ViewModels.Tools
     }
 
     [DataContract(IsReference = true)]
+    public class ConicToolSettings : Settings
+    {
+        private bool _connectPoints;
+        private double _hitTestRadius;
+        private double _weight;
+
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public bool ConnectPoints
+        {
+            get => _connectPoints;
+            set => Update(ref _connectPoints, value);
+        }
+
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public double HitTestRadius
+        {
+            get => _hitTestRadius;
+            set => Update(ref _hitTestRadius, value);
+        }
+
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public double Weight
+        {
+            get => _weight;
+            set => Update(ref _weight, value);
+        }
+    }
+
+    [DataContract(IsReference = true)]
     public class CubicBezierToolSettings : Settings
     {
         private bool _connectPoints;
@@ -7115,6 +7144,252 @@ namespace Draw2D.ViewModels.Tools
                 }
             }
             return false;
+        }
+    }
+
+    [DataContract(IsReference = true)]
+    public class ConicTool : BaseTool, ITool
+    {
+        private ConicToolSettings _settings;
+        private ConicShape _conic = null;
+
+        public enum State
+        {
+            StartPoint,
+            Point1,
+            Point2
+        }
+
+        [IgnoreDataMember]
+        public State CurrentState { get; set; } = State.StartPoint;
+
+        [IgnoreDataMember]
+        public string Title => "Conic";
+
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public ConicToolSettings Settings
+        {
+            get => _settings;
+            set => Update(ref _settings, value);
+        }
+
+        private void StartPointInternal(IToolContext context, double x, double y, Modifier modifier)
+        {
+            FiltersProcess(context, ref x, ref y);
+
+            IPointShape startPoint = context.ContainerView?.GetNextPoint(context, x, y, Settings?.ConnectPoints ?? false, Settings?.HitTestRadius ?? 0.0);
+            IPointShape point1 = context.ContainerView?.GetNextPoint(context, x, y, false, 0.0);
+            IPointShape point2 = context.ContainerView?.GetNextPoint(context, x, y, false, 0.0);
+
+            _conic = new ConicShape()
+            {
+                Points = new ObservableCollection<IPointShape>(),
+                StartPoint = startPoint,
+                Point1 = point1,
+                Point2 = point2,
+                Weight = Settings.Weight,
+                Text = new Text(),
+                StyleId = context.StyleLibrary?.CurrentStyle?.Title
+            };
+            if (_conic.StartPoint.Owner == null)
+            {
+                _conic.StartPoint.Owner = _conic;
+            }
+            if (_conic.Point1.Owner == null)
+            {
+                _conic.Point1.Owner = _conic;
+            }
+            if (_conic.Point2.Owner == null)
+            {
+                _conic.Point2.Owner = _conic;
+            }
+            context.ContainerView?.WorkingContainer.Shapes.Add(_conic);
+            context.ContainerView?.WorkingContainer.MarkAsDirty(true);
+            context.ContainerView?.SelectionState?.Select(_conic);
+            context.ContainerView?.SelectionState?.Select(_conic.StartPoint);
+            context.ContainerView?.SelectionState?.Select(_conic.Point1);
+            context.ContainerView?.SelectionState?.Select(_conic.Point2);
+
+            context.ContainerView?.InputService?.Capture?.Invoke();
+            context.ContainerView?.InputService?.Redraw?.Invoke();
+
+            CurrentState = State.Point2;
+        }
+
+        private void Point1Internal(IToolContext context, double x, double y, Modifier modifier)
+        {
+            FiltersProcess(context, ref x, ref y);
+
+            CurrentState = State.StartPoint;
+
+            context.ContainerView?.SelectionState?.Deselect(_conic);
+            context.ContainerView?.SelectionState?.Deselect(_conic.StartPoint);
+            context.ContainerView?.SelectionState?.Deselect(_conic.Point1);
+            context.ContainerView?.SelectionState?.Deselect(_conic.Point2);
+            context.ContainerView?.WorkingContainer.Shapes.Remove(_conic);
+            context.ContainerView?.WorkingContainer.MarkAsDirty(true);
+
+            IPointShape point1 = context.ContainerView?.GetNextPoint(context, x, y, Settings?.ConnectPoints ?? false, Settings?.HitTestRadius ?? 0.0);
+
+            _conic.Point1 = point1;
+            if (_conic.Point1.Owner == null)
+            {
+                _conic.Point1.Owner = _conic;
+            }
+            context.ContainerView?.CurrentContainer.Shapes.Add(_conic);
+            context.ContainerView?.CurrentContainer.MarkAsDirty(true);
+            _conic = null;
+
+            FiltersClear(context);
+
+            context.ContainerView?.InputService?.Release?.Invoke();
+            context.ContainerView?.InputService?.Redraw?.Invoke();
+        }
+
+        private void Point2Internal(IToolContext context, double x, double y, Modifier modifier)
+        {
+            FiltersProcess(context, ref x, ref y);
+
+            _conic.Point1.X = x;
+            _conic.Point1.Y = y;
+
+            context.ContainerView?.SelectionState?.Deselect(_conic.Point2);
+
+            IPointShape point2 = context.ContainerView?.GetNextPoint(context, x, y, Settings?.ConnectPoints ?? false, Settings?.HitTestRadius ?? 0.0);
+
+            _conic.Point2 = point2;
+            if (_conic.Point2.Owner == null)
+            {
+                _conic.Point2.Owner = _conic;
+            }
+            context.ContainerView?.SelectionState?.Select(_conic.Point2);
+
+            CurrentState = State.Point1;
+
+            context.ContainerView?.InputService?.Redraw?.Invoke();
+        }
+
+        private void MoveStartPointInternal(IToolContext context, double x, double y, Modifier modifier)
+        {
+            FiltersClear(context);
+            FiltersProcess(context, ref x, ref y);
+
+            context.ContainerView?.InputService?.Redraw?.Invoke();
+        }
+
+        private void MovePoint1Internal(IToolContext context, double x, double y, Modifier modifier)
+        {
+            FiltersClear(context);
+            FiltersProcess(context, ref x, ref y);
+
+            _conic.Point1.X = x;
+            _conic.Point1.Y = y;
+
+            context.ContainerView?.InputService?.Redraw?.Invoke();
+        }
+
+        private void MovePoint2Internal(IToolContext context, double x, double y, Modifier modifier)
+        {
+            FiltersClear(context);
+            FiltersProcess(context, ref x, ref y);
+
+            _conic.Point1.X = x;
+            _conic.Point1.Y = y;
+            _conic.Point2.X = x;
+            _conic.Point2.Y = y;
+
+            context.ContainerView?.InputService?.Redraw?.Invoke();
+        }
+
+        private void CleanInternal(IToolContext context)
+        {
+            FiltersClear(context);
+
+            CurrentState = State.StartPoint;
+
+            if (_conic != null)
+            {
+                context.ContainerView?.WorkingContainer.Shapes.Remove(_conic);
+                context.ContainerView?.WorkingContainer.MarkAsDirty(true);
+                context.ContainerView?.SelectionState?.Deselect(_conic);
+                context.ContainerView?.SelectionState?.Deselect(_conic.StartPoint);
+                context.ContainerView?.SelectionState?.Deselect(_conic.Point1);
+                context.ContainerView?.SelectionState?.Deselect(_conic.Point2);
+                _conic = null;
+            }
+
+            context.ContainerView?.InputService?.Release?.Invoke();
+            context.ContainerView?.InputService?.Redraw?.Invoke();
+        }
+
+        public void LeftDown(IToolContext context, double x, double y, Modifier modifier)
+        {
+            switch (CurrentState)
+            {
+                case State.StartPoint:
+                    {
+                        StartPointInternal(context, x, y, modifier);
+                    }
+                    break;
+                case State.Point1:
+                    {
+                        Point1Internal(context, x, y, modifier);
+                    }
+                    break;
+                case State.Point2:
+                    {
+                        Point2Internal(context, x, y, modifier);
+                    }
+                    break;
+            }
+        }
+
+        public void LeftUp(IToolContext context, double x, double y, Modifier modifier)
+        {
+        }
+
+        public void RightDown(IToolContext context, double x, double y, Modifier modifier)
+        {
+            switch (CurrentState)
+            {
+                case State.Point1:
+                case State.Point2:
+                    {
+                        this.Clean(context);
+                    }
+                    break;
+            }
+        }
+
+        public void RightUp(IToolContext context, double x, double y, Modifier modifier)
+        {
+        }
+
+        public void Move(IToolContext context, double x, double y, Modifier modifier)
+        {
+            switch (CurrentState)
+            {
+                case State.StartPoint:
+                    {
+                        MoveStartPointInternal(context, x, y, modifier);
+                    }
+                    break;
+                case State.Point1:
+                    {
+                        MovePoint1Internal(context, x, y, modifier);
+                    }
+                    break;
+                case State.Point2:
+                    {
+                        MovePoint2Internal(context, x, y, modifier);
+                    }
+                    break;
+            }
+        }
+
+        public void Clean(IToolContext context)
+        {
+            CleanInternal(context);
         }
     }
 
@@ -7939,154 +8214,140 @@ namespace Draw2D.ViewModels.Tools
     }
 
     [DataContract(IsReference = true)]
-    internal class FigureContainerView : IContainerView
-    {
-        internal IToolContext _context;
-        internal PathTool _pathTool;
-        internal IPointShape _nextPoint;
-
-        public FigureContainerView(IToolContext context, PathTool pathTool)
-        {
-            _context = context;
-            _pathTool = pathTool;
-        }
-
-        [IgnoreDataMember]
-        public string Title
-        {
-            get => _context.ContainerView.Title;
-            set => throw new InvalidOperationException($"Can not set {Title} property value.");
-        }
-
-        [IgnoreDataMember]
-        public double Width
-        {
-            get => _context.ContainerView.Width;
-            set => throw new InvalidOperationException($"Can not set {Width} property value.");
-        }
-
-        [IgnoreDataMember]
-        public double Height
-        {
-            get => _context.ContainerView.Width;
-            set => throw new InvalidOperationException($"Can not set {Height} property value.");
-        }
-
-        [IgnoreDataMember]
-        public ArgbColor PrintBackground
-        {
-            get => _context.ContainerView.PrintBackground;
-            set => throw new InvalidOperationException($"Can not set {PrintBackground} property value.");
-        }
-
-        [IgnoreDataMember]
-        public ArgbColor WorkBackground
-        {
-            get => _context.ContainerView.WorkBackground;
-            set => throw new InvalidOperationException($"Can not set {WorkBackground} property value.");
-        }
-
-        [IgnoreDataMember]
-        public ArgbColor InputBackground
-        {
-            get => _context.ContainerView.InputBackground;
-            set => throw new InvalidOperationException($"Can not set {InputBackground} property value.");
-        }
-
-        [IgnoreDataMember]
-        public ICanvasContainer CurrentContainer
-        {
-            get => _pathTool._figure;
-            set => throw new InvalidOperationException($"Can not set {CurrentContainer} property value.");
-        }
-
-        [IgnoreDataMember]
-        public ICanvasContainer WorkingContainer
-        {
-            get => _pathTool._figure;
-            set => throw new InvalidOperationException($"Can not set {WorkingContainer} property value.");
-        }
-
-        [IgnoreDataMember]
-        public IDrawContainerView DrawContainerView
-        {
-            get => _context.ContainerView.DrawContainerView;
-            set => throw new InvalidOperationException($"Can not set {DrawContainerView} property value.");
-        }
-
-        [IgnoreDataMember]
-        public ISelectionState SelectionState
-        {
-            get => _context.ContainerView.SelectionState;
-            set => throw new InvalidOperationException($"Can not set {SelectionState} property value.");
-        }
-
-        [IgnoreDataMember]
-        public IZoomServiceState ZoomServiceState
-        {
-            get => _context.ContainerView.ZoomServiceState;
-            set => throw new InvalidOperationException($"Can not set {ZoomServiceState} property value.");
-        }
-
-        [IgnoreDataMember]
-        public IInputService InputService
-        {
-            get => _context.ContainerView?.InputService;
-            set => throw new InvalidOperationException($"Can not set {InputService} property value.");
-        }
-
-        [IgnoreDataMember]
-        public IZoomService ZoomService
-        {
-            get => _context.ContainerView.ZoomService;
-            set => throw new InvalidOperationException($"Can not set {ZoomService} property value.");
-        }
-
-        public IPointShape GetNextPoint(IToolContext context, double x, double y, bool connect, double radius)
-        {
-            if (_nextPoint != null)
-            {
-                var nextPointTemp = _nextPoint;
-                _nextPoint = null;
-                return nextPointTemp;
-            }
-            return _context.ContainerView.GetNextPoint(_context, x, y, connect, radius);
-        }
-
-        public void Draw(object context, double width, double height, double dx, double dy, double zx, double zy)
-        {
-            _context.ContainerView.Draw(context, width, height, dx, dy, zx, zy);
-        }
-
-        public void Add(IBaseShape shape)
-        {
-            _context.ContainerView.Add(shape);
-        }
-
-        public void Remove(IBaseShape shape)
-        {
-            _context.ContainerView.Remove(shape);
-        }
-
-        public void Reference(GroupShape group)
-        {
-            _context.ContainerView.Reference(group);
-        }
-
-        public void Style(string styleId)
-        {
-            _context.ContainerView.Style(styleId);
-        }
-
-        public object Copy(Dictionary<object, object> shared)
-        {
-            return null;
-        }
-    }
-
-    [DataContract(IsReference = true)]
     public partial class PathTool : IToolContext
     {
+        internal class FigureContainerView : IContainerView
+        {
+            internal IToolContext _context;
+            internal PathTool _pathTool;
+            internal IPointShape _nextPoint;
+
+            public FigureContainerView(IToolContext context, PathTool pathTool)
+            {
+                _context = context;
+                _pathTool = pathTool;
+            }
+
+            public string Title
+            {
+                get => _context.ContainerView.Title;
+                set => throw new InvalidOperationException($"Can not set {Title} property value.");
+            }
+
+            public double Width
+            {
+                get => _context.ContainerView.Width;
+                set => throw new InvalidOperationException($"Can not set {Width} property value.");
+            }
+
+            public double Height
+            {
+                get => _context.ContainerView.Width;
+                set => throw new InvalidOperationException($"Can not set {Height} property value.");
+            }
+
+            public ArgbColor PrintBackground
+            {
+                get => _context.ContainerView.PrintBackground;
+                set => throw new InvalidOperationException($"Can not set {PrintBackground} property value.");
+            }
+
+            public ArgbColor WorkBackground
+            {
+                get => _context.ContainerView.WorkBackground;
+                set => throw new InvalidOperationException($"Can not set {WorkBackground} property value.");
+            }
+
+            public ArgbColor InputBackground
+            {
+                get => _context.ContainerView.InputBackground;
+                set => throw new InvalidOperationException($"Can not set {InputBackground} property value.");
+            }
+
+            public ICanvasContainer CurrentContainer
+            {
+                get => _pathTool._figure;
+                set => throw new InvalidOperationException($"Can not set {CurrentContainer} property value.");
+            }
+
+            public ICanvasContainer WorkingContainer
+            {
+                get => _pathTool._figure;
+                set => throw new InvalidOperationException($"Can not set {WorkingContainer} property value.");
+            }
+
+            public IDrawContainerView DrawContainerView
+            {
+                get => _context.ContainerView.DrawContainerView;
+                set => throw new InvalidOperationException($"Can not set {DrawContainerView} property value.");
+            }
+
+            public ISelectionState SelectionState
+            {
+                get => _context.ContainerView.SelectionState;
+                set => throw new InvalidOperationException($"Can not set {SelectionState} property value.");
+            }
+
+            public IZoomServiceState ZoomServiceState
+            {
+                get => _context.ContainerView.ZoomServiceState;
+                set => throw new InvalidOperationException($"Can not set {ZoomServiceState} property value.");
+            }
+
+            public IInputService InputService
+            {
+                get => _context.ContainerView?.InputService;
+                set => throw new InvalidOperationException($"Can not set {InputService} property value.");
+            }
+
+            public IZoomService ZoomService
+            {
+                get => _context.ContainerView.ZoomService;
+                set => throw new InvalidOperationException($"Can not set {ZoomService} property value.");
+            }
+
+            public IPointShape GetNextPoint(IToolContext context, double x, double y, bool connect, double radius)
+            {
+                if (_nextPoint != null)
+                {
+                    var nextPointTemp = _nextPoint;
+                    _nextPoint = null;
+                    return nextPointTemp;
+                }
+                return _context.ContainerView.GetNextPoint(_context, x, y, connect, radius);
+            }
+
+            public void Draw(object context, double width, double height, double dx, double dy, double zx, double zy)
+            {
+                _context.ContainerView.Draw(context, width, height, dx, dy, zx, zy);
+            }
+
+            public void Add(IBaseShape shape)
+            {
+                _context.ContainerView.Add(shape);
+            }
+
+            public void Remove(IBaseShape shape)
+            {
+                _context.ContainerView.Remove(shape);
+            }
+
+            public void Reference(GroupShape group)
+            {
+                _context.ContainerView.Reference(group);
+            }
+
+            public void Style(string styleId)
+            {
+                _context.ContainerView.Style(styleId);
+            }
+
+            public object Copy(Dictionary<object, object> shared)
+            {
+                return null;
+            }
+        }
+
         internal IToolContext _context;
         internal FigureContainerView _containerView;
 
@@ -8867,281 +9128,6 @@ namespace Draw2D.ViewModels.Tools
                 context.ContainerView?.SelectionState?.Deselect(_quadraticBezier.Point1);
                 context.ContainerView?.SelectionState?.Deselect(_quadraticBezier.Point2);
                 _quadraticBezier = null;
-            }
-
-            context.ContainerView?.InputService?.Release?.Invoke();
-            context.ContainerView?.InputService?.Redraw?.Invoke();
-        }
-
-        public void LeftDown(IToolContext context, double x, double y, Modifier modifier)
-        {
-            switch (CurrentState)
-            {
-                case State.StartPoint:
-                    {
-                        StartPointInternal(context, x, y, modifier);
-                    }
-                    break;
-                case State.Point1:
-                    {
-                        Point1Internal(context, x, y, modifier);
-                    }
-                    break;
-                case State.Point2:
-                    {
-                        Point2Internal(context, x, y, modifier);
-                    }
-                    break;
-            }
-        }
-
-        public void LeftUp(IToolContext context, double x, double y, Modifier modifier)
-        {
-        }
-
-        public void RightDown(IToolContext context, double x, double y, Modifier modifier)
-        {
-            switch (CurrentState)
-            {
-                case State.Point1:
-                case State.Point2:
-                    {
-                        this.Clean(context);
-                    }
-                    break;
-            }
-        }
-
-        public void RightUp(IToolContext context, double x, double y, Modifier modifier)
-        {
-        }
-
-        public void Move(IToolContext context, double x, double y, Modifier modifier)
-        {
-            switch (CurrentState)
-            {
-                case State.StartPoint:
-                    {
-                        MoveStartPointInternal(context, x, y, modifier);
-                    }
-                    break;
-                case State.Point1:
-                    {
-                        MovePoint1Internal(context, x, y, modifier);
-                    }
-                    break;
-                case State.Point2:
-                    {
-                        MovePoint2Internal(context, x, y, modifier);
-                    }
-                    break;
-            }
-        }
-
-        public void Clean(IToolContext context)
-        {
-            CleanInternal(context);
-        }
-    }
-
-    [DataContract(IsReference = true)]
-    public class ConicToolSettings : Settings
-    {
-        private bool _connectPoints;
-        private double _hitTestRadius;
-        private double _weight;
-
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public bool ConnectPoints
-        {
-            get => _connectPoints;
-            set => Update(ref _connectPoints, value);
-        }
-
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public double HitTestRadius
-        {
-            get => _hitTestRadius;
-            set => Update(ref _hitTestRadius, value);
-        }
-
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public double Weight
-        {
-            get => _weight;
-            set => Update(ref _weight, value);
-        }
-    }
-
-    [DataContract(IsReference = true)]
-    public class ConicTool : BaseTool, ITool
-    {
-        private ConicToolSettings _settings;
-        private ConicShape _conic = null;
-
-        public enum State
-        {
-            StartPoint,
-            Point1,
-            Point2
-        }
-
-        [IgnoreDataMember]
-        public State CurrentState { get; set; } = State.StartPoint;
-
-        [IgnoreDataMember]
-        public string Title => "Conic";
-
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public ConicToolSettings Settings
-        {
-            get => _settings;
-            set => Update(ref _settings, value);
-        }
-
-        private void StartPointInternal(IToolContext context, double x, double y, Modifier modifier)
-        {
-            FiltersProcess(context, ref x, ref y);
-
-            IPointShape startPoint = context.ContainerView?.GetNextPoint(context, x, y, Settings?.ConnectPoints ?? false, Settings?.HitTestRadius ?? 0.0);
-            IPointShape point1 = context.ContainerView?.GetNextPoint(context, x, y, false, 0.0);
-            IPointShape point2 = context.ContainerView?.GetNextPoint(context, x, y, false, 0.0);
-
-            _conic = new ConicShape()
-            {
-                Points = new ObservableCollection<IPointShape>(),
-                StartPoint = startPoint,
-                Point1 = point1,
-                Point2 = point2,
-                Weight = Settings.Weight,
-                Text = new Text(),
-                StyleId = context.StyleLibrary?.CurrentStyle?.Title
-            };
-            if (_conic.StartPoint.Owner == null)
-            {
-                _conic.StartPoint.Owner = _conic;
-            }
-            if (_conic.Point1.Owner == null)
-            {
-                _conic.Point1.Owner = _conic;
-            }
-            if (_conic.Point2.Owner == null)
-            {
-                _conic.Point2.Owner = _conic;
-            }
-            context.ContainerView?.WorkingContainer.Shapes.Add(_conic);
-            context.ContainerView?.WorkingContainer.MarkAsDirty(true);
-            context.ContainerView?.SelectionState?.Select(_conic);
-            context.ContainerView?.SelectionState?.Select(_conic.StartPoint);
-            context.ContainerView?.SelectionState?.Select(_conic.Point1);
-            context.ContainerView?.SelectionState?.Select(_conic.Point2);
-
-            context.ContainerView?.InputService?.Capture?.Invoke();
-            context.ContainerView?.InputService?.Redraw?.Invoke();
-
-            CurrentState = State.Point2;
-        }
-
-        private void Point1Internal(IToolContext context, double x, double y, Modifier modifier)
-        {
-            FiltersProcess(context, ref x, ref y);
-
-            CurrentState = State.StartPoint;
-
-            context.ContainerView?.SelectionState?.Deselect(_conic);
-            context.ContainerView?.SelectionState?.Deselect(_conic.StartPoint);
-            context.ContainerView?.SelectionState?.Deselect(_conic.Point1);
-            context.ContainerView?.SelectionState?.Deselect(_conic.Point2);
-            context.ContainerView?.WorkingContainer.Shapes.Remove(_conic);
-            context.ContainerView?.WorkingContainer.MarkAsDirty(true);
-
-            IPointShape point1 = context.ContainerView?.GetNextPoint(context, x, y, Settings?.ConnectPoints ?? false, Settings?.HitTestRadius ?? 0.0);
-
-            _conic.Point1 = point1;
-            if (_conic.Point1.Owner == null)
-            {
-                _conic.Point1.Owner = _conic;
-            }
-            context.ContainerView?.CurrentContainer.Shapes.Add(_conic);
-            context.ContainerView?.CurrentContainer.MarkAsDirty(true);
-            _conic = null;
-
-            FiltersClear(context);
-
-            context.ContainerView?.InputService?.Release?.Invoke();
-            context.ContainerView?.InputService?.Redraw?.Invoke();
-        }
-
-        private void Point2Internal(IToolContext context, double x, double y, Modifier modifier)
-        {
-            FiltersProcess(context, ref x, ref y);
-
-            _conic.Point1.X = x;
-            _conic.Point1.Y = y;
-
-            context.ContainerView?.SelectionState?.Deselect(_conic.Point2);
-
-            IPointShape point2 = context.ContainerView?.GetNextPoint(context, x, y, Settings?.ConnectPoints ?? false, Settings?.HitTestRadius ?? 0.0);
-
-            _conic.Point2 = point2;
-            if (_conic.Point2.Owner == null)
-            {
-                _conic.Point2.Owner = _conic;
-            }
-            context.ContainerView?.SelectionState?.Select(_conic.Point2);
-
-            CurrentState = State.Point1;
-
-            context.ContainerView?.InputService?.Redraw?.Invoke();
-        }
-
-        private void MoveStartPointInternal(IToolContext context, double x, double y, Modifier modifier)
-        {
-            FiltersClear(context);
-            FiltersProcess(context, ref x, ref y);
-
-            context.ContainerView?.InputService?.Redraw?.Invoke();
-        }
-
-        private void MovePoint1Internal(IToolContext context, double x, double y, Modifier modifier)
-        {
-            FiltersClear(context);
-            FiltersProcess(context, ref x, ref y);
-
-            _conic.Point1.X = x;
-            _conic.Point1.Y = y;
-
-            context.ContainerView?.InputService?.Redraw?.Invoke();
-        }
-
-        private void MovePoint2Internal(IToolContext context, double x, double y, Modifier modifier)
-        {
-            FiltersClear(context);
-            FiltersProcess(context, ref x, ref y);
-
-            _conic.Point1.X = x;
-            _conic.Point1.Y = y;
-            _conic.Point2.X = x;
-            _conic.Point2.Y = y;
-
-            context.ContainerView?.InputService?.Redraw?.Invoke();
-        }
-
-        private void CleanInternal(IToolContext context)
-        {
-            FiltersClear(context);
-
-            CurrentState = State.StartPoint;
-
-            if (_conic != null)
-            {
-                context.ContainerView?.WorkingContainer.Shapes.Remove(_conic);
-                context.ContainerView?.WorkingContainer.MarkAsDirty(true);
-                context.ContainerView?.SelectionState?.Deselect(_conic);
-                context.ContainerView?.SelectionState?.Deselect(_conic.StartPoint);
-                context.ContainerView?.SelectionState?.Deselect(_conic.Point1);
-                context.ContainerView?.SelectionState?.Deselect(_conic.Point2);
-                _conic = null;
             }
 
             context.ContainerView?.InputService?.Release?.Invoke();
