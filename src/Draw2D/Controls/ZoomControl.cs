@@ -126,11 +126,19 @@ namespace Draw2D.Controls
 
             if (e.Pointer.Type == PointerType.Mouse)
             {
-                if (e.InputModifiers.HasFlag(InputModifiers.LeftMouseButton))
+                //if (e.InputModifiers.HasFlag(InputModifiers.LeftMouseButton))
+                //{
+                //    isLeft = true;
+                //}
+                //else if (e.InputModifiers.HasFlag(InputModifiers.RightMouseButton))
+                //{
+                //    isRight = true;
+                //}
+                if (e.Pointer.IsPrimary == true)
                 {
                     isLeft = true;
                 }
-                else if (e.InputModifiers.HasFlag(InputModifiers.RightMouseButton))
+                else
                 {
                     isRight = true;
                 }
@@ -147,7 +155,7 @@ namespace Draw2D.Controls
                 }
             }
 #if DEBUG_POINTER_EVENTS
-            Debug.WriteLine(
+            Console.WriteLine(
                 $"[PointerPressed] Type: {e.Pointer.Type}, " +
                 $"Modifiers: {e.InputModifiers}, " +
                 $"IsPrimary: {e.Pointer.IsPrimary}, " +
@@ -166,14 +174,14 @@ namespace Draw2D.Controls
             {
                 //if (_isCaptured == false)
                 //{
-                    if (e.InputModifiers.HasFlag(InputModifiers.LeftMouseButton))
-                    {
-                        isLeft = true;
-                    }
-                    else if (e.InputModifiers.HasFlag(InputModifiers.RightMouseButton))
-                    {
-                        isRight = true;
-                    }
+                //    if (e.InputModifiers.HasFlag(InputModifiers.LeftMouseButton))
+                //    {
+                //        isLeft = true;
+                //    }
+                //    else if (e.InputModifiers.HasFlag(InputModifiers.RightMouseButton))
+                //    {
+                //        isRight = true;
+                //    }
                 //}
                 //else
                 //{
@@ -186,6 +194,14 @@ namespace Draw2D.Controls
                 //        isRight = true;
                 //    }
                 //}
+                if (e.Pointer.IsPrimary == true)
+                {
+                    isLeft = true;
+                }
+                else
+                {
+                    isRight = true;
+                }
             }
             else if (e.Pointer.Type == PointerType.Touch)
             {
@@ -199,7 +215,7 @@ namespace Draw2D.Controls
                 }
             }
 #if DEBUG_POINTER_EVENTS
-            Debug.WriteLine(
+            Console.WriteLine(
                 $"[PointerReleased] Type: {e.Pointer.Type}, " +
                 $"Modifiers: {e.InputModifiers}, " +
                 $"IsPrimary: {e.Pointer.IsPrimary}, " +
@@ -534,8 +550,8 @@ namespace Draw2D.Controls
                 {
                     foreach (var value in _pointers.Values)
                     {
-                        if (value.Pointer.IsPrimary)
-                        {
+                        //if (value.Pointer.IsPrimary)
+                        //{
                             if (value.Pointer.Captured == null)
                             {
                                 value.Pointer.Capture(this);
@@ -544,7 +560,7 @@ namespace Draw2D.Controls
                                 _isCaptured = true;
                             }
                             break;
-                        }
+                        //}
                     }
                 };
 
@@ -561,8 +577,8 @@ namespace Draw2D.Controls
                     {
                         foreach (var value in _pointers.Values)
                         {
-                            if (value.Pointer.IsPrimary)
-                            {
+                            //if (value.Pointer.IsPrimary)
+                            //{
                                 if (value.Pointer.Captured != null)
                                 {
                                     value.Pointer.Capture(null);
@@ -571,7 +587,7 @@ namespace Draw2D.Controls
                                     _isCaptured = false;
                                 }
                                 break;
-                            }
+                            //}
                         }
                     }
                 };
@@ -586,10 +602,10 @@ namespace Draw2D.Controls
                     {
                         foreach (var value in _pointers.Values)
                         {
-                            if (value.Pointer.IsPrimary)
-                            {
+                            //if (value.Pointer.IsPrimary)
+                            //{
                                 return value.Pointer.Captured != null;
-                            }
+                            //}
                         }
                     }
                     return false;
