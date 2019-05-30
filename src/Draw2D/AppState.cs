@@ -13,6 +13,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Draw2D.Editor;
 using Draw2D.ViewModels.Containers;
+using Draw2D.ViewModels.Tools;
 
 namespace Draw2D
 {

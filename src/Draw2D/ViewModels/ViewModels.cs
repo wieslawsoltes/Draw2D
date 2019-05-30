@@ -3410,73 +3410,6 @@ namespace Draw2D.ViewModels.Containers
         void Reference(GroupShape group);
         void Style(string styleId);
     }
-
-    public interface ISelection : IDirty
-    {
-        void Cut(IToolContext context);
-        void Copy(IToolContext context);
-        void Paste(IToolContext context);
-        void Delete(IToolContext context);
-        void Group(IToolContext context);
-        void Reference(IToolContext context);
-        void SelectAll(IToolContext context);
-        void Connect(IToolContext context, IPointShape point);
-        void Disconnect(IToolContext context, IPointShape point);
-        void Disconnect(IToolContext context, IBaseShape shape);
-    }
-
-    public interface IPointFilter : INode, IDirty
-    {
-        string Title { get; }
-        IList<IBaseShape> Guides { get; set; }
-        bool Process(IToolContext context, ref double x, ref double y);
-        void Clear(IToolContext context);
-    }
-
-    public interface IPointIntersection : INode, IDirty
-    {
-        string Title { get; }
-        IList<IPointShape> Intersections { get; set; }
-        void Find(IToolContext context, IBaseShape shape);
-        void Clear(IToolContext context);
-    }
-
-    public interface ITool
-    {
-        string Title { get; }
-        IList<IPointIntersection> Intersections { get; set; }
-        IPointIntersection CurrentIntersection { get; set; }
-        IList<IPointFilter> Filters { get; set; }
-        IPointFilter CurrentFilter { get; set; }
-        void LeftDown(IToolContext context, double x, double y, Modifier modifier);
-        void LeftUp(IToolContext context, double x, double y, Modifier modifier);
-        void RightDown(IToolContext context, double x, double y, Modifier modifier);
-        void RightUp(IToolContext context, double x, double y, Modifier modifier);
-        void Move(IToolContext context, double x, double y, Modifier modifier);
-        void Clean(IToolContext context);
-    }
-
-    public interface IToolContext : IInputTarget, IDisposable
-    {
-        IStyleLibrary StyleLibrary { get; set; }
-        IGroupLibrary GroupLibrary { get; set; }
-        IBaseShape PointTemplate { get; set; }
-        IHitTest HitTest { get; set; }
-        IList<IContainerView> ContainerViews { get; set; }
-        IContainerView ContainerView { get; set; }
-        IList<ITool> Tools { get; set; }
-        ITool CurrentTool { get; set; }
-        EditMode Mode { get; set; }
-        void SetTool(string name);
-    }
-
-    public interface IContainerFactory
-    {
-        IStyleLibrary CreateStyleLibrary();
-        IGroupLibrary CreateGroupLibrary();
-        IToolContext CreateToolContext();
-        IContainerView CreateContainerView(string title);
-    }
 }
 
 namespace Draw2D.ViewModels.Containers
@@ -4174,184 +4107,6 @@ namespace Draw2D.ViewModels.Containers
             return copy;
         }
     }
-
-    [DataContract(IsReference = true)]
-    public class ToolContext : ViewModelBase, IToolContext
-    {
-        private IStyleLibrary _styleLibrary;
-        private IGroupLibrary _groupLibrary;
-        private IBaseShape _pointTemplate;
-        private IHitTest _hitTest;
-        private IList<IContainerView> _containerViews;
-        private IContainerView _containerView;
-        private IList<ITool> _tools;
-        private ITool _currentTool;
-        private EditMode _mode;
-
-#if USE_SERIALIZE_STYLES
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-#else
-        [IgnoreDataMember]
-#endif
-        public IStyleLibrary StyleLibrary
-        {
-            get => _styleLibrary;
-            set => Update(ref _styleLibrary, value);
-        }
-
-#if USE_SERIALIZE_GROUPS
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-#else
-        [IgnoreDataMember]
-#endif
-        public IGroupLibrary GroupLibrary
-        {
-            get => _groupLibrary;
-            set => Update(ref _groupLibrary, value);
-        }
-
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public IBaseShape PointTemplate
-        {
-            get => _pointTemplate;
-            set => Update(ref _pointTemplate, value);
-        }
-
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public IHitTest HitTest
-        {
-            get => _hitTest;
-            set => Update(ref _hitTest, value);
-        }
-
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public IList<IContainerView> ContainerViews
-        {
-            get => _containerViews;
-            set => Update(ref _containerViews, value);
-        }
-
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public IContainerView ContainerView
-        {
-            get => _containerView;
-            set => Update(ref _containerView, value);
-        }
-
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public IList<ITool> Tools
-        {
-            get => _tools;
-            set => Update(ref _tools, value);
-        }
-
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public ITool CurrentTool
-        {
-            get => _currentTool;
-            set
-            {
-                _currentTool?.Clean(this);
-                Update(ref _currentTool, value);
-            }
-        }
-
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public EditMode Mode
-        {
-            get => _mode;
-            set => Update(ref _mode, value);
-        }
-
-        public void Dispose()
-        {
-            if (_containerViews != null)
-            {
-                foreach (var containerView in _containerViews)
-                {
-                    containerView.DrawContainerView?.Dispose();
-                    containerView.DrawContainerView = null;
-                    containerView.SelectionState = null;
-                    containerView.WorkingContainer = null;
-                }
-            }
-        }
-
-        public void SetTool(string title)
-        {
-            if (CurrentTool is PathTool pathTool && pathTool.Settings.CurrentTool.Title != title)
-            {
-                pathTool.CleanCurrentTool(this);
-                var tool = pathTool.Settings.Tools.Where(t => t.Title == title).FirstOrDefault();
-                if (tool != null)
-                {
-                    pathTool.Settings.CurrentTool = tool;
-                }
-                else
-                {
-                    CurrentTool = Tools.Where(t => t.Title == title).FirstOrDefault();
-                }
-            }
-            else
-            {
-                CurrentTool = Tools.Where(t => t.Title == title).FirstOrDefault();
-            }
-        }
-
-        public void LeftDown(double x, double y, Modifier modifier)
-        {
-            _currentTool.LeftDown(this, x, y, modifier);
-        }
-
-        public void LeftUp(double x, double y, Modifier modifier)
-        {
-            if (_mode == EditMode.Mouse)
-            {
-                _currentTool.LeftUp(this, x, y, modifier);
-            }
-            else if (_mode == EditMode.Touch)
-            {
-                _currentTool.LeftDown(this, x, y, modifier);
-            }
-        }
-
-        public void RightDown(double x, double y, Modifier modifier)
-        {
-            _currentTool.RightDown(this, x, y, modifier);
-        }
-
-        public void RightUp(double x, double y, Modifier modifier)
-        {
-            _currentTool.RightUp(this, x, y, modifier);
-        }
-
-        public void Move(double x, double y, Modifier modifier)
-        {
-            _currentTool.Move(this, x, y, modifier);
-        }
-
-        public double GetWidth()
-        {
-            return ContainerView?.Width ?? 0.0;
-        }
-
-        public double GetHeight()
-        {
-            return ContainerView?.Height ?? 0.0;
-        }
-
-        public virtual object Copy(Dictionary<object, object> shared)
-        {
-            var copy = new ToolContext()
-            {
-                Name = this.Name
-            };
-
-            // TODO: Copy all tool context properties.
-
-            return copy;
-        }
-    }
 }
 
 namespace Draw2D.ViewModels.Decorators
@@ -4616,6 +4371,44 @@ namespace Draw2D.ViewModels.Decorators
     }
 
     [DataContract(IsReference = true)]
+    public class ConicDecorator : CommonDecorator
+    {
+        public void Draw(object dc, IShapeRenderer renderer, ConicShape conic, double dx, double dy, double scale, DrawMode mode)
+        {
+            DrawLine(dc, renderer, conic.StartPoint, conic.Point1, dx, dy, scale, mode);
+            DrawLine(dc, renderer, conic.Point1, conic.Point2, dx, dy, scale, mode);
+        }
+
+        public override void Draw(object dc, IBaseShape shape, IShapeRenderer renderer, ISelectionState selectionState, double dx, double dy, double scale, DrawMode mode)
+        {
+            if (shape is ConicShape conic)
+            {
+                Draw(dc, renderer, conic, dx, dy, scale, mode);
+            }
+        }
+    }
+
+    [DataContract(IsReference = true)]
+    public class ContainerDecorator : CommonDecorator
+    {
+        public void Draw(object dc, IShapeRenderer renderer, ICanvasContainer container, ISelectionState selectionState, double dx, double dy, double scale, DrawMode mode)
+        {
+            if (selectionState.IsSelected(container))
+            {
+                DrawBoxFromPoints(dc, renderer, container, dx, dy, scale, mode);
+            }
+        }
+
+        public override void Draw(object dc, IBaseShape shape, IShapeRenderer renderer, ISelectionState selectionState, double dx, double dy, double scale, DrawMode mode)
+        {
+            if (shape is ICanvasContainer container)
+            {
+                Draw(dc, renderer, container, selectionState, dx, dy, scale, mode);
+            }
+        }
+    }
+
+    [DataContract(IsReference = true)]
     public class CubicBezierDecorator : CommonDecorator
     {
         public void Draw(object dc, IShapeRenderer renderer, CubicBezierShape cubicBezier, double dx, double dy, double scale, DrawMode mode)
@@ -4825,24 +4618,6 @@ namespace Draw2D.ViewModels.Decorators
     }
 
     [DataContract(IsReference = true)]
-    public class ConicDecorator : CommonDecorator
-    {
-        public void Draw(object dc, IShapeRenderer renderer, ConicShape conic, double dx, double dy, double scale, DrawMode mode)
-        {
-            DrawLine(dc, renderer, conic.StartPoint, conic.Point1, dx, dy, scale, mode);
-            DrawLine(dc, renderer, conic.Point1, conic.Point2, dx, dy, scale, mode);
-        }
-
-        public override void Draw(object dc, IBaseShape shape, IShapeRenderer renderer, ISelectionState selectionState, double dx, double dy, double scale, DrawMode mode)
-        {
-            if (shape is ConicShape conic)
-            {
-                Draw(dc, renderer, conic, dx, dy, scale, mode);
-            }
-        }
-    }
-
-    [DataContract(IsReference = true)]
     public class RectangleDecorator : CommonDecorator
     {
         public void Draw(object dc, IShapeRenderer renderer, RectangleShape rectangleShape, double dx, double dy, double scale, DrawMode mode)
@@ -4892,26 +4667,6 @@ namespace Draw2D.ViewModels.Decorators
             if (shape is TextShape textShape)
             {
                 Draw(dc, renderer, textShape, dx, dy, scale, mode);
-            }
-        }
-    }
-
-    [DataContract(IsReference = true)]
-    public class ContainerDecorator : CommonDecorator
-    {
-        public void Draw(object dc, IShapeRenderer renderer, ICanvasContainer container, ISelectionState selectionState, double dx, double dy, double scale, DrawMode mode)
-        {
-            if (selectionState.IsSelected(container))
-            {
-                DrawBoxFromPoints(dc, renderer, container, dx, dy, scale, mode);
-            }
-        }
-
-        public override void Draw(object dc, IBaseShape shape, IShapeRenderer renderer, ISelectionState selectionState, double dx, double dy, double scale, DrawMode mode)
-        {
-            if (shape is ICanvasContainer container)
-            {
-                Draw(dc, renderer, container, selectionState, dx, dy, scale, mode);
             }
         }
     }
@@ -5699,6 +5454,136 @@ namespace Draw2D.ViewModels.Intersections
 namespace Draw2D.ViewModels.Bounds
 {
     [DataContract(IsReference = true)]
+    public class ConicBounds : ViewModelBase, IBounds
+    {
+        public IPointShape TryToGetPoint(IBaseShape shape, Point2 target, double radius, IHitTest hitTest)
+        {
+            if (!(shape is ConicShape conic))
+            {
+                throw new ArgumentNullException("shape");
+            }
+
+            if (conic.StartPoint.Bounds?.TryToGetPoint(conic.StartPoint, target, radius, hitTest) != null)
+            {
+                return conic.StartPoint;
+            }
+
+            if (conic.Point1.Bounds?.TryToGetPoint(conic.Point1, target, radius, hitTest) != null)
+            {
+                return conic.Point1;
+            }
+
+            if (conic.Point2.Bounds?.TryToGetPoint(conic.Point2, target, radius, hitTest) != null)
+            {
+                return conic.Point2;
+            }
+
+            foreach (var point in conic.Points)
+            {
+                if (point.Bounds?.TryToGetPoint(point, target, radius, hitTest) != null)
+                {
+                    return point;
+                }
+            }
+
+            return null;
+        }
+
+        public IBaseShape Contains(IBaseShape shape, Point2 target, double radius, IHitTest hitTest)
+        {
+            if (!(shape is ConicShape conic))
+            {
+                throw new ArgumentNullException("shape");
+            }
+
+            var points = new List<IPointShape>();
+            conic.GetPoints(points);
+
+            return HitTestHelper.Contains(points, target) ? shape : null;
+        }
+
+        public IBaseShape Overlaps(IBaseShape shape, Rect2 target, double radius, IHitTest hitTest)
+        {
+            if (!(shape is ConicShape conic))
+            {
+                throw new ArgumentNullException("shape");
+            }
+
+            var points = new List<IPointShape>();
+            conic.GetPoints(points);
+
+            return HitTestHelper.Overlap(points, target) ? shape : null;
+        }
+    }
+
+    [DataContract(IsReference = true)]
+    public class ContainerBounds : ViewModelBase, IBounds
+    {
+        public IPointShape TryToGetPoint(IBaseShape shape, Point2 target, double radius, IHitTest hitTest)
+        {
+            if (!(shape is CanvasContainer container))
+            {
+                throw new ArgumentNullException("shape");
+            }
+
+            foreach (var containerPoint in container.Points)
+            {
+                if (containerPoint.Bounds?.TryToGetPoint(containerPoint, target, radius, hitTest) != null)
+                {
+                    return containerPoint;
+                }
+            }
+#if USE_CONTAINER_SHAPES
+            foreach (var containerShape in container.Shapes)
+            {
+                var result = containerShape.Bounds?.TryToGetPoint(containerShape, target, radius, hitTest);
+                if (result != null)
+                {
+                    return result;
+                }
+            }
+#endif
+            return null;
+        }
+
+        public IBaseShape Contains(IBaseShape shape, Point2 target, double radius, IHitTest hitTest)
+        {
+            if (!(shape is CanvasContainer container))
+            {
+                throw new ArgumentNullException("shape");
+            }
+
+            foreach (var containerShape in container.Shapes)
+            {
+                var result = containerShape.Bounds?.Contains(containerShape, target, radius, hitTest);
+                if (result != null)
+                {
+                    return container;
+                }
+            }
+            return null;
+        }
+
+        public IBaseShape Overlaps(IBaseShape shape, Rect2 target, double radius, IHitTest hitTest)
+        {
+            if (!(shape is CanvasContainer container))
+            {
+                throw new ArgumentNullException("shape");
+            }
+
+            foreach (var containerShape in container.Shapes)
+            {
+                var result = containerShape.Bounds?.Overlaps(containerShape, target, radius, hitTest);
+                if (result != null)
+                {
+                    return container;
+                }
+            }
+            return null;
+        }
+    }
+
+    [DataContract(IsReference = true)]
     public class CubicBezierBounds : ViewModelBase, IBounds
     {
         public IPointShape TryToGetPoint(IBaseShape shape, Point2 target, double radius, IHitTest hitTest)
@@ -6193,69 +6078,6 @@ namespace Draw2D.ViewModels.Bounds
     }
 
     [DataContract(IsReference = true)]
-    public class ConicBounds : ViewModelBase, IBounds
-    {
-        public IPointShape TryToGetPoint(IBaseShape shape, Point2 target, double radius, IHitTest hitTest)
-        {
-            if (!(shape is ConicShape conic))
-            {
-                throw new ArgumentNullException("shape");
-            }
-
-            if (conic.StartPoint.Bounds?.TryToGetPoint(conic.StartPoint, target, radius, hitTest) != null)
-            {
-                return conic.StartPoint;
-            }
-
-            if (conic.Point1.Bounds?.TryToGetPoint(conic.Point1, target, radius, hitTest) != null)
-            {
-                return conic.Point1;
-            }
-
-            if (conic.Point2.Bounds?.TryToGetPoint(conic.Point2, target, radius, hitTest) != null)
-            {
-                return conic.Point2;
-            }
-
-            foreach (var point in conic.Points)
-            {
-                if (point.Bounds?.TryToGetPoint(point, target, radius, hitTest) != null)
-                {
-                    return point;
-                }
-            }
-
-            return null;
-        }
-
-        public IBaseShape Contains(IBaseShape shape, Point2 target, double radius, IHitTest hitTest)
-        {
-            if (!(shape is ConicShape conic))
-            {
-                throw new ArgumentNullException("shape");
-            }
-
-            var points = new List<IPointShape>();
-            conic.GetPoints(points);
-
-            return HitTestHelper.Contains(points, target) ? shape : null;
-        }
-
-        public IBaseShape Overlaps(IBaseShape shape, Rect2 target, double radius, IHitTest hitTest)
-        {
-            if (!(shape is ConicShape conic))
-            {
-                throw new ArgumentNullException("shape");
-            }
-
-            var points = new List<IPointShape>();
-            conic.GetPoints(points);
-
-            return HitTestHelper.Overlap(points, target) ? shape : null;
-        }
-    }
-
-    [DataContract(IsReference = true)]
     public class RectangleBounds : ViewModelBase, IBounds
     {
         public IPointShape TryToGetPoint(IBaseShape shape, Point2 target, double radius, IHitTest hitTest)
@@ -6418,73 +6240,6 @@ namespace Draw2D.ViewModels.Bounds
                 box.BottomRight.Y).IntersectsWith(target) ? shape : null;
         }
     }
-
-    [DataContract(IsReference = true)]
-    public class ContainerBounds : ViewModelBase, IBounds
-    {
-        public IPointShape TryToGetPoint(IBaseShape shape, Point2 target, double radius, IHitTest hitTest)
-        {
-            if (!(shape is CanvasContainer container))
-            {
-                throw new ArgumentNullException("shape");
-            }
-
-            foreach (var containerPoint in container.Points)
-            {
-                if (containerPoint.Bounds?.TryToGetPoint(containerPoint, target, radius, hitTest) != null)
-                {
-                    return containerPoint;
-                }
-            }
-#if USE_CONTAINER_SHAPES
-            foreach (var containerShape in container.Shapes)
-            {
-                var result = containerShape.Bounds?.TryToGetPoint(containerShape, target, radius, hitTest);
-                if (result != null)
-                {
-                    return result;
-                }
-            }
-#endif
-            return null;
-        }
-
-        public IBaseShape Contains(IBaseShape shape, Point2 target, double radius, IHitTest hitTest)
-        {
-            if (!(shape is CanvasContainer container))
-            {
-                throw new ArgumentNullException("shape");
-            }
-
-            foreach (var containerShape in container.Shapes)
-            {
-                var result = containerShape.Bounds?.Contains(containerShape, target, radius, hitTest);
-                if (result != null)
-                {
-                    return container;
-                }
-            }
-            return null;
-        }
-
-        public IBaseShape Overlaps(IBaseShape shape, Rect2 target, double radius, IHitTest hitTest)
-        {
-            if (!(shape is CanvasContainer container))
-            {
-                throw new ArgumentNullException("shape");
-            }
-
-            foreach (var containerShape in container.Shapes)
-            {
-                var result = containerShape.Bounds?.Overlaps(containerShape, target, radius, hitTest);
-                if (result != null)
-                {
-                    return container;
-                }
-            }
-            return null;
-        }
-    }
 }
 
 namespace Draw2D.ViewModels.Bounds
@@ -6596,6 +6351,76 @@ namespace Draw2D.ViewModels.Bounds
         {
             return Overlap(points, ToSelection(rect));
         }
+    }
+}
+
+namespace Draw2D.ViewModels.Tools
+{
+    public interface ISelection : IDirty
+    {
+        void Cut(IToolContext context);
+        void Copy(IToolContext context);
+        void Paste(IToolContext context);
+        void Delete(IToolContext context);
+        void Group(IToolContext context);
+        void Reference(IToolContext context);
+        void SelectAll(IToolContext context);
+        void Connect(IToolContext context, IPointShape point);
+        void Disconnect(IToolContext context, IPointShape point);
+        void Disconnect(IToolContext context, IBaseShape shape);
+    }
+
+    public interface IPointFilter : INode, IDirty
+    {
+        string Title { get; }
+        IList<IBaseShape> Guides { get; set; }
+        bool Process(IToolContext context, ref double x, ref double y);
+        void Clear(IToolContext context);
+    }
+
+    public interface IPointIntersection : INode, IDirty
+    {
+        string Title { get; }
+        IList<IPointShape> Intersections { get; set; }
+        void Find(IToolContext context, IBaseShape shape);
+        void Clear(IToolContext context);
+    }
+
+    public interface ITool
+    {
+        string Title { get; }
+        IList<IPointIntersection> Intersections { get; set; }
+        IPointIntersection CurrentIntersection { get; set; }
+        IList<IPointFilter> Filters { get; set; }
+        IPointFilter CurrentFilter { get; set; }
+        void LeftDown(IToolContext context, double x, double y, Modifier modifier);
+        void LeftUp(IToolContext context, double x, double y, Modifier modifier);
+        void RightDown(IToolContext context, double x, double y, Modifier modifier);
+        void RightUp(IToolContext context, double x, double y, Modifier modifier);
+        void Move(IToolContext context, double x, double y, Modifier modifier);
+        void Clean(IToolContext context);
+    }
+
+    public interface IToolContext : IInputTarget, IDisposable
+    {
+        IStyleLibrary StyleLibrary { get; set; }
+        IGroupLibrary GroupLibrary { get; set; }
+        IBaseShape PointTemplate { get; set; }
+        IHitTest HitTest { get; set; }
+        IList<IContainerView> ContainerViews { get; set; }
+        IContainerView ContainerView { get; set; }
+        IList<ITool> Tools { get; set; }
+        ITool CurrentTool { get; set; }
+        EditMode Mode { get; set; }
+        void SetTool(string name);
+    }
+
+    public interface IContainerFactory
+    {
+        IStyleLibrary CreateStyleLibrary();
+        IGroupLibrary CreateGroupLibrary();
+        IToolContext CreateToolContext();
+        IContainerView CreateContainerView(string title);
     }
 }
 
@@ -10719,6 +10544,187 @@ namespace Draw2D.ViewModels.Tools
         public void Clean(IToolContext context)
         {
             CleanInternal(context);
+        }
+    }
+}
+
+namespace Draw2D.ViewModels.Tools
+{
+    [DataContract(IsReference = true)]
+    public class ToolContext : ViewModelBase, IToolContext
+    {
+        private IStyleLibrary _styleLibrary;
+        private IGroupLibrary _groupLibrary;
+        private IBaseShape _pointTemplate;
+        private IHitTest _hitTest;
+        private IList<IContainerView> _containerViews;
+        private IContainerView _containerView;
+        private IList<ITool> _tools;
+        private ITool _currentTool;
+        private EditMode _mode;
+
+#if USE_SERIALIZE_STYLES
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+#else
+        [IgnoreDataMember]
+#endif
+        public IStyleLibrary StyleLibrary
+        {
+            get => _styleLibrary;
+            set => Update(ref _styleLibrary, value);
+        }
+
+#if USE_SERIALIZE_GROUPS
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+#else
+        [IgnoreDataMember]
+#endif
+        public IGroupLibrary GroupLibrary
+        {
+            get => _groupLibrary;
+            set => Update(ref _groupLibrary, value);
+        }
+
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public IBaseShape PointTemplate
+        {
+            get => _pointTemplate;
+            set => Update(ref _pointTemplate, value);
+        }
+
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public IHitTest HitTest
+        {
+            get => _hitTest;
+            set => Update(ref _hitTest, value);
+        }
+
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public IList<IContainerView> ContainerViews
+        {
+            get => _containerViews;
+            set => Update(ref _containerViews, value);
+        }
+
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public IContainerView ContainerView
+        {
+            get => _containerView;
+            set => Update(ref _containerView, value);
+        }
+
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public IList<ITool> Tools
+        {
+            get => _tools;
+            set => Update(ref _tools, value);
+        }
+
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public ITool CurrentTool
+        {
+            get => _currentTool;
+            set
+            {
+                _currentTool?.Clean(this);
+                Update(ref _currentTool, value);
+            }
+        }
+
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public EditMode Mode
+        {
+            get => _mode;
+            set => Update(ref _mode, value);
+        }
+
+        public void Dispose()
+        {
+            if (_containerViews != null)
+            {
+                foreach (var containerView in _containerViews)
+                {
+                    containerView.DrawContainerView?.Dispose();
+                    containerView.DrawContainerView = null;
+                    containerView.SelectionState = null;
+                    containerView.WorkingContainer = null;
+                }
+            }
+        }
+
+        public void SetTool(string title)
+        {
+            if (CurrentTool is PathTool pathTool && pathTool.Settings.CurrentTool.Title != title)
+            {
+                pathTool.CleanCurrentTool(this);
+                var tool = pathTool.Settings.Tools.Where(t => t.Title == title).FirstOrDefault();
+                if (tool != null)
+                {
+                    pathTool.Settings.CurrentTool = tool;
+                }
+                else
+                {
+                    CurrentTool = Tools.Where(t => t.Title == title).FirstOrDefault();
+                }
+            }
+            else
+            {
+                CurrentTool = Tools.Where(t => t.Title == title).FirstOrDefault();
+            }
+        }
+
+        public void LeftDown(double x, double y, Modifier modifier)
+        {
+            _currentTool.LeftDown(this, x, y, modifier);
+        }
+
+        public void LeftUp(double x, double y, Modifier modifier)
+        {
+            if (_mode == EditMode.Mouse)
+            {
+                _currentTool.LeftUp(this, x, y, modifier);
+            }
+            else if (_mode == EditMode.Touch)
+            {
+                _currentTool.LeftDown(this, x, y, modifier);
+            }
+        }
+
+        public void RightDown(double x, double y, Modifier modifier)
+        {
+            _currentTool.RightDown(this, x, y, modifier);
+        }
+
+        public void RightUp(double x, double y, Modifier modifier)
+        {
+            _currentTool.RightUp(this, x, y, modifier);
+        }
+
+        public void Move(double x, double y, Modifier modifier)
+        {
+            _currentTool.Move(this, x, y, modifier);
+        }
+
+        public double GetWidth()
+        {
+            return ContainerView?.Width ?? 0.0;
+        }
+
+        public double GetHeight()
+        {
+            return ContainerView?.Height ?? 0.0;
+        }
+
+        public virtual object Copy(Dictionary<object, object> shared)
+        {
+            var copy = new ToolContext()
+            {
+                Name = this.Name
+            };
+
+            // TODO: Copy all tool context properties.
+
+            return copy;
         }
     }
 }

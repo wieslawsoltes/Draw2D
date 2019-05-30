@@ -3,6 +3,7 @@
 using Draw2D.Editor.Renderers;
 using Draw2D.ViewModels;
 using Draw2D.ViewModels.Containers;
+using Draw2D.ViewModels.Tools;
 using SkiaSharp;
 
 namespace Draw2D.Editor.Views

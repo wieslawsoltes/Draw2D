@@ -5,6 +5,7 @@ using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using Avalonia.Skia;
 using Draw2D.ViewModels.Containers;
+using Draw2D.ViewModels.Tools;
 
 namespace Draw2D.Editor.Views
 {
