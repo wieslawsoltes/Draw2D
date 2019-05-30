@@ -8456,7 +8456,7 @@ namespace Draw2D.ViewModels.Tools
             set => Update(ref _settings, value);
         }
 
-        public void Create(IToolContext context)
+        internal void Create(IToolContext context)
         {
             if (_containerView == null)
             {
@@ -8477,7 +8477,7 @@ namespace Draw2D.ViewModels.Tools
             context.ContainerView?.SelectionState?.Select(_path);
         }
 
-        public void Move(IToolContext context)
+        internal void Move(IToolContext context)
         {
             _figure = new FigureShape()
             {
@@ -8494,14 +8494,14 @@ namespace Draw2D.ViewModels.Tools
             }
         }
 
-        public void CleanCurrentTool(IToolContext context)
+        internal void CleanCurrentTool(IToolContext context)
         {
             SetContext(context);
             Settings.CurrentTool?.Clean(this);
             SetContext(null);
         }
 
-        public void UpdateCache(IToolContext context)
+        internal void UpdateCache(IToolContext context)
         {
             if (_path != null)
             {
