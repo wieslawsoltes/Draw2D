@@ -164,8 +164,8 @@ namespace Draw2D.Controls
 
             if (e.Pointer.Type == PointerType.Mouse)
             {
-                //if (_isCaptured == false)
-                //{
+                if (_isCaptured == false)
+                {
                       if (e.InputModifiers.HasFlag(InputModifiers.LeftMouseButton))
                       {
                           isLeft = true;
@@ -174,18 +174,18 @@ namespace Draw2D.Controls
                       {
                           isRight = true;
                       }
-                //}
-                //else
-                //{
-                //    if (_capturedInputModifiers.HasFlag(InputModifiers.LeftMouseButton))
-                //    {
-                //        isLeft = true;
-                //    }
-                //    else if (_capturedInputModifiers.HasFlag(InputModifiers.RightMouseButton))
-                //    {
-                //        isRight = true;
-                //    }
-                //}
+                }
+                else
+                {
+                    if (_capturedInputModifiers.HasFlag(InputModifiers.LeftMouseButton))
+                    {
+                        isLeft = true;
+                    }
+                    else if (_capturedInputModifiers.HasFlag(InputModifiers.RightMouseButton))
+                    {
+                        isRight = true;
+                    }
+                }
             }
             else if (e.Pointer.Type == PointerType.Touch)
             {
