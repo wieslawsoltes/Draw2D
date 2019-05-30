@@ -1,6 +1,6 @@
 ﻿// Copyright (c) Wiesław Šoltés. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
-//#define DEBUG_POINTER_EVENTS
+#define DEBUG_POINTER_EVENTS
 //#define USE_DRAW_POINTERS
 using System;
 using System.Collections.Generic;
@@ -126,19 +126,11 @@ namespace Draw2D.Controls
 
             if (e.Pointer.Type == PointerType.Mouse)
             {
-                //if (e.InputModifiers.HasFlag(InputModifiers.LeftMouseButton))
-                //{
-                //    isLeft = true;
-                //}
-                //else if (e.InputModifiers.HasFlag(InputModifiers.RightMouseButton))
-                //{
-                //    isRight = true;
-                //}
-                if (e.Pointer.IsPrimary == true)
+                if (e.InputModifiers.HasFlag(InputModifiers.LeftMouseButton))
                 {
                     isLeft = true;
                 }
-                else
+                else if (e.InputModifiers.HasFlag(InputModifiers.RightMouseButton))
                 {
                     isRight = true;
                 }
@@ -174,14 +166,14 @@ namespace Draw2D.Controls
             {
                 //if (_isCaptured == false)
                 //{
-                //    if (e.InputModifiers.HasFlag(InputModifiers.LeftMouseButton))
-                //    {
-                //        isLeft = true;
-                //    }
-                //    else if (e.InputModifiers.HasFlag(InputModifiers.RightMouseButton))
-                //    {
-                //        isRight = true;
-                //    }
+                      if (e.InputModifiers.HasFlag(InputModifiers.LeftMouseButton))
+                      {
+                          isLeft = true;
+                      }
+                      else if (e.InputModifiers.HasFlag(InputModifiers.RightMouseButton))
+                      {
+                          isRight = true;
+                      }
                 //}
                 //else
                 //{
@@ -194,14 +186,6 @@ namespace Draw2D.Controls
                 //        isRight = true;
                 //    }
                 //}
-                if (e.Pointer.IsPrimary == true)
-                {
-                    isLeft = true;
-                }
-                else
-                {
-                    isRight = true;
-                }
             }
             else if (e.Pointer.Type == PointerType.Touch)
             {
