@@ -93,6 +93,39 @@
             <Setter Property="TickFrequency" Value="0.1"/>
         </Style>
         <Style Selector="TabControl.default">
+            <Setter Property="Template">
+                <ControlTemplate>
+                    <Border
+                        Margin="{TemplateBinding Margin}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        Background="{TemplateBinding Background}"
+                        HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
+                        VerticalAlignment="{TemplateBinding VerticalAlignment}">
+                        <Grid RowDefinitions="Auto,*" ColumnDefinitions="*">
+                            <ItemsPresenter
+                                Name="PART_ItemsPresenter"
+                                Items="{TemplateBinding Items}"
+                                ItemsPanel="{TemplateBinding ItemsPanel}"
+                                ItemTemplate="{TemplateBinding ItemTemplate}"
+                                MemberSelector="{TemplateBinding MemberSelector}"
+                                Grid.Row="0"
+                                Grid.Column="0">
+                            </ItemsPresenter>
+                            <ContentPresenter
+                                Name="PART_SelectedContentHost"
+                                Margin="{TemplateBinding Padding}"
+                                HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+                                Content="{TemplateBinding SelectedContent}"
+                                ContentTemplate="{TemplateBinding SelectedContentTemplate}"
+                                Grid.Row="1"
+                                Grid.Column="0">
+                            </ContentPresenter>
+                        </Grid>
+                    </Border>
+                </ControlTemplate>
+            </Setter>
             <Setter Property="ItemsPanel">
                 <ItemsPanelTemplate>
                     <WrapPanel ClipToBounds="False"/>
