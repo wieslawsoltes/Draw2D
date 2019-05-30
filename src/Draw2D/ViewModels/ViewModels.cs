@@ -30,17 +30,6 @@ using Spatial.Sat;
 
 namespace Draw2D.ViewModels
 {
-    public static class ForEachExtension
-    {
-        public static void ForEach<T>(this IList<T> list, Action<T> action)
-        {
-            foreach (var t in list)
-            {
-                action(t);
-            }
-        }
-    }
-
     [Flags]
     public enum DrawMode
     {
@@ -160,7 +149,10 @@ namespace Draw2D.ViewModels
         void Select(ISelectionState selectionState);
         void Deselect(ISelectionState selectionState);
     }
+}
 
+namespace Draw2D.ViewModels
+{
     [DataContract(IsReference = true)]
     public abstract class ViewModelBase : INode, IDirty, INotifyPropertyChanged
     {
@@ -3267,7 +3259,10 @@ namespace Draw2D.ViewModels.Shapes
             return copy;
         }
     }
+}
 
+namespace Draw2D.ViewModels.Shapes
+{
     public static class BaseShapeExtensions
     {
         public static void GetBox(this IList<IPointShape> points, out double ax, out double ay, out double bx, out double by)
@@ -3482,7 +3477,10 @@ namespace Draw2D.ViewModels.Containers
         IToolContext CreateToolContext();
         IContainerView CreateContainerView(string title);
     }
+}
 
+namespace Draw2D.ViewModels.Containers
+{
     [DataContract(IsReference = true)]
     public class StyleLibrary : ViewModelBase, IStyleLibrary
     {
@@ -4921,6 +4919,36 @@ namespace Draw2D.ViewModels.Decorators
 
 namespace Draw2D.ViewModels.Filters
 {
+    [Flags]
+    public enum GridSnapMode
+    {
+        None = 0,
+        Horizontal = 1,
+        Vertical = 2,
+        All = Horizontal | Vertical
+    }
+
+    [Flags]
+    public enum LineSnapMode
+    {
+        None = 0,
+        Point = 1,
+        Middle = 2,
+        Intersection = 4,
+        Horizontal = 8,
+        Vertical = 16,
+        Nearest = 32,
+        All = Point | Middle | Intersection | Horizontal | Vertical | Nearest
+    }
+
+    [Flags]
+    public enum LineSnapTarget
+    {
+        None = 0,
+        Shapes = 1,
+        All = Shapes
+    }
+
     [DataContract(IsReference = true)]
     public abstract class PointFilter : ViewModelBase, IPointFilter
     {
@@ -4947,15 +4975,6 @@ namespace Draw2D.ViewModels.Filters
             }
             Guides.Clear();
         }
-    }
-
-    [Flags]
-    public enum GridSnapMode
-    {
-        None = 0,
-        Horizontal = 1,
-        Vertical = 2,
-        All = Horizontal | Vertical
     }
 
     [DataContract(IsReference = true)]
@@ -5095,27 +5114,6 @@ namespace Draw2D.ViewModels.Filters
             decimal r = value % size;
             return r >= size / 2.0m ? value + size - r : value - r;
         }
-    }
-
-    [Flags]
-    public enum LineSnapMode
-    {
-        None = 0,
-        Point = 1,
-        Middle = 2,
-        Intersection = 4,
-        Horizontal = 8,
-        Vertical = 16,
-        Nearest = 32,
-        All = Point | Middle | Intersection | Horizontal | Vertical | Nearest
-    }
-
-    [Flags]
-    public enum LineSnapTarget
-    {
-        None = 0,
-        Shapes = 1,
-        All = Shapes
     }
 
     [DataContract(IsReference = true)]
@@ -6487,7 +6485,62 @@ namespace Draw2D.ViewModels.Bounds
             return null;
         }
     }
+}
 
+namespace Draw2D.ViewModels.Bounds
+{
+    [DataContract(IsReference = true)]
+    public class HitTest : ViewModelBase, IHitTest
+    {
+        public IPointShape TryToGetPoint(IBaseShape shape, Point2 target, double radius)
+        {
+            return shape.Bounds?.TryToGetPoint(shape, target, radius, this);
+        }
+
+        public IPointShape TryToGetPoint(IEnumerable<IBaseShape> shapes, Point2 target, double radius, IPointShape exclude)
+        {
+            foreach (var shape in shapes.Reverse())
+            {
+                var result = TryToGetPoint(shape, target, radius);
+                if (result != null && result != exclude)
+                {
+                    return result;
+                }
+            }
+            return null;
+        }
+
+        public IBaseShape TryToGetShape(IEnumerable<IBaseShape> shapes, Point2 target, double radius)
+        {
+            foreach (var shape in shapes.Reverse())
+            {
+                var result = shape.Bounds?.Contains(shape, target, radius, this);
+                if (result != null)
+                {
+                    return result;
+                }
+            }
+            return null;
+        }
+
+        public ISet<IBaseShape> TryToGetShapes(IEnumerable<IBaseShape> shapes, Rect2 target, double radius)
+        {
+            var selected = new HashSet<IBaseShape>();
+            foreach (var shape in shapes.Reverse())
+            {
+                var result = shape.Bounds?.Overlaps(shape, target, radius, this);
+                if (result != null)
+                {
+                    selected.Add(shape);
+                }
+            }
+            return selected.Count > 0 ? selected : null;
+        }
+    }
+}
+
+namespace Draw2D.ViewModels.Bounds
+{
     public static class HitTestHelper
     {
         public static MonotoneChain MC => new MonotoneChain();
@@ -6544,57 +6597,422 @@ namespace Draw2D.ViewModels.Bounds
             return Overlap(points, ToSelection(rect));
         }
     }
+}
+
+namespace Draw2D.ViewModels.Tools
+{
+    [Flags]
+    public enum SelectionMode
+    {
+        None = 0,
+        Point = 1,
+        Shape = 2,
+        All = Point | Shape
+    }
+
+    [Flags]
+    public enum SelectionTargets
+    {
+        None = 0,
+        Shapes = 1,
+        Guides = 2,
+        All = Shapes | Guides
+    }
 
     [DataContract(IsReference = true)]
-    public class HitTest : ViewModelBase, IHitTest
+    public class CubicBezierToolSettings : Settings
     {
-        public HitTest()
+        private bool _connectPoints;
+        private double _hitTestRadius;
+
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public bool ConnectPoints
         {
+            get => _connectPoints;
+            set => Update(ref _connectPoints, value);
         }
 
-        public IPointShape TryToGetPoint(IBaseShape shape, Point2 target, double radius)
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public double HitTestRadius
         {
-            return shape.Bounds?.TryToGetPoint(shape, target, radius, this);
+            get => _hitTestRadius;
+            set => Update(ref _hitTestRadius, value);
+        }
+    }
+
+    [DataContract(IsReference = true)]
+    public class EllipseToolSettings : Settings
+    {
+        private bool _connectPoints;
+        private double _hitTestRadius;
+
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public bool ConnectPoints
+        {
+            get => _connectPoints;
+            set => Update(ref _connectPoints, value);
         }
 
-        public IPointShape TryToGetPoint(IEnumerable<IBaseShape> shapes, Point2 target, double radius, IPointShape exclude)
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public double HitTestRadius
         {
-            foreach (var shape in shapes.Reverse())
+            get => _hitTestRadius;
+            set => Update(ref _hitTestRadius, value);
+        }
+    }
+
+    [DataContract(IsReference = true)]
+    public class LineToolSettings : Settings
+    {
+        private bool _connectPoints;
+        private double _hitTestRadius;
+        private bool _splitIntersections;
+
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public bool ConnectPoints
+        {
+            get => _connectPoints;
+            set => Update(ref _connectPoints, value);
+        }
+
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public double HitTestRadius
+        {
+            get => _hitTestRadius;
+            set => Update(ref _hitTestRadius, value);
+        }
+
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public bool SplitIntersections
+        {
+            get => _splitIntersections;
+            set => Update(ref _splitIntersections, value);
+        }
+    }
+
+    [DataContract(IsReference = true)]
+    public class MoveToolSettings : Settings
+    {
+    }
+
+    [DataContract(IsReference = true)]
+    public class NoneToolSettings : Settings
+    {
+    }
+
+    [DataContract(IsReference = true)]
+    public class PathToolSettings : Settings
+    {
+        private bool _connectPoints;
+        private double _hitTestRadius;
+        private PathFillRule _fillRule;
+        private bool _isFilled;
+        private bool _isClosed;
+        private IList<ITool> _tools;
+        private ITool _currentTool;
+        private ITool _previousTool;
+
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public bool ConnectPoints
+        {
+            get => _connectPoints;
+            set => Update(ref _connectPoints, value);
+        }
+
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public double HitTestRadius
+        {
+            get => _hitTestRadius;
+            set => Update(ref _hitTestRadius, value);
+        }
+
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public PathFillRule FillRule
+        {
+            get => _fillRule;
+            set => Update(ref _fillRule, value);
+        }
+
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public bool IsFilled
+        {
+            get => _isFilled;
+            set => Update(ref _isFilled, value);
+        }
+
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public bool IsClosed
+        {
+            get => _isClosed;
+            set => Update(ref _isClosed, value);
+        }
+
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public IList<ITool> Tools
+        {
+            get => _tools;
+            set => Update(ref _tools, value);
+        }
+
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public ITool CurrentTool
+        {
+            get => _currentTool;
+            set
             {
-                var result = TryToGetPoint(shape, target, radius);
-                if (result != null && result != exclude)
-                {
-                    return result;
-                }
+                PreviousTool = _currentTool;
+                Update(ref _currentTool, value);
             }
-            return null;
         }
 
-        public IBaseShape TryToGetShape(IEnumerable<IBaseShape> shapes, Point2 target, double radius)
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public ITool PreviousTool
         {
-            foreach (var shape in shapes.Reverse())
-            {
-                var result = shape.Bounds?.Contains(shape, target, radius, this);
-                if (result != null)
-                {
-                    return result;
-                }
-            }
-            return null;
+            get => _previousTool;
+            set => Update(ref _previousTool, value);
+        }
+    }
+
+    [DataContract(IsReference = true)]
+    public class PointToolSettings : Settings
+    {
+        private bool _connectPoints;
+        private double _hitTestRadius;
+
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public bool ConnectPoints
+        {
+            get => _connectPoints;
+            set => Update(ref _connectPoints, value);
         }
 
-        public ISet<IBaseShape> TryToGetShapes(IEnumerable<IBaseShape> shapes, Rect2 target, double radius)
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public double HitTestRadius
         {
-            var selected = new HashSet<IBaseShape>();
-            foreach (var shape in shapes.Reverse())
-            {
-                var result = shape.Bounds?.Overlaps(shape, target, radius, this);
-                if (result != null)
-                {
-                    selected.Add(shape);
-                }
-            }
-            return selected.Count > 0 ? selected : null;
+            get => _hitTestRadius;
+            set => Update(ref _hitTestRadius, value);
+        }
+    }
+
+    [DataContract(IsReference = true)]
+    public class PolyLineToolSettings : Settings
+    {
+        private bool _connectPoints;
+        private double _hitTestRadius;
+
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public bool ConnectPoints
+        {
+            get => _connectPoints;
+            set => Update(ref _connectPoints, value);
+        }
+
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public double HitTestRadius
+        {
+            get => _hitTestRadius;
+            set => Update(ref _hitTestRadius, value);
+        }
+    }
+
+    [DataContract(IsReference = true)]
+    public class QuadraticBezierToolSettings : Settings
+    {
+        private bool _connectPoints;
+        private double _hitTestRadius;
+
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public bool ConnectPoints
+        {
+            get => _connectPoints;
+            set => Update(ref _connectPoints, value);
+        }
+
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public double HitTestRadius
+        {
+            get => _hitTestRadius;
+            set => Update(ref _hitTestRadius, value);
+        }
+    }
+
+    [DataContract(IsReference = true)]
+    public class RectangleToolSettings : Settings
+    {
+        private bool _connectPoints;
+        private double _hitTestRadius;
+
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public bool ConnectPoints
+        {
+            get => _connectPoints;
+            set => Update(ref _connectPoints, value);
+        }
+
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public double HitTestRadius
+        {
+            get => _hitTestRadius;
+            set => Update(ref _hitTestRadius, value);
+        }
+    }
+
+    [DataContract(IsReference = true)]
+    public class ScribbleToolSettings : Settings
+    {
+        private bool _simplify;
+        private double _epsilon;
+        private PathFillRule _fillRule;
+        private bool _isFilled;
+        private bool _isClosed;
+
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public bool Simplify
+        {
+            get => _simplify;
+            set => Update(ref _simplify, value);
+        }
+
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public double Epsilon
+        {
+            get => _epsilon;
+            set => Update(ref _epsilon, value);
+        }
+
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public PathFillRule FillRule
+        {
+            get => _fillRule;
+            set => Update(ref _fillRule, value);
+        }
+
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public bool IsFilled
+        {
+            get => _isFilled;
+            set => Update(ref _isFilled, value);
+        }
+
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public bool IsClosed
+        {
+            get => _isClosed;
+            set => Update(ref _isClosed, value);
+        }
+    }
+
+    [DataContract(IsReference = true)]
+    public class SelectionToolSettings : Settings
+    {
+        private SelectionMode _mode;
+        private SelectionTargets _targets;
+        private Modifier _selectionModifier;
+        private Modifier _connectionModifier;
+        private string _selectionStyle;
+        private bool _clearSelectionOnClean;
+        private double _hitTestRadius;
+        private bool _connectPoints;
+        private double _connectTestRadius;
+        private bool _disconnectPoints;
+        private double _disconnectTestRadius;
+
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public SelectionMode Mode
+        {
+            get => _mode;
+            set => Update(ref _mode, value);
+        }
+
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public SelectionTargets Targets
+        {
+            get => _targets;
+            set => Update(ref _targets, value);
+        }
+
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public Modifier SelectionModifier
+        {
+            get => _selectionModifier;
+            set => Update(ref _selectionModifier, value);
+        }
+
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public Modifier ConnectionModifier
+        {
+            get => _connectionModifier;
+            set => Update(ref _connectionModifier, value);
+        }
+
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public string SelectionStyle
+        {
+            get => _selectionStyle;
+            set => Update(ref _selectionStyle, value);
+        }
+
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public bool ClearSelectionOnClean
+        {
+            get => _clearSelectionOnClean;
+            set => Update(ref _clearSelectionOnClean, value);
+        }
+
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public double HitTestRadius
+        {
+            get => _hitTestRadius;
+            set => Update(ref _hitTestRadius, value);
+        }
+
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public bool ConnectPoints
+        {
+            get => _connectPoints;
+            set => Update(ref _connectPoints, value);
+        }
+
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public double ConnectTestRadius
+        {
+            get => _connectTestRadius;
+            set => Update(ref _connectTestRadius, value);
+        }
+
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public bool DisconnectPoints
+        {
+            get => _disconnectPoints;
+            set => Update(ref _disconnectPoints, value);
+        }
+
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public double DisconnectTestRadius
+        {
+            get => _disconnectTestRadius;
+            set => Update(ref _disconnectTestRadius, value);
+        }
+    }
+
+    [DataContract(IsReference = true)]
+    public class TextToolSettings : Settings
+    {
+        private bool _connectPoints;
+        private double _hitTestRadius;
+
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public bool ConnectPoints
+        {
+            get => _connectPoints;
+            set => Update(ref _connectPoints, value);
+        }
+
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public double HitTestRadius
+        {
+            get => _hitTestRadius;
+            set => Update(ref _hitTestRadius, value);
         }
     }
 }
@@ -6697,27 +7115,6 @@ namespace Draw2D.ViewModels.Tools
                 }
             }
             return false;
-        }
-    }
-
-    [DataContract(IsReference = true)]
-    public class CubicBezierToolSettings : Settings
-    {
-        private bool _connectPoints;
-        private double _hitTestRadius;
-
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public bool ConnectPoints
-        {
-            get => _connectPoints;
-            set => Update(ref _connectPoints, value);
-        }
-
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public double HitTestRadius
-        {
-            get => _hitTestRadius;
-            set => Update(ref _hitTestRadius, value);
         }
     }
 
@@ -7024,27 +7421,6 @@ namespace Draw2D.ViewModels.Tools
     }
 
     [DataContract(IsReference = true)]
-    public class EllipseToolSettings : Settings
-    {
-        private bool _connectPoints;
-        private double _hitTestRadius;
-
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public bool ConnectPoints
-        {
-            get => _connectPoints;
-            set => Update(ref _connectPoints, value);
-        }
-
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public double HitTestRadius
-        {
-            get => _hitTestRadius;
-            set => Update(ref _hitTestRadius, value);
-        }
-    }
-
-    [DataContract(IsReference = true)]
     public class EllipseTool : BaseTool, ITool
     {
         private EllipseToolSettings _settings;
@@ -7233,36 +7609,30 @@ namespace Draw2D.ViewModels.Tools
     }
 
     [DataContract(IsReference = true)]
-    public class LineToolSettings : Settings
+    public class LineTool : BaseTool, ITool
     {
-        private bool _connectPoints;
-        private double _hitTestRadius;
-        private bool _splitIntersections;
+        private LineToolSettings _settings;
+        private LineShape _line = null;
 
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public bool ConnectPoints
+        public enum State
         {
-            get => _connectPoints;
-            set => Update(ref _connectPoints, value);
+            StartPoint,
+            Point
         }
 
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public double HitTestRadius
-        {
-            get => _hitTestRadius;
-            set => Update(ref _hitTestRadius, value);
-        }
+        [IgnoreDataMember]
+        public State CurrentState { get; set; } = State.StartPoint;
+
+        [IgnoreDataMember]
+        public string Title => "Line";
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public bool SplitIntersections
+        public LineToolSettings Settings
         {
-            get => _splitIntersections;
-            set => Update(ref _splitIntersections, value);
+            get => _settings;
+            set => Update(ref _settings, value);
         }
-    }
 
-    public static class LineHelper
-    {
         public static IList<LineShape> SplitByIntersections(IToolContext context, IEnumerable<IPointIntersection> intersections, LineShape target)
         {
             var points = new List<IPointShape>(intersections.SelectMany(i => i.Intersections));
@@ -7292,32 +7662,6 @@ namespace Draw2D.ViewModels.Tools
             }
 
             return lines;
-        }
-    }
-
-    [DataContract(IsReference = true)]
-    public class LineTool : BaseTool, ITool
-    {
-        private LineToolSettings _settings;
-        private LineShape _line = null;
-
-        public enum State
-        {
-            StartPoint,
-            Point
-        }
-
-        [IgnoreDataMember]
-        public State CurrentState { get; set; } = State.StartPoint;
-
-        [IgnoreDataMember]
-        public string Title => "Line";
-
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public LineToolSettings Settings
-        {
-            get => _settings;
-            set => Update(ref _settings, value);
         }
 
         private void StartPointInternal(IToolContext context, double x, double y, Modifier modifier)
@@ -7380,7 +7724,7 @@ namespace Draw2D.ViewModels.Tools
 
             if ((Settings?.SplitIntersections ?? false) && HaveIntersections())
             {
-                LineHelper.SplitByIntersections(context, Intersections, _line);
+                SplitByIntersections(context, Intersections, _line);
             }
             else
             {
@@ -7501,11 +7845,6 @@ namespace Draw2D.ViewModels.Tools
     }
 
     [DataContract(IsReference = true)]
-    public class MoveToolSettings : Settings
-    {
-    }
-
-    [DataContract(IsReference = true)]
     public class MoveTool : BaseTool, ITool
     {
         private MoveToolSettings _settings;
@@ -7560,11 +7899,6 @@ namespace Draw2D.ViewModels.Tools
     }
 
     [DataContract(IsReference = true)]
-    public class NoneToolSettings : Settings
-    {
-    }
-
-    [DataContract(IsReference = true)]
     public class NoneTool : BaseTool, ITool
     {
         private NoneToolSettings _settings;
@@ -7601,79 +7935,6 @@ namespace Draw2D.ViewModels.Tools
 
         public void Clean(IToolContext context)
         {
-        }
-    }
-
-    [DataContract(IsReference = true)]
-    public class PathToolSettings : Settings
-    {
-        private bool _connectPoints;
-        private double _hitTestRadius;
-        private PathFillRule _fillRule;
-        private bool _isFilled;
-        private bool _isClosed;
-        private IList<ITool> _tools;
-        private ITool _currentTool;
-        private ITool _previousTool;
-
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public bool ConnectPoints
-        {
-            get => _connectPoints;
-            set => Update(ref _connectPoints, value);
-        }
-
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public double HitTestRadius
-        {
-            get => _hitTestRadius;
-            set => Update(ref _hitTestRadius, value);
-        }
-
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public PathFillRule FillRule
-        {
-            get => _fillRule;
-            set => Update(ref _fillRule, value);
-        }
-
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public bool IsFilled
-        {
-            get => _isFilled;
-            set => Update(ref _isFilled, value);
-        }
-
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public bool IsClosed
-        {
-            get => _isClosed;
-            set => Update(ref _isClosed, value);
-        }
-
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public IList<ITool> Tools
-        {
-            get => _tools;
-            set => Update(ref _tools, value);
-        }
-
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public ITool CurrentTool
-        {
-            get => _currentTool;
-            set
-            {
-                PreviousTool = _currentTool;
-                Update(ref _currentTool, value);
-            }
-        }
-
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public ITool PreviousTool
-        {
-            get => _previousTool;
-            set => Update(ref _previousTool, value);
         }
     }
 
@@ -8121,27 +8382,6 @@ namespace Draw2D.ViewModels.Tools
     }
 
     [DataContract(IsReference = true)]
-    public class PointToolSettings : Settings
-    {
-        private bool _connectPoints;
-        private double _hitTestRadius;
-
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public bool ConnectPoints
-        {
-            get => _connectPoints;
-            set => Update(ref _connectPoints, value);
-        }
-
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public double HitTestRadius
-        {
-            get => _hitTestRadius;
-            set => Update(ref _hitTestRadius, value);
-        }
-    }
-
-    [DataContract(IsReference = true)]
     public class PointTool : BaseTool, ITool
     {
         private PointToolSettings _settings;
@@ -8230,27 +8470,6 @@ namespace Draw2D.ViewModels.Tools
         public void Clean(IToolContext context)
         {
             CleanInternal(context);
-        }
-    }
-
-    [DataContract(IsReference = true)]
-    public class PolyLineToolSettings : Settings
-    {
-        private bool _connectPoints;
-        private double _hitTestRadius;
-
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public bool ConnectPoints
-        {
-            get => _connectPoints;
-            set => Update(ref _connectPoints, value);
-        }
-
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public double HitTestRadius
-        {
-            get => _hitTestRadius;
-            set => Update(ref _hitTestRadius, value);
         }
     }
 
@@ -8409,10 +8628,10 @@ namespace Draw2D.ViewModels.Tools
 
             if (_points != null)
             {
-                _points.ForEach(point =>
+                foreach (var point in _points)
                 {
                     context.ContainerView?.SelectionState?.Deselect(point);
-                });
+                }
                 _points = null;
             }
 
@@ -8477,27 +8696,6 @@ namespace Draw2D.ViewModels.Tools
         public void Clean(IToolContext context)
         {
             CleanInternal(context);
-        }
-    }
-
-    [DataContract(IsReference = true)]
-    public class QuadraticBezierToolSettings : Settings
-    {
-        private bool _connectPoints;
-        private double _hitTestRadius;
-
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public bool ConnectPoints
-        {
-            get => _connectPoints;
-            set => Update(ref _connectPoints, value);
-        }
-
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public double HitTestRadius
-        {
-            get => _hitTestRadius;
-            set => Update(ref _hitTestRadius, value);
         }
     }
 
@@ -9022,27 +9220,6 @@ namespace Draw2D.ViewModels.Tools
     }
 
     [DataContract(IsReference = true)]
-    public class RectangleToolSettings : Settings
-    {
-        private bool _connectPoints;
-        private double _hitTestRadius;
-
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public bool ConnectPoints
-        {
-            get => _connectPoints;
-            set => Update(ref _connectPoints, value);
-        }
-
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public double HitTestRadius
-        {
-            get => _hitTestRadius;
-            set => Update(ref _hitTestRadius, value);
-        }
-    }
-
-    [DataContract(IsReference = true)]
     public class RectangleTool : BaseTool, ITool
     {
         private RectangleToolSettings _settings;
@@ -9229,51 +9406,6 @@ namespace Draw2D.ViewModels.Tools
         public void Clean(IToolContext context)
         {
             CleanInternal(context);
-        }
-    }
-
-    [DataContract(IsReference = true)]
-    public class ScribbleToolSettings : Settings
-    {
-        private bool _simplify;
-        private double _epsilon;
-        private PathFillRule _fillRule;
-        private bool _isFilled;
-        private bool _isClosed;
-
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public bool Simplify
-        {
-            get => _simplify;
-            set => Update(ref _simplify, value);
-        }
-
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public double Epsilon
-        {
-            get => _epsilon;
-            set => Update(ref _epsilon, value);
-        }
-
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public PathFillRule FillRule
-        {
-            get => _fillRule;
-            set => Update(ref _fillRule, value);
-        }
-
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public bool IsFilled
-        {
-            get => _isFilled;
-            set => Update(ref _isFilled, value);
-        }
-
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public bool IsClosed
-        {
-            get => _isClosed;
-            set => Update(ref _isClosed, value);
         }
     }
 
@@ -9523,117 +9655,6 @@ namespace Draw2D.ViewModels.Tools
         public void Clean(IToolContext context)
         {
             CleanInternal(context);
-        }
-    }
-
-    [Flags]
-    public enum SelectionMode
-    {
-        None = 0,
-        Point = 1,
-        Shape = 2,
-        All = Point | Shape
-    }
-
-    [Flags]
-    public enum SelectionTargets
-    {
-        None = 0,
-        Shapes = 1,
-        Guides = 2,
-        All = Shapes | Guides
-    }
-
-    [DataContract(IsReference = true)]
-    public class SelectionToolSettings : Settings
-    {
-        private SelectionMode _mode;
-        private SelectionTargets _targets;
-        private Modifier _selectionModifier;
-        private Modifier _connectionModifier;
-        private string _selectionStyle;
-        private bool _clearSelectionOnClean;
-        private double _hitTestRadius;
-        private bool _connectPoints;
-        private double _connectTestRadius;
-        private bool _disconnectPoints;
-        private double _disconnectTestRadius;
-
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public SelectionMode Mode
-        {
-            get => _mode;
-            set => Update(ref _mode, value);
-        }
-
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public SelectionTargets Targets
-        {
-            get => _targets;
-            set => Update(ref _targets, value);
-        }
-
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public Modifier SelectionModifier
-        {
-            get => _selectionModifier;
-            set => Update(ref _selectionModifier, value);
-        }
-
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public Modifier ConnectionModifier
-        {
-            get => _connectionModifier;
-            set => Update(ref _connectionModifier, value);
-        }
-
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public string SelectionStyle
-        {
-            get => _selectionStyle;
-            set => Update(ref _selectionStyle, value);
-        }
-
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public bool ClearSelectionOnClean
-        {
-            get => _clearSelectionOnClean;
-            set => Update(ref _clearSelectionOnClean, value);
-        }
-
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public double HitTestRadius
-        {
-            get => _hitTestRadius;
-            set => Update(ref _hitTestRadius, value);
-        }
-
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public bool ConnectPoints
-        {
-            get => _connectPoints;
-            set => Update(ref _connectPoints, value);
-        }
-
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public double ConnectTestRadius
-        {
-            get => _connectTestRadius;
-            set => Update(ref _connectTestRadius, value);
-        }
-
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public bool DisconnectPoints
-        {
-            get => _disconnectPoints;
-            set => Update(ref _disconnectPoints, value);
-        }
-
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public double DisconnectTestRadius
-        {
-            get => _disconnectTestRadius;
-            set => Update(ref _disconnectTestRadius, value);
         }
     }
 
@@ -10523,27 +10544,6 @@ namespace Draw2D.ViewModels.Tools
                 }
             }
             return false;
-        }
-    }
-
-    [DataContract(IsReference = true)]
-    public class TextToolSettings : Settings
-    {
-        private bool _connectPoints;
-        private double _hitTestRadius;
-
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public bool ConnectPoints
-        {
-            get => _connectPoints;
-            set => Update(ref _connectPoints, value);
-        }
-
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public double HitTestRadius
-        {
-            get => _hitTestRadius;
-            set => Update(ref _hitTestRadius, value);
         }
     }
 
