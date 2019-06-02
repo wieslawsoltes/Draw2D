@@ -8,7 +8,9 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Media;
+#if USE_DRAW_POINTERS
 using Avalonia.Media.Immutable;
+#endif
 using Avalonia.VisualTree;
 using Draw2D.Input;
 
@@ -165,14 +167,14 @@ namespace Draw2D.Controls
             {
                 if (_isCaptured == false)
                 {
-                      if (e.InputModifiers.HasFlag(InputModifiers.LeftMouseButton))
-                      {
-                          isLeft = true;
-                      }
-                      else if (e.InputModifiers.HasFlag(InputModifiers.RightMouseButton))
-                      {
-                          isRight = true;
-                      }
+                    if (e.InputModifiers.HasFlag(InputModifiers.LeftMouseButton))
+                    {
+                        isLeft = true;
+                    }
+                    else if (e.InputModifiers.HasFlag(InputModifiers.RightMouseButton))
+                    {
+                        isRight = true;
+                    }
                 }
                 else
                 {
@@ -533,17 +535,14 @@ namespace Draw2D.Controls
                 {
                     foreach (var value in _pointers.Values)
                     {
-                        //if (value.Pointer.IsPrimary)
-                        //{
-                            if (value.Pointer.Captured == null)
-                            {
-                                value.Pointer.Capture(this);
-                                _capturedPointer = value.Pointer;
-                                _capturedInputModifiers = value.InputModifiers;
-                                _isCaptured = true;
-                            }
-                            break;
-                        //}
+                        if (value.Pointer.Captured == null)
+                        {
+                            value.Pointer.Capture(this);
+                            _capturedPointer = value.Pointer;
+                            _capturedInputModifiers = value.InputModifiers;
+                            _isCaptured = true;
+                        }
+                        break;
                     }
                 };
 
@@ -560,17 +559,14 @@ namespace Draw2D.Controls
                     {
                         foreach (var value in _pointers.Values)
                         {
-                            //if (value.Pointer.IsPrimary)
-                            //{
-                                if (value.Pointer.Captured != null)
-                                {
-                                    value.Pointer.Capture(null);
-                                    _capturedPointer = null;
-                                    _capturedInputModifiers = InputModifiers.None;
-                                    _isCaptured = false;
-                                }
-                                break;
-                            //}
+                            if (value.Pointer.Captured != null)
+                            {
+                                value.Pointer.Capture(null);
+                                _capturedPointer = null;
+                                _capturedInputModifiers = InputModifiers.None;
+                                _isCaptured = false;
+                            }
+                            break;
                         }
                     }
                 };
@@ -585,10 +581,7 @@ namespace Draw2D.Controls
                     {
                         foreach (var value in _pointers.Values)
                         {
-                            //if (value.Pointer.IsPrimary)
-                            //{
-                                return value.Pointer.Captured != null;
-                            //}
+                            return value.Pointer.Captured != null;
                         }
                     }
                     return false;
@@ -602,7 +595,6 @@ namespace Draw2D.Controls
 
             if (_inputTarget != null && _drawTarget != null)
             {
-                // TODO: Do not inject dependencies.
                 _drawTarget.InputService = this;
                 _drawTarget.ZoomService = this;
             }
@@ -614,7 +606,6 @@ namespace Draw2D.Controls
 
             if (_inputTarget != null && _drawTarget != null)
             {
-                // TODO: Do not inject dependencies.
                 _drawTarget.InputService = null;
                 _drawTarget.ZoomService = null;
             }
