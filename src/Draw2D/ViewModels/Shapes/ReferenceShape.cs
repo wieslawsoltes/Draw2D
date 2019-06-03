@@ -9,7 +9,7 @@ using Draw2D.ViewModels.Decorators;
 namespace Draw2D.ViewModels.Shapes
 {
     [DataContract(IsReference = true)]
-    public class ReferenceShape : ConnectableShape
+    public class ReferenceShape : BaseShape
     {
         internal static new IBounds s_bounds = new ReferenceBounds();
         internal static new IShapeDecorator s_decorator = new ReferenceDecorator();
@@ -65,7 +65,7 @@ namespace Draw2D.ViewModels.Shapes
             this.Template = template;
             this.Points = new ObservableCollection<IPointShape>();
 
-            if (template is ConnectableShape connectable)
+            if (template is IConnectable connectable)
             {
                 foreach (var point in connectable.Points)
                 {

@@ -534,7 +534,7 @@ namespace Draw2D.ViewModels.Tools
             {
                 foreach (var item in context.ContainerView?.CurrentContainer.Shapes)
                 {
-                    if (item is ConnectableShape connectable)
+                    if (item is IConnectable connectable)
                     {
                         if (connectable.Connect(point, target))
                         {
@@ -549,7 +549,7 @@ namespace Draw2D.ViewModels.Tools
         {
             foreach (var shape in context.ContainerView?.CurrentContainer.Shapes)
             {
-                if (shape is ConnectableShape connectable)
+                if (shape is IConnectable connectable)
                 {
                     if (connectable.Disconnect(point, out var copy))
                     {
@@ -569,16 +569,16 @@ namespace Draw2D.ViewModels.Tools
 
         public void Disconnect(IToolContext context, IBaseShape shape)
         {
-            if (shape is ConnectableShape connectable)
+            if (shape is IConnectable connectable)
             {
                 if (context.ContainerView?.SelectionState != null)
                 {
-                    connectable.Deselect(context.ContainerView.SelectionState);
+                    shape.Deselect(context.ContainerView.SelectionState);
                 }
                 _disconnected = connectable.Disconnect();
                 if (context.ContainerView?.SelectionState != null)
                 {
-                    connectable.Select(context.ContainerView.SelectionState);
+                    shape.Select(context.ContainerView.SelectionState);
                 }
             }
         }
@@ -682,7 +682,7 @@ namespace Draw2D.ViewModels.Tools
             }
         }
 
-        internal bool TryToDelete(IReadOnlyList<ConnectableShape> connectables, IPointShape point)
+        internal bool TryToDelete(IReadOnlyList<BaseShape> connectables, IPointShape point)
         {
             foreach (var connectable in connectables)
             {

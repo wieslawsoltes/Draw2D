@@ -11,7 +11,7 @@ using Draw2D.ViewModels.Decorators;
 namespace Draw2D.ViewModels.Shapes
 {
     [DataContract(IsReference = true)]
-    public class GroupShape : ConnectableShape, ICanvasContainer
+    public class GroupShape : BaseShape, ICanvasContainer
     {
         internal static new IBounds s_bounds = new GroupBounds();
         internal static new IShapeDecorator s_decorator = new GroupDecorator();

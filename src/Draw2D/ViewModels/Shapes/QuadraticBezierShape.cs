@@ -9,7 +9,7 @@ using Draw2D.ViewModels.Decorators;
 namespace Draw2D.ViewModels.Shapes
 {
     [DataContract(IsReference = true)]
-    public class QuadraticBezierShape : ConnectableShape
+    public class QuadraticBezierShape : BaseShape
     {
         internal static new IBounds s_bounds = new QuadraticBezierBounds();
         internal static new IShapeDecorator s_decorator = new QuadraticBezierDecorator();

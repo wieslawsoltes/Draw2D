@@ -9,7 +9,7 @@ using Draw2D.ViewModels.Decorators;
 namespace Draw2D.ViewModels.Shapes
 {
     [DataContract(IsReference = true)]
-    public class ConicShape : ConnectableShape
+    public class ConicShape : BaseShape
     {
         internal static new IBounds s_bounds = new ConicBounds();
         internal static new IShapeDecorator s_decorator = new ConicDecorator();

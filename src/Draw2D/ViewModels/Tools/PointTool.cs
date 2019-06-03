@@ -34,7 +34,7 @@ namespace Draw2D.ViewModels.Tools
                 Settings?.HitTestRadius ?? 7.0);
             if (shape != null && (Settings?.ConnectPoints ?? false))
             {
-                if (shape is ConnectableShape connectable)
+                if (shape is IConnectable connectable)
                 {
                     var point = new PointShape(x, y, context.PointTemplate);
                     point.Owner = connectable;
