@@ -92,7 +92,7 @@ namespace Draw2D.Editor.Views
              || style.TextStyle.Stroke.IsDirty)
             {
 #if USE_DEBUG_DIRTY
-                Console.WriteLine($"IsShapeStyleDirty: true");
+                Log.WriteLine($"IsShapeStyleDirty: true");
 #endif
                 return true;
             }
@@ -109,7 +109,7 @@ namespace Draw2D.Editor.Views
             if (styleLibrary.IsDirty)
             {
 #if USE_DEBUG_DIRTY
-                Console.WriteLine($"styleLibrary.IsDirty: true");
+                Log.WriteLine($"styleLibrary.IsDirty: true");
 #endif
                 return true;
             }
@@ -138,7 +138,7 @@ namespace Draw2D.Editor.Views
             if (canvasContainer.IsDirty)
             {
 #if USE_DEBUG_DIRTY
-                Console.WriteLine($"canvasContainer.IsDirty: true");
+                Log.WriteLine($"canvasContainer.IsDirty: true");
 #endif
                 return true;
             }
@@ -150,7 +150,7 @@ namespace Draw2D.Editor.Views
                     if (shape.IsDirty)
                     {
 #if USE_DEBUG_DIRTY
-                        Console.WriteLine($"shape.IsDirty: true");
+                        Log.WriteLine($"shape.IsDirty: true");
 #endif
                         return true;
                     }
@@ -175,7 +175,7 @@ namespace Draw2D.Editor.Views
                 if (point.IsDirty)
                 {
 #if USE_DEBUG_DIRTY
-                    Console.WriteLine($"point.IsDirty: true");
+                    Log.WriteLine($"point.IsDirty: true");
 #endif
                     return true;
                 }
@@ -185,7 +185,7 @@ namespace Draw2D.Editor.Views
                     if (point.Template.IsDirty)
                     {
 #if USE_DEBUG_DIRTY
-                        Console.WriteLine($"point.Template.IsDirty: true");
+                        Log.WriteLine($"point.Template.IsDirty: true");
 #endif
                         return true;
                     }
@@ -300,7 +300,7 @@ namespace Draw2D.Editor.Views
 
             bool isSelectionDirty = _view.SelectionState.IsDirty == true || isShapesCurrentDirty == true || isShapesWorkingDirty == true;
 #if USE_DEBUG_DIRTY
-            Console.WriteLine(
+            Log.WriteLine(
                 $"{nameof(isStyleLibraryDirty)}: {isStyleLibraryDirty}, " +
                 $"{nameof(isShapesCurrentDirty)}: {isShapesCurrentDirty}, " +
                 $"{nameof(isShapesWorkingDirty)}: {isShapesWorkingDirty}, " +

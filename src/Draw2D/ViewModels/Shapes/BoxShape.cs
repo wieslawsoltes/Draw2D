@@ -111,7 +111,7 @@ namespace Draw2D.ViewModels.Shapes
                 if (TopLeft == target)
                 {
 #if DEBUG_CONNECTORS
-                    Console.WriteLine($"{nameof(BoxShape)}: Connected to {nameof(TopLeft)}");
+                    Log.WriteLine($"{nameof(BoxShape)}: Connected to {nameof(TopLeft)}");
 #endif
                     this.TopLeft = point;
                     return true;
@@ -119,7 +119,7 @@ namespace Draw2D.ViewModels.Shapes
                 else if (BottomRight == target)
                 {
 #if DEBUG_CONNECTORS
-                    Console.WriteLine($"{nameof(BoxShape)}: Connected to {nameof(BottomRight)}");
+                    Log.WriteLine($"{nameof(BoxShape)}: Connected to {nameof(BottomRight)}");
 #endif
                     this.BottomRight = point;
                     return true;
@@ -137,7 +137,7 @@ namespace Draw2D.ViewModels.Shapes
             else if (TopLeft == point)
             {
 #if DEBUG_CONNECTORS
-                Console.WriteLine($"{nameof(BoxShape)}: Disconnected from {nameof(TopLeft)}");
+                Log.WriteLine($"{nameof(BoxShape)}: Disconnected from {nameof(TopLeft)}");
 #endif
                 result = (IPointShape)(point.Copy(null));
                 this.TopLeft = result;
@@ -146,7 +146,7 @@ namespace Draw2D.ViewModels.Shapes
             else if (BottomRight == point)
             {
 #if DEBUG_CONNECTORS
-                Console.WriteLine($"{nameof(BoxShape)}: Disconnected from {nameof(BottomRight)}");
+                Log.WriteLine($"{nameof(BoxShape)}: Disconnected from {nameof(BottomRight)}");
 #endif
                 result = (IPointShape)(point.Copy(null));
                 this.BottomRight = result;
@@ -163,7 +163,7 @@ namespace Draw2D.ViewModels.Shapes
             if (this.TopLeft != null)
             {
 #if DEBUG_CONNECTORS
-                Console.WriteLine($"{nameof(BoxShape)}: Disconnected from {nameof(TopLeft)}");
+                Log.WriteLine($"{nameof(BoxShape)}: Disconnected from {nameof(TopLeft)}");
 #endif
                 this.TopLeft = (IPointShape)(this.TopLeft.Copy(null));
                 result = true;
@@ -172,7 +172,7 @@ namespace Draw2D.ViewModels.Shapes
             if (this.BottomRight != null)
             {
 #if DEBUG_CONNECTORS
-                Console.WriteLine($"{nameof(BoxShape)}: Disconnected from {nameof(BottomRight)}");
+                Log.WriteLine($"{nameof(BoxShape)}: Disconnected from {nameof(BottomRight)}");
 #endif
                 this.BottomRight = (IPointShape)(this.BottomRight.Copy(null));
                 result = true;

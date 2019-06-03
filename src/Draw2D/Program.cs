@@ -22,8 +22,8 @@ namespace Draw2D
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
-                Console.WriteLine(ex.StackTrace);
+                Log.WriteLine(ex.Message);
+                Log.WriteLine(ex.StackTrace);
             }
         }
 

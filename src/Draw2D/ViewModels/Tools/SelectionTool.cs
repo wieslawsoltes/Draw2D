@@ -634,7 +634,7 @@ namespace Draw2D.ViewModels.Tools
                     else
                     {
 #if DEBUG
-                        Console.WriteLine($"Failed to find owner shape: {point.Owner} for point: {point}.");
+                        Log.WriteLine($"Failed to find owner shape: {point.Owner} for point: {point}.");
 #endif
                     }
                 }

@@ -146,7 +146,7 @@ namespace Draw2D.Controls
                 }
             }
 #if DEBUG_POINTER_EVENTS
-            Console.WriteLine(
+            Log.WriteLine(
                 $"[PointerPressed] type: {e.Pointer.Type}, " +
                 $"modifiers: {e.InputModifiers}, " +
                 $"isPrimary: {e.Pointer.IsPrimary}, " +
@@ -198,7 +198,7 @@ namespace Draw2D.Controls
                 }
             }
 #if DEBUG_POINTER_EVENTS
-            Console.WriteLine(
+            Log.WriteLine(
                 $"[PointerReleased] type: {e.Pointer.Type}, " +
                 $"modifiers: {e.InputModifiers}, " +
                 $"isPrimary: {e.Pointer.IsPrimary}, " +
