@@ -411,7 +411,7 @@ namespace Draw2D.Editor.Renderers
                                     StartPoint = pathShape.GetLastPoint(),
                                     Point = pathShape.GetFirstPoint(),
                                     Text = new Text(),
-                                    Style = style.Title
+                                    StyleId = style.Title
                                 };
                                 line.StartPoint.Owner = line;
                                 line.Point.Owner = line;
