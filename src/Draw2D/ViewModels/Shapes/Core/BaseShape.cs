@@ -28,7 +28,7 @@ namespace Draw2D.ViewModels.Shapes
 
         public abstract void GetPoints(IList<IPointShape> points);
 
-        public abstract void Draw(object dc, IShapeRenderer renderer, double dx, double dy, double scale, DrawMode mode, object db, object r);
+        public abstract void Draw(object dc, IShapeRenderer renderer, double dx, double dy, double scale, object db, object r);
 
         public abstract void Move(ISelectionState selectionState, double dx, double dy);
 

@@ -20,8 +20,6 @@ namespace Draw2D.Editor.Renderers
         private Dictionary<ShapeStyle, SKPaint> _fillPaintCache;
         private Dictionary<ShapeStyle, SKPaint> _strokePaintCache;
 
-        public ISelectionState SelectionState => _selectionState;
-
         public SkiaShapeRenderer(IToolContext context, ISelectionState selectionState)
         {
             _context = context;

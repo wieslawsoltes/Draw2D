@@ -29,7 +29,6 @@
     <!--<DefineConstants>$(DefineConstants);USE_DRAW_LINE</DefineConstants>-->
     <!--<DefineConstants>$(DefineConstants);USE_DRAW_RECT</DefineConstants>-->
     <!--<DefineConstants>$(DefineConstants);USE_DRAW_OVAL</DefineConstants>-->
-    <!--<DefineConstants>$(DefineConstants);USE_DRAW_POINTS</DefineConstants>-->
     <!--<DefineConstants>$(DefineConstants);USE_DEBUG_DIRTY</DefineConstants>-->
     <!--<DefineConstants>$(DefineConstants);USE_GROUP_SHAPES</DefineConstants>-->
     <!--<DefineConstants>$(DefineConstants);USE_PATH_FIGURES</DefineConstants>-->

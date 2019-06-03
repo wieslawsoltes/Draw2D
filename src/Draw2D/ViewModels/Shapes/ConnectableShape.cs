@@ -60,17 +60,11 @@ namespace Draw2D.ViewModels.Shapes
             }
         }
 
-        public override void Draw(object dc, IShapeRenderer renderer, double dx, double dy, double scale, DrawMode mode, object db, object r)
+        public override void Draw(object dc, IShapeRenderer renderer, double dx, double dy, double scale, object db, object r)
         {
-            if (mode.HasFlag(DrawMode.Point))
+            foreach (var point in Points)
             {
-                foreach (var point in Points)
-                {
-                    if (renderer.SelectionState?.IsSelected(point) ?? false)
-                    {
-                        point.Draw(dc, renderer, dx, dy, scale, mode, db, r);
-                    }
-                }
+                point.Draw(dc, renderer, dx, dy, scale, db, r);
             }
         }
 

@@ -213,31 +213,25 @@ namespace Draw2D.Editor.Views
 
         private void DrawShapesCurrent(IContainerView view, object context, IShapeRenderer renderer, double scale)
         {
-            view.CurrentContainer.Draw(context, renderer, 0.0, 0.0, scale, DrawMode.Shape, null, null);
+            view.CurrentContainer.Draw(context, renderer, 0.0, 0.0, scale, null, null);
         }
 
         private void DrawShapesWorking(IContainerView view, object context, IShapeRenderer renderer, double scale)
         {
-            view.WorkingContainer.Draw(context, renderer, 0.0, 0.0, scale, DrawMode.Shape, null, null);
+            view.WorkingContainer.Draw(context, renderer, 0.0, 0.0, scale, null, null);
         }
 
         private void DrawPoints(IContainerView view, object context, IShapeRenderer renderer, double scale)
         {
-#if USE_DRAW_POINTS
-            view.CurrentContainer.Draw(context, renderer, 0.0, 0.0, scale, DrawMode.Point, null, null);
-            view.WorkingContainer.Draw(context, renderer, 0.0, 0.0, scale, DrawMode.Point, null, null);
-#else
-            // NOTE: Draw only selected points.
             var selected = new List<IBaseShape>(view.SelectionState.Shapes);
 
             foreach (var shape in selected)
             {
                 if (shape is IPointShape point)
                 {
-                    point.Draw(context, renderer, 0.0, 0.0, scale, DrawMode.Point, null, null);
+                    point.Draw(context, renderer, 0.0, 0.0, scale, null, null);
                 }
             }
-#endif
         }
 
         private void DrawDecorators(IContainerView view, object context, IShapeRenderer renderer, double scale)
@@ -246,7 +240,7 @@ namespace Draw2D.Editor.Views
 
             foreach (var shape in selected)
             {
-                shape.Decorator?.Draw(context, shape, renderer, view.SelectionState, 0.0, 0.0, scale, DrawMode.Shape);
+                shape.Decorator?.Draw(context, shape, renderer, view.SelectionState, 0.0, 0.0, scale);
             }
         }
 

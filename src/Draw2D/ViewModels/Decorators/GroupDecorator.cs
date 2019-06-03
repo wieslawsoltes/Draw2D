@@ -8,19 +8,19 @@ namespace Draw2D.ViewModels.Decorators
     [DataContract(IsReference = true)]
     public class GroupDecorator : CommonDecorator
     {
-        public void Draw(object dc, IShapeRenderer renderer, GroupShape group, ISelectionState selectionState, double dx, double dy, double scale, DrawMode mode)
+        public void Draw(object dc, IShapeRenderer renderer, GroupShape group, ISelectionState selectionState, double dx, double dy, double scale)
         {
             if (selectionState.IsSelected(group))
             {
-                DrawBoxFromPoints(dc, renderer, group, dx, dy, scale, mode);
+                DrawBoxFromPoints(dc, renderer, group, dx, dy, scale);
             }
         }
 
-        public override void Draw(object dc, IBaseShape shape, IShapeRenderer renderer, ISelectionState selectionState, double dx, double dy, double scale, DrawMode mode)
+        public override void Draw(object dc, IBaseShape shape, IShapeRenderer renderer, ISelectionState selectionState, double dx, double dy, double scale)
         {
             if (shape is GroupShape group)
             {
-                Draw(dc, renderer, group, selectionState, dx, dy, scale, mode);
+                Draw(dc, renderer, group, selectionState, dx, dy, scale);
             }
         }
     }

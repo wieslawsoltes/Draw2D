@@ -117,13 +117,13 @@ namespace Draw2D.ViewModels.Shapes
             base.Invalidate();
         }
 
-        public override void Draw(object dc, IShapeRenderer renderer, double dx, double dy, double scale, DrawMode mode, object db, object r)
+        public override void Draw(object dc, IShapeRenderer renderer, double dx, double dy, double scale, object db, object r)
         {
             if (_point != null && _reference != null)
             {
                 double offsetX = _reference.X;
                 double offsetY = _reference.Y;
-                _point.Draw(dc, renderer, dx + offsetX, dy + offsetY, scale, DrawMode.Shape, db, r);
+                _point.Draw(dc, renderer, dx + offsetX, dy + offsetY, scale, db, r);
             }
         }
 

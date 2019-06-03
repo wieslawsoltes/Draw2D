@@ -83,17 +83,15 @@ namespace Draw2D.ViewModels.Shapes
             base.Invalidate();
         }
 
-        public override void Draw(object dc, IShapeRenderer renderer, double dx, double dy, double scale, DrawMode mode, object db, object r)
+        public override void Draw(object dc, IShapeRenderer renderer, double dx, double dy, double scale, object db, object r)
         {
             if (Shapes != null)
             {
                 foreach (var shape in Shapes)
                 {
-                    shape.Draw(dc, renderer, dx, dy, scale, mode, db, r);
+                    shape.Draw(dc, renderer, dx, dy, scale, db, r);
                 }
             }
-
-            base.Draw(dc, renderer, dx, dy, scale, mode, db, r);
         }
 
         public override void Move(ISelectionState selectionState, double dx, double dy)

@@ -30,7 +30,7 @@ namespace Draw2D.Editor.Views
             {
                 var canvas = context as SKCanvas;
                 canvas.DrawRect(SkiaHelper.ToRect(0.0, 0.0, _view.Width, _view.Height), background);
-                _view.CurrentContainer.Draw(canvas, renderer, 0.0, 0.0, zx, DrawMode.Shape, null, null);
+                _view.CurrentContainer.Draw(canvas, renderer, 0.0, 0.0, zx, null, null);
             }
         }
     }

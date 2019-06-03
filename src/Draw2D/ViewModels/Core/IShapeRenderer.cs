@@ -7,7 +7,6 @@ namespace Draw2D.ViewModels
 {
     public interface IShapeRenderer : IDisposable
     {
-        ISelectionState SelectionState { get; }
         void DrawLine(object dc, LineShape line, string styleId, double dx, double dy, double scale);
         void DrawCubicBezier(object dc, CubicBezierShape cubicBezier, string styleId, double dx, double dy, double scale);
         void DrawQuadraticBezier(object dc, QuadraticBezierShape quadraticBezier, string styleId, double dx, double dy, double scale);

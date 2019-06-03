@@ -46,27 +46,12 @@ namespace Draw2D.ViewModels.Shapes
             base.Invalidate();
         }
 
-        public override void Draw(object dc, IShapeRenderer renderer, double dx, double dy, double scale, DrawMode mode, object db, object r)
+        public override void Draw(object dc, IShapeRenderer renderer, double dx, double dy, double scale, object db, object r)
         {
-            if (StyleId != null && mode.HasFlag(DrawMode.Shape))
+            if (StyleId != null)
             {
                 renderer.DrawRectangle(dc, this, StyleId, dx, dy, scale);
             }
-
-            if (mode.HasFlag(DrawMode.Point))
-            {
-                if (renderer.SelectionState?.IsSelected(TopLeft) ?? false)
-                {
-                    TopLeft.Draw(dc, renderer, dx, dy, scale, mode, db, r);
-                }
-
-                if (renderer.SelectionState?.IsSelected(BottomRight) ?? false)
-                {
-                    BottomRight.Draw(dc, renderer, dx, dy, scale, mode, db, r);
-                }
-            }
-
-            base.Draw(dc, renderer, dx, dy, scale, mode, db, r);
         }
 
         public override object Copy(Dictionary<object, object> shared)

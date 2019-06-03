@@ -102,37 +102,12 @@ namespace Draw2D.ViewModels.Shapes
             base.Invalidate();
         }
 
-        public override void Draw(object dc, IShapeRenderer renderer, double dx, double dy, double scale, DrawMode mode, object db, object r)
+        public override void Draw(object dc, IShapeRenderer renderer, double dx, double dy, double scale, object db, object r)
         {
-            if (StyleId != null && mode.HasFlag(DrawMode.Shape))
+            if (StyleId != null)
             {
                 renderer.DrawCubicBezier(dc, this, StyleId, dx, dy, scale);
             }
-
-            if (mode.HasFlag(DrawMode.Point))
-            {
-                if (renderer.SelectionState?.IsSelected(_startPoint) ?? false)
-                {
-                    _startPoint.Draw(dc, renderer, dx, dy, scale, mode, db, r);
-                }
-
-                if (renderer.SelectionState?.IsSelected(_point1) ?? false)
-                {
-                    _point1.Draw(dc, renderer, dx, dy, scale, mode, db, r);
-                }
-
-                if (renderer.SelectionState?.IsSelected(_point2) ?? false)
-                {
-                    _point2.Draw(dc, renderer, dx, dy, scale, mode, db, r);
-                }
-
-                if (renderer.SelectionState?.IsSelected(_point3) ?? false)
-                {
-                    _point3.Draw(dc, renderer, dx, dy, scale, mode, db, r);
-                }
-            }
-
-            base.Draw(dc, renderer, dx, dy, scale, mode, db, r);
         }
 
         public override void Move(ISelectionState selectionState, double dx, double dy)

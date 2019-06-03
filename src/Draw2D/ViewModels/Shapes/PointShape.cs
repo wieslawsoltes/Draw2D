@@ -70,13 +70,13 @@ namespace Draw2D.ViewModels.Shapes
             base.Invalidate();
         }
 
-        public override void Draw(object dc, IShapeRenderer renderer, double dx, double dy, double scale, DrawMode mode, object db, object r)
+        public override void Draw(object dc, IShapeRenderer renderer, double dx, double dy, double scale, object db, object r)
         {
             if (_template != null)
             {
                 double offsetX = X;
                 double offsetY = Y;
-                _template.Draw(dc, renderer, dx + offsetX, dy + offsetY, scale, DrawMode.Shape, db, r);
+                _template.Draw(dc, renderer, dx + offsetX, dy + offsetY, scale, db, r);
             }
         }
 
