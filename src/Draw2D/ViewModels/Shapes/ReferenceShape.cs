@@ -65,7 +65,7 @@ namespace Draw2D.ViewModels.Shapes
             this.Template = template;
             this.Points = new ObservableCollection<IPointShape>();
 
-            if (template is IConnectable connectable)
+            if (template is ConnectableShape connectable)
             {
                 foreach (var point in connectable.Points)
                 {

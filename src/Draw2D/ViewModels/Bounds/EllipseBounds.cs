@@ -12,19 +12,19 @@ namespace Draw2D.ViewModels.Bounds
     {
         public IPointShape TryToGetPoint(IBaseShape shape, Point2 target, double radius, IHitTest hitTest)
         {
-            var box = shape as BoxShape ?? throw new ArgumentNullException("shape");
+            var ellipse = shape as EllipseShape ?? throw new ArgumentNullException("shape");
 
-            if (box.TopLeft.Bounds?.TryToGetPoint(box.TopLeft, target, radius, hitTest) != null)
+            if (ellipse.TopLeft.Bounds?.TryToGetPoint(ellipse.TopLeft, target, radius, hitTest) != null)
             {
-                return box.TopLeft;
+                return ellipse.TopLeft;
             }
 
-            if (box.BottomRight.Bounds?.TryToGetPoint(box.BottomRight, target, radius, hitTest) != null)
+            if (ellipse.BottomRight.Bounds?.TryToGetPoint(ellipse.BottomRight, target, radius, hitTest) != null)
             {
-                return box.BottomRight;
+                return ellipse.BottomRight;
             }
 
-            foreach (var point in box.Points)
+            foreach (var point in ellipse.Points)
             {
                 if (point.Bounds?.TryToGetPoint(point, target, radius, hitTest) != null)
                 {
@@ -37,24 +37,24 @@ namespace Draw2D.ViewModels.Bounds
 
         public IBaseShape Contains(IBaseShape shape, Point2 target, double radius, IHitTest hitTest)
         {
-            var box = shape as BoxShape ?? throw new ArgumentNullException("shape");
+            var ellipse = shape as EllipseShape ?? throw new ArgumentNullException("shape");
 
             return Rect2.FromPoints(
-                box.TopLeft.X,
-                box.TopLeft.Y,
-                box.BottomRight.X,
-                box.BottomRight.Y).Contains(target) ? shape : null;
+                ellipse.TopLeft.X,
+                ellipse.TopLeft.Y,
+                ellipse.BottomRight.X,
+                ellipse.BottomRight.Y).Contains(target) ? shape : null;
         }
 
         public IBaseShape Overlaps(IBaseShape shape, Rect2 target, double radius, IHitTest hitTest)
         {
-            var box = shape as BoxShape ?? throw new ArgumentNullException("shape");
+            var ellipse = shape as EllipseShape ?? throw new ArgumentNullException("shape");
 
             return Rect2.FromPoints(
-                box.TopLeft.X,
-                box.TopLeft.Y,
-                box.BottomRight.X,
-                box.BottomRight.Y).IntersectsWith(target) ? shape : null;
+                ellipse.TopLeft.X,
+                ellipse.TopLeft.Y,
+                ellipse.BottomRight.X,
+                ellipse.BottomRight.Y).IntersectsWith(target) ? shape : null;
         }
     }
 }
