@@ -1,8 +1,5 @@
 ﻿// Copyright (c) Wiesław Šoltés. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
-//#define USE_GROUP_SHAPES
-//#define USE_PATH_FIGURES
-//#define USE_CONTAINER_SHAPES
 using System;
 using System.Collections;
 using System.Collections.Generic;

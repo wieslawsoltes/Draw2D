@@ -1,13 +1,5 @@
 ﻿// Copyright (c) Wiesław Šoltés. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
-#define USE_LOAD_EDITOR
-#define USE_SAVE_EDITOR
-//#define USE_LOAD_STYLES
-//#define USE_SAVE_STYLES
-//#define USE_LOAD_GROUPS
-//#define USE_SAVE_GROUPS
-#define USE_LOAD_WINDOW
-#define USE_SAVE_WINDOW
 using System.IO;
 using Avalonia;
 using Avalonia.Controls;

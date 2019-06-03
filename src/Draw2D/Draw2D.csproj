@@ -11,6 +11,36 @@
     <PackageId>Draw2D</PackageId>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <DefineConstants>$(DefineConstants);USE_LOAD_EDITOR</DefineConstants>
+    <DefineConstants>$(DefineConstants);USE_SAVE_EDITOR</DefineConstants>
+    <!--<DefineConstants>$(DefineConstants);USE_LOAD_STYLES</DefineConstants>-->
+    <!--<DefineConstants>$(DefineConstants);USE_SAVE_STYLES</DefineConstants>-->
+    <!--<DefineConstants>$(DefineConstants);USE_LOAD_GROUPS</DefineConstants>-->
+    <!--<DefineConstants>$(DefineConstants);USE_SAVE_GROUPS</DefineConstants>-->
+    <DefineConstants>$(DefineConstants);USE_LOAD_WINDOW</DefineConstants>
+    <DefineConstants>$(DefineConstants);USE_SAVE_WINDOW</DefineConstants>
+    <!--<DefineConstants>$(DefineConstants);DEBUG_POINTER_EVENTS</DefineConstants>-->
+    <!--<DefineConstants>$(DefineConstants);USE_DRAW_POINTERS</DefineConstants>-->
+    <!--<DefineConstants>$(DefineConstants);USE_SVG_POINT</DefineConstants>-->
+    <!--<DefineConstants>$(DefineConstants);USE_CLOSE_SHAPE</DefineConstants>-->
+    <!--<DefineConstants>$(DefineConstants);DEBUG_DRAW_TEXT</DefineConstants>-->
+    <!--<DefineConstants>$(DefineConstants);DEBUG_DICT_CACHE</DefineConstants>-->
+    <!--<DefineConstants>$(DefineConstants);USE_DRAW_LINE</DefineConstants>-->
+    <!--<DefineConstants>$(DefineConstants);USE_DRAW_RECT</DefineConstants>-->
+    <!--<DefineConstants>$(DefineConstants);USE_DRAW_OVAL</DefineConstants>-->
+    <!--<DefineConstants>$(DefineConstants);USE_DRAW_POINTS</DefineConstants>-->
+    <!--<DefineConstants>$(DefineConstants);USE_DEBUG_DIRTY</DefineConstants>-->
+    <!--<DefineConstants>$(DefineConstants);USE_GROUP_SHAPES</DefineConstants>-->
+    <!--<DefineConstants>$(DefineConstants);USE_PATH_FIGURES</DefineConstants>-->
+    <!--<DefineConstants>$(DefineConstants);USE_CONTAINER_SHAPES</DefineConstants>-->
+    <!--<DefineConstants>$(DefineConstants);USE_POINT_DECORATOR</DefineConstants>-->
+    <!--<DefineConstants>$(DefineConstants);DEBUG_CONNECTORS</DefineConstants>-->
+    <!--<DefineConstants>$(DefineConstants);USE_CONTAINER_POINTS</DefineConstants>-->
+    <DefineConstants>$(DefineConstants);USE_SERIALIZE_STYLES</DefineConstants>
+    <DefineConstants>$(DefineConstants);USE_SERIALIZE_GROUPS</DefineConstants>
+  </PropertyGroup>
+
   <ItemGroup>
     <Compile Include="**\*.cs" Exclude="obj\**" />
     <AvaloniaResource Include="Assets\*" Exclude="bin\**;obj\**;**\*.xproj;packages\**;@(EmbeddedResource)" />

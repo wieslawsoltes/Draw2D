@@ -1,10 +1,5 @@
 ﻿// Copyright (c) Wiesław Šoltés. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
-//#define DEBUG_DRAW_TEXT
-//#define DEBUG_DICT_CACHE
-//#define USE_DRAW_LINE
-//#define USE_DRAW_RECT
-//#define USE_DRAW_OVAL
 using System;
 using System.Collections.Generic;
 using Draw2D.ViewModels;

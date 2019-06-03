@@ -1,7 +1,5 @@
 ﻿// Copyright (c) Wiesław Šoltés. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
-//#define USE_DRAW_POINTS
-//#define USE_DEBUG_DIRTY
 using System;
 using System.Collections.Generic;
 using Draw2D.Editor.Renderers;
