@@ -17,7 +17,7 @@ namespace Draw2D.ViewModels.Decorators
 #if USE_POINT_DECORATOR
             if (shape is IPointShape pointShape)
             {
-                Draw(dc, renderer, pointShape, dx, dy, scale, mode);
+                Draw(dc, renderer, pointShape, dx, dy, scale);
             }
 #endif
         }
