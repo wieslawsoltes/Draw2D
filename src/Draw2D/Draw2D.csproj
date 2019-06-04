@@ -8,18 +8,29 @@
   </PropertyGroup>
 
   <PropertyGroup>
+    <VersionPrefix>0.0.1</VersionPrefix>
+    <VersionSuffix></VersionSuffix>
+    <Authors>Wiesław Šoltés</Authors>
+    <Company>Wiesław Šoltés</Company>
+    <Description>A multi-platform 2D diagram editor.</Description>
+    <Copyright>Copyright © Wiesław Šoltés 2019</Copyright>
     <PackageId>Draw2D</PackageId>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/wieslawsoltes/Draw2D</PackageProjectUrl>
+    <PackageTags>2d;editor;data;diagram;graphics;geometry;data;shapes;wysiwyg-editor</PackageTags>
   </PropertyGroup>
 
   <PropertyGroup>
+    <DefineConstants>$(DefineConstants);USE_SERIALIZE_STYLES</DefineConstants>
+    <DefineConstants>$(DefineConstants);USE_SERIALIZE_GROUPS</DefineConstants>
     <DefineConstants>$(DefineConstants);USE_LOAD_EDITOR</DefineConstants>
     <DefineConstants>$(DefineConstants);USE_SAVE_EDITOR</DefineConstants>
+    <DefineConstants>$(DefineConstants);USE_LOAD_WINDOW</DefineConstants>
+    <DefineConstants>$(DefineConstants);USE_SAVE_WINDOW</DefineConstants>
     <!--<DefineConstants>$(DefineConstants);USE_LOAD_STYLES</DefineConstants>-->
     <!--<DefineConstants>$(DefineConstants);USE_SAVE_STYLES</DefineConstants>-->
     <!--<DefineConstants>$(DefineConstants);USE_LOAD_GROUPS</DefineConstants>-->
     <!--<DefineConstants>$(DefineConstants);USE_SAVE_GROUPS</DefineConstants>-->
-    <DefineConstants>$(DefineConstants);USE_LOAD_WINDOW</DefineConstants>
-    <DefineConstants>$(DefineConstants);USE_SAVE_WINDOW</DefineConstants>
     <!--<DefineConstants>$(DefineConstants);DEBUG_POINTER_EVENTS</DefineConstants>-->
     <!--<DefineConstants>$(DefineConstants);USE_DRAW_POINTERS</DefineConstants>-->
     <!--<DefineConstants>$(DefineConstants);USE_SVG_POINT</DefineConstants>-->
@@ -36,8 +47,6 @@
     <!--<DefineConstants>$(DefineConstants);USE_POINT_DECORATOR</DefineConstants>-->
     <!--<DefineConstants>$(DefineConstants);DEBUG_CONNECTORS</DefineConstants>-->
     <!--<DefineConstants>$(DefineConstants);USE_CONTAINER_POINTS</DefineConstants>-->
-    <DefineConstants>$(DefineConstants);USE_SERIALIZE_STYLES</DefineConstants>
-    <DefineConstants>$(DefineConstants);USE_SERIALIZE_GROUPS</DefineConstants>
   </PropertyGroup>
 
   <ItemGroup>
