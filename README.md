@@ -1,4 +1,8 @@
+# Draw2D
+
 [![Build status](https://dev.azure.com/wieslawsoltes/GitHub/_apis/build/status/Sources/Draw2D)](https://dev.azure.com/wieslawsoltes/GitHub/_build/latest?definitionId=73)
+
+A multi-platform data driven 2D diagram editor.
 
 ### Build
 
@@ -19,31 +23,31 @@ dotnet publish ./src/Draw2D/Draw2D.csproj -f netcoreapp3.0 -c Release -r osx-x64
 
 ### Command-Line
 
-Create styles.
+Create styles:
 ```
 dotnet build
 dotnet /home/ubuntu/environment/src/Draw2D/bin/Debug/netcoreapp3.0/Draw2D.dll --new-styles
 ```
 
-Create groups.
+Create groups:
 ```
 dotnet build
 dotnet /home/ubuntu/environment/src/Draw2D/bin/Debug/netcoreapp3.0/Draw2D.dll --new-groups
 ```
 
-Create view.
+Create view:
 ```
 dotnet build
 dotnet /home/ubuntu/environment/src/Draw2D/bin/Debug/netcoreapp3.0/Draw2D.dll --new-view
 ```
 
-Create editor.
+Create editor:
 ```
 dotnet build
 dotnet /home/ubuntu/environment/src/Draw2D/bin/Debug/netcoreapp3.0/Draw2D.dll --new-editor
 ```
 
-Export view.
+Export view:
 ```
 dotnet build
 dotnet /home/ubuntu/environment/src/Draw2D/bin/Debug/netcoreapp3.0/Draw2D.dll --demo
