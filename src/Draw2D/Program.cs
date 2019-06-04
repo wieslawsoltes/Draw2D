@@ -30,7 +30,7 @@ namespace Draw2D
         public static AppBuilder BuildAvaloniaApp()
             => AppBuilder.Configure<App>()
                          .UsePlatformDetect()
-                         .With(new Win32PlatformOptions { EnableMultitouch = true, AllowEglInitialization = true })
+                         .With(new Win32PlatformOptions { EnableMultitouch = true, AllowEglInitialization = false })
                          .With(new X11PlatformOptions { EnableMultiTouch = true, UseGpu = true, UseEGL = true })
                          .With(new AvaloniaNativePlatformOptions { UseGpu = true })
                          .UseSkia()
