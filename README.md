@@ -14,7 +14,18 @@ To build `Draw2D` install [.NET Core 3.0 preview 5](https://dotnet.microsoft.com
 
 ```
 git clone https://github.com/wieslawsoltes/Draw2D.git
+cd Draw2D
 dotnet build
+```
+
+You can also build for single target framework.
+
+```
+dotnet build -f netcoreapp3.0 -c Release
+```
+
+```
+dotnet build -f net461 -c Release
 ```
 
 ### Publish Managed
@@ -36,33 +47,33 @@ dotnet publish ./src/Draw2D/Draw2D.csproj -f netcoreapp3.0 -c Release -r osx-x64
 
 ## Command-Line Usage
 
-### Create styles
+### Create Styles Library
 
 ```
 dotnet build
 dotnet /home/ubuntu/environment/src/Draw2D/bin/Debug/netcoreapp3.0/Draw2D.dll --new-styles
 ```
 
-### Create groups
+### Create Groups Library
 
 ```
 dotnet build
 dotnet /home/ubuntu/environment/src/Draw2D/bin/Debug/netcoreapp3.0/Draw2D.dll --new-groups
 ```
 
-### Create view
+### Create View
 ```
 dotnet build
 dotnet /home/ubuntu/environment/src/Draw2D/bin/Debug/netcoreapp3.0/Draw2D.dll --new-view
 ```
 
-### Create editor
+### Create Editor
 ```
 dotnet build
 dotnet /home/ubuntu/environment/src/Draw2D/bin/Debug/netcoreapp3.0/Draw2D.dll --new-editor
 ```
 
-### Export view
+### Export View
 
 ```
 dotnet build
