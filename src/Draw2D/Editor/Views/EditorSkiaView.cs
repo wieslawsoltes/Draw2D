@@ -24,7 +24,7 @@ namespace Draw2D.Editor.Views
         private SKPicture _pictureShapesWorking = null;
         private SKPicture _pictureDecorators = null;
         private SKPicture _picturePoints = null;
-        private bool _enablePictureCache = false;
+        private bool _enablePictureCache = true;
 
         public EditorSkiaView(IToolContext context, IContainerView view)
         {
