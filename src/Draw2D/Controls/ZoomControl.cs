@@ -118,113 +118,103 @@ namespace Draw2D.Controls
             }
         }
 
-        private void GetPointerType(PointerPressedEventArgs e, out bool isLeft, out bool isRight)
+        private void GetPointerPressedType(PointerPressedEventArgs e, out bool isLeft)
         {
             isLeft = false;
-            isRight = false;
 
             if (e.Pointer.Type == PointerType.Mouse)
             {
-                if (e.InputModifiers.HasFlag(InputModifiers.LeftMouseButton))
-                {
-                    isLeft = true;
-                }
-                else if (e.InputModifiers.HasFlag(InputModifiers.RightMouseButton))
-                {
-                    isRight = true;
-                }
+                isLeft = e.InputModifiers.HasFlag(InputModifiers.LeftMouseButton);
             }
             else if (e.Pointer.Type == PointerType.Touch)
             {
-                if (e.Pointer.IsPrimary == true)
-                {
-                    isLeft = true;
-                }
-                else
-                {
-                    isRight = true;
-                }
+                isLeft = e.Pointer.IsPrimary;
             }
+
+            _capturedPointer = e.Pointer;
+            _capturedInputModifiers = e.InputModifiers;
 #if DEBUG_POINTER_EVENTS
             Log.WriteLine(
-                $"[PointerPressed] type: {e.Pointer.Type}, " +
-                $"modifiers: {e.InputModifiers}, " +
+                $"[Pressed] type: {e.Pointer.Type}, " +
+                $"Captured: {e.Pointer.Captured}, " +
+                $"isLeft: {isLeft}, " +
+                $"modifiers: {_capturedInputModifiers}, " +
                 $"isPrimary: {e.Pointer.IsPrimary}, " +
                 $"point: {e.GetPosition(this)}, " +
-                $"isCaptured: {_isCaptured}, " +
-                $"capturedInputModifiers: {_capturedInputModifiers}");
+                $"isCaptured: {_isCaptured}");
 #endif
         }
 
-        private void GetPointerType(PointerReleasedEventArgs e, out bool isLeft, out bool isRight)
+        private void GetPointerReleasedType(PointerReleasedEventArgs e, out bool isLeft)
         {
             isLeft = false;
-            isRight = false;
 
             if (e.Pointer.Type == PointerType.Mouse)
             {
-                if (_isCaptured == false)
-                {
-                    if (e.InputModifiers.HasFlag(InputModifiers.LeftMouseButton))
-                    {
-                        isLeft = true;
-                    }
-                    else if (e.InputModifiers.HasFlag(InputModifiers.RightMouseButton))
-                    {
-                        isRight = true;
-                    }
-                }
-                else
-                {
-                    if (_capturedInputModifiers.HasFlag(InputModifiers.LeftMouseButton))
-                    {
-                        isLeft = true;
-                    }
-                    else if (_capturedInputModifiers.HasFlag(InputModifiers.RightMouseButton))
-                    {
-                        isRight = true;
-                    }
-                }
+                isLeft = _capturedInputModifiers.HasFlag(InputModifiers.LeftMouseButton);
             }
             else if (e.Pointer.Type == PointerType.Touch)
             {
-                if (e.Pointer.IsPrimary == true)
-                {
-                    isLeft = true;
-                }
-                else
-                {
-                    isRight = true;
-                }
+                isLeft = e.Pointer.IsPrimary;
             }
 #if DEBUG_POINTER_EVENTS
             Log.WriteLine(
-                $"[PointerReleased] type: {e.Pointer.Type}, " +
-                $"modifiers: {e.InputModifiers}, " +
+                $"[Released] type: {e.Pointer.Type}, " +
+                $"Captured: {e.Pointer.Captured}, " +
+                $"isLeft: {isLeft}, " +
+                $"modifiers: {_capturedInputModifiers}, " +
                 $"isPrimary: {e.Pointer.IsPrimary}, " +
                 $"point: {e.GetPosition(this)}, " +
-                $"isCaptured: {_isCaptured}, " +
-                $"capturedInputModifiers: {_capturedInputModifiers}");
+                $"isCaptured: {_isCaptured}");
+#endif
+            _capturedPointer = null;
+            _capturedInputModifiers = InputModifiers.None;
+        }
+
+        private void GetPointerMovedType(PointerEventArgs e, out bool isLeft)
+        {
+            isLeft = false;
+
+            if (e.Pointer.Type == PointerType.Mouse)
+            {
+                isLeft = e.InputModifiers.HasFlag(InputModifiers.LeftMouseButton);
+            }
+            else if (e.Pointer.Type == PointerType.Touch)
+            {
+                isLeft = e.Pointer.IsPrimary;
+            }
+
+#if DEBUG_POINTER_EVENTS
+            Log.WriteLine(
+                $"[Moved] type: {e.Pointer.Type}, " +
+                $"Captured: {e.Pointer.Captured}, " +
+                $"isLeft: {isLeft}, " +
+                $"modifiers: {_capturedInputModifiers}, " +
+                $"isPrimary: {e.Pointer.IsPrimary}, " +
+                $"point: {e.GetPosition(this)}, " +
+                $"isCaptured: {_isCaptured}");
 #endif
         }
 
         private void HandlePointerPressed(PointerPressedEventArgs e)
         {
             UpdatePointer(e);
+            GetPointerPressedType(e, out var isLeft);
 
             if (_zoomServiceState != null && _inputTarget != null)
             {
-                GetPointerType(e, out var isLeft, out var isRight);
-
-                if (isLeft)
+                if (isLeft == true)
                 {
                     var tpoint = AdjustTargetPoint(e.GetPosition(this));
                     _inputTarget.LeftDown(tpoint.X, tpoint.Y, GetModifier(e.InputModifiers));
                 }
-                else if (isRight)
+                else
                 {
-                    var zpoint = AdjustPanPoint(e.GetPosition(this));
-                    Pressed(zpoint.X, zpoint.Y);
+                    if (_isCaptured == false)
+                    {
+                        var zpoint = AdjustPanPoint(e.GetPosition(this));
+                        Pressed(zpoint.X, zpoint.Y);
+                    }
 
                     if (_zoomServiceState.IsPanning == false)
                     {
@@ -237,19 +227,22 @@ namespace Draw2D.Controls
 
         private void HandlePointerReleased(PointerReleasedEventArgs e)
         {
+            GetPointerReleasedType(e, out var isLeft);
+
             if (_zoomServiceState != null && _inputTarget != null)
             {
-                GetPointerType(e, out var isLeft, out var isRight);
-
-                if (isLeft)
+                if (isLeft == true)
                 {
                     var tpoint = AdjustTargetPoint(e.GetPosition(this));
                     _inputTarget.LeftUp(tpoint.X, tpoint.Y, GetModifier(e.InputModifiers));
                 }
-                else if (isRight)
+                else
                 {
-                    var zpoint = AdjustPanPoint(e.GetPosition(this));
-                    Released(zpoint.X, zpoint.Y);
+                    if (_isCaptured == false)
+                    {
+                        var zpoint = AdjustPanPoint(e.GetPosition(this));
+                        Released(zpoint.X, zpoint.Y);
+                    }
 
                     if (_zoomServiceState.IsPanning == false)
                     {
@@ -265,10 +258,11 @@ namespace Draw2D.Controls
         private void HandlePointerMoved(PointerEventArgs e)
         {
             UpdatePointer(e);
+            GetPointerMovedType(e, out var isLeft);
 
             if (_zoomServiceState != null && _inputTarget != null)
             {
-                if (IsCaptured?.Invoke() == true)
+                if (isLeft == false)
                 {
                     var zpoint = AdjustPanPoint(e.GetPosition(this));
                     Moved(zpoint.X, zpoint.Y);
@@ -317,11 +311,10 @@ namespace Draw2D.Controls
 
         public void Pressed(double x, double y)
         {
-            if (_zoomServiceState != null && _inputTarget != null && _zoomServiceState.IsPanning == false && IsCaptured?.Invoke() == false)
+            if (_zoomServiceState != null && _inputTarget != null && _zoomServiceState.IsPanning == false)
             {
                 _zoomServiceState.IsPanning = true;
                 _zoomServiceState.AutoFitMode = FitMode.None;
-                Capture?.Invoke();
                 StartPan(x, y);
                 Invalidate(true);
             }
@@ -331,7 +324,6 @@ namespace Draw2D.Controls
         {
             if (_zoomServiceState != null && _inputTarget != null && _zoomServiceState.IsPanning == true)
             {
-                Release?.Invoke();
                 Invalidate(true);
                 _zoomServiceState.IsPanning = false;
             }
@@ -531,58 +523,17 @@ namespace Draw2D.Controls
             {
                 this.Capture = () =>
                 {
-                    foreach (var value in _pointers.Values)
-                    {
-                        if (value.Pointer.Captured == null)
-                        {
-                            value.Pointer.Capture(this);
-                            _capturedPointer = value.Pointer;
-                            _capturedInputModifiers = value.InputModifiers;
-                            _isCaptured = true;
-                        }
-                        break;
-                    }
+                    _isCaptured = true;
                 };
 
                 this.Release = () =>
                 {
-                    if (_capturedPointer != null)
-                    {
-                        _capturedPointer.Capture(null);
-                        _capturedPointer = null;
-                        _capturedInputModifiers = InputModifiers.None;
-                        _isCaptured = false;
-                    }
-                    else
-                    {
-                        foreach (var value in _pointers.Values)
-                        {
-                            if (value.Pointer.Captured != null)
-                            {
-                                value.Pointer.Capture(null);
-                                _capturedPointer = null;
-                                _capturedInputModifiers = InputModifiers.None;
-                                _isCaptured = false;
-                            }
-                            break;
-                        }
-                    }
+                    _isCaptured = false;
                 };
 
                 this.IsCaptured = () =>
                 {
-                    if (_capturedPointer != null && _isCaptured == true)
-                    {
-                        return true;
-                    }
-                    else
-                    {
-                        foreach (var value in _pointers.Values)
-                        {
-                            return value.Pointer.Captured != null;
-                        }
-                    }
-                    return false;
+                    return _isCaptured;
                 };
 
                 this.Redraw = () =>
