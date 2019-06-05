@@ -1,6 +1,5 @@
 ﻿// Copyright (c) Wiesław Šoltés. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
-using System;
 
 namespace Draw2D
 {
@@ -8,7 +7,11 @@ namespace Draw2D
     {
         public static void WriteLine(string message)
         {
-            Console.WriteLine(message);
+#if DEBUG
+            System.Diagnostics.Debug.WriteLine(message);
+#else
+            System.Console.WriteLine(message);
+#endif
         }
     }
 }
