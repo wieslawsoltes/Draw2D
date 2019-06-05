@@ -858,7 +858,7 @@ namespace Draw2D.Editor
             editorToolContext.ContainerView = null;
             editorToolContext.Tools = tools;
             editorToolContext.CurrentTool = selectionTool;
-            editorToolContext.Mode = EditMode.Mouse;
+            editorToolContext.EditMode = EditMode.Mouse;
 
             return editorToolContext;
         }

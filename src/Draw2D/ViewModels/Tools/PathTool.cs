@@ -205,10 +205,10 @@ namespace Draw2D.ViewModels.Tools
         }
 
         [IgnoreDataMember]
-        public EditMode Mode
+        public EditMode EditMode
         {
-            get => _context.Mode;
-            set => throw new InvalidOperationException($"Can not set {Mode} property value.");
+            get => _context.EditMode;
+            set => throw new InvalidOperationException($"Can not set {EditMode} property value.");
         }
 
         public void Dispose()

@@ -17,7 +17,7 @@ namespace Draw2D.ViewModels.Tools
         IContainerView ContainerView { get; set; }
         IList<ITool> Tools { get; set; }
         ITool CurrentTool { get; set; }
-        EditMode Mode { get; set; }
+        EditMode EditMode { get; set; }
         void SetTool(string name);
     }
 }

@@ -21,7 +21,7 @@ namespace Draw2D.Editor
         private IContainerView _containerView;
         private IList<ITool> _tools;
         private ITool _currentTool;
-        private EditMode _mode;
+        private EditMode _editMode;
 
 #if USE_SERIALIZE_STYLES
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
@@ -92,10 +92,10 @@ namespace Draw2D.Editor
         }
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public EditMode Mode
+        public EditMode EditMode
         {
-            get => _mode;
-            set => Update(ref _mode, value);
+            get => _editMode;
+            set => Update(ref _editMode, value);
         }
 
         public void Dispose()
@@ -140,11 +140,11 @@ namespace Draw2D.Editor
 
         public void LeftUp(double x, double y, Modifier modifier)
         {
-            if (_mode == EditMode.Mouse)
+            if (_editMode == EditMode.Mouse)
             {
                 _currentTool.LeftUp(this, x, y, modifier);
             }
-            else if (_mode == EditMode.Touch)
+            else if (_editMode == EditMode.Touch)
             {
                 _currentTool.LeftDown(this, x, y, modifier);
             }
