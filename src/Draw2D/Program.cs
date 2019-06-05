@@ -14,7 +14,7 @@ namespace Draw2D
         {
             try
             {
-                if (AppState.ParseArgs(args) == true)
+                if (App.ParseArgs(args) == true)
                 {
                     BuildAvaloniaApp().Start(AppMain, args);
                 }
@@ -49,23 +49,23 @@ namespace Draw2D
 
         private static void AppMain(Application app, string[] args)
         {
-            AppState.Load();
+            App.Load();
 
             var window = new MainWindow
             {
-                DataContext = AppState.ToolContext
+                DataContext = App.ToolContext
             };
 
-            AppState.SetWindowSettings(window);
+            App.SetWindowSettings(window);
 
             window.Closing += (sender, e) =>
             {
-                AppState.GetWindowSettings(window);
+                App.GetWindowSettings(window);
             };
 
             app.Run(window);
 
-            AppState.Save();
+            App.Save();
         }
     }
 }
