@@ -206,6 +206,12 @@
                         </TabItem>
                     </TabControl>
                 </TabItem>
+                <TabItem Classes="default" Header="Settings">
+                    <Grid RowDefinitions="Auto" ColumnDefinitions="Auto,*">
+                        <TextBlock Classes="default" Grid.Column="0" Grid.Row="0" Text="EditMode"/>
+                        <TextBox Classes="default" Grid.Column="1" Grid.Row="0" Text="{Binding EditMode}"/>
+                    </Grid>
+                </TabItem>
                 <TabItem Classes="default" Header="Files">
                     <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,*,Auto,Auto" ColumnDefinitions="50*,50*">
                         <TextBlock Classes="default" Text="Path:" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"/>
