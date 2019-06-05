@@ -137,11 +137,10 @@ namespace Draw2D.Controls
             Log.WriteLine(
                 $"[Pressed] type: {e.Pointer.Type}, " +
                 $"isLeft: {isLeft}, " +
-                $"modifiers: {_capturedInputModifiers}, " +
                 $"isPrimary: {e.Pointer.IsPrimary}, " +
+                $"modifiers: {_capturedInputModifiers}, " +
                 $"point: {e.GetPosition(this)}, " +
-                $"Captured: {e.Pointer.Captured}, " +
-                $"isCaptured: {_isCaptured}");
+                $"Captured: {e.Pointer.Captured}");
 #endif
         }
 
@@ -161,11 +160,10 @@ namespace Draw2D.Controls
             Log.WriteLine(
                 $"[Released] type: {e.Pointer.Type}, " +
                 $"isLeft: {isLeft}, " +
-                $"modifiers: {_capturedInputModifiers}, " +
                 $"isPrimary: {e.Pointer.IsPrimary}, " +
+                $"modifiers: {_capturedInputModifiers}, " +
                 $"point: {e.GetPosition(this)}, " +
-                $"Captured: {e.Pointer.Captured}, " +
-                $"isCaptured: {_isCaptured}");
+                $"Captured: {e.Pointer.Captured}");
 #endif
             _capturedPointer = null;
             _capturedInputModifiers = InputModifiers.None;
@@ -187,11 +185,10 @@ namespace Draw2D.Controls
             Log.WriteLine(
                 $"[Moved] type: {e.Pointer.Type}, " +
                 $"isLeft: {isLeft}, " +
-                $"modifiers: {_capturedInputModifiers}, " +
                 $"isPrimary: {e.Pointer.IsPrimary}, " +
+                $"modifiers: {_capturedInputModifiers}, " +
                 $"point: {e.GetPosition(this)}, " +
-                $"Captured: {e.Pointer.Captured}, " +
-                $"isCaptured: {_isCaptured}");
+                $"Captured: {e.Pointer.Captured}");
 #endif
         }
 
@@ -522,16 +519,25 @@ namespace Draw2D.Controls
             {
                 this.Capture = () =>
                 {
+#if DEBUG_POINTER_EVENTS
+                    Log.WriteLine($"[Capture] {_isCaptured}");
+#endif
                     _isCaptured = true;
                 };
 
                 this.Release = () =>
                 {
+#if DEBUG_POINTER_EVENTS
+                    Log.WriteLine($"[Release] {_isCaptured}");
+#endif
                     _isCaptured = false;
                 };
 
                 this.IsCaptured = () =>
                 {
+#if DEBUG_POINTER_EVENTS
+                    Log.WriteLine($"[IsCaptured] {_isCaptured}");
+#endif
                     return _isCaptured;
                 };
 
