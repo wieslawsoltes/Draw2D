@@ -136,11 +136,11 @@ namespace Draw2D.Controls
 #if DEBUG_POINTER_EVENTS
             Log.WriteLine(
                 $"[Pressed] type: {e.Pointer.Type}, " +
-                $"Captured: {e.Pointer.Captured}, " +
                 $"isLeft: {isLeft}, " +
                 $"modifiers: {_capturedInputModifiers}, " +
                 $"isPrimary: {e.Pointer.IsPrimary}, " +
                 $"point: {e.GetPosition(this)}, " +
+                $"Captured: {e.Pointer.Captured}, " +
                 $"isCaptured: {_isCaptured}");
 #endif
         }
@@ -160,11 +160,11 @@ namespace Draw2D.Controls
 #if DEBUG_POINTER_EVENTS
             Log.WriteLine(
                 $"[Released] type: {e.Pointer.Type}, " +
-                $"Captured: {e.Pointer.Captured}, " +
                 $"isLeft: {isLeft}, " +
                 $"modifiers: {_capturedInputModifiers}, " +
                 $"isPrimary: {e.Pointer.IsPrimary}, " +
                 $"point: {e.GetPosition(this)}, " +
+                $"Captured: {e.Pointer.Captured}, " +
                 $"isCaptured: {_isCaptured}");
 #endif
             _capturedPointer = null;
@@ -183,15 +183,14 @@ namespace Draw2D.Controls
             {
                 isLeft = e.Pointer.IsPrimary;
             }
-
 #if DEBUG_POINTER_EVENTS
             Log.WriteLine(
                 $"[Moved] type: {e.Pointer.Type}, " +
-                $"Captured: {e.Pointer.Captured}, " +
                 $"isLeft: {isLeft}, " +
                 $"modifiers: {_capturedInputModifiers}, " +
                 $"isPrimary: {e.Pointer.IsPrimary}, " +
                 $"point: {e.GetPosition(this)}, " +
+                $"Captured: {e.Pointer.Captured}, " +
                 $"isCaptured: {_isCaptured}");
 #endif
         }
