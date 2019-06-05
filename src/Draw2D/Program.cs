@@ -32,7 +32,7 @@ namespace Draw2D
                          .With(new Win32PlatformOptions
                          {
                              EnableMultitouch = true,
-                             AllowEglInitialization = true
+                             AllowEglInitialization = false
                          })
                          .With(new X11PlatformOptions
                          {
