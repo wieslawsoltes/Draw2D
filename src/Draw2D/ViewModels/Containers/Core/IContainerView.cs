@@ -18,7 +18,7 @@ namespace Draw2D.ViewModels.Containers
         ICanvasContainer WorkingContainer { get; set; }
         ISelectionState SelectionState { get; set; }
         IZoomServiceState ZoomServiceState { get; set; }
-        IDrawContainerView DrawContainerView { get; set; }
+        IContainerPresenter ContainerPresenter { get; set; }
         void Add(IBaseShape shape);
         void Remove(IBaseShape shape);
         void Reference(GroupShape group);

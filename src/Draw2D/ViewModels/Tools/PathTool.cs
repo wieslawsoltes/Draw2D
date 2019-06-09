@@ -73,10 +73,10 @@ namespace Draw2D.ViewModels.Tools
                 set => throw new InvalidOperationException($"Can not set {WorkingContainer} property value.");
             }
 
-            public IDrawContainerView DrawContainerView
+            public IContainerPresenter ContainerPresenter
             {
-                get => _context.ContainerView.DrawContainerView;
-                set => throw new InvalidOperationException($"Can not set {DrawContainerView} property value.");
+                get => _context.ContainerView.ContainerPresenter;
+                set => throw new InvalidOperationException($"Can not set {ContainerPresenter} property value.");
             }
 
             public ISelectionState SelectionState

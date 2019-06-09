@@ -9,7 +9,7 @@ using Draw2D.ViewModels.Style;
 using Draw2D.ViewModels.Tools;
 using SkiaSharp;
 
-namespace Draw2D.Editor.Renderers
+namespace Draw2D.Renderers
 {
     public class SkiaShapeRenderer : IShapeRenderer
     {

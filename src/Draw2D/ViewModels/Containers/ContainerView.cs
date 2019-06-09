@@ -23,7 +23,7 @@ namespace Draw2D.ViewModels.Containers
         private ICanvasContainer _workingContainer;
         private ISelectionState _selectionState;
         private IZoomServiceState _zoomServiceState;
-        private IDrawContainerView _drawContainerView;
+        private IContainerPresenter _containerPresenter;
         private IInputService _inputService;
         private IZoomService _zoomService;
 
@@ -98,10 +98,10 @@ namespace Draw2D.ViewModels.Containers
         }
 
         [IgnoreDataMember]
-        public IDrawContainerView DrawContainerView
+        public IContainerPresenter ContainerPresenter
         {
-            get => _drawContainerView;
-            set => Update(ref _drawContainerView, value);
+            get => _containerPresenter;
+            set => Update(ref _containerPresenter, value);
         }
 
         [IgnoreDataMember]
@@ -133,7 +133,7 @@ namespace Draw2D.ViewModels.Containers
 
         public void Draw(object context, double width, double height, double dx, double dy, double zx, double zy)
         {
-            _drawContainerView?.Draw(context, width, height, dx, dy, zx, zy);
+            _containerPresenter?.Draw(context, width, height, dx, dy, zx, zy);
         }
 
         public void Add(IBaseShape shape)
@@ -217,7 +217,7 @@ namespace Draw2D.ViewModels.Containers
                     InitFitMode = FitMode.Center,
                     AutoFitMode = FitMode.None
                 },
-                DrawContainerView = null,
+                ContainerPresenter = null,
                 InputService = null,
                 ZoomService = null
             };

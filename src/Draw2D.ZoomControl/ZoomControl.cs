@@ -12,7 +12,7 @@ using Avalonia.Media.Immutable;
 using Avalonia.VisualTree;
 using Draw2D.Input;
 
-namespace Draw2D.Controls
+namespace Draw2D.ZoomControl
 {
     public class ZoomControl : Border, IInputService, IZoomService
     {

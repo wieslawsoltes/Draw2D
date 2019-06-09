@@ -1,19 +1,19 @@
 ﻿// Copyright (c) Wiesław Šoltés. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
-using Draw2D.Editor.Renderers;
+using Draw2D.Renderers;
 using Draw2D.ViewModels;
 using Draw2D.ViewModels.Containers;
 using Draw2D.ViewModels.Tools;
 using SkiaSharp;
 
-namespace Draw2D.Editor.Views
+namespace Draw2D.Presenters
 {
-    public class ExportSkiaView : IDrawContainerView
+    public class ExportContainerPresenter : IContainerPresenter
     {
         private readonly IToolContext _context;
         private readonly IContainerView _view;
 
-        public ExportSkiaView(IToolContext context, IContainerView view)
+        public ExportContainerPresenter(IToolContext context, IContainerView view)
         {
             _context = context;
             _view = view;
