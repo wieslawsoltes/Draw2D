@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using Draw2D.Renderers;
 using Draw2D.ViewModels;
 using Draw2D.ViewModels.Containers;
-using Draw2D.ViewModels.Shapes;
 using Draw2D.ViewModels.Style;
 using Draw2D.ViewModels.Tools;
 using SkiaSharp;
@@ -78,123 +77,6 @@ namespace Draw2D.Presenters
             }
         }
 
-        private bool IsShapeStyleDirty(ShapeStyle style)
-        {
-            if (style == null)
-            {
-                return false;
-            }
-
-            if (style.IsDirty
-             || style.Stroke.IsDirty
-             || style.Fill.IsDirty
-             || style.TextStyle.IsDirty
-             || style.TextStyle.Stroke.IsDirty)
-            {
-#if USE_DEBUG_DIRTY
-                Log.WriteLine($"IsShapeStyleDirty: true");
-#endif
-                return true;
-            }
-            return false;
-        }
-
-        private bool IsStyleLibraryDirty(IStyleLibrary styleLibrary)
-        {
-            if (styleLibrary == null)
-            {
-                return false;
-            }
-
-            if (styleLibrary.IsDirty)
-            {
-#if USE_DEBUG_DIRTY
-                Log.WriteLine($"styleLibrary.IsDirty: true");
-#endif
-                return true;
-            }
-
-            if (styleLibrary.Styles != null)
-            {
-                foreach (var style in styleLibrary.Styles)
-                {
-                    if (IsShapeStyleDirty(style))
-                    {
-                        return true;
-                    }
-                }
-            }
-
-            return false;
-        }
-
-        private bool IsCanvasContainerDirty(ICanvasContainer canvasContainer)
-        {
-            if (canvasContainer == null)
-            {
-                return false;
-            }
-
-            if (canvasContainer.IsDirty)
-            {
-#if USE_DEBUG_DIRTY
-                Log.WriteLine($"canvasContainer.IsDirty: true");
-#endif
-                return true;
-            }
-
-            if (canvasContainer.Shapes != null)
-            {
-                foreach (var shape in canvasContainer.Shapes)
-                {
-                    if (shape.IsDirty)
-                    {
-#if USE_DEBUG_DIRTY
-                        Log.WriteLine($"shape.IsDirty: true");
-#endif
-                        return true;
-                    }
-                }
-            }
-
-            return false;
-        }
-
-        private bool IsPointsDirty(ICanvasContainer canvasContainer)
-        {
-            if (canvasContainer == null)
-            {
-                return false;
-            }
-
-            var points = new List<IPointShape>();
-            canvasContainer.GetPoints(points);
-
-            foreach (var point in points)
-            {
-                if (point.IsDirty)
-                {
-#if USE_DEBUG_DIRTY
-                    Log.WriteLine($"point.IsDirty: true");
-#endif
-                    return true;
-                }
-
-                if (point.Template != null)
-                {
-                    if (point.Template.IsDirty)
-                    {
-#if USE_DEBUG_DIRTY
-                        Log.WriteLine($"point.Template.IsDirty: true");
-#endif
-                        return true;
-                    }
-                }
-            }
-
-            return false;
-        }
-
         private void GetSKPaintFill(ArgbColor color, out SKPaint brush)
         {
             if (color.IsDirty == true || !_paintCache.TryGetValue(color, out var brushCached))
@@ -264,11 +146,11 @@ namespace Draw2D.Presenters
 
         public void Draw(object context, double width, double height, double dx, double dy, double zx, double zy)
         {
-            bool isStyleLibraryDirty = IsStyleLibraryDirty(_context.StyleLibrary);
-            bool isCurrentContainerDirty = IsCanvasContainerDirty(_view.CurrentContainer);
-            bool isWorkingContainerDirty = IsCanvasContainerDirty(_view.WorkingContainer);
-            bool isPointsCurrentContainerDirty = IsPointsDirty(_view.CurrentContainer);
-            bool isPointsWorkingContainerDirty = IsPointsDirty(_view.WorkingContainer);
+            bool isStyleLibraryDirty = _context.StyleLibrary.IsStyleLibraryDirty();
+            bool isCurrentContainerDirty = _view.CurrentContainer.IsCanvasContainerDirty();
+            bool isWorkingContainerDirty = _view.WorkingContainer.IsCanvasContainerDirty();
+            bool isPointsCurrentContainerDirty = _view.CurrentContainer.IsPointsDirty();
+            bool isPointsWorkingContainerDirty = _view.WorkingContainer.IsPointsDirty();
             bool isShapesCurrentDirty = isCurrentContainerDirty == true || isPointsCurrentContainerDirty == true || _previousZX != zx || _previousZY != zy;
             bool isShapesWorkingDirty = isWorkingContainerDirty == true || isPointsWorkingContainerDirty == true || _previousZX != zx || _previousZY != zy;
 
