@@ -277,6 +277,9 @@ namespace Draw2D.Presenters
                 canvas.Restore();
             }
 
+            // TODO: Fix grid X and Y position.
+            //DrawGrid(canvas, dx, dy, zx, zy);
+
             DrawPicture(canvas, _pictureShapesCurrent, dx, dy, zx, zy);
             DrawPicture(canvas, _pictureShapesWorking, dx, dy, zx, zy);
             DrawPicture(canvas, _pictureDecorators, dx, dy, zx, zy);
