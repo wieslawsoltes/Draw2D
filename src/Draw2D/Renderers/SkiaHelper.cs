@@ -7,7 +7,7 @@ using Draw2D.ViewModels.Shapes;
 using Draw2D.ViewModels.Style;
 using SkiaSharp;
 
-namespace Draw2D.Editor.Renderers
+namespace Draw2D.Renderers
 {
     internal class SkiaHelper
     {
