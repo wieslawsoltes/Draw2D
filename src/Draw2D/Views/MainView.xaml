@@ -7,7 +7,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:Draw2D.Views"
              xmlns:app="clr-namespace:Draw2D"
-             xmlns:controls="clr-namespace:Draw2D.Controls"
+             xmlns:zc="clr-namespace:Draw2D.ZoomControl;assembly=Draw2D.ZoomControl"
              xmlns:converters="clr-namespace:Draw2D.Converters"
              UseLayoutRounding="True" RenderOptions.BitmapInterpolationMode="HighQuality"
              Focusable="True"
@@ -374,7 +374,7 @@
                                     <KeyBinding Command="{Binding $parent[UserControl].DataContext.SetTool}" CommandParameter="Ellipse" Gesture="E"/>
                                     <KeyBinding Command="{Binding $parent[UserControl].DataContext.SetTool}" CommandParameter="Text" Gesture="T"/>
                                 </Border.KeyBindings>
-                                <controls:ZoomControl InputTarget="{Binding $parent[UserControl].DataContext}" ZoomServiceState="{Binding ZoomServiceState}" DrawTarget="{Binding}" Background="Transparent" ClipToBounds="False"/>
+                                <zc:ZoomControl InputTarget="{Binding $parent[UserControl].DataContext}" ZoomServiceState="{Binding ZoomServiceState}" DrawTarget="{Binding}" Background="Transparent" ClipToBounds="False"/>
                             </Border>
                         </Border>
                     </DataTemplate>

@@ -107,6 +107,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Draw2D.Input\Draw2D.Input.csproj" />
+    <ProjectReference Include="..\Draw2D.ZoomControl\Draw2D.ZoomControl.csproj" />
   </ItemGroup>
 
 </Project>
