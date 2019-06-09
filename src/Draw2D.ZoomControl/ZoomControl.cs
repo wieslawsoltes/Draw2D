@@ -33,7 +33,6 @@ namespace Draw2D.ZoomControl
         private Dictionary<IPointer, (IPointer Pointer, Point Point, InputModifiers InputModifiers)> _pointers;
         private bool _isCaptured;
         private InputModifiers _capturedInputModifiers;
-        private IPointer _capturedPointer;
         private Matrix _currentMatrix;
         private Point _panPosition;
 
@@ -80,7 +79,6 @@ namespace Draw2D.ZoomControl
             _pointers = new Dictionary<IPointer, (IPointer, Point, InputModifiers)>();
             _isCaptured = false;
             _capturedInputModifiers = InputModifiers.None;
-            _capturedPointer = null;
         }
 
         private void GetOffset(out double dx, out double dy, out double zx, out double zy)
@@ -134,7 +132,6 @@ namespace Draw2D.ZoomControl
                 isLeft = e.Pointer.IsPrimary;
             }
 
-            _capturedPointer = e.Pointer;
             _capturedInputModifiers = e.InputModifiers;
 #if DEBUG_POINTER_EVENTS
             Log.WriteLine(
@@ -168,7 +165,6 @@ namespace Draw2D.ZoomControl
                 $"point: {e.GetPosition(this)}, " +
                 $"Captured: {e.Pointer.Captured}");
 #endif
-            _capturedPointer = null;
             _capturedInputModifiers = InputModifiers.None;
         }
 
