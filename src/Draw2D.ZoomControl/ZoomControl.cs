@@ -34,6 +34,8 @@ namespace Draw2D.ZoomControl
         private bool _isCaptured;
         private InputModifiers _capturedInputModifiers;
         private IPointer _capturedPointer;
+        private Matrix _currentMatrix;
+        private Point _panPosition;
 
         public static readonly DirectProperty<ZoomControl, IZoomServiceState> ZoomServiceStateProperty =
            AvaloniaProperty.RegisterDirect<ZoomControl, IZoomServiceState>(nameof(ZoomServiceState), o => o.ZoomServiceState, (o, v) => o.ZoomServiceState = v);
@@ -62,10 +64,6 @@ namespace Draw2D.ZoomControl
             set { SetAndRaise(DrawTargetProperty, ref _drawTarget, value); }
         }
 
-        private Matrix CurrentMatrix { get; set; }
-
-        private Point PanPosition { get; set; }
-
         public Action Capture { get; set; }
 
         public Action Release { get; set; }
@@ -83,11 +81,6 @@ namespace Draw2D.ZoomControl
             _isCaptured = false;
             _capturedInputModifiers = InputModifiers.None;
             _capturedPointer = null;
-
-            PointerWheelChanged += (sender, e) => HandlePointerWheelChanged(e);
-            PointerPressed += (sender, e) => HandlePointerPressed(e);
-            PointerReleased += (sender, e) => HandlePointerReleased(e);
-            PointerMoved += (sender, e) => HandlePointerMoved(e);
         }
 
         private void GetOffset(out double dx, out double dy, out double zx, out double zy)
@@ -126,15 +119,6 @@ namespace Draw2D.ZoomControl
                 }
             }
             _pointers[e.Pointer] = (e.Pointer, e.GetPosition(this), e.InputModifiers);
-        }
-
-        private void HandlePointerWheelChanged(PointerWheelEventArgs e)
-        {
-            if (_zoomServiceState != null)
-            {
-                var zpoint = AdjustZoomPoint(e.GetPosition(this));
-                Wheel(e.Delta.Y, zpoint.X, zpoint.Y);
-            }
         }
 
         private void GetPointerPressedType(PointerPressedEventArgs e, out bool isLeft)
@@ -209,6 +193,15 @@ namespace Draw2D.ZoomControl
                 $"point: {e.GetPosition(this)}, " +
                 $"Captured: {e.Pointer.Captured}");
 #endif
+        }
+
+        private void HandlePointerWheelChanged(PointerWheelEventArgs e)
+        {
+            if (_zoomServiceState != null)
+            {
+                var zpoint = AdjustZoomPoint(e.GetPosition(this));
+                Wheel(e.Delta.Y, zpoint.X, zpoint.Y);
+            }
         }
 
         private void HandlePointerPressed(PointerPressedEventArgs e)
@@ -366,7 +359,7 @@ namespace Draw2D.ZoomControl
 
         private void UpdateCurrentMatrix()
         {
-            CurrentMatrix = new Matrix(
+            _currentMatrix = new Matrix(
                 _zoomServiceState.ZoomX,
                 0,
                 0,
@@ -377,10 +370,10 @@ namespace Draw2D.ZoomControl
 
         private void UpdateZoomServiceState()
         {
-            _zoomServiceState.ZoomX = CurrentMatrix.M11;
-            _zoomServiceState.ZoomY = CurrentMatrix.M22;
-            _zoomServiceState.OffsetX = CurrentMatrix.M31;
-            _zoomServiceState.OffsetY = CurrentMatrix.M32;
+            _zoomServiceState.ZoomX = _currentMatrix.M11;
+            _zoomServiceState.ZoomY = _currentMatrix.M22;
+            _zoomServiceState.OffsetX = _currentMatrix.M31;
+            _zoomServiceState.OffsetY = _currentMatrix.M32;
         }
 
         public void ZoomTo(double zoom, double x, double y)
@@ -388,7 +381,7 @@ namespace Draw2D.ZoomControl
             if (_zoomServiceState != null && _inputTarget != null)
             {
                 UpdateCurrentMatrix();
-                CurrentMatrix = new Matrix(zoom, 0, 0, zoom, x - (zoom * x), y - (zoom * y)) * CurrentMatrix;
+                _currentMatrix = new Matrix(zoom, 0, 0, zoom, x - (zoom * x), y - (zoom * y)) * _currentMatrix;
                 UpdateZoomServiceState();
             }
         }
@@ -405,7 +398,7 @@ namespace Draw2D.ZoomControl
         {
             if (_zoomServiceState != null && _inputTarget != null)
             {
-                PanPosition = new Point(x, y);
+                _panPosition = new Point(x, y);
             }
         }
 
@@ -413,12 +406,12 @@ namespace Draw2D.ZoomControl
         {
             if (_zoomServiceState != null && _inputTarget != null)
             {
-                double dx = x - PanPosition.X;
-                double dy = y - PanPosition.Y;
+                double dx = x - _panPosition.X;
+                double dy = y - _panPosition.Y;
                 Point delta = new Point(dx, dy);
-                PanPosition = new Point(x, y);
+                _panPosition = new Point(x, y);
                 UpdateCurrentMatrix();
-                CurrentMatrix = new Matrix(1.0, 0.0, 0.0, 1.0, delta.X, delta.Y) * CurrentMatrix;
+                _currentMatrix = new Matrix(1.0, 0.0, 0.0, 1.0, delta.X, delta.Y) * _currentMatrix;
                 UpdateZoomServiceState();
             }
         }
@@ -427,7 +420,7 @@ namespace Draw2D.ZoomControl
         {
             if (_zoomServiceState != null && _inputTarget != null)
             {
-                CurrentMatrix = new Matrix(1.0, 0.0, 0.0, 1.0, 0.0, 0.0);
+                _currentMatrix = new Matrix(1.0, 0.0, 0.0, 1.0, 0.0, 0.0);
                 UpdateZoomServiceState();
             }
         }
@@ -438,7 +431,7 @@ namespace Draw2D.ZoomControl
             {
                 double ox = (panelWidth - elementWidth) / 2;
                 double oy = (panelHeight - elementHeight) / 2;
-                CurrentMatrix = new Matrix(1.0, 0.0, 0.0, 1.0, ox, oy);
+                _currentMatrix = new Matrix(1.0, 0.0, 0.0, 1.0, ox, oy);
                 UpdateZoomServiceState();
             }
         }
@@ -451,7 +444,7 @@ namespace Draw2D.ZoomControl
                 double zy = panelHeight / elementHeight;
                 double ox = (panelWidth - elementWidth * zx) / 2;
                 double oy = (panelHeight - elementHeight * zy) / 2;
-                CurrentMatrix = new Matrix(zx, 0.0, 0.0, zy, ox, oy);
+                _currentMatrix = new Matrix(zx, 0.0, 0.0, zy, ox, oy);
                 UpdateZoomServiceState();
             }
         }
@@ -465,7 +458,7 @@ namespace Draw2D.ZoomControl
                 double zoom = Math.Min(zx, zy);
                 double ox = (panelWidth - elementWidth * zoom) / 2;
                 double oy = (panelHeight - elementHeight * zoom) / 2;
-                CurrentMatrix = new Matrix(zoom, 0.0, 0.0, zoom, ox, oy);
+                _currentMatrix = new Matrix(zoom, 0.0, 0.0, zoom, ox, oy);
                 UpdateZoomServiceState();
             }
         }
@@ -479,7 +472,7 @@ namespace Draw2D.ZoomControl
                 double zoom = Math.Max(zx, zy);
                 double ox = (panelWidth - elementWidth * zoom) / 2;
                 double oy = (panelHeight - elementHeight * zoom) / 2;
-                CurrentMatrix = new Matrix(zoom, 0.0, 0.0, zoom, ox, oy);
+                _currentMatrix = new Matrix(zoom, 0.0, 0.0, zoom, ox, oy);
                 UpdateZoomServiceState();
             }
         }
@@ -527,6 +520,31 @@ namespace Draw2D.ZoomControl
                 UniformToFill(Bounds.Width, Bounds.Height, _inputTarget.GetWidth(), _inputTarget.GetHeight());
                 Invalidate(redraw);
             }
+        }
+
+
+        protected override void OnPointerWheelChanged(PointerWheelEventArgs e)
+        {
+            base.OnPointerWheelChanged(e);
+            HandlePointerWheelChanged(e);
+        }
+
+        protected override void OnPointerPressed(PointerPressedEventArgs e)
+        {
+            base.OnPointerPressed(e);
+            HandlePointerPressed(e);
+        }
+
+        protected override void OnPointerReleased(PointerReleasedEventArgs e)
+        {
+            base.OnPointerReleased(e);
+            HandlePointerReleased(e);
+        }
+
+        protected override void OnPointerMoved(PointerEventArgs e)
+        {
+            base.OnPointerMoved(e);
+            HandlePointerMoved(e);
         }
 
         protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e)
