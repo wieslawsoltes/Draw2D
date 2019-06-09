@@ -35,7 +35,8 @@ namespace Draw2D.Renderers
                 Color = ToSKColor(style.Stroke),
                 //Shader = SKShader.CreateColor(ToSKColor(style.Stroke)),
                 StrokeCap = SKStrokeCap.Butt,
-                PathEffect = null
+                PathEffect = null,
+                Style = SKPaintStyle.Stroke
             };
         }
 
@@ -49,7 +50,8 @@ namespace Draw2D.Renderers
                 SubpixelText = true,
                 Color = ToSKColor(color),
                 //Shader = SKShader.CreateColor(ToSKColor(color)),
-                TextAlign = SKTextAlign.Left
+                TextAlign = SKTextAlign.Left,
+                Style = SKPaintStyle.Fill
             };
         }
 
