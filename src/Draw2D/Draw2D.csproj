@@ -31,8 +31,6 @@
     <!--<DefineConstants>$(DefineConstants);USE_SAVE_STYLES</DefineConstants>-->
     <!--<DefineConstants>$(DefineConstants);USE_LOAD_GROUPS</DefineConstants>-->
     <!--<DefineConstants>$(DefineConstants);USE_SAVE_GROUPS</DefineConstants>-->
-    <!--<DefineConstants>$(DefineConstants);DEBUG_POINTER_EVENTS</DefineConstants>-->
-    <!--<DefineConstants>$(DefineConstants);USE_DRAW_POINTERS</DefineConstants>-->
     <!--<DefineConstants>$(DefineConstants);USE_SVG_POINT</DefineConstants>-->
     <!--<DefineConstants>$(DefineConstants);USE_CLOSE_SHAPE</DefineConstants>-->
     <!--<DefineConstants>$(DefineConstants);DEBUG_DRAW_TEXT</DefineConstants>-->
