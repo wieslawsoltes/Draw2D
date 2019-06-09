@@ -14,6 +14,18 @@ using Draw2D.Input;
 
 namespace Draw2D.ZoomControl
 {
+    internal static class Log
+    {
+        public static void WriteLine(string message)
+        {
+#if DEBUG
+            System.Diagnostics.Debug.WriteLine(message);
+#else
+            System.Console.WriteLine(message);
+#endif
+        }
+    }
+
     public class ZoomControl : Border, IInputService, IZoomService
     {
         private IZoomServiceState _zoomServiceState = null;
