@@ -144,6 +144,50 @@ namespace Draw2D.Presenters
             canvas.Restore();
         }
 
+        private void DrawGrid(SKCanvas canvas, double dx, double dy, double zx, double zy)
+        {
+            float gw = (float)_view.Width;
+            float gh = (float)_view.Height;
+            float cw = 15.0f;
+            float ch = 15.0f;
+
+            canvas.Save();
+            canvas.Translate((float)dx, (float)dy);
+            canvas.Scale((float)zx, (float)zy);
+
+            var hlattice = SKMatrix.MakeScale(cw, ch);
+            SKMatrix.PreConcat(ref hlattice, SKMatrix.MakeRotation((float)(Math.PI * 0.0 / 180.0)));
+
+            var vlattice = SKMatrix.MakeScale(cw, ch);
+            SKMatrix.PreConcat(ref vlattice, SKMatrix.MakeRotation((float)(Math.PI * 90.0 / 180.0)));
+
+            using (var heffect = SKPathEffect.Create2DLine((float)(1.0 / zx), hlattice))
+            using (var veffect = SKPathEffect.Create2DLine((float)(1.0 / zx), vlattice))
+            using (var hpaint = new SKPaint())
+            using (var vpaint = new SKPaint())
+            {
+                hpaint.IsAntialias = false;
+                hpaint.Color = SKColors.LightGray;
+                hpaint.PathEffect = heffect;
+                canvas.DrawRect(SKRect.Create(0.0f, ch, gw, gh - ch), hpaint);
+                vpaint.IsAntialias = false;
+                vpaint.Color = SKColors.LightGray;
+                vpaint.PathEffect = veffect;
+                canvas.DrawRect(SKRect.Create(cw, 0.0f, gw - cw, gh), vpaint);
+            }
+
+            using (SKPaint strokePaint = new SKPaint())
+            {
+                strokePaint.IsAntialias = false;
+                strokePaint.StrokeWidth = (float)(1.0 / zx);
+                strokePaint.Color = SKColors.Red;
+                strokePaint.Style = SKPaintStyle.Stroke;
+                canvas.DrawRect(SKRect.Create(0.0f, 0.0f, gw, gh), strokePaint);
+            }
+
+            canvas.Restore();
+        }
+
         public void Draw(object context, double width, double height, double dx, double dy, double zx, double zy)
         {
             bool isStyleLibraryDirty = _context.StyleLibrary.IsStyleLibraryDirty();
