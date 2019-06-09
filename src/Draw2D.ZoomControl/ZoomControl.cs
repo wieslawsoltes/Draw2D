@@ -27,13 +27,13 @@ namespace Draw2D.ZoomControl
 
     public class ZoomControl : Border, IInputService, IZoomService
     {
-        private IZoomServiceState _zoomServiceState = null;
-        private IInputTarget _inputTarget = null;
-        private IDrawTarget _drawTarget = null;
-        private Dictionary<IPointer, (IPointer Pointer, Point Point, InputModifiers InputModifiers)> _pointers = new Dictionary<IPointer, (IPointer, Point, InputModifiers)>();
-        private bool _isCaptured = false;
-        private InputModifiers _capturedInputModifiers = InputModifiers.None;
-        private IPointer _capturedPointer = null;
+        private IZoomServiceState _zoomServiceState;
+        private IInputTarget _inputTarget;
+        private IDrawTarget _drawTarget;
+        private Dictionary<IPointer, (IPointer Pointer, Point Point, InputModifiers InputModifiers)> _pointers;
+        private bool _isCaptured;
+        private InputModifiers _capturedInputModifiers;
+        private IPointer _capturedPointer;
 
         public static readonly DirectProperty<ZoomControl, IZoomServiceState> ZoomServiceStateProperty =
            AvaloniaProperty.RegisterDirect<ZoomControl, IZoomServiceState>(nameof(ZoomServiceState), o => o.ZoomServiceState, (o, v) => o.ZoomServiceState = v);
@@ -76,6 +76,14 @@ namespace Draw2D.ZoomControl
 
         public ZoomControl()
         {
+            _zoomServiceState = null;
+            _inputTarget = null;
+            _drawTarget = null;
+            _pointers = new Dictionary<IPointer, (IPointer, Point, InputModifiers)>();
+            _isCaptured = false;
+            _capturedInputModifiers = InputModifiers.None;
+            _capturedPointer = null;
+
             PointerWheelChanged += (sender, e) => HandlePointerWheelChanged(e);
             PointerPressed += (sender, e) => HandlePointerPressed(e);
             PointerReleased += (sender, e) => HandlePointerReleased(e);
