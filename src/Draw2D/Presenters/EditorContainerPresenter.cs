@@ -10,9 +10,9 @@ using Draw2D.ViewModels.Style;
 using Draw2D.ViewModels.Tools;
 using SkiaSharp;
 
-namespace Draw2D.Editor.Views
+namespace Draw2D.Presenters
 {
-    public class EditorSkiaView : IDrawContainerView
+    public class EditorContainerPresenter : IContainerPresenter
     {
         private readonly IToolContext _context;
         private readonly IContainerView _view;
@@ -26,7 +26,7 @@ namespace Draw2D.Editor.Views
         private SKPicture _picturePoints = null;
         private bool _enablePictureCache = true;
 
-        public EditorSkiaView(IToolContext context, IContainerView view)
+        public EditorContainerPresenter(IToolContext context, IContainerView view)
         {
             _context = context;
             _view = view;

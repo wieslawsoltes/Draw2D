@@ -104,8 +104,8 @@ namespace Draw2D.Editor
             {
                 foreach (var containerView in _containerViews)
                 {
-                    containerView.DrawContainerView?.Dispose();
-                    containerView.DrawContainerView = null;
+                    containerView.ContainerPresenter?.Dispose();
+                    containerView.ContainerPresenter = null;
                     containerView.SelectionState = null;
                     containerView.WorkingContainer = null;
                 }

@@ -897,7 +897,7 @@ namespace Draw2D.Editor
                     InitFitMode = FitMode.Center,
                     AutoFitMode = FitMode.None
                 },
-                DrawContainerView = null,
+                ContainerPresenter = null,
                 InputService = null,
                 ZoomService = null
             };
