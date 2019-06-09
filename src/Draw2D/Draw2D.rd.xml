@@ -5,6 +5,7 @@
 
         <Assembly Name="Draw2D" Dynamic="Required All" />
         <Assembly Name="Draw2D.Input" Dynamic="Required All" />
+        <Assembly Name="Draw2D.ZoomControl" Dynamic="Required All" />
 
         <!-- Newtonsoft.Json" -->
 
