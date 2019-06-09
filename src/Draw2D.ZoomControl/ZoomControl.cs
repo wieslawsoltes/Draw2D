@@ -16,14 +16,13 @@ namespace Draw2D.ZoomControl
 {
     internal static class Log
     {
-        public static void WriteLine(string message)
-        {
 #if DEBUG
-            System.Diagnostics.Debug.WriteLine(message);
+        public static void WriteLine(string message)
+            => System.Diagnostics.Debug.WriteLine(message);
 #else
-            System.Console.WriteLine(message);
+        public static void WriteLine(string message)
+            => System.Console.WriteLine(message);
 #endif
-        }
     }
 
     public class ZoomControl : Border, IInputService, IZoomService
