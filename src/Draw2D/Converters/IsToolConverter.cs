@@ -13,10 +13,7 @@ namespace Draw2D.Converters
         {
             if (value is ITool tool && parameter is string name)
             {
-                if (tool.Title == name)
-                {
-                    return true;
-                }
+                return tool.Title == name;
             }
             return false;
         }
