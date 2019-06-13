@@ -30,7 +30,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Avalonia" Version="0.8.1-cibuild0002889-beta" />
+    <PackageReference Include="Avalonia" Version="0.8.1-cibuild0002893-beta" />
   </ItemGroup>
 
   <ItemGroup Condition="$(TargetFramework.StartsWith('net4'))">
