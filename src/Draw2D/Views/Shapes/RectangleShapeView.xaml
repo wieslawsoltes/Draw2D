@@ -14,10 +14,12 @@
     </UserControl.Resources>
     <TabControl Classes="default" TabStripPlacement="Top">
         <TabItem Classes="default" Header="Rectangle">
-            <Grid RowDefinitions="Auto" ColumnDefinitions="Auto,*">
-                <TextBlock Classes="default" Grid.Column="0" Grid.Row="0" Text="Text"/>
-                <TextBox Classes="default" Grid.Column="1" Grid.Row="0" Text="{Binding Text.Value}"/>
-            </Grid>
+            <ScrollViewer>
+                <Grid RowDefinitions="Auto" ColumnDefinitions="Auto,*">
+                    <TextBlock Classes="default" Grid.Column="0" Grid.Row="0" Text="Text"/>
+                    <TextBox Classes="default" Grid.Column="1" Grid.Row="0" Text="{Binding Text.Value}"/>
+                </Grid>
+            </ScrollViewer>
         </TabItem>
         <TabItem Classes="default" Header="TopLeft">
             <ContentControl Content="{Binding TopLeft}"/>
@@ -42,18 +44,20 @@
             </TabControl>
         </TabItem>
         <TabItem Classes="default" Header="Style">
-            <Grid RowDefinitions="Auto,*" ColumnDefinitions="Auto,*">
-                <TextBlock Classes="default" Grid.Column="0" Grid.Row="0" Text="StyleId"/>
-                <TextBox Classes="default" Grid.Column="1" Grid.Row="0" Text="{Binding StyleId}"/>
-                <ContentControl Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="1">
-                    <ContentControl.Content>
-                        <MultiBinding Mode="OneWay" Converter="{StaticResource StyleIdToStyleConverter}">
-                            <Binding Path="StyleId" Mode="OneWay"/>
-                            <Binding Path="$parent[Window].DataContext.StyleLibrary" Mode="OneWay"/>
-                        </MultiBinding>
-                    </ContentControl.Content>
-                </ContentControl>
-            </Grid>
+            <ScrollViewer>
+                <Grid RowDefinitions="Auto,*" ColumnDefinitions="Auto,*">
+                    <TextBlock Classes="default" Grid.Column="0" Grid.Row="0" Text="StyleId"/>
+                    <TextBox Classes="default" Grid.Column="1" Grid.Row="0" Text="{Binding StyleId}"/>
+                    <ContentControl Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="1">
+                        <ContentControl.Content>
+                            <MultiBinding Mode="OneWay" Converter="{StaticResource StyleIdToStyleConverter}">
+                                <Binding Path="StyleId" Mode="OneWay"/>
+                                <Binding Path="$parent[Window].DataContext.StyleLibrary" Mode="OneWay"/>
+                            </MultiBinding>
+                        </ContentControl.Content>
+                    </ContentControl>
+                </Grid>
+            </ScrollViewer>
         </TabItem>
         <TabItem Classes="default" Header="Decorator">
             <ContentControl Content="{Binding Decorator}"/>
@@ -62,18 +66,20 @@
             <ContentControl Content="{Binding Bounds}"/>
         </TabItem>
         <TabItem Classes="default" Header="Object">
-            <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="Auto,*">
-                <TextBlock Classes="default" Grid.Column="0" Grid.Row="0" Text="Id"/>
-                <TextBox Classes="default" Grid.Column="1" Grid.Row="0" Text="{Binding Id}"/>
-                <TextBlock Classes="default" Grid.Column="0" Grid.Row="1" Text="Name"/>
-                <TextBox Classes="default" Grid.Column="1" Grid.Row="1" Text="{Binding Name}"/>
-                <TextBlock Classes="default" Grid.Column="0" Grid.Row="2" Text="IsDirty"/>
-                <CheckBox Classes="default" Grid.Column="1" Grid.Row="2" IsEnabled="False" IsChecked="{Binding IsDirty, Mode=OneWay}"/>
-                <Button Classes="default" Content="MarkAsDirty=True" Command="{Binding MarkAsDirty}" CommandParameter="True" Grid.Column="1" Grid.Row="3"/>
-                <Button Classes="default" Content="MarkAsDirty=False" Command="{Binding MarkAsDirty}" CommandParameter="False" Grid.Column="1" Grid.Row="4"/>
-                <Button Classes="default" Content="Invalidate" Command="{Binding Invalidate}" Grid.Column="1" Grid.Row="5"/>
-                <Button Classes="default" Content="SetUniqueId" Command="{Binding SetUniqueId}" Grid.Column="1" Grid.Row="6"/>
-            </Grid>
+            <ScrollViewer>
+                <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="Auto,*">
+                    <TextBlock Classes="default" Grid.Column="0" Grid.Row="0" Text="Id"/>
+                    <TextBox Classes="default" Grid.Column="1" Grid.Row="0" Text="{Binding Id}"/>
+                    <TextBlock Classes="default" Grid.Column="0" Grid.Row="1" Text="Name"/>
+                    <TextBox Classes="default" Grid.Column="1" Grid.Row="1" Text="{Binding Name}"/>
+                    <TextBlock Classes="default" Grid.Column="0" Grid.Row="2" Text="IsDirty"/>
+                    <CheckBox Classes="default" Grid.Column="1" Grid.Row="2" IsEnabled="False" IsChecked="{Binding IsDirty, Mode=OneWay}"/>
+                    <Button Classes="default" Content="MarkAsDirty=True" Command="{Binding MarkAsDirty}" CommandParameter="True" Grid.Column="1" Grid.Row="3"/>
+                    <Button Classes="default" Content="MarkAsDirty=False" Command="{Binding MarkAsDirty}" CommandParameter="False" Grid.Column="1" Grid.Row="4"/>
+                    <Button Classes="default" Content="Invalidate" Command="{Binding Invalidate}" Grid.Column="1" Grid.Row="5"/>
+                    <Button Classes="default" Content="SetUniqueId" Command="{Binding SetUniqueId}" Grid.Column="1" Grid.Row="6"/>
+                </Grid>
+            </ScrollViewer>
         </TabItem>
         <TabItem Classes="default" Header="Owner">
             <ContentControl Content="{Binding Owner}"/>

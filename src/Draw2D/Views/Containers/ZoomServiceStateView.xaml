@@ -10,40 +10,44 @@
              d:DesignWidth="400" d:DesignHeight="300">
     <TabControl Classes="default" TabStripPlacement="Top">
         <TabItem Classes="default" Header="Settings">
-            <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="Auto,*">
-                <TextBlock Classes="default" Grid.Column="0" Grid.Row="0" Text="ZoomSpeed"/>
-                <TextBox Classes="default" Grid.Column="1" Grid.Row="0" Text="{Binding ZoomSpeed}"/>
-                <TextBlock Classes="default" Grid.Column="0" Grid.Row="1" Text="ZoomX"/>
-                <TextBox Classes="default" Grid.Column="1" Grid.Row="1" Text="{Binding ZoomX}"/>
-                <TextBlock Classes="default" Grid.Column="0" Grid.Row="2" Text="ZoomY"/>
-                <TextBox Classes="default" Grid.Column="1" Grid.Row="2" Text="{Binding ZoomY}"/>
-                <TextBlock Classes="default" Grid.Column="0" Grid.Row="3" Text="OffsetX"/>
-                <TextBox Classes="default" Grid.Column="1" Grid.Row="3" Text="{Binding OffsetX}"/>
-                <TextBlock Classes="default" Grid.Column="0" Grid.Row="4" Text="OffsetY"/>
-                <TextBox Classes="default" Grid.Column="1" Grid.Row="4" Text="{Binding OffsetY}"/>
-                <TextBlock Classes="default" Grid.Column="0" Grid.Row="5" Text="IsPanning"/>
-                <CheckBox Classes="default" Grid.Column="1" Grid.Row="5" IsEnabled="False" IsChecked="{Binding IsPanning, Mode=OneWay}"/>
-                <TextBlock Classes="default" Grid.Column="0" Grid.Row="6" Text="IsZooming"/>
-                <CheckBox Classes="default" Grid.Column="1" Grid.Row="6" IsEnabled="False" IsChecked="{Binding IsZooming, Mode=OneWay}"/>
-                <TextBlock Classes="default" Grid.Column="0" Grid.Row="7" Text="InitFitMode"/>
-                <TextBox Classes="default" Grid.Column="1" Grid.Row="7" Text="{Binding InitFitMode}"/>
-                <TextBlock Classes="default" Grid.Column="0" Grid.Row="8" Text="AutoFitMode"/>
-                <TextBox Classes="default" Grid.Column="1" Grid.Row="8" Text="{Binding AutoFitMode}"/>
-            </Grid>
+            <ScrollViewer>
+                <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="Auto,*">
+                    <TextBlock Classes="default" Grid.Column="0" Grid.Row="0" Text="ZoomSpeed"/>
+                    <TextBox Classes="default" Grid.Column="1" Grid.Row="0" Text="{Binding ZoomSpeed}"/>
+                    <TextBlock Classes="default" Grid.Column="0" Grid.Row="1" Text="ZoomX"/>
+                    <TextBox Classes="default" Grid.Column="1" Grid.Row="1" Text="{Binding ZoomX}"/>
+                    <TextBlock Classes="default" Grid.Column="0" Grid.Row="2" Text="ZoomY"/>
+                    <TextBox Classes="default" Grid.Column="1" Grid.Row="2" Text="{Binding ZoomY}"/>
+                    <TextBlock Classes="default" Grid.Column="0" Grid.Row="3" Text="OffsetX"/>
+                    <TextBox Classes="default" Grid.Column="1" Grid.Row="3" Text="{Binding OffsetX}"/>
+                    <TextBlock Classes="default" Grid.Column="0" Grid.Row="4" Text="OffsetY"/>
+                    <TextBox Classes="default" Grid.Column="1" Grid.Row="4" Text="{Binding OffsetY}"/>
+                    <TextBlock Classes="default" Grid.Column="0" Grid.Row="5" Text="IsPanning"/>
+                    <CheckBox Classes="default" Grid.Column="1" Grid.Row="5" IsEnabled="False" IsChecked="{Binding IsPanning, Mode=OneWay}"/>
+                    <TextBlock Classes="default" Grid.Column="0" Grid.Row="6" Text="IsZooming"/>
+                    <CheckBox Classes="default" Grid.Column="1" Grid.Row="6" IsEnabled="False" IsChecked="{Binding IsZooming, Mode=OneWay}"/>
+                    <TextBlock Classes="default" Grid.Column="0" Grid.Row="7" Text="InitFitMode"/>
+                    <TextBox Classes="default" Grid.Column="1" Grid.Row="7" Text="{Binding InitFitMode}"/>
+                    <TextBlock Classes="default" Grid.Column="0" Grid.Row="8" Text="AutoFitMode"/>
+                    <TextBox Classes="default" Grid.Column="1" Grid.Row="8" Text="{Binding AutoFitMode}"/>
+                </Grid>
+            </ScrollViewer>
         </TabItem>
         <TabItem Classes="default" Header="Object">
-            <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="Auto,*">
-                <TextBlock Classes="default" Grid.Column="0" Grid.Row="0" Text="Id"/>
-                <TextBox Classes="default" Grid.Column="1" Grid.Row="0" Text="{Binding Id}"/>
-                <TextBlock Classes="default" Grid.Column="0" Grid.Row="1" Text="Name"/>
-                <TextBox Classes="default" Grid.Column="1" Grid.Row="1" Text="{Binding Name}"/>
-                <TextBlock Classes="default" Grid.Column="0" Grid.Row="2" Text="IsDirty"/>
-                <CheckBox Classes="default" Grid.Column="1" Grid.Row="2" IsEnabled="False" IsChecked="{Binding IsDirty, Mode=OneWay}"/>
-                <Button Classes="default" Content="MarkAsDirty=True" Command="{Binding MarkAsDirty}" CommandParameter="True" Grid.Column="1" Grid.Row="3"/>
-                <Button Classes="default" Content="MarkAsDirty=False" Command="{Binding MarkAsDirty}" CommandParameter="False" Grid.Column="1" Grid.Row="4"/>
-                <Button Classes="default" Content="Invalidate" Command="{Binding Invalidate}" Grid.Column="1" Grid.Row="5"/>
-                <Button Classes="default" Content="SetUniqueId" Command="{Binding SetUniqueId}" Grid.Column="1" Grid.Row="6"/>
-            </Grid>
+            <ScrollViewer>
+                <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="Auto,*">
+                    <TextBlock Classes="default" Grid.Column="0" Grid.Row="0" Text="Id"/>
+                    <TextBox Classes="default" Grid.Column="1" Grid.Row="0" Text="{Binding Id}"/>
+                    <TextBlock Classes="default" Grid.Column="0" Grid.Row="1" Text="Name"/>
+                    <TextBox Classes="default" Grid.Column="1" Grid.Row="1" Text="{Binding Name}"/>
+                    <TextBlock Classes="default" Grid.Column="0" Grid.Row="2" Text="IsDirty"/>
+                    <CheckBox Classes="default" Grid.Column="1" Grid.Row="2" IsEnabled="False" IsChecked="{Binding IsDirty, Mode=OneWay}"/>
+                    <Button Classes="default" Content="MarkAsDirty=True" Command="{Binding MarkAsDirty}" CommandParameter="True" Grid.Column="1" Grid.Row="3"/>
+                    <Button Classes="default" Content="MarkAsDirty=False" Command="{Binding MarkAsDirty}" CommandParameter="False" Grid.Column="1" Grid.Row="4"/>
+                    <Button Classes="default" Content="Invalidate" Command="{Binding Invalidate}" Grid.Column="1" Grid.Row="5"/>
+                    <Button Classes="default" Content="SetUniqueId" Command="{Binding SetUniqueId}" Grid.Column="1" Grid.Row="6"/>
+                </Grid>
+            </ScrollViewer>
         </TabItem>
         <TabItem Classes="default" Header="Owner">
             <ContentControl Content="{Binding Owner}"/>
