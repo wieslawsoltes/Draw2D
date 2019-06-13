@@ -98,7 +98,7 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(CoreRT)' != 'True'">
-    <PublishTrimmed>False</PublishTrimmed>
+    <PublishTrimmed>True</PublishTrimmed>
     <PublishSingleFile>False</PublishSingleFile>
     <PublishReadyToRun>True</PublishReadyToRun>
   </PropertyGroup>
