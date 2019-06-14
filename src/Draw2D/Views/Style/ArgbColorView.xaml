@@ -10,34 +10,38 @@
              d:DesignWidth="400" d:DesignHeight="300">
     <TabControl Classes="default" TabStripPlacement="Top">
         <TabItem Classes="default" Header="Color">
-            <Grid RowDefinitions="Auto,Auto,Auto,Auto" ColumnDefinitions="Auto,*,50">
-                <TextBlock Classes="default" Grid.Column="0" Grid.Row="0" Text="A"/>
-                <Slider Classes="default" Grid.Column="1" Grid.Row="0" Value="{Binding A, Mode=TwoWay}" Minimum="0" Maximum="255"/>
-                <TextBox Classes="default" Grid.Column="2" Grid.Row="0" Text="{Binding A, Mode=TwoWay}"/>
-                <TextBlock Classes="default" Grid.Column="0" Grid.Row="1" Text="R"/>
-                <Slider Classes="default" Grid.Column="1" Grid.Row="1" Value="{Binding R, Mode=TwoWay}" Minimum="0" Maximum="255"/>
-                <TextBox Classes="default" Grid.Column="2" Grid.Row="1" Text="{Binding R, Mode=TwoWay}"/>
-                <TextBlock Classes="default" Grid.Column="0" Grid.Row="2" Text="G"/>
-                <Slider Classes="default" Grid.Column="1" Grid.Row="2" Value="{Binding G, Mode=TwoWay}" Minimum="0" Maximum="255"/>
-                <TextBox Classes="default" Grid.Column="2" Grid.Row="2" Text="{Binding G, Mode=TwoWay}"/>
-                <TextBlock Classes="default" Grid.Column="0" Grid.Row="3" Text="B"/>
-                <Slider Classes="default" Grid.Column="1" Grid.Row="3" Value="{Binding B, Mode=TwoWay}" Minimum="0" Maximum="255"/>
-                <TextBox Classes="default" Grid.Column="2" Grid.Row="3" Text="{Binding B, Mode=TwoWay}"/>
-            </Grid>
+            <ScrollViewer>
+                <Grid RowDefinitions="Auto,Auto,Auto,Auto" ColumnDefinitions="Auto,*,50">
+                    <TextBlock Classes="default" Grid.Column="0" Grid.Row="0" Text="A"/>
+                    <Slider Classes="default" Grid.Column="1" Grid.Row="0" Value="{Binding A, Mode=TwoWay}" Minimum="0" Maximum="255"/>
+                    <TextBox Classes="default" Grid.Column="2" Grid.Row="0" Text="{Binding A, Mode=TwoWay}"/>
+                    <TextBlock Classes="default" Grid.Column="0" Grid.Row="1" Text="R"/>
+                    <Slider Classes="default" Grid.Column="1" Grid.Row="1" Value="{Binding R, Mode=TwoWay}" Minimum="0" Maximum="255"/>
+                    <TextBox Classes="default" Grid.Column="2" Grid.Row="1" Text="{Binding R, Mode=TwoWay}"/>
+                    <TextBlock Classes="default" Grid.Column="0" Grid.Row="2" Text="G"/>
+                    <Slider Classes="default" Grid.Column="1" Grid.Row="2" Value="{Binding G, Mode=TwoWay}" Minimum="0" Maximum="255"/>
+                    <TextBox Classes="default" Grid.Column="2" Grid.Row="2" Text="{Binding G, Mode=TwoWay}"/>
+                    <TextBlock Classes="default" Grid.Column="0" Grid.Row="3" Text="B"/>
+                    <Slider Classes="default" Grid.Column="1" Grid.Row="3" Value="{Binding B, Mode=TwoWay}" Minimum="0" Maximum="255"/>
+                    <TextBox Classes="default" Grid.Column="2" Grid.Row="3" Text="{Binding B, Mode=TwoWay}"/>
+                </Grid>
+            </ScrollViewer>
         </TabItem>
         <TabItem Classes="default" Header="Object">
-            <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="Auto,*">
-                <TextBlock Classes="default" Grid.Column="0" Grid.Row="0" Text="Id"/>
-                <TextBox Classes="default" Grid.Column="1" Grid.Row="0" Text="{Binding Id}"/>
-                <TextBlock Classes="default" Grid.Column="0" Grid.Row="1" Text="Name"/>
-                <TextBox Classes="default" Grid.Column="1" Grid.Row="1" Text="{Binding Name}"/>
-                <TextBlock Classes="default" Grid.Column="0" Grid.Row="2" Text="IsDirty"/>
-                <CheckBox Classes="default" Grid.Column="1" Grid.Row="2" IsEnabled="False" IsChecked="{Binding IsDirty, Mode=OneWay}"/>
-                <Button Classes="default" Content="MarkAsDirty=True" Command="{Binding MarkAsDirty}" CommandParameter="True" Grid.Column="1" Grid.Row="3"/>
-                <Button Classes="default" Content="MarkAsDirty=False" Command="{Binding MarkAsDirty}" CommandParameter="False" Grid.Column="1" Grid.Row="4"/>
-                <Button Classes="default" Content="Invalidate" Command="{Binding Invalidate}" Grid.Column="1" Grid.Row="5"/>
-                <Button Classes="default" Content="SetUniqueId" Command="{Binding SetUniqueId}" Grid.Column="1" Grid.Row="6"/>
-            </Grid>
+            <ScrollViewer>
+                <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="Auto,*">
+                    <TextBlock Classes="default" Grid.Column="0" Grid.Row="0" Text="Id"/>
+                    <TextBox Classes="default" Grid.Column="1" Grid.Row="0" Text="{Binding Id}"/>
+                    <TextBlock Classes="default" Grid.Column="0" Grid.Row="1" Text="Name"/>
+                    <TextBox Classes="default" Grid.Column="1" Grid.Row="1" Text="{Binding Name}"/>
+                    <TextBlock Classes="default" Grid.Column="0" Grid.Row="2" Text="IsDirty"/>
+                    <CheckBox Classes="default" Grid.Column="1" Grid.Row="2" IsEnabled="False" IsChecked="{Binding IsDirty, Mode=OneWay}"/>
+                    <Button Classes="default" Content="MarkAsDirty=True" Command="{Binding MarkAsDirty}" CommandParameter="True" Grid.Column="1" Grid.Row="3"/>
+                    <Button Classes="default" Content="MarkAsDirty=False" Command="{Binding MarkAsDirty}" CommandParameter="False" Grid.Column="1" Grid.Row="4"/>
+                    <Button Classes="default" Content="Invalidate" Command="{Binding Invalidate}" Grid.Column="1" Grid.Row="5"/>
+                    <Button Classes="default" Content="SetUniqueId" Command="{Binding SetUniqueId}" Grid.Column="1" Grid.Row="6"/>
+                </Grid>
+            </ScrollViewer>
         </TabItem>
         <TabItem Classes="default" Header="Owner">
             <ContentControl Content="{Binding Owner}"/>

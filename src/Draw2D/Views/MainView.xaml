@@ -28,21 +28,25 @@
     <Grid RowDefinitions="Auto,5,*,5" ColumnDefinitions="340,Auto,*">
         <Menu Background="Transparent" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3">
             <MenuItem Header="_File">
-                <MenuItem Header="_New View" Command="{Binding NewContainerView}" CommandParameter="View"/>
+                <MenuItem Header="_New" Command="{Binding NewContainerView}" CommandParameter="View"/>
                 <Separator/>
-                <MenuItem Header="_Close View" Command="{Binding CloseContainerView}" CommandParameter="{Binding ContainerView, FallbackValue={x:Null}}"/>
+                <MenuItem Header="_Close" Command="{Binding CloseContainerView}" CommandParameter="{Binding ContainerView, FallbackValue={x:Null}}"/>
                 <Separator/>
-                <MenuItem Header="_Open View..." Command="{Binding OpenContainerView}"/>
+                <MenuItem Header="_Open..." Command="{Binding OpenContainerView}"/>
                 <Separator/>
-                <MenuItem Header="Save View _As..." Command="{Binding SaveContainerViewAs}"/>
+                <MenuItem Header="Save _As..." Command="{Binding SaveContainerViewAs}"/>
                 <Separator/>
-                <MenuItem Header="Open Styles..." Command="{Binding OpenStyleLibrary}"/>
+                <MenuItem Header="S_tyles">
+                    <MenuItem Header="_Open..." Command="{Binding OpenStyleLibrary}"/>
+                    <Separator/>
+                    <MenuItem Header="Save _As..." Command="{Binding SaveStyleLibraryAs}"/>
+                </MenuItem>
                 <Separator/>
-                <MenuItem Header="Save Styles..." Command="{Binding SaveStyleLibraryAs}"/>
-                <Separator/>
-                <MenuItem Header="Open Groups..." Command="{Binding OpenGroupLibrary}"/>
-                <Separator/>
-                <MenuItem Header="Save Groups..." Command="{Binding SaveGroupLibraryAs}"/>
+                <MenuItem Header="_Groups">
+                    <MenuItem Header="Open..." Command="{Binding OpenGroupLibrary}"/>
+                    <Separator/>
+                    <MenuItem Header="Save _As..." Command="{Binding SaveGroupLibraryAs}"/>
+                </MenuItem>
                 <Separator/>
                 <MenuItem Header="_Import..." Command="{Binding ImportFile}"/>
                 <Separator/>
@@ -207,10 +211,12 @@
                     </TabControl>
                 </TabItem>
                 <TabItem Classes="default" Header="Settings">
-                    <Grid RowDefinitions="Auto" ColumnDefinitions="Auto,*">
-                        <TextBlock Classes="default" Grid.Column="0" Grid.Row="0" Text="EditMode"/>
-                        <TextBox Classes="default" Grid.Column="1" Grid.Row="0" Text="{Binding EditMode}"/>
-                    </Grid>
+                    <ScrollViewer>
+                        <Grid RowDefinitions="Auto" ColumnDefinitions="Auto,*">
+                            <TextBlock Classes="default" Grid.Column="0" Grid.Row="0" Text="EditMode"/>
+                            <TextBox Classes="default" Grid.Column="1" Grid.Row="0" Text="{Binding EditMode}"/>
+                        </Grid>
+                    </ScrollViewer>
                 </TabItem>
                 <TabItem Classes="default" Header="Files">
                     <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,*,Auto,Auto" ColumnDefinitions="50*,50*">
