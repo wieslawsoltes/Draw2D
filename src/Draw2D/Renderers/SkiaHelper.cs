@@ -251,6 +251,14 @@ namespace Draw2D.Renderers
             return geometry;
         }
 
+        public static SKPath ToGeometry(TextShape text, double dx, double dy)
+        {
+            var rect = SkiaHelper.ToRect(text.TopLeft, text.BottomRight, dx, dy);
+            var geometry = new SKPath();
+            geometry.AddRect(rect, SKPathDirection.Clockwise);
+            return geometry;
+        }
+
         public static SKPath ToGeometry(Text text, IPointShape topLeft, IPointShape bottomRight, TextStyle style, double dx, double dy)
         {
             using (var typeface = SkiaHelper.ToSKTypeface(style.FontFamily))
@@ -259,15 +267,63 @@ namespace Draw2D.Renderers
                 paint.Typeface = typeface;
                 paint.TextEncoding = SKTextEncoding.Utf16;
                 paint.TextSize = (float)style.FontSize;
-                var outlineGeometry = paint.GetTextPath(text.Value, 0.0f, 0.0f);
+
+                switch (style.HAlign)
+                {
+                    default:
+                    case HAlign.Left:
+                        paint.TextAlign = SKTextAlign.Left;
+                        break;
+                    case HAlign.Center:
+                        paint.TextAlign = SKTextAlign.Center;
+                        break;
+                    case HAlign.Right:
+                        paint.TextAlign = SKTextAlign.Right;
+                        break;
+                }
+
+                var metrics = paint.FontMetrics;
+                var mAscent = metrics.Ascent;
+                var mDescent = metrics.Descent;
+                var rect = ToRect(topLeft, bottomRight, dx, dy);
+                float x = rect.Left;
+                float y = rect.Top;
+                float width = rect.Width;
+                float height = rect.Height;
+
+                switch (style.VAlign)
+                {
+                    default:
+                    case VAlign.Top:
+                        y -= mAscent;
+                        break;
+                    case VAlign.Center:
+                        y += (height / 2.0f) - (mAscent / 2.0f) - mDescent / 2.0f;
+                        break;
+                    case VAlign.Bottom:
+                        y += height - mDescent;
+                        break;
+                }
+
+                switch (style.HAlign)
+                {
+                    default:
+                    case HAlign.Left:
+                        // x = x;
+                        break;
+                    case HAlign.Center:
+                        x += width / 2.0f;
+                        break;
+                    case HAlign.Right:
+                        x += width;
+                        break;
+                }
+
+                var outlineGeometry = paint.GetTextPath(text.Value, x, y);
                 var fillGeometry = paint.GetFillPath(outlineGeometry);
+
                 return fillGeometry;
             }
-        }
-
-        public static SKPath ToGeometry(TextShape text, TextStyle style, double dx, double dy)
-        {
-            return ToGeometry(text.Text, text.TopLeft, text.BottomRight, style, dx, dy);
         }
 
         public static SKPath ToGeometry(string svgPathData)

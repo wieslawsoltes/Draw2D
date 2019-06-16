@@ -600,7 +600,7 @@ namespace Draw2D.Editor
                         var style = GetShapeStyle(text.StyleId);
                         if (style != null)
                         {
-                            sb.AppendLine(SkiaHelper.ToGeometry(text, style.TextStyle, 0.0, 0.0).ToSvgPathData());
+                            sb.AppendLine(SkiaHelper.ToGeometry(text.Text, text.TopLeft, text.BottomRight, style.TextStyle, 0.0, 0.0).ToSvgPathData());
                         }
                     }
                     break;
