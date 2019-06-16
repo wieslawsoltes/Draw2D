@@ -355,17 +355,17 @@ namespace Draw2D.Editor
             }
             var picture = recorder.EndRecording();
             var dimensions = new SKSizeI((int)containerView.Width, (int)containerView.Height);
-			using (var image = SKImage.FromPicture(picture, dimensions))
-			{
-				var data = image.EncodedData;
-				if (data != null)
-				{
+            using (var image = SKImage.FromPicture(picture, dimensions))
+            {
+                var data = image.EncodedData;
+                if (data != null)
+                {
                     using (var stream = File.OpenWrite(path))
                     {
                         data.SaveTo(stream);
                     }
-				}
-			}
+                }
+            }
             picture.Dispose();
         }
 
@@ -382,13 +382,13 @@ namespace Draw2D.Editor
                 using (var image = SKImage.FromBitmap(bitmap))
                 using (var data = image.Encode(format, quality))
                 {
-    				if (data != null)
-    				{
+                    if (data != null)
+                    {
                         using (var stream = File.OpenWrite(path))
                         {
                             data.SaveTo(stream);
                         }
-    				}
+                    }
                 }
             }
         }
