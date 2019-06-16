@@ -14,11 +14,5 @@
         mc:Ignorable="d"
         d:DataContext="{x:Static app:App.ToolContext}"
         d:DesignWidth="1320" d:DesignHeight="690">
-    <!--<local:MainView/>-->
-    <Grid RowDefinitions="Auto,5,*,5" ColumnDefinitions="340,Auto,*">
-        <Rectangle Fill="Red" Height="24" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3"/>
-        <Rectangle Fill="Blue" Grid.Row="2" Grid.Column="0"/>
-        <GridSplitter Grid.Row="2" Grid.Column="1"/>
-        <Rectangle Fill="Green" Grid.Row="2" Grid.Column="2"/>
-    </Grid>
+    <local:MainView/>
 </Window>
