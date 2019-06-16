@@ -716,8 +716,11 @@ namespace Draw2D.Editor
                     if (!path.IsEmpty)
                     {
                         var pathShape = SkiaHelper.FromGeometry(path, StyleLibrary.CurrentStyle, PointTemplate);
-                        ContainerView.CurrentContainer.Shapes.Add(pathShape);
-                        ContainerView.CurrentContainer.MarkAsDirty(true);
+                        ContainerView?.CurrentContainer?.Shapes.Add(pathShape);
+                        ContainerView?.CurrentContainer?.MarkAsDirty(true);
+                        ContainerView?.SelectionState?.Dehover();
+                        ContainerView?.SelectionState?.Clear();
+                        pathShape.Select(ContainerView.SelectionState);
                         ContainerView?.InputService?.Redraw?.Invoke();
                     }
                     path.Dispose();
