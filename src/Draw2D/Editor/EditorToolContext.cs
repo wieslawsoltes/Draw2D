@@ -674,8 +674,6 @@ namespace Draw2D.Editor
         {
             if (ContainerView.SelectionState?.Shapes != null)
             {
-                SKPath next = null;
-                SKPath result = null;
                 SKPath path = null;
 
                 var selected = new List<IBaseShape>(ContainerView.SelectionState?.Shapes);
@@ -697,12 +695,12 @@ namespace Draw2D.Editor
                         }
                         else
                         {
-                            next = ToGeometry(selected[i]);
+                            var next = ToGeometry(selected[i]);
                             if (next != null)
                             {
                                 if (!next.IsEmpty)
                                 {
-                                    result = path.Op(next, op);
+                                    var result = path.Op(next, op);
                                     if (result != null)
                                     {
                                         if (!result.IsEmpty)
