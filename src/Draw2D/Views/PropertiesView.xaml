@@ -9,7 +9,8 @@
              xmlns:app="clr-namespace:Draw2D"
              Focusable="True"
              mc:Ignorable="d"
-             d:DataContext="{x:Static app:App.ToolContext}">
+             d:DataContext="{x:Static app:App.ToolContext}"
+             d:DesignWidth="340" d:DesignHeight="720">
     <Grid RowDefinitions="55*,Auto,45*">
         <TabControl Classes="default" Grid.Row="0" TabStripPlacement="Top">
             <TabItem Classes="default" Header="Tools">
