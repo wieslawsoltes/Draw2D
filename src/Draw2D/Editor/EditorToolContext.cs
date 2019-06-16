@@ -504,6 +504,19 @@ namespace Draw2D.Editor
             }
         }
 
+        private void InsertAndSelectShape(IBaseShape shape)
+        {
+            ContainerView?.CurrentContainer?.Shapes.Add(shape);
+            ContainerView?.CurrentContainer?.MarkAsDirty(true);
+
+            ContainerView?.SelectionState?.Dehover();
+            ContainerView?.SelectionState?.Clear();
+
+            shape.Select(ContainerView.SelectionState);
+
+            ContainerView?.InputService?.Redraw?.Invoke();
+        }
+
         public void FromSvgPathData(TextBox textBox)
         {
             var svgPathData = textBox.Text;
@@ -511,9 +524,10 @@ namespace Draw2D.Editor
             {
                 var path = SkiaHelper.ToGeometry(svgPathData);
                 var pathShape = SkiaHelper.FromGeometry(path, StyleLibrary.CurrentStyle, PointTemplate);
-                ContainerView.CurrentContainer.Shapes.Add(pathShape);
-                ContainerView.CurrentContainer.MarkAsDirty(true);
-                ContainerView?.InputService?.Redraw?.Invoke();
+                if (pathShape != null)
+                {
+                    InsertAndSelectShape(pathShape);
+                }
             }
         }
 
@@ -716,12 +730,10 @@ namespace Draw2D.Editor
                     if (!path.IsEmpty)
                     {
                         var pathShape = SkiaHelper.FromGeometry(path, StyleLibrary.CurrentStyle, PointTemplate);
-                        ContainerView?.CurrentContainer?.Shapes.Add(pathShape);
-                        ContainerView?.CurrentContainer?.MarkAsDirty(true);
-                        ContainerView?.SelectionState?.Dehover();
-                        ContainerView?.SelectionState?.Clear();
-                        pathShape.Select(ContainerView.SelectionState);
-                        ContainerView?.InputService?.Redraw?.Invoke();
+                        if (pathShape != null)
+                        {
+                            InsertAndSelectShape(pathShape);
+                        }
                     }
                     path.Dispose();
                 }
