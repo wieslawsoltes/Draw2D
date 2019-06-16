@@ -479,7 +479,7 @@ namespace Draw2D.Editor
         {
             var dlg = new SaveFileDialog();
             dlg.Filters.Add(new FileDialogFilter() { Name = "Pdf Files", Extensions = { "pdf" } });
-            dlg.Filters.Add(new FileDialogFilter() { Name = "Pdf Files", Extensions = { "xps" } });
+            dlg.Filters.Add(new FileDialogFilter() { Name = "Xps Files", Extensions = { "xps" } });
             dlg.Filters.Add(new FileDialogFilter() { Name = "Svg Files", Extensions = { "svg" } });
             dlg.Filters.Add(new FileDialogFilter() { Name = "Skp Files", Extensions = { "skp" } });
             dlg.Filters.Add(new FileDialogFilter() { Name = "Bmp Files", Extensions = { "bmp" } });
