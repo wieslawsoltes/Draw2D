@@ -8,6 +8,7 @@
              xmlns:local="clr-namespace:Draw2D.Views"
              xmlns:app="clr-namespace:Draw2D"
              UseLayoutRounding="True" RenderOptions.BitmapInterpolationMode="HighQuality"
+             Focusable="True"
              mc:Ignorable="d"
              d:DataContext="{x:Static app:App.ToolContext}"
              d:DesignWidth="1320" d:DesignHeight="690">
