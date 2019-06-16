@@ -15,13 +15,6 @@
     <UserControl.Resources>
         <converters:IsToolConverter x:Key="IsToolConverter"/>
     </UserControl.Resources>
-    <UserControl.KeyBindings>
-        <KeyBinding Command="{Binding NewContainerView}" CommandParameter="View" Gesture="Ctrl+N"/>
-        <KeyBinding Command="{Binding OpenContainerView}" Gesture="Ctrl+O"/>
-        <KeyBinding Command="{Binding SaveContainerViewAs}" Gesture="Ctrl+S"/>
-        <KeyBinding Command="{Binding ExportFile}" Gesture="Ctrl+E"/>
-        <KeyBinding Command="{Binding Exit}" Gesture="Alt+F4"/>
-    </UserControl.KeyBindings>
     <Menu Background="Transparent">
         <MenuItem Header="_File">
             <MenuItem Header="_New" Command="{Binding NewContainerView}" CommandParameter="View"/>
