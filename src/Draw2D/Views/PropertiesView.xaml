@@ -1,0 +1,109 @@
+﻿<!-- Copyright (c) Wiesław Šoltés. All rights reserved. -->
+<!-- Licensed under the MIT license. See LICENSE file in the project root for full license information. -->
+<UserControl x:Class="Draw2D.Views.PropertiesView"
+             xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:Draw2D.Views"
+             xmlns:app="clr-namespace:Draw2D"
+             Focusable="True"
+             mc:Ignorable="d"
+             d:DataContext="{x:Static app:App.ToolContext}">
+    <Grid RowDefinitions="55*,Auto,45*">
+        <TabControl Classes="default" Grid.Row="0" TabStripPlacement="Top">
+            <TabItem Classes="default" Header="Tools">
+                <TabControl Classes="default" TabStripPlacement="Top">
+                    <TabItem Classes="default" Header="Current">
+                        <ContentControl Content="{Binding CurrentTool}"/>
+                    </TabItem>
+                    <TabItem Classes="default" Header="Tools">
+                        <ListBox Classes="default" Items="{Binding Tools}" SelectedItem="{Binding CurrentTool}">
+                            <ListBox.DataTemplates>
+                                <DataTemplate>
+                                    <TextBlock Classes="default" Text="{Binding Title}"/>
+                                </DataTemplate>
+                            </ListBox.DataTemplates>
+                        </ListBox>
+                    </TabItem>
+                </TabControl>
+            </TabItem>
+            <TabItem Classes="default" Header="Settings">
+                <ScrollViewer>
+                    <Grid RowDefinitions="Auto" ColumnDefinitions="Auto,*">
+                        <TextBlock Classes="default" Grid.Column="0" Grid.Row="0" Text="EditMode"/>
+                        <TextBox Classes="default" Grid.Column="1" Grid.Row="0" Text="{Binding EditMode}"/>
+                    </Grid>
+                </ScrollViewer>
+            </TabItem>
+            <TabItem Classes="default" Header="Files">
+                <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,*,Auto,Auto" ColumnDefinitions="50*,50*">
+                    <TextBlock Classes="default" Text="Path:" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"/>
+                    <TextBox x:Name="path" Classes="default" Text="{Binding #files.SelectedItem, Mode=OneWay, FallbackValue=View.json}" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"/>
+                    <Button Classes="default" Content="Save View" Command="{Binding SaveView}" CommandParameter="{Binding #path.Text}" Grid.Row="2" Grid.Column="0"/>
+                    <Button Classes="default" Content="Open View" Command="{Binding OpenView}" CommandParameter="{Binding #path.Text}" Grid.Row="2" Grid.Column="1"/>
+                    <Button Classes="default" Content="Save Styles" Command="{Binding SaveStyles}" CommandParameter="{Binding #path.Text}" Grid.Row="3" Grid.Column="0"/>
+                    <Button Classes="default" Content="Open Styles" Command="{Binding OpenStyles}" CommandParameter="{Binding #path.Text}" Grid.Row="3" Grid.Column="1"/>
+                    <Button Classes="default" Content="Save Groups" Command="{Binding SaveGroups}" CommandParameter="{Binding #path.Text}" Grid.Row="4" Grid.Column="0"/>
+                    <Button Classes="default" Content="Open Groups" Command="{Binding OpenGroups}" CommandParameter="{Binding #path.Text}" Grid.Row="4" Grid.Column="1"/>
+                    <ListBox x:Name="files" Classes="default" Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" Items="{Binding Files}">
+                        <ListBox.DataTemplates>
+                            <DataTemplate>
+                                <TextBlock Classes="default" Text="{Binding}"/>
+                            </DataTemplate>
+                        </ListBox.DataTemplates>
+                    </ListBox>
+                    <Button Classes="default" Content="Clear Files" Command="{Binding ClearFiles}" Grid.Row="6" Grid.Column="0"/>
+                    <Button Classes="default" Content="Add Files" Command="{Binding AddFiles}" CommandParameter="{Binding CurrentDirectory}" Grid.Row="6" Grid.Column="1"/>
+                    <TextBox Classes="default" Text="{Binding CurrentDirectory}" Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="2"/>
+                </Grid>
+            </TabItem>
+            <TabItem Classes="default" Header="Point">
+                <ContentControl Content="{Binding PointTemplate}"/>
+            </TabItem>
+            <TabItem Classes="default" Header="Svg">
+                <Grid RowDefinitions="Auto,Auto,*,Auto">
+                    <TextBlock Classes="default" Text="Svg Path:" Grid.Row="0"/>
+                    <Button Classes="default" Content="To Svg" Command="{Binding ToSvgPathData}" CommandParameter="{Binding #svgPathData}" Grid.Row="1"/>
+                    <TextBox x:Name="svgPathData" Classes="default" AcceptsReturn="True" AcceptsTab="True" Text="" Grid.Row="2"/>
+                    <Button Classes="default" Content="From Svg" Command="{Binding FromSvgPathData}" CommandParameter="{Binding #svgPathData}" Grid.Row="3"/>
+                </Grid>
+            </TabItem>
+        </TabControl>
+        <GridSplitter Grid.Row="1"/>
+        <TabControl Classes="default" Grid.Row="2" TabStripPlacement="Top">
+            <TabItem Classes="default" Header="Views">
+                <TabControl Classes="default" TabStripPlacement="Top">
+                    <TabItem Classes="default" Header="Current">
+                        <ContentControl Content="{Binding ContainerView}"/>
+                    </TabItem>
+                    <TabItem Classes="default" Header="Views">
+                        <ListBox Classes="default" Items="{Binding ContainerViews}" SelectedItem="{Binding ContainerView}">
+                            <ListBox.DataTemplates>
+                                <DataTemplate>
+                                    <TextBlock Classes="default" Text="{Binding Title}"/>
+                                </DataTemplate>
+                            </ListBox.DataTemplates>
+                        </ListBox>
+                    </TabItem>
+                </TabControl>
+            </TabItem>
+            <TabItem Classes="default" Header="Styles">
+                <Grid RowDefinitions="Auto,*" ColumnDefinitions="3*,3*,3*">
+                    <Button Classes="default" Content="Remove" Command="{Binding StyleLibrary.Remove}" CommandParameter="{Binding StyleLibrary.CurrentStyle}" Grid.Row="0" Grid.Column="0"/>
+                    <Button Classes="default" Content="Add" Command="{Binding StyleLibrary.Add}" CommandParameter="{x:Null}" Grid.Row="0" Grid.Column="1"/>
+                    <Button Classes="default" Content="Set" Command="{Binding ContainerView.Style}" CommandParameter="{Binding StyleLibrary.CurrentStyle.Title}" Grid.Row="0" Grid.Column="2"/>
+                    <ContentControl Content="{Binding StyleLibrary}" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3"/>
+                </Grid>
+            </TabItem>
+            <TabItem Classes="default" Header="Groups">
+                <Grid RowDefinitions="Auto,*" ColumnDefinitions="3*,3*,3*">
+                    <Button Classes="default" Content="Remove" Command="{Binding GroupLibrary.Remove}" CommandParameter="{Binding GroupLibrary.CurrentGroup}" Grid.Row="0" Grid.Column="0"/>
+                    <Button Classes="default" Content="Add" Command="{Binding GroupLibrary.Add}" CommandParameter="{Binding ContainerView.SelectionState.Selected}" Grid.Row="0" Grid.Column="1"/>
+                    <Button Classes="default" Content="Insert" Command="{Binding ContainerView.Reference}" CommandParameter="{Binding GroupLibrary.CurrentGroup}" Grid.Row="0" Grid.Column="2"/>
+                    <ContentControl Content="{Binding GroupLibrary}" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3"/>
+                </Grid>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</UserControl>

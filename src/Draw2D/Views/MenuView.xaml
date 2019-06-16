@@ -1,0 +1,190 @@
+﻿<!-- Copyright (c) Wiesław Šoltés. All rights reserved. -->
+<!-- Licensed under the MIT license. See LICENSE file in the project root for full license information. -->
+<UserControl x:Class="Draw2D.Views.MenuView"
+             xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:Draw2D.Views"
+             xmlns:app="clr-namespace:Draw2D"
+             xmlns:converters="clr-namespace:Draw2D.Converters"
+             mc:Ignorable="d"
+             d:DataContext="{x:Static app:App.ToolContext}"
+             d:DesignWidth="1320" d:DesignHeight="690">
+    <UserControl.Resources>
+        <converters:IsToolConverter x:Key="IsToolConverter"/>
+    </UserControl.Resources>
+    <UserControl.KeyBindings>
+        <KeyBinding Command="{Binding NewContainerView}" CommandParameter="View" Gesture="Ctrl+N"/>
+        <KeyBinding Command="{Binding OpenContainerView}" Gesture="Ctrl+O"/>
+        <KeyBinding Command="{Binding SaveContainerViewAs}" Gesture="Ctrl+S"/>
+        <KeyBinding Command="{Binding ExportFile}" Gesture="Ctrl+E"/>
+        <KeyBinding Command="{Binding Exit}" Gesture="Alt+F4"/>
+    </UserControl.KeyBindings>
+    <Menu Background="Transparent">
+        <MenuItem Header="_File">
+            <MenuItem Header="_New" Command="{Binding NewContainerView}" CommandParameter="View"/>
+            <Separator/>
+            <MenuItem Header="_Close" Command="{Binding CloseContainerView}" CommandParameter="{Binding ContainerView, FallbackValue={x:Null}}"/>
+            <Separator/>
+            <MenuItem Header="_Open..." Command="{Binding OpenContainerView}"/>
+            <Separator/>
+            <MenuItem Header="Save _As..." Command="{Binding SaveContainerViewAs}"/>
+            <Separator/>
+            <MenuItem Header="S_tyles">
+                <MenuItem Header="_Open..." Command="{Binding OpenStyleLibrary}"/>
+                <Separator/>
+                <MenuItem Header="Save _As..." Command="{Binding SaveStyleLibraryAs}"/>
+            </MenuItem>
+            <Separator/>
+            <MenuItem Header="_Groups">
+                <MenuItem Header="Open..." Command="{Binding OpenGroupLibrary}"/>
+                <Separator/>
+                <MenuItem Header="Save _As..." Command="{Binding SaveGroupLibraryAs}"/>
+            </MenuItem>
+            <Separator/>
+            <MenuItem Header="_Import..." Command="{Binding ImportFile}"/>
+            <Separator/>
+            <MenuItem Header="_Export..." Command="{Binding ExportFile}"/>
+            <Separator/>
+            <MenuItem Header="E_xit" Command="{Binding Exit}"/>
+        </MenuItem>
+        <MenuItem Header="_Edit">
+            <MenuItem Header="Cu_t" Command="{Binding Selection.Cut}" CommandParameter="{Binding}"/>
+            <MenuItem Header="_Copy" Command="{Binding Selection.Copy}" CommandParameter="{Binding}"/>
+            <MenuItem Header="_Paste" Command="{Binding Selection.Paste}" CommandParameter="{Binding}"/>
+            <MenuItem Header="_Delete" Command="{Binding Selection.Delete}" CommandParameter="{Binding}"/>
+            <Separator/>
+            <MenuItem Header="Create _Group" Command="{Binding Selection.Group}" CommandParameter="{Binding}"/>
+            <Separator/>
+            <MenuItem Header="Create _Reference" Command="{Binding Selection.Reference}" CommandParameter="{Binding}"/>
+            <Separator/>
+            <MenuItem Header="Select _All" Command="{Binding Selection.SelectAll}" CommandParameter="{Binding}"/>
+        </MenuItem>
+        <MenuItem Header="_View">
+            <MenuItem Header="_Reset Zoom" Command="{Binding ContainerView.ZoomService.ResetZoom}" CommandParameter="True"/>
+            <Separator/>
+            <MenuItem Header="_Center Zoom" Command="{Binding ContainerView.ZoomService.CenterZoom}" CommandParameter="True"/>
+            <Separator/>
+            <MenuItem Header="_Fill Zoom" Command="{Binding ContainerView.ZoomService.FillZoom}" CommandParameter="True"/>
+            <Separator/>
+            <MenuItem Header="_Uniform Zoom" Command="{Binding ContainerView.ZoomService.UniformZoom}" CommandParameter="True"/>
+            <Separator/>
+            <MenuItem Header="Uniform_ToFill Zoom" Command="{Binding ContainerView.ZoomService.UniformToFillZoom}" CommandParameter="True"/>
+        </MenuItem>
+        <MenuItem Header="_Tool">
+            <MenuItem Header="_None" Command="{Binding SetTool}" CommandParameter="None">
+                <MenuItem.Icon>
+                    <CheckBox BorderThickness="0" IsHitTestVisible="False" IsChecked="{Binding CurrentTool, Converter={StaticResource IsToolConverter}, ConverterParameter=None, Mode=OneWay}"/>
+                </MenuItem.Icon>
+            </MenuItem>
+            <Separator/>
+            <MenuItem Header="_Selection" Command="{Binding SetTool}" CommandParameter="Selection">
+                <MenuItem.Icon>
+                    <CheckBox BorderThickness="0" IsHitTestVisible="False" IsChecked="{Binding CurrentTool, Converter={StaticResource IsToolConverter}, ConverterParameter=Selection, Mode=OneWay}"/>
+                </MenuItem.Icon>
+            </MenuItem>
+            <Separator/>
+            <MenuItem Header="_Point" Command="{Binding SetTool}" CommandParameter="Point">
+                <MenuItem.Icon>
+                    <CheckBox BorderThickness="0" IsHitTestVisible="False" IsChecked="{Binding CurrentTool, Converter={StaticResource IsToolConverter}, ConverterParameter=Point, Mode=OneWay}"/>
+                </MenuItem.Icon>
+            </MenuItem>
+            <Separator/>
+            <MenuItem Header="_Line" Command="{Binding SetTool}" CommandParameter="Line">
+                <MenuItem.Icon>
+                    <CheckBox BorderThickness="0" IsHitTestVisible="False" IsChecked="{Binding CurrentTool, Converter={StaticResource IsToolConverter}, ConverterParameter=Line, Mode=OneWay}"/>
+                </MenuItem.Icon>
+            </MenuItem>
+            <MenuItem Header="Pol_y Line" Command="{Binding SetTool}" CommandParameter="PolyLine">
+                <MenuItem.Icon>
+                    <CheckBox BorderThickness="0" IsHitTestVisible="False" IsChecked="{Binding CurrentTool, Converter={StaticResource IsToolConverter}, ConverterParameter=PolyLine, Mode=OneWay}"/>
+                </MenuItem.Icon>
+            </MenuItem>
+            <MenuItem Header="_Cubic Bezier" Command="{Binding SetTool}" CommandParameter="CubicBezier">
+                <MenuItem.Icon>
+                    <CheckBox BorderThickness="0" IsHitTestVisible="False" IsChecked="{Binding CurrentTool, Converter={StaticResource IsToolConverter}, ConverterParameter=CubicBezier, Mode=OneWay}"/>
+                </MenuItem.Icon>
+            </MenuItem>
+            <MenuItem Header="_Quadratic Bezier" Command="{Binding SetTool}" CommandParameter="QuadraticBezier">
+                <MenuItem.Icon>
+                    <CheckBox BorderThickness="0" IsHitTestVisible="False" IsChecked="{Binding CurrentTool, Converter={StaticResource IsToolConverter}, ConverterParameter=QuadraticBezier, Mode=OneWay}"/>
+                </MenuItem.Icon>
+            </MenuItem>
+            <MenuItem Header="Con_ic" Command="{Binding SetTool}" CommandParameter="Conic">
+                <MenuItem.Icon>
+                    <CheckBox BorderThickness="0" IsHitTestVisible="False" IsChecked="{Binding CurrentTool, Converter={StaticResource IsToolConverter}, ConverterParameter=Conic, Mode=OneWay}"/>
+                </MenuItem.Icon>
+            </MenuItem>
+            <Separator/>
+            <MenuItem Header="Pat_h" Command="{Binding SetTool}" CommandParameter="Path">
+                <MenuItem.Icon>
+                    <CheckBox BorderThickness="0" IsHitTestVisible="False" IsChecked="{Binding CurrentTool, Converter={StaticResource IsToolConverter}, ConverterParameter=Path, Mode=OneWay}"/>
+                </MenuItem.Icon>
+            </MenuItem>
+            <MenuItem Header="Path T_ools" IsEnabled="{Binding CurrentTool, Converter={StaticResource IsToolConverter}, ConverterParameter=Path, Mode=OneWay}">
+                <MenuItem Header="_Line" Command="{Binding SetTool}" CommandParameter="Line">
+                    <MenuItem.Icon>
+                        <CheckBox BorderThickness="0" IsHitTestVisible="False" IsChecked="{Binding CurrentTool.Settings.CurrentTool, FallbackValue={x:Null}, Converter={StaticResource IsToolConverter}, ConverterParameter=Line, Mode=OneWay}"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="_Cubic Bezier" Command="{Binding SetTool}" CommandParameter="CubicBezier">
+                    <MenuItem.Icon>
+                        <CheckBox BorderThickness="0" IsHitTestVisible="False" IsChecked="{Binding CurrentTool.Settings.CurrentTool, FallbackValue={x:Null}, Converter={StaticResource IsToolConverter}, ConverterParameter=CubicBezier, Mode=OneWay}"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="_Quadratic Bezier" Command="{Binding SetTool}" CommandParameter="QuadraticBezier">
+                    <MenuItem.Icon>
+                        <CheckBox BorderThickness="0" IsHitTestVisible="False" IsChecked="{Binding CurrentTool.Settings.CurrentTool, FallbackValue={x:Null}, Converter={StaticResource IsToolConverter}, ConverterParameter=QuadraticBezier, Mode=OneWay}"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="Con_ic" Command="{Binding SetTool}" CommandParameter="Conic">
+                    <MenuItem.Icon>
+                        <CheckBox BorderThickness="0" IsHitTestVisible="False" IsChecked="{Binding CurrentTool.Settings.CurrentTool, FallbackValue={x:Null}, Converter={StaticResource IsToolConverter}, ConverterParameter=Conic, Mode=OneWay}"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="_Move" Command="{Binding SetTool}" CommandParameter="Move">
+                    <MenuItem.Icon>
+                        <CheckBox BorderThickness="0" IsHitTestVisible="False" IsChecked="{Binding CurrentTool.Settings.CurrentTool, FallbackValue={x:Null}, Converter={StaticResource IsToolConverter}, ConverterParameter=Move, Mode=OneWay}"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+            </MenuItem>
+            <Separator/>
+            <MenuItem Header="Scr_ibble" Command="{Binding SetTool}" CommandParameter="Scribble">
+                <MenuItem.Icon>
+                    <CheckBox BorderThickness="0" IsHitTestVisible="False" IsChecked="{Binding CurrentTool, Converter={StaticResource IsToolConverter}, ConverterParameter=Scribble, Mode=OneWay}"/>
+                </MenuItem.Icon>
+            </MenuItem>
+            <Separator/>
+            <MenuItem Header="_Rectangle" Command="{Binding SetTool}" CommandParameter="Rectangle">
+                <MenuItem.Icon>
+                    <CheckBox BorderThickness="0" IsHitTestVisible="False" IsChecked="{Binding CurrentTool, Converter={StaticResource IsToolConverter}, ConverterParameter=Rectangle, Mode=OneWay}"/>
+                </MenuItem.Icon>
+            </MenuItem>
+            <MenuItem Header="_Ellipse" Command="{Binding SetTool}" CommandParameter="Ellipse">
+                <MenuItem.Icon>
+                    <CheckBox BorderThickness="0" IsHitTestVisible="False" IsChecked="{Binding CurrentTool, Converter={StaticResource IsToolConverter}, ConverterParameter=Ellipse, Mode=OneWay}"/>
+                </MenuItem.Icon>
+            </MenuItem>
+            <Separator/>
+            <MenuItem Header="_Text" Command="{Binding SetTool}" CommandParameter="Text">
+                <MenuItem.Icon>
+                    <CheckBox BorderThickness="0" IsHitTestVisible="False" IsChecked="{Binding CurrentTool, Converter={StaticResource IsToolConverter}, ConverterParameter=Text, Mode=OneWay}"/>
+                </MenuItem.Icon>
+            </MenuItem>
+        </MenuItem>
+        <MenuItem Header="_Debug">
+            <MenuItem Header="DrawDirtyRects" Click="DebugDrawDirtyRects_Click">
+                <MenuItem.Icon>
+                    <CheckBox BorderThickness="0" IsHitTestVisible="False" IsChecked="{Binding $parent[local:MainView].DrawDirtyRects}"/>
+                </MenuItem.Icon>
+            </MenuItem>
+            <Separator/>
+            <MenuItem Header="DrawFps" Click="DebugDrawFps_Click">
+                <MenuItem.Icon>
+                    <CheckBox BorderThickness="0" IsHitTestVisible="False" IsChecked="{Binding $parent[local:MainView].DrawFps}"/>
+                </MenuItem.Icon>
+            </MenuItem>
+        </MenuItem>
+    </Menu>
+</UserControl>
