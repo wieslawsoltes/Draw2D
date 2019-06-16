@@ -55,6 +55,17 @@
             <Separator/>
             <MenuItem Header="Select _All" Command="{Binding Selection.SelectAll}" CommandParameter="{Binding}"/>
         </MenuItem>
+        <MenuItem Header="_Path">
+            <MenuItem Header="Difference" ToolTip.Tip="Subtract the op path from the current path." Command="{Binding PathOpDifference}"/>
+            <Separator/>
+            <MenuItem Header="Intersect" ToolTip.Tip="Intersect the two paths." Command="{Binding PathOpIntersect}"/>
+            <Separator/>
+            <MenuItem Header="Union" ToolTip.Tip="Union (inclusive-or) the two paths." Command="{Binding PathOpUnion}"/>
+            <Separator/>
+            <MenuItem Header="Xor" ToolTip.Tip="Exclusive-or the two paths." Command="{Binding PathOpXor}"/>
+            <Separator/>
+            <MenuItem Header="Reverse Difference" ToolTip.Tip="Subtract the current path from the op path." Command="{Binding PathOpReverseDifference}"/>
+        </MenuItem>
         <MenuItem Header="_View">
             <MenuItem Header="_Zoom">
                 <MenuItem Header="_Reset" Command="{Binding ContainerView.ZoomService.ResetZoom}" CommandParameter="True"/>

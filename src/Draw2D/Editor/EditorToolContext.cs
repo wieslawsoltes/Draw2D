@@ -625,6 +625,131 @@ namespace Draw2D.Editor
             }
         }
 
+        private SKPath ToGeometry(IBaseShape shape)
+        {
+            switch (shape)
+            {
+                case LineShape line:
+                    return SkiaHelper.ToGeometry(line, 0.0, 0.0);
+                case CubicBezierShape cubicBezier:
+                    return SkiaHelper.ToGeometry(cubicBezier, 0.0, 0.0);
+                case QuadraticBezierShape quadraticBezier:
+                    return SkiaHelper.ToGeometry(quadraticBezier, 0.0, 0.0);
+                case ConicShape conic:
+                    return SkiaHelper.ToGeometry(conic, 0.0, 0.0);
+                case PathShape pathShape:
+                    return SkiaHelper.ToGeometry(pathShape, 0.0, 0.0);
+                case RectangleShape rectangle:
+                    return SkiaHelper.ToGeometry(rectangle, 0.0, 0.0);
+                case EllipseShape ellipse:
+                    return SkiaHelper.ToGeometry(ellipse, 0.0, 0.0);
+                case TextShape text:
+                    {
+                        var style = GetShapeStyle(text.StyleId);
+                        if (style != null)
+                        {
+                            return SkiaHelper.ToGeometry(text.Text, text.TopLeft, text.BottomRight, style.TextStyle, 0.0, 0.0);
+                        }
+                    }
+                    return null;
+            };
+            return null;
+        }
+
+        private void PathOp(SKPathOp op)
+        {
+            if (ContainerView.SelectionState?.Shapes != null)
+            {
+                SKPath next = null;
+                SKPath result = null;
+                SKPath path = null;
+
+                var selected = new List<IBaseShape>(ContainerView.SelectionState?.Shapes);
+                if (selected.Count >= 2)
+                {
+                    for (int i = 0; i < selected.Count; i++)
+                    {
+                        if (path == null)
+                        {
+                            path = ToGeometry(selected[i]);
+                            if (path != null)
+                            {
+                                if (path.IsEmpty)
+                                {
+                                    path.Dispose();
+                                    path = null;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            next = ToGeometry(selected[i]);
+                            if (next != null)
+                            {
+                                if (!next.IsEmpty)
+                                {
+                                    result = path.Op(next, op);
+                                    if (result != null)
+                                    {
+                                        if (!result.IsEmpty)
+                                        {
+                                            if (path != null)
+                                            {
+                                                path.Dispose();
+                                            }
+                                            path = result;
+                                        }
+                                        else
+                                        {
+                                            result.Dispose();
+                                        }
+                                    }
+                                }
+                                next.Dispose();
+                            }
+                        }
+                    }
+                }
+
+                if (path != null)
+                {
+                    if (!path.IsEmpty)
+                    {
+                        var pathShape = SkiaHelper.FromGeometry(path, StyleLibrary.CurrentStyle, PointTemplate);
+                        ContainerView.CurrentContainer.Shapes.Add(pathShape);
+                        ContainerView.CurrentContainer.MarkAsDirty(true);
+                        ContainerView?.InputService?.Redraw?.Invoke();
+                    }
+                    path.Dispose();
+                }
+            }
+        }
+
+        public void PathOpDifference()
+        {
+            PathOp(SKPathOp.Difference);
+        }
+
+        public void PathOpIntersect()
+        {
+            PathOp(SKPathOp.Intersect);
+        }
+
+        public void PathOpUnion()
+        {
+            PathOp(SKPathOp.Union);
+        }
+
+        public void PathOpXor()
+        {
+            PathOp(SKPathOp.Xor);
+        }
+
+        public void PathOpReverseDifference()
+        {
+            PathOp(SKPathOp.ReverseDifference);
+        }
+
         public void Exit()
         {
             Application.Current.Shutdown();
