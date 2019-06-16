@@ -288,74 +288,6 @@
             </TabControl>
         </Grid>
         <GridSplitter Grid.Row="2" Grid.Column="1"/>
-        <TabControl Classes="default" Grid.Row="2" Grid.Column="2" Items="{Binding ContainerViews}" SelectedItem="{Binding ContainerView, Mode=TwoWay}">
-            <TabControl.ItemTemplate>
-                <DataTemplate>
-                    <StackPanel Orientation="Horizontal" Margin="4,0,4,0" Spacing="2">
-                        <StackPanel Orientation="Horizontal" Margin="2">
-                            <TextBlock Classes="default" Text="{Binding Title}" />
-                        </StackPanel>
-                        <Button Classes="tab" Height="14" Width="14" Command="{Binding $parent[UserControl].DataContext.CloseContainerView}" CommandParameter="{Binding}">
-                            <Path Margin="2" Stretch="Uniform" UseLayoutRounding="False" Data="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z" />
-                        </Button>
-                    </StackPanel>
-                </DataTemplate>
-            </TabControl.ItemTemplate>
-            <TabControl.ContentTemplate>
-                <DataTemplate>
-                    <Border Classes="zoom">
-                        <Border Classes="clip" ClipToBounds="True" Background="Transparent" Focusable="True">
-                            <Border.KeyBindings>
-                                <KeyBinding Command="{Binding $parent[UserControl].DataContext.Selection.Cut}" CommandParameter="{Binding $parent[UserControl].DataContext}" Gesture="Ctrl+X"/>
-                                <KeyBinding Command="{Binding $parent[UserControl].DataContext.Selection.Copy}" CommandParameter="{Binding $parent[UserControl].DataContext}" Gesture="Ctrl+C"/>
-                                <KeyBinding Command="{Binding $parent[UserControl].DataContext.Selection.Paste}" CommandParameter="{Binding $parent[UserControl].DataContext}" Gesture="Ctrl+V"/>
-                                <KeyBinding Command="{Binding $parent[UserControl].DataContext.Selection.Delete}" CommandParameter="{Binding $parent[UserControl].DataContext}" Gesture="Delete"/>
-                                <KeyBinding Command="{Binding $parent[UserControl].DataContext.Selection.Group}" CommandParameter="{Binding $parent[UserControl].DataContext}" Gesture="Ctrl+G"/>
-                                <KeyBinding Command="{Binding $parent[UserControl].DataContext.Selection.Reference}" CommandParameter="{Binding $parent[UserControl].DataContext}" Gesture="Ctrl+R"/>
-                                <KeyBinding Command="{Binding $parent[UserControl].DataContext.Selection.SelectAll}" CommandParameter="{Binding $parent[UserControl].DataContext}" Gesture="Ctrl+A"/>
-                                <KeyBinding Command="{Binding $parent[UserControl].DataContext.SetTool}" CommandParameter="None" Gesture="N"/>
-                                <KeyBinding Command="{Binding $parent[UserControl].DataContext.SetTool}" CommandParameter="Selection" Gesture="S"/>
-                                <KeyBinding Command="{Binding $parent[UserControl].DataContext.SetTool}" CommandParameter="Line" Gesture="L"/>
-                                <KeyBinding Command="{Binding $parent[UserControl].DataContext.SetTool}" CommandParameter="Point" Gesture="P"/>
-                                <KeyBinding Command="{Binding $parent[UserControl].DataContext.SetTool}" CommandParameter="CubicBezier" Gesture="B"/>
-                                <KeyBinding Command="{Binding $parent[UserControl].DataContext.SetTool}" CommandParameter="QuadraticBezier" Gesture="Q"/>
-                                <KeyBinding Command="{Binding $parent[UserControl].DataContext.SetTool}" CommandParameter="Conic" Gesture="A"/>
-                                <KeyBinding Command="{Binding $parent[UserControl].DataContext.SetTool}" CommandParameter="Path" Gesture="H"/>
-                                <KeyBinding Command="{Binding $parent[UserControl].DataContext.SetTool}" CommandParameter="Move" Gesture="M"/>
-                                <KeyBinding Command="{Binding $parent[UserControl].DataContext.SetTool}" CommandParameter="Rectangle" Gesture="R"/>
-                                <KeyBinding Command="{Binding $parent[UserControl].DataContext.SetTool}" CommandParameter="Ellipse" Gesture="E"/>
-                                <KeyBinding Command="{Binding $parent[UserControl].DataContext.SetTool}" CommandParameter="Text" Gesture="T"/>
-                            </Border.KeyBindings>
-                            <zc:ZoomControl InputTarget="{Binding $parent[UserControl].DataContext}" ZoomServiceState="{Binding ZoomServiceState}" DrawTarget="{Binding}" Background="Transparent" ClipToBounds="False"/>
-                        </Border>
-                    </Border>
-                </DataTemplate>
-            </TabControl.ContentTemplate>
-            <TabControl.Styles>
-                <Style Selector="TabItem">
-                    <Setter Property="Padding" Value="4"/>
-                    <Setter Property="Margin" Value="0"/>
-                    <Setter Property="FontSize" Value="{DynamicResource FontSizeNormal}"/>
-                    <Setter Property="FontWeight" Value="Normal"/>
-                </Style>
-                <Style Selector="Button.tab">
-                    <Setter Property="Background" Value="Transparent" />
-                    <Setter Property="BorderThickness" Value="0"/>
-                    <Setter Property="Padding" Value="0"/>
-                    <Setter Property="Margin" Value="0"/>
-                </Style>
-                <Style Selector="Button.tab:pointerover">
-                    <Setter Property="Background" Value="{DynamicResource ThemeAccentBrush3}" />
-                </Style>
-                <Style Selector="TabItem:selected Button.tab Path">
-                    <Setter Property="Fill" Value="{DynamicResource ThemeForegroundLowBrush}" />
-                </Style>
-                <Style Selector="TabItem:pointerover Button.tab Path">
-                    <Setter Property="Fill" Value="{DynamicResource ThemeForegroundLowBrush}" />
-                </Style>
-            </TabControl.Styles>
-        </TabControl>
-        <!--
         <DockPanel Classes="views" Grid.Row="2" Grid.Column="2">
             <TabStrip Items="{Binding ContainerViews}" SelectedItem="{Binding ContainerView, Mode=TwoWay}" Focusable="false" DockPanel.Dock="Top">
                 <TabStrip.Styles>
@@ -451,6 +383,5 @@
                 </Carousel.DataTemplates>
             </Carousel>
         </DockPanel>
-        -->
     </Grid>
 </UserControl>
