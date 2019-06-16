@@ -56,15 +56,17 @@
             <MenuItem Header="Select _All" Command="{Binding Selection.SelectAll}" CommandParameter="{Binding}"/>
         </MenuItem>
         <MenuItem Header="_View">
-            <MenuItem Header="_Reset Zoom" Command="{Binding ContainerView.ZoomService.ResetZoom}" CommandParameter="True"/>
-            <Separator/>
-            <MenuItem Header="_Center Zoom" Command="{Binding ContainerView.ZoomService.CenterZoom}" CommandParameter="True"/>
-            <Separator/>
-            <MenuItem Header="_Fill Zoom" Command="{Binding ContainerView.ZoomService.FillZoom}" CommandParameter="True"/>
-            <Separator/>
-            <MenuItem Header="_Uniform Zoom" Command="{Binding ContainerView.ZoomService.UniformZoom}" CommandParameter="True"/>
-            <Separator/>
-            <MenuItem Header="Uniform_ToFill Zoom" Command="{Binding ContainerView.ZoomService.UniformToFillZoom}" CommandParameter="True"/>
+            <MenuItem Header="_Zoom">
+                <MenuItem Header="_Reset" Command="{Binding ContainerView.ZoomService.ResetZoom}" CommandParameter="True"/>
+                <Separator/>
+                <MenuItem Header="_Center" Command="{Binding ContainerView.ZoomService.CenterZoom}" CommandParameter="True"/>
+                <Separator/>
+                <MenuItem Header="_Fill" Command="{Binding ContainerView.ZoomService.FillZoom}" CommandParameter="True"/>
+                <Separator/>
+                <MenuItem Header="_Uniform" Command="{Binding ContainerView.ZoomService.UniformZoom}" CommandParameter="True"/>
+                <Separator/>
+                <MenuItem Header="Uniform _To Fill" Command="{Binding ContainerView.ZoomService.UniformToFillZoom}" CommandParameter="True"/>
+            </MenuItem>
         </MenuItem>
         <MenuItem Header="_Tool">
             <MenuItem Header="_None" Command="{Binding SetTool}" CommandParameter="None">
@@ -170,13 +172,13 @@
         <MenuItem Header="_Debug">
             <MenuItem Header="DrawDirtyRects" Click="DebugDrawDirtyRects_Click">
                 <MenuItem.Icon>
-                    <CheckBox BorderThickness="0" IsHitTestVisible="False" IsChecked="{Binding $parent[local:MainView].DrawDirtyRects}"/>
+                    <CheckBox BorderThickness="0" IsHitTestVisible="False" IsChecked="{Binding $parent[local:MenuView].DrawDirtyRects}"/>
                 </MenuItem.Icon>
             </MenuItem>
             <Separator/>
             <MenuItem Header="DrawFps" Click="DebugDrawFps_Click">
                 <MenuItem.Icon>
-                    <CheckBox BorderThickness="0" IsHitTestVisible="False" IsChecked="{Binding $parent[local:MainView].DrawFps}"/>
+                    <CheckBox BorderThickness="0" IsHitTestVisible="False" IsChecked="{Binding $parent[local:MenuView].DrawFps}"/>
                 </MenuItem.Icon>
             </MenuItem>
         </MenuItem>
