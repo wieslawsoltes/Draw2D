@@ -285,14 +285,14 @@ namespace Draw2D.Editor
             Files.Clear();
         }
 
-        public void ImportSvg(string path)
+        public static void ImportSvg(IToolContext context, string path)
         {
             var svg = new SkiaSharp.Extended.Svg.SKSvg();
             var picture = svg.Load(path);
-            // TODO: Convert picture to shapes.
+            var image = SKImage.FromPicture(picture, picture.CullRect.Size.ToSizeI());
         }
 
-        public static void ExportSvg(string path, IContainerView containerView, IToolContext context)
+        public static void ExportSvg(IToolContext context, string path, IContainerView containerView)
         {
             using (var stream = new SKFileWStream(path))
             using (var writer = new SKXmlStreamWriter(stream))
@@ -303,7 +303,7 @@ namespace Draw2D.Editor
             }
         }
 
-        public static void ExportPdf(string path, IContainerView containerView, IToolContext context)
+        public static void ExportPdf(IToolContext context, string path, IContainerView containerView)
         {
             using (var stream = new SKFileWStream(path))
             using (var pdf = SKDocument.CreatePdf(stream, SKDocument.DefaultRasterDpi))
@@ -315,7 +315,7 @@ namespace Draw2D.Editor
             }
         }
 
-        public static void ExportXps(string path, IContainerView containerView, IToolContext context)
+        public static void ExportXps(IToolContext context, string path, IContainerView containerView)
         {
             using (var stream = new SKFileWStream(path))
             using (var xps = SKDocument.CreateXps(stream, SKDocument.DefaultRasterDpi))
@@ -327,7 +327,7 @@ namespace Draw2D.Editor
             }
         }
 
-        public static void ExportSkp(string path, IContainerView containerView, IToolContext context)
+        public static void ExportSkp(IToolContext context, string path, IContainerView containerView)
         {
             var recorder = new SKPictureRecorder();
             var rect = new SKRect(0f, 0f, (float)containerView.Width, (float)containerView.Height);
@@ -352,7 +352,7 @@ namespace Draw2D.Editor
             picture.Dispose();
         }
 
-        public static void ExportImage(string path, IContainerView containerView, IToolContext context, SKEncodedImageFormat format, int quality)
+        public static void ExportImage(IToolContext context, string path, IContainerView containerView, SKEncodedImageFormat format, int quality)
         {
             var info = new SKImageInfo((int)containerView.Width, (int)containerView.Height);
             using (var bitmap = new SKBitmap(info))
@@ -376,69 +376,69 @@ namespace Draw2D.Editor
             }
         }
 
-        public static void Export(string path, IContainerView containerView, IToolContext context)
+        public static void Export(IToolContext context, string path, IContainerView containerView)
         {
             var outputExtension = Path.GetExtension(path);
 
             if (string.Compare(outputExtension, ".svg", StringComparison.OrdinalIgnoreCase) == 0)
             {
-                ExportSvg(path, containerView, context);
+                ExportSvg(context, path, containerView);
             }
             else if (string.Compare(outputExtension, ".pdf", StringComparison.OrdinalIgnoreCase) == 0)
             {
-                ExportPdf(path, containerView, context);
+                ExportPdf(context, path, containerView);
             }
             else if (string.Compare(outputExtension, ".xps", StringComparison.OrdinalIgnoreCase) == 0)
             {
-                ExportXps(path, containerView, context);
+                ExportXps(context, path, containerView);
             }
             else if (string.Compare(outputExtension, ".skp", StringComparison.OrdinalIgnoreCase) == 0)
             {
-                ExportSkp(path, containerView, context);
+                ExportSkp(context, path, containerView);
             }
             else if (string.Compare(outputExtension, ".bmp", StringComparison.OrdinalIgnoreCase) == 0)
             {
-                ExportImage(path, containerView, context, SKEncodedImageFormat.Bmp, 100);
+                ExportImage(context, path, containerView, SKEncodedImageFormat.Bmp, 100);
             }
             else if (string.Compare(outputExtension, ".gif", StringComparison.OrdinalIgnoreCase) == 0)
             {
-                ExportImage(path, containerView, context, SKEncodedImageFormat.Gif, 100);
+                ExportImage(context, path, containerView, SKEncodedImageFormat.Gif, 100);
             }
             else if (string.Compare(outputExtension, ".ico", StringComparison.OrdinalIgnoreCase) == 0)
             {
-                ExportImage(path, containerView, context, SKEncodedImageFormat.Ico, 100);
+                ExportImage(context, path, containerView, SKEncodedImageFormat.Ico, 100);
             }
             else if (string.Compare(outputExtension, ".jpeg", StringComparison.OrdinalIgnoreCase) == 0)
             {
-                ExportImage(path, containerView, context, SKEncodedImageFormat.Jpeg, 100);
+                ExportImage(context, path, containerView, SKEncodedImageFormat.Jpeg, 100);
             }
             else if (string.Compare(outputExtension, ".png", StringComparison.OrdinalIgnoreCase) == 0)
             {
-                ExportImage(path, containerView, context, SKEncodedImageFormat.Png, 100);
+                ExportImage(context, path, containerView, SKEncodedImageFormat.Png, 100);
             }
             else if (string.Compare(outputExtension, ".wbmp", StringComparison.OrdinalIgnoreCase) == 0)
             {
-                ExportImage(path, containerView, context, SKEncodedImageFormat.Wbmp, 100);
+                ExportImage(context, path, containerView, SKEncodedImageFormat.Wbmp, 100);
             }
             else if (string.Compare(outputExtension, ".webp", StringComparison.OrdinalIgnoreCase) == 0)
             {
-                ExportImage(path, containerView, context, SKEncodedImageFormat.Webp, 100);
+                ExportImage(context, path, containerView, SKEncodedImageFormat.Webp, 100);
             }
             else if (string.Compare(outputExtension, ".pkm", StringComparison.OrdinalIgnoreCase) == 0)
             {
-                ExportImage(path, containerView, context, SKEncodedImageFormat.Pkm, 100);
+                ExportImage(context, path, containerView, SKEncodedImageFormat.Pkm, 100);
             }
             else if (string.Compare(outputExtension, ".ktx", StringComparison.OrdinalIgnoreCase) == 0)
             {
-                ExportImage(path, containerView, context, SKEncodedImageFormat.Ktx, 100);
+                ExportImage(context, path, containerView, SKEncodedImageFormat.Ktx, 100);
             }
             else if (string.Compare(outputExtension, ".astc", StringComparison.OrdinalIgnoreCase) == 0)
             {
-                ExportImage(path, containerView, context, SKEncodedImageFormat.Astc, 100);
+                ExportImage(context, path, containerView, SKEncodedImageFormat.Astc, 100);
             }
             else if (string.Compare(outputExtension, ".dng", StringComparison.OrdinalIgnoreCase) == 0)
             {
-                ExportImage(path, containerView, context, SKEncodedImageFormat.Dng, 100);
+                ExportImage(context, path, containerView, SKEncodedImageFormat.Dng, 100);
             }
         }
 
@@ -453,7 +453,7 @@ namespace Draw2D.Editor
             {
                 foreach (var path in result)
                 {
-                    ImportSvg(path);
+                    ImportSvg(this, path);
                 }
             }
         }
@@ -483,7 +483,7 @@ namespace Draw2D.Editor
             if (result != null)
             {
                 var path = result;
-                Export(path, ContainerView, this);
+                Export(this, path, ContainerView);
             }
         }
 
