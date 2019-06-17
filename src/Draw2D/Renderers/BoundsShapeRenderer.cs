@@ -9,7 +9,7 @@ namespace Draw2D.Renderers
 {
     public class BoundsShapeRenderer : IShapeRenderer
     {
-        readonly struct Node
+        public readonly struct Node
         {
             public readonly BaseShape shape;
             public readonly string styleId;
@@ -35,59 +35,64 @@ namespace Draw2D.Renderers
                 return geometry.Contains(x, y);
             }
 
+            public bool Intersects(SKPath geometry)
+            {
+                using (var result = this.geometry.Op(geometry, SKPathOp.Intersect))
+                {
+                    return result?.IsEmpty == false;
+                }
+            }
+
             public bool Intersects(ref Node node)
             {
-                if (this.geometry.Op(node.geometry, SKPathOp.Intersect) is SKPath result)
+                using (var result = this.geometry.Op(node.geometry, SKPathOp.Intersect))
                 {
-                    bool intersects = !result.IsEmpty;
-                    result.Dispose();
-                    return intersects;
+                    return result?.IsEmpty == false;
                 }
-                return false;
             }
         }
 
-        private IList<Node> _nodes;
+        public IList<Node> Nodes;
 
         public BoundsShapeRenderer()
         {
-            _nodes = new List<Node>();
+            Nodes = new List<Node>();
         }
 
         public void Dispose()
         {
-            if (_nodes != null)
+            if (Nodes != null)
             {
-                for (int i = 0; i < _nodes.Count; i++)
+                for (int i = 0; i < Nodes.Count; i++)
                 {
-                    _nodes[i].geometry.Dispose();
+                    Nodes[i].geometry.Dispose();
                 }
-                _nodes = null;
+                Nodes = null;
             }
         }
 
         public void DrawLine(object dc, LineShape line, string styleId, double dx, double dy, double scale)
-            => _nodes.Add(new Node(line, styleId, dx, dy, scale, SkiaHelper.ToGeometry(line, dx, dy)));
+            => Nodes.Add(new Node(line, styleId, dx, dy, scale, SkiaHelper.ToGeometry(line, dx, dy)));
 
         public void DrawCubicBezier(object dc, CubicBezierShape cubicBezier, string styleId, double dx, double dy, double scale)
-            => _nodes.Add(new Node(cubicBezier, styleId, dx, dy, scale, SkiaHelper.ToGeometry(cubicBezier, dx, dy)));
+            => Nodes.Add(new Node(cubicBezier, styleId, dx, dy, scale, SkiaHelper.ToGeometry(cubicBezier, dx, dy)));
 
         public void DrawQuadraticBezier(object dc, QuadraticBezierShape quadraticBezier, string styleId, double dx, double dy, double scale)
-            => _nodes.Add(new Node(quadraticBezier, styleId, dx, dy, scale, SkiaHelper.ToGeometry(quadraticBezier, dx, dy)));
+            => Nodes.Add(new Node(quadraticBezier, styleId, dx, dy, scale, SkiaHelper.ToGeometry(quadraticBezier, dx, dy)));
 
         public void DrawConic(object dc, ConicShape conic, string styleId, double dx, double dy, double scale)
-            => _nodes.Add(new Node(conic, styleId, dx, dy, scale, SkiaHelper.ToGeometry(conic, dx, dy)));
+            => Nodes.Add(new Node(conic, styleId, dx, dy, scale, SkiaHelper.ToGeometry(conic, dx, dy)));
 
         public void DrawPath(object dc, PathShape path, string styleId, double dx, double dy, double scale)
-            => _nodes.Add(new Node(path, styleId, dx, dy, scale, SkiaHelper.ToGeometry(path, dx, dy)));
+            => Nodes.Add(new Node(path, styleId, dx, dy, scale, SkiaHelper.ToGeometry(path, dx, dy)));
 
         public void DrawRectangle(object dc, RectangleShape rectangle, string styleId, double dx, double dy, double scale)
-            => _nodes.Add(new Node(rectangle, styleId, dx, dy, scale, SkiaHelper.ToGeometry(rectangle, dx, dy)));
+            => Nodes.Add(new Node(rectangle, styleId, dx, dy, scale, SkiaHelper.ToGeometry(rectangle, dx, dy)));
 
         public void DrawEllipse(object dc, EllipseShape ellipse, string styleId, double dx, double dy, double scale)
-            => _nodes.Add(new Node(ellipse, styleId, dx, dy, scale, SkiaHelper.ToGeometry(ellipse, dx, dy)));
+            => Nodes.Add(new Node(ellipse, styleId, dx, dy, scale, SkiaHelper.ToGeometry(ellipse, dx, dy)));
 
         public void DrawText(object dc, TextShape text, string styleId, double dx, double dy, double scale)
-            => _nodes.Add(new Node(text, styleId, dx, dy, scale, SkiaHelper.ToGeometry(text, dx, dy)));
+            => Nodes.Add(new Node(text, styleId, dx, dy, scale, SkiaHelper.ToGeometry(text, dx, dy)));
     }
 }
