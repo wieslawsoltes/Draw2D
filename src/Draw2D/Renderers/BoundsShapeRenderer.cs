@@ -9,128 +9,157 @@ using SkiaSharp;
 
 namespace Draw2D.Renderers
 {
+    public enum ContainsMode
+    {
+        Geometry,
+        Bounds
+    }
+
+    public readonly struct RootNode : IDisposable
+    {
+        public readonly IBaseShape Shape;
+        public readonly IList<ChildNode> Children;
+
+        public RootNode(IBaseShape shape)
+        {
+            this.Shape = shape;
+            this.Children = new List<ChildNode>();
+        }
+
+        public bool Contains(float x, float y, ContainsMode mode, out IBaseShape rootShape, out IBaseShape childShape)
+        {
+            rootShape = null;
+            childShape = null;
+            for (int i = 0; i < Children.Count; i++)
+            {
+                if (mode == ContainsMode.Geometry)
+                {
+                    if (Children[i].Geometry.Contains(x, y))
+                    {
+                        rootShape = this.Shape;
+                        childShape = Children[i].Shape;
+                        return true;
+                    }
+                }
+                else if (mode == ContainsMode.Bounds)
+                {
+                    if (Children[i].Bounds.Contains(x, y))
+                    {
+                        rootShape = this.Shape;
+                        childShape = Children[i].Shape;
+                        return true;
+                    }
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            return false;
+        }
+
+        public bool Intersects(SKPath geometry, out IBaseShape rootShape, out IBaseShape childShape)
+        {
+            rootShape = null;
+            childShape = null;
+            for (int i = 0; i < Children.Count; i++)
+            {
+                if (Children[i].Intersects(geometry))
+                {
+                    rootShape = this.Shape;
+                    childShape = Children[i].Shape;
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public bool Intersects(ref SKRect rect, out IBaseShape rootShape, out IBaseShape childShape)
+        {
+            rootShape = null;
+            childShape = null;
+            for (int i = 0; i < Children.Count; i++)
+            {
+                if (Children[i].Bounds.IntersectsWith(rect))
+                {
+                    rootShape = this.Shape;
+                    childShape = Children[i].Shape;
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public void Dispose()
+        {
+            for (int i = 0; i < Children?.Count; i++)
+            {
+                Children[i].Dispose();
+            }
+        }
+    }
+
+    public readonly struct ChildNode : IDisposable
+    {
+        public readonly IBaseShape Shape;
+        public readonly string StyleId;
+        public readonly double dX;
+        public readonly double dY;
+        public readonly double Scale;
+        public readonly SKPath Geometry;
+        public readonly SKRect Bounds;
+
+        public ChildNode(IBaseShape shape, string styleId, double dx, double dy, double scale, SKPath geometry)
+        {
+            this.Shape = shape;
+            this.StyleId = styleId;
+            this.dX = dx;
+            this.dY = dy;
+            this.Scale = scale;
+            this.Geometry = geometry;
+            geometry.GetBounds(out this.Bounds);
+        }
+
+        public bool Contains(float x, float y, ContainsMode mode)
+        {
+            if (mode == ContainsMode.Geometry)
+            {
+                return Geometry.Contains(x, y);
+            }
+            else if (mode == ContainsMode.Bounds)
+            {
+                return Bounds.Contains(x, y);
+            }
+            return false;
+        }
+
+        public bool Intersects(SKPath geometry)
+        {
+            using (var result = this.Geometry.Op(geometry, SKPathOp.Intersect))
+            {
+                return result?.IsEmpty == false;
+            }
+        }
+
+        public bool Intersects(ref SKRect rect)
+        {
+            return this.Bounds.IntersectsWith(rect);
+        }
+
+        public void Dispose()
+        {
+            Geometry?.Dispose();
+        }
+    }
+
     public class BoundsShapeRenderer : IShapeRenderer
     {
-        public readonly struct Root : IDisposable
+        private int _currentRootNode = -1;
+        private IList<RootNode> _rootNodes;
+
+        public BoundsShapeRenderer(ICanvasContainer container)
         {
-            public readonly IBaseShape shape;
-            public readonly IList<Node> nodes;
-
-            public Root(IBaseShape shape)
-            {
-                this.shape = shape;
-                this.nodes = new List<Node>();
-            }
-
-            public bool Contains(float x, float y, out IBaseShape shape)
-            {
-                shape = null;
-                for (int i = 0; i < nodes.Count; i++)
-                {
-                    //if (nodes[i].geometry.Contains(x, y))
-                    if (nodes[i].bounds.Contains(x, y))
-                    {
-                        shape = this.shape;
-                        return true;
-                    }
-                }
-                return false;
-            }
-
-            public bool Intersects(SKPath geometry, out IBaseShape shape)
-            {
-                shape = null;
-                for (int i = 0; i < nodes.Count; i++)
-                {
-                    if (nodes[i].Intersects(geometry))
-                    {
-                        shape = this.shape;
-                        return true;
-                    }
-                }
-                return false;
-            }
-
-            public bool Intersects(ref SKRect rect, out IBaseShape shape)
-            {
-                shape = null;
-                for (int i = 0; i < nodes.Count; i++)
-                {
-                    if (nodes[i].bounds.IntersectsWith(rect))
-                    {
-                        shape = this.shape;
-                        return true;
-                    }
-                }
-                return false;
-            }
-
-            public void Dispose()
-            {
-                for (int i = 0; i < nodes?.Count; i++)
-                {
-                    nodes[i].Dispose();
-                }
-            }
-        }
-
-        public readonly struct Node : IDisposable
-        {
-            public readonly IBaseShape shape;
-            public readonly string styleId;
-            public readonly double dx;
-            public readonly double dy;
-            public readonly double scale;
-            public readonly SKPath geometry;
-            public readonly SKRect bounds;
-
-            public Node(IBaseShape shape, string styleId, double dx, double dy, double scale, SKPath geometry)
-            {
-                this.shape = shape;
-                this.styleId = styleId;
-                this.dx = dx;
-                this.dy = dy;
-                this.scale = scale;
-                this.geometry = geometry;
-                geometry.GetBounds(out this.bounds);
-            }
-
-            public bool Contains(float x, float y)
-            {
-                return geometry.Contains(x, y);
-            }
-
-            public bool Intersects(SKPath geometry)
-            {
-                using (var result = this.geometry.Op(geometry, SKPathOp.Intersect))
-                {
-                    return result?.IsEmpty == false;
-                }
-            }
-
-            public bool Intersects(ref SKRect rect)
-            {
-                return this.bounds.IntersectsWith(rect);
-            }
-
-            public void Dispose()
-            {
-                geometry?.Dispose();
-            }
-        }
-
-        private int _current = -1;
-        private IList<Root> _roots;
-
-        private BoundsShapeRenderer()
-        {
-        }
-
-        public static BoundsShapeRenderer Create(ICanvasContainer container)
-        {
-            var renderer = new BoundsShapeRenderer();
-
-            renderer._roots = new List<Root>();
+            _rootNodes = new List<RootNode>();
 
             var points = new List<IPointShape>();
 
@@ -138,27 +167,26 @@ namespace Draw2D.Renderers
 
             foreach (var point in points)
             {
-                renderer._roots.Add(new Root(point));
-                renderer._current++;
-                point.Draw(null, renderer, 0.0, 0.0, 1.0, null, null);
+                _rootNodes.Add(new RootNode(point));
+                _currentRootNode++;
+                point.Draw(null, this, 0.0, 0.0, 1.0, null, null);
             }
 
             foreach (var shape in container.Shapes)
             {
-                renderer._roots.Add(new Root(shape));
-                renderer._current++;
-                shape.Draw(null, renderer, 0.0, 0.0, 1.0, null, null);
+                _rootNodes.Add(new RootNode(shape));
+                _currentRootNode++;
+                shape.Draw(null, this, 0.0, 0.0, 1.0, null, null);
             }
-
-            return renderer;
         }
 
-        public bool Contains(float x, float y, out IBaseShape shape)
+        public bool Contains(float x, float y, ContainsMode mode, out IBaseShape rootShape, out IBaseShape childShape)
         {
-            shape = null;
-            for (int i = 0; i < _roots.Count; i++)
+            rootShape = null;
+            childShape = null;
+            for (int i = 0; i < _rootNodes.Count; i++)
             {
-                if (_roots[i].Contains(x, y, out shape))
+                if (_rootNodes[i].Contains(x, y, mode, out rootShape, out childShape))
                 {
                     return true;
                 }
@@ -166,12 +194,13 @@ namespace Draw2D.Renderers
             return false;
         }
 
-        public bool Intersects(SKPath geometry, out IBaseShape shape)
+        public bool Intersects(SKPath geometry, out IBaseShape rootShape, out IBaseShape childShape)
         {
-            shape = null;
-            for (int i = 0; i < _roots.Count; i++)
+            rootShape = null;
+            childShape = null;
+            for (int i = 0; i < _rootNodes.Count; i++)
             {
-                if (_roots[i].Intersects(geometry, out shape))
+                if (_rootNodes[i].Intersects(geometry, out rootShape, out childShape))
                 {
                     return true;
                 }
@@ -179,12 +208,13 @@ namespace Draw2D.Renderers
             return false;
         }
 
-        public bool Intersects(ref SKRect rect, out IBaseShape shape)
+        public bool Intersects(ref SKRect rect, out IBaseShape rootShape, out IBaseShape childShape)
         {
-            shape = null;
-            for (int i = 0; i < _roots.Count; i++)
+            rootShape = null;
+            childShape = null;
+            for (int i = 0; i < _rootNodes.Count; i++)
             {
-                if (_roots[i].Intersects(ref rect, out shape))
+                if (_rootNodes[i].Intersects(ref rect, out rootShape, out childShape))
                 {
                     return true;
                 }
@@ -194,38 +224,54 @@ namespace Draw2D.Renderers
 
         public void Dispose()
         {
-            if (_roots != null)
+            if (_rootNodes != null)
             {
-                for (int i = 0; i < _roots.Count; i++)
+                for (int i = 0; i < _rootNodes.Count; i++)
                 {
-                    _roots[i].Dispose();
+                    _rootNodes[i].Dispose();
                 }
-                _roots = null;
+                _rootNodes = null;
             }
         }
 
         public void DrawLine(object dc, LineShape line, string styleId, double dx, double dy, double scale)
-            => _roots[_current].nodes.Add(new Node(line, styleId, dx, dy, scale, SkiaHelper.ToGeometry(line, dx, dy)));
+        {
+            _rootNodes[_currentRootNode].Children.Add(new ChildNode(line, styleId, dx, dy, scale, SkiaHelper.ToGeometry(line, dx, dy)));
+        }
 
         public void DrawCubicBezier(object dc, CubicBezierShape cubicBezier, string styleId, double dx, double dy, double scale)
-            => _roots[_current].nodes.Add(new Node(cubicBezier, styleId, dx, dy, scale, SkiaHelper.ToGeometry(cubicBezier, dx, dy)));
+        {
+            _rootNodes[_currentRootNode].Children.Add(new ChildNode(cubicBezier, styleId, dx, dy, scale, SkiaHelper.ToGeometry(cubicBezier, dx, dy)));
+        }
 
         public void DrawQuadraticBezier(object dc, QuadraticBezierShape quadraticBezier, string styleId, double dx, double dy, double scale)
-            => _roots[_current].nodes.Add(new Node(quadraticBezier, styleId, dx, dy, scale, SkiaHelper.ToGeometry(quadraticBezier, dx, dy)));
+        {
+            _rootNodes[_currentRootNode].Children.Add(new ChildNode(quadraticBezier, styleId, dx, dy, scale, SkiaHelper.ToGeometry(quadraticBezier, dx, dy)));
+        }
 
         public void DrawConic(object dc, ConicShape conic, string styleId, double dx, double dy, double scale)
-            => _roots[_current].nodes.Add(new Node(conic, styleId, dx, dy, scale, SkiaHelper.ToGeometry(conic, dx, dy)));
+        {
+            _rootNodes[_currentRootNode].Children.Add(new ChildNode(conic, styleId, dx, dy, scale, SkiaHelper.ToGeometry(conic, dx, dy)));
+        }
 
         public void DrawPath(object dc, PathShape path, string styleId, double dx, double dy, double scale)
-            => _roots[_current].nodes.Add(new Node(path, styleId, dx, dy, scale, SkiaHelper.ToGeometry(path, dx, dy)));
+        {
+            _rootNodes[_currentRootNode].Children.Add(new ChildNode(path, styleId, dx, dy, scale, SkiaHelper.ToGeometry(path, dx, dy)));
+        }
 
         public void DrawRectangle(object dc, RectangleShape rectangle, string styleId, double dx, double dy, double scale)
-            => _roots[_current].nodes.Add(new Node(rectangle, styleId, dx, dy, scale, SkiaHelper.ToGeometry(rectangle, dx, dy)));
+        {
+            _rootNodes[_currentRootNode].Children.Add(new ChildNode(rectangle, styleId, dx, dy, scale, SkiaHelper.ToGeometry(rectangle, dx, dy)));
+        }
 
         public void DrawEllipse(object dc, EllipseShape ellipse, string styleId, double dx, double dy, double scale)
-            => _roots[_current].nodes.Add(new Node(ellipse, styleId, dx, dy, scale, SkiaHelper.ToGeometry(ellipse, dx, dy)));
+        {
+            _rootNodes[_currentRootNode].Children.Add(new ChildNode(ellipse, styleId, dx, dy, scale, SkiaHelper.ToGeometry(ellipse, dx, dy)));
+        }
 
         public void DrawText(object dc, TextShape text, string styleId, double dx, double dy, double scale)
-            => _roots[_current].nodes.Add(new Node(text, styleId, dx, dy, scale, SkiaHelper.ToGeometry(text, dx, dy)));
+        {
+            _rootNodes[_currentRootNode].Children.Add(new ChildNode(text, styleId, dx, dy, scale, SkiaHelper.ToGeometry(text, dx, dy)));
+        }
     }
 }
