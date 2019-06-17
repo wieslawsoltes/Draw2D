@@ -6,8 +6,10 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Runtime.Serialization;
 using Draw2D.Input;
+//using Draw2D.Renderers;
 using Draw2D.ViewModels.Containers;
 using Draw2D.ViewModels.Shapes;
+//using SkiaSharp;
 using Spatial;
 
 namespace Draw2D.ViewModels.Tools
@@ -754,55 +756,40 @@ namespace Draw2D.ViewModels.Tools
             return false;
         }
 
-        // TODO: Experimental hit-testing.
-        //internal BoundsShapeRenderer _renderer = null;
-
         internal IBaseShape TryToHover(IToolContext context, SelectionMode mode, SelectionTargets targets, Point2 target, double radius)
         {
             // TODO: Experimental hit-testing.
             /*
-            var sw = Stopwatch.StartNew();
+            var bounds = new BoundsShapeRenderer(context.ContainerView?.CurrentContainer);
 
-            if (_renderer == null)
-            {
-                _renderer = BoundsShapeRenderer.Create(context.ContainerView?.CurrentContainer);
-            }
-
-            //if (_renderer.Contains((float)target.X, (float)target.Y, out var shape))
+            //if (bounds.Contains((float)target.X, (float)target.Y, ContainsMode.Bounds, out var rootShape, out var childShape))
             //{
-            //    //_renderer.Dispose();
-            //    sw.Stop();
-            //    Debug.WriteLine($"TryToHover {sw.Elapsed.TotalMilliseconds}ms");
-            //    return shape;
+            //    bounds.Dispose();
+            //    return rootShape;
             //}
 
             var rect = SKRect.Create((float)(target.X - radius), (float)(target.Y - radius), (float)(radius + radius), (float)(radius + radius));
-
-            if (_renderer.Intersects(ref rect, out var shape))
+            if (bounds.Intersects(ref rect, out var rootShape, out var childShape))
             {
-                _renderer.Dispose();
-                _renderer = null;
-                sw.Stop();
-                Debug.WriteLine($"TryToHover {sw.Elapsed.TotalMilliseconds}ms");
-                return shape;
+                bounds.Dispose();
+                return rootShape;
             }
 
+            //var rect = SKRect.Create((float)(target.X - radius), (float)(target.Y - radius), (float)(radius + radius), (float)(radius + radius));
             //var geometry = new SKPath();
             //geometry.AddRect(rect);
-            //if (_renderer.Intersects(geometry, out var shape))
+            //if (bounds.Intersects(geometry, out var rootShape, out var childShape))
             //{
-            //    //_renderer.Dispose();
-            //    sw.Stop();
-            //    Debug.WriteLine($"TryToHover {sw.Elapsed.TotalMilliseconds}ms");
-            //    return shape;
+            //    bounds.Dispose();
+            //    return rootShape;
             //}
 
-            _renderer.Dispose();
-            _renderer = null;
-            sw.Stop();
-            Debug.WriteLine($"TryToHover {sw.Elapsed.TotalMilliseconds}ms");
+            bounds.Dispose();
+
             return null;
-            */
+            //*/
+
+            ///*
             var shapePoint =
                 mode.HasFlag(SelectionMode.Point)
                 && targets.HasFlag(SelectionTargets.Shapes) ?
@@ -826,6 +813,7 @@ namespace Draw2D.ViewModels.Tools
             }
 
             return null;
+            //*/
         }
 
         internal bool TryToSelect(IToolContext context, SelectionMode mode, SelectionTargets targets, Modifier selectionModifier, Point2 point, double radius, Modifier modifier)
