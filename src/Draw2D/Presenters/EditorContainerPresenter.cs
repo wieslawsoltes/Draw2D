@@ -93,17 +93,17 @@ namespace Draw2D.Presenters
             brush = brushCached;
         }
 
-        private void DrawShapesCurrent(IContainerView view, object context, IShapeRenderer renderer, double scale)
+        private void DrawShapesCurrent(IContainerView view, SKCanvas canvas, IShapeRenderer renderer, double scale)
         {
-            view.CurrentContainer.Draw(context, renderer, 0.0, 0.0, scale, null, null);
+            view.CurrentContainer.Draw(canvas, renderer, 0.0, 0.0, scale, null, null);
         }
 
-        private void DrawShapesWorking(IContainerView view, object context, IShapeRenderer renderer, double scale)
+        private void DrawShapesWorking(IContainerView view, SKCanvas canvas, IShapeRenderer renderer, double scale)
         {
-            view.WorkingContainer.Draw(context, renderer, 0.0, 0.0, scale, null, null);
+            view.WorkingContainer.Draw(canvas, renderer, 0.0, 0.0, scale, null, null);
         }
 
-        private void DrawPoints(IContainerView view, object context, IShapeRenderer renderer, double scale)
+        private void DrawPoints(IContainerView view, SKCanvas canvas, IShapeRenderer renderer, double scale)
         {
             var selected = new List<IBaseShape>(view.SelectionState.Shapes);
 
@@ -111,22 +111,31 @@ namespace Draw2D.Presenters
             {
                 if (shape is IPointShape point)
                 {
-                    point.Draw(context, renderer, 0.0, 0.0, scale, null, null);
+                    double s = 1.0 / scale;
+                    canvas.Save();
+                    double dx = 0.0 - (point.X * s) + point.X;
+                    double dy = 0.0 - (point.Y * s) + point.Y;
+                    canvas.Translate((float)dx, (float)dy);
+                    canvas.Scale((float)s);
+
+                    point.Draw(canvas, renderer, 0.0, 0.0, scale, null, null);
+
+                    canvas.Restore();
                 }
             }
         }
 
-        private void DrawDecorators(IContainerView view, object context, IShapeRenderer renderer, double scale)
+        private void DrawDecorators(IContainerView view, SKCanvas canvas, IShapeRenderer renderer, double scale)
         {
             var selected = new List<IBaseShape>(view.SelectionState.Shapes);
 
             foreach (var shape in selected)
             {
-                shape.Decorator?.Draw(context, shape, renderer, view.SelectionState, 0.0, 0.0, scale);
+                shape.Decorator?.Draw(canvas, shape, renderer, view.SelectionState, 0.0, 0.0, scale);
             }
         }
 
-        private SKPicture RecordPicture(IContainerView view, IShapeRenderer renderer, double scale, Action<IContainerView, object, IShapeRenderer, double> draw)
+        private SKPicture RecordPicture(IContainerView view, IShapeRenderer renderer, double scale, Action<IContainerView, SKCanvas, IShapeRenderer, double> draw)
         {
             var recorder = new SKPictureRecorder();
             var rect = new SKRect(0f, 0f, (float)view.Width, (float)view.Height);
