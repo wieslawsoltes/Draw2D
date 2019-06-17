@@ -706,27 +706,38 @@ namespace Draw2D.Editor
 
                     if (paths.Count > 0)
                     {
+                        var result = new SKPath();
+
+                        for (int i = 0; i < paths.Count; i++)
+                        {
+                            var next = result.Op(paths[i], op);
+                            if (next != null)
+                            {
+                                result.Dispose();
+                                result = next;
+                            }
+                        }
+                        /*
                         using (var builder = new SKPath.OpBuilder())
                         {
                             for (int i = 0; i < paths.Count; i++)
                             {
                                 builder.Add(paths[i], op);
                             }
-
-                            var result = new SKPath();
-
                             builder.Resolve(result);
-                            if (!result.IsEmpty)
-                            {
-                                var pathShape = SkiaHelper.FromGeometry(result, StyleLibrary.CurrentStyle, PointTemplate);
-                                if (pathShape != null)
-                                {
-                                    InsertAndSelectShape(pathShape);
-                                }
-                            }
-
-                            result.Dispose();
                         }
+                        */
+
+                        if (!result.IsEmpty)
+                        {
+                            var pathShape = SkiaHelper.FromGeometry(result, StyleLibrary.CurrentStyle, PointTemplate);
+                            if (pathShape != null)
+                            {
+                                InsertAndSelectShape(pathShape);
+                            }
+                        }
+
+                        result.Dispose();
 
                         for (int i = 0; i < paths.Count; i++)
                         {
@@ -736,22 +747,22 @@ namespace Draw2D.Editor
                 }
 
                 /*
-                SKPath path = null;
+                SKPath result = null;
 
                 var selected = new List<IBaseShape>(ContainerView.SelectionState?.Shapes);
                 if (selected.Count >= 2)
                 {
                     for (int i = 0; i < selected.Count; i++)
                     {
-                        if (path == null)
+                        if (result == null)
                         {
-                            path = ToGeometry(selected[i]);
-                            if (path != null)
+                            result = ToGeometry(selected[i]);
+                            if (result != null)
                             {
-                                if (path.IsEmpty)
+                                if (result.IsEmpty)
                                 {
-                                    path.Dispose();
-                                    path = null;
+                                    result.Dispose();
+                                    result = null;
                                 }
                             }
                         }
@@ -762,16 +773,16 @@ namespace Draw2D.Editor
                             {
                                 if (!next.IsEmpty)
                                 {
-                                    var result = path.Op(next, op);
+                                    var result = result.Op(next, op);
                                     if (result != null)
                                     {
                                         if (!result.IsEmpty)
                                         {
-                                            if (path != null)
+                                            if (result != null)
                                             {
-                                                path.Dispose();
+                                                result.Dispose();
                                             }
-                                            path = result;
+                                            result = result;
                                         }
                                         else
                                         {
@@ -785,17 +796,17 @@ namespace Draw2D.Editor
                     }
                 }
 
-                if (path != null)
+                if (result != null)
                 {
-                    if (!path.IsEmpty)
+                    if (!result.IsEmpty)
                     {
-                        var pathShape = SkiaHelper.FromGeometry(path, StyleLibrary.CurrentStyle, PointTemplate);
+                        var pathShape = SkiaHelper.FromGeometry(result, StyleLibrary.CurrentStyle, PointTemplate);
                         if (pathShape != null)
                         {
                             InsertAndSelectShape(pathShape);
                         }
                     }
-                    path.Dispose();
+                    result.Dispose();
                 }
                 */
             }
