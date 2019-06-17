@@ -674,6 +674,68 @@ namespace Draw2D.Editor
         {
             if (ContainerView.SelectionState?.Shapes != null)
             {
+                var selected = new List<IBaseShape>();
+
+                foreach (var shape in ContainerView.SelectionState?.Shapes)
+                {
+                    if (!(shape is IPointShape))
+                    {
+                        selected.Add(shape);
+                    }
+                }
+
+                if (selected.Count > 0)
+                {
+                    var paths = new List<SKPath>();
+
+                    for (int i = 0; i < selected.Count; i++)
+                    {
+                        var path = ToGeometry(selected[i]);
+                        if (path != null)
+                        {
+                            if (!path.IsEmpty)
+                            {
+                                paths.Add(path);
+                            }
+                            else
+                            {
+                                path.Dispose();
+                            }
+                        }
+                    }
+
+                    if (paths.Count > 0)
+                    {
+                        using (var builder = new SKPath.OpBuilder())
+                        {
+                            for (int i = 0; i < paths.Count; i++)
+                            {
+                                builder.Add(paths[i], op);
+                            }
+
+                            var result = new SKPath();
+
+                            builder.Resolve(result);
+                            if (!result.IsEmpty)
+                            {
+                                var pathShape = SkiaHelper.FromGeometry(result, StyleLibrary.CurrentStyle, PointTemplate);
+                                if (pathShape != null)
+                                {
+                                    InsertAndSelectShape(pathShape);
+                                }
+                            }
+
+                            result.Dispose();
+                        }
+
+                        for (int i = 0; i < paths.Count; i++)
+                        {
+                            paths[i].Dispose();
+                        }
+                    }
+                }
+
+                /*
                 SKPath path = null;
 
                 var selected = new List<IBaseShape>(ContainerView.SelectionState?.Shapes);
@@ -735,6 +797,7 @@ namespace Draw2D.Editor
                     }
                     path.Dispose();
                 }
+                */
             }
         }
 
