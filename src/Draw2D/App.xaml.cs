@@ -258,7 +258,7 @@ namespace Draw2D
                 if (command == "--export")
                 {
                     var toolContext = JsonSerializer.FromJsonFile<IToolContext>(args[1]);
-                    EditorToolContext.Export(args[2], toolContext.ContainerView, toolContext);
+                    EditorToolContext.Export(toolContext, args[2], toolContext.ContainerView);
                     return false;
                 }
             }
