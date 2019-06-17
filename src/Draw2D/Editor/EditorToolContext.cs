@@ -706,109 +706,61 @@ namespace Draw2D.Editor
 
                     if (paths.Count > 0)
                     {
-                        var result = new SKPath();
-
-                        for (int i = 0; i < paths.Count; i++)
+                        if (paths.Count == 1)
                         {
-                            var next = result.Op(paths[i], op);
-                            if (next != null)
-                            {
-                                result.Dispose();
-                                result = next;
-                            }
-                        }
-                        /*
-                        using (var builder = new SKPath.OpBuilder())
-                        {
-                            for (int i = 0; i < paths.Count; i++)
-                            {
-                                builder.Add(paths[i], op);
-                            }
-                            builder.Resolve(result);
-                        }
-                        */
+                            var empty = new SKPath();
 
-                        if (!result.IsEmpty)
-                        {
-                            var pathShape = SkiaHelper.FromGeometry(result, StyleLibrary.CurrentStyle, PointTemplate);
-                            if (pathShape != null)
-                            {
-                                InsertAndSelectShape(pathShape);
-                            }
-                        }
-
-                        result.Dispose();
-
-                        for (int i = 0; i < paths.Count; i++)
-                        {
-                            paths[i].Dispose();
-                        }
-                    }
-                }
-
-                /*
-                SKPath result = null;
-
-                var selected = new List<IBaseShape>(ContainerView.SelectionState?.Shapes);
-                if (selected.Count >= 2)
-                {
-                    for (int i = 0; i < selected.Count; i++)
-                    {
-                        if (result == null)
-                        {
-                            result = ToGeometry(selected[i]);
+                            var result = empty.Op(paths[0], op);
                             if (result != null)
                             {
-                                if (result.IsEmpty)
+                                if (!result.IsEmpty)
                                 {
-                                    result.Dispose();
-                                    result = null;
+                                    var pathShape = SkiaHelper.FromGeometry(result, StyleLibrary.CurrentStyle, PointTemplate);
+                                    if (pathShape != null)
+                                    {
+                                        InsertAndSelectShape(pathShape);
+                                    }
                                 }
+                                result.Dispose();
                             }
+
+                            empty.Dispose();
+                            paths[0].Dispose();
                         }
                         else
                         {
-                            var next = ToGeometry(selected[i]);
-                            if (next != null)
+                            bool haveResult = false;
+                            var result = paths[0];
+
+                            for (int i = 1; i < paths.Count; i++)
                             {
-                                if (!next.IsEmpty)
+                                var next = result.Op(paths[i], op);
+                                if (next != null)
                                 {
-                                    var result = result.Op(next, op);
-                                    if (result != null)
-                                    {
-                                        if (!result.IsEmpty)
-                                        {
-                                            if (result != null)
-                                            {
-                                                result.Dispose();
-                                            }
-                                            result = result;
-                                        }
-                                        else
-                                        {
-                                            result.Dispose();
-                                        }
-                                    }
+                                    result.Dispose();
+                                    result = next;
+                                    haveResult = true;
                                 }
-                                next.Dispose();
+                            }
+
+                            if (!result.IsEmpty && haveResult)
+                            {
+                                var pathShape = SkiaHelper.FromGeometry(result, StyleLibrary.CurrentStyle, PointTemplate);
+                                if (pathShape != null)
+                                {
+                                    InsertAndSelectShape(pathShape);
+                                }
+                            }
+
+                            result.Dispose();
+
+                            for (int i = 1; i < paths.Count; i++)
+                            {
+                                paths[i].Dispose();
                             }
                         }
                     }
                 }
-
-                if (result != null)
-                {
-                    if (!result.IsEmpty)
-                    {
-                        var pathShape = SkiaHelper.FromGeometry(result, StyleLibrary.CurrentStyle, PointTemplate);
-                        if (pathShape != null)
-                        {
-                            InsertAndSelectShape(pathShape);
-                        }
-                    }
-                    result.Dispose();
-                }
-                */
             }
         }
 
