@@ -103,7 +103,7 @@ namespace Draw2D.ViewModels.Tools
                 set => throw new InvalidOperationException($"Can not set {ZoomService} property value.");
             }
 
-            public IPointShape GetNextPoint(IToolContext context, double x, double y, bool connect, double radius)
+            public IPointShape GetNextPoint(IToolContext context, double x, double y, bool connect, double radius, double scale)
             {
                 if (_nextPoint != null)
                 {
@@ -111,7 +111,7 @@ namespace Draw2D.ViewModels.Tools
                     _nextPoint = null;
                     return nextPointTemp;
                 }
-                return _context.ContainerView.GetNextPoint(_context, x, y, connect, radius);
+                return _context.ContainerView.GetNextPoint(_context, x, y, connect, radius, scale);
             }
 
             public void Draw(object context, double width, double height, double dx, double dy, double zx, double zy)

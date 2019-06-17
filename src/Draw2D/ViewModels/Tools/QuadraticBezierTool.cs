@@ -39,9 +39,12 @@ namespace Draw2D.ViewModels.Tools
         {
             FiltersProcess(context, ref x, ref y);
 
-            IPointShape startPoint = context.ContainerView?.GetNextPoint(context, x, y, Settings?.ConnectPoints ?? false, Settings?.HitTestRadius ?? 0.0);
-            IPointShape point1 = context.ContainerView?.GetNextPoint(context, x, y, false, 0.0);
-            IPointShape point2 = context.ContainerView?.GetNextPoint(context, x, y, false, 0.0);
+            var radius = Settings?.HitTestRadius ?? 0.0;
+            var scale = context.ContainerView?.ZoomService?.ZoomServiceState?.ZoomX ?? 1.0;
+
+            IPointShape startPoint = context.ContainerView?.GetNextPoint(context, x, y, Settings?.ConnectPoints ?? false, radius, scale);
+            IPointShape point1 = context.ContainerView?.GetNextPoint(context, x, y, false, 0.0, 1.0);
+            IPointShape point2 = context.ContainerView?.GetNextPoint(context, x, y, false, 0.0, 1.0);
 
             _quadraticBezier = new QuadraticBezierShape()
             {
@@ -90,7 +93,10 @@ namespace Draw2D.ViewModels.Tools
             context.ContainerView?.WorkingContainer.Shapes.Remove(_quadraticBezier);
             context.ContainerView?.WorkingContainer.MarkAsDirty(true);
 
-            IPointShape point1 = context.ContainerView?.GetNextPoint(context, x, y, Settings?.ConnectPoints ?? false, Settings?.HitTestRadius ?? 0.0);
+            var radius = Settings?.HitTestRadius ?? 0.0;
+            var scale = context.ContainerView?.ZoomService?.ZoomServiceState?.ZoomX ?? 1.0;
+
+            IPointShape point1 = context.ContainerView?.GetNextPoint(context, x, y, Settings?.ConnectPoints ?? false, radius, scale);
 
             _quadraticBezier.Point1 = point1;
             if (_quadraticBezier.Point1.Owner == null)
@@ -116,7 +122,10 @@ namespace Draw2D.ViewModels.Tools
 
             context.ContainerView?.SelectionState?.Deselect(_quadraticBezier.Point2);
 
-            IPointShape point2 = context.ContainerView?.GetNextPoint(context, x, y, Settings?.ConnectPoints ?? false, Settings?.HitTestRadius ?? 0.0);
+            var radius = Settings?.HitTestRadius ?? 0.0;
+            var scale = context.ContainerView?.ZoomService?.ZoomServiceState?.ZoomX ?? 1.0;
+
+            IPointShape point2 = context.ContainerView?.GetNextPoint(context, x, y, Settings?.ConnectPoints ?? false, radius, scale);
 
             _quadraticBezier.Point2 = point2;
             if (_quadraticBezier.Point2.Owner == null)

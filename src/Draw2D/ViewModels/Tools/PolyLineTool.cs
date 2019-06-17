@@ -39,8 +39,11 @@ namespace Draw2D.ViewModels.Tools
         {
             FiltersProcess(context, ref x, ref y);
 
-            IPointShape startPoint = context.ContainerView?.GetNextPoint(context, x, y, Settings?.ConnectPoints ?? false, Settings?.HitTestRadius ?? 7.0);
-            IPointShape point = context.ContainerView?.GetNextPoint(context, x, y, false, 0.0);
+            var radius = Settings?.HitTestRadius ?? 7.0;
+            var scale = context.ContainerView?.ZoomService?.ZoomServiceState?.ZoomX ?? 1.0;
+
+            IPointShape startPoint = context.ContainerView?.GetNextPoint(context, x, y, Settings?.ConnectPoints ?? false, radius, scale);
+            IPointShape point = context.ContainerView?.GetNextPoint(context, x, y, false, 0.0, 1.0);
 
             _points = new ObservableCollection<IPointShape>();
             _line = new LineShape()
@@ -80,7 +83,10 @@ namespace Draw2D.ViewModels.Tools
             context.ContainerView?.SelectionState?.Deselect(_line);
             context.ContainerView?.SelectionState?.Deselect(_line.Point);
 
-            IPointShape firstPoint = context.ContainerView?.GetNextPoint(context, x, y, Settings?.ConnectPoints ?? false, Settings?.HitTestRadius ?? 0.0);
+            var radius = Settings?.HitTestRadius ?? 0.0;
+            var scale = context.ContainerView?.ZoomService?.ZoomServiceState?.ZoomX ?? 1.0;
+
+            IPointShape firstPoint = context.ContainerView?.GetNextPoint(context, x, y, Settings?.ConnectPoints ?? false, radius, scale);
 
             _line.Point = firstPoint;
             if (_line.Point.Owner == null)
@@ -100,7 +106,7 @@ namespace Draw2D.ViewModels.Tools
             context.ContainerView?.CurrentContainer.MarkAsDirty(true);
 
             IPointShape startPoint = _points.Last();
-            IPointShape nextPoint = context.ContainerView?.GetNextPoint(context, x, y, false, 0.0);
+            IPointShape nextPoint = context.ContainerView?.GetNextPoint(context, x, y, false, 0.0, 1.0);
 
             _line = new LineShape()
             {

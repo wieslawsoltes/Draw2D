@@ -28,10 +28,14 @@ namespace Draw2D.ViewModels.Tools
             FiltersClear(context);
             FiltersProcess(context, ref x, ref y);
 
+            var radius = Settings?.HitTestRadius ?? 7.0;
+            var scale = context.ContainerView?.ZoomService?.ZoomServiceState?.ZoomX ?? 1.0;
+
             var shape = context.HitTest?.TryToGetShape(
                 context.ContainerView?.CurrentContainer.Shapes,
                 new Point2(x, y),
-                Settings?.HitTestRadius ?? 7.0);
+                radius,
+                scale);
             if (shape != null && (Settings?.ConnectPoints ?? false))
             {
                 if (shape is IConnectable connectable)

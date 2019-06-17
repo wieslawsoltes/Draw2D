@@ -63,13 +63,16 @@ namespace Draw2D.ViewModels.Tools
 
             context.ContainerView?.SelectionState?.Dehover();
 
+            var radius = Settings?.HitTestRadius ?? 7.0;
+            var scale = context.ContainerView?.ZoomService?.ZoomServiceState?.ZoomX ?? 1.0;
             var selected = TryToSelect(
                 context,
                 Settings?.Mode ?? SelectionMode.Shape,
                 Settings?.Targets ?? SelectionTargets.Shapes,
                 Settings?.SelectionModifier ?? Modifier.Control,
                 new Point2(x, y),
-                Settings?.HitTestRadius ?? 7.0,
+                radius,
+                scale,
                 modifier);
             if (selected == true)
             {
@@ -128,13 +131,17 @@ namespace Draw2D.ViewModels.Tools
 
             context.ContainerView?.SelectionState?.Dehover();
 
+            var radius = Settings?.HitTestRadius ?? 7.0;
+            var scale = context.ContainerView?.ZoomService?.ZoomServiceState?.ZoomX ?? 1.0;
+
             TryToSelect(
                 context,
                 Settings?.Mode ?? SelectionMode.Shape,
                 Settings?.Targets ?? SelectionTargets.Shapes,
                 Settings?.SelectionModifier ?? Modifier.Control,
                 _rectangle.ToRect2(),
-                Settings?.HitTestRadius ?? 7.0,
+                radius,
+                scale,
                 modifier);
 
             context.ContainerView?.WorkingContainer.Shapes.Remove(_rectangle);
@@ -174,13 +181,16 @@ namespace Draw2D.ViewModels.Tools
                 lock (context.ContainerView.SelectionState?.Shapes)
                 {
                     var previous = context.ContainerView?.SelectionState?.Hovered;
+                    var radius = Settings?.HitTestRadius ?? 7.0;
+                    var scale = context.ContainerView?.ZoomService?.ZoomServiceState?.ZoomX ?? 1.0;
                     var target = new Point2(x, y);
                     var shape = TryToHover(
                         context,
                         Settings?.Mode ?? SelectionMode.Shape,
                         Settings?.Targets ?? SelectionTargets.Shapes,
                         target,
-                        Settings?.HitTestRadius ?? 7.0);
+                        radius,
+                        scale);
                     if (shape != null)
                     {
                         if (shape != previous)
@@ -527,10 +537,12 @@ namespace Draw2D.ViewModels.Tools
 
         public void Connect(IToolContext context, IPointShape point)
         {
+            var scale = context.ContainerView?.ZoomService?.ZoomServiceState?.ZoomX ?? 1.0;
             var target = context.HitTest?.TryToGetPoint(
                 context.ContainerView?.CurrentContainer.Shapes,
                 new Point2(point.X, point.Y),
                 Settings?.ConnectTestRadius ?? 7.0,
+                scale,
                 point);
             if (target != point)
             {
@@ -756,7 +768,7 @@ namespace Draw2D.ViewModels.Tools
             return false;
         }
 
-        internal IBaseShape TryToHover(IToolContext context, SelectionMode mode, SelectionTargets targets, Point2 target, double radius)
+        internal IBaseShape TryToHover(IToolContext context, SelectionMode mode, SelectionTargets targets, Point2 target, double radius, double scale)
         {
             // TODO: Experimental hit-testing.
             /*
@@ -793,12 +805,12 @@ namespace Draw2D.ViewModels.Tools
             var shapePoint =
                 mode.HasFlag(SelectionMode.Point)
                 && targets.HasFlag(SelectionTargets.Shapes) ?
-                context.HitTest?.TryToGetPoint(context.ContainerView?.CurrentContainer.Shapes, target, radius, null) : null;
+                context.HitTest?.TryToGetPoint(context.ContainerView?.CurrentContainer.Shapes, target, radius, scale, null) : null;
 
             var shape =
                 mode.HasFlag(SelectionMode.Shape)
                 && targets.HasFlag(SelectionTargets.Shapes) ?
-                context.HitTest?.TryToGetShape(context.ContainerView?.CurrentContainer.Shapes, target, radius) : null;
+                context.HitTest?.TryToGetShape(context.ContainerView?.CurrentContainer.Shapes, target, radius, scale) : null;
 
             if (shapePoint != null || shape != null)
             {
@@ -816,19 +828,19 @@ namespace Draw2D.ViewModels.Tools
             //*/
         }
 
-        internal bool TryToSelect(IToolContext context, SelectionMode mode, SelectionTargets targets, Modifier selectionModifier, Point2 point, double radius, Modifier modifier)
+        internal bool TryToSelect(IToolContext context, SelectionMode mode, SelectionTargets targets, Modifier selectionModifier, Point2 point, double radius, double scale, Modifier modifier)
         {
             if (context.ContainerView?.SelectionState != null)
             {
                 var shapePoint =
                     mode.HasFlag(SelectionMode.Point)
                     && targets.HasFlag(SelectionTargets.Shapes) ?
-                    context.HitTest?.TryToGetPoint(context.ContainerView?.CurrentContainer.Shapes, point, radius, null) : null;
+                    context.HitTest?.TryToGetPoint(context.ContainerView?.CurrentContainer.Shapes, point, radius, scale, null) : null;
 
                 var shape =
                     mode.HasFlag(SelectionMode.Shape)
                     && targets.HasFlag(SelectionTargets.Shapes) ?
-                    context.HitTest?.TryToGetShape(context.ContainerView?.CurrentContainer.Shapes, point, radius) : null;
+                    context.HitTest?.TryToGetShape(context.ContainerView?.CurrentContainer.Shapes, point, radius, scale) : null;
 
                 if (shapePoint != null || shape != null)
                 {
@@ -892,14 +904,14 @@ namespace Draw2D.ViewModels.Tools
             return false;
         }
 
-        internal bool TryToSelect(IToolContext context, SelectionMode mode, SelectionTargets targets, Modifier selectionModifier, Rect2 rect, double radius, Modifier modifier)
+        internal bool TryToSelect(IToolContext context, SelectionMode mode, SelectionTargets targets, Modifier selectionModifier, Rect2 rect, double radius, double scale, Modifier modifier)
         {
             if (context.ContainerView?.SelectionState != null)
             {
                 var shapes =
                     mode.HasFlag(SelectionMode.Shape)
                     && targets.HasFlag(SelectionTargets.Shapes) ?
-                    context.HitTest?.TryToGetShapes(context.ContainerView?.CurrentContainer.Shapes, rect, radius) : null;
+                    context.HitTest?.TryToGetShapes(context.ContainerView?.CurrentContainer.Shapes, rect, radius, scale) : null;
 
                 if (shapes != null)
                 {

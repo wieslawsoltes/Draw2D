@@ -40,10 +40,13 @@ namespace Draw2D.ViewModels.Tools
         {
             FiltersProcess(context, ref x, ref y);
 
-            IPointShape startPoint = context.ContainerView?.GetNextPoint(context, x, y, Settings?.ConnectPoints ?? false, Settings?.HitTestRadius ?? 0.0);
-            IPointShape point1 = context.ContainerView?.GetNextPoint(context, x, y, false, 0.0);
-            IPointShape point2 = context.ContainerView?.GetNextPoint(context, x, y, false, 0.0);
-            IPointShape point3 = context.ContainerView?.GetNextPoint(context, x, y, false, 0.0);
+            var radius = Settings?.HitTestRadius ?? 0.0;
+            var scale = context.ContainerView?.ZoomService?.ZoomServiceState?.ZoomX ?? 1.0;
+
+            IPointShape startPoint = context.ContainerView?.GetNextPoint(context, x, y, Settings?.ConnectPoints ?? false, radius, scale);
+            IPointShape point1 = context.ContainerView?.GetNextPoint(context, x, y, false, 0.0, 1.0);
+            IPointShape point2 = context.ContainerView?.GetNextPoint(context, x, y, false, 0.0, 1.0);
+            IPointShape point3 = context.ContainerView?.GetNextPoint(context, x, y, false, 0.0, 1.0);
 
             _cubicBezier = new CubicBezierShape()
             {
@@ -99,7 +102,10 @@ namespace Draw2D.ViewModels.Tools
             context.ContainerView?.WorkingContainer.Shapes.Remove(_cubicBezier);
             context.ContainerView?.WorkingContainer.MarkAsDirty(true);
 
-            IPointShape point1 = context.ContainerView?.GetNextPoint(context, x, y, Settings?.ConnectPoints ?? false, Settings?.HitTestRadius ?? 0.0);
+            var radius = Settings?.HitTestRadius ?? 0.0;
+            var scale = context.ContainerView?.ZoomService?.ZoomServiceState?.ZoomX ?? 1.0;
+
+            IPointShape point1 = context.ContainerView?.GetNextPoint(context, x, y, Settings?.ConnectPoints ?? false, radius, scale);
 
             _cubicBezier.Point1 = point1;
             if (_cubicBezier.Point1.Owner == null)
@@ -125,7 +131,10 @@ namespace Draw2D.ViewModels.Tools
 
             context.ContainerView?.SelectionState?.Deselect(_cubicBezier.Point2);
 
-            IPointShape point2 = context.ContainerView?.GetNextPoint(context, x, y, Settings?.ConnectPoints ?? false, Settings?.HitTestRadius ?? 0.0);
+            var radius = Settings?.HitTestRadius ?? 0.0;
+            var scale = context.ContainerView?.ZoomService?.ZoomServiceState?.ZoomX ?? 1.0;
+
+            IPointShape point2 = context.ContainerView?.GetNextPoint(context, x, y, Settings?.ConnectPoints ?? false, radius, scale);
 
             _cubicBezier.Point2 = point2;
             if (_cubicBezier.Point2.Owner == null)
@@ -148,7 +157,10 @@ namespace Draw2D.ViewModels.Tools
 
             context.ContainerView?.SelectionState?.Deselect(_cubicBezier.Point3);
 
-            IPointShape point3 = context.ContainerView?.GetNextPoint(context, x, y, Settings?.ConnectPoints ?? false, Settings?.HitTestRadius ?? 0.0);
+            var radius = Settings?.HitTestRadius ?? 0.0;
+            var scale = context.ContainerView?.ZoomService?.ZoomServiceState?.ZoomX ?? 1.0;
+
+            IPointShape point3 = context.ContainerView?.GetNextPoint(context, x, y, Settings?.ConnectPoints ?? false, radius, scale);
 
             _cubicBezier.Point3 = point3;
             if (_cubicBezier.Point3.Owner == null)

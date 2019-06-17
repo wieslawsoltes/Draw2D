@@ -70,8 +70,11 @@ namespace Draw2D.ViewModels.Tools
         {
             FiltersProcess(context, ref x, ref y);
 
-            IPointShape startPoint = context.ContainerView?.GetNextPoint(context, x, y, Settings?.ConnectPoints ?? false, Settings?.HitTestRadius ?? 0.0);
-            IPointShape point = context.ContainerView?.GetNextPoint(context, x, y, false, 0.0);
+            var radius = Settings?.HitTestRadius ?? 0.0;
+            var scale = context.ContainerView?.ZoomService?.ZoomServiceState?.ZoomX ?? 1.0;
+
+            IPointShape startPoint = context.ContainerView?.GetNextPoint(context, x, y, Settings?.ConnectPoints ?? false, radius, scale);
+            IPointShape point = context.ContainerView?.GetNextPoint(context, x, y, false, 0.0, 1.0);
 
             _line = new LineShape()
             {
@@ -113,7 +116,10 @@ namespace Draw2D.ViewModels.Tools
             context.ContainerView?.WorkingContainer.Shapes.Remove(_line);
             context.ContainerView?.WorkingContainer.MarkAsDirty(true);
 
-            IPointShape point = context.ContainerView?.GetNextPoint(context, x, y, Settings?.ConnectPoints ?? false, Settings?.HitTestRadius ?? 0.0);
+            var radius = Settings?.HitTestRadius ?? 0.0;
+            var scale = context.ContainerView?.ZoomService?.ZoomServiceState?.ZoomX ?? 1.0;
+
+            IPointShape point = context.ContainerView?.GetNextPoint(context, x, y, Settings?.ConnectPoints ?? false, radius, scale);
 
             _line.Point = point;
             if (_line.Point.Owner == null)

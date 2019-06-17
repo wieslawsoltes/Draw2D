@@ -38,8 +38,11 @@ namespace Draw2D.ViewModels.Tools
         {
             FiltersProcess(context, ref x, ref y);
 
-            IPointShape topLeft = context.ContainerView?.GetNextPoint(context, x, y, Settings?.ConnectPoints ?? false, Settings?.HitTestRadius ?? 7.0);
-            IPointShape bottomRight = context.ContainerView?.GetNextPoint(context, x, y, false, 0.0);
+            var radius = Settings?.HitTestRadius ?? 7.0;
+            var scale = context.ContainerView?.ZoomService?.ZoomServiceState?.ZoomX ?? 1.0;
+
+            IPointShape topLeft = context.ContainerView?.GetNextPoint(context, x, y, Settings?.ConnectPoints ?? false, radius, scale);
+            IPointShape bottomRight = context.ContainerView?.GetNextPoint(context, x, y, false, 0.0, 1.0);
 
             _rectangle = new RectangleShape()
             {
@@ -78,7 +81,10 @@ namespace Draw2D.ViewModels.Tools
             context.ContainerView?.SelectionState?.Deselect(_rectangle);
             context.ContainerView?.SelectionState?.Deselect(_rectangle.BottomRight);
 
-            IPointShape bottomRight = context.ContainerView?.GetNextPoint(context, x, y, Settings?.ConnectPoints ?? false, Settings?.HitTestRadius ?? 7.0);
+            var radius = Settings?.HitTestRadius ?? 7.0;
+            var scale = context.ContainerView?.ZoomService?.ZoomServiceState?.ZoomX ?? 1.0;
+
+            IPointShape bottomRight = context.ContainerView?.GetNextPoint(context, x, y, Settings?.ConnectPoints ?? false, radius, scale);
 
             _rectangle.BottomRight = bottomRight;
             _rectangle.BottomRight.Y = y;
