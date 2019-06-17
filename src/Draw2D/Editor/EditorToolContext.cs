@@ -500,9 +500,9 @@ namespace Draw2D.Editor
             }
         }
 
-        public void PathOp(string value)
+        public void PathOp(string parameter)
         {
-            if (Enum.TryParse(typeof(SKPathOp), value, out object result) == true && result is SKPathOp op)
+            if (Enum.TryParse<SKPathOp>(parameter, true, out var op) == true)
             {
                 SkiaPathHelper.PathOp(this, op, ContainerView?.SelectionState?.Shapes);
             }
