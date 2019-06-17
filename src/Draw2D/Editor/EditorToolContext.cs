@@ -64,21 +64,6 @@ namespace Draw2D.Editor
             _containerFactory = containerFactory;
         }
 
-        private ShapeStyle GetShapeStyle(string styleId)
-        {
-            if (StyleLibrary?.Styles != null)
-            {
-                foreach (var style in StyleLibrary.Styles)
-                {
-                    if (style.Title == styleId)
-                    {
-                        return style;
-                    }
-                }
-            }
-            return null;
-        }
-
         public void InitContainerView(IContainerView containerView)
         {
             containerView.ContainerPresenter = new AvaloniaContainerPresenter(this, containerView);
@@ -531,7 +516,22 @@ namespace Draw2D.Editor
             }
         }
 
-        private void ToSvgPathDataImpl(IBaseShape shape, StringBuilder sb)
+        private static ShapeStyle GetShapeStyle(string styleId, IToolContext context)
+        {
+            if (context?.StyleLibrary?.Styles != null)
+            {
+                foreach (var style in context?.StyleLibrary.Styles)
+                {
+                    if (style.Title == styleId)
+                    {
+                        return style;
+                    }
+                }
+            }
+            return null;
+        }
+
+        private static void ToSvgPathDataImpl(IBaseShape shape, StringBuilder sb, IToolContext context)
         {
             switch (shape)
             {
@@ -570,7 +570,7 @@ namespace Draw2D.Editor
                         sb.AppendLine(SkiaHelper.ToGeometry(rectangle, 0.0, 0.0).ToSvgPathData());
                         if (!string.IsNullOrEmpty(rectangle.Text?.Value))
                         {
-                            var style = GetShapeStyle(rectangle.StyleId);
+                            var style = GetShapeStyle(rectangle.StyleId, context);
                             if (style != null)
                             {
                                 SkiaHelper.ToGeometry(rectangle.Text, rectangle.TopLeft, rectangle.BottomRight, style.TextStyle, 0.0, 0.0);
@@ -583,7 +583,7 @@ namespace Draw2D.Editor
                         sb.AppendLine(SkiaHelper.ToGeometry(ellipse, 0.0, 0.0).ToSvgPathData());
                         if (!string.IsNullOrEmpty(ellipse.Text?.Value))
                         {
-                            var style = GetShapeStyle(ellipse.StyleId);
+                            var style = GetShapeStyle(ellipse.StyleId, context);
                             if (style != null)
                             {
                                 SkiaHelper.ToGeometry(ellipse.Text, ellipse.TopLeft, ellipse.BottomRight, style.TextStyle, 0.0, 0.0);
@@ -605,13 +605,13 @@ namespace Draw2D.Editor
                     {
                         foreach (var groupShape in group.Shapes)
                         {
-                            ToSvgPathDataImpl(groupShape, sb);
+                            ToSvgPathDataImpl(groupShape, sb, context);
                         }
                     }
                     break;
                 case TextShape text:
                     {
-                        var style = GetShapeStyle(text.StyleId);
+                        var style = GetShapeStyle(text.StyleId, context);
                         if (style != null)
                         {
                             sb.AppendLine(SkiaHelper.ToGeometry(text.Text, text.TopLeft, text.BottomRight, style.TextStyle, 0.0, 0.0).ToSvgPathData());
@@ -630,7 +630,7 @@ namespace Draw2D.Editor
 
                 foreach (var shape in selected)
                 {
-                    ToSvgPathDataImpl(shape, sb);
+                    ToSvgPathDataImpl(shape, sb, this);
                 }
 
                 var svgPathData = sb.ToString();
@@ -639,7 +639,7 @@ namespace Draw2D.Editor
             }
         }
 
-        private SKPath ToGeometry(IBaseShape shape)
+        private static SKPath ToGeometry(IBaseShape shape, IToolContext context)
         {
             switch (shape)
             {
@@ -659,7 +659,7 @@ namespace Draw2D.Editor
                     return SkiaHelper.ToGeometry(ellipse, 0.0, 0.0);
                 case TextShape text:
                     {
-                        var style = GetShapeStyle(text.StyleId);
+                        var style = GetShapeStyle(text.StyleId, context);
                         if (style != null)
                         {
                             return SkiaHelper.ToGeometry(text.Text, text.TopLeft, text.BottomRight, style.TextStyle, 0.0, 0.0);
@@ -670,95 +670,113 @@ namespace Draw2D.Editor
             return null;
         }
 
-        private void PathOp(SKPathOp op)
+        private static SKPath PathOp(SKPathOp op, IList<SKPath> paths)
         {
-            if (ContainerView.SelectionState?.Shapes != null)
+            if (paths == null || paths.Count <= 0)
             {
-                var selected = new List<IBaseShape>();
+                return null;
+            }
 
-                foreach (var shape in ContainerView.SelectionState?.Shapes)
+            if (paths.Count == 1)
+            {
+                using (var empty = new SKPath())
                 {
-                    if (!(shape is IPointShape))
+                    return empty.Op(paths[0], op);
+                }
+            }
+            else
+            {
+                var haveResult = false;
+                var result = new SKPath(paths[0]);
+
+                for (int i = 1; i < paths.Count; i++)
+                {
+                    var next = result.Op(paths[i], op);
+                    if (next != null)
                     {
-                        selected.Add(shape);
+                        result.Dispose();
+                        result = next;
+                        haveResult = true;
                     }
                 }
 
-                if (selected.Count > 0)
-                {
-                    var paths = new List<SKPath>();
+                return haveResult ? result : null;
+            }
+        }
 
-                    for (int i = 0; i < selected.Count; i++)
+        private static IList<SKPath> ToGeometries(IList<IBaseShape> shapes, IToolContext context)
+        {
+            if (shapes == null || shapes.Count <= 0)
+            {
+                return null;
+            }
+
+            var paths = new List<SKPath>();
+
+            for (int i = 0; i < shapes.Count; i++)
+            {
+                var path = ToGeometry(shapes[i], context);
+                if (path != null)
+                {
+                    if (!path.IsEmpty)
                     {
-                        var path = ToGeometry(selected[i]);
-                        if (path != null)
+                        paths.Add(path);
+                    }
+                    else
+                    {
+                        path.Dispose();
+                    }
+                }
+            }
+
+            return paths;
+        }
+
+        private static IList<IBaseShape> GetShapes(ISet<IBaseShape> selected)
+        {
+            if (selected == null || selected.Count <= 0)
+            {
+                return null;
+            }
+
+            var shapes = new List<IBaseShape>();
+
+            foreach (var shape in selected)
+            {
+                if (!(shape is IPointShape))
+                {
+                    shapes.Add(shape);
+                }
+            }
+
+            return shapes;
+        }
+
+        private void PathOp(SKPathOp op, ISet<IBaseShape> selected)
+        {
+            var shapes = GetShapes(selected);
+            if (shapes != null && shapes.Count > 0)
+            {
+                var paths = ToGeometries(shapes, this);
+                if (paths != null && paths.Count > 0)
+                {
+                    var result = PathOp(op, paths);
+                    if (result != null)
+                    {
+                        if (!result.IsEmpty)
                         {
-                            if (!path.IsEmpty)
+                            var pathShape = SkiaHelper.FromGeometry(result, StyleLibrary.CurrentStyle, PointTemplate);
+                            if (pathShape != null)
                             {
-                                paths.Add(path);
-                            }
-                            else
-                            {
-                                path.Dispose();
+                                InsertAndSelectShape(pathShape);
                             }
                         }
+                        result.Dispose();
                     }
 
-                    if (paths.Count > 0)
+                    for (int i = 0; i < paths.Count; i++)
                     {
-                        if (paths.Count == 1)
-                        {
-                            var empty = new SKPath();
-
-                            var result = empty.Op(paths[0], op);
-                            if (result != null)
-                            {
-                                if (!result.IsEmpty)
-                                {
-                                    var pathShape = SkiaHelper.FromGeometry(result, StyleLibrary.CurrentStyle, PointTemplate);
-                                    if (pathShape != null)
-                                    {
-                                        InsertAndSelectShape(pathShape);
-                                    }
-                                }
-                                result.Dispose();
-                            }
-
-                            empty.Dispose();
-                            paths[0].Dispose();
-                        }
-                        else
-                        {
-                            bool haveResult = false;
-                            var result = paths[0];
-
-                            for (int i = 1; i < paths.Count; i++)
-                            {
-                                var next = result.Op(paths[i], op);
-                                if (next != null)
-                                {
-                                    result.Dispose();
-                                    result = next;
-                                    haveResult = true;
-                                }
-                            }
-
-                            if (!result.IsEmpty && haveResult)
-                            {
-                                var pathShape = SkiaHelper.FromGeometry(result, StyleLibrary.CurrentStyle, PointTemplate);
-                                if (pathShape != null)
-                                {
-                                    InsertAndSelectShape(pathShape);
-                                }
-                            }
-
-                            result.Dispose();
-
-                            for (int i = 1; i < paths.Count; i++)
-                            {
-                                paths[i].Dispose();
-                            }
-                        }
+                        paths[i].Dispose();
                     }
                 }
             }
@@ -766,27 +784,27 @@ namespace Draw2D.Editor
 
         public void PathOpDifference()
         {
-            PathOp(SKPathOp.Difference);
+            PathOp(SKPathOp.Difference, ContainerView?.SelectionState?.Shapes);
         }
 
         public void PathOpIntersect()
         {
-            PathOp(SKPathOp.Intersect);
+            PathOp(SKPathOp.Intersect, ContainerView?.SelectionState?.Shapes);
         }
 
         public void PathOpUnion()
         {
-            PathOp(SKPathOp.Union);
+            PathOp(SKPathOp.Union, ContainerView?.SelectionState?.Shapes);
         }
 
         public void PathOpXor()
         {
-            PathOp(SKPathOp.Xor);
+            PathOp(SKPathOp.Xor, ContainerView?.SelectionState?.Shapes);
         }
 
         public void PathOpReverseDifference()
         {
-            PathOp(SKPathOp.ReverseDifference);
+            PathOp(SKPathOp.ReverseDifference, ContainerView?.SelectionState?.Shapes);
         }
 
         public void Exit()
