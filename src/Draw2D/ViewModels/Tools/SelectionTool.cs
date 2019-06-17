@@ -754,8 +754,55 @@ namespace Draw2D.ViewModels.Tools
             return false;
         }
 
+        // TODO: Experimental hit-testing.
+        //internal BoundsShapeRenderer _renderer = null;
+
         internal IBaseShape TryToHover(IToolContext context, SelectionMode mode, SelectionTargets targets, Point2 target, double radius)
         {
+            // TODO: Experimental hit-testing.
+            /*
+            var sw = Stopwatch.StartNew();
+
+            if (_renderer == null)
+            {
+                _renderer = BoundsShapeRenderer.Create(context.ContainerView?.CurrentContainer);
+            }
+
+            //if (_renderer.Contains((float)target.X, (float)target.Y, out var shape))
+            //{
+            //    //_renderer.Dispose();
+            //    sw.Stop();
+            //    Debug.WriteLine($"TryToHover {sw.Elapsed.TotalMilliseconds}ms");
+            //    return shape;
+            //}
+
+            var rect = SKRect.Create((float)(target.X - radius), (float)(target.Y - radius), (float)(radius + radius), (float)(radius + radius));
+
+            if (_renderer.Intersects(ref rect, out var shape))
+            {
+                _renderer.Dispose();
+                _renderer = null;
+                sw.Stop();
+                Debug.WriteLine($"TryToHover {sw.Elapsed.TotalMilliseconds}ms");
+                return shape;
+            }
+
+            //var geometry = new SKPath();
+            //geometry.AddRect(rect);
+            //if (_renderer.Intersects(geometry, out var shape))
+            //{
+            //    //_renderer.Dispose();
+            //    sw.Stop();
+            //    Debug.WriteLine($"TryToHover {sw.Elapsed.TotalMilliseconds}ms");
+            //    return shape;
+            //}
+
+            _renderer.Dispose();
+            _renderer = null;
+            sw.Stop();
+            Debug.WriteLine($"TryToHover {sw.Elapsed.TotalMilliseconds}ms");
+            return null;
+            */
             var shapePoint =
                 mode.HasFlag(SelectionMode.Point)
                 && targets.HasFlag(SelectionTargets.Shapes) ?
