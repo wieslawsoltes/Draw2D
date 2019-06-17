@@ -87,6 +87,11 @@
                                 <KeyBinding Command="{Binding $parent[UserControl].DataContext.Selection.Group}" CommandParameter="{Binding $parent[UserControl].DataContext}" Gesture="Ctrl+G"/>
                                 <KeyBinding Command="{Binding $parent[UserControl].DataContext.Selection.Reference}" CommandParameter="{Binding $parent[UserControl].DataContext}" Gesture="Ctrl+R"/>
                                 <KeyBinding Command="{Binding $parent[UserControl].DataContext.Selection.SelectAll}" CommandParameter="{Binding $parent[UserControl].DataContext}" Gesture="Ctrl+A"/>
+                                <KeyBinding Command="{Binding $parent[UserControl].DataContext.PathOp}" CommandParameter="Difference" Gesture="Ctrl+Shift+D"/>
+                                <KeyBinding Command="{Binding $parent[UserControl].DataContext.PathOp}" CommandParameter="Intersect" Gesture="Ctrl+Shift+I"/>
+                                <KeyBinding Command="{Binding $parent[UserControl].DataContext.PathOp}" CommandParameter="Union" Gesture="Ctrl+Shift+U"/>
+                                <KeyBinding Command="{Binding $parent[UserControl].DataContext.PathOp}" CommandParameter="Xor" Gesture="Ctrl+Shift+X"/>
+                                <KeyBinding Command="{Binding $parent[UserControl].DataContext.PathOp}" CommandParameter="ReverseDifference" Gesture="Ctrl+Shift+R"/>
                                 <KeyBinding Command="{Binding $parent[UserControl].DataContext.SetTool}" CommandParameter="None" Gesture="N"/>
                                 <KeyBinding Command="{Binding $parent[UserControl].DataContext.SetTool}" CommandParameter="Selection" Gesture="S"/>
                                 <KeyBinding Command="{Binding $parent[UserControl].DataContext.SetTool}" CommandParameter="Line" Gesture="L"/>
