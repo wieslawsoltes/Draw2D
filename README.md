@@ -10,7 +10,7 @@ Draw2D is a multi-platform application for making 2D diagrams.
 
 ## Build
 
-To build `Draw2D` install [.NET Core 3.0 preview 5](https://dotnet.microsoft.com/download/dotnet-core/3.0).
+To build `Draw2D` install [.NET Core 3.0 preview 6](https://dotnet.microsoft.com/download/dotnet-core/3.0).
 
 ```
 git clone https://github.com/wieslawsoltes/Draw2D.git
