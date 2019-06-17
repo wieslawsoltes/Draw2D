@@ -55,17 +55,6 @@
             <Separator/>
             <MenuItem Header="Select _All" Command="{Binding Selection.SelectAll}" CommandParameter="{Binding}"/>
         </MenuItem>
-        <MenuItem Header="_Path">
-            <MenuItem Header="_Difference" ToolTip.Tip="Subtract the op path from the current path." Command="{Binding PathOpDifference}"/>
-            <Separator/>
-            <MenuItem Header="_Intersect" ToolTip.Tip="Intersect the two paths." Command="{Binding PathOpIntersect}"/>
-            <Separator/>
-            <MenuItem Header="_Union" ToolTip.Tip="Union (inclusive-or) the two paths." Command="{Binding PathOpUnion}"/>
-            <Separator/>
-            <MenuItem Header="_Xor" ToolTip.Tip="Exclusive-or the two paths." Command="{Binding PathOpXor}"/>
-            <Separator/>
-            <MenuItem Header="_Reverse Difference" ToolTip.Tip="Subtract the current path from the op path." Command="{Binding PathOpReverseDifference}"/>
-        </MenuItem>
         <MenuItem Header="_View">
             <MenuItem Header="_Zoom">
                 <MenuItem Header="_Reset" Command="{Binding ContainerView.ZoomService.ResetZoom}" CommandParameter="True"/>
@@ -178,6 +167,19 @@
                 <MenuItem.Icon>
                     <CheckBox BorderThickness="0" IsHitTestVisible="False" IsChecked="{Binding CurrentTool, Converter={StaticResource IsToolConverter}, ConverterParameter=Text, Mode=OneWay}"/>
                 </MenuItem.Icon>
+            </MenuItem>
+        </MenuItem>
+        <MenuItem Header="_Path">
+            <MenuItem Header="_Op">
+                <MenuItem Header="_Difference" ToolTip.Tip="Subtract the op path from the current path." Command="{Binding PathOp}" CommandParameter="Difference"/>
+                <Separator/>
+                <MenuItem Header="_Intersect" ToolTip.Tip="Intersect the two paths." Command="{Binding PathOp}" CommandParameter="Intersect"/>
+                <Separator/>
+                <MenuItem Header="_Union" ToolTip.Tip="Union (inclusive-or) the two paths." Command="{Binding PathOp}" CommandParameter="Union"/>
+                <Separator/>
+                <MenuItem Header="_Xor" ToolTip.Tip="Exclusive-or the two paths." Command="{Binding PathOp}" CommandParameter="Xor"/>
+                <Separator/>
+                <MenuItem Header="_Reverse Difference" ToolTip.Tip="Subtract the current path from the op path." Command="{Binding PathOp}" CommandParameter="ReverseDifference"/>
             </MenuItem>
         </MenuItem>
         <MenuItem Header="_Debug">
