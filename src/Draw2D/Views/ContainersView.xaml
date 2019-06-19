@@ -85,8 +85,11 @@
                                 <KeyBinding Command="{Binding $parent[UserControl].DataContext.Selection.Paste}" CommandParameter="{Binding $parent[UserControl].DataContext}" Gesture="Ctrl+V"/>
                                 <KeyBinding Command="{Binding $parent[UserControl].DataContext.Selection.Delete}" CommandParameter="{Binding $parent[UserControl].DataContext}" Gesture="Delete"/>
                                 <KeyBinding Command="{Binding $parent[UserControl].DataContext.Selection.Group}" CommandParameter="{Binding $parent[UserControl].DataContext}" Gesture="Ctrl+G"/>
+                                <KeyBinding Command="{Binding $parent[UserControl].DataContext.Selection.Ungroup}" CommandParameter="{Binding $parent[UserControl].DataContext}" Gesture="Ctrl+Shift+G"/>
+                                <KeyBinding Command="{Binding $parent[UserControl].DataContext.Selection.Break}" CommandParameter="{Binding $parent[UserControl].DataContext}" Gesture="Ctrl+Shift+B"/>
                                 <KeyBinding Command="{Binding $parent[UserControl].DataContext.Selection.Reference}" CommandParameter="{Binding $parent[UserControl].DataContext}" Gesture="Ctrl+R"/>
                                 <KeyBinding Command="{Binding $parent[UserControl].DataContext.Selection.SelectAll}" CommandParameter="{Binding $parent[UserControl].DataContext}" Gesture="Ctrl+A"/>
+                                <KeyBinding Command="{Binding $parent[UserControl].DataContext.Selection.DeselectAll}" CommandParameter="{Binding $parent[UserControl].DataContext}" Gesture="Ctrl+Shift+A"/>
                                 <KeyBinding Command="{Binding $parent[UserControl].DataContext.PathOp}" CommandParameter="Difference" Gesture="Ctrl+Shift+D"/>
                                 <KeyBinding Command="{Binding $parent[UserControl].DataContext.PathOp}" CommandParameter="Intersect" Gesture="Ctrl+Shift+I"/>
                                 <KeyBinding Command="{Binding $parent[UserControl].DataContext.PathOp}" CommandParameter="Union" Gesture="Ctrl+Shift+U"/>
