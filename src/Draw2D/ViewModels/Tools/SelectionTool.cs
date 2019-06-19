@@ -612,17 +612,17 @@ namespace Draw2D.ViewModels.Tools
 
                     foreach (var shape in shapes)
                     {
-                        if (shape is GroupShape group)
+                        if (shape is PathShape path)
+                        {
+                            BreakPath(context, path);
+                        }
+                        else if (shape is GroupShape group)
                         {
                             BreakGroup(context, group);
                         }
                         else if (shape is ReferenceShape reference)
                         {
                             BreakReference(context, reference);
-                        }
-                        else if (shape is PathShape path)
-                        {
-                            BreakPath(context, path);
                         }
                     }
 
