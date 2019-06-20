@@ -451,7 +451,7 @@ namespace Draw2D.ViewModels.Tools
             }
         }
 
-        public void Group(IToolContext context)
+        public void CreateGroup(IToolContext context)
         {
             if (context.ContainerView?.SelectionState != null)
             {
@@ -480,6 +480,79 @@ namespace Draw2D.ViewModels.Tools
 
                     group.Select(context.ContainerView.SelectionState);
                     context.ContainerView?.CurrentContainer.Shapes.Add(group);
+                    context.ContainerView?.CurrentContainer.MarkAsDirty(true);
+
+                    context.ContainerView?.InputService?.Redraw?.Invoke();
+
+                    this.CurrentState = State.None;
+                }
+            }
+        }
+
+        public void CreateReference(IToolContext context)
+        {
+            if (context.ContainerView?.SelectionState != null)
+            {
+                lock (context.ContainerView.SelectionState?.Shapes)
+                {
+                    context.ContainerView?.SelectionState?.Dehover();
+
+                    var shapes = new List<IBaseShape>(context.ContainerView.SelectionState?.Shapes);
+
+                    foreach (var shape in shapes)
+                    {
+                        if (shape is GroupShape group)
+                        {
+                            context.ContainerView?.Reference(group);
+                        }
+                    }
+
+                    context.ContainerView?.InputService?.Redraw?.Invoke();
+
+                    this.CurrentState = State.None;
+                }
+            }
+        }
+
+        public void CreatePath(IToolContext context)
+        {
+            if (context.ContainerView?.SelectionState != null)
+            {
+                lock (context.ContainerView.SelectionState?.Shapes)
+                {
+                    context.ContainerView?.SelectionState?.Dehover();
+
+                    var shapes = new List<IBaseShape>(context.ContainerView.SelectionState?.Shapes.Reverse());
+
+                    Delete(context);
+
+                    var path = new PathShape()
+                    {
+                        Points = new ObservableCollection<IPointShape>(),
+                        Shapes = new ObservableCollection<IBaseShape>(),
+                        FillRule = PathFillRule.EvenOdd,
+                        Text = new Text(),
+                        StyleId = context.StyleLibrary?.CurrentStyle?.Title
+                    };
+
+                    var figure = new FigureShape()
+                    {
+                        Shapes = new ObservableCollection<IBaseShape>(),
+                        IsFilled = false,
+                        IsClosed = false
+                    };
+                    path.Shapes.Add(figure);
+
+                    foreach (var shape in shapes)
+                    {
+                        if (!(shape is IPointShape))
+                        {
+                            figure.Shapes.Add(shape);
+                        }
+                    }
+
+                    path.Select(context.ContainerView.SelectionState);
+                    context.ContainerView?.CurrentContainer.Shapes.Add(path);
                     context.ContainerView?.CurrentContainer.MarkAsDirty(true);
 
                     context.ContainerView?.InputService?.Redraw?.Invoke();
@@ -575,31 +648,6 @@ namespace Draw2D.ViewModels.Tools
             }
         }
 
-        public void Ungroup(IToolContext context)
-        {
-            if (context.ContainerView?.SelectionState != null)
-            {
-                lock (context.ContainerView.SelectionState?.Shapes)
-                {
-                    context.ContainerView?.SelectionState?.Dehover();
-
-                    var shapes = new List<IBaseShape>(context.ContainerView.SelectionState?.Shapes.Reverse());
-
-                    foreach (var shape in shapes)
-                    {
-                        if (shape is GroupShape group)
-                        {
-                            BreakGroup(context, group);
-                        }
-                    }
-
-                    context.ContainerView?.InputService?.Redraw?.Invoke();
-
-                    this.CurrentState = State.None;
-                }
-            }
-        }
-
         public void Break(IToolContext context)
         {
             if (context.ContainerView?.SelectionState != null)
@@ -623,31 +671,6 @@ namespace Draw2D.ViewModels.Tools
                         else if (shape is ReferenceShape reference)
                         {
                             BreakReference(context, reference);
-                        }
-                    }
-
-                    context.ContainerView?.InputService?.Redraw?.Invoke();
-
-                    this.CurrentState = State.None;
-                }
-            }
-        }
-
-        public void Reference(IToolContext context)
-        {
-            if (context.ContainerView?.SelectionState != null)
-            {
-                lock (context.ContainerView.SelectionState?.Shapes)
-                {
-                    context.ContainerView?.SelectionState?.Dehover();
-
-                    var shapes = new List<IBaseShape>(context.ContainerView.SelectionState?.Shapes);
-
-                    foreach (var shape in shapes)
-                    {
-                        if (shape is GroupShape group)
-                        {
-                            context.ContainerView?.Reference(group);
                         }
                     }
 

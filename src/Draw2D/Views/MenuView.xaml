@@ -49,12 +49,13 @@
             <MenuItem Header="_Paste" Command="{Binding Selection.Paste}" CommandParameter="{Binding}"/>
             <MenuItem Header="_Delete" Command="{Binding Selection.Delete}" CommandParameter="{Binding}"/>
             <Separator/>
-            <MenuItem Header="_Group" Command="{Binding Selection.Group}" CommandParameter="{Binding}"/>
-            <MenuItem Header="_Ungroup" Command="{Binding Selection.Ungroup}" CommandParameter="{Binding}"/>
+            <MenuItem Header="Create _Group" Command="{Binding Selection.CreateGroup}" CommandParameter="{Binding}"/>
+            <Separator/>
+            <MenuItem Header="Create_Reference" Command="{Binding Selection.CreateReference}" CommandParameter="{Binding}"/>
+            <Separator/>
+            <MenuItem Header="Create Pat_h" Command="{Binding Selection.CreatePath}" CommandParameter="{Binding}"/>
             <Separator/>
             <MenuItem Header="_Break" Command="{Binding Selection.Break}" CommandParameter="{Binding}"/>
-            <Separator/>
-            <MenuItem Header="_Reference" Command="{Binding Selection.Reference}" CommandParameter="{Binding}"/>
             <Separator/>
             <MenuItem Header="Select _All" Command="{Binding Selection.SelectAll}" CommandParameter="{Binding}"/>
             <MenuItem Header="Deselect A_ll" Command="{Binding Selection.DeselectAll}" CommandParameter="{Binding}"/>

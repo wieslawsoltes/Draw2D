@@ -9,10 +9,10 @@ namespace Draw2D.ViewModels.Tools
         void Copy(IToolContext context);
         void Paste(IToolContext context);
         void Delete(IToolContext context);
-        void Group(IToolContext context);
-        void Ungroup(IToolContext context);
+        void CreateGroup(IToolContext context);
+        void CreateReference(IToolContext context);
+        void CreatePath(IToolContext context);
         void Break(IToolContext context);
-        void Reference(IToolContext context);
         void SelectAll(IToolContext context);
         void DeselectAll(IToolContext context);
         void Connect(IToolContext context, IPointShape point);
