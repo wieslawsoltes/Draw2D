@@ -62,6 +62,19 @@ namespace Draw2D.Editor
             _containerFactory = containerFactory;
         }
 
+        private void InsertAndSelectShape(IBaseShape shape)
+        {
+            ContainerView?.CurrentContainer?.Shapes.Add(shape);
+            ContainerView?.CurrentContainer?.MarkAsDirty(true);
+
+            ContainerView?.SelectionState?.Dehover();
+            ContainerView?.SelectionState?.Clear();
+
+            shape.Select(ContainerView?.SelectionState);
+
+            ContainerView?.InputService?.Redraw?.Invoke();
+        }
+
         public void InitContainerView(IContainerView containerView)
         {
             containerView.ContainerPresenter = new AvaloniaContainerPresenter(this, containerView);
@@ -489,14 +502,25 @@ namespace Draw2D.Editor
 
         public void FromSvgPathData(TextBox textBox)
         {
-            SkiaPathHelper.FromSvgPathData(this, textBox.Text);
+            var path = SkiaHelper.FromSvgPathData(this, textBox.Text);
+            if (path != null)
+            {
+                if (path != null)
+                {
+                    InsertAndSelectShape(path);
+                }
+            }
         }
 
         public void ToSvgPathData(TextBox textBox)
         {
             if (ContainerView.SelectionState?.Shapes != null)
             {
-                textBox.Text = SkiaPathHelper.ToSvgPathData(this, ContainerView.SelectionState?.Shapes);
+                var text = SkiaHelper.ToSvgPathData(this, ContainerView.SelectionState?.Shapes);
+                if (!string.IsNullOrEmpty(text))
+                {
+                    textBox.Text = text;
+                }
             }
         }
 
@@ -504,7 +528,11 @@ namespace Draw2D.Editor
         {
             if (Enum.TryParse<SKPathOp>(parameter, true, out var op) == true)
             {
-                SkiaPathHelper.PathOp(this, op, ContainerView?.SelectionState?.Shapes);
+                var path = SkiaHelper.PathOp(this, op, ContainerView?.SelectionState?.Shapes);
+                if (path != null)
+                {
+                    InsertAndSelectShape(path);
+                }
             }
         }
 
