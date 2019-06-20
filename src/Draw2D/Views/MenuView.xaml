@@ -51,7 +51,7 @@
             <Separator/>
             <MenuItem Header="Create _Group" Command="{Binding Selection.CreateGroup}" CommandParameter="{Binding}"/>
             <Separator/>
-            <MenuItem Header="Create_Reference" Command="{Binding Selection.CreateReference}" CommandParameter="{Binding}"/>
+            <MenuItem Header="Create _Reference" Command="{Binding Selection.CreateReference}" CommandParameter="{Binding}"/>
             <Separator/>
             <MenuItem Header="Create Pat_h" Command="{Binding Selection.CreatePath}" CommandParameter="{Binding}"/>
             <Separator/>
