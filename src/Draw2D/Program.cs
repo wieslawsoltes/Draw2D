@@ -3,20 +3,19 @@
 using System;
 using Avalonia;
 using Avalonia.Logging.Serilog;
-using Draw2D.Views;
 
 namespace Draw2D
 {
     class Program
     {
         [STAThread]
-        public static void Main(string[] args)
+        public static int Main(string[] args)
         {
             try
             {
                 if (App.ParseArgs(args) == true)
                 {
-                    BuildAvaloniaApp().Start(AppMain, args);
+                    return BuildAvaloniaApp().StartWithClassicDesktopLifetime(args);
                 }
             }
             catch (Exception ex)
@@ -24,48 +23,43 @@ namespace Draw2D
                 Log.WriteLine(ex.Message);
                 Log.WriteLine(ex.StackTrace);
             }
+            return 0;
+        }
+
+        private static Win32PlatformOptions GetWin32PlatformOptions()
+        {
+            return new Win32PlatformOptions
+            {
+                EnableMultitouch = true,
+                AllowEglInitialization = false
+            };
+        }
+
+        private static X11PlatformOptions GetX11PlatformOptions()
+        {
+            return new X11PlatformOptions
+            {
+                EnableMultiTouch = true,
+                UseGpu = true,
+                UseEGL = true
+            };
+        }
+
+        private static AvaloniaNativePlatformOptions GetAvaloniaNativePlatformOptions()
+        {
+            return new AvaloniaNativePlatformOptions
+            {
+                UseGpu = true
+            };
         }
 
         public static AppBuilder BuildAvaloniaApp()
             => AppBuilder.Configure<App>()
                          .UsePlatformDetect()
-                         .With(new Win32PlatformOptions
-                         {
-                             EnableMultitouch = true,
-                             AllowEglInitialization = false
-                         })
-                         .With(new X11PlatformOptions
-                         {
-                             EnableMultiTouch = true,
-                             UseGpu = true,
-                             UseEGL = true
-                         })
-                         .With(new AvaloniaNativePlatformOptions
-                         {
-                             UseGpu = true
-                         })
+                         .With(GetWin32PlatformOptions())
+                         .With(GetX11PlatformOptions())
+                         .With(GetAvaloniaNativePlatformOptions())
                          .UseSkia()
                          .LogToDebug();
-
-        private static void AppMain(Application app, string[] args)
-        {
-            App.Load();
-
-            var window = new MainWindow
-            {
-                DataContext = App.ToolContext
-            };
-
-            App.SetWindowSettings(window);
-
-            window.Closing += (sender, e) =>
-            {
-                App.GetWindowSettings(window);
-            };
-
-            app.Run(window);
-
-            App.Save();
-        }
     }
 }

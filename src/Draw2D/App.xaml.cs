@@ -3,10 +3,12 @@
 using System.IO;
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 using Draw2D.Editor;
 using Draw2D.ViewModels.Containers;
 using Draw2D.ViewModels.Tools;
+using Draw2D.Views;
 
 namespace Draw2D
 {
@@ -269,6 +271,49 @@ namespace Draw2D
         public override void Initialize()
         {
             AvaloniaXamlLoader.Load(this);
+        }
+
+        public override void OnFrameworkInitializationCompleted()
+        {
+            if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktopLifetime)
+            {
+                App.Load();
+
+                var window = new MainWindow
+                {
+                    DataContext = App.ToolContext
+                };
+
+                App.SetWindowSettings(window);
+
+                window.Closing += (sender, e) =>
+                {
+                    App.GetWindowSettings(window);
+                };
+
+                desktopLifetime.MainWindow = window;
+
+                desktopLifetime.Exit += (sennder, e) =>
+                {
+                    App.Save();
+                };
+            }
+            else if (ApplicationLifetime is ISingleViewApplicationLifetime singleViewLifetime)
+            {
+                var view = new MainView
+                {
+                    DataContext = App.ToolContext
+                };
+
+                view.Initialized += (sennder, e) =>
+                {
+                    App.Load();
+                };
+
+                singleViewLifetime.MainView = view;
+            }
+
+            base.OnFrameworkInitializationCompleted();
         }
     }
 }

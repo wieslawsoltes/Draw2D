@@ -7,6 +7,7 @@ using System.IO;
 using System.Runtime.Serialization;
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.ApplicationLifetimes;
 using Draw2D.Presenters;
 using Draw2D.Renderers;
 using Draw2D.ViewModels;
@@ -198,7 +199,7 @@ namespace Draw2D.Editor
             dlg.Filters.Add(new FileDialogFilter() { Name = "Json Files", Extensions = { "json" } });
             dlg.Filters.Add(new FileDialogFilter() { Name = "All Files", Extensions = { "*" } });
             dlg.AllowMultiple = true;
-            var result = await dlg.ShowAsync(Application.Current.Windows[0]);
+            var result = await dlg.ShowAsync(GetWindow());
             if (result != null)
             {
                 foreach (var path in result)
@@ -215,7 +216,7 @@ namespace Draw2D.Editor
             dlg.Filters.Add(new FileDialogFilter() { Name = "All Files", Extensions = { "*" } });
             dlg.InitialFileName = ContainerView.Title;
             dlg.DefaultExtension = "json";
-            var result = await dlg.ShowAsync(Application.Current.Windows[0]);
+            var result = await dlg.ShowAsync(GetWindow());
             if (result != null)
             {
                 var path = result;
@@ -229,7 +230,7 @@ namespace Draw2D.Editor
             dlg.Filters.Add(new FileDialogFilter() { Name = "Json Files", Extensions = { "json" } });
             dlg.Filters.Add(new FileDialogFilter() { Name = "All Files", Extensions = { "*" } });
             dlg.AllowMultiple = false;
-            var result = await dlg.ShowAsync(Application.Current.Windows[0]);
+            var result = await dlg.ShowAsync(GetWindow());
             if (result != null)
             {
                 foreach (var path in result)
@@ -246,7 +247,7 @@ namespace Draw2D.Editor
             dlg.Filters.Add(new FileDialogFilter() { Name = "All Files", Extensions = { "*" } });
             dlg.InitialFileName = "styles";
             dlg.DefaultExtension = "json";
-            var result = await dlg.ShowAsync(Application.Current.Windows[0]);
+            var result = await dlg.ShowAsync(GetWindow());
             if (result != null)
             {
                 var path = result;
@@ -260,7 +261,7 @@ namespace Draw2D.Editor
             dlg.Filters.Add(new FileDialogFilter() { Name = "Json Files", Extensions = { "json" } });
             dlg.Filters.Add(new FileDialogFilter() { Name = "All Files", Extensions = { "*" } });
             dlg.AllowMultiple = false;
-            var result = await dlg.ShowAsync(Application.Current.Windows[0]);
+            var result = await dlg.ShowAsync(GetWindow());
             if (result != null)
             {
                 foreach (var path in result)
@@ -277,7 +278,7 @@ namespace Draw2D.Editor
             dlg.Filters.Add(new FileDialogFilter() { Name = "All Files", Extensions = { "*" } });
             dlg.InitialFileName = "groups";
             dlg.DefaultExtension = "json";
-            var result = await dlg.ShowAsync(Application.Current.Windows[0]);
+            var result = await dlg.ShowAsync(GetWindow());
             if (result != null)
             {
                 var path = result;
@@ -461,7 +462,7 @@ namespace Draw2D.Editor
             dlg.Filters.Add(new FileDialogFilter() { Name = "Svg Files", Extensions = { "svg" } });
             dlg.Filters.Add(new FileDialogFilter() { Name = "All Files", Extensions = { "*" } });
             dlg.AllowMultiple = true;
-            var result = await dlg.ShowAsync(Application.Current.Windows[0]);
+            var result = await dlg.ShowAsync(GetWindow());
             if (result != null)
             {
                 foreach (var path in result)
@@ -492,7 +493,7 @@ namespace Draw2D.Editor
             dlg.Filters.Add(new FileDialogFilter() { Name = "All Files", Extensions = { "*" } });
             dlg.InitialFileName = ContainerView.Title;
             dlg.DefaultExtension = "pdf";
-            var result = await dlg.ShowAsync(Application.Current.Windows[0]);
+            var result = await dlg.ShowAsync(GetWindow());
             if (result != null)
             {
                 var path = result;
@@ -538,7 +539,10 @@ namespace Draw2D.Editor
 
         public void Exit()
         {
-            Application.Current.Shutdown();
+            if (Application.Current.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktopLifetime)
+            {
+                desktopLifetime.Shutdown();
+            }
         }
 
         public void CreateDemoGroup(IToolContext context)
@@ -588,6 +592,15 @@ namespace Draw2D.Editor
             context.ContainerView?.CurrentContainer.Shapes.Add(reference1);
             context.ContainerView?.CurrentContainer.Shapes.Add(reference2);
             context.ContainerView?.CurrentContainer.MarkAsDirty(true);
+        }
+
+        private Window GetWindow()
+        {
+            if (Application.Current.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktopLifetime)
+            {
+                return desktopLifetime.MainWindow;
+            }
+            return null;
         }
     }
 }
