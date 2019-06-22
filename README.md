@@ -31,18 +31,18 @@ dotnet build -f net461 -c Release
 ### Publish Managed
 
 ```
-dotnet publish ./src/Draw2D/Draw2D.csproj -f netcoreapp3.0 -c Release -r win7-x64 -o Draw2D_netcoreapp3.0_win7-x64
-dotnet publish ./src/Draw2D/Draw2D.csproj -f netcoreapp3.0 -c Release -r ubuntu.14.04-x64 -o Draw2D_netcoreapp3.0_ubuntu.14.04-x64
-dotnet publish ./src/Draw2D/Draw2D.csproj -f netcoreapp3.0 -c Release -r debian.8-x64 -o Draw2D_netcoreapp3.0_debian.8-x64
-dotnet publish ./src/Draw2D/Draw2D.csproj -f netcoreapp3.0 -c Release -r osx.10.12-x64 -o Draw2D_netcoreapp3.0_osx.10.12-x64
+dotnet publish ./src/Draw2D.Desktop/Draw2D.Desktop.csproj -f netcoreapp3.0 -c Release -r win7-x64 -o Draw2D.Desktop_netcoreapp3.0_win7-x64
+dotnet publish ./src/Draw2D.Desktop/Draw2D.Desktop.csproj -f netcoreapp3.0 -c Release -r ubuntu.14.04-x64 -o Draw2D.Desktop_netcoreapp3.0_ubuntu.14.04-x64
+dotnet publish ./src/Draw2D.Desktop/Draw2D.Desktop.csproj -f netcoreapp3.0 -c Release -r debian.8-x64 -o Draw2D.Desktop_netcoreapp3.0_debian.8-x64
+dotnet publish ./src/Draw2D.Desktop/Draw2D.Desktop.csproj -f netcoreapp3.0 -c Release -r osx.10.12-x64 -o Draw2D.Desktop_netcoreapp3.0_osx.10.12-x64
 ```
 
 ### Publish Native
 
 ```
-dotnet publish ./src/Draw2D/Draw2D.csproj -f netcoreapp3.0 -c Release -r win-x64 -o Draw2D_netcoreapp3.0_win-x64
-dotnet publish ./src/Draw2D/Draw2D.csproj -f netcoreapp3.0 -c Release -r linux-x64 -o Draw2D_netcoreapp3.0_linux-x64
-dotnet publish ./src/Draw2D/Draw2D.csproj -f netcoreapp3.0 -c Release -r osx-x64 -o Draw2D_netcoreapp3.0_osx-x64
+dotnet publish ./src/Draw2D.Desktop/Draw2D.Desktop.csproj -f netcoreapp3.0 -c Release -r win-x64 -o Draw2D.Desktop_netcoreapp3.0_win-x64
+dotnet publish ./src/Draw2D.Desktop/Draw2D.Desktop.csproj -f netcoreapp3.0 -c Release -r linux-x64 -o Draw2D.Desktop_netcoreapp3.0_linux-x64
+dotnet publish ./src/Draw2D.Desktop/Draw2D.Desktop.csproj -f netcoreapp3.0 -c Release -r osx-x64 -o Draw2D.Desktop_netcoreapp3.0_osx-x64
 ```
 
 ## Command-Line Usage
@@ -51,34 +51,34 @@ dotnet publish ./src/Draw2D/Draw2D.csproj -f netcoreapp3.0 -c Release -r osx-x64
 
 ```
 dotnet build
-dotnet /home/ubuntu/environment/src/Draw2D/bin/Debug/netcoreapp3.0/Draw2D.dll --new-styles
+dotnet /home/ubuntu/environment/src/Draw2D.Desktop/bin/Debug/netcoreapp3.0/Draw2D.Desktop.dll --new-styles
 ```
 
 ### Create Groups Library
 
 ```
 dotnet build
-dotnet /home/ubuntu/environment/src/Draw2D/bin/Debug/netcoreapp3.0/Draw2D.dll --new-groups
+dotnet /home/ubuntu/environment/src/Draw2D.Desktop/bin/Debug/netcoreapp3.0/Draw2D.Desktop.dll --new-groups
 ```
 
 ### Create View
 ```
 dotnet build
-dotnet /home/ubuntu/environment/src/Draw2D/bin/Debug/netcoreapp3.0/Draw2D.dll --new-view
+dotnet /home/ubuntu/environment/src/Draw2D.Desktop/bin/Debug/netcoreapp3.0/Draw2D.Desktop.dll --new-view
 ```
 
 ### Create Editor
 ```
 dotnet build
-dotnet /home/ubuntu/environment/src/Draw2D/bin/Debug/netcoreapp3.0/Draw2D.dll --new-editor
+dotnet /home/ubuntu/environment/src/Draw2D.Desktop/bin/Debug/netcoreapp3.0/Draw2D.Desktop.dll --new-editor
 ```
 
 ### Export View
 
 ```
 dotnet build
-dotnet /home/ubuntu/environment/src/Draw2D/bin/Debug/netcoreapp3.0/Draw2D.dll --demo
-dotnet /home/ubuntu/environment/src/Draw2D/bin/Debug/netcoreapp3.0/Draw2D.dll --export demo.json demo.png
+dotnet /home/ubuntu/environment/src/Draw2D.Desktop/bin/Debug/netcoreapp3.0/Draw2D.Desktop.dll --demo
+dotnet /home/ubuntu/environment/src/Draw2D.Desktop/bin/Debug/netcoreapp3.0/Draw2D.Desktop.dll --export demo.json demo.png
 ```
 
 ## Linux Fonts

@@ -3,7 +3,7 @@
 
 namespace Draw2D
 {
-    internal static class Log
+    public static class Log
     {
 #if DEBUG
         public static void WriteLine(string message)
