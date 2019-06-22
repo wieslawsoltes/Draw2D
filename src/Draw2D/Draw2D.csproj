@@ -1,8 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <OutputType>WinExe</OutputType>
-    <TargetFrameworks>netcoreapp3.0;net461</TargetFrameworks>
+    <OutputType>Library</OutputType>
+    <TargetFrameworks>netstandard2.0;net461</TargetFrameworks>
     <EnableDefaultCompileItems>False</EnableDefaultCompileItems>
     <IsPackable>False</IsPackable>
     <LangVersion>latest</LangVersion>
@@ -60,11 +60,15 @@
     </AvaloniaResource>
   </ItemGroup>
 
+  <ItemGroup Condition="$(TargetFramework.StartsWith('net4'))">
+    <Reference Include="System" />
+    <Reference Include="System.Drawing" />
+  </ItemGroup>
+
   <ItemGroup>
     <PackageReference Include="Avalonia" Version="0.8.1-cibuild0003015-beta" />
-    <PackageReference Include="Avalonia.Desktop" Version="0.8.1-cibuild0003015-beta" />
+    <PackageReference Include="Avalonia.Skia" Version="0.8.1-cibuild0003015-beta" />
     <PackageReference Include="Avalonia.Controls.DataGrid" Version="0.8.1-cibuild0003015-beta" />
-    <PackageReference Include="Avalonia.Angle.Windows.Natives" Version="2.1.0.2019013001" />
     <PackageReference Include="Math.Spatial" Version="1.0.4" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
     <PackageReference Include="SkiaSharp" Version="1.68.0" />
@@ -73,36 +77,8 @@
   </ItemGroup>
 
   <ItemGroup Condition="$(TargetFramework.StartsWith('net4'))">
-    <Reference Include="System" />
-    <Reference Include="System.Drawing" />
-  </ItemGroup>
-
-  <ItemGroup Condition="$(TargetFramework.StartsWith('net4'))">
     <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.0-preview.2" />
   </ItemGroup>
-
-  <PropertyGroup Condition="'$(RuntimeIdentifier)' == 'win-x64' or '$(RuntimeIdentifier)' == 'linux-x64' or '$(RuntimeIdentifier)' == 'osx-x64'">
-    <CoreRT>True</CoreRT>
-  </PropertyGroup>
-  
-  <!-- https://github.com/dotnet/corert -->
-  <ItemGroup Condition="'$(CoreRT)' == 'True'">
-    <RdXmlFile Include="Draw2D.rd.xml" />
-    <PackageReference Include="Microsoft.DotNet.ILCompiler" Version="1.0.0-alpha-*" />
-  </ItemGroup>
-
-  <!-- https://github.com/dotnet/corert/blob/master/Documentation/using-corert/optimizing-corert.md -->
-  <PropertyGroup Condition="'$(CoreRT)' == 'True'">
-    <RootAllApplicationAssemblies>False</RootAllApplicationAssemblies>
-    <IlcGenerateCompleteTypeMetadata>False</IlcGenerateCompleteTypeMetadata>
-    <IlcGenerateStackTraceData>False</IlcGenerateStackTraceData>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(CoreRT)' != 'True'">
-    <PublishTrimmed>True</PublishTrimmed>
-    <PublishSingleFile>False</PublishSingleFile>
-    <PublishReadyToRun>True</PublishReadyToRun>
-  </PropertyGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Draw2D.Input\Draw2D.Input.csproj" />
