@@ -237,56 +237,56 @@ namespace Draw2D.Renderers
         public void DrawLine(object dc, LineShape line, string styleId, double dx, double dy, double scale)
         {
             var geometry = new SKPath();
-            SkiaHelper.ToGeometry(line, dx, dy, geometry);
+            SkiaHelper.ToGeometry(null, line, dx, dy, geometry);
             _rootNodes[_currentRootNode].Children.Add(new ChildNode(line, styleId, dx, dy, scale, geometry));
         }
 
         public void DrawCubicBezier(object dc, CubicBezierShape cubicBezier, string styleId, double dx, double dy, double scale)
         {
             var geometry = new SKPath();
-            SkiaHelper.ToGeometry(cubicBezier, dx, dy, geometry);
+            SkiaHelper.ToGeometry(null, cubicBezier, dx, dy, geometry);
             _rootNodes[_currentRootNode].Children.Add(new ChildNode(cubicBezier, styleId, dx, dy, scale, geometry));
         }
 
         public void DrawQuadraticBezier(object dc, QuadraticBezierShape quadraticBezier, string styleId, double dx, double dy, double scale)
         {
             var geometry = new SKPath();
-            SkiaHelper.ToGeometry(quadraticBezier, dx, dy, geometry);
+            SkiaHelper.ToGeometry(null, quadraticBezier, dx, dy, geometry);
             _rootNodes[_currentRootNode].Children.Add(new ChildNode(quadraticBezier, styleId, dx, dy, scale, geometry));
         }
 
         public void DrawConic(object dc, ConicShape conic, string styleId, double dx, double dy, double scale)
         {
             var geometry = new SKPath();
-            SkiaHelper.ToGeometry(conic, dx, dy, geometry);
+            SkiaHelper.ToGeometry(null, conic, dx, dy, geometry);
             _rootNodes[_currentRootNode].Children.Add(new ChildNode(conic, styleId, dx, dy, scale, geometry));
         }
 
         public void DrawPath(object dc, PathShape path, string styleId, double dx, double dy, double scale)
         {
             var geometry = new SKPath();
-            SkiaHelper.ToGeometry(path, dx, dy, geometry);
+            SkiaHelper.ToGeometry(null, path, dx, dy, geometry);
             _rootNodes[_currentRootNode].Children.Add(new ChildNode(path, styleId, dx, dy, scale, geometry));
         }
 
         public void DrawRectangle(object dc, RectangleShape rectangle, string styleId, double dx, double dy, double scale)
         {
             var geometry = new SKPath();
-            SkiaHelper.ToGeometry(rectangle, dx, dy, geometry);
+            SkiaHelper.ToGeometry(null, rectangle, dx, dy, geometry);
             _rootNodes[_currentRootNode].Children.Add(new ChildNode(rectangle, styleId, dx, dy, scale, geometry));
         }
 
         public void DrawEllipse(object dc, EllipseShape ellipse, string styleId, double dx, double dy, double scale)
         {
             var geometry = new SKPath();
-            SkiaHelper.ToGeometry(ellipse, dx, dy, geometry);
+            SkiaHelper.ToGeometry(null, ellipse, dx, dy, geometry);
             _rootNodes[_currentRootNode].Children.Add(new ChildNode(ellipse, styleId, dx, dy, scale, geometry));
         }
 
         public void DrawText(object dc, TextShape text, string styleId, double dx, double dy, double scale)
         {
             var geometry = new SKPath();
-            SkiaHelper.ToGeometry(text, dx, dy, geometry);
+            SkiaHelper.ToGeometry(null, text, dx, dy, geometry);
             _rootNodes[_currentRootNode].Children.Add(new ChildNode(text, styleId, dx, dy, scale, geometry));
         }
     }
