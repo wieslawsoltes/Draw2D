@@ -177,6 +177,13 @@ namespace Draw2D.ViewModels.Tools
         }
 
         [IgnoreDataMember]
+        public IPathConverter PathConverter
+        {
+            get => _context.PathConverter;
+            set => throw new InvalidOperationException($"Can not set {PathConverter} property value.");
+        }
+
+        [IgnoreDataMember]
         public IList<IContainerView> ContainerViews
         {
             get => _context.ContainerViews;

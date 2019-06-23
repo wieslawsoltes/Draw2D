@@ -13,6 +13,7 @@ namespace Draw2D.ViewModels.Tools
         IGroupLibrary GroupLibrary { get; set; }
         IBaseShape PointTemplate { get; set; }
         IHitTest HitTest { get; set; }
+        IPathConverter PathConverter { get; set; }
         IList<IContainerView> ContainerViews { get; set; }
         IContainerView ContainerView { get; set; }
         IList<ITool> Tools { get; set; }

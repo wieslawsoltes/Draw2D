@@ -3,6 +3,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Draw2D.Input;
+using Draw2D.Renderers;
 using Draw2D.ViewModels;
 using Draw2D.ViewModels.Bounds;
 using Draw2D.ViewModels.Containers;
@@ -151,6 +152,8 @@ namespace Draw2D.Editor
             var editorToolContext = new EditorToolContext(this);
 
             var hitTest = new HitTest();
+
+            var pathConverter = new SkiaPathConverter();
 
             var tools = new ObservableCollection<ITool>();
 
@@ -837,6 +840,7 @@ namespace Draw2D.Editor
 
             editorToolContext.Selection = selectionTool;
             editorToolContext.HitTest = hitTest;
+            editorToolContext.PathConverter = pathConverter;
             editorToolContext.CurrentDirectory = null;
             editorToolContext.Files = new ObservableCollection<string>();
 

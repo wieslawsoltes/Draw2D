@@ -503,7 +503,8 @@ namespace Draw2D.Editor
 
         public void FromSvgPathData(TextBox textBox)
         {
-            var path = SkiaHelper.FromSvgPathData(this, textBox.Text);
+            var text = textBox.Text;
+            var path = PathConverter?.ToPathShape(this, text);
             if (path != null)
             {
                 if (path != null)
@@ -517,7 +518,7 @@ namespace Draw2D.Editor
         {
             if (ContainerView.SelectionState?.Shapes != null)
             {
-                var text = SkiaHelper.ToSvgPathData(this, ContainerView.SelectionState?.Shapes);
+                var text = PathConverter?.ToSvgPathData(this, ContainerView.SelectionState?.Shapes);
                 if (!string.IsNullOrEmpty(text))
                 {
                     textBox.Text = text;
@@ -527,9 +528,9 @@ namespace Draw2D.Editor
 
         public void PathOp(string parameter)
         {
-            if (Enum.TryParse<SKPathOp>(parameter, true, out var op) == true)
+            if (Enum.TryParse<PathOp>(parameter, true, out var op) == true)
             {
-                var path = SkiaHelper.PathOp(this, op, ContainerView?.SelectionState?.Shapes);
+                var path = PathConverter?.Op(this, op, ContainerView?.SelectionState?.Shapes);
                 if (path != null)
                 {
                     InsertAndSelectShape(path);

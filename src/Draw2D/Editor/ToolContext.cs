@@ -17,6 +17,7 @@ namespace Draw2D.Editor
         private IGroupLibrary _groupLibrary;
         private IBaseShape _pointTemplate;
         private IHitTest _hitTest;
+        private IPathConverter _pathConverter;
         private IList<IContainerView> _containerViews;
         private IContainerView _containerView;
         private IList<ITool> _tools;
@@ -57,6 +58,13 @@ namespace Draw2D.Editor
         {
             get => _hitTest;
             set => Update(ref _hitTest, value);
+        }
+
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public IPathConverter PathConverter
+        {
+            get => _pathConverter;
+            set => Update(ref _pathConverter, value);
         }
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]

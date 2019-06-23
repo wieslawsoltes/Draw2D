@@ -526,34 +526,19 @@ namespace Draw2D.ViewModels.Tools
 
                     Delete(context);
 
-                    var path = new PathShape()
-                    {
-                        Points = new ObservableCollection<IPointShape>(),
-                        Shapes = new ObservableCollection<IBaseShape>(),
-                        FillRule = PathFillRule.EvenOdd,
-                        Text = new Text(),
-                        StyleId = context.StyleLibrary?.CurrentStyle?.Title
-                    };
-
-                    var figure = new FigureShape()
-                    {
-                        Shapes = new ObservableCollection<IBaseShape>(),
-                        IsFilled = false,
-                        IsClosed = false
-                    };
-                    path.Shapes.Add(figure);
-
                     foreach (var shape in shapes)
                     {
                         if (!(shape is IPointShape))
                         {
-                            figure.Shapes.Add(shape);
+                            var path = context?.PathConverter?.ToPathShape(context, shape);
+                            if (path != null)
+                            {
+                                path.Select(context.ContainerView.SelectionState);
+                                context.ContainerView?.CurrentContainer.Shapes.Add(path);
+                                context.ContainerView?.CurrentContainer.MarkAsDirty(true);
+                            }
                         }
                     }
-
-                    path.Select(context.ContainerView.SelectionState);
-                    context.ContainerView?.CurrentContainer.Shapes.Add(path);
-                    context.ContainerView?.CurrentContainer.MarkAsDirty(true);
 
                     context.ContainerView?.InputService?.Redraw?.Invoke();
 
