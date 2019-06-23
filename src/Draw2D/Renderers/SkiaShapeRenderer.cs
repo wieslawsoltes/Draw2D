@@ -284,8 +284,9 @@ namespace Draw2D.Renderers
             if (style.IsStroked || style.TextStyle.IsStroked)
             {
                 var canvas = dc as SKCanvas;
-                using (var geometry = SkiaHelper.ToGeometry(line, dx, dy))
+                using (var geometry = new SKPath())
                 {
+                    SkiaHelper.ToGeometry(line, dx, dy, geometry);
                     if (style.IsStroked)
                     {
                         GetSKPaintStroke(style, out var pen, scale);
@@ -310,8 +311,9 @@ namespace Draw2D.Renderers
             if (style.IsFilled || style.IsStroked || style.TextStyle.IsStroked)
             {
                 var canvas = dc as SKCanvas;
-                using (var geometry = SkiaHelper.ToGeometry(cubicBezier, dx, dy))
+                using (var geometry = new SKPath())
                 {
+                    SkiaHelper.ToGeometry(cubicBezier, dx, dy, geometry);
                     if (style.IsFilled)
                     {
                         GetSKPaintFill(style, out var brush);
@@ -340,8 +342,9 @@ namespace Draw2D.Renderers
             if (style.IsFilled || style.IsStroked || style.TextStyle.IsStroked)
             {
                 var canvas = dc as SKCanvas;
-                using (var geometry = SkiaHelper.ToGeometry(quadraticBezier, dx, dy))
+                using (var geometry = new SKPath())
                 {
+                    SkiaHelper.ToGeometry(quadraticBezier, dx, dy, geometry);
                     if (style.IsFilled)
                     {
                         GetSKPaintFill(style, out var brush);
@@ -370,8 +373,9 @@ namespace Draw2D.Renderers
             if (style.IsFilled || style.IsStroked || style.TextStyle.IsStroked)
             {
                 var canvas = dc as SKCanvas;
-                using (var geometry = SkiaHelper.ToGeometry(conic, dx, dy))
+                using (var geometry = new SKPath())
                 {
+                    SkiaHelper.ToGeometry(conic, dx, dy, geometry);
                     if (style.IsFilled)
                     {
                         GetSKPaintFill(style, out var brush);
@@ -400,8 +404,9 @@ namespace Draw2D.Renderers
             if (style.IsFilled || style.IsStroked || style.TextStyle.IsStroked)
             {
                 var canvas = dc as SKCanvas;
-                using (var geometry = SkiaHelper.ToGeometry(path, dx, dy))
+                using (var geometry = new SKPath())
                 {
+                    SkiaHelper.ToGeometry(path, dx, dy, geometry);
                     if (style.IsFilled)
                     {
                         GetSKPaintFill(style, out var brush);
@@ -451,8 +456,9 @@ namespace Draw2D.Renderers
             if (style.IsFilled || style.IsStroked || style.TextStyle.IsStroked)
             {
                 var canvas = dc as SKCanvas;
-                using (var geometry = SkiaHelper.ToGeometry(rectangle, dx, dy))
+                using (var geometry = new SKPath())
                 {
+                    SkiaHelper.ToGeometry(rectangle, dx, dy, geometry);
                     if (style.IsFilled)
                     {
                         GetSKPaintFill(style, out var brush);
@@ -503,8 +509,9 @@ namespace Draw2D.Renderers
             if (style.IsFilled || style.IsStroked || style.TextStyle.IsStroked)
             {
                 var canvas = dc as SKCanvas;
-                using (var geometry = SkiaHelper.ToGeometry(ellipse, dx, dy))
+                using (var geometry = new SKPath())
                 {
+                    SkiaHelper.ToGeometry(ellipse, dx, dy, geometry);
                     if (style.IsFilled)
                     {
                         GetSKPaintFill(style, out var brush);
