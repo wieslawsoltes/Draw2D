@@ -191,26 +191,26 @@ namespace Draw2D.Renderers
 
         public static void ToGeometry(RectangleShape rectangle, double dx, double dy, SKPath geometry)
         {
-            var rect = SkiaHelper.ToRect(rectangle.TopLeft, rectangle.BottomRight, dx, dy);
+            var rect = ToRect(rectangle.TopLeft, rectangle.BottomRight, dx, dy);
             geometry.AddRect(rect, SKPathDirection.Clockwise);
         }
 
         public static void ToGeometry(EllipseShape ellipse, double dx, double dy, SKPath geometry)
         {
-            var rect = SkiaHelper.ToRect(ellipse.TopLeft, ellipse.BottomRight, dx, dy);
+            var rect = ToRect(ellipse.TopLeft, ellipse.BottomRight, dx, dy);
             geometry.AddOval(rect, SKPathDirection.Clockwise);
         }
 
         public static void ToGeometry(TextShape text, double dx, double dy, SKPath geometry)
         {
-            var rect = SkiaHelper.ToRect(text.TopLeft, text.BottomRight, dx, dy);
+            var rect = ToRect(text.TopLeft, text.BottomRight, dx, dy);
             geometry.AddRect(rect, SKPathDirection.Clockwise);
         }
 
         public static SKPath ToGeometry(Text text, IPointShape topLeft, IPointShape bottomRight, TextStyle style, double dx, double dy, SKPath geometry)
         {
-            using (var typeface = SkiaHelper.ToSKTypeface(style.FontFamily))
-            using (var paint = SkiaHelper.ToSKPaintBrush(style.Stroke))
+            using (var typeface = ToSKTypeface(style.FontFamily))
+            using (var paint = ToSKPaintBrush(style.Stroke))
             {
                 paint.Typeface = typeface;
                 paint.TextEncoding = SKTextEncoding.Utf16;
@@ -367,41 +367,48 @@ namespace Draw2D.Renderers
             }
         }
 
-        public static void ToGeometry(IBaseShape shape, double dx, double dy, SKPath geometry)
+        public static bool ToGeometry(IBaseShape shape, double dx, double dy, SKPath geometry)
         {
             switch (shape)
             {
                 case LineShape line:
-                    SkiaHelper.ToGeometry(line, dx, dy, geometry);
-                    break;
+                    ToGeometry(line, dx, dy, geometry);
+                    return true;
                 case CubicBezierShape cubicBezier:
-                    SkiaHelper.ToGeometry(cubicBezier, dx, dy, geometry);
-                    break;
+                    ToGeometry(cubicBezier, dx, dy, geometry);
+                    return true;
                 case QuadraticBezierShape quadraticBezier:
-                    SkiaHelper.ToGeometry(quadraticBezier, dx, dy, geometry);
-                    break;
+                    ToGeometry(quadraticBezier, dx, dy, geometry);
+                    return true;
                 case ConicShape conic:
-                    SkiaHelper.ToGeometry(conic, dx, dy, geometry);
-                    break;
+                    ToGeometry(conic, dx, dy, geometry);
+                    return true;
+                case FigureShape figure:
+                    ToGeometry(figure, dx, dy, geometry);
+                    return true;
                 case PathShape path:
-                    SkiaHelper.ToGeometry(path, dx, dy, geometry);
-                    break;
+                    ToGeometry(path, dx, dy, geometry);
+                    return true;
                 case RectangleShape rectangle:
-                    SkiaHelper.ToGeometry(rectangle, dx, dy, geometry);
-                    break;
+                    ToGeometry(rectangle, dx, dy, geometry);
+                    return true;
                 case EllipseShape ellipse:
-                    SkiaHelper.ToGeometry(ellipse, dx, dy, geometry);
-                    break;
+                    ToGeometry(ellipse, dx, dy, geometry);
+                    return true;
                 case IPointShape point:
-                    SkiaHelper.ToGeometry(point, dx, dy, geometry);
-                    break;
-                case GroupShape group:
-                    SkiaHelper.ToGeometry(group, dx, dy, geometry);
-                    break;
+                    ToGeometry(point, dx, dy, geometry);
+                    return true;
                 case TextShape text:
-                    SkiaHelper.ToGeometry(text, dx, dy, geometry);
-                    break;
+                    ToGeometry(text, dx, dy, geometry);
+                    return true;
+                case GroupShape group:
+                    ToGeometry(group, dx, dy, geometry);
+                    return true;
+                case ReferenceShape reference:
+                    ToGeometry(reference, dx, dy, geometry);
+                    return true;
             };
+            return false;
         }
 
         public static SKPath ToGeometry(string svgPathData)
@@ -571,7 +578,7 @@ namespace Draw2D.Renderers
             {
                 using (var geometry = new SKPath())
                 {
-                    SkiaHelper.ToGeometry(text, topLeft, bottomRight, style, 0.0, 0.0, geometry);
+                    ToGeometry(text, topLeft, bottomRight, style, 0.0, 0.0, geometry);
                     sb.AppendLine(geometry.ToSvgPathData());
                 }
             }
@@ -585,7 +592,7 @@ namespace Draw2D.Renderers
                     {
                         using (var geometry = new SKPath())
                         {
-                            SkiaHelper.ToGeometry(line, 0.0, 0.0, geometry);
+                            ToGeometry(line, 0.0, 0.0, geometry);
                             sb.AppendLine(geometry.ToSvgPathData());
                         }
                     }
@@ -594,7 +601,7 @@ namespace Draw2D.Renderers
                     {
                         using (var geometry = new SKPath())
                         {
-                            SkiaHelper.ToGeometry(cubicBezier, 0.0, 0.0, geometry);
+                            ToGeometry(cubicBezier, 0.0, 0.0, geometry);
                             sb.AppendLine(geometry.ToSvgPathData());
                         }
                     }
@@ -603,7 +610,7 @@ namespace Draw2D.Renderers
                     {
                         using (var geometry = new SKPath())
                         {
-                            SkiaHelper.ToGeometry(quadraticBezier, 0.0, 0.0, geometry);
+                            ToGeometry(quadraticBezier, 0.0, 0.0, geometry);
                             sb.AppendLine(geometry.ToSvgPathData());
                         }
                     }
@@ -612,7 +619,7 @@ namespace Draw2D.Renderers
                     {
                         using (var geometry = new SKPath())
                         {
-                            SkiaHelper.ToGeometry(conic, 0.0, 0.0, geometry);
+                            ToGeometry(conic, 0.0, 0.0, geometry);
                             sb.AppendLine(geometry.ToSvgPathData());
                         }
                     }
@@ -621,7 +628,7 @@ namespace Draw2D.Renderers
                     {
                         using (var geometry = new SKPath())
                         {
-                            SkiaHelper.ToGeometry(pathShape, 0.0, 0.0, geometry);
+                            ToGeometry(pathShape, 0.0, 0.0, geometry);
                             sb.AppendLine(geometry.ToSvgPathData());
                         }
                     }
@@ -630,7 +637,7 @@ namespace Draw2D.Renderers
                     {
                         using (var geometry = new SKPath())
                         {
-                            SkiaHelper.ToGeometry(rectangle, 0.0, 0.0, geometry);
+                            ToGeometry(rectangle, 0.0, 0.0, geometry);
                             sb.AppendLine(geometry.ToSvgPathData());
 
                             var style = GetShapeStyle(context, rectangle.StyleId);
@@ -645,7 +652,7 @@ namespace Draw2D.Renderers
                     {
                         using (var geometry = new SKPath())
                         {
-                            SkiaHelper.ToGeometry(ellipse, 0.0, 0.0, geometry);
+                            ToGeometry(ellipse, 0.0, 0.0, geometry);
                             sb.AppendLine(geometry.ToSvgPathData());
 
                             var style = GetShapeStyle(context, ellipse.StyleId);
@@ -702,8 +709,8 @@ namespace Draw2D.Renderers
         {
             if (!string.IsNullOrWhiteSpace(svgPathData))
             {
-                var path = SkiaHelper.ToGeometry(svgPathData);
-                return SkiaHelper.FromGeometry(path, context.StyleLibrary?.CurrentStyle, context.PointTemplate);
+                var path = ToGeometry(svgPathData);
+                return FromGeometry(path, context.StyleLibrary?.CurrentStyle, context.PointTemplate);
             }
             return null;
         }
@@ -713,32 +720,32 @@ namespace Draw2D.Renderers
             switch (shape)
             {
                 case LineShape line:
-                    SkiaHelper.ToGeometry(line, 0.0, 0.0, geometry);
+                    ToGeometry(line, 0.0, 0.0, geometry);
                     return true;
                 case CubicBezierShape cubicBezier:
-                    SkiaHelper.ToGeometry(cubicBezier, 0.0, 0.0, geometry);
+                    ToGeometry(cubicBezier, 0.0, 0.0, geometry);
                     return true;
                 case QuadraticBezierShape quadraticBezier:
-                    SkiaHelper.ToGeometry(quadraticBezier, 0.0, 0.0, geometry);
+                    ToGeometry(quadraticBezier, 0.0, 0.0, geometry);
                     return true;
                 case ConicShape conic:
-                    SkiaHelper.ToGeometry(conic, 0.0, 0.0, geometry);
+                    ToGeometry(conic, 0.0, 0.0, geometry);
                     return true;
                 case PathShape pathShape:
-                    SkiaHelper.ToGeometry(pathShape, 0.0, 0.0, geometry);
+                    ToGeometry(pathShape, 0.0, 0.0, geometry);
                     return true;
                 case RectangleShape rectangle:
-                    SkiaHelper.ToGeometry(rectangle, 0.0, 0.0, geometry);
+                    ToGeometry(rectangle, 0.0, 0.0, geometry);
                     return true;
                 case EllipseShape ellipse:
-                    SkiaHelper.ToGeometry(ellipse, 0.0, 0.0, geometry);
+                    ToGeometry(ellipse, 0.0, 0.0, geometry);
                     return true;
                 case TextShape text:
                     {
                         var style = GetShapeStyle(context, text.StyleId);
                         if (style != null)
                         {
-                            SkiaHelper.ToGeometry(text.Text, text.TopLeft, text.BottomRight, style.TextStyle, 0.0, 0.0, geometry);
+                            ToGeometry(text.Text, text.TopLeft, text.BottomRight, style.TextStyle, 0.0, 0.0, geometry);
                             return true;
                         }
                     }
@@ -821,7 +828,7 @@ namespace Draw2D.Renderers
                     {
                         if (!result.IsEmpty)
                         {
-                            path = SkiaHelper.FromGeometry(result, context.StyleLibrary?.CurrentStyle, context.PointTemplate);
+                            path = FromGeometry(result, context.StyleLibrary?.CurrentStyle, context.PointTemplate);
                         }
                         result.Dispose();
                     }
