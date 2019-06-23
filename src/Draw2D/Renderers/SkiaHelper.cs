@@ -14,41 +14,6 @@ namespace Draw2D.Renderers
 {
     internal class SkiaHelper
     {
-        internal static ShapeStyle GetShapeStyle(IToolContext context, string styleId)
-        {
-            if (context?.StyleLibrary?.Styles != null)
-            {
-                foreach (var style in context?.StyleLibrary.Styles)
-                {
-                    if (style.Title == styleId)
-                    {
-                        return style;
-                    }
-                }
-            }
-            return null;
-        }
-
-        internal static IList<IBaseShape> GetShapes(ICollection<IBaseShape> selected)
-        {
-            if (selected == null || selected.Count <= 0)
-            {
-                return null;
-            }
-
-            var shapes = new List<IBaseShape>();
-
-            foreach (var shape in selected)
-            {
-                if (!(shape is IPointShape))
-                {
-                    shapes.Add(shape);
-                }
-            }
-
-            return shapes;
-        }
-
         internal static SKTypeface ToSKTypeface(string familyName)
         {
             return SKTypeface.FromFamilyName(
@@ -289,7 +254,7 @@ namespace Draw2D.Renderers
 
         internal static void ToGeometry(IToolContext context, TextShape text, double dx, double dy, SKPath geometry)
         {
-            var style = GetShapeStyle(context, text.StyleId);
+            var style = context?.StyleLibrary?.Get(text.StyleId);
             if (style != null)
             {
                 ToGeometry(context, text.Text, text.TopLeft, text.BottomRight, style.TextStyle, dx, dy, geometry);
@@ -438,38 +403,6 @@ namespace Draw2D.Renderers
             return SKPath.ParseSvgPathData(svgPathData);
         }
 
-        internal static bool ToGeometry(IToolContext context, IBaseShape shape, SKPath geometry)
-        {
-            switch (shape)
-            {
-                case LineShape line:
-                    ToGeometry(context, line, 0.0, 0.0, geometry);
-                    return true;
-                case CubicBezierShape cubicBezier:
-                    ToGeometry(context, cubicBezier, 0.0, 0.0, geometry);
-                    return true;
-                case QuadraticBezierShape quadraticBezier:
-                    ToGeometry(context, quadraticBezier, 0.0, 0.0, geometry);
-                    return true;
-                case ConicShape conic:
-                    ToGeometry(context, conic, 0.0, 0.0, geometry);
-                    return true;
-                case PathShape pathShape:
-                    ToGeometry(context, pathShape, 0.0, 0.0, geometry);
-                    return true;
-                case RectangleShape rectangle:
-                    ToGeometry(context, rectangle, 0.0, 0.0, geometry);
-                    return true;
-                case EllipseShape ellipse:
-                    ToGeometry(context, ellipse, 0.0, 0.0, geometry);
-                    return true;
-                case TextShape text:
-                    ToGeometry(context, text, 0.0, 0.0, geometry);
-                    break;
-            };
-            return false;
-        }
-
         internal static IList<SKPath> ToGeometries(IToolContext context, IList<IBaseShape> shapes)
         {
             if (shapes == null || shapes.Count <= 0)
@@ -482,7 +415,7 @@ namespace Draw2D.Renderers
             for (int i = 0; i < shapes.Count; i++)
             {
                 var path = new SKPath();
-                var result = ToGeometry(context, shapes[i], path);
+                var result = ToGeometry(context, shapes[i], 0.0, 0.0, path);
                 if (result == true && path.IsEmpty == false)
                 {
                     paths.Add(path);
@@ -754,7 +687,7 @@ namespace Draw2D.Renderers
                             ToGeometry(context, rectangle, 0.0, 0.0, geometry);
                             sb.AppendLine(geometry.ToSvgPathData());
 
-                            var style = GetShapeStyle(context, rectangle.StyleId);
+                            var style = context?.StyleLibrary?.Get(rectangle.StyleId);
                             if (style != null)
                             {
                                 ToSvgPathData(context, rectangle.Text, rectangle.TopLeft, rectangle.BottomRight, style.TextStyle, sb);
@@ -769,7 +702,7 @@ namespace Draw2D.Renderers
                             ToGeometry(context, ellipse, 0.0, 0.0, geometry);
                             sb.AppendLine(geometry.ToSvgPathData());
 
-                            var style = GetShapeStyle(context, ellipse.StyleId);
+                            var style = context?.StyleLibrary?.Get(ellipse.StyleId);
                             if (style != null)
                             {
                                 ToSvgPathData(context, ellipse.Text, ellipse.TopLeft, ellipse.BottomRight, style.TextStyle, sb);
@@ -797,7 +730,7 @@ namespace Draw2D.Renderers
                     break;
                 case TextShape text:
                     {
-                        var style = GetShapeStyle(context, text.StyleId);
+                        var style = context?.StyleLibrary?.Get(text.StyleId);
                         if (style != null)
                         {
                             ToSvgPathData(context, text.Text, text.TopLeft, text.BottomRight, style.TextStyle, sb);
@@ -805,68 +738,6 @@ namespace Draw2D.Renderers
                     }
                     break;
             };
-        }
-
-        public static PathShape ToPathShape(IToolContext context, IBaseShape shape)
-        {
-            using (var geometry = new SKPath())
-            {
-                if (ToGeometry(context, shape, 0.0, 0.0, geometry) == true)
-                {
-                    return ToPathShape(context, geometry, context.StyleLibrary?.CurrentStyle, context.PointTemplate);
-                }
-            }
-            return null;
-        }
-
-        public static PathShape Op(IToolContext context, PathOp op, ICollection<IBaseShape> selected)
-        {
-            var path = default(PathShape);
-            var shapes = GetShapes(selected);
-            if (shapes != null && shapes.Count > 0)
-            {
-                var paths = ToGeometries(context, shapes);
-                if (paths != null && paths.Count > 0)
-                {
-                    var result = Op(ToPathOp(op), paths);
-                    if (result != null)
-                    {
-                        if (!result.IsEmpty)
-                        {
-                            path = ToPathShape(context, result, context.StyleLibrary?.CurrentStyle, context.PointTemplate);
-                        }
-                        result.Dispose();
-                    }
-
-                    for (int i = 0; i < paths.Count; i++)
-                    {
-                        paths[i].Dispose();
-                    }
-                }
-            }
-            return path;
-        }
-
-        public static PathShape ToPathShape(IToolContext context, string svgPathData)
-        {
-            if (!string.IsNullOrWhiteSpace(svgPathData))
-            {
-                var path = ToGeometry(svgPathData);
-                return ToPathShape(context, path, context.StyleLibrary?.CurrentStyle, context.PointTemplate);
-            }
-            return null;
-        }
-
-        public static string ToSvgPathData(IToolContext context, ICollection<IBaseShape> selected)
-        {
-            var sb = new StringBuilder();
-
-            foreach (var shape in selected)
-            {
-                ToSvgPathData(context, shape, sb);
-            }
-
-            return sb.ToString();
         }
     }
 }
