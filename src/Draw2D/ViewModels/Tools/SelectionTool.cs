@@ -501,7 +501,7 @@ namespace Draw2D.ViewModels.Tools
 
                     foreach (var shape in shapes)
                     {
-                        if (!(shape is IPointShape))
+                        if (!(shape is IPointShape) && !(shape is ReferenceShape))
                         {
                             context.ContainerView?.Reference(shape);
                         }
