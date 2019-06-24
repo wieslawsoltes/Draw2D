@@ -63,19 +63,6 @@ namespace Draw2D.Editor
             _containerFactory = containerFactory;
         }
 
-        private void InsertAndSelectShape(IBaseShape shape)
-        {
-            ContainerView?.CurrentContainer?.Shapes.Add(shape);
-            ContainerView?.CurrentContainer?.MarkAsDirty(true);
-
-            ContainerView?.SelectionState?.Dehover();
-            ContainerView?.SelectionState?.Clear();
-
-            shape.Select(ContainerView?.SelectionState);
-
-            ContainerView?.InputService?.Redraw?.Invoke();
-        }
-
         public void InitContainerView(IContainerView containerView)
         {
             containerView.ContainerPresenter = new AvaloniaContainerPresenter(this, containerView);
@@ -507,10 +494,15 @@ namespace Draw2D.Editor
             var path = PathConverter?.ToPathShape(this, text);
             if (path != null)
             {
-                if (path != null)
-                {
-                    InsertAndSelectShape(path);
-                }
+                ContainerView?.CurrentContainer?.Shapes.Add(path);
+                ContainerView?.CurrentContainer?.MarkAsDirty(true);
+
+                ContainerView?.SelectionState?.Dehover();
+                ContainerView?.SelectionState?.Clear();
+
+                path.Select(ContainerView?.SelectionState);
+
+                ContainerView?.InputService?.Redraw?.Invoke();
             }
         }
 
@@ -533,7 +525,17 @@ namespace Draw2D.Editor
                 var path = PathConverter?.Op(this, op, ContainerView?.SelectionState?.Shapes);
                 if (path != null)
                 {
-                    InsertAndSelectShape(path);
+                    Selection.Delete(this);
+
+                    ContainerView?.CurrentContainer?.Shapes.Add(path);
+                    ContainerView?.CurrentContainer?.MarkAsDirty(true);
+
+                    ContainerView?.SelectionState?.Dehover();
+                    ContainerView?.SelectionState?.Clear();
+
+                    path.Select(ContainerView?.SelectionState);
+
+                    ContainerView?.InputService?.Redraw?.Invoke();
                 }
             }
         }
