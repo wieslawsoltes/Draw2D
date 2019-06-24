@@ -547,6 +547,56 @@ namespace Draw2D.ViewModels.Tools
             }
         }
 
+        public void AlignLeft(IToolContext context)
+        {
+            // TODO:
+        }
+
+        public void AlignCentered(IToolContext context)
+        {
+            // TODO:
+        }
+
+        public void AlignTop(IToolContext context)
+        {
+            // TODO:
+        }
+
+        public void AlignCenter(IToolContext context)
+        {
+            // TODO:
+        }
+
+        public void AlignBottom(IToolContext context)
+        {
+            // TODO:
+        }
+
+        public void ArangeBringToFront(IToolContext context)
+        {
+            // TODO:
+        }
+
+        public void ArangeBringForward(IToolContext context)
+        {
+            // TODO:
+        }
+
+        public void ArangeSendBackward(IToolContext context)
+        {
+            // TODO:
+        }
+
+        public void ArangeSendToBack(IToolContext context)
+        {
+            // TODO:
+        }
+
+        public void ArangeReverse(IToolContext context)
+        {
+            // TODO:
+        }
+
         private void BreakGroup(IToolContext context, GroupShape group)
         {
             group.Deselect(context.ContainerView.SelectionState);
