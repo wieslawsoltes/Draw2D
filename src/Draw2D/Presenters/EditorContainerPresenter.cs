@@ -282,7 +282,7 @@ namespace Draw2D.Presenters
                 canvas.Save();
                 canvas.Translate((float)dx, (float)dy);
                 canvas.Scale((float)zx, (float)zy);
-                canvas.DrawRect(SkiaHelper.ToRect(0.0, 0.0, _view.Width, _view.Height), brush);
+                canvas.DrawRect(SkiaHelper.ToSKRect(0.0, 0.0, _view.Width, _view.Height), brush);
                 canvas.Restore();
             }
 

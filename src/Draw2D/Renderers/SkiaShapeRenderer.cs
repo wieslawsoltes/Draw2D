@@ -170,7 +170,7 @@ namespace Draw2D.Renderers
 
         private void DrawText(SKCanvas canvas, Text text, IPointShape topLeft, IPointShape bottomRight, ShapeStyle style, double dx, double dy, double scale)
         {
-            var rect = SkiaHelper.ToRect(topLeft, bottomRight, dx, dy);
+            var rect = SkiaHelper.ToSKRect(topLeft, bottomRight, dx, dy);
             GetSKPaintStrokeText(style.TextStyle, out var paint, out var metrics);
 #if DEBUG_DRAW_TEXT
             var mBaseline = 0.0f;

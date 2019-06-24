@@ -29,7 +29,7 @@ namespace Draw2D.Presenters
             using (var background = SkiaHelper.ToSKPaintBrush(_view.PrintBackground))
             {
                 var canvas = context as SKCanvas;
-                canvas.DrawRect(SkiaHelper.ToRect(0.0, 0.0, _view.Width, _view.Height), background);
+                canvas.DrawRect(SkiaHelper.ToSKRect(0.0, 0.0, _view.Width, _view.Height), background);
                 _view.CurrentContainer.Draw(canvas, renderer, 0.0, 0.0, zx, null, null);
             }
         }

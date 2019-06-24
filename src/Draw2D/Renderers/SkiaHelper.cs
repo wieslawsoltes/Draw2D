@@ -71,17 +71,17 @@ namespace Draw2D.Renderers
             //paint.Shader = SKShader.CreateColor(ToSKColor(color));
         }
 
-        internal static SKPoint ToPoint(IPointShape point, double dx, double dy)
+        internal static SKPoint ToSKPoint(IPointShape point, double dx, double dy)
         {
             return new SKPoint((float)(point.X + dx), (float)(point.Y + dy));
         }
 
-        internal static SKRect ToRect(double left, double top, double right, double bottom)
+        internal static SKRect ToSKRect(double left, double top, double right, double bottom)
         {
             return new SKRect((float)left, (float)top, (float)right, (float)bottom);
         }
 
-        internal static SKRect ToRect(IPointShape p1, IPointShape p2, double dx, double dy)
+        internal static SKRect ToSKRect(IPointShape p1, IPointShape p2, double dx, double dy)
         {
             double left = Math.Min(p1.X + dx, p2.X + dx);
             double top = Math.Min(p1.Y + dy, p2.Y + dy);
@@ -117,12 +117,12 @@ namespace Draw2D.Renderers
             };
         }
 
-        internal static SKPathFillType ToFillType(PathFillRule fillRule)
+        internal static SKPathFillType ToSKPathFillType(PathFillRule fillRule)
         {
             return fillRule == PathFillRule.EvenOdd ? SKPathFillType.EvenOdd : SKPathFillType.Winding;
         }
 
-        internal static SKPathOp ToPathOp(PathOp op)
+        internal static SKPathOp ToSKPathOp(PathOp op)
         {
             switch (op)
             {
@@ -142,45 +142,45 @@ namespace Draw2D.Renderers
 
         internal static void AddLine(IToolContext context, LineShape line, double dx, double dy, SKPath geometry)
         {
-            geometry.MoveTo(ToPoint(line.StartPoint, dx, dy));
-            geometry.LineTo(ToPoint(line.Point, dx, dy));
+            geometry.MoveTo(ToSKPoint(line.StartPoint, dx, dy));
+            geometry.LineTo(ToSKPoint(line.Point, dx, dy));
         }
 
         internal static void AddCubic(IToolContext context, CubicBezierShape cubicBezier, double dx, double dy, SKPath geometry)
         {
-            geometry.MoveTo(ToPoint(cubicBezier.StartPoint, dx, dy));
+            geometry.MoveTo(ToSKPoint(cubicBezier.StartPoint, dx, dy));
             geometry.CubicTo(
-                ToPoint(cubicBezier.Point1, dx, dy),
-                ToPoint(cubicBezier.Point2, dx, dy),
-                ToPoint(cubicBezier.Point3, dx, dy));
+                ToSKPoint(cubicBezier.Point1, dx, dy),
+                ToSKPoint(cubicBezier.Point2, dx, dy),
+                ToSKPoint(cubicBezier.Point3, dx, dy));
         }
 
         internal static void AddQuad(IToolContext context, QuadraticBezierShape quadraticBezier, double dx, double dy, SKPath geometry)
         {
-            geometry.MoveTo(ToPoint(quadraticBezier.StartPoint, dx, dy));
+            geometry.MoveTo(ToSKPoint(quadraticBezier.StartPoint, dx, dy));
             geometry.QuadTo(
-                ToPoint(quadraticBezier.Point1, dx, dy),
-                ToPoint(quadraticBezier.Point2, dx, dy));
+                ToSKPoint(quadraticBezier.Point1, dx, dy),
+                ToSKPoint(quadraticBezier.Point2, dx, dy));
         }
 
         internal static void AddConic(IToolContext context, ConicShape conic, double dx, double dy, SKPath geometry)
         {
-            geometry.MoveTo(ToPoint(conic.StartPoint, dx, dy));
+            geometry.MoveTo(ToSKPoint(conic.StartPoint, dx, dy));
             geometry.ConicTo(
-                ToPoint(conic.Point1, dx, dy),
-                ToPoint(conic.Point2, dx, dy),
+                ToSKPoint(conic.Point1, dx, dy),
+                ToSKPoint(conic.Point2, dx, dy),
                 (float)conic.Weight);
         }
 
         internal static void AddRect(IToolContext context, RectangleShape rectangle, double dx, double dy, SKPath geometry)
         {
-            var rect = ToRect(rectangle.TopLeft, rectangle.BottomRight, dx, dy);
+            var rect = ToSKRect(rectangle.TopLeft, rectangle.BottomRight, dx, dy);
             geometry.AddRect(rect, SKPathDirection.Clockwise);
         }
 
         internal static void AddOval(IToolContext context, EllipseShape ellipse, double dx, double dy, SKPath geometry)
         {
-            var rect = ToRect(ellipse.TopLeft, ellipse.BottomRight, dx, dy);
+            var rect = ToSKRect(ellipse.TopLeft, ellipse.BottomRight, dx, dy);
             geometry.AddOval(rect, SKPathDirection.Clockwise);
         }
 
@@ -210,7 +210,7 @@ namespace Draw2D.Renderers
                 var metrics = paint.FontMetrics;
                 var mAscent = metrics.Ascent;
                 var mDescent = metrics.Descent;
-                var rect = ToRect(topLeft, bottomRight, dx, dy);
+                var rect = ToSKRect(topLeft, bottomRight, dx, dy);
                 float x = rect.Left;
                 float y = rect.Top;
                 float width = rect.Width;
@@ -263,7 +263,7 @@ namespace Draw2D.Renderers
 
         internal static void AddPath(IToolContext context, PathShape path, double dx, double dy, SKPath geometry)
         {
-            geometry.FillType = ToFillType(path.FillRule);
+            geometry.FillType = ToSKPathFillType(path.FillRule);
 
             foreach (var shape in path.Shapes)
             {
@@ -286,47 +286,47 @@ namespace Draw2D.Renderers
                         {
                             if (isFirstShape)
                             {
-                                geometry.MoveTo(ToPoint(line.StartPoint, dx, dy));
+                                geometry.MoveTo(ToSKPoint(line.StartPoint, dx, dy));
                                 isFirstShape = false;
                             }
-                            geometry.LineTo(ToPoint(line.Point, dx, dy));
+                            geometry.LineTo(ToSKPoint(line.Point, dx, dy));
                         }
                         break;
                     case CubicBezierShape cubicBezier:
                         {
                             if (isFirstShape)
                             {
-                                geometry.MoveTo(ToPoint(cubicBezier.StartPoint, dx, dy));
+                                geometry.MoveTo(ToSKPoint(cubicBezier.StartPoint, dx, dy));
                                 isFirstShape = false;
                             }
                             geometry.CubicTo(
-                                ToPoint(cubicBezier.Point1, dx, dy),
-                                ToPoint(cubicBezier.Point2, dx, dy),
-                                ToPoint(cubicBezier.Point3, dx, dy));
+                                ToSKPoint(cubicBezier.Point1, dx, dy),
+                                ToSKPoint(cubicBezier.Point2, dx, dy),
+                                ToSKPoint(cubicBezier.Point3, dx, dy));
                         }
                         break;
                     case QuadraticBezierShape quadraticBezier:
                         {
                             if (isFirstShape)
                             {
-                                geometry.MoveTo(ToPoint(quadraticBezier.StartPoint, dx, dy));
+                                geometry.MoveTo(ToSKPoint(quadraticBezier.StartPoint, dx, dy));
                                 isFirstShape = false;
                             }
                             geometry.QuadTo(
-                                ToPoint(quadraticBezier.Point1, dx, dy),
-                                ToPoint(quadraticBezier.Point2, dx, dy));
+                                ToSKPoint(quadraticBezier.Point1, dx, dy),
+                                ToSKPoint(quadraticBezier.Point2, dx, dy));
                         }
                         break;
                     case ConicShape conic:
                         {
                             if (isFirstShape)
                             {
-                                geometry.MoveTo(ToPoint(conic.StartPoint, dx, dy));
+                                geometry.MoveTo(ToSKPoint(conic.StartPoint, dx, dy));
                                 isFirstShape = false;
                             }
                             geometry.ConicTo(
-                                ToPoint(conic.Point1, dx, dy),
-                                ToPoint(conic.Point2, dx, dy),
+                                ToSKPoint(conic.Point1, dx, dy),
+                                ToSKPoint(conic.Point2, dx, dy),
                                 (float)conic.Weight);
                         }
                         break;

@@ -78,7 +78,7 @@ namespace Draw2D.Renderers
                 var paths = ToPaths(context, shapes);
                 if (paths != null && paths.Count > 0)
                 {
-                    var result = SkiaHelper.Op(SkiaHelper.ToPathOp(op), paths);
+                    var result = SkiaHelper.Op(SkiaHelper.ToSKPathOp(op), paths);
                     if (result != null)
                     {
                         if (!result.IsEmpty)
