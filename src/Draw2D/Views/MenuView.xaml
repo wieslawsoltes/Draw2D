@@ -49,14 +49,6 @@
             <MenuItem Header="_Paste" Command="{Binding Selection.Paste}" CommandParameter="{Binding}"/>
             <MenuItem Header="_Delete" Command="{Binding Selection.Delete}" CommandParameter="{Binding}"/>
             <Separator/>
-            <MenuItem Header="Create _Group" Command="{Binding Selection.CreateGroup}" CommandParameter="{Binding}"/>
-            <Separator/>
-            <MenuItem Header="Create _Reference" Command="{Binding Selection.CreateReference}" CommandParameter="{Binding}"/>
-            <Separator/>
-            <MenuItem Header="Create Pat_h" Command="{Binding Selection.CreatePath}" CommandParameter="{Binding}"/>
-            <Separator/>
-            <MenuItem Header="_Break" Command="{Binding Selection.Break}" CommandParameter="{Binding}"/>
-            <Separator/>
             <MenuItem Header="Select _All" Command="{Binding Selection.SelectAll}" CommandParameter="{Binding}"/>
             <MenuItem Header="Deselect A_ll" Command="{Binding Selection.DeselectAll}" CommandParameter="{Binding}"/>
         </MenuItem>
@@ -174,18 +166,38 @@
                 </MenuItem.Icon>
             </MenuItem>
         </MenuItem>
-        <MenuItem Header="_Path">
-            <MenuItem Header="_Op">
-                <MenuItem Header="_Difference" ToolTip.Tip="Subtract the op path from the current path." Command="{Binding PathOp}" CommandParameter="Difference"/>
+        <MenuItem Header="_Shape">
+            <MenuItem Header="Create _Group" Command="{Binding Selection.CreateGroup}" CommandParameter="{Binding}"/>
+            <Separator/>
+            <MenuItem Header="Create R_eference" Command="{Binding Selection.CreateReference}" CommandParameter="{Binding}"/>
+            <Separator/>
+            <MenuItem Header="Create Pat_h" Command="{Binding Selection.CreatePath}" CommandParameter="{Binding}"/>
+            <Separator/>
+            <MenuItem Header="Alig_n">
+                <MenuItem Header="_Left" Command="{Binding Selection.AlignLeft}" CommandParameter="{Binding}"/>
+                <MenuItem Header="_Centered" Command="{Binding Selection.AlignCentered}" CommandParameter="{Binding}"/>
+                <MenuItem Header="_Right" Command="{Binding Selection.AlignRight}" CommandParameter="{Binding}"/>
                 <Separator/>
-                <MenuItem Header="_Intersect" ToolTip.Tip="Intersect the two paths." Command="{Binding PathOp}" CommandParameter="Intersect"/>
-                <Separator/>
-                <MenuItem Header="_Union" ToolTip.Tip="Union (inclusive-or) the two paths." Command="{Binding PathOp}" CommandParameter="Union"/>
-                <Separator/>
-                <MenuItem Header="_Xor" ToolTip.Tip="Exclusive-or the two paths." Command="{Binding PathOp}" CommandParameter="Xor"/>
-                <Separator/>
-                <MenuItem Header="_Reverse Difference" ToolTip.Tip="Subtract the current path from the op path." Command="{Binding PathOp}" CommandParameter="ReverseDifference"/>
+                <MenuItem Header="_Top" Command="{Binding Selection.AlignTop}" CommandParameter="{Binding}"/>
+                <MenuItem Header="C_enter" Command="{Binding Selection.AlignCenter}" CommandParameter="{Binding}"/>
+                <MenuItem Header="_Bottom" Command="{Binding Selection.AlignBottom}" CommandParameter="{Binding}"/>
             </MenuItem>
+            <MenuItem Header="_Arange">
+                <MenuItem Header="_Bring to Front" Command="{Binding Selection.ArangeBringToFront}" CommandParameter="{Binding}"/>
+                <MenuItem Header="Bring _Forward" Command="{Binding Selection.ArangeBringForward}" CommandParameter="{Binding}"/>
+                <MenuItem Header="Send Back_ward" Command="{Binding Selection.ArangeSendBackward}" CommandParameter="{Binding}"/>
+                <MenuItem Header="_Send to Back" Command="{Binding Selection.ArangeSendToBack}" CommandParameter="{Binding}"/>
+                <Separator/>
+                <MenuItem Header="_Reverse" Command="{Binding Selection.ArangeReverse}" CommandParameter="{Binding}"/>
+            </MenuItem>
+            <Separator/>
+            <MenuItem Header="_Difference" ToolTip.Tip="Subtract the op path from the current path." Command="{Binding PathOp}" CommandParameter="Difference"/>
+            <MenuItem Header="_Intersect" ToolTip.Tip="Intersect the two paths." Command="{Binding PathOp}" CommandParameter="Intersect"/>
+            <MenuItem Header="_Union" ToolTip.Tip="Union (inclusive-or) the two paths." Command="{Binding PathOp}" CommandParameter="Union"/>
+            <MenuItem Header="_Xor" ToolTip.Tip="Exclusive-or the two paths." Command="{Binding PathOp}" CommandParameter="Xor"/>
+            <MenuItem Header="_Reverse Difference" ToolTip.Tip="Subtract the current path from the op path." Command="{Binding PathOp}" CommandParameter="ReverseDifference"/>
+            <Separator/>
+            <MenuItem Header="_Break" Command="{Binding Selection.Break}" CommandParameter="{Binding}"/>
         </MenuItem>
         <MenuItem Header="_Debug">
             <MenuItem Header="DrawDirtyRects" Click="DebugDrawDirtyRects_Click">
