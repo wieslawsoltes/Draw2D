@@ -129,9 +129,9 @@ namespace Draw2D.ViewModels.Tools
                 _context.ContainerView.Remove(shape);
             }
 
-            public void Reference(GroupShape group)
+            public void Reference(IBaseShape shape)
             {
-                _context.ContainerView.Reference(group);
+                _context.ContainerView.Reference(shape);
             }
 
             public void Style(string styleId)

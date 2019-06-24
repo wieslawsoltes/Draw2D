@@ -156,13 +156,13 @@ namespace Draw2D.ViewModels.Containers
             }
         }
 
-        public void Reference(GroupShape group)
+        public void Reference(IBaseShape shape)
         {
-            if (group != null)
+            if (shape != null)
             {
                 _selectionState?.Clear();
-                group.GetBox(out double ax, out double ay, out _, out _);
-                var reference = new ReferenceShape(group.Title, ax, ay, group);
+                var title = shape is GroupShape group ? group.Title : "Reference";
+                var reference = new ReferenceShape(title, 0.0, 0.0, shape);
                 reference.Select(_selectionState);
                 _currentContainer.Shapes.Add(reference);
                 _currentContainer.MarkAsDirty(true);

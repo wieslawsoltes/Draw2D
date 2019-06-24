@@ -21,7 +21,7 @@ namespace Draw2D.ViewModels.Containers
         IContainerPresenter ContainerPresenter { get; set; }
         void Add(IBaseShape shape);
         void Remove(IBaseShape shape);
-        void Reference(GroupShape group);
+        void Reference(IBaseShape shape);
         void Style(string styleId);
     }
 }

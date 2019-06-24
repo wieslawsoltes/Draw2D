@@ -501,9 +501,9 @@ namespace Draw2D.ViewModels.Tools
 
                     foreach (var shape in shapes)
                     {
-                        if (shape is GroupShape group)
+                        if (!(shape is IPointShape))
                         {
-                            context.ContainerView?.Reference(group);
+                            context.ContainerView?.Reference(shape);
                         }
                     }
 
