@@ -14,6 +14,7 @@ namespace Draw2D.ViewModels.Tools
         void CreatePath(IToolContext context);
         void AlignLeft(IToolContext context);
         void AlignCentered(IToolContext context);
+        void AlignRight(IToolContext context);
         void AlignTop(IToolContext context);
         void AlignCenter(IToolContext context);
         void AlignBottom(IToolContext context);

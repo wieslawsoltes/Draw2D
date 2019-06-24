@@ -557,6 +557,11 @@ namespace Draw2D.ViewModels.Tools
             // TODO:
         }
 
+        public void AlignRight(IToolContext context)
+        {
+            // TODO:
+        }
+
         public void AlignTop(IToolContext context)
         {
             // TODO:
