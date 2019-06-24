@@ -261,6 +261,19 @@ namespace Draw2D.Renderers
             }
         }
 
+        internal static void AddPath(IToolContext context, PathShape path, double dx, double dy, SKPath geometry)
+        {
+            geometry.FillType = ToFillType(path.FillRule);
+
+            foreach (var shape in path.Shapes)
+            {
+                if (shape is FigureShape figure)
+                {
+                    AddFigure(context, figure, dx, dy, geometry);
+                }
+            }
+        }
+
         internal static void AddFigure(IToolContext context, IList<IBaseShape> shapes, bool isClosed, double dx, double dy, SKPath geometry)
         {
             bool isFirstShape = true;
@@ -326,32 +339,19 @@ namespace Draw2D.Renderers
             }
         }
 
-        internal static void AddShapes(IToolContext context, GroupShape group, double dx, double dy, SKPath geometry)
-        {
-            AddFigure(context, group.Shapes, false, dx, dy, geometry);
-        }
-
-        internal static void AddShape(IToolContext context, ReferenceShape reference, double dx, double dy, SKPath geometry)
-        {
-            AddShape(context, reference.Template, dx + reference.X, dy + reference.Y, geometry);
-        }
-
         internal static void AddFigure(IToolContext context, FigureShape figure, double dx, double dy, SKPath geometry)
         {
             AddFigure(context, figure.Shapes, figure.IsClosed, dx, dy, geometry);
         }
 
-        internal static void AddPath(IToolContext context, PathShape path, double dx, double dy, SKPath geometry)
+        internal static void AddFigure(IToolContext context, GroupShape group, double dx, double dy, SKPath geometry)
         {
-            geometry.FillType = ToFillType(path.FillRule);
+            AddFigure(context, group.Shapes, false, dx, dy, geometry);
+        }
 
-            foreach (var shape in path.Shapes)
-            {
-                if (shape is FigureShape figure)
-                {
-                    AddFigure(context, figure, dx, dy, geometry);
-                }
-            }
+        internal static void AddFigure(IToolContext context, ReferenceShape reference, double dx, double dy, SKPath geometry)
+        {
+            AddShape(context, reference.Template, dx + reference.X, dy + reference.Y, geometry);
         }
 
         internal static bool AddShape(IToolContext context, IBaseShape shape, double dx, double dy, SKPath geometry)
@@ -389,10 +389,10 @@ namespace Draw2D.Renderers
                     AddText(context, text, dx, dy, geometry);
                     return true;
                 case GroupShape group:
-                    AddShapes(context, group, dx, dy, geometry);
+                    AddFigure(context, group, dx, dy, geometry);
                     return true;
                 case ReferenceShape reference:
-                    AddShape(context, reference, dx, dy, geometry);
+                    AddFigure(context, reference, dx, dy, geometry);
                     return true;
             };
             return false;
@@ -401,32 +401,6 @@ namespace Draw2D.Renderers
         internal static SKPath ToPath(string svgPathData)
         {
             return SKPath.ParseSvgPathData(svgPathData);
-        }
-
-        internal static IList<SKPath> ToPaths(IToolContext context, IList<IBaseShape> shapes)
-        {
-            if (shapes == null || shapes.Count <= 0)
-            {
-                return null;
-            }
-
-            var paths = new List<SKPath>();
-
-            for (int i = 0; i < shapes.Count; i++)
-            {
-                var path = new SKPath();
-                var result = AddShape(context, shapes[i], 0.0, 0.0, path);
-                if (result == true && path.IsEmpty == false)
-                {
-                    paths.Add(path);
-                }
-                else
-                {
-                    path.Dispose();
-                }
-            }
-
-            return paths;
         }
 
         internal static SKPath Op(SKPathOp op, IList<SKPath> paths)

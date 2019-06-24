@@ -31,6 +31,32 @@ namespace Draw2D.Renderers
             return shapes;
         }
 
+        private IList<SKPath> ToPaths(IToolContext context, IList<IBaseShape> shapes)
+        {
+            if (shapes == null || shapes.Count <= 0)
+            {
+                return null;
+            }
+
+            var paths = new List<SKPath>();
+
+            for (int i = 0; i < shapes.Count; i++)
+            {
+                var path = new SKPath();
+                var result = SkiaHelper.AddShape(context, shapes[i], 0.0, 0.0, path);
+                if (result == true && path.IsEmpty == false)
+                {
+                    paths.Add(path);
+                }
+                else
+                {
+                    path.Dispose();
+                }
+            }
+
+            return paths;
+        }
+
         public PathShape ToPathShape(IToolContext context, IBaseShape shape)
         {
             using (var geometry = new SKPath())
@@ -49,7 +75,7 @@ namespace Draw2D.Renderers
             var shapes = GetShapes(selected);
             if (shapes != null && shapes.Count > 0)
             {
-                var paths = SkiaHelper.ToPaths(context, shapes);
+                var paths = ToPaths(context, shapes);
                 if (paths != null && paths.Count > 0)
                 {
                     var result = SkiaHelper.Op(SkiaHelper.ToPathOp(op), paths);
