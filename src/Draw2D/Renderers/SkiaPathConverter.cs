@@ -35,7 +35,7 @@ namespace Draw2D.Renderers
         {
             using (var geometry = new SKPath())
             {
-                if (SkiaHelper.ToGeometry(context, shape, 0.0, 0.0, geometry) == true)
+                if (SkiaHelper.AddShape(context, shape, 0.0, 0.0, geometry) == true)
                 {
                     return SkiaHelper.ToPathShape(context, geometry, context.StyleLibrary?.CurrentStyle, context.PointTemplate);
                 }
@@ -49,7 +49,7 @@ namespace Draw2D.Renderers
             var shapes = GetShapes(selected);
             if (shapes != null && shapes.Count > 0)
             {
-                var paths = SkiaHelper.ToGeometries(context, shapes);
+                var paths = SkiaHelper.ToPaths(context, shapes);
                 if (paths != null && paths.Count > 0)
                 {
                     var result = SkiaHelper.Op(SkiaHelper.ToPathOp(op), paths);
@@ -75,7 +75,7 @@ namespace Draw2D.Renderers
         {
             if (!string.IsNullOrWhiteSpace(svgPathData))
             {
-                using (var path = SkiaHelper.ToGeometry(svgPathData))
+                using (var path = SkiaHelper.ToPath(svgPathData))
                 {
                     return SkiaHelper.ToPathShape(context, path, context.StyleLibrary?.CurrentStyle, context.PointTemplate);
                 }

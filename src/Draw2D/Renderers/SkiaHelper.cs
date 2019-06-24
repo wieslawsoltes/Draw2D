@@ -140,13 +140,13 @@ namespace Draw2D.Renderers
             }
         }
 
-        internal static void ToGeometry(IToolContext context, LineShape line, double dx, double dy, SKPath geometry)
+        internal static void AddLine(IToolContext context, LineShape line, double dx, double dy, SKPath geometry)
         {
             geometry.MoveTo(ToPoint(line.StartPoint, dx, dy));
             geometry.LineTo(ToPoint(line.Point, dx, dy));
         }
 
-        internal static void ToGeometry(IToolContext context, CubicBezierShape cubicBezier, double dx, double dy, SKPath geometry)
+        internal static void AddCubic(IToolContext context, CubicBezierShape cubicBezier, double dx, double dy, SKPath geometry)
         {
             geometry.MoveTo(ToPoint(cubicBezier.StartPoint, dx, dy));
             geometry.CubicTo(
@@ -155,7 +155,7 @@ namespace Draw2D.Renderers
                 ToPoint(cubicBezier.Point3, dx, dy));
         }
 
-        internal static void ToGeometry(IToolContext context, QuadraticBezierShape quadraticBezier, double dx, double dy, SKPath geometry)
+        internal static void AddQuad(IToolContext context, QuadraticBezierShape quadraticBezier, double dx, double dy, SKPath geometry)
         {
             geometry.MoveTo(ToPoint(quadraticBezier.StartPoint, dx, dy));
             geometry.QuadTo(
@@ -163,7 +163,7 @@ namespace Draw2D.Renderers
                 ToPoint(quadraticBezier.Point2, dx, dy));
         }
 
-        internal static void ToGeometry(IToolContext context, ConicShape conic, double dx, double dy, SKPath geometry)
+        internal static void AddConic(IToolContext context, ConicShape conic, double dx, double dy, SKPath geometry)
         {
             geometry.MoveTo(ToPoint(conic.StartPoint, dx, dy));
             geometry.ConicTo(
@@ -172,19 +172,19 @@ namespace Draw2D.Renderers
                 (float)conic.Weight);
         }
 
-        internal static void ToGeometry(IToolContext context, RectangleShape rectangle, double dx, double dy, SKPath geometry)
+        internal static void AddRect(IToolContext context, RectangleShape rectangle, double dx, double dy, SKPath geometry)
         {
             var rect = ToRect(rectangle.TopLeft, rectangle.BottomRight, dx, dy);
             geometry.AddRect(rect, SKPathDirection.Clockwise);
         }
 
-        internal static void ToGeometry(IToolContext context, EllipseShape ellipse, double dx, double dy, SKPath geometry)
+        internal static void AddOval(IToolContext context, EllipseShape ellipse, double dx, double dy, SKPath geometry)
         {
             var rect = ToRect(ellipse.TopLeft, ellipse.BottomRight, dx, dy);
             geometry.AddOval(rect, SKPathDirection.Clockwise);
         }
 
-        internal static void ToGeometry(IToolContext context, Text text, IPointShape topLeft, IPointShape bottomRight, TextStyle style, double dx, double dy, SKPath geometry)
+        internal static void AddText(IToolContext context, Text text, IPointShape topLeft, IPointShape bottomRight, TextStyle style, double dx, double dy, SKPath geometry)
         {
             using (var typeface = ToSKTypeface(style.FontFamily))
             using (var paint = ToSKPaintBrush(style.Stroke))
@@ -252,16 +252,16 @@ namespace Draw2D.Renderers
             }
         }
 
-        internal static void ToGeometry(IToolContext context, TextShape text, double dx, double dy, SKPath geometry)
+        internal static void AddText(IToolContext context, TextShape text, double dx, double dy, SKPath geometry)
         {
             var style = context?.StyleLibrary?.Get(text.StyleId);
             if (style != null)
             {
-                ToGeometry(context, text.Text, text.TopLeft, text.BottomRight, style.TextStyle, dx, dy, geometry);
+                AddText(context, text.Text, text.TopLeft, text.BottomRight, style.TextStyle, dx, dy, geometry);
             }
         }
 
-        internal static void ToFigureGeometry(IToolContext context, IList<IBaseShape> shapes, bool isClosed, double dx, double dy, SKPath geometry)
+        internal static void AddFigure(IToolContext context, IList<IBaseShape> shapes, bool isClosed, double dx, double dy, SKPath geometry)
         {
             bool isFirstShape = true;
 
@@ -326,22 +326,22 @@ namespace Draw2D.Renderers
             }
         }
 
-        internal static void ToGeometry(IToolContext context, GroupShape group, double dx, double dy, SKPath geometry)
+        internal static void AddShapes(IToolContext context, GroupShape group, double dx, double dy, SKPath geometry)
         {
-            ToFigureGeometry(context, group.Shapes, false, dx, dy, geometry);
+            AddFigure(context, group.Shapes, false, dx, dy, geometry);
         }
 
-        internal static void ToGeometry(IToolContext context, ReferenceShape reference, double dx, double dy, SKPath geometry)
+        internal static void AddShape(IToolContext context, ReferenceShape reference, double dx, double dy, SKPath geometry)
         {
-            ToGeometry(context, reference.Template, dx + reference.X, dy + reference.Y, geometry);
+            AddShape(context, reference.Template, dx + reference.X, dy + reference.Y, geometry);
         }
 
-        internal static void ToGeometry(IToolContext context, FigureShape figure, double dx, double dy, SKPath geometry)
+        internal static void AddFigure(IToolContext context, FigureShape figure, double dx, double dy, SKPath geometry)
         {
-            ToFigureGeometry(context, figure.Shapes, figure.IsClosed, dx, dy, geometry);
+            AddFigure(context, figure.Shapes, figure.IsClosed, dx, dy, geometry);
         }
 
-        internal static void ToGeometry(IToolContext context, PathShape path, double dx, double dy, SKPath geometry)
+        internal static void AddPath(IToolContext context, PathShape path, double dx, double dy, SKPath geometry)
         {
             geometry.FillType = ToFillType(path.FillRule);
 
@@ -349,61 +349,61 @@ namespace Draw2D.Renderers
             {
                 if (shape is FigureShape figure)
                 {
-                    ToGeometry(context, figure, dx, dy, geometry);
+                    AddFigure(context, figure, dx, dy, geometry);
                 }
             }
         }
 
-        internal static bool ToGeometry(IToolContext context, IBaseShape shape, double dx, double dy, SKPath geometry)
+        internal static bool AddShape(IToolContext context, IBaseShape shape, double dx, double dy, SKPath geometry)
         {
             switch (shape)
             {
                 case LineShape line:
-                    ToGeometry(context, line, dx, dy, geometry);
+                    AddLine(context, line, dx, dy, geometry);
                     return true;
                 case CubicBezierShape cubicBezier:
-                    ToGeometry(context, cubicBezier, dx, dy, geometry);
+                    AddCubic(context, cubicBezier, dx, dy, geometry);
                     return true;
                 case QuadraticBezierShape quadraticBezier:
-                    ToGeometry(context, quadraticBezier, dx, dy, geometry);
+                    AddQuad(context, quadraticBezier, dx, dy, geometry);
                     return true;
                 case ConicShape conic:
-                    ToGeometry(context, conic, dx, dy, geometry);
+                    AddConic(context, conic, dx, dy, geometry);
                     return true;
                 case FigureShape figure:
-                    ToGeometry(context, figure, dx, dy, geometry);
+                    AddFigure(context, figure, dx, dy, geometry);
                     return true;
                 case PathShape path:
-                    ToGeometry(context, path, dx, dy, geometry);
+                    AddPath(context, path, dx, dy, geometry);
                     return true;
                 case RectangleShape rectangle:
-                    ToGeometry(context, rectangle, dx, dy, geometry);
+                    AddRect(context, rectangle, dx, dy, geometry);
                     return true;
                 case EllipseShape ellipse:
-                    ToGeometry(context, ellipse, dx, dy, geometry);
+                    AddOval(context, ellipse, dx, dy, geometry);
                     return true;
                 case IPointShape point:
-                    ToGeometry(context, point, dx, dy, geometry);
+                    AddShape(context, point, dx, dy, geometry);
                     return true;
                 case TextShape text:
-                    ToGeometry(context, text, dx, dy, geometry);
+                    AddText(context, text, dx, dy, geometry);
                     return true;
                 case GroupShape group:
-                    ToGeometry(context, group, dx, dy, geometry);
+                    AddShapes(context, group, dx, dy, geometry);
                     return true;
                 case ReferenceShape reference:
-                    ToGeometry(context, reference, dx, dy, geometry);
+                    AddShape(context, reference, dx, dy, geometry);
                     return true;
             };
             return false;
         }
 
-        internal static SKPath ToGeometry(string svgPathData)
+        internal static SKPath ToPath(string svgPathData)
         {
             return SKPath.ParseSvgPathData(svgPathData);
         }
 
-        internal static IList<SKPath> ToGeometries(IToolContext context, IList<IBaseShape> shapes)
+        internal static IList<SKPath> ToPaths(IToolContext context, IList<IBaseShape> shapes)
         {
             if (shapes == null || shapes.Count <= 0)
             {
@@ -415,7 +415,7 @@ namespace Draw2D.Renderers
             for (int i = 0; i < shapes.Count; i++)
             {
                 var path = new SKPath();
-                var result = ToGeometry(context, shapes[i], 0.0, 0.0, path);
+                var result = AddShape(context, shapes[i], 0.0, 0.0, path);
                 if (result == true && path.IsEmpty == false)
                 {
                     paths.Add(path);
@@ -625,7 +625,7 @@ namespace Draw2D.Renderers
             {
                 using (var geometry = new SKPath())
                 {
-                    ToGeometry(context, text, topLeft, bottomRight, style, 0.0, 0.0, geometry);
+                    AddText(context, text, topLeft, bottomRight, style, 0.0, 0.0, geometry);
                     sb.AppendLine(geometry.ToSvgPathData());
                 }
             }
@@ -639,7 +639,7 @@ namespace Draw2D.Renderers
                     {
                         using (var geometry = new SKPath())
                         {
-                            ToGeometry(context, line, 0.0, 0.0, geometry);
+                            AddLine(context, line, 0.0, 0.0, geometry);
                             sb.AppendLine(geometry.ToSvgPathData());
                         }
                     }
@@ -648,7 +648,7 @@ namespace Draw2D.Renderers
                     {
                         using (var geometry = new SKPath())
                         {
-                            ToGeometry(context, cubicBezier, 0.0, 0.0, geometry);
+                            AddCubic(context, cubicBezier, 0.0, 0.0, geometry);
                             sb.AppendLine(geometry.ToSvgPathData());
                         }
                     }
@@ -657,7 +657,7 @@ namespace Draw2D.Renderers
                     {
                         using (var geometry = new SKPath())
                         {
-                            ToGeometry(context, quadraticBezier, 0.0, 0.0, geometry);
+                            AddQuad(context, quadraticBezier, 0.0, 0.0, geometry);
                             sb.AppendLine(geometry.ToSvgPathData());
                         }
                     }
@@ -666,7 +666,7 @@ namespace Draw2D.Renderers
                     {
                         using (var geometry = new SKPath())
                         {
-                            ToGeometry(context, conic, 0.0, 0.0, geometry);
+                            AddConic(context, conic, 0.0, 0.0, geometry);
                             sb.AppendLine(geometry.ToSvgPathData());
                         }
                     }
@@ -675,7 +675,7 @@ namespace Draw2D.Renderers
                     {
                         using (var geometry = new SKPath())
                         {
-                            ToGeometry(context, pathShape, 0.0, 0.0, geometry);
+                            AddPath(context, pathShape, 0.0, 0.0, geometry);
                             sb.AppendLine(geometry.ToSvgPathData());
                         }
                     }
@@ -684,7 +684,7 @@ namespace Draw2D.Renderers
                     {
                         using (var geometry = new SKPath())
                         {
-                            ToGeometry(context, rectangle, 0.0, 0.0, geometry);
+                            AddRect(context, rectangle, 0.0, 0.0, geometry);
                             sb.AppendLine(geometry.ToSvgPathData());
 
                             var style = context?.StyleLibrary?.Get(rectangle.StyleId);
@@ -699,7 +699,7 @@ namespace Draw2D.Renderers
                     {
                         using (var geometry = new SKPath())
                         {
-                            ToGeometry(context, ellipse, 0.0, 0.0, geometry);
+                            AddOval(context, ellipse, 0.0, 0.0, geometry);
                             sb.AppendLine(geometry.ToSvgPathData());
 
                             var style = context?.StyleLibrary?.Get(ellipse.StyleId);

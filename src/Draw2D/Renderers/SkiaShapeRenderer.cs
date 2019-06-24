@@ -286,7 +286,7 @@ namespace Draw2D.Renderers
                 var canvas = dc as SKCanvas;
                 using (var geometry = new SKPath())
                 {
-                    SkiaHelper.ToGeometry(null, line, dx, dy, geometry);
+                    SkiaHelper.AddLine(null, line, dx, dy, geometry);
                     if (style.IsStroked)
                     {
                         GetSKPaintStroke(style, out var pen, scale);
@@ -313,7 +313,7 @@ namespace Draw2D.Renderers
                 var canvas = dc as SKCanvas;
                 using (var geometry = new SKPath())
                 {
-                    SkiaHelper.ToGeometry(null, cubicBezier, dx, dy, geometry);
+                    SkiaHelper.AddCubic(null, cubicBezier, dx, dy, geometry);
                     if (style.IsFilled)
                     {
                         GetSKPaintFill(style, out var brush);
@@ -344,7 +344,7 @@ namespace Draw2D.Renderers
                 var canvas = dc as SKCanvas;
                 using (var geometry = new SKPath())
                 {
-                    SkiaHelper.ToGeometry(null, quadraticBezier, dx, dy, geometry);
+                    SkiaHelper.AddQuad(null, quadraticBezier, dx, dy, geometry);
                     if (style.IsFilled)
                     {
                         GetSKPaintFill(style, out var brush);
@@ -375,7 +375,7 @@ namespace Draw2D.Renderers
                 var canvas = dc as SKCanvas;
                 using (var geometry = new SKPath())
                 {
-                    SkiaHelper.ToGeometry(null, conic, dx, dy, geometry);
+                    SkiaHelper.AddConic(null, conic, dx, dy, geometry);
                     if (style.IsFilled)
                     {
                         GetSKPaintFill(style, out var brush);
@@ -406,7 +406,7 @@ namespace Draw2D.Renderers
                 var canvas = dc as SKCanvas;
                 using (var geometry = new SKPath())
                 {
-                    SkiaHelper.ToGeometry(null, path, dx, dy, geometry);
+                    SkiaHelper.AddPath(null, path, dx, dy, geometry);
                     if (style.IsFilled)
                     {
                         GetSKPaintFill(style, out var brush);
@@ -458,7 +458,7 @@ namespace Draw2D.Renderers
                 var canvas = dc as SKCanvas;
                 using (var geometry = new SKPath())
                 {
-                    SkiaHelper.ToGeometry(null, rectangle, dx, dy, geometry);
+                    SkiaHelper.AddRect(null, rectangle, dx, dy, geometry);
                     if (style.IsFilled)
                     {
                         GetSKPaintFill(style, out var brush);
@@ -511,7 +511,7 @@ namespace Draw2D.Renderers
                 var canvas = dc as SKCanvas;
                 using (var geometry = new SKPath())
                 {
-                    SkiaHelper.ToGeometry(null, ellipse, dx, dy, geometry);
+                    SkiaHelper.AddOval(null, ellipse, dx, dy, geometry);
                     if (style.IsFilled)
                     {
                         GetSKPaintFill(style, out var brush);
