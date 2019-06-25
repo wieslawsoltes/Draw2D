@@ -241,19 +241,21 @@ namespace Draw2D.ViewModels.Tools
                     {
                         if (Settings.ConnectPoints && modifier.HasFlag(Settings?.ConnectionModifier ?? Modifier.Shift))
                         {
-                            Connect(context, source);
+                            ConnectImpl(context, source);
                         }
 
                         if (Settings.DisconnectPoints && modifier.HasFlag(Settings?.ConnectionModifier ?? Modifier.Shift))
                         {
                             if (_disconnected == false)
                             {
-                                double treshold = Settings.DisconnectTestRadius;
+                                var radius = Settings?.DisconnectTestRadius ?? 10.0;
+                                var scale = context.ContainerView?.ZoomService?.ZoomServiceState?.ZoomX ?? 1.0;
+                                double treshold = radius / scale;
                                 double tx = Math.Abs(_originX - source.X);
                                 double ty = Math.Abs(_originY - source.Y);
                                 if (tx > treshold || ty > treshold)
                                 {
-                                    Disconnect(context, source);
+                                    DisconnectImpl(context, source);
                                 }
                             }
                         }
@@ -270,7 +272,7 @@ namespace Draw2D.ViewModels.Tools
                         {
                             if (!(shape is IPointShape) && _disconnected == false)
                             {
-                                Disconnect(context, shape);
+                                DisconnectImpl(context, shape);
                             }
                         }
                     }
@@ -721,6 +723,136 @@ namespace Draw2D.ViewModels.Tools
             }
         }
 
+        public void ConnectImpl(IToolContext context, IPointShape point)
+        {
+            var scale = context.ContainerView?.ZoomService?.ZoomServiceState?.ZoomX ?? 1.0;
+            var target = context.HitTest?.TryToGetPoint(
+                context.ContainerView?.CurrentContainer.Shapes,
+                new Point2(point.X, point.Y),
+                Settings?.ConnectTestRadius ?? 7.0,
+                scale,
+                point);
+            if (target != point)
+            {
+                foreach (var item in context.ContainerView?.CurrentContainer.Shapes)
+                {
+                    if (item is IConnectable connectable)
+                    {
+                        if (connectable.Connect(point, target))
+                        {
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
+        public void DisconnectImpl(IToolContext context, IPointShape point)
+        {
+            foreach (var shape in context.ContainerView?.CurrentContainer.Shapes)
+            {
+                if (shape is IConnectable connectable)
+                {
+                    if (connectable.Disconnect(point, out var copy))
+                    {
+                        if (copy != null)
+                        {
+                            point.X = _originX;
+                            point.Y = _originY;
+                            context.ContainerView?.SelectionState?.Deselect(point);
+                            context.ContainerView?.SelectionState?.Select(copy);
+                            _disconnected = true;
+                        }
+                        break;
+                    }
+                }
+            }
+        }
+
+        public void DisconnectImpl(IToolContext context, IBaseShape shape)
+        {
+            if (shape is IConnectable connectable)
+            {
+                if (context.ContainerView?.SelectionState != null)
+                {
+                    shape.Deselect(context.ContainerView.SelectionState);
+                }
+                _disconnected = connectable.Disconnect();
+                if (context.ContainerView?.SelectionState != null)
+                {
+                    shape.Select(context.ContainerView.SelectionState);
+                }
+            }
+        }
+
+        public void Connect(IToolContext context)
+        {
+            if (context.ContainerView?.SelectionState != null)
+            {
+                if (context.ContainerView.SelectionState?.Shapes.Count == 1)
+                {
+                    var shape = context.ContainerView.SelectionState?.Shapes.FirstOrDefault();
+
+                    if (shape is IPointShape source)
+                    {
+                        ConnectImpl(context, source);
+                        context.ContainerView?.InputService?.Redraw?.Invoke();
+                    }
+                }
+                else if (context.ContainerView.SelectionState?.Shapes.Count == 2)
+                {
+                    var first = context.ContainerView.SelectionState?.Shapes.FirstOrDefault();
+                    var next = context.ContainerView.SelectionState?.Shapes.LastOrDefault();
+
+                    if (first is IPointShape point && next is IPointShape target)
+                    {
+                        if (target != point)
+                        {
+                            foreach (var item in context.ContainerView?.CurrentContainer.Shapes)
+                            {
+                                if (item is IConnectable connectable)
+                                {
+                                    if (connectable.Connect(point, target))
+                                    {
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        public void Disconnect(IToolContext context)
+        {
+            if (context.ContainerView?.SelectionState != null)
+            {
+                if (context.ContainerView.SelectionState?.Shapes.Count == 1)
+                {
+                    var shape = context.ContainerView.SelectionState?.Shapes.FirstOrDefault();
+
+                    if (shape is IPointShape source)
+                    {
+                        DisconnectImpl(context, source);
+                    }
+                }
+                else
+                {
+                    var selectedToDisconnect = new List<IBaseShape>(context.ContainerView.SelectionState?.Shapes);
+                    foreach (var shape in selectedToDisconnect)
+                    {
+                        if (!(shape is IPointShape))
+                        {
+                            DisconnectImpl(context, shape);
+                        }
+                    }
+                }
+
+                context.ContainerView?.InputService?.Redraw?.Invoke();
+            }
+        }
+
         public void SelectAll(IToolContext context)
         {
             if (context.ContainerView?.SelectionState != null)
@@ -754,68 +886,6 @@ namespace Draw2D.ViewModels.Tools
                     context.ContainerView?.InputService?.Redraw?.Invoke();
 
                     this.CurrentState = State.None;
-                }
-            }
-        }
-
-        public void Connect(IToolContext context, IPointShape point)
-        {
-            var scale = context.ContainerView?.ZoomService?.ZoomServiceState?.ZoomX ?? 1.0;
-            var target = context.HitTest?.TryToGetPoint(
-                context.ContainerView?.CurrentContainer.Shapes,
-                new Point2(point.X, point.Y),
-                Settings?.ConnectTestRadius ?? 7.0,
-                scale,
-                point);
-            if (target != point)
-            {
-                foreach (var item in context.ContainerView?.CurrentContainer.Shapes)
-                {
-                    if (item is IConnectable connectable)
-                    {
-                        if (connectable.Connect(point, target))
-                        {
-                            break;
-                        }
-                    }
-                }
-            }
-        }
-
-        public void Disconnect(IToolContext context, IPointShape point)
-        {
-            foreach (var shape in context.ContainerView?.CurrentContainer.Shapes)
-            {
-                if (shape is IConnectable connectable)
-                {
-                    if (connectable.Disconnect(point, out var copy))
-                    {
-                        if (copy != null)
-                        {
-                            point.X = _originX;
-                            point.Y = _originY;
-                            context.ContainerView?.SelectionState?.Deselect(point);
-                            context.ContainerView?.SelectionState?.Select(copy);
-                            _disconnected = true;
-                        }
-                        break;
-                    }
-                }
-            }
-        }
-
-        public void Disconnect(IToolContext context, IBaseShape shape)
-        {
-            if (shape is IConnectable connectable)
-            {
-                if (context.ContainerView?.SelectionState != null)
-                {
-                    shape.Deselect(context.ContainerView.SelectionState);
-                }
-                _disconnected = connectable.Disconnect();
-                if (context.ContainerView?.SelectionState != null)
-                {
-                    shape.Select(context.ContainerView.SelectionState);
                 }
             }
         }

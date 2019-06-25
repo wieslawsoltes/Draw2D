@@ -88,6 +88,8 @@
                                 <KeyBinding Command="{Binding $parent[UserControl].DataContext.Selection.CreateReference}" CommandParameter="{Binding $parent[UserControl].DataContext}" Gesture="Ctrl+R"/>
                                 <KeyBinding Command="{Binding $parent[UserControl].DataContext.Selection.CreatePath}" CommandParameter="{Binding $parent[UserControl].DataContext}" Gesture="Ctrl+Shift+H"/>
                                 <KeyBinding Command="{Binding $parent[UserControl].DataContext.Selection.Break}" CommandParameter="{Binding $parent[UserControl].DataContext}" Gesture="Ctrl+Shift+B"/>
+                                <KeyBinding Command="{Binding $parent[UserControl].DataContext.Selection.Connect}" CommandParameter="{Binding $parent[UserControl].DataContext}" Gesture="Ctrl+Shift+,"/>
+                                <KeyBinding Command="{Binding $parent[UserControl].DataContext.Selection.Disconnect}" CommandParameter="{Binding $parent[UserControl].DataContext}" Gesture="Ctrl+Shift+."/>
                                 <KeyBinding Command="{Binding $parent[UserControl].DataContext.Selection.SelectAll}" CommandParameter="{Binding $parent[UserControl].DataContext}" Gesture="Ctrl+A"/>
                                 <KeyBinding Command="{Binding $parent[UserControl].DataContext.Selection.DeselectAll}" CommandParameter="{Binding $parent[UserControl].DataContext}" Gesture="Ctrl+Shift+A"/>
                                 <KeyBinding Command="{Binding $parent[UserControl].DataContext.PathOp}" CommandParameter="Difference" Gesture="Ctrl+Shift+D"/>

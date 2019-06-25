@@ -24,10 +24,9 @@ namespace Draw2D.ViewModels.Tools
         void ArangeSendToBack(IToolContext context);
         void ArangeReverse(IToolContext context);
         void Break(IToolContext context);
+        void Connect(IToolContext context);
+        void Disconnect(IToolContext context);
         void SelectAll(IToolContext context);
         void DeselectAll(IToolContext context);
-        void Connect(IToolContext context, IPointShape point);
-        void Disconnect(IToolContext context, IPointShape point);
-        void Disconnect(IToolContext context, IBaseShape shape);
     }
 }

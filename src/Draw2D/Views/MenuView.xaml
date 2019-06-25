@@ -198,6 +198,9 @@
             <MenuItem Header="_Reverse Difference" ToolTip.Tip="Subtract the current path from the op path." Command="{Binding PathOp}" CommandParameter="ReverseDifference"/>
             <Separator/>
             <MenuItem Header="_Break" Command="{Binding Selection.Break}" CommandParameter="{Binding}"/>
+            <Separator/>
+            <MenuItem Header="_Connect" Command="{Binding Selection.Connect}" CommandParameter="{Binding}"/>
+            <MenuItem Header="Di_sconnect" Command="{Binding Selection.Disconnect}" CommandParameter="{Binding}"/>
         </MenuItem>
         <MenuItem Header="_Debug">
             <MenuItem Header="DrawDirtyRects" Click="DebugDrawDirtyRects_Click">
