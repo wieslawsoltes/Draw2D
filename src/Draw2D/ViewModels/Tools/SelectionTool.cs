@@ -418,7 +418,7 @@ namespace Draw2D.ViewModels.Tools
         {
             if (context.ContainerView?.SelectionState != null)
             {
-                if (_shapesToCopy != null)
+                if (_shapesToCopy != null && _shapesToCopy.Count > 0)
                 {
                     lock (context.ContainerView.SelectionState?.Shapes)
                     {
@@ -1132,13 +1132,14 @@ namespace Draw2D.ViewModels.Tools
             return copy;
         }
 
-        internal void Copy(ICanvasContainer container, IEnumerable<IBaseShape> shapes, ISelectionState selectionState)
+        internal void Copy(ICanvasContainer container, IList<IBaseShape> shapes, ISelectionState selectionState)
         {
             var shared = GetPointsCopyDict(shapes);
             var points = new List<IPointShape>();
 
-            foreach (var shape in shapes)
+            for (int i = shapes.Count - 1; i >= 0; i--)
             {
+                var shape = shapes[i];
                 if (shape is ICopyable copyable)
                 {
                     var copy = (IBaseShape)(copyable.Copy(shared));
