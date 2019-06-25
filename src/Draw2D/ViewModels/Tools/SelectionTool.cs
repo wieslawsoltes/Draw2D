@@ -696,8 +696,8 @@ namespace Draw2D.ViewModels.Tools
             {
                 var shapes = container.Shapes;
                 int sourceIndex = shapes.IndexOf(source);
-                int targetIndex = 0;
-                if (sourceIndex != targetIndex)
+                int targetIndex = shapes.Count - 1;
+                if (targetIndex >= 0 && sourceIndex != targetIndex)
                 {
                     Swap(container, source, sourceIndex, targetIndex);
                 }
@@ -705,21 +705,6 @@ namespace Draw2D.ViewModels.Tools
         }
 
         internal void BringForward(IToolContext context, IBaseShape source)
-        {
-            var container = context.ContainerView?.CurrentContainer;
-            if (container != null)
-            {
-                var shapes = container.Shapes;
-                int sourceIndex = shapes.IndexOf(source);
-                int targetIndex = sourceIndex - 1;
-                if (targetIndex >= 0)
-                {
-                    Swap(container, source, sourceIndex, targetIndex);
-                }
-            }
-        }
-
-        internal void SendBackward(IToolContext context, IBaseShape source)
         {
             var container = context.ContainerView?.CurrentContainer;
             if (container != null)
@@ -734,6 +719,21 @@ namespace Draw2D.ViewModels.Tools
             }
         }
 
+        internal void SendBackward(IToolContext context, IBaseShape source)
+        {
+            var container = context.ContainerView?.CurrentContainer;
+            if (container != null)
+            {
+                var shapes = container.Shapes;
+                int sourceIndex = shapes.IndexOf(source);
+                int targetIndex = sourceIndex - 1;
+                if (targetIndex >= 0)
+                {
+                    Swap(container, source, sourceIndex, targetIndex);
+                }
+            }
+        }
+
         internal void SendToBack(IToolContext context, IBaseShape source)
         {
             var container = context.ContainerView?.CurrentContainer;
@@ -741,8 +741,8 @@ namespace Draw2D.ViewModels.Tools
             {
                 var shapes = container.Shapes;
                 int sourceIndex = shapes.IndexOf(source);
-                int targetIndex = shapes.Count - 1;
-                if (targetIndex >= 0 && sourceIndex != targetIndex)
+                int targetIndex = 0;
+                if (sourceIndex != targetIndex)
                 {
                     Swap(container, source, sourceIndex, targetIndex);
                 }
@@ -755,7 +755,7 @@ namespace Draw2D.ViewModels.Tools
             {
                 var shapes = new List<IBaseShape>(context.ContainerView.SelectionState?.Shapes);
 
-                for (int i = 0; i < shapes.Count; i++)
+                for (int i = shapes.Count - 1; i >= 0; i--)
                 {
                     var shape = shapes[i];
                     if (!(shape is IPointShape))
@@ -774,7 +774,7 @@ namespace Draw2D.ViewModels.Tools
             {
                 var shapes = new List<IBaseShape>(context.ContainerView.SelectionState?.Shapes);
 
-                for (int i = 0; i < shapes.Count; i++)
+                for (int i = shapes.Count - 1; i >= 0; i--)
                 {
                     var shape = shapes[i];
                     if (!(shape is IPointShape))
@@ -793,7 +793,7 @@ namespace Draw2D.ViewModels.Tools
             {
                 var shapes = new List<IBaseShape>(context.ContainerView.SelectionState?.Shapes);
 
-                for (int i = shapes.Count - 1; i >= 0; i--)
+                for (int i = 0; i < shapes.Count; i++)
                 {
                     var shape = shapes[i];
                     if (!(shape is IPointShape))
@@ -812,7 +812,7 @@ namespace Draw2D.ViewModels.Tools
             {
                 var shapes = new List<IBaseShape>(context.ContainerView.SelectionState?.Shapes);
 
-                for (int i = shapes.Count - 1; i >= 0; i--)
+                for (int i = 0; i < shapes.Count; i++)
                 {
                     var shape = shapes[i];
                     if (!(shape is IPointShape))
@@ -1017,6 +1017,8 @@ namespace Draw2D.ViewModels.Tools
                     if (shape is IPointShape source)
                     {
                         ConnectImpl(context, source);
+                        context.ContainerView?.SelectionState?.Dehover();
+                        context.ContainerView?.SelectionState?.Clear();
                         context.ContainerView?.InputService?.Redraw?.Invoke();
                     }
                 }
@@ -1035,6 +1037,9 @@ namespace Draw2D.ViewModels.Tools
                                 {
                                     if (connectable.Connect(point, target))
                                     {
+                                        context.ContainerView?.SelectionState?.Dehover();
+                                        context.ContainerView?.SelectionState?.Clear();
+                                        context.ContainerView?.InputService?.Redraw?.Invoke();
                                         break;
                                     }
                                 }
@@ -1056,6 +1061,7 @@ namespace Draw2D.ViewModels.Tools
                     if (shape is IPointShape source)
                     {
                         DisconnectImpl(context, source);
+
                     }
                 }
                 else
@@ -1070,6 +1076,8 @@ namespace Draw2D.ViewModels.Tools
                     }
                 }
 
+                context.ContainerView?.SelectionState?.Dehover();
+                context.ContainerView?.SelectionState?.Clear();
                 context.ContainerView?.InputService?.Redraw?.Invoke();
             }
         }
