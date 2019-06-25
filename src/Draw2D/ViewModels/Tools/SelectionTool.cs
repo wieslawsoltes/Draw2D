@@ -664,24 +664,165 @@ namespace Draw2D.ViewModels.Tools
             Align(context, AlignMode.Bottom);
         }
 
+        internal void SwapShape(ICanvasContainer container, IBaseShape shape, int insertIndex, int removeIndex)
+        {
+            if (container != null && shape != null && insertIndex >= 0 && removeIndex >= 0)
+            {
+                container.Shapes.Insert(insertIndex, shape);
+                container.Shapes.RemoveAt(removeIndex);
+                container.MarkAsDirty(true);
+            }
+        }
+
+        internal void Swap(ICanvasContainer container, IBaseShape shape, int sourceIndex, int targetIndex)
+        {
+            if (sourceIndex < targetIndex)
+            {
+                SwapShape(container, shape, targetIndex + 1, sourceIndex);
+            }
+            else
+            {
+                if (container.Shapes.Count + 1 > sourceIndex + 1)
+                {
+                    SwapShape(container, shape, targetIndex, sourceIndex + 1);
+                }
+            }
+        }
+
+        internal void BringToFront(IToolContext context, IBaseShape source)
+        {
+            var container = context.ContainerView?.CurrentContainer;
+            if (container != null)
+            {
+                var shapes = container.Shapes;
+                int sourceIndex = shapes.IndexOf(source);
+                int targetIndex = 0;
+                if (sourceIndex != targetIndex)
+                {
+                    Swap(container, source, sourceIndex, targetIndex);
+                }
+            }
+        }
+
+        internal void BringForward(IToolContext context, IBaseShape source)
+        {
+            var container = context.ContainerView?.CurrentContainer;
+            if (container != null)
+            {
+                var shapes = container.Shapes;
+                int sourceIndex = shapes.IndexOf(source);
+                int targetIndex = sourceIndex - 1;
+                if (targetIndex >= 0)
+                {
+                    Swap(container, source, sourceIndex, targetIndex);
+                }
+            }
+        }
+
+        internal void SendBackward(IToolContext context, IBaseShape source)
+        {
+            var container = context.ContainerView?.CurrentContainer;
+            if (container != null)
+            {
+                var shapes = container.Shapes;
+                int sourceIndex = shapes.IndexOf(source);
+                int targetIndex = sourceIndex + 1;
+                if (targetIndex < shapes.Count)
+                {
+                    Swap(container, source, sourceIndex, targetIndex);
+                }
+            }
+        }
+
+        internal void SendToBack(IToolContext context, IBaseShape source)
+        {
+            var container = context.ContainerView?.CurrentContainer;
+            if (container != null)
+            {
+                var shapes = container.Shapes;
+                int sourceIndex = shapes.IndexOf(source);
+                int targetIndex = shapes.Count - 1;
+                if (targetIndex >= 0 && sourceIndex != targetIndex)
+                {
+                    Swap(container, source, sourceIndex, targetIndex);
+                }
+            }
+        }
+
         public void ArangeBringToFront(IToolContext context)
         {
-            // TODO:
+            if (context.ContainerView?.SelectionState != null)
+            {
+                var shapes = new List<IBaseShape>(context.ContainerView.SelectionState?.Shapes);
+
+                for (int i = 0; i < shapes.Count; i++)
+                {
+                    var shape = shapes[i];
+                    if (!(shape is IPointShape))
+                    {
+                        BringToFront(context, shape);
+                    }
+                }
+
+                context.ContainerView?.InputService?.Redraw?.Invoke();
+            }
         }
 
         public void ArangeBringForward(IToolContext context)
         {
-            // TODO:
+            if (context.ContainerView?.SelectionState != null)
+            {
+                var shapes = new List<IBaseShape>(context.ContainerView.SelectionState?.Shapes);
+
+                for (int i = 0; i < shapes.Count; i++)
+                {
+                    var shape = shapes[i];
+                    if (!(shape is IPointShape))
+                    {
+                        BringForward(context, shape);
+                    }
+                }
+
+                context.ContainerView?.InputService?.Redraw?.Invoke();
+            }
         }
 
         public void ArangeSendBackward(IToolContext context)
         {
-            // TODO:
+            if (context.ContainerView?.SelectionState != null)
+            {
+                var shapes = new List<IBaseShape>(context.ContainerView.SelectionState?.Shapes);
+
+                for (int i = shapes.Count - 1; i >= 0; i--)
+                {
+                    var shape = shapes[i];
+                    if (!(shape is IPointShape))
+                    {
+                        SendBackward(context, shape);
+                    }
+                }
+
+                context.ContainerView?.InputService?.Redraw?.Invoke();
+            }
         }
 
         public void ArangeSendToBack(IToolContext context)
         {
-            // TODO:
+            if (context.ContainerView?.SelectionState != null)
+            {
+                var shapes = new List<IBaseShape>(context.ContainerView.SelectionState?.Shapes);
+
+                for (int i = shapes.Count - 1; i >= 0; i--)
+                {
+                    var shape = shapes[i];
+                    if (!(shape is IPointShape))
+                    {
+                        SendToBack(context, shape);
+                    }
+                }
+
+                context.ContainerView?.InputService?.Redraw?.Invoke();
+            }
         }
 
         public void ArangeReverse(IToolContext context)
