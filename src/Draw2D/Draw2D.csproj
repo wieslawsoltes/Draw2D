@@ -66,9 +66,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Avalonia" Version="0.8.1-cibuild0003032-beta" />
-    <PackageReference Include="Avalonia.Skia" Version="0.8.1-cibuild0003032-beta" />
-    <PackageReference Include="Avalonia.Controls.DataGrid" Version="0.8.1-cibuild0003032-beta" />
+    <PackageReference Include="Avalonia" Version="0.8.1-cibuild0003053-beta" />
+    <PackageReference Include="Avalonia.Skia" Version="0.8.1-cibuild0003053-beta" />
+    <PackageReference Include="Avalonia.Controls.DataGrid" Version="0.8.1-cibuild0003053-beta" />
     <PackageReference Include="Math.Spatial" Version="1.0.4" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
     <PackageReference Include="SkiaSharp" Version="1.68.0" />
