@@ -622,7 +622,7 @@ namespace Draw2D.ViewModels.Tools
                                 break;
                         }
 
-                        if (dx != 0.0 && dy != 0.0)
+                        if (dx != 0.0 || dy != 0.0)
                         {
                             box.shape.Move(context.ContainerView.SelectionState, dx, dy);
                         }
