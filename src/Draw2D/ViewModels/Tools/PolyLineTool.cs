@@ -83,7 +83,7 @@ namespace Draw2D.ViewModels.Tools
             context.ContainerView?.SelectionState?.Deselect(_line);
             context.ContainerView?.SelectionState?.Deselect(_line.Point);
 
-            var radius = Settings?.HitTestRadius ?? 0.0;
+            var radius = Settings?.HitTestRadius ?? 7.0;
             var scale = context.ContainerView?.ZoomService?.ZoomServiceState?.ZoomX ?? 1.0;
 
             IPointShape firstPoint = context.ContainerView?.GetNextPoint(context, x, y, Settings?.ConnectPoints ?? false, radius, scale);

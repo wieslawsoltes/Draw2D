@@ -70,7 +70,7 @@ namespace Draw2D.ViewModels.Tools
         {
             FiltersProcess(context, ref x, ref y);
 
-            var radius = Settings?.HitTestRadius ?? 0.0;
+            var radius = Settings?.HitTestRadius ?? 7.0;
             var scale = context.ContainerView?.ZoomService?.ZoomServiceState?.ZoomX ?? 1.0;
 
             IPointShape startPoint = context.ContainerView?.GetNextPoint(context, x, y, Settings?.ConnectPoints ?? false, radius, scale);
@@ -116,7 +116,7 @@ namespace Draw2D.ViewModels.Tools
             context.ContainerView?.WorkingContainer.Shapes.Remove(_line);
             context.ContainerView?.WorkingContainer.MarkAsDirty(true);
 
-            var radius = Settings?.HitTestRadius ?? 0.0;
+            var radius = Settings?.HitTestRadius ?? 7.0;
             var scale = context.ContainerView?.ZoomService?.ZoomServiceState?.ZoomX ?? 1.0;
 
             IPointShape point = context.ContainerView?.GetNextPoint(context, x, y, Settings?.ConnectPoints ?? false, radius, scale);
