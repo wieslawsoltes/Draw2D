@@ -22,7 +22,6 @@ namespace Draw2D.ViewModels.Tools
         void ArangeBringForward(IToolContext context);
         void ArangeSendBackward(IToolContext context);
         void ArangeSendToBack(IToolContext context);
-        void ArangeReverse(IToolContext context);
         void Break(IToolContext context);
         void Connect(IToolContext context);
         void Disconnect(IToolContext context);

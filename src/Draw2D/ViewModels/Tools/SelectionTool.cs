@@ -825,11 +825,6 @@ namespace Draw2D.ViewModels.Tools
             }
         }
 
-        public void ArangeReverse(IToolContext context)
-        {
-            // TODO:
-        }
-
         private void BreakGroup(IToolContext context, GroupShape group)
         {
             group.Deselect(context.ContainerView.SelectionState);

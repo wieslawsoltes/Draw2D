@@ -87,6 +87,14 @@
                                 <KeyBinding Command="{Binding $parent[UserControl].DataContext.Selection.CreateGroup}" CommandParameter="{Binding $parent[UserControl].DataContext}" Gesture="Ctrl+G"/>
                                 <KeyBinding Command="{Binding $parent[UserControl].DataContext.Selection.CreateReference}" CommandParameter="{Binding $parent[UserControl].DataContext}" Gesture="Ctrl+R"/>
                                 <KeyBinding Command="{Binding $parent[UserControl].DataContext.Selection.CreatePath}" CommandParameter="{Binding $parent[UserControl].DataContext}" Gesture="Ctrl+Shift+H"/>
+                                <KeyBinding Command="{Binding $parent[UserControl].DataContext.Selection.ArangeBringToFront}" CommandParameter="{Binding $parent[UserControl].DataContext}" Gesture="Ctrl+Shift+OemPlus"/>
+                                <KeyBinding Command="{Binding $parent[UserControl].DataContext.Selection.ArangeBringToFront}" CommandParameter="{Binding $parent[UserControl].DataContext}" Gesture="Ctrl+Shift+Add"/>
+                                <KeyBinding Command="{Binding $parent[UserControl].DataContext.Selection.ArangeBringForward}" CommandParameter="{Binding $parent[UserControl].DataContext}" Gesture="Ctrl+OemPlus"/>
+                                <KeyBinding Command="{Binding $parent[UserControl].DataContext.Selection.ArangeBringForward}" CommandParameter="{Binding $parent[UserControl].DataContext}" Gesture="Ctrl+Add"/>
+                                <KeyBinding Command="{Binding $parent[UserControl].DataContext.Selection.ArangeSendBackward}" CommandParameter="{Binding $parent[UserControl].DataContext}" Gesture="Ctrl+OemMinus"/>
+                                <KeyBinding Command="{Binding $parent[UserControl].DataContext.Selection.ArangeSendBackward}" CommandParameter="{Binding $parent[UserControl].DataContext}" Gesture="Ctrl+Subtract"/>
+                                <KeyBinding Command="{Binding $parent[UserControl].DataContext.Selection.ArangeSendToBack}" CommandParameter="{Binding $parent[UserControl].DataContext}" Gesture="Ctrl+Shift+OemMinus"/>
+                                <KeyBinding Command="{Binding $parent[UserControl].DataContext.Selection.ArangeSendToBack}" CommandParameter="{Binding $parent[UserControl].DataContext}" Gesture="Ctrl+Shift+Subtract"/>
                                 <KeyBinding Command="{Binding $parent[UserControl].DataContext.Selection.Break}" CommandParameter="{Binding $parent[UserControl].DataContext}" Gesture="Ctrl+Shift+B"/>
                                 <KeyBinding Command="{Binding $parent[UserControl].DataContext.Selection.Connect}" CommandParameter="{Binding $parent[UserControl].DataContext}" Gesture="Ctrl+Shift+,"/>
                                 <KeyBinding Command="{Binding $parent[UserControl].DataContext.Selection.Disconnect}" CommandParameter="{Binding $parent[UserControl].DataContext}" Gesture="Ctrl+Shift+."/>

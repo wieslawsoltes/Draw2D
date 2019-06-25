@@ -187,8 +187,6 @@
                 <MenuItem Header="Bring _Forward" Command="{Binding Selection.ArangeBringForward}" CommandParameter="{Binding}"/>
                 <MenuItem Header="Send Back_ward" Command="{Binding Selection.ArangeSendBackward}" CommandParameter="{Binding}"/>
                 <MenuItem Header="_Send to Back" Command="{Binding Selection.ArangeSendToBack}" CommandParameter="{Binding}"/>
-                <Separator/>
-                <MenuItem Header="_Reverse" Command="{Binding Selection.ArangeReverse}" CommandParameter="{Binding}"/>
             </MenuItem>
             <Separator/>
             <MenuItem Header="_Difference" ToolTip.Tip="Subtract the op path from the current path." Command="{Binding PathOp}" CommandParameter="Difference"/>
