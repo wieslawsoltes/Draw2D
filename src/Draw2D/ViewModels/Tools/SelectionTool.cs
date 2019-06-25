@@ -549,34 +549,119 @@ namespace Draw2D.ViewModels.Tools
             }
         }
 
+        public static void GetAlignBounds(IList<(IBaseShape shape, double ax, double ay, double bx, double by)> boxes, out double ax, out double ay, out double bx, out double by)
+        {
+            ax = double.MaxValue;
+            ay = double.MaxValue;
+            bx = double.MinValue;
+            by = double.MinValue;
+
+            foreach (var box in boxes)
+            {
+                ax = Math.Min(ax, box.ax);
+                ay = Math.Min(ay, box.ay);
+                bx = Math.Max(bx, box.bx);
+                by = Math.Max(by, box.by);
+            }
+        }
+
+        internal enum AlignMode { Left, Centered, Right, Top, Center, Bottom }
+
+        internal void Align(IToolContext context, AlignMode mode)
+        {
+            if (context.ContainerView?.SelectionState != null)
+            {
+                var shapes = new List<IBaseShape>(context.ContainerView.SelectionState?.Shapes);
+                var boxes = new List<(IBaseShape shape, double ax, double ay, double bx, double by)>();
+
+                foreach (var shape in shapes)
+                {
+                    if (!(shape is IPointShape))
+                    {
+                        (IBaseShape shape, double ax, double ay, double bx, double by) box;
+                        box.shape = shape;
+                        shape.GetBox(out box.ax, out box.ay, out box.bx, out box.by);
+                        boxes.Add(box);
+                    }
+                }
+
+                if (boxes.Count > 1)
+                {
+                    context.ContainerView?.SelectionState?.Dehover();
+                    context.ContainerView?.SelectionState?.Clear();
+
+                    (double ax, double ay, double bx, double by) bounds;
+                    GetAlignBounds(boxes, out bounds.ax, out bounds.ay, out bounds.bx, out bounds.by);
+                    double cx = (bounds.ax + bounds.bx) / 2.0;
+                    double cy = (bounds.ay + bounds.by) / 2.0;
+
+                    foreach (var box in boxes)
+                    {
+                        double dx = 0.0;
+                        double dy = 0.0;
+
+                        switch (mode)
+                        {
+                            case AlignMode.Left:
+                                dx = bounds.ax - box.ax;
+                                break;
+                            case AlignMode.Centered:
+                                dx = cx - ((box.ax + box.bx) / 2.0);
+                                break;
+                            case AlignMode.Right:
+                                dx = bounds.bx - box.bx;
+                                break;
+                            case AlignMode.Top:
+                                dy = bounds.ay - box.ay;
+                                break;
+                            case AlignMode.Center:
+                                dy = cy - ((box.ay + box.by) / 2.0);
+                                break;
+                            case AlignMode.Bottom:
+                                dy = bounds.by - box.by;
+                                break;
+                        }
+
+                        if (dx != 0.0 && dy != 0.0)
+                        {
+                            box.shape.Move(context.ContainerView.SelectionState, dx, dy);
+                        }
+                        box.shape.Select(context.ContainerView.SelectionState);
+                    }
+
+                    context.ContainerView?.InputService?.Redraw?.Invoke();
+                }
+            }
+        }
+
         public void AlignLeft(IToolContext context)
         {
-            // TODO:
+            Align(context, AlignMode.Left);
         }
 
         public void AlignCentered(IToolContext context)
         {
-            // TODO:
+            Align(context, AlignMode.Centered);
         }
 
         public void AlignRight(IToolContext context)
         {
-            // TODO:
+            Align(context, AlignMode.Right);
         }
 
         public void AlignTop(IToolContext context)
         {
-            // TODO:
+            Align(context, AlignMode.Top);
         }
 
         public void AlignCenter(IToolContext context)
         {
-            // TODO:
+            Align(context, AlignMode.Center);
         }
 
         public void AlignBottom(IToolContext context)
         {
-            // TODO:
+            Align(context, AlignMode.Bottom);
         }
 
         public void ArangeBringToFront(IToolContext context)
