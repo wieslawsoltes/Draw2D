@@ -549,14 +549,24 @@ namespace Draw2D.ViewModels.Tools
             }
         }
 
+        public void StackHorizontally(IToolContext context)
+        {
+            Layout.Stack(context, StackMode.Horizontal);
+        }
+
+        public void StackVertically(IToolContext context)
+        {
+            Layout.Stack(context, StackMode.Vertical);
+        }
+
         public void DistributeHorizontally(IToolContext context)
         {
-            Layout.Distribute(context, DistributeMode.Horizontally);
+            Layout.Distribute(context, DistributeMode.Horizontal);
         }
 
         public void DistributeVertically(IToolContext context)
         {
-            Layout.Distribute(context, DistributeMode.Vertically);
+            Layout.Distribute(context, DistributeMode.Vertical);
         }
 
         public void AlignLeft(IToolContext context)

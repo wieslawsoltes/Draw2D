@@ -82,10 +82,16 @@ namespace Draw2D.ViewModels.Tools
         }
     }
 
+    internal enum StackMode
+    {
+        Horizontal,
+        Vertical
+    }
+
     internal enum DistributeMode
     {
-        Horizontally,
-        Vertically
+        Horizontal,
+        Vertical
     }
 
     internal enum AlignMode
@@ -113,6 +119,73 @@ namespace Draw2D.ViewModels.Tools
                 ay = Math.Min(ay, box.ay);
                 bx = Math.Max(bx, box.bx);
                 by = Math.Max(by, box.by);
+            }
+        }
+
+        public static void Stack(IToolContext context, StackMode mode)
+        {
+            if (context.ContainerView?.SelectionState != null)
+            {
+                var shapes = new List<IBaseShape>(context.ContainerView.SelectionState?.Shapes);
+                var boxes = new List<Box>();
+
+                foreach (var shape in shapes)
+                {
+                    if (!(shape is IPointShape))
+                    {
+                        boxes.Add(new Box(shape));
+                    }
+                }
+
+                if (boxes.Count > 2)
+                {
+                    context.ContainerView?.SelectionState?.Dehover();
+                    context.ContainerView?.SelectionState?.Clear();
+
+                    (double ax, double ay, double bx, double by) bounds;
+                    GetBounds(boxes, out bounds.ax, out bounds.ay, out bounds.bx, out bounds.by);
+                    double cx = (bounds.ax + bounds.bx) / 2.0;
+                    double cy = (bounds.ay + bounds.by) / 2.0;
+
+                    double bw = Math.Abs(bounds.bx - bounds.ax);
+                    double bh = Math.Abs(bounds.by - bounds.ay);
+
+                    switch (mode)
+                    {
+                        case StackMode.Horizontal:
+                            {
+                                boxes.Sort(Box.CompareHorizontalLeft);
+                                boxes[0].shape.Select(context.ContainerView.SelectionState);
+                                double offset = boxes[0].ax + boxes[0].w;
+                                for (int i = 1; i <= boxes.Count - 1; i++)
+                                {
+                                    var box = boxes[i];
+                                    double dx = offset - box.ax;
+                                    box.shape.Move(context.ContainerView.SelectionState, dx, 0.0);
+                                    box.shape.Select(context.ContainerView.SelectionState);
+                                    offset += box.w;
+                                }
+                            }
+                            break;
+                        case StackMode.Vertical:
+                            {
+                                boxes.Sort(Box.CompareVerticalTop);
+                                boxes[0].shape.Select(context.ContainerView.SelectionState);
+                                double offset = boxes[0].ay + boxes[0].h;
+                                for (int i = 1; i <= boxes.Count - 1; i++)
+                                {
+                                    var box = boxes[i];
+                                    double dy = offset - box.ay;
+                                    box.shape.Move(context.ContainerView.SelectionState, 0.0, dy);
+                                    box.shape.Select(context.ContainerView.SelectionState);
+                                    offset += box.h;
+                                }
+                            }
+                            break;
+                    }
+
+                    context.ContainerView?.InputService?.Redraw?.Invoke();
+                }
             }
         }
 
@@ -158,7 +231,7 @@ namespace Draw2D.ViewModels.Tools
 
                     switch (mode)
                     {
-                        case DistributeMode.Horizontally:
+                        case DistributeMode.Horizontal:
                             {
                                 boxes.Sort(Box.CompareHorizontalLeft);
                                 boxes[0].shape.Select(context.ContainerView.SelectionState);
@@ -174,7 +247,7 @@ namespace Draw2D.ViewModels.Tools
                                 boxes[boxes.Count - 1].shape.Select(context.ContainerView.SelectionState);
                             }
                             break;
-                        case DistributeMode.Vertically:
+                        case DistributeMode.Vertical:
                             {
                                 boxes.Sort(Box.CompareVerticalTop);
                                 boxes[0].shape.Select(context.ContainerView.SelectionState);
