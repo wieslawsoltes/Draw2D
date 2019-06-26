@@ -669,7 +669,7 @@ namespace Draw2D.ViewModels.Tools
                                 {
                                     var box = boxes[i];
                                     var size = sizes[i];
-                                    double dy = offset - box.a;
+                                    double dy = offset - box.ay;
                                     box.shape.Move(context.ContainerView.SelectionState, 0.0, dy);
                                     box.shape.Select(context.ContainerView.SelectionState);
                                     offset += size.h + gapv;
