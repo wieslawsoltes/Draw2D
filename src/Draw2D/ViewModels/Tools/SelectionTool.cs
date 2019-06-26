@@ -588,7 +588,7 @@ namespace Draw2D.ViewModels.Tools
 
         internal static int SortVertical((IBaseShape shape, double ax, double ay, double bx, double by) box1, (IBaseShape shape, double ax, double ay, double bx, double by) box2)
         {
-            return (box1.ax > box2.ax) ? 1 : ((box1.ax < box2.ax) ? -1 : 0);
+            return (box1.ay > box2.ay) ? 1 : ((box1.ay < box2.ay) ? -1 : 0);
         }
 
         internal void Distribute(IToolContext context, DistributeMode mode)
