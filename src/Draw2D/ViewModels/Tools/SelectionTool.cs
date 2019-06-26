@@ -565,6 +565,16 @@ namespace Draw2D.ViewModels.Tools
             }
         }
 
+        public void DistributeHorizontally(IToolContext context)
+        {
+            // TODO:
+        }
+
+        void DistributeVertically(IToolContext context)
+        {
+            // TODO:
+        }
+
         internal enum AlignMode { Left, Centered, Right, Top, Center, Bottom }
 
         internal void Align(IToolContext context, AlignMode mode)

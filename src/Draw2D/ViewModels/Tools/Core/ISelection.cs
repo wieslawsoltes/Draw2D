@@ -12,6 +12,8 @@ namespace Draw2D.ViewModels.Tools
         void CreateGroup(IToolContext context);
         void CreateReference(IToolContext context);
         void CreatePath(IToolContext context);
+        void DistributeHorizontally(IToolContext context);
+        void DistributeVertically(IToolContext context);
         void AlignLeft(IToolContext context);
         void AlignCentered(IToolContext context);
         void AlignRight(IToolContext context);

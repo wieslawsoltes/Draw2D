@@ -173,6 +173,10 @@
             <Separator/>
             <MenuItem Header="Create Pat_h" Command="{Binding Selection.CreatePath}" CommandParameter="{Binding}"/>
             <Separator/>
+            <MenuItem Header="Dis_tribute">
+                <MenuItem Header="Horizontally" Command="{Binding Selection.DistributeHorizontally}" CommandParameter="{Binding}"/>
+                <MenuItem Header="Vertically" Command="{Binding Selection.DistributeVertically}" CommandParameter="{Binding}"/>
+            </MenuItem>
             <MenuItem Header="Alig_n">
                 <MenuItem Header="_Left" Command="{Binding Selection.AlignLeft}" CommandParameter="{Binding}"/>
                 <MenuItem Header="_Centered" Command="{Binding Selection.AlignCentered}" CommandParameter="{Binding}"/>
