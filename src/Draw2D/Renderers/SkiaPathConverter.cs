@@ -63,7 +63,12 @@ namespace Draw2D.Renderers
             {
                 if (SkiaHelper.AddShape(context, shape, 0.0, 0.0, geometry) == true)
                 {
-                    return SkiaHelper.ToPathShape(context, geometry, context.StyleLibrary?.CurrentStyle, context.PointTemplate);
+                    var style = context.StyleLibrary?.Get(shape.StyleId);
+                    if (style == null)
+                    {
+                        style = context.StyleLibrary?.CurrentStyle;
+                    }
+                    return SkiaHelper.ToPathShape(context, geometry, style, context.PointTemplate);
                 }
             }
             return null;
@@ -83,7 +88,12 @@ namespace Draw2D.Renderers
                     {
                         if (!result.IsEmpty)
                         {
-                            path = SkiaHelper.ToPathShape(context, result, context.StyleLibrary?.CurrentStyle, context.PointTemplate);
+                            var style = context.StyleLibrary?.Get(shapes[0].StyleId);
+                            if (style == null)
+                            {
+                                style = context.StyleLibrary?.CurrentStyle;
+                            }
+                            path = SkiaHelper.ToPathShape(context, result, style, context.PointTemplate);
                         }
                         result.Dispose();
                     }
