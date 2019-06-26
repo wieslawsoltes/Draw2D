@@ -646,31 +646,35 @@ namespace Draw2D.ViewModels.Tools
                         case DistributeMode.Horizontally:
                             {
                                 boxes.Sort(SortHorizontal);
+                                boxes[0].shape.Select(context.ContainerView.SelectionState);
                                 double offset = boxes[0].ax + sizes[0].w + gaph;
                                 for (int i = 1; i <= boxes.Count - 2; i++)
                                 {
                                     var box = boxes[i];
                                     var size = sizes[i];
-                                    double dx = box.ax - offset;
+                                    double dx = offset - box.ax;
                                     box.shape.Move(context.ContainerView.SelectionState, dx, 0.0);
                                     box.shape.Select(context.ContainerView.SelectionState);
                                     offset += size.w + gaph;
                                 }
+                                boxes[boxes.Count - 1].shape.Select(context.ContainerView.SelectionState);
                             }
                             break;
                         case DistributeMode.Vertically:
                             {
                                 boxes.Sort(SortVertical);
+                                boxes[0].shape.Select(context.ContainerView.SelectionState);
                                 double offset = boxes[0].ay + sizes[0].h + gapv;
                                 for (int i = 1; i <= boxes.Count - 2; i++)
                                 {
                                     var box = boxes[i];
                                     var size = sizes[i];
-                                    double dy = box.ay - offset;
+                                    double dy = offset - box.a;
                                     box.shape.Move(context.ContainerView.SelectionState, 0.0, dy);
                                     box.shape.Select(context.ContainerView.SelectionState);
                                     offset += size.h + gapv;
                                 }
+                                boxes[boxes.Count - 1].shape.Select(context.ContainerView.SelectionState);
                             }
                             break;
                     }
