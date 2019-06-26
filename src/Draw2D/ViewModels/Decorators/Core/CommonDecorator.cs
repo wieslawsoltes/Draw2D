@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Runtime.Serialization;
 using Draw2D.ViewModels.Shapes;
+using Draw2D.ViewModels.Tools;
 
 namespace Draw2D.ViewModels.Decorators
 {
