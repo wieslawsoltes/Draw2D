@@ -565,7 +565,7 @@ namespace Draw2D.ViewModels.Tools
             }
         }
 
-        internal static void GetAlignBounds(IList<(IBaseShape shape, double ax, double ay, double bx, double by)> boxes, out double ax, out double ay, out double bx, out double by)
+        internal static void GetAlignBounds(IList<(IBaseShape shape, double ax, double ay, double bx, double by, (double w, double h) size)> boxes, out double ax, out double ay, out double bx, out double by)
         {
             ax = double.MaxValue;
             ay = double.MaxValue;
@@ -581,12 +581,12 @@ namespace Draw2D.ViewModels.Tools
             }
         }
 
-        internal static int SortHorizontal((IBaseShape shape, double ax, double ay, double bx, double by) box1, (IBaseShape shape, double ax, double ay, double bx, double by) box2)
+        internal static int SortHorizontal((IBaseShape shape, double ax, double ay, double bx, double by, (double w, double h) size) box1, (IBaseShape shape, double ax, double ay, double bx, double by, (double w, double h) size) box2)
         {
             return (box1.ax > box2.ax) ? 1 : ((box1.ax < box2.ax) ? -1 : 0);
         }
 
-        internal static int SortVertical((IBaseShape shape, double ax, double ay, double bx, double by) box1, (IBaseShape shape, double ax, double ay, double bx, double by) box2)
+        internal static int SortVertical((IBaseShape shape, double ax, double ay, double bx, double by, (double w, double h) size) box1, (IBaseShape shape, double ax, double ay, double bx, double by, (double w, double h) size) box2)
         {
             return (box1.ay > box2.ay) ? 1 : ((box1.ay < box2.ay) ? -1 : 0);
         }
@@ -596,15 +596,17 @@ namespace Draw2D.ViewModels.Tools
             if (context.ContainerView?.SelectionState != null)
             {
                 var shapes = new List<IBaseShape>(context.ContainerView.SelectionState?.Shapes);
-                var boxes = new List<(IBaseShape shape, double ax, double ay, double bx, double by)>();
+                var boxes = new List<(IBaseShape shape, double ax, double ay, double bx, double by, (double w, double h) size)>();
 
                 foreach (var shape in shapes)
                 {
                     if (!(shape is IPointShape))
                     {
-                        (IBaseShape shape, double ax, double ay, double bx, double by) box;
+                        (IBaseShape shape, double ax, double ay, double bx, double by, (double w, double h) size) box;
                         box.shape = shape;
                         shape.GetBox(out box.ax, out box.ay, out box.bx, out box.by);
+                        box.size.w = Math.Abs(box.bx - box.ax);
+                        box.size.h = Math.Abs(box.by - box.ay);
                         boxes.Add(box);
                     }
                 }
@@ -619,27 +621,20 @@ namespace Draw2D.ViewModels.Tools
                     double cx = (bounds.ax + bounds.bx) / 2.0;
                     double cy = (bounds.ay + bounds.by) / 2.0;
 
-                    double bw = bounds.bx - bounds.ax;
-                    double bh = bounds.by - bounds.ay;
+                    double bw = Math.Abs(bounds.bx - bounds.ax);
+                    double bh = Math.Abs(bounds.by - bounds.ay);
 
-                    double sw = 0;
-                    double sh = 0;
-
-                    var sizes = new List<(double w, double h)>();
+                    double sw = 0.0;
+                    double sh = 0.0;
 
                     foreach (var box in boxes)
                     {
-                        (double w, double h) size;
-                        size.w = box.bx - box.ax;
-                        size.h = box.by - box.ay;
-                        sizes.Add(size);
-
-                        sw += size.w;
-                        sh += size.h;
+                        sw += box.size.w;
+                        sh += box.size.h;
                     }
 
-                    double gaph = (bw - sw) / (boxes.Count - 1);
-                    double gapv = (bh - sh) / (boxes.Count - 1);
+                    double gaph = (Math.Abs(bw - sw)) / (boxes.Count - 1);
+                    double gapv = (Math.Abs(bh - sh)) / (boxes.Count - 1);
 
                     switch (mode)
                     {
@@ -647,15 +642,14 @@ namespace Draw2D.ViewModels.Tools
                             {
                                 boxes.Sort(SortHorizontal);
                                 boxes[0].shape.Select(context.ContainerView.SelectionState);
-                                double offset = boxes[0].ax + sizes[0].w + gaph;
+                                double offset = boxes[0].ax + boxes[0].size.w + gaph;
                                 for (int i = 1; i <= boxes.Count - 2; i++)
                                 {
                                     var box = boxes[i];
-                                    var size = sizes[i];
                                     double dx = offset - box.ax;
                                     box.shape.Move(context.ContainerView.SelectionState, dx, 0.0);
                                     box.shape.Select(context.ContainerView.SelectionState);
-                                    offset += size.w + gaph;
+                                    offset += box.size.w + gaph;
                                 }
                                 boxes[boxes.Count - 1].shape.Select(context.ContainerView.SelectionState);
                             }
@@ -664,15 +658,14 @@ namespace Draw2D.ViewModels.Tools
                             {
                                 boxes.Sort(SortVertical);
                                 boxes[0].shape.Select(context.ContainerView.SelectionState);
-                                double offset = boxes[0].ay + sizes[0].h + gapv;
+                                double offset = boxes[0].ay + boxes[0].size.h + gapv;
                                 for (int i = 1; i <= boxes.Count - 2; i++)
                                 {
                                     var box = boxes[i];
-                                    var size = sizes[i];
                                     double dy = offset - box.ay;
                                     box.shape.Move(context.ContainerView.SelectionState, 0.0, dy);
                                     box.shape.Select(context.ContainerView.SelectionState);
-                                    offset += size.h + gapv;
+                                    offset += box.size.h + gapv;
                                 }
                                 boxes[boxes.Count - 1].shape.Select(context.ContainerView.SelectionState);
                             }
@@ -699,15 +692,17 @@ namespace Draw2D.ViewModels.Tools
             if (context.ContainerView?.SelectionState != null)
             {
                 var shapes = new List<IBaseShape>(context.ContainerView.SelectionState?.Shapes);
-                var boxes = new List<(IBaseShape shape, double ax, double ay, double bx, double by)>();
+                var boxes = new List<(IBaseShape shape, double ax, double ay, double bx, double by, (double w, double h) size)>();
 
                 foreach (var shape in shapes)
                 {
                     if (!(shape is IPointShape))
                     {
-                        (IBaseShape shape, double ax, double ay, double bx, double by) box;
+                        (IBaseShape shape, double ax, double ay, double bx, double by, (double w, double h) size) box;
                         box.shape = shape;
                         shape.GetBox(out box.ax, out box.ay, out box.bx, out box.by);
+                        box.size.w = Math.Abs(box.bx - box.ax);
+                        box.size.h = Math.Abs(box.by - box.ay);
                         boxes.Add(box);
                     }
                 }
