@@ -153,8 +153,8 @@ namespace Draw2D.ViewModels.Tools
                         sh += box.h;
                     }
 
-                    double gaph = (Math.Abs(bw - sw)) / (boxes.Count - 1);
-                    double gapv = (Math.Abs(bh - sh)) / (boxes.Count - 1);
+                    double gaph = (bw - sw) / (boxes.Count - 1);
+                    double gapv = (bh - sh) / (boxes.Count - 1);
 
                     switch (mode)
                     {
