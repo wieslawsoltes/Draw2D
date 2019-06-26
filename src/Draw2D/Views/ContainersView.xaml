@@ -96,7 +96,7 @@
                                 <KeyBinding Command="{Binding $parent[UserControl].DataContext.Selection.ArangeSendToBack}" CommandParameter="{Binding $parent[UserControl].DataContext}" Gesture="Ctrl+Shift+OemMinus"/>
                                 <KeyBinding Command="{Binding $parent[UserControl].DataContext.Selection.ArangeSendToBack}" CommandParameter="{Binding $parent[UserControl].DataContext}" Gesture="Ctrl+Shift+Subtract"/>
                                 <KeyBinding Command="{Binding $parent[UserControl].DataContext.Selection.Break}" CommandParameter="{Binding $parent[UserControl].DataContext}" Gesture="Ctrl+Shift+B"/>
-                                <KeyBinding Command="{Binding $parent[UserControl].DataContext.Selection.Connect}" CommandParameter="{Binding $parent[UserControl].DataContext}" Gesture="Ctrl+Shift+,"/>
+                                <KeyBinding Command="{Binding $parent[UserControl].DataContext.Selection.Connect}" CommandParameter="{Binding $parent[UserControl].DataContext}" Gesture="Ctrl+Shift+OemComma"/>
                                 <KeyBinding Command="{Binding $parent[UserControl].DataContext.Selection.Disconnect}" CommandParameter="{Binding $parent[UserControl].DataContext}" Gesture="Ctrl+Shift+."/>
                                 <KeyBinding Command="{Binding $parent[UserControl].DataContext.Selection.SelectAll}" CommandParameter="{Binding $parent[UserControl].DataContext}" Gesture="Ctrl+A"/>
                                 <KeyBinding Command="{Binding $parent[UserControl].DataContext.Selection.DeselectAll}" CommandParameter="{Binding $parent[UserControl].DataContext}" Gesture="Ctrl+Shift+A"/>
