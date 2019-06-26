@@ -137,18 +137,13 @@ namespace Draw2D.ViewModels.Tools
                     }
                 }
 
-                if (boxes.Count > 2)
+                if (boxes.Count >= 2)
                 {
                     context.ContainerView?.SelectionState?.Dehover();
                     context.ContainerView?.SelectionState?.Clear();
 
                     (double ax, double ay, double bx, double by) bounds;
                     GetBounds(boxes, out bounds.ax, out bounds.ay, out bounds.bx, out bounds.by);
-                    double cx = (bounds.ax + bounds.bx) / 2.0;
-                    double cy = (bounds.ay + bounds.by) / 2.0;
-
-                    double bw = Math.Abs(bounds.bx - bounds.ax);
-                    double bh = Math.Abs(bounds.by - bounds.ay);
 
                     switch (mode)
                     {
@@ -211,12 +206,9 @@ namespace Draw2D.ViewModels.Tools
 
                     (double ax, double ay, double bx, double by) bounds;
                     GetBounds(boxes, out bounds.ax, out bounds.ay, out bounds.bx, out bounds.by);
-                    double cx = (bounds.ax + bounds.bx) / 2.0;
-                    double cy = (bounds.ay + bounds.by) / 2.0;
 
                     double bw = Math.Abs(bounds.bx - bounds.ax);
                     double bh = Math.Abs(bounds.by - bounds.ay);
-
                     double sw = 0.0;
                     double sh = 0.0;
 
