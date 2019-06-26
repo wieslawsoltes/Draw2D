@@ -26,6 +26,22 @@ namespace Draw2D.ViewModels.Tools
         private IList<IBaseShape> _shapesToCopy = null;
         private bool _disconnected = false;
 
+        internal enum DistributeMode
+        {
+            Horizontally,
+            Vertically
+        }
+
+        internal enum AlignMode
+        {
+            Left,
+            Centered,
+            Right,
+            Top,
+            Center,
+            Bottom
+        }
+
         public enum State
         {
             None,
@@ -549,7 +565,7 @@ namespace Draw2D.ViewModels.Tools
             }
         }
 
-        public static void GetAlignBounds(IList<(IBaseShape shape, double ax, double ay, double bx, double by)> boxes, out double ax, out double ay, out double bx, out double by)
+        internal static void GetAlignBounds(IList<(IBaseShape shape, double ax, double ay, double bx, double by)> boxes, out double ax, out double ay, out double bx, out double by)
         {
             ax = double.MaxValue;
             ay = double.MaxValue;
@@ -565,17 +581,86 @@ namespace Draw2D.ViewModels.Tools
             }
         }
 
+        internal void Distribute(IToolContext context, DistributeMode mode)
+        {
+            if (context.ContainerView?.SelectionState != null)
+            {
+                var shapes = new List<IBaseShape>(context.ContainerView.SelectionState?.Shapes);
+                var boxes = new List<(IBaseShape shape, double ax, double ay, double bx, double by)>();
+
+                foreach (var shape in shapes)
+                {
+                    if (!(shape is IPointShape))
+                    {
+                        (IBaseShape shape, double ax, double ay, double bx, double by) box;
+                        box.shape = shape;
+                        shape.GetBox(out box.ax, out box.ay, out box.bx, out box.by);
+                        boxes.Add(box);
+                    }
+                }
+
+                if (boxes.Count > 2)
+                {
+                    context.ContainerView?.SelectionState?.Dehover();
+                    context.ContainerView?.SelectionState?.Clear();
+
+                    (double ax, double ay, double bx, double by) bounds;
+                    GetAlignBounds(boxes, out bounds.ax, out bounds.ay, out bounds.bx, out bounds.by);
+                    double cx = (bounds.ax + bounds.bx) / 2.0;
+                    double cy = (bounds.ay + bounds.by) / 2.0;
+
+                    double bw = bounds.bx - bounds.ax;
+                    double bh = bounds.by - bounds.ay;
+
+                    double sw = 0;
+                    double sh = 0;
+
+                    foreach (var box in boxes)
+                    {
+                        sw += box.bx - box.ax;
+                        sh += box.by - box.ay;
+                    }
+
+                    double gx = (bw - sw) / (boxes.Count - 1);
+                    double gy = (bh - sh) / (boxes.Count - 1);
+
+                    for (int i = 1; i <= boxes.Count - 2; i++)
+                    {
+                        var box = boxes[i];
+                        double dx = 0.0;
+                        double dy = 0.0;
+
+                        switch (mode)
+                        {
+                            case DistributeMode.Horizontally:
+                                dx = gx;
+                                break;
+                            case DistributeMode.Vertically:
+                                dy = gy;
+                                break;
+                        }
+
+                        if (dx != 0.0 || dy != 0.0)
+                        {
+                            box.shape.Move(context.ContainerView.SelectionState, dx, dy);
+                        }
+                        box.shape.Select(context.ContainerView.SelectionState);
+                    }
+
+                    context.ContainerView?.InputService?.Redraw?.Invoke();
+                }
+            }
+        }
+
         public void DistributeHorizontally(IToolContext context)
         {
-            // TODO:
+            Distribute(context, DistributeMode.Horizontally);
         }
 
-        void DistributeVertically(IToolContext context)
+        public void DistributeVertically(IToolContext context)
         {
-            // TODO:
+            Distribute(context, DistributeMode.Vertically);
         }
-
-        internal enum AlignMode { Left, Centered, Right, Top, Center, Bottom }
 
         internal void Align(IToolContext context, AlignMode mode)
         {
