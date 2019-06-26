@@ -82,6 +82,39 @@ namespace Draw2D.ViewModels.Tools
         }
     }
 
+    internal readonly struct Bounds
+    {
+        public readonly IList<Box> boxes;
+        public readonly double ax;
+        public readonly double ay;
+        public readonly double bx;
+        public readonly double by;
+        public readonly double cx;
+        public readonly double cy;
+        public readonly double w;
+        public readonly double h;
+
+        public Bounds(IList<Box> boxes)
+        {
+            this.boxes = boxes;
+            this.ax = double.MaxValue;
+            this.ay = double.MaxValue;
+            this.bx = double.MinValue;
+            this.by = double.MinValue;
+            foreach (var box in this.boxes)
+            {
+                this.ax = Math.Min(this.ax, box.ax);
+                this.ay = Math.Min(this.ay, box.ay);
+                this.bx = Math.Max(this.bx, box.bx);
+                this.by = Math.Max(this.by, box.by);
+            }
+            this.cx = (this.ax + this.bx) / 2.0;
+            this.cy = (this.ay + this.by) / 2.0;
+            this.w = Math.Abs(this.bx - this.ax);
+            this.h = Math.Abs(this.by - this.ay);
+        }
+    }
+
     internal enum StackMode
     {
         Horizontal,
@@ -106,22 +139,6 @@ namespace Draw2D.ViewModels.Tools
 
     internal static class Layout
     {
-        public static void GetBounds(IList<Box> boxes, out double ax, out double ay, out double bx, out double by)
-        {
-            ax = double.MaxValue;
-            ay = double.MaxValue;
-            bx = double.MinValue;
-            by = double.MinValue;
-
-            foreach (var box in boxes)
-            {
-                ax = Math.Min(ax, box.ax);
-                ay = Math.Min(ay, box.ay);
-                bx = Math.Max(bx, box.bx);
-                by = Math.Max(by, box.by);
-            }
-        }
-
         public static void Stack(IToolContext context, StackMode mode)
         {
             if (context.ContainerView?.SelectionState != null)
@@ -142,8 +159,7 @@ namespace Draw2D.ViewModels.Tools
                     context.ContainerView?.SelectionState?.Dehover();
                     context.ContainerView?.SelectionState?.Clear();
 
-                    (double ax, double ay, double bx, double by) bounds;
-                    GetBounds(boxes, out bounds.ax, out bounds.ay, out bounds.bx, out bounds.by);
+                    var bounds = new Bounds(boxes);
 
                     switch (mode)
                     {
@@ -204,11 +220,8 @@ namespace Draw2D.ViewModels.Tools
                     context.ContainerView?.SelectionState?.Dehover();
                     context.ContainerView?.SelectionState?.Clear();
 
-                    (double ax, double ay, double bx, double by) bounds;
-                    GetBounds(boxes, out bounds.ax, out bounds.ay, out bounds.bx, out bounds.by);
+                    var bounds = new Bounds(boxes);
 
-                    double bw = Math.Abs(bounds.bx - bounds.ax);
-                    double bh = Math.Abs(bounds.by - bounds.ay);
                     double sw = 0.0;
                     double sh = 0.0;
 
@@ -218,8 +231,8 @@ namespace Draw2D.ViewModels.Tools
                         sh += box.h;
                     }
 
-                    double gaph = (bw - sw) / (boxes.Count - 1);
-                    double gapv = (bh - sh) / (boxes.Count - 1);
+                    double gaph = (bounds.w - sw) / (boxes.Count - 1);
+                    double gapv = (bounds.h - sh) / (boxes.Count - 1);
 
                     switch (mode)
                     {
@@ -282,10 +295,7 @@ namespace Draw2D.ViewModels.Tools
                     context.ContainerView?.SelectionState?.Dehover();
                     context.ContainerView?.SelectionState?.Clear();
 
-                    (double ax, double ay, double bx, double by) bounds;
-                    GetBounds(boxes, out bounds.ax, out bounds.ay, out bounds.bx, out bounds.by);
-                    double cx = (bounds.ax + bounds.bx) / 2.0;
-                    double cy = (bounds.ay + bounds.by) / 2.0;
+                    var bounds = new Bounds(boxes);
 
                     foreach (var box in boxes)
                     {
@@ -298,7 +308,7 @@ namespace Draw2D.ViewModels.Tools
                                 dx = bounds.ax - box.ax;
                                 break;
                             case AlignMode.Centered:
-                                dx = cx - ((box.ax + box.bx) / 2.0);
+                                dx = bounds.cx - ((box.ax + box.bx) / 2.0);
                                 break;
                             case AlignMode.Right:
                                 dx = bounds.bx - box.bx;
@@ -307,7 +317,7 @@ namespace Draw2D.ViewModels.Tools
                                 dy = bounds.ay - box.ay;
                                 break;
                             case AlignMode.Center:
-                                dy = cy - ((box.ay + box.by) / 2.0);
+                                dy = bounds.cy - ((box.ay + box.by) / 2.0);
                                 break;
                             case AlignMode.Bottom:
                                 dy = bounds.by - box.by;
