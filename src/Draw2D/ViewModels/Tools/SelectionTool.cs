@@ -6,10 +6,8 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Runtime.Serialization;
 using Draw2D.Input;
-//using Draw2D.Renderers;
 using Draw2D.ViewModels.Containers;
 using Draw2D.ViewModels.Shapes;
-//using SkiaSharp;
 using Spatial;
 
 namespace Draw2D.ViewModels.Tools
