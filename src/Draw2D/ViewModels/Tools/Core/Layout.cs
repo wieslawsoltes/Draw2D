@@ -6,39 +6,16 @@ using Draw2D.ViewModels.Containers;
 
 namespace Draw2D.ViewModels.Tools
 {
-    internal static class LayoutExtensions
-    {
-        public static void GetBox(this IList<IPointShape> points, out double ax, out double ay, out double bx, out double by)
-        {
-            ax = double.MaxValue;
-            ay = double.MaxValue;
-            bx = double.MinValue;
-            by = double.MinValue;
-
-            foreach (var point in points)
-            {
-                ax = Math.Min(ax, point.X);
-                ay = Math.Min(ay, point.Y);
-                bx = Math.Max(bx, point.X);
-                by = Math.Max(by, point.Y);
-            }
-        }
-
-        public static void GetBox(this IBaseShape shape, out double ax, out double ay, out double bx, out double by)
-        {
-            var points = new List<IPointShape>();
-            shape.GetPoints(points);
-            GetBox(points, out ax, out ay, out bx, out by);
-        }
-    }
-
     internal readonly struct Box
     {
         public readonly IBaseShape shape;
+        public readonly IList<IPointShape> points;
         public readonly double ax;
         public readonly double ay;
         public readonly double bx;
         public readonly double by;
+        public readonly double cx;
+        public readonly double cy;
         public readonly double w;
         public readonly double h;
 
@@ -72,10 +49,30 @@ namespace Draw2D.ViewModels.Tools
             return (box1.h > box2.h) ? 1 : ((box1.h < box2.h) ? -1 : 0);
         }
 
+        public static void GetBox(IList<IPointShape> points, out double ax, out double ay, out double bx, out double by)
+        {
+            ax = double.MaxValue;
+            ay = double.MaxValue;
+            bx = double.MinValue;
+            by = double.MinValue;
+
+            foreach (var point in points)
+            {
+                ax = Math.Min(ax, point.X);
+                ay = Math.Min(ay, point.Y);
+                bx = Math.Max(bx, point.X);
+                by = Math.Max(by, point.Y);
+            }
+        }
+
         public Box(IBaseShape shape)
         {
             this.shape = shape;
-            this.shape.GetBox(out this.ax, out this.ay, out this.bx, out this.by);
+            this.points = new List<IPointShape>();
+            this.shape.GetPoints(points);
+            GetBox(this.points, out this.ax, out this.ay, out this.bx, out this.by);
+            this.cx = (this.ax + this.bx) / 2.0;
+            this.cy = (this.ay + this.by) / 2.0;
             this.w = Math.Abs(this.bx - this.ax);
             this.h = Math.Abs(this.by - this.ay);
         }
