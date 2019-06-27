@@ -34,8 +34,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Avalonia" Version="0.8.1-cibuild0003062-beta" />
-    <PackageReference Include="Avalonia.Desktop" Version="0.8.1-cibuild0003062-beta" />
+    <PackageReference Include="Avalonia" Version="0.8.1-cibuild0003074-beta" />
+    <PackageReference Include="Avalonia.Desktop" Version="0.8.1-cibuild0003074-beta" />
     <PackageReference Include="Avalonia.Angle.Windows.Natives" Version="2.1.0.2019013001" />
   </ItemGroup>
 
