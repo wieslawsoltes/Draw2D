@@ -254,13 +254,10 @@ namespace Draw2D.ViewModels.Decorators
 
         internal void DrawBoxFromPoints(object dc, IShapeRenderer renderer, IBaseShape shape, double dx, double dy, double scale)
         {
-            var points = new List<IPointShape>();
-            shape.GetPoints(points);
-
-            if (points.Count >= 2)
+            var box = new Box(shape);
+            if (box.points.Count >= 2)
             {
-                points.GetBox(out double ax, out double ay, out double bx, out double by);
-                DrawRectangle(dc, renderer, ax, ay, bx, by, dx, dy, scale);
+                DrawRectangle(dc, renderer, box.ax, box.ay, box.bx, box.by, dx, dy, scale);
             }
         }
 
