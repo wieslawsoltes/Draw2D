@@ -41,7 +41,7 @@ namespace Draw2D.ViewModels.Intersections
             {
                 foreach (var rectangle in rectangles)
                 {
-                    var rect = Rect2.FromPoints(rectangle.TopLeft.ToPoint2(), rectangle.BottomRight.ToPoint2());
+                    var rect = Rect2.FromPoints(rectangle.StartPoint.ToPoint2(), rectangle.Point.ToPoint2());
                     var p1 = line.StartPoint.ToPoint2();
                     var p2 = line.Point.ToPoint2();
                     var intersections = Line2.LineIntersectsWithRect(p1, p2, rect, out double x0clip, out double y0clip, out double x1clip, out double y1clip);

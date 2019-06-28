@@ -90,17 +90,17 @@ namespace Draw2D.ViewModels.Tools
                     _rectangle = new RectangleShape()
                     {
                         Points = new ObservableCollection<IPointShape>(),
-                        TopLeft = new PointShape(),
-                        BottomRight = new PointShape()
+                        StartPoint = new PointShape(),
+                        Point = new PointShape()
                     };
-                    _rectangle.TopLeft.Owner = _rectangle;
-                    _rectangle.BottomRight.Owner = _rectangle;
+                    _rectangle.StartPoint.Owner = _rectangle;
+                    _rectangle.Point.Owner = _rectangle;
                 }
 
-                _rectangle.TopLeft.X = x;
-                _rectangle.TopLeft.Y = y;
-                _rectangle.BottomRight.X = x;
-                _rectangle.BottomRight.Y = y;
+                _rectangle.StartPoint.X = x;
+                _rectangle.StartPoint.Y = y;
+                _rectangle.Point.X = x;
+                _rectangle.Point.Y = y;
                 _rectangle.StyleId = Settings?.SelectionStyle;
                 context.ContainerView?.WorkingContainer.Shapes.Add(_rectangle);
                 context.ContainerView?.WorkingContainer.MarkAsDirty(true);
@@ -116,8 +116,8 @@ namespace Draw2D.ViewModels.Tools
         {
             CurrentState = State.None;
 
-            _rectangle.BottomRight.X = x;
-            _rectangle.BottomRight.Y = y;
+            _rectangle.Point.X = x;
+            _rectangle.Point.Y = y;
 
             context.ContainerView?.InputService?.Release?.Invoke();
             context.ContainerView?.InputService?.Redraw?.Invoke();
@@ -212,8 +212,8 @@ namespace Draw2D.ViewModels.Tools
 
         private void MoveSelectionInternal(IToolContext context, double x, double y, Modifier modifier)
         {
-            _rectangle.BottomRight.X = x;
-            _rectangle.BottomRight.Y = y;
+            _rectangle.Point.X = x;
+            _rectangle.Point.Y = y;
 
             context.ContainerView?.InputService?.Redraw?.Invoke();
         }

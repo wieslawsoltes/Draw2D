@@ -174,13 +174,13 @@ namespace Draw2D.Renderers
 
         internal static void AddRect(IToolContext context, RectangleShape rectangle, double dx, double dy, SKPath geometry)
         {
-            var rect = ToSKRect(rectangle.TopLeft, rectangle.BottomRight, dx, dy);
+            var rect = ToSKRect(rectangle.StartPoint, rectangle.Point, dx, dy);
             geometry.AddRect(rect, SKPathDirection.Clockwise);
         }
 
         internal static void AddOval(IToolContext context, EllipseShape ellipse, double dx, double dy, SKPath geometry)
         {
-            var rect = ToSKRect(ellipse.TopLeft, ellipse.BottomRight, dx, dy);
+            var rect = ToSKRect(ellipse.StartPoint, ellipse.Point, dx, dy);
             geometry.AddOval(rect, SKPathDirection.Clockwise);
         }
 
@@ -257,7 +257,7 @@ namespace Draw2D.Renderers
             var style = context?.StyleLibrary?.Get(text.StyleId);
             if (style != null)
             {
-                AddText(context, text.Text, text.TopLeft, text.BottomRight, style.TextStyle, dx, dy, geometry);
+                AddText(context, text.Text, text.StartPoint, text.Point, style.TextStyle, dx, dy, geometry);
             }
         }
 
@@ -664,7 +664,7 @@ namespace Draw2D.Renderers
                             var style = context?.StyleLibrary?.Get(rectangle.StyleId);
                             if (style != null)
                             {
-                                ToSvgPathData(context, rectangle.Text, rectangle.TopLeft, rectangle.BottomRight, style.TextStyle, sb);
+                                ToSvgPathData(context, rectangle.Text, rectangle.StartPoint, rectangle.Point, style.TextStyle, sb);
                             }
                         }
                     }
@@ -679,7 +679,7 @@ namespace Draw2D.Renderers
                             var style = context?.StyleLibrary?.Get(ellipse.StyleId);
                             if (style != null)
                             {
-                                ToSvgPathData(context, ellipse.Text, ellipse.TopLeft, ellipse.BottomRight, style.TextStyle, sb);
+                                ToSvgPathData(context, ellipse.Text, ellipse.StartPoint, ellipse.Point, style.TextStyle, sb);
                             }
                         }
                     }
@@ -707,7 +707,7 @@ namespace Draw2D.Renderers
                         var style = context?.StyleLibrary?.Get(text.StyleId);
                         if (style != null)
                         {
-                            ToSvgPathData(context, text.Text, text.TopLeft, text.BottomRight, style.TextStyle, sb);
+                            ToSvgPathData(context, text.Text, text.StartPoint, text.Point, style.TextStyle, sb);
                         }
                     }
                     break;

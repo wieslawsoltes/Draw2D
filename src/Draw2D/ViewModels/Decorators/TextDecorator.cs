@@ -10,7 +10,7 @@ namespace Draw2D.ViewModels.Decorators
     {
         public void Draw(object dc, IShapeRenderer renderer, TextShape textShape, double dx, double dy, double scale)
         {
-            DrawRectangle(dc, renderer, textShape.TopLeft, textShape.BottomRight, dx, dy, scale);
+            DrawRectangle(dc, renderer, textShape.StartPoint, textShape.Point, dx, dy, scale);
         }
 
         public override void Draw(object dc, IBaseShape shape, IShapeRenderer renderer, ISelectionState selectionState, double dx, double dy, double scale)

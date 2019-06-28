@@ -804,6 +804,78 @@ namespace Draw2D.Editor
                 }
             };
 
+            var twoPointsTool = new TwoPointsTool()
+            {
+                Intersections = new ObservableCollection<IPointIntersection>
+                {
+                    new LineLineIntersection()
+                    {
+                        Intersections = new ObservableCollection<IPointShape>(),
+                        Settings = new LineLineSettings()
+                        {
+                            IsEnabled = true
+                        }
+                    },
+                    new RectangleLineIntersection()
+                    {
+                        Intersections = new ObservableCollection<IPointShape>(),
+                        Settings = new RectangleLineSettings()
+                        {
+                            IsEnabled = true
+                        }
+                    },
+                    new EllipseLineIntersection()
+                    {
+                        Intersections = new ObservableCollection<IPointShape>(),
+                        Settings = new EllipseLineSettings()
+                        {
+                            IsEnabled = true
+                        }
+                    }
+                },
+                Filters = new ObservableCollection<IPointFilter>
+                {
+                    new GridSnapPointFilter()
+                    {
+                        Guides = new ObservableCollection<IBaseShape>(),
+                        Settings = new GridSnapSettings()
+                        {
+                            IsEnabled = true,
+                            EnableGuides = false,
+                            Mode = GridSnapMode.Horizontal | GridSnapMode.Vertical,
+                            GridSizeX = 15.0,
+                            GridSizeY = 15.0,
+                            GuideStyle = "Guide"
+                        }
+                    },
+                    new LineSnapPointFilter()
+                    {
+                        Guides = new ObservableCollection<IBaseShape>(),
+                        Settings = new LineSnapSettings()
+                        {
+                            IsEnabled = true,
+                            EnableGuides = false,
+                            Target = LineSnapTarget.Shapes,
+                            Mode = LineSnapMode.Point
+                            | LineSnapMode.Middle
+                            | LineSnapMode.Nearest
+                            | LineSnapMode.Intersection
+                            | LineSnapMode.Horizontal
+                            | LineSnapMode.Vertical,
+                            Threshold = 10.0,
+                            GuideStyle = "Guide"
+                        }
+                    }
+                },
+                Settings = new TwoPointsToolSettings()
+                {
+                    ShapeType = TwoPointsShapeType.Line,
+                    ConnectPoints = true,
+                    HitTestRadius = 7.0,
+                    SplitIntersections = false
+                }
+            };
+
             void SetToolDefaults(ITool tool)
             {
                 tool.CurrentIntersection = tool.Intersections.Count > 0 ? tool.Intersections[0] : null;
@@ -823,6 +895,7 @@ namespace Draw2D.Editor
             SetToolDefaults(rectangleTool);
             SetToolDefaults(ellipseTool);
             SetToolDefaults(textTool);
+            SetToolDefaults(twoPointsTool);
 
             tools.Add(noneTool);
             tools.Add(selectionTool);
@@ -837,6 +910,7 @@ namespace Draw2D.Editor
             tools.Add(rectangleTool);
             tools.Add(ellipseTool);
             tools.Add(textTool);
+            tools.Add(twoPointsTool);
 
             editorToolContext.Selection = selectionTool;
             editorToolContext.HitTest = hitTest;
@@ -853,8 +927,8 @@ namespace Draw2D.Editor
                 Text = new Text(),
                 StyleId = "PointTemplate"
             };
-            pointTemplate.TopLeft.Owner = pointTemplate;
-            pointTemplate.BottomRight.Owner = pointTemplate;
+            pointTemplate.StartPoint.Owner = pointTemplate;
+            pointTemplate.Point.Owner = pointTemplate;
 
             editorToolContext.PointTemplate = pointTemplate;
 

@@ -21,11 +21,11 @@
                 </Grid>
             </ScrollViewer>
         </TabItem>
-        <TabItem Classes="default" Header="TopLeft">
-            <ContentControl Content="{Binding TopLeft}"/>
+        <TabItem Classes="default" Header="StartPoint">
+            <ContentControl Content="{Binding StartPoint}"/>
         </TabItem>
-        <TabItem Classes="default" Header="BottomRight">
-            <ContentControl Content="{Binding BottomRight}"/>
+        <TabItem Classes="default" Header="Point">
+            <ContentControl Content="{Binding Point}"/>
         </TabItem>
         <TabItem Classes="default" Header="Points">
             <TabControl Classes="default" TabStripPlacement="Top">

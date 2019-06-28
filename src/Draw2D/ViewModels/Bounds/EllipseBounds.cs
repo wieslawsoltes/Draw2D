@@ -14,14 +14,14 @@ namespace Draw2D.ViewModels.Bounds
         {
             var ellipse = shape as EllipseShape ?? throw new ArgumentNullException("shape");
 
-            if (ellipse.TopLeft.Bounds?.TryToGetPoint(ellipse.TopLeft, target, radius, hitTest) != null)
+            if (ellipse.StartPoint.Bounds?.TryToGetPoint(ellipse.StartPoint, target, radius, hitTest) != null)
             {
-                return ellipse.TopLeft;
+                return ellipse.StartPoint;
             }
 
-            if (ellipse.BottomRight.Bounds?.TryToGetPoint(ellipse.BottomRight, target, radius, hitTest) != null)
+            if (ellipse.Point.Bounds?.TryToGetPoint(ellipse.Point, target, radius, hitTest) != null)
             {
-                return ellipse.BottomRight;
+                return ellipse.Point;
             }
 
             foreach (var point in ellipse.Points)
@@ -40,10 +40,10 @@ namespace Draw2D.ViewModels.Bounds
             var ellipse = shape as EllipseShape ?? throw new ArgumentNullException("shape");
 
             return Rect2.FromPoints(
-                ellipse.TopLeft.X,
-                ellipse.TopLeft.Y,
-                ellipse.BottomRight.X,
-                ellipse.BottomRight.Y).Contains(target) ? shape : null;
+                ellipse.StartPoint.X,
+                ellipse.StartPoint.Y,
+                ellipse.Point.X,
+                ellipse.Point.Y).Contains(target) ? shape : null;
         }
 
         public IBaseShape Overlaps(IBaseShape shape, Rect2 target, double radius, IHitTest hitTest)
@@ -51,10 +51,10 @@ namespace Draw2D.ViewModels.Bounds
             var ellipse = shape as EllipseShape ?? throw new ArgumentNullException("shape");
 
             return Rect2.FromPoints(
-                ellipse.TopLeft.X,
-                ellipse.TopLeft.Y,
-                ellipse.BottomRight.X,
-                ellipse.BottomRight.Y).IntersectsWith(target) ? shape : null;
+                ellipse.StartPoint.X,
+                ellipse.StartPoint.Y,
+                ellipse.Point.X,
+                ellipse.Point.Y).IntersectsWith(target) ? shape : null;
         }
     }
 }

@@ -9,13 +9,13 @@ using Draw2D.ViewModels.Decorators;
 namespace Draw2D.ViewModels.Shapes
 {
     [DataContract(IsReference = true)]
-    public class TextShape : BaseShape
+    public class TextShape : BaseShape, ITwoPointsShape
     {
         internal static new IBounds s_bounds = new TextBounds();
         internal static new IShapeDecorator s_decorator = new TextDecorator();
 
-        private IPointShape _topLeft;
-        private IPointShape _bottomRight;
+        private IPointShape _startPoint;
+        private IPointShape _point;
         private Text _text;
 
         [IgnoreDataMember]
@@ -25,17 +25,17 @@ namespace Draw2D.ViewModels.Shapes
         public override IShapeDecorator Decorator { get; } = s_decorator;
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public IPointShape TopLeft
+        public IPointShape StartPoint
         {
-            get => _topLeft;
-            set => Update(ref _topLeft, value);
+            get => _startPoint;
+            set => Update(ref _startPoint, value);
         }
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public IPointShape BottomRight
+        public IPointShape Point
         {
-            get => _bottomRight;
-            set => Update(ref _bottomRight, value);
+            get => _point;
+            set => Update(ref _point, value);
         }
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
@@ -51,21 +51,21 @@ namespace Draw2D.ViewModels.Shapes
 
         public TextShape(IPointShape topLeft, IPointShape bottomRight)
         {
-            this.TopLeft = topLeft;
-            this.BottomRight = bottomRight;
+            this.StartPoint = topLeft;
+            this.Point = bottomRight;
         }
 
         public TextShape(Text text, IPointShape topLeft, IPointShape bottomRight)
         {
             this.Text = text;
-            this.TopLeft = topLeft;
-            this.BottomRight = bottomRight;
+            this.StartPoint = topLeft;
+            this.Point = bottomRight;
         }
 
         public override void GetPoints(IList<IPointShape> points)
         {
-            points.Add(TopLeft);
-            points.Add(BottomRight);
+            points.Add(StartPoint);
+            points.Add(Point);
             foreach (var point in Points)
             {
                 points.Add(point);
@@ -74,9 +74,9 @@ namespace Draw2D.ViewModels.Shapes
 
         public override void Invalidate()
         {
-            _topLeft?.Invalidate();
+            _startPoint?.Invalidate();
 
-            _bottomRight?.Invalidate();
+            _point?.Invalidate();
 
             _text?.Invalidate();
 
@@ -93,14 +93,14 @@ namespace Draw2D.ViewModels.Shapes
 
         public override void Move(ISelectionState selectionState, double dx, double dy)
         {
-            if (!selectionState.IsSelected(_topLeft))
+            if (!selectionState.IsSelected(_startPoint))
             {
-                _topLeft.Move(selectionState, dx, dy);
+                _startPoint.Move(selectionState, dx, dy);
             }
 
-            if (!selectionState.IsSelected(_bottomRight))
+            if (!selectionState.IsSelected(_point))
             {
-                _bottomRight.Move(selectionState, dx, dy);
+                _point.Move(selectionState, dx, dy);
             }
 
             base.Move(selectionState, dx, dy);
@@ -109,21 +109,21 @@ namespace Draw2D.ViewModels.Shapes
         public override void Select(ISelectionState selectionState)
         {
             base.Select(selectionState);
-            TopLeft.Select(selectionState);
-            BottomRight.Select(selectionState);
+            StartPoint.Select(selectionState);
+            Point.Select(selectionState);
         }
 
         public override void Deselect(ISelectionState selectionState)
         {
             base.Deselect(selectionState);
-            TopLeft.Deselect(selectionState);
-            BottomRight.Deselect(selectionState);
+            StartPoint.Deselect(selectionState);
+            Point.Deselect(selectionState);
         }
 
         private bool CanConnect(IPointShape point)
         {
-            return TopLeft != point
-                && BottomRight != point;
+            return StartPoint != point
+                && Point != point;
         }
 
         public override bool Connect(IPointShape point, IPointShape target)
@@ -134,20 +134,20 @@ namespace Draw2D.ViewModels.Shapes
             }
             else if (CanConnect(point))
             {
-                if (TopLeft == target)
+                if (StartPoint == target)
                 {
 #if DEBUG_CONNECTORS
-                    Log.WriteLine($"{nameof(TextShape)}: Connected to {nameof(TopLeft)}");
+                    Log.WriteLine($"{nameof(TextShape)}: Connected to {nameof(StartPoint)}");
 #endif
-                    this.TopLeft = point;
+                    this.StartPoint = point;
                     return true;
                 }
-                else if (BottomRight == target)
+                else if (Point == target)
                 {
 #if DEBUG_CONNECTORS
-                    Log.WriteLine($"{nameof(TextShape)}: Connected to {nameof(BottomRight)}");
+                    Log.WriteLine($"{nameof(TextShape)}: Connected to {nameof(Point)}");
 #endif
-                    this.BottomRight = point;
+                    this.Point = point;
                     return true;
                 }
             }
@@ -160,22 +160,22 @@ namespace Draw2D.ViewModels.Shapes
             {
                 return true;
             }
-            else if (TopLeft == point)
+            else if (StartPoint == point)
             {
 #if DEBUG_CONNECTORS
-                Log.WriteLine($"{nameof(TextShape)}: Disconnected from {nameof(TopLeft)}");
+                Log.WriteLine($"{nameof(TextShape)}: Disconnected from {nameof(StartPoint)}");
 #endif
                 result = (IPointShape)(point.Copy(null));
-                this.TopLeft = result;
+                this.StartPoint = result;
                 return true;
             }
-            else if (BottomRight == point)
+            else if (Point == point)
             {
 #if DEBUG_CONNECTORS
-                Log.WriteLine($"{nameof(TextShape)}: Disconnected from {nameof(BottomRight)}");
+                Log.WriteLine($"{nameof(TextShape)}: Disconnected from {nameof(Point)}");
 #endif
                 result = (IPointShape)(point.Copy(null));
-                this.BottomRight = result;
+                this.Point = result;
                 return true;
             }
             result = null;
@@ -186,21 +186,21 @@ namespace Draw2D.ViewModels.Shapes
         {
             bool result = base.Disconnect();
 
-            if (this.TopLeft != null)
+            if (this.StartPoint != null)
             {
 #if DEBUG_CONNECTORS
-                Log.WriteLine($"{nameof(TextShape)}: Disconnected from {nameof(TopLeft)}");
+                Log.WriteLine($"{nameof(TextShape)}: Disconnected from {nameof(StartPoint)}");
 #endif
-                this.TopLeft = (IPointShape)(this.TopLeft.Copy(null));
+                this.StartPoint = (IPointShape)(this.StartPoint.Copy(null));
                 result = true;
             }
 
-            if (this.BottomRight != null)
+            if (this.Point != null)
             {
 #if DEBUG_CONNECTORS
-                Log.WriteLine($"{nameof(TextShape)}: Disconnected from {nameof(BottomRight)}");
+                Log.WriteLine($"{nameof(TextShape)}: Disconnected from {nameof(Point)}");
 #endif
-                this.BottomRight = (IPointShape)(this.BottomRight.Copy(null));
+                this.Point = (IPointShape)(this.Point.Copy(null));
                 result = true;
             }
 
@@ -218,8 +218,8 @@ namespace Draw2D.ViewModels.Shapes
 
             if (shared != null)
             {
-                copy.TopLeft = (IPointShape)shared[this.TopLeft];
-                copy.BottomRight = (IPointShape)shared[this.BottomRight];
+                copy.StartPoint = (IPointShape)shared[this.StartPoint];
+                copy.Point = (IPointShape)shared[this.Point];
 
                 foreach (var point in this.Points)
                 {

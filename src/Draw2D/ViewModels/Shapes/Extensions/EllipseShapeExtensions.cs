@@ -10,8 +10,8 @@ namespace Draw2D.ViewModels.Shapes
         public static Rect2 ToRect2(this EllipseShape ellipse, double dx = 0.0, double dy = 0.0)
         {
             return Rect2.FromPoints(
-                ellipse.TopLeft.X, ellipse.TopLeft.Y,
-                ellipse.BottomRight.X, ellipse.BottomRight.Y,
+                ellipse.StartPoint.X, ellipse.StartPoint.Y,
+                ellipse.Point.X, ellipse.Point.Y,
                 dx, dy);
         }
 

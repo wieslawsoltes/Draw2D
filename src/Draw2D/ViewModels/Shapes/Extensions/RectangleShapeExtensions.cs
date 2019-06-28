@@ -10,8 +10,8 @@ namespace Draw2D.ViewModels.Shapes
         public static Rect2 ToRect2(this RectangleShape rectangle, double dx = 0.0, double dy = 0.0)
         {
             return Rect2.FromPoints(
-                rectangle.TopLeft.X, rectangle.TopLeft.Y,
-                rectangle.BottomRight.X, rectangle.BottomRight.Y,
+                rectangle.StartPoint.X, rectangle.StartPoint.Y,
+                rectangle.Point.X, rectangle.Point.Y,
                 dx, dy);
         }
 
