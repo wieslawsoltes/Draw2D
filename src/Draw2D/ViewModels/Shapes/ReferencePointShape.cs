@@ -63,6 +63,46 @@ namespace Draw2D.ViewModels.Shapes
         }
 
         [IgnoreDataMember]
+        public HAlign HAlign
+        {
+            get
+            {
+                if (_point != null && _reference != null)
+                {
+                    return _point.HAlign;
+                }
+                return HAlign.Auto;
+            }
+            set
+            {
+                if (_point != null && _reference != null)
+                {
+                    _point.HAlign = value;
+                }
+            }
+        }
+
+        [IgnoreDataMember]
+        public VAlign VAlign
+        {
+            get
+            {
+                if (_point != null && _reference != null)
+                {
+                    return _point.VAlign;
+                }
+                return VAlign.Auto;
+            }
+            set
+            {
+                if (_point != null && _reference != null)
+                {
+                    _point.VAlign = value;
+                }
+            }
+        }
+
+        [IgnoreDataMember]
         public IBaseShape Template
         {
             get

@@ -15,6 +15,8 @@ namespace Draw2D.ViewModels.Shapes
 
         private double _x;
         private double _y;
+        private HAlign _hAlign;
+        private VAlign _vAlign;
         private IBaseShape _template;
 
         [IgnoreDataMember]
@@ -38,6 +40,20 @@ namespace Draw2D.ViewModels.Shapes
         }
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public HAlign HAlign
+        {
+            get => _hAlign;
+            set => Update(ref _hAlign, value);
+        }
+
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public VAlign VAlign
+        {
+            get => _vAlign;
+            set => Update(ref _vAlign, value);
+        }
+
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public IBaseShape Template
         {
             get => _template;
@@ -52,6 +68,15 @@ namespace Draw2D.ViewModels.Shapes
         {
             this.X = x;
             this.Y = y;
+            this.Template = template;
+        }
+
+        public PointShape(double x, double y, HAlign halign, VAlign valign, IBaseShape template)
+        {
+            this.X = x;
+            this.Y = y;
+            this.HAlign = halign;
+            this.VAlign = valign;
             this.Template = template;
         }
 

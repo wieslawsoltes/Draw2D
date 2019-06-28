@@ -15,11 +15,15 @@
     <TabControl Classes="default" TabStripPlacement="Top">
         <TabItem Classes="default" Header="Point">
             <ScrollViewer>
-            <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="Auto,*">
+            <Grid RowDefinitions="Auto,Auto,Auto,Auto" ColumnDefinitions="Auto,*">
                 <TextBlock Classes="default" Grid.Column="0" Grid.Row="0" Text="X"/>
                 <TextBox Classes="default" Grid.Column="1" Grid.Row="0" Text="{Binding X}"/>
                 <TextBlock Classes="default" Grid.Column="0" Grid.Row="1" Text="Y"/>
                 <TextBox Classes="default" Grid.Column="1" Grid.Row="1" Text="{Binding Y}"/>
+                <TextBlock Classes="default" Grid.Column="0" Grid.Row="2" Text="HAlign"/>
+                <TextBox Classes="default" Grid.Column="1" Grid.Row="2" Text="{Binding HAlign}"/>
+                <TextBlock Classes="default" Grid.Column="0" Grid.Row="3" Text="VAlign"/>
+                <TextBox Classes="default" Grid.Column="1" Grid.Row="3" Text="{Binding VAlign}"/>
             </Grid>
             </ScrollViewer>
         </TabItem>
