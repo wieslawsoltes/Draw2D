@@ -11,15 +11,13 @@
     <TabControl Classes="default" TabStripPlacement="Top">
         <TabItem Classes="default" Header="Settings">
             <ScrollViewer>
-                <Grid RowDefinitions="Auto,Auto,Auto,Auto" ColumnDefinitions="Auto,*">
+                <Grid RowDefinitions="Auto,Auto,Auto" ColumnDefinitions="Auto,*">
                     <TextBlock Classes="default" Grid.Column="0" Grid.Row="0" Text="ShapeType"/>
                     <TextBox Classes="default" Grid.Column="1" Grid.Row="0" Text="{Binding ShapeType}"/>
                     <TextBlock Classes="default" Grid.Column="0" Grid.Row="1" Text="ConnectPoints"/>
                     <CheckBox Classes="default" Grid.Column="1" Grid.Row="1" IsChecked="{Binding ConnectPoints}"/>
                     <TextBlock Classes="default" Grid.Column="0" Grid.Row="2" Text="HitTestRadius"/>
                     <TextBox Classes="default" Grid.Column="1" Grid.Row="2" Text="{Binding HitTestRadius}"/>
-                    <TextBlock Classes="default" Grid.Column="0" Grid.Row="3" Text="SplitIntersections"/>
-                    <CheckBox Classes="default" Grid.Column="1" Grid.Row="3" IsChecked="{Binding SplitIntersections}"/>
                 </Grid>
             </ScrollViewer>
         </TabItem>

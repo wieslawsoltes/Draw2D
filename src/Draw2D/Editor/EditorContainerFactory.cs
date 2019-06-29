@@ -806,33 +806,7 @@ namespace Draw2D.Editor
 
             var twoPointsTool = new TwoPointsTool()
             {
-                Intersections = new ObservableCollection<IPointIntersection>
-                {
-                    new LineLineIntersection()
-                    {
-                        Intersections = new ObservableCollection<IPointShape>(),
-                        Settings = new LineLineSettings()
-                        {
-                            IsEnabled = true
-                        }
-                    },
-                    new RectangleLineIntersection()
-                    {
-                        Intersections = new ObservableCollection<IPointShape>(),
-                        Settings = new RectangleLineSettings()
-                        {
-                            IsEnabled = true
-                        }
-                    },
-                    new EllipseLineIntersection()
-                    {
-                        Intersections = new ObservableCollection<IPointShape>(),
-                        Settings = new EllipseLineSettings()
-                        {
-                            IsEnabled = true
-                        }
-                    }
-                },
+                Intersections = new ObservableCollection<IPointIntersection>(),
                 Filters = new ObservableCollection<IPointFilter>
                 {
                     new GridSnapPointFilter()
@@ -871,8 +845,7 @@ namespace Draw2D.Editor
                 {
                     ShapeType = TwoPointsShapeType.Line,
                     ConnectPoints = true,
-                    HitTestRadius = 7.0,
-                    SplitIntersections = false
+                    HitTestRadius = 7.0
                 }
             };
 
