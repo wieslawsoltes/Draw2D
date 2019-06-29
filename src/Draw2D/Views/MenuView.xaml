@@ -166,7 +166,7 @@
                 </MenuItem.Icon>
             </MenuItem>
             <Separator/>
-            <MenuItem Header="Two Points" Command="{Binding SetTool}" CommandParameter="Text">
+            <MenuItem Header="Two Points" Command="{Binding SetTool}" CommandParameter="TwoPoints">
                 <MenuItem.Icon>
                     <CheckBox BorderThickness="0" IsHitTestVisible="False" IsChecked="{Binding CurrentTool, Converter={StaticResource IsToolConverter}, ConverterParameter=TwoPoints, Mode=OneWay}"/>
                 </MenuItem.Icon>
