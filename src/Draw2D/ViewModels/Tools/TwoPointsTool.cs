@@ -164,15 +164,8 @@ namespace Draw2D.ViewModels.Tools
             IntersectionsClear(context);
             IntersectionsFind(context, _shape);
 
-            if ((Settings?.SplitIntersections ?? false) && HaveIntersections())
-            {
-                SplitByIntersections(context, Intersections, _shape);
-            }
-            else
-            {
-                context.ContainerView?.CurrentContainer.Shapes.Add(_shape);
-                context.ContainerView?.CurrentContainer.MarkAsDirty(true);
-            }
+            context.ContainerView?.CurrentContainer.Shapes.Add(_shape);
+            context.ContainerView?.CurrentContainer.MarkAsDirty(true);
 
             _shape = null;
 
