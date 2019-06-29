@@ -1,0 +1,13 @@
+﻿// Copyright (c) Wiesław Šoltés. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
+namespace Draw2D.ViewModels
+{
+    public enum HAlign
+    {
+        Auto = 0,
+        Left = 1,
+        Center = 2,
+        Right = 3
+    }
+}
