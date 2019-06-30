@@ -83,10 +83,14 @@ namespace Draw2D.Renderers
 
         internal static SKRect ToSKRect(IPointShape p1, IPointShape p2, double dx, double dy)
         {
-            double left = Math.Min(p1.X + dx, p2.X + dx);
-            double top = Math.Min(p1.Y + dy, p2.Y + dy);
-            double right = left + Math.Abs(Math.Max(p1.X + dx, p2.X + dx) - left);
-            double bottom = top + Math.Abs(Math.Max(p1.Y + dy, p2.Y + dy) - top);
+            double x1 = p1.X + dx;
+            double y1 = p1.Y + dy;
+            double x2 = p2.X + dx;
+            double y2 = p2.Y + dy;
+            double left = Math.Min(x1, x2);
+            double top = Math.Min(y1, y2);
+            double right = left + Math.Abs(Math.Max(x1, x2) - left);
+            double bottom = top + Math.Abs(Math.Max(y1, y2) - top);
             return new SKRect((float)left, (float)top, (float)right, (float)bottom);
         }
 
