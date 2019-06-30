@@ -9,7 +9,7 @@ using Draw2D.ViewModels.Decorators;
 namespace Draw2D.ViewModels.Shapes
 {
     [DataContract(IsReference = true)]
-    public class RectangleShape : BaseShape, ITwoPointsShape
+    public class RectangleShape : BaseShape
     {
         internal static new IBounds s_bounds = new RectangleBounds();
         internal static new IShapeDecorator s_decorator = new RectangleDecorator();
