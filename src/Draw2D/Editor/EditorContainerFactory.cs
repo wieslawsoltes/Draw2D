@@ -804,8 +804,6 @@ namespace Draw2D.Editor
                 }
             };
 
-<<<<<<< HEAD
-=======
             var twoPointsTool = new TwoPointsTool()
             {
                 Intersections = new ObservableCollection<IPointIntersection>(),
@@ -851,7 +849,6 @@ namespace Draw2D.Editor
                 }
             };
 
->>>>>>> 475d033e2907d27c5486d9b77aebaaa64caf8a3b
             void SetToolDefaults(ITool tool)
             {
                 tool.CurrentIntersection = tool.Intersections.Count > 0 ? tool.Intersections[0] : null;
