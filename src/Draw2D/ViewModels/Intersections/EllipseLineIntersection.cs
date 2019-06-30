@@ -41,7 +41,7 @@ namespace Draw2D.ViewModels.Intersections
             {
                 foreach (var ellipse in ellipses)
                 {
-                    var rect = Rect2.FromPoints(ellipse.TopLeft.ToPoint2(), ellipse.BottomRight.ToPoint2());
+                    var rect = Rect2.FromPoints(ellipse.StartPoint.ToPoint2(), ellipse.Point.ToPoint2());
                     var p1 = line.StartPoint.ToPoint2();
                     var p2 = line.Point.ToPoint2();
                     Line2.LineIntersectsWithEllipse(p1, p2, rect, true, out var intersections);

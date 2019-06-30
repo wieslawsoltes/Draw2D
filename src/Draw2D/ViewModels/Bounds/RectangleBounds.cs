@@ -14,14 +14,14 @@ namespace Draw2D.ViewModels.Bounds
         {
             var rectangle = shape as RectangleShape ?? throw new ArgumentNullException("shape");
 
-            if (rectangle.TopLeft.Bounds?.TryToGetPoint(rectangle.TopLeft, target, radius, hitTest) != null)
+            if (rectangle.StartPoint.Bounds?.TryToGetPoint(rectangle.StartPoint, target, radius, hitTest) != null)
             {
-                return rectangle.TopLeft;
+                return rectangle.StartPoint;
             }
 
-            if (rectangle.BottomRight.Bounds?.TryToGetPoint(rectangle.BottomRight, target, radius, hitTest) != null)
+            if (rectangle.Point.Bounds?.TryToGetPoint(rectangle.Point, target, radius, hitTest) != null)
             {
-                return rectangle.BottomRight;
+                return rectangle.Point;
             }
 
             foreach (var point in rectangle.Points)
@@ -40,10 +40,10 @@ namespace Draw2D.ViewModels.Bounds
             var rectangle = shape as RectangleShape ?? throw new ArgumentNullException("shape");
 
             return Rect2.FromPoints(
-                rectangle.TopLeft.X,
-                rectangle.TopLeft.Y,
-                rectangle.BottomRight.X,
-                rectangle.BottomRight.Y).Contains(target) ? shape : null;
+                rectangle.StartPoint.X,
+                rectangle.StartPoint.Y,
+                rectangle.Point.X,
+                rectangle.Point.Y).Contains(target) ? shape : null;
         }
 
         public IBaseShape Overlaps(IBaseShape shape, Rect2 target, double radius, IHitTest hitTest)
@@ -51,10 +51,10 @@ namespace Draw2D.ViewModels.Bounds
             var rectangle = shape as RectangleShape ?? throw new ArgumentNullException("shape");
 
             return Rect2.FromPoints(
-                rectangle.TopLeft.X,
-                rectangle.TopLeft.Y,
-                rectangle.BottomRight.X,
-                rectangle.BottomRight.Y).IntersectsWith(target) ? shape : null;
+                rectangle.StartPoint.X,
+                rectangle.StartPoint.Y,
+                rectangle.Point.X,
+                rectangle.Point.Y).IntersectsWith(target) ? shape : null;
         }
     }
 }

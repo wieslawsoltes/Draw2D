@@ -14,14 +14,14 @@ namespace Draw2D.ViewModels.Bounds
         {
             var text = shape as TextShape ?? throw new ArgumentNullException("shape");
 
-            if (text.TopLeft.Bounds?.TryToGetPoint(text.TopLeft, target, radius, hitTest) != null)
+            if (text.StartPoint.Bounds?.TryToGetPoint(text.StartPoint, target, radius, hitTest) != null)
             {
-                return text.TopLeft;
+                return text.StartPoint;
             }
 
-            if (text.BottomRight.Bounds?.TryToGetPoint(text.BottomRight, target, radius, hitTest) != null)
+            if (text.Point.Bounds?.TryToGetPoint(text.Point, target, radius, hitTest) != null)
             {
-                return text.BottomRight;
+                return text.Point;
             }
 
             foreach (var point in text.Points)
@@ -40,10 +40,10 @@ namespace Draw2D.ViewModels.Bounds
             var text = shape as TextShape ?? throw new ArgumentNullException("shape");
 
             return Rect2.FromPoints(
-                text.TopLeft.X,
-                text.TopLeft.Y,
-                text.BottomRight.X,
-                text.BottomRight.Y).Contains(target) ? shape : null;
+                text.StartPoint.X,
+                text.StartPoint.Y,
+                text.Point.X,
+                text.Point.Y).Contains(target) ? shape : null;
         }
 
         public IBaseShape Overlaps(IBaseShape shape, Rect2 target, double radius, IHitTest hitTest)
@@ -51,10 +51,10 @@ namespace Draw2D.ViewModels.Bounds
             var text = shape as TextShape ?? throw new ArgumentNullException("shape");
 
             return Rect2.FromPoints(
-                text.TopLeft.X,
-                text.TopLeft.Y,
-                text.BottomRight.X,
-                text.BottomRight.Y).IntersectsWith(target) ? shape : null;
+                text.StartPoint.X,
+                text.StartPoint.Y,
+                text.Point.X,
+                text.Point.Y).IntersectsWith(target) ? shape : null;
         }
     }
 }

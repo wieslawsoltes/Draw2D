@@ -17,12 +17,12 @@ namespace Draw2D.ViewModels.Tools
 
         public enum State
         {
-            TopLeft,
-            BottomRight
+            StartPoint,
+            Point
         }
 
         [IgnoreDataMember]
-        public State CurrentState { get; set; } = State.TopLeft;
+        public State CurrentState { get; set; } = State.StartPoint;
 
         [IgnoreDataMember]
         public string Title => "Ellipse";
@@ -47,53 +47,53 @@ namespace Draw2D.ViewModels.Tools
             _ellipse = new EllipseShape()
             {
                 Points = new ObservableCollection<IPointShape>(),
-                TopLeft = topLeft,
-                BottomRight = bottomRight,
+                StartPoint = topLeft,
+                Point = bottomRight,
                 Text = new Text(),
                 StyleId = context.StyleLibrary?.CurrentStyle?.Title
             };
-            if (_ellipse.TopLeft.Owner == null)
+            if (_ellipse.StartPoint.Owner == null)
             {
-                _ellipse.TopLeft.Owner = _ellipse;
+                _ellipse.StartPoint.Owner = _ellipse;
             }
-            if (_ellipse.BottomRight.Owner == null)
+            if (_ellipse.Point.Owner == null)
             {
-                _ellipse.BottomRight.Owner = _ellipse;
+                _ellipse.Point.Owner = _ellipse;
             }
             context.ContainerView?.WorkingContainer.Shapes.Add(_ellipse);
             context.ContainerView?.WorkingContainer.MarkAsDirty(true);
             context.ContainerView?.SelectionState?.Select(_ellipse);
-            context.ContainerView?.SelectionState?.Select(_ellipse.TopLeft);
-            context.ContainerView?.SelectionState?.Select(_ellipse.BottomRight);
+            context.ContainerView?.SelectionState?.Select(_ellipse.StartPoint);
+            context.ContainerView?.SelectionState?.Select(_ellipse.Point);
 
             context.ContainerView?.InputService?.Capture?.Invoke();
             context.ContainerView?.InputService?.Redraw?.Invoke();
 
-            CurrentState = State.BottomRight;
+            CurrentState = State.Point;
         }
 
         private void BottomRightInternal(IToolContext context, double x, double y, Modifier modifier)
         {
             FiltersProcess(context, ref x, ref y);
 
-            CurrentState = State.TopLeft;
+            CurrentState = State.StartPoint;
 
-            context.ContainerView?.SelectionState?.Deselect(_ellipse.BottomRight);
+            context.ContainerView?.SelectionState?.Deselect(_ellipse.Point);
 
             var radius = Settings?.HitTestRadius ?? 7.0;
             var scale = context.ContainerView?.ZoomService?.ZoomServiceState?.ZoomX ?? 1.0;
 
             IPointShape bottomRight = context.ContainerView?.GetNextPoint(context, x, y, Settings?.ConnectPoints ?? false, radius, scale);
 
-            _ellipse.BottomRight = bottomRight;
-            if (_ellipse.BottomRight.Owner == null)
+            _ellipse.Point = bottomRight;
+            if (_ellipse.Point.Owner == null)
             {
-                _ellipse.BottomRight.Owner = _ellipse;
+                _ellipse.Point.Owner = _ellipse;
             }
             context.ContainerView?.WorkingContainer.Shapes.Remove(_ellipse);
             context.ContainerView?.WorkingContainer.MarkAsDirty(true);
             context.ContainerView?.SelectionState?.Deselect(_ellipse);
-            context.ContainerView?.SelectionState?.Deselect(_ellipse.TopLeft);
+            context.ContainerView?.SelectionState?.Deselect(_ellipse.StartPoint);
             context.ContainerView?.CurrentContainer.Shapes.Add(_ellipse);
             context.ContainerView?.CurrentContainer.MarkAsDirty(true);
             _ellipse = null;
@@ -117,15 +117,15 @@ namespace Draw2D.ViewModels.Tools
             FiltersClear(context);
             FiltersProcess(context, ref x, ref y);
 
-            _ellipse.BottomRight.X = x;
-            _ellipse.BottomRight.Y = y;
+            _ellipse.Point.X = x;
+            _ellipse.Point.Y = y;
 
             context.ContainerView?.InputService?.Redraw?.Invoke();
         }
 
         private void CleanInternal(IToolContext context)
         {
-            CurrentState = State.TopLeft;
+            CurrentState = State.StartPoint;
 
             FiltersClear(context);
 
@@ -134,8 +134,8 @@ namespace Draw2D.ViewModels.Tools
                 context.ContainerView?.WorkingContainer.Shapes.Remove(_ellipse);
                 context.ContainerView?.WorkingContainer.MarkAsDirty(true);
                 context.ContainerView?.SelectionState?.Deselect(_ellipse);
-                context.ContainerView?.SelectionState?.Deselect(_ellipse.TopLeft);
-                context.ContainerView?.SelectionState?.Deselect(_ellipse.BottomRight);
+                context.ContainerView?.SelectionState?.Deselect(_ellipse.StartPoint);
+                context.ContainerView?.SelectionState?.Deselect(_ellipse.Point);
                 _ellipse = null;
             }
 
@@ -147,12 +147,12 @@ namespace Draw2D.ViewModels.Tools
         {
             switch (CurrentState)
             {
-                case State.TopLeft:
+                case State.StartPoint:
                     {
                         TopLeftInternal(context, x, y, modifier);
                     }
                     break;
-                case State.BottomRight:
+                case State.Point:
                     {
                         BottomRightInternal(context, x, y, modifier);
                     }
@@ -168,7 +168,7 @@ namespace Draw2D.ViewModels.Tools
         {
             switch (CurrentState)
             {
-                case State.BottomRight:
+                case State.Point:
                     {
                         this.Clean(context);
                     }
@@ -184,12 +184,12 @@ namespace Draw2D.ViewModels.Tools
         {
             switch (CurrentState)
             {
-                case State.TopLeft:
+                case State.StartPoint:
                     {
                         MoveTopLeftInternal(context, x, y, modifier);
                     }
                     break;
-                case State.BottomRight:
+                case State.Point:
                     {
                         MoveBottomRightInternal(context, x, y, modifier);
                     }

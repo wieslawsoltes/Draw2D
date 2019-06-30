@@ -436,7 +436,7 @@ namespace Draw2D.Renderers
             if (style.IsFilled || style.IsStroked || style.TextStyle.IsStroked)
             {
                 var canvas = dc as SKCanvas;
-                var rect = SkiaHelper.ToRect(rectangle.TopLeft, rectangle.BottomRight, dx, dy);
+                var rect = SkiaHelper.ToRect(rectangle.StartPoint, rectangle.Point, dx, dy);
                 if (style.IsFilled)
                 {
                     GetSKPaintFill(style, out var brush);
@@ -449,7 +449,7 @@ namespace Draw2D.Renderers
                 }
                 if (style.TextStyle.IsStroked && !string.IsNullOrEmpty(rectangle.Text?.Value))
                 {
-                    DrawText(canvas, rectangle.Text, rectangle.TopLeft, rectangle.BottomRight, style, dx, dy, scale);
+                    DrawText(canvas, rectangle.Text, rectangle.StartPoint, rectangle.Point, style, dx, dy, scale);
                 }
             }
 #else
@@ -471,7 +471,7 @@ namespace Draw2D.Renderers
                     }
                     if (style.TextStyle.IsStroked && !string.IsNullOrEmpty(rectangle.Text?.Value))
                     {
-                        DrawText(canvas, rectangle.Text, rectangle.TopLeft, rectangle.BottomRight, style, dx, dy, scale);
+                        DrawText(canvas, rectangle.Text, rectangle.StartPoint, rectangle.Point, style, dx, dy, scale);
                     }
                 }
             }
@@ -489,7 +489,7 @@ namespace Draw2D.Renderers
             if (style.IsFilled || style.IsStroked || style.TextStyle.IsStroked)
             {
                 var canvas = dc as SKCanvas;
-                var rect = SkiaHelper.ToRect(ellipse.TopLeft, ellipse.BottomRight, dx, dy);
+                var rect = SkiaHelper.ToRect(ellipse.StartPoint, ellipse.Point, dx, dy);
                 if (style.IsFilled)
                 {
                     GetSKPaintFill(style, out var brush);
@@ -502,7 +502,7 @@ namespace Draw2D.Renderers
                 }
                 if (style.TextStyle.IsStroked && !string.IsNullOrEmpty(ellipse.Text?.Value))
                 {
-                    DrawText(canvas, ellipse.Text, ellipse.TopLeft, ellipse.BottomRight, style, dx, dy, scale);
+                    DrawText(canvas, ellipse.Text, ellipse.StartPoint, ellipse.Point, style, dx, dy, scale);
                 }
             }
 #else
@@ -524,7 +524,7 @@ namespace Draw2D.Renderers
                     }
                     if (style.TextStyle.IsStroked && !string.IsNullOrEmpty(ellipse.Text?.Value))
                     {
-                        DrawText(canvas, ellipse.Text, ellipse.TopLeft, ellipse.BottomRight, style, dx, dy, scale);
+                        DrawText(canvas, ellipse.Text, ellipse.StartPoint, ellipse.Point, style, dx, dy, scale);
                     }
                 }
             }
@@ -541,7 +541,7 @@ namespace Draw2D.Renderers
             if (style.TextStyle.IsStroked && !string.IsNullOrEmpty(text.Text?.Value))
             {
                 var canvas = dc as SKCanvas;
-                DrawText(canvas, text.Text, text.TopLeft, text.BottomRight, style, dx, dy, scale);
+                DrawText(canvas, text.Text, text.StartPoint, text.Point, style, dx, dy, scale);
             }
         }
     }

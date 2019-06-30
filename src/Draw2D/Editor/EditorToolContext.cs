@@ -562,8 +562,8 @@ namespace Draw2D.Editor
                 Text = new Text(),
                 StyleId = context.StyleLibrary?.CurrentStyle?.Title
             };
-            rectangle.TopLeft.Owner = rectangle;
-            rectangle.BottomRight.Owner = rectangle;
+            rectangle.StartPoint.Owner = rectangle;
+            rectangle.Point.Owner = rectangle;
 
             var text = new TextShape(new PointShape(0, 0, context.PointTemplate), new PointShape(30, 30, context.PointTemplate))
             {
@@ -571,8 +571,8 @@ namespace Draw2D.Editor
                 Text = new Text("&"),
                 StyleId = context.StyleLibrary?.CurrentStyle?.Title
             };
-            text.TopLeft.Owner = text;
-            text.BottomRight.Owner = text;
+            text.StartPoint.Owner = text;
+            text.Point.Owner = text;
 
             group.Shapes.Add(rectangle);
             group.Shapes.Add(text);

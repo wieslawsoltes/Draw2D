@@ -853,8 +853,8 @@ namespace Draw2D.Editor
                 Text = new Text(),
                 StyleId = "PointTemplate"
             };
-            pointTemplate.TopLeft.Owner = pointTemplate;
-            pointTemplate.BottomRight.Owner = pointTemplate;
+            pointTemplate.StartPoint.Owner = pointTemplate;
+            pointTemplate.Point.Owner = pointTemplate;
 
             editorToolContext.PointTemplate = pointTemplate;
 

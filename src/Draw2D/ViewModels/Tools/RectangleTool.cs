@@ -17,12 +17,12 @@ namespace Draw2D.ViewModels.Tools
 
         public enum State
         {
-            TopLeft,
-            BottomRight
+            StartPoint,
+            Point
         }
 
         [IgnoreDataMember]
-        public State CurrentState { get; set; } = State.TopLeft;
+        public State CurrentState { get; set; } = State.StartPoint;
 
         [IgnoreDataMember]
         public string Title => "Rectangle";
@@ -47,55 +47,55 @@ namespace Draw2D.ViewModels.Tools
             _rectangle = new RectangleShape()
             {
                 Points = new ObservableCollection<IPointShape>(),
-                TopLeft = topLeft,
-                BottomRight = bottomRight,
+                StartPoint = topLeft,
+                Point = bottomRight,
                 Text = new Text(),
                 StyleId = context.StyleLibrary?.CurrentStyle?.Title
             };
-            if (_rectangle.TopLeft.Owner == null)
+            if (_rectangle.StartPoint.Owner == null)
             {
-                _rectangle.TopLeft.Owner = _rectangle;
+                _rectangle.StartPoint.Owner = _rectangle;
             }
-            if (_rectangle.BottomRight.Owner == null)
+            if (_rectangle.Point.Owner == null)
             {
-                _rectangle.BottomRight.Owner = _rectangle;
+                _rectangle.Point.Owner = _rectangle;
             }
             context.ContainerView?.WorkingContainer.Shapes.Add(_rectangle);
             context.ContainerView?.WorkingContainer.MarkAsDirty(true);
             context.ContainerView?.SelectionState?.Select(_rectangle);
-            context.ContainerView?.SelectionState?.Select(_rectangle.TopLeft);
-            context.ContainerView?.SelectionState?.Select(_rectangle.BottomRight);
+            context.ContainerView?.SelectionState?.Select(_rectangle.StartPoint);
+            context.ContainerView?.SelectionState?.Select(_rectangle.Point);
 
             context.ContainerView?.InputService?.Capture?.Invoke();
             context.ContainerView?.InputService?.Redraw?.Invoke();
 
-            CurrentState = State.BottomRight;
+            CurrentState = State.Point;
         }
 
         private void BottomRightInternal(IToolContext context, double x, double y, Modifier modifier)
         {
             FiltersProcess(context, ref x, ref y);
 
-            CurrentState = State.TopLeft;
+            CurrentState = State.StartPoint;
 
             context.ContainerView?.SelectionState?.Deselect(_rectangle);
-            context.ContainerView?.SelectionState?.Deselect(_rectangle.BottomRight);
+            context.ContainerView?.SelectionState?.Deselect(_rectangle.Point);
 
             var radius = Settings?.HitTestRadius ?? 7.0;
             var scale = context.ContainerView?.ZoomService?.ZoomServiceState?.ZoomX ?? 1.0;
 
             IPointShape bottomRight = context.ContainerView?.GetNextPoint(context, x, y, Settings?.ConnectPoints ?? false, radius, scale);
 
-            _rectangle.BottomRight = bottomRight;
-            _rectangle.BottomRight.Y = y;
-            if (_rectangle.BottomRight.Owner == null)
+            _rectangle.Point = bottomRight;
+            _rectangle.Point.Y = y;
+            if (_rectangle.Point.Owner == null)
             {
-                _rectangle.BottomRight.Owner = _rectangle;
+                _rectangle.Point.Owner = _rectangle;
             }
             context.ContainerView?.WorkingContainer.Shapes.Remove(_rectangle);
             context.ContainerView?.WorkingContainer.MarkAsDirty(true);
             context.ContainerView?.WorkingContainer.MarkAsDirty(true);
-            context.ContainerView?.SelectionState?.Deselect(_rectangle.TopLeft);
+            context.ContainerView?.SelectionState?.Deselect(_rectangle.StartPoint);
             context.ContainerView?.CurrentContainer.Shapes.Add(_rectangle);
             context.ContainerView?.CurrentContainer.MarkAsDirty(true);
             _rectangle = null;
@@ -119,15 +119,15 @@ namespace Draw2D.ViewModels.Tools
             FiltersClear(context);
             FiltersProcess(context, ref x, ref y);
 
-            _rectangle.BottomRight.X = x;
-            _rectangle.BottomRight.Y = y;
+            _rectangle.Point.X = x;
+            _rectangle.Point.Y = y;
 
             context.ContainerView?.InputService?.Redraw?.Invoke();
         }
 
         private void CleanInternal(IToolContext context)
         {
-            CurrentState = State.TopLeft;
+            CurrentState = State.StartPoint;
 
             FiltersClear(context);
 
@@ -136,8 +136,8 @@ namespace Draw2D.ViewModels.Tools
                 context.ContainerView?.WorkingContainer.Shapes.Remove(_rectangle);
                 context.ContainerView?.WorkingContainer.MarkAsDirty(true);
                 context.ContainerView?.SelectionState?.Deselect(_rectangle);
-                context.ContainerView?.SelectionState?.Deselect(_rectangle.TopLeft);
-                context.ContainerView?.SelectionState?.Deselect(_rectangle.BottomRight);
+                context.ContainerView?.SelectionState?.Deselect(_rectangle.StartPoint);
+                context.ContainerView?.SelectionState?.Deselect(_rectangle.Point);
                 _rectangle = null;
             }
 
@@ -149,12 +149,12 @@ namespace Draw2D.ViewModels.Tools
         {
             switch (CurrentState)
             {
-                case State.TopLeft:
+                case State.StartPoint:
                     {
                         TopLeftInternal(context, x, y, modifier);
                     }
                     break;
-                case State.BottomRight:
+                case State.Point:
                     {
                         BottomRightInternal(context, x, y, modifier);
                     }
@@ -170,7 +170,7 @@ namespace Draw2D.ViewModels.Tools
         {
             switch (CurrentState)
             {
-                case State.BottomRight:
+                case State.Point:
                     {
                         this.Clean(context);
                     }
@@ -186,12 +186,12 @@ namespace Draw2D.ViewModels.Tools
         {
             switch (CurrentState)
             {
-                case State.TopLeft:
+                case State.StartPoint:
                     {
                         MoveTopLeftInternal(context, x, y, modifier);
                     }
                     break;
-                case State.BottomRight:
+                case State.Point:
                     {
                         MoveBottomRightInternal(context, x, y, modifier);
                     }
