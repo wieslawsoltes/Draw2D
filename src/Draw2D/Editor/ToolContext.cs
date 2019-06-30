@@ -6,6 +6,8 @@ using System.Runtime.Serialization;
 using Draw2D.Input;
 using Draw2D.ViewModels;
 using Draw2D.ViewModels.Containers;
+using Draw2D.ViewModels.Shapes;
+using Draw2D.ViewModels.Style;
 using Draw2D.ViewModels.Tools;
 
 namespace Draw2D.Editor
@@ -13,8 +15,8 @@ namespace Draw2D.Editor
     [DataContract(IsReference = true)]
     public class ToolContext : ViewModelBase, IToolContext
     {
-        private IStyleLibrary _styleLibrary;
-        private IGroupLibrary _groupLibrary;
+        private ILibrary<ShapeStyle> _styleLibrary;
+        private ILibrary<GroupShape> _groupLibrary;
         private IBaseShape _pointTemplate;
         private IHitTest _hitTest;
         private IPathConverter _pathConverter;
@@ -29,7 +31,7 @@ namespace Draw2D.Editor
 #else
         [IgnoreDataMember]
 #endif
-        public IStyleLibrary StyleLibrary
+        public ILibrary<ShapeStyle> StyleLibrary
         {
             get => _styleLibrary;
             set => Update(ref _styleLibrary, value);
@@ -40,7 +42,7 @@ namespace Draw2D.Editor
 #else
         [IgnoreDataMember]
 #endif
-        public IGroupLibrary GroupLibrary
+        public ILibrary<GroupShape> GroupLibrary
         {
             get => _groupLibrary;
             set => Update(ref _groupLibrary, value);

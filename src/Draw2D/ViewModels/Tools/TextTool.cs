@@ -50,7 +50,7 @@ namespace Draw2D.ViewModels.Tools
                 StartPoint = topLeft,
                 Point = bottomRight,
                 Text = new Text("Text"),
-                StyleId = context.StyleLibrary?.CurrentStyle?.Title
+                StyleId = context.StyleLibrary?.CurrentItem?.Title
             };
             if (_text.StartPoint.Owner == null)
             {

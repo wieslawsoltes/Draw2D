@@ -7,6 +7,8 @@ using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 using Draw2D.Editor;
 using Draw2D.ViewModels.Containers;
+using Draw2D.ViewModels.Shapes;
+using Draw2D.ViewModels.Style;
 using Draw2D.ViewModels.Tools;
 using Draw2D.Views;
 
@@ -19,8 +21,8 @@ namespace Draw2D
         public static string EditorPath { get; set; }
         public static string WindowPath { get; set; }
         public static IContainerFactory ContainerFactory { get; set; }
-        public static IStyleLibrary StyleLibrary { get; set; }
-        public static IGroupLibrary GroupLibrary { get; set; }
+        public static ILibrary<ShapeStyle> StyleLibrary { get; set; }
+        public static ILibrary<GroupShape> GroupLibrary { get; set; }
         public static IToolContext ToolContext { get; set; }
         public static WindowSettings WindowSettings { get; set; }
 
@@ -91,13 +93,13 @@ namespace Draw2D
 #if USE_LOAD_STYLES
             if (File.Exists(StylesPath))
             {
-                StyleLibrary = JsonSerializer.FromJsonFile<IStyleLibrary>(StylesPath);
+                StyleLibrary = JsonSerializer.FromJsonFile<ILibrary<ShapeStyle>>(StylesPath);
             }
 #endif
 #if USE_LOAD_GROUPS
             if (File.Exists(GroupsPath))
             {
-                GroupLibrary = JsonSerializer.FromJsonFile<IGroupLibrary>(GroupsPath);
+                GroupLibrary = JsonSerializer.FromJsonFile<ILibrary<GroupShape>>(GroupsPath);
             }
 #endif
 

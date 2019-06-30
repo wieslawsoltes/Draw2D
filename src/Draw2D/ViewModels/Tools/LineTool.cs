@@ -53,7 +53,7 @@ namespace Draw2D.ViewModels.Tools
                 var line = new LineShape(startPoint, point)
                 {
                     Points = new ObservableCollection<IPointShape>(),
-                    StyleId = context.StyleLibrary?.CurrentStyle?.Title
+                    StyleId = context.StyleLibrary?.CurrentItem?.Title
                 };
                 line.StartPoint.Owner = line;
                 line.Point.Owner = line;
@@ -82,7 +82,7 @@ namespace Draw2D.ViewModels.Tools
                 StartPoint = startPoint,
                 Point = point,
                 Text = new Text(),
-                StyleId = context.StyleLibrary?.CurrentStyle?.Title
+                StyleId = context.StyleLibrary?.CurrentItem?.Title
             };
             if (_line.StartPoint.Owner == null)
             {

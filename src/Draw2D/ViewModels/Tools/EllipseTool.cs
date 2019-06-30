@@ -50,7 +50,7 @@ namespace Draw2D.ViewModels.Tools
                 StartPoint = topLeft,
                 Point = bottomRight,
                 Text = new Text(),
-                StyleId = context.StyleLibrary?.CurrentStyle?.Title
+                StyleId = context.StyleLibrary?.CurrentItem?.Title
             };
             if (_ellipse.StartPoint.Owner == null)
             {

@@ -10,7 +10,7 @@
              d:DesignWidth="400" d:DesignHeight="300">
     <TabControl Classes="default" TabStripPlacement="Top">
         <TabItem Classes="default" Header="Styles">
-            <ListBox x:Name="styles"  Classes="default" Items="{Binding Styles}" SelectedItem="{Binding CurrentStyle}">
+            <ListBox x:Name="styles"  Classes="default" Items="{Binding Items}" SelectedItem="{Binding CurrentItem}">
                 <ListBox.DataTemplates>
                     <DataTemplate>
                         <TextBlock Classes="default" Text="{Binding Title}"/>
@@ -18,7 +18,7 @@
                 </ListBox.DataTemplates>
             </ListBox>
             <!--
-            <DataGrid x:Name="styles" Items="{Binding Styles}" SelectedItem="{Binding CurrentStyle}">
+            <DataGrid x:Name="styles" Items="{Binding Items}" SelectedItem="{Binding CurrentItem}">
                 <DataGrid.Styles>
                     <Style Selector="DataGrid">
                         <Setter Property="RowBackground" Value="Transparent"/>

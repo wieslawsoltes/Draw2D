@@ -12,6 +12,7 @@ using Draw2D.Presenters;
 using Draw2D.ViewModels;
 using Draw2D.ViewModels.Containers;
 using Draw2D.ViewModels.Shapes;
+using Draw2D.ViewModels.Style;
 using Draw2D.ViewModels.Tools;
 using SkiaSharp;
 
@@ -145,7 +146,7 @@ namespace Draw2D.Editor
 
         public void OpenStyles(string path)
         {
-            var styleLibrary = JsonSerializer.FromJsonFile<IStyleLibrary>(path);
+            var styleLibrary = JsonSerializer.FromJsonFile<ILibrary<ShapeStyle>>(path);
             if (styleLibrary != null)
             {
                 StyleLibrary = styleLibrary;
@@ -163,7 +164,7 @@ namespace Draw2D.Editor
 
         public void OpenGroups(string path)
         {
-            var groupLibrary = JsonSerializer.FromJsonFile<IGroupLibrary>(path);
+            var groupLibrary = JsonSerializer.FromJsonFile<ILibrary<GroupShape>>(path);
             if (groupLibrary != null)
             {
                 GroupLibrary = groupLibrary;
@@ -560,7 +561,7 @@ namespace Draw2D.Editor
             {
                 Points = new ObservableCollection<IPointShape>(),
                 Text = new Text(),
-                StyleId = context.StyleLibrary?.CurrentStyle?.Title
+                StyleId = context.StyleLibrary?.CurrentItem?.Title
             };
             rectangle.StartPoint.Owner = rectangle;
             rectangle.Point.Owner = rectangle;
@@ -569,7 +570,7 @@ namespace Draw2D.Editor
             {
                 Points = new ObservableCollection<IPointShape>(),
                 Text = new Text("&"),
-                StyleId = context.StyleLibrary?.CurrentStyle?.Title
+                StyleId = context.StyleLibrary?.CurrentItem?.Title
             };
             text.StartPoint.Owner = text;
             text.Point.Owner = text;

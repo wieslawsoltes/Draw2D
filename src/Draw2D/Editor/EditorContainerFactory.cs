@@ -17,16 +17,16 @@ namespace Draw2D.Editor
 {
     public class EditorContainerFactory : IContainerFactory
     {
-        public IStyleLibrary CreateStyleLibrary()
+        public ILibrary<ShapeStyle> CreateStyleLibrary()
         {
-            var styleLibrary = new StyleLibrary()
+            var styleLibrary = new Library<ShapeStyle>()
             {
-                Styles = new ObservableCollection<ShapeStyle>()
+                Items = new ObservableCollection<ShapeStyle>()
             };
 
             var fontFamily = "Calibri";
 
-            styleLibrary.Styles.Add(
+            styleLibrary.Items.Add(
                 new ShapeStyle(
                     "Default",
                     new ArgbColor(255, 0, 0, 0),
@@ -34,7 +34,7 @@ namespace Draw2D.Editor
                     2.0, true, false,
                     new TextStyle(fontFamily, 12.0, HAlign.Center, VAlign.Center, new ArgbColor(255, 0, 0, 0), true)));
 
-            styleLibrary.Styles.Add(
+            styleLibrary.Items.Add(
                 new ShapeStyle(
                     "Red",
                     new ArgbColor(255, 255, 0, 0),
@@ -42,7 +42,7 @@ namespace Draw2D.Editor
                     2.0, true, false,
                     new TextStyle(fontFamily, 12.0, HAlign.Center, VAlign.Center, new ArgbColor(255, 255, 0, 0), true)));
 
-            styleLibrary.Styles.Add(
+            styleLibrary.Items.Add(
                 new ShapeStyle(
                     "Green",
                     new ArgbColor(255, 0, 255, 0),
@@ -50,7 +50,7 @@ namespace Draw2D.Editor
                     2.0, true, false,
                     new TextStyle(fontFamily, 12.0, HAlign.Center, VAlign.Center, new ArgbColor(255, 0, 255, 0), true)));
 
-            styleLibrary.Styles.Add(
+            styleLibrary.Items.Add(
                 new ShapeStyle(
                     "Blue",
                     new ArgbColor(255, 0, 0, 255),
@@ -58,7 +58,7 @@ namespace Draw2D.Editor
                     2.0, true, false,
                     new TextStyle(fontFamily, 12.0, HAlign.Center, VAlign.Center, new ArgbColor(255, 0, 0, 255), true)));
 
-            styleLibrary.Styles.Add(
+            styleLibrary.Items.Add(
                 new ShapeStyle(
                     "Cyan",
                     new ArgbColor(255, 0, 255, 255),
@@ -66,7 +66,7 @@ namespace Draw2D.Editor
                     2.0, true, false,
                     new TextStyle(fontFamily, 12.0, HAlign.Center, VAlign.Center, new ArgbColor(255, 0, 255, 255), true)));
 
-            styleLibrary.Styles.Add(
+            styleLibrary.Items.Add(
                 new ShapeStyle(
                     "Magenta",
                     new ArgbColor(255, 255, 0, 255),
@@ -74,7 +74,7 @@ namespace Draw2D.Editor
                     2.0, true, false,
                     new TextStyle(fontFamily, 12.0, HAlign.Center, VAlign.Center, new ArgbColor(255, 255, 0, 255), true)));
 
-            styleLibrary.Styles.Add(
+            styleLibrary.Items.Add(
                 new ShapeStyle(
                     "Yellow",
                     new ArgbColor(255, 255, 255, 0),
@@ -82,7 +82,7 @@ namespace Draw2D.Editor
                     2.0, true, false,
                     new TextStyle(fontFamily, 12.0, HAlign.Center, VAlign.Center, new ArgbColor(255, 255, 255, 0), true)));
 
-            styleLibrary.Styles.Add(
+            styleLibrary.Items.Add(
                 new ShapeStyle(
                     "Black",
                     new ArgbColor(255, 0, 0, 0),
@@ -90,7 +90,7 @@ namespace Draw2D.Editor
                     2.0, true, false,
                     new TextStyle(fontFamily, 12.0, HAlign.Center, VAlign.Center, new ArgbColor(255, 0, 0, 0), true)));
 
-            styleLibrary.Styles.Add(
+            styleLibrary.Items.Add(
                 new ShapeStyle(
                     "Decorator-Stroke",
                     new ArgbColor(255, 0, 255, 255),
@@ -98,7 +98,7 @@ namespace Draw2D.Editor
                     2.0, true, false,
                     new TextStyle(fontFamily, 12.0, HAlign.Center, VAlign.Center, new ArgbColor(255, 0, 255, 255), true)));
 
-            styleLibrary.Styles.Add(
+            styleLibrary.Items.Add(
                 new ShapeStyle(
                     "Decorator-Fill",
                     new ArgbColor(255, 0, 255, 255),
@@ -106,7 +106,7 @@ namespace Draw2D.Editor
                     2.0, false, true,
                     new TextStyle(fontFamily, 12.0, HAlign.Center, VAlign.Center, new ArgbColor(255, 0, 255, 255), true)));
 
-            styleLibrary.Styles.Add(
+            styleLibrary.Items.Add(
                 new ShapeStyle(
                     "Guide",
                     new ArgbColor(128, 0, 255, 255),
@@ -114,7 +114,7 @@ namespace Draw2D.Editor
                     2.0, true, true,
                     new TextStyle(fontFamily, 12.0, HAlign.Center, VAlign.Center, new ArgbColor(128, 0, 255, 255), true)));
 
-            styleLibrary.Styles.Add(
+            styleLibrary.Items.Add(
                 new ShapeStyle(
                     "Selection",
                     new ArgbColor(255, 0, 120, 215),
@@ -122,7 +122,7 @@ namespace Draw2D.Editor
                     2.0, true, true,
                     new TextStyle(fontFamily, 12.0, HAlign.Center, VAlign.Center, new ArgbColor(255, 0, 120, 215), true)));
 
-            styleLibrary.Styles.Add(
+            styleLibrary.Items.Add(
                 new ShapeStyle(
                     "PointTemplate",
                     new ArgbColor(255, 255, 0, 255),
@@ -130,19 +130,19 @@ namespace Draw2D.Editor
                     2.0, false, true,
                     new TextStyle(fontFamily, 12.0, HAlign.Center, VAlign.Center, new ArgbColor(255, 255, 0, 255), true)));
 
-            styleLibrary.CurrentStyle = styleLibrary.Styles[0];
+            styleLibrary.CurrentItem = styleLibrary.Items[0];
 
             return styleLibrary;
         }
 
-        public IGroupLibrary CreateGroupLibrary()
+        public ILibrary<GroupShape> CreateGroupLibrary()
         {
-            var groupsLibrary = new GroupLibrary()
+            var groupsLibrary = new Library<GroupShape>()
             {
-                Groups = new ObservableCollection<GroupShape>()
+                Items = new ObservableCollection<GroupShape>()
             };
 
-            groupsLibrary.CurrentGroup = null;
+            groupsLibrary.CurrentItem = null;
 
             return groupsLibrary;
         }

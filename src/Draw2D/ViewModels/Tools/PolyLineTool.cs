@@ -52,7 +52,7 @@ namespace Draw2D.ViewModels.Tools
                 StartPoint = startPoint,
                 Point = point,
                 Text = new Text(),
-                StyleId = context.StyleLibrary?.CurrentStyle?.Title
+                StyleId = context.StyleLibrary?.CurrentItem?.Title
             };
             if (_line.StartPoint.Owner == null)
             {
@@ -114,7 +114,7 @@ namespace Draw2D.ViewModels.Tools
                 StartPoint = startPoint,
                 Point = nextPoint,
                 Text = new Text(),
-                StyleId = context.StyleLibrary?.CurrentStyle?.Title
+                StyleId = context.StyleLibrary?.CurrentItem?.Title
             };
             if (_line.Point.Owner == null)
             {

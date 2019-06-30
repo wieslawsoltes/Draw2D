@@ -54,7 +54,7 @@ namespace Draw2D.ViewModels.Tools
                 Point2 = point2,
                 Weight = Settings.Weight,
                 Text = new Text(),
-                StyleId = context.StyleLibrary?.CurrentStyle?.Title
+                StyleId = context.StyleLibrary?.CurrentItem?.Title
             };
             if (_conic.StartPoint.Owner == null)
             {

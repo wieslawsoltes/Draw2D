@@ -149,14 +149,14 @@ namespace Draw2D.ViewModels.Tools
         internal FigureContainerView _containerView;
 
         [IgnoreDataMember]
-        public IStyleLibrary StyleLibrary
+        public ILibrary<ShapeStyle> StyleLibrary
         {
             get => _context.StyleLibrary;
             set => throw new InvalidOperationException($"Can not set {StyleLibrary} property value.");
         }
 
         [IgnoreDataMember]
-        public IGroupLibrary GroupLibrary
+        public ILibrary<GroupShape> GroupLibrary
         {
             get => _context.GroupLibrary;
             set => throw new InvalidOperationException($"Can not set {GroupLibrary} property value.");
@@ -274,7 +274,7 @@ namespace Draw2D.ViewModels.Tools
                 Shapes = new ObservableCollection<IBaseShape>(),
                 FillRule = Settings.FillRule,
                 Text = new Text(),
-                StyleId = context.StyleLibrary?.CurrentStyle?.Title
+                StyleId = context.StyleLibrary?.CurrentItem?.Title
             };
 
             context.ContainerView?.WorkingContainer.Shapes.Add(_path);
