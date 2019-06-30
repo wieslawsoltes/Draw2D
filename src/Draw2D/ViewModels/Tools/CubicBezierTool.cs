@@ -27,7 +27,7 @@ namespace Draw2D.ViewModels.Tools
         public State CurrentState { get; set; } = State.StartPoint;
 
         [IgnoreDataMember]
-        public string Title => "CubicBezier";
+        public new string Title => "CubicBezier";
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public CubicBezierToolSettings Settings

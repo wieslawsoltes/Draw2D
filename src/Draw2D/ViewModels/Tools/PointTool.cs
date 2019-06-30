@@ -14,7 +14,7 @@ namespace Draw2D.ViewModels.Tools
         private PointToolSettings _settings;
 
         [IgnoreDataMember]
-        public string Title => "Point";
+        public new string Title => "Point";
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public PointToolSettings Settings

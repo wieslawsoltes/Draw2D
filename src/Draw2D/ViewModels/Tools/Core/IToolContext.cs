@@ -4,15 +4,13 @@ using System;
 using System.Collections.Generic;
 using Draw2D.Input;
 using Draw2D.ViewModels.Containers;
-using Draw2D.ViewModels.Shapes;
-using Draw2D.ViewModels.Style;
 
 namespace Draw2D.ViewModels.Tools
 {
     public interface IToolContext : IInputTarget, IDisposable
     {
-        ILibrary<ShapeStyle> StyleLibrary { get; set; }
-        ILibrary<GroupShape> GroupLibrary { get; set; }
+        IStyleLibrary StyleLibrary { get; set; }
+        IGroupLibrary GroupLibrary { get; set; }
         IBaseShape PointTemplate { get; set; }
         IHitTest HitTest { get; set; }
         IPathConverter PathConverter { get; set; }

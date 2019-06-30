@@ -13,7 +13,6 @@ namespace Draw2D.ViewModels.Containers
     [DataContract(IsReference = true)]
     public class ContainerView : ViewModelBase, IContainerView
     {
-        private string _title;
         private double _width;
         private double _height;
         private ArgbColor _printBackground;
@@ -26,13 +25,6 @@ namespace Draw2D.ViewModels.Containers
         private IContainerPresenter _containerPresenter;
         private IInputService _inputService;
         private IZoomService _zoomService;
-
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public string Title
-        {
-            get => _title;
-            set => Update(ref _title, value);
-        }
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public double Width

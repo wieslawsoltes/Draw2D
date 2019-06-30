@@ -26,7 +26,7 @@ namespace Draw2D.ViewModels.Tools
         public State CurrentState { get; set; } = State.StartPoint;
 
         [IgnoreDataMember]
-        public string Title => "PolyLine";
+        public new string Title => "PolyLine";
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public PolyLineToolSettings Settings

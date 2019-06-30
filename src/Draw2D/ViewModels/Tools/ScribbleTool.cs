@@ -31,7 +31,7 @@ namespace Draw2D.ViewModels.Tools
         public State CurrentState { get; set; } = State.Start;
 
         [IgnoreDataMember]
-        public string Title => "Scribble";
+        public new string Title => "Scribble";
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public ScribbleToolSettings Settings

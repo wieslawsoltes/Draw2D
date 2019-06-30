@@ -12,7 +12,6 @@ using Draw2D.Presenters;
 using Draw2D.ViewModels;
 using Draw2D.ViewModels.Containers;
 using Draw2D.ViewModels.Shapes;
-using Draw2D.ViewModels.Style;
 using Draw2D.ViewModels.Tools;
 using SkiaSharp;
 
@@ -146,7 +145,7 @@ namespace Draw2D.Editor
 
         public void OpenStyles(string path)
         {
-            var styleLibrary = JsonSerializer.FromJsonFile<ILibrary<ShapeStyle>>(path);
+            var styleLibrary = JsonSerializer.FromJsonFile<IStyleLibrary>(path);
             if (styleLibrary != null)
             {
                 StyleLibrary = styleLibrary;
@@ -164,7 +163,7 @@ namespace Draw2D.Editor
 
         public void OpenGroups(string path)
         {
-            var groupLibrary = JsonSerializer.FromJsonFile<ILibrary<GroupShape>>(path);
+            var groupLibrary = JsonSerializer.FromJsonFile<IGroupLibrary>(path);
             if (groupLibrary != null)
             {
                 GroupLibrary = groupLibrary;

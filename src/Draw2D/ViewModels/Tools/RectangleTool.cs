@@ -25,7 +25,7 @@ namespace Draw2D.ViewModels.Tools
         public State CurrentState { get; set; } = State.StartPoint;
 
         [IgnoreDataMember]
-        public string Title => "Rectangle";
+        public new string Title => "Rectangle";
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public RectangleToolSettings Settings

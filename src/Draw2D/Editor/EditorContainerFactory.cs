@@ -17,9 +17,9 @@ namespace Draw2D.Editor
 {
     public class EditorContainerFactory : IContainerFactory
     {
-        public ILibrary<ShapeStyle> CreateStyleLibrary()
+        public IStyleLibrary CreateStyleLibrary()
         {
-            var styleLibrary = new Library<ShapeStyle>()
+            var styleLibrary = new StyleLibrary()
             {
                 Items = new ObservableCollection<ShapeStyle>()
             };
@@ -135,9 +135,9 @@ namespace Draw2D.Editor
             return styleLibrary;
         }
 
-        public ILibrary<GroupShape> CreateGroupLibrary()
+        public IGroupLibrary CreateGroupLibrary()
         {
-            var groupsLibrary = new Library<GroupShape>()
+            var groupsLibrary = new GroupLibrary()
             {
                 Items = new ObservableCollection<GroupShape>()
             };

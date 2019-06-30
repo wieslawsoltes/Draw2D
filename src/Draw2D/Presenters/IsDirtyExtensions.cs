@@ -3,8 +3,8 @@
 using System.Collections.Generic;
 using Draw2D.ViewModels;
 using Draw2D.ViewModels.Containers;
-using Draw2D.ViewModels.Shapes;
 using Draw2D.ViewModels.Style;
+using Draw2D.ViewModels.Tools;
 
 namespace Draw2D.Presenters
 {
@@ -31,7 +31,7 @@ namespace Draw2D.Presenters
             return false;
         }
 
-        public static bool IsStyleLibraryDirty(this ILibrary<ShapeStyle> styleLibrary)
+        public static bool IsStyleLibraryDirty(this IStyleLibrary styleLibrary)
         {
             if (styleLibrary == null)
             {

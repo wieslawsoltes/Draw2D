@@ -19,7 +19,7 @@ namespace Draw2D.ViewModels.Tools
         }
 
         [IgnoreDataMember]
-        public string Title => "Move";
+        public new string Title => "Move";
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public MoveToolSettings Settings

@@ -11,6 +11,6 @@ namespace Draw2D.ViewModels.Containers
         void UpdateCache();
         void Add(T value);
         void Remove(T value);
-        T Get(string id);
+        T Get(string title);
     }
 }

@@ -8,20 +8,12 @@ namespace Draw2D.ViewModels.Style
     [DataContract(IsReference = true)]
     public class ShapeStyle : ViewModelBase, ICopyable
     {
-        private string _title;
         private ArgbColor _stroke;
         private ArgbColor _fill;
         private double _thickness;
         private bool _isStroked;
         private bool _isFilled;
         private TextStyle _textStyle;
-
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public string Title
-        {
-            get => _title;
-            set => Update(ref _title, value);
-        }
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public ArgbColor Stroke

@@ -11,7 +11,7 @@ namespace Draw2D.ViewModels.Tools
         private NoneToolSettings _settings;
 
         [IgnoreDataMember]
-        public string Title => "None";
+        public new string Title => "None";
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public NoneToolSettings Settings

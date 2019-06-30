@@ -8,8 +8,8 @@ namespace Draw2D.ViewModels.Tools
 {
     public interface IContainerFactory
     {
-        ILibrary<ShapeStyle> CreateStyleLibrary();
-        ILibrary<GroupShape> CreateGroupLibrary();
+        IStyleLibrary CreateStyleLibrary();
+        IGroupLibrary CreateGroupLibrary();
         IToolContext CreateToolContext();
         IContainerView CreateContainerView(string title);
     }

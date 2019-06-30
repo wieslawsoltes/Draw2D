@@ -14,7 +14,6 @@ namespace Draw2D.ViewModels.Shapes
         internal static new IBounds s_bounds = new ReferenceBounds();
         internal static new IShapeDecorator s_decorator = new ReferenceDecorator();
 
-        private string _title;
         private double _x;
         private double _y;
         private IBaseShape _template;
@@ -24,13 +23,6 @@ namespace Draw2D.ViewModels.Shapes
 
         [IgnoreDataMember]
         public override IShapeDecorator Decorator { get; } = s_decorator;
-
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public string Title
-        {
-            get => _title;
-            set => Update(ref _title, value);
-        }
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public double X

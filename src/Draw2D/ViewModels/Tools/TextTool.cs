@@ -25,7 +25,7 @@ namespace Draw2D.ViewModels.Tools
         public State CurrentState { get; set; } = State.StartPoint;
 
         [IgnoreDataMember]
-        public string Title => "Text";
+        public new string Title => "Text";
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public TextToolSettings Settings

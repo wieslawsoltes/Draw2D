@@ -26,7 +26,7 @@ namespace Draw2D.ViewModels.Shapes
         public override IShapeDecorator Decorator { get; } = s_decorator;
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public string Title
+        public new string Title
         {
             get => _title;
             set => Update(ref _title, value);

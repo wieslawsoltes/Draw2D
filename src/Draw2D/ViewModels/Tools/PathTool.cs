@@ -149,14 +149,14 @@ namespace Draw2D.ViewModels.Tools
         internal FigureContainerView _containerView;
 
         [IgnoreDataMember]
-        public ILibrary<ShapeStyle> StyleLibrary
+        public IStyleLibrary StyleLibrary
         {
             get => _context.StyleLibrary;
             set => throw new InvalidOperationException($"Can not set {StyleLibrary} property value.");
         }
 
         [IgnoreDataMember]
-        public ILibrary<GroupShape> GroupLibrary
+        public IGroupLibrary GroupLibrary
         {
             get => _context.GroupLibrary;
             set => throw new InvalidOperationException($"Can not set {GroupLibrary} property value.");
@@ -252,7 +252,7 @@ namespace Draw2D.ViewModels.Tools
         internal FigureShape _figure;
 
         [IgnoreDataMember]
-        public string Title => "Path";
+        public new string Title => "Path";
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public PathToolSettings Settings

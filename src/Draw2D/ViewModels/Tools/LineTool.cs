@@ -26,7 +26,7 @@ namespace Draw2D.ViewModels.Tools
         public State CurrentState { get; set; } = State.StartPoint;
 
         [IgnoreDataMember]
-        public string Title => "Line";
+        public new string Title => "Line";
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public LineToolSettings Settings

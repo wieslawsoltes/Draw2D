@@ -3,12 +3,11 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Runtime.Serialization;
-using Draw2D.ViewModels.Style;
 
 namespace Draw2D.ViewModels.Containers
 {
     [DataContract(IsReference = true)]
-    public class Library<T> : ViewModelBase, ILibrary<T> where T : INode, ICopyable, IDirty
+    public abstract class Library<T> : ViewModelBase, ILibrary<T> where T : INode, ICopyable, IDirty
     {
         private Dictionary<string, T> _itemsCache;
         private IList<T> _items;
@@ -43,26 +42,6 @@ namespace Draw2D.ViewModels.Containers
             base.Invalidate();
         }
 
-        public virtual object Copy(Dictionary<object, object> shared)
-        {
-            var copy = new Library<T>()
-            {
-                Name = this.Name,
-                CurrentItem = (T)this.CurrentItem?.Copy(shared),
-                Items = new ObservableCollection<T>()
-            };
-
-            foreach (var item in this.Items)
-            {
-                if (item is ICopyable copyable)
-                {
-                    copy.Items.Add((T)(copyable.Copy(shared)));
-                }
-            }
-
-            return copy;
-        }
-
         public void UpdateCache()
         {
             if (_items != null)
@@ -78,7 +57,7 @@ namespace Draw2D.ViewModels.Containers
 
                 foreach (var item in _items)
                 {
-                    _itemsCache[item.Id] = item;
+                    _itemsCache[item.Title] = item;
                 }
             }
         }
@@ -94,7 +73,7 @@ namespace Draw2D.ViewModels.Containers
                     _itemsCache = new Dictionary<string, T>();
                 }
 
-                _itemsCache[value.Id] = value;
+                _itemsCache[value.Title] = value;
             }
         }
 
@@ -106,25 +85,25 @@ namespace Draw2D.ViewModels.Containers
 
                 if (_itemsCache != null)
                 {
-                    _itemsCache.Remove(value.Id);
+                    _itemsCache.Remove(value.Title);
                 }
             }
         }
 
-        public T Get(string id)
+        public T Get(string title)
         {
             if (_itemsCache == null)
             {
                 UpdateCache();
             }
 
-            if (!_itemsCache.TryGetValue(id, out var value))
+            if (!_itemsCache.TryGetValue(title, out var value))
             {
                 foreach (var item in _items)
                 {
-                    if (item.Id == id)
+                    if (item.Title == title)
                     {
-                        _itemsCache[item.Id] = item;
+                        _itemsCache[item.Title] = item;
                         return item;
                     }
                 }

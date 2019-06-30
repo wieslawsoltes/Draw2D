@@ -7,6 +7,7 @@ using Avalonia;
 using Avalonia.Data.Converters;
 using Draw2D.ViewModels.Containers;
 using Draw2D.ViewModels.Shapes;
+using Draw2D.ViewModels.Tools;
 
 namespace Draw2D.Converters
 {
@@ -14,7 +15,7 @@ namespace Draw2D.Converters
     {
         public object Convert(IList<object> values, Type targetType, object parameter, CultureInfo culture)
         {
-            if (values?.Count == 2 && values[0] is string groupId && values[1] is ILibrary<GroupShape> groupLibrary)
+            if (values?.Count == 2 && values[0] is string groupId && values[1] is IGroupLibrary groupLibrary)
             {
                 return groupLibrary.Get(groupId);
             }
