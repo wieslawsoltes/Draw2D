@@ -487,9 +487,17 @@ namespace Draw2D.Editor
             }
         }
 
-        public void FromSvgPathData(TextBox textBox)
+        private string CopySvgPathDataImpl()
         {
-            var text = textBox.Text;
+            if (ContainerView.SelectionState?.Shapes != null)
+            {
+                return PathConverter?.ToSvgPathData(this, ContainerView.SelectionState?.Shapes);
+            }
+            return null;
+        }
+
+        private void PasteSvgPathDataImpl(string text)
+        {
             var path = PathConverter?.ToPathShape(this, text);
             if (path != null)
             {
@@ -505,15 +513,55 @@ namespace Draw2D.Editor
             }
         }
 
-        public void ToSvgPathData(TextBox textBox)
+        public async void CopySvgPathData()
         {
-            if (ContainerView.SelectionState?.Shapes != null)
+            try
             {
-                var text = PathConverter?.ToSvgPathData(this, ContainerView.SelectionState?.Shapes);
+                var text = CopySvgPathDataImpl();
                 if (!string.IsNullOrEmpty(text))
                 {
-                    textBox.Text = text;
+                    await Application.Current.Clipboard.SetTextAsync(text);
                 }
+            }
+            catch(Exception ex)
+            {
+                Log.WriteLine(ex.Message);
+                Log.WriteLine(ex.StackTrace);
+            }
+        }
+
+        public async void PasteSvgPathData()
+        {
+            try
+            {
+                var text = await Application.Current.Clipboard.GetTextAsync();
+                if (!string.IsNullOrEmpty(text))
+                {
+                    PasteSvgPathDataImpl(text);
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.WriteLine(ex.Message);
+                Log.WriteLine(ex.StackTrace);
+            }
+        }
+
+        public void ToSvgPathData(TextBox textBox)
+        {
+            var text = CopySvgPathDataImpl();
+            if (!string.IsNullOrEmpty(text))
+            {
+                textBox.Text = text;
+            }
+        }
+
+        public void FromSvgPathData(TextBox textBox)
+        {
+            var text = textBox.Text;
+            if (!string.IsNullOrEmpty(text))
+            {
+                PasteSvgPathDataImpl(text);
             }
         }
 
