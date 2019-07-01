@@ -288,8 +288,11 @@ namespace Draw2D.Editor
         public static void ImportSvg(IToolContext context, string path)
         {
             var svg = new SkiaSharp.Extended.Svg.SKSvg();
-            var picture = svg.Load(path);
-            var image = SKImage.FromPicture(picture, picture.CullRect.Size.ToSizeI());
+            using (var stream = File.Open(path, FileMode.Open))
+            {
+                var picture = svg.Load(stream);
+                //var image = SKImage.FromPicture(picture, picture.CullRect.Size.ToSizeI());
+            }
         }
 
         public static void ExportSvg(IToolContext context, string path, IContainerView containerView)
