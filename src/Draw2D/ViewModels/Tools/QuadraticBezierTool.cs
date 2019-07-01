@@ -26,7 +26,7 @@ namespace Draw2D.ViewModels.Tools
         public State CurrentState { get; set; } = State.StartPoint;
 
         [IgnoreDataMember]
-        public string Title => "QuadraticBezier";
+        public new string Title => "QuadraticBezier";
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public QuadraticBezierToolSettings Settings
@@ -53,7 +53,7 @@ namespace Draw2D.ViewModels.Tools
                 Point1 = point1,
                 Point2 = point2,
                 Text = new Text(),
-                StyleId = context.StyleLibrary?.CurrentStyle?.Title
+                StyleId = context.StyleLibrary?.CurrentItem?.Title
             };
             if (_quadraticBezier.StartPoint.Owner == null)
             {

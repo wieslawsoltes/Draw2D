@@ -25,7 +25,7 @@ namespace Draw2D.ViewModels.Tools
         public State CurrentState { get; set; } = State.StartPoint;
 
         [IgnoreDataMember]
-        public string Title => "Rectangle";
+        public new string Title => "Rectangle";
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public RectangleToolSettings Settings
@@ -50,7 +50,7 @@ namespace Draw2D.ViewModels.Tools
                 StartPoint = topLeft,
                 Point = bottomRight,
                 Text = new Text(),
-                StyleId = context.StyleLibrary?.CurrentStyle?.Title
+                StyleId = context.StyleLibrary?.CurrentItem?.Title
             };
             if (_rectangle.StartPoint.Owner == null)
             {

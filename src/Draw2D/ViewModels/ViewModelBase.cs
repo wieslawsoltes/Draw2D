@@ -12,7 +12,8 @@ namespace Draw2D.ViewModels
     {
         private string _id = null;
         private string _name = null;
-        private object _owner;
+        private string _title = null;
+        private object _owner = null;
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public virtual string Id
@@ -26,6 +27,13 @@ namespace Draw2D.ViewModels
         {
             get => _name;
             set => Update(ref _name, value);
+        }
+
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public string Title
+        {
+            get => _title;
+            set => Update(ref _title, value);
         }
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]

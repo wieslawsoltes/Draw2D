@@ -35,7 +35,7 @@ namespace Draw2D.ViewModels.Tools
         public State CurrentState { get; set; } = State.None;
 
         [IgnoreDataMember]
-        public string Title => "Selection";
+        public new string Title => "Selection";
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public SelectionToolSettings Settings

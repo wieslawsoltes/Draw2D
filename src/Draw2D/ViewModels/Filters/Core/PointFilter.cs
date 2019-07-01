@@ -11,7 +11,7 @@ namespace Draw2D.ViewModels.Filters
     {
         private IList<IBaseShape> _guides;
 
-        public abstract string Title { get; }
+        public new abstract string Title { get; }
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public IList<IBaseShape> Guides

@@ -31,7 +31,7 @@ namespace Draw2D.ViewModels.Tools
         public State CurrentState { get; set; } = State.Start;
 
         [IgnoreDataMember]
-        public string Title => "Scribble";
+        public new string Title => "Scribble";
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public ScribbleToolSettings Settings
@@ -50,7 +50,7 @@ namespace Draw2D.ViewModels.Tools
                 Shapes = new ObservableCollection<IBaseShape>(),
                 FillRule = Settings.FillRule,
                 Text = new Text(),
-                StyleId = context.StyleLibrary?.CurrentStyle?.Title
+                StyleId = context.StyleLibrary?.CurrentItem?.Title
             };
 
             _figure = new FigureShape()
@@ -110,7 +110,7 @@ namespace Draw2D.ViewModels.Tools
                             StartPoint = distinct[i],
                             Point = distinct[i + 1],
                             Text = new Text(),
-                            StyleId = context.StyleLibrary?.CurrentStyle?.Title
+                            StyleId = context.StyleLibrary?.CurrentItem?.Title
                         };
                         _figure.Shapes.Add(line);
                     }
@@ -158,7 +158,7 @@ namespace Draw2D.ViewModels.Tools
                 StartPoint = _previousPoint,
                 Point = _nextPoint,
                 Text = new Text(),
-                StyleId = context.StyleLibrary?.CurrentStyle?.Title
+                StyleId = context.StyleLibrary?.CurrentItem?.Title
             };
             if (line.StartPoint.Owner == null)
             {

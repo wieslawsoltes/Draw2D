@@ -26,7 +26,7 @@ namespace Draw2D.ViewModels.Tools
         public State CurrentState { get; set; } = State.StartPoint;
 
         [IgnoreDataMember]
-        public string Title => "Line";
+        public new string Title => "Line";
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public LineToolSettings Settings
@@ -53,7 +53,7 @@ namespace Draw2D.ViewModels.Tools
                 var line = new LineShape(startPoint, point)
                 {
                     Points = new ObservableCollection<IPointShape>(),
-                    StyleId = context.StyleLibrary?.CurrentStyle?.Title
+                    StyleId = context.StyleLibrary?.CurrentItem?.Title
                 };
                 line.StartPoint.Owner = line;
                 line.Point.Owner = line;
@@ -82,7 +82,7 @@ namespace Draw2D.ViewModels.Tools
                 StartPoint = startPoint,
                 Point = point,
                 Text = new Text(),
-                StyleId = context.StyleLibrary?.CurrentStyle?.Title
+                StyleId = context.StyleLibrary?.CurrentItem?.Title
             };
             if (_line.StartPoint.Owner == null)
             {

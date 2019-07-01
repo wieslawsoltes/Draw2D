@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Draw2D.ViewModels;
 using Draw2D.ViewModels.Containers;
 using Draw2D.ViewModels.Style;
+using Draw2D.ViewModels.Tools;
 
 namespace Draw2D.Presenters
 {
@@ -45,9 +46,9 @@ namespace Draw2D.Presenters
                 return true;
             }
 
-            if (styleLibrary.Styles != null)
+            if (styleLibrary.Items != null)
             {
-                foreach (var style in styleLibrary.Styles)
+                foreach (var style in styleLibrary.Items)
                 {
                     if (IsShapeStyleDirty(style))
                     {

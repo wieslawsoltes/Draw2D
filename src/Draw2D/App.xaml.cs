@@ -7,6 +7,8 @@ using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 using Draw2D.Editor;
 using Draw2D.ViewModels.Containers;
+using Draw2D.ViewModels.Shapes;
+using Draw2D.ViewModels.Style;
 using Draw2D.ViewModels.Tools;
 using Draw2D.Views;
 

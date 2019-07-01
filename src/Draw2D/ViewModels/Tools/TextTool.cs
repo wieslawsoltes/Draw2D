@@ -25,7 +25,7 @@ namespace Draw2D.ViewModels.Tools
         public State CurrentState { get; set; } = State.StartPoint;
 
         [IgnoreDataMember]
-        public string Title => "Text";
+        public new string Title => "Text";
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public TextToolSettings Settings
@@ -50,7 +50,7 @@ namespace Draw2D.ViewModels.Tools
                 StartPoint = topLeft,
                 Point = bottomRight,
                 Text = new Text("Text"),
-                StyleId = context.StyleLibrary?.CurrentStyle?.Title
+                StyleId = context.StyleLibrary?.CurrentItem?.Title
             };
             if (_text.StartPoint.Owner == null)
             {

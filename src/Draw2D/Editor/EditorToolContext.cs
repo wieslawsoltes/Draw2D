@@ -560,7 +560,7 @@ namespace Draw2D.Editor
             {
                 Points = new ObservableCollection<IPointShape>(),
                 Text = new Text(),
-                StyleId = context.StyleLibrary?.CurrentStyle?.Title
+                StyleId = context.StyleLibrary?.CurrentItem?.Title
             };
             rectangle.StartPoint.Owner = rectangle;
             rectangle.Point.Owner = rectangle;
@@ -569,7 +569,7 @@ namespace Draw2D.Editor
             {
                 Points = new ObservableCollection<IPointShape>(),
                 Text = new Text("&"),
-                StyleId = context.StyleLibrary?.CurrentStyle?.Title
+                StyleId = context.StyleLibrary?.CurrentItem?.Title
             };
             text.StartPoint.Owner = text;
             text.Point.Owner = text;

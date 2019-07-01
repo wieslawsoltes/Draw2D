@@ -11,7 +11,7 @@ namespace Draw2D.ViewModels.Intersections
     {
         private IList<IPointShape> _intersections;
 
-        public abstract string Title { get; }
+        public new abstract string Title { get; }
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public IList<IPointShape> Intersections

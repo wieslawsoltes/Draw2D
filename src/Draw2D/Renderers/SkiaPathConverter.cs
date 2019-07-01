@@ -66,7 +66,7 @@ namespace Draw2D.Renderers
                     var style = context.StyleLibrary?.Get(shape.StyleId);
                     if (style == null)
                     {
-                        style = context.StyleLibrary?.CurrentStyle;
+                        style = context.StyleLibrary?.CurrentItem;
                     }
                     return SkiaHelper.ToPathShape(context, geometry, style, context.PointTemplate);
                 }
@@ -91,7 +91,7 @@ namespace Draw2D.Renderers
                             var style = context.StyleLibrary?.Get(shapes[0].StyleId);
                             if (style == null)
                             {
-                                style = context.StyleLibrary?.CurrentStyle;
+                                style = context.StyleLibrary?.CurrentItem;
                             }
                             path = SkiaHelper.ToPathShape(context, result, style, context.PointTemplate);
                         }
@@ -113,7 +113,7 @@ namespace Draw2D.Renderers
             {
                 using (var path = SkiaHelper.ToPath(svgPathData))
                 {
-                    return SkiaHelper.ToPathShape(context, path, context.StyleLibrary?.CurrentStyle, context.PointTemplate);
+                    return SkiaHelper.ToPathShape(context, path, context.StyleLibrary?.CurrentItem, context.PointTemplate);
                 }
             }
             return null;

@@ -26,7 +26,7 @@ namespace Draw2D.ViewModels.Tools
         public State CurrentState { get; set; } = State.StartPoint;
 
         [IgnoreDataMember]
-        public string Title => "PolyLine";
+        public new string Title => "PolyLine";
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public PolyLineToolSettings Settings
@@ -52,7 +52,7 @@ namespace Draw2D.ViewModels.Tools
                 StartPoint = startPoint,
                 Point = point,
                 Text = new Text(),
-                StyleId = context.StyleLibrary?.CurrentStyle?.Title
+                StyleId = context.StyleLibrary?.CurrentItem?.Title
             };
             if (_line.StartPoint.Owner == null)
             {
@@ -114,7 +114,7 @@ namespace Draw2D.ViewModels.Tools
                 StartPoint = startPoint,
                 Point = nextPoint,
                 Text = new Text(),
-                StyleId = context.StyleLibrary?.CurrentStyle?.Title
+                StyleId = context.StyleLibrary?.CurrentItem?.Title
             };
             if (_line.Point.Owner == null)
             {

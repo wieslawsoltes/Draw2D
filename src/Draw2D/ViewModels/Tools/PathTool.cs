@@ -252,7 +252,7 @@ namespace Draw2D.ViewModels.Tools
         internal FigureShape _figure;
 
         [IgnoreDataMember]
-        public string Title => "Path";
+        public new string Title => "Path";
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public PathToolSettings Settings
@@ -274,7 +274,7 @@ namespace Draw2D.ViewModels.Tools
                 Shapes = new ObservableCollection<IBaseShape>(),
                 FillRule = Settings.FillRule,
                 Text = new Text(),
-                StyleId = context.StyleLibrary?.CurrentStyle?.Title
+                StyleId = context.StyleLibrary?.CurrentItem?.Title
             };
 
             context.ContainerView?.WorkingContainer.Shapes.Add(_path);
