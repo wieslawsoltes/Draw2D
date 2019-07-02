@@ -8,6 +8,8 @@ namespace Draw2D.ViewModels.Tools
     public interface IPathConverter
     {
         PathShape ToPathShape(IToolContext context, IBaseShape shape);
+        PathShape ToStrokePathShape(IToolContext context, IBaseShape shape);
+        PathShape ToFillPathShape(IToolContext context, IBaseShape shape);
         PathShape Op(IToolContext context, PathOp op, ICollection<IBaseShape> selected);
         PathShape ToPathShape(IToolContext context, string svgPathData);
         string ToSvgPathData(IToolContext context, ICollection<IBaseShape> selected);

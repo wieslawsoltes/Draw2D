@@ -547,6 +547,72 @@ namespace Draw2D.ViewModels.Tools
             }
         }
 
+        public void CreateStrokePath(IToolContext context)
+        {
+            if (context.ContainerView?.SelectionState != null)
+            {
+                lock (context.ContainerView.SelectionState?.Shapes)
+                {
+                    context.ContainerView?.SelectionState?.Dehover();
+
+                    var shapes = new List<IBaseShape>(context.ContainerView.SelectionState?.Shapes.Reverse());
+
+                    Delete(context);
+
+                    foreach (var shape in shapes)
+                    {
+                        if (!(shape is IPointShape))
+                        {
+                            var path = context?.PathConverter?.ToStrokePathShape(context, shape);
+                            if (path != null)
+                            {
+                                path.Select(context.ContainerView.SelectionState);
+                                context.ContainerView?.CurrentContainer.Shapes.Add(path);
+                                context.ContainerView?.CurrentContainer.MarkAsDirty(true);
+                            }
+                        }
+                    }
+
+                    context.ContainerView?.InputService?.Redraw?.Invoke();
+
+                    this.CurrentState = State.None;
+                }
+            }
+        }
+
+        public void CreateFillPath(IToolContext context)
+        {
+            if (context.ContainerView?.SelectionState != null)
+            {
+                lock (context.ContainerView.SelectionState?.Shapes)
+                {
+                    context.ContainerView?.SelectionState?.Dehover();
+
+                    var shapes = new List<IBaseShape>(context.ContainerView.SelectionState?.Shapes.Reverse());
+
+                    Delete(context);
+
+                    foreach (var shape in shapes)
+                    {
+                        if (!(shape is IPointShape))
+                        {
+                            var path = context?.PathConverter?.ToFillPathShape(context, shape);
+                            if (path != null)
+                            {
+                                path.Select(context.ContainerView.SelectionState);
+                                context.ContainerView?.CurrentContainer.Shapes.Add(path);
+                                context.ContainerView?.CurrentContainer.MarkAsDirty(true);
+                            }
+                        }
+                    }
+
+                    context.ContainerView?.InputService?.Redraw?.Invoke();
+
+                    this.CurrentState = State.None;
+                }
+            }
+        }
+
         public void StackHorizontally(IToolContext context)
         {
             Layout.Stack(context, StackMode.Horizontal);

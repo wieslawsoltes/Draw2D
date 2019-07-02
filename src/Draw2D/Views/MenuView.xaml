@@ -181,6 +181,8 @@
             <MenuItem Header="Create R_eference" Command="{Binding Selection.CreateReference}" CommandParameter="{Binding}"/>
             <Separator/>
             <MenuItem Header="Create Pat_h" Command="{Binding Selection.CreatePath}" CommandParameter="{Binding}"/>
+            <MenuItem Header="Create Str_oke Path" Command="{Binding Selection.CreateStrokePath}" CommandParameter="{Binding}"/>
+            <MenuItem Header="Create _Fill Path" Command="{Binding Selection.CreateFillPath}" CommandParameter="{Binding}"/>
             <Separator/>
             <MenuItem Header="Stac_k">
                 <MenuItem Header="_Horizontally" Command="{Binding Selection.StackHorizontally}" CommandParameter="{Binding}"/>

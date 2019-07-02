@@ -402,6 +402,22 @@ namespace Draw2D.Renderers
             return false;
         }
 
+        internal static SKPath ToStrokePath(IToolContext context, ShapeStyle style, SKPath geometry)
+        {
+            using (var paint = ToSKPaintPen(style, 1.0))
+            {
+                return paint.GetFillPath(geometry);
+            }
+        }
+
+        internal static SKPath ToFillPath(IToolContext context, ShapeStyle style, SKPath geometry)
+        {
+            using (var paint = ToSKPaintBrush(style.Fill))
+            {
+                return paint.GetFillPath(geometry);
+            }
+        }
+
         internal static SKPath ToPath(string svgPathData)
         {
             return SKPath.ParseSvgPathData(svgPathData);

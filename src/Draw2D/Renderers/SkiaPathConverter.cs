@@ -74,6 +74,48 @@ namespace Draw2D.Renderers
             return null;
         }
 
+        public PathShape ToStrokePathShape(IToolContext context, IBaseShape shape)
+        {
+            using (var geometry = new SKPath())
+            {
+                if (SkiaHelper.AddShape(context, shape, 0.0, 0.0, geometry) == true)
+                {
+                    var style = context.StyleLibrary?.Get(shape.StyleId);
+                    if (style == null)
+                    {
+                        style = context.StyleLibrary?.CurrentItem;
+                    }
+                    var path = SkiaHelper.ToStrokePath(context, style, geometry);
+                    if (path != null)
+                    {
+                        return SkiaHelper.ToPathShape(context, path, context.StyleLibrary?.CurrentItem, context.PointTemplate);
+                    }
+                }
+            }
+            return null;
+        }
+
+        public PathShape ToFillPathShape(IToolContext context, IBaseShape shape)
+        {
+            using (var geometry = new SKPath())
+            {
+                if (SkiaHelper.AddShape(context, shape, 0.0, 0.0, geometry) == true)
+                {
+                    var style = context.StyleLibrary?.Get(shape.StyleId);
+                    if (style == null)
+                    {
+                        style = context.StyleLibrary?.CurrentItem;
+                    }
+                    var path = SkiaHelper.ToFillPath(context, style, geometry);
+                    if (path != null)
+                    {
+                        return SkiaHelper.ToPathShape(context, path, context.StyleLibrary?.CurrentItem, context.PointTemplate);
+                    }
+                }
+            }
+            return null;
+        }
+
         public PathShape Op(IToolContext context, PathOp op, ICollection<IBaseShape> selected)
         {
             var path = default(PathShape);

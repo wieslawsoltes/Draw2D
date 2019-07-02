@@ -12,6 +12,8 @@ namespace Draw2D.ViewModels.Tools
         void CreateGroup(IToolContext context);
         void CreateReference(IToolContext context);
         void CreatePath(IToolContext context);
+        void CreateStrokePath(IToolContext context);
+        void CreateFillPath(IToolContext context);
         void StackHorizontally(IToolContext context);
         void StackVertically(IToolContext context);
         void DistributeHorizontally(IToolContext context);
