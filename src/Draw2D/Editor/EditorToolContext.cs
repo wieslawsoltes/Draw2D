@@ -535,7 +535,7 @@ namespace Draw2D.Editor
                 }
 
                 stream.Position = 0;
-                using (var reader = new StreamReader(stream))
+                using (var reader = new StreamReader(stream, Encoding.UTF8))
                 {
                    var xml = reader.ReadToEnd();
                    return FormatXml(xml);
