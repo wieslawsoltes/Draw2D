@@ -439,7 +439,7 @@ namespace Draw2D.Renderers
         {
             using (var paint = ToSKPaintPen(style, 1.0))
             {
-                return paint.GetFillPath(geometry);
+                return paint.GetFillPath(geometry, 1.0f);
             }
         }
 
@@ -447,7 +447,7 @@ namespace Draw2D.Renderers
         {
             using (var paint = ToSKPaintBrush(style.Fill))
             {
-                return paint.GetFillPath(geometry);
+                return paint.GetFillPath(geometry, 1.0f);
             }
         }
 
