@@ -264,7 +264,7 @@ namespace Draw2D.Renderers
 
         public void DrawPath(object dc, PathShape path, string styleId, double dx, double dy, double scale)
         {
-            var geometry = new SKPath() { FillType = SKPathFillType.Winding };
+            var geometry = new SKPath() { FillType = SkiaHelper.ToSKPathFillType(path.FillType) };
             SkiaHelper.AddPath(null, path, dx, dy, geometry);
             _rootNodes[_currentRootNode].Children.Add(new ChildNode(path, styleId, dx, dy, scale, geometry));
         }

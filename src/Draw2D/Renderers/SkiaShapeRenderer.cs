@@ -404,7 +404,7 @@ namespace Draw2D.Renderers
             if (style.IsFilled || style.IsStroked || style.TextStyle.IsStroked)
             {
                 var canvas = dc as SKCanvas;
-                using (var geometry = new SKPath() { FillType = SKPathFillType.Winding })
+                using (var geometry = new SKPath() { FillType = SkiaHelper.ToSKPathFillType(path.FillType) })
                 {
                     SkiaHelper.AddPath(null, path, dx, dy, geometry);
                     if (style.IsFilled)

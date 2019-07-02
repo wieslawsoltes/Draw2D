@@ -506,7 +506,7 @@ namespace Draw2D.Renderers
 
             if (paths.Count == 1)
             {
-                using (var empty = new SKPath() { FillType = SKPathFillType.Winding })
+                using (var empty = new SKPath() { FillType = paths[0].FillType })
                 {
                     return empty.Op(paths[0], op);
                 }
@@ -741,7 +741,7 @@ namespace Draw2D.Renderers
                     break;
                 case PathShape pathShape:
                     {
-                        using (var geometry = new SKPath() { FillType = SKPathFillType.Winding })
+                        using (var geometry = new SKPath() { FillType = SkiaHelper.ToSKPathFillType(pathShape.FillType) })
                         {
                             AddPath(context, pathShape, 0.0, 0.0, geometry);
                             sb.AppendLine(geometry.ToSvgPathData());
