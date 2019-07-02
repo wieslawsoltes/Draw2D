@@ -537,8 +537,8 @@ namespace Draw2D.Editor
                 stream.Position = 0;
                 using (var reader = new StreamReader(stream, Encoding.UTF8))
                 {
-                   var xml = reader.ReadToEnd();
-                   return FormatXml(xml);
+                    var xml = reader.ReadToEnd();
+                    return FormatXml(xml);
                 }
             }
         }
@@ -553,7 +553,7 @@ namespace Draw2D.Editor
                     await Application.Current.Clipboard.SetTextAsync(text);
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Log.WriteLine(ex.Message);
                 Log.WriteLine(ex.StackTrace);
@@ -605,7 +605,7 @@ namespace Draw2D.Editor
                     await Application.Current.Clipboard.SetTextAsync(text);
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Log.WriteLine(ex.Message);
                 Log.WriteLine(ex.StackTrace);
