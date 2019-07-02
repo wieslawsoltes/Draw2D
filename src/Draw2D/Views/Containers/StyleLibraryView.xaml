@@ -30,7 +30,7 @@
                 </DataGrid.Styles>
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Title" Binding="{Binding Title}"/>
-                    <DataGridTextColumn Header="Thickness" Binding="{Binding Thickness}"/>
+                    <DataGridTextColumn Header="StrokeWidth" Binding="{Binding StrokeWidth}"/>
                     <DataGridCheckBoxColumn Header="IsStroked" Binding="{Binding IsStroked}"/>
                     <DataGridCheckBoxColumn Header="IsFilled" Binding="{Binding IsFilled}"/>
                 </DataGrid.Columns>

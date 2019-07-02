@@ -204,12 +204,12 @@ namespace Draw2D.Renderers
                     break;
             }
 #if DEBUG_DRAW_TEXT
-            using (var boundsPen = new SKPaint() { IsAntialias = true, IsStroke = true, StrokeWidth = (float)(style.Thickness / scale), Color = new SKColor(255, 255, 255, 255) })
-            using (var mTopPen = new SKPaint() { IsAntialias = true, IsStroke = true, StrokeWidth = (float)(style.Thickness / scale), Color = new SKColor(128, 0, 128, 255) })
-            using (var mAscentPen = new SKPaint() { IsAntialias = true, IsStroke = true, StrokeWidth = (float)(style.Thickness / scale), Color = new SKColor(0, 255, 0, 255) })
-            using (var mBaselinePen = new SKPaint() { IsAntialias = true, IsStroke = true, StrokeWidth = (float)(style.Thickness / scale), Color = new SKColor(255, 0, 0, 255) })
-            using (var mDescentPen = new SKPaint() { IsAntialias = true, IsStroke = true, StrokeWidth = (float)(style.Thickness / scale), Color = new SKColor(0, 0, 255, 255) })
-            using (var mBottomPen = new SKPaint() { IsAntialias = true, IsStroke = true, StrokeWidth = (float)(style.Thickness / scale), Color = new SKColor(255, 127, 0, 255) })
+            using (var boundsPen = new SKPaint() { IsAntialias = true, IsStroke = true, StrokeWidth = (float)(style.StrokeWidth / scale), Color = new SKColor(255, 255, 255, 255) })
+            using (var mTopPen = new SKPaint() { IsAntialias = true, IsStroke = true, StrokeWidth = (float)(style.StrokeWidth / scale), Color = new SKColor(128, 0, 128, 255) })
+            using (var mAscentPen = new SKPaint() { IsAntialias = true, IsStroke = true, StrokeWidth = (float)(style.StrokeWidth / scale), Color = new SKColor(0, 255, 0, 255) })
+            using (var mBaselinePen = new SKPaint() { IsAntialias = true, IsStroke = true, StrokeWidth = (float)(style.StrokeWidth / scale), Color = new SKColor(255, 0, 0, 255) })
+            using (var mDescentPen = new SKPaint() { IsAntialias = true, IsStroke = true, StrokeWidth = (float)(style.StrokeWidth / scale), Color = new SKColor(0, 0, 255, 255) })
+            using (var mBottomPen = new SKPaint() { IsAntialias = true, IsStroke = true, StrokeWidth = (float)(style.StrokeWidth / scale), Color = new SKColor(255, 127, 0, 255) })
             {
                 var bounds = new SKRect();
                 paint.MeasureText(text.Value, ref bounds);

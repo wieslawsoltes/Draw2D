@@ -28,16 +28,46 @@ namespace Draw2D.Renderers
             return new SKColor(color.R, color.G, color.B, color.A);
         }
 
+        internal static SKStrokeCap ToSKStrokeCap(StrokeCap cap)
+        {
+            switch (cap)
+            {
+                default:
+                case StrokeCap.Butt:
+                    return SKStrokeCap.Butt;
+                case StrokeCap.Round:
+                    return SKStrokeCap.Round;
+                case StrokeCap.Square:
+                    return SKStrokeCap.Square;
+            }
+        }
+
+        internal static SKStrokeJoin ToSKStrokeJoin(StrokeJoin join)
+        {
+            switch (join)
+            {
+                default:
+                case StrokeJoin.Miter:
+                    return SKStrokeJoin.Miter;
+                case StrokeJoin.Round:
+                    return SKStrokeJoin.Round;
+                case StrokeJoin.Bevel:
+                    return SKStrokeJoin.Bevel;
+            }
+        }
+
         internal static SKPaint ToSKPaintPen(ShapeStyle style, double scale)
         {
             return new SKPaint()
             {
                 IsAntialias = true,
                 IsStroke = true,
-                StrokeWidth = (float)(style.Thickness / scale),
+                StrokeWidth = (float)(style.StrokeWidth / scale),
+                StrokeCap = ToSKStrokeCap(style.StrokeCap),
+                StrokeJoin = ToSKStrokeJoin(style.StrokeJoin),
+                StrokeMiter = (float)(style.StrokeMiter / scale),
                 Color = ToSKColor(style.Stroke),
                 //Shader = SKShader.CreateColor(ToSKColor(style.Stroke)),
-                StrokeCap = SKStrokeCap.Butt,
                 PathEffect = null,
                 Style = SKPaintStyle.Stroke
             };
@@ -60,7 +90,10 @@ namespace Draw2D.Renderers
 
         internal static void ToSKPaintPenUpdate(SKPaint paint, ShapeStyle style, double scale)
         {
-            paint.StrokeWidth = (float)(style.Thickness / scale);
+            paint.StrokeWidth = (float)(style.StrokeWidth / scale);
+            //paint.StrokeCap = ToSKStrokeCap(style.StrokeCap),
+            //paint.StrokeJoin = ToSKStrokeJoin(style.StrokeJoin),
+            //paint.StrokeMiter = (float)(style.StrokeMiter / scale),
             //paint.Color = ToSKColor(style.Stroke);
             //paint.Shader = SKShader.CreateColor(ToSKColor(style.Stroke));
         }

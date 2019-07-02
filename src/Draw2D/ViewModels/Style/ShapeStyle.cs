@@ -10,9 +10,12 @@ namespace Draw2D.ViewModels.Style
     {
         private ArgbColor _stroke;
         private ArgbColor _fill;
-        private double _thickness;
         private bool _isStroked;
         private bool _isFilled;
+        private double _strokeWidth;
+        private StrokeCap _strokeCap;
+        private StrokeJoin _strokeJoin;
+        private double _strokeMiter;
         private TextStyle _textStyle;
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
@@ -30,13 +33,6 @@ namespace Draw2D.ViewModels.Style
         }
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public double Thickness
-        {
-            get => _thickness;
-            set => Update(ref _thickness, value);
-        }
-
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public bool IsStroked
         {
             get => _isStroked;
@@ -51,6 +47,34 @@ namespace Draw2D.ViewModels.Style
         }
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public double StrokeWidth
+        {
+            get => _strokeWidth;
+            set => Update(ref _strokeWidth, value);
+        }
+
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public StrokeCap StrokeCap
+        {
+            get => _strokeCap;
+            set => Update(ref _strokeCap, value);
+        }
+
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public StrokeJoin StrokeJoin
+        {
+            get => _strokeJoin;
+            set => Update(ref _strokeJoin, value);
+        }
+
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public double StrokeMiter
+        {
+            get => _strokeMiter;
+            set => Update(ref _strokeMiter, value);
+        }
+
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public TextStyle TextStyle
         {
             get => _textStyle;
@@ -61,14 +85,17 @@ namespace Draw2D.ViewModels.Style
         {
         }
 
-        public ShapeStyle(string title, ArgbColor stroke, ArgbColor fill, double thickness, bool isStroked, bool isFilled, TextStyle textStyle)
+        public ShapeStyle(string title, ArgbColor stroke, ArgbColor fill, double strokeWidth, bool isStroked, bool isFilled, TextStyle textStyle)
         {
             this.Title = title;
             this.Stroke = stroke;
             this.Fill = fill;
-            this.Thickness = thickness;
             this.IsStroked = isStroked;
             this.IsFilled = isFilled;
+            this.StrokeWidth = strokeWidth;
+            this.StrokeCap = StrokeCap.Butt;
+            this.StrokeJoin = StrokeJoin.Miter;
+            this.StrokeMiter = 4.0;
             this.TextStyle = textStyle;
         }
 
@@ -80,9 +107,12 @@ namespace Draw2D.ViewModels.Style
                 Title = this.Title + "_copy",
                 Stroke = (ArgbColor)(this.Stroke.Copy(shared)),
                 Fill = (ArgbColor)(this.Fill.Copy(shared)),
-                Thickness = this.Thickness,
                 IsStroked = this.IsStroked,
                 IsFilled = this.IsFilled,
+                StrokeWidth = this.StrokeWidth,
+                StrokeCap = this.StrokeCap,
+                StrokeJoin = this.StrokeJoin,
+                StrokeMiter = this.StrokeMiter,
                 TextStyle = (TextStyle)(this.TextStyle.Copy(shared))
             };
         }
