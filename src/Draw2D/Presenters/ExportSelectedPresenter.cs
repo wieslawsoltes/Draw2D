@@ -32,7 +32,7 @@ namespace Draw2D.Presenters
                 var canvas = context as SKCanvas;
                 canvas.DrawRect(SkiaHelper.ToSKRect(dx, dy, _view.Width + dx, _view.Height + dy), background);
 
-                var selected = new List<IBaseShape>(_view.SelectionState.Shapes);
+                var selected = new List<IBaseShape>(_view.SelectionState?.Shapes);
                 foreach (var shape in selected)
                 {
                     if (!(shape is IPointShape))

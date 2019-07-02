@@ -492,34 +492,33 @@ namespace Draw2D.Editor
 
         private string CopySvgImpl(IToolContext context, IContainerView containerView)
         {
-            using (var ms = new MemoryStream())
-            using (var stream = new SKManagedWStream(ms))
-            using (var writer = new SKXmlStreamWriter(stream))
-            using (var canvas = SKSvgCanvas.Create(SKRect.Create(0, 0, (int)containerView.Width, (int)containerView.Height), writer))
+            using (var stream = new MemoryStream())
             {
-                if (containerView.SelectionState?.Shapes?.Count > 0)
+                using (var wstream = new SKManagedWStream(stream))
+                using (var writer = new SKXmlStreamWriter(wstream))
+                using (var canvas = SKSvgCanvas.Create(SKRect.Create(0, 0, (int)containerView.Width, (int)containerView.Height), writer))
                 {
-                    using (var skiaSelectedPresenter = new ExportSelectedPresenter(context, containerView))
+                    if (containerView.SelectionState?.Shapes?.Count > 0)
                     {
-                        skiaSelectedPresenter.Draw(canvas, containerView.Width, containerView.Height, 0, 0, 1.0, 1.0);
-                        ms.Position = 0;
-                        using (var reader = new StreamReader(ms))
+                        using (var skiaSelectedPresenter = new ExportSelectedPresenter(context, containerView))
                         {
-                           return reader.ReadToEnd();
+                            skiaSelectedPresenter.Draw(canvas, containerView.Width, containerView.Height, 0, 0, 1.0, 1.0);
+                        }
+                    }
+                    else
+                    {
+                        using (var skiaContainerPresenter = new ExportContainerPresenter(context, containerView))
+                        {
+                            skiaContainerPresenter.Draw(canvas, containerView.Width, containerView.Height, 0, 0, 1.0, 1.0);
                         }
                     }
                 }
-                else
+
+                stream.Position = 0;
+                using (var reader = new StreamReader(stream))
                 {
-                    using (var skiaContainerPresenter = new ExportContainerPresenter(context, containerView))
-                    {
-                        skiaContainerPresenter.Draw(canvas, containerView.Width, containerView.Height, 0, 0, 1.0, 1.0);
-                        ms.Position = 0;
-                        using (var reader = new StreamReader(ms))
-                        {
-                           return reader.ReadToEnd();
-                        }
-                    }
+                   var xml = reader.ReadToEnd();
+                   return xml;
                 }
             }
         }
