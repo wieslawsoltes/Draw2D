@@ -57,11 +57,27 @@ namespace Draw2D.Renderers
             return paths;
         }
 
+        private SKPath ToPath(IToolContext context, IBaseShape shape)
+        {
+            var geometry = new SKPath();
+
+            if (SkiaHelper.AddShape(context, shape, 0.0, 0.0, geometry) == true)
+            {
+                return geometry;
+            }
+            else
+            {
+                geometry.Dispose();
+            }
+
+            return null;
+        }
+
         public PathShape ToPathShape(IToolContext context, IBaseShape shape)
         {
-            using (var geometry = new SKPath())
+            using (var geometry = ToPath(context, shape))
             {
-                if (SkiaHelper.AddShape(context, shape, 0.0, 0.0, geometry) == true)
+                if (geometry != null)
                 {
                     var style = context.StyleLibrary?.Get(shape.StyleId);
                     if (style == null)
@@ -76,15 +92,16 @@ namespace Draw2D.Renderers
 
         public PathShape ToStrokePathShape(IToolContext context, IBaseShape shape)
         {
-            using (var geometry = new SKPath())
+            using (var geometry = ToPath(context, shape))
             {
-                if (SkiaHelper.AddShape(context, shape, 0.0, 0.0, geometry) == true)
+                if (geometry != null)
                 {
                     var style = context.StyleLibrary?.Get(shape.StyleId);
                     if (style == null)
                     {
                         style = context.StyleLibrary?.CurrentItem;
                     }
+
                     var path = SkiaHelper.ToStrokePath(context, style, geometry);
                     if (path != null)
                     {
@@ -97,15 +114,16 @@ namespace Draw2D.Renderers
 
         public PathShape ToFillPathShape(IToolContext context, IBaseShape shape)
         {
-            using (var geometry = new SKPath())
+            using (var geometry = ToPath(context, shape))
             {
-                if (SkiaHelper.AddShape(context, shape, 0.0, 0.0, geometry) == true)
+                if (geometry != null)
                 {
                     var style = context.StyleLibrary?.Get(shape.StyleId);
                     if (style == null)
                     {
                         style = context.StyleLibrary?.CurrentItem;
                     }
+
                     var path = SkiaHelper.ToFillPath(context, style, geometry);
                     if (path != null)
                     {
