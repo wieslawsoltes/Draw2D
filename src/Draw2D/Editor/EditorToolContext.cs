@@ -1,10 +1,13 @@
 ﻿// Copyright (c) Wiesław Šoltés. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using System;
+using System.Text;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Runtime.Serialization;
+using System.Xml;
+using System.Xml.Linq;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
@@ -490,6 +493,23 @@ namespace Draw2D.Editor
             }
         }
 
+        private static string FormatXml(string xml)
+        {
+            var sb = new StringBuilder();
+            var element = XElement.Parse(xml);
+            var settings = new XmlWriterSettings();
+            settings.OmitXmlDeclaration = false;
+            settings.Indent = true;
+            settings.NewLineOnAttributes = false;
+
+            using (var writer = XmlWriter.Create(sb, settings))
+            {
+                element.Save(writer);
+            }
+
+            return sb.ToString();
+        }
+
         private string CopySvgImpl(IToolContext context, IContainerView containerView)
         {
             using (var stream = new MemoryStream())
@@ -518,7 +538,7 @@ namespace Draw2D.Editor
                 using (var reader = new StreamReader(stream))
                 {
                    var xml = reader.ReadToEnd();
-                   return xml;
+                   return FormatXml(xml);
                 }
             }
         }
@@ -537,6 +557,15 @@ namespace Draw2D.Editor
             {
                 Log.WriteLine(ex.Message);
                 Log.WriteLine(ex.StackTrace);
+            }
+        }
+
+        public void ToSvg(TextBox textBox)
+        {
+            var text = CopySvgImpl(this, ContainerView);
+            if (!string.IsNullOrEmpty(text))
+            {
+                textBox.Text = text;
             }
         }
 
