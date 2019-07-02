@@ -20,8 +20,8 @@
                     <TextBox Classes="default" Grid.Column="1" Grid.Row="0" Text="{Binding Title}"/>
                     <TextBlock Classes="default" Grid.Column="0" Grid.Row="1" Text="Text"/>
                     <TextBox Classes="default" Grid.Column="1" Grid.Row="1" Text="{Binding Text.Value}"/>
-                    <TextBlock Classes="default" Grid.Column="0" Grid.Row="2" Text="FillRule"/>
-                    <TextBox Classes="default" Grid.Column="1" Grid.Row="2" Text="{Binding FillRule}"/>
+                    <TextBlock Classes="default" Grid.Column="0" Grid.Row="2" Text="FillType"/>
+                    <TextBox Classes="default" Grid.Column="1" Grid.Row="2" Text="{Binding FillType}"/>
                 </Grid>
             </ScrollViewer>
         </TabItem>

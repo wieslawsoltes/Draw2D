@@ -609,7 +609,7 @@ namespace Draw2D.Editor
                 {
                     ConnectPoints = true,
                     HitTestRadius = 7.0,
-                    FillRule = PathFillRule.EvenOdd,
+                    FillType = PathFillType.Winding,
                     IsFilled = true,
                     IsClosed = true
                 }
@@ -666,7 +666,7 @@ namespace Draw2D.Editor
                 {
                     Simplify = true,
                     Epsilon = 1.0,
-                    FillRule = PathFillRule.EvenOdd,
+                    FillType = PathFillType.Winding,
                     IsFilled = false,
                     IsClosed = false
                 }

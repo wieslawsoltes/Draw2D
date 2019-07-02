@@ -3,9 +3,11 @@
 
 namespace Draw2D.ViewModels.Shapes
 {
-    public enum PathFillRule
+    public enum PathFillType
     {
-        EvenOdd,
-        Nonzero
+        Winding = 0,
+        EvenOdd = 1,
+        InverseWinding = 2,
+        InverseEvenOdd = 3
     }
 }

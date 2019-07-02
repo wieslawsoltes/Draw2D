@@ -810,7 +810,7 @@ namespace Draw2D.ViewModels.Tools
                         {
                             Points = new ObservableCollection<IPointShape>(),
                             Shapes = new ObservableCollection<IBaseShape>(),
-                            FillRule = path.FillRule,
+                            FillType = path.FillType,
                             Text = new Text(),
                             StyleId = path.StyleId
                         };

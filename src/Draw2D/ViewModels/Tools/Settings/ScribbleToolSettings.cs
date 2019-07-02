@@ -10,7 +10,7 @@ namespace Draw2D.ViewModels.Tools
     {
         private bool _simplify;
         private double _epsilon;
-        private PathFillRule _fillRule;
+        private PathFillType _fillType;
         private bool _isFilled;
         private bool _isClosed;
 
@@ -29,10 +29,10 @@ namespace Draw2D.ViewModels.Tools
         }
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public PathFillRule FillRule
+        public PathFillType FillType
         {
-            get => _fillRule;
-            set => Update(ref _fillRule, value);
+            get => _fillType;
+            set => Update(ref _fillType, value);
         }
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]

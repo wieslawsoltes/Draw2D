@@ -16,7 +16,7 @@ namespace Draw2D.ViewModels.Shapes
         internal static new IBounds s_bounds = new PathBounds();
         internal static new IShapeDecorator s_decorator = new PathDecorator();
 
-        private PathFillRule _fillRule;
+        private PathFillType _fillType;
         private Text _text;
 
         [IgnoreDataMember]
@@ -26,10 +26,10 @@ namespace Draw2D.ViewModels.Shapes
         public override IShapeDecorator Decorator { get; } = s_decorator;
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public PathFillRule FillRule
+        public PathFillType FillType
         {
-            get => _fillRule;
-            set => Update(ref _fillRule, value);
+            get => _fillType;
+            set => Update(ref _fillType, value);
         }
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
@@ -200,7 +200,7 @@ namespace Draw2D.ViewModels.Shapes
                 Points = new ObservableCollection<IPointShape>(),
                 Shapes = new ObservableCollection<IBaseShape>(),
                 StyleId = this.StyleId,
-                FillRule = this.FillRule,
+                FillType = this.FillType,
                 Text = (Text)this.Text?.Copy(shared)
             };
 

@@ -154,9 +154,36 @@ namespace Draw2D.Renderers
             };
         }
 
-        internal static SKPathFillType ToSKPathFillType(PathFillRule fillRule)
+        internal static SKPathFillType ToSKPathFillType(PathFillType fillType)
         {
-            return fillRule == PathFillRule.EvenOdd ? SKPathFillType.EvenOdd : SKPathFillType.Winding;
+            switch (fillType)
+            {
+                default:
+                case PathFillType.Winding:
+                    return SKPathFillType.Winding;
+                case PathFillType.EvenOdd:
+                    return SKPathFillType.EvenOdd;
+                case PathFillType.InverseWinding:
+                    return SKPathFillType.InverseWinding;
+                case PathFillType.InverseEvenOdd:
+                    return SKPathFillType.InverseEvenOdd;
+            }
+        }
+
+        internal static PathFillType ToPathFillType(SKPathFillType fillType)
+        {
+            switch (fillType)
+            {
+                default:
+                case SKPathFillType.Winding:
+                    return PathFillType.Winding;
+                case SKPathFillType.EvenOdd:
+                    return PathFillType.EvenOdd;
+                case SKPathFillType.InverseWinding:
+                    return PathFillType.InverseWinding;
+                case SKPathFillType.InverseEvenOdd:
+                    return PathFillType.InverseEvenOdd;
+            }
         }
 
         internal static SKPathOp ToSKPathOp(PathOp op)
@@ -300,7 +327,7 @@ namespace Draw2D.Renderers
 
         internal static void AddPath(IToolContext context, PathShape path, double dx, double dy, SKPath geometry)
         {
-            geometry.FillType = ToSKPathFillType(path.FillRule);
+            geometry.FillType = ToSKPathFillType(path.FillType);
 
             foreach (var shape in path.Shapes)
             {
@@ -496,7 +523,7 @@ namespace Draw2D.Renderers
             {
                 Points = new ObservableCollection<IPointShape>(),
                 Shapes = new ObservableCollection<IBaseShape>(),
-                FillRule = PathFillRule.EvenOdd,
+                FillType = ToPathFillType(path.FillType),
                 Text = new Text(),
                 StyleId = style.Title
             };
