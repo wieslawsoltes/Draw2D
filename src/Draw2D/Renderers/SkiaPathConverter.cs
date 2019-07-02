@@ -105,7 +105,12 @@ namespace Draw2D.Renderers
                     var path = SkiaHelper.ToStrokePath(context, style, geometry);
                     if (path != null)
                     {
-                        return SkiaHelper.ToPathShape(context, path, context.StyleLibrary?.CurrentItem, context.PointTemplate);
+                        var union = SkiaHelper.Op(SKPathOp.Union, new[] { path, path });
+                        if (union != null && !union.IsEmpty)
+                        {
+                            return SkiaHelper.ToPathShape(context, union, context.StyleLibrary?.CurrentItem, context.PointTemplate);
+                        }
+
                     }
                 }
             }
@@ -127,7 +132,12 @@ namespace Draw2D.Renderers
                     var path = SkiaHelper.ToFillPath(context, style, geometry);
                     if (path != null)
                     {
-                        return SkiaHelper.ToPathShape(context, path, context.StyleLibrary?.CurrentItem, context.PointTemplate);
+                        var union = SkiaHelper.Op(SKPathOp.Union, new[] { path, path });
+                        if (union != null && !union.IsEmpty)
+                        {
+                            return SkiaHelper.ToPathShape(context, union, context.StyleLibrary?.CurrentItem, context.PointTemplate);
+                        }
+
                     }
                 }
             }
