@@ -1,5 +1,6 @@
 ﻿// Copyright (c) Wiesław Šoltés. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
+using System.Collections.Generic;
 using Draw2D.Renderers;
 using Draw2D.ViewModels;
 using Draw2D.ViewModels.Containers;
@@ -8,12 +9,12 @@ using SkiaSharp;
 
 namespace Draw2D.Presenters
 {
-    public class ExportContainerPresenter : IContainerPresenter
+    public class ExportSelectedPresenter : IContainerPresenter
     {
         private readonly IToolContext _context;
         private readonly IContainerView _view;
 
-        public ExportContainerPresenter(IToolContext context, IContainerView view)
+        public ExportSelectedPresenter(IToolContext context, IContainerView view)
         {
             _context = context;
             _view = view;
@@ -30,7 +31,15 @@ namespace Draw2D.Presenters
             {
                 var canvas = context as SKCanvas;
                 canvas.DrawRect(SkiaHelper.ToSKRect(dx, dy, _view.Width + dx, _view.Height + dy), background);
-                _view.CurrentContainer.Draw(canvas, renderer, dx, dy, zx, null, null);
+
+                var selected = new List<IBaseShape>(_view.SelectionState.Shapes);
+                foreach (var shape in selected)
+                {
+                    if (!(shape is IPointShape))
+                    {
+                        shape.Draw(canvas, renderer, dx, dy, zx, null, null);
+                    }
+                }
             }
         }
     }

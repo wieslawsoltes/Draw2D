@@ -50,10 +50,12 @@
             <MenuItem Header="_Delete" Command="{Binding Selection.Delete}" CommandParameter="{Binding}"/>
             <Separator/>
             <MenuItem Header="Copy _Special">
-                <MenuItem Header="_Svg Path Data" Command="{Binding CopySvgPathData}"/>
+                <MenuItem Header="_Svg" Command="{Binding CopySvg}"/>
+                <Separator/>
+                <MenuItem Header="Svg _Path Data" Command="{Binding CopySvgPathData}"/>
             </MenuItem>
             <MenuItem Header="Paste Sp_ecial">
-                <MenuItem Header="_Svg Path Data" Command="{Binding PasteSvgPathData}"/>
+                <MenuItem Header="Svg _Path Data" Command="{Binding PasteSvgPathData}"/>
             </MenuItem>
             <Separator/>
             <MenuItem Header="Select _All" Command="{Binding Selection.SelectAll}" CommandParameter="{Binding}"/>

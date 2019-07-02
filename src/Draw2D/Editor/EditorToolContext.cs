@@ -490,6 +490,57 @@ namespace Draw2D.Editor
             }
         }
 
+        private string CopySvgImpl(IToolContext context, IContainerView containerView)
+        {
+            using (var ms = new MemoryStream())
+            using (var stream = new SKManagedWStream(ms))
+            using (var writer = new SKXmlStreamWriter(stream))
+            using (var canvas = SKSvgCanvas.Create(SKRect.Create(0, 0, (int)containerView.Width, (int)containerView.Height), writer))
+            {
+                if (containerView.SelectionState?.Shapes?.Count > 0)
+                {
+                    using (var skiaSelectedPresenter = new ExportSelectedPresenter(context, containerView))
+                    {
+                        skiaSelectedPresenter.Draw(canvas, containerView.Width, containerView.Height, 0, 0, 1.0, 1.0);
+                        ms.Position = 0;
+                        using (var reader = new StreamReader(ms))
+                        {
+                           return reader.ReadToEnd();
+                        }
+                    }
+                }
+                else
+                {
+                    using (var skiaContainerPresenter = new ExportContainerPresenter(context, containerView))
+                    {
+                        skiaContainerPresenter.Draw(canvas, containerView.Width, containerView.Height, 0, 0, 1.0, 1.0);
+                        ms.Position = 0;
+                        using (var reader = new StreamReader(ms))
+                        {
+                           return reader.ReadToEnd();
+                        }
+                    }
+                }
+            }
+        }
+
+        public async void CopySvg()
+        {
+            try
+            {
+                var text = CopySvgImpl(this, ContainerView);
+                if (!string.IsNullOrEmpty(text))
+                {
+                    await Application.Current.Clipboard.SetTextAsync(text);
+                }
+            }
+            catch(Exception ex)
+            {
+                Log.WriteLine(ex.Message);
+                Log.WriteLine(ex.StackTrace);
+            }
+        }
+
         private string CopySvgPathDataImpl()
         {
             if (ContainerView.SelectionState?.Shapes != null)
