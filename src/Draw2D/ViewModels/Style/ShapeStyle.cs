@@ -12,6 +12,7 @@ namespace Draw2D.ViewModels.Style
         private ArgbColor _fill;
         private bool _isStroked;
         private bool _isFilled;
+        private bool _isScaled;
         private double _strokeWidth;
         private StrokeCap _strokeCap;
         private StrokeJoin _strokeJoin;
@@ -44,6 +45,13 @@ namespace Draw2D.ViewModels.Style
         {
             get => _isFilled;
             set => Update(ref _isFilled, value);
+        }
+
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public bool IsScaled
+        {
+            get => _isScaled;
+            set => Update(ref _isScaled, value);
         }
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
@@ -85,13 +93,14 @@ namespace Draw2D.ViewModels.Style
         {
         }
 
-        public ShapeStyle(string title, ArgbColor stroke, ArgbColor fill, double strokeWidth, bool isStroked, bool isFilled, TextStyle textStyle)
+        public ShapeStyle(string title, ArgbColor stroke, ArgbColor fill, bool isStroked, bool isFilled, bool isScaled, double strokeWidth, TextStyle textStyle)
         {
             this.Title = title;
             this.Stroke = stroke;
             this.Fill = fill;
             this.IsStroked = isStroked;
             this.IsFilled = isFilled;
+            this.IsScaled = isScaled;
             this.StrokeWidth = strokeWidth;
             this.StrokeCap = StrokeCap.Butt;
             this.StrokeJoin = StrokeJoin.Miter;

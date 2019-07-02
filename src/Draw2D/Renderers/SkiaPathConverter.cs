@@ -42,7 +42,7 @@ namespace Draw2D.Renderers
 
             for (int i = 0; i < shapes.Count; i++)
             {
-                var path = new SKPath();
+                var path = new SKPath() { FillType = SKPathFillType.Winding };
                 var result = SkiaHelper.AddShape(context, shapes[i], 0.0, 0.0, path);
                 if (result == true && path.IsEmpty == false)
                 {
@@ -59,7 +59,7 @@ namespace Draw2D.Renderers
 
         private SKPath ToPath(IToolContext context, IBaseShape shape)
         {
-            var geometry = new SKPath();
+            var geometry = new SKPath() { FillType = SKPathFillType.Winding };
 
             if (SkiaHelper.AddShape(context, shape, 0.0, 0.0, geometry) == true)
             {

@@ -1225,7 +1225,7 @@ namespace Draw2D.ViewModels.Tools
             }
 
             //var rect = SKRect.Create((float)(target.X - radius), (float)(target.Y - radius), (float)(radius + radius), (float)(radius + radius));
-            //var geometry = new SKPath();
+            //var geometry = new SKPath() { FillType = SKPathFillType.Winding };
             //geometry.AddRect(rect);
             //if (bounds.Intersects(geometry, out var rootShape, out var childShape))
             //{

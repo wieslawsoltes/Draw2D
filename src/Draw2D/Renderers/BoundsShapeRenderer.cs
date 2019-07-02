@@ -236,56 +236,56 @@ namespace Draw2D.Renderers
 
         public void DrawLine(object dc, LineShape line, string styleId, double dx, double dy, double scale)
         {
-            var geometry = new SKPath();
+            var geometry = new SKPath() { FillType = SKPathFillType.Winding };
             SkiaHelper.AddLine(null, line, dx, dy, geometry);
             _rootNodes[_currentRootNode].Children.Add(new ChildNode(line, styleId, dx, dy, scale, geometry));
         }
 
         public void DrawCubicBezier(object dc, CubicBezierShape cubicBezier, string styleId, double dx, double dy, double scale)
         {
-            var geometry = new SKPath();
+            var geometry = new SKPath() { FillType = SKPathFillType.Winding };
             SkiaHelper.AddCubic(null, cubicBezier, dx, dy, geometry);
             _rootNodes[_currentRootNode].Children.Add(new ChildNode(cubicBezier, styleId, dx, dy, scale, geometry));
         }
 
         public void DrawQuadraticBezier(object dc, QuadraticBezierShape quadraticBezier, string styleId, double dx, double dy, double scale)
         {
-            var geometry = new SKPath();
+            var geometry = new SKPath() { FillType = SKPathFillType.Winding };
             SkiaHelper.AddQuad(null, quadraticBezier, dx, dy, geometry);
             _rootNodes[_currentRootNode].Children.Add(new ChildNode(quadraticBezier, styleId, dx, dy, scale, geometry));
         }
 
         public void DrawConic(object dc, ConicShape conic, string styleId, double dx, double dy, double scale)
         {
-            var geometry = new SKPath();
+            var geometry = new SKPath() { FillType = SKPathFillType.Winding };
             SkiaHelper.AddConic(null, conic, dx, dy, geometry);
             _rootNodes[_currentRootNode].Children.Add(new ChildNode(conic, styleId, dx, dy, scale, geometry));
         }
 
         public void DrawPath(object dc, PathShape path, string styleId, double dx, double dy, double scale)
         {
-            var geometry = new SKPath();
+            var geometry = new SKPath() { FillType = SKPathFillType.Winding };
             SkiaHelper.AddPath(null, path, dx, dy, geometry);
             _rootNodes[_currentRootNode].Children.Add(new ChildNode(path, styleId, dx, dy, scale, geometry));
         }
 
         public void DrawRectangle(object dc, RectangleShape rectangle, string styleId, double dx, double dy, double scale)
         {
-            var geometry = new SKPath();
+            var geometry = new SKPath() { FillType = SKPathFillType.Winding };
             SkiaHelper.AddRect(null, rectangle, dx, dy, geometry);
             _rootNodes[_currentRootNode].Children.Add(new ChildNode(rectangle, styleId, dx, dy, scale, geometry));
         }
 
         public void DrawEllipse(object dc, EllipseShape ellipse, string styleId, double dx, double dy, double scale)
         {
-            var geometry = new SKPath();
+            var geometry = new SKPath() { FillType = SKPathFillType.Winding };
             SkiaHelper.AddOval(null, ellipse, dx, dy, geometry);
             _rootNodes[_currentRootNode].Children.Add(new ChildNode(ellipse, styleId, dx, dy, scale, geometry));
         }
 
         public void DrawText(object dc, TextShape text, string styleId, double dx, double dy, double scale)
         {
-            var geometry = new SKPath();
+            var geometry = new SKPath() { FillType = SKPathFillType.Winding };
             SkiaHelper.AddText(null, text, dx, dy, geometry);
             _rootNodes[_currentRootNode].Children.Add(new ChildNode(text, styleId, dx, dy, scale, geometry));
         }

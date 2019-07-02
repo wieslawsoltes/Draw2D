@@ -284,7 +284,7 @@ namespace Draw2D.Renderers
             if (style.IsStroked || style.TextStyle.IsStroked)
             {
                 var canvas = dc as SKCanvas;
-                using (var geometry = new SKPath())
+                using (var geometry = new SKPath() { FillType = SKPathFillType.Winding })
                 {
                     SkiaHelper.AddLine(null, line, dx, dy, geometry);
                     if (style.IsStroked)
@@ -311,7 +311,7 @@ namespace Draw2D.Renderers
             if (style.IsFilled || style.IsStroked || style.TextStyle.IsStroked)
             {
                 var canvas = dc as SKCanvas;
-                using (var geometry = new SKPath())
+                using (var geometry = new SKPath() { FillType = SKPathFillType.Winding })
                 {
                     SkiaHelper.AddCubic(null, cubicBezier, dx, dy, geometry);
                     if (style.IsFilled)
@@ -342,7 +342,7 @@ namespace Draw2D.Renderers
             if (style.IsFilled || style.IsStroked || style.TextStyle.IsStroked)
             {
                 var canvas = dc as SKCanvas;
-                using (var geometry = new SKPath())
+                using (var geometry = new SKPath() { FillType = SKPathFillType.Winding })
                 {
                     SkiaHelper.AddQuad(null, quadraticBezier, dx, dy, geometry);
                     if (style.IsFilled)
@@ -373,7 +373,7 @@ namespace Draw2D.Renderers
             if (style.IsFilled || style.IsStroked || style.TextStyle.IsStroked)
             {
                 var canvas = dc as SKCanvas;
-                using (var geometry = new SKPath())
+                using (var geometry = new SKPath() { FillType = SKPathFillType.Winding })
                 {
                     SkiaHelper.AddConic(null, conic, dx, dy, geometry);
                     if (style.IsFilled)
@@ -404,7 +404,7 @@ namespace Draw2D.Renderers
             if (style.IsFilled || style.IsStroked || style.TextStyle.IsStroked)
             {
                 var canvas = dc as SKCanvas;
-                using (var geometry = new SKPath())
+                using (var geometry = new SKPath() { FillType = SKPathFillType.Winding })
                 {
                     SkiaHelper.AddPath(null, path, dx, dy, geometry);
                     if (style.IsFilled)
@@ -456,7 +456,7 @@ namespace Draw2D.Renderers
             if (style.IsFilled || style.IsStroked || style.TextStyle.IsStroked)
             {
                 var canvas = dc as SKCanvas;
-                using (var geometry = new SKPath())
+                using (var geometry = new SKPath() { FillType = SKPathFillType.Winding })
                 {
                     SkiaHelper.AddRect(null, rectangle, dx, dy, geometry);
                     if (style.IsFilled)
@@ -509,7 +509,7 @@ namespace Draw2D.Renderers
             if (style.IsFilled || style.IsStroked || style.TextStyle.IsStroked)
             {
                 var canvas = dc as SKCanvas;
-                using (var geometry = new SKPath())
+                using (var geometry = new SKPath() { FillType = SKPathFillType.Winding })
                 {
                     SkiaHelper.AddOval(null, ellipse, dx, dy, geometry);
                     if (style.IsFilled)

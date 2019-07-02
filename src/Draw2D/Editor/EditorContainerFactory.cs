@@ -31,7 +31,7 @@ namespace Draw2D.Editor
                     "Default",
                     new ArgbColor(255, 0, 0, 0),
                     new ArgbColor(255, 255, 255, 255),
-                    2.0, true, false,
+                    true, false, true, 2.0,
                     new TextStyle(fontFamily, 12.0, HAlign.Center, VAlign.Center, new ArgbColor(255, 0, 0, 0), true)));
 
             styleLibrary.Items.Add(
@@ -39,7 +39,7 @@ namespace Draw2D.Editor
                     "Red",
                     new ArgbColor(255, 255, 0, 0),
                     new ArgbColor(255, 255, 0, 0),
-                    2.0, true, false,
+                    true, false, true, 2.0,
                     new TextStyle(fontFamily, 12.0, HAlign.Center, VAlign.Center, new ArgbColor(255, 255, 0, 0), true)));
 
             styleLibrary.Items.Add(
@@ -47,7 +47,7 @@ namespace Draw2D.Editor
                     "Green",
                     new ArgbColor(255, 0, 255, 0),
                     new ArgbColor(255, 0, 255, 0),
-                    2.0, true, false,
+                    true, false, true, 2.0,
                     new TextStyle(fontFamily, 12.0, HAlign.Center, VAlign.Center, new ArgbColor(255, 0, 255, 0), true)));
 
             styleLibrary.Items.Add(
@@ -55,7 +55,7 @@ namespace Draw2D.Editor
                     "Blue",
                     new ArgbColor(255, 0, 0, 255),
                     new ArgbColor(255, 0, 0, 255),
-                    2.0, true, false,
+                    true, false, true, 2.0,
                     new TextStyle(fontFamily, 12.0, HAlign.Center, VAlign.Center, new ArgbColor(255, 0, 0, 255), true)));
 
             styleLibrary.Items.Add(
@@ -63,7 +63,7 @@ namespace Draw2D.Editor
                     "Cyan",
                     new ArgbColor(255, 0, 255, 255),
                     new ArgbColor(255, 0, 255, 255),
-                    2.0, true, false,
+                    true, false, true, 2.0,
                     new TextStyle(fontFamily, 12.0, HAlign.Center, VAlign.Center, new ArgbColor(255, 0, 255, 255), true)));
 
             styleLibrary.Items.Add(
@@ -71,7 +71,7 @@ namespace Draw2D.Editor
                     "Magenta",
                     new ArgbColor(255, 255, 0, 255),
                     new ArgbColor(255, 255, 0, 255),
-                    2.0, true, false,
+                    true, false, true, 2.0,
                     new TextStyle(fontFamily, 12.0, HAlign.Center, VAlign.Center, new ArgbColor(255, 255, 0, 255), true)));
 
             styleLibrary.Items.Add(
@@ -79,7 +79,7 @@ namespace Draw2D.Editor
                     "Yellow",
                     new ArgbColor(255, 255, 255, 0),
                     new ArgbColor(255, 255, 255, 0),
-                    2.0, true, false,
+                    true, false, true, 2.0,
                     new TextStyle(fontFamily, 12.0, HAlign.Center, VAlign.Center, new ArgbColor(255, 255, 255, 0), true)));
 
             styleLibrary.Items.Add(
@@ -87,7 +87,7 @@ namespace Draw2D.Editor
                     "Black",
                     new ArgbColor(255, 0, 0, 0),
                     new ArgbColor(255, 0, 0, 0),
-                    2.0, true, false,
+                    true, false, true, 2.0,
                     new TextStyle(fontFamily, 12.0, HAlign.Center, VAlign.Center, new ArgbColor(255, 0, 0, 0), true)));
 
             styleLibrary.Items.Add(
@@ -95,7 +95,7 @@ namespace Draw2D.Editor
                     "Decorator-Stroke",
                     new ArgbColor(255, 0, 255, 255),
                     new ArgbColor(255, 0, 255, 255),
-                    2.0, true, false,
+                    true, false, true, 2.0,
                     new TextStyle(fontFamily, 12.0, HAlign.Center, VAlign.Center, new ArgbColor(255, 0, 255, 255), true)));
 
             styleLibrary.Items.Add(
@@ -103,7 +103,7 @@ namespace Draw2D.Editor
                     "Decorator-Fill",
                     new ArgbColor(255, 0, 255, 255),
                     new ArgbColor(255, 0, 255, 255),
-                    2.0, false, true,
+                    false, true, true, 2.0,
                     new TextStyle(fontFamily, 12.0, HAlign.Center, VAlign.Center, new ArgbColor(255, 0, 255, 255), true)));
 
             styleLibrary.Items.Add(
@@ -111,7 +111,7 @@ namespace Draw2D.Editor
                     "Guide",
                     new ArgbColor(128, 0, 255, 255),
                     new ArgbColor(128, 0, 255, 255),
-                    2.0, true, true,
+                    true, true, true, 2.0,
                     new TextStyle(fontFamily, 12.0, HAlign.Center, VAlign.Center, new ArgbColor(128, 0, 255, 255), true)));
 
             styleLibrary.Items.Add(
@@ -119,7 +119,7 @@ namespace Draw2D.Editor
                     "Selection",
                     new ArgbColor(255, 0, 120, 215),
                     new ArgbColor(60, 170, 204, 238),
-                    2.0, true, true,
+                    true, true, true, 2.0,
                     new TextStyle(fontFamily, 12.0, HAlign.Center, VAlign.Center, new ArgbColor(255, 0, 120, 215), true)));
 
             styleLibrary.Items.Add(
@@ -127,7 +127,7 @@ namespace Draw2D.Editor
                     "PointTemplate",
                     new ArgbColor(255, 255, 0, 255),
                     new ArgbColor(255, 255, 0, 255),
-                    2.0, false, true,
+                    false, true, true, 2.0,
                     new TextStyle(fontFamily, 12.0, HAlign.Center, VAlign.Center, new ArgbColor(255, 255, 0, 255), true)));
 
             styleLibrary.CurrentItem = styleLibrary.Items[0];

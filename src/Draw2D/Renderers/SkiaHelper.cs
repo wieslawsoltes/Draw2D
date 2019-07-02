@@ -58,14 +58,21 @@ namespace Draw2D.Renderers
 
         internal static SKPaint ToSKPaintPen(ShapeStyle style, double scale)
         {
+            double strokeWidth = style.StrokeWidth;
+            double strokeMiter = style.StrokeMiter;
+            if (style.IsScaled)
+            {
+                strokeWidth /= scale;
+                strokeMiter /= scale;
+            }
             return new SKPaint()
             {
                 IsAntialias = true,
                 IsStroke = true,
-                StrokeWidth = (float)(style.StrokeWidth / scale),
+                StrokeWidth = (float)(strokeWidth),
                 StrokeCap = ToSKStrokeCap(style.StrokeCap),
                 StrokeJoin = ToSKStrokeJoin(style.StrokeJoin),
-                StrokeMiter = (float)(style.StrokeMiter / scale),
+                StrokeMiter = (float)(strokeMiter),
                 Color = ToSKColor(style.Stroke),
                 //Shader = SKShader.CreateColor(ToSKColor(style.Stroke)),
                 PathEffect = null,
@@ -90,10 +97,17 @@ namespace Draw2D.Renderers
 
         internal static void ToSKPaintPenUpdate(SKPaint paint, ShapeStyle style, double scale)
         {
-            paint.StrokeWidth = (float)(style.StrokeWidth / scale);
+            double strokeWidth = style.StrokeWidth;
+            //double strokeMiter = style.StrokeMiter;
+            if (style.IsScaled)
+            {
+                strokeWidth /= scale;
+                //strokeMiter /= scale;
+            }
+            paint.StrokeWidth = (float)(strokeWidth);
             //paint.StrokeCap = ToSKStrokeCap(style.StrokeCap),
             //paint.StrokeJoin = ToSKStrokeJoin(style.StrokeJoin),
-            //paint.StrokeMiter = (float)(style.StrokeMiter / scale),
+            //paint.StrokeMiter = (float)(strokeMiter),
             //paint.Color = ToSKColor(style.Stroke);
             //paint.Shader = SKShader.CreateColor(ToSKColor(style.Stroke));
         }
@@ -492,7 +506,7 @@ namespace Draw2D.Renderers
 
             if (paths.Count == 1)
             {
-                using (var empty = new SKPath())
+                using (var empty = new SKPath() { FillType = SKPathFillType.Winding })
                 {
                     return empty.Op(paths[0], op);
                 }
@@ -500,7 +514,7 @@ namespace Draw2D.Renderers
             else
             {
                 var haveResult = false;
-                var result = new SKPath(paths[0]);
+                var result = new SKPath(paths[0]) { FillType = paths[0].FillType };
 
                 for (int i = 1; i < paths.Count; i++)
                 {
@@ -677,7 +691,7 @@ namespace Draw2D.Renderers
         {
             if (!string.IsNullOrEmpty(text?.Value))
             {
-                using (var geometry = new SKPath())
+                using (var geometry = new SKPath() { FillType = SKPathFillType.Winding })
                 {
                     AddText(context, text, topLeft, bottomRight, style, 0.0, 0.0, geometry);
                     sb.AppendLine(geometry.ToSvgPathData());
@@ -691,7 +705,7 @@ namespace Draw2D.Renderers
             {
                 case LineShape line:
                     {
-                        using (var geometry = new SKPath())
+                        using (var geometry = new SKPath() { FillType = SKPathFillType.Winding })
                         {
                             AddLine(context, line, 0.0, 0.0, geometry);
                             sb.AppendLine(geometry.ToSvgPathData());
@@ -700,7 +714,7 @@ namespace Draw2D.Renderers
                     break;
                 case CubicBezierShape cubicBezier:
                     {
-                        using (var geometry = new SKPath())
+                        using (var geometry = new SKPath() { FillType = SKPathFillType.Winding })
                         {
                             AddCubic(context, cubicBezier, 0.0, 0.0, geometry);
                             sb.AppendLine(geometry.ToSvgPathData());
@@ -709,7 +723,7 @@ namespace Draw2D.Renderers
                     break;
                 case QuadraticBezierShape quadraticBezier:
                     {
-                        using (var geometry = new SKPath())
+                        using (var geometry = new SKPath() { FillType = SKPathFillType.Winding })
                         {
                             AddQuad(context, quadraticBezier, 0.0, 0.0, geometry);
                             sb.AppendLine(geometry.ToSvgPathData());
@@ -718,7 +732,7 @@ namespace Draw2D.Renderers
                     break;
                 case ConicShape conic:
                     {
-                        using (var geometry = new SKPath())
+                        using (var geometry = new SKPath() { FillType = SKPathFillType.Winding })
                         {
                             AddConic(context, conic, 0.0, 0.0, geometry);
                             sb.AppendLine(geometry.ToSvgPathData());
@@ -727,7 +741,7 @@ namespace Draw2D.Renderers
                     break;
                 case PathShape pathShape:
                     {
-                        using (var geometry = new SKPath())
+                        using (var geometry = new SKPath() { FillType = SKPathFillType.Winding })
                         {
                             AddPath(context, pathShape, 0.0, 0.0, geometry);
                             sb.AppendLine(geometry.ToSvgPathData());
@@ -736,7 +750,7 @@ namespace Draw2D.Renderers
                     break;
                 case RectangleShape rectangle:
                     {
-                        using (var geometry = new SKPath())
+                        using (var geometry = new SKPath() { FillType = SKPathFillType.Winding })
                         {
                             AddRect(context, rectangle, 0.0, 0.0, geometry);
                             sb.AppendLine(geometry.ToSvgPathData());
@@ -751,7 +765,7 @@ namespace Draw2D.Renderers
                     break;
                 case EllipseShape ellipse:
                     {
-                        using (var geometry = new SKPath())
+                        using (var geometry = new SKPath() { FillType = SKPathFillType.Winding })
                         {
                             AddOval(context, ellipse, 0.0, 0.0, geometry);
                             sb.AppendLine(geometry.ToSvgPathData());
