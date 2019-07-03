@@ -1,5 +1,6 @@
 ﻿// Copyright (c) Wiesław Šoltés. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
+using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 
@@ -8,6 +9,9 @@ namespace Draw2D.ViewModels.Style
     [DataContract(IsReference = true)]
     public class ShapeStyle : ViewModelBase, ICopyable
     {
+        public static StrokeCap[] StrokeCapValues { get; } = (StrokeCap[])Enum.GetValues(typeof(StrokeCap));
+        public static StrokeJoin[] StrokeJoinValues { get; } = (StrokeJoin[])Enum.GetValues(typeof(StrokeJoin));
+
         private ArgbColor _stroke;
         private ArgbColor _fill;
         private bool _isStroked;
