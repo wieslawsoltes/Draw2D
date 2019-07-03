@@ -246,8 +246,6 @@ namespace Draw2D.ViewModels.Tools
     [DataContract(IsReference = true)]
     public partial class PathTool : BaseTool, ITool
     {
-        public static PathFillType[] PathFillTypeValues { get; } = (PathFillType[])Enum.GetValues(typeof(PathFillType));
-
         private PathToolSettings _settings;
 
         internal PathShape _path;
