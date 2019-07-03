@@ -17,9 +17,9 @@
                     <TextBlock Classes="default" Grid.Column="0" Grid.Row="1" Text="FontSize"/>
                     <TextBox Classes="default" Grid.Column="1" Grid.Row="1" Text="{Binding FontSize}"/>
                     <TextBlock Classes="default" Grid.Column="0" Grid.Row="2" Text="HAlign"/>
-                    <TextBox Classes="default" Grid.Column="1" Grid.Row="2" Text="{Binding HAlign}"/>
+                    <ComboBox Classes="default" Grid.Column="1" Grid.Row="2" Items="{Binding HAlignValues}" SelectedItem="{Binding HAlign, Mode=TwoWay}"/>
                     <TextBlock Classes="default" Grid.Column="0" Grid.Row="3" Text="VAlign"/>
-                    <TextBox Classes="default" Grid.Column="1" Grid.Row="3" Text="{Binding VAlign}"/>
+                    <ComboBox Classes="default" Grid.Column="1" Grid.Row="3" Items="{Binding VAlignValues}" SelectedItem="{Binding VAlign, Mode=TwoWay}"/>
                     <TextBlock Classes="default" Grid.Column="0" Grid.Row="4" Text="IsStroked"/>
                     <CheckBox Classes="default" Grid.Column="1" Grid.Row="4" IsChecked="{Binding IsStroked}"/>
                 </Grid>

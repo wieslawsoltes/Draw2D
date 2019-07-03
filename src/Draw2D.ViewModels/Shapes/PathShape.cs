@@ -13,6 +13,8 @@ namespace Draw2D.ViewModels.Shapes
     [DataContract(IsReference = true)]
     public class PathShape : GroupShape, ICanvasContainer
     {
+        public static PathFillType[] PathFillTypeValues { get; } = (PathFillType[])Enum.GetValues(typeof(PathFillType));
+
         internal static new IBounds s_bounds = new PathBounds();
         internal static new IShapeDecorator s_decorator = new PathDecorator();
 

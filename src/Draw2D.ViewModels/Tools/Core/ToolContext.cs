@@ -1,5 +1,6 @@
 ﻿// Copyright (c) Wiesław Šoltés. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
@@ -11,6 +12,8 @@ namespace Draw2D.ViewModels.Tools
     [DataContract(IsReference = true)]
     public class ToolContext : ViewModelBase, IToolContext
     {
+        public static EditMode[] EditModeValues { get; } = (EditMode[])Enum.GetValues(typeof(EditMode));
+
         private IStyleLibrary _styleLibrary;
         private IGroupLibrary _groupLibrary;
         private IBaseShape _pointTemplate;

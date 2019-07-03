@@ -1,5 +1,6 @@
 ﻿// Copyright (c) Wiesław Šoltés. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
+using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 
@@ -8,6 +9,9 @@ namespace Draw2D.ViewModels.Style
     [DataContract(IsReference = true)]
     public class TextStyle : ViewModelBase, ICopyable
     {
+        public static HAlign[] HAlignValues { get; } = (HAlign[])Enum.GetValues(typeof(HAlign));
+        public static VAlign[] VAlignValues { get; } = (VAlign[])Enum.GetValues(typeof(VAlign));
+
         private string _fontFamily;
         private double _fontSize;
         private HAlign _hAlign;

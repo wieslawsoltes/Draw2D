@@ -17,7 +17,7 @@
                     <TextBlock Classes="default" Grid.Column="0" Grid.Row="1" Text="Epsilon"/>
                     <TextBox Classes="default" Grid.Column="1" Grid.Row="1" Text="{Binding Epsilon}"/>
                     <TextBlock Classes="default" Grid.Column="0" Grid.Row="2" Text="FillType"/>
-                    <TextBox Classes="default" Grid.Column="1" Grid.Row="2" Text="{Binding FillType}"/>
+                    <ComboBox Classes="default" Grid.Column="1" Grid.Row="2" Items="{Binding PathFillTypeValues}" SelectedItem="{Binding FillType, Mode=TwoWay}"/>
                     <TextBlock Classes="default" Grid.Column="0" Grid.Row="3" Text="IsFilled"/>
                     <CheckBox Classes="default" Grid.Column="1" Grid.Row="3" IsChecked="{Binding IsFilled}"/>
                     <TextBlock Classes="default" Grid.Column="0" Grid.Row="4" Text="IsClosed"/>

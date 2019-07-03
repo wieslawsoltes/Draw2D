@@ -1,5 +1,6 @@
 ﻿// Copyright (c) Wiesław Šoltés. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
+using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 using Draw2D.ViewModels.Bounds;
@@ -10,6 +11,9 @@ namespace Draw2D.ViewModels.Shapes
     [DataContract(IsReference = true)]
     public class PointShape : BaseShape, IPointShape
     {
+        public static HAlign[] HAlignValues { get; } = (HAlign[])Enum.GetValues(typeof(HAlign));
+        public static VAlign[] VAlignValues { get; } = (VAlign[])Enum.GetValues(typeof(VAlign));
+
         internal static new IBounds s_bounds = new PointBounds();
         internal static new IShapeDecorator s_decorator = new PointDecorator();
 

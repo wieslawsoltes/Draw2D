@@ -33,7 +33,7 @@
                 <ScrollViewer>
                     <Grid RowDefinitions="Auto" ColumnDefinitions="Auto,*">
                         <TextBlock Classes="default" Grid.Column="0" Grid.Row="0" Text="EditMode"/>
-                        <TextBox Classes="default" Grid.Column="1" Grid.Row="0" Text="{Binding EditMode}"/>
+                        <ComboBox Classes="default" Grid.Column="1" Grid.Row="0" Items="{Binding EditModeValues}" SelectedItem="{Binding EditMode, Mode=TwoWay}"/>
                     </Grid>
                 </ScrollViewer>
             </TabItem>
