@@ -15,7 +15,7 @@ namespace Draw2D.Renderers
     {
         private IToolContext _context;
         private ISelectionState _selectionState;
-        private Dictionary<string, SKTypeface> _typefaceCache;
+        private Dictionary<Typeface, SKTypeface> _typefaceCache;
         private Dictionary<TextStyle, (SKPaint paint, SKFontMetrics metrics)> _textPaintCache;
         private Dictionary<ShapeStyle, SKPaint> _fillPaintCache;
         private Dictionary<ShapeStyle, SKPaint> _strokePaintCache;
@@ -24,7 +24,7 @@ namespace Draw2D.Renderers
         {
             _context = context;
             _selectionState = selectionState;
-            _typefaceCache = new Dictionary<string, SKTypeface>();
+            _typefaceCache = new Dictionary<Typeface, SKTypeface>();
             _textPaintCache = new Dictionary<TextStyle, (SKPaint paint, SKFontMetrics metrics)>();
             _fillPaintCache = new Dictionary<ShapeStyle, SKPaint>();
             _strokePaintCache = new Dictionary<ShapeStyle, SKPaint>();
@@ -72,12 +72,13 @@ namespace Draw2D.Renderers
             }
         }
 
-        private void GetSKTypeface(string familyName, out SKTypeface typeface)
+        private void GetSKTypeface(Typeface style, out SKTypeface typeface)
         {
-            if (!_typefaceCache.TryGetValue(familyName, out typeface))
+            if (style.IsDirty == true || !_typefaceCache.TryGetValue(style, out typeface))
             {
-                typeface = SkiaHelper.ToSKTypeface(familyName);
-                _typefaceCache[familyName] = typeface;
+                style.Invalidate();
+                typeface = SkiaHelper.ToSKTypeface(style);
+                _typefaceCache[style] = typeface;
 #if DEBUG_DICT_CACHE
                 Log.WriteLine($"ToSKTypeface: ctor()");
 #endif
@@ -89,7 +90,7 @@ namespace Draw2D.Renderers
             if (style.Fill.IsDirty == true || !_fillPaintCache.TryGetValue(style, out var brushCached))
             {
                 style.Fill.Invalidate();
-                brushCached = SkiaHelper.ToSKPaintBrush(style.Fill);
+                brushCached = SkiaHelper.ToSKPaintBrush(style.Fill, style.IsAntialias);
                 _fillPaintCache[style] = brushCached;
 #if DEBUG_DICT_CACHE
                 Log.WriteLine($"ToSKPaintBrush: ctor()");
@@ -129,13 +130,13 @@ namespace Draw2D.Renderers
             cached.paint = null;
             cached.metrics = default;
 
-            if (style.IsDirty == true || style.Stroke.IsDirty == true || !_textPaintCache.TryGetValue(style, out cached))
+            if (style.IsDirty == true || style.Stroke.IsDirty == true || style.Typeface.IsDirty == true || !_textPaintCache.TryGetValue(style, out cached))
             {
                 style.Invalidate();
                 style.Stroke.Invalidate();
-                GetSKTypeface(style.FontFamily, out var typeface);
+                GetSKTypeface(style.Typeface, out var typeface);
 
-                cached.paint = SkiaHelper.ToSKPaintBrush(style.Stroke);
+                cached.paint = SkiaHelper.ToSKPaintBrush(style);
                 cached.paint.Typeface = typeface;
                 cached.paint.TextEncoding = SKTextEncoding.Utf16;
                 cached.paint.TextSize = (float)style.FontSize;

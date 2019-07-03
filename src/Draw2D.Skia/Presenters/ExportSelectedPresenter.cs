@@ -27,7 +27,7 @@ namespace Draw2D.Presenters
         public void Draw(object context, double width, double height, double dx, double dy, double zx, double zy)
         {
             using (var renderer = new SkiaShapeRenderer(_context, _view.SelectionState))
-            using (var background = SkiaHelper.ToSKPaintBrush(_view.PrintBackground))
+            using (var background = SkiaHelper.ToSKPaintBrush(_view.PrintBackground, false))
             {
                 var canvas = context as SKCanvas;
                 canvas.DrawRect(SkiaHelper.ToSKRect(dx, dy, _view.Width + dx, _view.Height + dy), background);

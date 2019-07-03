@@ -77,12 +77,12 @@ namespace Draw2D.Presenters
             }
         }
 
-        private void GetSKPaintFill(ArgbColor color, out SKPaint brush)
+        private void GetSKPaintFill(ArgbColor color, bool isAntialias, out SKPaint brush)
         {
             if (color.IsDirty == true || !_paintCache.TryGetValue(color, out var brushCached))
             {
                 color.Invalidate();
-                brushCached = SkiaHelper.ToSKPaintBrush(color);
+                brushCached = SkiaHelper.ToSKPaintBrush(color, isAntialias);
                 _paintCache[color] = brushCached;
             }
             else
@@ -278,7 +278,7 @@ namespace Draw2D.Presenters
 
             if (_view.WorkBackground != null)
             {
-                GetSKPaintFill(_view.WorkBackground, out var brush);
+                GetSKPaintFill(_view.WorkBackground, false, out var brush);
                 canvas.Save();
                 canvas.Translate((float)dx, (float)dy);
                 canvas.Scale((float)zx, (float)zy);

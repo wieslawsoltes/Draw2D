@@ -19,6 +19,7 @@ namespace Draw2D.ViewModels
              || style.Stroke.IsDirty
              || style.Fill.IsDirty
              || style.TextStyle.IsDirty
+             || style.TextStyle.Typeface.IsDirty
              || style.TextStyle.Stroke.IsDirty)
             {
 #if USE_DEBUG_DIRTY

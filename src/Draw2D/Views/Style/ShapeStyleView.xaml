@@ -11,23 +11,25 @@
     <TabControl Classes="default" TabStripPlacement="Top">
         <TabItem Classes="default" Header="Style">
             <ScrollViewer>
-                <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="Auto,*">
+                <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="Auto,*">
                     <TextBlock Classes="default" Grid.Column="0" Grid.Row="0" Text="Title"/>
                     <TextBox Classes="default" Grid.Column="1" Grid.Row="0" Text="{Binding Title, Mode=TwoWay}"/>
                     <TextBlock Classes="default" Grid.Column="0" Grid.Row="1" Text="IsStroked"/>
                     <CheckBox Classes="default" Grid.Column="1" Grid.Row="1" IsChecked="{Binding IsStroked}"/>
                     <TextBlock Classes="default" Grid.Column="0" Grid.Row="2" Text="IsFilled"/>
                     <CheckBox Classes="default" Grid.Column="1" Grid.Row="2" IsChecked="{Binding IsFilled}"/>
-                    <TextBlock Classes="default" Grid.Column="0" Grid.Row="3" Text="IsScaled"/>
-                    <CheckBox Classes="default" Grid.Column="1" Grid.Row="3" IsChecked="{Binding IsScaled}"/>
-                    <TextBlock Classes="default" Grid.Column="0" Grid.Row="4" Text="StrokeWidth"/>
-                    <TextBox Classes="default" Grid.Column="1" Grid.Row="4" Text="{Binding StrokeWidth}"/>
-                    <TextBlock Classes="default" Grid.Column="0" Grid.Row="5" Text="StrokeCap"/>
-                    <ComboBox Classes="default" Grid.Column="1" Grid.Row="5" Items="{Binding StrokeCapValues}" SelectedItem="{Binding StrokeCap, Mode=TwoWay}"/>
-                    <TextBlock Classes="default" Grid.Column="0" Grid.Row="6" Text="StrokeJoin"/>
-                    <ComboBox Classes="default" Grid.Column="1" Grid.Row="6" Items="{Binding StrokeJoinValues}" SelectedItem="{Binding StrokeJoin, Mode=TwoWay}"/>
-                    <TextBlock Classes="default" Grid.Column="0" Grid.Row="7" Text="StrokeMiter"/>
-                    <TextBox Classes="default" Grid.Column="1" Grid.Row="77" Text="{Binding StrokeMiter}"/>
+                    <TextBlock Classes="default" Grid.Column="0" Grid.Row="3" Text="IsAntialias"/>
+                    <CheckBox Classes="default" Grid.Column="1" Grid.Row="3" IsChecked="{Binding IsAntialias}"/>
+                    <TextBlock Classes="default" Grid.Column="0" Grid.Row="4" Text="IsScaled"/>
+                    <CheckBox Classes="default" Grid.Column="1" Grid.Row="4" IsChecked="{Binding IsScaled}"/>
+                    <TextBlock Classes="default" Grid.Column="0" Grid.Row="5" Text="StrokeWidth"/>
+                    <TextBox Classes="default" Grid.Column="1" Grid.Row="5" Text="{Binding StrokeWidth}"/>
+                    <TextBlock Classes="default" Grid.Column="0" Grid.Row="6" Text="StrokeCap"/>
+                    <ComboBox Classes="default" Grid.Column="1" Grid.Row="6" Items="{Binding StrokeCapValues}" SelectedItem="{Binding StrokeCap, Mode=TwoWay}"/>
+                    <TextBlock Classes="default" Grid.Column="0" Grid.Row="7" Text="StrokeJoin"/>
+                    <ComboBox Classes="default" Grid.Column="1" Grid.Row="7" Items="{Binding StrokeJoinValues}" SelectedItem="{Binding StrokeJoin, Mode=TwoWay}"/>
+                    <TextBlock Classes="default" Grid.Column="0" Grid.Row="8" Text="StrokeMiter"/>
+                    <TextBox Classes="default" Grid.Column="1" Grid.Row="8" Text="{Binding StrokeMiter}"/>
                 </Grid>
             </ScrollViewer>
         </TabItem>

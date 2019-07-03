@@ -14,13 +14,27 @@ namespace Draw2D.Renderers
 {
     internal class SkiaHelper
     {
-        internal static SKTypeface ToSKTypeface(string familyName)
+        internal static SKFontStyleSlant ToSKFontStyleSlant(FontStyleSlant slant)
+        {
+            switch (slant)
+            {
+                default:
+                case FontStyleSlant.Upright:
+                    return SKFontStyleSlant.Upright;
+                case FontStyleSlant.Italic:
+                    return SKFontStyleSlant.Italic;
+                case FontStyleSlant.Oblique:
+                    return SKFontStyleSlant.Oblique;
+            }
+        }
+
+        internal static SKTypeface ToSKTypeface(Typeface typeface)
         {
             return SKTypeface.FromFamilyName(
-                familyName,
-                SKFontStyleWeight.Normal,
-                SKFontStyleWidth.Normal,
-                SKFontStyleSlant.Upright);
+                typeface.FontFamily,
+                typeface.FontWeight,
+                typeface.FontWidth,
+                ToSKFontStyleSlant(typeface.FontSlant));
         }
 
         internal static SKColor ToSKColor(ArgbColor color)
@@ -67,7 +81,7 @@ namespace Draw2D.Renderers
             }
             return new SKPaint()
             {
-                IsAntialias = true,
+                IsAntialias = style.IsAntialias,
                 IsStroke = true,
                 StrokeWidth = (float)(strokeWidth),
                 StrokeCap = ToSKStrokeCap(style.StrokeCap),
@@ -80,16 +94,29 @@ namespace Draw2D.Renderers
             };
         }
 
-        internal static SKPaint ToSKPaintBrush(ArgbColor color)
+        internal static SKPaint ToSKPaintBrush(ArgbColor color, bool isAntialias)
         {
             return new SKPaint()
             {
-                IsAntialias = true,
+                IsAntialias = isAntialias,
                 IsStroke = false,
-                LcdRenderText = true,
-                SubpixelText = true,
                 Color = ToSKColor(color),
                 //Shader = SKShader.CreateColor(ToSKColor(color)),
+                TextAlign = SKTextAlign.Left,
+                Style = SKPaintStyle.Fill
+            };
+        }
+
+        internal static SKPaint ToSKPaintBrush(TextStyle style)
+        {
+            return new SKPaint()
+            {
+                IsAntialias = style.IsAntialias,
+                IsStroke = false,
+                LcdRenderText = style.LcdRenderText,
+                SubpixelText = style.SubpixelText,
+                Color = ToSKColor(style.Stroke),
+                //Shader = SKShader.CreateColor(ToSKColor(style.Stroke)),
                 TextAlign = SKTextAlign.Left,
                 Style = SKPaintStyle.Fill
             };
@@ -264,8 +291,8 @@ namespace Draw2D.Renderers
 
         internal static void AddText(IToolContext context, Text text, IPointShape topLeft, IPointShape bottomRight, TextStyle style, double dx, double dy, SKPath geometry)
         {
-            using (var typeface = ToSKTypeface(style.FontFamily))
-            using (var paint = ToSKPaintBrush(style.Stroke))
+            using (var typeface = ToSKTypeface(style.Typeface))
+            using (var paint = ToSKPaintBrush(style))
             {
                 paint.Typeface = typeface;
                 paint.TextEncoding = SKTextEncoding.Utf16;
@@ -486,7 +513,7 @@ namespace Draw2D.Renderers
 
         internal static SKPath ToFillPath(IToolContext context, ShapeStyle style, SKPath geometry)
         {
-            using (var paint = ToSKPaintBrush(style.Fill))
+            using (var paint = ToSKPaintBrush(style.Fill, style.IsAntialias))
             {
                 return paint.GetFillPath(geometry, 1.0f);
             }

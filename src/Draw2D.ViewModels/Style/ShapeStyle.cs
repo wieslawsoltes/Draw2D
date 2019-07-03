@@ -16,6 +16,7 @@ namespace Draw2D.ViewModels.Style
         private ArgbColor _fill;
         private bool _isStroked;
         private bool _isFilled;
+        private bool _isAntialias;
         private bool _isScaled;
         private double _strokeWidth;
         private StrokeCap _strokeCap;
@@ -49,6 +50,13 @@ namespace Draw2D.ViewModels.Style
         {
             get => _isFilled;
             set => Update(ref _isFilled, value);
+        }
+
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public bool IsAntialias
+        {
+            get => _isAntialias;
+            set => Update(ref _isAntialias, value);
         }
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
@@ -104,6 +112,7 @@ namespace Draw2D.ViewModels.Style
             this.Fill = fill;
             this.IsStroked = isStroked;
             this.IsFilled = isFilled;
+            this.IsAntialias = true;
             this.IsScaled = isScaled;
             this.StrokeWidth = strokeWidth;
             this.StrokeCap = StrokeCap.Butt;
@@ -122,6 +131,8 @@ namespace Draw2D.ViewModels.Style
                 Fill = (ArgbColor)(this.Fill.Copy(shared)),
                 IsStroked = this.IsStroked,
                 IsFilled = this.IsFilled,
+                IsAntialias = this.IsAntialias,
+                IsScaled = this.IsScaled,
                 StrokeWidth = this.StrokeWidth,
                 StrokeCap = this.StrokeCap,
                 StrokeJoin = this.StrokeJoin,
