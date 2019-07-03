@@ -23,9 +23,9 @@
                     <TextBlock Classes="default" Grid.Column="0" Grid.Row="4" Text="StrokeWidth"/>
                     <TextBox Classes="default" Grid.Column="1" Grid.Row="4" Text="{Binding StrokeWidth}"/>
                     <TextBlock Classes="default" Grid.Column="0" Grid.Row="5" Text="StrokeCap"/>
-                    <TextBox Classes="default" Grid.Column="1" Grid.Row="5" Text="{Binding StrokeCap}"/>
+                    <ComboBox Classes="default" Grid.Column="1" Grid.Row="5" Items="{Binding StrokeCapValues}" SelectedItem="{Binding StrokeCap, Mode=TwoWay}"/>
                     <TextBlock Classes="default" Grid.Column="0" Grid.Row="6" Text="StrokeJoin"/>
-                    <TextBox Classes="default" Grid.Column="1" Grid.Row="6" Text="{Binding StrokeJoin}"/>
+                    <ComboBox Classes="default" Grid.Column="1" Grid.Row="6" Items="{Binding StrokeJoinValues}" SelectedItem="{Binding StrokeJoin, Mode=TwoWay}"/>
                     <TextBlock Classes="default" Grid.Column="0" Grid.Row="7" Text="StrokeMiter"/>
                     <TextBox Classes="default" Grid.Column="1" Grid.Row="77" Text="{Binding StrokeMiter}"/>
                 </Grid>
