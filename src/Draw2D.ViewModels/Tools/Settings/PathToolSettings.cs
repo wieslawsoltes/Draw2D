@@ -1,5 +1,6 @@
 ﻿// Copyright (c) Wiesław Šoltés. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
+using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 using Draw2D.ViewModels.Shapes;
@@ -9,6 +10,8 @@ namespace Draw2D.ViewModels.Tools
     [DataContract(IsReference = true)]
     public class PathToolSettings : Settings
     {
+        public static PathFillType[] PathFillTypeValues { get; } = (PathFillType[])Enum.GetValues(typeof(PathFillType));
+
         private bool _connectPoints;
         private double _hitTestRadius;
         private PathFillType _fillType;
