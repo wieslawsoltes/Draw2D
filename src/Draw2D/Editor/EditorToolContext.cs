@@ -23,6 +23,8 @@ namespace Draw2D.Editor
     [DataContract(IsReference = true)]
     public class EditorToolContext : ToolContext, IEditorToolContext
     {
+        public new static EditMode[] EditModeValues { get; } = (EditMode[])Enum.GetValues(typeof(EditMode));
+
         private IContainerFactory _containerFactory;
         private ISelection _selection;
         private string _currentDirectory;
