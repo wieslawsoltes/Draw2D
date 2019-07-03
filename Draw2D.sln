@@ -1,17 +1,21 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.26124.0
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29020.237
 MinimumVisualStudioVersion = 15.0.26124.0
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{0A6C444A-1F68-4421-9DB2-FCBDD1F2993C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Draw2D", "src\Draw2D\Draw2D.csproj", "{00EC6083-A7DB-45D6-9F05-F3EE48203ADA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Draw2D", "src\Draw2D\Draw2D.csproj", "{00EC6083-A7DB-45D6-9F05-F3EE48203ADA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Draw2D.Input", "src\Draw2D.Input\Draw2D.Input.csproj", "{D18BADE4-8CE0-41E3-83C2-45EAC6723E03}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Draw2D.Input", "src\Draw2D.Input\Draw2D.Input.csproj", "{D18BADE4-8CE0-41E3-83C2-45EAC6723E03}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Draw2D.ZoomControl", "src\Draw2D.ZoomControl\Draw2D.ZoomControl.csproj", "{288A14FD-3A8B-4ED6-B0A7-7C0FF7DFF9EF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Draw2D.ZoomControl", "src\Draw2D.ZoomControl\Draw2D.ZoomControl.csproj", "{288A14FD-3A8B-4ED6-B0A7-7C0FF7DFF9EF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Draw2D.Desktop", "src\Draw2D.Desktop\Draw2D.Desktop.csproj", "{0CD62475-F97E-40CD-A774-61580EC69930}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Draw2D.Desktop", "src\Draw2D.Desktop\Draw2D.Desktop.csproj", "{0CD62475-F97E-40CD-A774-61580EC69930}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Draw2D.ViewModels", "src\Draw2D.ViewModels\Draw2D.ViewModels.csproj", "{EC5939CF-BDA4-4A56-8845-CFA12F1933F5}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Draw2D.Skia", "src\Draw2D.Skia\Draw2D.Skia.csproj", "{4266914F-009A-43AE-9DFE-0D523C34C51E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,9 +25,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 		Release|x64 = Release|x64
 		Release|x86 = Release|x86
-	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{00EC6083-A7DB-45D6-9F05-F3EE48203ADA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -74,11 +75,43 @@ Global
 		{0CD62475-F97E-40CD-A774-61580EC69930}.Release|x64.Build.0 = Release|Any CPU
 		{0CD62475-F97E-40CD-A774-61580EC69930}.Release|x86.ActiveCfg = Release|Any CPU
 		{0CD62475-F97E-40CD-A774-61580EC69930}.Release|x86.Build.0 = Release|Any CPU
+		{EC5939CF-BDA4-4A56-8845-CFA12F1933F5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EC5939CF-BDA4-4A56-8845-CFA12F1933F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EC5939CF-BDA4-4A56-8845-CFA12F1933F5}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{EC5939CF-BDA4-4A56-8845-CFA12F1933F5}.Debug|x64.Build.0 = Debug|Any CPU
+		{EC5939CF-BDA4-4A56-8845-CFA12F1933F5}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{EC5939CF-BDA4-4A56-8845-CFA12F1933F5}.Debug|x86.Build.0 = Debug|Any CPU
+		{EC5939CF-BDA4-4A56-8845-CFA12F1933F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EC5939CF-BDA4-4A56-8845-CFA12F1933F5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EC5939CF-BDA4-4A56-8845-CFA12F1933F5}.Release|x64.ActiveCfg = Release|Any CPU
+		{EC5939CF-BDA4-4A56-8845-CFA12F1933F5}.Release|x64.Build.0 = Release|Any CPU
+		{EC5939CF-BDA4-4A56-8845-CFA12F1933F5}.Release|x86.ActiveCfg = Release|Any CPU
+		{EC5939CF-BDA4-4A56-8845-CFA12F1933F5}.Release|x86.Build.0 = Release|Any CPU
+		{4266914F-009A-43AE-9DFE-0D523C34C51E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4266914F-009A-43AE-9DFE-0D523C34C51E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4266914F-009A-43AE-9DFE-0D523C34C51E}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{4266914F-009A-43AE-9DFE-0D523C34C51E}.Debug|x64.Build.0 = Debug|Any CPU
+		{4266914F-009A-43AE-9DFE-0D523C34C51E}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{4266914F-009A-43AE-9DFE-0D523C34C51E}.Debug|x86.Build.0 = Debug|Any CPU
+		{4266914F-009A-43AE-9DFE-0D523C34C51E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4266914F-009A-43AE-9DFE-0D523C34C51E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4266914F-009A-43AE-9DFE-0D523C34C51E}.Release|x64.ActiveCfg = Release|Any CPU
+		{4266914F-009A-43AE-9DFE-0D523C34C51E}.Release|x64.Build.0 = Release|Any CPU
+		{4266914F-009A-43AE-9DFE-0D523C34C51E}.Release|x86.ActiveCfg = Release|Any CPU
+		{4266914F-009A-43AE-9DFE-0D523C34C51E}.Release|x86.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{00EC6083-A7DB-45D6-9F05-F3EE48203ADA} = {0A6C444A-1F68-4421-9DB2-FCBDD1F2993C}
 		{D18BADE4-8CE0-41E3-83C2-45EAC6723E03} = {0A6C444A-1F68-4421-9DB2-FCBDD1F2993C}
 		{288A14FD-3A8B-4ED6-B0A7-7C0FF7DFF9EF} = {0A6C444A-1F68-4421-9DB2-FCBDD1F2993C}
 		{0CD62475-F97E-40CD-A774-61580EC69930} = {0A6C444A-1F68-4421-9DB2-FCBDD1F2993C}
+		{EC5939CF-BDA4-4A56-8845-CFA12F1933F5} = {0A6C444A-1F68-4421-9DB2-FCBDD1F2993C}
+		{4266914F-009A-43AE-9DFE-0D523C34C51E} = {0A6C444A-1F68-4421-9DB2-FCBDD1F2993C}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {0E3023FE-CCDB-41C4-9123-CF58AE914702}
 	EndGlobalSection
 EndGlobal

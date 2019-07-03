@@ -20,8 +20,8 @@ namespace Draw2D.Desktop
             }
             catch (Exception ex)
             {
-                Log.WriteLine(ex.Message);
-                Log.WriteLine(ex.StackTrace);
+                Console.WriteLine(ex.Message);
+                Console.WriteLine(ex.StackTrace);
             }
             return 0;
         }

@@ -1,0 +1,52 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Library</OutputType>
+    <TargetFrameworks>netstandard2.0;net461</TargetFrameworks>
+    <EnableDefaultCompileItems>False</EnableDefaultCompileItems>
+    <IsPackable>True</IsPackable>
+    <LangVersion>latest</LangVersion>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <VersionPrefix>0.0.1</VersionPrefix>
+    <VersionSuffix></VersionSuffix>
+    <Authors>Wiesław Šoltés</Authors>
+    <Company>Wiesław Šoltés</Company>
+    <Description>A multi-platform 2D diagram editor.</Description>
+    <Copyright>Copyright © Wiesław Šoltés 2019</Copyright>
+    <PackageId>Draw2D.Skia</PackageId>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/wieslawsoltes/Draw2D</PackageProjectUrl>
+    <PackageTags>2d;editor;data;diagram;graphics;geometry;data;shapes;wysiwyg-editor</PackageTags>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <!--<DefineConstants>$(DefineConstants);USE_DEBUG_DIRTY</DefineConstants>-->
+    <!--<DefineConstants>$(DefineConstants);USE_CLOSE_SHAPE</DefineConstants>-->
+    <!--<DefineConstants>$(DefineConstants);USE_SVG_POINT</DefineConstants>-->
+    <!--<DefineConstants>$(DefineConstants);DEBUG_DRAW_TEXT</DefineConstants>-->
+    <!--<DefineConstants>$(DefineConstants);DEBUG_DICT_CACHE</DefineConstants>-->
+    <!--<DefineConstants>$(DefineConstants);USE_DRAW_LINE</DefineConstants>-->
+    <!--<DefineConstants>$(DefineConstants);USE_DRAW_RECT</DefineConstants>-->
+    <!--<DefineConstants>$(DefineConstants);USE_DRAW_OVAL</DefineConstants>-->
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="**\*.cs" Exclude="obj\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="SkiaSharp" Version="1.68.0" />
+  </ItemGroup>
+
+  <ItemGroup Condition="$(TargetFramework.StartsWith('net4'))">
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.0-preview.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Draw2D.Input\Draw2D.Input.csproj" />
+    <ProjectReference Include="..\Draw2D.ViewModels\Draw2D.ViewModels.csproj" />
+  </ItemGroup>
+
+</Project>

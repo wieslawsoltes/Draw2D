@@ -22,8 +22,6 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <DefineConstants>$(DefineConstants);USE_SERIALIZE_STYLES</DefineConstants>
-    <DefineConstants>$(DefineConstants);USE_SERIALIZE_GROUPS</DefineConstants>
     <DefineConstants>$(DefineConstants);USE_LOAD_EDITOR</DefineConstants>
     <DefineConstants>$(DefineConstants);USE_SAVE_EDITOR</DefineConstants>
     <DefineConstants>$(DefineConstants);USE_LOAD_WINDOW</DefineConstants>
@@ -32,20 +30,6 @@
     <!--<DefineConstants>$(DefineConstants);USE_SAVE_STYLES</DefineConstants>-->
     <!--<DefineConstants>$(DefineConstants);USE_LOAD_GROUPS</DefineConstants>-->
     <!--<DefineConstants>$(DefineConstants);USE_SAVE_GROUPS</DefineConstants>-->
-    <!--<DefineConstants>$(DefineConstants);USE_SVG_POINT</DefineConstants>-->
-    <!--<DefineConstants>$(DefineConstants);USE_CLOSE_SHAPE</DefineConstants>-->
-    <!--<DefineConstants>$(DefineConstants);DEBUG_DRAW_TEXT</DefineConstants>-->
-    <!--<DefineConstants>$(DefineConstants);DEBUG_DICT_CACHE</DefineConstants>-->
-    <!--<DefineConstants>$(DefineConstants);USE_DRAW_LINE</DefineConstants>-->
-    <!--<DefineConstants>$(DefineConstants);USE_DRAW_RECT</DefineConstants>-->
-    <!--<DefineConstants>$(DefineConstants);USE_DRAW_OVAL</DefineConstants>-->
-    <!--<DefineConstants>$(DefineConstants);USE_DEBUG_DIRTY</DefineConstants>-->
-    <!--<DefineConstants>$(DefineConstants);USE_GROUP_SHAPES</DefineConstants>-->
-    <!--<DefineConstants>$(DefineConstants);USE_PATH_FIGURES</DefineConstants>-->
-    <!--<DefineConstants>$(DefineConstants);USE_CONTAINER_SHAPES</DefineConstants>-->
-    <!--<DefineConstants>$(DefineConstants);USE_POINT_DECORATOR</DefineConstants>-->
-    <!--<DefineConstants>$(DefineConstants);DEBUG_CONNECTORS</DefineConstants>-->
-    <!--<DefineConstants>$(DefineConstants);USE_CONTAINER_POINTS</DefineConstants>-->
   </PropertyGroup>
 
   <ItemGroup>
@@ -82,6 +66,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Draw2D.Input\Draw2D.Input.csproj" />
+    <ProjectReference Include="..\Draw2D.Skia\Draw2D.Skia.csproj" />
+    <ProjectReference Include="..\Draw2D.ViewModels\Draw2D.ViewModels.csproj" />
     <ProjectReference Include="..\Draw2D.ZoomControl\Draw2D.ZoomControl.csproj" />
   </ItemGroup>
 
