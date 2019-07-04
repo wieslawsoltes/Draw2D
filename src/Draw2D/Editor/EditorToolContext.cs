@@ -580,23 +580,6 @@ namespace Draw2D.Editor
             return null;
         }
 
-        private void PasteSvgPathDataImpl(string text)
-        {
-            var path = PathConverter?.ToPathShape(this, text);
-            if (path != null)
-            {
-                ContainerView?.CurrentContainer?.Shapes.Add(path);
-                ContainerView?.CurrentContainer?.MarkAsDirty(true);
-
-                ContainerView?.SelectionState?.Dehover();
-                ContainerView?.SelectionState?.Clear();
-
-                path.Select(ContainerView?.SelectionState);
-
-                ContainerView?.InputService?.Redraw?.Invoke();
-            }
-        }
-
         public async void CopySvgPathData()
         {
             try
@@ -611,6 +594,23 @@ namespace Draw2D.Editor
             {
                 Log.WriteLine(ex.Message);
                 Log.WriteLine(ex.StackTrace);
+            }
+        }
+
+        private void PasteSvgPathDataImpl(string text)
+        {
+            var path = PathConverter?.ToPathShape(this, text);
+            if (path != null)
+            {
+                ContainerView?.CurrentContainer?.Shapes.Add(path);
+                ContainerView?.CurrentContainer?.MarkAsDirty(true);
+
+                ContainerView?.SelectionState?.Dehover();
+                ContainerView?.SelectionState?.Clear();
+
+                path.Select(ContainerView?.SelectionState);
+
+                ContainerView?.InputService?.Redraw?.Invoke();
             }
         }
 
