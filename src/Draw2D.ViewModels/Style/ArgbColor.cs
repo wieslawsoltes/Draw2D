@@ -53,6 +53,16 @@ namespace Draw2D.ViewModels.Style
             this.B = b;
         }
 
+        public uint ToUint32()
+        {
+            return ((uint)_a << 24) | ((uint)_r << 16) | ((uint)_g << 8) | (uint)_b;
+        }
+
+        public string ToHex()
+        {
+            return $"#{this.ToUint32():X8}";
+        }
+
         public object Copy(Dictionary<object, object> shared)
         {
             return new ArgbColor()
