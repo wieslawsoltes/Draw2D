@@ -512,7 +512,7 @@ namespace Draw2D.Editor
             return sb.ToString();
         }
 
-        private string CopySvgImpl(IToolContext context, IContainerView containerView)
+        private string CopySvgDocumentImpl(IToolContext context, IContainerView containerView)
         {
             using (var stream = new MemoryStream())
             {
@@ -545,11 +545,11 @@ namespace Draw2D.Editor
             }
         }
 
-        public async void CopySvg()
+        public async void CopySvgDocument()
         {
             try
             {
-                var text = CopySvgImpl(this, ContainerView);
+                var text = CopySvgDocumentImpl(this, ContainerView);
                 if (!string.IsNullOrEmpty(text))
                 {
                     await Application.Current.Clipboard.SetTextAsync(text);
@@ -564,7 +564,7 @@ namespace Draw2D.Editor
 
         public void ToSvg(TextBox textBox)
         {
-            var text = CopySvgImpl(this, ContainerView);
+            var text = CopySvgDocumentImpl(this, ContainerView);
             if (!string.IsNullOrEmpty(text))
             {
                 textBox.Text = text;
@@ -622,6 +622,137 @@ namespace Draw2D.Editor
                 if (!string.IsNullOrEmpty(text))
                 {
                     PasteSvgPathDataImpl(text);
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.WriteLine(ex.Message);
+                Log.WriteLine(ex.StackTrace);
+            }
+        }
+
+        private string CopyGeometryDrawingImpl(string indent = "")
+        {
+            if (ContainerView.SelectionState?.Shapes != null && ContainerView.SelectionState?.Shapes.Count > 0)
+            {
+                var shapes = new List<IBaseShape>(ContainerView.SelectionState?.Shapes);
+                var sb = new StringBuilder();
+
+                foreach (var shape in shapes)
+                {
+                    if (shape is IPointShape)
+                    {
+                        continue;
+                    }
+                    var geometry = PathConverter?.ToSvgPathData(this, new[] { shape })?.TrimEnd(Environment.NewLine.ToCharArray());
+                    if (geometry != null)
+                    {
+                        var style = StyleLibrary?.Get(shape.StyleId);
+                        if (style != null)
+                        {
+                            if (style.IsStroked && style.IsFilled)
+                            {
+                                sb.AppendLine($"{indent}<GeometryDrawing Brush=\"{style.Fill.ToHex()}\" Geometry=\"{geometry}\">");
+                                sb.AppendLine($"{indent}    <GeometryDrawing.Pen>");
+                                sb.AppendLine($"{indent}        <Pen Brush=\"{style.Stroke.ToHex()}\" Thickness=\"{style.StrokeWidth}\" LineCap=\"{style.StrokeCap}\" LineJoin=\"{style.StrokeJoin}\" MiterLimit=\"{style.StrokeMiter}\"/>");
+                                sb.AppendLine($"{indent}    </GeometryDrawing.Pen>");
+                                sb.AppendLine($"{indent}</GeometryDrawing>");
+                            }
+                            else if (style.IsStroked && !style.IsFilled)
+                            {
+                                sb.AppendLine($"{indent}<GeometryDrawing Geometry=\"{geometry}\">");
+                                sb.AppendLine($"{indent}    <GeometryDrawing.Pen>");
+                                sb.AppendLine($"{indent}        <Pen Brush=\"{style.Stroke.ToHex()}\" Thickness=\"{style.StrokeWidth}\" LineCap=\"{style.StrokeCap}\" LineJoin=\"{style.StrokeJoin}\" MiterLimit=\"{style.StrokeMiter}\"/>");
+                                sb.AppendLine($"{indent}    </GeometryDrawing.Pen>");
+                                sb.AppendLine($"{indent}</GeometryDrawing>");
+                            }
+                            else if (!style.IsStroked && style.IsFilled)
+                            {
+                                sb.AppendLine($"{indent}<GeometryDrawing Brush=\"{style.Fill.ToHex()}\" Geometry=\"{geometry}\" />");
+                            }
+                        }
+                    }
+                }
+
+                return sb.ToString().TrimEnd(Environment.NewLine.ToCharArray());
+            }
+            return null;
+        }
+
+        public async void CopyGeometryDrawing()
+        {
+            try
+            {
+                var text = CopyGeometryDrawingImpl();
+                if (!string.IsNullOrEmpty(text))
+                {
+                    await Application.Current.Clipboard.SetTextAsync(text);
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.WriteLine(ex.Message);
+                Log.WriteLine(ex.StackTrace);
+            }
+        }
+
+        private string CopyDrawingGroupImpl(string indent = "")
+        {
+            var geometryDrawing = CopyGeometryDrawingImpl(indent + "    ");
+            if (!string.IsNullOrEmpty(geometryDrawing))
+            {
+                var sb = new StringBuilder();
+
+                sb.AppendLine($"{indent}<DrawingGroup>");
+                sb.AppendLine($"{geometryDrawing}");
+                sb.AppendLine($"{indent}</DrawingGroup>");
+
+                return sb.ToString().TrimEnd(Environment.NewLine.ToCharArray());
+            }
+            return null;
+        }
+
+        public async void CopyDrawingGroup()
+        {
+            try
+            {
+                var text = CopyDrawingGroupImpl();
+                if (!string.IsNullOrEmpty(text))
+                {
+                    await Application.Current.Clipboard.SetTextAsync(text);
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.WriteLine(ex.Message);
+                Log.WriteLine(ex.StackTrace);
+            }
+        }
+
+        private string CopyDrawingPresenterImpl(string indent = "")
+        {
+            var drawingGroup = CopyDrawingGroupImpl(indent + "    ");
+            if (!string.IsNullOrEmpty(drawingGroup))
+            {
+                var sb = new StringBuilder();
+
+                sb.AppendLine($"{indent}<DrawingPresenter>");
+                sb.AppendLine($"{drawingGroup}");
+                sb.AppendLine($"{indent}</DrawingPresenter>");
+
+                return sb.ToString().TrimEnd(Environment.NewLine.ToCharArray());
+            }
+            return null;
+        }
+
+        public async void CopyDrawingPresenter()
+        {
+            try
+            {
+                var text = CopyDrawingPresenterImpl();
+                if (!string.IsNullOrEmpty(text))
+                {
+                    await Application.Current.Clipboard.SetTextAsync(text);
                 }
             }
             catch (Exception ex)

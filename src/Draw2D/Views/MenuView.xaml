@@ -50,9 +50,15 @@
             <MenuItem Header="_Delete" Command="{Binding Selection.Delete}" CommandParameter="{Binding}"/>
             <Separator/>
             <MenuItem Header="Copy _Special">
-                <MenuItem Header="_Svg" Command="{Binding CopySvg}"/>
-                <Separator/>
-                <MenuItem Header="Svg _Path Data" Command="{Binding CopySvgPathData}"/>
+                <MenuItem Header="_Svg">
+                    <MenuItem Header="_Path Data" Command="{Binding CopySvgPathData}"/>
+                    <MenuItem Header="_Document" Command="{Binding CopySvgDocument}"/>
+                </MenuItem>
+                <MenuItem Header="_Geometry">
+                    <MenuItem Header="_Drawing" Command="{Binding CopyGeometryDrawing}"/>
+                    <MenuItem Header="_Group" Command="{Binding CopyDrawingGroup}"/>
+                    <MenuItem Header="_Presenter" Command="{Binding CopyDrawingPresenter}"/>
+                </MenuItem>
             </MenuItem>
             <MenuItem Header="Paste Sp_ecial">
                 <MenuItem Header="Svg _Path Data" Command="{Binding PasteSvgPathData}"/>
