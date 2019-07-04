@@ -61,7 +61,9 @@
                 </MenuItem>
             </MenuItem>
             <MenuItem Header="Paste Sp_ecial">
-                <MenuItem Header="Svg _Path Data" Command="{Binding PasteSvgPathData}"/>
+                <MenuItem Header="_Svg">
+                    <MenuItem Header="Svg _Path Data" Command="{Binding PasteSvgPathData}"/>
+                </MenuItem>
             </MenuItem>
             <Separator/>
             <MenuItem Header="Select _All" Command="{Binding Selection.SelectAll}" CommandParameter="{Binding}"/>
