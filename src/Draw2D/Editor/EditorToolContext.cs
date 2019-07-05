@@ -6,8 +6,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Runtime.Serialization;
-using System.Xml;
-using System.Xml.Linq;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
@@ -335,32 +333,6 @@ namespace Draw2D.Editor
             }
         }
 
-        private string CopySvgPathDataImpl()
-        {
-            if (ContainerView.SelectionState?.Shapes != null)
-            {
-                return PathConverter?.ToSvgPathData(this, ContainerView.SelectionState?.Shapes);
-            }
-            return null;
-        }
-
-        private void PasteSvgPathDataImpl(string text)
-        {
-            var path = PathConverter?.ToPathShape(this, text);
-            if (path != null)
-            {
-                ContainerView?.CurrentContainer?.Shapes.Add(path);
-                ContainerView?.CurrentContainer?.MarkAsDirty(true);
-
-                ContainerView?.SelectionState?.Dehover();
-                ContainerView?.SelectionState?.Clear();
-
-                path.Select(ContainerView?.SelectionState);
-
-                ContainerView?.InputService?.Redraw?.Invoke();
-            }
-        }
-
         public async void CopySvgDocument()
         {
             try
@@ -382,10 +354,13 @@ namespace Draw2D.Editor
         {
             try
             {
-                var text = CopySvgPathDataImpl();
-                if (!string.IsNullOrEmpty(text))
+                if (ContainerView.SelectionState?.Shapes != null)
                 {
-                    await Application.Current.Clipboard.SetTextAsync(text);
+                    var text = PathConverter?.ToSvgPathData(this, ContainerView.SelectionState?.Shapes);
+                    if (!string.IsNullOrEmpty(text))
+                    {
+                        await Application.Current.Clipboard.SetTextAsync(text);
+                    }
                 }
             }
             catch (Exception ex)
@@ -402,7 +377,19 @@ namespace Draw2D.Editor
                 var text = await Application.Current.Clipboard.GetTextAsync();
                 if (!string.IsNullOrEmpty(text))
                 {
-                    PasteSvgPathDataImpl(text);
+                    var path = PathConverter?.ToPathShape(this, text);
+                    if (path != null)
+                    {
+                        ContainerView?.CurrentContainer?.Shapes.Add(path);
+                        ContainerView?.CurrentContainer?.MarkAsDirty(true);
+        
+                        ContainerView?.SelectionState?.Dehover();
+                        ContainerView?.SelectionState?.Clear();
+        
+                        path.Select(ContainerView?.SelectionState);
+        
+                        ContainerView?.InputService?.Redraw?.Invoke();
+                    }
                 }
             }
             catch (Exception ex)
@@ -497,33 +484,6 @@ namespace Draw2D.Editor
             }
         }
 
-        public void ToSvg(TextBox textBox)
-        {
-            var text = SkiaCanvasConverter.ToSvgDocument(this, ContainerView);
-            if (!string.IsNullOrEmpty(text))
-            {
-                textBox.Text = text;
-            }
-        }
-
-        public void ToSvgPathData(TextBox textBox)
-        {
-            var text = CopySvgPathDataImpl();
-            if (!string.IsNullOrEmpty(text))
-            {
-                textBox.Text = text;
-            }
-        }
-
-        public void FromSvgPathData(TextBox textBox)
-        {
-            var text = textBox.Text;
-            if (!string.IsNullOrEmpty(text))
-            {
-                PasteSvgPathDataImpl(text);
-            }
-        }
-
         public void PathOp(string parameter)
         {
             if (Enum.TryParse<PathOp>(parameter, true, out var op) == true)
@@ -552,55 +512,6 @@ namespace Draw2D.Editor
             {
                 desktopLifetime.Shutdown();
             }
-        }
-
-        public void CreateDemoGroup(IToolContext context)
-        {
-            var group = new GroupShape()
-            {
-                Title = "Group",
-                Points = new ObservableCollection<IPointShape>(),
-                Shapes = new ObservableCollection<IBaseShape>()
-            };
-
-            var rectangle = new RectangleShape(new PointShape(0, 0, context.PointTemplate), new PointShape(30, 30, context.PointTemplate))
-            {
-                Points = new ObservableCollection<IPointShape>(),
-                Text = new Text(),
-                StyleId = context.StyleLibrary?.CurrentItem?.Title
-            };
-            rectangle.StartPoint.Owner = rectangle;
-            rectangle.Point.Owner = rectangle;
-
-            var text = new TextShape(new PointShape(0, 0, context.PointTemplate), new PointShape(30, 30, context.PointTemplate))
-            {
-                Points = new ObservableCollection<IPointShape>(),
-                Text = new Text("&"),
-                StyleId = context.StyleLibrary?.CurrentItem?.Title
-            };
-            text.StartPoint.Owner = text;
-            text.Point.Owner = text;
-
-            group.Shapes.Add(rectangle);
-            group.Shapes.Add(text);
-
-            group.Points.Add(new PointShape(15, 0, context.PointTemplate));
-            group.Points.Add(new PointShape(15, 30, context.PointTemplate));
-            group.Points.Add(new PointShape(0, 15, context.PointTemplate));
-            group.Points.Add(new PointShape(30, 15, context.PointTemplate));
-
-            foreach (var point in group.Points)
-            {
-                point.Owner = group;
-            }
-
-            var reference1 = new ReferenceShape(group.Title, 0, 60, group);
-            var reference2 = new ReferenceShape(group.Title, 0, 120, group);
-
-            context.ContainerView?.CurrentContainer.Shapes.Add(group);
-            context.ContainerView?.CurrentContainer.Shapes.Add(reference1);
-            context.ContainerView?.CurrentContainer.Shapes.Add(reference2);
-            context.ContainerView?.CurrentContainer.MarkAsDirty(true);
         }
 
         private Window GetWindow()

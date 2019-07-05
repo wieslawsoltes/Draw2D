@@ -239,22 +239,6 @@ namespace Draw2D
                     JsonSerializer.ToJsonFile("editor.json", toolContext);
                     return false;
                 }
-
-                if (command == "--demo")
-                {
-                    var styleLibrary = ContainerFactory.CreateStyleLibrary();
-                    var groupLibrary = ContainerFactory.CreateGroupLibrary();
-                    var toolContext = ContainerFactory.CreateToolContext();
-                    toolContext.StyleLibrary = styleLibrary;
-                    toolContext.GroupLibrary = groupLibrary;
-                    if (toolContext is EditorToolContext editorToolContext)
-                    {
-                        editorToolContext.NewContainerView("demo");
-                        editorToolContext.CreateDemoGroup(editorToolContext);
-                        JsonSerializer.ToJsonFile("demo.json", editorToolContext);
-                    }
-                    return false;
-                }
             }
             else if (args.Length == 3)
             {

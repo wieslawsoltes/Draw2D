@@ -45,7 +45,7 @@
                     <ListBox Classes="default" Items="{Binding Tools}" SelectedItem="{Binding CurrentTool}">
                         <ListBox.DataTemplates>
                             <DataTemplate>
-                                <TextBlock Classes="default" Text="{Binding Title}"/>
+                                <TextBlock Classes="list" Text="{Binding Title}"/>
                             </DataTemplate>
                         </ListBox.DataTemplates>
                     </ListBox>

@@ -13,7 +13,7 @@
             <ListBox x:Name="groups"  Classes="default" Items="{Binding Items}" SelectedItem="{Binding CurrentItem}">
                 <ListBox.DataTemplates>
                     <DataTemplate>
-                        <TextBlock Classes="default" Text="{Binding Title}"/>
+                        <TextBlock Classes="list" Text="{Binding Title}"/>
                     </DataTemplate>
                 </ListBox.DataTemplates>
             </ListBox>

@@ -31,7 +31,7 @@
                     <ListBox x:Name="shapes" Classes="default" Items="{Binding Shapes}">
                         <ListBox.DataTemplates>
                             <DataTemplate>
-                                <TextBlock Classes="default" Text="{Binding}"/>
+                                <TextBlock Classes="list" Text="{Binding}"/>
                             </DataTemplate>
                         </ListBox.DataTemplates>
                     </ListBox>
@@ -47,7 +47,7 @@
                     <ListBox x:Name="points" Classes="default" Items="{Binding Points}">
                         <ListBox.DataTemplates>
                             <DataTemplate>
-                                <TextBlock Classes="default" Text="{Binding}"/>
+                                <TextBlock Classes="list" Text="{Binding}"/>
                             </DataTemplate>
                         </ListBox.DataTemplates>
                     </ListBox>

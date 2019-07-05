@@ -112,6 +112,12 @@
             <Setter Property="FontSize" Value="{DynamicResource FontSizeNormal}"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
         </Style>
+        <Style Selector="TextBlock.list">
+            <Setter Property="Margin" Value="2"/>
+            <Setter Property="FontSize" Value="{DynamicResource FontSizeNormal}"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="TextWrapping" Value="Wrap"/>
+        </Style>
         <Style Selector="TextBox.default">
             <Setter Property="Padding" Value="2"/>
             <Setter Property="Margin" Value="2"/>
