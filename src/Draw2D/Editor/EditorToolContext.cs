@@ -65,6 +65,15 @@ namespace Draw2D.Editor
             _containerFactory = containerFactory;
         }
 
+        private Window GetWindow()
+        {
+            if (Application.Current.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktopLifetime)
+            {
+                return desktopLifetime.MainWindow;
+            }
+            return null;
+        }
+
         public void InitContainerView(IContainerView containerView)
         {
             containerView.ContainerPresenter = new AvaloniaContainerPresenter(this, containerView);
@@ -512,15 +521,6 @@ namespace Draw2D.Editor
             {
                 desktopLifetime.Shutdown();
             }
-        }
-
-        private Window GetWindow()
-        {
-            if (Application.Current.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktopLifetime)
-            {
-                return desktopLifetime.MainWindow;
-            }
-            return null;
         }
     }
 }

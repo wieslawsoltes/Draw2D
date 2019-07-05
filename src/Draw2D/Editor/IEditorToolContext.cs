@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Wiesław Šoltés. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using System.Collections.Generic;
+using Draw2D.ViewModels.Containers;
 using Draw2D.ViewModels.Tools;
 
 namespace Draw2D.Editor
@@ -11,5 +12,35 @@ namespace Draw2D.Editor
         ISelection Selection { get; set; }
         string CurrentDirectory { get; set; }
         IList<string> Files { get; set; }
+        void InitContainerView(IContainerView containerView);
+        void AddContainerView(IContainerView containerView);
+        void CloseContainerView(IContainerView containerView);
+        void NewContainerView(string title);
+        void OpenView(string path);
+        void SaveView(string path);
+        void OpenStyles(string path);
+        void SaveStyles(string path);
+        void OpenGroups(string path);
+        void SaveGroups(string path);
+        void OpenContainerView();
+        void SaveContainerViewAs();
+        void OpenStyleLibrary();
+        void SaveStyleLibraryAs();
+        void OpenGroupLibrary();
+        void SaveGroupLibraryAs();
+        void AddFiles(string path);
+        void ClearFiles();
+        void ImportFile();
+        void ExportFile();
+        void CopySvgDocument();
+        void CopySvgPathData();
+        void PasteSvgPathData();
+        void CopyGeometryDrawing();
+        void CopyDrawingGroup();
+        void CopyDrawingPresenter();
+        void CopyPath();
+        void CopyCanvas();
+        void PathOp(string parameter);
+        void Exit();
     }
 }
