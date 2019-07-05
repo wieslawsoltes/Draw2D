@@ -15,7 +15,7 @@ using Draw2D.ViewModels.Shapes;
 using Draw2D.ViewModels.Tools;
 using SkiaSharp;
 
-namespace Draw2D.Editor
+namespace Draw2D.Export
 {
     public static class SkiaCanvasConverter
     {

@@ -8,7 +8,7 @@ using Draw2D.ViewModels.Containers;
 using Draw2D.ViewModels.Shapes;
 using Draw2D.ViewModels.Tools;
 
-namespace Draw2D.Editor
+namespace Draw2D.Export
 {
     internal static class AvaloniaXamlConverter
     {

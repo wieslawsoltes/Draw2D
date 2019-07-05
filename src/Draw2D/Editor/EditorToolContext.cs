@@ -11,6 +11,7 @@ using System.Xml.Linq;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
+using Draw2D.Export;
 using Draw2D.Presenters;
 using Draw2D.ViewModels;
 using Draw2D.ViewModels.Containers;
