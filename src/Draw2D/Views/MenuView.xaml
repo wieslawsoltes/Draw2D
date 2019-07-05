@@ -58,6 +58,9 @@
                     <MenuItem Header="_Drawing" Command="{Binding CopyGeometryDrawing}"/>
                     <MenuItem Header="_Group" Command="{Binding CopyDrawingGroup}"/>
                     <MenuItem Header="_Presenter" Command="{Binding CopyDrawingPresenter}"/>
+                    <Separator/>
+                    <MenuItem Header="P_ath" Command="{Binding CopyPath}"/>
+                    <MenuItem Header="_Canvas" Command="{Binding CopyCanvas}"/>
                 </MenuItem>
             </MenuItem>
             <MenuItem Header="Paste Sp_ecial">
