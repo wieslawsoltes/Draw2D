@@ -13,7 +13,7 @@ using Newtonsoft.Json.Serialization;
 
 namespace Draw2D.Serializer
 {
-    internal class JsonSerializer
+    public class JsonSerializer
     {
         internal class CustomContractResolver : DefaultContractResolver
         {

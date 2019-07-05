@@ -4,7 +4,7 @@
     <OutputType>Library</OutputType>
     <TargetFrameworks>netstandard2.0;net461</TargetFrameworks>
     <EnableDefaultCompileItems>False</EnableDefaultCompileItems>
-    <IsPackable>False</IsPackable>
+    <IsPackable>True</IsPackable>
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
@@ -15,39 +15,29 @@
     <Company>Wiesław Šoltés</Company>
     <Description>A multi-platform 2D diagram editor.</Description>
     <Copyright>Copyright © Wiesław Šoltés 2019</Copyright>
-    <PackageId>Draw2D</PackageId>
+    <PackageId>Draw2D.Editor</PackageId>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/wieslawsoltes/Draw2D</PackageProjectUrl>
     <PackageTags>2d;editor;data;diagram;graphics;geometry;data;shapes;wysiwyg-editor</PackageTags>
   </PropertyGroup>
 
-  <PropertyGroup>
-    <DefineConstants>$(DefineConstants);USE_LOAD_EDITOR</DefineConstants>
-    <DefineConstants>$(DefineConstants);USE_SAVE_EDITOR</DefineConstants>
-    <DefineConstants>$(DefineConstants);USE_LOAD_WINDOW</DefineConstants>
-    <DefineConstants>$(DefineConstants);USE_SAVE_WINDOW</DefineConstants>
-    <!--<DefineConstants>$(DefineConstants);USE_LOAD_STYLES</DefineConstants>-->
-    <!--<DefineConstants>$(DefineConstants);USE_SAVE_STYLES</DefineConstants>-->
-    <!--<DefineConstants>$(DefineConstants);USE_LOAD_GROUPS</DefineConstants>-->
-    <!--<DefineConstants>$(DefineConstants);USE_SAVE_GROUPS</DefineConstants>-->
-  </PropertyGroup>
-
   <ItemGroup>
     <Compile Include="**\*.cs" Exclude="obj\**" />
-    <AvaloniaResource Include="Assets\*" Exclude="bin\**;obj\**;**\*.xproj;packages\**;@(EmbeddedResource)" />
-    <Compile Update="**\*.xaml.cs">
-      <DependentUpon>%(Filename)</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <AvaloniaResource Include="**\*.xaml">
-      <SubType>Designer</SubType>
-    </AvaloniaResource>
+  </ItemGroup>
+
+  <ItemGroup Condition="$(TargetFramework.StartsWith('net4'))">
+    <Reference Include="System" />
+    <Reference Include="System.Drawing" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Avalonia" Version="0.8.1-cibuild0003100-beta" />
     <PackageReference Include="Avalonia.Skia" Version="0.8.1-cibuild0003100-beta" />
-    <PackageReference Include="Avalonia.Controls.DataGrid" Version="0.8.1-cibuild0003100-beta" />
+    <PackageReference Include="Math.Spatial" Version="1.0.4" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
+    <PackageReference Include="SkiaSharp" Version="1.68.0" />
+    <PackageReference Include="SkiaSharp.Svg" Version="1.60.0" />
+    <PackageReference Include="System.Drawing.Common" Version="4.5.1" />
   </ItemGroup>
 
   <ItemGroup Condition="$(TargetFramework.StartsWith('net4'))">
@@ -58,8 +48,6 @@
     <ProjectReference Include="..\Draw2D.Input\Draw2D.Input.csproj" />
     <ProjectReference Include="..\Draw2D.Skia\Draw2D.Skia.csproj" />
     <ProjectReference Include="..\Draw2D.ViewModels\Draw2D.ViewModels.csproj" />
-    <ProjectReference Include="..\Draw2D.Editor\Draw2D.Editor.csproj" />
-    <ProjectReference Include="..\Draw2D.ZoomControl\Draw2D.ZoomControl.csproj" />
   </ItemGroup>
 
 </Project>
