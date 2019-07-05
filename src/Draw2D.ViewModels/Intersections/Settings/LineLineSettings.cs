@@ -5,7 +5,7 @@ using System.Runtime.Serialization;
 namespace Draw2D.ViewModels.Intersections
 {
     [DataContract(IsReference = true)]
-    public class LineLineSettings : Settings
+    public class LineLineSettings : SettingsBase
     {
         private bool _isEnabled;
 

@@ -8,6 +8,7 @@ using Avalonia.Markup.Xaml;
 using Draw2D.Editor;
 using Draw2D.Export;
 using Draw2D.Serializer;
+using Draw2D.Settings;
 using Draw2D.ViewModels.Containers;
 using Draw2D.ViewModels.Shapes;
 using Draw2D.ViewModels.Style;

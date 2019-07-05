@@ -4,10 +4,10 @@ using System.Runtime.Serialization;
 using Avalonia.Controls;
 using Draw2D.ViewModels;
 
-namespace Draw2D
+namespace Draw2D.Settings
 {
     [DataContract(IsReference = true)]
-    public class WindowSettings : Settings
+    public class WindowSettings : SettingsBase
     {
         private double _width;
         private double _height;

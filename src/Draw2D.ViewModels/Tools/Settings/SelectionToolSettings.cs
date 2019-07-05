@@ -6,7 +6,7 @@ using Draw2D.Input;
 namespace Draw2D.ViewModels.Tools
 {
     [DataContract(IsReference = true)]
-    public class SelectionToolSettings : Settings
+    public class SelectionToolSettings : SettingsBase
     {
         private SelectionMode _mode;
         private SelectionTargets _targets;

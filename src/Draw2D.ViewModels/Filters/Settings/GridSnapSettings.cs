@@ -5,7 +5,7 @@ using System.Runtime.Serialization;
 namespace Draw2D.ViewModels.Filters
 {
     [DataContract(IsReference = true)]
-    public class GridSnapSettings : Settings
+    public class GridSnapSettings : SettingsBase
     {
         private bool _isEnabled;
         private bool _enableGuides;

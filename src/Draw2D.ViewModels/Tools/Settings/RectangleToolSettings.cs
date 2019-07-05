@@ -5,7 +5,7 @@ using System.Runtime.Serialization;
 namespace Draw2D.ViewModels.Tools
 {
     [DataContract(IsReference = true)]
-    public class RectangleToolSettings : Settings
+    public class RectangleToolSettings : SettingsBase
     {
         private bool _connectPoints;
         private double _hitTestRadius;

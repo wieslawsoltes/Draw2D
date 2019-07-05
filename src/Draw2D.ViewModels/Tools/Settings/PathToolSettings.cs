@@ -8,7 +8,7 @@ using Draw2D.ViewModels.Shapes;
 namespace Draw2D.ViewModels.Tools
 {
     [DataContract(IsReference = true)]
-    public class PathToolSettings : Settings
+    public class PathToolSettings : SettingsBase
     {
         public static PathFillType[] PathFillTypeValues { get; } = (PathFillType[])Enum.GetValues(typeof(PathFillType));
 
