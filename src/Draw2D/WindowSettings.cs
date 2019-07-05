@@ -4,7 +4,7 @@ using System.Runtime.Serialization;
 using Avalonia.Controls;
 using Draw2D.ViewModels;
 
-namespace Draw2D.Editor
+namespace Draw2D
 {
     [DataContract(IsReference = true)]
     public class WindowSettings : Settings

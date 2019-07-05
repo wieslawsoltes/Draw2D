@@ -11,7 +11,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
 
-namespace Draw2D.Editor
+namespace Draw2D.Serializer
 {
     internal class JsonSerializer
     {

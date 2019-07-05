@@ -15,7 +15,7 @@ using Draw2D.ViewModels.Tools;
 
 namespace Draw2D.Editor
 {
-    public class EditorContainerFactory : IContainerFactory
+    public class DefaultContainerFactory : IContainerFactory
     {
         public IStyleLibrary CreateStyleLibrary()
         {
