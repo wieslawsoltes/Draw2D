@@ -54,7 +54,7 @@
                     <MenuItem Header="_Path Data" Command="{Binding CopySvgPathData}"/>
                     <MenuItem Header="_Document" Command="{Binding CopySvgDocument}"/>
                 </MenuItem>
-                <MenuItem Header="_Geometry">
+                <MenuItem Header="_Xaml">
                     <MenuItem Header="_Drawing" Command="{Binding CopyGeometryDrawing}"/>
                     <MenuItem Header="_Group" Command="{Binding CopyDrawingGroup}"/>
                     <MenuItem Header="_Presenter" Command="{Binding CopyDrawingPresenter}"/>
