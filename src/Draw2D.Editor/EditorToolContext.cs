@@ -348,8 +348,7 @@ namespace Draw2D.Editor
                 var text = SkiaCanvasConverter.ToSvgDocument(this, ContainerView);
                 if (!string.IsNullOrEmpty(text))
                 {
-                    var formatted = SkiaCanvasConverter.FormatXml(text);
-                    await Application.Current.Clipboard.SetTextAsync(formatted);
+                    await Application.Current.Clipboard.SetTextAsync(text);
                 }
             }
             catch (Exception ex)
@@ -415,7 +414,6 @@ namespace Draw2D.Editor
                 var text = AvaloniaXamlConverter.ConvertToGeometryDrawing(this, this.ContainerView);
                 if (!string.IsNullOrEmpty(text))
                 {
-                    var formatted = AvaloniaXamlConverter.FormatXml(text);
                     await Application.Current.Clipboard.SetTextAsync(text);
                 }
             }
@@ -433,7 +431,6 @@ namespace Draw2D.Editor
                 var text = AvaloniaXamlConverter.ConvertToDrawingGroup(this, this.ContainerView);
                 if (!string.IsNullOrEmpty(text))
                 {
-                    var formatted = AvaloniaXamlConverter.FormatXml(text);
                     await Application.Current.Clipboard.SetTextAsync(text);
                 }
             }
@@ -451,7 +448,6 @@ namespace Draw2D.Editor
                 var text = AvaloniaXamlConverter.ConvertToDrawingPresenter(this, this.ContainerView);
                 if (!string.IsNullOrEmpty(text))
                 {
-                    var formatted = AvaloniaXamlConverter.FormatXml(text);
                     await Application.Current.Clipboard.SetTextAsync(text);
                 }
             }
@@ -469,7 +465,6 @@ namespace Draw2D.Editor
                 var text = AvaloniaXamlConverter.ConvertToPath(this, this.ContainerView);
                 if (!string.IsNullOrEmpty(text))
                 {
-                    var formatted = AvaloniaXamlConverter.FormatXml(text);
                     await Application.Current.Clipboard.SetTextAsync(text);
                 }
             }
@@ -487,7 +482,6 @@ namespace Draw2D.Editor
                 var text = AvaloniaXamlConverter.ConvertToCanvas(this, this.ContainerView);
                 if (!string.IsNullOrEmpty(text))
                 {
-                    var formatted = AvaloniaXamlConverter.FormatXml(text);
                     await Application.Current.Clipboard.SetTextAsync(text);
                 }
             }

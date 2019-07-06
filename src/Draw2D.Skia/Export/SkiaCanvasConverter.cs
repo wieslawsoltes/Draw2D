@@ -14,23 +14,6 @@ namespace Draw2D.Export
 {
     public static class SkiaCanvasConverter
     {
-        public static string FormatXml(string xml)
-        {
-            var sb = new StringBuilder();
-            var element = XElement.Parse(xml);
-            var settings = new XmlWriterSettings();
-            settings.OmitXmlDeclaration = false;
-            settings.Indent = true;
-            settings.NewLineOnAttributes = false;
-
-            using (var writer = XmlWriter.Create(sb, settings))
-            {
-                element.Save(writer);
-            }
-
-            return sb.ToString();
-        }
-
         public static void ImportSvg(IToolContext context, string path)
         {
             var svg = new SkiaSharp.Extended.Svg.SKSvg();
@@ -189,6 +172,23 @@ namespace Draw2D.Export
             {
                 ExportImage(context, path, containerView, SKEncodedImageFormat.Dng, 100);
             }
+        }
+
+        public static string FormatXml(string xml)
+        {
+            var sb = new StringBuilder();
+            var element = XElement.Parse(xml);
+            var settings = new XmlWriterSettings();
+            settings.OmitXmlDeclaration = false;
+            settings.Indent = true;
+            settings.NewLineOnAttributes = false;
+
+            using (var writer = XmlWriter.Create(sb, settings))
+            {
+                element.Save(writer);
+            }
+
+            return sb.ToString();
         }
 
         public static string ToSvgDocument(IToolContext context, IContainerView containerView)
