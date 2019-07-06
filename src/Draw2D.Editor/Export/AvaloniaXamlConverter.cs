@@ -11,6 +11,8 @@ namespace Draw2D.Export
 {
     public static class AvaloniaXamlConverter
     {
+        internal static char[] NewLine = Environment.NewLine.ToCharArray();
+
         public static void ConvertToGeometryDrawing(IToolContext context, IContainerView containerView, StringBuilder sb, string indent = "")
         {
             if (containerView.SelectionState?.Shapes != null && containerView.SelectionState?.Shapes.Count > 0)
