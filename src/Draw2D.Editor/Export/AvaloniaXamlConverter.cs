@@ -9,9 +9,11 @@ using Draw2D.ViewModels.Tools;
 
 namespace Draw2D.Export
 {
-    internal static class AvaloniaXamlConverter
+    public static class AvaloniaXamlConverter
     {
-        internal static string ConvertToGeometryDrawing(IToolContext context, IContainerView containerView, string indent = "")
+        internal static char[] s_newLine = Environment.NewLine.ToCharArray();
+
+        public static string ConvertToGeometryDrawing(IToolContext context, IContainerView containerView, string indent = "")
         {
             if (containerView.SelectionState?.Shapes != null && containerView.SelectionState?.Shapes.Count > 0)
             {
@@ -24,7 +26,7 @@ namespace Draw2D.Export
                     {
                         continue;
                     }
-                    var geometry = context.PathConverter?.ToSvgPathData(context, new[] { shape })?.TrimEnd(Environment.NewLine.ToCharArray());
+                    var geometry = context.PathConverter?.ToSvgPathData(context, new[] { shape })?.TrimEnd(s_newLine);
                     if (geometry != null)
                     {
                         var style = context.StyleLibrary?.Get(shape.StyleId);
@@ -54,12 +56,12 @@ namespace Draw2D.Export
                     }
                 }
 
-                return sb.ToString().TrimEnd(Environment.NewLine.ToCharArray());
+                return sb.ToString().TrimEnd(s_newLine);
             }
             return null;
         }
 
-        internal static string ConvertToDrawingGroup(IToolContext context, IContainerView containerView, string indent = "")
+        public static string ConvertToDrawingGroup(IToolContext context, IContainerView containerView, string indent = "")
         {
             var geometryDrawing = ConvertToGeometryDrawing(context, containerView, indent + "    ");
             if (!string.IsNullOrEmpty(geometryDrawing))
@@ -70,12 +72,12 @@ namespace Draw2D.Export
                 sb.AppendLine($"{geometryDrawing}");
                 sb.AppendLine($"{indent}</DrawingGroup>");
 
-                return sb.ToString().TrimEnd(Environment.NewLine.ToCharArray());
+                return sb.ToString().TrimEnd(s_newLine);
             }
             return null;
         }
 
-        internal static string ConvertToDrawingPresenter(IToolContext context, IContainerView containerView, string indent = "")
+        public static string ConvertToDrawingPresenter(IToolContext context, IContainerView containerView, string indent = "")
         {
             var drawingGroup = ConvertToDrawingGroup(context, containerView, indent + "    ");
             if (!string.IsNullOrEmpty(drawingGroup))
@@ -86,12 +88,12 @@ namespace Draw2D.Export
                 sb.AppendLine($"{drawingGroup}");
                 sb.AppendLine($"{indent}</DrawingPresenter>");
 
-                return sb.ToString().TrimEnd(Environment.NewLine.ToCharArray());
+                return sb.ToString().TrimEnd(s_newLine);
             }
             return null;
         }
 
-        internal static string ConvertToPath(IToolContext context, IContainerView containerView, string indent = "")
+        public static string ConvertToPath(IToolContext context, IContainerView containerView, string indent = "")
         {
             if (containerView.SelectionState?.Shapes != null && containerView.SelectionState?.Shapes.Count > 0)
             {
@@ -104,7 +106,7 @@ namespace Draw2D.Export
                     {
                         continue;
                     }
-                    var geometry = context.PathConverter?.ToSvgPathData(context, new[] { shape })?.TrimEnd(Environment.NewLine.ToCharArray());
+                    var geometry = context.PathConverter?.ToSvgPathData(context, new[] { shape })?.TrimEnd(s_newLine);
                     if (geometry != null)
                     {
                         var style = context.StyleLibrary?.Get(shape.StyleId);
@@ -126,12 +128,12 @@ namespace Draw2D.Export
                     }
                 }
 
-                return sb.ToString().TrimEnd(Environment.NewLine.ToCharArray());
+                return sb.ToString().TrimEnd(s_newLine);
             }
             return null;
         }
 
-        internal static string ConvertToCanvas(IToolContext context, IContainerView containerView, string indent = "")
+        public static string ConvertToCanvas(IToolContext context, IContainerView containerView, string indent = "")
         {
             var path = ConvertToPath(context, containerView, indent + "    ");
             if (!string.IsNullOrEmpty(path))
@@ -142,7 +144,7 @@ namespace Draw2D.Export
                 sb.AppendLine($"{path}");
                 sb.AppendLine($"{indent}</Canvas>");
 
-                return sb.ToString().TrimEnd(Environment.NewLine.ToCharArray());
+                return sb.ToString().TrimEnd(s_newLine);
             }
             return null;
         }
