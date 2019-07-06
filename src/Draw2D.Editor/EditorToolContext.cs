@@ -1,7 +1,6 @@
 ﻿// Copyright (c) Wiesław Šoltés. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using System;
-using System.Text;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
@@ -14,7 +13,6 @@ using Draw2D.Presenters;
 using Draw2D.Serializer;
 using Draw2D.ViewModels;
 using Draw2D.ViewModels.Containers;
-using Draw2D.ViewModels.Shapes;
 using Draw2D.ViewModels.Tools;
 
 namespace Draw2D.Editor
@@ -392,12 +390,12 @@ namespace Draw2D.Editor
                     {
                         ContainerView?.CurrentContainer?.Shapes.Add(path);
                         ContainerView?.CurrentContainer?.MarkAsDirty(true);
-        
+
                         ContainerView?.SelectionState?.Dehover();
                         ContainerView?.SelectionState?.Clear();
-        
+
                         path.Select(ContainerView?.SelectionState);
-        
+
                         ContainerView?.InputService?.Redraw?.Invoke();
                     }
                 }
