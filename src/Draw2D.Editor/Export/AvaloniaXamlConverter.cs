@@ -11,14 +11,11 @@ namespace Draw2D.Export
 {
     public static class AvaloniaXamlConverter
     {
-        internal static char[] s_newLine = Environment.NewLine.ToCharArray();
-
-        public static string ConvertToGeometryDrawing(IToolContext context, IContainerView containerView, string indent = "")
+        public static void ConvertToGeometryDrawing(IToolContext context, IContainerView containerView, StringBuilder sb, string indent = "")
         {
             if (containerView.SelectionState?.Shapes != null && containerView.SelectionState?.Shapes.Count > 0)
             {
                 var shapes = new List<IBaseShape>(containerView.SelectionState?.Shapes);
-                var sb = new StringBuilder();
 
                 foreach (var shape in shapes)
                 {
@@ -26,79 +23,62 @@ namespace Draw2D.Export
                     {
                         continue;
                     }
-                    var geometry = context.PathConverter?.ToSvgPathData(context, new[] { shape })?.TrimEnd(s_newLine);
-                    if (geometry != null)
+
+                    var style = context.StyleLibrary?.Get(shape.StyleId);
+                    if (style == null)
                     {
-                        var style = context.StyleLibrary?.Get(shape.StyleId);
-                        if (style != null)
-                        {
-                            if (style.IsStroked && style.IsFilled)
-                            {
-                                sb.AppendLine($"{indent}<GeometryDrawing Brush=\"{style.Fill.ToHex()}\" Geometry=\"{geometry}\">");
-                                sb.AppendLine($"{indent}    <GeometryDrawing.Pen>");
-                                sb.AppendLine($"{indent}        <Pen Brush=\"{style.Stroke.ToHex()}\" Thickness=\"{style.StrokeWidth}\" LineCap=\"{style.StrokeCap}\" LineJoin=\"{style.StrokeJoin}\" MiterLimit=\"{style.StrokeMiter}\"/>");
-                                sb.AppendLine($"{indent}    </GeometryDrawing.Pen>");
-                                sb.AppendLine($"{indent}</GeometryDrawing>");
-                            }
-                            else if (style.IsStroked && !style.IsFilled)
-                            {
-                                sb.AppendLine($"{indent}<GeometryDrawing Geometry=\"{geometry}\">");
-                                sb.AppendLine($"{indent}    <GeometryDrawing.Pen>");
-                                sb.AppendLine($"{indent}        <Pen Brush=\"{style.Stroke.ToHex()}\" Thickness=\"{style.StrokeWidth}\" LineCap=\"{style.StrokeCap}\" LineJoin=\"{style.StrokeJoin}\" MiterLimit=\"{style.StrokeMiter}\"/>");
-                                sb.AppendLine($"{indent}    </GeometryDrawing.Pen>");
-                                sb.AppendLine($"{indent}</GeometryDrawing>");
-                            }
-                            else if (!style.IsStroked && style.IsFilled)
-                            {
-                                sb.AppendLine($"{indent}<GeometryDrawing Brush=\"{style.Fill.ToHex()}\" Geometry=\"{geometry}\" />");
-                            }
-                        }
+                        continue;
+                    }
+
+                    var geometry = context.PathConverter?.ToSvgPathData(context, new[] { shape })?.TrimEnd(NewLine);
+                    if (geometry == null)
+                    {
+                        continue;
+                    }
+
+                    if (style.IsStroked && style.IsFilled)
+                    {
+                        sb.AppendLine($"{indent}<GeometryDrawing Brush=\"{style.Fill.ToHex()}\" Geometry=\"{geometry}\">");
+                        sb.AppendLine($"{indent}    <GeometryDrawing.Pen>");
+                        sb.AppendLine($"{indent}        <Pen Brush=\"{style.Stroke.ToHex()}\" Thickness=\"{style.StrokeWidth}\" LineCap=\"{style.StrokeCap}\" LineJoin=\"{style.StrokeJoin}\" MiterLimit=\"{style.StrokeMiter}\"/>");
+                        sb.AppendLine($"{indent}    </GeometryDrawing.Pen>");
+                        sb.AppendLine($"{indent}</GeometryDrawing>");
+                    }
+                    else if (style.IsStroked && !style.IsFilled)
+                    {
+                        sb.AppendLine($"{indent}<GeometryDrawing Geometry=\"{geometry}\">");
+                        sb.AppendLine($"{indent}    <GeometryDrawing.Pen>");
+                        sb.AppendLine($"{indent}        <Pen Brush=\"{style.Stroke.ToHex()}\" Thickness=\"{style.StrokeWidth}\" LineCap=\"{style.StrokeCap}\" LineJoin=\"{style.StrokeJoin}\" MiterLimit=\"{style.StrokeMiter}\"/>");
+                        sb.AppendLine($"{indent}    </GeometryDrawing.Pen>");
+                        sb.AppendLine($"{indent}</GeometryDrawing>");
+                    }
+                    else if (!style.IsStroked && style.IsFilled)
+                    {
+                        sb.AppendLine($"{indent}<GeometryDrawing Brush=\"{style.Fill.ToHex()}\" Geometry=\"{geometry}\" />");
                     }
                 }
-
-                return sb.ToString().TrimEnd(s_newLine);
             }
-            return null;
         }
 
-        public static string ConvertToDrawingGroup(IToolContext context, IContainerView containerView, string indent = "")
+        public static void ConvertToDrawingGroup(IToolContext context, IContainerView containerView, StringBuilder sb, string indent = "")
         {
-            var geometryDrawing = ConvertToGeometryDrawing(context, containerView, indent + "    ");
-            if (!string.IsNullOrEmpty(geometryDrawing))
-            {
-                var sb = new StringBuilder();
-
-                sb.AppendLine($"{indent}<DrawingGroup>");
-                sb.AppendLine($"{geometryDrawing}");
-                sb.AppendLine($"{indent}</DrawingGroup>");
-
-                return sb.ToString().TrimEnd(s_newLine);
-            }
-            return null;
+            sb.AppendLine($"{indent}<DrawingGroup>");
+            ConvertToGeometryDrawing(context, containerView, sb, indent + "    ");
+            sb.AppendLine($"{indent}</DrawingGroup>");
         }
 
-        public static string ConvertToDrawingPresenter(IToolContext context, IContainerView containerView, string indent = "")
+        public static void ConvertToDrawingPresenter(IToolContext context, IContainerView containerView, StringBuilder sb, string indent = "")
         {
-            var drawingGroup = ConvertToDrawingGroup(context, containerView, indent + "    ");
-            if (!string.IsNullOrEmpty(drawingGroup))
-            {
-                var sb = new StringBuilder();
-
-                sb.AppendLine($"{indent}<DrawingPresenter Width=\"{containerView.Width}\" Height=\"{containerView.Height}\" Stretch=\"Uniform\">");
-                sb.AppendLine($"{drawingGroup}");
-                sb.AppendLine($"{indent}</DrawingPresenter>");
-
-                return sb.ToString().TrimEnd(s_newLine);
-            }
-            return null;
+            sb.AppendLine($"{indent}<DrawingPresenter Width=\"{containerView.Width}\" Height=\"{containerView.Height}\" Stretch=\"Uniform\">");
+            ConvertToDrawingGroup(context, containerView, sb, indent + "    ");
+            sb.AppendLine($"{indent}</DrawingPresenter>");
         }
 
-        public static string ConvertToPath(IToolContext context, IContainerView containerView, string indent = "")
+        public static void ConvertToPath(IToolContext context, IContainerView containerView, StringBuilder sb, string indent = "")
         {
             if (containerView.SelectionState?.Shapes != null && containerView.SelectionState?.Shapes.Count > 0)
             {
                 var shapes = new List<IBaseShape>(containerView.SelectionState?.Shapes);
-                var sb = new StringBuilder();
 
                 foreach (var shape in shapes)
                 {
@@ -106,47 +86,40 @@ namespace Draw2D.Export
                     {
                         continue;
                     }
-                    var geometry = context.PathConverter?.ToSvgPathData(context, new[] { shape })?.TrimEnd(s_newLine);
-                    if (geometry != null)
+
+                    var style = context.StyleLibrary?.Get(shape.StyleId);
+                    if (style == null)
                     {
-                        var style = context.StyleLibrary?.Get(shape.StyleId);
-                        if (style != null)
-                        {
-                            if (style.IsStroked && style.IsFilled)
-                            {
-                                sb.AppendLine($"{indent}<Path Fill=\"{style.Fill.ToHex()}\" Stroke=\"{style.Stroke.ToHex()}\" StrokeThickness=\"{style.StrokeWidth}\" StrokeLineCap=\"{style.StrokeCap}\" StrokeJoin=\"{style.StrokeJoin}\" Data=\"{geometry}\"/>");
-                            }
-                            else if (style.IsStroked && !style.IsFilled)
-                            {
-                                sb.AppendLine($"{indent}<Path Stroke=\"{style.Stroke.ToHex()}\" StrokeThickness=\"{style.StrokeWidth}\" StrokeLineCap=\"{style.StrokeCap}\" StrokeJoin=\"{style.StrokeJoin}\" Data=\"{geometry}\"/>");
-                            }
-                            else if (!style.IsStroked && style.IsFilled)
-                            {
-                                sb.AppendLine($"{indent}<Path Fill=\"{style.Fill.ToHex()}\" Data=\"{geometry}\"/>");
-                            }
-                        }
+                        continue;
+                    }
+
+                    var geometry = context.PathConverter?.ToSvgPathData(context, new[] { shape })?.TrimEnd(NewLine);
+                    if (geometry == null)
+                    {
+                        continue;
+                    }
+
+                    if (style.IsStroked && style.IsFilled)
+                    {
+                        sb.AppendLine($"{indent}<Path Fill=\"{style.Fill.ToHex()}\" Stroke=\"{style.Stroke.ToHex()}\" StrokeThickness=\"{style.StrokeWidth}\" StrokeLineCap=\"{style.StrokeCap}\" StrokeJoin=\"{style.StrokeJoin}\" Data=\"{geometry}\"/>");
+                    }
+                    else if (style.IsStroked && !style.IsFilled)
+                    {
+                        sb.AppendLine($"{indent}<Path Stroke=\"{style.Stroke.ToHex()}\" StrokeThickness=\"{style.StrokeWidth}\" StrokeLineCap=\"{style.StrokeCap}\" StrokeJoin=\"{style.StrokeJoin}\" Data=\"{geometry}\"/>");
+                    }
+                    else if (!style.IsStroked && style.IsFilled)
+                    {
+                        sb.AppendLine($"{indent}<Path Fill=\"{style.Fill.ToHex()}\" Data=\"{geometry}\"/>");
                     }
                 }
-
-                return sb.ToString().TrimEnd(s_newLine);
             }
-            return null;
         }
 
-        public static string ConvertToCanvas(IToolContext context, IContainerView containerView, string indent = "")
+        public static void ConvertToCanvas(IToolContext context, IContainerView containerView, StringBuilder sb, string indent = "")
         {
-            var path = ConvertToPath(context, containerView, indent + "    ");
-            if (!string.IsNullOrEmpty(path))
-            {
-                var sb = new StringBuilder();
-
-                sb.AppendLine($"{indent}<Canvas Width=\"{containerView.Width}\" Height=\"{containerView.Height}\">");
-                sb.AppendLine($"{path}");
-                sb.AppendLine($"{indent}</Canvas>");
-
-                return sb.ToString().TrimEnd(s_newLine);
-            }
-            return null;
+            sb.AppendLine($"{indent}<Canvas Width=\"{containerView.Width}\" Height=\"{containerView.Height}\">");
+            ConvertToPath(context, containerView, sb, indent + "    ");
+            sb.AppendLine($"{indent}</Canvas>");
         }
     }
 }

@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Runtime.Serialization;
+using System.Text;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
@@ -411,7 +412,9 @@ namespace Draw2D.Editor
         {
             try
             {
-                var text = AvaloniaXamlConverter.ConvertToGeometryDrawing(this, this.ContainerView);
+                var sb = new StringBuilder();
+                AvaloniaXamlConverter.ConvertToGeometryDrawing(this, this.ContainerView, sb);
+                var text = sb.ToString();
                 if (!string.IsNullOrEmpty(text))
                 {
                     await Application.Current.Clipboard.SetTextAsync(text);
@@ -428,7 +431,9 @@ namespace Draw2D.Editor
         {
             try
             {
-                var text = AvaloniaXamlConverter.ConvertToDrawingGroup(this, this.ContainerView);
+                var sb = new StringBuilder();
+                AvaloniaXamlConverter.ConvertToDrawingGroup(this, this.ContainerView, sb);
+                var text = sb.ToString();
                 if (!string.IsNullOrEmpty(text))
                 {
                     await Application.Current.Clipboard.SetTextAsync(text);
@@ -445,7 +450,9 @@ namespace Draw2D.Editor
         {
             try
             {
-                var text = AvaloniaXamlConverter.ConvertToDrawingPresenter(this, this.ContainerView);
+                var sb = new StringBuilder();
+                AvaloniaXamlConverter.ConvertToDrawingPresenter(this, this.ContainerView, sb);
+                var text = sb.ToString();
                 if (!string.IsNullOrEmpty(text))
                 {
                     await Application.Current.Clipboard.SetTextAsync(text);
@@ -462,7 +469,9 @@ namespace Draw2D.Editor
         {
             try
             {
-                var text = AvaloniaXamlConverter.ConvertToPath(this, this.ContainerView);
+                var sb = new StringBuilder();
+                AvaloniaXamlConverter.ConvertToPath(this, this.ContainerView, sb);
+                var text = sb.ToString();
                 if (!string.IsNullOrEmpty(text))
                 {
                     await Application.Current.Clipboard.SetTextAsync(text);
@@ -479,7 +488,9 @@ namespace Draw2D.Editor
         {
             try
             {
-                var text = AvaloniaXamlConverter.ConvertToCanvas(this, this.ContainerView);
+                var sb = new StringBuilder();
+                AvaloniaXamlConverter.ConvertToCanvas(this, this.ContainerView, sb);
+                var text = sb.ToString();
                 if (!string.IsNullOrEmpty(text))
                 {
                     await Application.Current.Clipboard.SetTextAsync(text);
