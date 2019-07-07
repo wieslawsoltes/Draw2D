@@ -7,8 +7,39 @@ using Draw2D.ViewModels.Containers;
 using Draw2D.ViewModels.Shapes;
 using SkiaSharp;
 
-namespace Draw2D.Renderers
+namespace Draw2D.Bounds
 {
+    // TODO: Experimental hit-testing for TryToHover
+    /*
+    var bounds = new SkiaHitTest(context.ContainerView?.CurrentContainer);
+
+    //if (bounds.Contains((float)target.X, (float)target.Y, ContainsMode.Bounds, out var rootShape, out var childShape))
+    //{
+    //    bounds.Dispose();
+    //    return rootShape;
+    //}
+
+    var rect = SKRect.Create((float)(target.X - radius), (float)(target.Y - radius), (float)(radius + radius), (float)(radius + radius));
+    if (bounds.Intersects(ref rect, out var rootShape, out var childShape))
+    {
+        bounds.Dispose();
+        return rootShape;
+    }
+
+    //var rect = SKRect.Create((float)(target.X - radius), (float)(target.Y - radius), (float)(radius + radius), (float)(radius + radius));
+    //var geometry = new SKPath() { FillType = SKPathFillType.Winding };
+    //geometry.AddRect(rect);
+    //if (bounds.Intersects(geometry, out var rootShape, out var childShape))
+    //{
+    //    bounds.Dispose();
+    //    return rootShape;
+    //}
+
+    bounds.Dispose();
+
+    return null;
+    //*/
+
     public class SkiaHitTest : IDisposable
     {
         internal SkiaBoundsShapeRenderer _renderer;

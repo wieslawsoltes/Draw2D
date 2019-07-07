@@ -7,7 +7,7 @@ using Draw2D.ViewModels.Containers;
 using Draw2D.ViewModels.Shapes;
 using SkiaSharp;
 
-namespace Draw2D.Renderers
+namespace Draw2D.Bounds
 {
     public readonly struct ChildNode : IDisposable
     {

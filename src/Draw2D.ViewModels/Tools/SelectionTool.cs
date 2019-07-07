@@ -1207,38 +1207,6 @@ namespace Draw2D.ViewModels.Tools
 
         internal IBaseShape TryToHover(IToolContext context, SelectionMode mode, SelectionTargets targets, Point2 target, double radius, double scale)
         {
-            // TODO: Experimental hit-testing.
-            /*
-            var bounds = new SkiaHitTest(context.ContainerView?.CurrentContainer);
-
-            //if (bounds.Contains((float)target.X, (float)target.Y, ContainsMode.Bounds, out var rootShape, out var childShape))
-            //{
-            //    bounds.Dispose();
-            //    return rootShape;
-            //}
-
-            var rect = SKRect.Create((float)(target.X - radius), (float)(target.Y - radius), (float)(radius + radius), (float)(radius + radius));
-            if (bounds.Intersects(ref rect, out var rootShape, out var childShape))
-            {
-                bounds.Dispose();
-                return rootShape;
-            }
-
-            //var rect = SKRect.Create((float)(target.X - radius), (float)(target.Y - radius), (float)(radius + radius), (float)(radius + radius));
-            //var geometry = new SKPath() { FillType = SKPathFillType.Winding };
-            //geometry.AddRect(rect);
-            //if (bounds.Intersects(geometry, out var rootShape, out var childShape))
-            //{
-            //    bounds.Dispose();
-            //    return rootShape;
-            //}
-
-            bounds.Dispose();
-
-            return null;
-            //*/
-
-            ///*
             var shapePoint =
                 mode.HasFlag(SelectionMode.Point)
                 && targets.HasFlag(SelectionTargets.Shapes) ?
@@ -1262,7 +1230,6 @@ namespace Draw2D.ViewModels.Tools
             }
 
             return null;
-            //*/
         }
 
         internal bool TryToSelect(IToolContext context, SelectionMode mode, SelectionTargets targets, Modifier selectionModifier, Point2 point, double radius, double scale, Modifier modifier)
