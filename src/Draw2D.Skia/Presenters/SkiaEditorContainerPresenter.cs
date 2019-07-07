@@ -11,7 +11,7 @@ using SkiaSharp;
 
 namespace Draw2D.Presenters
 {
-    public class EditorContainerPresenter : IContainerPresenter
+    public class SkiaEditorContainerPresenter : IContainerPresenter
     {
         private readonly IToolContext _context;
         private readonly IContainerView _view;
@@ -25,7 +25,7 @@ namespace Draw2D.Presenters
         private SKPicture _picturePoints = null;
         private bool _enablePictureCache = true;
 
-        public EditorContainerPresenter(IToolContext context, IContainerView view)
+        public SkiaEditorContainerPresenter(IToolContext context, IContainerView view)
         {
             _context = context;
             _view = view;

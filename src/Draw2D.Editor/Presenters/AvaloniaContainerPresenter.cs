@@ -21,7 +21,7 @@ namespace Draw2D.Presenters
             _context = context;
             _view = view;
             _renderTarget = null;
-            _editorContainerPresenter = new EditorContainerPresenter(_context, _view);
+            _editorContainerPresenter = new SkiaEditorContainerPresenter(_context, _view);
         }
 
         public void Dispose()

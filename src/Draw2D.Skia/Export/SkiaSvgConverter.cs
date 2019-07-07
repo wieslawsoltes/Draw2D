@@ -41,14 +41,14 @@ namespace Draw2D.Export
                 {
                     if (containerView.SelectionState?.Shapes?.Count > 0)
                     {
-                        using (var skiaSelectedPresenter = new ExportSelectedPresenter(context, containerView))
+                        using (var skiaSelectedPresenter = new SkiaExportSelectedPresenter(context, containerView))
                         {
                             skiaSelectedPresenter.Draw(canvas, containerView.Width, containerView.Height, 0, 0, 1.0, 1.0);
                         }
                     }
                     else
                     {
-                        using (var skiaContainerPresenter = new ExportContainerPresenter(context, containerView))
+                        using (var skiaContainerPresenter = new SkiaExportContainerPresenter(context, containerView))
                         {
                             skiaContainerPresenter.Draw(canvas, containerView.Width, containerView.Height, 0, 0, 1.0, 1.0);
                         }

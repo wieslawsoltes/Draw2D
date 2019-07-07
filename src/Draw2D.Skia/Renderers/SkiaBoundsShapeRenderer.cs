@@ -152,12 +152,12 @@ namespace Draw2D.Renderers
         }
     }
 
-    public class BoundsShapeRenderer : IShapeRenderer
+    public class SkiaBoundsShapeRenderer : IShapeRenderer
     {
         private int _currentRootNode = -1;
         private IList<RootNode> _rootNodes;
 
-        public BoundsShapeRenderer(ICanvasContainer container)
+        public SkiaBoundsShapeRenderer(ICanvasContainer container)
         {
             _rootNodes = new List<RootNode>();
 

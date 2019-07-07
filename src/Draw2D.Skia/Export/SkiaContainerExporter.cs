@@ -19,7 +19,7 @@ namespace Draw2D.Export
             using (var stream = new SKFileWStream(path))
             using (var writer = new SKXmlStreamWriter(stream))
             using (var canvas = SKSvgCanvas.Create(SKRect.Create(0, 0, (int)containerView.Width, (int)containerView.Height), writer))
-            using (var skiaContainerPresenter = new ExportContainerPresenter(context, containerView))
+            using (var skiaContainerPresenter = new SkiaExportContainerPresenter(context, containerView))
             {
                 skiaContainerPresenter.Draw(canvas, containerView.Width, containerView.Height, 0, 0, 1.0, 1.0);
             }
@@ -30,7 +30,7 @@ namespace Draw2D.Export
             using (var stream = new SKFileWStream(path))
             using (var pdf = SKDocument.CreatePdf(stream, SKDocument.DefaultRasterDpi))
             using (var canvas = pdf.BeginPage((float)containerView.Width, (float)containerView.Height))
-            using (var skiaContainerPresenter = new ExportContainerPresenter(context, containerView))
+            using (var skiaContainerPresenter = new SkiaExportContainerPresenter(context, containerView))
             {
                 skiaContainerPresenter.Draw(canvas, containerView.Width, containerView.Height, 0, 0, 1.0, 1.0);
                 pdf.Close();
@@ -42,7 +42,7 @@ namespace Draw2D.Export
             using (var stream = new SKFileWStream(path))
             using (var xps = SKDocument.CreateXps(stream, SKDocument.DefaultRasterDpi))
             using (var canvas = xps.BeginPage((float)containerView.Width, (float)containerView.Height))
-            using (var skiaContainerPresenter = new ExportContainerPresenter(context, containerView))
+            using (var skiaContainerPresenter = new SkiaExportContainerPresenter(context, containerView))
             {
                 skiaContainerPresenter.Draw(canvas, containerView.Width, containerView.Height, 0, 0, 1.0, 1.0);
                 xps.Close();
@@ -54,7 +54,7 @@ namespace Draw2D.Export
             var recorder = new SKPictureRecorder();
             var rect = new SKRect(0f, 0f, (float)containerView.Width, (float)containerView.Height);
             var canvas = recorder.BeginRecording(rect);
-            using (var skiaContainerPresenter = new ExportContainerPresenter(context, containerView))
+            using (var skiaContainerPresenter = new SkiaExportContainerPresenter(context, containerView))
             {
                 skiaContainerPresenter.Draw(canvas, containerView.Width, containerView.Height, 0, 0, 1.0, 1.0);
             }
@@ -80,7 +80,7 @@ namespace Draw2D.Export
             using (var bitmap = new SKBitmap(info))
             {
                 using (var canvas = new SKCanvas(bitmap))
-                using (var skiaContainerPresenter = new ExportContainerPresenter(context, containerView))
+                using (var skiaContainerPresenter = new SkiaExportContainerPresenter(context, containerView))
                 {
                     skiaContainerPresenter.Draw(canvas, containerView.Width, containerView.Height, 0, 0, 1.0, 1.0);
                 }

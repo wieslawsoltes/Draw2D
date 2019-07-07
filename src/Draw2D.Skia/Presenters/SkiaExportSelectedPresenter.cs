@@ -9,12 +9,12 @@ using SkiaSharp;
 
 namespace Draw2D.Presenters
 {
-    public class ExportSelectedPresenter : IContainerPresenter
+    public class SkiaExportSelectedPresenter : IContainerPresenter
     {
         private readonly IToolContext _context;
         private readonly IContainerView _view;
 
-        public ExportSelectedPresenter(IToolContext context, IContainerView view)
+        public SkiaExportSelectedPresenter(IToolContext context, IContainerView view)
         {
             _context = context;
             _view = view;
