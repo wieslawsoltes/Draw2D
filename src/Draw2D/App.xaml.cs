@@ -7,6 +7,7 @@ using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 using Draw2D.Editor;
 using Draw2D.Export;
+using Draw2D.Renderers;
 using Draw2D.Serializer;
 using Draw2D.Settings;
 using Draw2D.ViewModels.Containers;
@@ -17,6 +18,18 @@ using Draw2D.Views;
 
 namespace Draw2D
 {
+    public static class EditorToolContextBuilder
+    {
+        public static void UseSkia(this IEditorToolContext editorToolContext)
+        {
+            editorToolContext.PathConverter = new SkiaPathConverter();
+            editorToolContext.AvaloniaXamlConverter = new AvaloniaXamlConverter();
+            editorToolContext.ContainerImporter = new SkiaContainerImporter();
+            editorToolContext.ContainerExporter = new SkiaContainerExporter();
+            editorToolContext.SvgConverter = new SkiaSvgConverter();
+        }
+    }
+
     public class App : Application
     {
         public static string StylesPath { get; set; }
@@ -46,9 +59,10 @@ namespace Draw2D
                 ToolContext.StyleLibrary = StyleLibrary;
                 ToolContext.GroupLibrary = GroupLibrary;
 
-                if (ToolContext is EditorToolContext editorToolContext)
+                if (ToolContext is IEditorToolContext editorToolContext)
                 {
                     editorToolContext.ContainerFactory = ContainerFactory;
+                    editorToolContext.UseSkia();
                     editorToolContext.NewContainerView("View");
 
                     editorToolContext.CurrentDirectory = Directory.GetCurrentDirectory();
@@ -122,9 +136,10 @@ namespace Draw2D
                     ToolContext.GroupLibrary = GroupLibrary;
                 }
 #endif
-                if (ToolContext is EditorToolContext editorToolContext)
+                if (ToolContext is IEditorToolContext editorToolContext)
                 {
                     editorToolContext.ContainerFactory = ContainerFactory;
+                    editorToolContext.UseSkia();
                     foreach (var containerView in editorToolContext.ContainerViews)
                     {
                         editorToolContext.InitContainerView(containerView);
@@ -157,9 +172,10 @@ namespace Draw2D
                     ToolContext.GroupLibrary = ContainerFactory.CreateGroupLibrary();
                 }
 
-                if (ToolContext is EditorToolContext editorToolContext)
+                if (ToolContext is IEditorToolContext editorToolContext)
                 {
                     editorToolContext.ContainerFactory = ContainerFactory;
+                    editorToolContext.UseSkia();
                     editorToolContext.NewContainerView("View");
 
                     editorToolContext.CurrentDirectory = Directory.GetCurrentDirectory();
@@ -249,7 +265,7 @@ namespace Draw2D
                 if (command == "--export")
                 {
                     var toolContext = JsonSerializer.FromJsonFile<IToolContext>(args[1]);
-                    SkiaCanvasConverter.Export(toolContext, args[2], toolContext.ContainerView);
+                    new SkiaContainerExporter().Export(toolContext, args[2], toolContext.ContainerView);
                     return false;
                 }
             }

@@ -9,6 +9,10 @@ namespace Draw2D.Editor
     public interface IEditorToolContext : IToolContext
     {
         IContainerFactory ContainerFactory { get; set; }
+        IAvaloniaXamlConverter AvaloniaXamlConverter { get; set; }
+        IContainerImporter ContainerImporter { get; set; }
+        IContainerExporter ContainerExporter { get; set; }
+        ISvgConverter SvgConverter { get; set; }
         ISelection Selection { get; set; }
         string CurrentDirectory { get; set; }
         IList<string> Files { get; set; }

@@ -9,7 +9,6 @@ using System.Text;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
-using Draw2D.Export;
 using Draw2D.Presenters;
 using Draw2D.Serializer;
 using Draw2D.ViewModels;
@@ -24,6 +23,10 @@ namespace Draw2D.Editor
         public new static EditMode[] EditModeValues { get; } = (EditMode[])Enum.GetValues(typeof(EditMode));
 
         private IContainerFactory _containerFactory;
+        private IAvaloniaXamlConverter _avaloniaXamlConverter;
+        private IContainerImporter _containerImporter;
+        private IContainerExporter _containerExporter;
+        private ISvgConverter _svgConverter;
         private ISelection _selection;
         private string _currentDirectory;
         private IList<string> _files;
@@ -33,6 +36,34 @@ namespace Draw2D.Editor
         {
             get => _containerFactory;
             set => Update(ref _containerFactory, value);
+        }
+
+        [IgnoreDataMember]
+        public IAvaloniaXamlConverter AvaloniaXamlConverter
+        {
+            get => _avaloniaXamlConverter;
+            set => Update(ref _avaloniaXamlConverter, value);
+        }
+
+        [IgnoreDataMember]
+        public IContainerImporter ContainerImporter
+        {
+            get => _containerImporter;
+            set => Update(ref _containerImporter, value);
+        }
+
+        [IgnoreDataMember]
+        public IContainerExporter ContainerExporter
+        {
+            get => _containerExporter;
+            set => Update(ref _containerExporter, value);
+        }
+
+        [IgnoreDataMember]
+        public ISvgConverter SvgConverter
+        {
+            get => _svgConverter;
+            set => Update(ref _svgConverter, value);
         }
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
@@ -54,15 +85,6 @@ namespace Draw2D.Editor
         {
             get => _files;
             set => Update(ref _files, value);
-        }
-
-        public EditorToolContext()
-        {
-        }
-
-        public EditorToolContext(IContainerFactory containerFactory)
-        {
-            _containerFactory = containerFactory;
         }
 
         private Window GetWindow()
@@ -308,7 +330,7 @@ namespace Draw2D.Editor
             {
                 foreach (var path in result)
                 {
-                    SkiaCanvasConverter.ImportSvg(this, path);
+                    ContainerImporter?.Import(this, path, ContainerView);
                 }
             }
         }
@@ -338,7 +360,7 @@ namespace Draw2D.Editor
             if (result != null)
             {
                 var path = result;
-                SkiaCanvasConverter.Export(this, path, ContainerView);
+                ContainerExporter?.Export(this, path, ContainerView);
             }
         }
 
@@ -346,7 +368,7 @@ namespace Draw2D.Editor
         {
             try
             {
-                var text = SkiaCanvasConverter.ToSvgDocument(this, ContainerView);
+                var text = SvgConverter?.ConvertToSvgDocument(this, ContainerView);
                 if (!string.IsNullOrEmpty(text))
                 {
                     await Application.Current.Clipboard.SetTextAsync(text);
@@ -413,7 +435,7 @@ namespace Draw2D.Editor
             try
             {
                 var sb = new StringBuilder();
-                AvaloniaXamlConverter.ConvertToGeometryDrawing(this, this.ContainerView, sb);
+                _avaloniaXamlConverter?.ConvertToGeometryDrawing(this, this.ContainerView, sb, "");
                 var text = sb.ToString();
                 if (!string.IsNullOrEmpty(text))
                 {
@@ -432,7 +454,7 @@ namespace Draw2D.Editor
             try
             {
                 var sb = new StringBuilder();
-                AvaloniaXamlConverter.ConvertToDrawingGroup(this, this.ContainerView, sb);
+                _avaloniaXamlConverter?.ConvertToDrawingGroup(this, this.ContainerView, sb, "");
                 var text = sb.ToString();
                 if (!string.IsNullOrEmpty(text))
                 {
@@ -451,7 +473,7 @@ namespace Draw2D.Editor
             try
             {
                 var sb = new StringBuilder();
-                AvaloniaXamlConverter.ConvertToDrawingPresenter(this, this.ContainerView, sb);
+                _avaloniaXamlConverter?.ConvertToDrawingPresenter(this, this.ContainerView, sb, "");
                 var text = sb.ToString();
                 if (!string.IsNullOrEmpty(text))
                 {
@@ -470,7 +492,7 @@ namespace Draw2D.Editor
             try
             {
                 var sb = new StringBuilder();
-                AvaloniaXamlConverter.ConvertToPath(this, this.ContainerView, sb);
+                _avaloniaXamlConverter?.ConvertToPath(this, this.ContainerView, sb, "");
                 var text = sb.ToString();
                 if (!string.IsNullOrEmpty(text))
                 {
@@ -489,7 +511,7 @@ namespace Draw2D.Editor
             try
             {
                 var sb = new StringBuilder();
-                AvaloniaXamlConverter.ConvertToCanvas(this, this.ContainerView, sb);
+                _avaloniaXamlConverter?.ConvertToCanvas(this, this.ContainerView, sb, "");
                 var text = sb.ToString();
                 if (!string.IsNullOrEmpty(text))
                 {

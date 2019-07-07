@@ -12,19 +12,9 @@ using SkiaSharp;
 
 namespace Draw2D.Export
 {
-    public static class SkiaCanvasConverter
+    public class SkiaContainerExporter : IContainerExporter
     {
-        public static void ImportSvg(IToolContext context, string path)
-        {
-            var svg = new SkiaSharp.Extended.Svg.SKSvg();
-            using (var stream = File.Open(path, FileMode.Open))
-            {
-                var picture = svg.Load(stream);
-                //var image = SKImage.FromPicture(picture, picture.CullRect.Size.ToSizeI());
-            }
-        }
-
-        public static void ExportSvg(IToolContext context, string path, IContainerView containerView)
+        internal static void ExportSvg(IToolContext context, string path, IContainerView containerView)
         {
             using (var stream = new SKFileWStream(path))
             using (var writer = new SKXmlStreamWriter(stream))
@@ -35,7 +25,7 @@ namespace Draw2D.Export
             }
         }
 
-        public static void ExportPdf(IToolContext context, string path, IContainerView containerView)
+        internal static void ExportPdf(IToolContext context, string path, IContainerView containerView)
         {
             using (var stream = new SKFileWStream(path))
             using (var pdf = SKDocument.CreatePdf(stream, SKDocument.DefaultRasterDpi))
@@ -47,7 +37,7 @@ namespace Draw2D.Export
             }
         }
 
-        public static void ExportXps(IToolContext context, string path, IContainerView containerView)
+        internal static void ExportXps(IToolContext context, string path, IContainerView containerView)
         {
             using (var stream = new SKFileWStream(path))
             using (var xps = SKDocument.CreateXps(stream, SKDocument.DefaultRasterDpi))
@@ -59,7 +49,7 @@ namespace Draw2D.Export
             }
         }
 
-        public static void ExportSkp(IToolContext context, string path, IContainerView containerView)
+        internal static void ExportSkp(IToolContext context, string path, IContainerView containerView)
         {
             var recorder = new SKPictureRecorder();
             var rect = new SKRect(0f, 0f, (float)containerView.Width, (float)containerView.Height);
@@ -84,7 +74,7 @@ namespace Draw2D.Export
             picture.Dispose();
         }
 
-        public static void ExportImage(IToolContext context, string path, IContainerView containerView, SKEncodedImageFormat format, int quality)
+        internal static void ExportImage(IToolContext context, string path, IContainerView containerView, SKEncodedImageFormat format, int quality)
         {
             var info = new SKImageInfo((int)containerView.Width, (int)containerView.Height);
             using (var bitmap = new SKBitmap(info))
@@ -108,7 +98,7 @@ namespace Draw2D.Export
             }
         }
 
-        public static void Export(IToolContext context, string path, IContainerView containerView)
+        public void Export(IToolContext context, string path, IContainerView containerView)
         {
             var outputExtension = Path.GetExtension(path);
 
@@ -171,56 +161,6 @@ namespace Draw2D.Export
             else if (string.Compare(outputExtension, ".dng", StringComparison.OrdinalIgnoreCase) == 0)
             {
                 ExportImage(context, path, containerView, SKEncodedImageFormat.Dng, 100);
-            }
-        }
-
-        public static string FormatXml(string xml)
-        {
-            var sb = new StringBuilder();
-            var element = XElement.Parse(xml);
-            var settings = new XmlWriterSettings();
-            settings.OmitXmlDeclaration = false;
-            settings.Indent = true;
-            settings.NewLineOnAttributes = false;
-
-            using (var writer = XmlWriter.Create(sb, settings))
-            {
-                element.Save(writer);
-            }
-
-            return sb.ToString();
-        }
-
-        public static string ToSvgDocument(IToolContext context, IContainerView containerView)
-        {
-            using (var stream = new MemoryStream())
-            {
-                using (var wstream = new SKManagedWStream(stream))
-                using (var writer = new SKXmlStreamWriter(wstream))
-                using (var canvas = SKSvgCanvas.Create(SKRect.Create(0, 0, (int)containerView.Width, (int)containerView.Height), writer))
-                {
-                    if (containerView.SelectionState?.Shapes?.Count > 0)
-                    {
-                        using (var skiaSelectedPresenter = new ExportSelectedPresenter(context, containerView))
-                        {
-                            skiaSelectedPresenter.Draw(canvas, containerView.Width, containerView.Height, 0, 0, 1.0, 1.0);
-                        }
-                    }
-                    else
-                    {
-                        using (var skiaContainerPresenter = new ExportContainerPresenter(context, containerView))
-                        {
-                            skiaContainerPresenter.Draw(canvas, containerView.Width, containerView.Height, 0, 0, 1.0, 1.0);
-                        }
-                    }
-                }
-
-                stream.Position = 0;
-                using (var reader = new StreamReader(stream, Encoding.UTF8))
-                {
-                    var xml = reader.ReadToEnd();
-                    return FormatXml(xml);
-                }
             }
         }
     }

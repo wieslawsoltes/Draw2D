@@ -149,11 +149,12 @@ namespace Draw2D.Editor
 
         public IToolContext CreateToolContext()
         {
-            var editorToolContext = new EditorToolContext(this);
+            var editorToolContext = new EditorToolContext()
+            {
+                ContainerFactory = this
+            };
 
             var hitTest = new HitTest();
-
-            var pathConverter = new SkiaPathConverter();
 
             var tools = new ObservableCollection<ITool>();
 
@@ -840,7 +841,6 @@ namespace Draw2D.Editor
 
             editorToolContext.Selection = selectionTool;
             editorToolContext.HitTest = hitTest;
-            editorToolContext.PathConverter = pathConverter;
             editorToolContext.CurrentDirectory = null;
             editorToolContext.Files = new ObservableCollection<string>();
 

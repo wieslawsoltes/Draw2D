@@ -9,11 +9,11 @@ using Draw2D.ViewModels.Tools;
 
 namespace Draw2D.Export
 {
-    public static class AvaloniaXamlConverter
+    public class AvaloniaXamlConverter : IAvaloniaXamlConverter
     {
         internal static char[] NewLine = Environment.NewLine.ToCharArray();
 
-        public static void ConvertToGeometryDrawing(IToolContext context, IContainerView containerView, StringBuilder sb, string indent = "")
+        public void ConvertToGeometryDrawing(IToolContext context, IContainerView containerView, StringBuilder sb, string indent)
         {
             if (containerView.SelectionState?.Shapes != null && containerView.SelectionState?.Shapes.Count > 0)
             {
@@ -62,21 +62,21 @@ namespace Draw2D.Export
             }
         }
 
-        public static void ConvertToDrawingGroup(IToolContext context, IContainerView containerView, StringBuilder sb, string indent = "")
+        public void ConvertToDrawingGroup(IToolContext context, IContainerView containerView, StringBuilder sb, string indent)
         {
             sb.AppendLine($"{indent}<DrawingGroup>");
             ConvertToGeometryDrawing(context, containerView, sb, indent + "    ");
             sb.AppendLine($"{indent}</DrawingGroup>");
         }
 
-        public static void ConvertToDrawingPresenter(IToolContext context, IContainerView containerView, StringBuilder sb, string indent = "")
+        public void ConvertToDrawingPresenter(IToolContext context, IContainerView containerView, StringBuilder sb, string indent)
         {
             sb.AppendLine($"{indent}<DrawingPresenter Width=\"{containerView.Width}\" Height=\"{containerView.Height}\" Stretch=\"Uniform\">");
             ConvertToDrawingGroup(context, containerView, sb, indent + "    ");
             sb.AppendLine($"{indent}</DrawingPresenter>");
         }
 
-        public static void ConvertToPath(IToolContext context, IContainerView containerView, StringBuilder sb, string indent = "")
+        public void ConvertToPath(IToolContext context, IContainerView containerView, StringBuilder sb, string indent)
         {
             if (containerView.SelectionState?.Shapes != null && containerView.SelectionState?.Shapes.Count > 0)
             {
@@ -117,7 +117,7 @@ namespace Draw2D.Export
             }
         }
 
-        public static void ConvertToCanvas(IToolContext context, IContainerView containerView, StringBuilder sb, string indent = "")
+        public void ConvertToCanvas(IToolContext context, IContainerView containerView, StringBuilder sb, string indent)
         {
             sb.AppendLine($"{indent}<Canvas Width=\"{containerView.Width}\" Height=\"{containerView.Height}\">");
             ConvertToPath(context, containerView, sb, indent + "    ");
