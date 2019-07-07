@@ -577,10 +577,9 @@ namespace Draw2D.Renderers
                 var rect = SkiaHelper.ToSKRect(image.StartPoint, image.Point, dx, dy);
                 GetSKPicture(image.Path, out var picture);
                 int count = canvas.Save();
-                canvas.Translate(rect.Left, rect.Top);
-                float sx = rect.Width / picture.CullRect.Width;
-                float sy = rect.Height / picture.CullRect.Height;
-                canvas.Scale(sx, sy);
+                SkiaHelper.GetTransform(image.StretchMode, rect, picture.CullRect, out var ox, out var oy, out var zx, out var zy);
+                canvas.Translate((float)ox, (float)oy);
+                canvas.Scale((float)zx, (float)zy);
                 canvas.DrawPicture(picture);
                 canvas.RestoreToCount(count);
             }
