@@ -13,7 +13,7 @@
         <converters:StyleIdToStyleConverter x:Key="StyleIdToStyleConverter"/>
     </UserControl.Resources>
     <TabControl Classes="default" TabStripPlacement="Top">
-        <TabItem Classes="default" Header="Rectangle">
+        <TabItem Classes="default" Header="Image">
             <ScrollViewer>
                 <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="Auto,*">
                     <TextBlock Classes="default" Grid.Column="0" Grid.Row="0" Text="Path"/>
