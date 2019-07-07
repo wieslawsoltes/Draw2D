@@ -15,25 +15,25 @@ namespace Draw2D.Export
         {
             try
             {
-                var image = SkiaHelper.ToSKImage(path);
-                if (image != null)
+                var picture = SkiaHelper.ToSKPicture(path);
+                if (picture != null)
                 {
-                    var imageShape = new ImageShape()
+                    var image = new ImageShape()
                     {
                         Points = new ObservableCollection<IPointShape>(),
                         StartPoint = new PointShape(0.0, 0.0, context.PointTemplate),
-                        Point = new PointShape(image.Width, image.Height, context.PointTemplate),
+                        Point = new PointShape(picture.CullRect.Width, picture.CullRect.Height, context.PointTemplate),
                         Path = path,
                         Text = new Text(),
                         StyleId = context.StyleLibrary?.CurrentItem?.Title,
                     };
 
-                    imageShape.StartPoint.Owner = imageShape;
-                    imageShape.Point.Owner = imageShape;
+                    image.StartPoint.Owner = image;
+                    image.Point.Owner = image;
 
-                    image.Dispose();
+                    picture.Dispose();
 
-                    context.ContainerView?.CurrentContainer.Shapes.Add(imageShape);
+                    context.ContainerView?.CurrentContainer.Shapes.Add(image);
                     context.ContainerView?.InputService?.Redraw?.Invoke();
                 }
             }

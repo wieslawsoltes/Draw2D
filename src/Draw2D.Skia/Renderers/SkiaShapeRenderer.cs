@@ -19,7 +19,7 @@ namespace Draw2D.Renderers
         private Dictionary<TextStyle, (SKPaint paint, SKFontMetrics metrics)> _textPaintCache;
         private Dictionary<ShapeStyle, SKPaint> _fillPaintCache;
         private Dictionary<ShapeStyle, SKPaint> _strokePaintCache;
-        private Dictionary<string, SKImage> _imageCache;
+        private Dictionary<string, SKPicture> _pictureCache;
 
         public SkiaShapeRenderer(IToolContext context, ISelectionState selectionState)
         {
@@ -29,7 +29,7 @@ namespace Draw2D.Renderers
             _textPaintCache = new Dictionary<TextStyle, (SKPaint paint, SKFontMetrics metrics)>();
             _fillPaintCache = new Dictionary<ShapeStyle, SKPaint>();
             _strokePaintCache = new Dictionary<ShapeStyle, SKPaint>();
-            _imageCache = new Dictionary<string, SKImage>();
+            _pictureCache = new Dictionary<string, SKPicture>();
         }
 
         public void Dispose()
@@ -73,13 +73,13 @@ namespace Draw2D.Renderers
                 _strokePaintCache = null;
             }
 
-            if (_imageCache != null)
+            if (_pictureCache != null)
             {
-                foreach (var cache in _imageCache)
+                foreach (var cache in _pictureCache)
                 {
                     cache.Value.Dispose();
                 }
-                _imageCache = null;
+                _pictureCache = null;
             }
         }
 
@@ -180,12 +180,12 @@ namespace Draw2D.Renderers
             metrics = cached.metrics;
         }
 
-        private void GetSKImage(string path, out SKImage image)
+        private void GetSKPicture(string path, out SKPicture picture)
         {
-            if (!_imageCache.TryGetValue(path, out image))
+            if (!_pictureCache.TryGetValue(path, out picture))
             {
-                image = SkiaHelper.ToSKImage(path);
-                _imageCache[path] = image;
+                picture = SkiaHelper.ToSKPicture(path);
+                _pictureCache[path] = picture;
 #if DEBUG_DICT_CACHE
                 Log.WriteLine($"GetSKImage: ctor()");
 #endif
@@ -575,8 +575,8 @@ namespace Draw2D.Renderers
             if (!string.IsNullOrEmpty(image.Path))
             {
                 var rect = SkiaHelper.ToSKRect(image.StartPoint, image.Point, dx, dy);
-                GetSKImage(image.Path, out var cache);
-                canvas.DrawImage(cache, rect);
+                GetSKPicture(image.Path, out var picture);
+                canvas.DrawPicture(picture);
             }
             var style = _context?.StyleLibrary?.Get(styleId);
             if (style != null)

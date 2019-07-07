@@ -848,7 +848,7 @@ namespace Draw2D
             };
         }
 
-        internal static SKPicture ToSKPicture(string xml)
+        internal static SKPicture SvgToSKPicture(string xml)
         {
             if (!string.IsNullOrEmpty(xml))
             {
@@ -862,16 +862,7 @@ namespace Draw2D
             return null;
         }
 
-        internal static SKImage ToSKImage(SKPicture picture)
-        {
-            if (picture != null)
-            {
-                return SKImage.FromPicture(picture, picture.CullRect.Size.ToSizeI());
-            }
-            return null;
-        }
-
-        internal static SKImage ToSKImage(string path)
+        internal static SKPicture ToSKPicture(string path)
         {
             var extension = Path.GetExtension(path);
 
@@ -880,14 +871,19 @@ namespace Draw2D
                 var xml = File.ReadAllText(path);
                 if (!string.IsNullOrEmpty(xml))
                 {
-                    using (var picture = ToSKPicture(xml))
-                    {
-                        return ToSKImage(picture);
-                    }
+                    return SvgToSKPicture(xml);
                 }
+                return null;
             }
 
-            return SKImage.FromEncodedData(path);
+            using (var recorder = new SKPictureRecorder())
+            {
+                var image = SKImage.FromEncodedData(path);
+                var rect = new SKRect(0f, 0f, (float)image.Width, (float)image.Height);
+                var canvas = recorder.BeginRecording(rect);
+                canvas.DrawImage(image, rect);
+                return recorder.EndRecording();
+            }
         }
     }
 }
