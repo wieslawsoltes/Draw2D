@@ -1,5 +1,6 @@
 ﻿// Copyright (c) Wiesław Šoltés. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Runtime.Serialization;
@@ -11,6 +12,8 @@ namespace Draw2D.ViewModels.Shapes
     [DataContract(IsReference = true)]
     public class ImageShape : BaseShape
     {
+        public static StretchMode[] StretchModeValues { get; } = (StretchMode[])Enum.GetValues(typeof(StretchMode));
+
         internal static new IBounds s_bounds = new ImageBounds();
         internal static new IShapeDecorator s_decorator = new ImageDecorator();
 
@@ -18,6 +21,7 @@ namespace Draw2D.ViewModels.Shapes
         private IPointShape _point;
         private Text _text;
         private string _path;
+        private StretchMode _stretchMode;
 
         [IgnoreDataMember]
         public override IBounds Bounds { get; } = s_bounds;
@@ -51,6 +55,13 @@ namespace Draw2D.ViewModels.Shapes
         {
             get => _path;
             set => Update(ref _path, value);
+        }
+
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public StretchMode StretchMode
+        {
+            get => _stretchMode;
+            set => Update(ref _stretchMode, value);
         }
 
         public ImageShape()
