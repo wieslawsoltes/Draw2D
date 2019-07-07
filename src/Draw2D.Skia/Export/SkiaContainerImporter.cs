@@ -24,7 +24,7 @@ namespace Draw2D.Export
                         StartPoint = new PointShape(0.0, 0.0, context.PointTemplate),
                         Point = new PointShape(picture.CullRect.Width, picture.CullRect.Height, context.PointTemplate),
                         Path = path,
-                        StretchMode = StretchMode.Uniform,
+                        StretchMode = StretchMode.Center,
                         Text = new Text(),
                         StyleId = context.StyleLibrary?.CurrentItem?.Title,
                     };
