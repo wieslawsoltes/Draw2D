@@ -68,6 +68,13 @@ namespace Draw2D.Bounds
             _rootNodes[_currentRootNode].Children.Add(new ChildNode(text, styleId, dx, dy, scale, geometry));
         }
 
+        public void DrawImage(object dc, ImageShape image, string styleId, double dx, double dy, double scale)
+        {
+            var geometry = new SKPath() { FillType = SKPathFillType.Winding };
+            SkiaHelper.AddImage(null, image, dx, dy, geometry);
+            _rootNodes[_currentRootNode].Children.Add(new ChildNode(image, styleId, dx, dy, scale, geometry));
+        }
+
         public void Dispose()
         {
             if (_rootNodes != null)

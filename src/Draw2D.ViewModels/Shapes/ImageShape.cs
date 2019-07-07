@@ -9,14 +9,15 @@ using Draw2D.ViewModels.Decorators;
 namespace Draw2D.ViewModels.Shapes
 {
     [DataContract(IsReference = true)]
-    public class EllipseShape : BaseShape
+    public class ImageShape : BaseShape
     {
-        internal static new IBounds s_bounds = new EllipseBounds();
-        internal static new IShapeDecorator s_decorator = new EllipseDecorator();
+        internal static new IBounds s_bounds = new ImageBounds();
+        internal static new IShapeDecorator s_decorator = new ImageDecorator();
 
         private IPointShape _startPoint;
         private IPointShape _point;
         private Text _text;
+        private string _path;
 
         [IgnoreDataMember]
         public override IBounds Bounds { get; } = s_bounds;
@@ -45,11 +46,23 @@ namespace Draw2D.ViewModels.Shapes
             set => Update(ref _text, value);
         }
 
-        public EllipseShape()
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public string Path
+        {
+            get => _path;
+            set => Update(ref _path, value);
+        }
+
+        public ImageShape()
         {
         }
 
-        public EllipseShape(IPointShape startPoint, IPointShape point)
+        public ImageShape(string path)
+        {
+            Path = path;
+        }
+
+        public ImageShape(IPointShape startPoint, IPointShape point)
         {
             this.StartPoint = startPoint;
             this.Point = point;
@@ -80,7 +93,7 @@ namespace Draw2D.ViewModels.Shapes
         {
             if (StyleId != null)
             {
-                renderer.DrawEllipse(dc, this, StyleId, dx, dy, scale);
+                renderer.DrawImage(dc, this, StyleId, dx, dy, scale);
             }
         }
 
@@ -130,7 +143,7 @@ namespace Draw2D.ViewModels.Shapes
                 if (StartPoint == target)
                 {
 #if DEBUG_CONNECTORS
-                    Log.WriteLine($"{nameof(EllipseShape)}: Connected to {nameof(StartPoint)}");
+                    Log.WriteLine($"{nameof(ImageShape)}: Connected to {nameof(StartPoint)}");
 #endif
                     this.StartPoint = point;
                     return true;
@@ -138,7 +151,7 @@ namespace Draw2D.ViewModels.Shapes
                 else if (Point == target)
                 {
 #if DEBUG_CONNECTORS
-                    Log.WriteLine($"{nameof(EllipseShape)}: Connected to {nameof(Point)}");
+                    Log.WriteLine($"{nameof(ImageShape)}: Connected to {nameof(Point)}");
 #endif
                     this.Point = point;
                     return true;
@@ -156,7 +169,7 @@ namespace Draw2D.ViewModels.Shapes
             else if (StartPoint == point)
             {
 #if DEBUG_CONNECTORS
-                Log.WriteLine($"{nameof(EllipseShape)}: Disconnected from {nameof(StartPoint)}");
+                Log.WriteLine($"{nameof(ImageShape)}: Disconnected from {nameof(StartPoint)}");
 #endif
                 result = (IPointShape)(point.Copy(null));
                 this.StartPoint = result;
@@ -165,7 +178,7 @@ namespace Draw2D.ViewModels.Shapes
             else if (Point == point)
             {
 #if DEBUG_CONNECTORS
-                Log.WriteLine($"{nameof(EllipseShape)}: Disconnected from {nameof(Point)}");
+                Log.WriteLine($"{nameof(ImageShape)}: Disconnected from {nameof(Point)}");
 #endif
                 result = (IPointShape)(point.Copy(null));
                 this.Point = result;
@@ -182,7 +195,7 @@ namespace Draw2D.ViewModels.Shapes
             if (this.StartPoint != null)
             {
 #if DEBUG_CONNECTORS
-                Log.WriteLine($"{nameof(EllipseShape)}: Disconnected from {nameof(StartPoint)}");
+                Log.WriteLine($"{nameof(ImageShape)}: Disconnected from {nameof(StartPoint)}");
 #endif
                 this.StartPoint = (IPointShape)(this.StartPoint.Copy(null));
                 result = true;
@@ -191,7 +204,7 @@ namespace Draw2D.ViewModels.Shapes
             if (this.Point != null)
             {
 #if DEBUG_CONNECTORS
-                Log.WriteLine($"{nameof(EllipseShape)}: Disconnected from {nameof(Point)}");
+                Log.WriteLine($"{nameof(ImageShape)}: Disconnected from {nameof(Point)}");
 #endif
                 this.Point = (IPointShape)(this.Point.Copy(null));
                 result = true;
@@ -202,11 +215,12 @@ namespace Draw2D.ViewModels.Shapes
 
         public override object Copy(Dictionary<object, object> shared)
         {
-            var copy = new EllipseShape()
+            var copy = new ImageShape()
             {
                 Points = new ObservableCollection<IPointShape>(),
-                StyleId = this.StyleId,
-                Text = (Text)this.Text?.Copy(shared)
+                Text = (Text)this.Text?.Copy(shared),
+                Path = this.Path,
+                StyleId = this.StyleId
             };
 
             if (shared != null)

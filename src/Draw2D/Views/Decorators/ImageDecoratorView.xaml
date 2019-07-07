@@ -1,0 +1,38 @@
+﻿<!-- Copyright (c) Wiesław Šoltés. All rights reserved. -->
+<!-- Licensed under the MIT license. See LICENSE file in the project root for full license information. -->
+<UserControl x:Class="Draw2D.Views.Decorators.ImageDecoratorView"
+             xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:Draw2D.Views.Decorators"
+             mc:Ignorable="d"
+             d:DesignWidth="400" d:DesignHeight="300">
+    <TabControl Classes="default" TabStripPlacement="Top">
+        <TabItem Classes="default" Header="Image">
+            <ScrollViewer>
+                <Grid>
+                </Grid>
+            </ScrollViewer>
+        </TabItem>
+        <TabItem Classes="default" Header="Object">
+            <ScrollViewer>
+                <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="Auto,*">
+                    <TextBlock Classes="default" Grid.Column="0" Grid.Row="0" Text="Id"/>
+                    <TextBox Classes="default" Grid.Column="1" Grid.Row="0" Text="{Binding Id}"/>
+                    <TextBlock Classes="default" Grid.Column="0" Grid.Row="1" Text="Name"/>
+                    <TextBox Classes="default" Grid.Column="1" Grid.Row="1" Text="{Binding Name}"/>
+                    <TextBlock Classes="default" Grid.Column="0" Grid.Row="2" Text="IsDirty"/>
+                    <CheckBox Classes="default" Grid.Column="1" Grid.Row="2" IsEnabled="False" IsChecked="{Binding IsDirty, Mode=OneWay}"/>
+                    <Button Classes="default" Content="MarkAsDirty=True" Command="{Binding MarkAsDirty}" CommandParameter="True" Grid.Column="1" Grid.Row="3"/>
+                    <Button Classes="default" Content="MarkAsDirty=False" Command="{Binding MarkAsDirty}" CommandParameter="False" Grid.Column="1" Grid.Row="4"/>
+                    <Button Classes="default" Content="Invalidate" Command="{Binding Invalidate}" Grid.Column="1" Grid.Row="5"/>
+                    <Button Classes="default" Content="SetUniqueId" Command="{Binding SetUniqueId}" Grid.Column="1" Grid.Row="6"/>
+                </Grid>
+            </ScrollViewer>
+        </TabItem>
+        <TabItem Classes="default" Header="Owner">
+            <ContentControl Content="{Binding Owner}"/>
+        </TabItem>
+    </TabControl>
+</UserControl>

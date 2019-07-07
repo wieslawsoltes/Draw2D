@@ -19,6 +19,7 @@ namespace Draw2D.Renderers
         private Dictionary<TextStyle, (SKPaint paint, SKFontMetrics metrics)> _textPaintCache;
         private Dictionary<ShapeStyle, SKPaint> _fillPaintCache;
         private Dictionary<ShapeStyle, SKPaint> _strokePaintCache;
+        private Dictionary<string, SKImage> _imageCache;
 
         public SkiaShapeRenderer(IToolContext context, ISelectionState selectionState)
         {
@@ -28,6 +29,7 @@ namespace Draw2D.Renderers
             _textPaintCache = new Dictionary<TextStyle, (SKPaint paint, SKFontMetrics metrics)>();
             _fillPaintCache = new Dictionary<ShapeStyle, SKPaint>();
             _strokePaintCache = new Dictionary<ShapeStyle, SKPaint>();
+            _imageCache = new Dictionary<string, SKImage>();
         }
 
         public void Dispose()
@@ -69,6 +71,15 @@ namespace Draw2D.Renderers
                     cache.Value.Dispose();
                 }
                 _strokePaintCache = null;
+            }
+
+            if (_imageCache != null)
+            {
+                foreach (var cache in _imageCache)
+                {
+                    cache.Value.Dispose();
+                }
+                _imageCache = null;
             }
         }
 
@@ -169,9 +180,21 @@ namespace Draw2D.Renderers
             metrics = cached.metrics;
         }
 
-        private void DrawText(SKCanvas canvas, Text text, IPointShape topLeft, IPointShape bottomRight, ShapeStyle style, double dx, double dy, double scale)
+        private void GetSKImage(string path, out SKImage image)
         {
-            var rect = SkiaHelper.ToSKRect(topLeft, bottomRight, dx, dy);
+            if (!_imageCache.TryGetValue(path, out image))
+            {
+                image = SkiaHelper.ToSKImage(path);
+                _imageCache[path] = image;
+#if DEBUG_DICT_CACHE
+                Log.WriteLine($"GetSKImage: ctor()");
+#endif
+            }
+        }
+
+        private void DrawText(SKCanvas canvas, Text text, IPointShape startPoint, IPointShape point, ShapeStyle style, double dx, double dy, double scale)
+        {
+            var rect = SkiaHelper.ToSKRect(startPoint, point, dx, dy);
             GetSKPaintStrokeText(style.TextStyle, out var paint, out var metrics);
 #if DEBUG_DRAW_TEXT
             var mBaseline = 0.0f;
@@ -437,7 +460,7 @@ namespace Draw2D.Renderers
             if (style.IsFilled || style.IsStroked || style.TextStyle.IsStroked)
             {
                 var canvas = dc as SKCanvas;
-                var rect = SkiaHelper.ToRect(rectangle.StartPoint, rectangle.Point, dx, dy);
+                var rect = SkiaHelper.ToSKRect(rectangle.StartPoint, rectangle.Point, dx, dy);
                 if (style.IsFilled)
                 {
                     GetSKPaintFill(style, out var brush);
@@ -490,7 +513,7 @@ namespace Draw2D.Renderers
             if (style.IsFilled || style.IsStroked || style.TextStyle.IsStroked)
             {
                 var canvas = dc as SKCanvas;
-                var rect = SkiaHelper.ToRect(ellipse.StartPoint, ellipse.Point, dx, dy);
+                var rect = SkiaHelper.ToSKRect(ellipse.StartPoint, ellipse.Point, dx, dy);
                 if (style.IsFilled)
                 {
                     GetSKPaintFill(style, out var brush);
@@ -543,6 +566,25 @@ namespace Draw2D.Renderers
             {
                 var canvas = dc as SKCanvas;
                 DrawText(canvas, text.Text, text.StartPoint, text.Point, style, dx, dy, scale);
+            }
+        }
+
+        public void DrawImage(object dc, ImageShape image, string styleId, double dx, double dy, double scale)
+        {
+            var canvas = dc as SKCanvas;
+            if (!string.IsNullOrEmpty(image.Path))
+            {
+                var rect = SkiaHelper.ToSKRect(image.StartPoint, image.Point, dx, dy);
+                GetSKImage(image.Path, out var cache);
+                canvas.DrawImage(cache, rect);
+            }
+            var style = _context?.StyleLibrary?.Get(styleId);
+            if (style != null)
+            {
+                if (style.TextStyle.IsStroked && !string.IsNullOrEmpty(image.Text?.Value))
+                {
+                    DrawText(canvas, image.Text, image.StartPoint, image.Point, style, dx, dy, scale);
+                }
             }
         }
     }

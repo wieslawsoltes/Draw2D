@@ -293,7 +293,7 @@ namespace Draw2D
             geometry.AddOval(rect, SKPathDirection.Clockwise);
         }
 
-        internal static void AddText(IToolContext context, Text text, IPointShape topLeft, IPointShape bottomRight, TextStyle style, double dx, double dy, SKPath geometry)
+        internal static void AddText(IToolContext context, Text text, IPointShape startPoint, IPointShape point, TextStyle style, double dx, double dy, SKPath geometry)
         {
             using (var typeface = ToSKTypeface(style.Typeface))
             using (var paint = ToSKPaintBrush(style))
@@ -319,7 +319,7 @@ namespace Draw2D
                 var metrics = paint.FontMetrics;
                 var mAscent = metrics.Ascent;
                 var mDescent = metrics.Descent;
-                var rect = ToSKRect(topLeft, bottomRight, dx, dy);
+                var rect = ToSKRect(startPoint, point, dx, dy);
                 float x = rect.Left;
                 float y = rect.Top;
                 float width = rect.Width;
@@ -368,6 +368,12 @@ namespace Draw2D
             {
                 AddText(context, text.Text, text.StartPoint, text.Point, style.TextStyle, dx, dy, geometry);
             }
+        }
+
+        internal static void AddImage(IToolContext context, ImageShape rectangle, double dx, double dy, SKPath geometry)
+        {
+            var rect = ToSKRect(rectangle.StartPoint, rectangle.Point, dx, dy);
+            geometry.AddRect(rect, SKPathDirection.Clockwise);
         }
 
         internal static void AddPath(IToolContext context, PathShape path, double dx, double dy, SKPath geometry)
@@ -496,6 +502,9 @@ namespace Draw2D
                     return true;
                 case TextShape text:
                     AddText(context, text, dx, dy, geometry);
+                    return true;
+                case ImageShape image:
+                    AddImage(context, image, dx, dy, geometry);
                     return true;
                 case GroupShape group:
                     AddFigure(context, group, dx, dy, geometry);
@@ -718,13 +727,13 @@ namespace Draw2D
             return pathShape;
         }
 
-        internal static void ToSvgPathData(IToolContext context, Text text, IPointShape topLeft, IPointShape bottomRight, TextStyle style, StringBuilder sb)
+        internal static void ToSvgPathData(IToolContext context, Text text, IPointShape startPoint, IPointShape point, TextStyle style, StringBuilder sb)
         {
             if (!string.IsNullOrEmpty(text?.Value))
             {
                 using (var geometry = new SKPath() { FillType = SKPathFillType.Winding })
                 {
-                    AddText(context, text, topLeft, bottomRight, style, 0.0, 0.0, geometry);
+                    AddText(context, text, startPoint, point, style, 0.0, 0.0, geometry);
                     sb.AppendLine(geometry.ToSvgPathData());
                 }
             }
@@ -860,6 +869,25 @@ namespace Draw2D
                 return SKImage.FromPicture(picture, picture.CullRect.Size.ToSizeI());
             }
             return null;
+        }
+
+        internal static SKImage ToSKImage(string path)
+        {
+            var extension = Path.GetExtension(path);
+
+            if (string.Compare(extension, ".svg", StringComparison.OrdinalIgnoreCase) == 0)
+            {
+                var xml = File.ReadAllText(path);
+                if (!string.IsNullOrEmpty(xml))
+                {
+                    using (var picture = ToSKPicture(xml))
+                    {
+                        return ToSKImage(picture);
+                    }
+                }
+            }
+
+            return SKImage.FromEncodedData(path);
         }
     }
 }

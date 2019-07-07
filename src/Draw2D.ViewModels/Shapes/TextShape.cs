@@ -49,17 +49,17 @@ namespace Draw2D.ViewModels.Shapes
         {
         }
 
-        public TextShape(IPointShape topLeft, IPointShape bottomRight)
+        public TextShape(IPointShape startPoint, IPointShape point)
         {
-            this.StartPoint = topLeft;
-            this.Point = bottomRight;
+            this.StartPoint = startPoint;
+            this.Point = point;
         }
 
-        public TextShape(Text text, IPointShape topLeft, IPointShape bottomRight)
+        public TextShape(Text text, IPointShape startPoint, IPointShape point)
         {
             this.Text = text;
-            this.StartPoint = topLeft;
-            this.Point = bottomRight;
+            this.StartPoint = startPoint;
+            this.Point = point;
         }
 
         public override void GetPoints(IList<IPointShape> points)

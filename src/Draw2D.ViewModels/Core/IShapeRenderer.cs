@@ -15,5 +15,6 @@ namespace Draw2D.ViewModels
         void DrawRectangle(object dc, RectangleShape rectangle, string styleId, double dx, double dy, double scale);
         void DrawEllipse(object dc, EllipseShape ellipse, string styleId, double dx, double dy, double scale);
         void DrawText(object dc, TextShape text, string styleId, double dx, double dy, double scale);
+        void DrawImage(object dc, ImageShape image, string styleId, double dx, double dy, double scale);
     }
 }

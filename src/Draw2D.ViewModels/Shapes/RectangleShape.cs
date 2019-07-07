@@ -49,10 +49,10 @@ namespace Draw2D.ViewModels.Shapes
         {
         }
 
-        public RectangleShape(IPointShape topLeft, IPointShape bottomRight)
+        public RectangleShape(IPointShape startPoint, IPointShape point)
         {
-            this.StartPoint = topLeft;
-            this.Point = bottomRight;
+            this.StartPoint = startPoint;
+            this.Point = point;
         }
 
         public override void GetPoints(IList<IPointShape> points)
