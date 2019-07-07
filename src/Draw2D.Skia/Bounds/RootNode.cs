@@ -3,8 +3,6 @@
 using System;
 using System.Collections.Generic;
 using Draw2D.ViewModels;
-using Draw2D.ViewModels.Containers;
-using Draw2D.ViewModels.Shapes;
 using SkiaSharp;
 
 namespace Draw2D.Bounds
