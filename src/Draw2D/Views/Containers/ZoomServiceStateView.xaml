@@ -27,8 +27,7 @@
                     <TextBlock Classes="default" Grid.Column="0" Grid.Row="6" Text="IsZooming"/>
                     <CheckBox Classes="default" Grid.Column="1" Grid.Row="6" IsEnabled="False" IsChecked="{Binding IsZooming, Mode=OneWay}"/>
                     <TextBlock Classes="default" Grid.Column="0" Grid.Row="7" Text="InitFitMode"/>
-                    <TextBox Classes="default" Grid.Column="1" Grid.Row="7" Text="{Binding InitFitMode}"/>
-                    <ComboBox Classes="default" Grid.Column="1" Grid.Row="6" Items="{Binding FitModeValues}" SelectedItem="{Binding InitFitMode, Mode=TwoWay}"/>
+                    <ComboBox Classes="default" Grid.Column="1" Grid.Row="7" Items="{Binding FitModeValues}" SelectedItem="{Binding InitFitMode, Mode=TwoWay}"/>
                     <TextBlock Classes="default" Grid.Column="0" Grid.Row="8" Text="AutoFitMode"/>
                     <ComboBox Classes="default" Grid.Column="1" Grid.Row="8" Items="{Binding FitModeValues}" SelectedItem="{Binding AutoFitMode, Mode=TwoWay}"/>
                 </Grid>
