@@ -11,7 +11,7 @@
              Focusable="True"
              mc:Ignorable="d"
              d:DataContext="{x:Static app:App.ToolContext}"
-             d:DesignWidth="340" d:DesignHeight="24">
+             d:DesignWidth="500" d:DesignHeight="24">
     <UserControl.Resources>
         <converters:IsToolConverter x:Key="IsToolConverter"/>
     </UserControl.Resources>
