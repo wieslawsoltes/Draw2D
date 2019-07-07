@@ -1209,7 +1209,7 @@ namespace Draw2D.ViewModels.Tools
         {
             // TODO: Experimental hit-testing.
             /*
-            var bounds = new SkiaBoundsShapeRenderer(context.ContainerView?.CurrentContainer);
+            var bounds = new SkiaHitTest(context.ContainerView?.CurrentContainer);
 
             //if (bounds.Contains((float)target.X, (float)target.Y, ContainsMode.Bounds, out var rootShape, out var childShape))
             //{

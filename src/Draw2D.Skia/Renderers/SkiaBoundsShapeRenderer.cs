@@ -9,14 +9,15 @@ using SkiaSharp;
 
 namespace Draw2D.Renderers
 {
-    public class SkiaBoundsShapeRenderer : IShapeRenderer
+    public class SkiaHitTest : IDisposable
     {
-        private int _currentRootNode = -1;
-        private IList<RootNode> _rootNodes;
+        internal SkiaBoundsShapeRenderer _renderer;
 
-        public SkiaBoundsShapeRenderer(ICanvasContainer container)
+        public SkiaHitTest(ICanvasContainer container)
         {
-            _rootNodes = new List<RootNode>();
+            _renderer = new SkiaBoundsShapeRenderer();
+            _renderer._currentRootNode = -1;
+            _renderer._rootNodes = new List<RootNode>();
 
             var points = new List<IPointShape>();
 
@@ -24,16 +25,16 @@ namespace Draw2D.Renderers
 
             foreach (var point in points)
             {
-                _rootNodes.Add(new RootNode(point));
-                _currentRootNode++;
-                point.Draw(null, this, 0.0, 0.0, 1.0, null, null);
+                _renderer._rootNodes.Add(new RootNode(point));
+                _renderer._currentRootNode++;
+                point.Draw(null, _renderer, 0.0, 0.0, 1.0, null, null);
             }
 
             foreach (var shape in container.Shapes)
             {
-                _rootNodes.Add(new RootNode(shape));
-                _currentRootNode++;
-                shape.Draw(null, this, 0.0, 0.0, 1.0, null, null);
+                _renderer._rootNodes.Add(new RootNode(shape));
+                _renderer._currentRootNode++;
+                shape.Draw(null, _renderer, 0.0, 0.0, 1.0, null, null);
             }
         }
 
@@ -41,9 +42,9 @@ namespace Draw2D.Renderers
         {
             rootShape = null;
             childShape = null;
-            for (int i = 0; i < _rootNodes.Count; i++)
+            for (int i = 0; i < _renderer._rootNodes.Count; i++)
             {
-                if (_rootNodes[i].Contains(x, y, mode, out rootShape, out childShape))
+                if (_renderer._rootNodes[i].Contains(x, y, mode, out rootShape, out childShape))
                 {
                     return true;
                 }
@@ -55,9 +56,9 @@ namespace Draw2D.Renderers
         {
             rootShape = null;
             childShape = null;
-            for (int i = 0; i < _rootNodes.Count; i++)
+            for (int i = 0; i < _renderer._rootNodes.Count; i++)
             {
-                if (_rootNodes[i].Intersects(geometry, out rootShape, out childShape))
+                if (_renderer._rootNodes[i].Intersects(geometry, out rootShape, out childShape))
                 {
                     return true;
                 }
@@ -69,9 +70,9 @@ namespace Draw2D.Renderers
         {
             rootShape = null;
             childShape = null;
-            for (int i = 0; i < _rootNodes.Count; i++)
+            for (int i = 0; i < _renderer._rootNodes.Count; i++)
             {
-                if (_rootNodes[i].Intersects(ref rect, out rootShape, out childShape))
+                if (_renderer._rootNodes[i].Intersects(ref rect, out rootShape, out childShape))
                 {
                     return true;
                 }
@@ -81,15 +82,18 @@ namespace Draw2D.Renderers
 
         public void Dispose()
         {
-            if (_rootNodes != null)
+            if (_renderer != null)
             {
-                for (int i = 0; i < _rootNodes.Count; i++)
-                {
-                    _rootNodes[i].Dispose();
-                }
-                _rootNodes = null;
+                _renderer.Dispose();
+                _renderer = null;
             }
         }
+    }
+
+    internal class SkiaBoundsShapeRenderer : IShapeRenderer
+    {
+        internal int _currentRootNode = -1;
+        internal IList<RootNode> _rootNodes;
 
         public void DrawLine(object dc, LineShape line, string styleId, double dx, double dy, double scale)
         {
@@ -145,6 +149,18 @@ namespace Draw2D.Renderers
             var geometry = new SKPath() { FillType = SKPathFillType.Winding };
             SkiaHelper.AddText(null, text, dx, dy, geometry);
             _rootNodes[_currentRootNode].Children.Add(new ChildNode(text, styleId, dx, dy, scale, geometry));
+        }
+
+        public void Dispose()
+        {
+            if (_rootNodes != null)
+            {
+                for (int i = 0; i < _rootNodes.Count; i++)
+                {
+                    _rootNodes[i].Dispose();
+                }
+                _rootNodes = null;
+            }
         }
     }
 }
