@@ -3,13 +3,16 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Text;
+using System.Xml;
 using Draw2D.ViewModels;
 using Draw2D.ViewModels.Containers;
 using Draw2D.ViewModels.Shapes;
 using Draw2D.ViewModels.Style;
 using Draw2D.ViewModels.Tools;
 using SkiaSharp;
+using Svg = SkiaSharp.Extended.Svg;
 
 namespace Draw2D
 {
@@ -834,6 +837,29 @@ namespace Draw2D
                     }
                     break;
             };
+        }
+
+        internal static SKPicture ToSKPicture(string xml)
+        {
+            if (!string.IsNullOrEmpty(xml))
+            {
+                using (var stream = new StringReader(xml))
+                using (var reader = XmlReader.Create(stream))
+                {
+                    var svg = new Svg.SKSvg();
+                    return svg.Load(reader);
+                }
+            }
+            return null;
+        }
+
+        internal static SKImage ToSKImage(SKPicture picture)
+        {
+            if (picture != null)
+            {
+                return SKImage.FromPicture(picture, picture.CullRect.Size.ToSizeI());
+            }
+            return null;
         }
     }
 }
