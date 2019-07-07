@@ -231,6 +231,7 @@ namespace Draw2D.ViewModels.Shapes
                 Points = new ObservableCollection<IPointShape>(),
                 Text = (Text)this.Text?.Copy(shared),
                 Path = this.Path,
+                StretchMode = this.StretchMode,
                 StyleId = this.StyleId
             };
 
