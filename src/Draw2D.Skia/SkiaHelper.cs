@@ -18,6 +18,46 @@ namespace Draw2D
 {
     internal class SkiaHelper
     {
+        internal static void GetTransform(StretchMode mode, SKRect element, SKRect panel, out double ox, out double oy, out double zx, out double zy)
+        {
+            ox = element.Left;
+            oy = element.Top;
+            zx = 1.0;
+            zy = 1.0;
+            switch (mode)
+            {
+                default:
+                case StretchMode.None:
+                    break;
+                case StretchMode.Center:
+                    ox = element.Left + (element.Width - panel.Width) / 2;
+                    oy = element.Top + (element.Height - panel.Height) / 2;
+                    break;
+                case StretchMode.Fill:
+                    zx = element.Width / panel.Width;
+                    zy = element.Height / panel.Height;
+                    ox = element.Left + (element.Width - panel.Width * zx) / 2;
+                    oy = element.Top + (element.Height - panel.Height * zy) / 2;
+                    break;
+                case StretchMode.Uniform:
+                    zx = element.Width / panel.Width;
+                    zy = element.Height / panel.Height;
+                    zx = Math.Min(zx, zy);
+                    zy = zx;
+                    ox = element.Left + (element.Width - panel.Width * zx) / 2;
+                    oy = element.Top + (element.Height - panel.Height * zy) / 2;
+                    break;
+                case StretchMode.UniformToFill:
+                    zx = element.Width / panel.Width;
+                    zy = element.Height / panel.Height;
+                    zx = Math.Max(zx, zy);
+                    zy = zx;
+                    ox = element.Left + (element.Width - panel.Width * zx) / 2;
+                    oy = element.Top + (element.Height - panel.Height * zy) / 2;
+                    break;
+            }
+        }
+
         internal static SKFontStyleSlant ToSKFontStyleSlant(FontStyleSlant slant)
         {
             switch (slant)
