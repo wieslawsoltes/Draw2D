@@ -15,11 +15,13 @@
     <TabControl Classes="default" TabStripPlacement="Top">
         <TabItem Classes="default" Header="Image">
             <ScrollViewer>
-                <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="Auto,*">
+                <Grid RowDefinitions="Auto,Auto,Auto" ColumnDefinitions="Auto,*">
                     <TextBlock Classes="default" Grid.Column="0" Grid.Row="0" Text="Path"/>
                     <TextBox Classes="default" Grid.Column="1" Grid.Row="0" Text="{Binding Path}"/>
                     <TextBlock Classes="default" Grid.Column="0" Grid.Row="1" Text="Text"/>
                     <TextBox Classes="default" Grid.Column="1" Grid.Row="1" Text="{Binding Text.Value}"/>
+                    <TextBlock Classes="default" Grid.Column="0" Grid.Row="2" Text="StretchMode"/>
+                    <ComboBox Classes="default" Grid.Column="1" Grid.Row="2" Items="{Binding StretchModeValues}" SelectedItem="{Binding StretchMode, Mode=TwoWay}"/>
                 </Grid>
             </ScrollViewer>
         </TabItem>
