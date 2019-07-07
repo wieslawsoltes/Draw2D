@@ -576,7 +576,13 @@ namespace Draw2D.Renderers
             {
                 var rect = SkiaHelper.ToSKRect(image.StartPoint, image.Point, dx, dy);
                 GetSKPicture(image.Path, out var picture);
+                int count = canvas.Save();
+                canvas.Translate(rect.Left, rect.Top);
+                float sx = rect.Width / picture.CullRect.Width;
+                float sy = rect.Height / picture.CullRect.Height;
+                canvas.Scale(sx, sy);
                 canvas.DrawPicture(picture);
+                canvas.RestoreToCount(count);
             }
             var style = _context?.StyleLibrary?.Get(styleId);
             if (style != null)
