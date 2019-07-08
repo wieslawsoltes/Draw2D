@@ -1077,12 +1077,29 @@ namespace Draw2D.ViewModels.Tools
                 if (shape is ICopyable copyable)
                 {
                     var copy = (IBaseShape)(copyable.Copy(shared));
-                    if (copy != null && !(copy is IPointShape))
+                    if (copy != null)
                     {
-                        copy.GetPoints(points);
-                        copy.Select(selectionState);
-                        copy.Owner = container;
-                        container.Shapes.Add(copy);
+                        switch (copy)
+                        {
+                            case IPointShape pointShape:
+                                {
+                                    // TODO: Copy point shape.
+                                }
+                                break;
+                            case FigureShape figureShape:
+                                {
+                                    // TODO: Copy figure shape.
+                                }
+                                break;
+                            default:
+                                {
+                                    copy.GetPoints(points);
+                                    copy.Select(selectionState);
+                                    copy.Owner = container;
+                                    container.Shapes.Add(copy);
+                                }
+                                break;
+                        }
                     }
                 }
             }
@@ -1108,11 +1125,13 @@ namespace Draw2D.ViewModels.Tools
         internal void Delete(ICanvasContainer container, ISelectionState selectionState)
         {
             var shapesHash = new HashSet<IBaseShape>(container.Shapes);
+            var selected = new List<IBaseShape>(selectionState.Shapes);
 
-            foreach (var shape in selectionState.Shapes)
+            foreach (var shape in selected)
             {
                 if (shapesHash.Contains(shape))
                 {
+                    shape.Deselect(selectionState);
                     container.Shapes.Remove(shape);
                     container.MarkAsDirty(true);
                 }
@@ -1124,11 +1143,13 @@ namespace Draw2D.ViewModels.Tools
                             {
                                 if (shape is IPointShape pointShape)
                                 {
+                                    shape.Deselect(selectionState);
                                     canvasContainer.Points.Remove(pointShape);
                                     canvasContainer.MarkAsDirty(true);
                                 }
                                 else
                                 {
+                                    shape.Deselect(selectionState);
                                     canvasContainer.Shapes.Remove(shape);
                                     canvasContainer.MarkAsDirty(true);
                                 }
@@ -1138,11 +1159,13 @@ namespace Draw2D.ViewModels.Tools
                             {
                                 if (shape is IPointShape pointShape)
                                 {
+                                    shape.Deselect(selectionState);
                                     figureShape.Points.Remove(pointShape);
                                     figureShape.MarkAsDirty(true);
                                 }
                                 else
                                 {
+                                    shape.Deselect(selectionState);
                                     figureShape.Shapes.Remove(shape);
                                     figureShape.MarkAsDirty(true);
                                 }
@@ -1152,11 +1175,13 @@ namespace Draw2D.ViewModels.Tools
                             {
                                 if (shape is IPointShape pointShape)
                                 {
+                                    shape.Deselect(selectionState);
                                     pathShape.Points.Remove(pointShape);
                                     pathShape.MarkAsDirty(true);
                                 }
                                 else
                                 {
+                                    shape.Deselect(selectionState);
                                     pathShape.Shapes.Remove(shape);
                                     pathShape.MarkAsDirty(true);
                                 }
@@ -1166,11 +1191,13 @@ namespace Draw2D.ViewModels.Tools
                             {
                                 if (shape is IPointShape pointShape)
                                 {
+                                    shape.Deselect(selectionState);
                                     groupShape.Points.Remove(pointShape);
                                     groupShape.MarkAsDirty(true);
                                 }
                                 else
                                 {
+                                    shape.Deselect(selectionState);
                                     groupShape.Shapes.Remove(shape);
                                     groupShape.MarkAsDirty(true);
                                 }
@@ -1180,6 +1207,7 @@ namespace Draw2D.ViewModels.Tools
                             {
                                 if (shape is IPointShape pointShape)
                                 {
+                                    shape.Deselect(selectionState);
                                     connectable.Points.Remove(pointShape);
                                     if (shape.Owner is IDirty dirty)
                                     {
