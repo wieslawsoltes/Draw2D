@@ -62,6 +62,32 @@ namespace Draw2D.ViewModels.Shapes
             this.Shapes = shapes;
         }
 
+        public override void Select(ISelectionState selectionState)
+        {
+            base.Select(selectionState);
+
+            var points = new List<IPointShape>();
+            GetPoints(points);
+
+            foreach (var point in points)
+            {
+                point.Select(selectionState);
+            }
+        }
+
+        public override void Deselect(ISelectionState selectionState)
+        {
+            base.Deselect(selectionState);
+
+            var points = new List<IPointShape>();
+            GetPoints(points);
+
+            foreach (var point in points)
+            {
+                point.Deselect(selectionState);
+            }
+        }
+
         public override object Copy(Dictionary<object, object> shared)
         {
             var copy = new FigureShape()

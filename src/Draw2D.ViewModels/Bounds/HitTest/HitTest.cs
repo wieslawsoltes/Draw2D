@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
+using Draw2D.Input;
 using Spatial;
 
 namespace Draw2D.ViewModels.Bounds
@@ -11,16 +12,16 @@ namespace Draw2D.ViewModels.Bounds
     [DataContract(IsReference = true)]
     public class HitTest : ViewModelBase, IHitTest
     {
-        public IPointShape TryToGetPoint(IBaseShape shape, Point2 target, double radius, double scale)
+        public IPointShape TryToGetPoint(IBaseShape shape, Point2 target, double radius, double scale, Modifier modifier)
         {
-            return shape.Bounds?.TryToGetPoint(shape, target, radius / scale, this);
+            return shape.Bounds?.TryToGetPoint(shape, target, radius / scale, this, modifier);
         }
 
-        public IPointShape TryToGetPoint(IEnumerable<IBaseShape> shapes, Point2 target, double radius, double scale, IPointShape exclude)
+        public IPointShape TryToGetPoint(IEnumerable<IBaseShape> shapes, Point2 target, double radius, double scale, Modifier modifier, IPointShape exclude)
         {
             foreach (var shape in shapes.Reverse())
             {
-                var result = TryToGetPoint(shape, target, radius, scale);
+                var result = TryToGetPoint(shape, target, radius, scale, modifier);
                 if (result != null && result != exclude)
                 {
                     return result;
@@ -29,11 +30,11 @@ namespace Draw2D.ViewModels.Bounds
             return null;
         }
 
-        public IBaseShape TryToGetShape(IEnumerable<IBaseShape> shapes, Point2 target, double radius, double scale)
+        public IBaseShape TryToGetShape(IEnumerable<IBaseShape> shapes, Point2 target, double radius, double scale, Modifier modifier)
         {
             foreach (var shape in shapes.Reverse())
             {
-                var result = shape.Bounds?.Contains(shape, target, radius / scale, this);
+                var result = shape.Bounds?.Contains(shape, target, radius / scale, this, modifier);
                 if (result != null)
                 {
                     return result;
@@ -42,12 +43,12 @@ namespace Draw2D.ViewModels.Bounds
             return null;
         }
 
-        public ISet<IBaseShape> TryToGetShapes(IEnumerable<IBaseShape> shapes, Rect2 target, double radius, double scale)
+        public ISet<IBaseShape> TryToGetShapes(IEnumerable<IBaseShape> shapes, Rect2 target, double radius, double scale, Modifier modifier)
         {
             var selected = new HashSet<IBaseShape>();
             foreach (var shape in shapes.Reverse())
             {
-                var result = shape.Bounds?.Overlaps(shape, target, radius / scale, this);
+                var result = shape.Bounds?.Overlaps(shape, target, radius / scale, this, modifier);
                 if (result != null)
                 {
                     selected.Add(shape);

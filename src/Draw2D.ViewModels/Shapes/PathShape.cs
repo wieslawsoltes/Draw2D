@@ -136,12 +136,16 @@ namespace Draw2D.ViewModels.Shapes
         {
             base.Select(selectionState);
 
-            var points = new List<IPointShape>();
-            GetPoints(points);
-
-            foreach (var point in points)
+            //var points = new List<IPointShape>();
+            //GetPoints(points);
+            //
+            //foreach (var point in points)
+            //{
+            //    point.Select(selectionState);
+            //}
+            foreach (var shape in Shapes)
             {
-                point.Select(selectionState);
+                shape.Select(selectionState);
             }
         }
 
@@ -149,12 +153,16 @@ namespace Draw2D.ViewModels.Shapes
         {
             base.Deselect(selectionState);
 
-            var points = new List<IPointShape>();
-            GetPoints(points);
-
-            foreach (var point in points)
+            //var points = new List<IPointShape>();
+            //GetPoints(points);
+            //
+            //foreach (var point in points)
+            //{
+            //    point.Deselect(selectionState);
+            //}
+            foreach (var shape in Shapes)
             {
-                point.Deselect(selectionState);
+                shape.Deselect(selectionState);
             }
         }
 

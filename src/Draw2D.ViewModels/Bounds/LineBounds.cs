@@ -2,6 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using System;
 using System.Runtime.Serialization;
+using Draw2D.Input;
 using Draw2D.ViewModels.Shapes;
 using Spatial;
 
@@ -10,26 +11,26 @@ namespace Draw2D.ViewModels.Bounds
     [DataContract(IsReference = true)]
     public class LineBounds : ViewModelBase, IBounds
     {
-        public IPointShape TryToGetPoint(IBaseShape shape, Point2 target, double radius, IHitTest hitTest)
+        public IPointShape TryToGetPoint(IBaseShape shape, Point2 target, double radius, IHitTest hitTest, Modifier modifier)
         {
             if (!(shape is LineShape line))
             {
                 throw new ArgumentNullException("shape");
             }
 
-            if (line.StartPoint.Bounds?.TryToGetPoint(line.StartPoint, target, radius, hitTest) != null)
+            if (line.StartPoint.Bounds?.TryToGetPoint(line.StartPoint, target, radius, hitTest, modifier) != null)
             {
                 return line.StartPoint;
             }
 
-            if (line.Point.Bounds?.TryToGetPoint(line.Point, target, radius, hitTest) != null)
+            if (line.Point.Bounds?.TryToGetPoint(line.Point, target, radius, hitTest, modifier) != null)
             {
                 return line.Point;
             }
 
             foreach (var point in line.Points)
             {
-                if (point.Bounds?.TryToGetPoint(point, target, radius, hitTest) != null)
+                if (point.Bounds?.TryToGetPoint(point, target, radius, hitTest, modifier) != null)
                 {
                     return point;
                 }
@@ -38,7 +39,7 @@ namespace Draw2D.ViewModels.Bounds
             return null;
         }
 
-        public IBaseShape Contains(IBaseShape shape, Point2 target, double radius, IHitTest hitTest)
+        public IBaseShape Contains(IBaseShape shape, Point2 target, double radius, IHitTest hitTest, Modifier modifier)
         {
             if (!(shape is LineShape line))
             {
@@ -52,7 +53,7 @@ namespace Draw2D.ViewModels.Bounds
             return distance < radius ? shape : null;
         }
 
-        public IBaseShape Overlaps(IBaseShape shape, Rect2 target, double radius, IHitTest hitTest)
+        public IBaseShape Overlaps(IBaseShape shape, Rect2 target, double radius, IHitTest hitTest, Modifier modifier)
         {
             if (!(shape is LineShape line))
             {

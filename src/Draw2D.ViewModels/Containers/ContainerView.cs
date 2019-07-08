@@ -110,11 +110,11 @@ namespace Draw2D.ViewModels.Containers
             set => Update(ref _zoomService, value);
         }
 
-        public virtual IPointShape GetNextPoint(IToolContext context, double x, double y, bool connect, double radius, double scale)
+        public virtual IPointShape GetNextPoint(IToolContext context, double x, double y, bool connect, double radius, double scale, Modifier modifier)
         {
             if (connect == true)
             {
-                var point = context.HitTest?.TryToGetPoint(_currentContainer.Shapes, new Point2(x, y), radius, scale, null);
+                var point = context.HitTest?.TryToGetPoint(_currentContainer.Shapes, new Point2(x, y), radius, scale, modifier, null);
                 if (point != null)
                 {
                     return point;

@@ -42,9 +42,9 @@ namespace Draw2D.ViewModels.Tools
             var radius = Settings?.HitTestRadius ?? 7.0;
             var scale = context.ContainerView?.ZoomService?.ZoomServiceState?.ZoomX ?? 1.0;
 
-            IPointShape startPoint = context.ContainerView?.GetNextPoint(context, x, y, Settings?.ConnectPoints ?? false, radius, scale);
-            IPointShape point1 = context.ContainerView?.GetNextPoint(context, x, y, false, 0.0, 1.0);
-            IPointShape point2 = context.ContainerView?.GetNextPoint(context, x, y, false, 0.0, 1.0);
+            IPointShape startPoint = context.ContainerView?.GetNextPoint(context, x, y, Settings?.ConnectPoints ?? false, radius, scale, modifier);
+            IPointShape point1 = context.ContainerView?.GetNextPoint(context, x, y, false, 0.0, 1.0, modifier);
+            IPointShape point2 = context.ContainerView?.GetNextPoint(context, x, y, false, 0.0, 1.0, modifier);
 
             _quadraticBezier = new QuadraticBezierShape()
             {
@@ -96,7 +96,7 @@ namespace Draw2D.ViewModels.Tools
             var radius = Settings?.HitTestRadius ?? 7.0;
             var scale = context.ContainerView?.ZoomService?.ZoomServiceState?.ZoomX ?? 1.0;
 
-            IPointShape point1 = context.ContainerView?.GetNextPoint(context, x, y, Settings?.ConnectPoints ?? false, radius, scale);
+            IPointShape point1 = context.ContainerView?.GetNextPoint(context, x, y, Settings?.ConnectPoints ?? false, radius, scale, modifier);
 
             _quadraticBezier.Point1 = point1;
             if (_quadraticBezier.Point1.Owner == null)
@@ -125,7 +125,7 @@ namespace Draw2D.ViewModels.Tools
             var radius = Settings?.HitTestRadius ?? 7.0;
             var scale = context.ContainerView?.ZoomService?.ZoomServiceState?.ZoomX ?? 1.0;
 
-            IPointShape point2 = context.ContainerView?.GetNextPoint(context, x, y, Settings?.ConnectPoints ?? false, radius, scale);
+            IPointShape point2 = context.ContainerView?.GetNextPoint(context, x, y, Settings?.ConnectPoints ?? false, radius, scale, modifier);
 
             _quadraticBezier.Point2 = point2;
             if (_quadraticBezier.Point2.Owner == null)

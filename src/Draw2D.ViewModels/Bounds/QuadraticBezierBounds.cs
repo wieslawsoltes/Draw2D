@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
+using Draw2D.Input;
 using Draw2D.ViewModels.Shapes;
 using Spatial;
 
@@ -11,31 +12,31 @@ namespace Draw2D.ViewModels.Bounds
     [DataContract(IsReference = true)]
     public class QuadraticBezierBounds : ViewModelBase, IBounds
     {
-        public IPointShape TryToGetPoint(IBaseShape shape, Point2 target, double radius, IHitTest hitTest)
+        public IPointShape TryToGetPoint(IBaseShape shape, Point2 target, double radius, IHitTest hitTest, Modifier modifier)
         {
             if (!(shape is QuadraticBezierShape quadraticBezier))
             {
                 throw new ArgumentNullException("shape");
             }
 
-            if (quadraticBezier.StartPoint.Bounds?.TryToGetPoint(quadraticBezier.StartPoint, target, radius, hitTest) != null)
+            if (quadraticBezier.StartPoint.Bounds?.TryToGetPoint(quadraticBezier.StartPoint, target, radius, hitTest, modifier) != null)
             {
                 return quadraticBezier.StartPoint;
             }
 
-            if (quadraticBezier.Point1.Bounds?.TryToGetPoint(quadraticBezier.Point1, target, radius, hitTest) != null)
+            if (quadraticBezier.Point1.Bounds?.TryToGetPoint(quadraticBezier.Point1, target, radius, hitTest, modifier) != null)
             {
                 return quadraticBezier.Point1;
             }
 
-            if (quadraticBezier.Point2.Bounds?.TryToGetPoint(quadraticBezier.Point2, target, radius, hitTest) != null)
+            if (quadraticBezier.Point2.Bounds?.TryToGetPoint(quadraticBezier.Point2, target, radius, hitTest, modifier) != null)
             {
                 return quadraticBezier.Point2;
             }
 
             foreach (var point in quadraticBezier.Points)
             {
-                if (point.Bounds?.TryToGetPoint(point, target, radius, hitTest) != null)
+                if (point.Bounds?.TryToGetPoint(point, target, radius, hitTest, modifier) != null)
                 {
                     return point;
                 }
@@ -44,7 +45,7 @@ namespace Draw2D.ViewModels.Bounds
             return null;
         }
 
-        public IBaseShape Contains(IBaseShape shape, Point2 target, double radius, IHitTest hitTest)
+        public IBaseShape Contains(IBaseShape shape, Point2 target, double radius, IHitTest hitTest, Modifier modifier)
         {
             if (!(shape is QuadraticBezierShape quadraticBezier))
             {
@@ -57,7 +58,7 @@ namespace Draw2D.ViewModels.Bounds
             return HitTestHelper.Contains(points, target) ? shape : null;
         }
 
-        public IBaseShape Overlaps(IBaseShape shape, Rect2 target, double radius, IHitTest hitTest)
+        public IBaseShape Overlaps(IBaseShape shape, Rect2 target, double radius, IHitTest hitTest, Modifier modifier)
         {
             if (!(shape is QuadraticBezierShape quadraticBezier))
             {

@@ -2,6 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using System;
 using System.Runtime.Serialization;
+using Draw2D.Input;
 using Spatial;
 
 namespace Draw2D.ViewModels.Bounds
@@ -9,7 +10,7 @@ namespace Draw2D.ViewModels.Bounds
     [DataContract(IsReference = true)]
     public class PointBounds : ViewModelBase, IBounds
     {
-        public IPointShape TryToGetPoint(IBaseShape shape, Point2 target, double radius, IHitTest hitTest)
+        public IPointShape TryToGetPoint(IBaseShape shape, Point2 target, double radius, IHitTest hitTest, Modifier modifier)
         {
             if (!(shape is IPointShape point))
             {
@@ -24,7 +25,7 @@ namespace Draw2D.ViewModels.Bounds
             return null;
         }
 
-        public IBaseShape Contains(IBaseShape shape, Point2 target, double radius, IHitTest hitTest)
+        public IBaseShape Contains(IBaseShape shape, Point2 target, double radius, IHitTest hitTest, Modifier modifier)
         {
             if (!(shape is IPointShape point))
             {
@@ -34,7 +35,7 @@ namespace Draw2D.ViewModels.Bounds
             return Point2.FromXY(point.X, point.Y).ExpandToRect(radius).Contains(target.X, target.Y) ? shape : null;
         }
 
-        public IBaseShape Overlaps(IBaseShape shape, Rect2 target, double radius, IHitTest hitTest)
+        public IBaseShape Overlaps(IBaseShape shape, Rect2 target, double radius, IHitTest hitTest, Modifier modifier)
         {
             if (!(shape is IPointShape point))
             {

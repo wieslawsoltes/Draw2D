@@ -2,6 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using System;
 using System.Runtime.Serialization;
+using Draw2D.Input;
 using Draw2D.ViewModels.Shapes;
 using Spatial;
 
@@ -10,23 +11,23 @@ namespace Draw2D.ViewModels.Bounds
     [DataContract(IsReference = true)]
     public class EllipseBounds : ViewModelBase, IBounds
     {
-        public IPointShape TryToGetPoint(IBaseShape shape, Point2 target, double radius, IHitTest hitTest)
+        public IPointShape TryToGetPoint(IBaseShape shape, Point2 target, double radius, IHitTest hitTest, Modifier modifier)
         {
             var ellipse = shape as EllipseShape ?? throw new ArgumentNullException("shape");
 
-            if (ellipse.StartPoint.Bounds?.TryToGetPoint(ellipse.StartPoint, target, radius, hitTest) != null)
+            if (ellipse.StartPoint.Bounds?.TryToGetPoint(ellipse.StartPoint, target, radius, hitTest, modifier) != null)
             {
                 return ellipse.StartPoint;
             }
 
-            if (ellipse.Point.Bounds?.TryToGetPoint(ellipse.Point, target, radius, hitTest) != null)
+            if (ellipse.Point.Bounds?.TryToGetPoint(ellipse.Point, target, radius, hitTest, modifier) != null)
             {
                 return ellipse.Point;
             }
 
             foreach (var point in ellipse.Points)
             {
-                if (point.Bounds?.TryToGetPoint(point, target, radius, hitTest) != null)
+                if (point.Bounds?.TryToGetPoint(point, target, radius, hitTest, modifier) != null)
                 {
                     return point;
                 }
@@ -35,7 +36,7 @@ namespace Draw2D.ViewModels.Bounds
             return null;
         }
 
-        public IBaseShape Contains(IBaseShape shape, Point2 target, double radius, IHitTest hitTest)
+        public IBaseShape Contains(IBaseShape shape, Point2 target, double radius, IHitTest hitTest, Modifier modifier)
         {
             var ellipse = shape as EllipseShape ?? throw new ArgumentNullException("shape");
 
@@ -46,7 +47,7 @@ namespace Draw2D.ViewModels.Bounds
                 ellipse.Point.Y).Contains(target) ? shape : null;
         }
 
-        public IBaseShape Overlaps(IBaseShape shape, Rect2 target, double radius, IHitTest hitTest)
+        public IBaseShape Overlaps(IBaseShape shape, Rect2 target, double radius, IHitTest hitTest, Modifier modifier)
         {
             var ellipse = shape as EllipseShape ?? throw new ArgumentNullException("shape");
 

@@ -35,7 +35,8 @@ namespace Draw2D.ViewModels.Tools
                 context.ContainerView?.CurrentContainer.Shapes,
                 new Point2(x, y),
                 radius,
-                scale);
+                scale,
+                modifier);
             if (shape != null && (Settings?.ConnectPoints ?? false))
             {
                 if (shape is IConnectable connectable)

@@ -41,8 +41,8 @@ namespace Draw2D.ViewModels.Tools
             var radius = Settings?.HitTestRadius ?? 7.0;
             var scale = context.ContainerView?.ZoomService?.ZoomServiceState?.ZoomX ?? 1.0;
 
-            IPointShape startPoint = context.ContainerView?.GetNextPoint(context, x, y, Settings?.ConnectPoints ?? false, radius, scale);
-            IPointShape point = context.ContainerView?.GetNextPoint(context, x, y, false, 0.0, 1.0);
+            IPointShape startPoint = context.ContainerView?.GetNextPoint(context, x, y, Settings?.ConnectPoints ?? false, radius, scale, modifier);
+            IPointShape point = context.ContainerView?.GetNextPoint(context, x, y, false, 0.0, 1.0, modifier);
 
             _ellipse = new EllipseShape()
             {
@@ -83,7 +83,7 @@ namespace Draw2D.ViewModels.Tools
             var radius = Settings?.HitTestRadius ?? 7.0;
             var scale = context.ContainerView?.ZoomService?.ZoomServiceState?.ZoomX ?? 1.0;
 
-            IPointShape point = context.ContainerView?.GetNextPoint(context, x, y, Settings?.ConnectPoints ?? false, radius, scale);
+            IPointShape point = context.ContainerView?.GetNextPoint(context, x, y, Settings?.ConnectPoints ?? false, radius, scale, modifier);
 
             _ellipse.Point = point;
             if (_ellipse.Point.Owner == null)

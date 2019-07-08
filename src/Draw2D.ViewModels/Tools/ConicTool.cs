@@ -42,9 +42,9 @@ namespace Draw2D.ViewModels.Tools
             var radius = Settings?.HitTestRadius ?? 7.0;
             var scale = context.ContainerView?.ZoomService?.ZoomServiceState?.ZoomX ?? 1.0;
 
-            IPointShape startPoint = context.ContainerView?.GetNextPoint(context, x, y, Settings?.ConnectPoints ?? false, radius, scale);
-            IPointShape point1 = context.ContainerView?.GetNextPoint(context, x, y, false, 0.0, 1.0);
-            IPointShape point2 = context.ContainerView?.GetNextPoint(context, x, y, false, 0.0, 1.0);
+            IPointShape startPoint = context.ContainerView?.GetNextPoint(context, x, y, Settings?.ConnectPoints ?? false, radius, scale, modifier);
+            IPointShape point1 = context.ContainerView?.GetNextPoint(context, x, y, false, 0.0, 1.0, modifier);
+            IPointShape point2 = context.ContainerView?.GetNextPoint(context, x, y, false, 0.0, 1.0, modifier);
 
             _conic = new ConicShape()
             {
@@ -97,7 +97,7 @@ namespace Draw2D.ViewModels.Tools
             var radius = Settings?.HitTestRadius ?? 7.0;
             var scale = context.ContainerView?.ZoomService?.ZoomServiceState?.ZoomX ?? 1.0;
 
-            IPointShape point1 = context.ContainerView?.GetNextPoint(context, x, y, Settings?.ConnectPoints ?? false, radius, scale);
+            IPointShape point1 = context.ContainerView?.GetNextPoint(context, x, y, Settings?.ConnectPoints ?? false, radius, scale, modifier);
 
             _conic.Point1 = point1;
             if (_conic.Point1.Owner == null)
@@ -126,7 +126,7 @@ namespace Draw2D.ViewModels.Tools
             var radius = Settings?.HitTestRadius ?? 7.0;
             var scale = context.ContainerView?.ZoomService?.ZoomServiceState?.ZoomX ?? 1.0;
 
-            IPointShape point2 = context.ContainerView?.GetNextPoint(context, x, y, Settings?.ConnectPoints ?? false, Settings?.HitTestRadius ?? 7.0, scale);
+            IPointShape point2 = context.ContainerView?.GetNextPoint(context, x, y, Settings?.ConnectPoints ?? false, Settings?.HitTestRadius ?? 7.0, scale, modifier);
 
             _conic.Point2 = point2;
             if (_conic.Point2.Owner == null)

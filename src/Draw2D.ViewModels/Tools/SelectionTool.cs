@@ -188,7 +188,8 @@ namespace Draw2D.ViewModels.Tools
                         Settings?.Targets ?? SelectionTargets.Shapes,
                         target,
                         radius,
-                        scale);
+                        scale,
+                        modifier);
                     if (shape != null)
                     {
                         if (shape != previous)
@@ -239,7 +240,7 @@ namespace Draw2D.ViewModels.Tools
                     {
                         if (Settings.ConnectPoints && modifier.HasFlag(Settings?.ConnectionModifier ?? Modifier.Shift))
                         {
-                            ConnectImpl(context, source);
+                            ConnectImpl(context, source, modifier);
                         }
 
                         if (Settings.DisconnectPoints && modifier.HasFlag(Settings?.ConnectionModifier ?? Modifier.Shift))
@@ -858,7 +859,7 @@ namespace Draw2D.ViewModels.Tools
             }
         }
 
-        public void ConnectImpl(IToolContext context, IPointShape point)
+        public void ConnectImpl(IToolContext context, IPointShape point, Modifier modifier)
         {
             var scale = context.ContainerView?.ZoomService?.ZoomServiceState?.ZoomX ?? 1.0;
             var target = context.HitTest?.TryToGetPoint(
@@ -866,6 +867,7 @@ namespace Draw2D.ViewModels.Tools
                 new Point2(point.X, point.Y),
                 Settings?.ConnectTestRadius ?? 7.0,
                 scale,
+                modifier,
                 point);
             if (target != point)
             {
@@ -930,7 +932,7 @@ namespace Draw2D.ViewModels.Tools
 
                     if (shape is IPointShape source)
                     {
-                        ConnectImpl(context, source);
+                        ConnectImpl(context, source, Modifier.None);
                         context.ContainerView?.SelectionState?.Dehover();
                         context.ContainerView?.SelectionState?.Clear();
                         context.ContainerView?.InputService?.Redraw?.Invoke();
@@ -1205,17 +1207,17 @@ namespace Draw2D.ViewModels.Tools
             return false;
         }
 
-        internal IBaseShape TryToHover(IToolContext context, SelectionMode mode, SelectionTargets targets, Point2 target, double radius, double scale)
+        internal IBaseShape TryToHover(IToolContext context, SelectionMode mode, SelectionTargets targets, Point2 target, double radius, double scale, Modifier modifier)
         {
             var shapePoint =
                 mode.HasFlag(SelectionMode.Point)
                 && targets.HasFlag(SelectionTargets.Shapes) ?
-                context.HitTest?.TryToGetPoint(context.ContainerView?.CurrentContainer.Shapes, target, radius, scale, null) : null;
+                context.HitTest?.TryToGetPoint(context.ContainerView?.CurrentContainer.Shapes, target, radius, scale, modifier, null) : null;
 
             var shape =
                 mode.HasFlag(SelectionMode.Shape)
                 && targets.HasFlag(SelectionTargets.Shapes) ?
-                context.HitTest?.TryToGetShape(context.ContainerView?.CurrentContainer.Shapes, target, radius, scale) : null;
+                context.HitTest?.TryToGetShape(context.ContainerView?.CurrentContainer.Shapes, target, radius, scale, modifier) : null;
 
             if (shapePoint != null || shape != null)
             {
@@ -1239,12 +1241,12 @@ namespace Draw2D.ViewModels.Tools
                 var shapePoint =
                     mode.HasFlag(SelectionMode.Point)
                     && targets.HasFlag(SelectionTargets.Shapes) ?
-                    context.HitTest?.TryToGetPoint(context.ContainerView?.CurrentContainer.Shapes, point, radius, scale, null) : null;
+                    context.HitTest?.TryToGetPoint(context.ContainerView?.CurrentContainer.Shapes, point, radius, scale, modifier, null) : null;
 
                 var shape =
                     mode.HasFlag(SelectionMode.Shape)
                     && targets.HasFlag(SelectionTargets.Shapes) ?
-                    context.HitTest?.TryToGetShape(context.ContainerView?.CurrentContainer.Shapes, point, radius, scale) : null;
+                    context.HitTest?.TryToGetShape(context.ContainerView?.CurrentContainer.Shapes, point, radius, scale, modifier) : null;
 
                 if (shapePoint != null || shape != null)
                 {
@@ -1315,7 +1317,7 @@ namespace Draw2D.ViewModels.Tools
                 var shapes =
                     mode.HasFlag(SelectionMode.Shape)
                     && targets.HasFlag(SelectionTargets.Shapes) ?
-                    context.HitTest?.TryToGetShapes(context.ContainerView?.CurrentContainer.Shapes, rect, radius, scale) : null;
+                    context.HitTest?.TryToGetShapes(context.ContainerView?.CurrentContainer.Shapes, rect, radius, scale, modifier) : null;
 
                 if (shapes != null)
                 {
