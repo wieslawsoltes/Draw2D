@@ -12,7 +12,6 @@ using Draw2D.ViewModels.Shapes;
 using Draw2D.ViewModels.Style;
 using Draw2D.ViewModels.Tools;
 using SkiaSharp;
-using Svg = SkiaSharp.Extended.Svg;
 
 namespace Draw2D
 {
@@ -895,7 +894,7 @@ namespace Draw2D
                 using (var stream = new StringReader(xml))
                 using (var reader = XmlReader.Create(stream))
                 {
-                    var svg = new Svg.SKSvg();
+                    var svg = new SkiaSharp.Extended.Svg.SKSvg();
                     return svg.Load(reader);
                 }
             }
