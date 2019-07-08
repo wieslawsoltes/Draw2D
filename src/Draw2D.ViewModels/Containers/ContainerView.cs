@@ -156,6 +156,7 @@ namespace Draw2D.ViewModels.Containers
                 var title = shape is GroupShape group ? group.Title : "Reference";
                 var reference = new ReferenceShape(title, 0.0, 0.0, shape);
                 reference.Select(_selectionState);
+                reference.Owner = _currentContainer;
                 _currentContainer.Shapes.Add(reference);
                 _currentContainer.MarkAsDirty(true);
                 _inputService?.Redraw?.Invoke();
