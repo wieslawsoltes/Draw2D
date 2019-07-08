@@ -20,25 +20,20 @@ namespace Draw2D.ViewModels.Bounds
                 throw new ArgumentNullException("shape");
             }
 
-            if (modifier.HasFlag(Modifier.Shift))
+            foreach (var pathShape in path.Shapes.Reverse())
             {
-                foreach (var pathShape in path.Shapes.Reverse())
+                var result = pathShape.Bounds?.TryToGetPoint(pathShape, target, radius, hitTest, modifier);
+                if (result != null)
                 {
-                    var result = pathShape.Bounds?.TryToGetPoint(pathShape, target, radius, hitTest, modifier);
-                    if (result != null)
-                    {
-                        return result;
-                    }
+                    return result;
                 }
             }
-            else
+
+            foreach (var pathPoint in path.Points)
             {
-                foreach (var pathPoint in path.Points)
+                if (pathPoint.Bounds?.TryToGetPoint(pathPoint, target, radius, hitTest, modifier) != null)
                 {
-                    if (pathPoint.Bounds?.TryToGetPoint(pathPoint, target, radius, hitTest, modifier) != null)
-                    {
-                        return pathPoint;
-                    }
+                    return pathPoint;
                 }
             }
 
@@ -63,6 +58,14 @@ namespace Draw2D.ViewModels.Bounds
 
                         if (HitTestHelper.Contains(pathShapePoints, target))
                         {
+                            if (modifier.HasFlag(Modifier.Alt))
+                            {
+                                var result = pathShape.Bounds?.Contains(pathShape, target, radius, hitTest, modifier);
+                                if (result != null)
+                                {
+                                    return result;
+                                }
+                            }
                             return pathShape;
                         }
                     }
@@ -75,6 +78,14 @@ namespace Draw2D.ViewModels.Bounds
                     var result = pathShape.Bounds?.Contains(pathShape, target, radius, hitTest, modifier);
                     if (result != null)
                     {
+                        if (modifier.HasFlag(Modifier.Alt))
+                        {
+                            var subResult = result.Bounds?.Contains(result, target, radius, hitTest, Modifier.Shift);
+                            if (subResult != null)
+                            {
+                                return subResult;
+                            }
+                        }
                         return path;
                     }
                 }

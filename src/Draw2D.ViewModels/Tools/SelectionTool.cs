@@ -238,12 +238,12 @@ namespace Draw2D.ViewModels.Tools
 
                     if (shape is IPointShape source)
                     {
-                        if (Settings.ConnectPoints && modifier.HasFlag(Settings?.ConnectionModifier ?? Modifier.Shift))
+                        if (Settings.ConnectPoints && modifier == Settings?.ConnectionModifier)
                         {
                             ConnectImpl(context, source, modifier);
                         }
 
-                        if (Settings.DisconnectPoints && modifier.HasFlag(Settings?.ConnectionModifier ?? Modifier.Shift))
+                        if (Settings.DisconnectPoints && modifier == Settings?.ConnectionModifier)
                         {
                             if (_disconnected == false)
                             {
@@ -267,7 +267,7 @@ namespace Draw2D.ViewModels.Tools
                     var selectedToDisconnect = new List<IBaseShape>(context.ContainerView.SelectionState?.Shapes);
                     foreach (var shape in selectedToDisconnect)
                     {
-                        if (Settings.DisconnectPoints && modifier.HasFlag(Settings?.ConnectionModifier ?? Modifier.Shift))
+                        if (Settings.DisconnectPoints && modifier == Settings?.ConnectionModifier)
                         {
                             if (!(shape is IPointShape) && _disconnected == false)
                             {

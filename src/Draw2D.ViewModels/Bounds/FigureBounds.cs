@@ -18,25 +18,20 @@ namespace Draw2D.ViewModels.Bounds
                 throw new ArgumentNullException("shape");
             }
 
-            if (modifier.HasFlag(Modifier.Shift))
+            foreach (var figureShape in figure.Shapes)
             {
-                foreach (var figureShape in figure.Shapes)
+                var result = figureShape.Bounds?.TryToGetPoint(figureShape, target, radius, hitTest, modifier);
+                if (result != null)
                 {
-                    var result = figureShape.Bounds?.TryToGetPoint(figureShape, target, radius, hitTest, modifier);
-                    if (result != null)
-                    {
-                        return result;
-                    }
+                    return result;
                 }
             }
-            else
+
+            foreach (var figurePoint in figure.Points)
             {
-                foreach (var figurePoint in figure.Points)
+                if (figurePoint.Bounds?.TryToGetPoint(figurePoint, target, radius, hitTest, modifier) != null)
                 {
-                    if (figurePoint.Bounds?.TryToGetPoint(figurePoint, target, radius, hitTest, modifier) != null)
-                    {
-                        return figurePoint;
-                    }
+                    return figurePoint;
                 }
             }
 

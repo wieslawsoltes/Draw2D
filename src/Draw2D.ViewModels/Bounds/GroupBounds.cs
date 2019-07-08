@@ -22,7 +22,7 @@ namespace Draw2D.ViewModels.Bounds
 
             if (modifier.HasFlag(Modifier.Shift))
             {
-                foreach (var groupShape in group.Shapes)
+                foreach (var groupShape in group.Shapes.Reverse())
                 {
                     var result = groupShape.Bounds?.TryToGetPoint(groupShape, target, radius, hitTest, modifier);
                     if (result != null)
@@ -52,24 +52,6 @@ namespace Draw2D.ViewModels.Bounds
                 throw new ArgumentNullException("shape");
             }
 
-            //if (modifier.HasFlag(Modifier.Shift))
-            //{
-            //    if (group.Shapes.Count >= 1)
-            //    {
-            //        foreach (var groupShape in group.Shapes.Reverse())
-            //        {
-            //            var grpoupShapePoints = new List<IPointShape>();
-            //            groupShape.GetPoints(grpoupShapePoints);
-            //
-            //            if (HitTestHelper.Contains(grpoupShapePoints, target))
-            //            {
-            //                return groupShape;
-            //            }
-            //        }
-            //    }
-            //}
-            //else
-            //{
             foreach (var groupShape in group.Shapes.Reverse())
             {
                 var result = groupShape.Bounds?.Contains(groupShape, target, radius, hitTest, modifier);
@@ -85,7 +67,6 @@ namespace Draw2D.ViewModels.Bounds
                     }
                 }
             }
-            //}
 
             var points = new List<IPointShape>();
             group.GetPoints(points);
