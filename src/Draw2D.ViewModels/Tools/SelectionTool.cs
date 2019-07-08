@@ -475,11 +475,13 @@ namespace Draw2D.ViewModels.Tools
                     {
                         if (!(shape is IPointShape))
                         {
+                            shape.Owner = group;
                             group.Shapes.Add(shape);
                         }
                     }
 
                     group.Select(context.ContainerView.SelectionState);
+                    group.Owner = context.ContainerView?.CurrentContainer;
                     context.ContainerView?.CurrentContainer.Shapes.Add(group);
                     context.ContainerView?.CurrentContainer.MarkAsDirty(true);
 
@@ -754,6 +756,7 @@ namespace Draw2D.ViewModels.Tools
             {
                 if (!(shape is IPointShape))
                 {
+                    shape.Owner = context.ContainerView?.CurrentContainer;
                     context.ContainerView?.CurrentContainer.Shapes.Add(shape);
                     context.ContainerView?.CurrentContainer.MarkAsDirty(true);
                     shape.Select(context.ContainerView.SelectionState);
@@ -771,6 +774,7 @@ namespace Draw2D.ViewModels.Tools
             if (reference.Template is IBaseShape shape)
             {
                 var copy = (IBaseShape)shape.Copy(null);
+                copy.Owner = context.ContainerView?.CurrentContainer;
                 context.ContainerView?.CurrentContainer.Shapes.Add(copy);
                 context.ContainerView?.CurrentContainer.MarkAsDirty(true);
                 copy.Select(context.ContainerView.SelectionState);
@@ -783,6 +787,7 @@ namespace Draw2D.ViewModels.Tools
             {
                 if (!(shape is IPointShape))
                 {
+                    shape.Owner = context.ContainerView?.CurrentContainer;
                     context.ContainerView?.CurrentContainer.Shapes.Add(shape);
                     context.ContainerView?.CurrentContainer.MarkAsDirty(true);
                     shape.Select(context.ContainerView.SelectionState);
@@ -819,8 +824,10 @@ namespace Draw2D.ViewModels.Tools
                             StyleId = path.StyleId
                         };
 
+                        figure.Owner = pathShape;
                         pathShape.Shapes.Add(figure);
 
+                        pathShape.Owner = context.ContainerView?.CurrentContainer;
                         context.ContainerView?.CurrentContainer.Shapes.Add(pathShape);
                         context.ContainerView?.CurrentContainer.MarkAsDirty(true);
                         pathShape.Select(context.ContainerView.SelectionState);
@@ -1074,6 +1081,7 @@ namespace Draw2D.ViewModels.Tools
                     {
                         copy.GetPoints(points);
                         copy.Select(selectionState);
+                        copy.Owner = container;
                         container.Shapes.Add(copy);
                     }
                 }
@@ -1099,11 +1107,6 @@ namespace Draw2D.ViewModels.Tools
 
         internal void Delete(ICanvasContainer container, ISelectionState selectionState)
         {
-            // TODO: Very slow when using Contains.
-            //var paths = new List<PathShape>(container.Shapes.OfType<PathShape>());
-            //var groups = new List<GroupShape>(container.Shapes.OfType<GroupShape>());
-            //var connectables = new List<ConnectableShape>(container.Shapes.OfType<ConnectableShape>());
-
             var shapesHash = new HashSet<IBaseShape>(container.Shapes);
 
             foreach (var shape in selectionState.Shapes)
@@ -1113,101 +1116,81 @@ namespace Draw2D.ViewModels.Tools
                     container.Shapes.Remove(shape);
                     container.MarkAsDirty(true);
                 }
-                /*
                 else
                 {
-                    if (shape is IPointShape point)
+                    switch (shape.Owner)
                     {
-                        // TODO: Very slow when using Contains.
-                        TryToDelete(connectables, point);
-                    }
-
-                    if (paths.Count > 0)
-                    {
-                        // TODO: Very slow when using Contains.
-                        TryToDelete(container, paths, shape);
-                    }
-
-                    if (groups.Count > 0)
-                    {
-                        // TODO: Very slow when using Contains.
-                        TryToDelete(container, groups, shape);
-                    }
-                }
-                */
-            }
-        }
-
-        internal bool TryToDelete(IReadOnlyList<BaseShape> connectables, IPointShape point)
-        {
-            foreach (var connectable in connectables)
-            {
-                if (connectable.Points.Contains(point))
-                {
-                    connectable.Points.Remove(point);
-                    connectable.MarkAsDirty(true);
-
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
-        internal bool TryToDelete(ICanvasContainer container, IReadOnlyList<PathShape> paths, IBaseShape shape)
-        {
-            foreach (var path in paths)
-            {
-                foreach (var pathShape in path.Shapes)
-                {
-                    if (pathShape is FigureShape figure)
-                    {
-                        if (figure.Shapes.Contains(shape))
-                        {
-                            figure.Shapes.Remove(shape);
-                            figure.MarkAsDirty(true);
-
-                            if (figure.Shapes.Count <= 0)
+                        case CanvasContainer canvasContainer:
                             {
-                                path.Shapes.Remove(figure);
-                                path.MarkAsDirty(true);
-
-                                if (path.Shapes.Count <= 0)
+                                if (shape is IPointShape pointShape)
                                 {
-                                    container.Shapes.Remove(path);
-                                    container.MarkAsDirty(true);
+                                    canvasContainer.Points.Remove(pointShape);
+                                    canvasContainer.MarkAsDirty(true);
+                                }
+                                else
+                                {
+                                    canvasContainer.Shapes.Remove(shape);
+                                    canvasContainer.MarkAsDirty(true);
                                 }
                             }
-
-                            return true;
-                        }
+                            break;
+                        case FigureShape figureShape:
+                            {
+                                if (shape is IPointShape pointShape)
+                                {
+                                    figureShape.Points.Remove(pointShape);
+                                    figureShape.MarkAsDirty(true);
+                                }
+                                else
+                                {
+                                    figureShape.Shapes.Remove(shape);
+                                    figureShape.MarkAsDirty(true);
+                                }
+                            }
+                            break;
+                        case PathShape pathShape:
+                            {
+                                if (shape is IPointShape pointShape)
+                                {
+                                    pathShape.Points.Remove(pointShape);
+                                    pathShape.MarkAsDirty(true);
+                                }
+                                else
+                                {
+                                    pathShape.Shapes.Remove(shape);
+                                    pathShape.MarkAsDirty(true);
+                                }
+                            }
+                            break;
+                        case GroupShape groupShape:
+                            {
+                                if (shape is IPointShape pointShape)
+                                {
+                                    groupShape.Points.Remove(pointShape);
+                                    groupShape.MarkAsDirty(true);
+                                }
+                                else
+                                {
+                                    groupShape.Shapes.Remove(shape);
+                                    groupShape.MarkAsDirty(true);
+                                }
+                            }
+                            break;
+                        case IConnectable connectable:
+                            {
+                                if (shape is IPointShape pointShape)
+                                {
+                                    connectable.Points.Remove(pointShape);
+                                    if (shape.Owner is IDirty dirty)
+                                    {
+                                        dirty.MarkAsDirty(true);
+                                    }
+                                }
+                            }
+                            break;
                     }
                 }
             }
-
-            return false;
-        }
-
-        internal bool TryToDelete(ICanvasContainer container, IReadOnlyList<GroupShape> groups, IBaseShape shape)
-        {
-            foreach (var group in groups)
-            {
-                if (group.Shapes.Contains(shape))
-                {
-                    group.Shapes.Remove(shape);
-                    group.MarkAsDirty(true);
-
-                    if (group.Shapes.Count <= 0)
-                    {
-                        container.Shapes.Remove(group);
-                        container.MarkAsDirty(true);
-                    }
-
-                    return true;
-                }
-            }
-
-            return false;
         }
 
         internal IBaseShape TryToHover(IToolContext context, SelectionMode mode, SelectionTargets targets, Point2 target, double radius, double scale, Modifier modifier)
