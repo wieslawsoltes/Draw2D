@@ -1140,11 +1140,13 @@ namespace Draw2D.ViewModels.Tools
                                 {
                                     figureShape.Points.Remove(pointShape);
                                     figureShape.MarkAsDirty(true);
+                                    container.MarkAsDirty(true);
                                 }
                                 else
                                 {
                                     figureShape.Shapes.Remove(shape);
                                     figureShape.MarkAsDirty(true);
+                                    container.MarkAsDirty(true);
                                 }
                             }
                             break;
@@ -1154,11 +1156,13 @@ namespace Draw2D.ViewModels.Tools
                                 {
                                     pathShape.Points.Remove(pointShape);
                                     pathShape.MarkAsDirty(true);
+                                    container.MarkAsDirty(true);
                                 }
                                 else
                                 {
                                     pathShape.Shapes.Remove(shape);
                                     pathShape.MarkAsDirty(true);
+                                    container.MarkAsDirty(true);
                                 }
                             }
                             break;
@@ -1168,11 +1172,13 @@ namespace Draw2D.ViewModels.Tools
                                 {
                                     groupShape.Points.Remove(pointShape);
                                     groupShape.MarkAsDirty(true);
+                                    container.MarkAsDirty(true);
                                 }
                                 else
                                 {
                                     groupShape.Shapes.Remove(shape);
                                     groupShape.MarkAsDirty(true);
+                                    container.MarkAsDirty(true);
                                 }
                             }
                             break;
@@ -1184,6 +1190,7 @@ namespace Draw2D.ViewModels.Tools
                                     if (shape.Owner is IDirty dirty)
                                     {
                                         dirty.MarkAsDirty(true);
+                                        container.MarkAsDirty(true);
                                     }
                                 }
                             }
