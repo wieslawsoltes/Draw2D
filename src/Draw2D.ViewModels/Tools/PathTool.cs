@@ -286,6 +286,7 @@ namespace Draw2D.ViewModels.Tools
         {
             _figure = new FigureShape()
             {
+                Points = new ObservableCollection<IPointShape>(),
                 Shapes = new ObservableCollection<IBaseShape>(),
                 IsFilled = Settings.IsFilled,
                 IsClosed = Settings.IsClosed
