@@ -52,6 +52,7 @@ namespace Draw2D.ViewModels.Tools
                 Text = new Text(),
                 StyleId = context.StyleLibrary?.CurrentItem?.Title
             };
+            _ellipse.Owner = context.ContainerView?.WorkingContainer;
             if (_ellipse.StartPoint.Owner == null)
             {
                 _ellipse.StartPoint.Owner = _ellipse;
@@ -94,6 +95,7 @@ namespace Draw2D.ViewModels.Tools
             context.ContainerView?.WorkingContainer.MarkAsDirty(true);
             context.ContainerView?.SelectionState?.Deselect(_ellipse);
             context.ContainerView?.SelectionState?.Deselect(_ellipse.StartPoint);
+            _ellipse.Owner = context.ContainerView?.CurrentContainer;
             context.ContainerView?.CurrentContainer.Shapes.Add(_ellipse);
             context.ContainerView?.CurrentContainer.MarkAsDirty(true);
             _ellipse = null;

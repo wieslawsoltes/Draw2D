@@ -291,6 +291,7 @@ namespace Draw2D.ViewModels.Tools
                 IsFilled = Settings.IsFilled,
                 IsClosed = Settings.IsClosed
             };
+            _figure.Owner = _path;
             _path.Shapes.Add(_figure);
             context.ContainerView?.WorkingContainer.MarkAsDirty(true);
 

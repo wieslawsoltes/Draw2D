@@ -52,6 +52,7 @@ namespace Draw2D.ViewModels.Tools
                 Text = new Text(),
                 StyleId = context.StyleLibrary?.CurrentItem?.Title
             };
+            _path.Owner = context.ContainerView?.WorkingContainer;
 
             _figure = new FigureShape()
             {
@@ -60,6 +61,7 @@ namespace Draw2D.ViewModels.Tools
                 IsFilled = Settings.IsFilled,
                 IsClosed = Settings.IsClosed
             };
+            _figure.Owner = _path;
 
             _path.Shapes.Add(_figure);
 
@@ -113,6 +115,9 @@ namespace Draw2D.ViewModels.Tools
                             Text = new Text(),
                             StyleId = context.StyleLibrary?.CurrentItem?.Title
                         };
+                        line.Owner = _figure;
+                        line.StartPoint.Owner = line;
+                        line.Point.Owner = line;
                         _figure.Shapes.Add(line);
                     }
                 }
@@ -123,6 +128,7 @@ namespace Draw2D.ViewModels.Tools
 
             if (_path.Validate(true) == true)
             {
+                _path.Owner = context.ContainerView?.CurrentContainer;
                 context.ContainerView?.CurrentContainer.Shapes.Add(_path);
                 context.ContainerView?.CurrentContainer.MarkAsDirty(true);
             }

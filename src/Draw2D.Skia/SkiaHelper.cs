@@ -643,6 +643,7 @@ namespace Draw2D
                                     IsFilled = true,
                                     IsClosed = false
                                 };
+                                figureShape.Owner = pathShape;
                                 pathShape.Shapes.Add(figureShape);
                                 firstPoint = lastPoint = points[0];
                             }
@@ -662,6 +663,7 @@ namespace Draw2D
                                     Text = new Text(),
                                     StyleId = style.Title
                                 };
+                                lineShape.Owner = figureShape;
                                 lineShape.StartPoint.Owner = lineShape;
                                 lineShape.Point.Owner = lineShape;
                                 figureShape.Shapes.Add(lineShape);
@@ -685,6 +687,7 @@ namespace Draw2D
                                     Text = new Text(),
                                     StyleId = style.Title
                                 };
+                                cubicBezierShape.Owner = figureShape;
                                 cubicBezierShape.StartPoint.Owner = cubicBezierShape;
                                 cubicBezierShape.Point1.Owner = cubicBezierShape;
                                 cubicBezierShape.Point2.Owner = cubicBezierShape;
@@ -709,6 +712,7 @@ namespace Draw2D
                                     Text = new Text(),
                                     StyleId = style.Title
                                 };
+                                quadraticBezierShape.Owner = figureShape;
                                 quadraticBezierShape.StartPoint.Owner = quadraticBezierShape;
                                 quadraticBezierShape.Point1.Owner = quadraticBezierShape;
                                 quadraticBezierShape.Point2.Owner = quadraticBezierShape;
@@ -733,6 +737,7 @@ namespace Draw2D
                                     Text = new Text(),
                                     StyleId = style.Title
                                 };
+                                conicShape.Owner = figureShape;
                                 conicShape.StartPoint.Owner = conicShape;
                                 conicShape.Point1.Owner = conicShape;
                                 conicShape.Point2.Owner = conicShape;
@@ -751,6 +756,7 @@ namespace Draw2D
                                     Text = new Text(),
                                     StyleId = style.Title
                                 };
+                                line.Owner = figureShape;
                                 line.StartPoint.Owner = line;
                                 line.Point.Owner = line;
                                 figureShape.Shapes.Add(line);

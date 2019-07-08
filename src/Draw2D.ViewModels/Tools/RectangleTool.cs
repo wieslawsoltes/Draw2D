@@ -52,6 +52,7 @@ namespace Draw2D.ViewModels.Tools
                 Text = new Text(),
                 StyleId = context.StyleLibrary?.CurrentItem?.Title
             };
+            _rectangle.Owner = context.ContainerView?.WorkingContainer;
             if (_rectangle.StartPoint.Owner == null)
             {
                 _rectangle.StartPoint.Owner = _rectangle;
@@ -96,6 +97,7 @@ namespace Draw2D.ViewModels.Tools
             context.ContainerView?.WorkingContainer.MarkAsDirty(true);
             context.ContainerView?.WorkingContainer.MarkAsDirty(true);
             context.ContainerView?.SelectionState?.Deselect(_rectangle.StartPoint);
+            _rectangle.Owner = context.ContainerView?.CurrentContainer;
             context.ContainerView?.CurrentContainer.Shapes.Add(_rectangle);
             context.ContainerView?.CurrentContainer.MarkAsDirty(true);
             _rectangle = null;

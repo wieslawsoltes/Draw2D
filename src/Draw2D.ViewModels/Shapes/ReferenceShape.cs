@@ -118,7 +118,9 @@ namespace Draw2D.ViewModels.Shapes
                     }
                     else
                     {
-                        copy.Points.Add((IPointShape)shared[point]);
+                        var pointCopy = (IPointShape)shared[point];
+                        pointCopy.Owner = copy;
+                        copy.Points.Add(pointCopy);
                     }
                 }
 

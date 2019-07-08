@@ -55,6 +55,7 @@ namespace Draw2D.ViewModels.Tools
                     Points = new ObservableCollection<IPointShape>(),
                     StyleId = context.StyleLibrary?.CurrentItem?.Title
                 };
+                line.Owner = context.ContainerView?.CurrentContainer;
                 line.StartPoint.Owner = line;
                 line.Point.Owner = line;
                 context.ContainerView?.CurrentContainer.Shapes.Add(line);
@@ -84,6 +85,7 @@ namespace Draw2D.ViewModels.Tools
                 Text = new Text(),
                 StyleId = context.StyleLibrary?.CurrentItem?.Title
             };
+            _line.Owner = context.ContainerView?.WorkingContainer;
             if (_line.StartPoint.Owner == null)
             {
                 _line.StartPoint.Owner = _line;
@@ -136,6 +138,7 @@ namespace Draw2D.ViewModels.Tools
             }
             else
             {
+                _line.Owner = context.ContainerView?.CurrentContainer;
                 context.ContainerView?.CurrentContainer.Shapes.Add(_line);
                 context.ContainerView?.CurrentContainer.MarkAsDirty(true);
             }

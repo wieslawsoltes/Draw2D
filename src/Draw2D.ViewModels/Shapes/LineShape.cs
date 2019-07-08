@@ -216,9 +216,14 @@ namespace Draw2D.ViewModels.Shapes
                 copy.StartPoint = (IPointShape)shared[this.StartPoint];
                 copy.Point = (IPointShape)shared[this.Point];
 
+                copy.StartPoint.Owner = copy;
+                copy.Point.Owner = copy;
+
                 foreach (var point in this.Points)
                 {
-                    copy.Points.Add((IPointShape)shared[point]);
+                    var pointCopy = (IPointShape)shared[point];
+                    pointCopy.Owner = copy;
+                    copy.Points.Add(pointCopy);
                 }
 
                 shared[this] = copy;

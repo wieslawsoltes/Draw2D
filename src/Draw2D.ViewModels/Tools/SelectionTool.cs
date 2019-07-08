@@ -535,6 +535,7 @@ namespace Draw2D.ViewModels.Tools
                             if (path != null)
                             {
                                 path.Select(context.ContainerView.SelectionState);
+                                path.Owner = context.ContainerView?.CurrentContainer;
                                 context.ContainerView?.CurrentContainer.Shapes.Add(path);
                                 context.ContainerView?.CurrentContainer.MarkAsDirty(true);
                             }
@@ -568,6 +569,7 @@ namespace Draw2D.ViewModels.Tools
                             if (path != null)
                             {
                                 path.Select(context.ContainerView.SelectionState);
+                                path.Owner = context.ContainerView?.CurrentContainer;
                                 context.ContainerView?.CurrentContainer.Shapes.Add(path);
                                 context.ContainerView?.CurrentContainer.MarkAsDirty(true);
                             }
@@ -601,6 +603,7 @@ namespace Draw2D.ViewModels.Tools
                             if (path != null)
                             {
                                 path.Select(context.ContainerView.SelectionState);
+                                path.Owner = context.ContainerView?.CurrentContainer;
                                 context.ContainerView?.CurrentContainer.Shapes.Add(path);
                                 context.ContainerView?.CurrentContainer.MarkAsDirty(true);
                             }

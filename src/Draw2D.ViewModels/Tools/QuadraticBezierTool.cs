@@ -55,6 +55,7 @@ namespace Draw2D.ViewModels.Tools
                 Text = new Text(),
                 StyleId = context.StyleLibrary?.CurrentItem?.Title
             };
+            _quadraticBezier.Owner = context.ContainerView?.WorkingContainer;
             if (_quadraticBezier.StartPoint.Owner == null)
             {
                 _quadraticBezier.StartPoint.Owner = _quadraticBezier;
@@ -103,6 +104,7 @@ namespace Draw2D.ViewModels.Tools
             {
                 _quadraticBezier.Point1.Owner = _quadraticBezier;
             }
+            _quadraticBezier.Owner = context.ContainerView?.CurrentContainer;
             context.ContainerView?.CurrentContainer.Shapes.Add(_quadraticBezier);
             context.ContainerView?.CurrentContainer.MarkAsDirty(true);
             _quadraticBezier = null;

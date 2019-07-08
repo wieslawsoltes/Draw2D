@@ -56,6 +56,7 @@ namespace Draw2D.ViewModels.Tools
                 Text = new Text(),
                 StyleId = context.StyleLibrary?.CurrentItem?.Title
             };
+            _conic.Owner = context.ContainerView?.WorkingContainer;
             if (_conic.StartPoint.Owner == null)
             {
                 _conic.StartPoint.Owner = _conic;
@@ -104,6 +105,7 @@ namespace Draw2D.ViewModels.Tools
             {
                 _conic.Point1.Owner = _conic;
             }
+            _conic.Owner = context.ContainerView?.CurrentContainer;
             context.ContainerView?.CurrentContainer.Shapes.Add(_conic);
             context.ContainerView?.CurrentContainer.MarkAsDirty(true);
             _conic = null;

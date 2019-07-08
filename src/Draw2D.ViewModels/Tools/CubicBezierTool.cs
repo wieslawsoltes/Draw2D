@@ -58,6 +58,7 @@ namespace Draw2D.ViewModels.Tools
                 Text = new Text(),
                 StyleId = context.StyleLibrary?.CurrentItem?.Title
             };
+            _cubicBezier.Owner = context.ContainerView?.WorkingContainer;
             if (_cubicBezier.StartPoint.Owner == null)
             {
                 _cubicBezier.StartPoint.Owner = _cubicBezier;
@@ -112,6 +113,7 @@ namespace Draw2D.ViewModels.Tools
             {
                 _cubicBezier.Point1.Owner = _cubicBezier;
             }
+            _cubicBezier.Owner = context.ContainerView?.CurrentContainer;
             context.ContainerView?.CurrentContainer.Shapes.Add(_cubicBezier);
             context.ContainerView?.CurrentContainer.MarkAsDirty(true);
             _cubicBezier = null;

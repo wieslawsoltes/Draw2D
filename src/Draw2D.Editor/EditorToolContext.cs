@@ -424,6 +424,7 @@ namespace Draw2D.Editor
                     var path = PathConverter?.ToPathShape(this, text);
                     if (path != null)
                     {
+                        path.Owner = ContainerView?.CurrentContainer;
                         ContainerView?.CurrentContainer?.Shapes.Add(path);
                         ContainerView?.CurrentContainer?.MarkAsDirty(true);
 
@@ -547,6 +548,7 @@ namespace Draw2D.Editor
                 {
                     Selection.Delete(this);
 
+                    path.Owner = ContainerView?.CurrentContainer;
                     ContainerView?.CurrentContainer?.Shapes.Add(path);
                     ContainerView?.CurrentContainer?.MarkAsDirty(true);
 
