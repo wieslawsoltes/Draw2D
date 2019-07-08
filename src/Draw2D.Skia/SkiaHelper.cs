@@ -638,6 +638,7 @@ namespace Draw2D
                             {
                                 figureShape = new FigureShape()
                                 {
+                                    Points = new ObservableCollection<IPointShape>(),
                                     Shapes = new ObservableCollection<IBaseShape>(),
                                     IsFilled = true,
                                     IsClosed = false
