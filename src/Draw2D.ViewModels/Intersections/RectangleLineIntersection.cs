@@ -50,15 +50,15 @@ namespace Draw2D.ViewModels.Intersections
                         var point1 = new PointShape(x0clip, y0clip, context.PointTemplate);
                         point1.Owner = context.ContainerView?.WorkingContainer;
                         Intersections.Add(point1);
-                        context.ContainerView?.WorkingContainer.Shapes.Add(point1);
-                        context.ContainerView?.WorkingContainer.MarkAsDirty(true);
+                        //context.ContainerView?.WorkingContainer.Shapes.Add(point1);
+                        //context.ContainerView?.WorkingContainer.MarkAsDirty(true);
                         context.ContainerView?.SelectionState?.Select(point1);
 
                         var point2 = new PointShape(x1clip, y1clip, context.PointTemplate);
                         point2.Owner = context.ContainerView?.WorkingContainer;
                         Intersections.Add(point2);
-                        context.ContainerView?.WorkingContainer.Shapes.Add(point2);
-                        context.ContainerView?.WorkingContainer.MarkAsDirty(true);
+                        //context.ContainerView?.WorkingContainer.Shapes.Add(point2);
+                        //context.ContainerView?.WorkingContainer.MarkAsDirty(true);
                         context.ContainerView?.SelectionState?.Select(point2);
                     }
                 }
