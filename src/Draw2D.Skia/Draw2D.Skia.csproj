@@ -28,6 +28,7 @@
     <!--<DefineConstants>$(DefineConstants);DEBUG_DRAW_TEXT</DefineConstants>-->
     <!--<DefineConstants>$(DefineConstants);DEBUG_DICT_CACHE</DefineConstants>-->
     <!--<DefineConstants>$(DefineConstants);USE_DRAW_LINE</DefineConstants>-->
+    <!--<DefineConstants>$(DefineConstants);USE_DRAW_CIRCLE</DefineConstants>-->
     <!--<DefineConstants>$(DefineConstants);USE_DRAW_RECT</DefineConstants>-->
     <!--<DefineConstants>$(DefineConstants);USE_DRAW_OVAL</DefineConstants>-->
   </PropertyGroup>

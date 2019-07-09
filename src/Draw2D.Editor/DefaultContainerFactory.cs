@@ -716,6 +716,50 @@ namespace Draw2D.Editor
                 }
             };
 
+            var circleTool = new CircleTool()
+            {
+                Intersections = new ObservableCollection<IPointIntersection>(),
+                Filters = new ObservableCollection<IPointFilter>
+                {
+                    new GridSnapPointFilter()
+                    {
+                        Guides = new ObservableCollection<IBaseShape>(),
+                        Settings = new GridSnapSettings()
+                        {
+                            IsEnabled = true,
+                            EnableGuides = false,
+                            Mode = GridSnapMode.Horizontal | GridSnapMode.Vertical,
+                            GridSizeX = 15.0,
+                            GridSizeY = 15.0,
+                            GuideStyle = "Guide"
+                        }
+                    },
+                    new LineSnapPointFilter()
+                    {
+                        Guides = new ObservableCollection<IBaseShape>(),
+                        Settings = new LineSnapSettings()
+                        {
+                            IsEnabled = true,
+                            EnableGuides = false,
+                            Target = LineSnapTarget.Shapes,
+                            Mode = LineSnapMode.Point
+                            | LineSnapMode.Middle
+                            | LineSnapMode.Nearest
+                            | LineSnapMode.Intersection
+                            | LineSnapMode.Horizontal
+                            | LineSnapMode.Vertical,
+                            Threshold = 10.0,
+                            GuideStyle = "Guide"
+                        }
+                    }
+                },
+                Settings = new CircleToolSettings()
+                {
+                    ConnectPoints = true,
+                    HitTestRadius = 7.0
+                }
+            };
+
             var ellipseTool = new EllipseTool()
             {
                 Intersections = new ObservableCollection<IPointIntersection>(),
@@ -821,6 +865,7 @@ namespace Draw2D.Editor
             SetToolDefaults(pathTool);
             SetToolDefaults(scribbleTool);
             SetToolDefaults(rectangleTool);
+            SetToolDefaults(circleTool);
             SetToolDefaults(ellipseTool);
             SetToolDefaults(textTool);
 
@@ -835,6 +880,7 @@ namespace Draw2D.Editor
             tools.Add(pathTool);
             tools.Add(scribbleTool);
             tools.Add(rectangleTool);
+            tools.Add(circleTool);
             tools.Add(ellipseTool);
             tools.Add(textTool);
 

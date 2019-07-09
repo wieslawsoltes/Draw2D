@@ -333,6 +333,12 @@ namespace Draw2D
             }
         }
 
+        internal static void AddCircle(IToolContext context, CircleShape circle, double dx, double dy, SKPath geometry)
+        {
+            var distance = circle.StartPoint.ToPoint2().DistanceTo(circle.Point.ToPoint2());
+            geometry.AddCircle((float)circle.StartPoint.X, (float)circle.StartPoint.Y, (float)distance, SKPathDirection.Clockwise);
+        }
+
         internal static void AddOval(IToolContext context, EllipseShape ellipse, double dx, double dy, SKPath geometry)
         {
             var rect = ToSKRect(ellipse.StartPoint, ellipse.Point, dx, dy);
@@ -539,6 +545,9 @@ namespace Draw2D
                     return true;
                 case RectangleShape rectangle:
                     AddRect(context, rectangle, dx, dy, geometry);
+                    return true;
+                case CircleShape circle:
+                    AddCircle(context, circle, dx, dy, geometry);
                     return true;
                 case EllipseShape ellipse:
                     AddOval(context, ellipse, dx, dy, geometry);
@@ -852,6 +861,21 @@ namespace Draw2D
                             if (style != null)
                             {
                                 ToSvgPathData(context, rectangle.Text, rectangle.StartPoint, rectangle.Point, style.TextStyle, sb);
+                            }
+                        }
+                    }
+                    break;
+                case CircleShape circle:
+                    {
+                        using (var geometry = new SKPath() { FillType = SKPathFillType.Winding })
+                        {
+                            AddCircle(context, circle, 0.0, 0.0, geometry);
+                            sb.AppendLine(geometry.ToSvgPathData());
+
+                            var style = context?.StyleLibrary?.Get(circle.StyleId);
+                            if (style != null)
+                            {
+                                ToSvgPathData(context, circle.Text, circle.StartPoint, circle.Point, style.TextStyle, sb);
                             }
                         }
                     }

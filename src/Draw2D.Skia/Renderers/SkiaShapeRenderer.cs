@@ -192,9 +192,8 @@ namespace Draw2D.Renderers
             }
         }
 
-        private void DrawText(SKCanvas canvas, Text text, IPointShape startPoint, IPointShape point, ShapeStyle style, double dx, double dy, double scale)
+        private void DrawText(SKCanvas canvas, Text text, SKRect rect, ShapeStyle style, double dx, double dy, double scale)
         {
-            var rect = SkiaHelper.ToSKRect(startPoint, point, dx, dy);
             GetSKPaintStrokeText(style.TextStyle, out var paint, out var metrics);
 #if DEBUG_DRAW_TEXT
             var mBaseline = 0.0f;
@@ -490,7 +489,8 @@ namespace Draw2D.Renderers
                 }
                 if (style.TextStyle.IsStroked && !string.IsNullOrEmpty(rectangle.Text?.Value))
                 {
-                    DrawText(canvas, rectangle.Text, rectangle.StartPoint, rectangle.Point, style, dx, dy, scale);
+                    var rect = SkiaHelper.ToSKRect(rectangle.StartPoint, rectangle.Point, dx, dy);
+                    DrawText(canvas, rectangle.Text, rect, style, dx, dy, scale);
                 }
             }
 #else
@@ -512,7 +512,72 @@ namespace Draw2D.Renderers
                     }
                     if (style.TextStyle.IsStroked && !string.IsNullOrEmpty(rectangle.Text?.Value))
                     {
-                        DrawText(canvas, rectangle.Text, rectangle.StartPoint, rectangle.Point, style, dx, dy, scale);
+                        var rect = SkiaHelper.ToSKRect(rectangle.StartPoint, rectangle.Point, dx, dy);
+                        DrawText(canvas, rectangle.Text, rect, style, dx, dy, scale);
+                    }
+                }
+            }
+#endif
+        }
+
+        public void DrawCircle(object dc, CircleShape circle, string styleId, double dx, double dy, double scale)
+        {
+            var style = _context?.StyleLibrary?.Get(styleId);
+            if (style == null)
+            {
+                return;
+            }
+#if USE_DRAW_CIRCLE
+            if (style.IsFilled || style.IsStroked || style.TextStyle.IsStroked)
+            {
+                var canvas = dc as SKCanvas;
+                var distance = circle.StartPoint.ToPoint2().DistanceTo(circle.Point.ToPoint2());
+                if (style.IsFilled)
+                {
+                    GetSKPaintFill(style, out var brush);
+                    canvas.DrawCircle((float)circle.StartPoint.X, (float)circle.StartPoint.Y, (float)distance, brush);
+                }
+                if (style.IsStroked)
+                {
+                    GetSKPaintStroke(style, out var pen, scale);
+                    canvas.DrawCircle((float)circle.StartPoint.X, (float)circle.StartPoint.Y, (float)distance, pen);
+                }
+                if (style.TextStyle.IsStroked && !string.IsNullOrEmpty(circle.Text?.Value))
+                {
+                    var rect = SkiaHelper.ToSKRect(
+                       circle.StartPoint.X - distance + dx,
+                       circle.StartPoint.Y - distance + dy,
+                       circle.StartPoint.X + distance + dx,
+                       circle.StartPoint.Y + distance + dy);
+                    DrawText(canvas, circle.Text, rect, style, dx, dy, scale);
+                }
+            }
+#else
+            if (style.IsFilled || style.IsStroked || style.TextStyle.IsStroked)
+            {
+                var canvas = dc as SKCanvas;
+                using (var geometry = new SKPath() { FillType = SKPathFillType.Winding })
+                {
+                    SkiaHelper.AddCircle(null, circle, dx, dy, geometry);
+                    if (style.IsFilled)
+                    {
+                        GetSKPaintFill(style, out var brush);
+                        canvas.DrawPath(geometry, brush);
+                    }
+                    if (style.IsStroked)
+                    {
+                        GetSKPaintStroke(style, out var pen, scale);
+                        canvas.DrawPath(geometry, pen);
+                    }
+                    if (style.TextStyle.IsStroked && !string.IsNullOrEmpty(circle.Text?.Value))
+                    {
+                        var distance = circle.StartPoint.ToPoint2().DistanceTo(circle.Point.ToPoint2());
+                        var rect = SkiaHelper.ToSKRect(
+                           circle.StartPoint.X - distance + dx,
+                           circle.StartPoint.Y - distance + dy,
+                           circle.StartPoint.X + distance + dx,
+                           circle.StartPoint.Y + distance + dy);
+                        DrawText(canvas, circle.Text, rect, style, dx, dy, scale);
                     }
                 }
             }
@@ -543,7 +608,8 @@ namespace Draw2D.Renderers
                 }
                 if (style.TextStyle.IsStroked && !string.IsNullOrEmpty(ellipse.Text?.Value))
                 {
-                    DrawText(canvas, ellipse.Text, ellipse.StartPoint, ellipse.Point, style, dx, dy, scale);
+                    var rect = SkiaHelper.ToSKRect(ellipse.StartPoint, ellipse.Point, dx, dy);
+                    DrawText(canvas, ellipse.Text, rect, style, dx, dy, scale);
                 }
             }
 #else
@@ -565,7 +631,8 @@ namespace Draw2D.Renderers
                     }
                     if (style.TextStyle.IsStroked && !string.IsNullOrEmpty(ellipse.Text?.Value))
                     {
-                        DrawText(canvas, ellipse.Text, ellipse.StartPoint, ellipse.Point, style, dx, dy, scale);
+                        var rect = SkiaHelper.ToSKRect(ellipse.StartPoint, ellipse.Point, dx, dy);
+                        DrawText(canvas, ellipse.Text, rect, style, dx, dy, scale);
                     }
                 }
             }
@@ -582,16 +649,17 @@ namespace Draw2D.Renderers
             if (style.TextStyle.IsStroked && !string.IsNullOrEmpty(text.Text?.Value))
             {
                 var canvas = dc as SKCanvas;
-                DrawText(canvas, text.Text, text.StartPoint, text.Point, style, dx, dy, scale);
+                var rect = SkiaHelper.ToSKRect(text.StartPoint, text.Point, dx, dy);
+                DrawText(canvas, text.Text, rect, style, dx, dy, scale);
             }
         }
 
         public void DrawImage(object dc, ImageShape image, string styleId, double dx, double dy, double scale)
         {
             var canvas = dc as SKCanvas;
+            var rect = SkiaHelper.ToSKRect(image.StartPoint, image.Point, dx, dy);
             if (!string.IsNullOrEmpty(image.Path))
             {
-                var rect = SkiaHelper.ToSKRect(image.StartPoint, image.Point, dx, dy);
                 GetSKPicture(image.Path, out var picture);
                 int count = canvas.Save();
                 SkiaHelper.GetTransform(image.StretchMode, rect, picture.CullRect, out var ox, out var oy, out var zx, out var zy);
@@ -605,7 +673,7 @@ namespace Draw2D.Renderers
             {
                 if (style.TextStyle.IsStroked && !string.IsNullOrEmpty(image.Text?.Value))
                 {
-                    DrawText(canvas, image.Text, image.StartPoint, image.Point, style, dx, dy, scale);
+                    DrawText(canvas, image.Text, rect, style, dx, dy, scale);
                 }
             }
         }
