@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Draw2D.Renderers;
 using Draw2D.ViewModels;
 using Draw2D.ViewModels.Containers;
+using Draw2D.ViewModels.Shapes;
 using Draw2D.ViewModels.Tools;
 using SkiaSharp;
 
@@ -35,7 +36,7 @@ namespace Draw2D.Presenters
                 var selected = new List<IBaseShape>(_view.SelectionState?.Shapes);
                 foreach (var shape in selected)
                 {
-                    if (!(shape is IPointShape))
+                    if (!(shape is IPointShape || shape is FigureShape))
                     {
                         shape.Draw(canvas, renderer, dx, dy, zx, null, null);
                     }

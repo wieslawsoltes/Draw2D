@@ -473,7 +473,7 @@ namespace Draw2D.ViewModels.Tools
 
                     foreach (var shape in shapes)
                     {
-                        if (!(shape is IPointShape))
+                        if (!(shape is IPointShape || shape is FigureShape))
                         {
                             shape.Owner = group;
                             group.Shapes.Add(shape);
@@ -504,7 +504,7 @@ namespace Draw2D.ViewModels.Tools
 
                     foreach (var shape in shapes)
                     {
-                        if (!(shape is IPointShape) && !(shape is ReferenceShape))
+                        if (!(shape is IPointShape || shape is FigureShape) && !(shape is ReferenceShape))
                         {
                             context.ContainerView?.Reference(shape);
                         }
@@ -531,7 +531,7 @@ namespace Draw2D.ViewModels.Tools
 
                     foreach (var shape in shapes)
                     {
-                        if (!(shape is IPointShape))
+                        if (!(shape is IPointShape || shape is FigureShape))
                         {
                             var path = context?.PathConverter?.ToPathShape(context, shape);
                             if (path != null)
@@ -565,7 +565,7 @@ namespace Draw2D.ViewModels.Tools
 
                     foreach (var shape in shapes)
                     {
-                        if (!(shape is IPointShape))
+                        if (!(shape is IPointShape || shape is FigureShape))
                         {
                             var path = context?.PathConverter?.ToStrokePathShape(context, shape);
                             if (path != null)
@@ -599,7 +599,7 @@ namespace Draw2D.ViewModels.Tools
 
                     foreach (var shape in shapes)
                     {
-                        if (!(shape is IPointShape))
+                        if (!(shape is IPointShape || shape is FigureShape))
                         {
                             var path = context?.PathConverter?.ToFillPathShape(context, shape);
                             if (path != null)
@@ -678,7 +678,7 @@ namespace Draw2D.ViewModels.Tools
                 for (int i = shapes.Count - 1; i >= 0; i--)
                 {
                     var shape = shapes[i];
-                    if (!(shape is IPointShape))
+                    if (!(shape is IPointShape || shape is FigureShape))
                     {
                         Layout.BringToFront(context, shape);
                     }
@@ -697,7 +697,7 @@ namespace Draw2D.ViewModels.Tools
                 for (int i = shapes.Count - 1; i >= 0; i--)
                 {
                     var shape = shapes[i];
-                    if (!(shape is IPointShape))
+                    if (!(shape is IPointShape || shape is FigureShape))
                     {
                         Layout.BringForward(context, shape);
                     }
@@ -716,7 +716,7 @@ namespace Draw2D.ViewModels.Tools
                 for (int i = 0; i < shapes.Count; i++)
                 {
                     var shape = shapes[i];
-                    if (!(shape is IPointShape))
+                    if (!(shape is IPointShape || shape is FigureShape))
                     {
                         Layout.SendBackward(context, shape);
                     }
@@ -735,7 +735,7 @@ namespace Draw2D.ViewModels.Tools
                 for (int i = 0; i < shapes.Count; i++)
                 {
                     var shape = shapes[i];
-                    if (!(shape is IPointShape))
+                    if (!(shape is IPointShape || shape is FigureShape))
                     {
                         Layout.SendToBack(context, shape);
                     }
@@ -754,7 +754,7 @@ namespace Draw2D.ViewModels.Tools
 
             foreach (var shape in group.Shapes)
             {
-                if (!(shape is IPointShape))
+                if (!(shape is IPointShape || shape is FigureShape))
                 {
                     shape.Owner = context.ContainerView?.CurrentContainer;
                     context.ContainerView?.CurrentContainer.Shapes.Add(shape);

@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Text;
 using Draw2D.ViewModels;
 using Draw2D.ViewModels.Containers;
+using Draw2D.ViewModels.Shapes;
 using Draw2D.ViewModels.Tools;
 
 namespace Draw2D.Export
@@ -21,7 +22,7 @@ namespace Draw2D.Export
 
                 foreach (var shape in shapes)
                 {
-                    if (shape is IPointShape)
+                    if (shape is IPointShape || shape is FigureShape)
                     {
                         continue;
                     }
@@ -84,7 +85,7 @@ namespace Draw2D.Export
 
                 foreach (var shape in shapes)
                 {
-                    if (shape is IPointShape)
+                    if (shape is IPointShape || shape is FigureShape)
                     {
                         continue;
                     }

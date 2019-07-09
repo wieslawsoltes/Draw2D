@@ -23,7 +23,7 @@ namespace Draw2D.Export
 
             foreach (var shape in selected)
             {
-                if (!(shape is IPointShape))
+                if (!(shape is IPointShape || shape is FigureShape))
                 {
                     shapes.Add(shape);
                 }

@@ -169,7 +169,7 @@ namespace Draw2D.ViewModels.Containers
             {
                 foreach (var shape in _selectionState.Shapes)
                 {
-                    if (!(shape is IPointShape))
+                    if (!(shape is IPointShape || shape is FigureShape))
                     {
                         shape.StyleId = styleId;
                     }
