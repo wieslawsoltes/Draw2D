@@ -314,6 +314,14 @@ namespace Draw2D.Editor
                             IsEnabled = true
                         }
                     },
+                    new CircleLineIntersection()
+                    {
+                        Intersections = new ObservableCollection<IPointShape>(),
+                        Settings = new CircleLineSettings()
+                        {
+                            IsEnabled = true
+                        }
+                    },
                     new EllipseLineIntersection()
                     {
                         Intersections = new ObservableCollection<IPointShape>(),
@@ -381,6 +389,14 @@ namespace Draw2D.Editor
                     {
                         Intersections = new ObservableCollection<IPointShape>(),
                         Settings = new RectangleLineSettings()
+                        {
+                            IsEnabled = true
+                        }
+                    },
+                    new CircleLineIntersection()
+                    {
+                        Intersections = new ObservableCollection<IPointShape>(),
+                        Settings = new CircleLineSettings()
                         {
                             IsEnabled = true
                         }
