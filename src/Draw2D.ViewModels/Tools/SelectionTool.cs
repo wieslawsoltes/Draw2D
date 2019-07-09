@@ -848,17 +848,30 @@ namespace Draw2D.ViewModels.Tools
 
                     foreach (var shape in shapes)
                     {
-                        if (shape is PathShape path)
+                        if (shape is PathShape pathShape)
                         {
-                            BreakPath(context, path);
+                            BreakPath(context, pathShape);
                         }
-                        else if (shape is GroupShape group)
+                        else if (shape is GroupShape groupShape)
                         {
-                            BreakGroup(context, group);
+                            BreakGroup(context, groupShape);
                         }
-                        else if (shape is ReferenceShape reference)
+                        else if (shape is ReferenceShape referenceShape)
                         {
-                            BreakReference(context, reference);
+                            BreakReference(context, referenceShape);
+                        }
+                        else if (!(shape is IPointShape))
+                        {
+                            var path = context?.PathConverter?.ToPathShape(context, shape);
+                            if (path != null)
+                            {
+                                shape.Deselect(context.ContainerView.SelectionState);
+
+                                context.ContainerView?.CurrentContainer?.Shapes?.Remove(shape);
+                                context.ContainerView?.CurrentContainer?.MarkAsDirty(true);
+
+                                BreakPath(context, path);
+                            }
                         }
                     }
 
