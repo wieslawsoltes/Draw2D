@@ -17,6 +17,8 @@ namespace Draw2D.ViewModels.Shapes
         private IPointShape _startPoint;
         private IPointShape _point;
         private Text _text;
+        private double _radiusX;
+        private double _radiusY;
 
         [IgnoreDataMember]
         public override IBounds Bounds { get; } = s_bounds;
@@ -43,6 +45,20 @@ namespace Draw2D.ViewModels.Shapes
         {
             get => _text;
             set => Update(ref _text, value);
+        }
+
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public double RadiusX
+        {
+            get => _radiusX;
+            set => Update(ref _radiusX, value);
+        }
+
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public double RadiusY
+        {
+            get => _radiusY;
+            set => Update(ref _radiusY, value);
         }
 
         public RectangleShape()
@@ -206,6 +222,8 @@ namespace Draw2D.ViewModels.Shapes
             {
                 Points = new ObservableCollection<IPointShape>(),
                 Text = (Text)this.Text?.Copy(shared),
+                RadiusX = this.RadiusX,
+                RadiusY = this.RadiusY,
                 StyleId = this.StyleId
             };
 

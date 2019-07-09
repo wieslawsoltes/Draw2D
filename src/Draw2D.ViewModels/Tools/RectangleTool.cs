@@ -50,6 +50,8 @@ namespace Draw2D.ViewModels.Tools
                 StartPoint = startPoint,
                 Point = point,
                 Text = new Text(),
+                RadiusX = Settings?.RadiusX ?? 0.0,
+                RadiusY = Settings?.RadiusY ?? 0.0,
                 StyleId = context.StyleLibrary?.CurrentItem?.Title
             };
             _rectangle.Owner = context.ContainerView?.WorkingContainer;

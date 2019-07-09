@@ -467,12 +467,26 @@ namespace Draw2D.Renderers
                 if (style.IsFilled)
                 {
                     GetSKPaintFill(style, out var brush);
-                    canvas.DrawRect(rect, brush);
+                    if (rectangle.RadiusX > 0.0 && rectangle.RadiusY > 0.0)
+                    {
+                        canvas.DrawRoundRect(rect, (float)rectangle.RadiusX, (float)rectangle.RadiusY, brush);
+                    }
+                    else
+                    {
+                        canvas.DrawRect(rect, brush);
+                    }
                 }
                 if (style.IsStroked)
                 {
                     GetSKPaintStroke(style, out var pen, scale);
-                    canvas.DrawRect(rect, pen);
+                    if (rectangle.RadiusX > 0.0 && rectangle.RadiusY > 0.0)
+                    {
+                        canvas.DrawRoundRect(rect, (float)rectangle.RadiusX, (float)rectangle.RadiusY, pen);
+                    }
+                    else
+                    {
+                        canvas.DrawRect(rect, pen);
+                    }
                 }
                 if (style.TextStyle.IsStroked && !string.IsNullOrEmpty(rectangle.Text?.Value))
                 {

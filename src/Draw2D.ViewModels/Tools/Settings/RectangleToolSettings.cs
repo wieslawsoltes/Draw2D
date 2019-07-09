@@ -9,6 +9,8 @@ namespace Draw2D.ViewModels.Tools
     {
         private bool _connectPoints;
         private double _hitTestRadius;
+        private double _radiusX;
+        private double _radiusY;
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public bool ConnectPoints
@@ -22,6 +24,20 @@ namespace Draw2D.ViewModels.Tools
         {
             get => _hitTestRadius;
             set => Update(ref _hitTestRadius, value);
+        }
+
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public double RadiusX
+        {
+            get => _radiusX;
+            set => Update(ref _radiusX, value);
+        }
+
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public double RadiusY
+        {
+            get => _radiusY;
+            set => Update(ref _radiusY, value);
         }
     }
 }

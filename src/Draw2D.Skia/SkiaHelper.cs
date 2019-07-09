@@ -323,7 +323,14 @@ namespace Draw2D
         internal static void AddRect(IToolContext context, RectangleShape rectangle, double dx, double dy, SKPath geometry)
         {
             var rect = ToSKRect(rectangle.StartPoint, rectangle.Point, dx, dy);
-            geometry.AddRect(rect, SKPathDirection.Clockwise);
+            if (rectangle.RadiusX > 0.0 && rectangle.RadiusY > 0.0)
+            {
+                geometry.AddRoundRect(rect, (float)rectangle.RadiusX, (float)rectangle.RadiusY, SKPathDirection.Clockwise);
+            }
+            else
+            {
+                geometry.AddRect(rect, SKPathDirection.Clockwise);
+            }
         }
 
         internal static void AddOval(IToolContext context, EllipseShape ellipse, double dx, double dy, SKPath geometry)
