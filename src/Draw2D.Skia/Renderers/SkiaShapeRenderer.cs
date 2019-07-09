@@ -280,11 +280,14 @@ namespace Draw2D.Renderers
         private void DrawTextOnPath(SKCanvas canvas, SKPath path, Text text, TextStyle style)
         {
             GetSKPaintStrokeText(style, out var paint, out var metrics);
-            var bounds = new SKRect();
-            float baseTextWidth = paint.MeasureText(text.Value, ref bounds);
-            SKPathMeasure pathMeasure = new SKPathMeasure(path, false, 1);
-            float hOffset = (pathMeasure.Length / 2f) - (baseTextWidth / 2f);
-            canvas.DrawTextOnPath(text.Value, path, hOffset, metrics.Bottom - metrics.Top, paint);
+            //var bounds = new SKRect();
+            //float baseTextWidth = paint.MeasureText(text.Value, ref bounds);
+            //SKPathMeasure pathMeasure = new SKPathMeasure(path, false, 1);
+            //float hOffset = (pathMeasure.Length / 2f) - (baseTextWidth / 2f);
+            //float vOffset = metrics.Bottom - metrics.Top;
+            float hOffset = 0.0f;
+            float vOffset = 0.0f;
+            canvas.DrawTextOnPath(text.Value, path, hOffset, vOffset, paint);
         }
 
         public void DrawLine(object dc, LineShape line, string styleId, double dx, double dy, double scale)
