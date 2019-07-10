@@ -544,11 +544,7 @@ namespace Draw2D.Renderers
                 }
                 if (style.TextStyle.IsStroked && !string.IsNullOrEmpty(circle.Text?.Value))
                 {
-                    var rect = SkiaHelper.ToSKRect(
-                       circle.StartPoint.X - distance + dx,
-                       circle.StartPoint.Y - distance + dy,
-                       circle.StartPoint.X + distance + dx,
-                       circle.StartPoint.Y + distance + dy);
+                    var rect = SkiaHelper.ToSKRect(circle.StartPoint, distance, dx, dy);
                     DrawText(canvas, circle.Text, rect, style, dx, dy, scale);
                 }
             }
@@ -572,11 +568,7 @@ namespace Draw2D.Renderers
                     if (style.TextStyle.IsStroked && !string.IsNullOrEmpty(circle.Text?.Value))
                     {
                         var distance = circle.StartPoint.DistanceTo(circle.Point);
-                        var rect = SkiaHelper.ToSKRect(
-                           circle.StartPoint.X - distance + dx,
-                           circle.StartPoint.Y - distance + dy,
-                           circle.StartPoint.X + distance + dx,
-                           circle.StartPoint.Y + distance + dy);
+                        var rect = SkiaHelper.ToSKRect(circle.StartPoint, distance, dx, dy);
                         DrawText(canvas, circle.Text, rect, style, dx, dy, scale);
                     }
                 }
