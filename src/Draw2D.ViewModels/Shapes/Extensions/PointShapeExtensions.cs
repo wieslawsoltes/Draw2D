@@ -20,5 +20,14 @@ namespace Draw2D.ViewModels.Shapes
         {
             return point.ToPoint2().DistanceTo(other.ToPoint2());
         }
+
+        public static Rect2 ToRect2(this IPointShape center, double radius)
+        {
+            return Rect2.FromPoints(
+                center.X - radius, 
+                center.Y - radius, 
+                center.X + radius, 
+                center.Y + radius);
+        }
     }
 }
