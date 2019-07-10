@@ -41,11 +41,7 @@ namespace Draw2D.ViewModels.Bounds
             var circle = shape as CircleShape ?? throw new ArgumentNullException("shape");
             var distance = circle.StartPoint.DistanceTo(circle.Point);
 
-            return Rect2.FromPoints(
-                circle.StartPoint.X - distance,
-                circle.StartPoint.Y - distance,
-                circle.StartPoint.X + distance,
-                circle.StartPoint.Y + distance).Contains(target) ? shape : null;
+            return circle.StartPoint.ToRect2(distance).Contains(target) ? shape : null;
         }
 
         public IBaseShape Overlaps(IBaseShape shape, Rect2 target, double radius, IHitTest hitTest, Modifier modifier)
@@ -53,11 +49,7 @@ namespace Draw2D.ViewModels.Bounds
             var circle = shape as CircleShape ?? throw new ArgumentNullException("shape");
             var distance = circle.StartPoint.DistanceTo(circle.Point);
 
-            return Rect2.FromPoints(
-                circle.StartPoint.X - distance,
-                circle.StartPoint.Y - distance,
-                circle.StartPoint.X + distance,
-                circle.StartPoint.Y + distance).IntersectsWith(target) ? shape : null;
+            return circle.StartPoint.ToRect2(distance).IntersectsWith(target) ? shape : null;
         }
     }
 }
