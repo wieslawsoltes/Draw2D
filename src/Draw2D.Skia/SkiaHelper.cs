@@ -211,6 +211,15 @@ namespace Draw2D
             return new SKRect((float)left, (float)top, (float)right, (float)bottom);
         }
 
+        internal static SKRect ToSKRect(IPointShape center, double radius, double dx, double dy)
+        {
+            return new SKRect(
+                (float)(center.X - radius + dx),
+                (float)(center.Y - radius + dy),
+                (float)(center.X + radius + dx),
+                (float)(center.Y + radius + dy));
+        }
+
         internal static SKMatrix Multiply(SKMatrix value1, SKMatrix value2)
         {
             return ToSKMatrix(
