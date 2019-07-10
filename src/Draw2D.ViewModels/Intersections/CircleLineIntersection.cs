@@ -42,11 +42,7 @@ namespace Draw2D.ViewModels.Intersections
                 foreach (var circle in circles)
                 {
                     var distance = circle.StartPoint.DistanceTo(circle.Point);
-                    var rect = Rect2.FromPoints(
-                        circle.StartPoint.X - distance,
-                        circle.StartPoint.Y - distance,
-                        circle.StartPoint.X + distance,
-                        circle.StartPoint.Y + distance);
+                    var rect = circle.StartPoint.ToRect2(distance);
                     var p1 = line.StartPoint.ToPoint2();
                     var p2 = line.Point.ToPoint2();
                     Line2.LineIntersectsWithEllipse(p1, p2, rect, true, out var intersections);
