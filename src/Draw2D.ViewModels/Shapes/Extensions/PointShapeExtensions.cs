@@ -15,5 +15,10 @@ namespace Draw2D.ViewModels.Shapes
         {
             return new PointShape(point.X, point.Y, template);
         }
+
+        public static double DistanceTo(this IPointShape point, IPointShape other)
+        {
+            return point.ToPoint2().DistanceTo(other.ToPoint2());
+        }
     }
 }

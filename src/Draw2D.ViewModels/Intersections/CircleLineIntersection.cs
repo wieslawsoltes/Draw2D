@@ -41,7 +41,7 @@ namespace Draw2D.ViewModels.Intersections
             {
                 foreach (var circle in circles)
                 {
-                    var distance = circle.StartPoint.ToPoint2().DistanceTo(circle.Point.ToPoint2());
+                    var distance = circle.StartPoint.DistanceTo(circle.Point);
                     var rect = Rect2.FromPoints(
                         circle.StartPoint.X - distance,
                         circle.StartPoint.Y - distance,

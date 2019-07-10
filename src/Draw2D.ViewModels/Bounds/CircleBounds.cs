@@ -39,7 +39,7 @@ namespace Draw2D.ViewModels.Bounds
         public IBaseShape Contains(IBaseShape shape, Point2 target, double radius, IHitTest hitTest, Modifier modifier)
         {
             var circle = shape as CircleShape ?? throw new ArgumentNullException("shape");
-            var distance = circle.StartPoint.ToPoint2().DistanceTo(circle.Point.ToPoint2());
+            var distance = circle.StartPoint.DistanceTo(circle.Point);
 
             return Rect2.FromPoints(
                 circle.StartPoint.X - distance,
@@ -51,7 +51,7 @@ namespace Draw2D.ViewModels.Bounds
         public IBaseShape Overlaps(IBaseShape shape, Rect2 target, double radius, IHitTest hitTest, Modifier modifier)
         {
             var circle = shape as CircleShape ?? throw new ArgumentNullException("shape");
-            var distance = circle.StartPoint.ToPoint2().DistanceTo(circle.Point.ToPoint2());
+            var distance = circle.StartPoint.DistanceTo(circle.Point);
 
             return Rect2.FromPoints(
                 circle.StartPoint.X - distance,

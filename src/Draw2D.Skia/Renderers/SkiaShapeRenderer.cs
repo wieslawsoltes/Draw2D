@@ -531,7 +531,7 @@ namespace Draw2D.Renderers
             if (style.IsFilled || style.IsStroked || style.TextStyle.IsStroked)
             {
                 var canvas = dc as SKCanvas;
-                var distance = circle.StartPoint.ToPoint2().DistanceTo(circle.Point.ToPoint2());
+                var distance = circle.StartPoint.DistanceTo(circle.Point);
                 if (style.IsFilled)
                 {
                     GetSKPaintFill(style, out var brush);
@@ -571,7 +571,7 @@ namespace Draw2D.Renderers
                     }
                     if (style.TextStyle.IsStroked && !string.IsNullOrEmpty(circle.Text?.Value))
                     {
-                        var distance = circle.StartPoint.ToPoint2().DistanceTo(circle.Point.ToPoint2());
+                        var distance = circle.StartPoint.DistanceTo(circle.Point);
                         var rect = SkiaHelper.ToSKRect(
                            circle.StartPoint.X - distance + dx,
                            circle.StartPoint.Y - distance + dy,

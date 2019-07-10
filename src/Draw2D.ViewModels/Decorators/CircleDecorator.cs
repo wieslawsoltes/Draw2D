@@ -10,7 +10,7 @@ namespace Draw2D.ViewModels.Decorators
     {
         public void Draw(object dc, IShapeRenderer renderer, CircleShape circleShape, double dx, double dy, double scale)
         {
-            var distance = circleShape.StartPoint.ToPoint2().DistanceTo(circleShape.Point.ToPoint2());
+            var distance = circleShape.StartPoint.DistanceTo(circleShape.Point);
 
             DrawRectangle(dc, renderer, circleShape.StartPoint.X, circleShape.StartPoint.Y, distance, dx, dy, scale);
         }

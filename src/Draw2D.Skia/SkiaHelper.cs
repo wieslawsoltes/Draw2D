@@ -335,7 +335,7 @@ namespace Draw2D
 
         internal static void AddCircle(IToolContext context, CircleShape circle, double dx, double dy, SKPath geometry)
         {
-            var distance = circle.StartPoint.ToPoint2().DistanceTo(circle.Point.ToPoint2());
+            var distance = circle.StartPoint.DistanceTo(circle.Point);
             geometry.AddCircle((float)circle.StartPoint.X, (float)circle.StartPoint.Y, (float)distance, SKPathDirection.Clockwise);
         }
 
