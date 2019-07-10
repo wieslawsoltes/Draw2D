@@ -111,11 +111,11 @@
                                 <KeyBinding Command="{Binding $parent[UserControl].DataContext.SetTool}" CommandParameter="Point" Gesture="P"/>
                                 <KeyBinding Command="{Binding $parent[UserControl].DataContext.SetTool}" CommandParameter="CubicBezier" Gesture="B"/>
                                 <KeyBinding Command="{Binding $parent[UserControl].DataContext.SetTool}" CommandParameter="QuadraticBezier" Gesture="Q"/>
-                                <KeyBinding Command="{Binding $parent[UserControl].DataContext.SetTool}" CommandParameter="Conic" Gesture="A"/>
                                 <KeyBinding Command="{Binding $parent[UserControl].DataContext.SetTool}" CommandParameter="Path" Gesture="H"/>
                                 <KeyBinding Command="{Binding $parent[UserControl].DataContext.SetTool}" CommandParameter="Move" Gesture="M"/>
                                 <KeyBinding Command="{Binding $parent[UserControl].DataContext.SetTool}" CommandParameter="Rectangle" Gesture="R"/>
                                 <KeyBinding Command="{Binding $parent[UserControl].DataContext.SetTool}" CommandParameter="Circle" Gesture="C"/>
+                                <KeyBinding Command="{Binding $parent[UserControl].DataContext.SetTool}" CommandParameter="Arc" Gesture="A"/>
                                 <KeyBinding Command="{Binding $parent[UserControl].DataContext.SetTool}" CommandParameter="Ellipse" Gesture="E"/>
                                 <KeyBinding Command="{Binding $parent[UserControl].DataContext.SetTool}" CommandParameter="Text" Gesture="T"/>
                             </Border.KeyBindings>

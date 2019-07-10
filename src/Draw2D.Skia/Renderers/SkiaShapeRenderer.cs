@@ -576,6 +576,39 @@ namespace Draw2D.Renderers
 #endif
         }
 
+        public void DrawArc(object dc, ArcShape arc, string styleId, double dx, double dy, double scale)
+        {
+            var style = _context?.StyleLibrary?.Get(styleId);
+            if (style == null)
+            {
+                return;
+            }
+            if (style.IsFilled || style.IsStroked || style.TextStyle.IsStroked)
+            {
+                var canvas = dc as SKCanvas;
+                using (var geometry = new SKPath() { FillType = SKPathFillType.Winding })
+                {
+                    SkiaHelper.AddArc(null, arc, dx, dy, geometry);
+                    if (style.IsFilled)
+                    {
+                        GetSKPaintFill(style, out var brush);
+                        canvas.DrawPath(geometry, brush);
+                    }
+                    if (style.IsStroked)
+                    {
+                        GetSKPaintStroke(style, out var pen, scale);
+                        canvas.DrawPath(geometry, pen);
+                    }
+                    if (style.TextStyle.IsStroked && !string.IsNullOrEmpty(arc.Text?.Value))
+                    {
+                        var distance = arc.StartPoint.DistanceTo(arc.Point);
+                        var rect = SkiaHelper.ToSKRect(arc.StartPoint, distance, dx, dy);
+                        DrawText(canvas, arc.Text, rect, style, dx, dy, scale);
+                    }
+                }
+            }
+        }
+
         public void DrawEllipse(object dc, EllipseShape ellipse, string styleId, double dx, double dy, double scale)
         {
             var style = _context?.StyleLibrary?.Get(styleId);

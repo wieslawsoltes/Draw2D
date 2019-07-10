@@ -179,6 +179,11 @@
                     <CheckBox BorderThickness="0" IsHitTestVisible="False" IsChecked="{Binding CurrentTool, Converter={StaticResource IsToolConverter}, ConverterParameter=Circle, Mode=OneWay}"/>
                 </MenuItem.Icon>
             </MenuItem>
+            <MenuItem Header="_Arc" Command="{Binding SetTool}" CommandParameter="Arc">
+                <MenuItem.Icon>
+                    <CheckBox BorderThickness="0" IsHitTestVisible="False" IsChecked="{Binding CurrentTool, Converter={StaticResource IsToolConverter}, ConverterParameter=Arc, Mode=OneWay}"/>
+                </MenuItem.Icon>
+            </MenuItem>
             <MenuItem Header="_Ellipse" Command="{Binding SetTool}" CommandParameter="Ellipse">
                 <MenuItem.Icon>
                     <CheckBox BorderThickness="0" IsHitTestVisible="False" IsChecked="{Binding CurrentTool, Converter={StaticResource IsToolConverter}, ConverterParameter=Ellipse, Mode=OneWay}"/>

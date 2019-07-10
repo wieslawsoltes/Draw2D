@@ -348,6 +348,13 @@ namespace Draw2D
             geometry.AddCircle((float)circle.StartPoint.X, (float)circle.StartPoint.Y, (float)distance, SKPathDirection.Clockwise);
         }
 
+        internal static void AddArc(IToolContext context, ArcShape arc, double dx, double dy, SKPath geometry)
+        {
+            var distance = arc.StartPoint.DistanceTo(arc.Point);
+            var rect = ToSKRect(arc.StartPoint, distance, dx, dy);
+            geometry.AddArc(rect, (float)arc.StartAngle, (float)arc.SweepAngle);
+        }
+
         internal static void AddOval(IToolContext context, EllipseShape ellipse, double dx, double dy, SKPath geometry)
         {
             var rect = ToSKRect(ellipse.StartPoint, ellipse.Point, dx, dy);
@@ -557,6 +564,9 @@ namespace Draw2D
                     return true;
                 case CircleShape circle:
                     AddCircle(context, circle, dx, dy, geometry);
+                    return true;
+                case ArcShape arc:
+                    AddArc(context, arc, dx, dy, geometry);
                     return true;
                 case EllipseShape ellipse:
                     AddOval(context, ellipse, dx, dy, geometry);
@@ -885,6 +895,21 @@ namespace Draw2D
                             if (style != null)
                             {
                                 ToSvgPathData(context, circle.Text, circle.StartPoint, circle.Point, style.TextStyle, sb);
+                            }
+                        }
+                    }
+                    break;
+                case ArcShape arc:
+                    {
+                        using (var geometry = new SKPath() { FillType = SKPathFillType.Winding })
+                        {
+                            AddArc(context, arc, 0.0, 0.0, geometry);
+                            sb.AppendLine(geometry.ToSvgPathData());
+
+                            var style = context?.StyleLibrary?.Get(arc.StyleId);
+                            if (style != null)
+                            {
+                                ToSvgPathData(context, arc.Text, arc.StartPoint, arc.Point, style.TextStyle, sb);
                             }
                         }
                     }

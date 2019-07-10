@@ -61,6 +61,13 @@ namespace Draw2D.Bounds
             _rootNodes[_currentRootNode].Children.Add(new ChildNode(circle, styleId, dx, dy, scale, geometry));
         }
 
+        public void DrawArc(object dc, ArcShape arc, string styleId, double dx, double dy, double scale)
+        {
+            var geometry = new SKPath() { FillType = SKPathFillType.Winding };
+            SkiaHelper.AddArc(null, arc, dx, dy, geometry);
+            _rootNodes[_currentRootNode].Children.Add(new ChildNode(arc, styleId, dx, dy, scale, geometry));
+        }
+
         public void DrawEllipse(object dc, EllipseShape ellipse, string styleId, double dx, double dy, double scale)
         {
             var geometry = new SKPath() { FillType = SKPathFillType.Winding };
