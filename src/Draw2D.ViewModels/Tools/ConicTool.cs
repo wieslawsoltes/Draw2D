@@ -52,7 +52,7 @@ namespace Draw2D.ViewModels.Tools
                 StartPoint = startPoint,
                 Point1 = point1,
                 Point2 = point2,
-                Weight = Settings.Weight,
+                Weight = Settings?.Weight ?? 1.0,
                 Text = new Text(),
                 StyleId = context.DocumentContainer?.StyleLibrary?.CurrentItem?.Title
             };
