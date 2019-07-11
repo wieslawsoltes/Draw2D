@@ -1,0 +1,68 @@
+﻿<!-- Copyright (c) Wiesław Šoltés. All rights reserved. -->
+<!-- Licensed under the MIT license. See LICENSE file in the project root for full license information. -->
+<UserControl x:Class="Draw2D.Views.Containers.DocumentContainerView"
+             xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:Draw2D.Views.Containers"
+             mc:Ignorable="d"
+             d:DesignWidth="500" d:DesignHeight="400">
+    <TabControl Classes="default" TabStripPlacement="Top">
+        <TabItem Classes="default" Header="Document">
+            <ScrollViewer>
+                <Grid RowDefinitions="Auto" ColumnDefinitions="Auto,*">
+                    <TextBlock Classes="default" Grid.Column="0" Grid.Row="0" Text="Title"/>
+                    <TextBox Classes="default" Grid.Column="1" Grid.Row="0" Text="{Binding Title}"/>
+                </Grid>
+            </ScrollViewer>
+        </TabItem>
+        <TabItem Classes="default" Header="Views">
+            <ListBox Classes="default" Items="{Binding ContainerViews}" SelectedItem="{Binding ContainerView}">
+                <ListBox.DataTemplates>
+                    <DataTemplate>
+                        <TextBlock Classes="list" Text="{Binding Title}"/>
+                    </DataTemplate>
+                </ListBox.DataTemplates>
+            </ListBox>
+        </TabItem>
+        <TabItem Classes="default" Header="Selected">
+            <ContentControl Content="{Binding ContainerView}"/>
+        </TabItem>
+        <TabItem Classes="default" Header="Styles">
+            <Grid RowDefinitions="Auto,*" ColumnDefinitions="3*,3*,3*">
+                <Button Classes="default" Content="Remove" Command="{Binding StyleLibrary.Remove}" CommandParameter="{Binding StyleLibrary.CurrentItem}" Grid.Row="0" Grid.Column="0"/>
+                <Button Classes="default" Content="Add" Command="{Binding StyleLibrary.Add}" CommandParameter="{x:Null}" Grid.Row="0" Grid.Column="1"/>
+                <Button Classes="default" Content="Set" Command="{Binding ContainerView.Style}" CommandParameter="{Binding StyleLibrary.CurrentItem.Title}" Grid.Row="0" Grid.Column="2"/>
+                <ContentControl Content="{Binding StyleLibrary}" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3"/>
+            </Grid>
+        </TabItem>
+        <TabItem Classes="default" Header="Groups">
+            <Grid RowDefinitions="Auto,*" ColumnDefinitions="3*,3*,3*">
+                <Button Classes="default" Content="Remove" Command="{Binding GroupLibrary.Remove}" CommandParameter="{Binding GroupLibrary.CurrentItem}" Grid.Row="0" Grid.Column="0"/>
+                <Button Classes="default" Content="Add" Command="{Binding GroupLibrary.Add}" CommandParameter="{Binding ContainerView.SelectionState.Selected}" Grid.Row="0" Grid.Column="1"/>
+                <Button Classes="default" Content="Insert" Command="{Binding ContainerView.Reference}" CommandParameter="{Binding GroupLibrary.CurrentItem}" Grid.Row="0" Grid.Column="2"/>
+                <ContentControl Content="{Binding GroupLibrary}" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3"/>
+            </Grid>
+        </TabItem>
+        <TabItem Classes="default" Header="Object">
+            <ScrollViewer>
+                <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="Auto,*">
+                    <TextBlock Classes="default" Grid.Column="0" Grid.Row="0" Text="Id"/>
+                    <TextBox Classes="default" Grid.Column="1" Grid.Row="0" Text="{Binding Id}"/>
+                    <TextBlock Classes="default" Grid.Column="0" Grid.Row="1" Text="Name"/>
+                    <TextBox Classes="default" Grid.Column="1" Grid.Row="1" Text="{Binding Name}"/>
+                    <TextBlock Classes="default" Grid.Column="0" Grid.Row="2" Text="IsDirty"/>
+                    <CheckBox Classes="default" Grid.Column="1" Grid.Row="2" IsEnabled="False" IsChecked="{Binding IsDirty, Mode=OneWay}"/>
+                    <Button Classes="default" Content="MarkAsDirty=True" Command="{Binding MarkAsDirty}" CommandParameter="True" Grid.Column="1" Grid.Row="3"/>
+                    <Button Classes="default" Content="MarkAsDirty=False" Command="{Binding MarkAsDirty}" CommandParameter="False" Grid.Column="1" Grid.Row="4"/>
+                    <Button Classes="default" Content="Invalidate" Command="{Binding Invalidate}" Grid.Column="1" Grid.Row="5"/>
+                    <Button Classes="default" Content="SetUniqueId" Command="{Binding SetUniqueId}" Grid.Column="1" Grid.Row="6"/>
+                </Grid>
+            </ScrollViewer>
+        </TabItem>
+        <TabItem Classes="default" Header="Owner">
+            <ContentControl Content="{Binding Owner}"/>
+        </TabItem>
+    </TabControl>
+</UserControl>
