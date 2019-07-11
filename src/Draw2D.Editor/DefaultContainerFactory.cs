@@ -623,6 +623,8 @@ namespace Draw2D.Editor
                 },
                 Settings = new PathToolSettings()
                 {
+                    Tools = new ObservableCollection<ITool>(),
+                    CurrentTool = null,
                     ConnectPoints = true,
                     HitTestRadius = 7.0,
                     FillType = PathFillType.Winding,
@@ -631,15 +633,224 @@ namespace Draw2D.Editor
                 }
             };
 
-            pathTool.Settings.Tools = new ObservableCollection<ITool>
+            var pathLineTool = new LineTool()
             {
-                new LineTool(),
-                new CubicBezierTool(),
-                new QuadraticBezierTool(),
-                new ConicTool(),
-                new MoveTool(pathTool)
+                Intersections = new ObservableCollection<IPointIntersection>
+                    {
+                        new LineLineIntersection()
+                        {
+                            Intersections = new ObservableCollection<IPointShape>(),
+                            Settings = new LineLineSettings()
+                            {
+                                IsEnabled = true
+                            }
+                        },
+                        new RectangleLineIntersection()
+                        {
+                            Intersections = new ObservableCollection<IPointShape>(),
+                            Settings = new RectangleLineSettings()
+                            {
+                                IsEnabled = true
+                            }
+                        },
+                        new CircleLineIntersection()
+                        {
+                            Intersections = new ObservableCollection<IPointShape>(),
+                            Settings = new CircleLineSettings()
+                            {
+                                IsEnabled = true
+                            }
+                        },
+                        new EllipseLineIntersection()
+                        {
+                            Intersections = new ObservableCollection<IPointShape>(),
+                            Settings = new EllipseLineSettings()
+                            {
+                                IsEnabled = true
+                            }
+                        }
+                    },
+                Filters = new ObservableCollection<IPointFilter>
+                    {
+                        new GridSnapPointFilter()
+                        {
+                            Guides = new ObservableCollection<IBaseShape>(),
+                            Settings = new GridSnapSettings()
+                            {
+                                IsEnabled = true,
+                                EnableGuides = false,
+                                Mode = GridSnapMode.Horizontal | GridSnapMode.Vertical,
+                                GridSizeX = 15.0,
+                                GridSizeY = 15.0,
+                                GuideStyle = "Guide"
+                            }
+                        },
+                        new LineSnapPointFilter()
+                        {
+                            Guides = new ObservableCollection<IBaseShape>(),
+                            Settings = new LineSnapSettings()
+                            {
+                                IsEnabled = true,
+                                EnableGuides = false,
+                                Target = LineSnapTarget.Shapes,
+                                Mode = LineSnapMode.Point
+                                | LineSnapMode.Middle
+                                | LineSnapMode.Nearest
+                                | LineSnapMode.Intersection
+                                | LineSnapMode.Horizontal
+                                | LineSnapMode.Vertical,
+                                Threshold = 10.0,
+                                GuideStyle = "Guide"
+                            }
+                        }
+                    },
+                Settings = new LineToolSettings()
+                {
+                    ConnectPoints = true,
+                    HitTestRadius = 7.0,
+                    SplitIntersections = false
+                }
             };
-            pathTool.Settings.CurrentTool = pathTool.Settings.Tools[0];
+
+            var pathCubicBezierTool = new CubicBezierTool()
+            {
+                Intersections = new ObservableCollection<IPointIntersection>(),
+                Filters = new ObservableCollection<IPointFilter>
+                {
+                    new GridSnapPointFilter()
+                    {
+                        Guides = new ObservableCollection<IBaseShape>(),
+                        Settings = new GridSnapSettings()
+                        {
+                            IsEnabled = true,
+                            EnableGuides = false,
+                            Mode = GridSnapMode.Horizontal | GridSnapMode.Vertical,
+                            GridSizeX = 15.0,
+                            GridSizeY = 15.0,
+                            GuideStyle = "Guide"
+                        }
+                    },
+                    new LineSnapPointFilter()
+                    {
+                        Guides = new ObservableCollection<IBaseShape>(),
+                        Settings = new LineSnapSettings()
+                        {
+                            IsEnabled = true,
+                            EnableGuides = false,
+                            Target = LineSnapTarget.Shapes,
+                            Mode = LineSnapMode.Point
+                            | LineSnapMode.Middle
+                            | LineSnapMode.Nearest
+                            | LineSnapMode.Intersection
+                            | LineSnapMode.Horizontal
+                            | LineSnapMode.Vertical,
+                            Threshold = 10.0,
+                            GuideStyle = "Guide"
+                        }
+                    }
+                },
+                Settings = new CubicBezierToolSettings()
+                {
+                    ConnectPoints = true,
+                    HitTestRadius = 7.0
+                }
+            };
+
+            var pathQuadraticBezierTool = new QuadraticBezierTool()
+            {
+                Intersections = new ObservableCollection<IPointIntersection>(),
+                Filters = new ObservableCollection<IPointFilter>
+                {
+                    new GridSnapPointFilter()
+                    {
+                        Guides = new ObservableCollection<IBaseShape>(),
+                        Settings = new GridSnapSettings()
+                        {
+                            IsEnabled = true,
+                            EnableGuides = false,
+                            Mode = GridSnapMode.Horizontal | GridSnapMode.Vertical,
+                            GridSizeX = 15.0,
+                            GridSizeY = 15.0,
+                            GuideStyle = "Guide"
+                        }
+                    },
+                    new LineSnapPointFilter()
+                    {
+                        Guides = new ObservableCollection<IBaseShape>(),
+                        Settings = new LineSnapSettings()
+                        {
+                            IsEnabled = true,
+                            EnableGuides = false,
+                            Target = LineSnapTarget.Shapes,
+                            Mode = LineSnapMode.Point
+                            | LineSnapMode.Middle
+                            | LineSnapMode.Nearest
+                            | LineSnapMode.Intersection
+                            | LineSnapMode.Horizontal
+                            | LineSnapMode.Vertical,
+                            Threshold = 10.0,
+                            GuideStyle = "Guide"
+                        }
+                    }
+                },
+                Settings = new QuadraticBezierToolSettings()
+                {
+                    ConnectPoints = true,
+                    HitTestRadius = 7.0
+                }
+            };
+
+            var pathConicTool = new ConicTool()
+            {
+                Intersections = new ObservableCollection<IPointIntersection>(),
+                Filters = new ObservableCollection<IPointFilter>
+                {
+                    new GridSnapPointFilter()
+                    {
+                        Guides = new ObservableCollection<IBaseShape>(),
+                        Settings = new GridSnapSettings()
+                        {
+                            IsEnabled = true,
+                            EnableGuides = false,
+                            Mode = GridSnapMode.Horizontal | GridSnapMode.Vertical,
+                            GridSizeX = 15.0,
+                            GridSizeY = 15.0,
+                            GuideStyle = "Guide"
+                        }
+                    },
+                    new LineSnapPointFilter()
+                    {
+                        Guides = new ObservableCollection<IBaseShape>(),
+                        Settings = new LineSnapSettings()
+                        {
+                            IsEnabled = true,
+                            EnableGuides = false,
+                            Target = LineSnapTarget.Shapes,
+                            Mode = LineSnapMode.Point
+                            | LineSnapMode.Middle
+                            | LineSnapMode.Nearest
+                            | LineSnapMode.Intersection
+                            | LineSnapMode.Horizontal
+                            | LineSnapMode.Vertical,
+                            Threshold = 10.0,
+                            GuideStyle = "Guide"
+                        }
+                    }
+                },
+                Settings = new ConicToolSettings()
+                {
+                    ConnectPoints = true,
+                    HitTestRadius = 7.0,
+                    Weight = 1.0
+                }
+            };
+
+            var pathMoveTool = new MoveTool(pathTool)
+            {
+                Intersections = new ObservableCollection<IPointIntersection>(),
+                Filters = new ObservableCollection<IPointFilter>(),
+                Settings = new MoveToolSettings()
+            };
 
             var scribbleTool = new ScribbleTool()
             {
@@ -948,27 +1159,27 @@ namespace Draw2D.Editor
             tools.Add(ellipseTool);
             tools.Add(textTool);
 
+            SetToolDefaults(pathLineTool);
+            SetToolDefaults(pathCubicBezierTool);
+            SetToolDefaults(pathQuadraticBezierTool);
+            SetToolDefaults(pathConicTool);
+            SetToolDefaults(pathMoveTool);
+
+            pathTool.Settings.Tools.Add(pathLineTool);
+            pathTool.Settings.Tools.Add(pathCubicBezierTool);
+            pathTool.Settings.Tools.Add(pathQuadraticBezierTool);
+            pathTool.Settings.Tools.Add(pathConicTool);
+            pathTool.Settings.Tools.Add(pathMoveTool);
+
+            pathTool.Settings.CurrentTool = pathTool.Settings.Tools[0];
+
             editorToolContext.Selection = selectionTool;
             editorToolContext.HitTest = hitTest;
             editorToolContext.CurrentDirectory = null;
             editorToolContext.Files = new ObservableCollection<string>();
 
-            editorToolContext.StyleLibrary = null;
-            editorToolContext.GroupLibrary = null;
+            editorToolContext.DocumentContainer = null;
 
-            var pointTemplate = new RectangleShape(new PointShape(-4, -4, null), new PointShape(4, 4, null))
-            {
-                Points = new ObservableCollection<IPointShape>(),
-                Text = new Text(),
-                StyleId = "PointTemplate"
-            };
-            pointTemplate.StartPoint.Owner = pointTemplate;
-            pointTemplate.Point.Owner = pointTemplate;
-
-            editorToolContext.PointTemplate = pointTemplate;
-
-            editorToolContext.ContainerViews = new ObservableCollection<IContainerView>();
-            editorToolContext.ContainerView = null;
             editorToolContext.Tools = tools;
             editorToolContext.CurrentTool = selectionTool;
             editorToolContext.EditMode = EditMode.Mouse;
@@ -1016,6 +1227,33 @@ namespace Draw2D.Editor
             };
 
             return containerView;
+        }
+
+        public IDocumentContainer CreateDocumentContainer(string title)
+        {
+            var documentContainer = new DocumentContainer()
+            {
+                Title = title
+            };
+
+            documentContainer.StyleLibrary = null;
+            documentContainer.GroupLibrary = null;
+
+            var pointTemplate = new RectangleShape(new PointShape(-4, -4, null), new PointShape(4, 4, null))
+            {
+                Points = new ObservableCollection<IPointShape>(),
+                Text = new Text(),
+                StyleId = "PointTemplate"
+            };
+            pointTemplate.StartPoint.Owner = pointTemplate;
+            pointTemplate.Point.Owner = pointTemplate;
+
+            documentContainer.PointTemplate = pointTemplate;
+
+            documentContainer.ContainerViews = new ObservableCollection<IContainerView>();
+            documentContainer.ContainerView = null;
+
+            return documentContainer;
         }
     }
 }

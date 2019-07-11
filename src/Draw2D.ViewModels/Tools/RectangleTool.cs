@@ -39,10 +39,10 @@ namespace Draw2D.ViewModels.Tools
             FiltersProcess(context, ref x, ref y);
 
             var radius = Settings?.HitTestRadius ?? 7.0;
-            var scale = context.ContainerView?.ZoomService?.ZoomServiceState?.ZoomX ?? 1.0;
+            var scale = context.DocumentContainer?.ContainerView?.ZoomService?.ZoomServiceState?.ZoomX ?? 1.0;
 
-            IPointShape startPoint = context.ContainerView?.GetNextPoint(context, x, y, Settings?.ConnectPoints ?? false, radius, scale, modifier);
-            IPointShape point = context.ContainerView?.GetNextPoint(context, x, y, false, 0.0, 1.0, modifier);
+            IPointShape startPoint = context.DocumentContainer?.ContainerView?.GetNextPoint(context, x, y, Settings?.ConnectPoints ?? false, radius, scale, modifier);
+            IPointShape point = context.DocumentContainer?.ContainerView?.GetNextPoint(context, x, y, false, 0.0, 1.0, modifier);
 
             _rectangle = new RectangleShape()
             {
@@ -52,9 +52,9 @@ namespace Draw2D.ViewModels.Tools
                 Text = new Text(),
                 RadiusX = Settings?.RadiusX ?? 0.0,
                 RadiusY = Settings?.RadiusY ?? 0.0,
-                StyleId = context.StyleLibrary?.CurrentItem?.Title
+                StyleId = context.DocumentContainer?.StyleLibrary?.CurrentItem?.Title
             };
-            _rectangle.Owner = context.ContainerView?.WorkingContainer;
+            _rectangle.Owner = context.DocumentContainer?.ContainerView?.WorkingContainer;
             if (_rectangle.StartPoint.Owner == null)
             {
                 _rectangle.StartPoint.Owner = _rectangle;
@@ -63,14 +63,14 @@ namespace Draw2D.ViewModels.Tools
             {
                 _rectangle.Point.Owner = _rectangle;
             }
-            context.ContainerView?.WorkingContainer.Shapes.Add(_rectangle);
-            context.ContainerView?.WorkingContainer.MarkAsDirty(true);
-            context.ContainerView?.SelectionState?.Select(_rectangle);
-            context.ContainerView?.SelectionState?.Select(_rectangle.StartPoint);
-            context.ContainerView?.SelectionState?.Select(_rectangle.Point);
+            context.DocumentContainer?.ContainerView?.WorkingContainer.Shapes.Add(_rectangle);
+            context.DocumentContainer?.ContainerView?.WorkingContainer.MarkAsDirty(true);
+            context.DocumentContainer?.ContainerView?.SelectionState?.Select(_rectangle);
+            context.DocumentContainer?.ContainerView?.SelectionState?.Select(_rectangle.StartPoint);
+            context.DocumentContainer?.ContainerView?.SelectionState?.Select(_rectangle.Point);
 
-            context.ContainerView?.InputService?.Capture?.Invoke();
-            context.ContainerView?.InputService?.Redraw?.Invoke();
+            context.DocumentContainer?.ContainerView?.InputService?.Capture?.Invoke();
+            context.DocumentContainer?.ContainerView?.InputService?.Redraw?.Invoke();
 
             CurrentState = State.Point;
         }
@@ -81,13 +81,13 @@ namespace Draw2D.ViewModels.Tools
 
             CurrentState = State.StartPoint;
 
-            context.ContainerView?.SelectionState?.Deselect(_rectangle);
-            context.ContainerView?.SelectionState?.Deselect(_rectangle.Point);
+            context.DocumentContainer?.ContainerView?.SelectionState?.Deselect(_rectangle);
+            context.DocumentContainer?.ContainerView?.SelectionState?.Deselect(_rectangle.Point);
 
             var radius = Settings?.HitTestRadius ?? 7.0;
-            var scale = context.ContainerView?.ZoomService?.ZoomServiceState?.ZoomX ?? 1.0;
+            var scale = context.DocumentContainer?.ContainerView?.ZoomService?.ZoomServiceState?.ZoomX ?? 1.0;
 
-            IPointShape point = context.ContainerView?.GetNextPoint(context, x, y, Settings?.ConnectPoints ?? false, radius, scale, modifier);
+            IPointShape point = context.DocumentContainer?.ContainerView?.GetNextPoint(context, x, y, Settings?.ConnectPoints ?? false, radius, scale, modifier);
 
             _rectangle.Point = point;
             _rectangle.Point.Y = y;
@@ -95,19 +95,19 @@ namespace Draw2D.ViewModels.Tools
             {
                 _rectangle.Point.Owner = _rectangle;
             }
-            context.ContainerView?.WorkingContainer.Shapes.Remove(_rectangle);
-            context.ContainerView?.WorkingContainer.MarkAsDirty(true);
-            context.ContainerView?.WorkingContainer.MarkAsDirty(true);
-            context.ContainerView?.SelectionState?.Deselect(_rectangle.StartPoint);
-            _rectangle.Owner = context.ContainerView?.CurrentContainer;
-            context.ContainerView?.CurrentContainer.Shapes.Add(_rectangle);
-            context.ContainerView?.CurrentContainer.MarkAsDirty(true);
+            context.DocumentContainer?.ContainerView?.WorkingContainer.Shapes.Remove(_rectangle);
+            context.DocumentContainer?.ContainerView?.WorkingContainer.MarkAsDirty(true);
+            context.DocumentContainer?.ContainerView?.WorkingContainer.MarkAsDirty(true);
+            context.DocumentContainer?.ContainerView?.SelectionState?.Deselect(_rectangle.StartPoint);
+            _rectangle.Owner = context.DocumentContainer?.ContainerView?.CurrentContainer;
+            context.DocumentContainer?.ContainerView?.CurrentContainer.Shapes.Add(_rectangle);
+            context.DocumentContainer?.ContainerView?.CurrentContainer.MarkAsDirty(true);
             _rectangle = null;
 
             FiltersClear(context);
 
-            context.ContainerView?.InputService?.Release?.Invoke();
-            context.ContainerView?.InputService?.Redraw?.Invoke();
+            context.DocumentContainer?.ContainerView?.InputService?.Release?.Invoke();
+            context.DocumentContainer?.ContainerView?.InputService?.Redraw?.Invoke();
         }
 
         private void MoveTopLeftInternal(IToolContext context, double x, double y, Modifier modifier)
@@ -115,7 +115,7 @@ namespace Draw2D.ViewModels.Tools
             FiltersClear(context);
             FiltersProcess(context, ref x, ref y);
 
-            context.ContainerView?.InputService?.Redraw?.Invoke();
+            context.DocumentContainer?.ContainerView?.InputService?.Redraw?.Invoke();
         }
 
         private void MoveBottomRightInternal(IToolContext context, double x, double y, Modifier modifier)
@@ -126,7 +126,7 @@ namespace Draw2D.ViewModels.Tools
             _rectangle.Point.X = x;
             _rectangle.Point.Y = y;
 
-            context.ContainerView?.InputService?.Redraw?.Invoke();
+            context.DocumentContainer?.ContainerView?.InputService?.Redraw?.Invoke();
         }
 
         private void CleanInternal(IToolContext context)
@@ -137,16 +137,16 @@ namespace Draw2D.ViewModels.Tools
 
             if (_rectangle != null)
             {
-                context.ContainerView?.WorkingContainer.Shapes.Remove(_rectangle);
-                context.ContainerView?.WorkingContainer.MarkAsDirty(true);
-                context.ContainerView?.SelectionState?.Deselect(_rectangle);
-                context.ContainerView?.SelectionState?.Deselect(_rectangle.StartPoint);
-                context.ContainerView?.SelectionState?.Deselect(_rectangle.Point);
+                context.DocumentContainer?.ContainerView?.WorkingContainer.Shapes.Remove(_rectangle);
+                context.DocumentContainer?.ContainerView?.WorkingContainer.MarkAsDirty(true);
+                context.DocumentContainer?.ContainerView?.SelectionState?.Deselect(_rectangle);
+                context.DocumentContainer?.ContainerView?.SelectionState?.Deselect(_rectangle.StartPoint);
+                context.DocumentContainer?.ContainerView?.SelectionState?.Deselect(_rectangle.Point);
                 _rectangle = null;
             }
 
-            context.ContainerView?.InputService?.Release?.Invoke();
-            context.ContainerView?.InputService?.Redraw?.Invoke();
+            context.DocumentContainer?.ContainerView?.InputService?.Release?.Invoke();
+            context.DocumentContainer?.ContainerView?.InputService?.Redraw?.Invoke();
         }
 
         public void LeftDown(IToolContext context, double x, double y, Modifier modifier)

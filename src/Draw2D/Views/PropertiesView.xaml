@@ -33,8 +33,8 @@
                 <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,*,Auto,Auto" ColumnDefinitions="50*,50*">
                     <TextBlock Classes="default" Text="Path:" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"/>
                     <TextBox x:Name="path" Classes="default" Text="{Binding #files.SelectedItem, Mode=OneWay, FallbackValue=View.json}" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"/>
-                    <Button Classes="default" Content="Save View" Command="{Binding SaveView}" CommandParameter="{Binding #path.Text}" Grid.Row="2" Grid.Column="0"/>
-                    <Button Classes="default" Content="Open View" Command="{Binding OpenView}" CommandParameter="{Binding #path.Text}" Grid.Row="2" Grid.Column="1"/>
+                    <Button Classes="default" Content="Save Document" Command="{Binding SaveDocument}" CommandParameter="{Binding #path.Text}" Grid.Row="2" Grid.Column="0"/>
+                    <Button Classes="default" Content="Open Document" Command="{Binding OpenDocument}" CommandParameter="{Binding #path.Text}" Grid.Row="2" Grid.Column="1"/>
                     <Button Classes="default" Content="Save Styles" Command="{Binding SaveStyles}" CommandParameter="{Binding #path.Text}" Grid.Row="3" Grid.Column="0"/>
                     <Button Classes="default" Content="Open Styles" Command="{Binding OpenStyles}" CommandParameter="{Binding #path.Text}" Grid.Row="3" Grid.Column="1"/>
                     <Button Classes="default" Content="Save Groups" Command="{Binding SaveGroups}" CommandParameter="{Binding #path.Text}" Grid.Row="4" Grid.Column="0"/>
@@ -68,39 +68,6 @@
             </TabItem>
         </TabControl>
         <GridSplitter Grid.Row="1"/>
-        <TabControl Classes="default" Grid.Row="2" TabStripPlacement="Top">
-            <TabItem Classes="default" Header="Views">
-                <TabControl Classes="default" TabStripPlacement="Top">
-                    <TabItem Classes="default" Header="Current">
-                        <ContentControl Content="{Binding ContainerView}"/>
-                    </TabItem>
-                    <TabItem Classes="default" Header="Views">
-                        <ListBox Classes="default" Items="{Binding ContainerViews}" SelectedItem="{Binding ContainerView}">
-                            <ListBox.DataTemplates>
-                                <DataTemplate>
-                                    <TextBlock Classes="list" Text="{Binding Title}"/>
-                                </DataTemplate>
-                            </ListBox.DataTemplates>
-                        </ListBox>
-                    </TabItem>
-                </TabControl>
-            </TabItem>
-            <TabItem Classes="default" Header="Styles">
-                <Grid RowDefinitions="Auto,*" ColumnDefinitions="3*,3*,3*">
-                    <Button Classes="default" Content="Remove" Command="{Binding StyleLibrary.Remove}" CommandParameter="{Binding StyleLibrary.CurrentItem}" Grid.Row="0" Grid.Column="0"/>
-                    <Button Classes="default" Content="Add" Command="{Binding StyleLibrary.Add}" CommandParameter="{x:Null}" Grid.Row="0" Grid.Column="1"/>
-                    <Button Classes="default" Content="Set" Command="{Binding ContainerView.Style}" CommandParameter="{Binding StyleLibrary.CurrentItem.Title}" Grid.Row="0" Grid.Column="2"/>
-                    <ContentControl Content="{Binding StyleLibrary}" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3"/>
-                </Grid>
-            </TabItem>
-            <TabItem Classes="default" Header="Groups">
-                <Grid RowDefinitions="Auto,*" ColumnDefinitions="3*,3*,3*">
-                    <Button Classes="default" Content="Remove" Command="{Binding GroupLibrary.Remove}" CommandParameter="{Binding GroupLibrary.CurrentItem}" Grid.Row="0" Grid.Column="0"/>
-                    <Button Classes="default" Content="Add" Command="{Binding GroupLibrary.Add}" CommandParameter="{Binding ContainerView.SelectionState.Selected}" Grid.Row="0" Grid.Column="1"/>
-                    <Button Classes="default" Content="Insert" Command="{Binding ContainerView.Reference}" CommandParameter="{Binding GroupLibrary.CurrentItem}" Grid.Row="0" Grid.Column="2"/>
-                    <ContentControl Content="{Binding GroupLibrary}" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3"/>
-                </Grid>
-            </TabItem>
-        </TabControl>
+        <ContentControl Content="{Binding DocumentContainer}" Grid.Row="2"/>
     </Grid>
 </UserControl>

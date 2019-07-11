@@ -11,162 +11,207 @@ using Draw2D.ViewModels.Style;
 
 namespace Draw2D.ViewModels.Tools
 {
-    public partial class PathTool : IToolContext
+    internal class FigureContainerView : IContainerView
     {
-        internal class FigureContainerView : IContainerView
+        internal IToolContext _context;
+        internal PathTool _pathTool;
+        internal IPointShape _nextPoint;
+
+        public FigureContainerView(IToolContext context, PathTool pathTool)
         {
-            internal IToolContext _context;
-            internal PathTool _pathTool;
-            internal IPointShape _nextPoint;
-
-            public FigureContainerView(IToolContext context, PathTool pathTool)
-            {
-                _context = context;
-                _pathTool = pathTool;
-            }
-
-            public string Title
-            {
-                get => _context.ContainerView.Title;
-                set => throw new InvalidOperationException($"Can not set {Title} property value.");
-            }
-
-            public double Width
-            {
-                get => _context.ContainerView.Width;
-                set => throw new InvalidOperationException($"Can not set {Width} property value.");
-            }
-
-            public double Height
-            {
-                get => _context.ContainerView.Width;
-                set => throw new InvalidOperationException($"Can not set {Height} property value.");
-            }
-
-            public ArgbColor PrintBackground
-            {
-                get => _context.ContainerView.PrintBackground;
-                set => throw new InvalidOperationException($"Can not set {PrintBackground} property value.");
-            }
-
-            public ArgbColor WorkBackground
-            {
-                get => _context.ContainerView.WorkBackground;
-                set => throw new InvalidOperationException($"Can not set {WorkBackground} property value.");
-            }
-
-            public ArgbColor InputBackground
-            {
-                get => _context.ContainerView.InputBackground;
-                set => throw new InvalidOperationException($"Can not set {InputBackground} property value.");
-            }
-
-            public ICanvasContainer CurrentContainer
-            {
-                get => _pathTool._figure;
-                set => throw new InvalidOperationException($"Can not set {CurrentContainer} property value.");
-            }
-
-            public ICanvasContainer WorkingContainer
-            {
-                get => _pathTool._figure;
-                set => throw new InvalidOperationException($"Can not set {WorkingContainer} property value.");
-            }
-
-            public IContainerPresenter ContainerPresenter
-            {
-                get => _context.ContainerView.ContainerPresenter;
-                set => throw new InvalidOperationException($"Can not set {ContainerPresenter} property value.");
-            }
-
-            public ISelectionState SelectionState
-            {
-                get => _context.ContainerView.SelectionState;
-                set => throw new InvalidOperationException($"Can not set {SelectionState} property value.");
-            }
-
-            public IZoomServiceState ZoomServiceState
-            {
-                get => _context.ContainerView.ZoomServiceState;
-                set => throw new InvalidOperationException($"Can not set {ZoomServiceState} property value.");
-            }
-
-            public IInputService InputService
-            {
-                get => _context.ContainerView?.InputService;
-                set => throw new InvalidOperationException($"Can not set {InputService} property value.");
-            }
-
-            public IZoomService ZoomService
-            {
-                get => _context.ContainerView.ZoomService;
-                set => throw new InvalidOperationException($"Can not set {ZoomService} property value.");
-            }
-
-            public IPointShape GetNextPoint(IToolContext context, double x, double y, bool connect, double radius, double scale, Modifier modifier)
-            {
-                if (_nextPoint != null)
-                {
-                    var nextPointTemp = _nextPoint;
-                    _nextPoint = null;
-                    return nextPointTemp;
-                }
-                return _context.ContainerView.GetNextPoint(_context, x, y, connect, radius, scale, modifier);
-            }
-
-            public void Draw(object context, double width, double height, double dx, double dy, double zx, double zy)
-            {
-                _context.ContainerView.Draw(context, width, height, dx, dy, zx, zy);
-            }
-
-            public void Add(IBaseShape shape)
-            {
-                _context.ContainerView.Add(shape);
-            }
-
-            public void Remove(IBaseShape shape)
-            {
-                _context.ContainerView.Remove(shape);
-            }
-
-            public void Reference(IBaseShape shape)
-            {
-                _context.ContainerView.Reference(shape);
-            }
-
-            public void Style(string styleId)
-            {
-                _context.ContainerView.Style(styleId);
-            }
-
-            public object Copy(Dictionary<object, object> shared)
-            {
-                return null;
-            }
+            _context = context;
+            _pathTool = pathTool;
         }
 
-        internal IToolContext _context;
-        internal FigureContainerView _containerView;
+        public string Title
+        {
+            get => _context.DocumentContainer.ContainerView.Title;
+            set => throw new InvalidOperationException($"Can not set {Title} property value.");
+        }
 
-        [IgnoreDataMember]
+        public double Width
+        {
+            get => _context.DocumentContainer.ContainerView.Width;
+            set => throw new InvalidOperationException($"Can not set {Width} property value.");
+        }
+
+        public double Height
+        {
+            get => _context.DocumentContainer.ContainerView.Width;
+            set => throw new InvalidOperationException($"Can not set {Height} property value.");
+        }
+
+        public ArgbColor PrintBackground
+        {
+            get => _context.DocumentContainer.ContainerView.PrintBackground;
+            set => throw new InvalidOperationException($"Can not set {PrintBackground} property value.");
+        }
+
+        public ArgbColor WorkBackground
+        {
+            get => _context.DocumentContainer.ContainerView.WorkBackground;
+            set => throw new InvalidOperationException($"Can not set {WorkBackground} property value.");
+        }
+
+        public ArgbColor InputBackground
+        {
+            get => _context.DocumentContainer.ContainerView.InputBackground;
+            set => throw new InvalidOperationException($"Can not set {InputBackground} property value.");
+        }
+
+        public ICanvasContainer CurrentContainer
+        {
+            get => _pathTool._figure;
+            set => throw new InvalidOperationException($"Can not set {CurrentContainer} property value.");
+        }
+
+        public ICanvasContainer WorkingContainer
+        {
+            get => _pathTool._figure;
+            set => throw new InvalidOperationException($"Can not set {WorkingContainer} property value.");
+        }
+
+        public IContainerPresenter ContainerPresenter
+        {
+            get => _context.DocumentContainer.ContainerView.ContainerPresenter;
+            set => throw new InvalidOperationException($"Can not set {ContainerPresenter} property value.");
+        }
+
+        public ISelectionState SelectionState
+        {
+            get => _context.DocumentContainer.ContainerView.SelectionState;
+            set => throw new InvalidOperationException($"Can not set {SelectionState} property value.");
+        }
+
+        public IZoomServiceState ZoomServiceState
+        {
+            get => _context.DocumentContainer.ContainerView.ZoomServiceState;
+            set => throw new InvalidOperationException($"Can not set {ZoomServiceState} property value.");
+        }
+
+        public IInputService InputService
+        {
+            get => _context.DocumentContainer.ContainerView?.InputService;
+            set => throw new InvalidOperationException($"Can not set {InputService} property value.");
+        }
+
+        public IZoomService ZoomService
+        {
+            get => _context.DocumentContainer.ContainerView.ZoomService;
+            set => throw new InvalidOperationException($"Can not set {ZoomService} property value.");
+        }
+
+        public IPointShape GetNextPoint(IToolContext context, double x, double y, bool connect, double radius, double scale, Modifier modifier)
+        {
+            if (_nextPoint != null)
+            {
+                var nextPointTemp = _nextPoint;
+                _nextPoint = null;
+                return nextPointTemp;
+            }
+            return _context.DocumentContainer.ContainerView.GetNextPoint(_context, x, y, connect, radius, scale, modifier);
+        }
+
+        public void Draw(object context, double width, double height, double dx, double dy, double zx, double zy)
+        {
+            _context.DocumentContainer.ContainerView.Draw(context, width, height, dx, dy, zx, zy);
+        }
+
+        public void Add(IBaseShape shape)
+        {
+            _context.DocumentContainer.ContainerView.Add(shape);
+        }
+
+        public void Remove(IBaseShape shape)
+        {
+            _context.DocumentContainer.ContainerView.Remove(shape);
+        }
+
+        public void Reference(IBaseShape shape)
+        {
+            _context.DocumentContainer.ContainerView.Reference(shape);
+        }
+
+        public void Style(string styleId)
+        {
+            _context.DocumentContainer.ContainerView.Style(styleId);
+        }
+
+        public object Copy(Dictionary<object, object> shared)
+        {
+            return null;
+        }
+    }
+
+    [DataContract(IsReference = true)]
+    public class FigureDocumentContainer : IDocumentContainer
+    {
+        internal IToolContext _context;
+        internal PathTool _pathTool;
+
+        public FigureDocumentContainer(IToolContext context, PathTool pathTool)
+        {
+            _context = context;
+            _pathTool = pathTool;
+        }
+
+        public string Title
+        {
+            get => _context.DocumentContainer.Title;
+            set => throw new InvalidOperationException($"Can not set {Title} property value.");
+        }
+
         public IStyleLibrary StyleLibrary
         {
-            get => _context.StyleLibrary;
+            get => _context.DocumentContainer.StyleLibrary;
             set => throw new InvalidOperationException($"Can not set {StyleLibrary} property value.");
         }
 
-        [IgnoreDataMember]
         public IGroupLibrary GroupLibrary
         {
-            get => _context.GroupLibrary;
+            get => _context.DocumentContainer.GroupLibrary;
             set => throw new InvalidOperationException($"Can not set {GroupLibrary} property value.");
         }
 
-        [IgnoreDataMember]
         public IBaseShape PointTemplate
         {
-            get => _context.PointTemplate;
+            get => _context.DocumentContainer.PointTemplate;
             set => throw new InvalidOperationException($"Can not set {PointTemplate} property value.");
+        }
+
+        public IList<IContainerView> ContainerViews
+        {
+            get => _context.DocumentContainer.ContainerViews;
+            set => throw new InvalidOperationException($"Can not set {ContainerViews} property value.");
+        }
+
+        public IContainerView ContainerView
+        {
+            get => _pathTool._containerView;
+            set => throw new InvalidOperationException($"Can not set {ContainerView} property value.");
+        }
+
+        public void Dispose()
+        {
+        }
+
+        public virtual object Copy(Dictionary<object, object> shared)
+        {
+            return null;
+        }
+    }
+
+    public partial class PathTool : IToolContext
+    {
+        internal IToolContext _context;
+        internal FigureContainerView _containerView;
+        internal FigureDocumentContainer _documentContainer;
+
+        [IgnoreDataMember]
+        public IDocumentContainer DocumentContainer
+        {
+            get => _documentContainer;
+            set => throw new InvalidOperationException($"Can not set {DocumentContainer} property value.");
         }
 
         [IgnoreDataMember]
@@ -181,20 +226,6 @@ namespace Draw2D.ViewModels.Tools
         {
             get => _context.PathConverter;
             set => throw new InvalidOperationException($"Can not set {PathConverter} property value.");
-        }
-
-        [IgnoreDataMember]
-        public IList<IContainerView> ContainerViews
-        {
-            get => _context.ContainerViews;
-            set => throw new InvalidOperationException($"Can not set {ContainerViews} property value.");
-        }
-
-        [IgnoreDataMember]
-        public IContainerView ContainerView
-        {
-            get => _containerView;
-            set => throw new InvalidOperationException($"Can not set {ContainerView} property value.");
         }
 
         [IgnoreDataMember]
@@ -268,18 +299,23 @@ namespace Draw2D.ViewModels.Tools
                 _containerView = new FigureContainerView(context, this);
             }
 
+            if (_documentContainer == null)
+            {
+                _documentContainer = new FigureDocumentContainer(context, this);
+            }
+
             _path = new PathShape()
             {
                 Points = new ObservableCollection<IPointShape>(),
                 Shapes = new ObservableCollection<IBaseShape>(),
                 FillType = Settings.FillType,
                 Text = new Text(),
-                StyleId = context.StyleLibrary?.CurrentItem?.Title
+                StyleId = context.DocumentContainer?.StyleLibrary?.CurrentItem?.Title
             };
 
-            context.ContainerView?.WorkingContainer.Shapes.Add(_path);
-            context.ContainerView?.WorkingContainer.MarkAsDirty(true);
-            context.ContainerView?.SelectionState?.Select(_path);
+            context.DocumentContainer?.ContainerView?.WorkingContainer.Shapes.Add(_path);
+            context.DocumentContainer?.ContainerView?.WorkingContainer.MarkAsDirty(true);
+            context.DocumentContainer?.ContainerView?.SelectionState?.Select(_path);
         }
 
         internal void Move(IToolContext context)
@@ -293,7 +329,7 @@ namespace Draw2D.ViewModels.Tools
             };
             _figure.Owner = _path;
             _path.Shapes.Add(_figure);
-            context.ContainerView?.WorkingContainer.MarkAsDirty(true);
+            context.DocumentContainer?.ContainerView?.WorkingContainer.MarkAsDirty(true);
 
             if (Settings.PreviousTool != null)
             {
@@ -387,6 +423,11 @@ namespace Draw2D.ViewModels.Tools
                 _containerView = new FigureContainerView(context, this);
             }
 
+            if (_documentContainer == null)
+            {
+                _documentContainer = new FigureDocumentContainer(context, this);
+            }
+
             SetContext(context);
             Settings.CurrentTool.Move(this, x, y, modifier);
             SetContext(null);
@@ -400,14 +441,14 @@ namespace Draw2D.ViewModels.Tools
 
             if (_path != null)
             {
-                context.ContainerView?.WorkingContainer.Shapes.Remove(_path);
-                context.ContainerView?.WorkingContainer.MarkAsDirty(true);
-                context.ContainerView?.SelectionState?.Deselect(_path);
+                context.DocumentContainer?.ContainerView?.WorkingContainer.Shapes.Remove(_path);
+                context.DocumentContainer?.ContainerView?.WorkingContainer.MarkAsDirty(true);
+                context.DocumentContainer?.ContainerView?.SelectionState?.Deselect(_path);
 
                 if (_path.Validate(true) == true)
                 {
-                    context.ContainerView?.CurrentContainer.Shapes.Add(_path);
-                    context.ContainerView?.CurrentContainer.MarkAsDirty(true);
+                    context.DocumentContainer?.ContainerView?.CurrentContainer.Shapes.Add(_path);
+                    context.DocumentContainer?.ContainerView?.CurrentContainer.MarkAsDirty(true);
                 }
 
                 Settings.PreviousTool = null;
@@ -417,6 +458,7 @@ namespace Draw2D.ViewModels.Tools
                 _path = null;
                 _figure = null;
                 _containerView = null;
+                _documentContainer = null;
             }
         }
 

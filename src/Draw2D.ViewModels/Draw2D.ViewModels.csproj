@@ -22,8 +22,6 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <DefineConstants>$(DefineConstants);USE_SERIALIZE_STYLES</DefineConstants>
-    <DefineConstants>$(DefineConstants);USE_SERIALIZE_GROUPS</DefineConstants>
     <!--<DefineConstants>$(DefineConstants);USE_CONTAINER_SHAPES</DefineConstants>-->
     <!--<DefineConstants>$(DefineConstants);USE_GROUP_SHAPES</DefineConstants>-->
     <!--<DefineConstants>$(DefineConstants);USE_PATH_FIGURES</DefineConstants>-->

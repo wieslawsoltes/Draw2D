@@ -138,9 +138,9 @@ namespace Draw2D.ViewModels.Tools
     {
         public static void Stack(IToolContext context, StackMode mode)
         {
-            if (context.ContainerView?.SelectionState != null)
+            if (context.DocumentContainer?.ContainerView?.SelectionState != null)
             {
-                var shapes = new List<IBaseShape>(context.ContainerView.SelectionState?.Shapes);
+                var shapes = new List<IBaseShape>(context.DocumentContainer.ContainerView.SelectionState?.Shapes);
                 var boxes = new List<Box>();
 
                 foreach (var shape in shapes)
@@ -153,8 +153,8 @@ namespace Draw2D.ViewModels.Tools
 
                 if (boxes.Count >= 2)
                 {
-                    context.ContainerView?.SelectionState?.Dehover();
-                    context.ContainerView?.SelectionState?.Clear();
+                    context.DocumentContainer?.ContainerView?.SelectionState?.Dehover();
+                    context.DocumentContainer?.ContainerView?.SelectionState?.Clear();
 
                     var bounds = new Bounds(boxes);
 
@@ -163,14 +163,14 @@ namespace Draw2D.ViewModels.Tools
                         case StackMode.Horizontal:
                             {
                                 boxes.Sort(Box.CompareHorizontalLeft);
-                                boxes[0].shape.Select(context.ContainerView.SelectionState);
+                                boxes[0].shape.Select(context.DocumentContainer.ContainerView.SelectionState);
                                 double offset = boxes[0].ax + boxes[0].w;
                                 for (int i = 1; i <= boxes.Count - 1; i++)
                                 {
                                     var box = boxes[i];
                                     double dx = offset - box.ax;
-                                    box.shape.Move(context.ContainerView.SelectionState, dx, 0.0);
-                                    box.shape.Select(context.ContainerView.SelectionState);
+                                    box.shape.Move(context.DocumentContainer.ContainerView.SelectionState, dx, 0.0);
+                                    box.shape.Select(context.DocumentContainer.ContainerView.SelectionState);
                                     offset += box.w;
                                 }
                             }
@@ -178,30 +178,30 @@ namespace Draw2D.ViewModels.Tools
                         case StackMode.Vertical:
                             {
                                 boxes.Sort(Box.CompareVerticalTop);
-                                boxes[0].shape.Select(context.ContainerView.SelectionState);
+                                boxes[0].shape.Select(context.DocumentContainer.ContainerView.SelectionState);
                                 double offset = boxes[0].ay + boxes[0].h;
                                 for (int i = 1; i <= boxes.Count - 1; i++)
                                 {
                                     var box = boxes[i];
                                     double dy = offset - box.ay;
-                                    box.shape.Move(context.ContainerView.SelectionState, 0.0, dy);
-                                    box.shape.Select(context.ContainerView.SelectionState);
+                                    box.shape.Move(context.DocumentContainer.ContainerView.SelectionState, 0.0, dy);
+                                    box.shape.Select(context.DocumentContainer.ContainerView.SelectionState);
                                     offset += box.h;
                                 }
                             }
                             break;
                     }
 
-                    context.ContainerView?.InputService?.Redraw?.Invoke();
+                    context.DocumentContainer?.ContainerView?.InputService?.Redraw?.Invoke();
                 }
             }
         }
 
         public static void Distribute(IToolContext context, DistributeMode mode)
         {
-            if (context.ContainerView?.SelectionState != null)
+            if (context.DocumentContainer?.ContainerView?.SelectionState != null)
             {
-                var shapes = new List<IBaseShape>(context.ContainerView.SelectionState?.Shapes);
+                var shapes = new List<IBaseShape>(context.DocumentContainer.ContainerView.SelectionState?.Shapes);
                 var boxes = new List<Box>();
 
                 foreach (var shape in shapes)
@@ -214,8 +214,8 @@ namespace Draw2D.ViewModels.Tools
 
                 if (boxes.Count > 2)
                 {
-                    context.ContainerView?.SelectionState?.Dehover();
-                    context.ContainerView?.SelectionState?.Clear();
+                    context.DocumentContainer?.ContainerView?.SelectionState?.Dehover();
+                    context.DocumentContainer?.ContainerView?.SelectionState?.Clear();
 
                     var bounds = new Bounds(boxes);
 
@@ -236,47 +236,47 @@ namespace Draw2D.ViewModels.Tools
                         case DistributeMode.Horizontal:
                             {
                                 boxes.Sort(Box.CompareHorizontalLeft);
-                                boxes[0].shape.Select(context.ContainerView.SelectionState);
+                                boxes[0].shape.Select(context.DocumentContainer.ContainerView.SelectionState);
                                 double offset = boxes[0].ax + boxes[0].w + gaph;
                                 for (int i = 1; i <= boxes.Count - 2; i++)
                                 {
                                     var box = boxes[i];
                                     double dx = offset - box.ax;
-                                    box.shape.Move(context.ContainerView.SelectionState, dx, 0.0);
-                                    box.shape.Select(context.ContainerView.SelectionState);
+                                    box.shape.Move(context.DocumentContainer.ContainerView.SelectionState, dx, 0.0);
+                                    box.shape.Select(context.DocumentContainer.ContainerView.SelectionState);
                                     offset += box.w + gaph;
                                 }
-                                boxes[boxes.Count - 1].shape.Select(context.ContainerView.SelectionState);
+                                boxes[boxes.Count - 1].shape.Select(context.DocumentContainer.ContainerView.SelectionState);
                             }
                             break;
                         case DistributeMode.Vertical:
                             {
                                 boxes.Sort(Box.CompareVerticalTop);
-                                boxes[0].shape.Select(context.ContainerView.SelectionState);
+                                boxes[0].shape.Select(context.DocumentContainer.ContainerView.SelectionState);
                                 double offset = boxes[0].ay + boxes[0].h + gapv;
                                 for (int i = 1; i <= boxes.Count - 2; i++)
                                 {
                                     var box = boxes[i];
                                     double dy = offset - box.ay;
-                                    box.shape.Move(context.ContainerView.SelectionState, 0.0, dy);
-                                    box.shape.Select(context.ContainerView.SelectionState);
+                                    box.shape.Move(context.DocumentContainer.ContainerView.SelectionState, 0.0, dy);
+                                    box.shape.Select(context.DocumentContainer.ContainerView.SelectionState);
                                     offset += box.h + gapv;
                                 }
-                                boxes[boxes.Count - 1].shape.Select(context.ContainerView.SelectionState);
+                                boxes[boxes.Count - 1].shape.Select(context.DocumentContainer.ContainerView.SelectionState);
                             }
                             break;
                     }
 
-                    context.ContainerView?.InputService?.Redraw?.Invoke();
+                    context.DocumentContainer?.ContainerView?.InputService?.Redraw?.Invoke();
                 }
             }
         }
 
         public static void Align(IToolContext context, AlignMode mode)
         {
-            if (context.ContainerView?.SelectionState != null)
+            if (context.DocumentContainer?.ContainerView?.SelectionState != null)
             {
-                var shapes = new List<IBaseShape>(context.ContainerView.SelectionState?.Shapes);
+                var shapes = new List<IBaseShape>(context.DocumentContainer.ContainerView.SelectionState?.Shapes);
                 var boxes = new List<Box>();
 
                 foreach (var shape in shapes)
@@ -289,8 +289,8 @@ namespace Draw2D.ViewModels.Tools
 
                 if (boxes.Count > 1)
                 {
-                    context.ContainerView?.SelectionState?.Dehover();
-                    context.ContainerView?.SelectionState?.Clear();
+                    context.DocumentContainer?.ContainerView?.SelectionState?.Dehover();
+                    context.DocumentContainer?.ContainerView?.SelectionState?.Clear();
 
                     var bounds = new Bounds(boxes);
 
@@ -323,12 +323,12 @@ namespace Draw2D.ViewModels.Tools
 
                         if (dx != 0.0 || dy != 0.0)
                         {
-                            box.shape.Move(context.ContainerView.SelectionState, dx, dy);
+                            box.shape.Move(context.DocumentContainer.ContainerView.SelectionState, dx, dy);
                         }
-                        box.shape.Select(context.ContainerView.SelectionState);
+                        box.shape.Select(context.DocumentContainer.ContainerView.SelectionState);
                     }
 
-                    context.ContainerView?.InputService?.Redraw?.Invoke();
+                    context.DocumentContainer?.ContainerView?.InputService?.Redraw?.Invoke();
                 }
             }
         }
@@ -360,7 +360,7 @@ namespace Draw2D.ViewModels.Tools
 
         public static void BringToFront(IToolContext context, IBaseShape source)
         {
-            var container = context.ContainerView?.CurrentContainer;
+            var container = context.DocumentContainer?.ContainerView?.CurrentContainer;
             if (container != null)
             {
                 var shapes = container.Shapes;
@@ -375,7 +375,7 @@ namespace Draw2D.ViewModels.Tools
 
         public static void BringForward(IToolContext context, IBaseShape source)
         {
-            var container = context.ContainerView?.CurrentContainer;
+            var container = context.DocumentContainer?.ContainerView?.CurrentContainer;
             if (container != null)
             {
                 var shapes = container.Shapes;
@@ -390,7 +390,7 @@ namespace Draw2D.ViewModels.Tools
 
         public static void SendBackward(IToolContext context, IBaseShape source)
         {
-            var container = context.ContainerView?.CurrentContainer;
+            var container = context.DocumentContainer?.ContainerView?.CurrentContainer;
             if (container != null)
             {
                 var shapes = container.Shapes;
@@ -405,7 +405,7 @@ namespace Draw2D.ViewModels.Tools
 
         public static void SendToBack(IToolContext context, IBaseShape source)
         {
-            var container = context.ContainerView?.CurrentContainer;
+            var container = context.DocumentContainer?.ContainerView?.CurrentContainer;
             if (container != null)
             {
                 var shapes = container.Shapes;

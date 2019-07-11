@@ -17,13 +17,13 @@
     </UserControl.Resources>
     <Menu Background="Transparent">
         <MenuItem Header="_File">
-            <MenuItem Header="_New" Command="{Binding NewContainerView}" CommandParameter="View"/>
+            <MenuItem Header="_New View" Command="{Binding NewContainerView}" CommandParameter="View"/>
             <Separator/>
-            <MenuItem Header="_Close" Command="{Binding CloseContainerView}" CommandParameter="{Binding ContainerView, FallbackValue={x:Null}}"/>
+            <MenuItem Header="_Close View" Command="{Binding CloseContainerView}" CommandParameter="{Binding DocumentContainer.ContainerView, FallbackValue={x:Null}}"/>
             <Separator/>
-            <MenuItem Header="_Open..." Command="{Binding OpenContainerView}"/>
+            <MenuItem Header="_Open Document..." Command="{Binding OpenDocumentContainer}"/>
             <Separator/>
-            <MenuItem Header="Save _As..." Command="{Binding SaveContainerViewAs}"/>
+            <MenuItem Header="Save Document _As..." Command="{Binding SaveDocumentContainerAs}"/>
             <Separator/>
             <MenuItem Header="S_tyles">
                 <MenuItem Header="_Open..." Command="{Binding OpenStyleLibrary}"/>
@@ -74,15 +74,15 @@
         </MenuItem>
         <MenuItem Header="_View">
             <MenuItem Header="_Zoom">
-                <MenuItem Header="_Reset" Command="{Binding ContainerView.ZoomService.ResetZoom}" CommandParameter="True"/>
+                <MenuItem Header="_Reset" Command="{Binding DocumentContainer.ContainerView.ZoomService.ResetZoom}" CommandParameter="True"/>
                 <Separator/>
-                <MenuItem Header="_Center" Command="{Binding ContainerView.ZoomService.CenterZoom}" CommandParameter="True"/>
+                <MenuItem Header="_Center" Command="{Binding DocumentContainer.ContainerView.ZoomService.CenterZoom}" CommandParameter="True"/>
                 <Separator/>
-                <MenuItem Header="_Fill" Command="{Binding ContainerView.ZoomService.FillZoom}" CommandParameter="True"/>
+                <MenuItem Header="_Fill" Command="{Binding DocumentContainer.ContainerView.ZoomService.FillZoom}" CommandParameter="True"/>
                 <Separator/>
-                <MenuItem Header="_Uniform" Command="{Binding ContainerView.ZoomService.UniformZoom}" CommandParameter="True"/>
+                <MenuItem Header="_Uniform" Command="{Binding DocumentContainer.ContainerView.ZoomService.UniformZoom}" CommandParameter="True"/>
                 <Separator/>
-                <MenuItem Header="Uniform _To Fill" Command="{Binding ContainerView.ZoomService.UniformToFillZoom}" CommandParameter="True"/>
+                <MenuItem Header="Uniform _To Fill" Command="{Binding DocumentContainer.ContainerView.ZoomService.UniformToFillZoom}" CommandParameter="True"/>
             </MenuItem>
         </MenuItem>
         <MenuItem Header="_Tool">

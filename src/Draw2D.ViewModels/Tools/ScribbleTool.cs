@@ -50,9 +50,9 @@ namespace Draw2D.ViewModels.Tools
                 Shapes = new ObservableCollection<IBaseShape>(),
                 FillType = Settings.FillType,
                 Text = new Text(),
-                StyleId = context.StyleLibrary?.CurrentItem?.Title
+                StyleId = context.DocumentContainer?.StyleLibrary?.CurrentItem?.Title
             };
-            _path.Owner = context.ContainerView?.WorkingContainer;
+            _path.Owner = context.DocumentContainer?.ContainerView?.WorkingContainer;
 
             _figure = new FigureShape()
             {
@@ -65,14 +65,14 @@ namespace Draw2D.ViewModels.Tools
 
             _path.Shapes.Add(_figure);
 
-            _previousPoint = new PointShape(x, y, context.PointTemplate);
+            _previousPoint = new PointShape(x, y, context?.DocumentContainer?.PointTemplate);
             _previousPoint.Owner = null;
 
-            context.ContainerView?.WorkingContainer.Shapes.Add(_path);
-            context.ContainerView?.WorkingContainer.MarkAsDirty(true);
+            context.DocumentContainer?.ContainerView?.WorkingContainer.Shapes.Add(_path);
+            context.DocumentContainer?.ContainerView?.WorkingContainer.MarkAsDirty(true);
 
-            context.ContainerView?.InputService?.Capture?.Invoke();
-            context.ContainerView?.InputService?.Redraw?.Invoke();
+            context.DocumentContainer?.ContainerView?.InputService?.Capture?.Invoke();
+            context.DocumentContainer?.ContainerView?.InputService?.Redraw?.Invoke();
 
             CurrentState = State.Points;
         }
@@ -113,7 +113,7 @@ namespace Draw2D.ViewModels.Tools
                             StartPoint = distinct[i],
                             Point = distinct[i + 1],
                             Text = new Text(),
-                            StyleId = context.StyleLibrary?.CurrentItem?.Title
+                            StyleId = context.DocumentContainer?.StyleLibrary?.CurrentItem?.Title
                         };
                         line.Owner = _figure;
                         line.StartPoint.Owner = line;
@@ -123,14 +123,14 @@ namespace Draw2D.ViewModels.Tools
                 }
             }
 
-            context.ContainerView?.WorkingContainer.Shapes.Remove(_path);
-            context.ContainerView?.WorkingContainer.MarkAsDirty(true);
+            context.DocumentContainer?.ContainerView?.WorkingContainer.Shapes.Remove(_path);
+            context.DocumentContainer?.ContainerView?.WorkingContainer.MarkAsDirty(true);
 
             if (_path.Validate(true) == true)
             {
-                _path.Owner = context.ContainerView?.CurrentContainer;
-                context.ContainerView?.CurrentContainer.Shapes.Add(_path);
-                context.ContainerView?.CurrentContainer.MarkAsDirty(true);
+                _path.Owner = context.DocumentContainer?.ContainerView?.CurrentContainer;
+                context.DocumentContainer?.ContainerView?.CurrentContainer.Shapes.Add(_path);
+                context.DocumentContainer?.ContainerView?.CurrentContainer.MarkAsDirty(true);
             }
 
             _path = null;
@@ -140,8 +140,8 @@ namespace Draw2D.ViewModels.Tools
 
             FiltersClear(context);
 
-            context.ContainerView?.InputService?.Release?.Invoke();
-            context.ContainerView?.InputService?.Redraw?.Invoke();
+            context.DocumentContainer?.ContainerView?.InputService?.Release?.Invoke();
+            context.DocumentContainer?.ContainerView?.InputService?.Redraw?.Invoke();
         }
 
         private void MoveStartInternal(IToolContext context, double x, double y, Modifier modifier)
@@ -149,7 +149,7 @@ namespace Draw2D.ViewModels.Tools
             FiltersClear(context);
             FiltersProcess(context, ref x, ref y);
 
-            context.ContainerView?.InputService?.Redraw?.Invoke();
+            context.DocumentContainer?.ContainerView?.InputService?.Redraw?.Invoke();
         }
 
         private void MovePointsInternal(IToolContext context, double x, double y, Modifier modifier)
@@ -157,7 +157,7 @@ namespace Draw2D.ViewModels.Tools
             FiltersClear(context);
             FiltersProcess(context, ref x, ref y);
 
-            _nextPoint = new PointShape(x, y, context.PointTemplate);
+            _nextPoint = new PointShape(x, y, context?.DocumentContainer?.PointTemplate);
 
             var line = new LineShape()
             {
@@ -165,7 +165,7 @@ namespace Draw2D.ViewModels.Tools
                 StartPoint = _previousPoint,
                 Point = _nextPoint,
                 Text = new Text(),
-                StyleId = context.StyleLibrary?.CurrentItem?.Title
+                StyleId = context.DocumentContainer?.StyleLibrary?.CurrentItem?.Title
             };
             if (line.StartPoint.Owner == null)
             {
@@ -177,12 +177,12 @@ namespace Draw2D.ViewModels.Tools
             }
 
             _figure.Shapes.Add(line);
-            context.ContainerView?.CurrentContainer.MarkAsDirty(true);
+            context.DocumentContainer?.ContainerView?.CurrentContainer.MarkAsDirty(true);
 
             _previousPoint = _nextPoint;
             _nextPoint = null;
 
-            context.ContainerView?.InputService?.Redraw?.Invoke();
+            context.DocumentContainer?.ContainerView?.InputService?.Redraw?.Invoke();
         }
 
         private void CleanInternal(IToolContext context)
@@ -193,16 +193,16 @@ namespace Draw2D.ViewModels.Tools
 
             if (_path != null)
             {
-                context.ContainerView?.WorkingContainer.Shapes.Remove(_path);
-                context.ContainerView?.WorkingContainer.MarkAsDirty(true);
+                context.DocumentContainer?.ContainerView?.WorkingContainer.Shapes.Remove(_path);
+                context.DocumentContainer?.ContainerView?.WorkingContainer.MarkAsDirty(true);
                 _path = null;
                 _figure = null;
                 _previousPoint = null;
                 _nextPoint = null;
             }
 
-            context.ContainerView?.InputService?.Release?.Invoke();
-            context.ContainerView?.InputService?.Redraw?.Invoke();
+            context.DocumentContainer?.ContainerView?.InputService?.Release?.Invoke();
+            context.DocumentContainer?.ContainerView?.InputService?.Redraw?.Invoke();
         }
 
         public void LeftDown(IToolContext context, double x, double y, Modifier modifier)

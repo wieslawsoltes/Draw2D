@@ -25,6 +25,11 @@ namespace Draw2D.Presenters
         {
         }
 
+        private bool IsAcceptedShape(IBaseShape shape)
+        {
+            return !(shape is IPointShape || shape is FigureShape);
+        }
+
         public void Draw(object context, double width, double height, double dx, double dy, double zx, double zy)
         {
             using (var renderer = new SkiaShapeRenderer(_context, _view.SelectionState))
@@ -36,7 +41,7 @@ namespace Draw2D.Presenters
                 var selected = new List<IBaseShape>(_view.SelectionState?.Shapes);
                 foreach (var shape in selected)
                 {
-                    if (!(shape is IPointShape || shape is FigureShape))
+                    if (IsAcceptedShape(shape))
                     {
                         shape.Draw(canvas, renderer, dx, dy, zx, null, null);
                     }

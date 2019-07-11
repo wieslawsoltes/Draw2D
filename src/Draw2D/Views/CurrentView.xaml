@@ -14,10 +14,10 @@
     <Grid RowDefinitions="55*,Auto,45*">
         <TabControl Classes="default" Grid.Row="0" TabStripPlacement="Top">
             <TabItem Classes="default" Header="Style">
-                <ContentControl Content="{Binding StyleLibrary.CurrentItem}"/>
+                <ContentControl Content="{Binding DocumentContainer.StyleLibrary.CurrentItem}"/>
             </TabItem>
             <TabItem Classes="default" Header="Group">
-                <ContentControl Content="{Binding GroupLibrary.CurrentItem}"/>
+                <ContentControl Content="{Binding DocumentContainer.GroupLibrary.CurrentItem}"/>
             </TabItem>
             <TabItem Classes="default" Header="Tool">
                 <ContentControl Content="{Binding CurrentTool}"/>
@@ -26,13 +26,13 @@
         <GridSplitter Grid.Row="1"/>
         <TabControl Classes="default" Grid.Row="2" TabStripPlacement="Top">
             <TabItem Classes="default" Header="Selected">
-                <ContentControl Content="{Binding ContainerView.SelectionState.Selected}"/>
+                <ContentControl Content="{Binding DocumentContainer.ContainerView.SelectionState.Selected}"/>
             </TabItem>
             <TabItem Classes="default" Header="Container">
-                <ContentControl Content="{Binding ContainerView.CurrentContainer}"/>
+                <ContentControl Content="{Binding DocumentContainer.ContainerView.CurrentContainer}"/>
             </TabItem>
             <TabItem Classes="default" Header="View">
-                <ContentControl Content="{Binding ContainerView}"/>
+                <ContentControl Content="{Binding DocumentContainer.ContainerView}"/>
             </TabItem>
         </TabControl>
     </Grid>

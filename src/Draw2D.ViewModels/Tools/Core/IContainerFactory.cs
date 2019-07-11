@@ -12,5 +12,6 @@ namespace Draw2D.ViewModels.Tools
         IGroupLibrary CreateGroupLibrary();
         IToolContext CreateToolContext();
         IContainerView CreateContainerView(string title);
+        IDocumentContainer CreateDocumentContainer(string title);
     }
 }

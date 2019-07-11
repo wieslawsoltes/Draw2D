@@ -21,12 +21,12 @@ namespace Draw2D.Export
                     var image = new ImageShape()
                     {
                         Points = new ObservableCollection<IPointShape>(),
-                        StartPoint = new PointShape(0.0, 0.0, context.PointTemplate),
-                        Point = new PointShape(picture.CullRect.Width, picture.CullRect.Height, context.PointTemplate),
+                        StartPoint = new PointShape(0.0, 0.0, context?.DocumentContainer?.PointTemplate),
+                        Point = new PointShape(picture.CullRect.Width, picture.CullRect.Height, context?.DocumentContainer?.PointTemplate),
                         Path = path,
                         StretchMode = StretchMode.Center,
                         Text = new Text(),
-                        StyleId = context.StyleLibrary?.CurrentItem?.Title,
+                        StyleId = context.DocumentContainer?.StyleLibrary?.CurrentItem?.Title,
                     };
 
                     image.StartPoint.Owner = image;
@@ -34,8 +34,8 @@ namespace Draw2D.Export
 
                     picture.Dispose();
 
-                    context.ContainerView?.CurrentContainer.Shapes.Add(image);
-                    context.ContainerView?.InputService?.Redraw?.Invoke();
+                    context.DocumentContainer?.ContainerView?.CurrentContainer.Shapes.Add(image);
+                    context.DocumentContainer?.ContainerView?.InputService?.Redraw?.Invoke();
                 }
             }
             catch (Exception ex)

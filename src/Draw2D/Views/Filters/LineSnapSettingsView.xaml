@@ -38,7 +38,7 @@
                         <ContentControl.Content>
                             <MultiBinding Mode="OneWay" Converter="{StaticResource StyleIdToStyleConverter}">
                                 <Binding Path="GuideStyle" Mode="OneWay"/>
-                                <Binding Path="$parent[Window].DataContext.StyleLibrary" Mode="OneWay"/>
+                                <Binding Path="$parent[Window].DataContext.DocumentContainer.StyleLibrary" Mode="OneWay"/>
                             </MultiBinding>
                         </ContentControl.Content>
                     </ContentControl>

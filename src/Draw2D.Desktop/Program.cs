@@ -13,10 +13,7 @@ namespace Draw2D.Desktop
         {
             try
             {
-                if (App.ParseArgs(args) == true)
-                {
-                    return BuildAvaloniaApp().StartWithClassicDesktopLifetime(args);
-                }
+                return BuildAvaloniaApp().StartWithClassicDesktopLifetime(args);
             }
             catch (Exception ex)
             {

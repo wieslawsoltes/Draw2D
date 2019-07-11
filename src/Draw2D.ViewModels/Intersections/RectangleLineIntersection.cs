@@ -36,7 +36,7 @@ namespace Draw2D.ViewModels.Intersections
                 return;
             }
 
-            var rectangles = context.ContainerView?.CurrentContainer.Shapes.OfType<RectangleShape>();
+            var rectangles = context.DocumentContainer?.ContainerView?.CurrentContainer.Shapes.OfType<RectangleShape>();
             if (rectangles.Any())
             {
                 foreach (var rectangle in rectangles)
@@ -47,19 +47,19 @@ namespace Draw2D.ViewModels.Intersections
                     var intersections = Line2.LineIntersectsWithRect(p1, p2, rect, out double x0clip, out double y0clip, out double x1clip, out double y1clip);
                     if (intersections)
                     {
-                        var point1 = new PointShape(x0clip, y0clip, context.PointTemplate);
-                        point1.Owner = context.ContainerView?.WorkingContainer;
+                        var point1 = new PointShape(x0clip, y0clip, context?.DocumentContainer?.PointTemplate);
+                        point1.Owner = context.DocumentContainer?.ContainerView?.WorkingContainer;
                         Intersections.Add(point1);
-                        //context.ContainerView?.WorkingContainer.Shapes.Add(point1);
-                        //context.ContainerView?.WorkingContainer.MarkAsDirty(true);
-                        context.ContainerView?.SelectionState?.Select(point1);
+                        //context.DocumentContainer?.ContainerView?.WorkingContainer.Shapes.Add(point1);
+                        //context.DocumentContainer?.ContainerView?.WorkingContainer.MarkAsDirty(true);
+                        context.DocumentContainer?.ContainerView?.SelectionState?.Select(point1);
 
-                        var point2 = new PointShape(x1clip, y1clip, context.PointTemplate);
-                        point2.Owner = context.ContainerView?.WorkingContainer;
+                        var point2 = new PointShape(x1clip, y1clip, context?.DocumentContainer?.PointTemplate);
+                        point2.Owner = context.DocumentContainer?.ContainerView?.WorkingContainer;
                         Intersections.Add(point2);
-                        //context.ContainerView?.WorkingContainer.Shapes.Add(point2);
-                        //context.ContainerView?.WorkingContainer.MarkAsDirty(true);
-                        context.ContainerView?.SelectionState?.Select(point2);
+                        //context.DocumentContainer?.ContainerView?.WorkingContainer.Shapes.Add(point2);
+                        //context.DocumentContainer?.ContainerView?.WorkingContainer.MarkAsDirty(true);
+                        context.DocumentContainer?.ContainerView?.SelectionState?.Select(point2);
                     }
                 }
             }

@@ -39,10 +39,10 @@ namespace Draw2D.ViewModels.Tools
             FiltersProcess(context, ref x, ref y);
 
             var radius = Settings?.HitTestRadius ?? 7.0;
-            var scale = context.ContainerView?.ZoomService?.ZoomServiceState?.ZoomX ?? 1.0;
+            var scale = context.DocumentContainer?.ContainerView?.ZoomService?.ZoomServiceState?.ZoomX ?? 1.0;
 
-            IPointShape startPoint = context.ContainerView?.GetNextPoint(context, x, y, Settings?.ConnectPoints ?? false, radius, scale, modifier);
-            IPointShape point = context.ContainerView?.GetNextPoint(context, x, y, false, 0.0, 1.0, modifier);
+            IPointShape startPoint = context.DocumentContainer?.ContainerView?.GetNextPoint(context, x, y, Settings?.ConnectPoints ?? false, radius, scale, modifier);
+            IPointShape point = context.DocumentContainer?.ContainerView?.GetNextPoint(context, x, y, false, 0.0, 1.0, modifier);
 
             _text = new TextShape()
             {
@@ -50,9 +50,9 @@ namespace Draw2D.ViewModels.Tools
                 StartPoint = startPoint,
                 Point = point,
                 Text = new Text("Text"),
-                StyleId = context.StyleLibrary?.CurrentItem?.Title
+                StyleId = context.DocumentContainer?.StyleLibrary?.CurrentItem?.Title
             };
-            _text.Owner = context.ContainerView?.WorkingContainer;
+            _text.Owner = context.DocumentContainer?.ContainerView?.WorkingContainer;
             if (_text.StartPoint.Owner == null)
             {
                 _text.StartPoint.Owner = _text;
@@ -61,14 +61,14 @@ namespace Draw2D.ViewModels.Tools
             {
                 _text.Point.Owner = _text;
             }
-            context.ContainerView?.WorkingContainer.Shapes.Add(_text);
-            context.ContainerView?.WorkingContainer.MarkAsDirty(true);
-            context.ContainerView?.SelectionState?.Select(_text);
-            context.ContainerView?.SelectionState?.Select(_text.StartPoint);
-            context.ContainerView?.SelectionState?.Select(_text.Point);
+            context.DocumentContainer?.ContainerView?.WorkingContainer.Shapes.Add(_text);
+            context.DocumentContainer?.ContainerView?.WorkingContainer.MarkAsDirty(true);
+            context.DocumentContainer?.ContainerView?.SelectionState?.Select(_text);
+            context.DocumentContainer?.ContainerView?.SelectionState?.Select(_text.StartPoint);
+            context.DocumentContainer?.ContainerView?.SelectionState?.Select(_text.Point);
 
-            context.ContainerView?.InputService?.Capture?.Invoke();
-            context.ContainerView?.InputService?.Redraw?.Invoke();
+            context.DocumentContainer?.ContainerView?.InputService?.Capture?.Invoke();
+            context.DocumentContainer?.ContainerView?.InputService?.Redraw?.Invoke();
 
             CurrentState = State.Point;
         }
@@ -79,13 +79,13 @@ namespace Draw2D.ViewModels.Tools
 
             CurrentState = State.StartPoint;
 
-            context.ContainerView?.SelectionState?.Deselect(_text);
-            context.ContainerView?.SelectionState?.Deselect(_text.Point);
+            context.DocumentContainer?.ContainerView?.SelectionState?.Deselect(_text);
+            context.DocumentContainer?.ContainerView?.SelectionState?.Deselect(_text.Point);
 
             var radius = Settings?.HitTestRadius ?? 7.0;
-            var scale = context.ContainerView?.ZoomService?.ZoomServiceState?.ZoomX ?? 1.0;
+            var scale = context.DocumentContainer?.ContainerView?.ZoomService?.ZoomServiceState?.ZoomX ?? 1.0;
 
-            IPointShape point = context.ContainerView?.GetNextPoint(context, x, y, Settings?.ConnectPoints ?? false, radius, scale, modifier);
+            IPointShape point = context.DocumentContainer?.ContainerView?.GetNextPoint(context, x, y, Settings?.ConnectPoints ?? false, radius, scale, modifier);
 
             _text.Point = point;
             _text.Point.Y = y;
@@ -93,18 +93,18 @@ namespace Draw2D.ViewModels.Tools
             {
                 _text.Point.Owner = _text;
             }
-            context.ContainerView?.WorkingContainer.Shapes.Remove(_text);
-            context.ContainerView?.WorkingContainer.MarkAsDirty(true);
-            context.ContainerView?.SelectionState?.Deselect(_text.StartPoint);
-            _text.Owner = context.ContainerView?.CurrentContainer;
-            context.ContainerView?.CurrentContainer.Shapes.Add(_text);
-            context.ContainerView?.CurrentContainer.MarkAsDirty(true);
+            context.DocumentContainer?.ContainerView?.WorkingContainer.Shapes.Remove(_text);
+            context.DocumentContainer?.ContainerView?.WorkingContainer.MarkAsDirty(true);
+            context.DocumentContainer?.ContainerView?.SelectionState?.Deselect(_text.StartPoint);
+            _text.Owner = context.DocumentContainer?.ContainerView?.CurrentContainer;
+            context.DocumentContainer?.ContainerView?.CurrentContainer.Shapes.Add(_text);
+            context.DocumentContainer?.ContainerView?.CurrentContainer.MarkAsDirty(true);
             _text = null;
 
             FiltersClear(context);
 
-            context.ContainerView?.InputService?.Release?.Invoke();
-            context.ContainerView?.InputService?.Redraw?.Invoke();
+            context.DocumentContainer?.ContainerView?.InputService?.Release?.Invoke();
+            context.DocumentContainer?.ContainerView?.InputService?.Redraw?.Invoke();
         }
 
         private void MoveTopLeftInternal(IToolContext context, double x, double y, Modifier modifier)
@@ -112,7 +112,7 @@ namespace Draw2D.ViewModels.Tools
             FiltersClear(context);
             FiltersProcess(context, ref x, ref y);
 
-            context.ContainerView?.InputService?.Redraw?.Invoke();
+            context.DocumentContainer?.ContainerView?.InputService?.Redraw?.Invoke();
         }
 
         private void MoveBottomRightInternal(IToolContext context, double x, double y, Modifier modifier)
@@ -123,7 +123,7 @@ namespace Draw2D.ViewModels.Tools
             _text.Point.X = x;
             _text.Point.Y = y;
 
-            context.ContainerView?.InputService?.Redraw?.Invoke();
+            context.DocumentContainer?.ContainerView?.InputService?.Redraw?.Invoke();
         }
 
         private void CleanInternal(IToolContext context)
@@ -134,16 +134,16 @@ namespace Draw2D.ViewModels.Tools
 
             if (_text != null)
             {
-                context.ContainerView?.WorkingContainer.Shapes.Remove(_text);
-                context.ContainerView?.WorkingContainer.MarkAsDirty(true);
-                context.ContainerView?.SelectionState?.Deselect(_text);
-                context.ContainerView?.SelectionState?.Deselect(_text.StartPoint);
-                context.ContainerView?.SelectionState?.Deselect(_text.Point);
+                context.DocumentContainer?.ContainerView?.WorkingContainer.Shapes.Remove(_text);
+                context.DocumentContainer?.ContainerView?.WorkingContainer.MarkAsDirty(true);
+                context.DocumentContainer?.ContainerView?.SelectionState?.Deselect(_text);
+                context.DocumentContainer?.ContainerView?.SelectionState?.Deselect(_text.StartPoint);
+                context.DocumentContainer?.ContainerView?.SelectionState?.Deselect(_text.Point);
                 _text = null;
             }
 
-            context.ContainerView?.InputService?.Release?.Invoke();
-            context.ContainerView?.InputService?.Redraw?.Invoke();
+            context.DocumentContainer?.ContainerView?.InputService?.Release?.Invoke();
+            context.DocumentContainer?.ContainerView?.InputService?.Redraw?.Invoke();
         }
 
         public void LeftDown(IToolContext context, double x, double y, Modifier modifier)

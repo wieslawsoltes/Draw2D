@@ -39,10 +39,10 @@ namespace Draw2D.ViewModels.Tools
             FiltersProcess(context, ref x, ref y);
 
             var radius = Settings?.HitTestRadius ?? 7.0;
-            var scale = context.ContainerView?.ZoomService?.ZoomServiceState?.ZoomX ?? 1.0;
+            var scale = context.DocumentContainer?.ContainerView?.ZoomService?.ZoomServiceState?.ZoomX ?? 1.0;
 
-            IPointShape startPoint = context.ContainerView?.GetNextPoint(context, x, y, Settings?.ConnectPoints ?? false, radius, scale, modifier);
-            IPointShape point = context.ContainerView?.GetNextPoint(context, x, y, false, 0.0, 1.0, modifier);
+            IPointShape startPoint = context.DocumentContainer?.ContainerView?.GetNextPoint(context, x, y, Settings?.ConnectPoints ?? false, radius, scale, modifier);
+            IPointShape point = context.DocumentContainer?.ContainerView?.GetNextPoint(context, x, y, false, 0.0, 1.0, modifier);
 
             _ellipse = new EllipseShape()
             {
@@ -50,9 +50,9 @@ namespace Draw2D.ViewModels.Tools
                 StartPoint = startPoint,
                 Point = point,
                 Text = new Text(),
-                StyleId = context.StyleLibrary?.CurrentItem?.Title
+                StyleId = context.DocumentContainer?.StyleLibrary?.CurrentItem?.Title
             };
-            _ellipse.Owner = context.ContainerView?.WorkingContainer;
+            _ellipse.Owner = context.DocumentContainer?.ContainerView?.WorkingContainer;
             if (_ellipse.StartPoint.Owner == null)
             {
                 _ellipse.StartPoint.Owner = _ellipse;
@@ -61,14 +61,14 @@ namespace Draw2D.ViewModels.Tools
             {
                 _ellipse.Point.Owner = _ellipse;
             }
-            context.ContainerView?.WorkingContainer.Shapes.Add(_ellipse);
-            context.ContainerView?.WorkingContainer.MarkAsDirty(true);
-            context.ContainerView?.SelectionState?.Select(_ellipse);
-            context.ContainerView?.SelectionState?.Select(_ellipse.StartPoint);
-            context.ContainerView?.SelectionState?.Select(_ellipse.Point);
+            context.DocumentContainer?.ContainerView?.WorkingContainer.Shapes.Add(_ellipse);
+            context.DocumentContainer?.ContainerView?.WorkingContainer.MarkAsDirty(true);
+            context.DocumentContainer?.ContainerView?.SelectionState?.Select(_ellipse);
+            context.DocumentContainer?.ContainerView?.SelectionState?.Select(_ellipse.StartPoint);
+            context.DocumentContainer?.ContainerView?.SelectionState?.Select(_ellipse.Point);
 
-            context.ContainerView?.InputService?.Capture?.Invoke();
-            context.ContainerView?.InputService?.Redraw?.Invoke();
+            context.DocumentContainer?.ContainerView?.InputService?.Capture?.Invoke();
+            context.DocumentContainer?.ContainerView?.InputService?.Redraw?.Invoke();
 
             CurrentState = State.Point;
         }
@@ -79,31 +79,31 @@ namespace Draw2D.ViewModels.Tools
 
             CurrentState = State.StartPoint;
 
-            context.ContainerView?.SelectionState?.Deselect(_ellipse.Point);
+            context.DocumentContainer?.ContainerView?.SelectionState?.Deselect(_ellipse.Point);
 
             var radius = Settings?.HitTestRadius ?? 7.0;
-            var scale = context.ContainerView?.ZoomService?.ZoomServiceState?.ZoomX ?? 1.0;
+            var scale = context.DocumentContainer?.ContainerView?.ZoomService?.ZoomServiceState?.ZoomX ?? 1.0;
 
-            IPointShape point = context.ContainerView?.GetNextPoint(context, x, y, Settings?.ConnectPoints ?? false, radius, scale, modifier);
+            IPointShape point = context.DocumentContainer?.ContainerView?.GetNextPoint(context, x, y, Settings?.ConnectPoints ?? false, radius, scale, modifier);
 
             _ellipse.Point = point;
             if (_ellipse.Point.Owner == null)
             {
                 _ellipse.Point.Owner = _ellipse;
             }
-            context.ContainerView?.WorkingContainer.Shapes.Remove(_ellipse);
-            context.ContainerView?.WorkingContainer.MarkAsDirty(true);
-            context.ContainerView?.SelectionState?.Deselect(_ellipse);
-            context.ContainerView?.SelectionState?.Deselect(_ellipse.StartPoint);
-            _ellipse.Owner = context.ContainerView?.CurrentContainer;
-            context.ContainerView?.CurrentContainer.Shapes.Add(_ellipse);
-            context.ContainerView?.CurrentContainer.MarkAsDirty(true);
+            context.DocumentContainer?.ContainerView?.WorkingContainer.Shapes.Remove(_ellipse);
+            context.DocumentContainer?.ContainerView?.WorkingContainer.MarkAsDirty(true);
+            context.DocumentContainer?.ContainerView?.SelectionState?.Deselect(_ellipse);
+            context.DocumentContainer?.ContainerView?.SelectionState?.Deselect(_ellipse.StartPoint);
+            _ellipse.Owner = context.DocumentContainer?.ContainerView?.CurrentContainer;
+            context.DocumentContainer?.ContainerView?.CurrentContainer.Shapes.Add(_ellipse);
+            context.DocumentContainer?.ContainerView?.CurrentContainer.MarkAsDirty(true);
             _ellipse = null;
 
             FiltersClear(context);
 
-            context.ContainerView?.InputService?.Release?.Invoke();
-            context.ContainerView?.InputService?.Redraw?.Invoke();
+            context.DocumentContainer?.ContainerView?.InputService?.Release?.Invoke();
+            context.DocumentContainer?.ContainerView?.InputService?.Redraw?.Invoke();
         }
 
         private void MoveTopLeftInternal(IToolContext context, double x, double y, Modifier modifier)
@@ -111,7 +111,7 @@ namespace Draw2D.ViewModels.Tools
             FiltersClear(context);
             FiltersProcess(context, ref x, ref y);
 
-            context.ContainerView?.InputService?.Redraw?.Invoke();
+            context.DocumentContainer?.ContainerView?.InputService?.Redraw?.Invoke();
         }
 
         private void MoveBottomRightInternal(IToolContext context, double x, double y, Modifier modifier)
@@ -122,7 +122,7 @@ namespace Draw2D.ViewModels.Tools
             _ellipse.Point.X = x;
             _ellipse.Point.Y = y;
 
-            context.ContainerView?.InputService?.Redraw?.Invoke();
+            context.DocumentContainer?.ContainerView?.InputService?.Redraw?.Invoke();
         }
 
         private void CleanInternal(IToolContext context)
@@ -133,16 +133,16 @@ namespace Draw2D.ViewModels.Tools
 
             if (_ellipse != null)
             {
-                context.ContainerView?.WorkingContainer.Shapes.Remove(_ellipse);
-                context.ContainerView?.WorkingContainer.MarkAsDirty(true);
-                context.ContainerView?.SelectionState?.Deselect(_ellipse);
-                context.ContainerView?.SelectionState?.Deselect(_ellipse.StartPoint);
-                context.ContainerView?.SelectionState?.Deselect(_ellipse.Point);
+                context.DocumentContainer?.ContainerView?.WorkingContainer.Shapes.Remove(_ellipse);
+                context.DocumentContainer?.ContainerView?.WorkingContainer.MarkAsDirty(true);
+                context.DocumentContainer?.ContainerView?.SelectionState?.Deselect(_ellipse);
+                context.DocumentContainer?.ContainerView?.SelectionState?.Deselect(_ellipse.StartPoint);
+                context.DocumentContainer?.ContainerView?.SelectionState?.Deselect(_ellipse.Point);
                 _ellipse = null;
             }
 
-            context.ContainerView?.InputService?.Release?.Invoke();
-            context.ContainerView?.InputService?.Redraw?.Invoke();
+            context.DocumentContainer?.ContainerView?.InputService?.Release?.Invoke();
+            context.DocumentContainer?.ContainerView?.InputService?.Redraw?.Invoke();
         }
 
         public void LeftDown(IToolContext context, double x, double y, Modifier modifier)

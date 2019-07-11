@@ -36,7 +36,7 @@ namespace Draw2D.ViewModels.Intersections
                 return;
             }
 
-            var ellipses = context.ContainerView?.CurrentContainer.Shapes.OfType<EllipseShape>();
+            var ellipses = context.DocumentContainer?.ContainerView?.CurrentContainer.Shapes.OfType<EllipseShape>();
             if (ellipses.Any())
             {
                 foreach (var ellipse in ellipses)
@@ -49,12 +49,12 @@ namespace Draw2D.ViewModels.Intersections
                     {
                         foreach (var p in intersections)
                         {
-                            var point = new PointShape(p.X, p.Y, context.PointTemplate);
-                            point.Owner = context.ContainerView?.WorkingContainer;
+                            var point = new PointShape(p.X, p.Y, context?.DocumentContainer?.PointTemplate);
+                            point.Owner = context.DocumentContainer?.ContainerView?.WorkingContainer;
                             Intersections.Add(point);
-                            //context.ContainerView?.WorkingContainer.Shapes.Add(point);
-                            //context.ContainerView?.WorkingContainer.MarkAsDirty(true);
-                            context.ContainerView?.SelectionState?.Select(point);
+                            //context.DocumentContainer?.ContainerView?.WorkingContainer.Shapes.Add(point);
+                            //context.DocumentContainer?.ContainerView?.WorkingContainer.MarkAsDirty(true);
+                            context.DocumentContainer?.ContainerView?.SelectionState?.Select(point);
                         }
                     }
                 }

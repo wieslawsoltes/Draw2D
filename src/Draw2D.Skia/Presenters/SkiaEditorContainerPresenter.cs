@@ -199,7 +199,7 @@ namespace Draw2D.Presenters
 
         public void Draw(object context, double width, double height, double dx, double dy, double zx, double zy)
         {
-            bool isStyleLibraryDirty = _context.StyleLibrary.IsStyleLibraryDirty();
+            bool isStyleLibraryDirty = _context.DocumentContainer.StyleLibrary.IsStyleLibraryDirty();
             bool isCurrentContainerDirty = _view.CurrentContainer.IsCanvasContainerDirty();
             bool isWorkingContainerDirty = _view.WorkingContainer.IsCanvasContainerDirty();
             bool isPointsCurrentContainerDirty = _view.CurrentContainer.IsPointsDirty();
@@ -321,7 +321,7 @@ namespace Draw2D.Presenters
 
             if (isStyleLibraryDirty == true)
             {
-                _context.StyleLibrary?.Invalidate();
+                _context.DocumentContainer.StyleLibrary?.Invalidate();
             }
         }
     }

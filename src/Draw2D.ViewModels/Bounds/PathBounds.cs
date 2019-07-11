@@ -56,6 +56,11 @@ namespace Draw2D.ViewModels.Bounds
                         var pathShapePoints = new List<IPointShape>();
                         pathShape.GetPoints(pathShapePoints);
 
+                        if (pathShapePoints.Count == 0)
+                        {
+                            continue;
+                        }
+
                         if (HitTestHelper.Contains(pathShapePoints, target))
                         {
                             if (modifier.HasFlag(Modifier.Alt))
@@ -94,6 +99,11 @@ namespace Draw2D.ViewModels.Bounds
             var points = new List<IPointShape>();
             path.GetPoints(points);
 
+            if (points.Count == 0)
+            {
+                return null;
+            }
+
             return HitTestHelper.Contains(points, target) ? shape : null;
         }
 
@@ -115,6 +125,11 @@ namespace Draw2D.ViewModels.Bounds
 
             var points = new List<IPointShape>();
             path.GetPoints(points);
+
+            if (points.Count == 0)
+            {
+                return null;
+            }
 
             return HitTestHelper.Overlap(points, target) ? shape : null;
         }

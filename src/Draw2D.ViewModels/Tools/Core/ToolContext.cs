@@ -14,44 +14,18 @@ namespace Draw2D.ViewModels.Tools
     {
         public static EditMode[] EditModeValues { get; } = (EditMode[])Enum.GetValues(typeof(EditMode));
 
-        private IStyleLibrary _styleLibrary;
-        private IGroupLibrary _groupLibrary;
-        private IBaseShape _pointTemplate;
+        private IDocumentContainer _documentContainer;
         private IHitTest _hitTest;
         private IPathConverter _pathConverter;
-        private IList<IContainerView> _containerViews;
-        private IContainerView _containerView;
         private IList<ITool> _tools;
         private ITool _currentTool;
         private EditMode _editMode;
 
-#if USE_SERIALIZE_STYLES
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-#else
         [IgnoreDataMember]
-#endif
-        public IStyleLibrary StyleLibrary
+        public IDocumentContainer DocumentContainer
         {
-            get => _styleLibrary;
-            set => Update(ref _styleLibrary, value);
-        }
-
-#if USE_SERIALIZE_GROUPS
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-#else
-        [IgnoreDataMember]
-#endif
-        public IGroupLibrary GroupLibrary
-        {
-            get => _groupLibrary;
-            set => Update(ref _groupLibrary, value);
-        }
-
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public IBaseShape PointTemplate
-        {
-            get => _pointTemplate;
-            set => Update(ref _pointTemplate, value);
+            get => _documentContainer;
+            set => Update(ref _documentContainer, value);
         }
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
@@ -61,25 +35,11 @@ namespace Draw2D.ViewModels.Tools
             set => Update(ref _hitTest, value);
         }
 
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        [IgnoreDataMember]
         public IPathConverter PathConverter
         {
             get => _pathConverter;
             set => Update(ref _pathConverter, value);
-        }
-
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public IList<IContainerView> ContainerViews
-        {
-            get => _containerViews;
-            set => Update(ref _containerViews, value);
-        }
-
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public IContainerView ContainerView
-        {
-            get => _containerView;
-            set => Update(ref _containerView, value);
         }
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
@@ -109,16 +69,7 @@ namespace Draw2D.ViewModels.Tools
 
         public void Dispose()
         {
-            if (_containerViews != null)
-            {
-                foreach (var containerView in _containerViews)
-                {
-                    containerView.ContainerPresenter?.Dispose();
-                    containerView.ContainerPresenter = null;
-                    containerView.SelectionState = null;
-                    containerView.WorkingContainer = null;
-                }
-            }
+            _documentContainer?.Dispose();
         }
 
         public void SetTool(string title)
@@ -176,12 +127,12 @@ namespace Draw2D.ViewModels.Tools
 
         public double GetWidth()
         {
-            return ContainerView?.Width ?? 0.0;
+            return _documentContainer?.ContainerView?.Width ?? 0.0;
         }
 
         public double GetHeight()
         {
-            return ContainerView?.Height ?? 0.0;
+            return _documentContainer?.ContainerView?.Height ?? 0.0;
         }
 
         public virtual object Copy(Dictionary<object, object> shared)

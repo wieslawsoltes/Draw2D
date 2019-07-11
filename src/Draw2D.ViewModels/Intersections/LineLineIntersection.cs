@@ -36,7 +36,7 @@ namespace Draw2D.ViewModels.Intersections
                 return;
             }
 
-            var lines = context.ContainerView?.CurrentContainer.Shapes.OfType<LineShape>();
+            var lines = context.DocumentContainer?.ContainerView?.CurrentContainer.Shapes.OfType<LineShape>();
             if (lines.Any())
             {
                 var a0 = line.StartPoint.ToPoint2();
@@ -48,12 +48,12 @@ namespace Draw2D.ViewModels.Intersections
                     bool intersection = Line2.LineIntersectWithLine(a0, b0, a1, b1, out var clip);
                     if (intersection)
                     {
-                        var point = new PointShape(clip.X, clip.Y, context.PointTemplate);
-                        point.Owner = context.ContainerView?.WorkingContainer;
+                        var point = new PointShape(clip.X, clip.Y, context?.DocumentContainer?.PointTemplate);
+                        point.Owner = context.DocumentContainer?.ContainerView?.WorkingContainer;
                         Intersections.Add(point);
-                        //context.ContainerView?.WorkingContainer.Shapes.Add(point);
-                        //context.ContainerView?.WorkingContainer.MarkAsDirty(true);
-                        context.ContainerView?.SelectionState?.Select(point);
+                        //context.DocumentContainer?.ContainerView?.WorkingContainer.Shapes.Add(point);
+                        //context.DocumentContainer?.ContainerView?.WorkingContainer.MarkAsDirty(true);
+                        context.DocumentContainer?.ContainerView?.SelectionState?.Select(point);
                     }
                 }
             }

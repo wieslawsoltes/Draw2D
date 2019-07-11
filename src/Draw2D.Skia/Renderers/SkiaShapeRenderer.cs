@@ -291,7 +291,7 @@ namespace Draw2D.Renderers
 
         public void DrawLine(object dc, LineShape line, string styleId, double dx, double dy, double scale)
         {
-            var style = _context?.StyleLibrary?.Get(styleId);
+            var style = _context?.DocumentContainer?.StyleLibrary?.Get(styleId);
             if (style == null)
             {
                 return;
@@ -329,7 +329,7 @@ namespace Draw2D.Renderers
 
         public void DrawCubicBezier(object dc, CubicBezierShape cubicBezier, string styleId, double dx, double dy, double scale)
         {
-            var style = _context?.StyleLibrary?.Get(styleId);
+            var style = _context?.DocumentContainer?.StyleLibrary?.Get(styleId);
             if (style == null)
             {
                 return;
@@ -360,7 +360,7 @@ namespace Draw2D.Renderers
 
         public void DrawQuadraticBezier(object dc, QuadraticBezierShape quadraticBezier, string styleId, double dx, double dy, double scale)
         {
-            var style = _context?.StyleLibrary?.Get(styleId);
+            var style = _context?.DocumentContainer?.StyleLibrary?.Get(styleId);
             if (style == null)
             {
                 return;
@@ -391,7 +391,7 @@ namespace Draw2D.Renderers
 
         public void DrawConic(object dc, ConicShape conic, string styleId, double dx, double dy, double scale)
         {
-            var style = _context?.StyleLibrary?.Get(styleId);
+            var style = _context?.DocumentContainer?.StyleLibrary?.Get(styleId);
             if (style == null)
             {
                 return;
@@ -422,7 +422,7 @@ namespace Draw2D.Renderers
 
         public void DrawPath(object dc, PathShape path, string styleId, double dx, double dy, double scale)
         {
-            var style = _context?.StyleLibrary?.Get(styleId);
+            var style = _context?.DocumentContainer?.StyleLibrary?.Get(styleId);
             if (style == null)
             {
                 return;
@@ -453,7 +453,7 @@ namespace Draw2D.Renderers
 
         public void DrawRectangle(object dc, RectangleShape rectangle, string styleId, double dx, double dy, double scale)
         {
-            var style = _context?.StyleLibrary?.Get(styleId);
+            var style = _context?.DocumentContainer?.StyleLibrary?.Get(styleId);
             if (style == null)
             {
                 return;
@@ -522,7 +522,7 @@ namespace Draw2D.Renderers
 
         public void DrawCircle(object dc, CircleShape circle, string styleId, double dx, double dy, double scale)
         {
-            var style = _context?.StyleLibrary?.Get(styleId);
+            var style = _context?.DocumentContainer?.StyleLibrary?.Get(styleId);
             if (style == null)
             {
                 return;
@@ -578,7 +578,7 @@ namespace Draw2D.Renderers
 
         public void DrawArc(object dc, ArcShape arc, string styleId, double dx, double dy, double scale)
         {
-            var style = _context?.StyleLibrary?.Get(styleId);
+            var style = _context?.DocumentContainer?.StyleLibrary?.Get(styleId);
             if (style == null)
             {
                 return;
@@ -611,7 +611,7 @@ namespace Draw2D.Renderers
 
         public void DrawEllipse(object dc, EllipseShape ellipse, string styleId, double dx, double dy, double scale)
         {
-            var style = _context?.StyleLibrary?.Get(styleId);
+            var style = _context?.DocumentContainer?.StyleLibrary?.Get(styleId);
             if (style == null)
             {
                 return;
@@ -666,7 +666,7 @@ namespace Draw2D.Renderers
 
         public void DrawText(object dc, TextShape text, string styleId, double dx, double dy, double scale)
         {
-            var style = _context?.StyleLibrary?.Get(styleId);
+            var style = _context?.DocumentContainer?.StyleLibrary?.Get(styleId);
             if (style == null)
             {
                 return;
@@ -693,7 +693,7 @@ namespace Draw2D.Renderers
                 canvas.DrawPicture(picture);
                 canvas.RestoreToCount(count);
             }
-            var style = _context?.StyleLibrary?.Get(styleId);
+            var style = _context?.DocumentContainer?.StyleLibrary?.Get(styleId);
             if (style != null)
             {
                 if (style.TextStyle.IsStroked && !string.IsNullOrEmpty(image.Text?.Value))

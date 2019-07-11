@@ -10,7 +10,7 @@ namespace Draw2D.Bounds
 {
     // TODO: Experimental hit-testing for TryToHover
     /*
-    var bounds = new SkiaHitTest(context.ContainerView?.CurrentContainer);
+    var bounds = new SkiaHitTest(context.DocumentContainer?.ContainerView?.CurrentContainer);
 
     //if (bounds.Contains((float)target.X, (float)target.Y, ContainsMode.Bounds, out var rootShape, out var childShape))
     //{
