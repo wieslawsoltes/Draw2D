@@ -10,6 +10,7 @@ using Draw2D.ViewModels.Filters;
 using Draw2D.ViewModels.Intersections;
 using Draw2D.ViewModels.Shapes;
 using Draw2D.ViewModels.Style;
+using Draw2D.ViewModels.Style.PathEffects;
 using Draw2D.ViewModels.Tools;
 
 namespace Draw2D.Editor
@@ -88,6 +89,54 @@ namespace Draw2D.Editor
                     new ArgbColor(255, 0, 0, 0),
                     true, false, true, 2.0,
                     new TextStyle(fontFamily, 12.0, HAlign.Center, VAlign.Center, new ArgbColor(255, 0, 0, 0), true)));
+
+            styleLibrary.Items.Add(
+                new ShapeStyle(
+                    "Dash",
+                    new ArgbColor(255, 0, 0, 0),
+                    new ArgbColor(255, 0, 0, 0),
+                    true, false, true, 2.0,
+                    new TextStyle(fontFamily, 12.0, HAlign.Center, VAlign.Center, new ArgbColor(255, 0, 0, 0), true),
+                    new[] { new DashPathEffect("2 2", 1.0) { Title = "Dash" } })
+                {
+                    StrokeCap = StrokeCap.Round
+                });
+
+            styleLibrary.Items.Add(
+                new ShapeStyle(
+                    "Dot",
+                    new ArgbColor(255, 0, 0, 0),
+                    new ArgbColor(255, 0, 0, 0),
+                    true, false, true, 2.0,
+                    new TextStyle(fontFamily, 12.0, HAlign.Center, VAlign.Center, new ArgbColor(255, 0, 0, 0), true),
+                    new[] { new DashPathEffect("0 2", 0.0) { Title = "Dot" } })
+                {
+                    StrokeCap = StrokeCap.Round
+                });
+
+            styleLibrary.Items.Add(
+                new ShapeStyle(
+                    "DashDot",
+                    new ArgbColor(255, 0, 0, 0),
+                    new ArgbColor(255, 0, 0, 0),
+                    true, false, true, 2.0,
+                    new TextStyle(fontFamily, 12.0, HAlign.Center, VAlign.Center, new ArgbColor(255, 0, 0, 0), true),
+                    new[] { new DashPathEffect("2 2 0 2", 1.0) { Title = "DashDot" } })
+                {
+                    StrokeCap = StrokeCap.Round
+                });
+
+            styleLibrary.Items.Add(
+                new ShapeStyle(
+                    "DashDotDot",
+                    new ArgbColor(255, 0, 0, 0),
+                    new ArgbColor(255, 0, 0, 0),
+                    true, false, true, 2.0,
+                    new TextStyle(fontFamily, 12.0, HAlign.Center, VAlign.Center, new ArgbColor(255, 0, 0, 0), true),
+                    new[] { new DashPathEffect("2 2 0 2 0 2", 1.0) { Title = "DashDotDot" } })
+                {
+                    StrokeCap = StrokeCap.Round
+                });
 
             styleLibrary.Items.Add(
                 new ShapeStyle(

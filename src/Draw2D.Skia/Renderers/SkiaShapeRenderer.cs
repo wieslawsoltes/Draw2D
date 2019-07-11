@@ -87,7 +87,6 @@ namespace Draw2D.Renderers
         {
             if (style.IsDirty == true || !_typefaceCache.TryGetValue(style, out typeface))
             {
-                style.Invalidate();
                 typeface = SkiaHelper.ToSKTypeface(style);
                 _typefaceCache[style] = typeface;
 #if DEBUG_DICT_CACHE
@@ -100,7 +99,6 @@ namespace Draw2D.Renderers
         {
             if (style.Fill.IsDirty == true || !_fillPaintCache.TryGetValue(style, out var brushCached))
             {
-                style.Fill.Invalidate();
                 brushCached = SkiaHelper.ToSKPaintBrush(style.Fill, style.IsAntialias);
                 _fillPaintCache[style] = brushCached;
 #if DEBUG_DICT_CACHE
@@ -115,12 +113,22 @@ namespace Draw2D.Renderers
             brush = brushCached;
         }
 
+        private bool IsPathEffectsDirty(ShapeStyle style)
+        {
+            foreach (var pathEffect in style.PathEffects)
+            {
+                if (pathEffect.IsDirty)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
         private void GetSKPaintStroke(ShapeStyle style, out SKPaint pen, double scale)
         {
-            if (style.IsDirty == true || style.Stroke.IsDirty == true || !_strokePaintCache.TryGetValue(style, out var penCached))
+            if (style.IsDirty == true || style.Stroke.IsDirty == true || IsPathEffectsDirty(style) || !_strokePaintCache.TryGetValue(style, out var penCached))
             {
-                style.Invalidate();
-                style.Stroke.Invalidate();
                 penCached = SkiaHelper.ToSKPaintPen(style, scale);
                 _strokePaintCache[style] = penCached;
 #if DEBUG_DICT_CACHE
@@ -143,10 +151,7 @@ namespace Draw2D.Renderers
 
             if (style.IsDirty == true || style.Stroke.IsDirty == true || style.Typeface.IsDirty == true || !_textPaintCache.TryGetValue(style, out cached))
             {
-                style.Invalidate();
-                style.Stroke.Invalidate();
                 GetSKTypeface(style.Typeface, out var typeface);
-
                 cached.paint = SkiaHelper.ToSKPaintBrush(style);
                 cached.paint.Typeface = typeface;
                 cached.paint.TextEncoding = SKTextEncoding.Utf16;

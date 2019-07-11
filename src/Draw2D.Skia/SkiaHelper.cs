@@ -10,6 +10,7 @@ using Draw2D.ViewModels;
 using Draw2D.ViewModels.Containers;
 using Draw2D.ViewModels.Shapes;
 using Draw2D.ViewModels.Style;
+using Draw2D.ViewModels.Style.PathEffects;
 using Draw2D.ViewModels.Tools;
 using SkiaSharp;
 
@@ -113,15 +114,64 @@ namespace Draw2D
             }
         }
 
+        internal static float[] ToIntervals(string intervals, double strokeWidth)
+        {
+            string[] values = intervals.Split(new char[] { ' ', ',' }, StringSplitOptions.RemoveEmptyEntries);
+            float[] array = new float[values.Length];
+            for (int i = 0; i < values.Length; i++)
+            {
+                array[i] = Convert.ToSingle(values[i]) * (float)strokeWidth;
+            }
+            if (array.Length >= 2 && array.Length % 2 == 0)
+            {
+                return array;
+            }
+            return null;
+        }
+
+        internal static SKPathEffect ToSKPathEffect(IPathEffect pathEffect, double strokeWidth)
+        {
+            switch (pathEffect)
+            {
+                case DashPathEffect dashPathEffect:
+                    {
+                        var intervals = ToIntervals(dashPathEffect.Intervals, strokeWidth);
+                        if (intervals != null)
+                        {
+                            return SKPathEffect.CreateDash(intervals, (float)dashPathEffect.Phase);
+                        }
+                    }
+                    break;
+                // TODO: Handle other path effects.
+                default:
+                    break;
+            }
+            return null;
+        }
+
         internal static SKPaint ToSKPaintPen(ShapeStyle style, double scale)
         {
             double strokeWidth = style.StrokeWidth;
             double strokeMiter = style.StrokeMiter;
+
             if (style.IsScaled)
             {
                 strokeWidth /= scale;
                 strokeMiter /= scale;
             }
+
+            SKPathEffect pathEffect = null;
+            int pathEffectsCount = style.PathEffects.Count;
+
+            if (pathEffectsCount == 1)
+            {
+                pathEffect = ToSKPathEffect(style.PathEffects[0], strokeWidth);
+            }
+            else if (pathEffectsCount > 1)
+            {
+                // TODO: Handle more than one path effect.
+            }
+
             return new SKPaint()
             {
                 IsAntialias = style.IsAntialias,
@@ -132,8 +182,8 @@ namespace Draw2D
                 StrokeMiter = (float)(strokeMiter),
                 Color = ToSKColor(style.Stroke),
                 //Shader = SKShader.CreateColor(ToSKColor(style.Stroke)),
-                PathEffect = null,
-                Style = SKPaintStyle.Stroke
+                Style = SKPaintStyle.Stroke,
+                PathEffect = pathEffect
             };
         }
 

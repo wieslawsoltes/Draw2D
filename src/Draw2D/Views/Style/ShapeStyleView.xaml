@@ -39,6 +39,22 @@
         <TabItem Classes="default" Header="Fill">
             <ContentControl Content="{Binding Fill}"/>
         </TabItem>
+        <TabItem Classes="default" Header="PathEffects">
+            <TabControl Classes="default" TabStripPlacement="Top">
+                <TabItem Classes="default" Header="PathEffects">
+                    <ListBox x:Name="effects" Classes="default" Items="{Binding PathEffects}">
+                        <ListBox.DataTemplates>
+                            <DataTemplate>
+                                <TextBlock Classes="list" Text="{Binding Title}"/>
+                            </DataTemplate>
+                        </ListBox.DataTemplates>
+                    </ListBox>
+                </TabItem>
+                <TabItem Classes="default" Header="Selected">
+                    <ContentControl Content="{Binding #effects.SelectedItem}"/>
+                </TabItem>
+            </TabControl>
+        </TabItem>
         <TabItem Classes="default" Header="Text">
             <ContentControl Content="{Binding TextStyle}"/>
         </TabItem>

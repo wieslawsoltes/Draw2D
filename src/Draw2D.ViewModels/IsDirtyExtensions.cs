@@ -27,6 +27,18 @@ namespace Draw2D.ViewModels
 #endif
                 return true;
             }
+
+            foreach (var pathEffect in style.PathEffects)
+            {
+                if (pathEffect.IsDirty)
+                {
+#if USE_DEBUG_DIRTY
+                Log.WriteLine($"pathEffect.IsDirty: true");
+#endif
+                    return true;
+                }
+            }
+
             return false;
         }
 

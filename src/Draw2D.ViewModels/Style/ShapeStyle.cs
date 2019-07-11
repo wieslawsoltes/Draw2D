@@ -2,6 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Runtime.Serialization;
 
 namespace Draw2D.ViewModels.Style
@@ -23,6 +24,7 @@ namespace Draw2D.ViewModels.Style
         private StrokeJoin _strokeJoin;
         private double _strokeMiter;
         private TextStyle _textStyle;
+        private IList<IPathEffect> _pathEffects;
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public ArgbColor Stroke
@@ -101,11 +103,18 @@ namespace Draw2D.ViewModels.Style
             set => Update(ref _textStyle, value);
         }
 
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public IList<IPathEffect> PathEffects
+        {
+            get => _pathEffects;
+            set => Update(ref _pathEffects, value);
+        }
+
         public ShapeStyle()
         {
         }
 
-        public ShapeStyle(string title, ArgbColor stroke, ArgbColor fill, bool isStroked, bool isFilled, bool isScaled, double strokeWidth, TextStyle textStyle)
+        public ShapeStyle(string title, ArgbColor stroke, ArgbColor fill, bool isStroked, bool isFilled, bool isScaled, double strokeWidth, TextStyle textStyle, IList<IPathEffect> pathEffects = null)
         {
             this.Title = title;
             this.Stroke = stroke;
@@ -119,11 +128,33 @@ namespace Draw2D.ViewModels.Style
             this.StrokeJoin = StrokeJoin.Miter;
             this.StrokeMiter = 4.0;
             this.TextStyle = textStyle;
+            this.PathEffects = pathEffects != null ?
+                new ObservableCollection<IPathEffect>(pathEffects) : 
+                new ObservableCollection<IPathEffect>();
+        }
+
+        public override void Invalidate()
+        {
+            _stroke?.Invalidate();
+            _fill?.Invalidate();
+            _textStyle?.Invalidate();
+            _textStyle.Typeface?.Invalidate();
+            _textStyle.Stroke?.Invalidate();
+
+            if (_pathEffects != null)
+            {
+                foreach (var pathEffect in _pathEffects)
+                {
+                    pathEffect.Invalidate();
+                } 
+            }
+
+            base.Invalidate();
         }
 
         public object Copy(Dictionary<object, object> shared)
         {
-            return new ShapeStyle()
+            var copy = new ShapeStyle()
             {
                 Name = this.Name,
                 Title = this.Title + "_copy",
@@ -137,8 +168,17 @@ namespace Draw2D.ViewModels.Style
                 StrokeCap = this.StrokeCap,
                 StrokeJoin = this.StrokeJoin,
                 StrokeMiter = this.StrokeMiter,
-                TextStyle = (TextStyle)(this.TextStyle.Copy(shared))
+                TextStyle = (TextStyle)(this.TextStyle.Copy(shared)),
+                PathEffects = new ObservableCollection<IPathEffect>()
             };
+
+            foreach (var pathEffect in this.PathEffects)
+            {
+                var pathEffectCopy = (IPathEffect)pathEffect.Copy(shared);
+                copy.PathEffects.Add(pathEffectCopy);
+            }
+
+            return copy;
         }
     }
 }
