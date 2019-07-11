@@ -91,6 +91,11 @@ namespace Draw2D.ViewModels.Containers
 
         public T Get(string title)
         {
+            if (title == null)
+            {
+                return default;
+            }
+
             if (_itemsCache == null)
             {
                 UpdateCache();
