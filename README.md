@@ -8,6 +8,8 @@ A multi-platform 2D diagram editor.
 
 Draw2D is a multi-platform application for making 2D diagrams. 
 
+[![Draw2D](images/Draw2D.png)](images/Draw2D.png)
+
 ## Resources
 
 * [GitHub source code repository.](https://github.com/wieslawsoltes/Draw2D)
