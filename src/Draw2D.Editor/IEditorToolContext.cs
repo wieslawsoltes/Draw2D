@@ -20,14 +20,14 @@ namespace Draw2D.Editor
         void AddContainerView(IContainerView containerView);
         void CloseContainerView(IContainerView containerView);
         void NewContainerView(string title);
-        void OpenView(string path);
-        void SaveView(string path);
+        void OpenDocument(string path);
+        void SaveDocument(string path);
         void OpenStyles(string path);
         void SaveStyles(string path);
         void OpenGroups(string path);
         void SaveGroups(string path);
-        void OpenContainerView();
-        void SaveContainerViewAs();
+        void OpenDocumentContainer();
+        void SaveDocumentContainerAs();
         void OpenStyleLibrary();
         void SaveStyleLibraryAs();
         void OpenGroupLibrary();

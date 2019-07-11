@@ -48,7 +48,7 @@ namespace Draw2D.ViewModels.Intersections
                     bool intersection = Line2.LineIntersectWithLine(a0, b0, a1, b1, out var clip);
                     if (intersection)
                     {
-                        var point = new PointShape(clip.X, clip.Y, context.PointTemplate);
+                        var point = new PointShape(clip.X, clip.Y, context?.DocumentContainer?.PointTemplate);
                         point.Owner = context.ContainerView?.WorkingContainer;
                         Intersections.Add(point);
                         //context.ContainerView?.WorkingContainer.Shapes.Add(point);

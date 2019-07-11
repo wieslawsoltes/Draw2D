@@ -9,13 +9,9 @@ namespace Draw2D.ViewModels.Tools
 {
     public interface IToolContext : IInputTarget, IDisposable
     {
-        IStyleLibrary StyleLibrary { get; set; }
-        IGroupLibrary GroupLibrary { get; set; }
-        IBaseShape PointTemplate { get; set; }
+        IDocumentContainer DocumentContainer { get; set; }
         IHitTest HitTest { get; set; }
         IPathConverter PathConverter { get; set; }
-        IList<IContainerView> ContainerViews { get; set; }
-        IContainerView ContainerView { get; set; }
         IList<ITool> Tools { get; set; }
         ITool CurrentTool { get; set; }
         EditMode EditMode { get; set; }

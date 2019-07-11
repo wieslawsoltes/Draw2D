@@ -431,7 +431,7 @@ namespace Draw2D
 
         internal static void AddText(IToolContext context, TextShape text, double dx, double dy, SKPath geometry)
         {
-            var style = context?.StyleLibrary?.Get(text.StyleId);
+            var style = context?.DocumentContainer?.StyleLibrary?.Get(text.StyleId);
             if (style != null)
             {
                 AddText(context, text.Text, text.StartPoint, text.Point, style.TextStyle, dx, dy, geometry);
@@ -876,7 +876,7 @@ namespace Draw2D
                             AddRect(context, rectangle, 0.0, 0.0, geometry);
                             sb.AppendLine(geometry.ToSvgPathData());
 
-                            var style = context?.StyleLibrary?.Get(rectangle.StyleId);
+                            var style = context?.DocumentContainer?.StyleLibrary?.Get(rectangle.StyleId);
                             if (style != null)
                             {
                                 ToSvgPathData(context, rectangle.Text, rectangle.StartPoint, rectangle.Point, style.TextStyle, sb);
@@ -891,7 +891,7 @@ namespace Draw2D
                             AddCircle(context, circle, 0.0, 0.0, geometry);
                             sb.AppendLine(geometry.ToSvgPathData());
 
-                            var style = context?.StyleLibrary?.Get(circle.StyleId);
+                            var style = context?.DocumentContainer?.StyleLibrary?.Get(circle.StyleId);
                             if (style != null)
                             {
                                 ToSvgPathData(context, circle.Text, circle.StartPoint, circle.Point, style.TextStyle, sb);
@@ -906,7 +906,7 @@ namespace Draw2D
                             AddArc(context, arc, 0.0, 0.0, geometry);
                             sb.AppendLine(geometry.ToSvgPathData());
 
-                            var style = context?.StyleLibrary?.Get(arc.StyleId);
+                            var style = context?.DocumentContainer?.StyleLibrary?.Get(arc.StyleId);
                             if (style != null)
                             {
                                 ToSvgPathData(context, arc.Text, arc.StartPoint, arc.Point, style.TextStyle, sb);
@@ -921,7 +921,7 @@ namespace Draw2D
                             AddOval(context, ellipse, 0.0, 0.0, geometry);
                             sb.AppendLine(geometry.ToSvgPathData());
 
-                            var style = context?.StyleLibrary?.Get(ellipse.StyleId);
+                            var style = context?.DocumentContainer?.StyleLibrary?.Get(ellipse.StyleId);
                             if (style != null)
                             {
                                 ToSvgPathData(context, ellipse.Text, ellipse.StartPoint, ellipse.Point, style.TextStyle, sb);
@@ -949,7 +949,7 @@ namespace Draw2D
                     break;
                 case TextShape text:
                     {
-                        var style = context?.StyleLibrary?.Get(text.StyleId);
+                        var style = context?.DocumentContainer?.StyleLibrary?.Get(text.StyleId);
                         if (style != null)
                         {
                             ToSvgPathData(context, text.Text, text.StartPoint, text.Point, style.TextStyle, sb);

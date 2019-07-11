@@ -159,7 +159,7 @@ namespace Draw2D.Editor
             }
         }
 
-        public void OpenView(string path)
+        public void OpenDocument(string path)
         {
             var containerView = JsonSerializer.FromJsonFile<ContainerView>(path);
             if (containerView != null)
@@ -169,7 +169,7 @@ namespace Draw2D.Editor
             }
         }
 
-        public void SaveView(string path)
+        public void SaveDocument(string path)
         {
             if (ContainerView != null)
             {
@@ -213,7 +213,7 @@ namespace Draw2D.Editor
             }
         }
 
-        public async void OpenContainerView()
+        public async void OpenDocumentContainer()
         {
             var dlg = new OpenFileDialog();
             dlg.Filters.Add(new FileDialogFilter() { Name = "Json Files", Extensions = { "json" } });
@@ -224,23 +224,23 @@ namespace Draw2D.Editor
             {
                 foreach (var path in result)
                 {
-                    OpenView(path);
+                    OpenDocument(path);
                 }
             }
         }
 
-        public async void SaveContainerViewAs()
+        public async void SaveDocumentContainerAs()
         {
             var dlg = new SaveFileDialog();
             dlg.Filters.Add(new FileDialogFilter() { Name = "Json Files", Extensions = { "json" } });
             dlg.Filters.Add(new FileDialogFilter() { Name = "All Files", Extensions = { "*" } });
-            dlg.InitialFileName = ContainerView.Title;
+            dlg.InitialFileName = DocumentContainer.Title;
             dlg.DefaultExtension = "json";
             var result = await dlg.ShowAsync(GetWindow());
             if (result != null)
             {
                 var path = result;
-                SaveView(path);
+                SaveDocument(path);
             }
         }
 

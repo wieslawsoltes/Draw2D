@@ -65,7 +65,7 @@ namespace Draw2D.ViewModels.Tools
 
             _path.Shapes.Add(_figure);
 
-            _previousPoint = new PointShape(x, y, context.PointTemplate);
+            _previousPoint = new PointShape(x, y, context?.DocumentContainer?.PointTemplate);
             _previousPoint.Owner = null;
 
             context.ContainerView?.WorkingContainer.Shapes.Add(_path);
@@ -157,7 +157,7 @@ namespace Draw2D.ViewModels.Tools
             FiltersClear(context);
             FiltersProcess(context, ref x, ref y);
 
-            _nextPoint = new PointShape(x, y, context.PointTemplate);
+            _nextPoint = new PointShape(x, y, context?.DocumentContainer?.PointTemplate);
 
             var line = new LineShape()
             {

@@ -953,22 +953,8 @@ namespace Draw2D.Editor
             editorToolContext.CurrentDirectory = null;
             editorToolContext.Files = new ObservableCollection<string>();
 
-            editorToolContext.StyleLibrary = null;
-            editorToolContext.GroupLibrary = null;
+            editorToolContext.DocumentContainer = null;
 
-            var pointTemplate = new RectangleShape(new PointShape(-4, -4, null), new PointShape(4, 4, null))
-            {
-                Points = new ObservableCollection<IPointShape>(),
-                Text = new Text(),
-                StyleId = "PointTemplate"
-            };
-            pointTemplate.StartPoint.Owner = pointTemplate;
-            pointTemplate.Point.Owner = pointTemplate;
-
-            editorToolContext.PointTemplate = pointTemplate;
-
-            editorToolContext.ContainerViews = new ObservableCollection<IContainerView>();
-            editorToolContext.ContainerView = null;
             editorToolContext.Tools = tools;
             editorToolContext.CurrentTool = selectionTool;
             editorToolContext.EditMode = EditMode.Mouse;
@@ -1016,6 +1002,33 @@ namespace Draw2D.Editor
             };
 
             return containerView;
+        }
+
+        public IDocumentContainer CreateDocumentContainer(string title)
+        {
+            var documentContainer = new DocumentContainer()
+            {
+                Title = title
+            };
+
+            documentContainer.StyleLibrary = null;
+            documentContainer.GroupLibrary = null;
+
+            var pointTemplate = new RectangleShape(new PointShape(-4, -4, null), new PointShape(4, 4, null))
+            {
+                Points = new ObservableCollection<IPointShape>(),
+                Text = new Text(),
+                StyleId = "PointTemplate"
+            };
+            pointTemplate.StartPoint.Owner = pointTemplate;
+            pointTemplate.Point.Owner = pointTemplate;
+
+            documentContainer.PointTemplate = pointTemplate;
+
+            documentContainer.ContainerViews = new ObservableCollection<IContainerView>();
+            documentContainer.ContainerView = null;
+
+            return documentContainer;
         }
     }
 }

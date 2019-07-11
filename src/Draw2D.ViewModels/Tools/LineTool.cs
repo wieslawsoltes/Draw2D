@@ -43,7 +43,7 @@ namespace Draw2D.ViewModels.Tools
 
             var unique = new List<IPointShape>(
                 points.Select(p => new Point2(p.X, p.Y)).Distinct().OrderBy(p => p)
-                      .Select(p => new PointShape(p.X, p.Y, context.PointTemplate)));
+                      .Select(p => new PointShape(p.X, p.Y, context?.DocumentContainer?.PointTemplate)));
 
             var lines = new ObservableCollection<LineShape>();
             for (int i = 0; i < unique.Count - 1; i++)

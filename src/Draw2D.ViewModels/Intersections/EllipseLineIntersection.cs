@@ -49,7 +49,7 @@ namespace Draw2D.ViewModels.Intersections
                     {
                         foreach (var p in intersections)
                         {
-                            var point = new PointShape(p.X, p.Y, context.PointTemplate);
+                            var point = new PointShape(p.X, p.Y, context?.DocumentContainer?.PointTemplate);
                             point.Owner = context.ContainerView?.WorkingContainer;
                             Intersections.Add(point);
                             //context.ContainerView?.WorkingContainer.Shapes.Add(point);

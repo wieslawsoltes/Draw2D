@@ -41,7 +41,7 @@ namespace Draw2D.ViewModels.Tools
             {
                 if (shape is IConnectable connectable)
                 {
-                    var point = new PointShape(x, y, context.PointTemplate);
+                    var point = new PointShape(x, y, context?.DocumentContainer?.PointTemplate);
                     point.Owner = connectable;
                     connectable.Points.Add(point);
                     context.ContainerView?.WorkingContainer.MarkAsDirty(true);
@@ -54,7 +54,7 @@ namespace Draw2D.ViewModels.Tools
             {
                 if (context.ContainerView?.CurrentContainer != null)
                 {
-                    var point = new PointShape(x, y, context.PointTemplate);
+                    var point = new PointShape(x, y, context?.DocumentContainer?.PointTemplate);
                     point.Owner = context.ContainerView?.CurrentContainer;
 
                     context.ContainerView?.CurrentContainer.Shapes.Add(point);

@@ -21,8 +21,8 @@ namespace Draw2D.Export
                     var image = new ImageShape()
                     {
                         Points = new ObservableCollection<IPointShape>(),
-                        StartPoint = new PointShape(0.0, 0.0, context.PointTemplate),
-                        Point = new PointShape(picture.CullRect.Width, picture.CullRect.Height, context.PointTemplate),
+                        StartPoint = new PointShape(0.0, 0.0, context?.DocumentContainer?.PointTemplate),
+                        Point = new PointShape(picture.CullRect.Width, picture.CullRect.Height, context?.DocumentContainer?.PointTemplate),
                         Path = path,
                         StretchMode = StretchMode.Center,
                         Text = new Text(),

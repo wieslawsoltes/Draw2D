@@ -120,7 +120,7 @@ namespace Draw2D.ViewModels.Containers
                     return point;
                 }
             }
-            return new PointShape(x, y, context.PointTemplate);
+            return new PointShape(x, y, context?.DocumentContainer?.PointTemplate);
         }
 
         public void Draw(object context, double width, double height, double dx, double dy, double zx, double zy)

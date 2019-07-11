@@ -96,7 +96,7 @@ namespace Draw2D.Export
                     {
                         style = context.StyleLibrary?.CurrentItem;
                     }
-                    return SkiaHelper.ToPathShape(context, geometry, style, context.PointTemplate);
+                    return SkiaHelper.ToPathShape(context, geometry, style, context?.DocumentContainer?.PointTemplate);
                 }
             }
             return null;
@@ -120,7 +120,7 @@ namespace Draw2D.Export
                         var union = SkiaHelper.Op(SKPathOp.Union, new[] { path, path });
                         if (union != null && !union.IsEmpty)
                         {
-                            return SkiaHelper.ToPathShape(context, union, context.StyleLibrary?.CurrentItem, context.PointTemplate);
+                            return SkiaHelper.ToPathShape(context, union, context.StyleLibrary?.CurrentItem, context?.DocumentContainer?.PointTemplate);
                         }
 
                     }
@@ -147,7 +147,7 @@ namespace Draw2D.Export
                         var union = SkiaHelper.Op(SKPathOp.Union, new[] { path, path });
                         if (union != null && !union.IsEmpty)
                         {
-                            return SkiaHelper.ToPathShape(context, union, context.StyleLibrary?.CurrentItem, context.PointTemplate);
+                            return SkiaHelper.ToPathShape(context, union, context.StyleLibrary?.CurrentItem, context?.DocumentContainer?.PointTemplate);
                         }
 
                     }
@@ -175,7 +175,7 @@ namespace Draw2D.Export
                             {
                                 style = context.StyleLibrary?.CurrentItem;
                             }
-                            path = SkiaHelper.ToPathShape(context, result, style, context.PointTemplate);
+                            path = SkiaHelper.ToPathShape(context, result, style, context?.DocumentContainer?.PointTemplate);
                         }
                         result.Dispose();
                     }
@@ -195,7 +195,7 @@ namespace Draw2D.Export
             {
                 using (var path = SkiaHelper.ToPath(svgPathData))
                 {
-                    return SkiaHelper.ToPathShape(context, path, context.StyleLibrary?.CurrentItem, context.PointTemplate);
+                    return SkiaHelper.ToPathShape(context, path, context.StyleLibrary?.CurrentItem, context?.DocumentContainer?.PointTemplate);
                 }
             }
             return null;
