@@ -1,0 +1,39 @@
+﻿<!-- Copyright (c) Wiesław Šoltés. All rights reserved. -->
+<!-- Licensed under the MIT license. See LICENSE file in the project root for full license information. -->
+<UserControl x:Class="Draw2D.Views.CurrentView"
+             xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:Draw2D.Views"
+             xmlns:app="clr-namespace:Draw2D"
+             Focusable="True"
+             mc:Ignorable="d"
+             d:DataContext="{x:Static app:App.ToolContext}"
+             d:DesignWidth="500" d:DesignHeight="400">
+    <Grid RowDefinitions="55*,Auto,45*">
+        <TabControl Classes="default" Grid.Row="0" TabStripPlacement="Top">
+            <TabItem Classes="default" Header="Style">
+                <ContentControl Content="{Binding StyleLibrary.CurrentItem}"/>
+            </TabItem>
+            <TabItem Classes="default" Header="Group">
+                <ContentControl Content="{Binding GroupLibrary.CurrentItem}"/>
+            </TabItem>
+            <TabItem Classes="default" Header="Tool">
+                <ContentControl Content="{Binding CurrentTool}"/>
+            </TabItem>
+        </TabControl>
+        <GridSplitter Grid.Row="1"/>
+        <TabControl Classes="default" Grid.Row="2" TabStripPlacement="Top">
+            <TabItem Classes="default" Header="Selected">
+                <ContentControl Content="{Binding ContainerView.SelectionState.Selected}"/>
+            </TabItem>
+            <TabItem Classes="default" Header="Container">
+                <ContentControl Content="{Binding ContainerView.CurrentContainer}"/>
+            </TabItem>
+            <TabItem Classes="default" Header="View">
+                <ContentControl Content="{Binding ContainerView}"/>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</UserControl>

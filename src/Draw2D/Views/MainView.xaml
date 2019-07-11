@@ -20,10 +20,12 @@
         <KeyBinding Command="{Binding ExportFile}" Gesture="Ctrl+E"/>
         <KeyBinding Command="{Binding Exit}" Gesture="Alt+F4"/>
     </UserControl.KeyBindings>
-    <Grid RowDefinitions="Auto,5,*,5" ColumnDefinitions="340,Auto,*">
-        <local:MenuView Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3"/>
+    <Grid RowDefinitions="Auto,5,*,5" ColumnDefinitions="320,Auto,*,Auto,320">
+        <local:MenuView Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="5"/>
         <local:PropertiesView Grid.Row="2" Grid.Column="0"/>
         <GridSplitter Grid.Row="2" Grid.Column="1"/>
         <local:ContainersView Grid.Row="2" Grid.Column="2"/>
+        <GridSplitter Grid.Row="2" Grid.Column="3"/>
+        <local:CurrentView Grid.Row="2" Grid.Column="4"/>
     </Grid>
 </UserControl>

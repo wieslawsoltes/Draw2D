@@ -111,6 +111,7 @@
             <Setter Property="Margin" Value="2"/>
             <Setter Property="FontSize" Value="{DynamicResource FontSizeNormal}"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="TextWrapping" Value="Wrap"/>
         </Style>
         <Style Selector="TextBlock.list">
             <Setter Property="Margin" Value="2"/>
