@@ -197,6 +197,8 @@
             </MenuItem>
         </MenuItem>
         <MenuItem Header="_Shape">
+            <MenuItem Header="Du_plicate" Command="{Binding Selection.Duplicate}" CommandParameter="{Binding}"/>
+            <Separator/>
             <MenuItem Header="Create _Group" Command="{Binding Selection.CreateGroup}" CommandParameter="{Binding}"/>
             <Separator/>
             <MenuItem Header="Create R_eference" Command="{Binding Selection.CreateReference}" CommandParameter="{Binding}"/>

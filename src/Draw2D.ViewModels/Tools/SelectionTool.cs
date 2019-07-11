@@ -452,6 +452,29 @@ namespace Draw2D.ViewModels.Tools
             }
         }
 
+        public void Duplicate(IToolContext context)
+        {
+            if (context.ContainerView?.SelectionState != null)
+            {
+                lock (context.ContainerView.SelectionState?.Shapes)
+                {
+                    var shapes = new List<IBaseShape>(context.ContainerView.SelectionState?.Shapes);
+
+                    if (shapes != null && shapes.Count > 0)
+                    {
+                        context.ContainerView?.SelectionState?.Dehover();
+                        context.ContainerView?.SelectionState?.Clear();
+
+                        Copy(context.ContainerView?.CurrentContainer, shapes, context.ContainerView.SelectionState);
+
+                        context.ContainerView?.InputService?.Redraw?.Invoke();
+
+                        this.CurrentState = State.None;
+                    }
+                }
+            }
+        }
+
         public void CreateGroup(IToolContext context)
         {
             if (context.ContainerView?.SelectionState != null)

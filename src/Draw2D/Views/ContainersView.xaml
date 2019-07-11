@@ -84,6 +84,7 @@
                                 <KeyBinding Command="{Binding $parent[UserControl].DataContext.Selection.Copy}" CommandParameter="{Binding $parent[UserControl].DataContext}" Gesture="Ctrl+C"/>
                                 <KeyBinding Command="{Binding $parent[UserControl].DataContext.Selection.Paste}" CommandParameter="{Binding $parent[UserControl].DataContext}" Gesture="Ctrl+V"/>
                                 <KeyBinding Command="{Binding $parent[UserControl].DataContext.Selection.Delete}" CommandParameter="{Binding $parent[UserControl].DataContext}" Gesture="Delete"/>
+                                <KeyBinding Command="{Binding $parent[UserControl].DataContext.Selection.Duplicate}" CommandParameter="{Binding $parent[UserControl].DataContext}" Gesture="Ctrl+D"/>
                                 <KeyBinding Command="{Binding $parent[UserControl].DataContext.Selection.CreateGroup}" CommandParameter="{Binding $parent[UserControl].DataContext}" Gesture="Ctrl+G"/>
                                 <KeyBinding Command="{Binding $parent[UserControl].DataContext.Selection.CreateReference}" CommandParameter="{Binding $parent[UserControl].DataContext}" Gesture="Ctrl+R"/>
                                 <KeyBinding Command="{Binding $parent[UserControl].DataContext.Selection.CreatePath}" CommandParameter="{Binding $parent[UserControl].DataContext}" Gesture="Ctrl+Shift+H"/>
