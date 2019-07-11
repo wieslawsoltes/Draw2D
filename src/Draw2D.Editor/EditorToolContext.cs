@@ -112,12 +112,12 @@ namespace Draw2D.Editor
             if (containerView != null)
             {
                 CurrentTool.Clean(this);
-                ContainerView?.SelectionState.Clear();
+               _documentContainer?. ContainerView?.SelectionState.Clear();
 
-                ContainerViews.Add(containerView);
-                ContainerView = containerView;
+                _documentContainer?.ContainerViews.Add(containerView);
+                _documentContainer?.ContainerView = containerView;
 
-                ContainerView?.InputService?.Redraw?.Invoke();
+                _documentContainer?.ContainerView?.InputService?.Redraw?.Invoke();
             }
         }
 
@@ -128,17 +128,17 @@ namespace Draw2D.Editor
                 int index = ContainerViews.IndexOf(containerView);
                 if (index >= 0)
                 {
-                    ContainerViews.Remove(containerView);
+                    _documentContainer?.ContainerViews.Remove(containerView);
 
                     int count = ContainerViews.Count;
                     if (count > 0)
                     {
                         int selectedIndex = (count == 1 || index == 0) ? 0 : index - 1;
-                        ContainerView = ContainerViews[selectedIndex];
+                        _documentContainer?.ContainerView = _documentContainer?.ContainerViews[selectedIndex];
                     }
                     else
                     {
-                        ContainerView = null;
+                        _documentContainer?.ContainerView = null;
                     }
 
                     containerView.ContainerPresenter.Dispose();
