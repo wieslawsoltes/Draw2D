@@ -12,6 +12,11 @@ namespace Draw2D.Export
 {
     public class SkiaPathConverter : IPathConverter
     {
+        private bool IsAcceptedShape(IBaseShape shape)
+        {
+            return !(shape is IPointShape || shape is FigureShape);
+        }
+
         private IList<IBaseShape> GetShapes(ICollection<IBaseShape> selected)
         {
             if (selected == null || selected.Count <= 0)
@@ -23,7 +28,7 @@ namespace Draw2D.Export
 
             foreach (var shape in selected)
             {
-                if (!(shape is IPointShape || shape is FigureShape))
+                if (IsAcceptedShape(shape))
                 {
                     shapes.Add(shape);
                 }
