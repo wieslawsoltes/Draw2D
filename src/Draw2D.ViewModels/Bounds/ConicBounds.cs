@@ -54,6 +54,11 @@ namespace Draw2D.ViewModels.Bounds
 
             var points = new List<IPointShape>();
             conic.GetPoints(points);
+            
+            if (points.Count == 0)
+            {
+                return null;
+            }
 
             return HitTestHelper.Contains(points, target) ? shape : null;
         }
@@ -67,6 +72,11 @@ namespace Draw2D.ViewModels.Bounds
 
             var points = new List<IPointShape>();
             conic.GetPoints(points);
+
+            if (points.Count == 0)
+            {
+                return null;
+            }
 
             return HitTestHelper.Overlap(points, target) ? shape : null;
         }

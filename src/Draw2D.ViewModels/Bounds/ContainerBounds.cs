@@ -49,6 +49,11 @@ namespace Draw2D.ViewModels.Bounds
             var points = new List<IPointShape>();
             container.GetPoints(points);
 
+            if (points.Count == 0)
+            {
+                return null;
+            }
+
             return HitTestHelper.Contains(points, target) ? shape : null;
         }
 
