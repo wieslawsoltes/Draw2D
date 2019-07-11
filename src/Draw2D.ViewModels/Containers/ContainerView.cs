@@ -110,6 +110,11 @@ namespace Draw2D.ViewModels.Containers
             set => Update(ref _zoomService, value);
         }
 
+        private bool IsAcceptedShape(IBaseShape shape)
+        {
+            return !(shape is IPointShape || shape is FigureShape);
+        }
+
         public virtual IPointShape GetNextPoint(IToolContext context, double x, double y, bool connect, double radius, double scale, Modifier modifier)
         {
             if (connect == true)
@@ -169,7 +174,7 @@ namespace Draw2D.ViewModels.Containers
             {
                 foreach (var shape in _selectionState.Shapes)
                 {
-                    if (!(shape is IPointShape || shape is FigureShape))
+                    if (IsAcceptedShape(shape))
                     {
                         shape.StyleId = styleId;
                     }
