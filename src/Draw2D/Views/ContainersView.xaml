@@ -10,10 +10,10 @@
              xmlns:zc="clr-namespace:Draw2D.ZoomControl;assembly=Draw2D.ZoomControl"
              Focusable="True"
              mc:Ignorable="d"
-             d:DataContext="{x:Static app:App.ToolContext}"
+             d:DataContext="{x:Static app:App.ToolContext.DocumentContainer}"
              d:DesignWidth="810" d:DesignHeight="720">
     <DockPanel Classes="views">
-        <TabStrip Items="{Binding ContainerViews}" SelectedItem="{Binding ContainerView, Mode=TwoWay}" Focusable="false" DockPanel.Dock="Top">
+        <TabStrip Items="{Binding DocumentContainer.ContainerViews}" SelectedItem="{Binding DocumentContainer.ContainerView, Mode=TwoWay}" Focusable="false" DockPanel.Dock="Top">
             <TabStrip.Styles>
                 <Style Selector="TabStrip">
                     <Setter Property="ItemsPanel">
@@ -74,7 +74,7 @@
                 </DataTemplate>
             </TabStrip.DataTemplates>
         </TabStrip>
-        <Carousel Items="{Binding ContainerViews}" SelectedItem="{Binding ContainerView, Mode=TwoWay}" IsVirtualized="False">
+        <Carousel Items="{Binding DocumentContainer.ContainerViews}" SelectedItem="{Binding DocumentContainer.ContainerView, Mode=TwoWay}" IsVirtualized="False">
             <Carousel.DataTemplates>
                 <DataTemplate>
                     <Border Classes="zoom">

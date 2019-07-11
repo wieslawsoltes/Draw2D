@@ -25,37 +25,37 @@ namespace Draw2D.ViewModels.Tools
 
         public string Title
         {
-            get => _context.ContainerView.Title;
+            get => _context.DocumentContainer.ContainerView.Title;
             set => throw new InvalidOperationException($"Can not set {Title} property value.");
         }
 
         public double Width
         {
-            get => _context.ContainerView.Width;
+            get => _context.DocumentContainer.ContainerView.Width;
             set => throw new InvalidOperationException($"Can not set {Width} property value.");
         }
 
         public double Height
         {
-            get => _context.ContainerView.Width;
+            get => _context.DocumentContainer.ContainerView.Width;
             set => throw new InvalidOperationException($"Can not set {Height} property value.");
         }
 
         public ArgbColor PrintBackground
         {
-            get => _context.ContainerView.PrintBackground;
+            get => _context.DocumentContainer.ContainerView.PrintBackground;
             set => throw new InvalidOperationException($"Can not set {PrintBackground} property value.");
         }
 
         public ArgbColor WorkBackground
         {
-            get => _context.ContainerView.WorkBackground;
+            get => _context.DocumentContainer.ContainerView.WorkBackground;
             set => throw new InvalidOperationException($"Can not set {WorkBackground} property value.");
         }
 
         public ArgbColor InputBackground
         {
-            get => _context.ContainerView.InputBackground;
+            get => _context.DocumentContainer.ContainerView.InputBackground;
             set => throw new InvalidOperationException($"Can not set {InputBackground} property value.");
         }
 
@@ -73,31 +73,31 @@ namespace Draw2D.ViewModels.Tools
 
         public IContainerPresenter ContainerPresenter
         {
-            get => _context.ContainerView.ContainerPresenter;
+            get => _context.DocumentContainer.ContainerView.ContainerPresenter;
             set => throw new InvalidOperationException($"Can not set {ContainerPresenter} property value.");
         }
 
         public ISelectionState SelectionState
         {
-            get => _context.ContainerView.SelectionState;
+            get => _context.DocumentContainer.ContainerView.SelectionState;
             set => throw new InvalidOperationException($"Can not set {SelectionState} property value.");
         }
 
         public IZoomServiceState ZoomServiceState
         {
-            get => _context.ContainerView.ZoomServiceState;
+            get => _context.DocumentContainer.ContainerView.ZoomServiceState;
             set => throw new InvalidOperationException($"Can not set {ZoomServiceState} property value.");
         }
 
         public IInputService InputService
         {
-            get => _context.ContainerView?.InputService;
+            get => _context.DocumentContainer.ContainerView?.InputService;
             set => throw new InvalidOperationException($"Can not set {InputService} property value.");
         }
 
         public IZoomService ZoomService
         {
-            get => _context.ContainerView.ZoomService;
+            get => _context.DocumentContainer.ContainerView.ZoomService;
             set => throw new InvalidOperationException($"Can not set {ZoomService} property value.");
         }
 
@@ -109,32 +109,32 @@ namespace Draw2D.ViewModels.Tools
                 _nextPoint = null;
                 return nextPointTemp;
             }
-            return _context.ContainerView.GetNextPoint(_context, x, y, connect, radius, scale, modifier);
+            return _context.DocumentContainer.ContainerView.GetNextPoint(_context, x, y, connect, radius, scale, modifier);
         }
 
         public void Draw(object context, double width, double height, double dx, double dy, double zx, double zy)
         {
-            _context.ContainerView.Draw(context, width, height, dx, dy, zx, zy);
+            _context.DocumentContainer.ContainerView.Draw(context, width, height, dx, dy, zx, zy);
         }
 
         public void Add(IBaseShape shape)
         {
-            _context.ContainerView.Add(shape);
+            _context.DocumentContainer.ContainerView.Add(shape);
         }
 
         public void Remove(IBaseShape shape)
         {
-            _context.ContainerView.Remove(shape);
+            _context.DocumentContainer.ContainerView.Remove(shape);
         }
 
         public void Reference(IBaseShape shape)
         {
-            _context.ContainerView.Reference(shape);
+            _context.DocumentContainer.ContainerView.Reference(shape);
         }
 
         public void Style(string styleId)
         {
-            _context.ContainerView.Style(styleId);
+            _context.DocumentContainer.ContainerView.Style(styleId);
         }
 
         public object Copy(Dictionary<object, object> shared)
@@ -310,12 +310,12 @@ namespace Draw2D.ViewModels.Tools
                 Shapes = new ObservableCollection<IBaseShape>(),
                 FillType = Settings.FillType,
                 Text = new Text(),
-                StyleId = context.StyleLibrary?.CurrentItem?.Title
+                StyleId = context.DocumentContainer?.StyleLibrary?.CurrentItem?.Title
             };
 
-            context.ContainerView?.WorkingContainer.Shapes.Add(_path);
-            context.ContainerView?.WorkingContainer.MarkAsDirty(true);
-            context.ContainerView?.SelectionState?.Select(_path);
+            context.DocumentContainer?.ContainerView?.WorkingContainer.Shapes.Add(_path);
+            context.DocumentContainer?.ContainerView?.WorkingContainer.MarkAsDirty(true);
+            context.DocumentContainer?.ContainerView?.SelectionState?.Select(_path);
         }
 
         internal void Move(IToolContext context)
@@ -329,7 +329,7 @@ namespace Draw2D.ViewModels.Tools
             };
             _figure.Owner = _path;
             _path.Shapes.Add(_figure);
-            context.ContainerView?.WorkingContainer.MarkAsDirty(true);
+            context.DocumentContainer?.ContainerView?.WorkingContainer.MarkAsDirty(true);
 
             if (Settings.PreviousTool != null)
             {
@@ -441,14 +441,14 @@ namespace Draw2D.ViewModels.Tools
 
             if (_path != null)
             {
-                context.ContainerView?.WorkingContainer.Shapes.Remove(_path);
-                context.ContainerView?.WorkingContainer.MarkAsDirty(true);
-                context.ContainerView?.SelectionState?.Deselect(_path);
+                context.DocumentContainer?.ContainerView?.WorkingContainer.Shapes.Remove(_path);
+                context.DocumentContainer?.ContainerView?.WorkingContainer.MarkAsDirty(true);
+                context.DocumentContainer?.ContainerView?.SelectionState?.Deselect(_path);
 
                 if (_path.Validate(true) == true)
                 {
-                    context.ContainerView?.CurrentContainer.Shapes.Add(_path);
-                    context.ContainerView?.CurrentContainer.MarkAsDirty(true);
+                    context.DocumentContainer?.ContainerView?.CurrentContainer.Shapes.Add(_path);
+                    context.DocumentContainer?.ContainerView?.CurrentContainer.MarkAsDirty(true);
                 }
 
                 Settings.PreviousTool = null;

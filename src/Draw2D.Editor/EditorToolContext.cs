@@ -112,12 +112,12 @@ namespace Draw2D.Editor
             if (containerView != null)
             {
                 CurrentTool.Clean(this);
-               _documentContainer?. ContainerView?.SelectionState.Clear();
+                DocumentContainer.ContainerView?.SelectionState.Clear();
 
-                _documentContainer?.ContainerViews.Add(containerView);
-                _documentContainer?.ContainerView = containerView;
+                DocumentContainer.ContainerViews.Add(containerView);
+                DocumentContainer.ContainerView = containerView;
 
-                _documentContainer?.ContainerView?.InputService?.Redraw?.Invoke();
+                DocumentContainer.ContainerView?.InputService?.Redraw?.Invoke();
             }
         }
 
@@ -125,20 +125,20 @@ namespace Draw2D.Editor
         {
             if (containerView != null)
             {
-                int index = ContainerViews.IndexOf(containerView);
+                int index = DocumentContainer.ContainerViews.IndexOf(containerView);
                 if (index >= 0)
                 {
-                    _documentContainer?.ContainerViews.Remove(containerView);
+                    DocumentContainer?.ContainerViews.Remove(containerView);
 
-                    int count = ContainerViews.Count;
+                    int count = DocumentContainer.ContainerViews.Count;
                     if (count > 0)
                     {
                         int selectedIndex = (count == 1 || index == 0) ? 0 : index - 1;
-                        _documentContainer?.ContainerView = _documentContainer?.ContainerViews[selectedIndex];
+                        DocumentContainer.ContainerView = DocumentContainer.ContainerViews[selectedIndex];
                     }
                     else
                     {
-                        _documentContainer?.ContainerView = null;
+                        DocumentContainer.ContainerView = null;
                     }
 
                     containerView.ContainerPresenter.Dispose();
@@ -161,19 +161,22 @@ namespace Draw2D.Editor
 
         public void OpenDocument(string path)
         {
-            var containerView = JsonSerializer.FromJsonFile<ContainerView>(path);
-            if (containerView != null)
+            var documentContainer = JsonSerializer.FromJsonFile<IDocumentContainer>(path);
+            if (documentContainer != null)
             {
-                InitContainerView(containerView);
-                AddContainerView(containerView);
+                foreach (var containerView in documentContainer.ContainerViews)
+                {
+                    InitContainerView(containerView);
+                }
+                DocumentContainer = documentContainer;
             }
         }
 
         public void SaveDocument(string path)
         {
-            if (ContainerView != null)
+            if (DocumentContainer != null)
             {
-                JsonSerializer.ToJsonFile(path, ContainerView);
+                JsonSerializer.ToJsonFile(path, DocumentContainer);
             }
         }
 
@@ -182,16 +185,16 @@ namespace Draw2D.Editor
             var styleLibrary = JsonSerializer.FromJsonFile<IStyleLibrary>(path);
             if (styleLibrary != null)
             {
-                StyleLibrary = styleLibrary;
-                StyleLibrary.UpdateCache();
+                DocumentContainer.StyleLibrary = styleLibrary;
+                DocumentContainer.StyleLibrary.UpdateCache();
             }
         }
 
         public void SaveStyles(string path)
         {
-            if (StyleLibrary != null)
+            if (DocumentContainer.StyleLibrary != null)
             {
-                JsonSerializer.ToJsonFile(path, StyleLibrary);
+                JsonSerializer.ToJsonFile(path, DocumentContainer.StyleLibrary);
             }
         }
 
@@ -200,16 +203,16 @@ namespace Draw2D.Editor
             var groupLibrary = JsonSerializer.FromJsonFile<IGroupLibrary>(path);
             if (groupLibrary != null)
             {
-                GroupLibrary = groupLibrary;
-                GroupLibrary.UpdateCache();
+                DocumentContainer.GroupLibrary = groupLibrary;
+                DocumentContainer.GroupLibrary.UpdateCache();
             }
         }
 
         public void SaveGroups(string path)
         {
-            if (GroupLibrary != null)
+            if (DocumentContainer.GroupLibrary != null)
             {
-                JsonSerializer.ToJsonFile(path, GroupLibrary);
+                JsonSerializer.ToJsonFile(path, DocumentContainer.GroupLibrary);
             }
         }
 
@@ -343,7 +346,7 @@ namespace Draw2D.Editor
             {
                 foreach (var path in result)
                 {
-                    ContainerImporter?.Import(this, path, ContainerView);
+                    ContainerImporter?.Import(this, path, DocumentContainer.ContainerView);
                 }
             }
         }
@@ -367,13 +370,13 @@ namespace Draw2D.Editor
             dlg.Filters.Add(new FileDialogFilter() { Name = "Astc Files", Extensions = { "astc" } });
             dlg.Filters.Add(new FileDialogFilter() { Name = "Dng Files", Extensions = { "dng" } });
             dlg.Filters.Add(new FileDialogFilter() { Name = "All Files", Extensions = { "*" } });
-            dlg.InitialFileName = ContainerView.Title;
+            dlg.InitialFileName = DocumentContainer.ContainerView.Title;
             dlg.DefaultExtension = "pdf";
             var result = await dlg.ShowAsync(GetWindow());
             if (result != null)
             {
                 var path = result;
-                ContainerExporter?.Export(this, path, ContainerView);
+                ContainerExporter?.Export(this, path, DocumentContainer.ContainerView);
             }
         }
 
@@ -381,7 +384,7 @@ namespace Draw2D.Editor
         {
             try
             {
-                var text = SvgConverter?.ConvertToSvgDocument(this, ContainerView);
+                var text = SvgConverter?.ConvertToSvgDocument(this, DocumentContainer.ContainerView);
                 if (!string.IsNullOrEmpty(text))
                 {
                     await Application.Current.Clipboard.SetTextAsync(text);
@@ -398,9 +401,9 @@ namespace Draw2D.Editor
         {
             try
             {
-                if (ContainerView.SelectionState?.Shapes != null)
+                if (DocumentContainer.ContainerView.SelectionState?.Shapes != null)
                 {
-                    var text = PathConverter?.ToSvgPathData(this, ContainerView.SelectionState?.Shapes);
+                    var text = PathConverter?.ToSvgPathData(this, DocumentContainer.ContainerView.SelectionState?.Shapes);
                     if (!string.IsNullOrEmpty(text))
                     {
                         await Application.Current.Clipboard.SetTextAsync(text);
@@ -424,16 +427,16 @@ namespace Draw2D.Editor
                     var path = PathConverter?.ToPathShape(this, text);
                     if (path != null)
                     {
-                        path.Owner = ContainerView?.CurrentContainer;
-                        ContainerView?.CurrentContainer?.Shapes.Add(path);
-                        ContainerView?.CurrentContainer?.MarkAsDirty(true);
+                        path.Owner = DocumentContainer.ContainerView?.CurrentContainer;
+                        DocumentContainer.ContainerView?.CurrentContainer?.Shapes.Add(path);
+                        DocumentContainer.ContainerView?.CurrentContainer?.MarkAsDirty(true);
 
-                        ContainerView?.SelectionState?.Dehover();
-                        ContainerView?.SelectionState?.Clear();
+                        DocumentContainer.ContainerView?.SelectionState?.Dehover();
+                        DocumentContainer.ContainerView?.SelectionState?.Clear();
 
-                        path.Select(ContainerView?.SelectionState);
+                        path.Select(DocumentContainer.ContainerView?.SelectionState);
 
-                        ContainerView?.InputService?.Redraw?.Invoke();
+                        DocumentContainer.ContainerView?.InputService?.Redraw?.Invoke();
                     }
                 }
             }
@@ -449,7 +452,7 @@ namespace Draw2D.Editor
             try
             {
                 var sb = new StringBuilder();
-                _avaloniaXamlConverter?.ConvertToGeometryDrawing(this, this.ContainerView, sb, "");
+                _avaloniaXamlConverter?.ConvertToGeometryDrawing(this, DocumentContainer.ContainerView, sb, "");
                 var text = sb.ToString();
                 if (!string.IsNullOrEmpty(text))
                 {
@@ -468,7 +471,7 @@ namespace Draw2D.Editor
             try
             {
                 var sb = new StringBuilder();
-                _avaloniaXamlConverter?.ConvertToDrawingGroup(this, this.ContainerView, sb, "");
+                _avaloniaXamlConverter?.ConvertToDrawingGroup(this, DocumentContainer.ContainerView, sb, "");
                 var text = sb.ToString();
                 if (!string.IsNullOrEmpty(text))
                 {
@@ -487,7 +490,7 @@ namespace Draw2D.Editor
             try
             {
                 var sb = new StringBuilder();
-                _avaloniaXamlConverter?.ConvertToDrawingPresenter(this, this.ContainerView, sb, "");
+                _avaloniaXamlConverter?.ConvertToDrawingPresenter(this, DocumentContainer.ContainerView, sb, "");
                 var text = sb.ToString();
                 if (!string.IsNullOrEmpty(text))
                 {
@@ -506,7 +509,7 @@ namespace Draw2D.Editor
             try
             {
                 var sb = new StringBuilder();
-                _avaloniaXamlConverter?.ConvertToPath(this, this.ContainerView, sb, "");
+                _avaloniaXamlConverter?.ConvertToPath(this, DocumentContainer.ContainerView, sb, "");
                 var text = sb.ToString();
                 if (!string.IsNullOrEmpty(text))
                 {
@@ -525,7 +528,7 @@ namespace Draw2D.Editor
             try
             {
                 var sb = new StringBuilder();
-                _avaloniaXamlConverter?.ConvertToCanvas(this, this.ContainerView, sb, "");
+                _avaloniaXamlConverter?.ConvertToCanvas(this, DocumentContainer.ContainerView, sb, "");
                 var text = sb.ToString();
                 if (!string.IsNullOrEmpty(text))
                 {
@@ -543,21 +546,21 @@ namespace Draw2D.Editor
         {
             if (Enum.TryParse<PathOp>(parameter, true, out var op) == true)
             {
-                var path = PathConverter?.Op(this, op, ContainerView?.SelectionState?.Shapes);
+                var path = PathConverter?.Op(this, op, DocumentContainer.ContainerView?.SelectionState?.Shapes);
                 if (path != null)
                 {
                     Selection.Delete(this);
 
-                    path.Owner = ContainerView?.CurrentContainer;
-                    ContainerView?.CurrentContainer?.Shapes.Add(path);
-                    ContainerView?.CurrentContainer?.MarkAsDirty(true);
+                    path.Owner = DocumentContainer.ContainerView?.CurrentContainer;
+                    DocumentContainer.ContainerView?.CurrentContainer?.Shapes.Add(path);
+                    DocumentContainer.ContainerView?.CurrentContainer?.MarkAsDirty(true);
 
-                    ContainerView?.SelectionState?.Dehover();
-                    ContainerView?.SelectionState?.Clear();
+                    DocumentContainer.ContainerView?.SelectionState?.Dehover();
+                    DocumentContainer.ContainerView?.SelectionState?.Clear();
 
-                    path.Select(ContainerView?.SelectionState);
+                    path.Select(DocumentContainer.ContainerView?.SelectionState);
 
-                    ContainerView?.InputService?.Redraw?.Invoke();
+                    DocumentContainer.ContainerView?.InputService?.Redraw?.Invoke();
                 }
             }
         }

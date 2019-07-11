@@ -26,9 +26,9 @@ namespace Draw2D.ViewModels.Filters
         {
             foreach (var guide in Guides)
             {
-                context.ContainerView?.WorkingContainer.Shapes.Remove(guide);
-                context.ContainerView?.WorkingContainer.MarkAsDirty(true);
-                context.ContainerView?.SelectionState?.Deselect(guide);
+                context.DocumentContainer?.ContainerView?.WorkingContainer.Shapes.Remove(guide);
+                context.DocumentContainer?.ContainerView?.WorkingContainer.MarkAsDirty(true);
+                context.DocumentContainer?.ContainerView?.SelectionState?.Deselect(guide);
             }
             Guides.Clear();
         }

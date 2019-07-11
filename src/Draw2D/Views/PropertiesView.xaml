@@ -72,10 +72,10 @@
             <TabItem Classes="default" Header="Views">
                 <TabControl Classes="default" TabStripPlacement="Top">
                     <TabItem Classes="default" Header="Current">
-                        <ContentControl Content="{Binding ContainerView}"/>
+                        <ContentControl Content="{Binding DocumentContainer.ContainerView}"/>
                     </TabItem>
                     <TabItem Classes="default" Header="Views">
-                        <ListBox Classes="default" Items="{Binding ContainerViews}" SelectedItem="{Binding ContainerView}">
+                        <ListBox Classes="default" Items="{Binding DocumentContainer.ContainerViews}" SelectedItem="{Binding DocumentContainer.ContainerView}">
                             <ListBox.DataTemplates>
                                 <DataTemplate>
                                     <TextBlock Classes="list" Text="{Binding Title}"/>
@@ -87,18 +87,18 @@
             </TabItem>
             <TabItem Classes="default" Header="Styles">
                 <Grid RowDefinitions="Auto,*" ColumnDefinitions="3*,3*,3*">
-                    <Button Classes="default" Content="Remove" Command="{Binding StyleLibrary.Remove}" CommandParameter="{Binding StyleLibrary.CurrentItem}" Grid.Row="0" Grid.Column="0"/>
-                    <Button Classes="default" Content="Add" Command="{Binding StyleLibrary.Add}" CommandParameter="{x:Null}" Grid.Row="0" Grid.Column="1"/>
-                    <Button Classes="default" Content="Set" Command="{Binding ContainerView.Style}" CommandParameter="{Binding StyleLibrary.CurrentItem.Title}" Grid.Row="0" Grid.Column="2"/>
-                    <ContentControl Content="{Binding StyleLibrary}" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3"/>
+                    <Button Classes="default" Content="Remove" Command="{Binding DocumentContainer.StyleLibrary.Remove}" CommandParameter="{Binding DocumentContainer.StyleLibrary.CurrentItem}" Grid.Row="0" Grid.Column="0"/>
+                    <Button Classes="default" Content="Add" Command="{Binding DocumentContainer.StyleLibrary.Add}" CommandParameter="{x:Null}" Grid.Row="0" Grid.Column="1"/>
+                    <Button Classes="default" Content="Set" Command="{Binding DocumentContainer.ContainerView.Style}" CommandParameter="{Binding DocumentContainer.StyleLibrary.CurrentItem.Title}" Grid.Row="0" Grid.Column="2"/>
+                    <ContentControl Content="{Binding DocumentContainer.StyleLibrary}" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3"/>
                 </Grid>
             </TabItem>
             <TabItem Classes="default" Header="Groups">
                 <Grid RowDefinitions="Auto,*" ColumnDefinitions="3*,3*,3*">
-                    <Button Classes="default" Content="Remove" Command="{Binding GroupLibrary.Remove}" CommandParameter="{Binding GroupLibrary.CurrentItem}" Grid.Row="0" Grid.Column="0"/>
-                    <Button Classes="default" Content="Add" Command="{Binding GroupLibrary.Add}" CommandParameter="{Binding ContainerView.SelectionState.Selected}" Grid.Row="0" Grid.Column="1"/>
-                    <Button Classes="default" Content="Insert" Command="{Binding ContainerView.Reference}" CommandParameter="{Binding GroupLibrary.CurrentItem}" Grid.Row="0" Grid.Column="2"/>
-                    <ContentControl Content="{Binding GroupLibrary}" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3"/>
+                    <Button Classes="default" Content="Remove" Command="{Binding DocumentContainer.GroupLibrary.Remove}" CommandParameter="{Binding DocumentContainer.GroupLibrary.CurrentItem}" Grid.Row="0" Grid.Column="0"/>
+                    <Button Classes="default" Content="Add" Command="{Binding DocumentContainer.GroupLibrary.Add}" CommandParameter="{Binding DocumentContainer.ContainerView.SelectionState.Selected}" Grid.Row="0" Grid.Column="1"/>
+                    <Button Classes="default" Content="Insert" Command="{Binding DocumentContainer.ContainerView.Reference}" CommandParameter="{Binding DocumentContainer.GroupLibrary.CurrentItem}" Grid.Row="0" Grid.Column="2"/>
+                    <ContentControl Content="{Binding DocumentContainer.GroupLibrary}" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3"/>
                 </Grid>
             </TabItem>
         </TabControl>

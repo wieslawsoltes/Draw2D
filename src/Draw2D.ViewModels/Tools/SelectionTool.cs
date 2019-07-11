@@ -59,10 +59,10 @@ namespace Draw2D.ViewModels.Tools
             _previousX = _originX;
             _previousY = _originY;
 
-            context.ContainerView?.SelectionState?.Dehover();
+            context.DocumentContainer?.ContainerView?.SelectionState?.Dehover();
 
             var radius = Settings?.HitTestRadius ?? 7.0;
-            var scale = context.ContainerView?.ZoomService?.ZoomServiceState?.ZoomX ?? 1.0;
+            var scale = context.DocumentContainer?.ContainerView?.ZoomService?.ZoomServiceState?.ZoomX ?? 1.0;
             var selected = TryToSelect(
                 context,
                 Settings?.Mode ?? SelectionMode.Shape,
@@ -74,7 +74,7 @@ namespace Draw2D.ViewModels.Tools
                 modifier);
             if (selected == true)
             {
-                context.ContainerView?.InputService?.Capture?.Invoke();
+                context.DocumentContainer?.ContainerView?.InputService?.Capture?.Invoke();
 
                 CurrentState = State.Move;
             }
@@ -82,7 +82,7 @@ namespace Draw2D.ViewModels.Tools
             {
                 if (!modifier.HasFlag(Settings?.SelectionModifier ?? Modifier.Control))
                 {
-                    context.ContainerView?.SelectionState?.Clear();
+                    context.DocumentContainer?.ContainerView?.SelectionState?.Clear();
                 }
 
                 if (_rectangle == null)
@@ -102,11 +102,11 @@ namespace Draw2D.ViewModels.Tools
                 _rectangle.Point.X = x;
                 _rectangle.Point.Y = y;
                 _rectangle.StyleId = Settings?.SelectionStyle;
-                context.ContainerView?.WorkingContainer.Shapes.Add(_rectangle);
-                context.ContainerView?.WorkingContainer.MarkAsDirty(true);
+                context.DocumentContainer?.ContainerView?.WorkingContainer.Shapes.Add(_rectangle);
+                context.DocumentContainer?.ContainerView?.WorkingContainer.MarkAsDirty(true);
 
-                context.ContainerView?.InputService?.Capture?.Invoke();
-                context.ContainerView?.InputService?.Redraw?.Invoke();
+                context.DocumentContainer?.ContainerView?.InputService?.Capture?.Invoke();
+                context.DocumentContainer?.ContainerView?.InputService?.Redraw?.Invoke();
 
                 CurrentState = State.Selection;
             }
@@ -119,18 +119,18 @@ namespace Draw2D.ViewModels.Tools
             _rectangle.Point.X = x;
             _rectangle.Point.Y = y;
 
-            context.ContainerView?.InputService?.Release?.Invoke();
-            context.ContainerView?.InputService?.Redraw?.Invoke();
+            context.DocumentContainer?.ContainerView?.InputService?.Release?.Invoke();
+            context.DocumentContainer?.ContainerView?.InputService?.Redraw?.Invoke();
         }
 
         private void LeftUpSelectionInternal(IToolContext context, double x, double y, Modifier modifier)
         {
             FiltersClear(context);
 
-            context.ContainerView?.SelectionState?.Dehover();
+            context.DocumentContainer?.ContainerView?.SelectionState?.Dehover();
 
             var radius = Settings?.HitTestRadius ?? 7.0;
-            var scale = context.ContainerView?.ZoomService?.ZoomServiceState?.ZoomX ?? 1.0;
+            var scale = context.DocumentContainer?.ContainerView?.ZoomService?.ZoomServiceState?.ZoomX ?? 1.0;
 
             TryToSelect(
                 context,
@@ -142,22 +142,22 @@ namespace Draw2D.ViewModels.Tools
                 scale,
                 modifier);
 
-            context.ContainerView?.WorkingContainer.Shapes.Remove(_rectangle);
-            context.ContainerView?.WorkingContainer.MarkAsDirty(true);
+            context.DocumentContainer?.ContainerView?.WorkingContainer.Shapes.Remove(_rectangle);
+            context.DocumentContainer?.ContainerView?.WorkingContainer.MarkAsDirty(true);
             _rectangle = null;
 
             CurrentState = State.None;
 
-            context.ContainerView?.InputService?.Release?.Invoke();
-            context.ContainerView?.InputService?.Redraw?.Invoke();
+            context.DocumentContainer?.ContainerView?.InputService?.Release?.Invoke();
+            context.DocumentContainer?.ContainerView?.InputService?.Redraw?.Invoke();
         }
 
         private void LeftUpMoveInternal(IToolContext context, double x, double y, Modifier modifier)
         {
             FiltersClear(context);
 
-            context.ContainerView?.InputService?.Release?.Invoke();
-            context.ContainerView?.InputService?.Redraw?.Invoke();
+            context.DocumentContainer?.ContainerView?.InputService?.Release?.Invoke();
+            context.DocumentContainer?.ContainerView?.InputService?.Redraw?.Invoke();
 
             CurrentState = State.None;
         }
@@ -166,21 +166,21 @@ namespace Draw2D.ViewModels.Tools
         {
             FiltersClear(context);
 
-            context.ContainerView?.InputService?.Release?.Invoke();
-            context.ContainerView?.InputService?.Redraw?.Invoke();
+            context.DocumentContainer?.ContainerView?.InputService?.Release?.Invoke();
+            context.DocumentContainer?.ContainerView?.InputService?.Redraw?.Invoke();
 
             CurrentState = State.None;
         }
 
         private void MoveNoneInternal(IToolContext context, double x, double y, Modifier modifier)
         {
-            if (context.ContainerView?.SelectionState != null && !(context.ContainerView.SelectionState?.Hovered == null && context.ContainerView.SelectionState?.Shapes.Count > 0))
+            if (context.DocumentContainer?.ContainerView?.SelectionState != null && !(context.DocumentContainer.ContainerView.SelectionState?.Hovered == null && context.DocumentContainer.ContainerView.SelectionState?.Shapes.Count > 0))
             {
-                lock (context.ContainerView.SelectionState?.Shapes)
+                lock (context.DocumentContainer.ContainerView.SelectionState?.Shapes)
                 {
-                    var previous = context.ContainerView?.SelectionState?.Hovered;
+                    var previous = context.DocumentContainer?.ContainerView?.SelectionState?.Hovered;
                     var radius = Settings?.HitTestRadius ?? 7.0;
-                    var scale = context.ContainerView?.ZoomService?.ZoomServiceState?.ZoomX ?? 1.0;
+                    var scale = context.DocumentContainer?.ContainerView?.ZoomService?.ZoomServiceState?.ZoomX ?? 1.0;
                     var target = new Point2(x, y);
                     var shape = TryToHover(
                         context,
@@ -194,17 +194,17 @@ namespace Draw2D.ViewModels.Tools
                     {
                         if (shape != previous)
                         {
-                            context.ContainerView?.SelectionState?.Dehover();
-                            context.ContainerView?.SelectionState?.Hover(shape);
-                            context.ContainerView?.InputService?.Redraw?.Invoke();
+                            context.DocumentContainer?.ContainerView?.SelectionState?.Dehover();
+                            context.DocumentContainer?.ContainerView?.SelectionState?.Hover(shape);
+                            context.DocumentContainer?.ContainerView?.InputService?.Redraw?.Invoke();
                         }
                     }
                     else
                     {
                         if (previous != null)
                         {
-                            context.ContainerView?.SelectionState?.Dehover();
-                            context.ContainerView?.InputService?.Redraw?.Invoke();
+                            context.DocumentContainer?.ContainerView?.SelectionState?.Dehover();
+                            context.DocumentContainer?.ContainerView?.InputService?.Redraw?.Invoke();
                         }
                     }
                 }
@@ -216,7 +216,7 @@ namespace Draw2D.ViewModels.Tools
             _rectangle.Point.X = x;
             _rectangle.Point.Y = y;
 
-            context.ContainerView?.InputService?.Redraw?.Invoke();
+            context.DocumentContainer?.ContainerView?.InputService?.Redraw?.Invoke();
         }
 
         private void MoveMoveInternal(IToolContext context, double x, double y, Modifier modifier)
@@ -230,11 +230,11 @@ namespace Draw2D.ViewModels.Tools
             _previousX = x;
             _previousY = y;
 
-            if (context.ContainerView?.SelectionState != null)
+            if (context.DocumentContainer?.ContainerView?.SelectionState != null)
             {
-                if (context.ContainerView.SelectionState?.Shapes.Count == 1)
+                if (context.DocumentContainer.ContainerView.SelectionState?.Shapes.Count == 1)
                 {
-                    var shape = context.ContainerView.SelectionState?.Shapes.FirstOrDefault();
+                    var shape = context.DocumentContainer.ContainerView.SelectionState?.Shapes.FirstOrDefault();
 
                     if (shape is IPointShape source)
                     {
@@ -248,7 +248,7 @@ namespace Draw2D.ViewModels.Tools
                             if (_disconnected == false)
                             {
                                 var radius = Settings?.DisconnectTestRadius ?? 10.0;
-                                var scale = context.ContainerView?.ZoomService?.ZoomServiceState?.ZoomX ?? 1.0;
+                                var scale = context.DocumentContainer?.ContainerView?.ZoomService?.ZoomServiceState?.ZoomX ?? 1.0;
                                 double treshold = radius / scale;
                                 double tx = Math.Abs(_originX - source.X);
                                 double ty = Math.Abs(_originY - source.Y);
@@ -260,11 +260,11 @@ namespace Draw2D.ViewModels.Tools
                         }
                     }
 
-                    shape.Move(context.ContainerView.SelectionState, dx, dy);
+                    shape.Move(context.DocumentContainer.ContainerView.SelectionState, dx, dy);
                 }
                 else
                 {
-                    var selectedToDisconnect = new List<IBaseShape>(context.ContainerView.SelectionState?.Shapes);
+                    var selectedToDisconnect = new List<IBaseShape>(context.DocumentContainer.ContainerView.SelectionState?.Shapes);
                     foreach (var shape in selectedToDisconnect)
                     {
                         if (Settings.DisconnectPoints && modifier == Settings?.ConnectionModifier)
@@ -276,14 +276,14 @@ namespace Draw2D.ViewModels.Tools
                         }
                     }
 
-                    var selectedToMove = new List<IBaseShape>(context.ContainerView.SelectionState?.Shapes);
+                    var selectedToMove = new List<IBaseShape>(context.DocumentContainer.ContainerView.SelectionState?.Shapes);
                     foreach (var shape in selectedToMove)
                     {
-                        shape.Move(context.ContainerView.SelectionState, dx, dy);
+                        shape.Move(context.DocumentContainer.ContainerView.SelectionState, dx, dy);
                     }
                 }
 
-                context.ContainerView?.InputService?.Redraw?.Invoke();
+                context.DocumentContainer?.ContainerView?.InputService?.Redraw?.Invoke();
             }
         }
 
@@ -293,25 +293,25 @@ namespace Draw2D.ViewModels.Tools
 
             _disconnected = false;
 
-            context.ContainerView?.SelectionState?.Dehover();
+            context.DocumentContainer?.ContainerView?.SelectionState?.Dehover();
 
             if (_rectangle != null)
             {
-                context.ContainerView?.WorkingContainer.Shapes.Remove(_rectangle);
-                context.ContainerView?.WorkingContainer.MarkAsDirty(true);
+                context.DocumentContainer?.ContainerView?.WorkingContainer.Shapes.Remove(_rectangle);
+                context.DocumentContainer?.ContainerView?.WorkingContainer.MarkAsDirty(true);
                 _rectangle = null;
             }
 
             if (Settings?.ClearSelectionOnClean == true)
             {
-                context.ContainerView?.SelectionState?.Dehover();
-                context.ContainerView?.SelectionState?.Clear();
+                context.DocumentContainer?.ContainerView?.SelectionState?.Dehover();
+                context.DocumentContainer?.ContainerView?.SelectionState?.Clear();
             }
 
             FiltersClear(context);
 
-            context.ContainerView?.InputService?.Release?.Invoke();
-            context.ContainerView?.InputService?.Redraw?.Invoke();
+            context.DocumentContainer?.ContainerView?.InputService?.Release?.Invoke();
+            context.DocumentContainer?.ContainerView?.InputService?.Redraw?.Invoke();
         }
 
         public void LeftDown(IToolContext context, double x, double y, Modifier modifier)
@@ -404,29 +404,29 @@ namespace Draw2D.ViewModels.Tools
 
         public void Copy(IToolContext context)
         {
-            if (context.ContainerView?.SelectionState != null)
+            if (context.DocumentContainer?.ContainerView?.SelectionState != null)
             {
-                lock (context.ContainerView.SelectionState?.Shapes)
+                lock (context.DocumentContainer.ContainerView.SelectionState?.Shapes)
                 {
-                    _shapesToCopy = new List<IBaseShape>(context.ContainerView.SelectionState?.Shapes);
+                    _shapesToCopy = new List<IBaseShape>(context.DocumentContainer.ContainerView.SelectionState?.Shapes);
                 }
             }
         }
 
         public void Paste(IToolContext context)
         {
-            if (context.ContainerView?.SelectionState != null)
+            if (context.DocumentContainer?.ContainerView?.SelectionState != null)
             {
                 if (_shapesToCopy != null && _shapesToCopy.Count > 0)
                 {
-                    lock (context.ContainerView.SelectionState?.Shapes)
+                    lock (context.DocumentContainer.ContainerView.SelectionState?.Shapes)
                     {
-                        context.ContainerView?.SelectionState?.Dehover();
-                        context.ContainerView?.SelectionState?.Clear();
+                        context.DocumentContainer?.ContainerView?.SelectionState?.Dehover();
+                        context.DocumentContainer?.ContainerView?.SelectionState?.Clear();
 
-                        Copy(context.ContainerView?.CurrentContainer, _shapesToCopy, context.ContainerView.SelectionState);
+                        Copy(context.DocumentContainer?.ContainerView?.CurrentContainer, _shapesToCopy, context.DocumentContainer.ContainerView.SelectionState);
 
-                        context.ContainerView?.InputService?.Redraw?.Invoke();
+                        context.DocumentContainer?.ContainerView?.InputService?.Redraw?.Invoke();
 
                         this.CurrentState = State.None;
                     }
@@ -436,16 +436,16 @@ namespace Draw2D.ViewModels.Tools
 
         public void Delete(IToolContext context)
         {
-            if (context.ContainerView?.SelectionState != null)
+            if (context.DocumentContainer?.ContainerView?.SelectionState != null)
             {
-                lock (context.ContainerView.SelectionState?.Shapes)
+                lock (context.DocumentContainer.ContainerView.SelectionState?.Shapes)
                 {
-                    Delete(context.ContainerView?.CurrentContainer, context.ContainerView.SelectionState);
+                    Delete(context.DocumentContainer?.ContainerView?.CurrentContainer, context.DocumentContainer.ContainerView.SelectionState);
 
-                    context.ContainerView?.SelectionState?.Dehover();
-                    context.ContainerView?.SelectionState?.Clear();
+                    context.DocumentContainer?.ContainerView?.SelectionState?.Dehover();
+                    context.DocumentContainer?.ContainerView?.SelectionState?.Clear();
 
-                    context.ContainerView?.InputService?.Redraw?.Invoke();
+                    context.DocumentContainer?.ContainerView?.InputService?.Redraw?.Invoke();
 
                     this.CurrentState = State.None;
                 }
@@ -454,20 +454,20 @@ namespace Draw2D.ViewModels.Tools
 
         public void Duplicate(IToolContext context)
         {
-            if (context.ContainerView?.SelectionState != null)
+            if (context.DocumentContainer?.ContainerView?.SelectionState != null)
             {
-                lock (context.ContainerView.SelectionState?.Shapes)
+                lock (context.DocumentContainer.ContainerView.SelectionState?.Shapes)
                 {
-                    var shapes = new List<IBaseShape>(context.ContainerView.SelectionState?.Shapes);
+                    var shapes = new List<IBaseShape>(context.DocumentContainer.ContainerView.SelectionState?.Shapes);
 
                     if (shapes != null && shapes.Count > 0)
                     {
-                        context.ContainerView?.SelectionState?.Dehover();
-                        context.ContainerView?.SelectionState?.Clear();
+                        context.DocumentContainer?.ContainerView?.SelectionState?.Dehover();
+                        context.DocumentContainer?.ContainerView?.SelectionState?.Clear();
 
-                        Copy(context.ContainerView?.CurrentContainer, shapes, context.ContainerView.SelectionState);
+                        Copy(context.DocumentContainer?.ContainerView?.CurrentContainer, shapes, context.DocumentContainer.ContainerView.SelectionState);
 
-                        context.ContainerView?.InputService?.Redraw?.Invoke();
+                        context.DocumentContainer?.ContainerView?.InputService?.Redraw?.Invoke();
 
                         this.CurrentState = State.None;
                     }
@@ -477,13 +477,13 @@ namespace Draw2D.ViewModels.Tools
 
         public void CreateGroup(IToolContext context)
         {
-            if (context.ContainerView?.SelectionState != null)
+            if (context.DocumentContainer?.ContainerView?.SelectionState != null)
             {
-                lock (context.ContainerView.SelectionState?.Shapes)
+                lock (context.DocumentContainer.ContainerView.SelectionState?.Shapes)
                 {
-                    context.ContainerView?.SelectionState?.Dehover();
+                    context.DocumentContainer?.ContainerView?.SelectionState?.Dehover();
 
-                    var shapes = new List<IBaseShape>(context.ContainerView.SelectionState?.Shapes.Reverse());
+                    var shapes = new List<IBaseShape>(context.DocumentContainer.ContainerView.SelectionState?.Shapes.Reverse());
 
                     Delete(context);
 
@@ -503,12 +503,12 @@ namespace Draw2D.ViewModels.Tools
                         }
                     }
 
-                    group.Select(context.ContainerView.SelectionState);
-                    group.Owner = context.ContainerView?.CurrentContainer;
-                    context.ContainerView?.CurrentContainer.Shapes.Add(group);
-                    context.ContainerView?.CurrentContainer.MarkAsDirty(true);
+                    group.Select(context.DocumentContainer.ContainerView.SelectionState);
+                    group.Owner = context.DocumentContainer?.ContainerView?.CurrentContainer;
+                    context.DocumentContainer?.ContainerView?.CurrentContainer.Shapes.Add(group);
+                    context.DocumentContainer?.ContainerView?.CurrentContainer.MarkAsDirty(true);
 
-                    context.ContainerView?.InputService?.Redraw?.Invoke();
+                    context.DocumentContainer?.ContainerView?.InputService?.Redraw?.Invoke();
 
                     this.CurrentState = State.None;
                 }
@@ -517,23 +517,23 @@ namespace Draw2D.ViewModels.Tools
 
         public void CreateReference(IToolContext context)
         {
-            if (context.ContainerView?.SelectionState != null)
+            if (context.DocumentContainer?.ContainerView?.SelectionState != null)
             {
-                lock (context.ContainerView.SelectionState?.Shapes)
+                lock (context.DocumentContainer.ContainerView.SelectionState?.Shapes)
                 {
-                    context.ContainerView?.SelectionState?.Dehover();
+                    context.DocumentContainer?.ContainerView?.SelectionState?.Dehover();
 
-                    var shapes = new List<IBaseShape>(context.ContainerView.SelectionState?.Shapes);
+                    var shapes = new List<IBaseShape>(context.DocumentContainer.ContainerView.SelectionState?.Shapes);
 
                     foreach (var shape in shapes)
                     {
                         if (!(shape is IPointShape || shape is FigureShape) && !(shape is ReferenceShape))
                         {
-                            context.ContainerView?.Reference(shape);
+                            context.DocumentContainer?.ContainerView?.Reference(shape);
                         }
                     }
 
-                    context.ContainerView?.InputService?.Redraw?.Invoke();
+                    context.DocumentContainer?.ContainerView?.InputService?.Redraw?.Invoke();
 
                     this.CurrentState = State.None;
                 }
@@ -542,13 +542,13 @@ namespace Draw2D.ViewModels.Tools
 
         public void CreatePath(IToolContext context)
         {
-            if (context.ContainerView?.SelectionState != null)
+            if (context.DocumentContainer?.ContainerView?.SelectionState != null)
             {
-                lock (context.ContainerView.SelectionState?.Shapes)
+                lock (context.DocumentContainer.ContainerView.SelectionState?.Shapes)
                 {
-                    context.ContainerView?.SelectionState?.Dehover();
+                    context.DocumentContainer?.ContainerView?.SelectionState?.Dehover();
 
-                    var shapes = new List<IBaseShape>(context.ContainerView.SelectionState?.Shapes.Reverse());
+                    var shapes = new List<IBaseShape>(context.DocumentContainer.ContainerView.SelectionState?.Shapes.Reverse());
 
                     Delete(context);
 
@@ -559,15 +559,15 @@ namespace Draw2D.ViewModels.Tools
                             var path = context?.PathConverter?.ToPathShape(context, shape);
                             if (path != null)
                             {
-                                path.Select(context.ContainerView.SelectionState);
-                                path.Owner = context.ContainerView?.CurrentContainer;
-                                context.ContainerView?.CurrentContainer.Shapes.Add(path);
-                                context.ContainerView?.CurrentContainer.MarkAsDirty(true);
+                                path.Select(context.DocumentContainer.ContainerView.SelectionState);
+                                path.Owner = context.DocumentContainer?.ContainerView?.CurrentContainer;
+                                context.DocumentContainer?.ContainerView?.CurrentContainer.Shapes.Add(path);
+                                context.DocumentContainer?.ContainerView?.CurrentContainer.MarkAsDirty(true);
                             }
                         }
                     }
 
-                    context.ContainerView?.InputService?.Redraw?.Invoke();
+                    context.DocumentContainer?.ContainerView?.InputService?.Redraw?.Invoke();
 
                     this.CurrentState = State.None;
                 }
@@ -576,13 +576,13 @@ namespace Draw2D.ViewModels.Tools
 
         public void CreateStrokePath(IToolContext context)
         {
-            if (context.ContainerView?.SelectionState != null)
+            if (context.DocumentContainer?.ContainerView?.SelectionState != null)
             {
-                lock (context.ContainerView.SelectionState?.Shapes)
+                lock (context.DocumentContainer.ContainerView.SelectionState?.Shapes)
                 {
-                    context.ContainerView?.SelectionState?.Dehover();
+                    context.DocumentContainer?.ContainerView?.SelectionState?.Dehover();
 
-                    var shapes = new List<IBaseShape>(context.ContainerView.SelectionState?.Shapes.Reverse());
+                    var shapes = new List<IBaseShape>(context.DocumentContainer.ContainerView.SelectionState?.Shapes.Reverse());
 
                     Delete(context);
 
@@ -593,15 +593,15 @@ namespace Draw2D.ViewModels.Tools
                             var path = context?.PathConverter?.ToStrokePathShape(context, shape);
                             if (path != null)
                             {
-                                path.Select(context.ContainerView.SelectionState);
-                                path.Owner = context.ContainerView?.CurrentContainer;
-                                context.ContainerView?.CurrentContainer.Shapes.Add(path);
-                                context.ContainerView?.CurrentContainer.MarkAsDirty(true);
+                                path.Select(context.DocumentContainer.ContainerView.SelectionState);
+                                path.Owner = context.DocumentContainer?.ContainerView?.CurrentContainer;
+                                context.DocumentContainer?.ContainerView?.CurrentContainer.Shapes.Add(path);
+                                context.DocumentContainer?.ContainerView?.CurrentContainer.MarkAsDirty(true);
                             }
                         }
                     }
 
-                    context.ContainerView?.InputService?.Redraw?.Invoke();
+                    context.DocumentContainer?.ContainerView?.InputService?.Redraw?.Invoke();
 
                     this.CurrentState = State.None;
                 }
@@ -610,13 +610,13 @@ namespace Draw2D.ViewModels.Tools
 
         public void CreateFillPath(IToolContext context)
         {
-            if (context.ContainerView?.SelectionState != null)
+            if (context.DocumentContainer?.ContainerView?.SelectionState != null)
             {
-                lock (context.ContainerView.SelectionState?.Shapes)
+                lock (context.DocumentContainer.ContainerView.SelectionState?.Shapes)
                 {
-                    context.ContainerView?.SelectionState?.Dehover();
+                    context.DocumentContainer?.ContainerView?.SelectionState?.Dehover();
 
-                    var shapes = new List<IBaseShape>(context.ContainerView.SelectionState?.Shapes.Reverse());
+                    var shapes = new List<IBaseShape>(context.DocumentContainer.ContainerView.SelectionState?.Shapes.Reverse());
 
                     Delete(context);
 
@@ -627,15 +627,15 @@ namespace Draw2D.ViewModels.Tools
                             var path = context?.PathConverter?.ToFillPathShape(context, shape);
                             if (path != null)
                             {
-                                path.Select(context.ContainerView.SelectionState);
-                                path.Owner = context.ContainerView?.CurrentContainer;
-                                context.ContainerView?.CurrentContainer.Shapes.Add(path);
-                                context.ContainerView?.CurrentContainer.MarkAsDirty(true);
+                                path.Select(context.DocumentContainer.ContainerView.SelectionState);
+                                path.Owner = context.DocumentContainer?.ContainerView?.CurrentContainer;
+                                context.DocumentContainer?.ContainerView?.CurrentContainer.Shapes.Add(path);
+                                context.DocumentContainer?.ContainerView?.CurrentContainer.MarkAsDirty(true);
                             }
                         }
                     }
 
-                    context.ContainerView?.InputService?.Redraw?.Invoke();
+                    context.DocumentContainer?.ContainerView?.InputService?.Redraw?.Invoke();
 
                     this.CurrentState = State.None;
                 }
@@ -694,9 +694,9 @@ namespace Draw2D.ViewModels.Tools
 
         public void ArangeBringToFront(IToolContext context)
         {
-            if (context.ContainerView?.SelectionState != null)
+            if (context.DocumentContainer?.ContainerView?.SelectionState != null)
             {
-                var shapes = new List<IBaseShape>(context.ContainerView.SelectionState?.Shapes);
+                var shapes = new List<IBaseShape>(context.DocumentContainer.ContainerView.SelectionState?.Shapes);
 
                 for (int i = shapes.Count - 1; i >= 0; i--)
                 {
@@ -707,15 +707,15 @@ namespace Draw2D.ViewModels.Tools
                     }
                 }
 
-                context.ContainerView?.InputService?.Redraw?.Invoke();
+                context.DocumentContainer?.ContainerView?.InputService?.Redraw?.Invoke();
             }
         }
 
         public void ArangeBringForward(IToolContext context)
         {
-            if (context.ContainerView?.SelectionState != null)
+            if (context.DocumentContainer?.ContainerView?.SelectionState != null)
             {
-                var shapes = new List<IBaseShape>(context.ContainerView.SelectionState?.Shapes);
+                var shapes = new List<IBaseShape>(context.DocumentContainer.ContainerView.SelectionState?.Shapes);
 
                 for (int i = shapes.Count - 1; i >= 0; i--)
                 {
@@ -726,15 +726,15 @@ namespace Draw2D.ViewModels.Tools
                     }
                 }
 
-                context.ContainerView?.InputService?.Redraw?.Invoke();
+                context.DocumentContainer?.ContainerView?.InputService?.Redraw?.Invoke();
             }
         }
 
         public void ArangeSendBackward(IToolContext context)
         {
-            if (context.ContainerView?.SelectionState != null)
+            if (context.DocumentContainer?.ContainerView?.SelectionState != null)
             {
-                var shapes = new List<IBaseShape>(context.ContainerView.SelectionState?.Shapes);
+                var shapes = new List<IBaseShape>(context.DocumentContainer.ContainerView.SelectionState?.Shapes);
 
                 for (int i = 0; i < shapes.Count; i++)
                 {
@@ -745,15 +745,15 @@ namespace Draw2D.ViewModels.Tools
                     }
                 }
 
-                context.ContainerView?.InputService?.Redraw?.Invoke();
+                context.DocumentContainer?.ContainerView?.InputService?.Redraw?.Invoke();
             }
         }
 
         public void ArangeSendToBack(IToolContext context)
         {
-            if (context.ContainerView?.SelectionState != null)
+            if (context.DocumentContainer?.ContainerView?.SelectionState != null)
             {
-                var shapes = new List<IBaseShape>(context.ContainerView.SelectionState?.Shapes);
+                var shapes = new List<IBaseShape>(context.DocumentContainer.ContainerView.SelectionState?.Shapes);
 
                 for (int i = 0; i < shapes.Count; i++)
                 {
@@ -764,43 +764,43 @@ namespace Draw2D.ViewModels.Tools
                     }
                 }
 
-                context.ContainerView?.InputService?.Redraw?.Invoke();
+                context.DocumentContainer?.ContainerView?.InputService?.Redraw?.Invoke();
             }
         }
 
         private void BreakGroup(IToolContext context, GroupShape group)
         {
-            group.Deselect(context.ContainerView.SelectionState);
+            group.Deselect(context.DocumentContainer.ContainerView.SelectionState);
 
-            context.ContainerView?.CurrentContainer?.Shapes?.Remove(group);
-            context.ContainerView?.CurrentContainer?.MarkAsDirty(true);
+            context.DocumentContainer?.ContainerView?.CurrentContainer?.Shapes?.Remove(group);
+            context.DocumentContainer?.ContainerView?.CurrentContainer?.MarkAsDirty(true);
 
             foreach (var shape in group.Shapes)
             {
                 if (!(shape is IPointShape || shape is FigureShape))
                 {
-                    shape.Owner = context.ContainerView?.CurrentContainer;
-                    context.ContainerView?.CurrentContainer.Shapes.Add(shape);
-                    context.ContainerView?.CurrentContainer.MarkAsDirty(true);
-                    shape.Select(context.ContainerView.SelectionState);
+                    shape.Owner = context.DocumentContainer?.ContainerView?.CurrentContainer;
+                    context.DocumentContainer?.ContainerView?.CurrentContainer.Shapes.Add(shape);
+                    context.DocumentContainer?.ContainerView?.CurrentContainer.MarkAsDirty(true);
+                    shape.Select(context.DocumentContainer.ContainerView.SelectionState);
                 }
             }
         }
 
         private void BreakReference(IToolContext context, ReferenceShape reference)
         {
-            reference.Deselect(context.ContainerView.SelectionState);
+            reference.Deselect(context.DocumentContainer.ContainerView.SelectionState);
 
-            context.ContainerView?.CurrentContainer?.Shapes?.Remove(reference);
-            context.ContainerView?.CurrentContainer?.MarkAsDirty(true);
+            context.DocumentContainer?.ContainerView?.CurrentContainer?.Shapes?.Remove(reference);
+            context.DocumentContainer?.ContainerView?.CurrentContainer?.MarkAsDirty(true);
 
             if (reference.Template is IBaseShape shape)
             {
                 var copy = (IBaseShape)shape.Copy(null);
-                copy.Owner = context.ContainerView?.CurrentContainer;
-                context.ContainerView?.CurrentContainer.Shapes.Add(copy);
-                context.ContainerView?.CurrentContainer.MarkAsDirty(true);
-                copy.Select(context.ContainerView.SelectionState);
+                copy.Owner = context.DocumentContainer?.ContainerView?.CurrentContainer;
+                context.DocumentContainer?.ContainerView?.CurrentContainer.Shapes.Add(copy);
+                context.DocumentContainer?.ContainerView?.CurrentContainer.MarkAsDirty(true);
+                copy.Select(context.DocumentContainer.ContainerView.SelectionState);
             }
         }
 
@@ -810,20 +810,20 @@ namespace Draw2D.ViewModels.Tools
             {
                 if (!(shape is IPointShape))
                 {
-                    shape.Owner = context.ContainerView?.CurrentContainer;
-                    context.ContainerView?.CurrentContainer.Shapes.Add(shape);
-                    context.ContainerView?.CurrentContainer.MarkAsDirty(true);
-                    shape.Select(context.ContainerView.SelectionState);
+                    shape.Owner = context.DocumentContainer?.ContainerView?.CurrentContainer;
+                    context.DocumentContainer?.ContainerView?.CurrentContainer.Shapes.Add(shape);
+                    context.DocumentContainer?.ContainerView?.CurrentContainer.MarkAsDirty(true);
+                    shape.Select(context.DocumentContainer.ContainerView.SelectionState);
                 }
             }
         }
 
         private void BreakPath(IToolContext context, PathShape path)
         {
-            path.Deselect(context.ContainerView.SelectionState);
+            path.Deselect(context.DocumentContainer.ContainerView.SelectionState);
 
-            context.ContainerView?.CurrentContainer?.Shapes?.Remove(path);
-            context.ContainerView?.CurrentContainer?.MarkAsDirty(true);
+            context.DocumentContainer?.ContainerView?.CurrentContainer?.Shapes?.Remove(path);
+            context.DocumentContainer?.ContainerView?.CurrentContainer?.MarkAsDirty(true);
 
             if (path.Shapes.Count == 1)
             {
@@ -850,10 +850,10 @@ namespace Draw2D.ViewModels.Tools
                         figure.Owner = pathShape;
                         pathShape.Shapes.Add(figure);
 
-                        pathShape.Owner = context.ContainerView?.CurrentContainer;
-                        context.ContainerView?.CurrentContainer.Shapes.Add(pathShape);
-                        context.ContainerView?.CurrentContainer.MarkAsDirty(true);
-                        pathShape.Select(context.ContainerView.SelectionState);
+                        pathShape.Owner = context.DocumentContainer?.ContainerView?.CurrentContainer;
+                        context.DocumentContainer?.ContainerView?.CurrentContainer.Shapes.Add(pathShape);
+                        context.DocumentContainer?.ContainerView?.CurrentContainer.MarkAsDirty(true);
+                        pathShape.Select(context.DocumentContainer.ContainerView.SelectionState);
                     }
                 }
             }
@@ -861,13 +861,13 @@ namespace Draw2D.ViewModels.Tools
 
         public void Break(IToolContext context)
         {
-            if (context.ContainerView?.SelectionState != null)
+            if (context.DocumentContainer?.ContainerView?.SelectionState != null)
             {
-                lock (context.ContainerView.SelectionState?.Shapes)
+                lock (context.DocumentContainer.ContainerView.SelectionState?.Shapes)
                 {
-                    context.ContainerView?.SelectionState?.Dehover();
+                    context.DocumentContainer?.ContainerView?.SelectionState?.Dehover();
 
-                    var shapes = new List<IBaseShape>(context.ContainerView.SelectionState?.Shapes.Reverse());
+                    var shapes = new List<IBaseShape>(context.DocumentContainer.ContainerView.SelectionState?.Shapes.Reverse());
 
                     foreach (var shape in shapes)
                     {
@@ -888,17 +888,17 @@ namespace Draw2D.ViewModels.Tools
                             var path = context?.PathConverter?.ToPathShape(context, shape);
                             if (path != null)
                             {
-                                shape.Deselect(context.ContainerView.SelectionState);
+                                shape.Deselect(context.DocumentContainer.ContainerView.SelectionState);
 
-                                context.ContainerView?.CurrentContainer?.Shapes?.Remove(shape);
-                                context.ContainerView?.CurrentContainer?.MarkAsDirty(true);
+                                context.DocumentContainer?.ContainerView?.CurrentContainer?.Shapes?.Remove(shape);
+                                context.DocumentContainer?.ContainerView?.CurrentContainer?.MarkAsDirty(true);
 
                                 BreakPath(context, path);
                             }
                         }
                     }
 
-                    context.ContainerView?.InputService?.Redraw?.Invoke();
+                    context.DocumentContainer?.ContainerView?.InputService?.Redraw?.Invoke();
 
                     this.CurrentState = State.None;
                 }
@@ -907,9 +907,9 @@ namespace Draw2D.ViewModels.Tools
 
         public void ConnectImpl(IToolContext context, IPointShape point, Modifier modifier)
         {
-            var scale = context.ContainerView?.ZoomService?.ZoomServiceState?.ZoomX ?? 1.0;
+            var scale = context.DocumentContainer?.ContainerView?.ZoomService?.ZoomServiceState?.ZoomX ?? 1.0;
             var target = context.HitTest?.TryToGetPoint(
-                context.ContainerView?.CurrentContainer.Shapes,
+                context.DocumentContainer?.ContainerView?.CurrentContainer.Shapes,
                 new Point2(point.X, point.Y),
                 Settings?.ConnectTestRadius ?? 7.0,
                 scale,
@@ -917,7 +917,7 @@ namespace Draw2D.ViewModels.Tools
                 point);
             if (target != point)
             {
-                foreach (var item in context.ContainerView?.CurrentContainer.Shapes)
+                foreach (var item in context.DocumentContainer?.ContainerView?.CurrentContainer.Shapes)
                 {
                     if (item is IConnectable connectable)
                     {
@@ -932,7 +932,7 @@ namespace Draw2D.ViewModels.Tools
 
         public void DisconnectImpl(IToolContext context, IPointShape point)
         {
-            foreach (var shape in context.ContainerView?.CurrentContainer.Shapes)
+            foreach (var shape in context.DocumentContainer?.ContainerView?.CurrentContainer.Shapes)
             {
                 if (shape is IConnectable connectable)
                 {
@@ -942,8 +942,8 @@ namespace Draw2D.ViewModels.Tools
                         {
                             point.X = _originX;
                             point.Y = _originY;
-                            context.ContainerView?.SelectionState?.Deselect(point);
-                            context.ContainerView?.SelectionState?.Select(copy);
+                            context.DocumentContainer?.ContainerView?.SelectionState?.Deselect(point);
+                            context.DocumentContainer?.ContainerView?.SelectionState?.Select(copy);
                             _disconnected = true;
                         }
                         break;
@@ -956,52 +956,52 @@ namespace Draw2D.ViewModels.Tools
         {
             if (shape is IConnectable connectable)
             {
-                if (context.ContainerView?.SelectionState != null)
+                if (context.DocumentContainer?.ContainerView?.SelectionState != null)
                 {
-                    shape.Deselect(context.ContainerView.SelectionState);
+                    shape.Deselect(context.DocumentContainer.ContainerView.SelectionState);
                 }
                 _disconnected = connectable.Disconnect();
-                if (context.ContainerView?.SelectionState != null)
+                if (context.DocumentContainer?.ContainerView?.SelectionState != null)
                 {
-                    shape.Select(context.ContainerView.SelectionState);
+                    shape.Select(context.DocumentContainer.ContainerView.SelectionState);
                 }
             }
         }
 
         public void Connect(IToolContext context)
         {
-            if (context.ContainerView?.SelectionState != null)
+            if (context.DocumentContainer?.ContainerView?.SelectionState != null)
             {
-                if (context.ContainerView.SelectionState?.Shapes.Count == 1)
+                if (context.DocumentContainer.ContainerView.SelectionState?.Shapes.Count == 1)
                 {
-                    var shape = context.ContainerView.SelectionState?.Shapes.FirstOrDefault();
+                    var shape = context.DocumentContainer.ContainerView.SelectionState?.Shapes.FirstOrDefault();
 
                     if (shape is IPointShape source)
                     {
                         ConnectImpl(context, source, Modifier.None);
-                        context.ContainerView?.SelectionState?.Dehover();
-                        context.ContainerView?.SelectionState?.Clear();
-                        context.ContainerView?.InputService?.Redraw?.Invoke();
+                        context.DocumentContainer?.ContainerView?.SelectionState?.Dehover();
+                        context.DocumentContainer?.ContainerView?.SelectionState?.Clear();
+                        context.DocumentContainer?.ContainerView?.InputService?.Redraw?.Invoke();
                     }
                 }
-                else if (context.ContainerView.SelectionState?.Shapes.Count == 2)
+                else if (context.DocumentContainer.ContainerView.SelectionState?.Shapes.Count == 2)
                 {
-                    var first = context.ContainerView.SelectionState?.Shapes.FirstOrDefault();
-                    var next = context.ContainerView.SelectionState?.Shapes.LastOrDefault();
+                    var first = context.DocumentContainer.ContainerView.SelectionState?.Shapes.FirstOrDefault();
+                    var next = context.DocumentContainer.ContainerView.SelectionState?.Shapes.LastOrDefault();
 
                     if (first is IPointShape point && next is IPointShape target)
                     {
                         if (target != point)
                         {
-                            foreach (var item in context.ContainerView?.CurrentContainer.Shapes)
+                            foreach (var item in context.DocumentContainer?.ContainerView?.CurrentContainer.Shapes)
                             {
                                 if (item is IConnectable connectable)
                                 {
                                     if (connectable.Connect(point, target))
                                     {
-                                        context.ContainerView?.SelectionState?.Dehover();
-                                        context.ContainerView?.SelectionState?.Clear();
-                                        context.ContainerView?.InputService?.Redraw?.Invoke();
+                                        context.DocumentContainer?.ContainerView?.SelectionState?.Dehover();
+                                        context.DocumentContainer?.ContainerView?.SelectionState?.Clear();
+                                        context.DocumentContainer?.ContainerView?.InputService?.Redraw?.Invoke();
                                         break;
                                     }
                                 }
@@ -1014,11 +1014,11 @@ namespace Draw2D.ViewModels.Tools
 
         public void Disconnect(IToolContext context)
         {
-            if (context.ContainerView?.SelectionState != null)
+            if (context.DocumentContainer?.ContainerView?.SelectionState != null)
             {
-                if (context.ContainerView.SelectionState?.Shapes.Count == 1)
+                if (context.DocumentContainer.ContainerView.SelectionState?.Shapes.Count == 1)
                 {
-                    var shape = context.ContainerView.SelectionState?.Shapes.FirstOrDefault();
+                    var shape = context.DocumentContainer.ContainerView.SelectionState?.Shapes.FirstOrDefault();
 
                     if (shape is IPointShape source)
                     {
@@ -1028,7 +1028,7 @@ namespace Draw2D.ViewModels.Tools
                 }
                 else
                 {
-                    var selectedToDisconnect = new List<IBaseShape>(context.ContainerView.SelectionState?.Shapes);
+                    var selectedToDisconnect = new List<IBaseShape>(context.DocumentContainer.ContainerView.SelectionState?.Shapes);
                     foreach (var shape in selectedToDisconnect)
                     {
                         if (!(shape is IPointShape))
@@ -1038,27 +1038,27 @@ namespace Draw2D.ViewModels.Tools
                     }
                 }
 
-                context.ContainerView?.SelectionState?.Dehover();
-                context.ContainerView?.SelectionState?.Clear();
-                context.ContainerView?.InputService?.Redraw?.Invoke();
+                context.DocumentContainer?.ContainerView?.SelectionState?.Dehover();
+                context.DocumentContainer?.ContainerView?.SelectionState?.Clear();
+                context.DocumentContainer?.ContainerView?.InputService?.Redraw?.Invoke();
             }
         }
 
         public void SelectAll(IToolContext context)
         {
-            if (context.ContainerView?.SelectionState != null)
+            if (context.DocumentContainer?.ContainerView?.SelectionState != null)
             {
-                lock (context.ContainerView.SelectionState?.Shapes)
+                lock (context.DocumentContainer.ContainerView.SelectionState?.Shapes)
                 {
-                    context.ContainerView?.SelectionState?.Dehover();
-                    context.ContainerView?.SelectionState?.Clear();
+                    context.DocumentContainer?.ContainerView?.SelectionState?.Dehover();
+                    context.DocumentContainer?.ContainerView?.SelectionState?.Clear();
 
-                    foreach (var shape in context.ContainerView?.CurrentContainer.Shapes)
+                    foreach (var shape in context.DocumentContainer?.ContainerView?.CurrentContainer.Shapes)
                     {
-                        shape.Select(context.ContainerView.SelectionState);
+                        shape.Select(context.DocumentContainer.ContainerView.SelectionState);
                     }
 
-                    context.ContainerView?.InputService?.Redraw?.Invoke();
+                    context.DocumentContainer?.ContainerView?.InputService?.Redraw?.Invoke();
 
                     this.CurrentState = State.None;
                 }
@@ -1067,14 +1067,14 @@ namespace Draw2D.ViewModels.Tools
 
         public void DeselectAll(IToolContext context)
         {
-            if (context.ContainerView?.SelectionState != null)
+            if (context.DocumentContainer?.ContainerView?.SelectionState != null)
             {
-                lock (context.ContainerView.SelectionState?.Shapes)
+                lock (context.DocumentContainer.ContainerView.SelectionState?.Shapes)
                 {
-                    context.ContainerView?.SelectionState?.Dehover();
-                    context.ContainerView?.SelectionState?.Clear();
+                    context.DocumentContainer?.ContainerView?.SelectionState?.Dehover();
+                    context.DocumentContainer?.ContainerView?.SelectionState?.Clear();
 
-                    context.ContainerView?.InputService?.Redraw?.Invoke();
+                    context.DocumentContainer?.ContainerView?.InputService?.Redraw?.Invoke();
 
                     this.CurrentState = State.None;
                 }
@@ -1262,12 +1262,12 @@ namespace Draw2D.ViewModels.Tools
             var shapePoint =
                 mode.HasFlag(SelectionMode.Point)
                 && targets.HasFlag(SelectionTargets.Shapes) ?
-                context.HitTest?.TryToGetPoint(context.ContainerView?.CurrentContainer.Shapes, target, radius, scale, modifier, null) : null;
+                context.HitTest?.TryToGetPoint(context.DocumentContainer?.ContainerView?.CurrentContainer.Shapes, target, radius, scale, modifier, null) : null;
 
             var shape =
                 mode.HasFlag(SelectionMode.Shape)
                 && targets.HasFlag(SelectionTargets.Shapes) ?
-                context.HitTest?.TryToGetShape(context.ContainerView?.CurrentContainer.Shapes, target, radius, scale, modifier) : null;
+                context.HitTest?.TryToGetShape(context.DocumentContainer?.ContainerView?.CurrentContainer.Shapes, target, radius, scale, modifier) : null;
 
             if (shapePoint != null || shape != null)
             {
@@ -1286,25 +1286,25 @@ namespace Draw2D.ViewModels.Tools
 
         internal bool TryToSelect(IToolContext context, SelectionMode mode, SelectionTargets targets, Modifier selectionModifier, Point2 point, double radius, double scale, Modifier modifier)
         {
-            if (context.ContainerView?.SelectionState != null)
+            if (context.DocumentContainer?.ContainerView?.SelectionState != null)
             {
                 var shapePoint =
                     mode.HasFlag(SelectionMode.Point)
                     && targets.HasFlag(SelectionTargets.Shapes) ?
-                    context.HitTest?.TryToGetPoint(context.ContainerView?.CurrentContainer.Shapes, point, radius, scale, modifier, null) : null;
+                    context.HitTest?.TryToGetPoint(context.DocumentContainer?.ContainerView?.CurrentContainer.Shapes, point, radius, scale, modifier, null) : null;
 
                 var shape =
                     mode.HasFlag(SelectionMode.Shape)
                     && targets.HasFlag(SelectionTargets.Shapes) ?
-                    context.HitTest?.TryToGetShape(context.ContainerView?.CurrentContainer.Shapes, point, radius, scale, modifier) : null;
+                    context.HitTest?.TryToGetShape(context.DocumentContainer?.ContainerView?.CurrentContainer.Shapes, point, radius, scale, modifier) : null;
 
                 if (shapePoint != null || shape != null)
                 {
                     bool haveNewSelection =
-                        (shapePoint != null && !(context.ContainerView.SelectionState?.IsSelected(shapePoint) ?? false))
-                        || (shape != null && !(context.ContainerView.SelectionState?.IsSelected(shape) ?? false));
+                        (shapePoint != null && !(context.DocumentContainer.ContainerView.SelectionState?.IsSelected(shapePoint) ?? false))
+                        || (shape != null && !(context.DocumentContainer.ContainerView.SelectionState?.IsSelected(shape) ?? false));
 
-                    if (context.ContainerView.SelectionState?.Shapes.Count >= 1
+                    if (context.DocumentContainer.ContainerView.SelectionState?.Shapes.Count >= 1
                         && !haveNewSelection
                         && !modifier.HasFlag(selectionModifier))
                     {
@@ -1316,20 +1316,20 @@ namespace Draw2D.ViewModels.Tools
                         {
                             if (modifier.HasFlag(selectionModifier))
                             {
-                                if (context.ContainerView.SelectionState?.IsSelected(shapePoint) ?? false)
+                                if (context.DocumentContainer.ContainerView.SelectionState?.IsSelected(shapePoint) ?? false)
                                 {
-                                    shapePoint.Deselect(context.ContainerView.SelectionState);
+                                    shapePoint.Deselect(context.DocumentContainer.ContainerView.SelectionState);
                                 }
                                 else
                                 {
-                                    shapePoint.Select(context.ContainerView.SelectionState);
+                                    shapePoint.Select(context.DocumentContainer.ContainerView.SelectionState);
                                 }
-                                return context.ContainerView.SelectionState?.Shapes.Count > 0;
+                                return context.DocumentContainer.ContainerView.SelectionState?.Shapes.Count > 0;
                             }
                             else
                             {
-                                context.ContainerView.SelectionState?.Clear();
-                                shapePoint.Select(context.ContainerView.SelectionState);
+                                context.DocumentContainer.ContainerView.SelectionState?.Clear();
+                                shapePoint.Select(context.DocumentContainer.ContainerView.SelectionState);
                                 return true;
                             }
                         }
@@ -1337,20 +1337,20 @@ namespace Draw2D.ViewModels.Tools
                         {
                             if (modifier.HasFlag(selectionModifier))
                             {
-                                if (context.ContainerView.SelectionState?.IsSelected(shape) ?? false)
+                                if (context.DocumentContainer.ContainerView.SelectionState?.IsSelected(shape) ?? false)
                                 {
-                                    shape.Deselect(context.ContainerView.SelectionState);
+                                    shape.Deselect(context.DocumentContainer.ContainerView.SelectionState);
                                 }
                                 else
                                 {
-                                    shape.Select(context.ContainerView.SelectionState);
+                                    shape.Select(context.DocumentContainer.ContainerView.SelectionState);
                                 }
-                                return context.ContainerView.SelectionState?.Shapes.Count > 0;
+                                return context.DocumentContainer.ContainerView.SelectionState?.Shapes.Count > 0;
                             }
                             else
                             {
-                                context.ContainerView.SelectionState?.Clear();
-                                shape.Select(context.ContainerView.SelectionState);
+                                context.DocumentContainer.ContainerView.SelectionState?.Clear();
+                                shape.Select(context.DocumentContainer.ContainerView.SelectionState);
                                 return true;
                             }
                         }
@@ -1362,12 +1362,12 @@ namespace Draw2D.ViewModels.Tools
 
         internal bool TryToSelect(IToolContext context, SelectionMode mode, SelectionTargets targets, Modifier selectionModifier, Rect2 rect, double radius, double scale, Modifier modifier)
         {
-            if (context.ContainerView?.SelectionState != null)
+            if (context.DocumentContainer?.ContainerView?.SelectionState != null)
             {
                 var shapes =
                     mode.HasFlag(SelectionMode.Shape)
                     && targets.HasFlag(SelectionTargets.Shapes) ?
-                    context.HitTest?.TryToGetShapes(context.ContainerView?.CurrentContainer.Shapes, rect, radius, scale, modifier) : null;
+                    context.HitTest?.TryToGetShapes(context.DocumentContainer?.ContainerView?.CurrentContainer.Shapes, rect, radius, scale, modifier) : null;
 
                 if (shapes != null)
                 {
@@ -1377,23 +1377,23 @@ namespace Draw2D.ViewModels.Tools
                         {
                             foreach (var shape in shapes)
                             {
-                                if (context.ContainerView.SelectionState?.IsSelected(shape) ?? false)
+                                if (context.DocumentContainer.ContainerView.SelectionState?.IsSelected(shape) ?? false)
                                 {
-                                    shape.Deselect(context.ContainerView.SelectionState);
+                                    shape.Deselect(context.DocumentContainer.ContainerView.SelectionState);
                                 }
                                 else
                                 {
-                                    shape.Select(context.ContainerView.SelectionState);
+                                    shape.Select(context.DocumentContainer.ContainerView.SelectionState);
                                 }
                             }
-                            return context.ContainerView.SelectionState?.Shapes.Count > 0;
+                            return context.DocumentContainer.ContainerView.SelectionState?.Shapes.Count > 0;
                         }
                         else
                         {
-                            context.ContainerView.SelectionState?.Clear();
+                            context.DocumentContainer.ContainerView.SelectionState?.Clear();
                             foreach (var shape in shapes)
                             {
-                                shape.Select(context.ContainerView.SelectionState);
+                                shape.Select(context.DocumentContainer.ContainerView.SelectionState);
                             }
                             return true;
                         }

@@ -35,7 +35,7 @@ namespace Draw2D.ViewModels.Tools
             set => Update(ref _hitTest, value);
         }
 
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        [IgnoreDataMember]
         public IPathConverter PathConverter
         {
             get => _pathConverter;
@@ -127,12 +127,12 @@ namespace Draw2D.ViewModels.Tools
 
         public double GetWidth()
         {
-            return ContainerView?.Width ?? 0.0;
+            return _documentContainer?.ContainerView?.Width ?? 0.0;
         }
 
         public double GetHeight()
         {
-            return ContainerView?.Height ?? 0.0;
+            return _documentContainer?.ContainerView?.Height ?? 0.0;
         }
 
         public virtual object Copy(Dictionary<object, object> shared)

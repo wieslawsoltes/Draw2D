@@ -27,7 +27,7 @@ namespace Draw2D.Export
                         continue;
                     }
 
-                    var style = context.StyleLibrary?.Get(shape.StyleId);
+                    var style = context.DocumentContainer?.StyleLibrary?.Get(shape.StyleId);
                     if (style == null)
                     {
                         continue;
@@ -90,7 +90,7 @@ namespace Draw2D.Export
                         continue;
                     }
 
-                    var style = context.StyleLibrary?.Get(shape.StyleId);
+                    var style = context.DocumentContainer?.StyleLibrary?.Get(shape.StyleId);
                     if (style == null)
                     {
                         continue;

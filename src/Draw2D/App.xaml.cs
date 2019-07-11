@@ -32,8 +32,7 @@ namespace Draw2D
 
     public class App : Application
     {
-        public static string StylesPath { get; set; }
-        public static string GroupsPath { get; set; }
+        public static string DocumentPath { get; set; }
         public static string EditorPath { get; set; }
         public static string WindowPath { get; set; }
         public static IContainerFactory ContainerFactory { get; set; }
@@ -44,8 +43,7 @@ namespace Draw2D
 
         static App()
         {
-            StylesPath = "styles.json";
-            GroupsPath = "groups.json";
+            DocumentPath = "document.json";
             EditorPath = "editor.json";
             WindowPath = "window.json";
 
@@ -56,8 +54,8 @@ namespace Draw2D
                 StyleLibrary = ContainerFactory.CreateStyleLibrary();
                 GroupLibrary = ContainerFactory.CreateGroupLibrary();
                 ToolContext = ContainerFactory.CreateToolContext();
-                ToolContext.StyleLibrary = StyleLibrary;
-                ToolContext.GroupLibrary = GroupLibrary;
+                ToolContext.DocumentContainer.StyleLibrary = StyleLibrary;
+                ToolContext.DocumentContainer.GroupLibrary = GroupLibrary;
 
                 if (ToolContext is IEditorToolContext editorToolContext)
                 {
@@ -107,88 +105,60 @@ namespace Draw2D
 
         public static void Load()
         {
-#if USE_LOAD_STYLES
-            if (File.Exists(StylesPath))
-            {
-                StyleLibrary = JsonSerializer.FromJsonFile<IStyleLibrary>(StylesPath);
-            }
-#endif
-#if USE_LOAD_GROUPS
-            if (File.Exists(GroupsPath))
-            {
-                GroupLibrary = JsonSerializer.FromJsonFile<IGroupLibrary>(GroupsPath);
-            }
-#endif
-
-#if USE_LOAD_EDITOR
             if (File.Exists(EditorPath))
             {
                 ToolContext = JsonSerializer.FromJsonFile<IToolContext>(EditorPath);
-#if USE_LOAD_STYLES
-                if (StyleLibrary != null)
+            }
+
+            if (ToolContext == null)
+            {
+                ToolContext = ContainerFactory.CreateToolContext();
+            }
+
+            bool isNewDocument;
+
+            if (File.Exists(DocumentPath))
+            {
+                ToolContext.DocumentContainer = JsonSerializer.FromJsonFile<IDocumentContainer>(DocumentPath);
+                isNewDocument = false;
+            }
+            else
+            {
+                ToolContext.DocumentContainer = ContainerFactory.CreateDocumentContainer("document");
+                ToolContext.DocumentContainer.StyleLibrary = ContainerFactory.CreateStyleLibrary();
+                ToolContext.DocumentContainer.GroupLibrary = ContainerFactory.CreateGroupLibrary();
+                isNewDocument = true;
+            }
+
+            if (ToolContext is IEditorToolContext editorToolContext)
+            {
+                editorToolContext.ContainerFactory = ContainerFactory;
+                editorToolContext.UseSkia();
+
+                if (editorToolContext.CurrentDirectory == null)
                 {
-                    ToolContext.StyleLibrary = StyleLibrary;
+                    editorToolContext.CurrentDirectory = Directory.GetCurrentDirectory();
+                    editorToolContext.AddFiles(editorToolContext.CurrentDirectory);
                 }
-#endif
-#if USE_LOAD_GROUPS
-                if (GroupLibrary != null)
+
+                if (isNewDocument)
                 {
-                    ToolContext.GroupLibrary = GroupLibrary;
+                    editorToolContext.NewContainerView("View");
                 }
-#endif
-                if (ToolContext is IEditorToolContext editorToolContext)
+                else
                 {
-                    editorToolContext.ContainerFactory = ContainerFactory;
-                    editorToolContext.UseSkia();
-                    foreach (var containerView in editorToolContext.ContainerViews)
+                    foreach (var containerView in editorToolContext.DocumentContainer.ContainerViews)
                     {
                         editorToolContext.InitContainerView(containerView);
                     }
                 }
             }
-#endif
-            if (ToolContext == null)
-            {
-                ToolContext = ContainerFactory.CreateToolContext();
-#if USE_LOAD_STYLES
-                if (StyleLibrary != null)
-                {
-                    ToolContext.StyleLibrary = StyleLibrary;
-                }
-#endif
-#if USE_LOAD_GROUPS
-                if (GroupLibrary != null)
-                {
-                    ToolContext.GroupLibrary = GroupLibrary;
-                }
-#endif
-                if (ToolContext.StyleLibrary == null)
-                {
-                    ToolContext.StyleLibrary = ContainerFactory.CreateStyleLibrary();
-                }
 
-                if (ToolContext.GroupLibrary == null)
-                {
-                    ToolContext.GroupLibrary = ContainerFactory.CreateGroupLibrary();
-                }
-
-                if (ToolContext is IEditorToolContext editorToolContext)
-                {
-                    editorToolContext.ContainerFactory = ContainerFactory;
-                    editorToolContext.UseSkia();
-                    editorToolContext.NewContainerView("View");
-
-                    editorToolContext.CurrentDirectory = Directory.GetCurrentDirectory();
-                    editorToolContext.AddFiles(editorToolContext.CurrentDirectory);
-                }
-            }
-
-#if USE_LOAD_WINDOW
             if (File.Exists(WindowPath))
             {
                 WindowSettings = JsonSerializer.FromJsonFile<WindowSettings>(WindowPath);
             }
-#endif
+
             if (WindowSettings == null)
             {
                 WindowSettings = new WindowSettings()
@@ -204,73 +174,15 @@ namespace Draw2D
 
         public static void Save()
         {
-#if USE_SAVE_STYLES
-            JsonSerializer.ToJsonFile(StylesPath, ToolContext.StyleLibrary);
-#endif
-#if USE_SAVE_GROUPS
-            JsonSerializer.ToJsonFile(GroupsPath, ToolContext.GroupLibrary);
-#endif
-#if USE_SAVE_EDITOR
+            JsonSerializer.ToJsonFile(DocumentPath, ToolContext.DocumentContainer);
             JsonSerializer.ToJsonFile(EditorPath, ToolContext);
-#endif
-#if USE_SAVE_WINDOW
             JsonSerializer.ToJsonFile(WindowPath, WindowSettings);
-#endif
             WindowSettings = null;
             ToolContext.Dispose();
             ToolContext = null;
             StyleLibrary = null;
             GroupLibrary = null;
             ContainerFactory = null;
-        }
-
-        public static bool ParseArgs(string[] args)
-        {
-            if (args.Length == 1)
-            {
-                var command = args[0];
-
-                if (command == "--new-styles")
-                {
-                    var styleLibrary = ContainerFactory.CreateStyleLibrary();
-                    JsonSerializer.ToJsonFile("styles.json", styleLibrary);
-                    return false;
-                }
-
-                if (command == "--new-groups")
-                {
-                    var groupLibrary = ContainerFactory.CreateGroupLibrary();
-                    JsonSerializer.ToJsonFile("groups.json", groupLibrary);
-                    return false;
-                }
-
-                if (command == "--new-view")
-                {
-                    var containerView = ContainerFactory.CreateContainerView("View");
-                    JsonSerializer.ToJsonFile("View.json", containerView);
-                    return false;
-                }
-
-                if (command == "--new-editor")
-                {
-                    var toolContext = ContainerFactory.CreateToolContext();
-                    JsonSerializer.ToJsonFile("editor.json", toolContext);
-                    return false;
-                }
-            }
-            else if (args.Length == 3)
-            {
-                var command = args[0];
-
-                if (command == "--export")
-                {
-                    var toolContext = JsonSerializer.FromJsonFile<IToolContext>(args[1]);
-                    new SkiaContainerExporter().Export(toolContext, args[2], toolContext.ContainerView);
-                    return false;
-                }
-            }
-
-            return true;
         }
 
         public override void Initialize()

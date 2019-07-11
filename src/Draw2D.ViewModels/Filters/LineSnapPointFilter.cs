@@ -34,7 +34,7 @@ namespace Draw2D.ViewModels.Filters
 
             if (Settings.Target.HasFlag(LineSnapTarget.Shapes))
             {
-                if (Process(context, ref x, ref y, context.ContainerView?.CurrentContainer.Shapes.OfType<LineShape>()))
+                if (Process(context, ref x, ref y, context.DocumentContainer?.ContainerView?.CurrentContainer.Shapes.OfType<LineShape>()))
                 {
                     return true;
                 }
@@ -73,7 +73,7 @@ namespace Draw2D.ViewModels.Filters
             {
                 Points = new ObservableCollection<IPointShape>(),
                 StartPoint = new PointShape(0, y, null),
-                Point = new PointShape(context.ContainerView?.Width ?? 0, y, null),
+                Point = new PointShape(context.DocumentContainer?.ContainerView?.Width ?? 0, y, null),
                 StyleId = Settings.GuideStyle
             };
             horizontal.StartPoint.Owner = horizontal;
@@ -83,7 +83,7 @@ namespace Draw2D.ViewModels.Filters
             {
                 Points = new ObservableCollection<IPointShape>(),
                 StartPoint = new PointShape(x, 0, null),
-                Point = new PointShape(x, context.ContainerView?.Height ?? 0, null),
+                Point = new PointShape(x, context.DocumentContainer?.ContainerView?.Height ?? 0, null),
                 StyleId = Settings.GuideStyle
             };
             vertical.StartPoint.Owner = vertical;
@@ -92,9 +92,9 @@ namespace Draw2D.ViewModels.Filters
             Guides.Add(horizontal);
             Guides.Add(vertical);
 
-            context.ContainerView?.WorkingContainer.Shapes.Add(horizontal);
-            context.ContainerView?.WorkingContainer.Shapes.Add(vertical);
-            context.ContainerView?.WorkingContainer.MarkAsDirty(true);
+            context.DocumentContainer?.ContainerView?.WorkingContainer.Shapes.Add(horizontal);
+            context.DocumentContainer?.ContainerView?.WorkingContainer.Shapes.Add(vertical);
+            context.DocumentContainer?.ContainerView?.WorkingContainer.MarkAsDirty(true);
         }
 
         public static bool SnapLinesToPoint(IEnumerable<LineShape> lines, double threshold, Point2 point, out Point2 snap, out LineSnapMode result)

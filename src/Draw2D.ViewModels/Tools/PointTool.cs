@@ -29,10 +29,10 @@ namespace Draw2D.ViewModels.Tools
             FiltersProcess(context, ref x, ref y);
 
             var radius = Settings?.HitTestRadius ?? 7.0;
-            var scale = context.ContainerView?.ZoomService?.ZoomServiceState?.ZoomX ?? 1.0;
+            var scale = context.DocumentContainer?.ContainerView?.ZoomService?.ZoomServiceState?.ZoomX ?? 1.0;
 
             var shape = context.HitTest?.TryToGetShape(
-                context.ContainerView?.CurrentContainer.Shapes,
+                context.DocumentContainer?.ContainerView?.CurrentContainer.Shapes,
                 new Point2(x, y),
                 radius,
                 scale,
@@ -44,21 +44,21 @@ namespace Draw2D.ViewModels.Tools
                     var point = new PointShape(x, y, context?.DocumentContainer?.PointTemplate);
                     point.Owner = connectable;
                     connectable.Points.Add(point);
-                    context.ContainerView?.WorkingContainer.MarkAsDirty(true);
-                    context.ContainerView?.SelectionState?.Select(point);
-                    context.ContainerView?.InputService?.Redraw?.Invoke();
+                    context.DocumentContainer?.ContainerView?.WorkingContainer.MarkAsDirty(true);
+                    context.DocumentContainer?.ContainerView?.SelectionState?.Select(point);
+                    context.DocumentContainer?.ContainerView?.InputService?.Redraw?.Invoke();
                 }
             }
 #if USE_CONTAINER_POINTS
             else
             {
-                if (context.ContainerView?.CurrentContainer != null)
+                if (context.DocumentContainer?.ContainerView?.CurrentContainer != null)
                 {
                     var point = new PointShape(x, y, context?.DocumentContainer?.PointTemplate);
-                    point.Owner = context.ContainerView?.CurrentContainer;
+                    point.Owner = context.DocumentContainer?.ContainerView?.CurrentContainer;
 
-                    context.ContainerView?.CurrentContainer.Shapes.Add(point);
-                    context.ContainerView?.InputService?.Redraw?.Invoke();
+                    context.DocumentContainer?.ContainerView?.CurrentContainer.Shapes.Add(point);
+                    context.DocumentContainer?.ContainerView?.InputService?.Redraw?.Invoke();
                 }
             }
 #endif
@@ -69,7 +69,7 @@ namespace Draw2D.ViewModels.Tools
             FiltersClear(context);
             FiltersProcess(context, ref x, ref y);
 
-            context.ContainerView?.InputService?.Redraw?.Invoke();
+            context.DocumentContainer?.ContainerView?.InputService?.Redraw?.Invoke();
         }
 
         private void CleanInternal(IToolContext context)

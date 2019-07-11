@@ -14,13 +14,13 @@
              d:DesignWidth="1320" d:DesignHeight="690">
     <UserControl.KeyBindings>
         <KeyBinding Command="{Binding NewContainerView}" CommandParameter="View" Gesture="Ctrl+N"/>
-        <KeyBinding Command="{Binding OpenContainerView}" Gesture="Ctrl+O"/>
-        <KeyBinding Command="{Binding SaveContainerViewAs}" Gesture="Ctrl+S"/>
+        <KeyBinding Command="{Binding OpenDocumentContainer}" Gesture="Ctrl+O"/>
+        <KeyBinding Command="{Binding SaveDocumentContainerAs}" Gesture="Ctrl+S"/>
         <KeyBinding Command="{Binding ImportFile}" Gesture="Ctrl+I"/>
         <KeyBinding Command="{Binding ExportFile}" Gesture="Ctrl+E"/>
         <KeyBinding Command="{Binding Exit}" Gesture="Alt+F4"/>
     </UserControl.KeyBindings>
-    <Grid RowDefinitions="Auto,5,*,5" ColumnDefinitions="320,Auto,*,Auto,320">
+    <Grid RowDefinitions="Auto,5,*,5" ColumnDefinitions="320,Auto,*,Auto,2800">
         <local:MenuView Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="5"/>
         <local:PropertiesView Grid.Row="2" Grid.Column="0"/>
         <GridSplitter Grid.Row="2" Grid.Column="1"/>

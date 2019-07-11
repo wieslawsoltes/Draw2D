@@ -41,12 +41,12 @@ namespace Draw2D.ViewModels.Tools
             FiltersProcess(context, ref x, ref y);
 
             var radius = Settings?.HitTestRadius ?? 7.0;
-            var scale = context.ContainerView?.ZoomService?.ZoomServiceState?.ZoomX ?? 1.0;
+            var scale = context.DocumentContainer?.ContainerView?.ZoomService?.ZoomServiceState?.ZoomX ?? 1.0;
 
-            IPointShape startPoint = context.ContainerView?.GetNextPoint(context, x, y, Settings?.ConnectPoints ?? false, radius, scale, modifier);
-            IPointShape point1 = context.ContainerView?.GetNextPoint(context, x, y, false, 0.0, 1.0, modifier);
-            IPointShape point2 = context.ContainerView?.GetNextPoint(context, x, y, false, 0.0, 1.0, modifier);
-            IPointShape point3 = context.ContainerView?.GetNextPoint(context, x, y, false, 0.0, 1.0, modifier);
+            IPointShape startPoint = context.DocumentContainer?.ContainerView?.GetNextPoint(context, x, y, Settings?.ConnectPoints ?? false, radius, scale, modifier);
+            IPointShape point1 = context.DocumentContainer?.ContainerView?.GetNextPoint(context, x, y, false, 0.0, 1.0, modifier);
+            IPointShape point2 = context.DocumentContainer?.ContainerView?.GetNextPoint(context, x, y, false, 0.0, 1.0, modifier);
+            IPointShape point3 = context.DocumentContainer?.ContainerView?.GetNextPoint(context, x, y, false, 0.0, 1.0, modifier);
 
             _cubicBezier = new CubicBezierShape()
             {
@@ -56,9 +56,9 @@ namespace Draw2D.ViewModels.Tools
                 Point2 = point2,
                 Point3 = point3,
                 Text = new Text(),
-                StyleId = context.StyleLibrary?.CurrentItem?.Title
+                StyleId = context.DocumentContainer?.StyleLibrary?.CurrentItem?.Title
             };
-            _cubicBezier.Owner = context.ContainerView?.WorkingContainer;
+            _cubicBezier.Owner = context.DocumentContainer?.ContainerView?.WorkingContainer;
             if (_cubicBezier.StartPoint.Owner == null)
             {
                 _cubicBezier.StartPoint.Owner = _cubicBezier;
@@ -75,16 +75,16 @@ namespace Draw2D.ViewModels.Tools
             {
                 _cubicBezier.Point3.Owner = _cubicBezier;
             }
-            context.ContainerView?.WorkingContainer.Shapes.Add(_cubicBezier);
-            context.ContainerView?.WorkingContainer.MarkAsDirty(true);
-            context.ContainerView?.SelectionState?.Select(_cubicBezier);
-            context.ContainerView?.SelectionState?.Select(_cubicBezier.StartPoint);
-            context.ContainerView?.SelectionState?.Select(_cubicBezier.Point1);
-            context.ContainerView?.SelectionState?.Select(_cubicBezier.Point2);
-            context.ContainerView?.SelectionState?.Select(_cubicBezier.Point3);
+            context.DocumentContainer?.ContainerView?.WorkingContainer.Shapes.Add(_cubicBezier);
+            context.DocumentContainer?.ContainerView?.WorkingContainer.MarkAsDirty(true);
+            context.DocumentContainer?.ContainerView?.SelectionState?.Select(_cubicBezier);
+            context.DocumentContainer?.ContainerView?.SelectionState?.Select(_cubicBezier.StartPoint);
+            context.DocumentContainer?.ContainerView?.SelectionState?.Select(_cubicBezier.Point1);
+            context.DocumentContainer?.ContainerView?.SelectionState?.Select(_cubicBezier.Point2);
+            context.DocumentContainer?.ContainerView?.SelectionState?.Select(_cubicBezier.Point3);
 
-            context.ContainerView?.InputService?.Capture?.Invoke();
-            context.ContainerView?.InputService?.Redraw?.Invoke();
+            context.DocumentContainer?.ContainerView?.InputService?.Capture?.Invoke();
+            context.DocumentContainer?.ContainerView?.InputService?.Redraw?.Invoke();
 
             CurrentState = State.Point3;
         }
@@ -95,33 +95,33 @@ namespace Draw2D.ViewModels.Tools
 
             CurrentState = State.StartPoint;
 
-            context.ContainerView?.SelectionState?.Deselect(_cubicBezier);
-            context.ContainerView?.SelectionState?.Deselect(_cubicBezier.StartPoint);
-            context.ContainerView?.SelectionState?.Deselect(_cubicBezier.Point1);
-            context.ContainerView?.SelectionState?.Deselect(_cubicBezier.Point2);
-            context.ContainerView?.SelectionState?.Deselect(_cubicBezier.Point3);
-            context.ContainerView?.WorkingContainer.Shapes.Remove(_cubicBezier);
-            context.ContainerView?.WorkingContainer.MarkAsDirty(true);
+            context.DocumentContainer?.ContainerView?.SelectionState?.Deselect(_cubicBezier);
+            context.DocumentContainer?.ContainerView?.SelectionState?.Deselect(_cubicBezier.StartPoint);
+            context.DocumentContainer?.ContainerView?.SelectionState?.Deselect(_cubicBezier.Point1);
+            context.DocumentContainer?.ContainerView?.SelectionState?.Deselect(_cubicBezier.Point2);
+            context.DocumentContainer?.ContainerView?.SelectionState?.Deselect(_cubicBezier.Point3);
+            context.DocumentContainer?.ContainerView?.WorkingContainer.Shapes.Remove(_cubicBezier);
+            context.DocumentContainer?.ContainerView?.WorkingContainer.MarkAsDirty(true);
 
             var radius = Settings?.HitTestRadius ?? 7.0;
-            var scale = context.ContainerView?.ZoomService?.ZoomServiceState?.ZoomX ?? 1.0;
+            var scale = context.DocumentContainer?.ContainerView?.ZoomService?.ZoomServiceState?.ZoomX ?? 1.0;
 
-            IPointShape point1 = context.ContainerView?.GetNextPoint(context, x, y, Settings?.ConnectPoints ?? false, radius, scale, modifier);
+            IPointShape point1 = context.DocumentContainer?.ContainerView?.GetNextPoint(context, x, y, Settings?.ConnectPoints ?? false, radius, scale, modifier);
 
             _cubicBezier.Point1 = point1;
             if (_cubicBezier.Point1.Owner == null)
             {
                 _cubicBezier.Point1.Owner = _cubicBezier;
             }
-            _cubicBezier.Owner = context.ContainerView?.CurrentContainer;
-            context.ContainerView?.CurrentContainer.Shapes.Add(_cubicBezier);
-            context.ContainerView?.CurrentContainer.MarkAsDirty(true);
+            _cubicBezier.Owner = context.DocumentContainer?.ContainerView?.CurrentContainer;
+            context.DocumentContainer?.ContainerView?.CurrentContainer.Shapes.Add(_cubicBezier);
+            context.DocumentContainer?.ContainerView?.CurrentContainer.MarkAsDirty(true);
             _cubicBezier = null;
 
             FiltersClear(context);
 
-            context.ContainerView?.InputService?.Release?.Invoke();
-            context.ContainerView?.InputService?.Redraw?.Invoke();
+            context.DocumentContainer?.ContainerView?.InputService?.Release?.Invoke();
+            context.DocumentContainer?.ContainerView?.InputService?.Redraw?.Invoke();
         }
 
         private void Point2Internal(IToolContext context, double x, double y, Modifier modifier)
@@ -131,23 +131,23 @@ namespace Draw2D.ViewModels.Tools
             _cubicBezier.Point1.X = x;
             _cubicBezier.Point1.Y = y;
 
-            context.ContainerView?.SelectionState?.Deselect(_cubicBezier.Point2);
+            context.DocumentContainer?.ContainerView?.SelectionState?.Deselect(_cubicBezier.Point2);
 
             var radius = Settings?.HitTestRadius ?? 7.0;
-            var scale = context.ContainerView?.ZoomService?.ZoomServiceState?.ZoomX ?? 1.0;
+            var scale = context.DocumentContainer?.ContainerView?.ZoomService?.ZoomServiceState?.ZoomX ?? 1.0;
 
-            IPointShape point2 = context.ContainerView?.GetNextPoint(context, x, y, Settings?.ConnectPoints ?? false, radius, scale, modifier);
+            IPointShape point2 = context.DocumentContainer?.ContainerView?.GetNextPoint(context, x, y, Settings?.ConnectPoints ?? false, radius, scale, modifier);
 
             _cubicBezier.Point2 = point2;
             if (_cubicBezier.Point2.Owner == null)
             {
                 _cubicBezier.Point2.Owner = _cubicBezier;
             }
-            context.ContainerView?.SelectionState?.Select(_cubicBezier.Point2);
+            context.DocumentContainer?.ContainerView?.SelectionState?.Select(_cubicBezier.Point2);
 
             CurrentState = State.Point1;
 
-            context.ContainerView?.InputService?.Redraw?.Invoke();
+            context.DocumentContainer?.ContainerView?.InputService?.Redraw?.Invoke();
         }
 
         private void Point3Internal(IToolContext context, double x, double y, Modifier modifier)
@@ -157,23 +157,23 @@ namespace Draw2D.ViewModels.Tools
             _cubicBezier.Point2.X = x;
             _cubicBezier.Point2.Y = y;
 
-            context.ContainerView?.SelectionState?.Deselect(_cubicBezier.Point3);
+            context.DocumentContainer?.ContainerView?.SelectionState?.Deselect(_cubicBezier.Point3);
 
             var radius = Settings?.HitTestRadius ?? 7.0;
-            var scale = context.ContainerView?.ZoomService?.ZoomServiceState?.ZoomX ?? 1.0;
+            var scale = context.DocumentContainer?.ContainerView?.ZoomService?.ZoomServiceState?.ZoomX ?? 1.0;
 
-            IPointShape point3 = context.ContainerView?.GetNextPoint(context, x, y, Settings?.ConnectPoints ?? false, radius, scale, modifier);
+            IPointShape point3 = context.DocumentContainer?.ContainerView?.GetNextPoint(context, x, y, Settings?.ConnectPoints ?? false, radius, scale, modifier);
 
             _cubicBezier.Point3 = point3;
             if (_cubicBezier.Point3.Owner == null)
             {
                 _cubicBezier.Point3.Owner = _cubicBezier;
             }
-            context.ContainerView?.SelectionState?.Select(_cubicBezier.Point3);
+            context.DocumentContainer?.ContainerView?.SelectionState?.Select(_cubicBezier.Point3);
 
             CurrentState = State.Point2;
 
-            context.ContainerView?.InputService?.Redraw?.Invoke();
+            context.DocumentContainer?.ContainerView?.InputService?.Redraw?.Invoke();
         }
 
         private void MoveStartPointInternal(IToolContext context, double x, double y, Modifier modifier)
@@ -181,7 +181,7 @@ namespace Draw2D.ViewModels.Tools
             FiltersClear(context);
             FiltersProcess(context, ref x, ref y);
 
-            context.ContainerView?.InputService?.Redraw?.Invoke();
+            context.DocumentContainer?.ContainerView?.InputService?.Redraw?.Invoke();
         }
 
         private void MovePoint1Internal(IToolContext context, double x, double y, Modifier modifier)
@@ -192,7 +192,7 @@ namespace Draw2D.ViewModels.Tools
             _cubicBezier.Point1.X = x;
             _cubicBezier.Point1.Y = y;
 
-            context.ContainerView?.InputService?.Redraw?.Invoke();
+            context.DocumentContainer?.ContainerView?.InputService?.Redraw?.Invoke();
         }
 
         private void MovePoint2Internal(IToolContext context, double x, double y, Modifier modifier)
@@ -205,7 +205,7 @@ namespace Draw2D.ViewModels.Tools
             _cubicBezier.Point2.X = x;
             _cubicBezier.Point2.Y = y;
 
-            context.ContainerView?.InputService?.Redraw?.Invoke();
+            context.DocumentContainer?.ContainerView?.InputService?.Redraw?.Invoke();
         }
 
         private void MovePoint3Internal(IToolContext context, double x, double y, Modifier modifier)
@@ -218,7 +218,7 @@ namespace Draw2D.ViewModels.Tools
             _cubicBezier.Point3.X = x;
             _cubicBezier.Point3.Y = y;
 
-            context.ContainerView?.InputService?.Redraw?.Invoke();
+            context.DocumentContainer?.ContainerView?.InputService?.Redraw?.Invoke();
         }
 
         private void CleanInternal(IToolContext context)
@@ -229,18 +229,18 @@ namespace Draw2D.ViewModels.Tools
 
             if (_cubicBezier != null)
             {
-                context.ContainerView?.WorkingContainer.Shapes.Remove(_cubicBezier);
-                context.ContainerView?.WorkingContainer.MarkAsDirty(true);
-                context.ContainerView?.SelectionState?.Deselect(_cubicBezier);
-                context.ContainerView?.SelectionState?.Deselect(_cubicBezier.StartPoint);
-                context.ContainerView?.SelectionState?.Deselect(_cubicBezier.Point1);
-                context.ContainerView?.SelectionState?.Deselect(_cubicBezier.Point2);
-                context.ContainerView?.SelectionState?.Deselect(_cubicBezier.Point3);
+                context.DocumentContainer?.ContainerView?.WorkingContainer.Shapes.Remove(_cubicBezier);
+                context.DocumentContainer?.ContainerView?.WorkingContainer.MarkAsDirty(true);
+                context.DocumentContainer?.ContainerView?.SelectionState?.Deselect(_cubicBezier);
+                context.DocumentContainer?.ContainerView?.SelectionState?.Deselect(_cubicBezier.StartPoint);
+                context.DocumentContainer?.ContainerView?.SelectionState?.Deselect(_cubicBezier.Point1);
+                context.DocumentContainer?.ContainerView?.SelectionState?.Deselect(_cubicBezier.Point2);
+                context.DocumentContainer?.ContainerView?.SelectionState?.Deselect(_cubicBezier.Point3);
                 _cubicBezier = null;
             }
 
-            context.ContainerView?.InputService?.Release?.Invoke();
-            context.ContainerView?.InputService?.Redraw?.Invoke();
+            context.DocumentContainer?.ContainerView?.InputService?.Release?.Invoke();
+            context.DocumentContainer?.ContainerView?.InputService?.Redraw?.Invoke();
         }
 
         public void LeftDown(IToolContext context, double x, double y, Modifier modifier)

@@ -26,9 +26,9 @@ namespace Draw2D.ViewModels.Intersections
         {
             foreach (var point in Intersections)
             {
-                context.ContainerView?.WorkingContainer.Shapes.Remove(point);
-                context.ContainerView?.WorkingContainer.MarkAsDirty(true);
-                context.ContainerView?.SelectionState?.Deselect(point);
+                context.DocumentContainer?.ContainerView?.WorkingContainer.Shapes.Remove(point);
+                context.DocumentContainer?.ContainerView?.WorkingContainer.MarkAsDirty(true);
+                context.DocumentContainer?.ContainerView?.SelectionState?.Deselect(point);
             }
             Intersections.Clear();
         }

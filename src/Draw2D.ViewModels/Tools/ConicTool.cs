@@ -40,11 +40,11 @@ namespace Draw2D.ViewModels.Tools
             FiltersProcess(context, ref x, ref y);
 
             var radius = Settings?.HitTestRadius ?? 7.0;
-            var scale = context.ContainerView?.ZoomService?.ZoomServiceState?.ZoomX ?? 1.0;
+            var scale = context.DocumentContainer?.ContainerView?.ZoomService?.ZoomServiceState?.ZoomX ?? 1.0;
 
-            IPointShape startPoint = context.ContainerView?.GetNextPoint(context, x, y, Settings?.ConnectPoints ?? false, radius, scale, modifier);
-            IPointShape point1 = context.ContainerView?.GetNextPoint(context, x, y, false, 0.0, 1.0, modifier);
-            IPointShape point2 = context.ContainerView?.GetNextPoint(context, x, y, false, 0.0, 1.0, modifier);
+            IPointShape startPoint = context.DocumentContainer?.ContainerView?.GetNextPoint(context, x, y, Settings?.ConnectPoints ?? false, radius, scale, modifier);
+            IPointShape point1 = context.DocumentContainer?.ContainerView?.GetNextPoint(context, x, y, false, 0.0, 1.0, modifier);
+            IPointShape point2 = context.DocumentContainer?.ContainerView?.GetNextPoint(context, x, y, false, 0.0, 1.0, modifier);
 
             _conic = new ConicShape()
             {
@@ -54,9 +54,9 @@ namespace Draw2D.ViewModels.Tools
                 Point2 = point2,
                 Weight = Settings.Weight,
                 Text = new Text(),
-                StyleId = context.StyleLibrary?.CurrentItem?.Title
+                StyleId = context.DocumentContainer?.StyleLibrary?.CurrentItem?.Title
             };
-            _conic.Owner = context.ContainerView?.WorkingContainer;
+            _conic.Owner = context.DocumentContainer?.ContainerView?.WorkingContainer;
             if (_conic.StartPoint.Owner == null)
             {
                 _conic.StartPoint.Owner = _conic;
@@ -69,15 +69,15 @@ namespace Draw2D.ViewModels.Tools
             {
                 _conic.Point2.Owner = _conic;
             }
-            context.ContainerView?.WorkingContainer.Shapes.Add(_conic);
-            context.ContainerView?.WorkingContainer.MarkAsDirty(true);
-            context.ContainerView?.SelectionState?.Select(_conic);
-            context.ContainerView?.SelectionState?.Select(_conic.StartPoint);
-            context.ContainerView?.SelectionState?.Select(_conic.Point1);
-            context.ContainerView?.SelectionState?.Select(_conic.Point2);
+            context.DocumentContainer?.ContainerView?.WorkingContainer.Shapes.Add(_conic);
+            context.DocumentContainer?.ContainerView?.WorkingContainer.MarkAsDirty(true);
+            context.DocumentContainer?.ContainerView?.SelectionState?.Select(_conic);
+            context.DocumentContainer?.ContainerView?.SelectionState?.Select(_conic.StartPoint);
+            context.DocumentContainer?.ContainerView?.SelectionState?.Select(_conic.Point1);
+            context.DocumentContainer?.ContainerView?.SelectionState?.Select(_conic.Point2);
 
-            context.ContainerView?.InputService?.Capture?.Invoke();
-            context.ContainerView?.InputService?.Redraw?.Invoke();
+            context.DocumentContainer?.ContainerView?.InputService?.Capture?.Invoke();
+            context.DocumentContainer?.ContainerView?.InputService?.Redraw?.Invoke();
 
             CurrentState = State.Point2;
         }
@@ -88,32 +88,32 @@ namespace Draw2D.ViewModels.Tools
 
             CurrentState = State.StartPoint;
 
-            context.ContainerView?.SelectionState?.Deselect(_conic);
-            context.ContainerView?.SelectionState?.Deselect(_conic.StartPoint);
-            context.ContainerView?.SelectionState?.Deselect(_conic.Point1);
-            context.ContainerView?.SelectionState?.Deselect(_conic.Point2);
-            context.ContainerView?.WorkingContainer.Shapes.Remove(_conic);
-            context.ContainerView?.WorkingContainer.MarkAsDirty(true);
+            context.DocumentContainer?.ContainerView?.SelectionState?.Deselect(_conic);
+            context.DocumentContainer?.ContainerView?.SelectionState?.Deselect(_conic.StartPoint);
+            context.DocumentContainer?.ContainerView?.SelectionState?.Deselect(_conic.Point1);
+            context.DocumentContainer?.ContainerView?.SelectionState?.Deselect(_conic.Point2);
+            context.DocumentContainer?.ContainerView?.WorkingContainer.Shapes.Remove(_conic);
+            context.DocumentContainer?.ContainerView?.WorkingContainer.MarkAsDirty(true);
 
             var radius = Settings?.HitTestRadius ?? 7.0;
-            var scale = context.ContainerView?.ZoomService?.ZoomServiceState?.ZoomX ?? 1.0;
+            var scale = context.DocumentContainer?.ContainerView?.ZoomService?.ZoomServiceState?.ZoomX ?? 1.0;
 
-            IPointShape point1 = context.ContainerView?.GetNextPoint(context, x, y, Settings?.ConnectPoints ?? false, radius, scale, modifier);
+            IPointShape point1 = context.DocumentContainer?.ContainerView?.GetNextPoint(context, x, y, Settings?.ConnectPoints ?? false, radius, scale, modifier);
 
             _conic.Point1 = point1;
             if (_conic.Point1.Owner == null)
             {
                 _conic.Point1.Owner = _conic;
             }
-            _conic.Owner = context.ContainerView?.CurrentContainer;
-            context.ContainerView?.CurrentContainer.Shapes.Add(_conic);
-            context.ContainerView?.CurrentContainer.MarkAsDirty(true);
+            _conic.Owner = context.DocumentContainer?.ContainerView?.CurrentContainer;
+            context.DocumentContainer?.ContainerView?.CurrentContainer.Shapes.Add(_conic);
+            context.DocumentContainer?.ContainerView?.CurrentContainer.MarkAsDirty(true);
             _conic = null;
 
             FiltersClear(context);
 
-            context.ContainerView?.InputService?.Release?.Invoke();
-            context.ContainerView?.InputService?.Redraw?.Invoke();
+            context.DocumentContainer?.ContainerView?.InputService?.Release?.Invoke();
+            context.DocumentContainer?.ContainerView?.InputService?.Redraw?.Invoke();
         }
 
         private void Point2Internal(IToolContext context, double x, double y, Modifier modifier)
@@ -123,23 +123,23 @@ namespace Draw2D.ViewModels.Tools
             _conic.Point1.X = x;
             _conic.Point1.Y = y;
 
-            context.ContainerView?.SelectionState?.Deselect(_conic.Point2);
+            context.DocumentContainer?.ContainerView?.SelectionState?.Deselect(_conic.Point2);
 
             var radius = Settings?.HitTestRadius ?? 7.0;
-            var scale = context.ContainerView?.ZoomService?.ZoomServiceState?.ZoomX ?? 1.0;
+            var scale = context.DocumentContainer?.ContainerView?.ZoomService?.ZoomServiceState?.ZoomX ?? 1.0;
 
-            IPointShape point2 = context.ContainerView?.GetNextPoint(context, x, y, Settings?.ConnectPoints ?? false, Settings?.HitTestRadius ?? 7.0, scale, modifier);
+            IPointShape point2 = context.DocumentContainer?.ContainerView?.GetNextPoint(context, x, y, Settings?.ConnectPoints ?? false, Settings?.HitTestRadius ?? 7.0, scale, modifier);
 
             _conic.Point2 = point2;
             if (_conic.Point2.Owner == null)
             {
                 _conic.Point2.Owner = _conic;
             }
-            context.ContainerView?.SelectionState?.Select(_conic.Point2);
+            context.DocumentContainer?.ContainerView?.SelectionState?.Select(_conic.Point2);
 
             CurrentState = State.Point1;
 
-            context.ContainerView?.InputService?.Redraw?.Invoke();
+            context.DocumentContainer?.ContainerView?.InputService?.Redraw?.Invoke();
         }
 
         private void MoveStartPointInternal(IToolContext context, double x, double y, Modifier modifier)
@@ -147,7 +147,7 @@ namespace Draw2D.ViewModels.Tools
             FiltersClear(context);
             FiltersProcess(context, ref x, ref y);
 
-            context.ContainerView?.InputService?.Redraw?.Invoke();
+            context.DocumentContainer?.ContainerView?.InputService?.Redraw?.Invoke();
         }
 
         private void MovePoint1Internal(IToolContext context, double x, double y, Modifier modifier)
@@ -158,7 +158,7 @@ namespace Draw2D.ViewModels.Tools
             _conic.Point1.X = x;
             _conic.Point1.Y = y;
 
-            context.ContainerView?.InputService?.Redraw?.Invoke();
+            context.DocumentContainer?.ContainerView?.InputService?.Redraw?.Invoke();
         }
 
         private void MovePoint2Internal(IToolContext context, double x, double y, Modifier modifier)
@@ -171,7 +171,7 @@ namespace Draw2D.ViewModels.Tools
             _conic.Point2.X = x;
             _conic.Point2.Y = y;
 
-            context.ContainerView?.InputService?.Redraw?.Invoke();
+            context.DocumentContainer?.ContainerView?.InputService?.Redraw?.Invoke();
         }
 
         private void CleanInternal(IToolContext context)
@@ -182,17 +182,17 @@ namespace Draw2D.ViewModels.Tools
 
             if (_conic != null)
             {
-                context.ContainerView?.WorkingContainer.Shapes.Remove(_conic);
-                context.ContainerView?.WorkingContainer.MarkAsDirty(true);
-                context.ContainerView?.SelectionState?.Deselect(_conic);
-                context.ContainerView?.SelectionState?.Deselect(_conic.StartPoint);
-                context.ContainerView?.SelectionState?.Deselect(_conic.Point1);
-                context.ContainerView?.SelectionState?.Deselect(_conic.Point2);
+                context.DocumentContainer?.ContainerView?.WorkingContainer.Shapes.Remove(_conic);
+                context.DocumentContainer?.ContainerView?.WorkingContainer.MarkAsDirty(true);
+                context.DocumentContainer?.ContainerView?.SelectionState?.Deselect(_conic);
+                context.DocumentContainer?.ContainerView?.SelectionState?.Deselect(_conic.StartPoint);
+                context.DocumentContainer?.ContainerView?.SelectionState?.Deselect(_conic.Point1);
+                context.DocumentContainer?.ContainerView?.SelectionState?.Deselect(_conic.Point2);
                 _conic = null;
             }
 
-            context.ContainerView?.InputService?.Release?.Invoke();
-            context.ContainerView?.InputService?.Redraw?.Invoke();
+            context.DocumentContainer?.ContainerView?.InputService?.Release?.Invoke();
+            context.DocumentContainer?.ContainerView?.InputService?.Redraw?.Invoke();
         }
 
         public void LeftDown(IToolContext context, double x, double y, Modifier modifier)

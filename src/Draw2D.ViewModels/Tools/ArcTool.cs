@@ -39,10 +39,10 @@ namespace Draw2D.ViewModels.Tools
             FiltersProcess(context, ref x, ref y);
 
             var radius = Settings?.HitTestRadius ?? 7.0;
-            var scale = context.ContainerView?.ZoomService?.ZoomServiceState?.ZoomX ?? 1.0;
+            var scale = context.DocumentContainer?.ContainerView?.ZoomService?.ZoomServiceState?.ZoomX ?? 1.0;
 
-            IPointShape startPoint = context.ContainerView?.GetNextPoint(context, x, y, Settings?.ConnectPoints ?? false, radius, scale, modifier);
-            IPointShape point = context.ContainerView?.GetNextPoint(context, x, y, false, 0.0, 1.0, modifier);
+            IPointShape startPoint = context.DocumentContainer?.ContainerView?.GetNextPoint(context, x, y, Settings?.ConnectPoints ?? false, radius, scale, modifier);
+            IPointShape point = context.DocumentContainer?.ContainerView?.GetNextPoint(context, x, y, false, 0.0, 1.0, modifier);
 
             _arc = new ArcShape()
             {
@@ -52,9 +52,9 @@ namespace Draw2D.ViewModels.Tools
                 Text = new Text(),
                 StartAngle = Settings?.StartAngle ?? 0.0,
                 SweepAngle = Settings?.SweepAngle ?? 0.0,
-                StyleId = context.StyleLibrary?.CurrentItem?.Title
+                StyleId = context.DocumentContainer?.StyleLibrary?.CurrentItem?.Title
             };
-            _arc.Owner = context.ContainerView?.WorkingContainer;
+            _arc.Owner = context.DocumentContainer?.ContainerView?.WorkingContainer;
             if (_arc.StartPoint.Owner == null)
             {
                 _arc.StartPoint.Owner = _arc;
@@ -63,14 +63,14 @@ namespace Draw2D.ViewModels.Tools
             {
                 _arc.Point.Owner = _arc;
             }
-            context.ContainerView?.WorkingContainer.Shapes.Add(_arc);
-            context.ContainerView?.WorkingContainer.MarkAsDirty(true);
-            context.ContainerView?.SelectionState?.Select(_arc);
-            context.ContainerView?.SelectionState?.Select(_arc.StartPoint);
-            context.ContainerView?.SelectionState?.Select(_arc.Point);
+            context.DocumentContainer?.ContainerView?.WorkingContainer.Shapes.Add(_arc);
+            context.DocumentContainer?.ContainerView?.WorkingContainer.MarkAsDirty(true);
+            context.DocumentContainer?.ContainerView?.SelectionState?.Select(_arc);
+            context.DocumentContainer?.ContainerView?.SelectionState?.Select(_arc.StartPoint);
+            context.DocumentContainer?.ContainerView?.SelectionState?.Select(_arc.Point);
 
-            context.ContainerView?.InputService?.Capture?.Invoke();
-            context.ContainerView?.InputService?.Redraw?.Invoke();
+            context.DocumentContainer?.ContainerView?.InputService?.Capture?.Invoke();
+            context.DocumentContainer?.ContainerView?.InputService?.Redraw?.Invoke();
 
             CurrentState = State.Point;
         }
@@ -81,31 +81,31 @@ namespace Draw2D.ViewModels.Tools
 
             CurrentState = State.StartPoint;
 
-            context.ContainerView?.SelectionState?.Deselect(_arc.Point);
+            context.DocumentContainer?.ContainerView?.SelectionState?.Deselect(_arc.Point);
 
             var radius = Settings?.HitTestRadius ?? 7.0;
-            var scale = context.ContainerView?.ZoomService?.ZoomServiceState?.ZoomX ?? 1.0;
+            var scale = context.DocumentContainer?.ContainerView?.ZoomService?.ZoomServiceState?.ZoomX ?? 1.0;
 
-            IPointShape point = context.ContainerView?.GetNextPoint(context, x, y, Settings?.ConnectPoints ?? false, radius, scale, modifier);
+            IPointShape point = context.DocumentContainer?.ContainerView?.GetNextPoint(context, x, y, Settings?.ConnectPoints ?? false, radius, scale, modifier);
 
             _arc.Point = point;
             if (_arc.Point.Owner == null)
             {
                 _arc.Point.Owner = _arc;
             }
-            context.ContainerView?.WorkingContainer.Shapes.Remove(_arc);
-            context.ContainerView?.WorkingContainer.MarkAsDirty(true);
-            context.ContainerView?.SelectionState?.Deselect(_arc);
-            context.ContainerView?.SelectionState?.Deselect(_arc.StartPoint);
-            _arc.Owner = context.ContainerView?.CurrentContainer;
-            context.ContainerView?.CurrentContainer.Shapes.Add(_arc);
-            context.ContainerView?.CurrentContainer.MarkAsDirty(true);
+            context.DocumentContainer?.ContainerView?.WorkingContainer.Shapes.Remove(_arc);
+            context.DocumentContainer?.ContainerView?.WorkingContainer.MarkAsDirty(true);
+            context.DocumentContainer?.ContainerView?.SelectionState?.Deselect(_arc);
+            context.DocumentContainer?.ContainerView?.SelectionState?.Deselect(_arc.StartPoint);
+            _arc.Owner = context.DocumentContainer?.ContainerView?.CurrentContainer;
+            context.DocumentContainer?.ContainerView?.CurrentContainer.Shapes.Add(_arc);
+            context.DocumentContainer?.ContainerView?.CurrentContainer.MarkAsDirty(true);
             _arc = null;
 
             FiltersClear(context);
 
-            context.ContainerView?.InputService?.Release?.Invoke();
-            context.ContainerView?.InputService?.Redraw?.Invoke();
+            context.DocumentContainer?.ContainerView?.InputService?.Release?.Invoke();
+            context.DocumentContainer?.ContainerView?.InputService?.Redraw?.Invoke();
         }
 
         private void MoveTopLeftInternal(IToolContext context, double x, double y, Modifier modifier)
@@ -113,7 +113,7 @@ namespace Draw2D.ViewModels.Tools
             FiltersClear(context);
             FiltersProcess(context, ref x, ref y);
 
-            context.ContainerView?.InputService?.Redraw?.Invoke();
+            context.DocumentContainer?.ContainerView?.InputService?.Redraw?.Invoke();
         }
 
         private void MoveBottomRightInternal(IToolContext context, double x, double y, Modifier modifier)
@@ -124,7 +124,7 @@ namespace Draw2D.ViewModels.Tools
             _arc.Point.X = x;
             _arc.Point.Y = y;
 
-            context.ContainerView?.InputService?.Redraw?.Invoke();
+            context.DocumentContainer?.ContainerView?.InputService?.Redraw?.Invoke();
         }
 
         private void CleanInternal(IToolContext context)
@@ -135,16 +135,16 @@ namespace Draw2D.ViewModels.Tools
 
             if (_arc != null)
             {
-                context.ContainerView?.WorkingContainer.Shapes.Remove(_arc);
-                context.ContainerView?.WorkingContainer.MarkAsDirty(true);
-                context.ContainerView?.SelectionState?.Deselect(_arc);
-                context.ContainerView?.SelectionState?.Deselect(_arc.StartPoint);
-                context.ContainerView?.SelectionState?.Deselect(_arc.Point);
+                context.DocumentContainer?.ContainerView?.WorkingContainer.Shapes.Remove(_arc);
+                context.DocumentContainer?.ContainerView?.WorkingContainer.MarkAsDirty(true);
+                context.DocumentContainer?.ContainerView?.SelectionState?.Deselect(_arc);
+                context.DocumentContainer?.ContainerView?.SelectionState?.Deselect(_arc.StartPoint);
+                context.DocumentContainer?.ContainerView?.SelectionState?.Deselect(_arc.Point);
                 _arc = null;
             }
 
-            context.ContainerView?.InputService?.Release?.Invoke();
-            context.ContainerView?.InputService?.Redraw?.Invoke();
+            context.DocumentContainer?.ContainerView?.InputService?.Release?.Invoke();
+            context.DocumentContainer?.ContainerView?.InputService?.Redraw?.Invoke();
         }
 
         public void LeftDown(IToolContext context, double x, double y, Modifier modifier)
