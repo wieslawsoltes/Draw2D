@@ -72,6 +72,69 @@ namespace Draw2D.ViewModels.Tools
             _documentContainer?.Dispose();
         }
 
+        public void SetTool(string title)
+        {
+            if (CurrentTool is PathTool pathTool && pathTool.Settings.CurrentTool.Title != title)
+            {
+                pathTool.CleanCurrentTool(this);
+                var tool = pathTool.Settings.Tools.Where(t => t.Title == title).FirstOrDefault();
+                if (tool != null)
+                {
+                    pathTool.Settings.CurrentTool = tool;
+                }
+                else
+                {
+                    CurrentTool = Tools.Where(t => t.Title == title).FirstOrDefault();
+                }
+            }
+            else
+            {
+                CurrentTool = Tools.Where(t => t.Title == title).FirstOrDefault();
+            }
+        }
+
+        public void LeftDown(double x, double y, Modifier modifier)
+        {
+            _currentTool.LeftDown(this, x, y, modifier);
+        }
+
+        public void LeftUp(double x, double y, Modifier modifier)
+        {
+            if (_editMode == EditMode.Mouse)
+            {
+                _currentTool.LeftUp(this, x, y, modifier);
+            }
+            else if (_editMode == EditMode.Touch)
+            {
+                _currentTool.LeftDown(this, x, y, modifier);
+            }
+        }
+
+        public void RightDown(double x, double y, Modifier modifier)
+        {
+            _currentTool.RightDown(this, x, y, modifier);
+        }
+
+        public void RightUp(double x, double y, Modifier modifier)
+        {
+            _currentTool.RightUp(this, x, y, modifier);
+        }
+
+        public void Move(double x, double y, Modifier modifier)
+        {
+            _currentTool.Move(this, x, y, modifier);
+        }
+
+        public double GetWidth()
+        {
+            return ContainerView?.Width ?? 0.0;
+        }
+
+        public double GetHeight()
+        {
+            return ContainerView?.Height ?? 0.0;
+        }
+
         public virtual object Copy(Dictionary<object, object> shared)
         {
             var copy = new ToolContext()

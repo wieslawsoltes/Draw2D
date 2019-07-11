@@ -155,35 +155,36 @@ namespace Draw2D.ViewModels.Tools
             _pathTool = pathTool;
         }
 
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public string Title
+        {
+            get => _context.DocumentContainer.Title;
+            set => throw new InvalidOperationException($"Can not set {Title} property value.");
+        }
+
         public IStyleLibrary StyleLibrary
         {
             get => _context.DocumentContainer.StyleLibrary;
             set => throw new InvalidOperationException($"Can not set {StyleLibrary} property value.");
         }
 
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public IGroupLibrary GroupLibrary
         {
             get => _context.DocumentContainer.GroupLibrary;
             set => throw new InvalidOperationException($"Can not set {GroupLibrary} property value.");
         }
 
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public IBaseShape PointTemplate
         {
             get => _context.DocumentContainer.PointTemplate;
             set => throw new InvalidOperationException($"Can not set {PointTemplate} property value.");
         }
 
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public IList<IContainerView> ContainerViews
         {
             get => _context.DocumentContainer.ContainerViews;
             set => throw new InvalidOperationException($"Can not set {ContainerViews} property value.");
         }
 
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public IContainerView ContainerView
         {
             get => _pathTool._containerView;
