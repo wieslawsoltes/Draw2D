@@ -7,13 +7,13 @@ using Draw2D.ViewModels.Tools;
 
 namespace Draw2D.Converters
 {
-    public class IsToolConverter : IValueConverter
+    public class IsEqualStringConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value is ITool tool && parameter is string name)
+            if (value is string str1 && parameter is string str2)
             {
-                return tool.Title == name;
+                return str1 == str2;
             }
             return false;
         }
