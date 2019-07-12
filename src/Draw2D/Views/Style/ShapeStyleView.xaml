@@ -46,15 +46,15 @@
                         <Menu Background="Transparent" Grid.Row="0">
                             <MenuItem Header="Add">
                                 <MenuItem Header="1DPath">
-                                    <MenuItem Header="Add Translate" Command="{Binding Add1DPathTranslateEffect}"/>
-                                    <MenuItem Header="Add Rotate" Command="{Binding Add1DPathRotateEffect}"/>
-                                    <MenuItem Header="Add Morph" Command="{Binding Add1DPathMorphEffect}"/>
+                                    <MenuItem Header="Translate" Command="{Binding Add1DPathTranslateEffect}"/>
+                                    <MenuItem Header="Rotate" Command="{Binding Add1DPathRotateEffect}"/>
+                                    <MenuItem Header="Morph" Command="{Binding Add1DPathMorphEffect}"/>
                                 </MenuItem>
                                 <MenuItem Header="Dash">
-                                    <MenuItem Header="Add Dash" Command="{Binding AddDashEffect}"/>
-                                    <MenuItem Header="Add Dot" Command="{Binding AddDotEffect}"/>
-                                    <MenuItem Header="Add DashDot" Command="{Binding AddDashDotEffect}"/>
-                                    <MenuItem Header="Add DashDotDot" Command="{Binding AddDashDotDotEffect}"/>
+                                    <MenuItem Header="Dash" Command="{Binding AddDashEffect}"/>
+                                    <MenuItem Header="Dot" Command="{Binding AddDotEffect}"/>
+                                    <MenuItem Header="DashDot" Command="{Binding AddDashDotEffect}"/>
+                                    <MenuItem Header="DashDotDot" Command="{Binding AddDashDotDotEffect}"/>
                                 </MenuItem>
                             </MenuItem>
                             <MenuItem Header="Remove" Command="{Binding RemovePathEffect}" CommandParameter="{Binding #effects.SelectedItem}"/>
