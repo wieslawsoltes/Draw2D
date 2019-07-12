@@ -11,8 +11,7 @@ namespace Draw2D.ViewModels.Style
     [DataContract(IsReference = true)]
     public class ShapeStyle : ViewModelBase, ICopyable
     {
-        public static IPathEffectFactory PathEffectFactory = new PathEffectFactory();
-
+        public static IPathEffectFactory PathEffectFactory { get; } = new PathEffectFactory();
         public static StrokeCap[] StrokeCapValues { get; } = (StrokeCap[])Enum.GetValues(typeof(StrokeCap));
         public static StrokeJoin[] StrokeJoinValues { get; } = (StrokeJoin[])Enum.GetValues(typeof(StrokeJoin));
 

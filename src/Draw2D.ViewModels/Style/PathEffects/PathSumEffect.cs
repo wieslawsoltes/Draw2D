@@ -8,7 +8,7 @@ namespace Draw2D.ViewModels.Style.PathEffects
     [DataContract(IsReference = true)]
     public class PathSumEffect : ViewModelBase, IPathEffect
     {
-        public static IPathEffectFactory PathEffectFactory = new PathEffectFactory();
+        public static IPathEffectFactory PathEffectFactory { get; } = new PathEffectFactory();
 
         private IPathEffect _first;
         private IPathEffect _second;
