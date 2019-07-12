@@ -159,6 +159,18 @@ namespace Draw2D
             }
         }
 
+        internal static SKTrimPathEffectMode ToSKTrimPathEffectMode(TrimPathEffectMode mode)
+        {
+            switch (mode)
+            {
+                default:
+                case TrimPathEffectMode.Normal:
+                    return SKTrimPathEffectMode.Normal;
+                case TrimPathEffectMode.Inverted:
+                    return SKTrimPathEffectMode.Inverted;
+            }
+        }
+
         internal static SKPathEffect ToSKPathEffect(IPathEffect pathEffect, double strokeWidth)
         {
             switch (pathEffect)
