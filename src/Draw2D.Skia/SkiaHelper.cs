@@ -310,7 +310,7 @@ namespace Draw2D
                             {
                                 foreach (var disposable in composeDisposables)
                                 {
-                                    disposable.Dispose();
+                                    disposable?.Dispose();
                                 }
                             }
                         }
