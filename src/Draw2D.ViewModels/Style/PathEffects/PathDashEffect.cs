@@ -35,6 +35,26 @@ namespace Draw2D.ViewModels.Style.PathEffects
             this.Phase = phase;
         }
 
+        public static IPathEffect MakeDash()
+        {
+            return new PathDashEffect("2 2", 1.0) { Title = "Dash" };
+        }
+
+        public static IPathEffect MakeDot()
+        {
+            return new PathDashEffect("0 2", 0.0) { Title = "Dot" };
+        }
+
+        public static IPathEffect MakeDashDot()
+        {
+            return new PathDashEffect("2 2 0 2", 1.0) { Title = "DashDot" };
+        }
+
+        public static IPathEffect MakeDashDotDot()
+        {
+            return new PathDashEffect("2 2 0 2 0 2", 1.0) { Title = "DashDotDot" };
+        }
+
         public object Copy(Dictionary<object, object> shared)
         {
             return new PathDashEffect()
