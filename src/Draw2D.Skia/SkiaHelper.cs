@@ -145,16 +145,41 @@ namespace Draw2D
             return null;
         }
 
+        internal static SKPath1DPathEffectStyle ToSKPath1DPathEffectStyle(Path1DPathEffectStyle style)
+        {
+            switch (style)
+            {
+                default:
+                case Path1DPathEffectStyle.Translate:
+                    return SKPath1DPathEffectStyle.Translate;
+                case Path1DPathEffectStyle.Rotate:
+                    return SKPath1DPathEffectStyle.Rotate;
+                case Path1DPathEffectStyle.Morph:
+                    return SKPath1DPathEffectStyle.Morph;
+            }
+        }
+
         internal static SKPathEffect ToSKPathEffect(IPathEffect pathEffect, double strokeWidth)
         {
             switch (pathEffect)
             {
-                case DashPathEffect dashPathEffect:
+                case Path1DPathEffect path1DPathEffect:
                     {
-                        var intervals = ToIntervals(dashPathEffect.Intervals, strokeWidth);
+                        var path = path1DPathEffect.Path;
+                        var geometry = new SKPath() { FillType = SkiaHelper.ToSKPathFillType(path.FillType) };
+                        SkiaHelper.AddPath(null, path, 0.0, 0.0, geometry);
+                        return SKPathEffect.Create1DPath(
+                            geometry, 
+                            (float)path1DPathEffect.Advance, 
+                            (float)path1DPathEffect.Phase,
+                            ToSKPath1DPathEffectStyle(path1DPathEffect.Style));
+                    }
+                case PathDashEffect pathDashEffect:
+                    {
+                        var intervals = ToIntervals(pathDashEffect.Intervals, strokeWidth);
                         if (intervals != null)
                         {
-                            return SKPathEffect.CreateDash(intervals, (float)dashPathEffect.Phase);
+                            return SKPathEffect.CreateDash(intervals, (float)pathDashEffect.Phase);
                         }
                     }
                     break;

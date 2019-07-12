@@ -1,6 +1,6 @@
 ﻿<!-- Copyright (c) Wiesław Šoltés. All rights reserved. -->
 <!-- Licensed under the MIT license. See LICENSE file in the project root for full license information. -->
-<UserControl x:Class="Draw2D.Views.Style.PathEffects.DashPathEffectView"
+<UserControl x:Class="Draw2D.Views.Style.PathEffects.PathDashEffectView"
              xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -11,11 +11,13 @@
     <TabControl Classes="default" TabStripPlacement="Top">
         <TabItem Classes="default" Header="Dash">
             <ScrollViewer>
-                <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="Auto,*">
-                    <TextBlock Classes="default" Grid.Column="0" Grid.Row="0" Text="Intervals"/>
-                    <TextBox Classes="default" Grid.Column="1" Grid.Row="0" Text="{Binding Intervals}"/>
-                    <TextBlock Classes="default" Grid.Column="0" Grid.Row="1" Text="Phase"/>
-                    <TextBox Classes="default" Grid.Column="1" Grid.Row="1" Text="{Binding Phase}"/>
+                <Grid RowDefinitions="Auto,Auto,Auto" ColumnDefinitions="Auto,*">
+                    <TextBlock Classes="default" Grid.Column="0" Grid.Row="0" Text="Title"/>
+                    <TextBox Classes="default" Grid.Column="1" Grid.Row="0" Text="{Binding Title}"/>
+                    <TextBlock Classes="default" Grid.Column="0" Grid.Row="1" Text="Intervals"/>
+                    <TextBox Classes="default" Grid.Column="1" Grid.Row="1" Text="{Binding Intervals}"/>
+                    <TextBlock Classes="default" Grid.Column="0" Grid.Row="2" Text="Phase"/>
+                    <TextBox Classes="default" Grid.Column="1" Grid.Row="2" Text="{Binding Phase}"/>
                 </Grid>
             </ScrollViewer>
         </TabItem>

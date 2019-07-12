@@ -97,7 +97,7 @@ namespace Draw2D.Editor
                     new ArgbColor(255, 0, 0, 0),
                     true, false, true, 2.0,
                     new TextStyle(fontFamily, 12.0, HAlign.Center, VAlign.Center, new ArgbColor(255, 0, 0, 0), true),
-                    new[] { new DashPathEffect("2 2", 1.0) { Title = "Dash" } })
+                    new[] { new PathDashEffect("2 2", 1.0) { Title = "Dash" } })
                 {
                     StrokeCap = StrokeCap.Round
                 });
@@ -109,7 +109,7 @@ namespace Draw2D.Editor
                     new ArgbColor(255, 0, 0, 0),
                     true, false, true, 2.0,
                     new TextStyle(fontFamily, 12.0, HAlign.Center, VAlign.Center, new ArgbColor(255, 0, 0, 0), true),
-                    new[] { new DashPathEffect("0 2", 0.0) { Title = "Dot" } })
+                    new[] { new PathDashEffect("0 2", 0.0) { Title = "Dot" } })
                 {
                     StrokeCap = StrokeCap.Round
                 });
@@ -121,7 +121,7 @@ namespace Draw2D.Editor
                     new ArgbColor(255, 0, 0, 0),
                     true, false, true, 2.0,
                     new TextStyle(fontFamily, 12.0, HAlign.Center, VAlign.Center, new ArgbColor(255, 0, 0, 0), true),
-                    new[] { new DashPathEffect("2 2 0 2", 1.0) { Title = "DashDot" } })
+                    new[] { new PathDashEffect("2 2 0 2", 1.0) { Title = "DashDot" } })
                 {
                     StrokeCap = StrokeCap.Round
                 });
@@ -133,7 +133,7 @@ namespace Draw2D.Editor
                     new ArgbColor(255, 0, 0, 0),
                     true, false, true, 2.0,
                     new TextStyle(fontFamily, 12.0, HAlign.Center, VAlign.Center, new ArgbColor(255, 0, 0, 0), true),
-                    new[] { new DashPathEffect("2 2 0 2 0 2", 1.0) { Title = "DashDotDot" } })
+                    new[] { new PathDashEffect("2 2 0 2 0 2", 1.0) { Title = "DashDotDot" } })
                 {
                     StrokeCap = StrokeCap.Round
                 });

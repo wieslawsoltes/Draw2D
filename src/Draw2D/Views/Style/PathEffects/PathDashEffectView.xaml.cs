@@ -5,9 +5,9 @@ using Avalonia.Markup.Xaml;
 
 namespace Draw2D.Views.Style.PathEffects
 {
-    public class DashPathEffectView : UserControl
+    public class PathDashEffectView : UserControl
     {
-        public DashPathEffectView()
+        public PathDashEffectView()
         {
             InitializeComponent();
         }

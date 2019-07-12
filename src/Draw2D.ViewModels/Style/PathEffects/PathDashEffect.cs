@@ -6,7 +6,7 @@ using System.Runtime.Serialization;
 namespace Draw2D.ViewModels.Style.PathEffects
 {
     [DataContract(IsReference = true)]
-    public class DashPathEffect : ViewModelBase, IPathEffect
+    public class PathDashEffect : ViewModelBase, IPathEffect
     {
         private string _intervals;
         private double _phase;
@@ -25,11 +25,11 @@ namespace Draw2D.ViewModels.Style.PathEffects
             set => Update(ref _phase, value);
         }
 
-        public DashPathEffect()
+        public PathDashEffect()
         {
         }
 
-        public DashPathEffect(string intervals, double phase)
+        public PathDashEffect(string intervals, double phase)
         {
             this.Intervals = intervals;
             this.Phase = phase;
@@ -37,7 +37,7 @@ namespace Draw2D.ViewModels.Style.PathEffects
 
         public object Copy(Dictionary<object, object> shared)
         {
-            return new DashPathEffect()
+            return new PathDashEffect()
             {
                 Intervals = this.Intervals,
                 Phase = this.Phase
