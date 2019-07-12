@@ -7,6 +7,8 @@ namespace Draw2D.ViewModels.Style
 {
     public class PathEffectFactory : IPathEffectFactory
     {
+        public static IPathEffectFactory Instance { get; } = new PathEffectFactory();
+
         private IPathEffect _copy = null;
 
         public void Create1DPathTranslateEffect(Action<IPathEffect> setter)
