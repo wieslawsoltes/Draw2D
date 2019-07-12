@@ -56,7 +56,7 @@
                     </MenuItem>
                     <MenuItem Header="Reset" Command="{Binding PathEffectFactory.ResetPathEffect}" CommandParameter="{Binding SetOuterPathEffect}"/>
                 </Menu>
-                <ContentControl Content="{Binding Outer}"/>
+                <ContentControl Content="{Binding Outer}" Grid.Row="1"/>
             </Grid>
         </TabItem>
         <TabItem Classes="default" Header="Inner">
@@ -98,7 +98,7 @@
                     </MenuItem>
                     <MenuItem Header="Reset" Command="{Binding PathEffectFactory.ResetPathEffect}" CommandParameter="{Binding SetInnerPathEffect}"/>
                 </Menu>
-                <ContentControl Content="{Binding Inner}"/>
+                <ContentControl Content="{Binding Inner}" Grid.Row="1"/>
             </Grid>
         </TabItem>
         <TabItem Classes="default" Header="Object">
