@@ -3,7 +3,6 @@
 using System;
 using System.Collections.Generic;
 using Draw2D.ViewModels;
-using Draw2D.ViewModels.Containers;
 using Draw2D.ViewModels.Shapes;
 using Draw2D.ViewModels.Style;
 using Draw2D.ViewModels.Tools;
@@ -20,6 +19,7 @@ namespace Draw2D.Renderers
         private Dictionary<ShapeStyle, SKPaint> _fillPaintCache;
         private Dictionary<ShapeStyle, SKPaint> _strokePaintCache;
         private Dictionary<string, SKPicture> _pictureCache;
+        private IList<IDisposable> _pathEffectDisposables;
 
         public SkiaShapeRenderer(IToolContext context, ISelectionState selectionState)
         {
@@ -30,6 +30,7 @@ namespace Draw2D.Renderers
             _fillPaintCache = new Dictionary<ShapeStyle, SKPaint>();
             _strokePaintCache = new Dictionary<ShapeStyle, SKPaint>();
             _pictureCache = new Dictionary<string, SKPicture>();
+            _pathEffectDisposables = new List<IDisposable>();
         }
 
         public void Dispose()
@@ -81,6 +82,15 @@ namespace Draw2D.Renderers
                 }
                 _pictureCache = null;
             }
+
+            if (_pathEffectDisposables != null)
+            {
+                foreach (var disposable in _pathEffectDisposables)
+                {
+                    disposable.Dispose();
+                }
+                _pathEffectDisposables = null;
+            }
         }
 
         private void GetSKTypeface(Typeface style, out SKTypeface typeface)
@@ -113,23 +123,11 @@ namespace Draw2D.Renderers
             brush = brushCached;
         }
 
-        private bool IsPathEffectsDirty(ShapeStyle style)
-        {
-            foreach (var pathEffect in style.PathEffects)
-            {
-                if (pathEffect.IsDirty)
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
-
         private void GetSKPaintStroke(ShapeStyle style, out SKPaint pen, double scale)
         {
-            if (style.IsDirty == true || style.Stroke.IsDirty == true || IsPathEffectsDirty(style) || !_strokePaintCache.TryGetValue(style, out var penCached))
+            if (style.IsDirty == true || style.Stroke.IsDirty == true || (style.PathEffect?.IsDirty ?? false) || !_strokePaintCache.TryGetValue(style, out var penCached))
             {
-                penCached = SkiaHelper.ToSKPaintPen(style, scale);
+                penCached = SkiaHelper.ToSKPaintPen(style, scale, _pathEffectDisposables);
                 _strokePaintCache[style] = penCached;
 #if DEBUG_DICT_CACHE
                 Log.WriteLine($"ToSKPaintPen: ctor()");

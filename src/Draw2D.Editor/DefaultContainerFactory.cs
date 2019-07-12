@@ -97,7 +97,7 @@ namespace Draw2D.Editor
                     new ArgbColor(255, 0, 0, 0),
                     true, false, true, 2.0,
                     new TextStyle(fontFamily, 12.0, HAlign.Center, VAlign.Center, new ArgbColor(255, 0, 0, 0), true),
-                    new[] { PathDashEffect.MakeDash() })
+                    PathDashEffect.MakeDash())
                 {
                     StrokeCap = StrokeCap.Round
                 });
@@ -109,7 +109,7 @@ namespace Draw2D.Editor
                     new ArgbColor(255, 0, 0, 0),
                     true, false, true, 2.0,
                     new TextStyle(fontFamily, 12.0, HAlign.Center, VAlign.Center, new ArgbColor(255, 0, 0, 0), true),
-                    new[] { PathDashEffect.MakeDot() })
+                    PathDashEffect.MakeDot())
                 {
                     StrokeCap = StrokeCap.Round
                 });
@@ -121,7 +121,7 @@ namespace Draw2D.Editor
                     new ArgbColor(255, 0, 0, 0),
                     true, false, true, 2.0,
                     new TextStyle(fontFamily, 12.0, HAlign.Center, VAlign.Center, new ArgbColor(255, 0, 0, 0), true),
-                    new[] { PathDashEffect.MakeDashDot() })
+                    PathDashEffect.MakeDashDot())
                 {
                     StrokeCap = StrokeCap.Round
                 });
@@ -133,7 +133,7 @@ namespace Draw2D.Editor
                     new ArgbColor(255, 0, 0, 0),
                     true, false, true, 2.0,
                     new TextStyle(fontFamily, 12.0, HAlign.Center, VAlign.Center, new ArgbColor(255, 0, 0, 0), true),
-                    new[] { PathDashEffect.MakeDashDotDot() })
+                    PathDashEffect.MakeDashDotDot())
                 {
                     StrokeCap = StrokeCap.Round
                 });

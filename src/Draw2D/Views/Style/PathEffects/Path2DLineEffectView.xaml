@@ -1,6 +1,6 @@
 ﻿<!-- Copyright (c) Wiesław Šoltés. All rights reserved. -->
 <!-- Licensed under the MIT license. See LICENSE file in the project root for full license information. -->
-<UserControl x:Class="Draw2D.Views.Style.PathEffects.Path1DPathEffectView"
+<UserControl x:Class="Draw2D.Views.Style.PathEffects.Path2DLineEffectView"
              xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -9,24 +9,18 @@
              mc:Ignorable="d"
              d:DesignWidth="500" d:DesignHeight="400">
     <TabControl Classes="default" TabStripPlacement="Top">
-        <TabItem Classes="default" Header="1DPath">
+        <TabItem Classes="default" Header="2DLine">
             <ScrollViewer>
-                <Grid RowDefinitions="Auto,Auto,Auto,Auto" ColumnDefinitions="Auto,*">
+                <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="Auto,*">
                     <TextBlock Classes="default" Grid.Column="0" Grid.Row="0" Text="Title"/>
                     <TextBox Classes="default" Grid.Column="1" Grid.Row="0" Text="{Binding Title}"/>
-                    <TextBlock Classes="default" Grid.Column="0" Grid.Row="1" Text="Advance"/>
-                    <TextBox Classes="default" Grid.Column="1" Grid.Row="1" Text="{Binding Advance}"/>
-                    <TextBlock Classes="default" Grid.Column="0" Grid.Row="2" Text="Phase"/>
-                    <TextBox Classes="default" Grid.Column="1" Grid.Row="2" Text="{Binding Phase}"/>
-                    <TextBlock Classes="default" Grid.Column="0" Grid.Row="3" Text="Style"/>
-                    <ComboBox Classes="default" Grid.Column="1" Grid.Row="3" Items="{Binding Path1DPathEffectStyleValues}" SelectedItem="{Binding Style, Mode=TwoWay}"/>
+                    <TextBlock Classes="default" Grid.Column="0" Grid.Row="1" Text="Width"/>
+                    <TextBox Classes="default" Grid.Column="1" Grid.Row="1" Text="{Binding Width}"/>
                 </Grid>
             </ScrollViewer>
         </TabItem>
-        <TabItem Classes="default" Header="Path">
-            <Grid>
-                <TextBox Classes="default" AcceptsReturn="True" Text="{Binding Path}"/>
-            </Grid>
+        <TabItem Classes="default" Header="Matrix">
+            <ContentControl Content="{Binding Matrix}"/>
         </TabItem>
         <TabItem Classes="default" Header="Object">
             <ScrollViewer>

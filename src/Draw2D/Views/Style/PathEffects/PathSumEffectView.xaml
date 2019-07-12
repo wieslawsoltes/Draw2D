@@ -1,0 +1,124 @@
+﻿<!-- Copyright (c) Wiesław Šoltés. All rights reserved. -->
+<!-- Licensed under the MIT license. See LICENSE file in the project root for full license information. -->
+<UserControl x:Class="Draw2D.Views.Style.PathEffects.PathSumEffectView"
+             xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:Draw2D.Views.Style"
+             mc:Ignorable="d"
+             d:DesignWidth="500" d:DesignHeight="400">
+    <TabControl Classes="default" TabStripPlacement="Top">
+        <TabItem Classes="default" Header="Sum">
+            <ScrollViewer>
+                <Grid RowDefinitions="Auto" ColumnDefinitions="Auto,*">
+                    <TextBlock Classes="default" Grid.Column="0" Grid.Row="0" Text="Title"/>
+                    <TextBox Classes="default" Grid.Column="1" Grid.Row="0" Text="{Binding Title}"/>
+                </Grid>
+            </ScrollViewer>
+        </TabItem>
+        <TabItem Classes="default" Header="First">
+            <Grid RowDefinitions="Auto,*">
+                <Menu Background="Transparent" Grid.Row="0">
+                    <MenuItem Header="Create">
+                        <MenuItem Header="1DPath">
+                            <MenuItem Header="Translate" Command="{Binding PathEffectFactory.Create1DPathTranslateEffect}" CommandParameter="{Binding SetFirstPathEffect}"/>
+                            <MenuItem Header="Rotate" Command="{Binding PathEffectFactory.Create1DPathRotateEffect}" CommandParameter="{Binding SetFirstPathEffect}"/>
+                            <MenuItem Header="Morph" Command="{Binding PathEffectFactory.Create1DPathMorphEffect}" CommandParameter="{Binding SetFirstPathEffect}"/>
+                        </MenuItem>
+                        <MenuItem Header="2DLine">
+                            <MenuItem Header="Hatch Horizontal Lines" Command="{Binding PathEffectFactory.Create2DLineHatchHorizontalLinesEffect}" CommandParameter="{Binding SetFirstPathEffect}"/>
+                            <MenuItem Header="Hatch Vertical Lines" Command="{Binding PathEffectFactory.Create2DLineHatchVerticalLinesEffect}" CommandParameter="{Binding SetFirstPathEffect}"/>
+                            <MenuItem Header="Hatch Diagonal Lines" Command="{Binding PathEffectFactory.Create2DLineHatchDiagonalLinesEffect}" CommandParameter="{Binding SetFirstPathEffect}"/>
+                        </MenuItem>
+                        <MenuItem Header="2DPath">
+                            <MenuItem Header="Tile" Command="{Binding PathEffectFactory.Create2DPathTileEffect}" CommandParameter="{Binding SetFirstPathEffect}"/>
+                        </MenuItem>
+                        <MenuItem Header="Corner">
+                            <MenuItem Header="Corner" Command="{Binding PathEffectFactory.CreateCornerEffect}" CommandParameter="{Binding SetFirstPathEffect}"/>
+                        </MenuItem>
+                        <MenuItem Header="Dash">
+                            <MenuItem Header="Dash" Command="{Binding PathEffectFactory.CreateDashEffect}" CommandParameter="{Binding SetFirstPathEffect}"/>
+                            <MenuItem Header="Dot" Command="{Binding PathEffectFactory.CreateDotEffect}" CommandParameter="{Binding SetFirstPathEffect}"/>
+                            <MenuItem Header="DashDot" Command="{Binding PathEffectFactory.CreateDashDotEffect}" CommandParameter="{Binding SetFirstPathEffect}"/>
+                            <MenuItem Header="DashDotDot" Command="{Binding PathEffectFactory.CreateDashDotDotEffect}" CommandParameter="{Binding SetFirstPathEffect}"/>
+                        </MenuItem>
+                        <MenuItem Header="Discrete">
+                            <MenuItem Header="Discrete" Command="{Binding PathEffectFactory.CreateDiscreteEffect}" CommandParameter="{Binding SetFirstPathEffect}"/>
+                        </MenuItem>
+                        <MenuItem Header="Trim">
+                            <MenuItem Header="Trim" Command="{Binding PathEffectFactory.CreateTrimEffect}" CommandParameter="{Binding SetFirstPathEffect}"/>
+                        </MenuItem>
+                        <MenuItem Header="Compound">
+                            <MenuItem Header="Compose" Command="{Binding PathEffectFactory.CreateComposeEffect}" CommandParameter="{Binding SetFirstPathEffect}"/>
+                            <MenuItem Header="Sum" Command="{Binding PathEffectFactory.CreateSumEffect}" CommandParameter="{Binding SetFirstPathEffect}"/>
+                        </MenuItem>
+                    </MenuItem>
+                    <MenuItem Header="Reset" Command="{Binding PathEffectFactory.ResetPathEffect}" CommandParameter="{Binding SetFirstPathEffect}"/>
+                </Menu>
+                <ContentControl Content="{Binding First}"/>
+            </Grid>
+        </TabItem>
+        <TabItem Classes="default" Header="Second">
+            <Grid RowDefinitions="Auto,*">
+                <Menu Background="Transparent" Grid.Row="0">
+                    <MenuItem Header="Create">
+                        <MenuItem Header="1DPath">
+                            <MenuItem Header="Translate" Command="{Binding PathEffectFactory.Create1DPathTranslateEffect}" CommandParameter="{Binding SetSecondPathEffect}"/>
+                            <MenuItem Header="Rotate" Command="{Binding PathEffectFactory.Create1DPathRotateEffect}" CommandParameter="{Binding SetSecondPathEffect}"/>
+                            <MenuItem Header="Morph" Command="{Binding PathEffectFactory.Create1DPathMorphEffect}" CommandParameter="{Binding SetSecondPathEffect}"/>
+                        </MenuItem>
+                        <MenuItem Header="2DLine">
+                            <MenuItem Header="Hatch Horizontal Lines" Command="{Binding PathEffectFactory.Create2DLineHatchHorizontalLinesEffect}" CommandParameter="{Binding SetSecondPathEffect}"/>
+                            <MenuItem Header="Hatch Vertical Lines" Command="{Binding PathEffectFactory.Create2DLineHatchVerticalLinesEffect}" CommandParameter="{Binding SetSecondPathEffect}"/>
+                            <MenuItem Header="Hatch Diagonal Lines" Command="{Binding PathEffectFactory.Create2DLineHatchDiagonalLinesEffect}" CommandParameter="{Binding SetSecondPathEffect}"/>
+                        </MenuItem>
+                        <MenuItem Header="2DPath">
+                            <MenuItem Header="Tile" Command="{Binding PathEffectFactory.Create2DPathTileEffect}" CommandParameter="{Binding SetSecondPathEffect}"/>
+                        </MenuItem>
+                        <MenuItem Header="Corner">
+                            <MenuItem Header="Corner" Command="{Binding PathEffectFactory.CreateCornerEffect}" CommandParameter="{Binding SetSecondPathEffect}"/>
+                        </MenuItem>
+                        <MenuItem Header="Dash">
+                            <MenuItem Header="Dash" Command="{Binding PathEffectFactory.CreateDashEffect}" CommandParameter="{Binding SetSecondPathEffect}"/>
+                            <MenuItem Header="Dot" Command="{Binding PathEffectFactory.CreateDotEffect}" CommandParameter="{Binding SetSecondPathEffect}"/>
+                            <MenuItem Header="DashDot" Command="{Binding PathEffectFactory.CreateDashDotEffect}" CommandParameter="{Binding SetSecondPathEffect}"/>
+                            <MenuItem Header="DashDotDot" Command="{Binding PathEffectFactory.CreateDashDotDotEffect}" CommandParameter="{Binding SetSecondPathEffect}"/>
+                        </MenuItem>
+                        <MenuItem Header="Discrete">
+                            <MenuItem Header="Discrete" Command="{Binding PathEffectFactory.CreateDiscreteEffect}" CommandParameter="{Binding SetSecondPathEffect}"/>
+                        </MenuItem>
+                        <MenuItem Header="Trim">
+                            <MenuItem Header="Trim" Command="{Binding PathEffectFactory.CreateTrimEffect}" CommandParameter="{Binding SetSecondPathEffect}"/>
+                        </MenuItem>
+                        <MenuItem Header="Compound">
+                            <MenuItem Header="Compose" Command="{Binding PathEffectFactory.CreateComposeEffect}" CommandParameter="{Binding SetSecondPathEffect}"/>
+                            <MenuItem Header="Sum" Command="{Binding PathEffectFactory.CreateSumEffect}" CommandParameter="{Binding SetSecondPathEffect}"/>
+                        </MenuItem>
+                    </MenuItem>
+                    <MenuItem Header="Reset" Command="{Binding PathEffectFactory.ResetPathEffect}" CommandParameter="{Binding SetSecondPathEffect}"/>
+                </Menu>
+                <ContentControl Content="{Binding Second}"/>
+            </Grid>
+        </TabItem>
+        <TabItem Classes="default" Header="Object">
+            <ScrollViewer>
+                <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="Auto,*">
+                    <TextBlock Classes="default" Grid.Column="0" Grid.Row="0" Text="Id"/>
+                    <TextBox Classes="default" Grid.Column="1" Grid.Row="0" Text="{Binding Id}"/>
+                    <TextBlock Classes="default" Grid.Column="0" Grid.Row="1" Text="Name"/>
+                    <TextBox Classes="default" Grid.Column="1" Grid.Row="1" Text="{Binding Name}"/>
+                    <TextBlock Classes="default" Grid.Column="0" Grid.Row="2" Text="IsDirty"/>
+                    <CheckBox Classes="default" Grid.Column="1" Grid.Row="2" IsEnabled="False" IsChecked="{Binding IsDirty, Mode=OneWay}"/>
+                    <Button Classes="default" Content="MarkAsDirty=True" Command="{Binding MarkAsDirty}" CommandParameter="True" Grid.Column="1" Grid.Row="3"/>
+                    <Button Classes="default" Content="MarkAsDirty=False" Command="{Binding MarkAsDirty}" CommandParameter="False" Grid.Column="1" Grid.Row="4"/>
+                    <Button Classes="default" Content="Invalidate" Command="{Binding Invalidate}" Grid.Column="1" Grid.Row="5"/>
+                    <Button Classes="default" Content="SetUniqueId" Command="{Binding SetUniqueId}" Grid.Column="1" Grid.Row="6"/>
+                </Grid>
+            </ScrollViewer>
+        </TabItem>
+        <TabItem Classes="default" Header="Owner">
+            <ContentControl Content="{Binding Owner}"/>
+        </TabItem>
+    </TabControl>
+</UserControl>

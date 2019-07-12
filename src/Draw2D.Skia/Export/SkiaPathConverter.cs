@@ -1,5 +1,6 @@
 ﻿// Copyright (c) Wiesław Šoltés. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
+using System;
 using System.Collections.Generic;
 using System.Text;
 using Draw2D.ViewModels;
@@ -12,6 +13,8 @@ namespace Draw2D.Export
 {
     public class SkiaPathConverter : IPathConverter
     {
+        private IList<IDisposable> _disposables = new List<IDisposable>();
+
         private bool IsAcceptedShape(IBaseShape shape)
         {
             return !(shape is IPointShape || shape is FigureShape);
@@ -119,7 +122,7 @@ namespace Draw2D.Export
                         style = context.DocumentContainer?.StyleLibrary?.CurrentItem;
                     }
 
-                    var path = SkiaHelper.ToStrokePath(context, style, geometry);
+                    var path = SkiaHelper.ToStrokePath(context, style, geometry, _disposables);
                     if (path != null)
                     {
                         var union = SkiaHelper.Op(SKPathOp.Union, new[] { path, path });
@@ -216,6 +219,17 @@ namespace Draw2D.Export
             }
 
             return sb.ToString();
+        }
+
+        public void Dispose()
+        {
+            if (_disposables != null)
+            {
+                foreach (var disposable in _disposables)
+                {
+                    disposable.Dispose();
+                }
+            }
         }
     }
 }

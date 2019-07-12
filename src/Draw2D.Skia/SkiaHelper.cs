@@ -130,21 +130,6 @@ namespace Draw2D
             }
         }
 
-        internal static float[] ToIntervals(string intervals, double strokeWidth)
-        {
-            string[] values = intervals.Split(new char[] { ' ', ',' }, StringSplitOptions.RemoveEmptyEntries);
-            float[] array = new float[values.Length];
-            for (int i = 0; i < values.Length; i++)
-            {
-                array[i] = Convert.ToSingle(values[i]) * (float)strokeWidth;
-            }
-            if (array.Length >= 2 && array.Length % 2 == 0)
-            {
-                return array;
-            }
-            return null;
-        }
-
         internal static SKPath1DPathEffectStyle ToSKPath1DPathEffectStyle(Path1DPathEffectStyle style)
         {
             switch (style)
@@ -171,7 +156,22 @@ namespace Draw2D
             }
         }
 
-        internal static SKPathEffect ToSKPathEffect(IPathEffect pathEffect, double strokeWidth)
+        internal static float[] ToIntervals(string intervals, double strokeWidth)
+        {
+            string[] values = intervals.Split(new char[] { ' ', ',' }, StringSplitOptions.RemoveEmptyEntries);
+            float[] array = new float[values.Length];
+            for (int i = 0; i < values.Length; i++)
+            {
+                array[i] = Convert.ToSingle(values[i]) * (float)strokeWidth;
+            }
+            if (array.Length >= 2 && array.Length % 2 == 0)
+            {
+                return array;
+            }
+            return null;
+        }
+
+        internal static SKPathEffect ToSKPathEffect(IPathEffect pathEffect, double strokeWidth, IList<IDisposable> disposables)
         {
             switch (pathEffect)
             {
@@ -180,14 +180,90 @@ namespace Draw2D
                         if (path1DPathEffect.Path != null)
                         {
                             var geometry = SKPath.ParseSvgPathData(path1DPathEffect.Path);
-                            if (geometry != null && geometry.IsEmpty == false)
+                            if (geometry != null)
                             {
-                                return SKPathEffect.Create1DPath(
-                                    geometry,
-                                    (float)path1DPathEffect.Advance,
-                                    (float)path1DPathEffect.Phase,
-                                    ToSKPath1DPathEffectStyle(path1DPathEffect.Style));
+                                if (geometry.IsEmpty == false)
+                                {
+                                    var skPathEffect = SKPathEffect.Create1DPath(
+                                        geometry,
+                                        (float)path1DPathEffect.Advance,
+                                        (float)path1DPathEffect.Phase,
+                                        ToSKPath1DPathEffectStyle(path1DPathEffect.Style));
+                                    disposables.Add(geometry);
+                                    disposables.Add(skPathEffect);
+                                    return skPathEffect;
+                                }
+                                geometry.Dispose();
                             }
+                        }
+                    }
+                    break;
+                case Path2DLineEffect path2DLineEffect:
+                    {
+                        if (path2DLineEffect.Matrix != null)
+                        {
+                            var matrix = ToSKMatrix(path2DLineEffect.Matrix);
+                            var skPathEffect = SKPathEffect.Create2DLine((float)path2DLineEffect.Width, matrix);
+                            disposables.Add(skPathEffect);
+                            return skPathEffect;
+                        }
+                    }
+                    break;
+                case Path2DPathEffect path2DPathEffect:
+                    {
+                        if (path2DPathEffect.Matrix != null && path2DPathEffect.Path != null)
+                        {
+                            var geometry = SKPath.ParseSvgPathData(path2DPathEffect.Path);
+                            if (geometry != null)
+                            {
+                                if (geometry.IsEmpty == false)
+                                {
+                                    var matrix = ToSKMatrix(path2DPathEffect.Matrix);
+                                    var skPathEffect = SKPathEffect.Create2DPath(matrix, geometry);
+                                    disposables.Add(skPathEffect);
+                                    return skPathEffect;
+                                }
+                                geometry.Dispose();
+                            }
+                        }
+                    }
+                    break;
+                case PathComposeEffect pathComposeEffect:
+                    {
+                        if (pathComposeEffect.Outer != null && pathComposeEffect.Inner != null)
+                        {
+                            var composeDisposables = new List<IDisposable>();
+                            var skPathEffectOuter = ToSKPathEffect(pathComposeEffect.Outer, strokeWidth, composeDisposables);
+                            var skPathEffectInner = ToSKPathEffect(pathComposeEffect.Inner, strokeWidth, composeDisposables);
+
+                            if (skPathEffectOuter != null && skPathEffectInner != null)
+                            {
+                                foreach (var disposable in composeDisposables)
+                                {
+                                    disposables.Add(disposable);
+                                }
+
+                                var skPathEffect = SKPathEffect.CreateCompose(skPathEffectOuter, skPathEffectInner);
+                                disposables.Add(skPathEffect);
+                                return skPathEffect;
+                            }
+                            else
+                            {
+                                foreach (var disposable in composeDisposables)
+                                {
+                                    disposable.Dispose();
+                                }
+                            }
+                        }
+                    }
+                    break;
+                case PathCornerEffect pathCornerEffect:
+                    {
+                        if (pathCornerEffect.Radius > 0)
+                        {
+                            var skPathEffect = SKPathEffect.CreateCorner((float)pathCornerEffect.Radius);
+                            disposables.Add(skPathEffect);
+                            return skPathEffect;
                         }
                     }
                     break;
@@ -196,40 +272,74 @@ namespace Draw2D
                         var intervals = ToIntervals(pathDashEffect.Intervals, strokeWidth);
                         if (intervals != null)
                         {
-                            return SKPathEffect.CreateDash(intervals, (float)pathDashEffect.Phase);
+                            var skPathEffect = SKPathEffect.CreateDash(intervals, (float)pathDashEffect.Phase);
+                            disposables.Add(skPathEffect);
+                            return skPathEffect;
                         }
                     }
                     break;
-                // TODO: Handle other path effects.
-                default:
+                case PathDiscreteEffect pathDiscreteEffect:
+                    {
+                        var skPathEffect = SKPathEffect.CreateDiscrete(
+                            (float)pathDiscreteEffect.SegLength,
+                            (float)pathDiscreteEffect.Deviation,
+                            pathDiscreteEffect.SeedAssist);
+                        disposables.Add(skPathEffect);
+                        return skPathEffect;
+                    }
+                case PathSumEffect pathSumEffect:
+                    {
+                        if (pathSumEffect.First != null && pathSumEffect.Second != null)
+                        {
+                            var composeDisposables = new List<IDisposable>();
+                            var skPathEffectFirst = ToSKPathEffect(pathSumEffect.First, strokeWidth, composeDisposables);
+                            var skPathEffectSecond = ToSKPathEffect(pathSumEffect.Second, strokeWidth, composeDisposables);
+
+                            if (skPathEffectFirst != null && skPathEffectSecond != null)
+                            {
+                                foreach (var disposable in composeDisposables)
+                                {
+                                    disposables.Add(disposable);
+                                }
+
+                                var skPathEffect = SKPathEffect.CreateSum(skPathEffectFirst, skPathEffectSecond);
+                                disposables.Add(skPathEffect);
+                                return skPathEffect;
+                            }
+                            else
+                            {
+                                foreach (var disposable in composeDisposables)
+                                {
+                                    disposable.Dispose();
+                                }
+                            }
+                        }
+                    }
                     break;
+                case PathTrimEffect pathTrimEffect:
+                    {
+                        var skPathEffect = SKPathEffect.CreateTrim(
+                            (float)pathTrimEffect.Start,
+                            (float)pathTrimEffect.Stop,
+                            ToSKTrimPathEffectMode(pathTrimEffect.Mode));
+                        disposables.Add(skPathEffect);
+                        return skPathEffect;
+                    }
+                default:
+                    return null;
             }
             return null;
         }
 
-        internal static SKPaint ToSKPaintPen(ShapeStyle style, double scale)
+        internal static SKPaint ToSKPaintPen(ShapeStyle style, double scale, IList<IDisposable> disposables)
         {
             double strokeWidth = style.StrokeWidth;
             double strokeMiter = style.StrokeMiter;
-
             if (style.IsScaled)
             {
                 strokeWidth /= scale;
                 strokeMiter /= scale;
             }
-
-            SKPathEffect pathEffect = null;
-            int pathEffectsCount = style.PathEffects.Count;
-
-            if (pathEffectsCount == 1)
-            {
-                pathEffect = ToSKPathEffect(style.PathEffects[0], strokeWidth);
-            }
-            else if (pathEffectsCount > 1)
-            {
-                // TODO: Handle more than one path effect.
-            }
-
             return new SKPaint()
             {
                 IsAntialias = style.IsAntialias,
@@ -239,9 +349,8 @@ namespace Draw2D
                 StrokeJoin = ToSKStrokeJoin(style.StrokeJoin),
                 StrokeMiter = (float)(strokeMiter),
                 Color = ToSKColor(style.Stroke),
-                //Shader = SKShader.CreateColor(ToSKColor(style.Stroke)),
                 Style = SKPaintStyle.Stroke,
-                PathEffect = pathEffect
+                PathEffect = ToSKPathEffect(style.PathEffect, strokeWidth, disposables)
             };
         }
 
@@ -252,7 +361,6 @@ namespace Draw2D
                 IsAntialias = isAntialias,
                 IsStroke = false,
                 Color = ToSKColor(color),
-                //Shader = SKShader.CreateColor(ToSKColor(color)),
                 TextAlign = SKTextAlign.Left,
                 Style = SKPaintStyle.Fill
             };
@@ -267,7 +375,6 @@ namespace Draw2D
                 LcdRenderText = style.LcdRenderText,
                 SubpixelText = style.SubpixelText,
                 Color = ToSKColor(style.Stroke),
-                //Shader = SKShader.CreateColor(ToSKColor(style.Stroke)),
                 TextAlign = SKTextAlign.Left,
                 Style = SKPaintStyle.Fill
             };
@@ -698,9 +805,9 @@ namespace Draw2D
             return false;
         }
 
-        internal static SKPath ToStrokePath(IToolContext context, ShapeStyle style, SKPath geometry)
+        internal static SKPath ToStrokePath(IToolContext context, ShapeStyle style, SKPath geometry, IList<IDisposable> disposables)
         {
-            using (var paint = ToSKPaintPen(style, 1.0))
+            using (var paint = ToSKPaintPen(style, 1.0, disposables))
             {
                 return paint.GetFillPath(geometry, 1.0f);
             }

@@ -8,6 +8,8 @@ namespace Draw2D.ViewModels.Style.PathEffects
     [DataContract(IsReference = true)]
     public class PathSumEffect : ViewModelBase, IPathEffect
     {
+        public static IPathEffectFactory PathEffectFactory = new PathEffectFactory();
+
         private IPathEffect _first;
         private IPathEffect _second;
 
@@ -38,6 +40,16 @@ namespace Draw2D.ViewModels.Style.PathEffects
         public static IPathEffect MakeSum()
         {
             return new PathSumEffect();
+        }
+
+        public void SetFirstPathEffect(IPathEffect pathEffect)
+        {
+            this.First = pathEffect;
+        }
+
+        public void SetSecondPathEffect(IPathEffect pathEffect)
+        {
+            this.Second = pathEffect;
         }
 
         public object Copy(Dictionary<object, object> shared)

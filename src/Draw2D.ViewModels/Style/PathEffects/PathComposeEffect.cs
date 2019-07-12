@@ -8,6 +8,8 @@ namespace Draw2D.ViewModels.Style.PathEffects
     [DataContract(IsReference = true)]
     public class PathComposeEffect : ViewModelBase, IPathEffect
     {
+        public static IPathEffectFactory PathEffectFactory = new PathEffectFactory();
+
         private IPathEffect _outer;
         private IPathEffect _inner;
 
@@ -38,6 +40,16 @@ namespace Draw2D.ViewModels.Style.PathEffects
         public static IPathEffect MakeCompose()
         {
             return new PathComposeEffect();
+        }
+
+        public void SetOuterPathEffect(IPathEffect pathEffect)
+        {
+            this.Outer = pathEffect;
+        }
+
+        public void SetInnerPathEffect(IPathEffect pathEffect)
+        {
+            this.Inner = pathEffect;
         }
 
         public object Copy(Dictionary<object, object> shared)

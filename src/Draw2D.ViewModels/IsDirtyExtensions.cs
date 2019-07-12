@@ -20,23 +20,13 @@ namespace Draw2D.ViewModels
              || style.Fill.IsDirty
              || style.TextStyle.IsDirty
              || style.TextStyle.Typeface.IsDirty
-             || style.TextStyle.Stroke.IsDirty)
+             || style.TextStyle.Stroke.IsDirty
+             || (style.PathEffect?.IsDirty ?? false))
             {
 #if USE_DEBUG_DIRTY
                 Log.WriteLine($"IsShapeStyleDirty: true");
 #endif
                 return true;
-            }
-
-            foreach (var pathEffect in style.PathEffects)
-            {
-                if (pathEffect.IsDirty)
-                {
-#if USE_DEBUG_DIRTY
-                Log.WriteLine($"pathEffect.IsDirty: true");
-#endif
-                    return true;
-                }
             }
 
             return false;
