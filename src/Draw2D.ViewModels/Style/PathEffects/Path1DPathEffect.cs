@@ -12,13 +12,13 @@ namespace Draw2D.ViewModels.Style.PathEffects
     {
         public static Path1DPathEffectStyle[] Path1DPathEffectStyleValues { get; } = (Path1DPathEffectStyle[])Enum.GetValues(typeof(Path1DPathEffectStyle));
 
-        private PathShape _path;
+        private string _path;
         private double _advance;
         private double _phase;
         private Path1DPathEffectStyle _style;
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public PathShape Path
+        public string Path
         {
             get => _path;
             set => Update(ref _path, value);
@@ -49,7 +49,7 @@ namespace Draw2D.ViewModels.Style.PathEffects
         {
         }
 
-        public Path1DPathEffect(PathShape path, double advance, double phase, Path1DPathEffectStyle style)
+        public Path1DPathEffect(string path, double advance, double phase, Path1DPathEffectStyle style)
         {
             this.Path = path;
             this.Advance = advance;
@@ -57,9 +57,19 @@ namespace Draw2D.ViewModels.Style.PathEffects
             this.Style = style;
         }
 
-        public void SetPath(PathShape path)
+        public static IPathEffect MakeTranslate()
         {
-            this.Path = path;
+            return new Path1DPathEffect("M -10 -10 L 10 -10, 10 10, -10 10 Z", 24, 0, Path1DPathEffectStyle.Translate) { Title = "1DPathTranslate" };
+        }
+
+        public static IPathEffect MakeRotate()
+        {
+            return new Path1DPathEffect("M -10 0 L 0 -10, 10 0, 0 10 Z", 20, 0, Path1DPathEffectStyle.Rotate) { Title = "1DPathRotate" };
+        }
+
+        public static IPathEffect MakeMorph()
+        {
+            return new Path1DPathEffect("M -25 -10 L 25 -10, 25 10, -25 10 Z", 55, 0, Path1DPathEffectStyle.Morph) { Title = "1DPathMorph" };
         }
 
         public object Copy(Dictionary<object, object> shared)

@@ -42,13 +42,31 @@
         <TabItem Classes="default" Header="PathEffects">
             <TabControl Classes="default" TabStripPlacement="Top">
                 <TabItem Classes="default" Header="PathEffects">
-                    <ListBox x:Name="effects" Classes="default" Items="{Binding PathEffects}">
-                        <ListBox.DataTemplates>
-                            <DataTemplate>
-                                <TextBlock Classes="list" Text="{Binding Title}"/>
-                            </DataTemplate>
-                        </ListBox.DataTemplates>
-                    </ListBox>
+                    <Grid RowDefinitions="Auto,*">
+                        <Menu Background="Transparent" Grid.Row="0">
+                            <MenuItem Header="Add">
+                                <MenuItem Header="1DPath">
+                                    <MenuItem Header="Add Translate" Command="{Binding Add1DPathTranslateEffect}"/>
+                                    <MenuItem Header="Add Rotate" Command="{Binding Add1DPathRotateEffect}"/>
+                                    <MenuItem Header="Add Morph" Command="{Binding Add1DPathMorphEffect}"/>
+                                </MenuItem>
+                                <MenuItem Header="Dash">
+                                    <MenuItem Header="Add Dash" Command="{Binding AddDashEffect}"/>
+                                    <MenuItem Header="Add Dot" Command="{Binding AddDotEffect}"/>
+                                    <MenuItem Header="Add DashDot" Command="{Binding AddDashDotEffect}"/>
+                                    <MenuItem Header="Add DashDotDot" Command="{Binding AddDashDotDotEffect}"/>
+                                </MenuItem>
+                            </MenuItem>
+                            <MenuItem Header="Remove" Command="{Binding RemovePathEffect}" CommandParameter="{Binding #effects.SelectedItem}"/>
+                        </Menu>
+                        <ListBox x:Name="effects" Classes="default" Items="{Binding PathEffects}" Grid.Row="1">
+                            <ListBox.DataTemplates>
+                                <DataTemplate>
+                                    <TextBlock Classes="list" Text="{Binding Title}"/>
+                                </DataTemplate>
+                            </ListBox.DataTemplates>
+                        </ListBox>
+                    </Grid>     
                 </TabItem>
                 <TabItem Classes="default" Header="Selected">
                     <ContentControl Content="{Binding #effects.SelectedItem}"/>

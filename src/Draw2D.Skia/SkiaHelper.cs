@@ -165,15 +165,20 @@ namespace Draw2D
             {
                 case Path1DPathEffect path1DPathEffect:
                     {
-                        var path = path1DPathEffect.Path;
-                        var geometry = new SKPath() { FillType = SkiaHelper.ToSKPathFillType(path.FillType) };
-                        SkiaHelper.AddPath(null, path, 0.0, 0.0, geometry);
-                        return SKPathEffect.Create1DPath(
-                            geometry, 
-                            (float)path1DPathEffect.Advance, 
-                            (float)path1DPathEffect.Phase,
-                            ToSKPath1DPathEffectStyle(path1DPathEffect.Style));
+                        if (path1DPathEffect.Path != null)
+                        {
+                            var geometry = SKPath.ParseSvgPathData(path1DPathEffect.Path);
+                            if (geometry != null && geometry.IsEmpty == false)
+                            {
+                                return SKPathEffect.Create1DPath(
+                                    geometry, 
+                                    (float)path1DPathEffect.Advance, 
+                                    (float)path1DPathEffect.Phase,
+                                    ToSKPath1DPathEffectStyle(path1DPathEffect.Style));
+                            }
+                        }
                     }
+                    break;
                 case PathDashEffect pathDashEffect:
                     {
                         var intervals = ToIntervals(pathDashEffect.Intervals, strokeWidth);

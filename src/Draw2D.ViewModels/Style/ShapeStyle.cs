@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Runtime.Serialization;
+using Draw2D.ViewModels.Style.PathEffects;
 
 namespace Draw2D.ViewModels.Style
 {
@@ -131,6 +132,49 @@ namespace Draw2D.ViewModels.Style
             this.PathEffects = pathEffects != null ?
                 new ObservableCollection<IPathEffect>(pathEffects) : 
                 new ObservableCollection<IPathEffect>();
+        }
+
+        public void Add1DPathTranslateEffect()
+        {
+            _pathEffects.Add(Path1DPathEffect.MakeTranslate());
+        }
+
+        public void Add1DPathRotateEffect()
+        {
+            _pathEffects.Add(Path1DPathEffect.MakeRotate());
+        }
+
+        public void Add1DPathMorphEffect()
+        {
+            _pathEffects.Add(Path1DPathEffect.MakeMorph());
+        }
+
+        public void AddDashEffect()
+        {
+            _pathEffects.Add(PathDashEffect.MakeDash());
+        }
+
+        public void AddDotEffect()
+        {
+            _pathEffects.Add(PathDashEffect.MakeDot());
+        }
+
+        public void AddDashDotEffect()
+        {
+            _pathEffects.Add(PathDashEffect.MakeDashDot());
+        }
+
+        public void AddDashDotDotEffect()
+        {
+            _pathEffects.Add(PathDashEffect.MakeDashDotDot());
+        }
+
+        public void RemovePathEffect(IPathEffect pathEffect)
+        {
+            if (pathEffect != null)
+            {
+                _pathEffects.Remove(pathEffect);
+            }
         }
 
         public override void Invalidate()
