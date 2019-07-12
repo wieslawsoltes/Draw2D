@@ -7,6 +7,8 @@ namespace Draw2D.ViewModels.Style
 {
     public class PathEffectFactory : IPathEffectFactory
     {
+        private IPathEffect _copy = null;
+
         public void Create1DPathTranslateEffect(Action<IPathEffect> setter)
         {
             setter?.Invoke(Path1DPathEffect.MakeTranslate());
@@ -87,7 +89,23 @@ namespace Draw2D.ViewModels.Style
             setter?.Invoke(PathSumEffect.MakeSum());
         }
 
-        public void ResetPathEffect(Action<IPathEffect> setter)
+        public void Copy(IPathEffect pathEffect)
+        {
+            if (pathEffect != null)
+            {
+                _copy = pathEffect;
+            }
+        }
+
+        public void Paste(Action<IPathEffect> setter)
+        {
+            if (_copy != null)
+            {
+                setter?.Invoke((IPathEffect)_copy.Copy(null));
+            }
+        }
+
+        public void Delete(Action<IPathEffect> setter)
         {
             setter?.Invoke(null);
         }

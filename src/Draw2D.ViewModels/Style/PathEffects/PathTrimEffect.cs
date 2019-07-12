@@ -49,7 +49,7 @@ namespace Draw2D.ViewModels.Style.PathEffects
 
         public static IPathEffect MakeTrim()
         {
-            return new PathTrimEffect(0, 1) { Title = "Trim" };
+            return new PathTrimEffect(0, 0.5) { Title = "Trim" };
         }
 
         public object Copy(Dictionary<object, object> shared)

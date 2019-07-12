@@ -87,7 +87,7 @@ namespace Draw2D.Renderers
             {
                 foreach (var disposable in _pathEffectDisposables)
                 {
-                    disposable.Dispose();
+                    disposable?.Dispose();
                 }
                 _pathEffectDisposables = null;
             }

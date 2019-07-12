@@ -39,7 +39,7 @@ namespace Draw2D.ViewModels.Style.PathEffects
 
         public static IPathEffect MakeSum()
         {
-            return new PathSumEffect();
+            return new PathSumEffect() { Title = "Sum" };
         }
 
         public void SetFirstPathEffect(IPathEffect pathEffect)

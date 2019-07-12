@@ -54,7 +54,11 @@
                             <MenuItem Header="Sum" Command="{Binding PathEffectFactory.CreateSumEffect}" CommandParameter="{Binding SetFirstPathEffect}"/>
                         </MenuItem>
                     </MenuItem>
-                    <MenuItem Header="Reset" Command="{Binding PathEffectFactory.ResetPathEffect}" CommandParameter="{Binding SetFirstPathEffect}"/>
+                    <MenuItem Header="Edit">
+                        <MenuItem Header="Copy" Command="{Binding PathEffectFactory.Copy}" CommandParameter="{Binding First}"/>
+                        <MenuItem Header="Paste" Command="{Binding PathEffectFactory.Paste}" CommandParameter="{Binding SetFirstPathEffect}"/>
+                        <MenuItem Header="Delete" Command="{Binding PathEffectFactory.Delete}" CommandParameter="{Binding SetFirstPathEffect}"/>
+                    </MenuItem>
                 </Menu>
                 <ContentControl Content="{Binding First}" Grid.Row="1"/>
             </Grid>
@@ -96,7 +100,11 @@
                             <MenuItem Header="Sum" Command="{Binding PathEffectFactory.CreateSumEffect}" CommandParameter="{Binding SetSecondPathEffect}"/>
                         </MenuItem>
                     </MenuItem>
-                    <MenuItem Header="Reset" Command="{Binding PathEffectFactory.ResetPathEffect}" CommandParameter="{Binding SetSecondPathEffect}"/>
+                    <MenuItem Header="Edit">
+                        <MenuItem Header="Copy" Command="{Binding PathEffectFactory.Copy}" CommandParameter="{Binding Second}"/>
+                        <MenuItem Header="Paste" Command="{Binding PathEffectFactory.Paste}" CommandParameter="{Binding SetSecondPathEffect}"/>
+                        <MenuItem Header="Delete" Command="{Binding PathEffectFactory.Delete}" CommandParameter="{Binding SetSecondPathEffect}"/>
+                    </MenuItem>
                 </Menu>
                 <ContentControl Content="{Binding Second}" Grid.Row="1"/>
             </Grid>

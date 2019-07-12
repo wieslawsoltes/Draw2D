@@ -22,6 +22,8 @@ namespace Draw2D.ViewModels.Style
         void CreateTrimEffect(Action<IPathEffect> setter);
         void CreateComposeEffect(Action<IPathEffect> setter);
         void CreateSumEffect(Action<IPathEffect> setter);
-        void ResetPathEffect(Action<IPathEffect> setter);
+        void Copy(IPathEffect pathEffect);
+        void Paste(Action<IPathEffect> setter);
+        void Delete(Action<IPathEffect> setter);
     }
 }

@@ -39,7 +39,7 @@ namespace Draw2D.ViewModels.Style.PathEffects
 
         public static IPathEffect MakeCompose()
         {
-            return new PathComposeEffect();
+            return new PathComposeEffect() { Title = "Compose" };
         }
 
         public void SetOuterPathEffect(IPathEffect pathEffect)
