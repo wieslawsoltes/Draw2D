@@ -78,7 +78,7 @@
                     </MenuItem>
                     <MenuItem Header="Reset" Command="{Binding PathEffectFactory.ResetPathEffect}" CommandParameter="{Binding SetPathEffect}"/>
                 </Menu>
-                <ContentControl Content="{Binding PathEffect}"/>
+                <ContentControl Content="{Binding PathEffect}" Grid.Row="1"/>
             </Grid>
         </TabItem>
         <TabItem Classes="default" Header="Text">
