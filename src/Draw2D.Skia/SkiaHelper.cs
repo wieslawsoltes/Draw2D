@@ -18,6 +18,22 @@ namespace Draw2D
 {
     internal class SkiaHelper
     {
+        internal static SKMatrix ToSKMatrix(Matrix matrix)
+        {
+    		return new SKMatrix()
+    		{
+    			ScaleX = (float)matrix.ScaleX, 
+    			SkewX = (float)matrix.SkewX, 
+    			TransX = (float)matrix.TransX,
+    			SkewY = (float)matrix.SkewY, 
+    			ScaleY = (float)matrix.ScaleY, 
+    			TransY = (float)matrix.TransY,
+    			Persp0 = (float)matrix.Persp0, 
+    			Persp1 = (float)matrix.Persp1, 
+    			Persp2 = (float)matrix.Persp2
+    		};
+        }
+
         internal static void GetTransform(StretchMode mode, SKRect element, SKRect panel, out double ox, out double oy, out double zx, out double zy)
         {
             ox = element.Left;
