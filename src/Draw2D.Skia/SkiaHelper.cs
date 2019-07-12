@@ -20,18 +20,18 @@ namespace Draw2D
     {
         internal static SKMatrix ToSKMatrix(Matrix matrix)
         {
-    		return new SKMatrix()
-    		{
-    			ScaleX = (float)matrix.ScaleX, 
-    			SkewX = (float)matrix.SkewX, 
-    			TransX = (float)matrix.TransX,
-    			SkewY = (float)matrix.SkewY, 
-    			ScaleY = (float)matrix.ScaleY, 
-    			TransY = (float)matrix.TransY,
-    			Persp0 = (float)matrix.Persp0, 
-    			Persp1 = (float)matrix.Persp1, 
-    			Persp2 = (float)matrix.Persp2
-    		};
+            return new SKMatrix()
+            {
+                ScaleX = (float)matrix.ScaleX,
+                SkewX = (float)matrix.SkewX,
+                TransX = (float)matrix.TransX,
+                SkewY = (float)matrix.SkewY,
+                ScaleY = (float)matrix.ScaleY,
+                TransY = (float)matrix.TransY,
+                Persp0 = (float)matrix.Persp0,
+                Persp1 = (float)matrix.Persp1,
+                Persp2 = (float)matrix.Persp2
+            };
         }
 
         internal static void GetTransform(StretchMode mode, SKRect element, SKRect panel, out double ox, out double oy, out double zx, out double zy)
@@ -171,8 +171,8 @@ namespace Draw2D
                             if (geometry != null && geometry.IsEmpty == false)
                             {
                                 return SKPathEffect.Create1DPath(
-                                    geometry, 
-                                    (float)path1DPathEffect.Advance, 
+                                    geometry,
+                                    (float)path1DPathEffect.Advance,
                                     (float)path1DPathEffect.Phase,
                                     ToSKPath1DPathEffectStyle(path1DPathEffect.Style));
                             }
