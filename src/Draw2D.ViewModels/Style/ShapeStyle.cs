@@ -130,7 +130,7 @@ namespace Draw2D.ViewModels.Style
             this.StrokeMiter = 4.0;
             this.TextStyle = textStyle;
             this.PathEffects = pathEffects != null ?
-                new ObservableCollection<IPathEffect>(pathEffects) : 
+                new ObservableCollection<IPathEffect>(pathEffects) :
                 new ObservableCollection<IPathEffect>();
         }
 
@@ -190,7 +190,7 @@ namespace Draw2D.ViewModels.Style
                 foreach (var pathEffect in _pathEffects)
                 {
                     pathEffect.Invalidate();
-                } 
+                }
             }
 
             base.Invalidate();
