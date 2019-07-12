@@ -39,7 +39,9 @@ namespace Draw2D.ViewModels.Style.PathEffects
         {
             // TODO:
             var matrix = Matrix.MakeIdentity();
-            var path = "";
+            matrix.ScaleX = 30;
+            matrix.ScaleY = 30;
+            var path = "M-15 -15L15 -15L15 15L-15 15L-15 -15Z";
             return new Path2DPathEffect(matrix, path) { Title = "2DPathTile" };
         }
 
