@@ -76,6 +76,7 @@ namespace Draw2D.ViewModels.Style.PathEffects
         {
             return new Path1DPathEffect()
             {
+                Title = this.Title,
                 Path = this.Path,
                 Advance = this.Advance,
                 Phase = this.Phase,

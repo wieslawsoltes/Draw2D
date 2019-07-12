@@ -59,6 +59,7 @@ namespace Draw2D.ViewModels.Style.PathEffects
         {
             return new PathDashEffect()
             {
+                Title = this.Title,
                 Intervals = this.Intervals,
                 Phase = this.Phase
             };
