@@ -41,7 +41,7 @@ namespace Draw2D.ViewModels.Style
         {
             setter?.Invoke(Path2DPathEffect.MakeTile());
         }
-        
+
         public void CreateCornerEffect(Action<IPathEffect> setter)
         {
             setter?.Invoke(PathCornerEffect.MakeCorner());
