@@ -18,23 +18,50 @@ namespace Draw2D.ViewModels
 
             if (pathEffect.IsDirty)
             {
-#if USE_DEBUG_DIRTY
-                Log.WriteLine($"IsPathEffectDirty: true");
-#endif
                 return true;
             }
 
             switch (pathEffect)
             {
+                case Path1DPathEffect path1DPathEffect:
+                    {
+                    }
+                    break;
+                case Path2DLineEffect path2DLineEffect:
+                    {
+                        if (path2DLineEffect.Matrix?.IsDirty ?? false)
+                        {
+                            return true;
+                        }
+                    }
+                    break;
+                case Path2DPathEffect path2DPathEffect:
+                    {
+                        if (path2DPathEffect.Matrix?.IsDirty ?? false)
+                        {
+                            return true;
+                        }
+                    }
+                    break;
                 case PathComposeEffect pathComposeEffect:
                     {
                         if ((pathComposeEffect.Outer?.IsPathEffectDirty() ?? false)
                          || (pathComposeEffect.Inner?.IsPathEffectDirty() ?? false))
                         {
-#if USE_DEBUG_DIRTY
-                Log.WriteLine($"IsPathEffectDirty: true");
-#endif
+                            return true;
                         }
+                    }
+                    break;
+                case PathCornerEffect pathCornerEffect:
+                    {
+                    }
+                    break;
+                case PathDashEffect pathDashEffect:
+                    {
+                    }
+                    break;
+                case PathDiscreteEffect pathDiscreteEffect:
+                    {
                     }
                     break;
                 case PathSumEffect pathSumEffect:
@@ -42,10 +69,12 @@ namespace Draw2D.ViewModels
                         if ((pathSumEffect.First?.IsPathEffectDirty() ?? false)
                          || (pathSumEffect.Second?.IsPathEffectDirty() ?? false))
                         {
-#if USE_DEBUG_DIRTY
-                Log.WriteLine($"IsPathEffectDirty: true");
-#endif
+                            return true;
                         }
+                    }
+                    break;
+                case PathTrimEffect pathTrimEffect:
+                    {
                     }
                     break;
                 default:
