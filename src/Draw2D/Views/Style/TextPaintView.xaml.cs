@@ -5,9 +5,9 @@ using Avalonia.Markup.Xaml;
 
 namespace Draw2D.Views.Style
 {
-    public class TextStyleView : UserControl
+    public class TextPaintView : UserControl
     {
-        public TextStyleView()
+        public TextPaintView()
         {
             InitializeComponent();
         }

@@ -13,8 +13,6 @@ namespace Draw2D.Export
 {
     public class SkiaPathConverter : IPathConverter
     {
-        private IList<IDisposable> _disposables = new List<IDisposable>();
-
         private bool IsAcceptedShape(IBaseShape shape)
         {
             return !(shape is IPointShape || shape is FigureShape);
@@ -122,15 +120,19 @@ namespace Draw2D.Export
                         style = context.DocumentContainer?.StyleLibrary?.CurrentItem;
                     }
 
-                    var path = SkiaHelper.ToStrokePath(context, style, geometry, _disposables);
-                    if (path != null)
+                    using (var disposable = new CompositeDisposable())
                     {
-                        var union = SkiaHelper.Op(SKPathOp.Union, new[] { path, path });
-                        if (union != null && !union.IsEmpty)
+                        var path = SkiaHelper.ToStrokePath(context, style.StrokePaint, geometry, disposable.Disposables);
+                        if (path != null)
                         {
-                            return SkiaHelper.ToPathShape(context, union, context.DocumentContainer?.StyleLibrary?.CurrentItem, context?.DocumentContainer?.PointTemplate);
+                            disposable.Disposables.Add(path);
+                            var union = SkiaHelper.Op(SKPathOp.Union, new[] { path, path });
+                            if (union != null && !union.IsEmpty)
+                            {
+                                disposable.Disposables.Add(union);
+                                return SkiaHelper.ToPathShape(context, union, context.DocumentContainer?.StyleLibrary?.CurrentItem, context?.DocumentContainer?.PointTemplate);
+                            }
                         }
-
                     }
                 }
             }
@@ -149,15 +151,20 @@ namespace Draw2D.Export
                         style = context.DocumentContainer?.StyleLibrary?.CurrentItem;
                     }
 
-                    var path = SkiaHelper.ToFillPath(context, style, geometry);
-                    if (path != null)
+                    using (var disposable = new CompositeDisposable())
                     {
-                        var union = SkiaHelper.Op(SKPathOp.Union, new[] { path, path });
-                        if (union != null && !union.IsEmpty)
+                        var path = SkiaHelper.ToFillPath(context, style.FillPaint, geometry, disposable.Disposables);
+                        if (path != null)
                         {
-                            return SkiaHelper.ToPathShape(context, union, context.DocumentContainer?.StyleLibrary?.CurrentItem, context?.DocumentContainer?.PointTemplate);
+                            disposable.Disposables.Add(path);
+                            var union = SkiaHelper.Op(SKPathOp.Union, new[] { path, path });
+                            if (union != null && !union.IsEmpty)
+                            {
+                                disposable.Disposables.Add(union);
+                                return SkiaHelper.ToPathShape(context, union, context.DocumentContainer?.StyleLibrary?.CurrentItem, context?.DocumentContainer?.PointTemplate);
+                            }
+    
                         }
-
                     }
                 }
             }
@@ -223,13 +230,6 @@ namespace Draw2D.Export
 
         public void Dispose()
         {
-            if (_disposables != null)
-            {
-                foreach (var disposable in _disposables)
-                {
-                    disposable.Dispose();
-                }
-            }
         }
     }
 }

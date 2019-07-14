@@ -21,162 +21,176 @@ namespace Draw2D.Editor
         {
             var styleLibrary = new StyleLibrary()
             {
-                Items = new ObservableCollection<ShapeStyle>()
+                Items = new ObservableCollection<IShapeStyle>()
             };
-
-            var fontFamily = "Calibri";
 
             styleLibrary.Items.Add(
                 new ShapeStyle(
                     "Default",
-                    new ArgbColor(255, 0, 0, 0),
-                    new ArgbColor(255, 255, 255, 255),
-                    true, false, true, 2.0,
-                    new TextStyle(fontFamily, 12.0, HAlign.Center, VAlign.Center, new ArgbColor(255, 0, 0, 0), true)));
+                    new StrokePaint(color: new ArgbColor(255, 0, 0, 0)),
+                    new FillPaint(color: new ArgbColor(255, 255, 255, 255)),
+                    new TextPaint(color: new ArgbColor(255, 0, 0, 0)),
+                    isStroked: true, isFilled: false, isText: true));
 
             styleLibrary.Items.Add(
                 new ShapeStyle(
                     "Red",
-                    new ArgbColor(255, 255, 0, 0),
-                    new ArgbColor(255, 255, 0, 0),
-                    true, false, true, 2.0,
-                    new TextStyle(fontFamily, 12.0, HAlign.Center, VAlign.Center, new ArgbColor(255, 255, 0, 0), true)));
+                    new StrokePaint(color: new ArgbColor(255, 255, 0, 0)),
+                    new FillPaint(color: new ArgbColor(255, 255, 0, 0)),
+                    new TextPaint(color: new ArgbColor(255, 255, 0, 0)),
+                    isStroked: true, isFilled: false, isText: true));
 
             styleLibrary.Items.Add(
                 new ShapeStyle(
                     "Green",
-                    new ArgbColor(255, 0, 255, 0),
-                    new ArgbColor(255, 0, 255, 0),
-                    true, false, true, 2.0,
-                    new TextStyle(fontFamily, 12.0, HAlign.Center, VAlign.Center, new ArgbColor(255, 0, 255, 0), true)));
+                    new StrokePaint(color: new ArgbColor(255, 0, 255, 0)),
+                    new FillPaint(color: new ArgbColor(255, 0, 255, 0)),
+                    new TextPaint(color: new ArgbColor(255, 0, 255, 0)),
+                    isStroked: true, isFilled: false, isText: true));
 
             styleLibrary.Items.Add(
                 new ShapeStyle(
                     "Blue",
-                    new ArgbColor(255, 0, 0, 255),
-                    new ArgbColor(255, 0, 0, 255),
-                    true, false, true, 2.0,
-                    new TextStyle(fontFamily, 12.0, HAlign.Center, VAlign.Center, new ArgbColor(255, 0, 0, 255), true)));
+                    new StrokePaint(color: new ArgbColor(255, 0, 0, 255)),
+                    new FillPaint(color: new ArgbColor(255, 0, 0, 255)),
+                    new TextPaint(color: new ArgbColor(255, 0, 0, 255)),
+                    isStroked: true, isFilled: false, isText: true));
 
             styleLibrary.Items.Add(
                 new ShapeStyle(
                     "Cyan",
-                    new ArgbColor(255, 0, 255, 255),
-                    new ArgbColor(255, 0, 255, 255),
-                    true, false, true, 2.0,
-                    new TextStyle(fontFamily, 12.0, HAlign.Center, VAlign.Center, new ArgbColor(255, 0, 255, 255), true)));
+                    new StrokePaint(color: new ArgbColor(255, 0, 255, 255)),
+                    new FillPaint(color: new ArgbColor(255, 0, 255, 255)),
+                    new TextPaint(color: new ArgbColor(255, 0, 255, 255)),
+                    isStroked: true, isFilled: false, isText: true));
 
             styleLibrary.Items.Add(
                 new ShapeStyle(
                     "Magenta",
-                    new ArgbColor(255, 255, 0, 255),
-                    new ArgbColor(255, 255, 0, 255),
-                    true, false, true, 2.0,
-                    new TextStyle(fontFamily, 12.0, HAlign.Center, VAlign.Center, new ArgbColor(255, 255, 0, 255), true)));
+                    new StrokePaint(color: new ArgbColor(255, 255, 0, 255)),
+                    new FillPaint(color: new ArgbColor(255, 255, 0, 255)),
+                    new TextPaint(color: new ArgbColor(255, 255, 0, 255)),
+                    isStroked: true, isFilled: false, isText: true));
 
             styleLibrary.Items.Add(
                 new ShapeStyle(
                     "Yellow",
-                    new ArgbColor(255, 255, 255, 0),
-                    new ArgbColor(255, 255, 255, 0),
-                    true, false, true, 2.0,
-                    new TextStyle(fontFamily, 12.0, HAlign.Center, VAlign.Center, new ArgbColor(255, 255, 255, 0), true)));
+                    new StrokePaint(color: new ArgbColor(255, 255, 255, 0)),
+                    new FillPaint(color: new ArgbColor(255, 255, 255, 0)),
+                    new TextPaint(color: new ArgbColor(255, 255, 255, 0)),
+                    isStroked: true, isFilled: false, isText: true));
 
             styleLibrary.Items.Add(
                 new ShapeStyle(
                     "Black",
-                    new ArgbColor(255, 0, 0, 0),
-                    new ArgbColor(255, 0, 0, 0),
-                    true, false, true, 2.0,
-                    new TextStyle(fontFamily, 12.0, HAlign.Center, VAlign.Center, new ArgbColor(255, 0, 0, 0), true)));
+                    new StrokePaint(color: new ArgbColor(255, 0, 0, 0)),
+                    new FillPaint(color: new ArgbColor(255, 0, 0, 0)),
+                    new TextPaint(color: new ArgbColor(255, 0, 0, 0)),
+                    isStroked: true, isFilled: false, isText: true));
 
             styleLibrary.Items.Add(
                 new ShapeStyle(
                     "Dash",
-                    new ArgbColor(255, 0, 0, 0),
-                    new ArgbColor(255, 0, 0, 0),
-                    true, false, true, 2.0,
-                    new TextStyle(fontFamily, 12.0, HAlign.Center, VAlign.Center, new ArgbColor(255, 0, 0, 0), true),
-                    PathDashEffect.MakeDash())
-                {
-                    StrokeCap = StrokeCap.Round
-                });
+                    new StrokePaint(
+                        color: new ArgbColor(255, 0, 0, 0),
+                        strokeCap: StrokeCap.Round,
+                        strokeJoin: StrokeJoin.Round,
+                        pathEffect: PathDashEffect.MakeDash()),
+                    new FillPaint(color: new ArgbColor(255, 0, 0, 0)),
+                    new TextPaint(color: new ArgbColor(255, 0, 0, 0)),
+                    isStroked: true, isFilled: false, isText: true));
 
             styleLibrary.Items.Add(
                 new ShapeStyle(
                     "Dot",
-                    new ArgbColor(255, 0, 0, 0),
-                    new ArgbColor(255, 0, 0, 0),
-                    true, false, true, 2.0,
-                    new TextStyle(fontFamily, 12.0, HAlign.Center, VAlign.Center, new ArgbColor(255, 0, 0, 0), true),
-                    PathDashEffect.MakeDot())
-                {
-                    StrokeCap = StrokeCap.Round
-                });
+                    new StrokePaint(
+                        color: new ArgbColor(255, 0, 0, 0),
+                        strokeCap: StrokeCap.Round,
+                        strokeJoin: StrokeJoin.Round,
+                        pathEffect: PathDashEffect.MakeDot()),
+                    new FillPaint(color: new ArgbColor(255, 0, 0, 0)),
+                    new TextPaint(color: new ArgbColor(255, 0, 0, 0)),
+                    isStroked: true, isFilled: false, isText: true));
 
             styleLibrary.Items.Add(
                 new ShapeStyle(
                     "DashDot",
-                    new ArgbColor(255, 0, 0, 0),
-                    new ArgbColor(255, 0, 0, 0),
-                    true, false, true, 2.0,
-                    new TextStyle(fontFamily, 12.0, HAlign.Center, VAlign.Center, new ArgbColor(255, 0, 0, 0), true),
-                    PathDashEffect.MakeDashDot())
-                {
-                    StrokeCap = StrokeCap.Round
-                });
+                    new StrokePaint(
+                        color: new ArgbColor(255, 0, 0, 0),
+                        strokeCap: StrokeCap.Round,
+                        strokeJoin: StrokeJoin.Round,
+                        pathEffect: PathDashEffect.MakeDashDot()),
+                    new FillPaint(color: new ArgbColor(255, 0, 0, 0)),
+                    new TextPaint(color: new ArgbColor(255, 0, 0, 0)),
+                    isStroked: true, isFilled: false, isText: true));
+
+            styleLibrary.Items.Add(
+                new ShapeStyle(
+                    "Fuzzy",
+                    new StrokePaint(
+                        color: new ArgbColor(255, 0, 0, 0),
+                        strokeCap: StrokeCap.Round,
+                        strokeJoin: StrokeJoin.Round,
+                        pathEffect: PathDiscreteEffect.MakeDiscrete()),
+                    new FillPaint(
+                        color: new ArgbColor(255, 0, 0, 0),
+                        pathEffect: PathDiscreteEffect.MakeDiscrete()),
+                    new TextPaint(
+                        color: new ArgbColor(255, 0, 0, 0),
+                        pathEffect: PathDiscreteEffect.MakeDiscrete()),
+                    isStroked: true, isFilled: true, isText: true));
 
             styleLibrary.Items.Add(
                 new ShapeStyle(
                     "DashDotDot",
-                    new ArgbColor(255, 0, 0, 0),
-                    new ArgbColor(255, 0, 0, 0),
-                    true, false, true, 2.0,
-                    new TextStyle(fontFamily, 12.0, HAlign.Center, VAlign.Center, new ArgbColor(255, 0, 0, 0), true),
-                    PathDashEffect.MakeDashDotDot())
-                {
-                    StrokeCap = StrokeCap.Round
-                });
+                    new StrokePaint(
+                        color: new ArgbColor(255, 0, 0, 0),
+                        strokeCap: StrokeCap.Round,
+                        strokeJoin: StrokeJoin.Round,
+                        pathEffect: PathDashEffect.MakeDashDotDot()),
+                    new FillPaint(color: new ArgbColor(255, 0, 0, 0)),
+                    new TextPaint(color: new ArgbColor(255, 0, 0, 0)),
+                    isStroked: true, isFilled: false, isText: true));
 
             styleLibrary.Items.Add(
                 new ShapeStyle(
                     "Decorator-Stroke",
-                    new ArgbColor(255, 0, 255, 255),
-                    new ArgbColor(255, 0, 255, 255),
-                    true, false, true, 2.0,
-                    new TextStyle(fontFamily, 12.0, HAlign.Center, VAlign.Center, new ArgbColor(255, 0, 255, 255), true)));
+                    new StrokePaint(color: new ArgbColor(255, 0, 255, 255)),
+                    new FillPaint(color: new ArgbColor(255, 0, 255, 255)),
+                    new TextPaint(color: new ArgbColor(255, 0, 255, 255)),
+                    isStroked: true, isFilled: false, isText: false));
 
             styleLibrary.Items.Add(
                 new ShapeStyle(
                     "Decorator-Fill",
-                    new ArgbColor(255, 0, 255, 255),
-                    new ArgbColor(255, 0, 255, 255),
-                    false, true, true, 2.0,
-                    new TextStyle(fontFamily, 12.0, HAlign.Center, VAlign.Center, new ArgbColor(255, 0, 255, 255), true)));
+                    new StrokePaint(color: new ArgbColor(255, 0, 255, 255)),
+                    new FillPaint(color: new ArgbColor(255, 0, 255, 255)),
+                    new TextPaint(color: new ArgbColor(255, 0, 255, 255)),
+                    isStroked: false, isFilled: true, isText: false));
 
             styleLibrary.Items.Add(
                 new ShapeStyle(
                     "Guide",
-                    new ArgbColor(128, 0, 255, 255),
-                    new ArgbColor(128, 0, 255, 255),
-                    true, true, true, 2.0,
-                    new TextStyle(fontFamily, 12.0, HAlign.Center, VAlign.Center, new ArgbColor(128, 0, 255, 255), true)));
+                    new StrokePaint(color: new ArgbColor(128, 0, 255, 255)),
+                    new FillPaint(color: new ArgbColor(128, 0, 255, 255)),
+                    new TextPaint(color: new ArgbColor(128, 0, 255, 255)),
+                    isStroked: true, isFilled: true, isText: true));
 
             styleLibrary.Items.Add(
                 new ShapeStyle(
                     "Selection",
-                    new ArgbColor(255, 0, 120, 215),
-                    new ArgbColor(60, 170, 204, 238),
-                    true, true, true, 2.0,
-                    new TextStyle(fontFamily, 12.0, HAlign.Center, VAlign.Center, new ArgbColor(255, 0, 120, 215), true)));
+                    new StrokePaint(color: new ArgbColor(255, 0, 120, 215)),
+                    new FillPaint(color: new ArgbColor(60, 170, 204, 238)),
+                    new TextPaint(color: new ArgbColor(255, 0, 120, 215)),
+                    isStroked: true, isFilled: true, isText: false));
 
             styleLibrary.Items.Add(
                 new ShapeStyle(
                     "PointTemplate",
-                    new ArgbColor(255, 255, 0, 255),
-                    new ArgbColor(255, 255, 0, 255),
-                    false, true, true, 2.0,
-                    new TextStyle(fontFamily, 12.0, HAlign.Center, VAlign.Center, new ArgbColor(255, 255, 0, 255), true)));
+                    new StrokePaint(color: new ArgbColor(255, 255, 0, 255)),
+                    new FillPaint(color: new ArgbColor(255, 255, 0, 255)),
+                    new TextPaint(color: new ArgbColor(255, 255, 0, 255)),
+                    isStroked: false, isFilled: true, isText: false));
 
             styleLibrary.CurrentItem = styleLibrary.Items[0];
 
@@ -1243,9 +1257,9 @@ namespace Draw2D.Editor
                 Title = title,
                 Width = 720,
                 Height = 630,
-                PrintBackground = new ArgbColor(0, 255, 255, 255),
-                WorkBackground = new ArgbColor(255, 255, 255, 255),
-                InputBackground = new ArgbColor(0, 255, 255, 255),
+                PrintBackground = new FillPaint(color: new ArgbColor(0, 255, 255, 255), isAntialias: false),
+                WorkBackground = new FillPaint(color: new ArgbColor(255, 255, 255, 255), isAntialias: false),
+                InputBackground = new FillPaint(color: new ArgbColor(0, 255, 255, 255), isAntialias: false),
                 CurrentContainer = new CanvasContainer()
                 {
                     Points = new ObservableCollection<IPointShape>(),

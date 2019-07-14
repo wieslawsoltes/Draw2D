@@ -39,11 +39,14 @@ namespace Draw2D.Export
                         continue;
                     }
 
+                    var stroke = style.StrokePaint;
+                    var fill = style.FillPaint;
+
                     if (style.IsStroked && style.IsFilled)
                     {
-                        sb.AppendLine($"{indent}<GeometryDrawing Brush=\"{style.Fill.ToHex()}\" Geometry=\"{geometry}\">");
+                        sb.AppendLine($"{indent}<GeometryDrawing Brush=\"{fill.Color.ToHex()}\" Geometry=\"{geometry}\">");
                         sb.AppendLine($"{indent}    <GeometryDrawing.Pen>");
-                        sb.AppendLine($"{indent}        <Pen Brush=\"{style.Stroke.ToHex()}\" Thickness=\"{style.StrokeWidth}\" LineCap=\"{style.StrokeCap}\" LineJoin=\"{style.StrokeJoin}\" MiterLimit=\"{style.StrokeMiter}\"/>");
+                        sb.AppendLine($"{indent}        <Pen Brush=\"{stroke.Color.ToHex()}\" Thickness=\"{stroke.StrokeWidth}\" LineCap=\"{stroke.StrokeCap}\" LineJoin=\"{stroke.StrokeJoin}\" MiterLimit=\"{stroke.StrokeMiter}\"/>");
                         sb.AppendLine($"{indent}    </GeometryDrawing.Pen>");
                         sb.AppendLine($"{indent}</GeometryDrawing>");
                     }
@@ -51,13 +54,13 @@ namespace Draw2D.Export
                     {
                         sb.AppendLine($"{indent}<GeometryDrawing Geometry=\"{geometry}\">");
                         sb.AppendLine($"{indent}    <GeometryDrawing.Pen>");
-                        sb.AppendLine($"{indent}        <Pen Brush=\"{style.Stroke.ToHex()}\" Thickness=\"{style.StrokeWidth}\" LineCap=\"{style.StrokeCap}\" LineJoin=\"{style.StrokeJoin}\" MiterLimit=\"{style.StrokeMiter}\"/>");
+                        sb.AppendLine($"{indent}        <Pen Brush=\"{stroke.Color.ToHex()}\" Thickness=\"{stroke.StrokeWidth}\" LineCap=\"{stroke.StrokeCap}\" LineJoin=\"{stroke.StrokeJoin}\" MiterLimit=\"{stroke.StrokeMiter}\"/>");
                         sb.AppendLine($"{indent}    </GeometryDrawing.Pen>");
                         sb.AppendLine($"{indent}</GeometryDrawing>");
                     }
                     else if (!style.IsStroked && style.IsFilled)
                     {
-                        sb.AppendLine($"{indent}<GeometryDrawing Brush=\"{style.Fill.ToHex()}\" Geometry=\"{geometry}\" />");
+                        sb.AppendLine($"{indent}<GeometryDrawing Brush=\"{fill.Color.ToHex()}\" Geometry=\"{geometry}\" />");
                     }
                 }
             }
@@ -102,17 +105,20 @@ namespace Draw2D.Export
                         continue;
                     }
 
+                    var stroke = style.StrokePaint;
+                    var fill = style.FillPaint;
+
                     if (style.IsStroked && style.IsFilled)
                     {
-                        sb.AppendLine($"{indent}<Path Fill=\"{style.Fill.ToHex()}\" Stroke=\"{style.Stroke.ToHex()}\" StrokeThickness=\"{style.StrokeWidth}\" StrokeLineCap=\"{style.StrokeCap}\" StrokeJoin=\"{style.StrokeJoin}\" Data=\"{geometry}\"/>");
+                        sb.AppendLine($"{indent}<Path Fill=\"{fill.Color.ToHex()}\" Stroke=\"{stroke.Color.ToHex()}\" StrokeThickness=\"{stroke.StrokeWidth}\" StrokeLineCap=\"{stroke.StrokeCap}\" StrokeJoin=\"{stroke.StrokeJoin}\" Data=\"{geometry}\"/>");
                     }
                     else if (style.IsStroked && !style.IsFilled)
                     {
-                        sb.AppendLine($"{indent}<Path Stroke=\"{style.Stroke.ToHex()}\" StrokeThickness=\"{style.StrokeWidth}\" StrokeLineCap=\"{style.StrokeCap}\" StrokeJoin=\"{style.StrokeJoin}\" Data=\"{geometry}\"/>");
+                        sb.AppendLine($"{indent}<Path Stroke=\"{stroke.Color.ToHex()}\" StrokeThickness=\"{stroke.StrokeWidth}\" StrokeLineCap=\"{stroke.StrokeCap}\" StrokeJoin=\"{stroke.StrokeJoin}\" Data=\"{geometry}\"/>");
                     }
                     else if (!style.IsStroked && style.IsFilled)
                     {
-                        sb.AppendLine($"{indent}<Path Fill=\"{style.Fill.ToHex()}\" Data=\"{geometry}\"/>");
+                        sb.AppendLine($"{indent}<Path Fill=\"{fill.Color.ToHex()}\" Data=\"{geometry}\"/>");
                     }
                 }
             }

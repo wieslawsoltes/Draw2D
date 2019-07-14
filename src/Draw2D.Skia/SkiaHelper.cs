@@ -331,76 +331,73 @@ namespace Draw2D
             return null;
         }
 
-        internal static SKPaint ToSKPaintPen(ShapeStyle style, double scale, IList<IDisposable> disposables)
+        internal static SKPaint ToSKPaintStroke(IStrokePaint strokePaint, double scale, IList<IDisposable> disposables)
         {
-            double strokeWidth = style.StrokeWidth;
-            double strokeMiter = style.StrokeMiter;
-            if (style.IsScaled)
+            double strokeWidth = strokePaint.StrokeWidth;
+            double strokeMiter = strokePaint.StrokeMiter;
+            if (strokePaint.IsScaled)
             {
                 strokeWidth /= scale;
                 strokeMiter /= scale;
             }
             return new SKPaint()
             {
-                IsAntialias = style.IsAntialias,
+                IsAntialias = strokePaint.IsAntialias,
                 IsStroke = true,
                 StrokeWidth = (float)(strokeWidth),
-                StrokeCap = ToSKStrokeCap(style.StrokeCap),
-                StrokeJoin = ToSKStrokeJoin(style.StrokeJoin),
+                StrokeCap = ToSKStrokeCap(strokePaint.StrokeCap),
+                StrokeJoin = ToSKStrokeJoin(strokePaint.StrokeJoin),
                 StrokeMiter = (float)(strokeMiter),
-                Color = ToSKColor(style.Stroke),
+                Color = ToSKColor(strokePaint.Color),
                 Style = SKPaintStyle.Stroke,
-                PathEffect = ToSKPathEffect(style.PathEffect, strokeWidth, disposables)
+                PathEffect = ToSKPathEffect(strokePaint.PathEffect, strokeWidth, disposables)
             };
         }
 
-        internal static SKPaint ToSKPaintBrush(ArgbColor color, bool isAntialias)
+        internal static SKPaint ToSKPaintFill(IFillPaint fillPaint, IList<IDisposable> disposables)
         {
             return new SKPaint()
             {
-                IsAntialias = isAntialias,
+                IsAntialias = fillPaint.IsAntialias,
                 IsStroke = false,
-                Color = ToSKColor(color),
+                Color = ToSKColor(fillPaint.Color),
                 TextAlign = SKTextAlign.Left,
-                Style = SKPaintStyle.Fill
+                Style = SKPaintStyle.Fill,
+                PathEffect = ToSKPathEffect(fillPaint.PathEffect, 0.0, disposables)
             };
         }
 
-        internal static SKPaint ToSKPaintBrush(TextStyle style)
+        internal static SKPaint ToSKPaintText(ITextPaint textPaint, IList<IDisposable> disposables)
         {
             return new SKPaint()
             {
-                IsAntialias = style.IsAntialias,
+                IsAntialias = textPaint.IsAntialias,
                 IsStroke = false,
-                LcdRenderText = style.LcdRenderText,
-                SubpixelText = style.SubpixelText,
-                Color = ToSKColor(style.Stroke),
+                LcdRenderText = textPaint.LcdRenderText,
+                SubpixelText = textPaint.SubpixelText,
+                Color = ToSKColor(textPaint.Color),
                 TextAlign = SKTextAlign.Left,
-                Style = SKPaintStyle.Fill
+                Style = SKPaintStyle.Fill,
+                PathEffect = ToSKPathEffect(textPaint.PathEffect, 0.0, disposables)
             };
         }
 
-        internal static void ToSKPaintPenUpdate(SKPaint paint, ShapeStyle style, double scale)
+        internal static void ToSKPaintStrokeUpdate(SKPaint paint, IStrokePaint strokePaint, double scale, IList<IDisposable> disposables)
         {
-            double strokeWidth = style.StrokeWidth;
-            //double strokeMiter = style.StrokeMiter;
-            if (style.IsScaled)
+            double strokeWidth = strokePaint.StrokeWidth;
+            if (strokePaint.IsScaled)
             {
                 strokeWidth /= scale;
-                //strokeMiter /= scale;
             }
             paint.StrokeWidth = (float)(strokeWidth);
-            //paint.StrokeCap = ToSKStrokeCap(style.StrokeCap),
-            //paint.StrokeJoin = ToSKStrokeJoin(style.StrokeJoin),
-            //paint.StrokeMiter = (float)(strokeMiter),
-            //paint.Color = ToSKColor(style.Stroke);
-            //paint.Shader = SKShader.CreateColor(ToSKColor(style.Stroke));
         }
 
-        internal static void ToSKPaintBrushUpdate(SKPaint paint, ArgbColor color)
+        internal static void ToSKPaintFillUpdate(SKPaint paint, IFillPaint fillPaint, IList<IDisposable> disposables)
         {
-            //paint.Color = ToSKColor(color);
-            //paint.Shader = SKShader.CreateColor(ToSKColor(color));
+        }
+
+        internal static void ToSKPaintTextUpdate(SKPaint paint, ITextPaint textPaint, IList<IDisposable> disposables)
+        {
         }
 
         internal static SKPoint ToSKPoint(IPointShape point, double dx, double dy)
@@ -576,16 +573,17 @@ namespace Draw2D
             geometry.AddOval(rect, SKPathDirection.Clockwise);
         }
 
-        internal static void AddText(IToolContext context, Text text, IPointShape startPoint, IPointShape point, TextStyle style, double dx, double dy, SKPath geometry)
+        internal static void AddText(IToolContext context, Text text, IPointShape startPoint, IPointShape point, ITextPaint textPaint, double dx, double dy, SKPath geometry)
         {
-            using (var typeface = ToSKTypeface(style.Typeface))
-            using (var paint = ToSKPaintBrush(style))
+            using (var typeface = ToSKTypeface(textPaint.Typeface))
+            using (var pathEffectDisposable = new CompositeDisposable())
+            using (var paint = ToSKPaintText(textPaint, pathEffectDisposable.Disposables))
             {
                 paint.Typeface = typeface;
                 paint.TextEncoding = SKTextEncoding.Utf16;
-                paint.TextSize = (float)style.FontSize;
+                paint.TextSize = (float)textPaint.FontSize;
 
-                switch (style.HAlign)
+                switch (textPaint.HAlign)
                 {
                     default:
                     case HAlign.Left:
@@ -608,7 +606,7 @@ namespace Draw2D
                 float width = rect.Width;
                 float height = rect.Height;
 
-                switch (style.VAlign)
+                switch (textPaint.VAlign)
                 {
                     default:
                     case VAlign.Top:
@@ -622,7 +620,7 @@ namespace Draw2D
                         break;
                 }
 
-                switch (style.HAlign)
+                switch (textPaint.HAlign)
                 {
                     default:
                     case HAlign.Left:
@@ -649,7 +647,7 @@ namespace Draw2D
             var style = context?.DocumentContainer?.StyleLibrary?.Get(text.StyleId);
             if (style != null)
             {
-                AddText(context, text.Text, text.StartPoint, text.Point, style.TextStyle, dx, dy, geometry);
+                AddText(context, text.Text, text.StartPoint, text.Point, style.TextPaint, dx, dy, geometry);
             }
         }
 
@@ -805,17 +803,17 @@ namespace Draw2D
             return false;
         }
 
-        internal static SKPath ToStrokePath(IToolContext context, ShapeStyle style, SKPath geometry, IList<IDisposable> disposables)
+        internal static SKPath ToStrokePath(IToolContext context, IStrokePaint strokePaint, SKPath geometry, IList<IDisposable> disposables)
         {
-            using (var paint = ToSKPaintPen(style, 1.0, disposables))
+            using (var paint = ToSKPaintStroke(strokePaint, 1.0, disposables))
             {
                 return paint.GetFillPath(geometry, 1.0f);
             }
         }
 
-        internal static SKPath ToFillPath(IToolContext context, ShapeStyle style, SKPath geometry)
+        internal static SKPath ToFillPath(IToolContext context, IFillPaint fillPaint, SKPath geometry, IList<IDisposable> disposables)
         {
-            using (var paint = ToSKPaintBrush(style.Fill, style.IsAntialias))
+            using (var paint = ToSKPaintFill(fillPaint, disposables))
             {
                 return paint.GetFillPath(geometry, 1.0f);
             }
@@ -860,7 +858,7 @@ namespace Draw2D
             }
         }
 
-        internal static PathShape ToPathShape(IToolContext context, SKPath path, ShapeStyle style, IBaseShape pointTemplate)
+        internal static PathShape ToPathShape(IToolContext context, SKPath path, IShapeStyle style, IBaseShape pointTemplate)
         {
             var pathShape = new PathShape()
             {
@@ -1023,25 +1021,25 @@ namespace Draw2D
             return pathShape;
         }
 
-        internal static void ToSvgPathData(IToolContext context, Text text, IPointShape startPoint, IPointShape point, TextStyle style, StringBuilder sb)
+        internal static void ToSvgPathData(IToolContext context, Text text, IPointShape startPoint, IPointShape point, ITextPaint textPaint, StringBuilder sb, SKPathFillType fillType = SKPathFillType.Winding)
         {
             if (!string.IsNullOrEmpty(text?.Value))
             {
-                using (var geometry = new SKPath() { FillType = SKPathFillType.Winding })
+                using (var geometry = new SKPath() { FillType = fillType })
                 {
-                    AddText(context, text, startPoint, point, style, 0.0, 0.0, geometry);
+                    AddText(context, text, startPoint, point, textPaint, 0.0, 0.0, geometry);
                     sb.AppendLine(geometry.ToSvgPathData());
                 }
             }
         }
 
-        internal static void ToSvgPathData(IToolContext context, IBaseShape shape, StringBuilder sb)
+        internal static void ToSvgPathData(IToolContext context, IBaseShape shape, StringBuilder sb, SKPathFillType fillType = SKPathFillType.Winding)
         {
             switch (shape)
             {
                 case LineShape line:
                     {
-                        using (var geometry = new SKPath() { FillType = SKPathFillType.Winding })
+                        using (var geometry = new SKPath() { FillType = fillType })
                         {
                             AddLine(context, line, 0.0, 0.0, geometry);
                             sb.AppendLine(geometry.ToSvgPathData());
@@ -1050,7 +1048,7 @@ namespace Draw2D
                     break;
                 case CubicBezierShape cubicBezier:
                     {
-                        using (var geometry = new SKPath() { FillType = SKPathFillType.Winding })
+                        using (var geometry = new SKPath() { FillType = fillType })
                         {
                             AddCubic(context, cubicBezier, 0.0, 0.0, geometry);
                             sb.AppendLine(geometry.ToSvgPathData());
@@ -1059,7 +1057,7 @@ namespace Draw2D
                     break;
                 case QuadraticBezierShape quadraticBezier:
                     {
-                        using (var geometry = new SKPath() { FillType = SKPathFillType.Winding })
+                        using (var geometry = new SKPath() { FillType = fillType })
                         {
                             AddQuad(context, quadraticBezier, 0.0, 0.0, geometry);
                             sb.AppendLine(geometry.ToSvgPathData());
@@ -1068,7 +1066,7 @@ namespace Draw2D
                     break;
                 case ConicShape conic:
                     {
-                        using (var geometry = new SKPath() { FillType = SKPathFillType.Winding })
+                        using (var geometry = new SKPath() { FillType = fillType })
                         {
                             AddConic(context, conic, 0.0, 0.0, geometry);
                             sb.AppendLine(geometry.ToSvgPathData());
@@ -1086,7 +1084,7 @@ namespace Draw2D
                     break;
                 case RectangleShape rectangle:
                     {
-                        using (var geometry = new SKPath() { FillType = SKPathFillType.Winding })
+                        using (var geometry = new SKPath() { FillType = fillType })
                         {
                             AddRect(context, rectangle, 0.0, 0.0, geometry);
                             sb.AppendLine(geometry.ToSvgPathData());
@@ -1094,14 +1092,14 @@ namespace Draw2D
                             var style = context?.DocumentContainer?.StyleLibrary?.Get(rectangle.StyleId);
                             if (style != null)
                             {
-                                ToSvgPathData(context, rectangle.Text, rectangle.StartPoint, rectangle.Point, style.TextStyle, sb);
+                                ToSvgPathData(context, rectangle.Text, rectangle.StartPoint, rectangle.Point, style.TextPaint, sb, fillType);
                             }
                         }
                     }
                     break;
                 case CircleShape circle:
                     {
-                        using (var geometry = new SKPath() { FillType = SKPathFillType.Winding })
+                        using (var geometry = new SKPath() { FillType = fillType })
                         {
                             AddCircle(context, circle, 0.0, 0.0, geometry);
                             sb.AppendLine(geometry.ToSvgPathData());
@@ -1109,14 +1107,14 @@ namespace Draw2D
                             var style = context?.DocumentContainer?.StyleLibrary?.Get(circle.StyleId);
                             if (style != null)
                             {
-                                ToSvgPathData(context, circle.Text, circle.StartPoint, circle.Point, style.TextStyle, sb);
+                                ToSvgPathData(context, circle.Text, circle.StartPoint, circle.Point, style.TextPaint, sb, fillType);
                             }
                         }
                     }
                     break;
                 case ArcShape arc:
                     {
-                        using (var geometry = new SKPath() { FillType = SKPathFillType.Winding })
+                        using (var geometry = new SKPath() { FillType = fillType })
                         {
                             AddArc(context, arc, 0.0, 0.0, geometry);
                             sb.AppendLine(geometry.ToSvgPathData());
@@ -1124,14 +1122,14 @@ namespace Draw2D
                             var style = context?.DocumentContainer?.StyleLibrary?.Get(arc.StyleId);
                             if (style != null)
                             {
-                                ToSvgPathData(context, arc.Text, arc.StartPoint, arc.Point, style.TextStyle, sb);
+                                ToSvgPathData(context, arc.Text, arc.StartPoint, arc.Point, style.TextPaint, sb, fillType);
                             }
                         }
                     }
                     break;
                 case EllipseShape ellipse:
                     {
-                        using (var geometry = new SKPath() { FillType = SKPathFillType.Winding })
+                        using (var geometry = new SKPath() { FillType = fillType })
                         {
                             AddOval(context, ellipse, 0.0, 0.0, geometry);
                             sb.AppendLine(geometry.ToSvgPathData());
@@ -1139,7 +1137,7 @@ namespace Draw2D
                             var style = context?.DocumentContainer?.StyleLibrary?.Get(ellipse.StyleId);
                             if (style != null)
                             {
-                                ToSvgPathData(context, ellipse.Text, ellipse.StartPoint, ellipse.Point, style.TextStyle, sb);
+                                ToSvgPathData(context, ellipse.Text, ellipse.StartPoint, ellipse.Point, style.TextPaint, sb, fillType);
                             }
                         }
                     }
@@ -1149,7 +1147,7 @@ namespace Draw2D
                     {
                         if (point.Template != null)
                         {
-                            ToSvgPathData(context, point.Template, sb);
+                            ToSvgPathData(context, point.Template, sb, fillType);
                         }
                     }
                     break;
@@ -1158,7 +1156,7 @@ namespace Draw2D
                     {
                         foreach (var groupShape in group.Shapes)
                         {
-                            ToSvgPathData(context, groupShape, sb);
+                            ToSvgPathData(context, groupShape, sb, fillType);
                         }
                     }
                     break;
@@ -1167,7 +1165,7 @@ namespace Draw2D
                         var style = context?.DocumentContainer?.StyleLibrary?.Get(text.StyleId);
                         if (style != null)
                         {
-                            ToSvgPathData(context, text.Text, text.StartPoint, text.Point, style.TextStyle, sb);
+                            ToSvgPathData(context, text.Text, text.StartPoint, text.Point, style.TextPaint, sb, fillType);
                         }
                     }
                     break;

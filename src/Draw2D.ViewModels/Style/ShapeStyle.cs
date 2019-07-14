@@ -2,45 +2,19 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Runtime.Serialization;
-using Draw2D.ViewModels.Style.PathEffects;
 
 namespace Draw2D.ViewModels.Style
 {
     [DataContract(IsReference = true)]
-    public class ShapeStyle : ViewModelBase, ICopyable
+    public class ShapeStyle : ViewModelBase, IShapeStyle
     {
-        public static IPathEffectFactory PathEffectFactory { get; } = Style.PathEffectFactory.Instance;
-        public static StrokeCap[] StrokeCapValues { get; } = (StrokeCap[])Enum.GetValues(typeof(StrokeCap));
-        public static StrokeJoin[] StrokeJoinValues { get; } = (StrokeJoin[])Enum.GetValues(typeof(StrokeJoin));
-
-        private ArgbColor _stroke;
-        private ArgbColor _fill;
         private bool _isStroked;
         private bool _isFilled;
-        private bool _isAntialias;
-        private bool _isScaled;
-        private double _strokeWidth;
-        private StrokeCap _strokeCap;
-        private StrokeJoin _strokeJoin;
-        private double _strokeMiter;
-        private TextStyle _textStyle;
-        private IPathEffect _pathEffect;
-
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public ArgbColor Stroke
-        {
-            get => _stroke;
-            set => Update(ref _stroke, value);
-        }
-
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public ArgbColor Fill
-        {
-            get => _fill;
-            set => Update(ref _fill, value);
-        }
+        private bool _isText;
+        private IStrokePaint _strokePaint;
+        private IFillPaint _fillPaint;
+        private ITextPaint _textPaint;
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public bool IsStroked
@@ -57,59 +31,31 @@ namespace Draw2D.ViewModels.Style
         }
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public bool IsAntialias
+        public bool IsText
         {
-            get => _isAntialias;
-            set => Update(ref _isAntialias, value);
+            get => _isText;
+            set => Update(ref _isText, value);
         }
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public bool IsScaled
+        public IStrokePaint StrokePaint
         {
-            get => _isScaled;
-            set => Update(ref _isScaled, value);
+            get => _strokePaint;
+            set => Update(ref _strokePaint, value);
         }
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public double StrokeWidth
+        public IFillPaint FillPaint
         {
-            get => _strokeWidth;
-            set => Update(ref _strokeWidth, value);
+            get => _fillPaint;
+            set => Update(ref _fillPaint, value);
         }
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public StrokeCap StrokeCap
+        public ITextPaint TextPaint
         {
-            get => _strokeCap;
-            set => Update(ref _strokeCap, value);
-        }
-
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public StrokeJoin StrokeJoin
-        {
-            get => _strokeJoin;
-            set => Update(ref _strokeJoin, value);
-        }
-
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public double StrokeMiter
-        {
-            get => _strokeMiter;
-            set => Update(ref _strokeMiter, value);
-        }
-
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public TextStyle TextStyle
-        {
-            get => _textStyle;
-            set => Update(ref _textStyle, value);
-        }
-
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public IPathEffect PathEffect
-        {
-            get => _pathEffect;
-            set => Update(ref _pathEffect, value);
+            get => _textPaint;
+            set => Update(ref _textPaint, value);
         }
 
         public ShapeStyle()
@@ -118,43 +64,37 @@ namespace Draw2D.ViewModels.Style
 
         public ShapeStyle(
             string title,
-            ArgbColor stroke,
-            ArgbColor fill,
-            bool isStroked,
-            bool isFilled,
-            bool isScaled,
-            double strokeWidth,
-            TextStyle textStyle,
-            IPathEffect pathEffect = null)
+            IStrokePaint strokePaint = null,
+            IFillPaint fillPaint = null,
+            ITextPaint textPaint = null,
+            bool isStroked = true,
+            bool isFilled = false,
+            bool isText = true)
         {
             this.Title = title;
-            this.Stroke = stroke;
-            this.Fill = fill;
             this.IsStroked = isStroked;
             this.IsFilled = isFilled;
-            this.IsAntialias = true;
-            this.IsScaled = isScaled;
-            this.StrokeWidth = strokeWidth;
-            this.StrokeCap = StrokeCap.Butt;
-            this.StrokeJoin = StrokeJoin.Miter;
-            this.StrokeMiter = 4.0;
-            this.TextStyle = textStyle;
-            this.PathEffect = pathEffect;
-        }
-
-        public void SetPathEffect(IPathEffect pathEffect)
-        {
-            this.PathEffect = pathEffect;
+            this.IsText = isText;
+            this.StrokePaint = strokePaint;
+            this.FillPaint = fillPaint;
+            this.TextPaint = textPaint;
         }
 
         public override void Invalidate()
         {
-            _stroke?.Invalidate();
-            _fill?.Invalidate();
-            _textStyle?.Invalidate();
-            _textStyle.Typeface?.Invalidate();
-            _textStyle.Stroke?.Invalidate();
-            _pathEffect?.Invalidate();
+            _strokePaint?.Invalidate();
+            _strokePaint?.Color?.Invalidate();
+            _strokePaint?.PathEffect?.Invalidate();
+
+            _fillPaint?.Invalidate();
+            _fillPaint?.Color?.Invalidate();
+            _fillPaint?.PathEffect?.Invalidate();
+
+            _textPaint?.Invalidate();
+            _textPaint?.Color?.Invalidate();
+            _textPaint?.Typeface?.Invalidate();
+            _textPaint?.PathEffect?.Invalidate();
+
             base.Invalidate();
         }
 
@@ -164,18 +104,12 @@ namespace Draw2D.ViewModels.Style
             {
                 Name = this.Name,
                 Title = this.Title + "_copy",
-                Stroke = (ArgbColor)(this.Stroke.Copy(shared)),
-                Fill = (ArgbColor)(this.Fill.Copy(shared)),
                 IsStroked = this.IsStroked,
                 IsFilled = this.IsFilled,
-                IsAntialias = this.IsAntialias,
-                IsScaled = this.IsScaled,
-                StrokeWidth = this.StrokeWidth,
-                StrokeCap = this.StrokeCap,
-                StrokeJoin = this.StrokeJoin,
-                StrokeMiter = this.StrokeMiter,
-                TextStyle = (TextStyle)this.TextStyle.Copy(shared),
-                PathEffect = (IPathEffect)this.PathEffect.Copy(shared)
+                IsText = this.IsText,
+                StrokePaint = (IStrokePaint)this.StrokePaint.Copy(shared),
+                FillPaint = (IFillPaint)this.FillPaint.Copy(shared),
+                TextPaint = (ITextPaint)this.TextPaint.Copy(shared)
             };
         }
     }

@@ -11,82 +11,27 @@
     <TabControl Classes="default" TabStripPlacement="Top">
         <TabItem Classes="default" Header="Style">
             <ScrollViewer>
-                <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="Auto,*">
+                <Grid RowDefinitions="Auto,Auto,Auto,Auto" ColumnDefinitions="Auto,*">
                     <TextBlock Classes="default" Grid.Column="0" Grid.Row="0" Text="Title"/>
                     <TextBox Classes="default" Grid.Column="1" Grid.Row="0" Text="{Binding Title, Mode=TwoWay}"/>
                     <TextBlock Classes="default" Grid.Column="0" Grid.Row="1" Text="IsStroked"/>
                     <CheckBox Classes="default" Grid.Column="1" Grid.Row="1" IsChecked="{Binding IsStroked}"/>
                     <TextBlock Classes="default" Grid.Column="0" Grid.Row="2" Text="IsFilled"/>
                     <CheckBox Classes="default" Grid.Column="1" Grid.Row="2" IsChecked="{Binding IsFilled}"/>
-                    <TextBlock Classes="default" Grid.Column="0" Grid.Row="3" Text="IsAntialias"/>
-                    <CheckBox Classes="default" Grid.Column="1" Grid.Row="3" IsChecked="{Binding IsAntialias}"/>
-                    <TextBlock Classes="default" Grid.Column="0" Grid.Row="4" Text="IsScaled"/>
-                    <CheckBox Classes="default" Grid.Column="1" Grid.Row="4" IsChecked="{Binding IsScaled}"/>
-                    <TextBlock Classes="default" Grid.Column="0" Grid.Row="5" Text="StrokeWidth"/>
-                    <TextBox Classes="default" Grid.Column="1" Grid.Row="5" Text="{Binding StrokeWidth}"/>
-                    <TextBlock Classes="default" Grid.Column="0" Grid.Row="6" Text="StrokeCap"/>
-                    <ComboBox Classes="default" Grid.Column="1" Grid.Row="6" Items="{Binding StrokeCapValues}" SelectedItem="{Binding StrokeCap, Mode=TwoWay}"/>
-                    <TextBlock Classes="default" Grid.Column="0" Grid.Row="7" Text="StrokeJoin"/>
-                    <ComboBox Classes="default" Grid.Column="1" Grid.Row="7" Items="{Binding StrokeJoinValues}" SelectedItem="{Binding StrokeJoin, Mode=TwoWay}"/>
-                    <TextBlock Classes="default" Grid.Column="0" Grid.Row="8" Text="StrokeMiter"/>
-                    <TextBox Classes="default" Grid.Column="1" Grid.Row="8" Text="{Binding StrokeMiter}"/>
+                    <TextBlock Classes="default" Grid.Column="0" Grid.Row="3" Text="IsText"/>
+                    <CheckBox Classes="default" Grid.Column="1" Grid.Row="3" IsChecked="{Binding IsText}"/>
                 </Grid>
             </ScrollViewer>
         </TabItem>
         <TabItem Classes="default" Header="Stroke">
-            <ContentControl Content="{Binding Stroke}"/>
+            <ContentControl Content="{Binding StrokePaint}"/>
         </TabItem>
         <TabItem Classes="default" Header="Fill">
-            <ContentControl Content="{Binding Fill}"/>
+            <ContentControl Content="{Binding FillPaint}"/>
         </TabItem>
-        <TabItem Classes="default" Header="PathEffect">
-            <Grid RowDefinitions="Auto,*">
-                <Menu Background="Transparent" Grid.Row="0">
-                    <MenuItem Header="Create">
-                        <MenuItem Header="1DPath">
-                            <MenuItem Header="Translate" Command="{Binding PathEffectFactory.Create1DPathTranslateEffect}" CommandParameter="{Binding SetPathEffect}"/>
-                            <MenuItem Header="Rotate" Command="{Binding PathEffectFactory.Create1DPathRotateEffect}" CommandParameter="{Binding SetPathEffect}"/>
-                            <MenuItem Header="Morph" Command="{Binding PathEffectFactory.Create1DPathMorphEffect}" CommandParameter="{Binding SetPathEffect}"/>
-                        </MenuItem>
-                        <MenuItem Header="2DLine">
-                            <MenuItem Header="Hatch Horizontal Lines" Command="{Binding PathEffectFactory.Create2DLineHatchHorizontalLinesEffect}" CommandParameter="{Binding SetPathEffect}"/>
-                            <MenuItem Header="Hatch Vertical Lines" Command="{Binding PathEffectFactory.Create2DLineHatchVerticalLinesEffect}" CommandParameter="{Binding SetPathEffect}"/>
-                            <MenuItem Header="Hatch Diagonal Lines" Command="{Binding PathEffectFactory.Create2DLineHatchDiagonalLinesEffect}" CommandParameter="{Binding SetPathEffect}"/>
-                        </MenuItem>
-                        <MenuItem Header="2DPath">
-                            <MenuItem Header="Tile" Command="{Binding PathEffectFactory.Create2DPathTileEffect}" CommandParameter="{Binding SetPathEffect}"/>
-                        </MenuItem>
-                        <MenuItem Header="Corner">
-                            <MenuItem Header="Corner" Command="{Binding PathEffectFactory.CreateCornerEffect}" CommandParameter="{Binding SetPathEffect}"/>
-                        </MenuItem>
-                        <MenuItem Header="Dash">
-                            <MenuItem Header="Dash" Command="{Binding PathEffectFactory.CreateDashEffect}" CommandParameter="{Binding SetPathEffect}"/>
-                            <MenuItem Header="Dot" Command="{Binding PathEffectFactory.CreateDotEffect}" CommandParameter="{Binding SetPathEffect}"/>
-                            <MenuItem Header="DashDot" Command="{Binding PathEffectFactory.CreateDashDotEffect}" CommandParameter="{Binding SetPathEffect}"/>
-                            <MenuItem Header="DashDotDot" Command="{Binding PathEffectFactory.CreateDashDotDotEffect}" CommandParameter="{Binding SetPathEffect}"/>
-                        </MenuItem>
-                        <MenuItem Header="Discrete">
-                            <MenuItem Header="Discrete" Command="{Binding PathEffectFactory.CreateDiscreteEffect}" CommandParameter="{Binding SetPathEffect}"/>
-                        </MenuItem>
-                        <MenuItem Header="Trim">
-                            <MenuItem Header="Trim" Command="{Binding PathEffectFactory.CreateTrimEffect}" CommandParameter="{Binding SetPathEffect}"/>
-                        </MenuItem>
-                        <MenuItem Header="Compound">
-                            <MenuItem Header="Compose" Command="{Binding PathEffectFactory.CreateComposeEffect}" CommandParameter="{Binding SetPathEffect}"/>
-                            <MenuItem Header="Sum" Command="{Binding PathEffectFactory.CreateSumEffect}" CommandParameter="{Binding SetPathEffect}"/>
-                        </MenuItem>
-                    </MenuItem>
-                    <MenuItem Header="Edit">
-                        <MenuItem Header="Copy" Command="{Binding PathEffectFactory.Copy}" CommandParameter="{Binding PathEffect}"/>
-                        <MenuItem Header="Paste" Command="{Binding PathEffectFactory.Paste}" CommandParameter="{Binding SetPathEffect}"/>
-                        <MenuItem Header="Delete" Command="{Binding PathEffectFactory.Delete}" CommandParameter="{Binding SetPathEffect}"/>
-                    </MenuItem>
-                </Menu>
-                <ContentControl Content="{Binding PathEffect}" Grid.Row="1"/>
-            </Grid>
-        </TabItem>
+
         <TabItem Classes="default" Header="Text">
-            <ContentControl Content="{Binding TextStyle}"/>
+            <ContentControl Content="{Binding TextPaint}"/>
         </TabItem>
         <TabItem Classes="default" Header="Object">
             <ScrollViewer>

@@ -41,19 +41,19 @@ namespace Draw2D.ViewModels.Tools
             set => throw new InvalidOperationException($"Can not set {Height} property value.");
         }
 
-        public ArgbColor PrintBackground
+        public IFillPaint PrintBackground
         {
             get => _context.DocumentContainer.ContainerView.PrintBackground;
             set => throw new InvalidOperationException($"Can not set {PrintBackground} property value.");
         }
 
-        public ArgbColor WorkBackground
+        public IFillPaint WorkBackground
         {
             get => _context.DocumentContainer.ContainerView.WorkBackground;
             set => throw new InvalidOperationException($"Can not set {WorkBackground} property value.");
         }
 
-        public ArgbColor InputBackground
+        public IFillPaint InputBackground
         {
             get => _context.DocumentContainer.ContainerView.InputBackground;
             set => throw new InvalidOperationException($"Can not set {InputBackground} property value.");
