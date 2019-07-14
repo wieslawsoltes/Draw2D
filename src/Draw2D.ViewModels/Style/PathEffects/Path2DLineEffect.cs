@@ -38,10 +38,10 @@ namespace Draw2D.ViewModels.Style.PathEffects
         public static IPathEffect MakeHatchHorizontalLines()
         {
             // TODO:
-            double width = 3;
+            double width = 1;
             var matrix = Matrix.MakeIdentity();
-            matrix.ScaleX = 6;
-            matrix.ScaleY = 6;
+            matrix.ScaleX = 15;
+            matrix.ScaleY = 15;
             return new Path2DLineEffect(width, matrix) { Title = "HatchHorizontalLines" };
         }
 
@@ -50,6 +50,8 @@ namespace Draw2D.ViewModels.Style.PathEffects
             // TODO:
             double width = 6;
             var matrix = Matrix.MakeIdentity();
+            matrix.ScaleX = 15;
+            matrix.ScaleY = 15;
             return new Path2DLineEffect(width, matrix) { Title = "HatchVerticalLines" };
         }
 
@@ -58,6 +60,8 @@ namespace Draw2D.ViewModels.Style.PathEffects
             // TODO:
             double width = 12;
             var matrix = Matrix.MakeIdentity();
+            matrix.ScaleX = 15;
+            matrix.ScaleY = 15;
             return new Path2DLineEffect(width, matrix) { Title = "HatchDiagonalLines" };
         }
 
