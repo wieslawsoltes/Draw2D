@@ -40,6 +40,8 @@ namespace Draw2D.ViewModels.Style.PathEffects
             // TODO:
             double width = 3;
             var matrix = Matrix.MakeIdentity();
+            matrix.ScaleX = 6;
+            matrix.ScaleY = 6;
             return new Path2DLineEffect(width, matrix) { Title = "HatchHorizontalLines" };
         }
 
