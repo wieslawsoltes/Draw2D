@@ -2,6 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using System.Collections.Generic;
 using System.Runtime.Serialization;
+using Spatial;
 
 namespace Draw2D.ViewModels.Style.PathEffects
 {
@@ -37,31 +38,22 @@ namespace Draw2D.ViewModels.Style.PathEffects
 
         public static IPathEffect MakeHatchHorizontalLines()
         {
-            // TODO:
             double width = 1;
-            var matrix = Matrix.MakeIdentity();
-            matrix.ScaleX = 15;
-            matrix.ScaleY = 15;
+            var matrix = Matrix.MakeFrom(Matrix2.Scale(15, 15));
             return new Path2DLineEffect(width, matrix) { Title = "HatchHorizontalLines" };
         }
 
         public static IPathEffect MakeHatchVerticalLines()
         {
-            // TODO:
-            double width = 6;
-            var matrix = Matrix.MakeIdentity();
-            matrix.ScaleX = 15;
-            matrix.ScaleY = 15;
+            double width = 1;
+            var matrix = Matrix.MakeFrom(Matrix2.Rotation(90 * Vector2.DegreesToRadians) * Matrix2.Scale(15, 15));
             return new Path2DLineEffect(width, matrix) { Title = "HatchVerticalLines" };
         }
 
         public static IPathEffect MakeHatchDiagonalLines()
         {
-            // TODO:
-            double width = 12;
-            var matrix = Matrix.MakeIdentity();
-            matrix.ScaleX = 15;
-            matrix.ScaleY = 15;
+            double width = 1;
+            var matrix = Matrix.MakeFrom(Matrix2.Scale(15, 15) * Matrix2.Rotation(45 * Vector2.DegreesToRadians));
             return new Path2DLineEffect(width, matrix) { Title = "HatchDiagonalLines" };
         }
 
