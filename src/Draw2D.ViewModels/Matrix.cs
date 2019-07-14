@@ -1,7 +1,9 @@
 ﻿// Copyright (c) Wiesław Šoltés. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
+using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
+using Spatial;
 
 namespace Draw2D.ViewModels
 {
@@ -110,6 +112,22 @@ namespace Draw2D.ViewModels
 			    Persp2 = 1
 			};
 		}
+
+        public static Matrix MakeFrom(Matrix2 matrix)
+        {
+            return new Matrix()
+            {
+                ScaleX = matrix.M11,
+                SkewX = matrix.M12,
+                TransX = matrix.OffsetX,
+                SkewY = matrix.M21,
+                ScaleY = matrix.M22,
+                TransY = matrix.OffsetY,
+                Persp0 = 0,
+                Persp1 = 0,
+                Persp2 = 1
+            };
+        }
 
         public object Copy(Dictionary<object, object> shared)
         {
