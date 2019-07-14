@@ -3,7 +3,7 @@
 
 namespace Draw2D.ViewModels.Style
 {
-    public class IPaint : INode, IDirty, ICopyable
+    public interface IPaint : INode, IDirty, ICopyable
     {
         ArgbColor Color { get; set; }
         bool IsAntialias { get; set; }

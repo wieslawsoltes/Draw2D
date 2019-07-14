@@ -95,7 +95,7 @@ namespace Draw2D.ViewModels.Style
             string fontFamily = "Calibri",
             double fontSize = 12.0,
             HAlign hAlign = HAlign.Center,
-            VAlign vAlign = HAlign.Center,
+            VAlign vAlign = VAlign.Center,
             bool lcdRenderText = true,
             bool subpixelText = true,
             bool isAntialias = true,
@@ -129,7 +129,7 @@ namespace Draw2D.ViewModels.Style
                 FontSize = this.FontSize,
                 LcdRenderText = this.LcdRenderText,
                 SubpixelText = this.SubpixelText,
-                PathEffect = (IPathEffect)this.PathEffect.Copy(shared)
+                PathEffect = (IPathEffect)this.PathEffect.Copy(shared),
                 HAlign = this.HAlign,
                 VAlign = this.VAlign,
             };

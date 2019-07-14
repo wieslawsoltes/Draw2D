@@ -3,12 +3,120 @@
 using System.Collections.Generic;
 using Draw2D.ViewModels.Containers;
 using Draw2D.ViewModels.Style;
+using Draw2D.ViewModels.Style.PathEffects;
 
 namespace Draw2D.ViewModels
 {
     public static class IsDirtyExtensions
     {
-        public static bool IsShapeStyleDirty(this ShapeStyle style)
+        public static bool IsPathEffectDirty(this IPathEffect pathEffect)
+        {
+            if (pathEffect == null)
+            {
+                return false;
+            }
+
+            if (pathEffect.IsDirty)
+            {
+#if USE_DEBUG_DIRTY
+                Log.WriteLine($"IsPathEffectDirty: true");
+#endif
+                return true;
+            }
+
+            switch (pathEffect)
+            {
+                case PathComposeEffect pathComposeEffect:
+                    {
+                        if ((pathComposeEffect.Outer?.IsPathEffectDirty() ?? false)
+                         || (pathComposeEffect.Inner?.IsPathEffectDirty() ?? false))
+                        {
+#if USE_DEBUG_DIRTY
+                Log.WriteLine($"IsPathEffectDirty: true");
+#endif
+                        }
+                    }
+                    break;
+                case PathSumEffect pathSumEffect:
+                    {
+                        if ((pathSumEffect.First?.IsPathEffectDirty() ?? false)
+                         || (pathSumEffect.Second?.IsPathEffectDirty() ?? false))
+                        {
+#if USE_DEBUG_DIRTY
+                Log.WriteLine($"IsPathEffectDirty: true");
+#endif
+                        }
+                    }
+                    break;
+                default:
+                    break;
+            }
+
+            return false;
+        }
+
+        public static bool IsStrokePaintDirty(this IStrokePaint strokePaint)
+        {
+            if (strokePaint == null)
+            {
+                return false;
+            }
+
+            if (strokePaint.IsDirty
+             || (strokePaint.Color?.IsDirty ?? false)
+             || (strokePaint.PathEffect?.IsPathEffectDirty() ?? false))
+            {
+#if USE_DEBUG_DIRTY
+                Log.WriteLine($"IsStrokePaintDirty: true");
+#endif
+                return true;
+            }
+
+            return false;
+        }
+
+        public static bool IsFillPaintDirty(this IFillPaint fillPaint)
+        {
+            if (fillPaint == null)
+            {
+                return false;
+            }
+
+            if (fillPaint.IsDirty
+             || (fillPaint.Color?.IsDirty ?? false)
+             || (fillPaint.PathEffect?.IsPathEffectDirty() ?? false))
+            {
+#if USE_DEBUG_DIRTY
+                Log.WriteLine($"IsFillPaintDirty: true");
+#endif
+                return true;
+            }
+
+            return false;
+        }
+
+        public static bool IsTextPaintDirty(this ITextPaint textPaint)
+        {
+            if (textPaint == null)
+            {
+                return false;
+            }
+
+            if (textPaint.IsDirty
+             || (textPaint.Color?.IsDirty ?? false)
+             || (textPaint.Typeface?.IsDirty ?? false)
+             || (textPaint.PathEffect?.IsPathEffectDirty() ?? false))
+            {
+#if USE_DEBUG_DIRTY
+                Log.WriteLine($"IsTextPaintDirty: true");
+#endif
+                return true;
+            }
+
+            return false;
+        }
+
+        public static bool IsShapeStyleDirty(this IShapeStyle style)
         {
             if (style == null)
             {
@@ -16,12 +124,9 @@ namespace Draw2D.ViewModels
             }
 
             if (style.IsDirty
-             || style.Stroke.IsDirty
-             || style.Fill.IsDirty
-             || style.TextStyle.IsDirty
-             || style.TextStyle.Typeface.IsDirty
-             || style.TextStyle.Stroke.IsDirty
-             || (style.PathEffect?.IsDirty ?? false))
+             || (style.StrokePaint?.IsStrokePaintDirty() ?? false)
+             || (style.FillPaint?.IsFillPaintDirty() ?? false)
+             || (style.TextPaint?.IsTextPaintDirty() ?? false))
             {
 #if USE_DEBUG_DIRTY
                 Log.WriteLine($"IsShapeStyleDirty: true");
@@ -51,7 +156,7 @@ namespace Draw2D.ViewModels
             {
                 foreach (var style in styleLibrary.Items)
                 {
-                    if (IsShapeStyleDirty(style))
+                    if (style?.IsShapeStyleDirty() ?? false)
                     {
                         return true;
                     }

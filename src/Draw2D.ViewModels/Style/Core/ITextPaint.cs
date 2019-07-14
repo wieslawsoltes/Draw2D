@@ -3,7 +3,7 @@
 
 namespace Draw2D.ViewModels.Style
 {
-    public class ITextPaint : IPaint
+    public interface ITextPaint : IPaint
     {
         Typeface Typeface { get; set; }
         double FontSize { get; set; }

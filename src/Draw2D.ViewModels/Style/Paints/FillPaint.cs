@@ -7,7 +7,7 @@ using System.Runtime.Serialization;
 namespace Draw2D.ViewModels.Style
 {
     [DataContract(IsReference = true)]
-    public class FillPaint : ViewModelBase, FillPaint
+    public class FillPaint : ViewModelBase, IFillPaint
     {
         public static IPathEffectFactory PathEffectFactory { get; } = Style.PathEffectFactory.Instance;
 

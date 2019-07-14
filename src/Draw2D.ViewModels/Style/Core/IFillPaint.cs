@@ -3,7 +3,7 @@
 
 namespace Draw2D.ViewModels.Style
 {
-    public class IFillPaint : IPaint
+    public interface IFillPaint : IPaint
     {
     }
 }

@@ -16,7 +16,7 @@ namespace Draw2D.Presenters
         private readonly IToolContext _context;
         private readonly IContainerView _view;
         private SkiaShapeRenderer _skiaRenderer;
-        private Dictionary<ArgbColor, SKPaint> _paintCache;
+        private Dictionary<IFillPaint, SKPaint> _paintCache;
         private double _previousZX = double.NaN;
         private double _previousZY = double.NaN;
         private SKPicture _pictureShapesCurrent = null;
@@ -24,13 +24,15 @@ namespace Draw2D.Presenters
         private SKPicture _pictureDecorators = null;
         private SKPicture _picturePoints = null;
         private bool _enablePictureCache = true;
+        private CompositeDisposable _pathEffectDisposable;
 
         public SkiaEditorContainerPresenter(IToolContext context, IContainerView view)
         {
             _context = context;
             _view = view;
             _skiaRenderer = new SkiaShapeRenderer(_context, _view.SelectionState);
-            _paintCache = new Dictionary<ArgbColor, SKPaint>();
+            _paintCache = new Dictionary<IFillPaint, SKPaint>();
+            _pathEffectDisposable = new CompositeDisposable();
         }
 
         public void Dispose()
@@ -75,19 +77,25 @@ namespace Draw2D.Presenters
                 _pictureShapesCurrent.Dispose();
                 _pictureShapesCurrent = null;
             }
+
+            if (_pathEffectDisposable != null)
+            {
+                _pathEffectDisposable.Dispose();
+                _pathEffectDisposable = null;
+            }
         }
 
-        private void GetSKPaintFill(ArgbColor color, bool isAntialias, out SKPaint brush)
+        private void GetSKPaintFill(IFillPaint fillPaint, out SKPaint brush)
         {
-            if (color.IsDirty == true || !_paintCache.TryGetValue(color, out var brushCached))
+            if (fillPaint.IsDirty == true || !_paintCache.TryGetValue(fillPaint, out var brushCached))
             {
-                color.Invalidate();
-                brushCached = SkiaHelper.ToSKPaintBrush(color, isAntialias);
-                _paintCache[color] = brushCached;
+                fillPaint.Invalidate();
+                brushCached = SkiaHelper.ToSKPaintFill(fillPaint, _pathEffectDisposable.Disposables);
+                _paintCache[fillPaint] = brushCached;
             }
             else
             {
-                SkiaHelper.ToSKPaintBrushUpdate(brushCached, color);
+                SkiaHelper.ToSKPaintFillUpdate(brushCached, fillPaint, _pathEffectDisposable.Disposables);
             }
 
             brush = brushCached;
@@ -267,9 +275,9 @@ namespace Draw2D.Presenters
 
             var canvas = context as SKCanvas;
 
-            if (_view.InputBackground != null)
+            if (_view.InputBackground?.Color != null)
             {
-                canvas.Clear(SkiaHelper.ToSKColor(_view.InputBackground));
+                canvas.Clear(SkiaHelper.ToSKColor(_view.InputBackground.Color));
             }
             else
             {
@@ -278,7 +286,7 @@ namespace Draw2D.Presenters
 
             if (_view.WorkBackground != null)
             {
-                GetSKPaintFill(_view.WorkBackground, false, out var brush);
+                GetSKPaintFill(_view.WorkBackground, out var brush);
                 canvas.Save();
                 canvas.Translate((float)dx, (float)dy);
                 canvas.Scale((float)zx, (float)zy);

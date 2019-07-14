@@ -11,9 +11,9 @@ namespace Draw2D.ViewModels.Containers
         string Title { get; set; }
         double Width { get; set; }
         double Height { get; set; }
-        ArgbColor PrintBackground { get; set; }
-        ArgbColor WorkBackground { get; set; }
-        ArgbColor InputBackground { get; set; }
+        IFillPaint PrintBackground { get; set; }
+        IFillPaint WorkBackground { get; set; }
+        IFillPaint InputBackground { get; set; }
         ICanvasContainer CurrentContainer { get; set; }
         ICanvasContainer WorkingContainer { get; set; }
         ISelectionState SelectionState { get; set; }

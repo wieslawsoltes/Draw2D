@@ -3,7 +3,7 @@
 
 namespace Draw2D.ViewModels.Style
 {
-    public class IStrokePaint : IPaint
+    public interface IStrokePaint : IPaint
     {
         double StrokeWidth { get; set; }
         StrokeCap StrokeCap { get; set; }

@@ -64,12 +64,12 @@ namespace Draw2D.ViewModels.Style
 
         public ShapeStyle(
             string title,
+            IStrokePaint strokePaint = null,
+            IFillPaint fillPaint = null,
+            ITextPaint textPaint = null,
             bool isStroked = true,
             bool isFilled = false,
-            bool isText = true,
-            IStrokePaint strokePaint,
-            IFillPaint fillPaint,
-            ITextPaint textPaint)
+            bool isText = true)
         {
             this.Title = title;
             this.IsStroked = isStroked;
@@ -108,8 +108,8 @@ namespace Draw2D.ViewModels.Style
                 IsFilled = this.IsFilled,
                 IsText = this.IsText,
                 StrokePaint = (IStrokePaint)this.StrokePaint.Copy(shared),
-                IFillPaint = (ITextPaint)this.FillPaint.Copy(shared),
-                TextPaint = (ITextPaint)this.TextPaint.Copy(shared),
+                FillPaint = (IFillPaint)this.FillPaint.Copy(shared),
+                TextPaint = (ITextPaint)this.TextPaint.Copy(shared)
             };
         }
     }
