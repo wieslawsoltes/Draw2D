@@ -2,6 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using System.Collections.Generic;
 using System.Runtime.Serialization;
+using Spatial;
 
 namespace Draw2D.ViewModels.Style.PathEffects
 {
@@ -37,10 +38,7 @@ namespace Draw2D.ViewModels.Style.PathEffects
 
         public static IPathEffect MakeTile()
         {
-            // TODO:
-            var matrix = Matrix.MakeIdentity();
-            matrix.ScaleX = 30;
-            matrix.ScaleY = 30;
+            var matrix = Matrix.MakeFrom(Matrix2.Scale(30, 30));
             var path = "M-15 -15L15 -15L15 15L-15 15L-15 -15Z";
             return new Path2DPathEffect(matrix, path) { Title = "2DPathTile" };
         }
