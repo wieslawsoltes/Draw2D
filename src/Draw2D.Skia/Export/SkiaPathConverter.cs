@@ -219,12 +219,14 @@ namespace Draw2D.Export
         public string ToSvgPathData(IToolContext context, ICollection<IBaseShape> selected)
         {
             var sb = new StringBuilder();
-
-            foreach (var shape in selected)
+            var shapes = GetShapes(selected);
+            if (shapes != null && shapes.Count > 0)
             {
-                SkiaHelper.ToSvgPathData(context, shape, sb);
+                foreach (var shape in shapes)
+                {
+                    SkiaHelper.ToSvgPathData(context, shape, sb);
+                }
             }
-
             return sb.ToString();
         }
 
