@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using Draw2D.ViewModels;
+using Draw2D.ViewModels.Containers;
 using Draw2D.ViewModels.Shapes;
 using Draw2D.ViewModels.Style;
 using Draw2D.ViewModels.Tools;
@@ -13,6 +14,7 @@ namespace Draw2D.Renderers
     public class SkiaShapeRenderer : IShapeRenderer
     {
         private IToolContext _context;
+        private IContainerView _view;
         private ISelectionState _selectionState;
         private Dictionary<Typeface, SKTypeface> _typefaceCache;
         private Dictionary<ITextPaint, (SKPaint paint, SKFontMetrics metrics)> _textPaintCache;
@@ -21,9 +23,10 @@ namespace Draw2D.Renderers
         private Dictionary<string, SKPicture> _pictureCache;
         private CompositeDisposable _pathEffectDisposable;
 
-        public SkiaShapeRenderer(IToolContext context, ISelectionState selectionState)
+        public SkiaShapeRenderer(IToolContext context, IContainerView view, ISelectionState selectionState)
         {
             _context = context;
+            _view = view;
             _selectionState = selectionState;
             _typefaceCache = new Dictionary<Typeface, SKTypeface>();
             _textPaintCache = new Dictionary<ITextPaint, (SKPaint paint, SKFontMetrics metrics)>();

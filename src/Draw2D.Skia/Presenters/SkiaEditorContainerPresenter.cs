@@ -30,7 +30,7 @@ namespace Draw2D.Presenters
         {
             _context = context;
             _view = view;
-            _skiaRenderer = new SkiaShapeRenderer(_context, _view.SelectionState);
+            _skiaRenderer = new SkiaShapeRenderer(_context, _view, _view.SelectionState);
             _paintCache = new Dictionary<IFillPaint, SKPaint>();
             _pathEffectDisposable = new CompositeDisposable();
         }
