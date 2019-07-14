@@ -318,16 +318,22 @@ namespace Draw2D.Renderers
                     break;
                 case Path2DLineEffect path2DLineEffect:
                     {
-                        inflateX = path2DLineEffect.Matrix?.ScaleX ?? 0.0;
-                        inflateY = path2DLineEffect.Matrix?.ScaleY ?? 0.0;
-                        isClipPath = true;
+                        if (path2DLineEffect.Matrix != null)
+                        {
+                            inflateX = Math.Max(Math.Abs(path2DLineEffect.Matrix.ScaleX), Math.Abs(path2DLineEffect.Matrix.SkewX));
+                            inflateY = Math.Max(Math.Abs(path2DLineEffect.Matrix.ScaleY), Math.Abs(path2DLineEffect.Matrix.SkewY));
+                            isClipPath = true;
+                        }
                     }
                     break;
                 case Path2DPathEffect path2DPathEffect:
                     {
-                        inflateX = path2DPathEffect.Matrix?.ScaleX ?? 0.0;
-                        inflateY = path2DPathEffect.Matrix?.ScaleY ?? 0.0;
-                        isClipPath = true;
+                        if (path2DPathEffect.Matrix != null)
+                        {
+                            inflateX = Math.Max(Math.Abs(path2DPathEffect.Matrix.ScaleX), Math.Abs(path2DPathEffect.Matrix.SkewX));
+                            inflateY = Math.Max(Math.Abs(path2DPathEffect.Matrix.ScaleY), Math.Abs(path2DPathEffect.Matrix.SkewY));
+                            isClipPath = true;
+                        }
                     }
                     break;
                 case PathComposeEffect pathComposeEffect:
