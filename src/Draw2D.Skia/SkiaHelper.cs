@@ -995,23 +995,21 @@ namespace Draw2D
                             break;
                         case SKPathVerb.Close:
                             {
-#if USE_CLOSE_SHAPE
-                                var line = new LineShape()
-                                {
-                                    Points = new ObservableCollection<IPointShape>(),
-                                    StartPoint = pathShape.GetLastPoint(),
-                                    Point = pathShape.GetFirstPoint(),
-                                    Text = new Text(),
-                                    StyleId = style.Title
-                                };
-                                line.Owner = figureShape;
-                                line.StartPoint.Owner = line;
-                                line.Point.Owner = line;
-                                figureShape.Shapes.Add(line);
-#else
+                                // TODO:
+                                //var line = new LineShape()
+                                //{
+                                //    Points = new ObservableCollection<IPointShape>(),
+                                //    StartPoint = pathShape.GetLastPoint(),
+                                //    Point = pathShape.GetFirstPoint(),
+                                //    Text = new Text(),
+                                //    StyleId = style.Title
+                                //};
+                                //line.Owner = figureShape;
+                                //line.StartPoint.Owner = line;
+                                //line.Point.Owner = line;
+                                //figureShape.Shapes.Add(line);
                                 figureShape.IsClosed = true;
                                 firstPoint = lastPoint = new SKPoint(0, 0);
-#endif
                             }
                             break;
                     }
@@ -1142,16 +1140,6 @@ namespace Draw2D
                         }
                     }
                     break;
-#if USE_SVG_POINT
-                case IPointShape point:
-                    {
-                        if (point.Template != null)
-                        {
-                            ToSvgPathData(context, point.Template, sb, fillType);
-                        }
-                    }
-                    break;
-#endif
                 case GroupShape group:
                     {
                         foreach (var groupShape in group.Shapes)

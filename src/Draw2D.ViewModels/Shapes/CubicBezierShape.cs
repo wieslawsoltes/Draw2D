@@ -171,33 +171,21 @@ namespace Draw2D.ViewModels.Shapes
             {
                 if (StartPoint == target)
                 {
-#if DEBUG_CONNECTORS
-                    Log.WriteLine($"{nameof(CubicBezierShape)}: Connected to {nameof(StartPoint)}");
-#endif
                     this.StartPoint = point;
                     return true;
                 }
                 else if (Point1 == target)
                 {
-#if DEBUG_CONNECTORS
-                    Log.WriteLine($"{nameof(CubicBezierShape)}: Connected to {nameof(Point1)}");
-#endif
                     this.Point1 = point;
                     return true;
                 }
                 else if (Point2 == target)
                 {
-#if DEBUG_CONNECTORS
-                    Log.WriteLine($"{nameof(CubicBezierShape)}: Connected to {nameof(Point2)}");
-#endif
                     this.Point2 = point;
                     return true;
                 }
                 else if (Point3 == target)
                 {
-#if DEBUG_CONNECTORS
-                    Log.WriteLine($"{nameof(CubicBezierShape)}: Connected to {nameof(Point3)}");
-#endif
                     this.Point3 = point;
                     return true;
                 }
@@ -213,36 +201,24 @@ namespace Draw2D.ViewModels.Shapes
             }
             else if (StartPoint == point)
             {
-#if DEBUG_CONNECTORS
-                Log.WriteLine($"{nameof(CubicBezierShape)}: Disconnected from {nameof(StartPoint)}");
-#endif
                 result = (IPointShape)(point.Copy(null));
                 this.StartPoint = result;
                 return true;
             }
             else if (Point1 == point)
             {
-#if DEBUG_CONNECTORS
-                Log.WriteLine($"{nameof(CubicBezierShape)}: Disconnected from {nameof(Point1)}");
-#endif
                 result = (IPointShape)(point.Copy(null));
                 this.Point1 = result;
                 return true;
             }
             else if (Point2 == point)
             {
-#if DEBUG_CONNECTORS
-                Log.WriteLine($"{nameof(CubicBezierShape)}: Disconnected from {nameof(Point2)}");
-#endif
                 result = (IPointShape)(point.Copy(null));
                 this.Point2 = result;
                 return true;
             }
             else if (Point3 == point)
             {
-#if DEBUG_CONNECTORS
-                Log.WriteLine($"{nameof(CubicBezierShape)}: Disconnected from {nameof(Point3)}");
-#endif
                 result = (IPointShape)(point.Copy(null));
                 this.Point3 = result;
                 return true;
@@ -257,36 +233,24 @@ namespace Draw2D.ViewModels.Shapes
 
             if (this.StartPoint != null)
             {
-#if DEBUG_CONNECTORS
-                Log.WriteLine($"{nameof(CubicBezierShape)}: Disconnected from {nameof(StartPoint)}");
-#endif
                 this.StartPoint = (IPointShape)(this.StartPoint.Copy(null));
                 result = true;
             }
 
             if (this.Point1 != null)
             {
-#if DEBUG_CONNECTORS
-                Log.WriteLine($"{nameof(CubicBezierShape)}: Disconnected from {nameof(Point1)}");
-#endif
                 this.Point1 = (IPointShape)(this.Point1.Copy(null));
                 result = true;
             }
 
             if (this.Point2 != null)
             {
-#if DEBUG_CONNECTORS
-                Log.WriteLine($"{nameof(CubicBezierShape)}: Disconnected from {nameof(Point2)}");
-#endif
                 this.Point2 = (IPointShape)(this.Point2.Copy(null));
                 result = true;
             }
 
             if (this.Point3 != null)
             {
-#if DEBUG_CONNECTORS
-                Log.WriteLine($"{nameof(CubicBezierShape)}: Disconnected from {nameof(Point3)}");
-#endif
                 this.Point3 = (IPointShape)this.Point3.Copy(null);
                 result = true;
             }

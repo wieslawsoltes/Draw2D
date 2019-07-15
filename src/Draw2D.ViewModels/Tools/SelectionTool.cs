@@ -1198,12 +1198,6 @@ namespace Draw2D.ViewModels.Tools
                     {
                         point.Owner = owner;
                     }
-                    else
-                    {
-#if DEBUG
-                        Log.WriteLine($"Failed to find owner shape: {point.Owner} for point: {point}.");
-#endif
-                    }
                 }
             }
         }

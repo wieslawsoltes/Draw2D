@@ -95,9 +95,6 @@ namespace Draw2D.ViewModels
              || (strokePaint.Color?.IsDirty ?? false)
              || (strokePaint.PathEffect?.IsPathEffectDirty() ?? false))
             {
-#if USE_DEBUG_DIRTY
-                Log.WriteLine($"IsStrokePaintDirty: true");
-#endif
                 return true;
             }
 
@@ -115,9 +112,6 @@ namespace Draw2D.ViewModels
              || (fillPaint.Color?.IsDirty ?? false)
              || (fillPaint.PathEffect?.IsPathEffectDirty() ?? false))
             {
-#if USE_DEBUG_DIRTY
-                Log.WriteLine($"IsFillPaintDirty: true");
-#endif
                 return true;
             }
 
@@ -136,9 +130,6 @@ namespace Draw2D.ViewModels
              || (textPaint.Typeface?.IsDirty ?? false)
              || (textPaint.PathEffect?.IsPathEffectDirty() ?? false))
             {
-#if USE_DEBUG_DIRTY
-                Log.WriteLine($"IsTextPaintDirty: true");
-#endif
                 return true;
             }
 
@@ -157,9 +148,6 @@ namespace Draw2D.ViewModels
              || (style.FillPaint?.IsFillPaintDirty() ?? false)
              || (style.TextPaint?.IsTextPaintDirty() ?? false))
             {
-#if USE_DEBUG_DIRTY
-                Log.WriteLine($"IsShapeStyleDirty: true");
-#endif
                 return true;
             }
 
@@ -175,9 +163,6 @@ namespace Draw2D.ViewModels
 
             if (styleLibrary.IsDirty)
             {
-#if USE_DEBUG_DIRTY
-                Log.WriteLine($"styleLibrary.IsDirty: true");
-#endif
                 return true;
             }
 
@@ -204,9 +189,6 @@ namespace Draw2D.ViewModels
 
             if (canvasContainer.IsDirty)
             {
-#if USE_DEBUG_DIRTY
-                Log.WriteLine($"canvasContainer.IsDirty: true");
-#endif
                 return true;
             }
 
@@ -216,9 +198,6 @@ namespace Draw2D.ViewModels
                 {
                     if (shape.IsDirty)
                     {
-#if USE_DEBUG_DIRTY
-                        Log.WriteLine($"shape.IsDirty: true");
-#endif
                         return true;
                     }
                 }
@@ -241,9 +220,6 @@ namespace Draw2D.ViewModels
             {
                 if (point.IsDirty)
                 {
-#if USE_DEBUG_DIRTY
-                    Log.WriteLine($"point.IsDirty: true");
-#endif
                     return true;
                 }
 
@@ -251,9 +227,6 @@ namespace Draw2D.ViewModels
                 {
                     if (point.Template.IsDirty)
                     {
-#if USE_DEBUG_DIRTY
-                        Log.WriteLine($"point.Template.IsDirty: true");
-#endif
                         return true;
                     }
                 }

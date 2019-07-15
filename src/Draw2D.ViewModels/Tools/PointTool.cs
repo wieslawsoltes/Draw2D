@@ -49,19 +49,6 @@ namespace Draw2D.ViewModels.Tools
                     context.DocumentContainer?.ContainerView?.InputService?.Redraw?.Invoke();
                 }
             }
-#if USE_CONTAINER_POINTS
-            else
-            {
-                if (context.DocumentContainer?.ContainerView?.CurrentContainer != null)
-                {
-                    var point = new PointShape(x, y, context?.DocumentContainer?.PointTemplate);
-                    point.Owner = context.DocumentContainer?.ContainerView?.CurrentContainer;
-
-                    context.DocumentContainer?.ContainerView?.CurrentContainer.Shapes.Add(point);
-                    context.DocumentContainer?.ContainerView?.InputService?.Redraw?.Invoke();
-                }
-            }
-#endif
         }
 
         private void MoveInternal(IToolContext context, double x, double y, Modifier modifier)

@@ -14,12 +14,11 @@ namespace Draw2D.ViewModels.Decorators
 
         public override void Draw(object dc, IBaseShape shape, IShapeRenderer renderer, ISelectionState selectionState, double dx, double dy, double scale)
         {
-#if USE_POINT_DECORATOR
-            if (shape is IPointShape pointShape)
-            {
-                Draw(dc, renderer, pointShape, dx, dy, scale);
-            }
-#endif
+            // TODO:
+            //if (shape is IPointShape pointShape)
+            //{
+            //    Draw(dc, renderer, pointShape, dx, dy, scale);
+            //}
         }
     }
 }

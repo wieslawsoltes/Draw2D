@@ -236,15 +236,6 @@ namespace Draw2D.Presenters
             }
 
             bool isSelectionDirty = _view.SelectionState.IsDirty == true || isShapesCurrentDirty == true || isShapesWorkingDirty == true;
-#if USE_DEBUG_DIRTY
-            Log.WriteLine(
-                $"{nameof(isStyleLibraryDirty)}: {isStyleLibraryDirty}, " +
-                $"{nameof(isShapesCurrentDirty)}: {isShapesCurrentDirty}, " +
-                $"{nameof(isShapesWorkingDirty)}: {isShapesWorkingDirty}, " +
-                $"{nameof(isCurrentContainerDirty)}: {isCurrentContainerDirty}, " +
-                $"{nameof(isWorkingContainerDirty)}: {isWorkingContainerDirty}, " +
-                $"{nameof(isSelectionDirty)}: {isSelectionDirty}");
-#endif
             if (_view.SelectionState.IsDirty == true)
             {
                 _view.SelectionState.Invalidate();

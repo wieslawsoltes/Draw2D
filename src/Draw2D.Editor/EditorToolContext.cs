@@ -392,8 +392,8 @@ namespace Draw2D.Editor
             }
             catch (Exception ex)
             {
-                Log.WriteLine(ex.Message);
-                Log.WriteLine(ex.StackTrace);
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+                System.Diagnostics.Debug.WriteLine(ex.StackTrace);
             }
         }
 
@@ -412,8 +412,8 @@ namespace Draw2D.Editor
             }
             catch (Exception ex)
             {
-                Log.WriteLine(ex.Message);
-                Log.WriteLine(ex.StackTrace);
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+                System.Diagnostics.Debug.WriteLine(ex.StackTrace);
             }
         }
 
@@ -442,8 +442,8 @@ namespace Draw2D.Editor
             }
             catch (Exception ex)
             {
-                Log.WriteLine(ex.Message);
-                Log.WriteLine(ex.StackTrace);
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+                System.Diagnostics.Debug.WriteLine(ex.StackTrace);
             }
         }
 
@@ -461,8 +461,8 @@ namespace Draw2D.Editor
             }
             catch (Exception ex)
             {
-                Log.WriteLine(ex.Message);
-                Log.WriteLine(ex.StackTrace);
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+                System.Diagnostics.Debug.WriteLine(ex.StackTrace);
             }
         }
 
@@ -480,8 +480,8 @@ namespace Draw2D.Editor
             }
             catch (Exception ex)
             {
-                Log.WriteLine(ex.Message);
-                Log.WriteLine(ex.StackTrace);
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+                System.Diagnostics.Debug.WriteLine(ex.StackTrace);
             }
         }
 
@@ -499,8 +499,8 @@ namespace Draw2D.Editor
             }
             catch (Exception ex)
             {
-                Log.WriteLine(ex.Message);
-                Log.WriteLine(ex.StackTrace);
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+                System.Diagnostics.Debug.WriteLine(ex.StackTrace);
             }
         }
 
@@ -518,8 +518,8 @@ namespace Draw2D.Editor
             }
             catch (Exception ex)
             {
-                Log.WriteLine(ex.Message);
-                Log.WriteLine(ex.StackTrace);
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+                System.Diagnostics.Debug.WriteLine(ex.StackTrace);
             }
         }
 
@@ -537,8 +537,8 @@ namespace Draw2D.Editor
             }
             catch (Exception ex)
             {
-                Log.WriteLine(ex.Message);
-                Log.WriteLine(ex.StackTrace);
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+                System.Diagnostics.Debug.WriteLine(ex.StackTrace);
             }
         }
 

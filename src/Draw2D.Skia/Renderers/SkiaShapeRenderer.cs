@@ -100,9 +100,6 @@ namespace Draw2D.Renderers
             {
                 typeface = SkiaHelper.ToSKTypeface(style);
                 _typefaceCache[style] = typeface;
-#if DEBUG_DICT_CACHE
-                Log.WriteLine($"ToSKTypeface: ctor()");
-#endif
             }
         }
 
@@ -112,9 +109,6 @@ namespace Draw2D.Renderers
             {
                 brushCached = SkiaHelper.ToSKPaintFill(fillPaint, _pathEffectDisposable.Disposables);
                 _fillPaintCache[fillPaint] = brushCached;
-#if DEBUG_DICT_CACHE
-                Log.WriteLine($"ToSKPaintFill: ctor()");
-#endif
             }
             else
             {
@@ -130,9 +124,6 @@ namespace Draw2D.Renderers
             {
                 penCached = SkiaHelper.ToSKPaintStroke(strokePaint, scale, _pathEffectDisposable.Disposables);
                 _strokePaintCache[strokePaint] = penCached;
-#if DEBUG_DICT_CACHE
-                Log.WriteLine($"ToSKPaintStroke: ctor()");
-#endif
             }
             else
             {
@@ -155,9 +146,6 @@ namespace Draw2D.Renderers
                 cached.paint.Typeface = typeface;
                 cached.paint.TextEncoding = SKTextEncoding.Utf16;
                 cached.paint.TextSize = (float)textPaint.FontSize;
-#if DEBUG_DICT_CACHE
-                Log.WriteLine($"ToSKPaintText: ctor()");
-#endif
                 switch (textPaint.HAlign)
                 {
                     default:
@@ -190,9 +178,6 @@ namespace Draw2D.Renderers
             {
                 picture = SkiaHelper.ToSKPicture(path);
                 _pictureCache[path] = picture;
-#if DEBUG_DICT_CACHE
-                Log.WriteLine($"GetSKImage: ctor()");
-#endif
             }
         }
 
@@ -203,7 +188,7 @@ namespace Draw2D.Renderers
                 return;
             }
             GetSKPaintText(shapeStyle.TextPaint, out var paint, out var metrics);
-#if DEBUG_DRAW_TEXT
+#if false
             var mBaseline = 0.0f;
 #endif
             var mTop = metrics.Top;
@@ -234,7 +219,7 @@ namespace Draw2D.Renderers
                     y += height - mDescent;
                     break;
             }
-#if DEBUG_DRAW_TEXT
+#if false
             double strokeWidth = 2.0;
             if (style.StrokePaint != null)
             {
@@ -271,7 +256,7 @@ namespace Draw2D.Renderers
                     x += width;
                     break;
             }
-#if DEBUG_DRAW_TEXT
+#if false
             int line = 2;
             canvas.DrawText($"Top: {mTop}", x, y + mLineHeight * line++, paint);
             canvas.DrawText($"Ascent: {mAscent}", x, y + mLineHeight * line++, paint);
@@ -399,17 +384,6 @@ namespace Draw2D.Renderers
             {
                 return;
             }
-#if USE_DRAW_LINE
-            if (style.IsStroked || style.IsText)
-            {
-                var canvas = dc as SKCanvas;
-                if (style.IsStroked)
-                {
-                    GetSKPaintStroke(style, out var pen, scale);
-                    canvas.DrawLine(SkiaHelper.ToPoint(line.StartPoint, dx, dy), SkiaHelper.ToPoint(line.Point, dx, dy), pen);
-                }
-            }
-#else
             if (style.IsStroked || style.IsText)
             {
                 var canvas = dc as SKCanvas;
@@ -426,7 +400,6 @@ namespace Draw2D.Renderers
                     }
                 }
             }
-#endif
         }
 
         public void DrawCubicBezier(object dc, CubicBezierShape cubicBezier, string styleId, double dx, double dy, double scale)
@@ -552,42 +525,6 @@ namespace Draw2D.Renderers
             {
                 return;
             }
-#if USE_DRAW_RECT
-            if (style.IsFilled || style.IsStroked || style.IsText)
-            {
-                var canvas = dc as SKCanvas;
-                var rect = SkiaHelper.ToSKRect(rectangle.StartPoint, rectangle.Point, dx, dy);
-                if (style.IsFilled)
-                {
-                    GetSKPaintFill(style, out var brush);
-                    if (rectangle.RadiusX > 0.0 && rectangle.RadiusY > 0.0)
-                    {
-                        canvas.DrawRoundRect(rect, (float)rectangle.RadiusX, (float)rectangle.RadiusY, brush);
-                    }
-                    else
-                    {
-                        canvas.DrawRect(rect, brush);
-                    }
-                }
-                if (style.IsStroked)
-                {
-                    GetSKPaintStroke(style.StrokePaint, out var pen, scale);
-                    if (rectangle.RadiusX > 0.0 && rectangle.RadiusY > 0.0)
-                    {
-                        canvas.DrawRoundRect(rect, (float)rectangle.RadiusX, (float)rectangle.RadiusY, pen);
-                    }
-                    else
-                    {
-                        canvas.DrawRect(rect, pen);
-                    }
-                }
-                if (style.IsText && !string.IsNullOrEmpty(rectangle.Text?.Value))
-                {
-                    var rect = SkiaHelper.ToSKRect(rectangle.StartPoint, rectangle.Point, dx, dy);
-                    DrawText(canvas, rectangle.Text, rect, style, dx, dy, scale);
-                }
-            }
-#else
             if (style.IsFilled || style.IsStroked || style.IsText)
             {
                 var canvas = dc as SKCanvas;
@@ -609,7 +546,6 @@ namespace Draw2D.Renderers
                     }
                 }
             }
-#endif
         }
 
         public void DrawCircle(object dc, CircleShape circle, string styleId, double dx, double dy, double scale)
@@ -619,28 +555,6 @@ namespace Draw2D.Renderers
             {
                 return;
             }
-#if USE_DRAW_CIRCLE
-            if (style.IsFilled || style.IsStroked || style.IsText)
-            {
-                var canvas = dc as SKCanvas;
-                var distance = circle.StartPoint.DistanceTo(circle.Point);
-                if (style.IsFilled)
-                {
-                    GetSKPaintFill(style.FillPaint, out var brush);
-                    canvas.DrawCircle((float)circle.StartPoint.X, (float)circle.StartPoint.Y, (float)distance, brush);
-                }
-                if (style.IsStroked)
-                {
-                    GetSKPaintStroke(style>StrokePaint, out var pen, scale);
-                    canvas.DrawCircle((float)circle.StartPoint.X, (float)circle.StartPoint.Y, (float)distance, pen);
-                }
-                if (style.IsText && !string.IsNullOrEmpty(circle.Text?.Value))
-                {
-                    var rect = SkiaHelper.ToSKRect(circle.StartPoint, distance, dx, dy);
-                    DrawText(canvas, circle.Text, rect, style, dx, dy, scale);
-                }
-            }
-#else
             if (style.IsFilled || style.IsStroked || style.IsText)
             {
                 var canvas = dc as SKCanvas;
@@ -663,7 +577,6 @@ namespace Draw2D.Renderers
                     }
                 }
             }
-#endif
         }
 
         public void DrawArc(object dc, ArcShape arc, string styleId, double dx, double dy, double scale)
@@ -704,28 +617,6 @@ namespace Draw2D.Renderers
             {
                 return;
             }
-#if USE_DRAW_OVAL
-            if (style.IsFilled || style.IsStroked || style.IsText)
-            {
-                var canvas = dc as SKCanvas;
-                var rect = SkiaHelper.ToSKRect(ellipse.StartPoint, ellipse.Point, dx, dy);
-                if (style.IsFilled)
-                {
-                    GetSKPaintFill(style.FillPaint, out var brush);
-                    canvas.DrawOval(rect, brush);
-                }
-                if (style.IsStroked)
-                {
-                    GetSKPaintStroke(style.StrokePaint, out var pen, scale);
-                    canvas.DrawOval(rect, pen);
-                }
-                if (style.IsText && !string.IsNullOrEmpty(ellipse.Text?.Value))
-                {
-                    var rect = SkiaHelper.ToSKRect(ellipse.StartPoint, ellipse.Point, dx, dy);
-                    DrawText(canvas, ellipse.Text, rect, style, dx, dy, scale);
-                }
-            }
-#else
             if (style.IsFilled || style.IsStroked || style.IsText)
             {
                 var canvas = dc as SKCanvas;
@@ -747,7 +638,6 @@ namespace Draw2D.Renderers
                     }
                 }
             }
-#endif
         }
 
         public void DrawText(object dc, TextShape text, string styleId, double dx, double dy, double scale)

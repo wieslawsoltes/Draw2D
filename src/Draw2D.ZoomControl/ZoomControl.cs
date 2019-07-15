@@ -1,12 +1,13 @@
 ﻿// Copyright (c) Wiesław Šoltés. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
+//#define DEBUG_POINTER_EVENTS
 using System;
 using System.Collections.Generic;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Media;
-#if USE_DRAW_POINTERS
+#if DEBUG_POINTER_EVENTS
 using Avalonia.Media.Immutable;
 #endif
 using Avalonia.VisualTree;
@@ -14,17 +15,6 @@ using Draw2D.Input;
 
 namespace Draw2D.ZoomControl
 {
-    internal static class Log
-    {
-#if DEBUG
-        public static void WriteLine(string message)
-            => System.Diagnostics.Debug.WriteLine(message);
-#else
-        public static void WriteLine(string message)
-            => System.Console.WriteLine(message);
-#endif
-    }
-
     public class ZoomControl : Border, IInputService, IZoomService
     {
         private IZoomServiceState _zoomServiceState;
@@ -134,7 +124,7 @@ namespace Draw2D.ZoomControl
 
             _capturedInputModifiers = e.InputModifiers;
 #if DEBUG_POINTER_EVENTS
-            Log.WriteLine(
+            System.Diagnostics.Debug.WriteLine(
                 $"[Pressed] type: {e.Pointer.Type}, " +
                 $"isLeft: {isLeft}, " +
                 $"isPrimary: {e.Pointer.IsPrimary}, " +
@@ -157,7 +147,7 @@ namespace Draw2D.ZoomControl
                 isLeft = e.Pointer.IsPrimary;
             }
 #if DEBUG_POINTER_EVENTS
-            Log.WriteLine(
+            System.Diagnostics.Debug.WriteLine(
                 $"[Released] type: {e.Pointer.Type}, " +
                 $"isLeft: {isLeft}, " +
                 $"isPrimary: {e.Pointer.IsPrimary}, " +
@@ -181,7 +171,7 @@ namespace Draw2D.ZoomControl
                 isLeft = e.Pointer.IsPrimary;
             }
 #if DEBUG_POINTER_EVENTS
-            Log.WriteLine(
+            System.Diagnostics.Debug.WriteLine(
                 $"[Moved] type: {e.Pointer.Type}, " +
                 $"isLeft: {isLeft}, " +
                 $"isPrimary: {e.Pointer.IsPrimary}, " +
@@ -553,7 +543,7 @@ namespace Draw2D.ZoomControl
                 this.Capture = () =>
                 {
 #if DEBUG_POINTER_EVENTS
-                    Log.WriteLine($"[Capture] {_isCaptured}");
+                    System.Diagnostics.Debug.WriteLine($"[Capture] {_isCaptured}");
 #endif
                     _isCaptured = true;
                 };
@@ -561,7 +551,7 @@ namespace Draw2D.ZoomControl
                 this.Release = () =>
                 {
 #if DEBUG_POINTER_EVENTS
-                    Log.WriteLine($"[Release] {_isCaptured}");
+                    System.Diagnostics.Debug.WriteLine($"[Release] {_isCaptured}");
 #endif
                     _isCaptured = false;
                 };
@@ -569,7 +559,7 @@ namespace Draw2D.ZoomControl
                 this.IsCaptured = () =>
                 {
 #if DEBUG_POINTER_EVENTS
-                    Log.WriteLine($"[IsCaptured] {_isCaptured}");
+                    System.Diagnostics.Debug.WriteLine($"[IsCaptured] {_isCaptured}");
 #endif
                     return _isCaptured;
                 };
@@ -672,7 +662,7 @@ namespace Draw2D.ZoomControl
                     _zoomServiceState.IsZooming = false;
                 }
             }
-#if USE_DRAW_POINTERS
+#if DEBUG_POINTER_EVENTS
             var brush = new ImmutableSolidColorBrush(Colors.Magenta);
             foreach (var value in _pointers.Values)
             {

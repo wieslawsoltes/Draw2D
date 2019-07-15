@@ -126,9 +126,6 @@ namespace Draw2D.ViewModels.Shapes
                     int index = _points.IndexOf(target);
                     if (index >= 0)
                     {
-#if DEBUG_CONNECTORS
-                        Log.WriteLine($"{nameof(ConnectableShape)} Connected to Points");
-#endif
                         _points[index] = point;
                         return true;
                     }
@@ -151,9 +148,6 @@ namespace Draw2D.ViewModels.Shapes
             {
                 for (int i = 0; i < _points.Count; i++)
                 {
-#if DEBUG_CONNECTORS
-                    Log.WriteLine($"{nameof(ConnectableShape)}: Disconnected from {nameof(Points)} #{i}");
-#endif
                     _points[i] = (IPointShape)_points[i].Copy(null);
                     result = true;
                 }

@@ -21,11 +21,6 @@
     <PackageTags>2d;editor;data;diagram;graphics;geometry;data;shapes;wysiwyg-editor</PackageTags>
   </PropertyGroup>
 
-  <PropertyGroup>
-    <!--<DefineConstants>$(DefineConstants);DEBUG_POINTER_EVENTS</DefineConstants>-->
-    <!--<DefineConstants>$(DefineConstants);USE_DRAW_POINTERS</DefineConstants>-->
-  </PropertyGroup>
-
   <ItemGroup>
     <Compile Include="**\*.cs" Exclude="obj\**" />
   </ItemGroup>

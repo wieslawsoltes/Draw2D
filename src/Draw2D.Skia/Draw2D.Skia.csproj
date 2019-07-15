@@ -21,18 +21,6 @@
     <PackageTags>2d;editor;data;diagram;graphics;geometry;data;shapes;wysiwyg-editor</PackageTags>
   </PropertyGroup>
 
-  <PropertyGroup>
-    <!--<DefineConstants>$(DefineConstants);USE_DEBUG_DIRTY</DefineConstants>-->
-    <!--<DefineConstants>$(DefineConstants);USE_CLOSE_SHAPE</DefineConstants>-->
-    <!--<DefineConstants>$(DefineConstants);USE_SVG_POINT</DefineConstants>-->
-    <!--<DefineConstants>$(DefineConstants);DEBUG_DRAW_TEXT</DefineConstants>-->
-    <!--<DefineConstants>$(DefineConstants);DEBUG_DICT_CACHE</DefineConstants>-->
-    <!--<DefineConstants>$(DefineConstants);USE_DRAW_LINE</DefineConstants>-->
-    <!--<DefineConstants>$(DefineConstants);USE_DRAW_CIRCLE</DefineConstants>-->
-    <!--<DefineConstants>$(DefineConstants);USE_DRAW_RECT</DefineConstants>-->
-    <!--<DefineConstants>$(DefineConstants);USE_DRAW_OVAL</DefineConstants>-->
-  </PropertyGroup>
-
   <ItemGroup>
     <Compile Include="**\*.cs" Exclude="obj\**" />
   </ItemGroup>

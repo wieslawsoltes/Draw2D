@@ -130,17 +130,11 @@ namespace Draw2D.ViewModels.Shapes
             {
                 if (StartPoint == target)
                 {
-#if DEBUG_CONNECTORS
-                    Log.WriteLine($"{nameof(CircleShape)}: Connected to {nameof(StartPoint)}");
-#endif
                     this.StartPoint = point;
                     return true;
                 }
                 else if (Point == target)
                 {
-#if DEBUG_CONNECTORS
-                    Log.WriteLine($"{nameof(CircleShape)}: Connected to {nameof(Point)}");
-#endif
                     this.Point = point;
                     return true;
                 }
@@ -156,18 +150,12 @@ namespace Draw2D.ViewModels.Shapes
             }
             else if (StartPoint == point)
             {
-#if DEBUG_CONNECTORS
-                Log.WriteLine($"{nameof(CircleShape)}: Disconnected from {nameof(StartPoint)}");
-#endif
                 result = (IPointShape)(point.Copy(null));
                 this.StartPoint = result;
                 return true;
             }
             else if (Point == point)
             {
-#if DEBUG_CONNECTORS
-                Log.WriteLine($"{nameof(CircleShape)}: Disconnected from {nameof(Point)}");
-#endif
                 result = (IPointShape)(point.Copy(null));
                 this.Point = result;
                 return true;
@@ -182,18 +170,12 @@ namespace Draw2D.ViewModels.Shapes
 
             if (this.StartPoint != null)
             {
-#if DEBUG_CONNECTORS
-                Log.WriteLine($"{nameof(CircleShape)}: Disconnected from {nameof(StartPoint)}");
-#endif
                 this.StartPoint = (IPointShape)(this.StartPoint.Copy(null));
                 result = true;
             }
 
             if (this.Point != null)
             {
-#if DEBUG_CONNECTORS
-                Log.WriteLine($"{nameof(CircleShape)}: Disconnected from {nameof(Point)}");
-#endif
                 this.Point = (IPointShape)(this.Point.Copy(null));
                 result = true;
             }
