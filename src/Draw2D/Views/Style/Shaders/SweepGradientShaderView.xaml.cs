@@ -5,9 +5,9 @@ using Avalonia.Markup.Xaml;
 
 namespace Draw2D.Views.Style.Shaders
 {
-    public class Path1DPathEffectView : UserControl
+    public class SweepGradientShaderView : UserControl
     {
-        public Path1DPathEffectView()
+        public SweepGradientShaderView()
         {
             InitializeComponent();
         }
