@@ -101,37 +101,37 @@ namespace Draw2D.Renderers
             }
         }
 
-        private void GetSKPaintFill(IFillPaint fillPaint, out SKPaint brush)
+        private void GetSKPaintFill(IFillPaint fillPaint, IShader shader, out SKPaint brush)
         {
             if (fillPaint.IsFillPaintDirty() || !_fillPaintCache.TryGetValue(fillPaint, out var brushCached))
             {
-                brushCached = SkiaHelper.ToSKPaintFill(fillPaint, _pathEffectDisposable.Disposables);
+                brushCached = SkiaHelper.ToSKPaintFill(fillPaint, shader, _pathEffectDisposable.Disposables);
                 _fillPaintCache[fillPaint] = brushCached;
             }
             else
             {
-                SkiaHelper.ToSKPaintFillUpdate(brushCached, fillPaint, _pathEffectDisposable.Disposables);
+                SkiaHelper.ToSKPaintFillUpdate(brushCached, fillPaint, shader, _pathEffectDisposable.Disposables);
             }
 
             brush = brushCached;
         }
 
-        private void GetSKPaintStroke(IStrokePaint strokePaint, out SKPaint pen, double scale)
+        private void GetSKPaintStroke(IStrokePaint strokePaint, IShader shader, out SKPaint pen, double scale)
         {
             if (strokePaint.IsStrokePaintDirty() || !_strokePaintCache.TryGetValue(strokePaint, out var penCached))
             {
-                penCached = SkiaHelper.ToSKPaintStroke(strokePaint, scale, _pathEffectDisposable.Disposables);
+                penCached = SkiaHelper.ToSKPaintStroke(strokePaint, shader, scale, _pathEffectDisposable.Disposables);
                 _strokePaintCache[strokePaint] = penCached;
             }
             else
             {
-                SkiaHelper.ToSKPaintStrokeUpdate(penCached, strokePaint, scale, _pathEffectDisposable.Disposables);
+                SkiaHelper.ToSKPaintStrokeUpdate(penCached, strokePaint, shader, scale, _pathEffectDisposable.Disposables);
             }
 
             pen = penCached;
         }
 
-        private void GetSKPaintText(ITextPaint textPaint, out SKPaint paint, out SKFontMetrics metrics)
+        private void GetSKPaintText(ITextPaint textPaint, IShader shader, out SKPaint paint, out SKFontMetrics metrics)
         {
             (SKPaint paint, SKFontMetrics metrics) cached;
             cached.paint = null;
@@ -140,7 +140,7 @@ namespace Draw2D.Renderers
             if (textPaint.IsTextPaintDirty() || !_textPaintCache.TryGetValue(textPaint, out cached))
             {
                 GetSKTypeface(textPaint.Typeface, out var typeface);
-                cached.paint = SkiaHelper.ToSKPaintText(textPaint, _pathEffectDisposable.Disposables);
+                cached.paint = SkiaHelper.ToSKPaintText(textPaint, shader, _pathEffectDisposable.Disposables);
                 cached.paint.Typeface = typeface;
                 cached.paint.TextEncoding = SKTextEncoding.Utf16;
                 cached.paint.TextSize = (float)textPaint.FontSize;
@@ -163,7 +163,7 @@ namespace Draw2D.Renderers
             }
             else
             {
-                SkiaHelper.ToSKPaintTextUpdate(cached.paint, textPaint, _pathEffectDisposable.Disposables);
+                SkiaHelper.ToSKPaintTextUpdate(cached.paint, textPaint, shader, _pathEffectDisposable.Disposables);
             }
 
             paint = cached.paint;
@@ -179,13 +179,13 @@ namespace Draw2D.Renderers
             }
         }
 
-        private void DrawText(SKCanvas canvas, Text text, SKRect rect, IShapeStyle shapeStyle, double dx, double dy, double scale)
+        private void DrawText(SKCanvas canvas, Text text, SKRect rect, IShapeStyle shapeStyle, IShader shader, double dx, double dy, double scale)
         {
             if (shapeStyle?.TextPaint == null)
             {
                 return;
             }
-            GetSKPaintText(shapeStyle.TextPaint, out var paint, out var metrics);
+            GetSKPaintText(shapeStyle.TextPaint, shader, out var paint, out var metrics);
 #if false
             var mBaseline = 0.0f;
             var mTop = metrics.Top;
@@ -271,9 +271,9 @@ namespace Draw2D.Renderers
             canvas.DrawText(text.Value, x, y, paint);
         }
 
-        private void DrawTextOnPath(SKCanvas canvas, SKPath path, Text text, ITextPaint textPaint)
+        private void DrawTextOnPath(SKCanvas canvas, SKPath path, Text text, ITextPaint textPaint, IShader shader)
         {
-            GetSKPaintText(textPaint, out var paint, out var metrics);
+            GetSKPaintText(textPaint, shader, out var paint, out var metrics);
             //var bounds = new SKRect();
             //float baseTextWidth = paint.MeasureText(text.Value, ref bounds);
             //SKPathMeasure pathMeasure = new SKPathMeasure(path, false, 1);
@@ -284,9 +284,9 @@ namespace Draw2D.Renderers
             canvas.DrawTextOnPath(text.Value, path, hOffset, vOffset, paint);
         }
 
-        private void DrawStrokedPath(SKCanvas canvas, SKPath path, IStrokePaint strokePaint, double scale)
+        private void DrawStrokedPath(SKCanvas canvas, SKPath path, IStrokePaint strokePaint, IShader shader, double scale)
         {
-            GetSKPaintStroke(strokePaint, out var pen, scale);
+            GetSKPaintStroke(strokePaint, shader, out var pen, scale);
             bool isClipPath = SkiaHelper.GetInflateOffset(strokePaint.PathEffect, out var inflateX, out var inflateY);
             if (isClipPath)
             {
@@ -303,9 +303,9 @@ namespace Draw2D.Renderers
             }
         }
 
-        private void DrawFilledPath(SKCanvas canvas, SKPath path, IFillPaint fillPaint, double scale)
+        private void DrawFilledPath(SKCanvas canvas, SKPath path, IFillPaint fillPaint, IShader shader, double scale)
         {
-            GetSKPaintFill(fillPaint, out var brush);
+            GetSKPaintFill(fillPaint, shader, out var brush);
             bool isClipPath = SkiaHelper.GetInflateOffset(fillPaint.PathEffect, out var inflateX, out var inflateY);
             if (isClipPath)
             {
@@ -337,11 +337,11 @@ namespace Draw2D.Renderers
                     SkiaHelper.AddLine(null, line, dx, dy, geometry);
                     if (style.IsStroked)
                     {
-                        DrawStrokedPath(canvas, geometry, style.StrokePaint, scale);
+                        DrawStrokedPath(canvas, geometry, style.StrokePaint, line.Shader, scale);
                     }
                     if (style.IsText && !string.IsNullOrEmpty(line.Text?.Value))
                     {
-                        DrawTextOnPath(canvas, geometry, line.Text, style.TextPaint);
+                        DrawTextOnPath(canvas, geometry, line.Text, style.TextPaint, line.Shader);
                     }
                 }
             }
@@ -362,15 +362,15 @@ namespace Draw2D.Renderers
                     SkiaHelper.AddCubic(null, cubicBezier, dx, dy, geometry);
                     if (style.IsFilled)
                     {
-                        DrawFilledPath(canvas, geometry, style.FillPaint, scale);
+                        DrawFilledPath(canvas, geometry, style.FillPaint, cubicBezier.Shader, scale);
                     }
                     if (style.IsStroked)
                     {
-                        DrawStrokedPath(canvas, geometry, style.StrokePaint, scale);
+                        DrawStrokedPath(canvas, geometry, style.StrokePaint, cubicBezier.Shader, scale);
                     }
                     if (style.IsText && !string.IsNullOrEmpty(cubicBezier.Text?.Value))
                     {
-                        DrawTextOnPath(canvas, geometry, cubicBezier.Text, style.TextPaint);
+                        DrawTextOnPath(canvas, geometry, cubicBezier.Text, style.TextPaint, cubicBezier.Shader);
                     }
                 }
             }
@@ -391,15 +391,15 @@ namespace Draw2D.Renderers
                     SkiaHelper.AddQuad(null, quadraticBezier, dx, dy, geometry);
                     if (style.IsFilled)
                     {
-                        DrawFilledPath(canvas, geometry, style.FillPaint, scale);
+                        DrawFilledPath(canvas, geometry, style.FillPaint, quadraticBezier.Shader, scale);
                     }
                     if (style.IsStroked)
                     {
-                        DrawStrokedPath(canvas, geometry, style.StrokePaint, scale);
+                        DrawStrokedPath(canvas, geometry, style.StrokePaint, quadraticBezier.Shader, scale);
                     }
                     if (style.IsText && !string.IsNullOrEmpty(quadraticBezier.Text?.Value))
                     {
-                        DrawTextOnPath(canvas, geometry, quadraticBezier.Text, style.TextPaint);
+                        DrawTextOnPath(canvas, geometry, quadraticBezier.Text, style.TextPaint, quadraticBezier.Shader);
                     }
                 }
             }
@@ -420,15 +420,15 @@ namespace Draw2D.Renderers
                     SkiaHelper.AddConic(null, conic, dx, dy, geometry);
                     if (style.IsFilled)
                     {
-                        DrawFilledPath(canvas, geometry, style.FillPaint, scale);
+                        DrawFilledPath(canvas, geometry, style.FillPaint, conic.Shader, scale);
                     }
                     if (style.IsStroked)
                     {
-                        DrawStrokedPath(canvas, geometry, style.StrokePaint, scale);
+                        DrawStrokedPath(canvas, geometry, style.StrokePaint, conic.Shader, scale);
                     }
                     if (style.IsText && !string.IsNullOrEmpty(conic.Text?.Value))
                     {
-                        DrawTextOnPath(canvas, geometry, conic.Text, style.TextPaint);
+                        DrawTextOnPath(canvas, geometry, conic.Text, style.TextPaint, conic.Shader);
                     }
                 }
             }
@@ -449,15 +449,15 @@ namespace Draw2D.Renderers
                     SkiaHelper.AddPath(null, path, dx, dy, geometry);
                     if (style.IsFilled)
                     {
-                        DrawFilledPath(canvas, geometry, style.FillPaint, scale);
+                        DrawFilledPath(canvas, geometry, style.FillPaint, path.Shader, scale);
                     }
                     if (style.IsStroked)
                     {
-                        DrawStrokedPath(canvas, geometry, style.StrokePaint, scale);
+                        DrawStrokedPath(canvas, geometry, style.StrokePaint, path.Shader, scale);
                     }
                     if (style.IsText && !string.IsNullOrEmpty(path.Text?.Value))
                     {
-                        DrawTextOnPath(canvas, geometry, path.Text, style.TextPaint);
+                        DrawTextOnPath(canvas, geometry, path.Text, style.TextPaint, path.Shader);
                     }
                 }
             }
@@ -478,16 +478,16 @@ namespace Draw2D.Renderers
                     SkiaHelper.AddRect(null, rectangle, dx, dy, geometry);
                     if (style.IsFilled)
                     {
-                        DrawFilledPath(canvas, geometry, style.FillPaint, scale);
+                        DrawFilledPath(canvas, geometry, style.FillPaint, rectangle.Shader, scale);
                     }
                     if (style.IsStroked)
                     {
-                        DrawStrokedPath(canvas, geometry, style.StrokePaint, scale);
+                        DrawStrokedPath(canvas, geometry, style.StrokePaint, rectangle.Shader, scale);
                     }
                     if (style.IsText && !string.IsNullOrEmpty(rectangle.Text?.Value))
                     {
                         var rect = SkiaHelper.ToSKRect(rectangle.StartPoint, rectangle.Point, dx, dy);
-                        DrawText(canvas, rectangle.Text, rect, style, dx, dy, scale);
+                        DrawText(canvas, rectangle.Text, rect, style, rectangle.Shader, dx, dy, scale);
                     }
                 }
             }
@@ -508,17 +508,17 @@ namespace Draw2D.Renderers
                     SkiaHelper.AddCircle(null, circle, dx, dy, geometry);
                     if (style.IsFilled)
                     {
-                        DrawFilledPath(canvas, geometry, style.FillPaint, scale);
+                        DrawFilledPath(canvas, geometry, style.FillPaint, circle.Shader, scale);
                     }
                     if (style.IsStroked)
                     {
-                        DrawStrokedPath(canvas, geometry, style.StrokePaint, scale);
+                        DrawStrokedPath(canvas, geometry, style.StrokePaint, circle.Shader, scale);
                     }
                     if (style.IsText && !string.IsNullOrEmpty(circle.Text?.Value))
                     {
                         var distance = circle.StartPoint.DistanceTo(circle.Point);
                         var rect = SkiaHelper.ToSKRect(circle.StartPoint, distance, dx, dy);
-                        DrawText(canvas, circle.Text, rect, style, dx, dy, scale);
+                        DrawText(canvas, circle.Text, rect, style, circle.Shader, dx, dy, scale);
                     }
                 }
             }
@@ -539,17 +539,17 @@ namespace Draw2D.Renderers
                     SkiaHelper.AddArc(null, arc, dx, dy, geometry);
                     if (style.IsFilled)
                     {
-                        DrawFilledPath(canvas, geometry, style.FillPaint, scale);
+                        DrawFilledPath(canvas, geometry, style.FillPaint, arc.Shader, scale);
                     }
                     if (style.IsStroked)
                     {
-                        DrawStrokedPath(canvas, geometry, style.StrokePaint, scale);
+                        DrawStrokedPath(canvas, geometry, style.StrokePaint, arc.Shader, scale);
                     }
                     if (style.IsText && !string.IsNullOrEmpty(arc.Text?.Value))
                     {
                         var distance = arc.StartPoint.DistanceTo(arc.Point);
                         var rect = SkiaHelper.ToSKRect(arc.StartPoint, distance, dx, dy);
-                        DrawText(canvas, arc.Text, rect, style, dx, dy, scale);
+                        DrawText(canvas, arc.Text, rect, style, arc.Shader, dx, dy, scale);
                     }
                 }
             }
@@ -570,16 +570,16 @@ namespace Draw2D.Renderers
                     SkiaHelper.AddOval(null, ellipse, dx, dy, geometry);
                     if (style.IsFilled)
                     {
-                        DrawFilledPath(canvas, geometry, style.FillPaint, scale);
+                        DrawFilledPath(canvas, geometry, style.FillPaint, ellipse.Shader, scale);
                     }
                     if (style.IsStroked)
                     {
-                        DrawStrokedPath(canvas, geometry, style.StrokePaint, scale);
+                        DrawStrokedPath(canvas, geometry, style.StrokePaint, ellipse.Shader, scale);
                     }
                     if (style.IsText && !string.IsNullOrEmpty(ellipse.Text?.Value))
                     {
                         var rect = SkiaHelper.ToSKRect(ellipse.StartPoint, ellipse.Point, dx, dy);
-                        DrawText(canvas, ellipse.Text, rect, style, dx, dy, scale);
+                        DrawText(canvas, ellipse.Text, rect, style, ellipse.Shader, dx, dy, scale);
                     }
                 }
             }
@@ -596,7 +596,7 @@ namespace Draw2D.Renderers
             {
                 var canvas = dc as SKCanvas;
                 var rect = SkiaHelper.ToSKRect(text.StartPoint, text.Point, dx, dy);
-                DrawText(canvas, text.Text, rect, style, dx, dy, scale);
+                DrawText(canvas, text.Text, rect, style, text.Shader, dx, dy, scale);
             }
         }
 
@@ -619,7 +619,7 @@ namespace Draw2D.Renderers
             {
                 if (style.IsText && !string.IsNullOrEmpty(image.Text?.Value))
                 {
-                    DrawText(canvas, image.Text, rect, style, dx, dy, scale);
+                    DrawText(canvas, image.Text, rect, style, image.Shader, dx, dy, scale);
                 }
             }
         }

@@ -11,6 +11,7 @@ using Draw2D.ViewModels.Containers;
 using Draw2D.ViewModels.Shapes;
 using Draw2D.ViewModels.Style;
 using Draw2D.ViewModels.Style.PathEffects;
+using Draw2D.ViewModels.Style.Shaders;
 using Draw2D.ViewModels.Tools;
 using SkiaSharp;
 
@@ -395,12 +396,82 @@ namespace Draw2D
             return null;
         }
 
+        internal static SKShader ToSKShader(IShader shader, IList<IDisposable> disposables)
+        {
+            switch (shader)
+            {
+                case BitmapShader bitmapShader:
+                    {
+                        // TODO:
+                    }
+                    break;
+                case ColorShader colorShader:
+                    {
+                        // TODO:
+                    }
+                    break;
+                case ColorFilterShader colorFilterShader:
+                    {
+                        // TODO:
+                    }
+                    break;
+                case ComposeShader composeShader:
+                    {
+                        // TODO:
+                    }
+                    break;
+                case EmptyShader emptyShader:
+                    {
+                        // TODO:
+                    }
+                    break;
+                case LinearGradientShader linearGradientShader:
+                    {
+                        // TODO:
+                    }
+                    break;
+                case LocalMatrixShader localMatrixShader:
+                    {
+                        // TODO:
+                    }
+                    break;
+                case PerlinNoiseFractalNoiseShader perlinNoiseFractalNoiseShader:
+                    {
+                        // TODO:
+                    }
+                    break;
+                case PerlinNoiseTurbulenceShader perlinNoiseTurbulenceShader:
+                    {
+                        // TODO:
+                    }
+                    break;
+                case RadialGradientShader radialGradientShader:
+                    {
+                        // TODO:
+                    }
+                    break;
+                case SweepGradientShader sweepGradientShader:
+                    {
+                        // TODO:
+                    }
+                    break;
+                case TwoPointConicalGradientShader twoPointConicalGradientShader:
+                    {
+                        // TODO:
+                    }
+                    break;
+                default:
+                    return null;
+            }
+            return null;
+        }
+
         internal static SKColor ToSKColor(ArgbColor color)
         {
             return new SKColor(color.R, color.G, color.B, color.A);
         }
 
-        internal static SKPaint ToSKPaintStroke(IStrokePaint strokePaint, double scale, IList<IDisposable> disposables)
+        internal static SKPaint ToSKPaintStroke(IStrokePaint strokePaint, IShader shader, double scale, IList<IDisposable> disposables)
         {
             double strokeWidth = strokePaint.StrokeWidth;
             double strokeMiter = strokePaint.StrokeMiter;
@@ -419,11 +490,12 @@ namespace Draw2D
                 StrokeMiter = (float)(strokeMiter),
                 Color = ToSKColor(strokePaint.Color),
                 Style = SKPaintStyle.Stroke,
-                PathEffect = ToSKPathEffect(strokePaint.PathEffect, strokeWidth, disposables)
+                PathEffect = ToSKPathEffect(strokePaint.PathEffect, strokeWidth, disposables),
+                Shader = shader != null ? ToSKShader(shader, disposables) : ToSKShader(strokePaint.Shader, disposables)
             };
         }
 
-        internal static SKPaint ToSKPaintFill(IFillPaint fillPaint, IList<IDisposable> disposables)
+        internal static SKPaint ToSKPaintFill(IFillPaint fillPaint, IShader shader, IList<IDisposable> disposables)
         {
             return new SKPaint()
             {
@@ -432,11 +504,12 @@ namespace Draw2D
                 Color = ToSKColor(fillPaint.Color),
                 TextAlign = SKTextAlign.Left,
                 Style = SKPaintStyle.Fill,
-                PathEffect = ToSKPathEffect(fillPaint.PathEffect, 0.0, disposables)
+                PathEffect = ToSKPathEffect(fillPaint.PathEffect, 0.0, disposables),
+                Shader = shader != null ? ToSKShader(shader, disposables) : ToSKShader(fillPaint.Shader, disposables)
             };
         }
 
-        internal static SKPaint ToSKPaintText(ITextPaint textPaint, IList<IDisposable> disposables)
+        internal static SKPaint ToSKPaintText(ITextPaint textPaint, IShader shader, IList<IDisposable> disposables)
         {
             return new SKPaint()
             {
@@ -447,11 +520,12 @@ namespace Draw2D
                 Color = ToSKColor(textPaint.Color),
                 TextAlign = SKTextAlign.Left,
                 Style = SKPaintStyle.Fill,
-                PathEffect = ToSKPathEffect(textPaint.PathEffect, 0.0, disposables)
+                PathEffect = ToSKPathEffect(textPaint.PathEffect, 0.0, disposables),
+                Shader = shader != null ? ToSKShader(shader, disposables) : ToSKShader(textPaint.Shader, disposables)
             };
         }
 
-        internal static void ToSKPaintStrokeUpdate(SKPaint paint, IStrokePaint strokePaint, double scale, IList<IDisposable> disposables)
+        internal static void ToSKPaintStrokeUpdate(SKPaint paint, IStrokePaint strokePaint, IShader shader, double scale, IList<IDisposable> disposables)
         {
             double strokeWidth = strokePaint.StrokeWidth;
             if (strokePaint.IsScaled)
@@ -461,11 +535,11 @@ namespace Draw2D
             paint.StrokeWidth = (float)(strokeWidth);
         }
 
-        internal static void ToSKPaintFillUpdate(SKPaint paint, IFillPaint fillPaint, IList<IDisposable> disposables)
+        internal static void ToSKPaintFillUpdate(SKPaint paint, IFillPaint fillPaint, IShader shader, IList<IDisposable> disposables)
         {
         }
 
-        internal static void ToSKPaintTextUpdate(SKPaint paint, ITextPaint textPaint, IList<IDisposable> disposables)
+        internal static void ToSKPaintTextUpdate(SKPaint paint, ITextPaint textPaint, IShader shader, IList<IDisposable> disposables)
         {
         }
 
@@ -537,7 +611,7 @@ namespace Draw2D
         {
             using (var typeface = ToSKTypeface(textPaint.Typeface))
             using (var pathEffectDisposable = new CompositeDisposable())
-            using (var paint = ToSKPaintText(textPaint, pathEffectDisposable.Disposables))
+            using (var paint = ToSKPaintText(textPaint, null, pathEffectDisposable.Disposables))
             {
                 paint.Typeface = typeface;
                 paint.TextEncoding = SKTextEncoding.Utf16;
@@ -765,7 +839,7 @@ namespace Draw2D
 
         internal static SKPath ToStrokePath(IToolContext context, IStrokePaint strokePaint, SKPath geometry, IList<IDisposable> disposables)
         {
-            using (var paint = ToSKPaintStroke(strokePaint, 1.0, disposables))
+            using (var paint = ToSKPaintStroke(strokePaint, null, 1.0, disposables))
             {
                 bool isClipPath = GetInflateOffset(strokePaint.PathEffect, out var inflateX, out var inflateY);
                 if (isClipPath)
@@ -785,7 +859,7 @@ namespace Draw2D
 
         internal static SKPath ToFillPath(IToolContext context, IFillPaint fillPaint, SKPath geometry, IList<IDisposable> disposables)
         {
-            using (var paint = ToSKPaintFill(fillPaint, disposables))
+            using (var paint = ToSKPaintFill(fillPaint, null, disposables))
             {
                 bool isClipPath = GetInflateOffset(fillPaint.PathEffect, out var inflateX, out var inflateY);
                 if (isClipPath)

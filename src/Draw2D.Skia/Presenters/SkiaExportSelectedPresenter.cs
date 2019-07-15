@@ -34,7 +34,7 @@ namespace Draw2D.Presenters
         {
             using (var renderer = new SkiaShapeRenderer(_context, _view, _view.SelectionState))
             using (var pathEffectDisposable = new CompositeDisposable())
-            using (var background = SkiaHelper.ToSKPaintFill(_view.PrintBackground, pathEffectDisposable.Disposables))
+            using (var background = SkiaHelper.ToSKPaintFill(_view.PrintBackground, null, pathEffectDisposable.Disposables))
             {
                 var canvas = context as SKCanvas;
                 canvas.DrawRect(SkiaHelper.ToSKRect(dx, dy, _view.Width + dx, _view.Height + dy), background);
