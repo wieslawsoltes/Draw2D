@@ -188,17 +188,16 @@ namespace Draw2D.Renderers
             GetSKPaintText(shapeStyle.TextPaint, out var paint, out var metrics);
 #if false
             var mBaseline = 0.0f;
-#endif
             var mTop = metrics.Top;
-            var mAscent = metrics.Ascent;
-            var mDescent = metrics.Descent;
             var mBottom = metrics.Bottom;
             var mLeading = metrics.Leading;
             var mCapHeight = metrics.CapHeight;
             var mLineHeight = metrics.Bottom - metrics.Top;
             var mXMax = metrics.XMax;
             var mXMin = metrics.XMin;
-
+#endif
+            var mAscent = metrics.Ascent;
+            var mDescent = metrics.Descent;
             float x = rect.Left;
             float y = rect.Top;
             float width = rect.Width;
