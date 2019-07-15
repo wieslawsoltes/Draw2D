@@ -96,7 +96,7 @@ namespace Draw2D.Renderers
 
         private void GetSKTypeface(Typeface style, out SKTypeface typeface)
         {
-            if (style.IsDirty == true || !_typefaceCache.TryGetValue(style, out typeface))
+            if (style.IsDirty || !_typefaceCache.TryGetValue(style, out typeface))
             {
                 typeface = SkiaHelper.ToSKTypeface(style);
                 _typefaceCache[style] = typeface;

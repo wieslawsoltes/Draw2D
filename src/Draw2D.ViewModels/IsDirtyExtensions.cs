@@ -180,32 +180,6 @@ namespace Draw2D.ViewModels
             return false;
         }
 
-        public static bool IsCanvasContainerDirty(this ICanvasContainer canvasContainer)
-        {
-            if (canvasContainer == null)
-            {
-                return false;
-            }
-
-            if (canvasContainer.IsDirty)
-            {
-                return true;
-            }
-
-            if (canvasContainer.Shapes != null)
-            {
-                foreach (var shape in canvasContainer.Shapes)
-                {
-                    if (shape.IsDirty)
-                    {
-                        return true;
-                    }
-                }
-            }
-
-            return false;
-        }
-
         public static bool IsPointsDirty(this ICanvasContainer canvasContainer)
         {
             if (canvasContainer == null)
@@ -226,6 +200,32 @@ namespace Draw2D.ViewModels
                 if (point.Template != null)
                 {
                     if (point.Template.IsDirty)
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        public static bool IsCanvasContainerDirty(this ICanvasContainer canvasContainer)
+        {
+            if (canvasContainer == null)
+            {
+                return false;
+            }
+
+            if (canvasContainer.IsDirty)
+            {
+                return true;
+            }
+
+            if (canvasContainer.Shapes != null)
+            {
+                foreach (var shape in canvasContainer.Shapes)
+                {
+                    if (shape.IsDirty)
                     {
                         return true;
                     }

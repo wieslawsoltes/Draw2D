@@ -87,7 +87,7 @@ namespace Draw2D.Presenters
 
         private void GetSKPaintFill(IFillPaint fillPaint, out SKPaint brush)
         {
-            if (fillPaint.IsDirty == true || !_paintCache.TryGetValue(fillPaint, out var brushCached))
+            if (fillPaint.IsFillPaintDirty() || !_paintCache.TryGetValue(fillPaint, out var brushCached))
             {
                 fillPaint.Invalidate();
                 brushCached = SkiaHelper.ToSKPaintFill(fillPaint, _pathEffectDisposable.Disposables);
