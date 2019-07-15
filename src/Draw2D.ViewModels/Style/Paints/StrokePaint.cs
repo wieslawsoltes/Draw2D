@@ -88,7 +88,7 @@ namespace Draw2D.ViewModels.Style
             StrokeCap strokeCap = StrokeCap.Butt,
             StrokeJoin strokeJoin = StrokeJoin.Miter,
             double strokeMiter = 4.0,
-            bool isScaled = true,
+            bool isScaled = false,
             bool isAntialias = true,
             IPathEffect pathEffect = null)
         {
