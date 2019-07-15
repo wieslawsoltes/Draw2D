@@ -7,6 +7,7 @@ using System.Runtime.Serialization;
 using Draw2D.ViewModels.Bounds;
 using Draw2D.ViewModels.Containers;
 using Draw2D.ViewModels.Decorators;
+using Draw2D.ViewModels.Style;
 
 namespace Draw2D.ViewModels.Shapes
 {
@@ -119,7 +120,8 @@ namespace Draw2D.ViewModels.Shapes
                 Title = this.Title + "_copy",
                 Points = new ObservableCollection<IPointShape>(),
                 Shapes = new ObservableCollection<IBaseShape>(),
-                StyleId = this.StyleId
+                StyleId = this.StyleId,
+                Shader = (IShader)this.Shader?.Copy(shared),
             };
 
             if (shared != null)

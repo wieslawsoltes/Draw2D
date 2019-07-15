@@ -62,6 +62,9 @@
                 </Grid>
             </ScrollViewer>
         </TabItem>
+        <TabItem Classes="default" Header="Shader">
+            <ContentControl Content="{Binding Shader}"/>
+        </TabItem>
         <TabItem Classes="default" Header="Decorator">
             <ContentControl Content="{Binding Decorator}"/>
         </TabItem>

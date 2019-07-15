@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Runtime.Serialization;
 using Draw2D.ViewModels.Bounds;
 using Draw2D.ViewModels.Decorators;
+using Draw2D.ViewModels.Style;
 
 namespace Draw2D.ViewModels.Shapes
 {
@@ -120,6 +121,7 @@ namespace Draw2D.ViewModels.Shapes
             return new PointShape()
             {
                 StyleId = this.StyleId,
+                Shader = (IShader)this.Shader?.Copy(shared),
                 Owner = this.Owner,
                 X = this.X,
                 Y = this.Y,

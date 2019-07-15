@@ -2,6 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using System.Collections.Generic;
 using System.Runtime.Serialization;
+using Draw2D.ViewModels.Style;
 
 namespace Draw2D.ViewModels.Shapes
 {
@@ -13,6 +14,7 @@ namespace Draw2D.ViewModels.Shapes
 
         private string _styleId;
         private IList<IPointShape> _points;
+        private IShader _shader;
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public string StyleId
@@ -26,6 +28,13 @@ namespace Draw2D.ViewModels.Shapes
         {
             get => _points;
             set => Update(ref _points, value);
+        }
+
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public IShader Shader
+        {
+            get => _shader;
+            set => Update(ref _shader, value);
         }
 
         [IgnoreDataMember]

@@ -20,6 +20,7 @@ namespace Draw2D.ViewModels.Style
         private StrokeJoin _strokeJoin;
         private double _strokeMiter;
         private IPathEffect _pathEffect;
+        private IShader _shader;
         private bool _isScaled;
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
@@ -72,6 +73,13 @@ namespace Draw2D.ViewModels.Style
         }
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public IShader Shader
+        {
+            get => _shader;
+            set => Update(ref _shader, value);
+        }
+
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public bool IsScaled
         {
             get => _isScaled;
@@ -90,7 +98,8 @@ namespace Draw2D.ViewModels.Style
             double strokeMiter = 4.0,
             bool isScaled = false,
             bool isAntialias = true,
-            IPathEffect pathEffect = null)
+            IPathEffect pathEffect = null,
+            IShader shader = null)
         {
             this.Color = color;
             this.IsAntialias = isAntialias;
@@ -99,12 +108,18 @@ namespace Draw2D.ViewModels.Style
             this.StrokeJoin = strokeJoin;
             this.StrokeMiter = strokeMiter;
             this.PathEffect = pathEffect;
+            this.Shader = shader;
             this.IsScaled = isScaled;
         }
 
         public void SetPathEffect(IPathEffect pathEffect)
         {
             this.PathEffect = pathEffect;
+        }
+
+        public void SetShader(IShader shader)
+        {
+            this.Shader = shader;
         }
 
         public object Copy(Dictionary<object, object> shared)
@@ -120,6 +135,7 @@ namespace Draw2D.ViewModels.Style
                 StrokeJoin = this.StrokeJoin,
                 StrokeMiter = this.StrokeMiter,
                 PathEffect = (IPathEffect)this.PathEffect.Copy(shared),
+                Shader = (IShader)this.Shader.Copy(shared),
                 IsScaled = this.IsScaled
             };
         }

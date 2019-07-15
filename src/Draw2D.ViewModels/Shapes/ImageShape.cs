@@ -6,6 +6,7 @@ using System.Collections.ObjectModel;
 using System.Runtime.Serialization;
 using Draw2D.ViewModels.Bounds;
 using Draw2D.ViewModels.Decorators;
+using Draw2D.ViewModels.Style;
 
 namespace Draw2D.ViewModels.Shapes
 {
@@ -214,7 +215,8 @@ namespace Draw2D.ViewModels.Shapes
                 Text = (Text)this.Text?.Copy(shared),
                 Path = this.Path,
                 StretchMode = this.StretchMode,
-                StyleId = this.StyleId
+                StyleId = this.StyleId,
+                Shader = (IShader)this.Shader?.Copy(shared),
             };
 
             if (shared != null)

@@ -13,6 +13,7 @@ namespace Draw2D.ViewModels.Style
         private ArgbColor _color;
         private bool _isAntialias;
         private IPathEffect _pathEffect;
+        private IShader _shader;
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public ArgbColor Color
@@ -35,6 +36,13 @@ namespace Draw2D.ViewModels.Style
             set => Update(ref _pathEffect, value);
         }
 
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public IShader Shader
+        {
+            get => _shader;
+            set => Update(ref _shader, value);
+        }
+
         public FillPaint()
         {
         }
@@ -42,16 +50,23 @@ namespace Draw2D.ViewModels.Style
         public FillPaint(
             ArgbColor color,
             bool isAntialias = true,
-            IPathEffect pathEffect = null)
+            IPathEffect pathEffect = null,
+            IShader shader = null)
         {
             this.Color = color;
             this.IsAntialias = isAntialias;
             this.PathEffect = pathEffect;
+            this.Shader = shader;
         }
 
         public void SetPathEffect(IPathEffect pathEffect)
         {
             this.PathEffect = pathEffect;
+        }
+
+        public void SetShader(IShader shader)
+        {
+            this.Shader = shader;
         }
 
         public object Copy(Dictionary<object, object> shared)
@@ -62,7 +77,8 @@ namespace Draw2D.ViewModels.Style
                 Title = this.Title,
                 Color = (ArgbColor)(this.Color.Copy(shared)),
                 IsAntialias = this.IsAntialias,
-                PathEffect = (IPathEffect)this.PathEffect.Copy(shared)
+                PathEffect = (IPathEffect)this.PathEffect.Copy(shared),
+                Shader = (IShader)this.Shader.Copy(shared)
             };
         }
     }
