@@ -767,7 +767,19 @@ namespace Draw2D
         {
             using (var paint = ToSKPaintStroke(strokePaint, 1.0, disposables))
             {
-                return paint.GetFillPath(geometry, 1.0f);
+                bool isClipPath = GetInflateOffset(strokePaint.PathEffect, out var inflateX, out var inflateY);
+                if (isClipPath)
+                {
+                    var bounds = geometry.Bounds;
+                    var rect = SKRect.Inflate(bounds, (float)inflateX, (float)inflateY);
+                    // TODO: Clip path.
+                    var path = paint.GetFillPath(geometry, 1.0f);
+                    return path;
+                }
+                else
+                {
+                    return paint.GetFillPath(geometry, 1.0f);
+                }
             }
         }
 
@@ -775,7 +787,19 @@ namespace Draw2D
         {
             using (var paint = ToSKPaintFill(fillPaint, disposables))
             {
-                return paint.GetFillPath(geometry, 1.0f);
+                bool isClipPath = GetInflateOffset(fillPaint.PathEffect, out var inflateX, out var inflateY);
+                if (isClipPath)
+                {
+                    var bounds = geometry.Bounds;
+                    var rect = SKRect.Inflate(bounds, (float)inflateX, (float)inflateY);
+                    // TODO: Clip path.
+                    var path = paint.GetFillPath(geometry, 1.0f);
+                    return path;
+                }
+                else
+                {
+                    return paint.GetFillPath(geometry, 1.0f);
+                }
             }
         }
 
