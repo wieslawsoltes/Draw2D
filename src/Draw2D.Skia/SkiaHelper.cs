@@ -18,59 +18,53 @@ namespace Draw2D
 {
     internal class SkiaHelper
     {
-        internal static SKMatrix ToSKMatrix(Matrix matrix)
+        internal static SKPathFillType ToSKPathFillType(PathFillType fillType)
         {
-            return new SKMatrix()
-            {
-                ScaleX = (float)matrix.ScaleX,
-                SkewX = (float)matrix.SkewX,
-                TransX = (float)matrix.TransX,
-                SkewY = (float)matrix.SkewY,
-                ScaleY = (float)matrix.ScaleY,
-                TransY = (float)matrix.TransY,
-                Persp0 = (float)matrix.Persp0,
-                Persp1 = (float)matrix.Persp1,
-                Persp2 = (float)matrix.Persp2
-            };
-        }
-
-        internal static void GetTransform(StretchMode mode, SKRect element, SKRect panel, out double ox, out double oy, out double zx, out double zy)
-        {
-            ox = element.Left;
-            oy = element.Top;
-            zx = 1.0;
-            zy = 1.0;
-            switch (mode)
+            switch (fillType)
             {
                 default:
-                case StretchMode.None:
-                    break;
-                case StretchMode.Center:
-                    ox = element.Left + (element.Width - panel.Width) / 2;
-                    oy = element.Top + (element.Height - panel.Height) / 2;
-                    break;
-                case StretchMode.Fill:
-                    zx = element.Width / panel.Width;
-                    zy = element.Height / panel.Height;
-                    ox = element.Left + (element.Width - panel.Width * zx) / 2;
-                    oy = element.Top + (element.Height - panel.Height * zy) / 2;
-                    break;
-                case StretchMode.Uniform:
-                    zx = element.Width / panel.Width;
-                    zy = element.Height / panel.Height;
-                    zx = Math.Min(zx, zy);
-                    zy = zx;
-                    ox = element.Left + (element.Width - panel.Width * zx) / 2;
-                    oy = element.Top + (element.Height - panel.Height * zy) / 2;
-                    break;
-                case StretchMode.UniformToFill:
-                    zx = element.Width / panel.Width;
-                    zy = element.Height / panel.Height;
-                    zx = Math.Max(zx, zy);
-                    zy = zx;
-                    ox = element.Left + (element.Width - panel.Width * zx) / 2;
-                    oy = element.Top + (element.Height - panel.Height * zy) / 2;
-                    break;
+                case PathFillType.Winding:
+                    return SKPathFillType.Winding;
+                case PathFillType.EvenOdd:
+                    return SKPathFillType.EvenOdd;
+                case PathFillType.InverseWinding:
+                    return SKPathFillType.InverseWinding;
+                case PathFillType.InverseEvenOdd:
+                    return SKPathFillType.InverseEvenOdd;
+            }
+        }
+
+        internal static PathFillType ToPathFillType(SKPathFillType fillType)
+        {
+            switch (fillType)
+            {
+                default:
+                case SKPathFillType.Winding:
+                    return PathFillType.Winding;
+                case SKPathFillType.EvenOdd:
+                    return PathFillType.EvenOdd;
+                case SKPathFillType.InverseWinding:
+                    return PathFillType.InverseWinding;
+                case SKPathFillType.InverseEvenOdd:
+                    return PathFillType.InverseEvenOdd;
+            }
+        }
+
+        internal static SKPathOp ToSKPathOp(PathOp op)
+        {
+            switch (op)
+            {
+                default:
+                case PathOp.Difference:
+                    return SKPathOp.Difference;
+                case PathOp.Intersect:
+                    return SKPathOp.Intersect;
+                case PathOp.Union:
+                    return SKPathOp.Union;
+                case PathOp.Xor:
+                    return SKPathOp.Xor;
+                case PathOp.ReverseDifference:
+                    return SKPathOp.ReverseDifference;
             }
         }
 
@@ -95,11 +89,6 @@ namespace Draw2D
                 typeface.FontWeight,
                 typeface.FontWidth,
                 ToSKFontStyleSlant(typeface.FontSlant));
-        }
-
-        internal static SKColor ToSKColor(ArgbColor color)
-        {
-            return new SKColor(color.R, color.G, color.B, color.A);
         }
 
         internal static SKStrokeCap ToSKStrokeCap(StrokeCap cap)
@@ -169,6 +158,81 @@ namespace Draw2D
                 return array;
             }
             return null;
+        }
+
+        internal static SKMatrix ToSKMatrix(Matrix matrix)
+        {
+            return new SKMatrix()
+            {
+                ScaleX = (float)matrix.ScaleX,
+                SkewX = (float)matrix.SkewX,
+                TransX = (float)matrix.TransX,
+                SkewY = (float)matrix.SkewY,
+                ScaleY = (float)matrix.ScaleY,
+                TransY = (float)matrix.TransY,
+                Persp0 = (float)matrix.Persp0,
+                Persp1 = (float)matrix.Persp1,
+                Persp2 = (float)matrix.Persp2
+            };
+        }
+
+        internal static SKMatrix Multiply(ref SKMatrix value1, ref SKMatrix value2)
+        {
+            return ToSKMatrix(
+                (value1.ScaleX * value2.ScaleX) + (value1.SkewY * value2.SkewX),
+                (value1.ScaleX * value2.SkewY) + (value1.SkewY * value2.ScaleY),
+                (value1.SkewX * value2.ScaleX) + (value1.ScaleY * value2.SkewX),
+                (value1.SkewX * value2.SkewY) + (value1.ScaleY * value2.ScaleY),
+                (value1.TransX * value2.ScaleX) + (value1.TransY * value2.SkewX) + value2.TransX,
+                (value1.TransX * value2.SkewY) + (value1.TransY * value2.ScaleY) + value2.TransY);
+        }
+
+        internal static SKMatrix ToSKMatrix(double m11, double m12, double m21, double m22, double m31, double m32)
+        {
+            return new SKMatrix
+            {
+                ScaleX = (float)m11,
+                SkewX = (float)m21,
+                TransX = (float)m31,
+                SkewY = (float)m12,
+                ScaleY = (float)m22,
+                TransY = (float)m32,
+                Persp0 = 0,
+                Persp1 = 0,
+                Persp2 = 1
+            };
+        }
+
+        internal static SKPoint ToSKPoint(IPointShape point, double dx, double dy)
+        {
+            return new SKPoint((float)(point.X + dx), (float)(point.Y + dy));
+        }
+
+        internal static SKRect ToSKRect(double left, double top, double right, double bottom)
+        {
+            return new SKRect((float)left, (float)top, (float)right, (float)bottom);
+        }
+
+        internal static SKRect ToSKRect(IPointShape p1, IPointShape p2, double dx, double dy)
+        {
+            double x1 = p1.X + dx;
+            double y1 = p1.Y + dy;
+            double x2 = p2.X + dx;
+            double y2 = p2.Y + dy;
+            double left = Math.Min(x1, x2);
+            double top = Math.Min(y1, y2);
+            double right = left + Math.Abs(Math.Max(x1, x2) - left);
+            double bottom = top + Math.Abs(Math.Max(y1, y2) - top);
+            return new SKRect((float)left, (float)top, (float)right, (float)bottom);
+        }
+
+        internal static SKRect ToSKRect(IPointShape center, double radius, double dx, double dy)
+        {
+            return new SKRect(
+                (float)(center.X - radius + dx),
+                (float)(center.Y - radius + dy),
+                (float)(center.X + radius + dx),
+                (float)(center.Y + radius + dy));
         }
 
         internal static SKPathEffect ToSKPathEffect(IPathEffect pathEffect, double strokeWidth, IList<IDisposable> disposables)
@@ -331,6 +395,11 @@ namespace Draw2D
             return null;
         }
 
+        internal static SKColor ToSKColor(ArgbColor color)
+        {
+            return new SKColor(color.R, color.G, color.B, color.A);
+        }
+
         internal static SKPaint ToSKPaintStroke(IStrokePaint strokePaint, double scale, IList<IDisposable> disposables)
         {
             double strokeWidth = strokePaint.StrokeWidth;
@@ -398,115 +467,6 @@ namespace Draw2D
 
         internal static void ToSKPaintTextUpdate(SKPaint paint, ITextPaint textPaint, IList<IDisposable> disposables)
         {
-        }
-
-        internal static SKPoint ToSKPoint(IPointShape point, double dx, double dy)
-        {
-            return new SKPoint((float)(point.X + dx), (float)(point.Y + dy));
-        }
-
-        internal static SKRect ToSKRect(double left, double top, double right, double bottom)
-        {
-            return new SKRect((float)left, (float)top, (float)right, (float)bottom);
-        }
-
-        internal static SKRect ToSKRect(IPointShape p1, IPointShape p2, double dx, double dy)
-        {
-            double x1 = p1.X + dx;
-            double y1 = p1.Y + dy;
-            double x2 = p2.X + dx;
-            double y2 = p2.Y + dy;
-            double left = Math.Min(x1, x2);
-            double top = Math.Min(y1, y2);
-            double right = left + Math.Abs(Math.Max(x1, x2) - left);
-            double bottom = top + Math.Abs(Math.Max(y1, y2) - top);
-            return new SKRect((float)left, (float)top, (float)right, (float)bottom);
-        }
-
-        internal static SKRect ToSKRect(IPointShape center, double radius, double dx, double dy)
-        {
-            return new SKRect(
-                (float)(center.X - radius + dx),
-                (float)(center.Y - radius + dy),
-                (float)(center.X + radius + dx),
-                (float)(center.Y + radius + dy));
-        }
-
-        internal static SKMatrix Multiply(SKMatrix value1, SKMatrix value2)
-        {
-            return ToSKMatrix(
-                (value1.ScaleX * value2.ScaleX) + (value1.SkewY * value2.SkewX),
-                (value1.ScaleX * value2.SkewY) + (value1.SkewY * value2.ScaleY),
-                (value1.SkewX * value2.ScaleX) + (value1.ScaleY * value2.SkewX),
-                (value1.SkewX * value2.SkewY) + (value1.ScaleY * value2.ScaleY),
-                (value1.TransX * value2.ScaleX) + (value1.TransY * value2.SkewX) + value2.TransX,
-                (value1.TransX * value2.SkewY) + (value1.TransY * value2.ScaleY) + value2.TransY);
-        }
-
-        internal static SKMatrix ToSKMatrix(double m11, double m12, double m21, double m22, double m31, double m32)
-        {
-            return new SKMatrix
-            {
-                ScaleX = (float)m11,
-                SkewX = (float)m21,
-                TransX = (float)m31,
-                SkewY = (float)m12,
-                ScaleY = (float)m22,
-                TransY = (float)m32,
-                Persp0 = 0,
-                Persp1 = 0,
-                Persp2 = 1
-            };
-        }
-
-        internal static SKPathFillType ToSKPathFillType(PathFillType fillType)
-        {
-            switch (fillType)
-            {
-                default:
-                case PathFillType.Winding:
-                    return SKPathFillType.Winding;
-                case PathFillType.EvenOdd:
-                    return SKPathFillType.EvenOdd;
-                case PathFillType.InverseWinding:
-                    return SKPathFillType.InverseWinding;
-                case PathFillType.InverseEvenOdd:
-                    return SKPathFillType.InverseEvenOdd;
-            }
-        }
-
-        internal static PathFillType ToPathFillType(SKPathFillType fillType)
-        {
-            switch (fillType)
-            {
-                default:
-                case SKPathFillType.Winding:
-                    return PathFillType.Winding;
-                case SKPathFillType.EvenOdd:
-                    return PathFillType.EvenOdd;
-                case SKPathFillType.InverseWinding:
-                    return PathFillType.InverseWinding;
-                case SKPathFillType.InverseEvenOdd:
-                    return PathFillType.InverseEvenOdd;
-            }
-        }
-
-        internal static SKPathOp ToSKPathOp(PathOp op)
-        {
-            switch (op)
-            {
-                default:
-                case PathOp.Difference:
-                    return SKPathOp.Difference;
-                case PathOp.Intersect:
-                    return SKPathOp.Intersect;
-                case PathOp.Union:
-                    return SKPathOp.Union;
-                case PathOp.Xor:
-                    return SKPathOp.Xor;
-                case PathOp.ReverseDifference:
-                    return SKPathOp.ReverseDifference;
-            }
         }
 
         internal static void AddLine(IToolContext context, LineShape line, double dx, double dy, SKPath geometry)
@@ -1195,6 +1155,46 @@ namespace Draw2D
                 var canvas = recorder.BeginRecording(rect);
                 canvas.DrawImage(image, rect);
                 return recorder.EndRecording();
+            }
+        }
+
+        internal static void GetStretchModeTransform(StretchMode mode, SKRect element, SKRect panel, out double ox, out double oy, out double zx, out double zy)
+        {
+            ox = element.Left;
+            oy = element.Top;
+            zx = 1.0;
+            zy = 1.0;
+            switch (mode)
+            {
+                default:
+                case StretchMode.None:
+                    break;
+                case StretchMode.Center:
+                    ox = element.Left + (element.Width - panel.Width) / 2;
+                    oy = element.Top + (element.Height - panel.Height) / 2;
+                    break;
+                case StretchMode.Fill:
+                    zx = element.Width / panel.Width;
+                    zy = element.Height / panel.Height;
+                    ox = element.Left + (element.Width - panel.Width * zx) / 2;
+                    oy = element.Top + (element.Height - panel.Height * zy) / 2;
+                    break;
+                case StretchMode.Uniform:
+                    zx = element.Width / panel.Width;
+                    zy = element.Height / panel.Height;
+                    zx = Math.Min(zx, zy);
+                    zy = zx;
+                    ox = element.Left + (element.Width - panel.Width * zx) / 2;
+                    oy = element.Top + (element.Height - panel.Height * zy) / 2;
+                    break;
+                case StretchMode.UniformToFill:
+                    zx = element.Width / panel.Width;
+                    zy = element.Height / panel.Height;
+                    zx = Math.Max(zx, zy);
+                    zy = zx;
+                    ox = element.Left + (element.Width - panel.Width * zx) / 2;
+                    oy = element.Top + (element.Height - panel.Height * zy) / 2;
+                    break;
             }
         }
     }

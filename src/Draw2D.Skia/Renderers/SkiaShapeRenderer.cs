@@ -293,7 +293,7 @@ namespace Draw2D.Renderers
             canvas.DrawPath(path, pen);
         }
 
-        private static void GetInflateBounds(IFillPaint fillPaint, ref double inflateX, ref double inflateY, ref bool isClipPath)
+        private void GetInflateBounds(IFillPaint fillPaint, ref double inflateX, ref double inflateY, ref bool isClipPath)
         {
             switch (fillPaint.PathEffect)
             {
@@ -663,7 +663,7 @@ namespace Draw2D.Renderers
             {
                 GetSKPicture(image.Path, out var picture);
                 int count = canvas.Save();
-                SkiaHelper.GetTransform(image.StretchMode, rect, picture.CullRect, out var ox, out var oy, out var zx, out var zy);
+                SkiaHelper.GetStretchModeTransform(image.StretchMode, rect, picture.CullRect, out var ox, out var oy, out var zx, out var zy);
                 canvas.Translate((float)ox, (float)oy);
                 canvas.Scale((float)zx, (float)zy);
                 canvas.DrawPicture(picture);
