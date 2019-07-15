@@ -3,7 +3,6 @@
 using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
-using Draw2D.ViewModels.Shapes;
 
 namespace Draw2D.ViewModels.Style.PathEffects
 {

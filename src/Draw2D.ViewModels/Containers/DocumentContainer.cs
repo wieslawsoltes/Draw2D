@@ -2,8 +2,6 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using System.Collections.Generic;
 using System.Runtime.Serialization;
-using Draw2D.ViewModels.Shapes;
-using Draw2D.ViewModels.Style;
 using Draw2D.ViewModels.Tools;
 
 namespace Draw2D.ViewModels.Containers

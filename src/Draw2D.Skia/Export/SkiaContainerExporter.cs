@@ -3,7 +3,6 @@
 using System;
 using System.IO;
 using Draw2D.Presenters;
-using Draw2D.ViewModels;
 using Draw2D.ViewModels.Containers;
 using Draw2D.ViewModels.Tools;
 using SkiaSharp;
