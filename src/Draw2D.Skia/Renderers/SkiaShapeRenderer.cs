@@ -286,14 +286,15 @@ namespace Draw2D.Renderers
 
         private void DrawStrokedPath(SKCanvas canvas, SKPath path, IStrokePaint strokePaint, double scale)
         {
-            bool isClipPath = SkiaHelper.GetInflateOffset(strokePaint.PathEffect, out var inflateX, out var inflateY);
             GetSKPaintStroke(strokePaint, out var pen, scale);
+            bool isClipPath = SkiaHelper.GetInflateOffset(strokePaint.PathEffect, out var inflateX, out var inflateY);
             if (isClipPath)
             {
-                var bounds = SKRect.Inflate(path.Bounds, (float)inflateX, (float)inflateY);
+                var bounds = path.Bounds;
+                var rect = SKRect.Inflate(bounds, (float)inflateX, (float)inflateY);
                 canvas.Save();
                 canvas.ClipPath(path);
-                canvas.DrawRect(bounds, pen);
+                canvas.DrawRect(rect, pen);
                 canvas.Restore();
             }
             else
@@ -304,14 +305,15 @@ namespace Draw2D.Renderers
 
         private void DrawFilledPath(SKCanvas canvas, SKPath path, IFillPaint fillPaint, double scale)
         {
-            bool isClipPath = SkiaHelper.GetInflateOffset(fillPaint.PathEffect, out var inflateX, out var inflateY);
             GetSKPaintFill(fillPaint, out var brush);
+            bool isClipPath = SkiaHelper.GetInflateOffset(fillPaint.PathEffect, out var inflateX, out var inflateY);
             if (isClipPath)
             {
-                var bounds = SKRect.Inflate(path.Bounds, (float)inflateX, (float)inflateY);
+                var bounds = path.Bounds;
+                var rect = SKRect.Inflate(bounds, (float)inflateX, (float)inflateY);
                 canvas.Save();
                 canvas.ClipPath(path);
-                canvas.DrawRect(bounds, brush);
+                canvas.DrawRect(rect, brush);
                 canvas.Restore();
             }
             else
