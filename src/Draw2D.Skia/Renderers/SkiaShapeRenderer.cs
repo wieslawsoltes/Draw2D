@@ -289,79 +289,25 @@ namespace Draw2D.Renderers
 
         private void DrawStrokedPath(SKCanvas canvas, SKPath path, IStrokePaint strokePaint, double scale)
         {
+            bool isClipPath = SkiaHelper.GetInflateOffset(strokePaint.PathEffect, out var inflateX, out var inflateY);
             GetSKPaintStroke(strokePaint, out var pen, scale);
-            canvas.DrawPath(path, pen);
-        }
-
-        private void GetInflateBounds(IFillPaint fillPaint, ref double inflateX, ref double inflateY, ref bool isClipPath)
-        {
-            switch (fillPaint.PathEffect)
+            if (isClipPath)
             {
-                case Path1DPathEffect path1DPathEffect:
-                    {
-                    }
-                    break;
-                case Path2DLineEffect path2DLineEffect:
-                    {
-                        if (path2DLineEffect.Matrix != null)
-                        {
-                            inflateX = Math.Max(Math.Abs(path2DLineEffect.Matrix.ScaleX), Math.Abs(path2DLineEffect.Matrix.SkewX));
-                            inflateY = Math.Max(Math.Abs(path2DLineEffect.Matrix.ScaleY), Math.Abs(path2DLineEffect.Matrix.SkewY));
-                            isClipPath = true;
-                        }
-                    }
-                    break;
-                case Path2DPathEffect path2DPathEffect:
-                    {
-                        if (path2DPathEffect.Matrix != null)
-                        {
-                            inflateX = Math.Max(Math.Abs(path2DPathEffect.Matrix.ScaleX), Math.Abs(path2DPathEffect.Matrix.SkewX));
-                            inflateY = Math.Max(Math.Abs(path2DPathEffect.Matrix.ScaleY), Math.Abs(path2DPathEffect.Matrix.SkewY));
-                            isClipPath = true;
-                        }
-                    }
-                    break;
-                case PathComposeEffect pathComposeEffect:
-                    {
-                        // TODO:
-                        //pathComposeEffect.Outer
-                        //pathComposeEffect.Inner
-                    }
-                    break;
-                case PathCornerEffect pathCornerEffect:
-                    {
-                    }
-                    break;
-                case PathDashEffect pathDashEffect:
-                    {
-                    }
-                    break;
-                case PathDiscreteEffect pathDiscreteEffect:
-                    {
-                    }
-                    break;
-                case PathSumEffect pathSumEffect:
-                    {
-                        // TODO:
-                        //pathSumEffect.First
-                        //pathSumEffect.Second
-                    }
-                    break;
-                case PathTrimEffect pathTrimEffect:
-                    {
-                    }
-                    break;
-                default:
-                    break;
+                var bounds = SKRect.Inflate(path.Bounds, (float)inflateX, (float)inflateY);
+                canvas.Save();
+                canvas.ClipPath(path);
+                canvas.DrawRect(bounds, pen);
+                canvas.Restore();
+            }
+            else
+            {
+                canvas.DrawPath(path, pen);
             }
         }
 
         private void DrawFilledPath(SKCanvas canvas, SKPath path, IFillPaint fillPaint, double scale)
         {
-            bool isClipPath = false;
-            double inflateX = 0;
-            double inflateY = 0;
-            GetInflateBounds(fillPaint, ref inflateX, ref inflateY, ref isClipPath);
+            bool isClipPath = SkiaHelper.GetInflateOffset(fillPaint.PathEffect, out var inflateX, out var inflateY);
             GetSKPaintFill(fillPaint, out var brush);
             if (isClipPath)
             {

@@ -1158,6 +1158,87 @@ namespace Draw2D
             }
         }
 
+        internal static bool GetInflateOffset(IPathEffect pathEffect, out double inflateX, out double inflateY)
+        {
+            inflateX = 0;
+            inflateY = 0;
+            if (pathEffect == null)
+            {
+                return false;
+            }
+            switch (pathEffect)
+            {
+                case Path1DPathEffect path1DPathEffect:
+                    {
+                        return false;
+                    }
+                case Path2DLineEffect path2DLineEffect:
+                    {
+                        if (path2DLineEffect.Matrix != null)
+                        {
+                            inflateX = Math.Max(Math.Abs(path2DLineEffect.Matrix.ScaleX), Math.Abs(path2DLineEffect.Matrix.SkewX));
+                            inflateY = Math.Max(Math.Abs(path2DLineEffect.Matrix.ScaleY), Math.Abs(path2DLineEffect.Matrix.SkewY));
+                            return true;
+                        }
+                        return false;
+                    }
+                case Path2DPathEffect path2DPathEffect:
+                    {
+                        if (path2DPathEffect.Matrix != null)
+                        {
+                            inflateX = Math.Max(Math.Abs(path2DPathEffect.Matrix.ScaleX), Math.Abs(path2DPathEffect.Matrix.SkewX));
+                            inflateY = Math.Max(Math.Abs(path2DPathEffect.Matrix.ScaleY), Math.Abs(path2DPathEffect.Matrix.SkewY));
+                            return true;
+                        }
+                        return false;
+                    }
+                case PathComposeEffect pathComposeEffect:
+                    {
+                        bool isClipPathInner = GetInflateOffset(pathComposeEffect.Inner, out var inflateInnerX, out var inflateInnerY);
+                        bool isClipPathOuter = GetInflateOffset(pathComposeEffect.Outer, out var inflateOuterX, out var inflateOuterY);
+                        if (isClipPathOuter || isClipPathInner)
+                        {
+                            inflateX = Math.Max(Math.Abs(inflateInnerX), Math.Abs(inflateOuterX));
+                            inflateY = Math.Max(Math.Abs(inflateInnerY), Math.Abs(inflateOuterY));
+                            return true;
+                        }
+                        return false;
+                    }
+                case PathCornerEffect pathCornerEffect:
+                    {
+                        return false;
+                    }
+                case PathDashEffect pathDashEffect:
+                    {
+                        return false;
+                    }
+                case PathDiscreteEffect pathDiscreteEffect:
+                    {
+                        return false;
+                    }
+                case PathSumEffect pathSumEffect:
+                    {
+                        bool isClipPathFirst = GetInflateOffset(pathSumEffect.First, out var inflateFirstX, out var inflateFirstY);
+                        bool isClipPathSecond = GetInflateOffset(pathSumEffect.Second, out var inflateSecondX, out var inflateSecondY);
+                        if (isClipPathFirst || isClipPathSecond)
+                        {
+                            inflateX = Math.Max(Math.Abs(inflateFirstX), Math.Abs(inflateSecondX));
+                            inflateY = Math.Max(Math.Abs(inflateFirstY), Math.Abs(inflateSecondY));
+                            return true;
+                        }
+                        return false;
+                    }
+                case PathTrimEffect pathTrimEffect:
+                    {
+                        return false;
+                    }
+                default:
+                    {
+                        return false;
+                    }
+            }
+        }
+
         internal static void GetStretchModeTransform(StretchMode mode, SKRect element, SKRect panel, out double ox, out double oy, out double zx, out double zy)
         {
             ox = element.Left;
