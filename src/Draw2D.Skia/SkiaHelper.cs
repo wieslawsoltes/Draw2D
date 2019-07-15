@@ -610,8 +610,8 @@ namespace Draw2D
         internal static void AddText(IToolContext context, Text text, IPointShape startPoint, IPointShape point, ITextPaint textPaint, double dx, double dy, SKPath geometry)
         {
             using (var typeface = ToSKTypeface(textPaint.Typeface))
-            using (var pathEffectDisposable = new CompositeDisposable())
-            using (var paint = ToSKPaintText(textPaint, null, pathEffectDisposable.Disposables))
+            using (var disposable = new CompositeDisposable())
+            using (var paint = ToSKPaintText(textPaint, null, disposable.Disposables))
             {
                 paint.Typeface = typeface;
                 paint.TextEncoding = SKTextEncoding.Utf16;

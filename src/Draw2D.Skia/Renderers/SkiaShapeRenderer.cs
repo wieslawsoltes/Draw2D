@@ -20,7 +20,7 @@ namespace Draw2D.Renderers
         private Dictionary<IFillPaint, SKPaint> _fillPaintCache;
         private Dictionary<IStrokePaint, SKPaint> _strokePaintCache;
         private Dictionary<string, SKPicture> _pictureCache;
-        private CompositeDisposable _pathEffectDisposable;
+        private CompositeDisposable _disposable;
 
         public SkiaShapeRenderer(IToolContext context, IContainerView view, ISelectionState selectionState)
         {
@@ -32,7 +32,7 @@ namespace Draw2D.Renderers
             _fillPaintCache = new Dictionary<IFillPaint, SKPaint>();
             _strokePaintCache = new Dictionary<IStrokePaint, SKPaint>();
             _pictureCache = new Dictionary<string, SKPicture>();
-            _pathEffectDisposable = new CompositeDisposable();
+            _disposable = new CompositeDisposable();
         }
 
         public void Dispose()
@@ -85,10 +85,10 @@ namespace Draw2D.Renderers
                 _pictureCache = null;
             }
 
-            if (_pathEffectDisposable != null)
+            if (_disposable != null)
             {
-                _pathEffectDisposable.Dispose();
-                _pathEffectDisposable = null;
+                _disposable.Dispose();
+                _disposable = null;
             }
         }
 
@@ -105,12 +105,12 @@ namespace Draw2D.Renderers
         {
             if (fillPaint.IsFillPaintDirty() || !_fillPaintCache.TryGetValue(fillPaint, out var brushCached))
             {
-                brushCached = SkiaHelper.ToSKPaintFill(fillPaint, shader, _pathEffectDisposable.Disposables);
+                brushCached = SkiaHelper.ToSKPaintFill(fillPaint, shader, _disposable.Disposables);
                 _fillPaintCache[fillPaint] = brushCached;
             }
             else
             {
-                SkiaHelper.ToSKPaintFillUpdate(brushCached, fillPaint, shader, _pathEffectDisposable.Disposables);
+                SkiaHelper.ToSKPaintFillUpdate(brushCached, fillPaint, shader, _disposable.Disposables);
             }
 
             brush = brushCached;
@@ -120,12 +120,12 @@ namespace Draw2D.Renderers
         {
             if (strokePaint.IsStrokePaintDirty() || !_strokePaintCache.TryGetValue(strokePaint, out var penCached))
             {
-                penCached = SkiaHelper.ToSKPaintStroke(strokePaint, shader, scale, _pathEffectDisposable.Disposables);
+                penCached = SkiaHelper.ToSKPaintStroke(strokePaint, shader, scale, _disposable.Disposables);
                 _strokePaintCache[strokePaint] = penCached;
             }
             else
             {
-                SkiaHelper.ToSKPaintStrokeUpdate(penCached, strokePaint, shader, scale, _pathEffectDisposable.Disposables);
+                SkiaHelper.ToSKPaintStrokeUpdate(penCached, strokePaint, shader, scale, _disposable.Disposables);
             }
 
             pen = penCached;
@@ -140,7 +140,7 @@ namespace Draw2D.Renderers
             if (textPaint.IsTextPaintDirty() || !_textPaintCache.TryGetValue(textPaint, out cached))
             {
                 GetSKTypeface(textPaint.Typeface, out var typeface);
-                cached.paint = SkiaHelper.ToSKPaintText(textPaint, shader, _pathEffectDisposable.Disposables);
+                cached.paint = SkiaHelper.ToSKPaintText(textPaint, shader, _disposable.Disposables);
                 cached.paint.Typeface = typeface;
                 cached.paint.TextEncoding = SKTextEncoding.Utf16;
                 cached.paint.TextSize = (float)textPaint.FontSize;
@@ -163,7 +163,7 @@ namespace Draw2D.Renderers
             }
             else
             {
-                SkiaHelper.ToSKPaintTextUpdate(cached.paint, textPaint, shader, _pathEffectDisposable.Disposables);
+                SkiaHelper.ToSKPaintTextUpdate(cached.paint, textPaint, shader, _disposable.Disposables);
             }
 
             paint = cached.paint;

@@ -24,7 +24,7 @@ namespace Draw2D.Presenters
         private SKPicture _pictureDecorators = null;
         private SKPicture _picturePoints = null;
         private bool _enablePictureCache = true;
-        private CompositeDisposable _pathEffectDisposable;
+        private CompositeDisposable _disposable;
 
         public SkiaEditorContainerPresenter(IToolContext context, IContainerView view)
         {
@@ -32,7 +32,7 @@ namespace Draw2D.Presenters
             _view = view;
             _skiaRenderer = new SkiaShapeRenderer(_context, _view, _view.SelectionState);
             _paintCache = new Dictionary<IFillPaint, SKPaint>();
-            _pathEffectDisposable = new CompositeDisposable();
+            _disposable = new CompositeDisposable();
         }
 
         public void Dispose()
@@ -78,10 +78,10 @@ namespace Draw2D.Presenters
                 _pictureShapesCurrent = null;
             }
 
-            if (_pathEffectDisposable != null)
+            if (_disposable != null)
             {
-                _pathEffectDisposable.Dispose();
-                _pathEffectDisposable = null;
+                _disposable.Dispose();
+                _disposable = null;
             }
         }
 
@@ -90,12 +90,12 @@ namespace Draw2D.Presenters
             if (fillPaint.IsFillPaintDirty() || !_paintCache.TryGetValue(fillPaint, out var brushCached))
             {
                 fillPaint.Invalidate();
-                brushCached = SkiaHelper.ToSKPaintFill(fillPaint, shader, _pathEffectDisposable.Disposables);
+                brushCached = SkiaHelper.ToSKPaintFill(fillPaint, shader, _disposable.Disposables);
                 _paintCache[fillPaint] = brushCached;
             }
             else
             {
-                SkiaHelper.ToSKPaintFillUpdate(brushCached, fillPaint, shader, _pathEffectDisposable.Disposables);
+                SkiaHelper.ToSKPaintFillUpdate(brushCached, fillPaint, shader, _disposable.Disposables);
             }
 
             brush = brushCached;
