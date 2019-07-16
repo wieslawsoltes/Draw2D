@@ -13,6 +13,7 @@ namespace Draw2D.ViewModels.Style
 
         private BlendMode _blendMode;
         private IColorFilter _colorFilter;
+        private IImageFilter _imageFilter;
         private IMaskFilter _maskFilter;
         private IPathEffect _pathEffect;
         private IShader _shader;
@@ -29,6 +30,13 @@ namespace Draw2D.ViewModels.Style
         {
             get => _colorFilter;
             set => Update(ref _colorFilter, value);
+        }
+
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public IImageFilter ImageFilter
+        {
+            get => _imageFilter;
+            set => Update(ref _imageFilter, value);
         }
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
@@ -57,6 +65,11 @@ namespace Draw2D.ViewModels.Style
             this.ColorFilter = colorFilter;
         }
 
+        public void SetImageFilter(IImageFilter imageFilter)
+        {
+            this.ImageFilter = imageFilter;
+        }
+
         public void SetMaskFilter(IMaskFilter maskFilter)
         {
             this.MaskFilter = maskFilter;
@@ -79,12 +92,14 @@ namespace Draw2D.ViewModels.Style
         public PaintEffects(
             BlendMode blendMode = BlendMode.Clear,
             IColorFilter colorFilter = null,
+            IImageFilter imageFilter = null,
             IMaskFilter maskFilter = null,
             IPathEffect pathEffect = null,
             IShader shader = null)
         {
             this.BlendMode = blendMode;
             this.ColorFilter = colorFilter;
+            this.ImageFilter = imageFilter;
             this.MaskFilter = maskFilter;
             this.PathEffect = pathEffect;
             this.Shader = shader;
@@ -98,6 +113,7 @@ namespace Draw2D.ViewModels.Style
                 Title = this.Title,
                 BlendMode = this.BlendMode,
                 ColorFilter = (IColorFilter)this.ColorFilter.Copy(shared),
+                ImageFilter = (IImageFilter)this.ImageFilter.Copy(shared),
                 MaskFilter = (IMaskFilter)this.MaskFilter.Copy(shared),
                 PathEffect = (IPathEffect)this.PathEffect.Copy(shared),
                 Shader = (IShader)this.Shader.Copy(shared)

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Draw2D.ViewModels.Containers;
 using Draw2D.ViewModels.Style;
 using Draw2D.ViewModels.Style.ColorFilters;
+using Draw2D.ViewModels.Style.ImageFilters;
 using Draw2D.ViewModels.Style.MaskFilters;
 using Draw2D.ViewModels.Style.PathEffects;
 using Draw2D.ViewModels.Style.Shaders;
@@ -67,6 +68,152 @@ namespace Draw2D.ViewModels
                     }
                     break;
                 case TableColorFilter tableColorFilter:
+                    {
+                        // TODO:
+                    }
+                    break;
+                default:
+                    break;
+            }
+
+            return false;
+        }
+
+        public static bool IsImageFilterDirty(this IImageFilter imageFilter)
+        {
+            if (imageFilter == null)
+            {
+                return false;
+            }
+
+            if (imageFilter.IsDirty)
+            {
+                return true;
+            }
+
+            switch (imageFilter)
+            {
+                case AlphaThresholdImageFilter alphaThresholdImageFilter:
+                    {
+                        // TODO:
+                    }
+                    break;
+                case ArithmeticImageFilter arithmeticImageFilter:
+                    {
+                        // TODO:
+                    }
+                    break;
+                case BlendModeImageFilter blendModeImageFilter:
+                    {
+                        // TODO:
+                    }
+                    break;
+                case BlurImageFilter blurImageFilter:
+                    {
+                        // TODO:
+                    }
+                    break;
+                case ColorFilterImageFilter colorFilterImageFilter:
+                    {
+                        // TODO:
+                    }
+                    break;
+                case ComposeImageFilter composeImageFilter:
+                    {
+                        // TODO:
+                    }
+                    break;
+                case DilateImageFilter dilateImageFilter:
+                    {
+                        // TODO:
+                    }
+                    break;
+                case DisplacementMapEffectImageFilter displacementMapEffectImageFilter:
+                    {
+                        // TODO:
+                    }
+                    break;
+                case DistantLitDiffuseImageFilter distantLitDiffuseImageFilter:
+                    {
+                        // TODO:
+                    }
+                    break;
+                case DistantLitSpecularImageFilter distantLitSpecularImageFilter:
+                    {
+                        // TODO:
+                    }
+                    break;
+                case DropShadowImageFilter dropShadowImageFilter:
+                    {
+                        // TODO:
+                    }
+                    break;
+                case ErodeImageFilter erodeImageFilter:
+                    {
+                        // TODO:
+                    }
+                    break;
+                case ImageImageFilter imageImageFilter:
+                    {
+                        // TODO:
+                    }
+                    break;
+                case MagnifierImageFilter magnifierImageFilter:
+                    {
+                        // TODO:
+                    }
+                    break;
+                case MatrixImageFilter matrixImageFilter:
+                    {
+                        // TODO:
+                    }
+                    break;
+                case MatrixConvolutionImageFilter matrixConvolutionImageFilter:
+                    {
+                        // TODO:
+                    }
+                    break;
+                case MergeImageFilter mergeImageFilter:
+                    {
+                        // TODO:
+                    }
+                    break;
+                case OffsetImageFilter offsetImageFilter:
+                    {
+                        // TODO:
+                    }
+                    break;
+                case PaintImageFilter paintImageFilter:
+                    {
+                        // TODO:
+                    }
+                    break;
+                case PictureImageFilter pictureImageFilter:
+                    {
+                        // TODO:
+                    }
+                    break;
+                case PointLitDiffuseImageFilter pointLitDiffuseImageFilter:
+                    {
+                        // TODO:
+                    }
+                    break;
+                case PointLitSpecularImageFilter pointLitSpecularImageFilter:
+                    {
+                        // TODO:
+                    }
+                    break;
+                case SpotLitDiffuseImageFilter spotLitDiffuseImageFilter:
+                    {
+                        // TODO:
+                    }
+                    break;
+                case SpotLitSpecularImageFilter spotLitSpecularImageFilter:
+                    {
+                        // TODO:
+                    }
+                    break;
+                case TileImageFilter tileImageFilter:
                     {
                         // TODO:
                     }
@@ -284,6 +431,7 @@ namespace Draw2D.ViewModels
 
             if (paintEffects.IsDirty
              || (paintEffects?.ColorFilter?.IsColorFilterDirty() ?? false)
+             || (paintEffects?.ImageFilter?.IsImageFilterDirty() ?? false)
              || (paintEffects?.MaskFilter?.IsMaskFilterDirty() ?? false)
              || (paintEffects?.PathEffect?.IsPathEffectDirty() ?? false)
              || (paintEffects?.Shader?.IsShaderDirty() ?? false))
