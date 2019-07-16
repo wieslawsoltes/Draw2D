@@ -662,20 +662,20 @@ namespace Draw2D
                 StrokeMiter = (float)(strokeMiter),
                 Color = ToSKColor(strokePaint.Color),
                 Style = SKPaintStyle.Stroke,
-                BlendMode = effects?.BlendMode != BlendMode.Clear ? 
+                BlendMode = effects?.BlendMode != BlendMode.Clear ?
                     ToSKBlendMode(effects.BlendMode) :
                     ToSKBlendMode(strokePaint.Effects?.BlendMode ?? BlendMode.Clear),
-                ColorFilter = effects?.ColorFilter != null ? 
+                ColorFilter = effects?.ColorFilter != null ?
                     ToSKColorFilter(effects.ColorFilter, disposables) :
                     ToSKColorFilter(strokePaint.Effects?.ColorFilter, disposables),
-                MaskFilter = effects?.MaskFilter != null ? 
+                MaskFilter = effects?.MaskFilter != null ?
                     ToSKMaskFilter(effects.MaskFilter, disposables) :
                     ToSKMaskFilter(strokePaint.Effects?.MaskFilter, disposables),
-                PathEffect = effects?.PathEffect != null ? 
+                PathEffect = effects?.PathEffect != null ?
                     ToSKPathEffect(effects.PathEffect, 0.0, disposables) :
                     ToSKPathEffect(strokePaint.Effects?.PathEffect, 0.0, disposables),
-                Shader = effects?.Shader != null ? 
-                    ToSKShader(effects.Shader, disposables) : 
+                Shader = effects?.Shader != null ?
+                    ToSKShader(effects.Shader, disposables) :
                     ToSKShader(strokePaint.Effects?.Shader, disposables)
             };
         }
@@ -689,20 +689,20 @@ namespace Draw2D
                 Color = ToSKColor(fillPaint.Color),
                 TextAlign = SKTextAlign.Left,
                 Style = SKPaintStyle.Fill,
-                BlendMode = effects?.BlendMode != BlendMode.Clear ? 
+                BlendMode = effects?.BlendMode != BlendMode.Clear ?
                     ToSKBlendMode(effects.BlendMode) :
                     ToSKBlendMode(fillPaint.Effects?.BlendMode ?? BlendMode.Clear),
-                ColorFilter = effects?.ColorFilter != null ? 
+                ColorFilter = effects?.ColorFilter != null ?
                     ToSKColorFilter(effects.ColorFilter, disposables) :
                     ToSKColorFilter(fillPaint.Effects?.ColorFilter, disposables),
-                MaskFilter = effects?.MaskFilter != null ? 
+                MaskFilter = effects?.MaskFilter != null ?
                     ToSKMaskFilter(effects.MaskFilter, disposables) :
                     ToSKMaskFilter(fillPaint.Effects?.MaskFilter, disposables),
-                PathEffect = effects?.PathEffect != null ? 
+                PathEffect = effects?.PathEffect != null ?
                     ToSKPathEffect(effects.PathEffect, 0.0, disposables) :
                     ToSKPathEffect(fillPaint.Effects?.PathEffect, 0.0, disposables),
-                Shader = effects?.Shader != null ? 
-                    ToSKShader(effects.Shader, disposables) : 
+                Shader = effects?.Shader != null ?
+                    ToSKShader(effects.Shader, disposables) :
                     ToSKShader(fillPaint.Effects?.Shader, disposables)
             };
         }
@@ -718,20 +718,20 @@ namespace Draw2D
                 Color = ToSKColor(textPaint.Color),
                 TextAlign = SKTextAlign.Left,
                 Style = SKPaintStyle.Fill,
-                BlendMode = effects?.BlendMode != BlendMode.Clear ? 
+                BlendMode = effects?.BlendMode != BlendMode.Clear ?
                     ToSKBlendMode(effects.BlendMode) :
                     ToSKBlendMode(textPaint.Effects?.BlendMode ?? BlendMode.Clear),
-                ColorFilter = effects?.ColorFilter != null ? 
+                ColorFilter = effects?.ColorFilter != null ?
                     ToSKColorFilter(effects.ColorFilter, disposables) :
                     ToSKColorFilter(textPaint.Effects?.ColorFilter, disposables),
-                MaskFilter = effects?.MaskFilter != null ? 
+                MaskFilter = effects?.MaskFilter != null ?
                     ToSKMaskFilter(effects.MaskFilter, disposables) :
                     ToSKMaskFilter(textPaint.Effects?.MaskFilter, disposables),
-                PathEffect = effects?.PathEffect != null ? 
+                PathEffect = effects?.PathEffect != null ?
                     ToSKPathEffect(effects.PathEffect, 0.0, disposables) :
                     ToSKPathEffect(textPaint.Effects?.PathEffect, 0.0, disposables),
-                Shader = effects?.Shader != null ? 
-                    ToSKShader(effects.Shader, disposables) : 
+                Shader = effects?.Shader != null ?
+                    ToSKShader(effects.Shader, disposables) :
                     ToSKShader(textPaint.Effects?.Shader, disposables)
             };
         }
