@@ -98,7 +98,7 @@ namespace Draw2D.ViewModels.Shapes
             var copy = new ReferenceShape()
             {
                 StyleId = this.StyleId,
-                Shader = (IShader)this.Shader?.Copy(shared),
+                Effects = (IPaintEffects)this.Effects?.Copy(shared),
                 Owner = this.Owner,
                 Title = this.Title,
                 X = this.X,

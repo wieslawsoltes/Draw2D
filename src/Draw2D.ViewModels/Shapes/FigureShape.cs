@@ -98,7 +98,7 @@ namespace Draw2D.ViewModels.Shapes
                 Points = new ObservableCollection<IPointShape>(),
                 Shapes = new ObservableCollection<IBaseShape>(),
                 StyleId = this.StyleId,
-                Shader = (IShader)this.Shader?.Copy(shared),
+                Effects = (IPaintEffects)this.Effects?.Copy(shared),
                 IsFilled = this.IsFilled,
                 IsClosed = this.IsClosed
             };

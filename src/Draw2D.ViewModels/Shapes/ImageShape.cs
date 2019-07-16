@@ -216,7 +216,7 @@ namespace Draw2D.ViewModels.Shapes
                 Path = this.Path,
                 StretchMode = this.StretchMode,
                 StyleId = this.StyleId,
-                Shader = (IShader)this.Shader?.Copy(shared),
+                Effects = (IPaintEffects)this.Effects?.Copy(shared)
             };
 
             if (shared != null)

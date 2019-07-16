@@ -90,7 +90,7 @@ namespace Draw2D.ViewModels.Style
             this.Shader = shader;
         }
 
-        public override object Copy(Dictionary<object, object> shared)
+        public object Copy(Dictionary<object, object> shared)
         {
             return new PaintEffects()
             {

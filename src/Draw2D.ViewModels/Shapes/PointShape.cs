@@ -121,7 +121,7 @@ namespace Draw2D.ViewModels.Shapes
             return new PointShape()
             {
                 StyleId = this.StyleId,
-                Shader = (IShader)this.Shader?.Copy(shared),
+                Effects = (IPaintEffects)this.Effects?.Copy(shared),
                 Owner = this.Owner,
                 X = this.X,
                 Y = this.Y,

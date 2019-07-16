@@ -121,7 +121,7 @@ namespace Draw2D.Export
 
                     using (var disposable = new CompositeDisposable())
                     {
-                        var path = SkiaHelper.ToStrokePath(context, style.StrokePaint, geometry, disposable.Disposables);
+                        var path = SkiaHelper.ToStrokePath(context, style.StrokePaint, shape.Effects, geometry, disposable.Disposables);
                         if (path != null)
                         {
                             disposable.Disposables.Add(path);
@@ -152,7 +152,7 @@ namespace Draw2D.Export
 
                     using (var disposable = new CompositeDisposable())
                     {
-                        var path = SkiaHelper.ToFillPath(context, style.FillPaint, geometry, disposable.Disposables);
+                        var path = SkiaHelper.ToFillPath(context, style.FillPaint, shape.Effects, geometry, disposable.Disposables);
                         if (path != null)
                         {
                             disposable.Disposables.Add(path);

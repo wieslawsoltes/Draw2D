@@ -73,8 +73,8 @@
                 </Grid>
             </ScrollViewer>
         </TabItem>
-        <TabItem Classes="default" Header="Shader">
-            <ContentControl Content="{Binding Shader}"/>
+        <TabItem Classes="default" Header="Effects">
+            <ContentControl Content="{Binding Effects}"/>
         </TabItem>
         <TabItem Classes="default" Header="Decorator">
             <ContentControl Content="{Binding Decorator}"/>

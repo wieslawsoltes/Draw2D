@@ -643,7 +643,7 @@ namespace Draw2D
             return new SKColor(color.R, color.G, color.B, color.A);
         }
 
-        internal static SKPaint ToSKPaintStroke(IStrokePaint strokePaint, IShader shader, double scale, IList<IDisposable> disposables)
+        internal static SKPaint ToSKPaintStroke(IStrokePaint strokePaint, IPaintEffects effects, double scale, IList<IDisposable> disposables)
         {
             double strokeWidth = strokePaint.StrokeWidth;
             double strokeMiter = strokePaint.StrokeMiter;
@@ -662,15 +662,25 @@ namespace Draw2D
                 StrokeMiter = (float)(strokeMiter),
                 Color = ToSKColor(strokePaint.Color),
                 Style = SKPaintStyle.Stroke,
-                BlendMode = ToSKBlendMode(strokePaint.BlendMode),
-                ColorFilter = ToSKColorFilter(strokePaint.ColorFilter, disposables),
-                MaskFilter = ToSKMaskFilter(strokePaint.MaskFilter, disposables),
-                PathEffect = ToSKPathEffect(strokePaint.PathEffect, strokeWidth, disposables),
-                Shader = shader != null ? ToSKShader(shader, disposables) : ToSKShader(strokePaint.Shader, disposables)
+                BlendMode = effects?.BlendMode != BlendMode.Clear ? 
+                    ToSKBlendMode(effects.BlendMode) :
+                    ToSKBlendMode(strokePaint.Effects?.BlendMode ?? BlendMode.Clear),
+                ColorFilter = effects?.ColorFilter != null ? 
+                    ToSKColorFilter(effects.ColorFilter, disposables) :
+                    ToSKColorFilter(strokePaint.Effects?.ColorFilter, disposables),
+                MaskFilter = effects?.MaskFilter != null ? 
+                    ToSKMaskFilter(effects.MaskFilter, disposables) :
+                    ToSKMaskFilter(strokePaint.Effects?.MaskFilter, disposables),
+                PathEffect = effects?.PathEffect != null ? 
+                    ToSKPathEffect(effects.PathEffect, 0.0, disposables) :
+                    ToSKPathEffect(strokePaint.Effects?.PathEffect, 0.0, disposables),
+                Shader = effects?.Shader != null ? 
+                    ToSKShader(effects.Shader, disposables) : 
+                    ToSKShader(strokePaint.Effects?.Shader, disposables)
             };
         }
 
-        internal static SKPaint ToSKPaintFill(IFillPaint fillPaint, IShader shader, IList<IDisposable> disposables)
+        internal static SKPaint ToSKPaintFill(IFillPaint fillPaint, IPaintEffects effects, IList<IDisposable> disposables)
         {
             return new SKPaint()
             {
@@ -679,15 +689,25 @@ namespace Draw2D
                 Color = ToSKColor(fillPaint.Color),
                 TextAlign = SKTextAlign.Left,
                 Style = SKPaintStyle.Fill,
-                BlendMode = ToSKBlendMode(fillPaint.BlendMode),
-                ColorFilter = ToSKColorFilter(fillPaint.ColorFilter, disposables),
-                MaskFilter = ToSKMaskFilter(fillPaint.MaskFilter, disposables),
-                PathEffect = ToSKPathEffect(fillPaint.PathEffect, 0.0, disposables),
-                Shader = shader != null ? ToSKShader(shader, disposables) : ToSKShader(fillPaint.Shader, disposables)
+                BlendMode = effects?.BlendMode != BlendMode.Clear ? 
+                    ToSKBlendMode(effects.BlendMode) :
+                    ToSKBlendMode(fillPaint.Effects?.BlendMode ?? BlendMode.Clear),
+                ColorFilter = effects?.ColorFilter != null ? 
+                    ToSKColorFilter(effects.ColorFilter, disposables) :
+                    ToSKColorFilter(fillPaint.Effects?.ColorFilter, disposables),
+                MaskFilter = effects?.MaskFilter != null ? 
+                    ToSKMaskFilter(effects.MaskFilter, disposables) :
+                    ToSKMaskFilter(fillPaint.Effects?.MaskFilter, disposables),
+                PathEffect = effects?.PathEffect != null ? 
+                    ToSKPathEffect(effects.PathEffect, 0.0, disposables) :
+                    ToSKPathEffect(fillPaint.Effects?.PathEffect, 0.0, disposables),
+                Shader = effects?.Shader != null ? 
+                    ToSKShader(effects.Shader, disposables) : 
+                    ToSKShader(fillPaint.Effects?.Shader, disposables)
             };
         }
 
-        internal static SKPaint ToSKPaintText(ITextPaint textPaint, IShader shader, IList<IDisposable> disposables)
+        internal static SKPaint ToSKPaintText(ITextPaint textPaint, IPaintEffects effects, IList<IDisposable> disposables)
         {
             return new SKPaint()
             {
@@ -698,15 +718,25 @@ namespace Draw2D
                 Color = ToSKColor(textPaint.Color),
                 TextAlign = SKTextAlign.Left,
                 Style = SKPaintStyle.Fill,
-                BlendMode = ToSKBlendMode(textPaint.BlendMode),
-                ColorFilter = ToSKColorFilter(textPaint.ColorFilter, disposables),
-                MaskFilter = ToSKMaskFilter(textPaint.MaskFilter, disposables),
-                PathEffect = ToSKPathEffect(textPaint.PathEffect, 0.0, disposables),
-                Shader = shader != null ? ToSKShader(shader, disposables) : ToSKShader(textPaint.Shader, disposables)
+                BlendMode = effects?.BlendMode != BlendMode.Clear ? 
+                    ToSKBlendMode(effects.BlendMode) :
+                    ToSKBlendMode(textPaint.Effects?.BlendMode ?? BlendMode.Clear),
+                ColorFilter = effects?.ColorFilter != null ? 
+                    ToSKColorFilter(effects.ColorFilter, disposables) :
+                    ToSKColorFilter(textPaint.Effects?.ColorFilter, disposables),
+                MaskFilter = effects?.MaskFilter != null ? 
+                    ToSKMaskFilter(effects.MaskFilter, disposables) :
+                    ToSKMaskFilter(textPaint.Effects?.MaskFilter, disposables),
+                PathEffect = effects?.PathEffect != null ? 
+                    ToSKPathEffect(effects.PathEffect, 0.0, disposables) :
+                    ToSKPathEffect(textPaint.Effects?.PathEffect, 0.0, disposables),
+                Shader = effects?.Shader != null ? 
+                    ToSKShader(effects.Shader, disposables) : 
+                    ToSKShader(textPaint.Effects?.Shader, disposables)
             };
         }
 
-        internal static void ToSKPaintStrokeUpdate(SKPaint paint, IStrokePaint strokePaint, IShader shader, double scale, IList<IDisposable> disposables)
+        internal static void ToSKPaintStrokeUpdate(SKPaint paint, IStrokePaint strokePaint, IPaintEffects effects, double scale, IList<IDisposable> disposables)
         {
             double strokeWidth = strokePaint.StrokeWidth;
             if (strokePaint.IsScaled)
@@ -716,11 +746,11 @@ namespace Draw2D
             paint.StrokeWidth = (float)(strokeWidth);
         }
 
-        internal static void ToSKPaintFillUpdate(SKPaint paint, IFillPaint fillPaint, IShader shader, IList<IDisposable> disposables)
+        internal static void ToSKPaintFillUpdate(SKPaint paint, IFillPaint fillPaint, IPaintEffects effects, IList<IDisposable> disposables)
         {
         }
 
-        internal static void ToSKPaintTextUpdate(SKPaint paint, ITextPaint textPaint, IShader shader, IList<IDisposable> disposables)
+        internal static void ToSKPaintTextUpdate(SKPaint paint, ITextPaint textPaint, IPaintEffects effects, IList<IDisposable> disposables)
         {
         }
 
@@ -1018,11 +1048,11 @@ namespace Draw2D
             return false;
         }
 
-        internal static SKPath ToStrokePath(IToolContext context, IStrokePaint strokePaint, SKPath geometry, IList<IDisposable> disposables)
+        internal static SKPath ToStrokePath(IToolContext context, IStrokePaint strokePaint, IPaintEffects effects, SKPath geometry, IList<IDisposable> disposables)
         {
             using (var paint = ToSKPaintStroke(strokePaint, null, 1.0, disposables))
             {
-                bool isClipPath = GetInflateOffset(strokePaint.PathEffect, out var inflateX, out var inflateY);
+                bool isClipPath = GetInflateOffset(effects?.PathEffect != null ? effects.PathEffect : strokePaint.Effects?.PathEffect, out var inflateX, out var inflateY);
                 if (isClipPath)
                 {
                     var bounds = geometry.Bounds;
@@ -1038,11 +1068,11 @@ namespace Draw2D
             }
         }
 
-        internal static SKPath ToFillPath(IToolContext context, IFillPaint fillPaint, SKPath geometry, IList<IDisposable> disposables)
+        internal static SKPath ToFillPath(IToolContext context, IFillPaint fillPaint, IPaintEffects effects, SKPath geometry, IList<IDisposable> disposables)
         {
             using (var paint = ToSKPaintFill(fillPaint, null, disposables))
             {
-                bool isClipPath = GetInflateOffset(fillPaint.PathEffect, out var inflateX, out var inflateY);
+                bool isClipPath = GetInflateOffset(effects?.PathEffect != null ? effects.PathEffect : fillPaint.Effects?.PathEffect, out var inflateX, out var inflateY);
                 if (isClipPath)
                 {
                     var bounds = geometry.Bounds;

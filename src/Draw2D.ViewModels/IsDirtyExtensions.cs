@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Draw2D.ViewModels.Containers;
 using Draw2D.ViewModels.Style;
 using Draw2D.ViewModels.Style.ColorFilters;
+using Draw2D.ViewModels.Style.MaskFilters;
 using Draw2D.ViewModels.Style.PathEffects;
 using Draw2D.ViewModels.Style.Shaders;
 
@@ -68,6 +69,122 @@ namespace Draw2D.ViewModels
                 case TableColorFilter tableColorFilter:
                     {
                         // TODO:
+                    }
+                    break;
+                default:
+                    break;
+            }
+
+            return false;
+        }
+
+        public static bool IsMaskFilterDirty(this IMaskFilter maskFilter)
+        {
+            if (maskFilter == null)
+            {
+                return false;
+            }
+
+            if (maskFilter.IsDirty)
+            {
+                return true;
+            }
+
+            switch (maskFilter)
+            {
+                case BlurMaskFilter blurMaskFilter:
+                    {
+                        // TODO:
+                    }
+                    break;
+                case ClipMaskFilter clipMaskFilter:
+                    {
+                        // TODO:
+                    }
+                    break;
+                case GammaMaskFilter gammaMaskFilter:
+                    {
+                        // TODO:
+                    }
+                    break;
+                case TableMaskFilter tableMaskFilter:
+                    {
+                        // TODO:
+                    }
+                    break;
+                default:
+                    break;
+            }
+
+            return false;
+        }
+
+        public static bool IsPathEffectDirty(this IPathEffect pathEffect)
+        {
+            if (pathEffect == null)
+            {
+                return false;
+            }
+
+            if (pathEffect.IsDirty)
+            {
+                return true;
+            }
+
+            switch (pathEffect)
+            {
+                case Path1DPathEffect path1DPathEffect:
+                    {
+                    }
+                    break;
+                case Path2DLineEffect path2DLineEffect:
+                    {
+                        if (path2DLineEffect.Matrix?.IsDirty ?? false)
+                        {
+                            return true;
+                        }
+                    }
+                    break;
+                case Path2DPathEffect path2DPathEffect:
+                    {
+                        if (path2DPathEffect.Matrix?.IsDirty ?? false)
+                        {
+                            return true;
+                        }
+                    }
+                    break;
+                case PathComposeEffect pathComposeEffect:
+                    {
+                        if ((pathComposeEffect.Outer?.IsPathEffectDirty() ?? false)
+                         || (pathComposeEffect.Inner?.IsPathEffectDirty() ?? false))
+                        {
+                            return true;
+                        }
+                    }
+                    break;
+                case PathCornerEffect pathCornerEffect:
+                    {
+                    }
+                    break;
+                case PathDashEffect pathDashEffect:
+                    {
+                    }
+                    break;
+                case PathDiscreteEffect pathDiscreteEffect:
+                    {
+                    }
+                    break;
+                case PathSumEffect pathSumEffect:
+                    {
+                        if ((pathSumEffect.First?.IsPathEffectDirty() ?? false)
+                         || (pathSumEffect.Second?.IsPathEffectDirty() ?? false))
+                        {
+                            return true;
+                        }
+                    }
+                    break;
+                case PathTrimEffect pathTrimEffect:
+                    {
                     }
                     break;
                 default:
@@ -158,76 +275,20 @@ namespace Draw2D.ViewModels
             return false;
         }
 
-        public static bool IsPathEffectDirty(this IPathEffect pathEffect)
+        public static bool IsPaintEffectsDirty(this IPaintEffects paintEffects)
         {
-            if (pathEffect == null)
+            if (paintEffects == null)
             {
                 return false;
             }
 
-            if (pathEffect.IsDirty)
+            if (paintEffects.IsDirty
+             || (paintEffects?.ColorFilter?.IsColorFilterDirty() ?? false)
+             || (paintEffects?.MaskFilter?.IsMaskFilterDirty() ?? false)
+             || (paintEffects?.PathEffect?.IsPathEffectDirty() ?? false)
+             || (paintEffects?.Shader?.IsShaderDirty() ?? false))
             {
                 return true;
-            }
-
-            switch (pathEffect)
-            {
-                case Path1DPathEffect path1DPathEffect:
-                    {
-                    }
-                    break;
-                case Path2DLineEffect path2DLineEffect:
-                    {
-                        if (path2DLineEffect.Matrix?.IsDirty ?? false)
-                        {
-                            return true;
-                        }
-                    }
-                    break;
-                case Path2DPathEffect path2DPathEffect:
-                    {
-                        if (path2DPathEffect.Matrix?.IsDirty ?? false)
-                        {
-                            return true;
-                        }
-                    }
-                    break;
-                case PathComposeEffect pathComposeEffect:
-                    {
-                        if ((pathComposeEffect.Outer?.IsPathEffectDirty() ?? false)
-                         || (pathComposeEffect.Inner?.IsPathEffectDirty() ?? false))
-                        {
-                            return true;
-                        }
-                    }
-                    break;
-                case PathCornerEffect pathCornerEffect:
-                    {
-                    }
-                    break;
-                case PathDashEffect pathDashEffect:
-                    {
-                    }
-                    break;
-                case PathDiscreteEffect pathDiscreteEffect:
-                    {
-                    }
-                    break;
-                case PathSumEffect pathSumEffect:
-                    {
-                        if ((pathSumEffect.First?.IsPathEffectDirty() ?? false)
-                         || (pathSumEffect.Second?.IsPathEffectDirty() ?? false))
-                        {
-                            return true;
-                        }
-                    }
-                    break;
-                case PathTrimEffect pathTrimEffect:
-                    {
-                    }
-                    break;
-                default:
-                    break;
             }
 
             return false;
@@ -242,9 +303,7 @@ namespace Draw2D.ViewModels
 
             if (strokePaint.IsDirty
              || (strokePaint.Color?.IsDirty ?? false)
-             || (strokePaint.ColorFilter?.IsColorFilterDirty() ?? false)
-             || (strokePaint.PathEffect?.IsPathEffectDirty() ?? false)
-             || (strokePaint.Shader?.IsShaderDirty() ?? false))
+             || (strokePaint.Effects?.IsPaintEffectsDirty() ?? false))
             {
                 return true;
             }
@@ -261,9 +320,7 @@ namespace Draw2D.ViewModels
 
             if (fillPaint.IsDirty
              || (fillPaint.Color?.IsDirty ?? false)
-             || (fillPaint.ColorFilter?.IsColorFilterDirty() ?? false)
-             || (fillPaint.PathEffect?.IsPathEffectDirty() ?? false)
-             || (fillPaint.Shader?.IsShaderDirty() ?? false))
+             || (fillPaint.Effects?.IsPaintEffectsDirty() ?? false))
             {
                 return true;
             }
@@ -280,10 +337,7 @@ namespace Draw2D.ViewModels
 
             if (textPaint.IsDirty
              || (textPaint.Color?.IsDirty ?? false)
-             || (textPaint.Typeface?.IsDirty ?? false)
-             || (textPaint.ColorFilter?.IsColorFilterDirty() ?? false)
-             || (textPaint.PathEffect?.IsPathEffectDirty() ?? false)
-             || (textPaint.Shader?.IsShaderDirty() ?? false))
+             || (textPaint.Effects?.IsPaintEffectsDirty() ?? false))
             {
                 return true;
             }
@@ -359,6 +413,11 @@ namespace Draw2D.ViewModels
                         return true;
                     }
                 }
+                
+                if (point.Effects?.IsPaintEffectsDirty() ?? false)
+                {
+                    return true;
+                }
             }
 
             return false;
@@ -381,6 +440,11 @@ namespace Draw2D.ViewModels
                 foreach (var shape in canvasContainer.Shapes)
                 {
                     if (shape.IsDirty)
+                    {
+                        return true;
+                    }
+
+                    if (shape.Effects?.IsPaintEffectsDirty() ?? false)
                     {
                         return true;
                     }

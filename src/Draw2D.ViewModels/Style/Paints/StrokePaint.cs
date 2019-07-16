@@ -66,11 +66,7 @@ namespace Draw2D.ViewModels.Style
             double strokeMiter = 4.0,
             bool isScaled = false,
             bool isAntialias = true,
-            BlendMode blendMode = BlendMode.Clear,
-            IColorFilter colorFilter = null,
-            IMaskFilter maskFilter = null,
-            IPathEffect pathEffect = null,
-            IShader shader = null)
+            IPaintEffects effects = null)
         {
             this.Color = color;
             this.IsAntialias = isAntialias;
@@ -78,11 +74,7 @@ namespace Draw2D.ViewModels.Style
             this.StrokeCap = strokeCap;
             this.StrokeJoin = strokeJoin;
             this.StrokeMiter = strokeMiter;
-            this.BlendMode = blendMode;
-            this.ColorFilter = colorFilter;
-            this.MaskFilter = maskFilter;
-            this.PathEffect = pathEffect;
-            this.Shader = shader;
+            this.Effects = effects;
             this.IsScaled = isScaled;
         }
 
@@ -98,11 +90,7 @@ namespace Draw2D.ViewModels.Style
                 StrokeCap = this.StrokeCap,
                 StrokeJoin = this.StrokeJoin,
                 StrokeMiter = this.StrokeMiter,
-                BlendMode = this.BlendMode,
-                ColorFilter = (IColorFilter)this.ColorFilter.Copy(shared),
-                MaskFilter = (IMaskFilter)this.MaskFilter.Copy(shared),
-                PathEffect = (IPathEffect)this.PathEffect.Copy(shared),
-                Shader = (IShader)this.Shader.Copy(shared),
+                Effects = (IPaintEffects)this.Effects.Copy(shared),
                 IsScaled = this.IsScaled
             };
         }

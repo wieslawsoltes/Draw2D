@@ -75,11 +75,7 @@ namespace Draw2D.ViewModels.Style
             bool lcdRenderText = true,
             bool subpixelText = true,
             bool isAntialias = true,
-            BlendMode blendMode = BlendMode.Clear,
-            IColorFilter colorFilter = null,
-            IMaskFilter maskFilter = null,
-            IPathEffect pathEffect = null,
-            IShader shader = null)
+            IPaintEffects effects = null)
         {
             this.Color = color;
             this.IsAntialias = isAntialias;
@@ -87,11 +83,7 @@ namespace Draw2D.ViewModels.Style
             this.FontSize = fontSize;
             this.LcdRenderText = lcdRenderText;
             this.SubpixelText = subpixelText;
-            this.BlendMode = blendMode;
-            this.ColorFilter = colorFilter;
-            this.MaskFilter = maskFilter;
-            this.PathEffect = pathEffect;
-            this.Shader = shader;
+            this.Effects = effects;
             this.HAlign = hAlign;
             this.VAlign = vAlign;
         }
@@ -108,11 +100,7 @@ namespace Draw2D.ViewModels.Style
                 FontSize = this.FontSize,
                 LcdRenderText = this.LcdRenderText,
                 SubpixelText = this.SubpixelText,
-                BlendMode = this.BlendMode,
-                ColorFilter = (IColorFilter)this.ColorFilter.Copy(shared),
-                MaskFilter = (IMaskFilter)this.MaskFilter.Copy(shared),
-                PathEffect = (IPathEffect)this.PathEffect.Copy(shared),
-                Shader = (IShader)this.Shader.Copy(shared),
+                Effects = (IPaintEffects)this.Effects.Copy(shared),
                 HAlign = this.HAlign,
                 VAlign = this.VAlign,
             };

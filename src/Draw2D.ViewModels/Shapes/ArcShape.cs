@@ -205,7 +205,7 @@ namespace Draw2D.ViewModels.Shapes
             {
                 Points = new ObservableCollection<IPointShape>(),
                 StyleId = this.StyleId,
-                Shader = (IShader)this.Shader?.Copy(shared),
+                Effects = (IPaintEffects)this.Effects?.Copy(shared),
                 StartAngle = this.StartAngle,
                 SweepAngle = this.SweepAngle,
                 Text = (Text)this.Text?.Copy(shared)

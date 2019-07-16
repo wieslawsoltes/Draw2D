@@ -14,7 +14,7 @@ namespace Draw2D.ViewModels.Shapes
 
         private string _styleId;
         private IList<IPointShape> _points;
-        private IShader _shader;
+        private IPaintEffects _effects;
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public string StyleId
@@ -31,10 +31,10 @@ namespace Draw2D.ViewModels.Shapes
         }
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public IShader Shader
+        public IPaintEffects Effects
         {
-            get => _shader;
-            set => Update(ref _shader, value);
+            get => _effects;
+            set => Update(ref _effects, value);
         }
 
         [IgnoreDataMember]

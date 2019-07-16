@@ -177,7 +177,7 @@ namespace Draw2D.ViewModels.Shapes
             return new ReferencePointShape()
             {
                 StyleId = this.StyleId,
-                Shader = (IShader)this.Shader?.Copy(shared),
+                Effects = (IPaintEffects)this.Effects?.Copy(shared),
                 Owner = this.Owner,
                 Point = this.Point,
                 Reference = this.Reference,

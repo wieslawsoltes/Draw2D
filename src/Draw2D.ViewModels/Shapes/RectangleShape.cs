@@ -208,7 +208,7 @@ namespace Draw2D.ViewModels.Shapes
                 RadiusX = this.RadiusX,
                 RadiusY = this.RadiusY,
                 StyleId = this.StyleId,
-                Shader = (IShader)this.Shader?.Copy(shared),
+                Effects = (IPaintEffects)this.Effects?.Copy(shared)
             };
 
             if (shared != null)

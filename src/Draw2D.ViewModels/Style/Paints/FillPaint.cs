@@ -18,19 +18,11 @@ namespace Draw2D.ViewModels.Style
         public FillPaint(
             ArgbColor color,
             bool isAntialias = true,
-            BlendMode blendMode = BlendMode.Clear,
-            IColorFilter colorFilter = null,
-            IMaskFilter maskFilter = null,
-            IPathEffect pathEffect = null,
-            IShader shader = null)
+            IPaintEffects effects = null)
         {
             this.Color = color;
             this.IsAntialias = isAntialias;
-            this.BlendMode = blendMode;
-            this.ColorFilter = colorFilter;
-            this.MaskFilter = maskFilter;
-            this.PathEffect = pathEffect;
-            this.Shader = shader;
+            this.Effects = effects;
         }
 
         public override object Copy(Dictionary<object, object> shared)
@@ -41,11 +33,7 @@ namespace Draw2D.ViewModels.Style
                 Title = this.Title,
                 Color = (ArgbColor)(this.Color.Copy(shared)),
                 IsAntialias = this.IsAntialias,
-                BlendMode = this.BlendMode,
-                ColorFilter = (IColorFilter)this.ColorFilter.Copy(shared),
-                MaskFilter = (IMaskFilter)this.MaskFilter.Copy(shared),
-                PathEffect = (IPathEffect)this.PathEffect.Copy(shared),
-                Shader = (IShader)this.Shader.Copy(shared)
+                Effects = (IPaintEffects)this.Effects.Copy(shared)
             };
         }
     }

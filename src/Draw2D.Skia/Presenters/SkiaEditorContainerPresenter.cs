@@ -85,17 +85,17 @@ namespace Draw2D.Presenters
             }
         }
 
-        private void GetSKPaintFill(IFillPaint fillPaint, IShader shader, out SKPaint brush)
+        private void GetSKPaintFill(IFillPaint fillPaint, IPaintEffects effects, out SKPaint brush)
         {
             if (fillPaint.IsFillPaintDirty() || !_paintCache.TryGetValue(fillPaint, out var brushCached))
             {
                 fillPaint.Invalidate();
-                brushCached = SkiaHelper.ToSKPaintFill(fillPaint, shader, _disposable.Disposables);
+                brushCached = SkiaHelper.ToSKPaintFill(fillPaint, effects, _disposable.Disposables);
                 _paintCache[fillPaint] = brushCached;
             }
             else
             {
-                SkiaHelper.ToSKPaintFillUpdate(brushCached, fillPaint, shader, _disposable.Disposables);
+                SkiaHelper.ToSKPaintFillUpdate(brushCached, fillPaint, effects, _disposable.Disposables);
             }
 
             brush = brushCached;
