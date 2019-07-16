@@ -127,7 +127,6 @@ namespace Draw2D
         {
             switch (mode)
             {
-                default:
                 case BlendMode.Clear:
                     return SKBlendMode.Clear;
                 case BlendMode.Src:
@@ -135,6 +134,7 @@ namespace Draw2D
                 case BlendMode.Dst:
                     return SKBlendMode.Dst;
                 case BlendMode.SrcOver:
+                default:
                     return SKBlendMode.SrcOver;
                 case BlendMode.DstOver:
                     return SKBlendMode.DstOver;
@@ -781,9 +781,9 @@ namespace Draw2D
 
         internal static void SetSKPaintEffects(SKPaint paint, IPaintEffects paintEffects, IPaintEffects overrideEffects, IList<IDisposable> disposables)
         {
-            paint.BlendMode = overrideEffects?.BlendMode != BlendMode.Clear ?
-                ToSKBlendMode(overrideEffects?.BlendMode ?? BlendMode.Clear) :
-                ToSKBlendMode(paintEffects?.BlendMode ?? BlendMode.Clear);
+            paint.BlendMode = overrideEffects?.BlendMode != BlendMode.SrcOver ?
+                ToSKBlendMode(overrideEffects?.BlendMode ?? BlendMode.SrcOver) :
+                ToSKBlendMode(paintEffects?.BlendMode ?? BlendMode.SrcOver);
             paint.ColorFilter = overrideEffects?.ColorFilter != null ?
                 ToSKColorFilter(overrideEffects?.ColorFilter, disposables) :
                 ToSKColorFilter(paintEffects?.ColorFilter, disposables);
