@@ -19,6 +19,7 @@ namespace Draw2D.ViewModels.Style
         private double _fontSize;
         private bool _lcdRenderText;
         private bool _subpixelText;
+        private IColorFilter _colorFilter;
         private IPathEffect _pathEffect;
         private IShader _shader;
         private HAlign _hAlign;
@@ -67,6 +68,13 @@ namespace Draw2D.ViewModels.Style
         }
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public IColorFilter ColorFilter
+        {
+            get => _colorFilter;
+            set => Update(ref _colorFilter, value);
+        }
+
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public IPathEffect PathEffect
         {
             get => _pathEffect;
@@ -107,6 +115,7 @@ namespace Draw2D.ViewModels.Style
             bool lcdRenderText = true,
             bool subpixelText = true,
             bool isAntialias = true,
+            IColorFilter colorFilter = null,
             IPathEffect pathEffect = null,
             IShader shader = null)
         {
@@ -116,10 +125,16 @@ namespace Draw2D.ViewModels.Style
             this.FontSize = fontSize;
             this.LcdRenderText = lcdRenderText;
             this.SubpixelText = subpixelText;
+            this.ColorFilter = colorFilter;
             this.PathEffect = pathEffect;
             this.Shader = shader;
             this.HAlign = hAlign;
             this.VAlign = vAlign;
+        }
+
+        public void SetColorFilter(IColorFilter colorFilter)
+        {
+            this.ColorFilter = colorFilter;
         }
 
         public void SetPathEffect(IPathEffect pathEffect)
@@ -144,6 +159,7 @@ namespace Draw2D.ViewModels.Style
                 FontSize = this.FontSize,
                 LcdRenderText = this.LcdRenderText,
                 SubpixelText = this.SubpixelText,
+                ColorFilter = (IColorFilter)this.ColorFilter.Copy(shared),
                 PathEffect = (IPathEffect)this.PathEffect.Copy(shared),
                 Shader = (IShader)this.Shader.Copy(shared),
                 HAlign = this.HAlign,

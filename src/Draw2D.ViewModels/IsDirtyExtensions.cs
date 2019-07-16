@@ -3,6 +3,7 @@
 using System.Collections.Generic;
 using Draw2D.ViewModels.Containers;
 using Draw2D.ViewModels.Style;
+using Draw2D.ViewModels.Style.ColorFilters;
 using Draw2D.ViewModels.Style.PathEffects;
 using Draw2D.ViewModels.Style.Shaders;
 
@@ -10,6 +11,72 @@ namespace Draw2D.ViewModels
 {
     public static class IsDirtyExtensions
     {
+        public static bool IsColorFilterDirty(this IColorFilter colorFilter)
+        {
+            if (colorFilter == null)
+            {
+                return false;
+            }
+
+            if (colorFilter.IsDirty)
+            {
+                return true;
+            }
+
+            switch (colorFilter)
+            {
+                case BlendModeColorFilter blendModeColorFilter:
+                    {
+                        // TODO:
+                    }
+                    break;
+                case ColorCubeColorFilter colorCubeColorFilter:
+                    {
+                        // TODO:
+                    }
+                    break;
+                case ColorMatrixColorFilter colorMatrixColorFilter:
+                    {
+                        // TODO:
+                    }
+                    break;
+                case ComposeColorFilter composeColorFilter:
+                    {
+                        // TODO:
+                    }
+                    break;
+                case GammaColorFilter gammaColorFilter:
+                    {
+                        // TODO:
+                    }
+                    break;
+                case HighContrastColorFilter highContrastColorFilter:
+                    {
+                        // TODO:
+                    }
+                    break;
+                case LightingColorFilter lightingColorFilter:
+                    {
+                        // TODO:
+                    }
+                    break;
+                case LumaColorColorFilter lumaColorColorFilter:
+                    {
+                        // TODO:
+                    }
+                    break;
+                case TableColorFilter tableColorFilter:
+                    {
+                        // TODO:
+                    }
+                    break;
+                default:
+                    break;
+            }
+
+            return false;
+        }
+
         public static bool IsShaderDirty(this IShader shader)
         {
             if (shader == null)
@@ -175,6 +242,7 @@ namespace Draw2D.ViewModels
 
             if (strokePaint.IsDirty
              || (strokePaint.Color?.IsDirty ?? false)
+             || (strokePaint.ColorFilter?.IsColorFilterDirty() ?? false)
              || (strokePaint.PathEffect?.IsPathEffectDirty() ?? false)
              || (strokePaint.Shader?.IsShaderDirty() ?? false))
             {
@@ -193,6 +261,7 @@ namespace Draw2D.ViewModels
 
             if (fillPaint.IsDirty
              || (fillPaint.Color?.IsDirty ?? false)
+             || (fillPaint.ColorFilter?.IsColorFilterDirty() ?? false)
              || (fillPaint.PathEffect?.IsPathEffectDirty() ?? false)
              || (fillPaint.Shader?.IsShaderDirty() ?? false))
             {
@@ -212,6 +281,7 @@ namespace Draw2D.ViewModels
             if (textPaint.IsDirty
              || (textPaint.Color?.IsDirty ?? false)
              || (textPaint.Typeface?.IsDirty ?? false)
+             || (textPaint.ColorFilter?.IsColorFilterDirty() ?? false)
              || (textPaint.PathEffect?.IsPathEffectDirty() ?? false)
              || (textPaint.Shader?.IsShaderDirty() ?? false))
             {

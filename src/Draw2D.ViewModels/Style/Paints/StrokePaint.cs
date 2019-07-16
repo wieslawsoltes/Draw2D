@@ -19,6 +19,7 @@ namespace Draw2D.ViewModels.Style
         private StrokeCap _strokeCap;
         private StrokeJoin _strokeJoin;
         private double _strokeMiter;
+        private IColorFilter _colorFilter;
         private IPathEffect _pathEffect;
         private IShader _shader;
         private bool _isScaled;
@@ -66,6 +67,13 @@ namespace Draw2D.ViewModels.Style
         }
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public IColorFilter ColorFilter
+        {
+            get => _colorFilter;
+            set => Update(ref _colorFilter, value);
+        }
+
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public IPathEffect PathEffect
         {
             get => _pathEffect;
@@ -98,6 +106,7 @@ namespace Draw2D.ViewModels.Style
             double strokeMiter = 4.0,
             bool isScaled = false,
             bool isAntialias = true,
+            IColorFilter colorFilter = null,
             IPathEffect pathEffect = null,
             IShader shader = null)
         {
@@ -107,9 +116,15 @@ namespace Draw2D.ViewModels.Style
             this.StrokeCap = strokeCap;
             this.StrokeJoin = strokeJoin;
             this.StrokeMiter = strokeMiter;
+            this.ColorFilter = colorFilter;
             this.PathEffect = pathEffect;
             this.Shader = shader;
             this.IsScaled = isScaled;
+        }
+
+        public void SetColorFilter(IColorFilter colorFilter)
+        {
+            this.ColorFilter = colorFilter;
         }
 
         public void SetPathEffect(IPathEffect pathEffect)
@@ -134,6 +149,7 @@ namespace Draw2D.ViewModels.Style
                 StrokeCap = this.StrokeCap,
                 StrokeJoin = this.StrokeJoin,
                 StrokeMiter = this.StrokeMiter,
+                ColorFilter = (IColorFilter)this.ColorFilter.Copy(shared),
                 PathEffect = (IPathEffect)this.PathEffect.Copy(shared),
                 Shader = (IShader)this.Shader.Copy(shared),
                 IsScaled = this.IsScaled

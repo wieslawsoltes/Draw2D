@@ -32,6 +32,9 @@
         <TabItem Classes="default" Header="Color">
             <ContentControl Content="{Binding Color}"/>
         </TabItem>
+        <TabItem Classes="default" Header="ColorFilter">
+            <ContentControl Content="{Binding ColorFilter}"/>
+        </TabItem>
         <TabItem Classes="default" Header="PathEffect">
             <Grid RowDefinitions="Auto,*">
                 <Menu Background="Transparent" Grid.Row="0">

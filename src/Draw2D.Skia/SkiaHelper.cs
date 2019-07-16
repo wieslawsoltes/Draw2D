@@ -10,6 +10,7 @@ using Draw2D.ViewModels;
 using Draw2D.ViewModels.Containers;
 using Draw2D.ViewModels.Shapes;
 using Draw2D.ViewModels.Style;
+using Draw2D.ViewModels.Style.ColorFilters;
 using Draw2D.ViewModels.Style.PathEffects;
 using Draw2D.ViewModels.Style.Shaders;
 using Draw2D.ViewModels.Tools;
@@ -410,6 +411,61 @@ namespace Draw2D
             return null;
         }
 
+        internal static SKColorFilter ToSKColorFilter(IColorFilter colorFilter, IList<IDisposable> disposables)
+        {
+            switch (colorFilter)
+            {
+                case BlendModeColorFilter blendModeColorFilter:
+                    {
+                        // TODO:
+                    }
+                    break;
+                case ColorCubeColorFilter colorCubeColorFilter:
+                    {
+                        // TODO:
+                    }
+                    break;
+                case ColorMatrixColorFilter colorMatrixColorFilter:
+                    {
+                        // TODO:
+                    }
+                    break;
+                case ComposeColorFilter composeColorFilter:
+                    {
+                        // TODO:
+                    }
+                    break;
+                case GammaColorFilter gammaColorFilter:
+                    {
+                        // TODO:
+                    }
+                    break;
+                case HighContrastColorFilter highContrastColorFilter:
+                    {
+                        // TODO:
+                    }
+                    break;
+                case LightingColorFilter lightingColorFilter:
+                    {
+                        // TODO:
+                    }
+                    break;
+                case LumaColorColorFilter lumaColorColorFilter:
+                    {
+                        // TODO:
+                    }
+                    break;
+                case TableColorFilter tableColorFilter:
+                    {
+                        // TODO:
+                    }
+                    break;
+                default:
+                    return null;
+            }
+            return null;
+        }
+
         internal static SKShader ToSKShader(IShader shader, IList<IDisposable> disposables)
         {
             switch (shader)
@@ -509,6 +565,7 @@ namespace Draw2D
                 StrokeMiter = (float)(strokeMiter),
                 Color = ToSKColor(strokePaint.Color),
                 Style = SKPaintStyle.Stroke,
+                ColorFilter = ToSKColorFilter(strokePaint.ColorFilter, disposables),
                 PathEffect = ToSKPathEffect(strokePaint.PathEffect, strokeWidth, disposables),
                 Shader = shader != null ? ToSKShader(shader, disposables) : ToSKShader(strokePaint.Shader, disposables)
             };
@@ -523,6 +580,7 @@ namespace Draw2D
                 Color = ToSKColor(fillPaint.Color),
                 TextAlign = SKTextAlign.Left,
                 Style = SKPaintStyle.Fill,
+                ColorFilter = ToSKColorFilter(fillPaint.ColorFilter, disposables),
                 PathEffect = ToSKPathEffect(fillPaint.PathEffect, 0.0, disposables),
                 Shader = shader != null ? ToSKShader(shader, disposables) : ToSKShader(fillPaint.Shader, disposables)
             };
@@ -539,6 +597,7 @@ namespace Draw2D
                 Color = ToSKColor(textPaint.Color),
                 TextAlign = SKTextAlign.Left,
                 Style = SKPaintStyle.Fill,
+                ColorFilter = ToSKColorFilter(textPaint.ColorFilter, disposables),
                 PathEffect = ToSKPathEffect(textPaint.PathEffect, 0.0, disposables),
                 Shader = shader != null ? ToSKShader(shader, disposables) : ToSKShader(textPaint.Shader, disposables)
             };
