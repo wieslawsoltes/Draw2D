@@ -10,7 +10,6 @@ namespace Draw2D.ViewModels.Style
     public class TextPaint : BasePaint, ITextPaint
     {
         public static IPathEffectFactory PathEffectFactory { get; } = Style.PathEffectFactory.Instance;
-        public static BlendMode[] BlendModeValues { get; } = (BlendMode[])Enum.GetValues(typeof(BlendMode));
         public static HAlign[] HAlignValues { get; } = (HAlign[])Enum.GetValues(typeof(HAlign));
         public static VAlign[] VAlignValues { get; } = (VAlign[])Enum.GetValues(typeof(VAlign));
 

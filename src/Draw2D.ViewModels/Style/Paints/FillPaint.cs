@@ -10,7 +10,6 @@ namespace Draw2D.ViewModels.Style
     public class FillPaint : BasePaint, IFillPaint
     {
         public static IPathEffectFactory PathEffectFactory { get; } = Style.PathEffectFactory.Instance;
-        public static BlendMode[] BlendModeValues { get; } = (BlendMode[])Enum.GetValues(typeof(BlendMode));
 
         public FillPaint()
         {

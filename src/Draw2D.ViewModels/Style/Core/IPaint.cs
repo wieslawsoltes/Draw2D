@@ -7,14 +7,6 @@ namespace Draw2D.ViewModels.Style
     {
         ArgbColor Color { get; set; }
         bool IsAntialias { get; set; }
-        BlendMode BlendMode { get; set; }
-        IColorFilter ColorFilter { get; set; }
-        IMaskFilter MaskFilter { get; set; }
-        IPathEffect PathEffect { get; set; }
-        IShader Shader { get; set; }
-        void SetColorFilter(IColorFilter colorFilter);
-        void SetMaskFilter(IMaskFilter maskFilter);
-        void SetPathEffect(IPathEffect pathEffect);
-        void SetShader(IShader shader);
+        IPaintEffects Effects { get; set; }
     }
 }
