@@ -49,20 +49,18 @@
             </TabControl>
         </TabItem>
         <TabItem Classes="default" Header="Style">
-            <ScrollViewer>
-                <Grid RowDefinitions="Auto,*" ColumnDefinitions="Auto,*">
-                    <TextBlock Classes="default" Grid.Column="0" Grid.Row="0" Text="StyleId"/>
-                    <TextBox Classes="default" Grid.Column="1" Grid.Row="0" Text="{Binding StyleId}"/>
-                    <ContentControl Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="1">
-                        <ContentControl.Content>
-                            <MultiBinding Mode="OneWay" Converter="{StaticResource StyleIdToStyleConverter}">
-                                <Binding Path="StyleId" Mode="OneWay"/>
-                                <Binding Path="$parent[Window].DataContext.DocumentContainer.StyleLibrary" Mode="OneWay"/>
-                            </MultiBinding>
-                        </ContentControl.Content>
-                    </ContentControl>
-                </Grid>
-            </ScrollViewer>
+            <Grid RowDefinitions="Auto,*" ColumnDefinitions="Auto,*">
+                <TextBlock Classes="default" Grid.Column="0" Grid.Row="0" Text="StyleId"/>
+                <TextBox Classes="default" Grid.Column="1" Grid.Row="0" Text="{Binding StyleId}"/>
+                <ContentControl Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="1">
+                    <ContentControl.Content>
+                        <MultiBinding Mode="OneWay" Converter="{StaticResource StyleIdToStyleConverter}">
+                            <Binding Path="StyleId" Mode="OneWay"/>
+                            <Binding Path="$parent[Window].DataContext.DocumentContainer.StyleLibrary" Mode="OneWay"/>
+                        </MultiBinding>
+                    </ContentControl.Content>
+                </ContentControl>
+            </Grid>
         </TabItem>
         <TabItem Classes="default" Header="Effects">
             <ContentControl Content="{Binding Effects}"/>
