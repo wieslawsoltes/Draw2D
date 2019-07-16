@@ -161,6 +161,20 @@ namespace Draw2D
             return null;
         }
 
+        internal static SKShaderTileMode ToSKShaderTileMode(ShaderTileMode tileMode)
+        {
+            switch (tileMode)
+            {
+                default:
+                case ShaderTileMode.Clamp:
+                    return SKShaderTileMode.Clamp;
+                case ShaderTileMode.Repeat:
+                    return SKShaderTileMode.Repeat;
+                case ShaderTileMode.Mirror:
+                    return SKShaderTileMode.Mirror;
+            }
+        }
+
         internal static SKMatrix ToSKMatrix(Matrix matrix)
         {
             return new SKMatrix()
