@@ -421,7 +421,12 @@ namespace Draw2D
                     break;
                 case ColorShader colorShader:
                     {
-                        // TODO:
+                        if (colorShader.Color != null)
+                        {
+                            var skShader = SKShader.CreateColor(ToSKColor(colorShader.Color));
+                            disposables.Add(skShader);
+                            return skShader;
+                        }
                     }
                     break;
                 case ColorFilterShader colorFilterShader:
