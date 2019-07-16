@@ -9,7 +9,6 @@ namespace Draw2D.ViewModels.Style
     [DataContract(IsReference = true)]
     public class StrokePaint : BasePaint, IStrokePaint
     {
-        public static IPathEffectFactory PathEffectFactory { get; } = Style.PathEffectFactory.Instance;
         public static StrokeCap[] StrokeCapValues { get; } = (StrokeCap[])Enum.GetValues(typeof(StrokeCap));
         public static StrokeJoin[] StrokeJoinValues { get; } = (StrokeJoin[])Enum.GetValues(typeof(StrokeJoin));
 

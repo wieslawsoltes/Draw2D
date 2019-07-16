@@ -9,8 +9,6 @@ namespace Draw2D.ViewModels.Style
     [DataContract(IsReference = true)]
     public class FillPaint : BasePaint, IFillPaint
     {
-        public static IPathEffectFactory PathEffectFactory { get; } = Style.PathEffectFactory.Instance;
-
         public FillPaint()
         {
         }

@@ -9,6 +9,7 @@ namespace Draw2D.ViewModels.Style
     [DataContract(IsReference = true)]
     public class PaintEffects : ViewModelBase, IPaintEffects
     {
+        public static IPathEffectFactory PathEffectFactory { get; } = Style.PathEffectFactory.Instance;
         public static BlendMode[] BlendModeValues { get; } = (BlendMode[])Enum.GetValues(typeof(BlendMode));
 
         private BlendMode _blendMode;
@@ -90,7 +91,7 @@ namespace Draw2D.ViewModels.Style
         }
 
         public PaintEffects(
-            BlendMode blendMode = BlendMode.Clear,
+            BlendMode blendMode = BlendMode.SrcOver,
             IColorFilter colorFilter = null,
             IImageFilter imageFilter = null,
             IMaskFilter maskFilter = null,
