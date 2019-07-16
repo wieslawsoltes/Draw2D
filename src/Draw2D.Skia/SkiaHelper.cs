@@ -11,6 +11,7 @@ using Draw2D.ViewModels.Containers;
 using Draw2D.ViewModels.Shapes;
 using Draw2D.ViewModels.Style;
 using Draw2D.ViewModels.Style.ColorFilters;
+using Draw2D.ViewModels.Style.MaskFilters;
 using Draw2D.ViewModels.Style.PathEffects;
 using Draw2D.ViewModels.Style.Shaders;
 using Draw2D.ViewModels.Tools;
@@ -118,6 +119,72 @@ namespace Draw2D
                     return SKStrokeJoin.Round;
                 case StrokeJoin.Bevel:
                     return SKStrokeJoin.Bevel;
+            }
+        }
+
+        internal static SKBlendMode ToSKBlendMode(BlendMode mode)
+        {
+            switch (mode)
+            {
+                default:
+                case BlendMode.Clear:
+                    return SKBlendMode.Clear;
+                case BlendMode.Src:
+                    return SKBlendMode.Src;
+                case BlendMode.Dst:
+                    return SKBlendMode.Dst;
+                case BlendMode.SrcOver:
+                    return SKBlendMode.SrcOver;
+                case BlendMode.DstOver:
+                    return SKBlendMode.DstOver;
+                case BlendMode.SrcIn:
+                    return SKBlendMode.SrcIn;
+                case BlendMode.DstIn:
+                    return SKBlendMode.DstIn;
+                case BlendMode.SrcOut:
+                    return SKBlendMode.SrcOut;
+                case BlendMode.DstOut:
+                    return SKBlendMode.DstOut;
+                case BlendMode.SrcATop:
+                    return SKBlendMode.SrcATop;
+                case BlendMode.DstATop:
+                    return SKBlendMode.DstATop;
+                case BlendMode.Xor:
+                    return SKBlendMode.Xor;
+                case BlendMode.Plus:
+                    return SKBlendMode.Plus;
+                case BlendMode.Modulate:
+                    return SKBlendMode.Modulate;
+                case BlendMode.Screen:
+                    return SKBlendMode.Screen;
+                case BlendMode.Overlay:
+                    return SKBlendMode.Overlay;
+                case BlendMode.Darken:
+                    return SKBlendMode.Darken;
+                case BlendMode.Lighten:
+                    return SKBlendMode.Lighten;
+                case BlendMode.ColorDodge:
+                    return SKBlendMode.ColorDodge;
+                case BlendMode.ColorBurn:
+                    return SKBlendMode.ColorBurn;
+                case BlendMode.HardLight:
+                    return SKBlendMode.HardLight;
+                case BlendMode.SoftLight:
+                    return SKBlendMode.SoftLight;
+                case BlendMode.Difference:
+                    return SKBlendMode.Difference;
+                case BlendMode.Exclusion:
+                    return SKBlendMode.Exclusion;
+                case BlendMode.Multiply:
+                    return SKBlendMode.Multiply;
+                case BlendMode.Hue:
+                    return SKBlendMode.Hue;
+                case BlendMode.Saturation:
+                    return SKBlendMode.Saturation;
+                case BlendMode.Color:
+                    return SKBlendMode.Color;
+                case BlendMode.Luminosity:
+                    return SKBlendMode.Luminosity;
             }
         }
 
@@ -466,6 +533,36 @@ namespace Draw2D
             return null;
         }
 
+        internal static SKMaskFilter ToSKMaskFilter(IMaskFilter maskFilter, IList<IDisposable> disposables)
+        {
+            switch (maskFilter)
+            {
+                case BlurMaskFilter blurMaskFilter:
+                    {
+                        // TODO:
+                    }
+                    break;
+                case ClipMaskFilter clipMaskFilter:
+                    {
+                        // TODO:
+                    }
+                    break;
+                case GammaMaskFilter gammaMaskFilter:
+                    {
+                        // TODO:
+                    }
+                    break;
+                case TableMaskFilter tableMaskFilter:
+                    {
+                        // TODO:
+                    }
+                    break;
+                default:
+                    return null;
+            }
+            return null;
+        }
+
         internal static SKShader ToSKShader(IShader shader, IList<IDisposable> disposables)
         {
             switch (shader)
@@ -565,7 +662,9 @@ namespace Draw2D
                 StrokeMiter = (float)(strokeMiter),
                 Color = ToSKColor(strokePaint.Color),
                 Style = SKPaintStyle.Stroke,
+                BlendMode = ToSKBlendMode(strokePaint.BlendMode),
                 ColorFilter = ToSKColorFilter(strokePaint.ColorFilter, disposables),
+                MaskFilter = ToSKMaskFilter(strokePaint.MaskFilter, disposables),
                 PathEffect = ToSKPathEffect(strokePaint.PathEffect, strokeWidth, disposables),
                 Shader = shader != null ? ToSKShader(shader, disposables) : ToSKShader(strokePaint.Shader, disposables)
             };
@@ -580,7 +679,9 @@ namespace Draw2D
                 Color = ToSKColor(fillPaint.Color),
                 TextAlign = SKTextAlign.Left,
                 Style = SKPaintStyle.Fill,
+                BlendMode = ToSKBlendMode(fillPaint.BlendMode),
                 ColorFilter = ToSKColorFilter(fillPaint.ColorFilter, disposables),
+                MaskFilter = ToSKMaskFilter(fillPaint.MaskFilter, disposables),
                 PathEffect = ToSKPathEffect(fillPaint.PathEffect, 0.0, disposables),
                 Shader = shader != null ? ToSKShader(shader, disposables) : ToSKShader(fillPaint.Shader, disposables)
             };
@@ -597,7 +698,9 @@ namespace Draw2D
                 Color = ToSKColor(textPaint.Color),
                 TextAlign = SKTextAlign.Left,
                 Style = SKPaintStyle.Fill,
+                BlendMode = ToSKBlendMode(textPaint.BlendMode),
                 ColorFilter = ToSKColorFilter(textPaint.ColorFilter, disposables),
+                MaskFilter = ToSKMaskFilter(textPaint.MaskFilter, disposables),
                 PathEffect = ToSKPathEffect(textPaint.PathEffect, 0.0, disposables),
                 Shader = shader != null ? ToSKShader(shader, disposables) : ToSKShader(textPaint.Shader, disposables)
             };

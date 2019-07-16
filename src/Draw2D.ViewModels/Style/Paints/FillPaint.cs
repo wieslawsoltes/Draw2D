@@ -1,55 +1,16 @@
 ﻿// Copyright (c) Wiesław Šoltés. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
+using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 
 namespace Draw2D.ViewModels.Style
 {
     [DataContract(IsReference = true)]
-    public class FillPaint : ViewModelBase, IFillPaint
+    public class FillPaint : BasePaint, IFillPaint
     {
         public static IPathEffectFactory PathEffectFactory { get; } = Style.PathEffectFactory.Instance;
-
-        private ArgbColor _color;
-        private bool _isAntialias;
-        private IColorFilter _colorFilter;
-        private IPathEffect _pathEffect;
-        private IShader _shader;
-
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public ArgbColor Color
-        {
-            get => _color;
-            set => Update(ref _color, value);
-        }
-
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public bool IsAntialias
-        {
-            get => _isAntialias;
-            set => Update(ref _isAntialias, value);
-        }
-
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public IColorFilter ColorFilter
-        {
-            get => _colorFilter;
-            set => Update(ref _colorFilter, value);
-        }
-
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public IPathEffect PathEffect
-        {
-            get => _pathEffect;
-            set => Update(ref _pathEffect, value);
-        }
-
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public IShader Shader
-        {
-            get => _shader;
-            set => Update(ref _shader, value);
-        }
+        public static BlendMode[] BlendModeValues { get; } = (BlendMode[])Enum.GetValues(typeof(BlendMode));
 
         public FillPaint()
         {
@@ -58,33 +19,22 @@ namespace Draw2D.ViewModels.Style
         public FillPaint(
             ArgbColor color,
             bool isAntialias = true,
+            BlendMode blendMode = BlendMode.Clear,
             IColorFilter colorFilter = null,
+            IMaskFilter maskFilter = null,
             IPathEffect pathEffect = null,
             IShader shader = null)
         {
             this.Color = color;
             this.IsAntialias = isAntialias;
+            this.BlendMode = blendMode;
             this.ColorFilter = colorFilter;
+            this.MaskFilter = maskFilter;
             this.PathEffect = pathEffect;
             this.Shader = shader;
         }
 
-        public void SetColorFilter(IColorFilter colorFilter)
-        {
-            this.ColorFilter = colorFilter;
-        }
-
-        public void SetPathEffect(IPathEffect pathEffect)
-        {
-            this.PathEffect = pathEffect;
-        }
-
-        public void SetShader(IShader shader)
-        {
-            this.Shader = shader;
-        }
-
-        public object Copy(Dictionary<object, object> shared)
+        public override object Copy(Dictionary<object, object> shared)
         {
             return new FillPaint()
             {
@@ -92,7 +42,9 @@ namespace Draw2D.ViewModels.Style
                 Title = this.Title,
                 Color = (ArgbColor)(this.Color.Copy(shared)),
                 IsAntialias = this.IsAntialias,
+                BlendMode = this.BlendMode,
                 ColorFilter = (IColorFilter)this.ColorFilter.Copy(shared),
+                MaskFilter = (IMaskFilter)this.MaskFilter.Copy(shared),
                 PathEffect = (IPathEffect)this.PathEffect.Copy(shared),
                 Shader = (IShader)this.Shader.Copy(shared)
             };

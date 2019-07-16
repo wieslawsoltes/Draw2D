@@ -7,37 +7,19 @@ using System.Runtime.Serialization;
 namespace Draw2D.ViewModels.Style
 {
     [DataContract(IsReference = true)]
-    public class TextPaint : ViewModelBase, ITextPaint
+    public class TextPaint : BasePaint, ITextPaint
     {
         public static IPathEffectFactory PathEffectFactory { get; } = Style.PathEffectFactory.Instance;
+        public static BlendMode[] BlendModeValues { get; } = (BlendMode[])Enum.GetValues(typeof(BlendMode));
         public static HAlign[] HAlignValues { get; } = (HAlign[])Enum.GetValues(typeof(HAlign));
         public static VAlign[] VAlignValues { get; } = (VAlign[])Enum.GetValues(typeof(VAlign));
 
-        private ArgbColor _color;
-        private bool _isAntialias;
         private Typeface _typeface;
         private double _fontSize;
         private bool _lcdRenderText;
         private bool _subpixelText;
-        private IColorFilter _colorFilter;
-        private IPathEffect _pathEffect;
-        private IShader _shader;
         private HAlign _hAlign;
         private VAlign _vAlign;
-
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public ArgbColor Color
-        {
-            get => _color;
-            set => Update(ref _color, value);
-        }
-
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public bool IsAntialias
-        {
-            get => _isAntialias;
-            set => Update(ref _isAntialias, value);
-        }
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public Typeface Typeface
@@ -68,27 +50,6 @@ namespace Draw2D.ViewModels.Style
         }
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public IColorFilter ColorFilter
-        {
-            get => _colorFilter;
-            set => Update(ref _colorFilter, value);
-        }
-
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public IPathEffect PathEffect
-        {
-            get => _pathEffect;
-            set => Update(ref _pathEffect, value);
-        }
-
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public IShader Shader
-        {
-            get => _shader;
-            set => Update(ref _shader, value);
-        }
-
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public HAlign HAlign
         {
             get => _hAlign;
@@ -115,7 +76,9 @@ namespace Draw2D.ViewModels.Style
             bool lcdRenderText = true,
             bool subpixelText = true,
             bool isAntialias = true,
+            BlendMode blendMode = BlendMode.Clear,
             IColorFilter colorFilter = null,
+            IMaskFilter maskFilter = null,
             IPathEffect pathEffect = null,
             IShader shader = null)
         {
@@ -125,29 +88,16 @@ namespace Draw2D.ViewModels.Style
             this.FontSize = fontSize;
             this.LcdRenderText = lcdRenderText;
             this.SubpixelText = subpixelText;
+            this.BlendMode = blendMode;
             this.ColorFilter = colorFilter;
+            this.MaskFilter = maskFilter;
             this.PathEffect = pathEffect;
             this.Shader = shader;
             this.HAlign = hAlign;
             this.VAlign = vAlign;
         }
 
-        public void SetColorFilter(IColorFilter colorFilter)
-        {
-            this.ColorFilter = colorFilter;
-        }
-
-        public void SetPathEffect(IPathEffect pathEffect)
-        {
-            this.PathEffect = pathEffect;
-        }
-
-        public void SetShader(IShader shader)
-        {
-            this.Shader = shader;
-        }
-
-        public object Copy(Dictionary<object, object> shared)
+        public override object Copy(Dictionary<object, object> shared)
         {
             return new TextPaint()
             {
@@ -159,7 +109,9 @@ namespace Draw2D.ViewModels.Style
                 FontSize = this.FontSize,
                 LcdRenderText = this.LcdRenderText,
                 SubpixelText = this.SubpixelText,
+                BlendMode = this.BlendMode,
                 ColorFilter = (IColorFilter)this.ColorFilter.Copy(shared),
+                MaskFilter = (IMaskFilter)this.MaskFilter.Copy(shared),
                 PathEffect = (IPathEffect)this.PathEffect.Copy(shared),
                 Shader = (IShader)this.Shader.Copy(shared),
                 HAlign = this.HAlign,
