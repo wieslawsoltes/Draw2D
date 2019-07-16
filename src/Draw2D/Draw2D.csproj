@@ -34,9 +34,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Avalonia" Version="0.8.999-cibuild0003193-beta" />
-    <PackageReference Include="Avalonia.Skia" Version="0.8.999-cibuild0003193-beta" />
-    <PackageReference Include="Avalonia.Controls.DataGrid" Version="0.8.999-cibuild0003193-beta" />
+    <PackageReference Include="Avalonia" Version="0.8.999-cibuild0003215-beta" />
+    <PackageReference Include="Avalonia.Skia" Version="0.8.999-cibuild0003215-beta" />
+    <PackageReference Include="Avalonia.Controls.DataGrid" Version="0.8.999-cibuild0003215-beta" />
   </ItemGroup>
 
   <ItemGroup Condition="$(TargetFramework.StartsWith('net4'))">
