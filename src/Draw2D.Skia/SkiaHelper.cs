@@ -779,6 +779,28 @@ namespace Draw2D
             return new SKColor(color.R, color.G, color.B, color.A);
         }
 
+        internal static void SetSKPaintEffects(SKPaint paint, IPaintEffects paintEffects, IPaintEffects overrideEffects, IList<IDisposable> disposables)
+        {
+            paint.BlendMode = overrideEffects?.BlendMode != BlendMode.Clear ?
+                ToSKBlendMode(overrideEffects?.BlendMode ?? BlendMode.Clear) :
+                ToSKBlendMode(paintEffects?.BlendMode ?? BlendMode.Clear);
+            paint.ColorFilter = overrideEffects?.ColorFilter != null ?
+                ToSKColorFilter(overrideEffects?.ColorFilter, disposables) :
+                ToSKColorFilter(paintEffects?.ColorFilter, disposables);
+            paint.ImageFilter = overrideEffects?.ImageFilter != null ?
+                ToSKImageFilter(overrideEffects?.ImageFilter, disposables) :
+                ToSKImageFilter(paintEffects?.ImageFilter, disposables);
+            paint.MaskFilter = overrideEffects?.MaskFilter != null ?
+                ToSKMaskFilter(overrideEffects?.MaskFilter, disposables) :
+                ToSKMaskFilter(paintEffects?.MaskFilter, disposables);
+            paint.PathEffect = overrideEffects?.PathEffect != null ?
+                ToSKPathEffect(overrideEffects?.PathEffect, 0.0, disposables) :
+                ToSKPathEffect(paintEffects?.PathEffect, 0.0, disposables);
+            paint.Shader = overrideEffects?.Shader != null ?
+                ToSKShader(overrideEffects?.Shader, disposables) :
+                ToSKShader(paintEffects?.Shader, disposables);
+        }
+
         internal static SKPaint ToSKPaintStroke(IStrokePaint strokePaint, IPaintEffects effects, double scale, IList<IDisposable> disposables)
         {
             double strokeWidth = strokePaint.StrokeWidth;
@@ -788,7 +810,7 @@ namespace Draw2D
                 strokeWidth /= scale;
                 strokeMiter /= scale;
             }
-            return new SKPaint()
+            var paint = new SKPaint()
             {
                 IsAntialias = strokePaint.IsAntialias,
                 IsStroke = true,
@@ -797,61 +819,29 @@ namespace Draw2D
                 StrokeJoin = ToSKStrokeJoin(strokePaint.StrokeJoin),
                 StrokeMiter = (float)(strokeMiter),
                 Color = ToSKColor(strokePaint.Color),
-                Style = SKPaintStyle.Stroke,
-                BlendMode = effects?.BlendMode != BlendMode.Clear ?
-                    ToSKBlendMode(effects.BlendMode) :
-                    ToSKBlendMode(strokePaint.Effects?.BlendMode ?? BlendMode.Clear),
-                ColorFilter = effects?.ColorFilter != null ?
-                    ToSKColorFilter(effects.ColorFilter, disposables) :
-                    ToSKColorFilter(strokePaint.Effects?.ColorFilter, disposables),
-                ImageFilter = effects?.ImageFilter != null ?
-                    ToSKImageFilter(effects.ImageFilter, disposables) :
-                    ToSKImageFilter(strokePaint.Effects?.ImageFilter, disposables),
-                MaskFilter = effects?.MaskFilter != null ?
-                    ToSKMaskFilter(effects.MaskFilter, disposables) :
-                    ToSKMaskFilter(strokePaint.Effects?.MaskFilter, disposables),
-                PathEffect = effects?.PathEffect != null ?
-                    ToSKPathEffect(effects.PathEffect, 0.0, disposables) :
-                    ToSKPathEffect(strokePaint.Effects?.PathEffect, 0.0, disposables),
-                Shader = effects?.Shader != null ?
-                    ToSKShader(effects.Shader, disposables) :
-                    ToSKShader(strokePaint.Effects?.Shader, disposables)
+                Style = SKPaintStyle.Stroke
             };
+            SetSKPaintEffects(paint, strokePaint.Effects, effects, disposables);
+            return paint;
         }
 
         internal static SKPaint ToSKPaintFill(IFillPaint fillPaint, IPaintEffects effects, IList<IDisposable> disposables)
         {
-            return new SKPaint()
+            var paint = new SKPaint()
             {
                 IsAntialias = fillPaint.IsAntialias,
                 IsStroke = false,
                 Color = ToSKColor(fillPaint.Color),
                 TextAlign = SKTextAlign.Left,
-                Style = SKPaintStyle.Fill,
-                BlendMode = effects?.BlendMode != BlendMode.Clear ?
-                    ToSKBlendMode(effects.BlendMode) :
-                    ToSKBlendMode(fillPaint.Effects?.BlendMode ?? BlendMode.Clear),
-                ColorFilter = effects?.ColorFilter != null ?
-                    ToSKColorFilter(effects.ColorFilter, disposables) :
-                    ToSKColorFilter(fillPaint.Effects?.ColorFilter, disposables),
-                ImageFilter = effects?.ImageFilter != null ?
-                    ToSKImageFilter(effects.ImageFilter, disposables) :
-                    ToSKImageFilter(fillPaint.Effects?.ImageFilter, disposables),
-                MaskFilter = effects?.MaskFilter != null ?
-                    ToSKMaskFilter(effects.MaskFilter, disposables) :
-                    ToSKMaskFilter(fillPaint.Effects?.MaskFilter, disposables),
-                PathEffect = effects?.PathEffect != null ?
-                    ToSKPathEffect(effects.PathEffect, 0.0, disposables) :
-                    ToSKPathEffect(fillPaint.Effects?.PathEffect, 0.0, disposables),
-                Shader = effects?.Shader != null ?
-                    ToSKShader(effects.Shader, disposables) :
-                    ToSKShader(fillPaint.Effects?.Shader, disposables)
+                Style = SKPaintStyle.Fill
             };
+            SetSKPaintEffects(paint, fillPaint.Effects, effects, disposables);
+            return paint;
         }
 
         internal static SKPaint ToSKPaintText(ITextPaint textPaint, IPaintEffects effects, IList<IDisposable> disposables)
         {
-            return new SKPaint()
+            var paint = new SKPaint()
             {
                 IsAntialias = textPaint.IsAntialias,
                 IsStroke = false,
@@ -859,26 +849,10 @@ namespace Draw2D
                 SubpixelText = textPaint.SubpixelText,
                 Color = ToSKColor(textPaint.Color),
                 TextAlign = SKTextAlign.Left,
-                Style = SKPaintStyle.Fill,
-                BlendMode = effects?.BlendMode != BlendMode.Clear ?
-                    ToSKBlendMode(effects.BlendMode) :
-                    ToSKBlendMode(textPaint.Effects?.BlendMode ?? BlendMode.Clear),
-                ColorFilter = effects?.ColorFilter != null ?
-                    ToSKColorFilter(effects.ColorFilter, disposables) :
-                    ToSKColorFilter(textPaint.Effects?.ColorFilter, disposables),
-                ImageFilter = effects?.ImageFilter != null ?
-                    ToSKImageFilter(effects.ImageFilter, disposables) :
-                    ToSKImageFilter(textPaint.Effects?.ImageFilter, disposables),
-                MaskFilter = effects?.MaskFilter != null ?
-                    ToSKMaskFilter(effects.MaskFilter, disposables) :
-                    ToSKMaskFilter(textPaint.Effects?.MaskFilter, disposables),
-                PathEffect = effects?.PathEffect != null ?
-                    ToSKPathEffect(effects.PathEffect, 0.0, disposables) :
-                    ToSKPathEffect(textPaint.Effects?.PathEffect, 0.0, disposables),
-                Shader = effects?.Shader != null ?
-                    ToSKShader(effects.Shader, disposables) :
-                    ToSKShader(textPaint.Effects?.Shader, disposables)
+                Style = SKPaintStyle.Fill
             };
+            SetSKPaintEffects(paint, textPaint.Effects, effects, disposables);
+            return paint;
         }
 
         internal static void ToSKPaintStrokeUpdate(SKPaint paint, IStrokePaint strokePaint, IPaintEffects effects, double scale, IList<IDisposable> disposables)
