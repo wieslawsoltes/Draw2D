@@ -11,9 +11,9 @@ namespace Draw2D.ViewModels.Style
         private bool _isStroked;
         private bool _isFilled;
         private bool _isText;
-        private IStrokePaint _strokePaint;
-        private IFillPaint _fillPaint;
-        private ITextPaint _textPaint;
+        private IPaint _strokePaint;
+        private IPaint _fillPaint;
+        private IPaint _textPaint;
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public bool IsStroked
@@ -37,21 +37,21 @@ namespace Draw2D.ViewModels.Style
         }
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public IStrokePaint StrokePaint
+        public IPaint StrokePaint
         {
             get => _strokePaint;
             set => Update(ref _strokePaint, value);
         }
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public IFillPaint FillPaint
+        public IPaint FillPaint
         {
             get => _fillPaint;
             set => Update(ref _fillPaint, value);
         }
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public ITextPaint TextPaint
+        public IPaint TextPaint
         {
             get => _textPaint;
             set => Update(ref _textPaint, value);
@@ -63,9 +63,9 @@ namespace Draw2D.ViewModels.Style
 
         public ShapeStyle(
             string title,
-            IStrokePaint strokePaint = null,
-            IFillPaint fillPaint = null,
-            ITextPaint textPaint = null,
+            IPaint strokePaint = null,
+            IPaint fillPaint = null,
+            IPaint textPaint = null,
             bool isStroked = true,
             bool isFilled = false,
             bool isText = true)
@@ -83,6 +83,7 @@ namespace Draw2D.ViewModels.Style
         {
             _strokePaint?.Invalidate();
             _strokePaint?.Color?.Invalidate();
+            _strokePaint?.Typeface?.Invalidate();
             _strokePaint?.Effects?.Invalidate();
             _strokePaint?.Effects?.ColorFilter?.Invalidate();
             _strokePaint?.Effects?.MaskFilter?.Invalidate();
@@ -91,6 +92,7 @@ namespace Draw2D.ViewModels.Style
 
             _fillPaint?.Invalidate();
             _fillPaint?.Color?.Invalidate();
+            _fillPaint?.Typeface?.Invalidate();
             _fillPaint?.Effects?.ColorFilter?.Invalidate();
             _fillPaint?.Effects?.MaskFilter?.Invalidate();
             _fillPaint?.Effects?.PathEffect?.Invalidate();
@@ -116,9 +118,9 @@ namespace Draw2D.ViewModels.Style
                 IsStroked = this.IsStroked,
                 IsFilled = this.IsFilled,
                 IsText = this.IsText,
-                StrokePaint = (IStrokePaint)this.StrokePaint.Copy(shared),
-                FillPaint = (IFillPaint)this.FillPaint.Copy(shared),
-                TextPaint = (ITextPaint)this.TextPaint.Copy(shared)
+                StrokePaint = (IPaint)this.StrokePaint.Copy(shared),
+                FillPaint = (IPaint)this.FillPaint.Copy(shared),
+                TextPaint = (IPaint)this.TextPaint.Copy(shared)
             };
         }
     }

@@ -106,6 +106,11 @@ namespace Draw2D.ViewModels.Style
             this.Shader = shader;
         }
 
+        public static IPaintEffects MakeEffects()
+        {
+            return new PaintEffects(blendMode: BlendMode.SrcOver);
+        }
+
         public object Copy(Dictionary<object, object> shared)
         {
             return new PaintEffects()

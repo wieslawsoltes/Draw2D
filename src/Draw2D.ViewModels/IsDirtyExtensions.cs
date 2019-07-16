@@ -442,50 +442,17 @@ namespace Draw2D.ViewModels
             return false;
         }
 
-        public static bool IsStrokePaintDirty(this IStrokePaint strokePaint)
+        public static bool IsPaintDirty(this IPaint paint)
         {
-            if (strokePaint == null)
+            if (paint == null)
             {
                 return false;
             }
 
-            if (strokePaint.IsDirty
-             || (strokePaint.Color?.IsDirty ?? false)
-             || (strokePaint.Effects?.IsPaintEffectsDirty() ?? false))
-            {
-                return true;
-            }
-
-            return false;
-        }
-
-        public static bool IsFillPaintDirty(this IFillPaint fillPaint)
-        {
-            if (fillPaint == null)
-            {
-                return false;
-            }
-
-            if (fillPaint.IsDirty
-             || (fillPaint.Color?.IsDirty ?? false)
-             || (fillPaint.Effects?.IsPaintEffectsDirty() ?? false))
-            {
-                return true;
-            }
-
-            return false;
-        }
-
-        public static bool IsTextPaintDirty(this ITextPaint textPaint)
-        {
-            if (textPaint == null)
-            {
-                return false;
-            }
-
-            if (textPaint.IsDirty
-             || (textPaint.Color?.IsDirty ?? false)
-             || (textPaint.Effects?.IsPaintEffectsDirty() ?? false))
+            if (paint.IsDirty
+             || (paint.Color?.IsDirty ?? false)
+             || (paint.Typeface?.IsDirty ?? false)
+             || (paint.Effects?.IsPaintEffectsDirty() ?? false))
             {
                 return true;
             }
@@ -501,9 +468,9 @@ namespace Draw2D.ViewModels
             }
 
             if (style.IsDirty
-             || (style.StrokePaint?.IsStrokePaintDirty() ?? false)
-             || (style.FillPaint?.IsFillPaintDirty() ?? false)
-             || (style.TextPaint?.IsTextPaintDirty() ?? false))
+             || (style.StrokePaint?.IsPaintDirty() ?? false)
+             || (style.FillPaint?.IsPaintDirty() ?? false)
+             || (style.TextPaint?.IsPaintDirty() ?? false))
             {
                 return true;
             }

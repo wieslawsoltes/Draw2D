@@ -16,9 +16,9 @@ namespace Draw2D.Renderers
         private IContainerView _view;
         private ISelectionState _selectionState;
         private Dictionary<Typeface, SKTypeface> _typefaceCache;
-        private Dictionary<ITextPaint, (SKPaint paint, SKFontMetrics metrics)> _textPaintCache;
-        private Dictionary<IFillPaint, SKPaint> _fillPaintCache;
-        private Dictionary<IStrokePaint, SKPaint> _strokePaintCache;
+        private Dictionary<IPaint, (SKPaint paint, SKFontMetrics metrics)> _textPaintCache;
+        private Dictionary<IPaint, SKPaint> _fillPaintCache;
+        private Dictionary<IPaint, SKPaint> _strokePaintCache;
         private Dictionary<string, SKPicture> _pictureCache;
         private CompositeDisposable _disposable;
 
@@ -28,9 +28,9 @@ namespace Draw2D.Renderers
             _view = view;
             _selectionState = selectionState;
             _typefaceCache = new Dictionary<Typeface, SKTypeface>();
-            _textPaintCache = new Dictionary<ITextPaint, (SKPaint paint, SKFontMetrics metrics)>();
-            _fillPaintCache = new Dictionary<IFillPaint, SKPaint>();
-            _strokePaintCache = new Dictionary<IStrokePaint, SKPaint>();
+            _textPaintCache = new Dictionary<IPaint, (SKPaint paint, SKFontMetrics metrics)>();
+            _fillPaintCache = new Dictionary<IPaint, SKPaint>();
+            _strokePaintCache = new Dictionary<IPaint, SKPaint>();
             _pictureCache = new Dictionary<string, SKPicture>();
             _disposable = new CompositeDisposable();
         }
@@ -101,46 +101,46 @@ namespace Draw2D.Renderers
             }
         }
 
-        private void GetSKPaintFill(IFillPaint fillPaint, IPaintEffects effects, out SKPaint brush)
+        private void GetSKPaintFill(IPaint fillPaint, IPaintEffects effects, double scale, out SKPaint brush)
         {
-            if (fillPaint.IsFillPaintDirty() || !_fillPaintCache.TryGetValue(fillPaint, out var brushCached))
+            if (fillPaint.IsPaintDirty() || !_fillPaintCache.TryGetValue(fillPaint, out var brushCached))
             {
-                brushCached = SkiaHelper.ToSKPaintFill(fillPaint, effects, _disposable.Disposables);
+                brushCached = SkiaHelper.ToSKPaint(fillPaint, effects, scale, _disposable.Disposables);
                 _fillPaintCache[fillPaint] = brushCached;
             }
             else
             {
-                SkiaHelper.ToSKPaintFillUpdate(brushCached, fillPaint, effects, _disposable.Disposables);
+                SkiaHelper.ToSKPaintUpdate(brushCached, fillPaint, effects, scale, _disposable.Disposables);
             }
 
             brush = brushCached;
         }
 
-        private void GetSKPaintStroke(IStrokePaint strokePaint, IPaintEffects effects, out SKPaint pen, double scale)
+        private void GetSKPaintStroke(IPaint strokePaint, IPaintEffects effects, double scale, out SKPaint pen)
         {
-            if (strokePaint.IsStrokePaintDirty() || !_strokePaintCache.TryGetValue(strokePaint, out var penCached))
+            if (strokePaint.IsPaintDirty() || !_strokePaintCache.TryGetValue(strokePaint, out var penCached))
             {
-                penCached = SkiaHelper.ToSKPaintStroke(strokePaint, effects, scale, _disposable.Disposables);
+                penCached = SkiaHelper.ToSKPaint(strokePaint, effects, scale, _disposable.Disposables);
                 _strokePaintCache[strokePaint] = penCached;
             }
             else
             {
-                SkiaHelper.ToSKPaintStrokeUpdate(penCached, strokePaint, effects, scale, _disposable.Disposables);
+                SkiaHelper.ToSKPaintUpdate(penCached, strokePaint, effects, scale, _disposable.Disposables);
             }
 
             pen = penCached;
         }
 
-        private void GetSKPaintText(ITextPaint textPaint, IPaintEffects effects, out SKPaint paint, out SKFontMetrics metrics)
+        private void GetSKPaintText(IPaint textPaint, IPaintEffects effects, double scale, out SKPaint paint, out SKFontMetrics metrics)
         {
             (SKPaint paint, SKFontMetrics metrics) cached;
             cached.paint = null;
             cached.metrics = default;
 
-            if (textPaint.IsTextPaintDirty() || !_textPaintCache.TryGetValue(textPaint, out cached))
+            if (textPaint.IsPaintDirty() || !_textPaintCache.TryGetValue(textPaint, out cached))
             {
                 GetSKTypeface(textPaint.Typeface, out var typeface);
-                cached.paint = SkiaHelper.ToSKPaintText(textPaint, effects, _disposable.Disposables);
+                cached.paint = SkiaHelper.ToSKPaint(textPaint, effects, scale, _disposable.Disposables);
                 cached.paint.Typeface = typeface;
                 cached.paint.TextEncoding = SKTextEncoding.Utf16;
                 cached.paint.TextSize = (float)textPaint.FontSize;
@@ -163,7 +163,7 @@ namespace Draw2D.Renderers
             }
             else
             {
-                SkiaHelper.ToSKPaintTextUpdate(cached.paint, textPaint, effects, _disposable.Disposables);
+                SkiaHelper.ToSKPaintUpdate(cached.paint, textPaint, effects, scale, _disposable.Disposables);
             }
 
             paint = cached.paint;
@@ -185,7 +185,7 @@ namespace Draw2D.Renderers
             {
                 return;
             }
-            GetSKPaintText(shapeStyle.TextPaint, effects, out var paint, out var metrics);
+            GetSKPaintText(shapeStyle.TextPaint, effects, scale, out var paint, out var metrics);
 #if false
             var mBaseline = 0.0f;
             var mTop = metrics.Top;
@@ -271,9 +271,9 @@ namespace Draw2D.Renderers
             canvas.DrawText(text.Value, x, y, paint);
         }
 
-        private void DrawTextOnPath(SKCanvas canvas, SKPath path, Text text, ITextPaint textPaint, IPaintEffects effects)
+        private void DrawTextOnPath(SKCanvas canvas, SKPath path, Text text, IPaint textPaint, IPaintEffects effects, double scale)
         {
-            GetSKPaintText(textPaint, effects, out var paint, out var metrics);
+            GetSKPaintText(textPaint, effects, scale, out var paint, out var metrics);
             //var bounds = new SKRect();
             //float baseTextWidth = paint.MeasureText(text.Value, ref bounds);
             //SKPathMeasure pathMeasure = new SKPathMeasure(path, false, 1);
@@ -284,9 +284,9 @@ namespace Draw2D.Renderers
             canvas.DrawTextOnPath(text.Value, path, hOffset, vOffset, paint);
         }
 
-        private void DrawStrokedPath(SKCanvas canvas, SKPath path, IStrokePaint strokePaint, IPaintEffects effects, double scale)
+        private void DrawStrokedPath(SKCanvas canvas, SKPath path, IPaint strokePaint, IPaintEffects effects, double scale)
         {
-            GetSKPaintStroke(strokePaint, effects, out var pen, scale);
+            GetSKPaintStroke(strokePaint, effects, scale, out var pen);
             bool isClipPath = SkiaHelper.GetInflateOffset(effects?.PathEffect != null ? effects.PathEffect : strokePaint.Effects?.PathEffect, out var inflateX, out var inflateY);
             if (isClipPath)
             {
@@ -303,9 +303,9 @@ namespace Draw2D.Renderers
             }
         }
 
-        private void DrawFilledPath(SKCanvas canvas, SKPath path, IFillPaint fillPaint, IPaintEffects effects, double scale)
+        private void DrawFilledPath(SKCanvas canvas, SKPath path, IPaint fillPaint, IPaintEffects effects, double scale)
         {
-            GetSKPaintFill(fillPaint, effects, out var brush);
+            GetSKPaintFill(fillPaint, effects, scale, out var brush);
             bool isClipPath = SkiaHelper.GetInflateOffset(effects?.PathEffect != null ? effects.PathEffect : fillPaint.Effects?.PathEffect, out var inflateX, out var inflateY);
             if (isClipPath)
             {
@@ -341,7 +341,7 @@ namespace Draw2D.Renderers
                     }
                     if (style.IsText && !string.IsNullOrEmpty(line.Text?.Value))
                     {
-                        DrawTextOnPath(canvas, geometry, line.Text, style.TextPaint, line.Effects);
+                        DrawTextOnPath(canvas, geometry, line.Text, style.TextPaint, line.Effects, scale);
                     }
                 }
             }
@@ -370,7 +370,7 @@ namespace Draw2D.Renderers
                     }
                     if (style.IsText && !string.IsNullOrEmpty(cubicBezier.Text?.Value))
                     {
-                        DrawTextOnPath(canvas, geometry, cubicBezier.Text, style.TextPaint, cubicBezier.Effects);
+                        DrawTextOnPath(canvas, geometry, cubicBezier.Text, style.TextPaint, cubicBezier.Effects, scale);
                     }
                 }
             }
@@ -399,7 +399,7 @@ namespace Draw2D.Renderers
                     }
                     if (style.IsText && !string.IsNullOrEmpty(quadraticBezier.Text?.Value))
                     {
-                        DrawTextOnPath(canvas, geometry, quadraticBezier.Text, style.TextPaint, quadraticBezier.Effects);
+                        DrawTextOnPath(canvas, geometry, quadraticBezier.Text, style.TextPaint, quadraticBezier.Effects, scale);
                     }
                 }
             }
@@ -428,7 +428,7 @@ namespace Draw2D.Renderers
                     }
                     if (style.IsText && !string.IsNullOrEmpty(conic.Text?.Value))
                     {
-                        DrawTextOnPath(canvas, geometry, conic.Text, style.TextPaint, conic.Effects);
+                        DrawTextOnPath(canvas, geometry, conic.Text, style.TextPaint, conic.Effects, scale);
                     }
                 }
             }
@@ -457,7 +457,7 @@ namespace Draw2D.Renderers
                     }
                     if (style.IsText && !string.IsNullOrEmpty(path.Text?.Value))
                     {
-                        DrawTextOnPath(canvas, geometry, path.Text, style.TextPaint, path.Effects);
+                        DrawTextOnPath(canvas, geometry, path.Text, style.TextPaint, path.Effects, scale);
                     }
                 }
             }

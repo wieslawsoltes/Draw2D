@@ -22,6 +22,20 @@ namespace Draw2D
 {
     internal class SkiaHelper
     {
+        internal static SKPaintStyle ToSKPaintStyle(PaintStyle paintStyle)
+        {
+            switch (paintStyle)
+            {
+                default:
+                case PaintStyle.Fill:
+                    return SKPaintStyle.Fill;
+                case PaintStyle.Stroke:
+                    return SKPaintStyle.Stroke;
+                case PaintStyle.StrokeAndFill:
+                    return SKPaintStyle.StrokeAndFill;
+            }
+        }
+
         internal static SKPathFillType ToSKPathFillType(PathFillType fillType)
         {
             switch (fillType)
@@ -781,96 +795,96 @@ namespace Draw2D
 
         internal static void SetSKPaintEffects(SKPaint paint, IPaintEffects paintEffects, IPaintEffects overrideEffects, IList<IDisposable> disposables)
         {
-            paint.BlendMode = overrideEffects?.BlendMode != BlendMode.SrcOver ?
-                ToSKBlendMode(overrideEffects?.BlendMode ?? BlendMode.SrcOver) :
-                ToSKBlendMode(paintEffects?.BlendMode ?? BlendMode.SrcOver);
-            paint.ColorFilter = overrideEffects?.ColorFilter != null ?
-                ToSKColorFilter(overrideEffects?.ColorFilter, disposables) :
-                ToSKColorFilter(paintEffects?.ColorFilter, disposables);
-            paint.ImageFilter = overrideEffects?.ImageFilter != null ?
-                ToSKImageFilter(overrideEffects?.ImageFilter, disposables) :
-                ToSKImageFilter(paintEffects?.ImageFilter, disposables);
-            paint.MaskFilter = overrideEffects?.MaskFilter != null ?
-                ToSKMaskFilter(overrideEffects?.MaskFilter, disposables) :
-                ToSKMaskFilter(paintEffects?.MaskFilter, disposables);
-            paint.PathEffect = overrideEffects?.PathEffect != null ?
-                ToSKPathEffect(overrideEffects?.PathEffect, 0.0, disposables) :
-                ToSKPathEffect(paintEffects?.PathEffect, 0.0, disposables);
-            paint.Shader = overrideEffects?.Shader != null ?
+            var sKBlendMode = overrideEffects?.BlendMode == BlendMode.SrcOver ?
+                ToSKBlendMode(paintEffects?.BlendMode ?? BlendMode.SrcOver) :
+                ToSKBlendMode(overrideEffects?.BlendMode ?? BlendMode.SrcOver);
+
+            var sKColorFilter = (overrideEffects?.ColorFilter == null) ?
+                ToSKColorFilter(paintEffects?.ColorFilter, disposables) :
+                ToSKColorFilter(overrideEffects?.ColorFilter, disposables);
+
+            var sKImageFilter = (overrideEffects?.ImageFilter == null) ?
+                ToSKImageFilter(paintEffects?.ImageFilter, disposables) :
+                ToSKImageFilter(overrideEffects?.ImageFilter, disposables);
+
+            var sKMaskFilter = (overrideEffects?.MaskFilter == null) ?
+                ToSKMaskFilter(paintEffects?.MaskFilter, disposables) :
+                ToSKMaskFilter(overrideEffects?.MaskFilter, disposables);
+
+            var sKPathEffect = (overrideEffects?.PathEffect == null) ?
+                ToSKPathEffect(paintEffects?.PathEffect, paint.StrokeWidth, disposables) :
+                ToSKPathEffect(overrideEffects?.PathEffect, paint.StrokeWidth, disposables);
+
+            var sKShader = overrideEffects?.Shader != null ?
                 ToSKShader(overrideEffects?.Shader, disposables) :
                 ToSKShader(paintEffects?.Shader, disposables);
+
+            paint.BlendMode = sKBlendMode;
+            paint.ColorFilter = sKColorFilter;
+            paint.ImageFilter = sKImageFilter;
+            paint.MaskFilter = sKMaskFilter;
+            paint.PathEffect = sKPathEffect;
+            paint.Shader = sKShader;
         }
 
-        internal static SKPaint ToSKPaintStroke(IStrokePaint strokePaint, IPaintEffects effects, double scale, IList<IDisposable> disposables)
+        internal static SKPaint ToSKPaint(IPaint paint, IPaintEffects effects, double scale, IList<IDisposable> disposables)
         {
-            double strokeWidth = strokePaint.StrokeWidth;
-            double strokeMiter = strokePaint.StrokeMiter;
-            if (strokePaint.IsScaled)
+            var skPaint = new SKPaint()
+            {
+                Style = ToSKPaintStyle(paint.PaintStyle),
+                Color = ToSKColor(paint.Color),
+                IsAntialias = paint.IsAntialias,
+                TextAlign = SKTextAlign.Left
+            };
+
+            switch (paint.PaintStyle)
+            {
+                default:
+                case PaintStyle.Fill:
+                    {
+                    }
+                    break;
+                case PaintStyle.Stroke:
+                case PaintStyle.StrokeAndFill:
+                    {
+                        // Stroke
+                        double strokeWidth = paint.StrokeWidth;
+                        double strokeMiter = paint.StrokeMiter;
+                        if (paint.IsScaled)
+                        {
+                            strokeWidth /= scale;
+                            strokeMiter /= scale;
+                        }
+                        skPaint.StrokeWidth = (float)(strokeWidth);
+                        skPaint.StrokeCap = ToSKStrokeCap(paint.StrokeCap);
+                        skPaint.StrokeJoin = ToSKStrokeJoin(paint.StrokeJoin);
+                        skPaint.StrokeMiter = (float)(strokeMiter);
+                    }
+                    break;
+            }
+
+            // Text
+            skPaint.LcdRenderText = paint.LcdRenderText;
+            skPaint.SubpixelText = paint.SubpixelText;
+            skPaint.TextAlign = SKTextAlign.Left;
+
+            // Effects
+            SetSKPaintEffects(skPaint, paint.Effects, effects, disposables);
+
+            return skPaint;
+        }
+
+        internal static void ToSKPaintUpdate(SKPaint skPaint, IPaint paint, IPaintEffects effects, double scale, IList<IDisposable> disposables)
+        {
+            double strokeWidth = paint.StrokeWidth;
+            double strokeMiter = paint.StrokeMiter;
+            if (paint.IsScaled)
             {
                 strokeWidth /= scale;
                 strokeMiter /= scale;
             }
-            var paint = new SKPaint()
-            {
-                IsAntialias = strokePaint.IsAntialias,
-                IsStroke = true,
-                StrokeWidth = (float)(strokeWidth),
-                StrokeCap = ToSKStrokeCap(strokePaint.StrokeCap),
-                StrokeJoin = ToSKStrokeJoin(strokePaint.StrokeJoin),
-                StrokeMiter = (float)(strokeMiter),
-                Color = ToSKColor(strokePaint.Color),
-                Style = SKPaintStyle.Stroke
-            };
-            SetSKPaintEffects(paint, strokePaint.Effects, effects, disposables);
-            return paint;
-        }
-
-        internal static SKPaint ToSKPaintFill(IFillPaint fillPaint, IPaintEffects effects, IList<IDisposable> disposables)
-        {
-            var paint = new SKPaint()
-            {
-                IsAntialias = fillPaint.IsAntialias,
-                IsStroke = false,
-                Color = ToSKColor(fillPaint.Color),
-                TextAlign = SKTextAlign.Left,
-                Style = SKPaintStyle.Fill
-            };
-            SetSKPaintEffects(paint, fillPaint.Effects, effects, disposables);
-            return paint;
-        }
-
-        internal static SKPaint ToSKPaintText(ITextPaint textPaint, IPaintEffects effects, IList<IDisposable> disposables)
-        {
-            var paint = new SKPaint()
-            {
-                IsAntialias = textPaint.IsAntialias,
-                IsStroke = false,
-                LcdRenderText = textPaint.LcdRenderText,
-                SubpixelText = textPaint.SubpixelText,
-                Color = ToSKColor(textPaint.Color),
-                TextAlign = SKTextAlign.Left,
-                Style = SKPaintStyle.Fill
-            };
-            SetSKPaintEffects(paint, textPaint.Effects, effects, disposables);
-            return paint;
-        }
-
-        internal static void ToSKPaintStrokeUpdate(SKPaint paint, IStrokePaint strokePaint, IPaintEffects effects, double scale, IList<IDisposable> disposables)
-        {
-            double strokeWidth = strokePaint.StrokeWidth;
-            if (strokePaint.IsScaled)
-            {
-                strokeWidth /= scale;
-            }
-            paint.StrokeWidth = (float)(strokeWidth);
-        }
-
-        internal static void ToSKPaintFillUpdate(SKPaint paint, IFillPaint fillPaint, IPaintEffects effects, IList<IDisposable> disposables)
-        {
-        }
-
-        internal static void ToSKPaintTextUpdate(SKPaint paint, ITextPaint textPaint, IPaintEffects effects, IList<IDisposable> disposables)
-        {
+            skPaint.StrokeWidth = (float)(strokeWidth);
+            skPaint.StrokeMiter = (float)(strokeMiter);
         }
 
         internal static void AddLine(IToolContext context, LineShape line, double dx, double dy, SKPath geometry)
@@ -937,31 +951,31 @@ namespace Draw2D
             geometry.AddOval(rect, SKPathDirection.Clockwise);
         }
 
-        internal static void AddText(IToolContext context, Text text, IPointShape startPoint, IPointShape point, ITextPaint textPaint, double dx, double dy, SKPath geometry)
+        internal static void AddText(IToolContext context, Text text, IPointShape startPoint, IPointShape point, IPaint paint, double dx, double dy, SKPath geometry)
         {
-            using (var typeface = ToSKTypeface(textPaint.Typeface))
+            using (var typeface = ToSKTypeface(paint.Typeface))
             using (var disposable = new CompositeDisposable())
-            using (var paint = ToSKPaintText(textPaint, null, disposable.Disposables))
+            using (var skPaint = ToSKPaint(paint, null, 1.0, disposable.Disposables))
             {
-                paint.Typeface = typeface;
-                paint.TextEncoding = SKTextEncoding.Utf16;
-                paint.TextSize = (float)textPaint.FontSize;
+                skPaint.Typeface = typeface;
+                skPaint.TextEncoding = SKTextEncoding.Utf16;
+                skPaint.TextSize = (float)paint.FontSize;
 
-                switch (textPaint.HAlign)
+                switch (paint.HAlign)
                 {
                     default:
                     case HAlign.Left:
-                        paint.TextAlign = SKTextAlign.Left;
+                        skPaint.TextAlign = SKTextAlign.Left;
                         break;
                     case HAlign.Center:
-                        paint.TextAlign = SKTextAlign.Center;
+                        skPaint.TextAlign = SKTextAlign.Center;
                         break;
                     case HAlign.Right:
-                        paint.TextAlign = SKTextAlign.Right;
+                        skPaint.TextAlign = SKTextAlign.Right;
                         break;
                 }
 
-                var metrics = paint.FontMetrics;
+                var metrics = skPaint.FontMetrics;
                 var mAscent = metrics.Ascent;
                 var mDescent = metrics.Descent;
                 var rect = ToSKRect(startPoint, point, dx, dy);
@@ -970,7 +984,7 @@ namespace Draw2D
                 float width = rect.Width;
                 float height = rect.Height;
 
-                switch (textPaint.VAlign)
+                switch (paint.VAlign)
                 {
                     default:
                     case VAlign.Top:
@@ -984,7 +998,7 @@ namespace Draw2D
                         break;
                 }
 
-                switch (textPaint.HAlign)
+                switch (paint.HAlign)
                 {
                     default:
                     case HAlign.Left:
@@ -998,8 +1012,8 @@ namespace Draw2D
                         break;
                 }
 
-                using (var outlineGeometry = paint.GetTextPath(text.Value, x, y))
-                using (var fillGeometry = paint.GetFillPath(outlineGeometry))
+                using (var outlineGeometry = skPaint.GetTextPath(text.Value, x, y))
+                using (var fillGeometry = skPaint.GetFillPath(outlineGeometry))
                 {
                     geometry.AddPath(fillGeometry, SKPathAddMode.Append);
                 }
@@ -1167,42 +1181,42 @@ namespace Draw2D
             return false;
         }
 
-        internal static SKPath ToStrokePath(IToolContext context, IStrokePaint strokePaint, IPaintEffects effects, SKPath geometry, IList<IDisposable> disposables)
+        internal static SKPath ToStrokePath(IToolContext context, IPaint paint, IPaintEffects effects, SKPath geometry, IList<IDisposable> disposables)
         {
-            using (var paint = ToSKPaintStroke(strokePaint, null, 1.0, disposables))
+            using (var skPaint = ToSKPaint(paint, null, 1.0, disposables))
             {
-                bool isClipPath = GetInflateOffset(effects?.PathEffect != null ? effects.PathEffect : strokePaint.Effects?.PathEffect, out var inflateX, out var inflateY);
+                bool isClipPath = GetInflateOffset(effects?.PathEffect != null ? effects.PathEffect : paint.Effects?.PathEffect, out var inflateX, out var inflateY);
                 if (isClipPath)
                 {
                     var bounds = geometry.Bounds;
                     var rect = SKRect.Inflate(bounds, (float)inflateX, (float)inflateY);
                     // TODO: Clip path.
-                    var path = paint.GetFillPath(geometry, 1.0f);
+                    var path = skPaint.GetFillPath(geometry, 1.0f);
                     return path;
                 }
                 else
                 {
-                    return paint.GetFillPath(geometry, 1.0f);
+                    return skPaint.GetFillPath(geometry, 1.0f);
                 }
             }
         }
 
-        internal static SKPath ToFillPath(IToolContext context, IFillPaint fillPaint, IPaintEffects effects, SKPath geometry, IList<IDisposable> disposables)
+        internal static SKPath ToFillPath(IToolContext context, IPaint paint, IPaintEffects effects, SKPath geometry, IList<IDisposable> disposables)
         {
-            using (var paint = ToSKPaintFill(fillPaint, null, disposables))
+            using (var skPaint = ToSKPaint(paint, null, 1.0, disposables))
             {
-                bool isClipPath = GetInflateOffset(effects?.PathEffect != null ? effects.PathEffect : fillPaint.Effects?.PathEffect, out var inflateX, out var inflateY);
+                bool isClipPath = GetInflateOffset(effects?.PathEffect != null ? effects.PathEffect : paint.Effects?.PathEffect, out var inflateX, out var inflateY);
                 if (isClipPath)
                 {
                     var bounds = geometry.Bounds;
                     var rect = SKRect.Inflate(bounds, (float)inflateX, (float)inflateY);
                     // TODO: Clip path.
-                    var path = paint.GetFillPath(geometry, 1.0f);
+                    var path = skPaint.GetFillPath(geometry, 1.0f);
                     return path;
                 }
                 else
                 {
-                    return paint.GetFillPath(geometry, 1.0f);
+                    return skPaint.GetFillPath(geometry, 1.0f);
                 }
             }
         }
@@ -1407,13 +1421,13 @@ namespace Draw2D
             return pathShape;
         }
 
-        internal static void ToSvgPathData(IToolContext context, Text text, IPointShape startPoint, IPointShape point, ITextPaint textPaint, StringBuilder sb, SKPathFillType fillType = SKPathFillType.Winding)
+        internal static void ToSvgPathData(IToolContext context, Text text, IPointShape startPoint, IPointShape point, IPaint paint, StringBuilder sb, SKPathFillType fillType = SKPathFillType.Winding)
         {
             if (!string.IsNullOrEmpty(text?.Value))
             {
                 using (var geometry = new SKPath() { FillType = fillType })
                 {
-                    AddText(context, text, startPoint, point, textPaint, 0.0, 0.0, geometry);
+                    AddText(context, text, startPoint, point, paint, 0.0, 0.0, geometry);
                     sb.AppendLine(geometry.ToSvgPathData());
                 }
             }

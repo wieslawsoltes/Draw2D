@@ -16,7 +16,7 @@ namespace Draw2D.Presenters
         private readonly IToolContext _context;
         private readonly IContainerView _view;
         private SkiaShapeRenderer _skiaRenderer;
-        private Dictionary<IFillPaint, SKPaint> _paintCache;
+        private Dictionary<IPaint, SKPaint> _paintCache;
         private double _previousZX = double.NaN;
         private double _previousZY = double.NaN;
         private SKPicture _pictureShapesCurrent = null;
@@ -31,7 +31,7 @@ namespace Draw2D.Presenters
             _context = context;
             _view = view;
             _skiaRenderer = new SkiaShapeRenderer(_context, _view, _view.SelectionState);
-            _paintCache = new Dictionary<IFillPaint, SKPaint>();
+            _paintCache = new Dictionary<IPaint, SKPaint>();
             _disposable = new CompositeDisposable();
         }
 
@@ -85,17 +85,17 @@ namespace Draw2D.Presenters
             }
         }
 
-        private void GetSKPaintFill(IFillPaint fillPaint, IPaintEffects effects, out SKPaint brush)
+        private void GetSKPaintFill(IPaint fillPaint, IPaintEffects effects, double scale, out SKPaint brush)
         {
-            if (fillPaint.IsFillPaintDirty() || !_paintCache.TryGetValue(fillPaint, out var brushCached))
+            if (fillPaint.IsPaintDirty() || !_paintCache.TryGetValue(fillPaint, out var brushCached))
             {
                 fillPaint.Invalidate();
-                brushCached = SkiaHelper.ToSKPaintFill(fillPaint, effects, _disposable.Disposables);
+                brushCached = SkiaHelper.ToSKPaint(fillPaint, effects, scale, _disposable.Disposables);
                 _paintCache[fillPaint] = brushCached;
             }
             else
             {
-                SkiaHelper.ToSKPaintFillUpdate(brushCached, fillPaint, effects, _disposable.Disposables);
+                SkiaHelper.ToSKPaintUpdate(brushCached, fillPaint, effects, scale, _disposable.Disposables);
             }
 
             brush = brushCached;
@@ -277,7 +277,7 @@ namespace Draw2D.Presenters
 
             if (_view.WorkBackground != null)
             {
-                GetSKPaintFill(_view.WorkBackground, null, out var brush);
+                GetSKPaintFill(_view.WorkBackground, null, 1.0, out var brush);
                 canvas.Save();
                 canvas.Translate((float)dx, (float)dy);
                 canvas.Scale((float)zx, (float)zy);

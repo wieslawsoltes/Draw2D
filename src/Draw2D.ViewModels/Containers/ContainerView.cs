@@ -15,9 +15,9 @@ namespace Draw2D.ViewModels.Containers
     {
         private double _width;
         private double _height;
-        private IFillPaint _printBackground;
-        private IFillPaint _workBackground;
-        private IFillPaint _inputBackground;
+        private IPaint _printBackground;
+        private IPaint _workBackground;
+        private IPaint _inputBackground;
         private ICanvasContainer _currentContainer;
         private ICanvasContainer _workingContainer;
         private ISelectionState _selectionState;
@@ -41,21 +41,21 @@ namespace Draw2D.ViewModels.Containers
         }
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public IFillPaint PrintBackground
+        public IPaint PrintBackground
         {
             get => _printBackground;
             set => Update(ref _printBackground, value);
         }
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public IFillPaint WorkBackground
+        public IPaint WorkBackground
         {
             get => _workBackground;
             set => Update(ref _workBackground, value);
         }
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public IFillPaint InputBackground
+        public IPaint InputBackground
         {
             get => _inputBackground;
             set => Update(ref _inputBackground, value);
@@ -192,9 +192,9 @@ namespace Draw2D.ViewModels.Containers
                 Title = this.Title + "_copy",
                 Width = this.Width,
                 Height = this.Height,
-                PrintBackground = (IFillPaint)this.PrintBackground?.Copy(shared),
-                WorkBackground = (IFillPaint)this.WorkBackground?.Copy(shared),
-                InputBackground = (IFillPaint)this.InputBackground?.Copy(shared),
+                PrintBackground = (IPaint)this.PrintBackground?.Copy(shared),
+                WorkBackground = (IPaint)this.WorkBackground?.Copy(shared),
+                InputBackground = (IPaint)this.InputBackground?.Copy(shared),
                 CurrentContainer = (ICanvasContainer)this.CurrentContainer?.Copy(shared),
                 WorkingContainer = null,
                 SelectionState = new SelectionState()
