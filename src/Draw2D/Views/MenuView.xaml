@@ -197,7 +197,7 @@
             </MenuItem>
         </MenuItem>
         <MenuItem Header="_Shape">
-            <MenuItem Header="Du_plicate" Command="{Binding Selection.Duplicate}" CommandParameter="{Binding}"/>
+            <MenuItem Header="Du_plicate" Icon="{StaticResource CopyToClipboard}" Command="{Binding Selection.Duplicate}" CommandParameter="{Binding}"/>
             <Separator/>
             <MenuItem Header="Create _Group" Icon="{StaticResource GroupIcon}" Command="{Binding Selection.CreateGroup}" CommandParameter="{Binding}"/>
             <Separator/>
@@ -237,7 +237,7 @@
             <MenuItem Header="_Xor" Icon="{StaticResource ExcludePathIcon}" ToolTip.Tip="Exclusive-or the two paths." Command="{Binding PathOp}" CommandParameter="Xor"/>
             <MenuItem Header="_Reverse Difference" Icon="{StaticResource SubtractBackIcon}" ToolTip.Tip="Subtract the current path from the op path." Command="{Binding PathOp}" CommandParameter="ReverseDifference"/>
             <Separator/>
-            <MenuItem Header="_Break" Command="{Binding Selection.Break}" CommandParameter="{Binding}"/>
+            <MenuItem Header="_Break" Icon="{StaticResource UngroupIcon}" Command="{Binding Selection.Break}" CommandParameter="{Binding}"/>
             <Separator/>
             <MenuItem Header="_Connect" Command="{Binding Selection.Connect}" CommandParameter="{Binding}"/>
             <MenuItem Header="Di_sconnect" Command="{Binding Selection.Disconnect}" CommandParameter="{Binding}"/>
