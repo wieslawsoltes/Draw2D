@@ -5,9 +5,9 @@ using Avalonia.Markup.Xaml;
 
 namespace Draw2D.Views.Decorators
 {
-    public class EllipseDecoratorView : UserControl
+    public class OvalDecoratorView : UserControl
     {
-        public EllipseDecoratorView()
+        public OvalDecoratorView()
         {
             InitializeComponent();
         }

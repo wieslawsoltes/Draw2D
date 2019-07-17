@@ -3,11 +3,11 @@
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 
-namespace Draw2D.Views.Intersections
+namespace Draw2D.Views.Bounds
 {
-    public class EllipseLineSettingsView : UserControl
+    public class OvalBoundsView : UserControl
     {
-        public EllipseLineSettingsView()
+        public OvalBoundsView()
         {
             InitializeComponent();
         }

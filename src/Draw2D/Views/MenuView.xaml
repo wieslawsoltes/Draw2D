@@ -184,9 +184,9 @@
                     <CheckBox BorderThickness="0" IsHitTestVisible="False" IsChecked="{Binding CurrentTool.Title, Converter={StaticResource IsEqualStringConverter}, ConverterParameter=Arc, Mode=OneWay}"/>
                 </MenuItem.Icon>
             </MenuItem>
-            <MenuItem Header="_Ellipse" Command="{Binding SetTool}" CommandParameter="Ellipse">
+            <MenuItem Header="O_val" Command="{Binding SetTool}" CommandParameter="Oval">
                 <MenuItem.Icon>
-                    <CheckBox BorderThickness="0" IsHitTestVisible="False" IsChecked="{Binding CurrentTool.Title, Converter={StaticResource IsEqualStringConverter}, ConverterParameter=Ellipse, Mode=OneWay}"/>
+                    <CheckBox BorderThickness="0" IsHitTestVisible="False" IsChecked="{Binding CurrentTool.Title, Converter={StaticResource IsEqualStringConverter}, ConverterParameter=Oval, Mode=OneWay}"/>
                 </MenuItem.Icon>
             </MenuItem>
             <Separator/>

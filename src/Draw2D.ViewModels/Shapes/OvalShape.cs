@@ -10,10 +10,10 @@ using Draw2D.ViewModels.Style;
 namespace Draw2D.ViewModels.Shapes
 {
     [DataContract(IsReference = true)]
-    public class EllipseShape : BaseShape
+    public class OvalShape : BaseShape
     {
-        internal static new IBounds s_bounds = new EllipseBounds();
-        internal static new IShapeDecorator s_decorator = new EllipseDecorator();
+        internal static new IBounds s_bounds = new OvalBounds();
+        internal static new IShapeDecorator s_decorator = new OvalDecorator();
 
         private IPointShape _startPoint;
         private IPointShape _point;
@@ -46,11 +46,11 @@ namespace Draw2D.ViewModels.Shapes
             set => Update(ref _text, value);
         }
 
-        public EllipseShape()
+        public OvalShape()
         {
         }
 
-        public EllipseShape(IPointShape startPoint, IPointShape point)
+        public OvalShape(IPointShape startPoint, IPointShape point)
         {
             this.StartPoint = startPoint;
             this.Point = point;
@@ -81,7 +81,7 @@ namespace Draw2D.ViewModels.Shapes
         {
             if (StyleId != null)
             {
-                renderer.DrawEllipse(dc, this, StyleId, dx, dy, scale);
+                renderer.DrawOval(dc, this, StyleId, dx, dy, scale);
             }
         }
 
@@ -185,7 +185,7 @@ namespace Draw2D.ViewModels.Shapes
 
         public override object Copy(Dictionary<object, object> shared)
         {
-            var copy = new EllipseShape()
+            var copy = new OvalShape()
             {
                 Points = new ObservableCollection<IPointShape>(),
                 StyleId = this.StyleId,

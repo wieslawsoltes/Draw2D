@@ -3,11 +3,11 @@
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 
-namespace Draw2D.Views.Bounds
+namespace Draw2D.Views.Shapes
 {
-    public class EllipseBoundsView : UserControl
+    public class OvalShapeView : UserControl
     {
-        public EllipseBoundsView()
+        public OvalShapeView()
         {
             InitializeComponent();
         }

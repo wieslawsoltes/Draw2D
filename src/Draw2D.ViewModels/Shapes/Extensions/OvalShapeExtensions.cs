@@ -5,19 +5,19 @@ using Spatial;
 
 namespace Draw2D.ViewModels.Shapes
 {
-    public static class EllipseShapeExtensions
+    public static class OvalShapeExtensions
     {
-        public static Rect2 ToRect2(this EllipseShape ellipse, double dx = 0.0, double dy = 0.0)
+        public static Rect2 ToRect2(this OvalShape oval, double dx = 0.0, double dy = 0.0)
         {
             return Rect2.FromPoints(
-                ellipse.StartPoint.X, ellipse.StartPoint.Y,
-                ellipse.Point.X, ellipse.Point.Y,
+                oval.StartPoint.X, oval.StartPoint.Y,
+                oval.Point.X, oval.Point.Y,
                 dx, dy);
         }
 
-        public static EllipseShape FromRect2(this Rect2 rect)
+        public static OvalShape FromRect2(this Rect2 rect)
         {
-            return new EllipseShape(rect.TopLeft.FromPoint2(), rect.BottomRight.FromPoint2())
+            return new OvalShape(rect.TopLeft.FromPoint2(), rect.BottomRight.FromPoint2())
             {
                 Points = new ObservableCollection<IPointShape>()
             };

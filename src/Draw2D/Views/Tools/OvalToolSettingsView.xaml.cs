@@ -5,9 +5,9 @@ using Avalonia.Markup.Xaml;
 
 namespace Draw2D.Views.Tools
 {
-    public class EllipseToolView : UserControl
+    public class OvalToolSettingsView : UserControl
     {
-        public EllipseToolView()
+        public OvalToolSettingsView()
         {
             InitializeComponent();
         }

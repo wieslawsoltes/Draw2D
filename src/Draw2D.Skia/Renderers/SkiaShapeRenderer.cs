@@ -555,7 +555,7 @@ namespace Draw2D.Renderers
             }
         }
 
-        public void DrawEllipse(object dc, EllipseShape ellipse, string styleId, double dx, double dy, double scale)
+        public void DrawOval(object dc, OvalShape oval, string styleId, double dx, double dy, double scale)
         {
             var style = _context?.DocumentContainer?.StyleLibrary?.Get(styleId);
             if (style == null)
@@ -567,19 +567,19 @@ namespace Draw2D.Renderers
                 var canvas = dc as SKCanvas;
                 using (var geometry = new SKPath() { FillType = SKPathFillType.Winding })
                 {
-                    SkiaHelper.AddOval(null, ellipse, dx, dy, geometry);
+                    SkiaHelper.AddOval(null, oval, dx, dy, geometry);
                     if (style.IsFilled)
                     {
-                        DrawFilledPath(canvas, geometry, style.FillPaint, ellipse.Effects, scale);
+                        DrawFilledPath(canvas, geometry, style.FillPaint, oval.Effects, scale);
                     }
                     if (style.IsStroked)
                     {
-                        DrawStrokedPath(canvas, geometry, style.StrokePaint, ellipse.Effects, scale);
+                        DrawStrokedPath(canvas, geometry, style.StrokePaint, oval.Effects, scale);
                     }
-                    if (style.IsText && !string.IsNullOrEmpty(ellipse.Text?.Value))
+                    if (style.IsText && !string.IsNullOrEmpty(oval.Text?.Value))
                     {
-                        var rect = SkiaHelper.ToSKRect(ellipse.StartPoint, ellipse.Point, dx, dy);
-                        DrawText(canvas, ellipse.Text, rect, style, ellipse.Effects, dx, dy, scale);
+                        var rect = SkiaHelper.ToSKRect(oval.StartPoint, oval.Point, dx, dy);
+                        DrawText(canvas, oval.Text, rect, style, oval.Effects, dx, dy, scale);
                     }
                 }
             }

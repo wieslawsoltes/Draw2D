@@ -9,23 +9,23 @@ using Spatial;
 namespace Draw2D.ViewModels.Bounds
 {
     [DataContract(IsReference = true)]
-    public class EllipseBounds : ViewModelBase, IBounds
+    public class OvalBounds : ViewModelBase, IBounds
     {
         public IPointShape TryToGetPoint(IBaseShape shape, Point2 target, double radius, IHitTest hitTest, Modifier modifier)
         {
-            var ellipse = shape as EllipseShape ?? throw new ArgumentNullException("shape");
+            var oval = shape as OvalShape ?? throw new ArgumentNullException("shape");
 
-            if (ellipse.StartPoint.Bounds?.TryToGetPoint(ellipse.StartPoint, target, radius, hitTest, modifier) != null)
+            if (oval.StartPoint.Bounds?.TryToGetPoint(oval.StartPoint, target, radius, hitTest, modifier) != null)
             {
-                return ellipse.StartPoint;
+                return oval.StartPoint;
             }
 
-            if (ellipse.Point.Bounds?.TryToGetPoint(ellipse.Point, target, radius, hitTest, modifier) != null)
+            if (oval.Point.Bounds?.TryToGetPoint(oval.Point, target, radius, hitTest, modifier) != null)
             {
-                return ellipse.Point;
+                return oval.Point;
             }
 
-            foreach (var point in ellipse.Points)
+            foreach (var point in oval.Points)
             {
                 if (point.Bounds?.TryToGetPoint(point, target, radius, hitTest, modifier) != null)
                 {
@@ -38,24 +38,24 @@ namespace Draw2D.ViewModels.Bounds
 
         public IBaseShape Contains(IBaseShape shape, Point2 target, double radius, IHitTest hitTest, Modifier modifier)
         {
-            var ellipse = shape as EllipseShape ?? throw new ArgumentNullException("shape");
+            var oval = shape as OvalShape ?? throw new ArgumentNullException("shape");
 
             return Rect2.FromPoints(
-                ellipse.StartPoint.X,
-                ellipse.StartPoint.Y,
-                ellipse.Point.X,
-                ellipse.Point.Y).Contains(target) ? shape : null;
+                oval.StartPoint.X,
+                oval.StartPoint.Y,
+                oval.Point.X,
+                oval.Point.Y).Contains(target) ? shape : null;
         }
 
         public IBaseShape Overlaps(IBaseShape shape, Rect2 target, double radius, IHitTest hitTest, Modifier modifier)
         {
-            var ellipse = shape as EllipseShape ?? throw new ArgumentNullException("shape");
+            var oval = shape as OvalShape ?? throw new ArgumentNullException("shape");
 
             return Rect2.FromPoints(
-                ellipse.StartPoint.X,
-                ellipse.StartPoint.Y,
-                ellipse.Point.X,
-                ellipse.Point.Y).IntersectsWith(target) ? shape : null;
+                oval.StartPoint.X,
+                oval.StartPoint.Y,
+                oval.Point.X,
+                oval.Point.Y).IntersectsWith(target) ? shape : null;
         }
     }
 }

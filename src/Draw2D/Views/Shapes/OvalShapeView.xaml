@@ -1,6 +1,6 @@
 ﻿<!-- Copyright (c) Wiesław Šoltés. All rights reserved. -->
 <!-- Licensed under the MIT license. See LICENSE file in the project root for full license information. -->
-<UserControl x:Class="Draw2D.Views.Shapes.EllipseShapeView"
+<UserControl x:Class="Draw2D.Views.Shapes.OvalShapeView"
              xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -13,7 +13,7 @@
         <converters:StyleIdToStyleConverter x:Key="StyleIdToStyleConverter"/>
     </UserControl.Resources>
     <TabControl Classes="default" TabStripPlacement="Top">
-        <TabItem Classes="default" Header="Ellipse">
+        <TabItem Classes="default" Header="Oval">
             <ScrollViewer>
                 <Grid RowDefinitions="Auto" ColumnDefinitions="Auto,*">
                     <TextBlock Classes="default" Grid.Column="0" Grid.Row="0" Text="Text"/>

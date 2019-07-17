@@ -945,9 +945,9 @@ namespace Draw2D
             geometry.AddArc(rect, (float)arc.StartAngle, (float)arc.SweepAngle);
         }
 
-        internal static void AddOval(IToolContext context, EllipseShape ellipse, double dx, double dy, SKPath geometry)
+        internal static void AddOval(IToolContext context, OvalShape oval, double dx, double dy, SKPath geometry)
         {
-            var rect = ToSKRect(ellipse.StartPoint, ellipse.Point, dx, dy);
+            var rect = ToSKRect(oval.StartPoint, oval.Point, dx, dy);
             geometry.AddOval(rect, SKPathDirection.Clockwise);
         }
 
@@ -1159,8 +1159,8 @@ namespace Draw2D
                 case ArcShape arc:
                     AddArc(context, arc, dx, dy, geometry);
                     return true;
-                case EllipseShape ellipse:
-                    AddOval(context, ellipse, dx, dy, geometry);
+                case OvalShape oval:
+                    AddOval(context, oval, dx, dy, geometry);
                     return true;
                 case IPointShape point:
                     AddShape(context, point, dx, dy, geometry);
@@ -1527,17 +1527,17 @@ namespace Draw2D
                         }
                     }
                     break;
-                case EllipseShape ellipse:
+                case OvalShape oval:
                     {
                         using (var geometry = new SKPath() { FillType = fillType })
                         {
-                            AddOval(context, ellipse, 0.0, 0.0, geometry);
+                            AddOval(context, oval, 0.0, 0.0, geometry);
                             sb.AppendLine(geometry.ToSvgPathData());
 
-                            var style = context?.DocumentContainer?.StyleLibrary?.Get(ellipse.StyleId);
+                            var style = context?.DocumentContainer?.StyleLibrary?.Get(oval.StyleId);
                             if (style != null)
                             {
-                                ToSvgPathData(context, ellipse.Text, ellipse.StartPoint, ellipse.Point, style.TextPaint, sb, fillType);
+                                ToSvgPathData(context, oval.Text, oval.StartPoint, oval.Point, style.TextPaint, sb, fillType);
                             }
                         }
                     }

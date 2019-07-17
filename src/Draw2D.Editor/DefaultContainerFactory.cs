@@ -397,10 +397,10 @@ namespace Draw2D.Editor
                             IsEnabled = true
                         }
                     },
-                    new EllipseLineIntersection()
+                    new OvalLineIntersection()
                     {
                         Intersections = new ObservableCollection<IPointShape>(),
-                        Settings = new EllipseLineSettings()
+                        Settings = new OvalLineSettings()
                         {
                             IsEnabled = true
                         }
@@ -476,10 +476,10 @@ namespace Draw2D.Editor
                             IsEnabled = true
                         }
                     },
-                    new EllipseLineIntersection()
+                    new OvalLineIntersection()
                     {
                         Intersections = new ObservableCollection<IPointShape>(),
-                        Settings = new EllipseLineSettings()
+                        Settings = new OvalLineSettings()
                         {
                             IsEnabled = true
                         }
@@ -736,10 +736,10 @@ namespace Draw2D.Editor
                                 IsEnabled = true
                             }
                         },
-                        new EllipseLineIntersection()
+                        new OvalLineIntersection()
                         {
                             Intersections = new ObservableCollection<IPointShape>(),
-                            Settings = new EllipseLineSettings()
+                            Settings = new OvalLineSettings()
                             {
                                 IsEnabled = true
                             }
@@ -1108,7 +1108,7 @@ namespace Draw2D.Editor
                 }
             };
 
-            var ellipseTool = new EllipseTool()
+            var ovalTool = new OvalTool()
             {
                 Intersections = new ObservableCollection<IPointIntersection>(),
                 Filters = new ObservableCollection<IPointFilter>
@@ -1145,7 +1145,7 @@ namespace Draw2D.Editor
                         }
                     }
                 },
-                Settings = new EllipseToolSettings()
+                Settings = new OvalToolSettings()
                 {
                     ConnectPoints = true,
                     HitTestRadius = 7.0
@@ -1215,7 +1215,7 @@ namespace Draw2D.Editor
             SetToolDefaults(rectangleTool);
             SetToolDefaults(circleTool);
             SetToolDefaults(arcTool);
-            SetToolDefaults(ellipseTool);
+            SetToolDefaults(ovalTool);
             SetToolDefaults(textTool);
 
             tools.Add(noneTool);
@@ -1231,7 +1231,7 @@ namespace Draw2D.Editor
             tools.Add(rectangleTool);
             tools.Add(circleTool);
             tools.Add(arcTool);
-            tools.Add(ellipseTool);
+            tools.Add(ovalTool);
             tools.Add(textTool);
 
             SetToolDefaults(pathLineTool);

@@ -13,7 +13,7 @@ namespace Draw2D.ViewModels.Decorators
         private readonly string _strokeStyleId;
         private readonly string _fillStyleId;
         private readonly LineShape _line;
-        private readonly EllipseShape _ellipse;
+        private readonly OvalShape _oval;
         private readonly RectangleShape _rectangle;
         private readonly TextShape _text;
 
@@ -29,12 +29,12 @@ namespace Draw2D.ViewModels.Decorators
             _line.StartPoint.Owner = _line;
             _line.Point.Owner = _line;
 
-            _ellipse = new EllipseShape(new PointShape(0, 0, null), new PointShape(0, 0, null))
+            _oval = new OvalShape(new PointShape(0, 0, null), new PointShape(0, 0, null))
             {
                 Points = new ObservableCollection<IPointShape>(),
             };
-            _ellipse.StartPoint.Owner = _ellipse;
-            _ellipse.Point.Owner = _ellipse;
+            _oval.StartPoint.Owner = _oval;
+            _oval.Point.Owner = _oval;
 
             _rectangle = new RectangleShape(new PointShape(0, 0, null), new PointShape(0, 0, null))
             {
@@ -71,84 +71,84 @@ namespace Draw2D.ViewModels.Decorators
             _line.Draw(dc, renderer, dx, dy, scale, null, null);
         }
 
-        internal void FillEllipse(object dc, IShapeRenderer renderer, IPointShape s, double radius, double dx, double dy, double scale)
+        internal void FillOval(object dc, IShapeRenderer renderer, IPointShape s, double radius, double dx, double dy, double scale)
         {
-            _ellipse.StyleId = _fillStyleId;
-            _ellipse.StartPoint.X = s.X - radius;
-            _ellipse.StartPoint.Y = s.Y - radius;
-            _ellipse.Point.X = s.X + radius;
-            _ellipse.Point.Y = s.Y + radius;
-            _ellipse.Draw(dc, renderer, dx, dy, scale, null, null);
+            _oval.StyleId = _fillStyleId;
+            _oval.StartPoint.X = s.X - radius;
+            _oval.StartPoint.Y = s.Y - radius;
+            _oval.Point.X = s.X + radius;
+            _oval.Point.Y = s.Y + radius;
+            _oval.Draw(dc, renderer, dx, dy, scale, null, null);
         }
 
-        internal void FillEllipse(object dc, IShapeRenderer renderer, double sx, double sy, double radius, double dx, double dy, double scale)
+        internal void FillOval(object dc, IShapeRenderer renderer, double sx, double sy, double radius, double dx, double dy, double scale)
         {
-            _ellipse.StyleId = _fillStyleId;
-            _ellipse.StartPoint.X = sx - radius;
-            _ellipse.StartPoint.Y = sy - radius;
-            _ellipse.Point.X = sx + radius;
-            _ellipse.Point.Y = sy + radius;
-            _ellipse.Draw(dc, renderer, dx, dy, scale, null, null);
+            _oval.StyleId = _fillStyleId;
+            _oval.StartPoint.X = sx - radius;
+            _oval.StartPoint.Y = sy - radius;
+            _oval.Point.X = sx + radius;
+            _oval.Point.Y = sy + radius;
+            _oval.Draw(dc, renderer, dx, dy, scale, null, null);
         }
 
-        internal void DrawEllipse(object dc, IShapeRenderer renderer, IPointShape s, double radius, double dx, double dy, double scale)
+        internal void DrawOval(object dc, IShapeRenderer renderer, IPointShape s, double radius, double dx, double dy, double scale)
         {
-            _ellipse.StyleId = _strokeStyleId;
-            _ellipse.StartPoint.X = s.X - radius;
-            _ellipse.StartPoint.Y = s.Y - radius;
-            _ellipse.Point.X = s.X + radius;
-            _ellipse.Point.Y = s.Y + radius;
-            _ellipse.Draw(dc, renderer, dx, dy, scale, null, null);
+            _oval.StyleId = _strokeStyleId;
+            _oval.StartPoint.X = s.X - radius;
+            _oval.StartPoint.Y = s.Y - radius;
+            _oval.Point.X = s.X + radius;
+            _oval.Point.Y = s.Y + radius;
+            _oval.Draw(dc, renderer, dx, dy, scale, null, null);
         }
 
-        internal void DrawEllipse(object dc, IShapeRenderer renderer, double sx, double sy, double radius, double dx, double dy, double scale)
+        internal void DrawOval(object dc, IShapeRenderer renderer, double sx, double sy, double radius, double dx, double dy, double scale)
         {
-            _ellipse.StyleId = _strokeStyleId;
-            _ellipse.StartPoint.X = sx - radius;
-            _ellipse.StartPoint.Y = sy - radius;
-            _ellipse.Point.X = sx + radius;
-            _ellipse.Point.Y = sy + radius;
-            _ellipse.Draw(dc, renderer, dx, dy, scale, null, null);
+            _oval.StyleId = _strokeStyleId;
+            _oval.StartPoint.X = sx - radius;
+            _oval.StartPoint.Y = sy - radius;
+            _oval.Point.X = sx + radius;
+            _oval.Point.Y = sy + radius;
+            _oval.Draw(dc, renderer, dx, dy, scale, null, null);
         }
 
-        internal void FillEllipse(object dc, IShapeRenderer renderer, IPointShape a, IPointShape b, double dx, double dy, double scale)
+        internal void FillOval(object dc, IShapeRenderer renderer, IPointShape a, IPointShape b, double dx, double dy, double scale)
         {
-            _ellipse.StyleId = _fillStyleId;
-            _ellipse.StartPoint.X = a.X;
-            _ellipse.StartPoint.Y = a.Y;
-            _ellipse.Point.X = b.X;
-            _ellipse.Point.Y = b.Y;
-            _ellipse.Draw(dc, renderer, dx, dy, scale, null, null);
+            _oval.StyleId = _fillStyleId;
+            _oval.StartPoint.X = a.X;
+            _oval.StartPoint.Y = a.Y;
+            _oval.Point.X = b.X;
+            _oval.Point.Y = b.Y;
+            _oval.Draw(dc, renderer, dx, dy, scale, null, null);
         }
 
-        internal void FillEllipse(object dc, IShapeRenderer renderer, double ax, double ay, double bx, double by, double dx, double dy, double scale)
+        internal void FillOval(object dc, IShapeRenderer renderer, double ax, double ay, double bx, double by, double dx, double dy, double scale)
         {
-            _ellipse.StyleId = _fillStyleId;
-            _ellipse.StartPoint.X = ax;
-            _ellipse.StartPoint.Y = ay;
-            _ellipse.Point.X = bx;
-            _ellipse.Point.Y = by;
-            _ellipse.Draw(dc, renderer, dx, dy, scale, null, null);
+            _oval.StyleId = _fillStyleId;
+            _oval.StartPoint.X = ax;
+            _oval.StartPoint.Y = ay;
+            _oval.Point.X = bx;
+            _oval.Point.Y = by;
+            _oval.Draw(dc, renderer, dx, dy, scale, null, null);
         }
 
-        internal void DrawEllipse(object dc, IShapeRenderer renderer, IPointShape a, IPointShape b, double dx, double dy, double scale)
+        internal void DrawOval(object dc, IShapeRenderer renderer, IPointShape a, IPointShape b, double dx, double dy, double scale)
         {
-            _ellipse.StyleId = _strokeStyleId;
-            _ellipse.StartPoint.X = a.X;
-            _ellipse.StartPoint.Y = a.Y;
-            _ellipse.Point.X = b.X;
-            _ellipse.Point.Y = b.Y;
-            _ellipse.Draw(dc, renderer, dx, dy, scale, null, null);
+            _oval.StyleId = _strokeStyleId;
+            _oval.StartPoint.X = a.X;
+            _oval.StartPoint.Y = a.Y;
+            _oval.Point.X = b.X;
+            _oval.Point.Y = b.Y;
+            _oval.Draw(dc, renderer, dx, dy, scale, null, null);
         }
 
-        internal void DrawEllipse(object dc, IShapeRenderer renderer, double ax, double ay, double bx, double by, double dx, double dy, double scale)
+        internal void DrawOval(object dc, IShapeRenderer renderer, double ax, double ay, double bx, double by, double dx, double dy, double scale)
         {
-            _ellipse.StyleId = _strokeStyleId;
-            _ellipse.StartPoint.X = ax;
-            _ellipse.StartPoint.Y = ay;
-            _ellipse.Point.X = bx;
-            _ellipse.Point.Y = by;
-            _ellipse.Draw(dc, renderer, dx, dy, scale, null, null);
+            _oval.StyleId = _strokeStyleId;
+            _oval.StartPoint.X = ax;
+            _oval.StartPoint.Y = ay;
+            _oval.Point.X = bx;
+            _oval.Point.Y = by;
+            _oval.Draw(dc, renderer, dx, dy, scale, null, null);
         }
 
         internal void FillRectangle(object dc, IShapeRenderer renderer, IPointShape s, double radius, double dx, double dy, double scale)
