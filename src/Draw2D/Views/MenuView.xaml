@@ -17,13 +17,13 @@
     </UserControl.Resources>
     <Menu Background="Transparent">
         <MenuItem Header="_File">
-            <MenuItem Header="_New View" Command="{Binding NewContainerView}" CommandParameter="View"/>
+            <MenuItem Header="_New View" Icon="{StaticResource DocumentIcon}" Command="{Binding NewContainerView}" CommandParameter="View"/>
             <Separator/>
-            <MenuItem Header="_Close View" Command="{Binding CloseContainerView}" CommandParameter="{Binding DocumentContainer.ContainerView, FallbackValue={x:Null}}"/>
+            <MenuItem Header="_Close View" Icon="{StaticResource CloseDocumentIcon}" Command="{Binding CloseContainerView}" CommandParameter="{Binding DocumentContainer.ContainerView, FallbackValue={x:Null}}"/>
             <Separator/>
-            <MenuItem Header="_Open Document..." Command="{Binding OpenDocumentContainer}"/>
+            <MenuItem Header="_Open Document..." Icon="{StaticResource OpenFileIcon}" Command="{Binding OpenDocumentContainer}"/>
             <Separator/>
-            <MenuItem Header="Save Document _As..." Command="{Binding SaveDocumentContainerAs}"/>
+            <MenuItem Header="Save Document _As..." Icon="{StaticResource SaveAsIcon}" Command="{Binding SaveDocumentContainerAs}"/>
             <Separator/>
             <MenuItem Header="S_tyles">
                 <MenuItem Header="_Open..." Command="{Binding OpenStyleLibrary}"/>
@@ -37,16 +37,16 @@
                 <MenuItem Header="Save _As..." Command="{Binding SaveGroupLibraryAs}"/>
             </MenuItem>
             <Separator/>
-            <MenuItem Header="_Import..." Command="{Binding ImportFile}"/>
+            <MenuItem Header="_Import..." Icon="{StaticResource ImportIcon}" Command="{Binding ImportFile}"/>
             <Separator/>
-            <MenuItem Header="_Export..." Command="{Binding ExportFile}"/>
+            <MenuItem Header="_Export..." Icon="{StaticResource ExportIcon}" Command="{Binding ExportFile}"/>
             <Separator/>
             <MenuItem Header="E_xit" Command="{Binding Exit}"/>
         </MenuItem>
         <MenuItem Header="_Edit">
-            <MenuItem Header="Cu_t" Command="{Binding Selection.Cut}" CommandParameter="{Binding}"/>
-            <MenuItem Header="_Copy" Command="{Binding Selection.Copy}" CommandParameter="{Binding}"/>
-            <MenuItem Header="_Paste" Command="{Binding Selection.Paste}" CommandParameter="{Binding}"/>
+            <MenuItem Header="Cu_t" Icon="{StaticResource CutIcon}" Command="{Binding Selection.Cut}" CommandParameter="{Binding}"/>
+            <MenuItem Header="_Copy" Icon="{StaticResource CopyIcon}" Command="{Binding Selection.Copy}" CommandParameter="{Binding}"/>
+            <MenuItem Header="_Paste" Icon="{StaticResource PasteIcon}" Command="{Binding Selection.Paste}" CommandParameter="{Binding}"/>
             <MenuItem Header="_Delete" Command="{Binding Selection.Delete}" CommandParameter="{Binding}"/>
             <Separator/>
             <MenuItem Header="Copy _Special">
@@ -69,7 +69,7 @@
                 </MenuItem>
             </MenuItem>
             <Separator/>
-            <MenuItem Header="Select _All" Command="{Binding Selection.SelectAll}" CommandParameter="{Binding}"/>
+            <MenuItem Header="Select _All" Icon="{StaticResource SelectIcon}" Command="{Binding Selection.SelectAll}" CommandParameter="{Binding}"/>
             <MenuItem Header="Deselect A_ll" Command="{Binding Selection.DeselectAll}" CommandParameter="{Binding}"/>
         </MenuItem>
         <MenuItem Header="_View">
@@ -87,121 +87,121 @@
         </MenuItem>
         <MenuItem Header="_Tool">
             <MenuItem Header="_None" Command="{Binding SetTool}" CommandParameter="None">
-                <MenuItem.Icon>
+                <!--<MenuItem.Icon>
                     <CheckBox BorderThickness="0" IsHitTestVisible="False" IsChecked="{Binding CurrentTool.Title, Converter={StaticResource IsEqualStringConverter}, ConverterParameter=None, Mode=OneWay}"/>
-                </MenuItem.Icon>
+                </MenuItem.Icon>-->
             </MenuItem>
             <Separator/>
-            <MenuItem Header="_Selection" Command="{Binding SetTool}" CommandParameter="Selection">
-                <MenuItem.Icon>
+            <MenuItem Header="_Selection" Icon="{StaticResource CursorIcon}" Command="{Binding SetTool}" CommandParameter="Selection">
+                <!--<MenuItem.Icon>
                     <CheckBox BorderThickness="0" IsHitTestVisible="False" IsChecked="{Binding CurrentTool.Title, Converter={StaticResource IsEqualStringConverter}, ConverterParameter=Selection, Mode=OneWay}"/>
-                </MenuItem.Icon>
+                </MenuItem.Icon>-->
             </MenuItem>
             <Separator/>
             <MenuItem Header="_Point" Command="{Binding SetTool}" CommandParameter="Point">
-                <MenuItem.Icon>
+                <!--<MenuItem.Icon>
                     <CheckBox BorderThickness="0" IsHitTestVisible="False" IsChecked="{Binding CurrentTool.Title, Converter={StaticResource IsEqualStringConverter}, ConverterParameter=Point, Mode=OneWay}"/>
-                </MenuItem.Icon>
+                </MenuItem.Icon>-->
             </MenuItem>
             <Separator/>
             <MenuItem Header="_Line" Command="{Binding SetTool}" CommandParameter="Line">
-                <MenuItem.Icon>
+                <!--<MenuItem.Icon>
                     <CheckBox BorderThickness="0" IsHitTestVisible="False" IsChecked="{Binding CurrentTool.Title, Converter={StaticResource IsEqualStringConverter}, ConverterParameter=Line, Mode=OneWay}"/>
-                </MenuItem.Icon>
+                </MenuItem.Icon>-->
             </MenuItem>
             <MenuItem Header="Pol_y Line" Command="{Binding SetTool}" CommandParameter="PolyLine">
-                <MenuItem.Icon>
+                <!--<MenuItem.Icon>
                     <CheckBox BorderThickness="0" IsHitTestVisible="False" IsChecked="{Binding CurrentTool.Title, Converter={StaticResource IsEqualStringConverter}, ConverterParameter=PolyLine, Mode=OneWay}"/>
-                </MenuItem.Icon>
+                </MenuItem.Icon>-->
             </MenuItem>
             <MenuItem Header="Cubic _Bezier" Command="{Binding SetTool}" CommandParameter="CubicBezier">
-                <MenuItem.Icon>
+                <!--<MenuItem.Icon>
                     <CheckBox BorderThickness="0" IsHitTestVisible="False" IsChecked="{Binding CurrentTool.Title, Converter={StaticResource IsEqualStringConverter}, ConverterParameter=CubicBezier, Mode=OneWay}"/>
-                </MenuItem.Icon>
+                </MenuItem.Icon>-->
             </MenuItem>
             <MenuItem Header="_Quadratic Bezier" Command="{Binding SetTool}" CommandParameter="QuadraticBezier">
-                <MenuItem.Icon>
+                <!--<MenuItem.Icon>
                     <CheckBox BorderThickness="0" IsHitTestVisible="False" IsChecked="{Binding CurrentTool.Title, Converter={StaticResource IsEqualStringConverter}, ConverterParameter=QuadraticBezier, Mode=OneWay}"/>
-                </MenuItem.Icon>
+                </MenuItem.Icon>-->
             </MenuItem>
-            <MenuItem Header="Con_ic" Command="{Binding SetTool}" CommandParameter="Conic">
-                <MenuItem.Icon>
+            <MenuItem Header="Con_ic" Icon="{StaticResource CurveToolIcon}" Command="{Binding SetTool}" CommandParameter="Conic">
+                <!--<MenuItem.Icon>
                     <CheckBox BorderThickness="0" IsHitTestVisible="False" IsChecked="{Binding CurrentTool.Title, Converter={StaticResource IsEqualStringConverter}, ConverterParameter=Conic, Mode=OneWay}"/>
-                </MenuItem.Icon>
+                </MenuItem.Icon>-->
             </MenuItem>
             <Separator/>
-            <MenuItem Header="Pat_h" Command="{Binding SetTool}" CommandParameter="Path">
-                <MenuItem.Icon>
+            <MenuItem Header="Pat_h" Icon="{StaticResource PathIcon}" Command="{Binding SetTool}" CommandParameter="Path">
+                <!--<MenuItem.Icon>
                     <CheckBox BorderThickness="0" IsHitTestVisible="False" IsChecked="{Binding CurrentTool.Title, Converter={StaticResource IsEqualStringConverter}, ConverterParameter=Path, Mode=OneWay}"/>
-                </MenuItem.Icon>
+                </MenuItem.Icon>-->
             </MenuItem>
             <MenuItem Header="Path T_ools" IsEnabled="{Binding CurrentTool.Title, Converter={StaticResource IsEqualStringConverter}, ConverterParameter=Path, Mode=OneWay}">
                 <MenuItem Header="_Line" Command="{Binding SetTool}" CommandParameter="Line">
-                    <MenuItem.Icon>
+                    <!--<MenuItem.Icon>
                         <CheckBox BorderThickness="0" IsHitTestVisible="False" IsChecked="{Binding CurrentTool.Settings.CurrentTool.Title, FallbackValue={x:Null}, Converter={StaticResource IsEqualStringConverter}, ConverterParameter=Line, Mode=OneWay}"/>
-                    </MenuItem.Icon>
+                    </MenuItem.Icon>-->
                 </MenuItem>
                 <MenuItem Header="Cubic _Bezier" Command="{Binding SetTool}" CommandParameter="CubicBezier">
-                    <MenuItem.Icon>
+                    <!--<MenuItem.Icon>
                         <CheckBox BorderThickness="0" IsHitTestVisible="False" IsChecked="{Binding CurrentTool.Settings.CurrentTool.Title, FallbackValue={x:Null}, Converter={StaticResource IsEqualStringConverter}, ConverterParameter=CubicBezier, Mode=OneWay}"/>
-                    </MenuItem.Icon>
+                    </MenuItem.Icon>-->
                 </MenuItem>
                 <MenuItem Header="_Quadratic Bezier" Command="{Binding SetTool}" CommandParameter="QuadraticBezier">
-                    <MenuItem.Icon>
+                    <!--<MenuItem.Icon>
                         <CheckBox BorderThickness="0" IsHitTestVisible="False" IsChecked="{Binding CurrentTool.Settings.CurrentTool.Title, FallbackValue={x:Null}, Converter={StaticResource IsEqualStringConverter}, ConverterParameter=QuadraticBezier, Mode=OneWay}"/>
-                    </MenuItem.Icon>
+                    </MenuItem.Icon>-->
                 </MenuItem>
                 <MenuItem Header="Con_ic" Command="{Binding SetTool}" CommandParameter="Conic">
-                    <MenuItem.Icon>
+                    <!--<MenuItem.Icon>
                         <CheckBox BorderThickness="0" IsHitTestVisible="False" IsChecked="{Binding CurrentTool.Settings.CurrentTool.Title, FallbackValue={x:Null}, Converter={StaticResource IsEqualStringConverter}, ConverterParameter=Conic, Mode=OneWay}"/>
-                    </MenuItem.Icon>
+                    </MenuItem.Icon>-->
                 </MenuItem>
                 <MenuItem Header="_Move" Command="{Binding SetTool}" CommandParameter="Move">
-                    <MenuItem.Icon>
+                    <!--<MenuItem.Icon>
                         <CheckBox BorderThickness="0" IsHitTestVisible="False" IsChecked="{Binding CurrentTool.Settings.CurrentTool.Title, FallbackValue={x:Null}, Converter={StaticResource IsEqualStringConverter}, ConverterParameter=Move, Mode=OneWay}"/>
-                    </MenuItem.Icon>
+                    </MenuItem.Icon>-->
                 </MenuItem>
             </MenuItem>
             <Separator/>
             <MenuItem Header="Scr_ibble" Command="{Binding SetTool}" CommandParameter="Scribble">
-                <MenuItem.Icon>
+                <!--<MenuItem.Icon>
                     <CheckBox BorderThickness="0" IsHitTestVisible="False" IsChecked="{Binding CurrentTool.Title, Converter={StaticResource IsEqualStringConverter}, ConverterParameter=Scribble, Mode=OneWay}"/>
-                </MenuItem.Icon>
+                </MenuItem.Icon>-->
             </MenuItem>
             <Separator/>
-            <MenuItem Header="_Rectangle" Command="{Binding SetTool}" CommandParameter="Rectangle">
-                <MenuItem.Icon>
+            <MenuItem Header="_Rectangle" Icon="{StaticResource RectangleIcon}" Command="{Binding SetTool}" CommandParameter="Rectangle">
+                <!--<MenuItem.Icon>
                     <CheckBox BorderThickness="0" IsHitTestVisible="False" IsChecked="{Binding CurrentTool.Title, Converter={StaticResource IsEqualStringConverter}, ConverterParameter=Rectangle, Mode=OneWay}"/>
-                </MenuItem.Icon>
+                </MenuItem.Icon>-->
             </MenuItem>
             <MenuItem Header="_Circle" Command="{Binding SetTool}" CommandParameter="Circle">
-                <MenuItem.Icon>
+                <!--<MenuItem.Icon>
                     <CheckBox BorderThickness="0" IsHitTestVisible="False" IsChecked="{Binding CurrentTool.Title, Converter={StaticResource IsEqualStringConverter}, ConverterParameter=Circle, Mode=OneWay}"/>
-                </MenuItem.Icon>
+                </MenuItem.Icon>-->
             </MenuItem>
-            <MenuItem Header="_Arc" Command="{Binding SetTool}" CommandParameter="Arc">
-                <MenuItem.Icon>
+            <MenuItem Header="_Arc" Icon="{StaticResource ArcSegmentIcon}" Command="{Binding SetTool}" CommandParameter="Arc">
+                <!--<MenuItem.Icon>
                     <CheckBox BorderThickness="0" IsHitTestVisible="False" IsChecked="{Binding CurrentTool.Title, Converter={StaticResource IsEqualStringConverter}, ConverterParameter=Arc, Mode=OneWay}"/>
-                </MenuItem.Icon>
+                </MenuItem.Icon>-->
             </MenuItem>
-            <MenuItem Header="O_val" Command="{Binding SetTool}" CommandParameter="Oval">
-                <MenuItem.Icon>
+            <MenuItem Header="O_val" Icon="{StaticResource EllipseIcon}" Command="{Binding SetTool}" CommandParameter="Oval">
+                <!--<MenuItem.Icon>
                     <CheckBox BorderThickness="0" IsHitTestVisible="False" IsChecked="{Binding CurrentTool.Title, Converter={StaticResource IsEqualStringConverter}, ConverterParameter=Oval, Mode=OneWay}"/>
-                </MenuItem.Icon>
+                </MenuItem.Icon>-->
             </MenuItem>
             <Separator/>
-            <MenuItem Header="_Text" Command="{Binding SetTool}" CommandParameter="Text">
-                <MenuItem.Icon>
+            <MenuItem Header="_Text" Icon="{StaticResource TextBlockIcon}" Command="{Binding SetTool}" CommandParameter="Text">
+                <!--<MenuItem.Icon>
                     <CheckBox BorderThickness="0" IsHitTestVisible="False" IsChecked="{Binding CurrentTool.Title, Converter={StaticResource IsEqualStringConverter}, ConverterParameter=Text, Mode=OneWay}"/>
-                </MenuItem.Icon>
+                </MenuItem.Icon>-->
             </MenuItem>
         </MenuItem>
         <MenuItem Header="_Shape">
             <MenuItem Header="Du_plicate" Command="{Binding Selection.Duplicate}" CommandParameter="{Binding}"/>
             <Separator/>
-            <MenuItem Header="Create _Group" Command="{Binding Selection.CreateGroup}" CommandParameter="{Binding}"/>
+            <MenuItem Header="Create _Group" Icon="{StaticResource GroupIcon}" Command="{Binding Selection.CreateGroup}" CommandParameter="{Binding}"/>
             <Separator/>
-            <MenuItem Header="Create R_eference" Command="{Binding Selection.CreateReference}" CommandParameter="{Binding}"/>
+            <MenuItem Header="Create R_eference" Icon="{StaticResource ReferenceIcon}" Command="{Binding Selection.CreateReference}" CommandParameter="{Binding}"/>
             <Separator/>
             <MenuItem Header="Create Pat_h" Command="{Binding Selection.CreatePath}" CommandParameter="{Binding}"/>
             <MenuItem Header="Create Str_oke Path" Command="{Binding Selection.CreateStrokePath}" CommandParameter="{Binding}"/>
@@ -216,26 +216,26 @@
                 <MenuItem Header="_Vertically" Command="{Binding Selection.DistributeVertically}" CommandParameter="{Binding}"/>
             </MenuItem>
             <MenuItem Header="Alig_n">
-                <MenuItem Header="_Left" Command="{Binding Selection.AlignLeft}" CommandParameter="{Binding}"/>
-                <MenuItem Header="_Centered" Command="{Binding Selection.AlignCentered}" CommandParameter="{Binding}"/>
-                <MenuItem Header="_Right" Command="{Binding Selection.AlignRight}" CommandParameter="{Binding}"/>
+                <MenuItem Header="_Left" Icon="{StaticResource AlignLeftIcon}" Command="{Binding Selection.AlignLeft}" CommandParameter="{Binding}"/>
+                <MenuItem Header="_Centered" Icon="{StaticResource TextCenterInFormHorizontalIcon}" Command="{Binding Selection.AlignCentered}" CommandParameter="{Binding}"/>
+                <MenuItem Header="_Right" Icon="{StaticResource AlignRightIcon}" Command="{Binding Selection.AlignRight}" CommandParameter="{Binding}"/>
                 <Separator/>
-                <MenuItem Header="_Top" Command="{Binding Selection.AlignTop}" CommandParameter="{Binding}"/>
-                <MenuItem Header="C_enter" Command="{Binding Selection.AlignCenter}" CommandParameter="{Binding}"/>
-                <MenuItem Header="_Bottom" Command="{Binding Selection.AlignBottom}" CommandParameter="{Binding}"/>
+                <MenuItem Header="_Top" Icon="{StaticResource AlignTopIcon}" Command="{Binding Selection.AlignTop}" CommandParameter="{Binding}"/>
+                <MenuItem Header="C_enter" Icon="{StaticResource CenterInFormVerticalIcon}" Command="{Binding Selection.AlignCenter}" CommandParameter="{Binding}"/>
+                <MenuItem Header="_Bottom" Icon="{StaticResource AlignBottomIcon}" Command="{Binding Selection.AlignBottom}" CommandParameter="{Binding}"/>
             </MenuItem>
             <MenuItem Header="_Arange">
-                <MenuItem Header="_Bring to Front" Command="{Binding Selection.ArangeBringToFront}" CommandParameter="{Binding}"/>
-                <MenuItem Header="Bring _Forward" Command="{Binding Selection.ArangeBringForward}" CommandParameter="{Binding}"/>
-                <MenuItem Header="Send Back_ward" Command="{Binding Selection.ArangeSendBackward}" CommandParameter="{Binding}"/>
-                <MenuItem Header="_Send to Back" Command="{Binding Selection.ArangeSendToBack}" CommandParameter="{Binding}"/>
+                <MenuItem Header="_Bring to Front" Icon="{StaticResource BringtoFrontIcon}" Command="{Binding Selection.ArangeBringToFront}" CommandParameter="{Binding}"/>
+                <MenuItem Header="Bring _Forward" Icon="{StaticResource BringForwardIcon}" Command="{Binding Selection.ArangeBringForward}" CommandParameter="{Binding}"/>
+                <MenuItem Header="Send Back_ward" Icon="{StaticResource SendBackwardIcon}" Command="{Binding Selection.ArangeSendBackward}" CommandParameter="{Binding}"/>
+                <MenuItem Header="_Send to Back" Icon="{StaticResource SendtoBackIcon}" Command="{Binding Selection.ArangeSendToBack}" CommandParameter="{Binding}"/>
             </MenuItem>
             <Separator/>
-            <MenuItem Header="_Difference" ToolTip.Tip="Subtract the op path from the current path." Command="{Binding PathOp}" CommandParameter="Difference"/>
-            <MenuItem Header="_Intersect" ToolTip.Tip="Intersect the two paths." Command="{Binding PathOp}" CommandParameter="Intersect"/>
-            <MenuItem Header="_Union" ToolTip.Tip="Union (inclusive-or) the two paths." Command="{Binding PathOp}" CommandParameter="Union"/>
-            <MenuItem Header="_Xor" ToolTip.Tip="Exclusive-or the two paths." Command="{Binding PathOp}" CommandParameter="Xor"/>
-            <MenuItem Header="_Reverse Difference" ToolTip.Tip="Subtract the current path from the op path." Command="{Binding PathOp}" CommandParameter="ReverseDifference"/>
+            <MenuItem Header="_Difference" Icon="{StaticResource SubtractFrontIcon}" ToolTip.Tip="Subtract the op path from the current path." Command="{Binding PathOp}" CommandParameter="Difference"/>
+            <MenuItem Header="_Intersect" Icon="{StaticResource IntersectPathIcon}" ToolTip.Tip="Intersect the two paths." Command="{Binding PathOp}" CommandParameter="Intersect"/>
+            <MenuItem Header="_Union" Icon="{StaticResource UnitePathIcon}" ToolTip.Tip="Union (inclusive-or) the two paths." Command="{Binding PathOp}" CommandParameter="Union"/>
+            <MenuItem Header="_Xor" Icon="{StaticResource ExcludePathIcon}" ToolTip.Tip="Exclusive-or the two paths." Command="{Binding PathOp}" CommandParameter="Xor"/>
+            <MenuItem Header="_Reverse Difference" Icon="{StaticResource SubtractBackIcon}" ToolTip.Tip="Subtract the current path from the op path." Command="{Binding PathOp}" CommandParameter="ReverseDifference"/>
             <Separator/>
             <MenuItem Header="_Break" Command="{Binding Selection.Break}" CommandParameter="{Binding}"/>
             <Separator/>
