@@ -848,6 +848,7 @@ namespace Draw2D
                 case PaintStyle.StrokeAndFill:
                     {
                         // Stroke
+
                         double strokeWidth = paint.StrokeWidth;
                         double strokeMiter = paint.StrokeMiter;
                         if (paint.IsScaled)
@@ -864,11 +865,28 @@ namespace Draw2D
             }
 
             // Text
+
             skPaint.LcdRenderText = paint.LcdRenderText;
             skPaint.SubpixelText = paint.SubpixelText;
-            skPaint.TextAlign = SKTextAlign.Left;
+            skPaint.TextEncoding = SKTextEncoding.Utf16;
+            skPaint.TextSize = (float)paint.FontSize;
+
+            switch (paint.HAlign)
+            {
+                default:
+                case HAlign.Left:
+                    skPaint.TextAlign = SKTextAlign.Left;
+                    break;
+                case HAlign.Center:
+                    skPaint.TextAlign = SKTextAlign.Center;
+                    break;
+                case HAlign.Right:
+                    skPaint.TextAlign = SKTextAlign.Right;
+                    break;
+            }
 
             // Effects
+
             SetSKPaintEffects(skPaint, paint.Effects, effects, disposables);
 
             return skPaint;

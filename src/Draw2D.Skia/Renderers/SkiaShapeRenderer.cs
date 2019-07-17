@@ -142,22 +142,6 @@ namespace Draw2D.Renderers
                 GetSKTypeface(textPaint.Typeface, out var typeface);
                 cached.paint = SkiaHelper.ToSKPaint(textPaint, effects, scale, _disposable.Disposables);
                 cached.paint.Typeface = typeface;
-                cached.paint.TextEncoding = SKTextEncoding.Utf16;
-                cached.paint.TextSize = (float)textPaint.FontSize;
-                switch (textPaint.HAlign)
-                {
-                    default:
-                    case HAlign.Left:
-                        cached.paint.TextAlign = SKTextAlign.Left;
-                        break;
-                    case HAlign.Center:
-                        cached.paint.TextAlign = SKTextAlign.Center;
-                        break;
-                    case HAlign.Right:
-                        cached.paint.TextAlign = SKTextAlign.Right;
-                        break;
-                }
-
                 cached.metrics = cached.paint.FontMetrics;
                 _textPaintCache[textPaint] = cached;
             }
