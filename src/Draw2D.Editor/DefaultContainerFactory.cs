@@ -28,7 +28,7 @@ namespace Draw2D.Editor
                 new ShapeStyle(
                     "Default",
                     strokePaint: new Paint(paintStyle: PaintStyle.Stroke, color: new ArgbColor(255, 0, 0, 0), isScaled: false, effects: PaintEffects.MakeEffects()),
-                    fillPaint: new Paint(paintStyle: PaintStyle.Fill, color: new ArgbColor(255, 255, 255, 255), effects: PaintEffects.MakeEffects()),
+                    fillPaint: new Paint(paintStyle: PaintStyle.Fill, color: new ArgbColor(255, 0, 0, 0), effects: PaintEffects.MakeEffects()),
                     textPaint: new Paint(paintStyle: PaintStyle.Fill, color: new ArgbColor(255, 0, 0, 0), effects: PaintEffects.MakeEffects()),
                     isStroked: true, isFilled: false, isText: true));
 
