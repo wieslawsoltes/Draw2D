@@ -23,7 +23,7 @@
 
   <ItemGroup>
     <Compile Include="**\*.cs" Exclude="obj\**" />
-    <AvaloniaResource Include="Assets\*" Exclude="bin\**;obj\**;**\*.xproj;packages\**;@(EmbeddedResource)" />
+    <AvaloniaResource Include="Assets\*" />
     <Compile Update="**\*.xaml.cs">
       <DependentUpon>%(Filename)</DependentUpon>
       <SubType>Code</SubType>
