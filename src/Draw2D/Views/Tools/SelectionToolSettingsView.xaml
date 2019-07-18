@@ -15,32 +15,41 @@
     <TabControl Classes="default" TabStripPlacement="Top">
         <TabItem Classes="default" Header="Settings">
             <ScrollViewer>
-                <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="Auto,*">
+                <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="Auto,*">
                     <TextBlock Classes="default" Grid.Column="0" Grid.Row="0" Text="Mode"/>
                     <TextBox Classes="default" Grid.Column="1" Grid.Row="0" Text="{Binding Mode}"/>
                     <TextBlock Classes="default" Grid.Column="0" Grid.Row="1" Text="Targets"/>
                     <TextBox Classes="default" Grid.Column="1" Grid.Row="1" Text="{Binding Targets}"/>
-                    <TextBlock Classes="default" Grid.Column="0" Grid.Row="2" Text="SelectionModifier"/>
-                    <TextBox Classes="default" Grid.Column="1" Grid.Row="2" Text="{Binding SelectionModifier}"/>
-                    <TextBlock Classes="default" Grid.Column="0" Grid.Row="3" Text="ConnectionModifier"/>
-                    <TextBox Classes="default" Grid.Column="1" Grid.Row="3" Text="{Binding ConnectionModifier}"/>
-                    <TextBlock Classes="default" Grid.Column="0" Grid.Row="4" Text="ClearSelectionOnClean"/>
-                    <CheckBox Classes="default" Grid.Column="1" Grid.Row="4" IsChecked="{Binding ClearSelectionOnClean}"/>
-                    <TextBlock Classes="default" Grid.Column="0" Grid.Row="5" Text="HitTestRadius"/>
-                    <TextBox Classes="default" Grid.Column="1" Grid.Row="5" Text="{Binding HitTestRadius}"/>
-                    <TextBlock Classes="default" Grid.Column="0" Grid.Row="6" Text="ConnectPoints"/>
-                    <CheckBox Classes="default" Grid.Column="1" Grid.Row="6" IsChecked="{Binding ConnectPoints}"/>
-                    <TextBlock Classes="default" Grid.Column="0" Grid.Row="7" Text="ConnectTestRadius"/>
-                    <TextBox Classes="default" Grid.Column="1" Grid.Row="7" Text="{Binding ConnectTestRadius}"/>
-                    <TextBlock Classes="default" Grid.Column="0" Grid.Row="8" Text="DisconnectPoints"/>
-                    <CheckBox Classes="default" Grid.Column="1" Grid.Row="8" IsChecked="{Binding DisconnectPoints}"/>
-                    <TextBlock Classes="default" Grid.Column="0" Grid.Row="9" Text="DisconnectTestRadius"/>
-                    <TextBox Classes="default" Grid.Column="1" Grid.Row="9" Text="{Binding DisconnectTestRadius}"/>
-                    <TextBlock Classes="default" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="10" Text="Hold Ctrl key to add/remove selected shapes."/>
-                    <TextBlock Classes="default" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="11" Text="Hold Shift key to connect/disconnect points."/>
-                    <TextBlock Classes="default" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="12" Text="Hold Shift key to select path figure or group shape/point."/>
-                    <TextBlock Classes="default" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="13" Text="Hold Alt key to select figure shape."/>
-                    <TextBlock Classes="default" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="14" Text="Hold Shift+Alt key to select figure shape."/>
+                    <TextBlock Classes="default" Grid.Column="0" Grid.Row="2" Text="ClearSelectionOnClean"/>
+                    <CheckBox Classes="default" Grid.Column="1" Grid.Row="2" IsChecked="{Binding ClearSelectionOnClean}"/>
+                    <TextBlock Classes="default" Grid.Column="0" Grid.Row="3" Text="HitTestRadius"/>
+                    <TextBox Classes="default" Grid.Column="1" Grid.Row="3" Text="{Binding HitTestRadius}"/>
+                    <TextBlock Classes="default" Grid.Column="0" Grid.Row="4" Text="ConnectPoints"/>
+                    <CheckBox Classes="default" Grid.Column="1" Grid.Row="4" IsChecked="{Binding ConnectPoints}"/>
+                    <TextBlock Classes="default" Grid.Column="0" Grid.Row="5" Text="ConnectTestRadius"/>
+                    <TextBox Classes="default" Grid.Column="1" Grid.Row="5" Text="{Binding ConnectTestRadius}"/>
+                    <TextBlock Classes="default" Grid.Column="0" Grid.Row="6" Text="DisconnectPoints"/>
+                    <CheckBox Classes="default" Grid.Column="1" Grid.Row="6" IsChecked="{Binding DisconnectPoints}"/>
+                    <TextBlock Classes="default" Grid.Column="0" Grid.Row="7" Text="DisconnectTestRadius"/>
+                    <TextBox Classes="default" Grid.Column="1" Grid.Row="7" Text="{Binding DisconnectTestRadius}"/>
+                </Grid>
+            </ScrollViewer>
+        </TabItem>
+        <TabItem Classes="default" Header="Modifiers">
+            <ScrollViewer>
+                <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="Auto,*">
+                    <TextBlock Classes="default" Grid.Column="0" Grid.Row="0" Text="SelectionModifier"/>
+                    <TextBox Classes="default" Grid.Column="1" Grid.Row="0" Text="{Binding SelectionModifier}"/>
+                    <TextBlock Classes="default" Grid.Column="0" Grid.Row="1" Text="ConnectionModifier"/>
+                    <TextBox Classes="default" Grid.Column="1" Grid.Row="1" Text="{Binding ConnectionModifier}"/>
+                    <TextBlock Classes="default" Grid.Column="0" Grid.Row="2" Text="CopyModifier"/>
+                    <TextBox Classes="default" Grid.Column="1" Grid.Row="2" Text="{Binding CopyModifier}"/>
+                    <TextBlock Classes="default" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="3" Text="Hold Ctrl key to add/remove selected shapes."/>
+                    <TextBlock Classes="default" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="4" Text="Hold Shift key to connect/disconnect points."/>
+                    <TextBlock Classes="default" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="5" Text="Hold Shift key to select path figure or group shape/point."/>
+                    <TextBlock Classes="default" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="6" Text="Hold Alt key to select figure shape."/>
+                    <TextBlock Classes="default" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="7" Text="Hold Shift+Alt key to select figure shape."/>
+                    <TextBlock Classes="default" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="8" Text="Hold Alt key to copy selected shapes."/>
                 </Grid>
             </ScrollViewer>
         </TabItem>
