@@ -150,7 +150,7 @@ namespace Draw2D.ViewModels.Style
             StrokeJoin strokeJoin = StrokeJoin.Miter,
             double strokeMiter = 4.0,
             bool isScaled = false,
-            string fontFamily = "Calibri",
+            string fontFamily = "System", // Calibri
             double fontSize = 12.0,
             HAlign hAlign = HAlign.Center,
             VAlign vAlign = VAlign.Center,
