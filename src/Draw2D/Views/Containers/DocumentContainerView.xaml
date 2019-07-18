@@ -49,6 +49,9 @@
                 <ContentControl Content="{Binding GroupLibrary}" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3"/>
             </Grid>
         </TabItem>
+        <TabItem Classes="default" Header="PointTemplate">
+            <ContentControl Content="{Binding PointTemplate}"/>
+        </TabItem>
         <TabItem Classes="default" Header="Object">
             <ScrollViewer>
                 <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="Auto,*">
