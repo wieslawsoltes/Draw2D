@@ -12,6 +12,7 @@ namespace Draw2D.ViewModels.Tools
         private SelectionTargets _targets;
         private Modifier _selectionModifier;
         private Modifier _connectionModifier;
+        private Modifier _copyModifier;
         private string _selectionStyle;
         private bool _clearSelectionOnClean;
         private double _hitTestRadius;
@@ -46,6 +47,13 @@ namespace Draw2D.ViewModels.Tools
         {
             get => _connectionModifier;
             set => Update(ref _connectionModifier, value);
+        }
+
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
+        public Modifier CopyModifier
+        {
+            get => _copyModifier;
+            set => Update(ref _copyModifier, value);
         }
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
