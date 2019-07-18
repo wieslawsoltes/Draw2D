@@ -257,7 +257,7 @@ namespace Draw2D.ViewModels.Tools
 
         private void SetContext(IToolContext context) => _context = context;
 
-        public void SetTool(string name) => _context.SetTool(name);
+        public void SetTool(string title) => _context.SetTool(title);
 
         public double GetWidth() => _context.GetWidth();
 

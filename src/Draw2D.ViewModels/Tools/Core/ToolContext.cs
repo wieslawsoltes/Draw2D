@@ -72,24 +72,33 @@ namespace Draw2D.ViewModels.Tools
             _documentContainer?.Dispose();
         }
 
+        private bool CompareToolTitle(ITool tool, string title)
+        {
+            if (tool == null || string.IsNullOrEmpty(tool.Title) || string.IsNullOrEmpty(title))
+            {
+                return false;
+            }
+            return string.Compare(tool.Title, title, StringComparison.OrdinalIgnoreCase) == 0;
+        }
+
         public void SetTool(string title)
         {
-            if (CurrentTool is PathTool pathTool && pathTool.Settings.CurrentTool.Title != title)
+            if (CurrentTool is PathTool pathTool && !CompareToolTitle(pathTool.Settings.CurrentTool, title))
             {
                 pathTool.CleanCurrentTool(this);
-                var tool = pathTool.Settings.Tools.Where(t => t.Title == title).FirstOrDefault();
+                var tool = pathTool.Settings.Tools.Where(t => CompareToolTitle(t, title)).FirstOrDefault();
                 if (tool != null)
                 {
                     pathTool.Settings.CurrentTool = tool;
                 }
                 else
                 {
-                    CurrentTool = Tools.Where(t => t.Title == title).FirstOrDefault();
+                    CurrentTool = Tools.Where(t => CompareToolTitle(t, title)).FirstOrDefault();
                 }
             }
             else
             {
-                CurrentTool = Tools.Where(t => t.Title == title).FirstOrDefault();
+                CurrentTool = Tools.Where(t => CompareToolTitle(t, title)).FirstOrDefault();
             }
         }
 

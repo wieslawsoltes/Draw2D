@@ -23,7 +23,7 @@ namespace Draw2D.ViewModels.Tools
         public State CurrentState { get; set; } = State.StartPoint;
 
         [IgnoreDataMember]
-        public new string Title => "oval";
+        public new string Title => "Oval";
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public OvalToolSettings Settings
