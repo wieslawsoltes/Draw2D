@@ -23,14 +23,14 @@
                 </Grid>
             </ScrollViewer>
         </TabItem>
-        <TabItem Classes="default" Header="Stroke">
+        <TabItem Classes="default" Header="StrokePaint">
             <ContentControl Content="{Binding StrokePaint}"/>
         </TabItem>
-        <TabItem Classes="default" Header="Fill">
+        <TabItem Classes="default" Header="FillPaint">
             <ContentControl Content="{Binding FillPaint}"/>
         </TabItem>
 
-        <TabItem Classes="default" Header="Text">
+        <TabItem Classes="default" Header="TextPaint">
             <ContentControl Content="{Binding TextPaint}"/>
         </TabItem>
         <TabItem Classes="default" Header="Object">

@@ -68,11 +68,11 @@ namespace Draw2D.Bounds
             _rootNodes[_currentRootNode].Children.Add(new ChildNode(arc, styleId, dx, dy, scale, geometry));
         }
 
-        public void DrawEllipse(object dc, EllipseShape ellipse, string styleId, double dx, double dy, double scale)
+        public void DrawOval(object dc, OvalShape oval, string styleId, double dx, double dy, double scale)
         {
             var geometry = new SKPath() { FillType = SKPathFillType.Winding };
-            SkiaHelper.AddOval(null, ellipse, dx, dy, geometry);
-            _rootNodes[_currentRootNode].Children.Add(new ChildNode(ellipse, styleId, dx, dy, scale, geometry));
+            SkiaHelper.AddOval(null, oval, dx, dy, geometry);
+            _rootNodes[_currentRootNode].Children.Add(new ChildNode(oval, styleId, dx, dy, scale, geometry));
         }
 
         public void DrawText(object dc, TextShape text, string styleId, double dx, double dy, double scale)

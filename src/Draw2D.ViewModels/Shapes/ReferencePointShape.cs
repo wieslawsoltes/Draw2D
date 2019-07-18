@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Runtime.Serialization;
 using Draw2D.ViewModels.Bounds;
 using Draw2D.ViewModels.Decorators;
+using Draw2D.ViewModels.Style;
 
 namespace Draw2D.ViewModels.Shapes
 {
@@ -176,6 +177,7 @@ namespace Draw2D.ViewModels.Shapes
             return new ReferencePointShape()
             {
                 StyleId = this.StyleId,
+                Effects = (IPaintEffects)this.Effects?.Copy(shared),
                 Owner = this.Owner,
                 Point = this.Point,
                 Reference = this.Reference,

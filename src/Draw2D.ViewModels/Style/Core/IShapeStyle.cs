@@ -8,8 +8,8 @@ namespace Draw2D.ViewModels.Style
         bool IsStroked { get; set; }
         bool IsFilled { get; set; }
         bool IsText { get; set; }
-        IStrokePaint StrokePaint { get; set; }
-        IFillPaint FillPaint{ get; set; }
-        ITextPaint TextPaint{ get; set; }
+        IPaint StrokePaint { get; set; }
+        IPaint FillPaint { get; set; }
+        IPaint TextPaint { get; set; }
     }
 }

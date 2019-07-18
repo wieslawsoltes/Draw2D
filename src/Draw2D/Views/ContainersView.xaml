@@ -117,7 +117,7 @@
                                 <KeyBinding Command="{Binding $parent[UserControl].DataContext.SetTool}" CommandParameter="Rectangle" Gesture="R"/>
                                 <KeyBinding Command="{Binding $parent[UserControl].DataContext.SetTool}" CommandParameter="Circle" Gesture="C"/>
                                 <KeyBinding Command="{Binding $parent[UserControl].DataContext.SetTool}" CommandParameter="Arc" Gesture="A"/>
-                                <KeyBinding Command="{Binding $parent[UserControl].DataContext.SetTool}" CommandParameter="Ellipse" Gesture="E"/>
+                                <KeyBinding Command="{Binding $parent[UserControl].DataContext.SetTool}" CommandParameter="Oval" Gesture="O"/>
                                 <KeyBinding Command="{Binding $parent[UserControl].DataContext.SetTool}" CommandParameter="Text" Gesture="T"/>
                             </Border.KeyBindings>
                             <zc:ZoomControl InputTarget="{Binding $parent[UserControl].DataContext}" ZoomServiceState="{Binding ZoomServiceState}" DrawTarget="{Binding}" Background="Transparent" ClipToBounds="False"/>

@@ -3,12 +3,269 @@
 using System.Collections.Generic;
 using Draw2D.ViewModels.Containers;
 using Draw2D.ViewModels.Style;
+using Draw2D.ViewModels.Style.ColorFilters;
+using Draw2D.ViewModels.Style.ImageFilters;
+using Draw2D.ViewModels.Style.MaskFilters;
 using Draw2D.ViewModels.Style.PathEffects;
+using Draw2D.ViewModels.Style.Shaders;
 
 namespace Draw2D.ViewModels
 {
     public static class IsDirtyExtensions
     {
+        public static bool IsColorFilterDirty(this IColorFilter colorFilter)
+        {
+            if (colorFilter == null)
+            {
+                return false;
+            }
+
+            if (colorFilter.IsDirty)
+            {
+                return true;
+            }
+
+            switch (colorFilter)
+            {
+                case BlendModeColorFilter blendModeColorFilter:
+                    {
+                        // TODO:
+                    }
+                    break;
+                case ColorCubeColorFilter colorCubeColorFilter:
+                    {
+                        // TODO:
+                    }
+                    break;
+                case ColorMatrixColorFilter colorMatrixColorFilter:
+                    {
+                        // TODO:
+                    }
+                    break;
+                case ComposeColorFilter composeColorFilter:
+                    {
+                        // TODO:
+                    }
+                    break;
+                case GammaColorFilter gammaColorFilter:
+                    {
+                        // TODO:
+                    }
+                    break;
+                case HighContrastColorFilter highContrastColorFilter:
+                    {
+                        // TODO:
+                    }
+                    break;
+                case LightingColorFilter lightingColorFilter:
+                    {
+                        // TODO:
+                    }
+                    break;
+                case LumaColorColorFilter lumaColorColorFilter:
+                    {
+                        // TODO:
+                    }
+                    break;
+                case TableColorFilter tableColorFilter:
+                    {
+                        // TODO:
+                    }
+                    break;
+                default:
+                    break;
+            }
+
+            return false;
+        }
+
+        public static bool IsImageFilterDirty(this IImageFilter imageFilter)
+        {
+            if (imageFilter == null)
+            {
+                return false;
+            }
+
+            if (imageFilter.IsDirty)
+            {
+                return true;
+            }
+
+            switch (imageFilter)
+            {
+                case AlphaThresholdImageFilter alphaThresholdImageFilter:
+                    {
+                        // TODO:
+                    }
+                    break;
+                case ArithmeticImageFilter arithmeticImageFilter:
+                    {
+                        // TODO:
+                    }
+                    break;
+                case BlendModeImageFilter blendModeImageFilter:
+                    {
+                        // TODO:
+                    }
+                    break;
+                case BlurImageFilter blurImageFilter:
+                    {
+                        // TODO:
+                    }
+                    break;
+                case ColorFilterImageFilter colorFilterImageFilter:
+                    {
+                        // TODO:
+                    }
+                    break;
+                case ComposeImageFilter composeImageFilter:
+                    {
+                        // TODO:
+                    }
+                    break;
+                case DilateImageFilter dilateImageFilter:
+                    {
+                        // TODO:
+                    }
+                    break;
+                case DisplacementMapEffectImageFilter displacementMapEffectImageFilter:
+                    {
+                        // TODO:
+                    }
+                    break;
+                case DistantLitDiffuseImageFilter distantLitDiffuseImageFilter:
+                    {
+                        // TODO:
+                    }
+                    break;
+                case DistantLitSpecularImageFilter distantLitSpecularImageFilter:
+                    {
+                        // TODO:
+                    }
+                    break;
+                case DropShadowImageFilter dropShadowImageFilter:
+                    {
+                        // TODO:
+                    }
+                    break;
+                case ErodeImageFilter erodeImageFilter:
+                    {
+                        // TODO:
+                    }
+                    break;
+                case ImageImageFilter imageImageFilter:
+                    {
+                        // TODO:
+                    }
+                    break;
+                case MagnifierImageFilter magnifierImageFilter:
+                    {
+                        // TODO:
+                    }
+                    break;
+                case MatrixImageFilter matrixImageFilter:
+                    {
+                        // TODO:
+                    }
+                    break;
+                case MatrixConvolutionImageFilter matrixConvolutionImageFilter:
+                    {
+                        // TODO:
+                    }
+                    break;
+                case MergeImageFilter mergeImageFilter:
+                    {
+                        // TODO:
+                    }
+                    break;
+                case OffsetImageFilter offsetImageFilter:
+                    {
+                        // TODO:
+                    }
+                    break;
+                case PaintImageFilter paintImageFilter:
+                    {
+                        // TODO:
+                    }
+                    break;
+                case PictureImageFilter pictureImageFilter:
+                    {
+                        // TODO:
+                    }
+                    break;
+                case PointLitDiffuseImageFilter pointLitDiffuseImageFilter:
+                    {
+                        // TODO:
+                    }
+                    break;
+                case PointLitSpecularImageFilter pointLitSpecularImageFilter:
+                    {
+                        // TODO:
+                    }
+                    break;
+                case SpotLitDiffuseImageFilter spotLitDiffuseImageFilter:
+                    {
+                        // TODO:
+                    }
+                    break;
+                case SpotLitSpecularImageFilter spotLitSpecularImageFilter:
+                    {
+                        // TODO:
+                    }
+                    break;
+                case TileImageFilter tileImageFilter:
+                    {
+                        // TODO:
+                    }
+                    break;
+                default:
+                    break;
+            }
+
+            return false;
+        }
+
+        public static bool IsMaskFilterDirty(this IMaskFilter maskFilter)
+        {
+            if (maskFilter == null)
+            {
+                return false;
+            }
+
+            if (maskFilter.IsDirty)
+            {
+                return true;
+            }
+
+            switch (maskFilter)
+            {
+                case BlurMaskFilter blurMaskFilter:
+                    {
+                        // TODO:
+                    }
+                    break;
+                case ClipMaskFilter clipMaskFilter:
+                    {
+                        // TODO:
+                    }
+                    break;
+                case GammaMaskFilter gammaMaskFilter:
+                    {
+                        // TODO:
+                    }
+                    break;
+                case TableMaskFilter tableMaskFilter:
+                    {
+                        // TODO:
+                    }
+                    break;
+                default:
+                    break;
+            }
+
+            return false;
+        }
+
         public static bool IsPathEffectDirty(this IPathEffect pathEffect)
         {
             if (pathEffect == null)
@@ -84,16 +341,100 @@ namespace Draw2D.ViewModels
             return false;
         }
 
-        public static bool IsStrokePaintDirty(this IStrokePaint strokePaint)
+        public static bool IsShaderDirty(this IShader shader)
         {
-            if (strokePaint == null)
+            if (shader == null)
             {
                 return false;
             }
 
-            if (strokePaint.IsDirty
-             || (strokePaint.Color?.IsDirty ?? false)
-             || (strokePaint.PathEffect?.IsPathEffectDirty() ?? false))
+            if (shader.IsDirty)
+            {
+                return true;
+            }
+
+            switch (shader)
+            {
+                case BitmapShader bitmapShader:
+                    {
+                        // TODO:
+                    }
+                    break;
+                case ColorShader colorShader:
+                    {
+                        // TODO:
+                    }
+                    break;
+                case ColorFilterShader colorFilterShader:
+                    {
+                        // TODO:
+                    }
+                    break;
+                case ComposeShader composeShader:
+                    {
+                        // TODO:
+                    }
+                    break;
+                case EmptyShader emptyShader:
+                    {
+                        // TODO:
+                    }
+                    break;
+                case LinearGradientShader linearGradientShader:
+                    {
+                        // TODO:
+                    }
+                    break;
+                case LocalMatrixShader localMatrixShader:
+                    {
+                        // TODO:
+                    }
+                    break;
+                case PerlinNoiseFractalNoiseShader perlinNoiseFractalNoiseShader:
+                    {
+                        // TODO:
+                    }
+                    break;
+                case PerlinNoiseTurbulenceShader perlinNoiseTurbulenceShader:
+                    {
+                        // TODO:
+                    }
+                    break;
+                case RadialGradientShader radialGradientShader:
+                    {
+                        // TODO:
+                    }
+                    break;
+                case SweepGradientShader sweepGradientShader:
+                    {
+                        // TODO:
+                    }
+                    break;
+                case TwoPointConicalGradientShader twoPointConicalGradientShader:
+                    {
+                        // TODO:
+                    }
+                    break;
+                default:
+                    break;
+            }
+
+            return false;
+        }
+
+        public static bool IsPaintEffectsDirty(this IPaintEffects paintEffects)
+        {
+            if (paintEffects == null)
+            {
+                return false;
+            }
+
+            if (paintEffects.IsDirty
+             || (paintEffects?.ColorFilter?.IsColorFilterDirty() ?? false)
+             || (paintEffects?.ImageFilter?.IsImageFilterDirty() ?? false)
+             || (paintEffects?.MaskFilter?.IsMaskFilterDirty() ?? false)
+             || (paintEffects?.PathEffect?.IsPathEffectDirty() ?? false)
+             || (paintEffects?.Shader?.IsShaderDirty() ?? false))
             {
                 return true;
             }
@@ -101,34 +442,17 @@ namespace Draw2D.ViewModels
             return false;
         }
 
-        public static bool IsFillPaintDirty(this IFillPaint fillPaint)
+        public static bool IsPaintDirty(this IPaint paint)
         {
-            if (fillPaint == null)
+            if (paint == null)
             {
                 return false;
             }
 
-            if (fillPaint.IsDirty
-             || (fillPaint.Color?.IsDirty ?? false)
-             || (fillPaint.PathEffect?.IsPathEffectDirty() ?? false))
-            {
-                return true;
-            }
-
-            return false;
-        }
-
-        public static bool IsTextPaintDirty(this ITextPaint textPaint)
-        {
-            if (textPaint == null)
-            {
-                return false;
-            }
-
-            if (textPaint.IsDirty
-             || (textPaint.Color?.IsDirty ?? false)
-             || (textPaint.Typeface?.IsDirty ?? false)
-             || (textPaint.PathEffect?.IsPathEffectDirty() ?? false))
+            if (paint.IsDirty
+             || (paint.Color?.IsDirty ?? false)
+             || (paint.Typeface?.IsDirty ?? false)
+             || (paint.Effects?.IsPaintEffectsDirty() ?? false))
             {
                 return true;
             }
@@ -144,9 +468,9 @@ namespace Draw2D.ViewModels
             }
 
             if (style.IsDirty
-             || (style.StrokePaint?.IsStrokePaintDirty() ?? false)
-             || (style.FillPaint?.IsFillPaintDirty() ?? false)
-             || (style.TextPaint?.IsTextPaintDirty() ?? false))
+             || (style.StrokePaint?.IsPaintDirty() ?? false)
+             || (style.FillPaint?.IsPaintDirty() ?? false)
+             || (style.TextPaint?.IsPaintDirty() ?? false))
             {
                 return true;
             }
@@ -204,6 +528,11 @@ namespace Draw2D.ViewModels
                         return true;
                     }
                 }
+                
+                if (point.Effects?.IsPaintEffectsDirty() ?? false)
+                {
+                    return true;
+                }
             }
 
             return false;
@@ -226,6 +555,11 @@ namespace Draw2D.ViewModels
                 foreach (var shape in canvasContainer.Shapes)
                 {
                     if (shape.IsDirty)
+                    {
+                        return true;
+                    }
+
+                    if (shape.Effects?.IsPaintEffectsDirty() ?? false)
                     {
                         return true;
                     }

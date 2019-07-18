@@ -5,6 +5,7 @@ using System.Collections.ObjectModel;
 using System.Runtime.Serialization;
 using Draw2D.ViewModels.Bounds;
 using Draw2D.ViewModels.Decorators;
+using Draw2D.ViewModels.Style;
 
 namespace Draw2D.ViewModels.Shapes
 {
@@ -227,6 +228,7 @@ namespace Draw2D.ViewModels.Shapes
             {
                 Points = new ObservableCollection<IPointShape>(),
                 StyleId = this.StyleId,
+                Effects = (IPaintEffects)this.Effects?.Copy(shared),
                 Text = (Text)this.Text?.Copy(shared)
             };
 

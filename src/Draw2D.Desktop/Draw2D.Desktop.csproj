@@ -23,7 +23,7 @@
 
   <ItemGroup>
     <Compile Include="**\*.cs" Exclude="obj\**" />
-    <AvaloniaResource Include="Assets\*" Exclude="bin\**;obj\**;**\*.xproj;packages\**;@(EmbeddedResource)" />
+    <AvaloniaResource Include="Assets\*" />
     <Compile Update="**\*.xaml.cs">
       <DependentUpon>%(Filename)</DependentUpon>
       <SubType>Code</SubType>
@@ -34,8 +34,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Avalonia" Version="0.8.999-cibuild0003193-beta" />
-    <PackageReference Include="Avalonia.Desktop" Version="0.8.999-cibuild0003193-beta" />
+    <PackageReference Include="Avalonia" Version="0.8.999-cibuild0003215-beta" />
+    <PackageReference Include="Avalonia.Desktop" Version="0.8.999-cibuild0003215-beta" />
     <PackageReference Include="Avalonia.Angle.Windows.Natives" Version="2.1.0.2019013001" />
   </ItemGroup>
 

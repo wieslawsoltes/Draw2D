@@ -404,7 +404,7 @@ namespace Draw2D.ViewModels.Tools
         public void Cut(IToolContext context)
         {
             Copy(context);
-            Delete(context);
+            DeleteOnlyAccepted(context);
         }
 
         public void Copy(IToolContext context)
@@ -439,13 +439,31 @@ namespace Draw2D.ViewModels.Tools
             }
         }
 
+        private void DeleteOnlyAccepted(IToolContext context)
+        {
+            if (context.DocumentContainer?.ContainerView?.SelectionState != null)
+            {
+                lock (context.DocumentContainer.ContainerView.SelectionState?.Shapes)
+                {
+                    Delete(context.DocumentContainer?.ContainerView?.CurrentContainer, context.DocumentContainer.ContainerView.SelectionState, true);
+
+                    context.DocumentContainer?.ContainerView?.SelectionState?.Dehover();
+                    context.DocumentContainer?.ContainerView?.SelectionState?.Clear();
+
+                    context.DocumentContainer?.ContainerView?.InputService?.Redraw?.Invoke();
+
+                    this.CurrentState = State.None;
+                }
+            }
+        }
+
         public void Delete(IToolContext context)
         {
             if (context.DocumentContainer?.ContainerView?.SelectionState != null)
             {
                 lock (context.DocumentContainer.ContainerView.SelectionState?.Shapes)
                 {
-                    Delete(context.DocumentContainer?.ContainerView?.CurrentContainer, context.DocumentContainer.ContainerView.SelectionState);
+                    Delete(context.DocumentContainer?.ContainerView?.CurrentContainer, context.DocumentContainer.ContainerView.SelectionState, false);
 
                     context.DocumentContainer?.ContainerView?.SelectionState?.Dehover();
                     context.DocumentContainer?.ContainerView?.SelectionState?.Clear();
@@ -509,7 +527,7 @@ namespace Draw2D.ViewModels.Tools
                         {
                             context.DocumentContainer?.ContainerView?.SelectionState?.Dehover();
 
-                            Delete(context);
+                            DeleteOnlyAccepted(context);
 
                             group.Select(context.DocumentContainer.ContainerView.SelectionState);
                             group.Owner = context.DocumentContainer?.ContainerView?.CurrentContainer;
@@ -578,7 +596,7 @@ namespace Draw2D.ViewModels.Tools
                         {
                             context.DocumentContainer?.ContainerView?.SelectionState?.Dehover();
 
-                            Delete(context);
+                            DeleteOnlyAccepted(context);
 
                             foreach (var path in paths)
                             {
@@ -624,7 +642,7 @@ namespace Draw2D.ViewModels.Tools
                         {
                             context.DocumentContainer?.ContainerView?.SelectionState?.Dehover();
 
-                            Delete(context);
+                            DeleteOnlyAccepted(context);
 
                             foreach (var path in paths)
                             {
@@ -670,7 +688,7 @@ namespace Draw2D.ViewModels.Tools
                         {
                             context.DocumentContainer?.ContainerView?.SelectionState?.Dehover();
 
-                            Delete(context);
+                            DeleteOnlyAccepted(context);
 
                             foreach (var path in paths)
                             {
@@ -1202,13 +1220,21 @@ namespace Draw2D.ViewModels.Tools
             }
         }
 
-        internal void Delete(ICanvasContainer container, ISelectionState selectionState)
+        internal void Delete(ICanvasContainer container, ISelectionState selectionState, bool onlyAccepted)
         {
             var shapesHash = new HashSet<IBaseShape>(container.Shapes);
             var selected = new List<IBaseShape>(selectionState.Shapes);
 
             foreach (var shape in selected)
             {
+                if (onlyAccepted)
+                {
+                    if (!IsAcceptedShape(shape))
+                    {
+                        continue;
+                    }
+                }
+
                 if (shapesHash.Contains(shape))
                 {
                     shape.Deselect(selectionState);
