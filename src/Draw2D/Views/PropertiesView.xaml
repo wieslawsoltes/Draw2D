@@ -61,9 +61,6 @@
                             </Grid>
                         </ScrollViewer>
                     </TabItem>
-                    <TabItem Classes="default" Header="Point">
-                        <ContentControl Content="{Binding PointTemplate}"/>
-                    </TabItem>
                 </TabControl>
             </TabItem>
         </TabControl>
