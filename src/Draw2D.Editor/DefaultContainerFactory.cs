@@ -315,6 +315,7 @@ namespace Draw2D.Editor
                     Targets = SelectionTargets.Shapes,
                     SelectionModifier = Modifier.Control,
                     ConnectionModifier = Modifier.Shift,
+                    CopyModifier = Modifier.Alt,
                     SelectionStyle = "Selection",
                     ClearSelectionOnClean = false,
                     HitTestRadius = 7.0,
