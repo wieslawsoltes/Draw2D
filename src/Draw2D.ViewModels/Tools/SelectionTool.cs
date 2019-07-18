@@ -23,6 +23,7 @@ namespace Draw2D.ViewModels.Tools
         private double _previousY;
         private IList<IBaseShape> _shapesToCopy = null;
         private bool _disconnected = false;
+        private bool _copied = false;
 
         public enum State
         {
@@ -52,6 +53,7 @@ namespace Draw2D.ViewModels.Tools
         private void LeftDownNoneInternal(IToolContext context, double x, double y, Modifier modifier)
         {
             _disconnected = false;
+            _copied = false;
 
             _originX = x;
             _originY = y;
@@ -235,6 +237,12 @@ namespace Draw2D.ViewModels.Tools
             _previousX = x;
             _previousY = y;
 
+            if (modifier == Modifier.None)
+            {
+                _disconnected = false;
+                _copied = false;
+            }
+
             if (context.DocumentContainer?.ContainerView?.SelectionState != null)
             {
                 if (context.DocumentContainer.ContainerView.SelectionState?.Shapes.Count == 1)
@@ -263,22 +271,36 @@ namespace Draw2D.ViewModels.Tools
                                 }
                             }
                         }
+
+                        if (modifier == Settings?.CopyModifier && _copied == false)
+                        {
+                            Duplicate(context);
+                            this.CurrentState = State.Move;
+                            _copied = true;
+                        }
                     }
 
                     shape.Move(context.DocumentContainer.ContainerView.SelectionState, dx, dy);
                 }
                 else
                 {
-                    var selectedToDisconnect = new List<IBaseShape>(context.DocumentContainer.ContainerView.SelectionState?.Shapes);
-                    foreach (var shape in selectedToDisconnect)
+                    if (Settings.DisconnectPoints && modifier == Settings?.ConnectionModifier && _disconnected == false)
                     {
-                        if (Settings.DisconnectPoints && modifier == Settings?.ConnectionModifier)
+                        var selectedToDisconnect = new List<IBaseShape>(context.DocumentContainer.ContainerView.SelectionState?.Shapes);
+                        foreach (var shape in selectedToDisconnect)
                         {
-                            if (!(shape is IPointShape) && _disconnected == false)
+                            if (IsAcceptedShape(shape))
                             {
                                 DisconnectImpl(context, shape);
                             }
                         }
+                    }
+
+                    if (modifier == Settings?.CopyModifier && _copied == false)
+                    {
+                        Duplicate(context);
+                        this.CurrentState = State.Move;
+                        _copied = true;
                     }
 
                     var selectedToMove = new List<IBaseShape>(context.DocumentContainer.ContainerView.SelectionState?.Shapes);
@@ -297,6 +319,7 @@ namespace Draw2D.ViewModels.Tools
             CurrentState = State.None;
 
             _disconnected = false;
+            _copied = false;
 
             context.DocumentContainer?.ContainerView?.SelectionState?.Dehover();
 
