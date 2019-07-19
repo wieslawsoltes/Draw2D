@@ -26,6 +26,27 @@ namespace Draw2D.ViewModels.Containers
             set => Update(ref _currentItem, value);
         }
 
+        public override bool IsTreeDirty()
+        {
+            if (base.IsTreeDirty())
+            {
+                return true;
+            }
+
+            if (_items != null)
+            {
+                foreach (var item in _items)
+                {
+                    if (item?.IsTreeDirty() ?? false)
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
         public override void Invalidate()
         {
             if (_items != null)

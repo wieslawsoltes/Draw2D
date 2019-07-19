@@ -52,6 +52,26 @@ namespace Draw2D.ViewModels.Style.PathEffects
             this.Second = pathEffect;
         }
 
+        public override bool IsTreeDirty()
+        {
+            if (base.IsTreeDirty())
+            {
+                return true;
+            }
+
+            if (_first?.IsTreeDirty() ?? false)
+            {
+                return true;
+            }
+
+            if (_second?.IsTreeDirty() ?? false)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
         public object Copy(Dictionary<object, object> shared)
         {
             return new PathSumEffect()

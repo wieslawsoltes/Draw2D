@@ -111,6 +111,41 @@ namespace Draw2D.ViewModels.Style
             return new PaintEffects(blendMode: BlendMode.SrcOver);
         }
 
+        public override bool IsTreeDirty()
+        {
+            if (base.IsTreeDirty())
+            {
+                return true;
+            }
+
+            if (_colorFilter?.IsTreeDirty() ?? false)
+            {
+                return true;
+            }
+
+            if (_imageFilter?.IsTreeDirty() ?? false)
+            {
+                return true;
+            }
+
+            if (_maskFilter?.IsTreeDirty() ?? false)
+            {
+                return true;
+            }
+
+            if (_pathEffect?.IsTreeDirty() ?? false)
+            {
+                return true;
+            }
+
+            if (_shader?.IsTreeDirty() ?? false)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
         public override void Invalidate()
         {
             _colorFilter?.Invalidate();

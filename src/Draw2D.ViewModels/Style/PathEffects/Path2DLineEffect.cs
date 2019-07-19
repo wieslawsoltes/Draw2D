@@ -57,6 +57,21 @@ namespace Draw2D.ViewModels.Style.PathEffects
             return new Path2DLineEffect(width, matrix) { Title = "HatchDiagonalLines" };
         }
 
+        public override bool IsTreeDirty()
+        {
+            if (base.IsTreeDirty())
+            {
+                return true;
+            }
+
+            if (_matrix?.IsTreeDirty() ?? false)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
         public object Copy(Dictionary<object, object> shared)
         {
             return new Path2DLineEffect()

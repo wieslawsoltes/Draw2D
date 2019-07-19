@@ -177,6 +177,31 @@ namespace Draw2D.ViewModels.Style
             this.VAlign = vAlign;
         }
 
+        public override bool IsTreeDirty()
+        {
+            if (base.IsTreeDirty())
+            {
+                return true;
+            }
+
+            if (_color?.IsTreeDirty() ?? false)
+            {
+                return true;
+            }
+
+            if (_typeface?.IsTreeDirty() ?? false)
+            {
+                return true;
+            }
+
+            if (_effects?.IsTreeDirty() ?? false)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
         public override void Invalidate()
         {
             _color?.Invalidate();

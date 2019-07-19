@@ -52,6 +52,26 @@ namespace Draw2D.ViewModels.Style.PathEffects
             this.Inner = pathEffect;
         }
 
+        public override bool IsTreeDirty()
+        {
+            if (base.IsTreeDirty())
+            {
+                return true;
+            }
+
+            if (_outer?.IsTreeDirty() ?? false)
+            {
+                return true;
+            }
+
+            if (_inner?.IsTreeDirty() ?? false)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
         public object Copy(Dictionary<object, object> shared)
         {
             return new PathComposeEffect()

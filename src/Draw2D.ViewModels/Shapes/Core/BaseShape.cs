@@ -54,6 +54,41 @@ namespace Draw2D.ViewModels.Shapes
             }
         }
 
+        public override bool IsTreeDirty()
+        {
+            if (base.IsTreeDirty())
+            {
+                return true;
+            }
+
+            if (_effects?.IsTreeDirty() ?? false)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        public virtual bool IsPointsTreeDirty()
+        {
+            var points = new List<IPointShape>();
+
+            this.GetPoints(points);
+
+            if (points.Count > 0)
+            {
+                foreach (var point in points)
+                {
+                    if (point.IsTreeDirty())
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
         public override void Invalidate()
         {
             if (_points != null)

@@ -29,6 +29,5 @@ namespace Draw2D.ViewModels.Containers
 
             return copy;
         }
-
     }
 }

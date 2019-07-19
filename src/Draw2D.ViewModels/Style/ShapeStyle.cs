@@ -79,6 +79,31 @@ namespace Draw2D.ViewModels.Style
             this.TextPaint = textPaint;
         }
 
+        public override bool IsTreeDirty()
+        {
+            if (base.IsTreeDirty())
+            {
+                return true;
+            }
+
+            if (_strokePaint?.IsTreeDirty() ?? false)
+            {
+                return true;
+            }
+
+            if (_fillPaint?.IsTreeDirty() ?? false)
+            {
+                return true;
+            }
+
+            if (_textPaint?.IsTreeDirty() ?? false)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
         public override void Invalidate()
         {
             _strokePaint?.Invalidate();

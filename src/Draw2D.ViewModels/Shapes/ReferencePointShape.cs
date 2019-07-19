@@ -153,6 +153,26 @@ namespace Draw2D.ViewModels.Shapes
             points.Add(this);
         }
 
+        public override bool IsTreeDirty()
+        {
+            if (base.IsTreeDirty())
+            {
+                return true;
+            }
+
+            if (_point?.IsTreeDirty() ?? false)
+            {
+                return true;
+            }
+
+            if (_reference?.IsTreeDirty() ?? false)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
         public override void Invalidate()
         {
             base.Invalidate();

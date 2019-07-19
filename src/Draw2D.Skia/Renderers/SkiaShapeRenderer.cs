@@ -94,7 +94,7 @@ namespace Draw2D.Renderers
 
         private void GetSKTypeface(Typeface style, out SKTypeface typeface)
         {
-            if (style.IsDirty || !_typefaceCache.TryGetValue(style, out typeface))
+            if (style.IsTreeDirty() || !_typefaceCache.TryGetValue(style, out typeface))
             {
                 typeface = SkiaHelper.ToSKTypeface(style);
                 _typefaceCache[style] = typeface;
@@ -103,7 +103,7 @@ namespace Draw2D.Renderers
 
         private void GetSKPaintFill(IPaint fillPaint, IPaintEffects effects, double scale, out SKPaint brush)
         {
-            if (fillPaint.IsPaintDirty() || !_fillPaintCache.TryGetValue(fillPaint, out var brushCached))
+            if (fillPaint.IsTreeDirty() || !_fillPaintCache.TryGetValue(fillPaint, out var brushCached))
             {
                 brushCached = SkiaHelper.ToSKPaint(fillPaint, effects, scale, _disposable.Disposables);
                 _fillPaintCache[fillPaint] = brushCached;
@@ -118,7 +118,7 @@ namespace Draw2D.Renderers
 
         private void GetSKPaintStroke(IPaint strokePaint, IPaintEffects effects, double scale, out SKPaint pen)
         {
-            if (strokePaint.IsPaintDirty() || !_strokePaintCache.TryGetValue(strokePaint, out var penCached))
+            if (strokePaint.IsTreeDirty() || !_strokePaintCache.TryGetValue(strokePaint, out var penCached))
             {
                 penCached = SkiaHelper.ToSKPaint(strokePaint, effects, scale, _disposable.Disposables);
                 _strokePaintCache[strokePaint] = penCached;
@@ -137,7 +137,7 @@ namespace Draw2D.Renderers
             cached.paint = null;
             cached.metrics = default;
 
-            if (textPaint.IsPaintDirty() || !_textPaintCache.TryGetValue(textPaint, out cached))
+            if (textPaint.IsTreeDirty() || !_textPaintCache.TryGetValue(textPaint, out cached))
             {
                 GetSKTypeface(textPaint.Typeface, out var typeface);
                 cached.paint = SkiaHelper.ToSKPaint(textPaint, effects, scale, _disposable.Disposables);

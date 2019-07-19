@@ -74,6 +74,27 @@ namespace Draw2D.ViewModels.Shapes
             }
         }
 
+        public override bool IsTreeDirty()
+        {
+            if (base.IsTreeDirty())
+            {
+                return true;
+            }
+
+            if (_shapes != null)
+            {
+                foreach (var shape in _shapes)
+                {
+                    if (shape.IsTreeDirty())
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
         public override void Invalidate()
         {
             foreach (var shape in Shapes)

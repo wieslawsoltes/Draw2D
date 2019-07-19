@@ -7,6 +7,7 @@ namespace Draw2D.ViewModels
     {
         bool IsDirty { get; set; }
         void MarkAsDirty(bool isDirty);
+        bool IsTreeDirty();
         void Invalidate();
     }
 }

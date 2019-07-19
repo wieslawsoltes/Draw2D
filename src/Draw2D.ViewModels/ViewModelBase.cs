@@ -48,6 +48,8 @@ namespace Draw2D.ViewModels
 
         public virtual void MarkAsDirty(bool value) => IsDirty = value;
 
+        public virtual bool IsTreeDirty() => this.IsDirty;
+
         public virtual void Invalidate()
         {
             if (this.IsDirty)

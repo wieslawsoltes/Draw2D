@@ -87,7 +87,7 @@ namespace Draw2D.Presenters
 
         private void GetSKPaintFill(IPaint fillPaint, IPaintEffects effects, double scale, out SKPaint brush)
         {
-            if (fillPaint.IsPaintDirty() || !_paintCache.TryGetValue(fillPaint, out var brushCached))
+            if (fillPaint.IsTreeDirty() || !_paintCache.TryGetValue(fillPaint, out var brushCached))
             {
                 fillPaint.Invalidate();
                 brushCached = SkiaHelper.ToSKPaint(fillPaint, effects, scale, _disposable.Disposables);
@@ -207,11 +207,11 @@ namespace Draw2D.Presenters
 
         public void Draw(object context, double width, double height, double dx, double dy, double zx, double zy)
         {
-            bool isStyleLibraryDirty = _context.DocumentContainer.StyleLibrary.IsStyleLibraryDirty();
-            bool isCurrentContainerDirty = _view.CurrentContainer.IsCanvasContainerDirty();
-            bool isWorkingContainerDirty = _view.WorkingContainer.IsCanvasContainerDirty();
-            bool isPointsCurrentContainerDirty = _view.CurrentContainer.IsPointsDirty();
-            bool isPointsWorkingContainerDirty = _view.WorkingContainer.IsPointsDirty();
+            bool isStyleLibraryDirty = _context.DocumentContainer.StyleLibrary.IsTreeDirty();
+            bool isCurrentContainerDirty = _view.CurrentContainer.IsTreeDirty();
+            bool isWorkingContainerDirty = _view.WorkingContainer.IsTreeDirty();
+            bool isPointsCurrentContainerDirty = _view.CurrentContainer.IsPointsTreeDirty();
+            bool isPointsWorkingContainerDirty = _view.WorkingContainer.IsPointsTreeDirty();
             bool isShapesCurrentDirty = isCurrentContainerDirty == true || isPointsCurrentContainerDirty == true || _previousZX != zx || _previousZY != zy;
             bool isShapesWorkingDirty = isWorkingContainerDirty == true || isPointsWorkingContainerDirty == true || _previousZX != zx || _previousZY != zy;
 
@@ -235,8 +235,8 @@ namespace Draw2D.Presenters
                 _pictureShapesWorking = RecordPicture(_view, _skiaRenderer, zx, DrawShapesWorking);
             }
 
-            bool isSelectionDirty = _view.SelectionState.IsDirty == true || isShapesCurrentDirty == true || isShapesWorkingDirty == true;
-            if (_view.SelectionState.IsDirty == true)
+            bool isSelectionDirty = _view.SelectionState.IsTreeDirty() == true || isShapesCurrentDirty == true || isShapesWorkingDirty == true;
+            if (_view.SelectionState.IsTreeDirty() == true)
             {
                 _view.SelectionState.Invalidate();
             }
