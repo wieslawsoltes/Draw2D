@@ -177,6 +177,17 @@ namespace Draw2D.ViewModels.Style
             this.VAlign = vAlign;
         }
 
+        public override void Invalidate()
+        {
+            _color?.Invalidate();
+
+            _typeface?.Invalidate();
+
+            _effects?.Invalidate();
+
+            base.Invalidate();
+        }
+
         public object Copy(Dictionary<object, object> shared)
         {
             return new Paint()

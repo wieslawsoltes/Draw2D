@@ -64,6 +64,8 @@ namespace Draw2D.ViewModels.Shapes
                 }
             }
 
+            _effects?.Invalidate();
+
             base.Invalidate();
         }
 

@@ -82,29 +82,10 @@ namespace Draw2D.ViewModels.Style
         public override void Invalidate()
         {
             _strokePaint?.Invalidate();
-            _strokePaint?.Color?.Invalidate();
-            _strokePaint?.Typeface?.Invalidate();
-            _strokePaint?.Effects?.Invalidate();
-            _strokePaint?.Effects?.ColorFilter?.Invalidate();
-            _strokePaint?.Effects?.MaskFilter?.Invalidate();
-            _strokePaint?.Effects?.PathEffect?.Invalidate();
-            _strokePaint?.Effects?.Shader?.Invalidate();
 
             _fillPaint?.Invalidate();
-            _fillPaint?.Color?.Invalidate();
-            _fillPaint?.Typeface?.Invalidate();
-            _fillPaint?.Effects?.ColorFilter?.Invalidate();
-            _fillPaint?.Effects?.MaskFilter?.Invalidate();
-            _fillPaint?.Effects?.PathEffect?.Invalidate();
-            _fillPaint?.Effects?.Shader?.Invalidate();
 
             _textPaint?.Invalidate();
-            _textPaint?.Color?.Invalidate();
-            _textPaint?.Typeface?.Invalidate();
-            _textPaint?.Effects?.ColorFilter?.Invalidate();
-            _textPaint?.Effects?.MaskFilter?.Invalidate();
-            _textPaint?.Effects?.PathEffect?.Invalidate();
-            _textPaint?.Effects?.Shader?.Invalidate();
 
             base.Invalidate();
         }

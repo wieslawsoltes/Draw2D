@@ -111,6 +111,19 @@ namespace Draw2D.ViewModels.Style
             return new PaintEffects(blendMode: BlendMode.SrcOver);
         }
 
+        public override void Invalidate()
+
+            _colorFilter?.Invalidate();
+
+            _maskFilter?.Invalidate();
+
+            _pathEffect?.Invalidate();
+
+            _shader?.Invalidate();
+
+            base.Invalidate();
+        }
+
         public object Copy(Dictionary<object, object> shared)
         {
             return new PaintEffects()
