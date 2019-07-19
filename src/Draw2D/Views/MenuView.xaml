@@ -159,8 +159,8 @@
             <Separator/>
             <MenuItem Header="_Break" Icon="{StaticResource BreakIcon}" Command="{Binding Selection.Break}" CommandParameter="{Binding}"/>
             <Separator/>
-            <MenuItem Header="_Connect" Command="{Binding Selection.Connect}" CommandParameter="{Binding}"/>
-            <MenuItem Header="Di_sconnect" Command="{Binding Selection.Disconnect}" CommandParameter="{Binding}"/>
+            <MenuItem Header="_Connect" Icon="{StaticResource ConnectIcon}" Command="{Binding Selection.Connect}" CommandParameter="{Binding}"/>
+            <MenuItem Header="Di_sconnect" Icon="{StaticResource DisconnectIcon}" Command="{Binding Selection.Disconnect}" CommandParameter="{Binding}"/>
         </MenuItem>
         <MenuItem Header="_Debug">
             <MenuItem Header="DrawDirtyRects" Click="DebugDrawDirtyRects_Click">
