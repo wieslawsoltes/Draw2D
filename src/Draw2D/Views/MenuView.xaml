@@ -94,7 +94,7 @@
             <Separator/>
             <MenuItem Header="_Line" Icon="{StaticResource LineIcon}" Command="{Binding SetTool}" CommandParameter="Line"/>
             <MenuItem Header="Pol_y Line" Icon="{StaticResource PolyLineIcon}" Command="{Binding SetTool}" CommandParameter="PolyLine"/>
-            <MenuItem Header="Cubic _Bezier" Command="{Binding SetTool}" CommandParameter="CubicBezier"/>>
+            <MenuItem Header="Cubic _Bezier" Command="{Binding SetTool}" CommandParameter="CubicBezier"/>
             <MenuItem Header="_Quadratic Bezier" Command="{Binding SetTool}" CommandParameter="QuadraticBezier"/>
             <MenuItem Header="Con_ic" Icon="{StaticResource ConicIcon}" Command="{Binding SetTool}" CommandParameter="Conic"/>
             <Separator/>
