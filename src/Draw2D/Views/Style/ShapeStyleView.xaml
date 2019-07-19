@@ -29,7 +29,6 @@
         <TabItem Classes="default" Header="FillPaint">
             <ContentControl Content="{Binding FillPaint}"/>
         </TabItem>
-
         <TabItem Classes="default" Header="TextPaint">
             <ContentControl Content="{Binding TextPaint}"/>
         </TabItem>

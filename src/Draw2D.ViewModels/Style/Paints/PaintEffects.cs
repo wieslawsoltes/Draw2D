@@ -112,7 +112,7 @@ namespace Draw2D.ViewModels.Style
         }
 
         public override void Invalidate()
-
+        {
             _colorFilter?.Invalidate();
 
             _maskFilter?.Invalidate();
