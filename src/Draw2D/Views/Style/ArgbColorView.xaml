@@ -12,16 +12,16 @@
         <TabItem Classes="default" Header="Color">
             <ScrollViewer>
                 <Grid RowDefinitions="Auto,Auto,Auto,Auto" ColumnDefinitions="Auto,*,50">
-                    <TextBlock Classes="default" Grid.Column="0" Grid.Row="0" Text="A"/>
+                    <DrawingPresenter Drawing="{StaticResource AlphaChannel}" ToolTip.Tip="Alpha Channel" Width="16" Height="16" Grid.Column="0" Grid.Row="0"/>
                     <Slider Classes="default" Grid.Column="1" Grid.Row="0" Value="{Binding A, Mode=TwoWay}" Minimum="0" Maximum="255"/>
                     <TextBox Classes="default" Grid.Column="2" Grid.Row="0" Text="{Binding A, Mode=TwoWay}"/>
-                    <TextBlock Classes="default" Grid.Column="0" Grid.Row="1" Text="R"/>
+                    <DrawingPresenter Drawing="{StaticResource RedChannel}" ToolTip.Tip="Red Channel" Width="16" Height="16" Grid.Column="0" Grid.Row="1"/>
                     <Slider Classes="default" Grid.Column="1" Grid.Row="1" Value="{Binding R, Mode=TwoWay}" Minimum="0" Maximum="255"/>
                     <TextBox Classes="default" Grid.Column="2" Grid.Row="1" Text="{Binding R, Mode=TwoWay}"/>
-                    <TextBlock Classes="default" Grid.Column="0" Grid.Row="2" Text="G"/>
+                    <DrawingPresenter Drawing="{StaticResource GreenChannel}" ToolTip.Tip="Green Channel" Width="16" Height="16" Grid.Column="0" Grid.Row="2"/>
                     <Slider Classes="default" Grid.Column="1" Grid.Row="2" Value="{Binding G, Mode=TwoWay}" Minimum="0" Maximum="255"/>
                     <TextBox Classes="default" Grid.Column="2" Grid.Row="2" Text="{Binding G, Mode=TwoWay}"/>
-                    <TextBlock Classes="default" Grid.Column="0" Grid.Row="3" Text="B"/>
+                    <DrawingPresenter Drawing="{StaticResource BlueChannel}" ToolTip.Tip="Blue Channel" Width="16" Height="16" Grid.Column="0" Grid.Row="3"/>
                     <Slider Classes="default" Grid.Column="1" Grid.Row="3" Value="{Binding B, Mode=TwoWay}" Minimum="0" Maximum="255"/>
                     <TextBox Classes="default" Grid.Column="2" Grid.Row="3" Text="{Binding B, Mode=TwoWay}"/>
                 </Grid>
