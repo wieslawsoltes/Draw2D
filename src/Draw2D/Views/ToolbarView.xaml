@@ -155,7 +155,7 @@
         <Grid x:Name="shapeToolbar">
             <StackPanel Classes="toolbar">
                 <Button Classes="toolbar" ToolTip.Tip="Duplicate" Content="{StaticResource DuplicateIcon}" Command="{Binding Selection.Duplicate}" CommandParameter="{Binding}"/>
-                <Button Classes="toolbar"/>
+                <Grid Classes="separator"/>
                 <Button Classes="toolbar" ToolTip.Tip="Create Group" Content="{StaticResource GroupIcon}" Command="{Binding Selection.CreateGroup}" CommandParameter="{Binding}"/>
                 <Button Classes="toolbar" ToolTip.Tip="Create Reference" Content="{StaticResource ReferenceIcon}" Command="{Binding Selection.CreateReference}" CommandParameter="{Binding}"/>
                 <Button Classes="toolbar" ToolTip.Tip="Create Path" Content="" Command="{Binding Selection.CreatePath}" CommandParameter="{Binding}"/>
