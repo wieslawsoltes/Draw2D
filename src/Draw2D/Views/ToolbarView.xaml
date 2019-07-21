@@ -51,22 +51,26 @@
         <DrawingPresenter x:Key="DuplicateIcon" Drawing="{StaticResource CopyToClipboard}" Width="16" Height="16"/>
         <DrawingPresenter x:Key="GroupIcon" Drawing="{StaticResource Group}" Width="16" Height="16"/>
         <DrawingPresenter x:Key="ReferenceIcon" Drawing="{StaticResource Reference}" Width="16" Height="16"/>
+        <DrawingPresenter x:Key="BreakIcon" Drawing="{StaticResource Ungroup}" Width="16" Height="16"/>
+        <!-- Align -->
         <DrawingPresenter x:Key="AlignLeftIcon" Drawing="{StaticResource AlignLeft}" Width="16" Height="16"/>
         <DrawingPresenter x:Key="AlignCenteredIcon" Drawing="{StaticResource TextCenterInFormHorizontal}" Width="16" Height="16"/>
         <DrawingPresenter x:Key="AlignRightIcon" Drawing="{StaticResource AlignRight}" Width="16" Height="16"/>
         <DrawingPresenter x:Key="AlignTopIcon" Drawing="{StaticResource AlignTop}" Width="16" Height="16"/>
         <DrawingPresenter x:Key="AlignCenterIcon" Drawing="{StaticResource CenterInFormVertical}" Width="16" Height="16"/>
         <DrawingPresenter x:Key="AlignBottomIcon" Drawing="{StaticResource AlignBottom}" Width="16" Height="16"/>
+        <!-- Arange -->
         <DrawingPresenter x:Key="BringToFrontIcon" Drawing="{StaticResource BringtoFront}" Width="16" Height="16"/>
         <DrawingPresenter x:Key="BringForwardIcon" Drawing="{StaticResource BringForward}" Width="16" Height="16"/>
         <DrawingPresenter x:Key="SendBackwardIcon" Drawing="{StaticResource SendBackward}" Width="16" Height="16"/>
         <DrawingPresenter x:Key="SendToBackIcon" Drawing="{StaticResource SendtoBack}" Width="16" Height="16"/>
+        <!-- Path Op -->
         <DrawingPresenter x:Key="DifferenceIcon" Drawing="{StaticResource SubtractFront}" Width="16" Height="16"/>
         <DrawingPresenter x:Key="IntersectIcon" Drawing="{StaticResource IntersectPath}" Width="16" Height="16"/>
         <DrawingPresenter x:Key="UnionIcon" Drawing="{StaticResource UnitePath}" Width="16" Height="16"/>
         <DrawingPresenter x:Key="XorIcon" Drawing="{StaticResource ExcludePath}" Width="16" Height="16"/>
         <DrawingPresenter x:Key="ReverseDifferenceIcon" Drawing="{StaticResource SubtractBack}" Width="16" Height="16"/>
-        <DrawingPresenter x:Key="BreakIcon" Drawing="{StaticResource Ungroup}" Width="16" Height="16"/>
+        <!-- Connectors -->
         <DrawingPresenter x:Key="ConnectIcon" Drawing="{StaticResource Link}" Width="16" Height="16"/>
         <DrawingPresenter x:Key="DisconnectIcon" Drawing="{StaticResource RemoveLink}" Width="16" Height="16"/>
     </UserControl.Resources>
@@ -184,13 +188,21 @@
                 <Button Classes="toolbar" ToolTip.Tip="Create Fill Path" Content="" Command="{Binding Selection.CreateFillPath}" CommandParameter="{Binding}"/>
                 <Grid Classes="separator"/>
                 <Button Classes="toolbar" ToolTip.Tip="Break" Content="{StaticResource BreakIcon}" Command="{Binding Selection.Break}" CommandParameter="{Binding}"/>
-                <Grid Classes="separator"/>
+            </StackPanel>
+        </Grid>
+        <Grid Classes="tray" ColumnDefinitions="Auto,*">
+            <Grid Classes="thumb" Grid.Column="0"/>
+            <StackPanel Classes="toolbar" Grid.Column="1">
                 <Button Classes="toolbar" ToolTip.Tip="Stack Horizontally" Content="" Command="{Binding Selection.StackHorizontally}" CommandParameter="{Binding}"/>
                 <Button Classes="toolbar" ToolTip.Tip="Stack Vertically" Content="" Command="{Binding Selection.StackVertically}" CommandParameter="{Binding}"/>
                 <Grid Classes="separator"/>
                 <Button Classes="toolbar" ToolTip.Tip="Distribute Horizontally" Content="" Command="{Binding Selection.DistributeHorizontally}" CommandParameter="{Binding}"/>
                 <Button Classes="toolbar" ToolTip.Tip="Distribute Vertically" Content="" Command="{Binding Selection.DistributeVertically}" CommandParameter="{Binding}"/>
-                <Grid Classes="separator"/>
+            </StackPanel>
+        </Grid>
+        <Grid Classes="tray" ColumnDefinitions="Auto,*">
+            <Grid Classes="thumb" Grid.Column="0"/>
+            <StackPanel Classes="toolbar" Grid.Column="1">
                 <Button Classes="toolbar" ToolTip.Tip="Align Left" Content="{StaticResource AlignLeftIcon}" Command="{Binding Selection.AlignLeft}" CommandParameter="{Binding}"/>
                 <Button Classes="toolbar" ToolTip.Tip="Align Centered" Content="{StaticResource AlignCenteredIcon}" Command="{Binding Selection.AlignCentered}" CommandParameter="{Binding}"/>
                 <Button Classes="toolbar" ToolTip.Tip="Align Right" Content="{StaticResource AlignRightIcon}" Command="{Binding Selection.AlignRight}" CommandParameter="{Binding}"/>
@@ -198,18 +210,30 @@
                 <Button Classes="toolbar" ToolTip.Tip="Align Top" Content="{StaticResource AlignTopIcon}" Command="{Binding Selection.AlignTop}" CommandParameter="{Binding}"/>
                 <Button Classes="toolbar" ToolTip.Tip="Align Center" Content="{StaticResource AlignCenterIcon}" Command="{Binding Selection.AlignCenter}" CommandParameter="{Binding}"/>
                 <Button Classes="toolbar" ToolTip.Tip="Align Bottom" Content="{StaticResource AlignBottomIcon}" Command="{Binding Selection.AlignBottom}" CommandParameter="{Binding}"/>
-                <Grid Classes="separator"/>
+            </StackPanel>
+        </Grid>
+        <Grid Classes="tray" ColumnDefinitions="Auto,*">
+            <Grid Classes="thumb" Grid.Column="0"/>
+            <StackPanel Classes="toolbar" Grid.Column="1">
                 <Button Classes="toolbar" ToolTip.Tip="Bring to Front" Content="{StaticResource BringToFrontIcon}" Command="{Binding Selection.ArangeBringToFront}" CommandParameter="{Binding}"/>
                 <Button Classes="toolbar" ToolTip.Tip="Bring Forward" Content="{StaticResource BringForwardIcon}" Command="{Binding Selection.ArangeBringForward}" CommandParameter="{Binding}"/>
                 <Button Classes="toolbar" ToolTip.Tip="Send Backward" Content="{StaticResource SendBackwardIcon}" Command="{Binding Selection.ArangeSendBackward}" CommandParameter="{Binding}"/>
                 <Button Classes="toolbar" ToolTip.Tip="Send to Back" Content="{StaticResource SendToBackIcon}" Command="{Binding Selection.ArangeSendToBack}" CommandParameter="{Binding}"/>
-                <Grid Classes="separator"/>
+            </StackPanel>
+        </Grid>
+        <Grid Classes="tray" ColumnDefinitions="Auto,*">
+            <Grid Classes="thumb" Grid.Column="0"/>
+            <StackPanel Classes="toolbar" Grid.Column="1">
                 <Button Classes="toolbar" ToolTip.Tip="Path Op Difference" Content="{StaticResource DifferenceIcon}" Command="{Binding PathOp}" CommandParameter="Difference"/>
                 <Button Classes="toolbar" ToolTip.Tip="Path Op Intersect" Content="{StaticResource IntersectIcon}" Command="{Binding PathOp}" CommandParameter="Intersect"/>
                 <Button Classes="toolbar" ToolTip.Tip="Path Op Union" Content="{StaticResource UnionIcon}" Command="{Binding PathOp}" CommandParameter="Union"/>
                 <Button Classes="toolbar" ToolTip.Tip="Path Op Xor" Content="{StaticResource XorIcon}" Command="{Binding PathOp}" CommandParameter="Xor"/>
                 <Button Classes="toolbar" ToolTip.Tip="Path Op Reverse Difference" Content="{StaticResource ReverseDifferenceIcon}" Command="{Binding PathOp}" CommandParameter="ReverseDifference"/>
-                <Grid Classes="separator"/>
+            </StackPanel>
+        </Grid>
+        <Grid Classes="tray" ColumnDefinitions="Auto,*">
+            <Grid Classes="thumb" Grid.Column="0"/>
+            <StackPanel Classes="toolbar" Grid.Column="1">
                 <Button Classes="toolbar" ToolTip.Tip="Connect" Content="{StaticResource ConnectIcon}" Command="{Binding Selection.Connect}" CommandParameter="{Binding}"/>
                 <Button Classes="toolbar" ToolTip.Tip="Disconnect" Content="{StaticResource DisconnectIcon}" Command="{Binding Selection.Disconnect}" CommandParameter="{Binding}"/>
             </StackPanel>
