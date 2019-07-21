@@ -1,6 +1,6 @@
 ﻿<!-- Copyright (c) Wiesław Šoltés. All rights reserved. -->
 <!-- Licensed under the MIT license. See LICENSE file in the project root for full license information. -->
-<UserControl x:Class="Draw2D.Views.ToolbarViev"
+<UserControl x:Class="Draw2D.Views.ToolbarView"
              xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -67,8 +67,9 @@
             <Setter Property="Background" Value="Transparent"/>
             <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="Margin" Value="0"/>
-            <Setter Property="Width" Value="18"/>
-            <Setter Property="Height" Value="18"/>
+            <Setter Property="Padding" Value="3"/>
+            <Setter Property="Width" Value="22"/>
+            <Setter Property="Height" Value="22"/>
         </Style>
         <Style Selector="Button.toolbar /template/ ContentPresenter">
             <Setter Property="BorderThickness" Value="0"/>
@@ -118,11 +119,11 @@
         </Grid>
         <Grid x:Name="zoomToolbar">
             <StackPanel Classes="toolbar">
-                <Button Classes="toolbar" ToolTip.Tip="Reset Zoom" Content="R" Command="{Binding DocumentContainer.ContainerView.ZoomService.ResetZoom}" CommandParameter="True"/>
-                <Button Classes="toolbar" ToolTip.Tip="Center Zoom" Content="C" Command="{Binding DocumentContainer.ContainerView.ZoomService.CenterZoom}" CommandParameter="True"/>
-                <Button Classes="toolbar" ToolTip.Tip="Fill Zoom" Content="F" Command="{Binding DocumentContainer.ContainerView.ZoomService.FillZoom}" CommandParameter="True"/>
-                <Button Classes="toolbar" ToolTip.Tip="Uniform Zoom" Content="U" Command="{Binding DocumentContainer.ContainerView.ZoomService.UniformZoom}" CommandParameter="True"/>
-                <Button Classes="toolbar" ToolTip.Tip="Uniform To Fill Zoom" Content="T" Command="{Binding DocumentContainer.ContainerView.ZoomService.UniformToFillZoom}" CommandParameter="True"/>
+                <Button Classes="toolbar" ToolTip.Tip="Reset Zoom" Content="" Command="{Binding DocumentContainer.ContainerView.ZoomService.ResetZoom}" CommandParameter="True"/>
+                <Button Classes="toolbar" ToolTip.Tip="Center Zoom" Content="" Command="{Binding DocumentContainer.ContainerView.ZoomService.CenterZoom}" CommandParameter="True"/>
+                <Button Classes="toolbar" ToolTip.Tip="Fill Zoom" Content="" Command="{Binding DocumentContainer.ContainerView.ZoomService.FillZoom}" CommandParameter="True"/>
+                <Button Classes="toolbar" ToolTip.Tip="Uniform Zoom" Content="" Command="{Binding DocumentContainer.ContainerView.ZoomService.UniformZoom}" CommandParameter="True"/>
+                <Button Classes="toolbar" ToolTip.Tip="Uniform To Fill Zoom" Content="" Command="{Binding DocumentContainer.ContainerView.ZoomService.UniformToFillZoom}" CommandParameter="True"/>
             </StackPanel>
         </Grid>
         <Grid x:Name="toolToolbar">
@@ -135,13 +136,13 @@
                 <Grid Classes="separator"/>
                 <Button Classes="toolbar" ToolTip.Tip="Line Tool" Content="{StaticResource LineIcon}" Command="{Binding SetTool}" CommandParameter="Line"/>
                 <Button Classes="toolbar" ToolTip.Tip="Poly Line Tool" Content="{StaticResource PolyLineIcon}" Command="{Binding SetTool}" CommandParameter="PolyLine"/>
-                <Button Classes="toolbar" ToolTip.Tip="Cubic Bezier Tool" Content="Q" Command="{Binding SetTool}" CommandParameter="CubicBezier"/>
-                <Button Classes="toolbar" ToolTip.Tip="Quadratic Bezier Tool" Content="B" Command="{Binding SetTool}" CommandParameter="QuadraticBezier"/>
+                <Button Classes="toolbar" ToolTip.Tip="Cubic Bezier Tool" Content="" Command="{Binding SetTool}" CommandParameter="CubicBezier"/>
+                <Button Classes="toolbar" ToolTip.Tip="Quadratic Bezier Tool" Content="" Command="{Binding SetTool}" CommandParameter="QuadraticBezier"/>
                 <Button Classes="toolbar" ToolTip.Tip="Conic Tool" Content="{StaticResource ConicIcon}" Command="{Binding SetTool}" CommandParameter="Conic"/>
                 <Grid Classes="separator"/>
                 <Button Classes="toolbar" ToolTip.Tip="Path Tool" Content="{StaticResource PathIcon}" Command="{Binding SetTool}" CommandParameter="Path"/>
                 <Grid Classes="separator"/>
-                <Button Classes="toolbar" ToolTip.Tip="Scribble Tool" Content="S" Command="{Binding SetTool}" CommandParameter="Scribble"/>
+                <Button Classes="toolbar" ToolTip.Tip="Scribble Tool" Content="" Command="{Binding SetTool}" CommandParameter="Scribble"/>
                 <Grid Classes="separator"/>
                 <Button Classes="toolbar" ToolTip.Tip="Rectangle Tool" Content="{StaticResource RectangleIcon}" Command="{Binding SetTool}" CommandParameter="Rectangle"/>
                 <Button Classes="toolbar" ToolTip.Tip="Circle Tool" Content="{StaticResource CircleIcon}" Command="{Binding SetTool}" CommandParameter="Circle"/>
@@ -156,18 +157,18 @@
                 <Button Classes="toolbar" ToolTip.Tip="Duplicate" Content="{StaticResource DuplicateIcon}" Command="{Binding Selection.Duplicate}" CommandParameter="{Binding}"/>
                 <Button Classes="toolbar"/>
                 <Button Classes="toolbar" ToolTip.Tip="Create Group" Content="{StaticResource GroupIcon}" Command="{Binding Selection.CreateGroup}" CommandParameter="{Binding}"/>
+                <Button Classes="toolbar" ToolTip.Tip="Create Reference" Content="{StaticResource ReferenceIcon}" Command="{Binding Selection.CreateReference}" CommandParameter="{Binding}"/>
+                <Button Classes="toolbar" ToolTip.Tip="Create Path" Content="" Command="{Binding Selection.CreatePath}" CommandParameter="{Binding}"/>
+                <Button Classes="toolbar" ToolTip.Tip="Create Stroke Path" Content="" Command="{Binding Selection.CreateStrokePath}" CommandParameter="{Binding}"/>
+                <Button Classes="toolbar" ToolTip.Tip="Create Fill Path" Content="" Command="{Binding Selection.CreateFillPath}" CommandParameter="{Binding}"/>
+                <Grid Classes="separator"/>
                 <Button Classes="toolbar" ToolTip.Tip="Break" Content="{StaticResource BreakIcon}" Command="{Binding Selection.Break}" CommandParameter="{Binding}"/>
                 <Grid Classes="separator"/>
-                <Button Classes="toolbar" ToolTip.Tip="Create Reference" Content="{StaticResource ReferenceIcon}" Command="{Binding Selection.CreateReference}" CommandParameter="{Binding}"/>
-                <Button Classes="toolbar" ToolTip.Tip="Create Path" Content="P" Command="{Binding Selection.CreatePath}" CommandParameter="{Binding}"/>
-                <Button Classes="toolbar" ToolTip.Tip="Create Stroke Path" Content="S" Command="{Binding Selection.CreateStrokePath}" CommandParameter="{Binding}"/>
-                <Button Classes="toolbar" ToolTip.Tip="Create Fill Path" Content="F" Command="{Binding Selection.CreateFillPath}" CommandParameter="{Binding}"/>
+                <Button Classes="toolbar" ToolTip.Tip="Stack Horizontally" Content="" Command="{Binding Selection.StackHorizontally}" CommandParameter="{Binding}"/>
+                <Button Classes="toolbar" ToolTip.Tip="Stack Vertically" Content="" Command="{Binding Selection.StackVertically}" CommandParameter="{Binding}"/>
                 <Grid Classes="separator"/>
-                <Button Classes="toolbar" ToolTip.Tip="Stack Horizontally" Content="H" Command="{Binding Selection.StackHorizontally}" CommandParameter="{Binding}"/>
-                <Button Classes="toolbar" ToolTip.Tip="Stack Vertically" Content="V" Command="{Binding Selection.StackVertically}" CommandParameter="{Binding}"/>
-                <Grid Classes="separator"/>
-                <Button Classes="toolbar" ToolTip.Tip="Distribute Horizontally" Content="H" Command="{Binding Selection.DistributeHorizontally}" CommandParameter="{Binding}"/>
-                <Button Classes="toolbar" ToolTip.Tip="Distribute Vertically" Content="V" Command="{Binding Selection.DistributeVertically}" CommandParameter="{Binding}"/>
+                <Button Classes="toolbar" ToolTip.Tip="Distribute Horizontally" Content="" Command="{Binding Selection.DistributeHorizontally}" CommandParameter="{Binding}"/>
+                <Button Classes="toolbar" ToolTip.Tip="Distribute Vertically" Content="" Command="{Binding Selection.DistributeVertically}" CommandParameter="{Binding}"/>
                 <Grid Classes="separator"/>
                 <Button Classes="toolbar" ToolTip.Tip="Align Left" Content="{StaticResource AlignLeftIcon}" Command="{Binding Selection.AlignLeft}" CommandParameter="{Binding}"/>
                 <Button Classes="toolbar" ToolTip.Tip="Align Centered" Content="{StaticResource AlignCenteredIcon}" Command="{Binding Selection.AlignCentered}" CommandParameter="{Binding}"/>

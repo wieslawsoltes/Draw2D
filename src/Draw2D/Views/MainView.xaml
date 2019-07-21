@@ -22,7 +22,7 @@
     </UserControl.KeyBindings>
     <Grid RowDefinitions="Auto,Auto,5,*,5" ColumnDefinitions="320,Auto,*,Auto,280">
         <local:MenuView Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="5"/>
-        <local:ToolbarViev Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="5"/>
+        <local:ToolbarView Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="5"/>
         <local:PropertiesView Grid.Row="3" Grid.Column="0"/>
         <GridSplitter Grid.Row="3" Grid.Column="1"/>
         <local:ContainersView Grid.Row="3" Grid.Column="2"/>

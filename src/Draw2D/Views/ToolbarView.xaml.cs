@@ -5,9 +5,9 @@ using Avalonia.Markup.Xaml;
 
 namespace Draw2D.Views
 {
-    public class ToolbarViev : UserControl
+    public class ToolbarView : UserControl
     {
-        public ToolbarViev()
+        public ToolbarView()
         {
             InitializeComponent();
         }
