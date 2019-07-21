@@ -41,7 +41,7 @@
                     <TextBlock Classes="default" Grid.Column="0" Grid.Row="2" Text="Title"/>
                     <TextBox Classes="default" Grid.Column="1" Grid.Row="2" Text="{Binding Title}"/>
                     <TextBlock Classes="default" Grid.Column="0" Grid.Row="3" Text="IsDirty"/>
-                    <CheckBox Classes="default" Grid.Column="1" Grid.Row="2" IsEnabled="False" IsChecked="{Binding IsDirty, Mode=OneWay}"/>
+                    <CheckBox Classes="default" Grid.Column="1" Grid.Row="3" IsEnabled="False" IsChecked="{Binding IsDirty, Mode=OneWay}"/>
                     <Button Classes="default" Content="MarkAsDirty=True" Command="{Binding MarkAsDirty}" CommandParameter="True" Grid.Column="1" Grid.Row="4"/>
                     <Button Classes="default" Content="MarkAsDirty=False" Command="{Binding MarkAsDirty}" CommandParameter="False" Grid.Column="1" Grid.Row="5"/>
                     <Button Classes="default" Content="Invalidate" Command="{Binding Invalidate}" Grid.Column="1" Grid.Row="6"/>
