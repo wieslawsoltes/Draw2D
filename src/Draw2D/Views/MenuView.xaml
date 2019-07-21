@@ -26,6 +26,14 @@
         <DrawingPresenter x:Key="CopyIcon" Drawing="{StaticResource Copy}" Width="16" Height="16"/>
         <DrawingPresenter x:Key="PasteIcon" Drawing="{StaticResource Paste}" Width="16" Height="16"/>
         <DrawingPresenter x:Key="DeleteIcon" Drawing="{StaticResource Cancel}" Width="16" Height="16"/>
+        <DrawingPresenter x:Key="CopySvgPathDataIcon" Drawing="{StaticResource String}" Width="16" Height="16"/>
+        <DrawingPresenter x:Key="CopySvgDocumentIcon" Drawing="{StaticResource MarkupTag}" Width="16" Height="16"/>
+        <DrawingPresenter x:Key="CopyGeometryDrawingIcon" Drawing="{StaticResource MarkupTag}" Width="16" Height="16"/>
+        <DrawingPresenter x:Key="CopyDrawingGroupIcon" Drawing="{StaticResource MarkupTag}" Width="16" Height="16"/>
+        <DrawingPresenter x:Key="CopyDrawingPresenterIcon" Drawing="{StaticResource MarkupTag}" Width="16" Height="16"/>
+        <DrawingPresenter x:Key="CopyPathIcon" Drawing="{StaticResource MarkupTag}" Width="16" Height="16"/>
+        <DrawingPresenter x:Key="CopyCanvasIcon" Drawing="{StaticResource MarkupTag}" Width="16" Height="16"/>
+        <DrawingPresenter x:Key="PasteSvgPathDataIcon" Drawing="{StaticResource String}" Width="16" Height="16"/>
         <DrawingPresenter x:Key="SelectAllIcon" Drawing="{StaticResource SelectAllItems}" Width="16" Height="16"/>
         <DrawingPresenter x:Key="DeselectAllIcon" Drawing="{StaticResource SelectNoItems}" Width="16" Height="16"/>
         <!-- Zoom -->
@@ -41,6 +49,9 @@
         <DrawingPresenter x:Key="PolyLineIcon" Drawing="{StaticResource Path}" Width="16" Height="16"/>
         <DrawingPresenter x:Key="ConicIcon" Drawing="{StaticResource CurveTool}" Width="16" Height="16"/>
         <DrawingPresenter x:Key="PathIcon" Drawing="{StaticResource PenTool}" Width="16" Height="16"/>
+        <DrawingPresenter x:Key="PathLineIcon" Drawing="{StaticResource Backslash}" Width="16" Height="16"/>
+        <DrawingPresenter x:Key="PathConicIcon" Drawing="{StaticResource CurveTool}" Width="16" Height="16"/>
+        <DrawingPresenter x:Key="PathMoveIcon" Drawing="{StaticResource MoveGlyph}" Width="16" Height="16"/>
         <DrawingPresenter x:Key="RectangleIcon" Drawing="{StaticResource Rectangle}" Width="16" Height="16"/>
         <DrawingPresenter x:Key="ScribbleIcon" Drawing="{StaticResource InkBrush}" Width="16" Height="16"/>
         <DrawingPresenter x:Key="CircleIcon" Drawing="{StaticResource ShaderUnit}" Width="16" Height="16"/>
@@ -109,21 +120,21 @@
             <Separator/>
             <MenuItem Header="Copy _Special">
                 <MenuItem Header="_Svg">
-                    <MenuItem Header="_Path Data" Command="{Binding CopySvgPathData}"/>
-                    <MenuItem Header="_Document" Command="{Binding CopySvgDocument}"/>
+                    <MenuItem Header="_Path Data" Icon="{StaticResource CopySvgPathDataIcon}" Command="{Binding CopySvgPathData}"/>
+                    <MenuItem Header="_Document" Icon="{StaticResource CopySvgDocumentIcon}" Command="{Binding CopySvgDocument}"/>
                 </MenuItem>
                 <MenuItem Header="_Xaml">
-                    <MenuItem Header="_Drawing" Command="{Binding CopyGeometryDrawing}"/>
-                    <MenuItem Header="_Group" Command="{Binding CopyDrawingGroup}"/>
-                    <MenuItem Header="_Presenter" Command="{Binding CopyDrawingPresenter}"/>
+                    <MenuItem Header="_Drawing" Icon="{StaticResource CopyGeometryDrawingIcon}" Command="{Binding CopyGeometryDrawing}"/>
+                    <MenuItem Header="_Group" Icon="{StaticResource CopyDrawingGroupIcon}" Command="{Binding CopyDrawingGroup}"/>
+                    <MenuItem Header="_Presenter" Icon="{StaticResource CopyDrawingPresenterIcon}" Command="{Binding CopyDrawingPresenter}"/>
                     <Separator/>
-                    <MenuItem Header="P_ath" Command="{Binding CopyPath}"/>
-                    <MenuItem Header="_Canvas" Command="{Binding CopyCanvas}"/>
+                    <MenuItem Header="P_ath" Icon="{StaticResource CopyPathIcon}" Command="{Binding CopyPath}"/>
+                    <MenuItem Header="_Canvas" Icon="{StaticResource CopyCanvasIcon}" Command="{Binding CopyCanvas}"/>
                 </MenuItem>
             </MenuItem>
             <MenuItem Header="Paste Sp_ecial">
                 <MenuItem Header="_Svg">
-                    <MenuItem Header="Svg _Path Data" Command="{Binding PasteSvgPathData}"/>
+                    <MenuItem Header="Svg _Path Data" Icon="{StaticResource PasteSvgPathDataIcon}" Command="{Binding PasteSvgPathData}"/>
                 </MenuItem>
             </MenuItem>
             <Separator/>
@@ -156,11 +167,11 @@
             <Separator/>
             <MenuItem Header="Pat_h" Icon="{StaticResource PathIcon}" Command="{Binding SetTool}" CommandParameter="Path"/>
             <MenuItem Header="Path T_ools" IsEnabled="{Binding CurrentTool.Title, Converter={StaticResource IsEqualStringConverter}, ConverterParameter=Path, Mode=OneWay}">
-                <MenuItem Header="_Line" Command="{Binding SetTool}" CommandParameter="Line"/>
+                <MenuItem Header="_Line" Icon="{StaticResource PathLineIcon}" Command="{Binding SetTool}" CommandParameter="Line"/>
                 <MenuItem Header="Cubic _Bezier" Command="{Binding SetTool}" CommandParameter="CubicBezier"/>
                 <MenuItem Header="_Quadratic Bezier" Command="{Binding SetTool}" CommandParameter="QuadraticBezier"/>
-                <MenuItem Header="Con_ic" Command="{Binding SetTool}" CommandParameter="Conic"/>
-                <MenuItem Header="_Move" Command="{Binding SetTool}" CommandParameter="Move"/>
+                <MenuItem Header="Con_ic" Icon="{StaticResource PathConicIcon}" Command="{Binding SetTool}" CommandParameter="Conic"/>
+                <MenuItem Header="_Move" Icon="{StaticResource PathMoveIcon}" Command="{Binding SetTool}" CommandParameter="Move"/>
             </MenuItem>
             <Separator/>
             <MenuItem Header="Scr_ibble" Icon="{StaticResource ScribbleIcon}" Command="{Binding SetTool}" CommandParameter="Scribble"/>
