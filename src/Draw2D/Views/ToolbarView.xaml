@@ -36,7 +36,9 @@
         <DrawingPresenter x:Key="DeselectAllIcon" Drawing="{StaticResource SelectNoItems}" Width="16" Height="16"/>
         <!-- Zoom -->
         <DrawingPresenter x:Key="CenterZoomIcon" Drawing="{StaticResource ZoomOriginalSize}" Width="16" Height="16"/>
+        <DrawingPresenter x:Key="FillZoomIcon" Drawing="{StaticResource ViewBox}" Width="16" Height="16"/>
         <DrawingPresenter x:Key="UniformZoomIcon" Drawing="{StaticResource ZoomToFit}" Width="16" Height="16"/>
+        <DrawingPresenter x:Key="UniformToFillZoomIcon" Drawing="{StaticResource FitToScreen}" Width="16" Height="16"/>
         <!-- Tool -->
         <DrawingPresenter x:Key="NoneIcon" Drawing="{StaticResource DisplayNoneMark}" Width="16" Height="16"/>
         <DrawingPresenter x:Key="SelectionIcon" Drawing="{StaticResource Cursor}" Width="16" Height="16"/>
@@ -46,6 +48,7 @@
         <DrawingPresenter x:Key="ConicIcon" Drawing="{StaticResource CurveTool}" Width="16" Height="16"/>
         <DrawingPresenter x:Key="PathIcon" Drawing="{StaticResource PenTool}" Width="16" Height="16"/>
         <DrawingPresenter x:Key="RectangleIcon" Drawing="{StaticResource Rectangle}" Width="16" Height="16"/>
+        <DrawingPresenter x:Key="ScribbleIcon" Drawing="{StaticResource InkBrush}" Width="16" Height="16"/>
         <DrawingPresenter x:Key="CircleIcon" Drawing="{StaticResource ShaderUnit}" Width="16" Height="16"/>
         <DrawingPresenter x:Key="ArcIcon" Drawing="{StaticResource ArcSegment}" Width="16" Height="16"/>
         <DrawingPresenter x:Key="OvalIcon" Drawing="{StaticResource Ellipse}" Width="16" Height="16"/>
@@ -54,6 +57,9 @@
         <DrawingPresenter x:Key="DuplicateIcon" Drawing="{StaticResource CopyToClipboard}" Width="16" Height="16"/>
         <DrawingPresenter x:Key="GroupIcon" Drawing="{StaticResource Group}" Width="16" Height="16"/>
         <DrawingPresenter x:Key="ReferenceIcon" Drawing="{StaticResource Reference}" Width="16" Height="16"/>
+        <DrawingPresenter x:Key="CreatePathIcon" Drawing="{StaticResource Path}" Width="16" Height="16"/>
+        <DrawingPresenter x:Key="CreateStrokePathIcon" Drawing="{StaticResource PenPathConvert}" Width="16" Height="16"/>
+        <DrawingPresenter x:Key="CreateFillPathIcon" Drawing="{StaticResource FilledRectangleTool}" Width="16" Height="16"/>
         <DrawingPresenter x:Key="BreakIcon" Drawing="{StaticResource Ungroup}" Width="16" Height="16"/>
         <!-- Align -->
         <DrawingPresenter x:Key="AlignLeftIcon" Drawing="{StaticResource AlignLeft}" Width="16" Height="16"/>
@@ -145,11 +151,10 @@
         <Grid Classes="tray" ColumnDefinitions="Auto,*">
             <Grid Classes="thumb" Grid.Column="0"/>
             <StackPanel Classes="toolbar" Grid.Column="1">
-                <Button Classes="toolbar" ToolTip.Tip="Reset Zoom" Content="" Command="{Binding DocumentContainer.ContainerView.ZoomService.ResetZoom}" CommandParameter="True"/>
                 <Button Classes="toolbar" ToolTip.Tip="Center Zoom" Content="{StaticResource CenterZoomIcon}" Command="{Binding DocumentContainer.ContainerView.ZoomService.CenterZoom}" CommandParameter="True"/>
-                <Button Classes="toolbar" ToolTip.Tip="Fill Zoom" Content="" Command="{Binding DocumentContainer.ContainerView.ZoomService.FillZoom}" CommandParameter="True"/>
+                <Button Classes="toolbar" ToolTip.Tip="Fill Zoom" Content="{StaticResource FillZoomIcon}" Command="{Binding DocumentContainer.ContainerView.ZoomService.FillZoom}" CommandParameter="True"/>
                 <Button Classes="toolbar" ToolTip.Tip="Uniform Zoom" Content="{StaticResource UniformZoomIcon}" Command="{Binding DocumentContainer.ContainerView.ZoomService.UniformZoom}" CommandParameter="True"/>
-                <Button Classes="toolbar" ToolTip.Tip="Uniform To Fill Zoom" Content="" Command="{Binding DocumentContainer.ContainerView.ZoomService.UniformToFillZoom}" CommandParameter="True"/>
+                <Button Classes="toolbar" ToolTip.Tip="Uniform To Fill Zoom" Content="{StaticResource UniformToFillZoomIcon}" Command="{Binding DocumentContainer.ContainerView.ZoomService.UniformToFillZoom}" CommandParameter="True"/>
             </StackPanel>
         </Grid>
         <Grid Classes="tray" ColumnDefinitions="Auto,*">
@@ -169,7 +174,7 @@
                 <Grid Classes="separator"/>
                 <Button Classes="toolbar" ToolTip.Tip="Path Tool" Content="{StaticResource PathIcon}" Command="{Binding SetTool}" CommandParameter="Path"/>
                 <Grid Classes="separator"/>
-                <Button Classes="toolbar" ToolTip.Tip="Scribble Tool" Content="" Command="{Binding SetTool}" CommandParameter="Scribble"/>
+                <Button Classes="toolbar" ToolTip.Tip="Scribble Tool" Content="{StaticResource ScribbleIcon}" Command="{Binding SetTool}" CommandParameter="Scribble"/>
                 <Grid Classes="separator"/>
                 <Button Classes="toolbar" ToolTip.Tip="Rectangle Tool" Content="{StaticResource RectangleIcon}" Command="{Binding SetTool}" CommandParameter="Rectangle"/>
                 <Button Classes="toolbar" ToolTip.Tip="Circle Tool" Content="{StaticResource CircleIcon}" Command="{Binding SetTool}" CommandParameter="Circle"/>
@@ -186,9 +191,9 @@
                 <Grid Classes="separator"/>
                 <Button Classes="toolbar" ToolTip.Tip="Create Group" Content="{StaticResource GroupIcon}" Command="{Binding Selection.CreateGroup}" CommandParameter="{Binding}"/>
                 <Button Classes="toolbar" ToolTip.Tip="Create Reference" Content="{StaticResource ReferenceIcon}" Command="{Binding Selection.CreateReference}" CommandParameter="{Binding}"/>
-                <Button Classes="toolbar" ToolTip.Tip="Create Path" Content="" Command="{Binding Selection.CreatePath}" CommandParameter="{Binding}"/>
-                <Button Classes="toolbar" ToolTip.Tip="Create Stroke Path" Content="" Command="{Binding Selection.CreateStrokePath}" CommandParameter="{Binding}"/>
-                <Button Classes="toolbar" ToolTip.Tip="Create Fill Path" Content="" Command="{Binding Selection.CreateFillPath}" CommandParameter="{Binding}"/>
+                <Button Classes="toolbar" ToolTip.Tip="Create Path" Content="{StaticResource CreatePathIcon}" Command="{Binding Selection.CreatePath}" CommandParameter="{Binding}"/>
+                <Button Classes="toolbar" ToolTip.Tip="Create Stroke Path" Content="{StaticResource CreateStrokePathIcon}" Command="{Binding Selection.CreateStrokePath}" CommandParameter="{Binding}"/>
+                <Button Classes="toolbar" ToolTip.Tip="Create Fill Path" Content="{StaticResource CreateFillPathIcon}" Command="{Binding Selection.CreateFillPath}" CommandParameter="{Binding}"/>
                 <Grid Classes="separator"/>
                 <Button Classes="toolbar" ToolTip.Tip="Break" Content="{StaticResource BreakIcon}" Command="{Binding Selection.Break}" CommandParameter="{Binding}"/>
             </StackPanel>
