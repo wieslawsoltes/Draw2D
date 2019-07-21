@@ -208,6 +208,20 @@
                 <GeometryDrawing Brush="{StaticResource icon-vs-fg}" Geometry="F1M8.916,2.2319L13.278,5.8669 9.485,8.1429 8.484,8.7429 9.231,9.6409 12.865,13.9999 4.721,13.9999 2.198,6.4309z"/>
             </DrawingGroup.Children>
         </DrawingGroup>
+        <DrawingGroup x:Key="PenPathConvert">
+            <DrawingGroup.Children>
+                <GeometryDrawing Brush="{StaticResource icon-canvas-transparent}" Geometry="M16,16H0V0h16V16z"/>
+                <GeometryDrawing Brush="{StaticResource icon-vs-out}" Geometry="M15.113,11.699l-3.757,1.189L5,6.717v8.23L2.188,16H2V0h1.414L15.113,11.699z"/>
+                <GeometryDrawing Brush="{StaticResource icon-vs-bg}" Geometry="M4.368,14.226L3,14.682V1l10.262,10.262l-1.451,0.484L4.368,4.303V14.226z"/>
+            </DrawingGroup.Children>
+        </DrawingGroup>
+        <DrawingGroup x:Key="FilledRectangleTool">
+            <DrawingGroup.Children>
+                <GeometryDrawing Brush="{StaticResource icon-canvas-transparent}" Geometry="F1M16,16L0,16 0,0 16,0z" />
+                <GeometryDrawing Brush="{StaticResource icon-vs-out}" Geometry="F1M15,13L1,13 1,3 15,3z" />
+                <GeometryDrawing Brush="{StaticResource icon-vs-bg}" Geometry="F1M14,12L2,12 2,4 14,4z" />
+            </DrawingGroup.Children>
+        </DrawingGroup>
         <DrawingGroup x:Key="CurveTool">
             <DrawingGroup.Children>
                 <GeometryDrawing Brush="{StaticResource icon-canvas-transparent}" Geometry="F1M16,16L0,16 0,0 16,0z"/>
@@ -230,6 +244,13 @@
                 <GeometryDrawing Brush="{StaticResource icon-vs-out}" Geometry="F1M0,15L16,15 16,1 0,1z"/>
                 <GeometryDrawing Brush="{StaticResource icon-vs-bg}" Geometry="F1M14,13L2,13 2,3 14,3z M1,14L15,14 15,2 1,2z"/>
                 <GeometryDrawing Brush="{StaticResource icon-vs-fg}" Geometry="F1M2,13L14,13 14,3 2,3z"/>
+            </DrawingGroup.Children>
+        </DrawingGroup>
+        <DrawingGroup x:Key="InkBrush">
+            <DrawingGroup.Children>
+                <GeometryDrawing Brush="{StaticResource icon-canvas-transparent}" Geometry="M16 16h-16v-16h16v16z"/>
+                <GeometryDrawing Brush="{StaticResource icon-vs-out}" Geometry="M.704 16h-.704v-1.179l.728-2.911c.633-2.53 2.095-3.577 3.384-3.753l.219-.749 1.271-.635.946-.841c1.978-1.758 6.745-5.846 8.291-5.846.384 0 .629.164.767.302.496.497 1.328 1.325-5.543 9.056l-.842.943-.635 1.265-.975.274c-.373 1.428-1.722 2.698-3.469 3.28-2.391.797-3.284.794-3.438.794z"/>
+                <GeometryDrawing Brush="{StaticResource icon-vs-bg}" Geometry="M6.367 9.645c1.593 1.593.012 4.02-2.39 4.779-2.303.728-3.186.797-3.186.797l.797-3.186c.796-3.187 3.186-3.983 4.779-2.39zm.001-2.39l-1.594.797s3.186 0 3.186 3.186l.796-1.593-.041.04.041-.04c-.005-2.384-2.388-2.39-2.388-2.39zm8.674-6.304c-.797-.797-7.879 5.507-7.879 5.507s2.39 0 2.39 2.39c0 0 6.286-7.1 5.489-7.897z"/>
             </DrawingGroup.Children>
         </DrawingGroup>
         <DrawingGroup x:Key="ShaderUnit">
@@ -453,6 +474,21 @@
                 <GeometryDrawing Brush="{StaticResource icon-canvas-transparent}" Geometry="F1M16,16L0,16 0,0 16,0z"/>
                 <GeometryDrawing Brush="{StaticResource icon-vs-out}" Geometry="F1M12.9766,15C12.9766,15,14.0066,15.98,14.0296,16L15.9736,16C15.9816,15.993,15.9926,15.991,15.9996,15.984L15.9996,13.755 14.9996,12.783 14.9996,3 12.9996,3 12.9996,0 1.9996,0 1.9996,3 -0.000400000000000844,3 -0.000400000000000844,13 1.9996,13 1.9996,15z"/>
                 <GeometryDrawing Brush="{StaticResource icon-vs-bg}" Geometry="F1M14,12L13,12 13,4 14,4z M3,13L12,13 12,14 3,14z M12,2L3,2 3,1 12,1z M1,4L2,4 2,12 1,12z M8,7L10,7 10,8 8,8 8,10 7,10 7,8 5,8 5,7 7,7 7,5 8,5z M3.875,7.5C3.875,5.501 5.501,3.875 7.5,3.875 9.499,3.875 11.125,5.501 11.125,7.5 11.125,9.5 9.499,11.126 7.5,11.126 5.501,11.126 3.875,9.5 3.875,7.5 M15.349,14.517L11.092,10.378C11.728,9.586 12.125,8.593 12.125,7.5 12.125,4.95 10.05,2.875 7.5,2.875 4.95,2.875 2.875,4.95 2.875,7.5 2.875,10.051 4.95,12.126 7.5,12.126 8.596,12.126 9.592,11.726 10.385,11.086L14.651,15.233C14.749,15.328 14.874,15.375 15,15.375 15.13,15.375 15.261,15.324 15.358,15.224 15.551,15.025 15.547,14.709 15.349,14.517"/>
+            </DrawingGroup.Children>
+        </DrawingGroup>
+        <DrawingGroup x:Key="ViewBox">
+            <DrawingGroup.Children>
+                <GeometryDrawing Brush="{StaticResource icon-canvas-transparent}" Geometry="F1M16,16L0,16 0,0 16,0z"/>
+                <GeometryDrawing Brush="{StaticResource icon-vs-out}" Geometry="F1M1,15L16,15 16,0 1,0z"/>
+                <GeometryDrawing Brush="{StaticResource icon-vs-bg}" Geometry="F1M14,13L3,13 3,2 14,2z M2,14L15,14 15,1 2,1z M7,6L10,6 10,9 7,9z M7,11L5.708,11 6.708,10 10.293,10 11.293,11 10,11 10,12 13,12 13,9 12,9 12,10.293 11,9.293 11,5.707 12,4.707 12,6 13,6 13,3 10,3 10,4 11.293,4 10.293,5 6.706,5 5.706,4 7,4 7,3 4,3 4,6 5,6 5,4.708 6,5.708 6,9.294 5,10.294 5,9 4,9 4,12 7,12z"/>
+                <GeometryDrawing Brush="{StaticResource icon-vs-fg}" Geometry="F1M13,3L10,3 10,4 11.293,4 10.293,5 6.706,5 5.706,4 7,4 7,3 4,3 4,6 5,6 5,4.708 6,5.708 6,9.294 5,10.294 5,9 4,9 4,12 7,12 7,11 5.708,11 6.708,10 10.293,10 11.293,11 10,11 10,12 13,12 13,9 12,9 12,10.293 11,9.293 11,5.707 12,4.707 12,6 13,6z M14,13L3,13 3,2 14,2z M7,6L10,6 10,9 7,9z"/>
+            </DrawingGroup.Children>
+        </DrawingGroup>
+        <DrawingGroup x:Key="FitToScreen">
+            <DrawingGroup.Children>
+                <GeometryDrawing Brush="{StaticResource icon-canvas-transparent}" Geometry="F1M16,16L0,16 0,0 16,0z"/>
+                <GeometryDrawing Brush="{StaticResource icon-vs-out}" Geometry="F1M9.9999,-0.000199999999999534L9.9999,3.0008 5.9999,3.0008 5.9999,-0.000199999999999534 -9.99999999997669E-05,-0.000199999999999534 -9.99999999997669E-05,5.9998 2.9999,5.9998 2.9999,9.9998 -9.99999999997669E-05,9.9998 -9.99999999997669E-05,15.9998 5.9999,15.9998 5.9999,13.0008 9.9999,13.0008 9.9999,15.9998 15.9999,15.9998 15.9999,9.9998 12.9999,9.9998 12.9999,5.9998 15.9999,5.9998 15.9999,-0.000199999999999534z"/>
+                <GeometryDrawing Brush="{StaticResource icon-vs-bg}" Geometry="F1M11,11L5,11 5,5 11,5z M15,5L15,1 11,1 11,2 13.293,2 11.293,4 4.707,4 2.707,2 5,2 5,1 1,1 1,5 2,5 2,2.707 4,4.707 4,11.293 2,13.293 2,11 1,11 1,15 5,15 5,14 2.707,14 4.707,12 11.293,12 13.293,14 11,14 11,15 15,15 15,11 14,11 14,13.293 12,11.293 12,4.707 14,2.707 14,5z"/>
             </DrawingGroup.Children>
         </DrawingGroup>
     </Style.Resources>
