@@ -12,6 +12,14 @@
              d:DataContext="{x:Static app:App.ToolContext}"
              d:DesignWidth="800" d:DesignHeight="24">
     <UserControl.Resources>
+        <VisualBrush x:Key="ToolBarThumb" TileMode="Tile" Stretch="None" AlignmentX="Left" AlignmentY="Top" SourceRect="0,0,4,8" DestinationRect="0,0,4,8">
+            <VisualBrush.Visual>
+                    <StackPanel Orientation="Vertical">
+                        <Rectangle Width="4" Height="4" Fill="#FF3F3F46"/>
+                        <Rectangle Width="4" Height="4" Fill="#00FFFFFF"/>
+                    </StackPanel>
+            </VisualBrush.Visual>
+        </VisualBrush>
         <!-- File -->
         <DrawingPresenter x:Key="NewContainerViewIcon" Drawing="{StaticResource Document}" Width="16" Height="16"/>
         <DrawingPresenter x:Key="CloseContainerViewIcon" Drawing="{StaticResource CloseDocument}" Width="16" Height="16"/>
@@ -67,9 +75,9 @@
             <Setter Property="Background" Value="Transparent"/>
             <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="Margin" Value="0"/>
-            <Setter Property="Padding" Value="3"/>
-            <Setter Property="Width" Value="22"/>
-            <Setter Property="Height" Value="22"/>
+            <Setter Property="Padding" Value="2"/>
+            <Setter Property="Width" Value="20"/>
+            <Setter Property="Height" Value="20"/>
         </Style>
         <Style Selector="Button.toolbar /template/ ContentPresenter">
             <Setter Property="BorderThickness" Value="0"/>
@@ -83,6 +91,11 @@
         <Style Selector="Button.toolbar:pressed /template/ ContentPresenter">
             <Setter Property="Background" Value="#007ACC"/>
         </Style>
+        <Style Selector="Grid.thumb">
+            <Setter Property="Background" Value="{StaticResource ToolBarThumb}"/>
+            <Setter Property="Margin" Value="4,0"/>
+            <Setter Property="Width" Value="4"/>
+        </Style>
         <Style Selector="Grid.separator">
             <Setter Property="Background" Value="#3F3F46"/>
             <Setter Property="Margin" Value="4,0"/>
@@ -94,8 +107,9 @@
         </Style>
     </UserControl.Styles>
     <WrapPanel>
-        <Grid x:Name="fileToolbar">
-            <StackPanel Classes="toolbar">
+        <Grid x:Name="fileToolbar" ColumnDefinitions="Auto,*">
+            <Grid Classes="thumb" Grid.Column="0"/>
+            <StackPanel Classes="toolbar" Grid.Column="1">
                 <Button Classes="toolbar" ToolTip.Tip="New View" Content="{StaticResource NewContainerViewIcon}" Command="{Binding NewContainerView}" CommandParameter="View"/>
                 <Button Classes="toolbar" ToolTip.Tip="Close View" Content="{StaticResource CloseContainerViewIcon}" Command="{Binding CloseContainerView}" CommandParameter="{Binding DocumentContainer.ContainerView, FallbackValue={x:Null}}"/>
                 <Grid Classes="separator"/>
@@ -106,8 +120,9 @@
                 <Button Classes="toolbar" ToolTip.Tip="Export..." Content="{StaticResource ExportFileIcon}" Command="{Binding ExportFile}"/>
             </StackPanel>
         </Grid>
-        <Grid x:Name="editToolbar">
-            <StackPanel Classes="toolbar">
+        <Grid x:Name="editToolbar" ColumnDefinitions="Auto,*">
+            <Grid Classes="thumb" Grid.Column="0"/>
+            <StackPanel Classes="toolbar" Grid.Column="1">
                 <Button Classes="toolbar" ToolTip.Tip="Cut" Content="{StaticResource CutIcon}" Command="{Binding Selection.Cut}" CommandParameter="{Binding}"/>
                 <Button Classes="toolbar" ToolTip.Tip="Copy" Content="{StaticResource CopyIcon}" Command="{Binding Selection.Copy}" CommandParameter="{Binding}"/>
                 <Button Classes="toolbar" ToolTip.Tip="Paste" Content="{StaticResource PasteIcon}" Command="{Binding Selection.Paste}" CommandParameter="{Binding}"/>
@@ -117,8 +132,9 @@
                 <Button Classes="toolbar" ToolTip.Tip="Deselect All" Content="{StaticResource DeselectAllIcon}" Command="{Binding Selection.DeselectAll}" CommandParameter="{Binding}"/>
             </StackPanel>
         </Grid>
-        <Grid x:Name="zoomToolbar">
-            <StackPanel Classes="toolbar">
+        <Grid x:Name="zoomToolbar" ColumnDefinitions="Auto,*">
+            <Grid Classes="thumb" Grid.Column="0"/>
+            <StackPanel Classes="toolbar" Grid.Column="1">
                 <Button Classes="toolbar" ToolTip.Tip="Reset Zoom" Content="" Command="{Binding DocumentContainer.ContainerView.ZoomService.ResetZoom}" CommandParameter="True"/>
                 <Button Classes="toolbar" ToolTip.Tip="Center Zoom" Content="" Command="{Binding DocumentContainer.ContainerView.ZoomService.CenterZoom}" CommandParameter="True"/>
                 <Button Classes="toolbar" ToolTip.Tip="Fill Zoom" Content="" Command="{Binding DocumentContainer.ContainerView.ZoomService.FillZoom}" CommandParameter="True"/>
@@ -126,8 +142,9 @@
                 <Button Classes="toolbar" ToolTip.Tip="Uniform To Fill Zoom" Content="" Command="{Binding DocumentContainer.ContainerView.ZoomService.UniformToFillZoom}" CommandParameter="True"/>
             </StackPanel>
         </Grid>
-        <Grid x:Name="toolToolbar">
-            <StackPanel Classes="toolbar">
+        <Grid x:Name="toolToolbar" ColumnDefinitions="Auto,*">
+            <Grid Classes="thumb" Grid.Column="0"/>
+            <StackPanel Classes="toolbar" Grid.Column="1">
                 <Button Classes="toolbar" ToolTip.Tip="None Tool" Content="{StaticResource NoneIcon}" Command="{Binding SetTool}" CommandParameter="None"/>
                 <Grid Classes="separator"/>
                 <Button Classes="toolbar" ToolTip.Tip="Selection Tool" Content="{StaticResource SelectionIcon}" Command="{Binding SetTool}" CommandParameter="Selection"/>
@@ -152,8 +169,9 @@
                 <Button Classes="toolbar" ToolTip.Tip="Text Tool" Content="{StaticResource TextIcon}" Command="{Binding SetTool}" CommandParameter="Text"/>
             </StackPanel>
         </Grid>
-        <Grid x:Name="shapeToolbar">
-            <StackPanel Classes="toolbar">
+        <Grid x:Name="shapeToolbar" ColumnDefinitions="Auto,*">
+            <Grid Classes="thumb" Grid.Column="0"/>
+            <StackPanel Classes="toolbar" Grid.Column="1">
                 <Button Classes="toolbar" ToolTip.Tip="Duplicate" Content="{StaticResource DuplicateIcon}" Command="{Binding Selection.Duplicate}" CommandParameter="{Binding}"/>
                 <Grid Classes="separator"/>
                 <Button Classes="toolbar" ToolTip.Tip="Create Group" Content="{StaticResource GroupIcon}" Command="{Binding Selection.CreateGroup}" CommandParameter="{Binding}"/>
