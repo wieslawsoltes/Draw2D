@@ -11,6 +11,57 @@
              mc:Ignorable="d"
              d:DataContext="{x:Static app:App.ToolContext}"
              d:DesignWidth="800" d:DesignHeight="24">
+    <UserControl.Resources>
+        <!-- File -->
+        <DrawingPresenter x:Key="NewContainerViewIcon" Drawing="{StaticResource Document}" Width="16" Height="16"/>
+        <DrawingPresenter x:Key="CloseContainerViewIcon" Drawing="{StaticResource CloseDocument}" Width="16" Height="16"/>
+        <DrawingPresenter x:Key="OpenDocumentContainerIcon" Drawing="{StaticResource OpenFile}" Width="16" Height="16"/>
+        <DrawingPresenter x:Key="SaveDocumentContainerAsIcon" Drawing="{StaticResource SaveAs}" Width="16" Height="16"/>
+        <DrawingPresenter x:Key="ImportFileIcon" Drawing="{StaticResource ImportFile}" Width="16" Height="16"/>
+        <DrawingPresenter x:Key="ExportFileIcon" Drawing="{StaticResource ExportFile}" Width="16" Height="16"/>
+        <!-- Edit -->
+        <DrawingPresenter x:Key="CutIcon" Drawing="{StaticResource Cut}" Width="16" Height="16"/>
+        <DrawingPresenter x:Key="CopyIcon" Drawing="{StaticResource Copy}" Width="16" Height="16"/>
+        <DrawingPresenter x:Key="PasteIcon" Drawing="{StaticResource Paste}" Width="16" Height="16"/>
+        <DrawingPresenter x:Key="DeleteIcon" Drawing="{StaticResource Cancel}" Width="16" Height="16"/>
+        <DrawingPresenter x:Key="SelectAllIcon" Drawing="{StaticResource SelectAllItems}" Width="16" Height="16"/>
+        <DrawingPresenter x:Key="DeselectAllIcon" Drawing="{StaticResource SelectNoItems}" Width="16" Height="16"/>
+        <!-- Tool -->
+        <DrawingPresenter x:Key="NoneIcon" Drawing="{StaticResource DisplayNoneMark}" Width="16" Height="16"/>
+        <DrawingPresenter x:Key="SelectionIcon" Drawing="{StaticResource Cursor}" Width="16" Height="16"/>
+        <DrawingPresenter x:Key="PointIcon" Drawing="{StaticResource Large}" Width="16" Height="16"/>
+        <DrawingPresenter x:Key="LineIcon" Drawing="{StaticResource Backslash}" Width="16" Height="16"/>
+        <DrawingPresenter x:Key="PolyLineIcon" Drawing="{StaticResource Path}" Width="16" Height="16"/>
+        <DrawingPresenter x:Key="ConicIcon" Drawing="{StaticResource CurveTool}" Width="16" Height="16"/>
+        <DrawingPresenter x:Key="PathIcon" Drawing="{StaticResource PenTool}" Width="16" Height="16"/>
+        <DrawingPresenter x:Key="RectangleIcon" Drawing="{StaticResource Rectangle}" Width="16" Height="16"/>
+        <DrawingPresenter x:Key="CircleIcon" Drawing="{StaticResource ShaderUnit}" Width="16" Height="16"/>
+        <DrawingPresenter x:Key="ArcIcon" Drawing="{StaticResource ArcSegment}" Width="16" Height="16"/>
+        <DrawingPresenter x:Key="OvalIcon" Drawing="{StaticResource Ellipse}" Width="16" Height="16"/>
+        <DrawingPresenter x:Key="TextIcon" Drawing="{StaticResource TextElement}" Width="16" Height="16"/>
+        <!-- Shape -->
+        <DrawingPresenter x:Key="DuplicateIcon" Drawing="{StaticResource CopyToClipboard}" Width="16" Height="16"/>
+        <DrawingPresenter x:Key="GroupIcon" Drawing="{StaticResource Group}" Width="16" Height="16"/>
+        <DrawingPresenter x:Key="ReferenceIcon" Drawing="{StaticResource Reference}" Width="16" Height="16"/>
+        <DrawingPresenter x:Key="AlignLeftIcon" Drawing="{StaticResource AlignLeft}" Width="16" Height="16"/>
+        <DrawingPresenter x:Key="AlignCenteredIcon" Drawing="{StaticResource TextCenterInFormHorizontal}" Width="16" Height="16"/>
+        <DrawingPresenter x:Key="AlignRightIcon" Drawing="{StaticResource AlignRight}" Width="16" Height="16"/>
+        <DrawingPresenter x:Key="AlignTopIcon" Drawing="{StaticResource AlignTop}" Width="16" Height="16"/>
+        <DrawingPresenter x:Key="AlignCenterIcon" Drawing="{StaticResource CenterInFormVertical}" Width="16" Height="16"/>
+        <DrawingPresenter x:Key="AlignBottomIcon" Drawing="{StaticResource AlignBottom}" Width="16" Height="16"/>
+        <DrawingPresenter x:Key="BringToFrontIcon" Drawing="{StaticResource BringtoFront}" Width="16" Height="16"/>
+        <DrawingPresenter x:Key="BringForwardIcon" Drawing="{StaticResource BringForward}" Width="16" Height="16"/>
+        <DrawingPresenter x:Key="SendBackwardIcon" Drawing="{StaticResource SendBackward}" Width="16" Height="16"/>
+        <DrawingPresenter x:Key="SendToBackIcon" Drawing="{StaticResource SendtoBack}" Width="16" Height="16"/>
+        <DrawingPresenter x:Key="DifferenceIcon" Drawing="{StaticResource SubtractFront}" Width="16" Height="16"/>
+        <DrawingPresenter x:Key="IntersectIcon" Drawing="{StaticResource IntersectPath}" Width="16" Height="16"/>
+        <DrawingPresenter x:Key="UnionIcon" Drawing="{StaticResource UnitePath}" Width="16" Height="16"/>
+        <DrawingPresenter x:Key="XorIcon" Drawing="{StaticResource ExcludePath}" Width="16" Height="16"/>
+        <DrawingPresenter x:Key="ReverseDifferenceIcon" Drawing="{StaticResource SubtractBack}" Width="16" Height="16"/>
+        <DrawingPresenter x:Key="BreakIcon" Drawing="{StaticResource Ungroup}" Width="16" Height="16"/>
+        <DrawingPresenter x:Key="ConnectIcon" Drawing="{StaticResource Link}" Width="16" Height="16"/>
+        <DrawingPresenter x:Key="DisconnectIcon" Drawing="{StaticResource RemoveLink}" Width="16" Height="16"/>
+    </UserControl.Resources>
     <UserControl.Styles>
         <Style Selector="Button.toolbar">
             <Setter Property="Background" Value="Transparent"/>
