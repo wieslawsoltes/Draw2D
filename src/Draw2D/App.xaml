@@ -137,7 +137,7 @@
         </Style>
     </Application.Styles>
     <Application.Resources>
-        <SolidColorBrush x:Key="TransparentBrush">#00FFFFFF</SolidColorBrush>
+        <SolidColorBrush x:Key="TransparentBrush" Opacity="0" Color="#FFFFFF"/>
         <VisualBrush x:Key="LightCheckerBoard" TileMode="Tile" Stretch="None" AlignmentX="Left" AlignmentY="Top" SourceRect="0,0,20,20" DestinationRect="0,0,20,20">
             <VisualBrush.Visual>
                 <StackPanel Orientation="Horizontal">
