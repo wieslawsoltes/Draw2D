@@ -1,0 +1,145 @@
+﻿<!-- Copyright (c) Wiesław Šoltés. All rights reserved. -->
+<!-- Licensed under the MIT license. See LICENSE file in the project root for full license information. -->
+<UserControl x:Class="Draw2D.Views.ToolbarViev"
+             xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:Draw2D.Views"
+             xmlns:app="clr-namespace:Draw2D"
+             Focusable="True"
+             mc:Ignorable="d"
+             d:DataContext="{x:Static app:App.ToolContext}"
+             d:DesignWidth="800" d:DesignHeight="24">
+    <UserControl.Styles>
+        <Style Selector="Button.toolbar">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Margin" Value="0"/>
+            <Setter Property="Width" Value="18"/>
+            <Setter Property="Height" Value="18"/>
+        </Style>
+        <Style Selector="Button.toolbar /template/ ContentPresenter">
+            <Setter Property="BorderThickness" Value="0"/>
+        </Style>
+        <Style Selector="Button.toolbar /template/ ContentPresenter">
+            <Setter Property="Background" Value="#00FFFFFF"/>
+        </Style>
+        <Style Selector="Button.toolbar:pointerover /template/ ContentPresenter">
+            <Setter Property="Background" Value="#22FFFFFF"/>
+        </Style>
+        <Style Selector="Button.toolbar:pressed /template/ ContentPresenter">
+            <Setter Property="Background" Value="#007ACC"/>
+        </Style>
+        <Style Selector="Grid.separator">
+            <Setter Property="Background" Value="#3F3F46"/>
+            <Setter Property="Margin" Value="4,0"/>
+            <Setter Property="Width" Value="1"/>
+        </Style>
+        <Style Selector="StackPanel.toolbar">
+            <Setter Property="Orientation" Value="Horizontal"/>
+            <Setter Property="Spacing" Value="1"/>
+        </Style>
+    </UserControl.Styles>
+    <WrapPanel>
+        <Grid x:Name="fileToolbar">
+            <StackPanel Classes="toolbar">
+                <Button Classes="toolbar" ToolTip.Tip="New View" Content="{StaticResource NewContainerViewIcon}" Command="{Binding NewContainerView}" CommandParameter="View"/>
+                <Button Classes="toolbar" ToolTip.Tip="Close View" Content="{StaticResource CloseContainerViewIcon}" Command="{Binding CloseContainerView}" CommandParameter="{Binding DocumentContainer.ContainerView, FallbackValue={x:Null}}"/>
+                <Grid Classes="separator"/>
+                <Button Classes="toolbar" ToolTip.Tip="Open Document..." Content="{StaticResource OpenDocumentContainerIcon}" Command="{Binding OpenDocumentContainer}"/>
+                <Button Classes="toolbar" ToolTip.Tip="Save Document As..." Content="{StaticResource SaveDocumentContainerAsIcon}" Command="{Binding SaveDocumentContainerAs}"/>
+                <Grid Classes="separator"/>
+                <Button Classes="toolbar" ToolTip.Tip="Import..." Content="{StaticResource ImportFileIcon}" Command="{Binding ImportFile}"/>
+                <Button Classes="toolbar" ToolTip.Tip="Export..." Content="{StaticResource ExportFileIcon}" Command="{Binding ExportFile}"/>
+            </StackPanel>
+        </Grid>
+        <Grid x:Name="editToolbar">
+            <StackPanel Classes="toolbar">
+                <Button Classes="toolbar" ToolTip.Tip="Cut" Content="{StaticResource CutIcon}" Command="{Binding Selection.Cut}" CommandParameter="{Binding}"/>
+                <Button Classes="toolbar" ToolTip.Tip="Copy" Content="{StaticResource CopyIcon}" Command="{Binding Selection.Copy}" CommandParameter="{Binding}"/>
+                <Button Classes="toolbar" ToolTip.Tip="Paste" Content="{StaticResource PasteIcon}" Command="{Binding Selection.Paste}" CommandParameter="{Binding}"/>
+                <Button Classes="toolbar" ToolTip.Tip="Delete" Content="{StaticResource DeleteIcon}" Command="{Binding Selection.Delete}" CommandParameter="{Binding}"/>
+                <Grid Classes="separator"/>
+                <Button Classes="toolbar" ToolTip.Tip="Select All" Content="{StaticResource SelectAllIcon}" Command="{Binding Selection.SelectAll}" CommandParameter="{Binding}"/>
+                <Button Classes="toolbar" ToolTip.Tip="Deselect All" Content="{StaticResource DeselectAllIcon}" Command="{Binding Selection.DeselectAll}" CommandParameter="{Binding}"/>
+            </StackPanel>
+        </Grid>
+        <Grid x:Name="zoomToolbar">
+            <StackPanel Classes="toolbar">
+                <Button Classes="toolbar" ToolTip.Tip="Reset Zoom" Content="R" Command="{Binding DocumentContainer.ContainerView.ZoomService.ResetZoom}" CommandParameter="True"/>
+                <Button Classes="toolbar" ToolTip.Tip="Center Zoom" Content="C" Command="{Binding DocumentContainer.ContainerView.ZoomService.CenterZoom}" CommandParameter="True"/>
+                <Button Classes="toolbar" ToolTip.Tip="Fill Zoom" Content="F" Command="{Binding DocumentContainer.ContainerView.ZoomService.FillZoom}" CommandParameter="True"/>
+                <Button Classes="toolbar" ToolTip.Tip="Uniform Zoom" Content="U" Command="{Binding DocumentContainer.ContainerView.ZoomService.UniformZoom}" CommandParameter="True"/>
+                <Button Classes="toolbar" ToolTip.Tip="Uniform To Fill Zoom" Content="T" Command="{Binding DocumentContainer.ContainerView.ZoomService.UniformToFillZoom}" CommandParameter="True"/>
+            </StackPanel>
+        </Grid>
+        <Grid x:Name="toolToolbar">
+            <StackPanel Classes="toolbar">
+                <Button Classes="toolbar" ToolTip.Tip="None Tool" Content="{StaticResource NoneIcon}" Command="{Binding SetTool}" CommandParameter="None"/>
+                <Grid Classes="separator"/>
+                <Button Classes="toolbar" ToolTip.Tip="Selection Tool" Content="{StaticResource SelectionIcon}" Command="{Binding SetTool}" CommandParameter="Selection"/>
+                <Grid Classes="separator"/>
+                <Button Classes="toolbar" ToolTip.Tip="Point Tool" Content="{StaticResource PointIcon}" Command="{Binding SetTool}" CommandParameter="Point"/>
+                <Grid Classes="separator"/>
+                <Button Classes="toolbar" ToolTip.Tip="Line Tool" Content="{StaticResource LineIcon}" Command="{Binding SetTool}" CommandParameter="Line"/>
+                <Button Classes="toolbar" ToolTip.Tip="Poly Line Tool" Content="{StaticResource PolyLineIcon}" Command="{Binding SetTool}" CommandParameter="PolyLine"/>
+                <Button Classes="toolbar" ToolTip.Tip="Cubic Bezier Tool" Content="Q" Command="{Binding SetTool}" CommandParameter="CubicBezier"/>
+                <Button Classes="toolbar" ToolTip.Tip="Quadratic Bezier Tool" Content="B" Command="{Binding SetTool}" CommandParameter="QuadraticBezier"/>
+                <Button Classes="toolbar" ToolTip.Tip="Conic Tool" Content="{StaticResource ConicIcon}" Command="{Binding SetTool}" CommandParameter="Conic"/>
+                <Grid Classes="separator"/>
+                <Button Classes="toolbar" ToolTip.Tip="Path Tool" Content="{StaticResource PathIcon}" Command="{Binding SetTool}" CommandParameter="Path"/>
+                <Grid Classes="separator"/>
+                <Button Classes="toolbar" ToolTip.Tip="Scribble Tool" Content="S" Command="{Binding SetTool}" CommandParameter="Scribble"/>
+                <Grid Classes="separator"/>
+                <Button Classes="toolbar" ToolTip.Tip="Rectangle Tool" Content="{StaticResource RectangleIcon}" Command="{Binding SetTool}" CommandParameter="Rectangle"/>
+                <Button Classes="toolbar" ToolTip.Tip="Circle Tool" Content="{StaticResource CircleIcon}" Command="{Binding SetTool}" CommandParameter="Circle"/>
+                <Button Classes="toolbar" ToolTip.Tip="Arc Tool" Content="{StaticResource ArcIcon}" Command="{Binding SetTool}" CommandParameter="Arc"/>
+                <Button Classes="toolbar" ToolTip.Tip="Oval Tool" Content="{StaticResource OvalIcon}" Command="{Binding SetTool}" CommandParameter="Oval"/>
+                <Grid Classes="separator"/>
+                <Button Classes="toolbar" ToolTip.Tip="Text Tool" Content="{StaticResource TextIcon}" Command="{Binding SetTool}" CommandParameter="Text"/>
+            </StackPanel>
+        </Grid>
+        <Grid x:Name="shapeToolbar">
+            <StackPanel Classes="toolbar">
+                <Button Classes="toolbar" ToolTip.Tip="Duplicate" Content="{StaticResource DuplicateIcon}" Command="{Binding Selection.Duplicate}" CommandParameter="{Binding}"/>
+                <Button Classes="toolbar"/>
+                <Button Classes="toolbar" ToolTip.Tip="Create Group" Content="{StaticResource GroupIcon}" Command="{Binding Selection.CreateGroup}" CommandParameter="{Binding}"/>
+                <Button Classes="toolbar" ToolTip.Tip="Break" Content="{StaticResource BreakIcon}" Command="{Binding Selection.Break}" CommandParameter="{Binding}"/>
+                <Grid Classes="separator"/>
+                <Button Classes="toolbar" ToolTip.Tip="Create Reference" Content="{StaticResource ReferenceIcon}" Command="{Binding Selection.CreateReference}" CommandParameter="{Binding}"/>
+                <Button Classes="toolbar" ToolTip.Tip="Create Path" Content="P" Command="{Binding Selection.CreatePath}" CommandParameter="{Binding}"/>
+                <Button Classes="toolbar" ToolTip.Tip="Create Stroke Path" Content="S" Command="{Binding Selection.CreateStrokePath}" CommandParameter="{Binding}"/>
+                <Button Classes="toolbar" ToolTip.Tip="Create Fill Path" Content="F" Command="{Binding Selection.CreateFillPath}" CommandParameter="{Binding}"/>
+                <Grid Classes="separator"/>
+                <Button Classes="toolbar" ToolTip.Tip="Stack Horizontally" Content="H" Command="{Binding Selection.StackHorizontally}" CommandParameter="{Binding}"/>
+                <Button Classes="toolbar" ToolTip.Tip="Stack Vertically" Content="V" Command="{Binding Selection.StackVertically}" CommandParameter="{Binding}"/>
+                <Grid Classes="separator"/>
+                <Button Classes="toolbar" ToolTip.Tip="Distribute Horizontally" Content="H" Command="{Binding Selection.DistributeHorizontally}" CommandParameter="{Binding}"/>
+                <Button Classes="toolbar" ToolTip.Tip="Distribute Vertically" Content="V" Command="{Binding Selection.DistributeVertically}" CommandParameter="{Binding}"/>
+                <Grid Classes="separator"/>
+                <Button Classes="toolbar" ToolTip.Tip="Align Left" Content="{StaticResource AlignLeftIcon}" Command="{Binding Selection.AlignLeft}" CommandParameter="{Binding}"/>
+                <Button Classes="toolbar" ToolTip.Tip="Align Centered" Content="{StaticResource AlignCenteredIcon}" Command="{Binding Selection.AlignCentered}" CommandParameter="{Binding}"/>
+                <Button Classes="toolbar" ToolTip.Tip="Align Right" Content="{StaticResource AlignRightIcon}" Command="{Binding Selection.AlignRight}" CommandParameter="{Binding}"/>
+                <Grid Classes="separator"/>
+                <Button Classes="toolbar" ToolTip.Tip="Align Top" Content="{StaticResource AlignTopIcon}" Command="{Binding Selection.AlignTop}" CommandParameter="{Binding}"/>
+                <Button Classes="toolbar" ToolTip.Tip="Align Center" Content="{StaticResource AlignCenterIcon}" Command="{Binding Selection.AlignCenter}" CommandParameter="{Binding}"/>
+                <Button Classes="toolbar" ToolTip.Tip="Align Bottom" Content="{StaticResource AlignBottomIcon}" Command="{Binding Selection.AlignBottom}" CommandParameter="{Binding}"/>
+                <Grid Classes="separator"/>
+                <Button Classes="toolbar" ToolTip.Tip="Bring to Front" Content="{StaticResource BringToFrontIcon}" Command="{Binding Selection.ArangeBringToFront}" CommandParameter="{Binding}"/>
+                <Button Classes="toolbar" ToolTip.Tip="Bring Forward" Content="{StaticResource BringForwardIcon}" Command="{Binding Selection.ArangeBringForward}" CommandParameter="{Binding}"/>
+                <Button Classes="toolbar" ToolTip.Tip="Send Backward" Content="{StaticResource SendBackwardIcon}" Command="{Binding Selection.ArangeSendBackward}" CommandParameter="{Binding}"/>
+                <Button Classes="toolbar" ToolTip.Tip="Send to Back" Content="{StaticResource SendToBackIcon}" Command="{Binding Selection.ArangeSendToBack}" CommandParameter="{Binding}"/>
+                <Grid Classes="separator"/>
+                <Button Classes="toolbar" ToolTip.Tip="Path Op Difference" Content="{StaticResource DifferenceIcon}" Command="{Binding PathOp}" CommandParameter="Difference"/>
+                <Button Classes="toolbar" ToolTip.Tip="Path Op Intersect" Content="{StaticResource IntersectIcon}" Command="{Binding PathOp}" CommandParameter="Intersect"/>
+                <Button Classes="toolbar" ToolTip.Tip="Path Op Union" Content="{StaticResource UnionIcon}" Command="{Binding PathOp}" CommandParameter="Union"/>
+                <Button Classes="toolbar" ToolTip.Tip="Path Op Xor" Content="{StaticResource XorIcon}" Command="{Binding PathOp}" CommandParameter="Xor"/>
+                <Button Classes="toolbar" ToolTip.Tip="Path Op Reverse Difference" Content="{StaticResource ReverseDifferenceIcon}" Command="{Binding PathOp}" CommandParameter="ReverseDifference"/>
+                <Grid Classes="separator"/>
+                <Button Classes="toolbar" ToolTip.Tip="Connect" Content="{StaticResource ConnectIcon}" Command="{Binding Selection.Connect}" CommandParameter="{Binding}"/>
+                <Button Classes="toolbar" ToolTip.Tip="Disconnect" Content="{StaticResource DisconnectIcon}" Command="{Binding Selection.Disconnect}" CommandParameter="{Binding}"/>
+            </StackPanel>
+        </Grid>
+    </WrapPanel>
+</UserControl>
