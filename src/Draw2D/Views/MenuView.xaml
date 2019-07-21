@@ -30,7 +30,9 @@
         <DrawingPresenter x:Key="DeselectAllIcon" Drawing="{StaticResource SelectNoItems}" Width="16" Height="16"/>
         <!-- Zoom -->
         <DrawingPresenter x:Key="CenterZoomIcon" Drawing="{StaticResource ZoomOriginalSize}" Width="16" Height="16"/>
+        <DrawingPresenter x:Key="FillZoomIcon" Drawing="{StaticResource ViewBox}" Width="16" Height="16"/>
         <DrawingPresenter x:Key="UniformZoomIcon" Drawing="{StaticResource ZoomToFit}" Width="16" Height="16"/>
+        <DrawingPresenter x:Key="UniformToFillZoomIcon" Drawing="{StaticResource FitToScreen}" Width="16" Height="16"/>
         <!-- Tool -->
         <DrawingPresenter x:Key="NoneIcon" Drawing="{StaticResource DisplayNoneMark}" Width="16" Height="16"/>
         <DrawingPresenter x:Key="SelectionIcon" Drawing="{StaticResource Cursor}" Width="16" Height="16"/>
@@ -40,6 +42,7 @@
         <DrawingPresenter x:Key="ConicIcon" Drawing="{StaticResource CurveTool}" Width="16" Height="16"/>
         <DrawingPresenter x:Key="PathIcon" Drawing="{StaticResource PenTool}" Width="16" Height="16"/>
         <DrawingPresenter x:Key="RectangleIcon" Drawing="{StaticResource Rectangle}" Width="16" Height="16"/>
+        <DrawingPresenter x:Key="ScribbleIcon" Drawing="{StaticResource InkBrush}" Width="16" Height="16"/>
         <DrawingPresenter x:Key="CircleIcon" Drawing="{StaticResource ShaderUnit}" Width="16" Height="16"/>
         <DrawingPresenter x:Key="ArcIcon" Drawing="{StaticResource ArcSegment}" Width="16" Height="16"/>
         <DrawingPresenter x:Key="OvalIcon" Drawing="{StaticResource Ellipse}" Width="16" Height="16"/>
@@ -48,6 +51,9 @@
         <DrawingPresenter x:Key="DuplicateIcon" Drawing="{StaticResource CopyToClipboard}" Width="16" Height="16"/>
         <DrawingPresenter x:Key="GroupIcon" Drawing="{StaticResource Group}" Width="16" Height="16"/>
         <DrawingPresenter x:Key="ReferenceIcon" Drawing="{StaticResource Reference}" Width="16" Height="16"/>
+        <DrawingPresenter x:Key="CreatePathIcon" Drawing="{StaticResource Path}" Width="16" Height="16"/>
+        <DrawingPresenter x:Key="CreateStrokePathIcon" Drawing="{StaticResource PenPathConvert}" Width="16" Height="16"/>
+        <DrawingPresenter x:Key="CreateFillPathIcon" Drawing="{StaticResource FilledRectangleTool}" Width="16" Height="16"/>
         <DrawingPresenter x:Key="AlignLeftIcon" Drawing="{StaticResource AlignLeft}" Width="16" Height="16"/>
         <DrawingPresenter x:Key="AlignCenteredIcon" Drawing="{StaticResource TextCenterInFormHorizontal}" Width="16" Height="16"/>
         <DrawingPresenter x:Key="AlignRightIcon" Drawing="{StaticResource AlignRight}" Width="16" Height="16"/>
@@ -126,15 +132,13 @@
         </MenuItem>
         <MenuItem Header="_View">
             <MenuItem Header="_Zoom">
-                <MenuItem Header="_Reset" Command="{Binding DocumentContainer.ContainerView.ZoomService.ResetZoom}" CommandParameter="True"/>
-                <Separator/>
                 <MenuItem Header="_Center" Icon="{StaticResource CenterZoomIcon}" Command="{Binding DocumentContainer.ContainerView.ZoomService.CenterZoom}" CommandParameter="True"/>
                 <Separator/>
-                <MenuItem Header="_Fill" Command="{Binding DocumentContainer.ContainerView.ZoomService.FillZoom}" CommandParameter="True"/>
+                <MenuItem Header="_Fill" Icon="{StaticResource FillZoomIcon}" Command="{Binding DocumentContainer.ContainerView.ZoomService.FillZoom}" CommandParameter="True"/>
                 <Separator/>
                 <MenuItem Header="_Uniform" Icon="{StaticResource UniformZoomIcon}" Command="{Binding DocumentContainer.ContainerView.ZoomService.UniformZoom}" CommandParameter="True"/>
                 <Separator/>
-                <MenuItem Header="Uniform _To Fill" Command="{Binding DocumentContainer.ContainerView.ZoomService.UniformToFillZoom}" CommandParameter="True"/>
+                <MenuItem Header="Uniform _To Fill" Icon="{StaticResource UniformToFillZoomIcon}" Command="{Binding DocumentContainer.ContainerView.ZoomService.UniformToFillZoom}" CommandParameter="True"/>
             </MenuItem>
         </MenuItem>
         <MenuItem Header="_Tool">
@@ -159,7 +163,7 @@
                 <MenuItem Header="_Move" Command="{Binding SetTool}" CommandParameter="Move"/>
             </MenuItem>
             <Separator/>
-            <MenuItem Header="Scr_ibble" Command="{Binding SetTool}" CommandParameter="Scribble"/>
+            <MenuItem Header="Scr_ibble" Icon="{StaticResource ScribbleIcon}" Command="{Binding SetTool}" CommandParameter="Scribble"/>
             <Separator/>
             <MenuItem Header="_Rectangle" Icon="{StaticResource RectangleIcon}" Command="{Binding SetTool}" CommandParameter="Rectangle"/>
             <MenuItem Header="_Circle" Icon="{StaticResource CircleIcon}" Command="{Binding SetTool}" CommandParameter="Circle"/>
@@ -175,9 +179,9 @@
             <Separator/>
             <MenuItem Header="Create R_eference" Icon="{StaticResource ReferenceIcon}" Command="{Binding Selection.CreateReference}" CommandParameter="{Binding}"/>
             <Separator/>
-            <MenuItem Header="Create Pat_h" Command="{Binding Selection.CreatePath}" CommandParameter="{Binding}"/>
-            <MenuItem Header="Create Str_oke Path" Command="{Binding Selection.CreateStrokePath}" CommandParameter="{Binding}"/>
-            <MenuItem Header="Create _Fill Path" Command="{Binding Selection.CreateFillPath}" CommandParameter="{Binding}"/>
+            <MenuItem Header="Create Pat_h" Icon="{StaticResource CreatePathIcon}" Command="{Binding Selection.CreatePath}" CommandParameter="{Binding}"/>
+            <MenuItem Header="Create Str_oke Path" Icon="{StaticResource CreateStrokePathIcon}" Command="{Binding Selection.CreateStrokePath}" CommandParameter="{Binding}"/>
+            <MenuItem Header="Create _Fill Path" Icon="{StaticResource CreateFillPathIcon}" Command="{Binding Selection.CreateFillPath}" CommandParameter="{Binding}"/>
             <Separator/>
             <MenuItem Header="Stac_k">
                 <MenuItem Header="_Horizontally" Command="{Binding Selection.StackHorizontally}" CommandParameter="{Binding}"/>
