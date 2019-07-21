@@ -91,6 +91,9 @@
         <Style Selector="Button.toolbar:pressed /template/ ContentPresenter">
             <Setter Property="Background" Value="#007ACC"/>
         </Style>
+        <Style Selector="Grid.tray">
+            <Setter Property="Margin" Value="0,5"/>
+        </Style>
         <Style Selector="Grid.thumb">
             <Setter Property="Background" Value="{StaticResource ToolBarThumb}"/>
             <Setter Property="Margin" Value="4,0"/>
@@ -107,7 +110,7 @@
         </Style>
     </UserControl.Styles>
     <WrapPanel>
-        <Grid x:Name="fileToolbar" ColumnDefinitions="Auto,*">
+        <Grid Classes="tray" ColumnDefinitions="Auto,*">
             <Grid Classes="thumb" Grid.Column="0"/>
             <StackPanel Classes="toolbar" Grid.Column="1">
                 <Button Classes="toolbar" ToolTip.Tip="New View" Content="{StaticResource NewContainerViewIcon}" Command="{Binding NewContainerView}" CommandParameter="View"/>
@@ -120,7 +123,7 @@
                 <Button Classes="toolbar" ToolTip.Tip="Export..." Content="{StaticResource ExportFileIcon}" Command="{Binding ExportFile}"/>
             </StackPanel>
         </Grid>
-        <Grid x:Name="editToolbar" ColumnDefinitions="Auto,*">
+        <Grid Classes="tray" ColumnDefinitions="Auto,*">
             <Grid Classes="thumb" Grid.Column="0"/>
             <StackPanel Classes="toolbar" Grid.Column="1">
                 <Button Classes="toolbar" ToolTip.Tip="Cut" Content="{StaticResource CutIcon}" Command="{Binding Selection.Cut}" CommandParameter="{Binding}"/>
@@ -132,7 +135,7 @@
                 <Button Classes="toolbar" ToolTip.Tip="Deselect All" Content="{StaticResource DeselectAllIcon}" Command="{Binding Selection.DeselectAll}" CommandParameter="{Binding}"/>
             </StackPanel>
         </Grid>
-        <Grid x:Name="zoomToolbar" ColumnDefinitions="Auto,*">
+        <Grid Classes="tray" ColumnDefinitions="Auto,*">
             <Grid Classes="thumb" Grid.Column="0"/>
             <StackPanel Classes="toolbar" Grid.Column="1">
                 <Button Classes="toolbar" ToolTip.Tip="Reset Zoom" Content="" Command="{Binding DocumentContainer.ContainerView.ZoomService.ResetZoom}" CommandParameter="True"/>
@@ -142,7 +145,7 @@
                 <Button Classes="toolbar" ToolTip.Tip="Uniform To Fill Zoom" Content="" Command="{Binding DocumentContainer.ContainerView.ZoomService.UniformToFillZoom}" CommandParameter="True"/>
             </StackPanel>
         </Grid>
-        <Grid x:Name="toolToolbar" ColumnDefinitions="Auto,*">
+        <Grid Classes="tray" ColumnDefinitions="Auto,*">
             <Grid Classes="thumb" Grid.Column="0"/>
             <StackPanel Classes="toolbar" Grid.Column="1">
                 <Button Classes="toolbar" ToolTip.Tip="None Tool" Content="{StaticResource NoneIcon}" Command="{Binding SetTool}" CommandParameter="None"/>
@@ -169,7 +172,7 @@
                 <Button Classes="toolbar" ToolTip.Tip="Text Tool" Content="{StaticResource TextIcon}" Command="{Binding SetTool}" CommandParameter="Text"/>
             </StackPanel>
         </Grid>
-        <Grid x:Name="shapeToolbar" ColumnDefinitions="Auto,*">
+        <Grid Classes="tray" ColumnDefinitions="Auto,*">
             <Grid Classes="thumb" Grid.Column="0"/>
             <StackPanel Classes="toolbar" Grid.Column="1">
                 <Button Classes="toolbar" ToolTip.Tip="Duplicate" Content="{StaticResource DuplicateIcon}" Command="{Binding Selection.Duplicate}" CommandParameter="{Binding}"/>
