@@ -34,6 +34,9 @@
         <DrawingPresenter x:Key="DeleteIcon" Drawing="{StaticResource Cancel}" Width="16" Height="16"/>
         <DrawingPresenter x:Key="SelectAllIcon" Drawing="{StaticResource SelectAllItems}" Width="16" Height="16"/>
         <DrawingPresenter x:Key="DeselectAllIcon" Drawing="{StaticResource SelectNoItems}" Width="16" Height="16"/>
+        <!-- Zoom -->
+        <DrawingPresenter x:Key="CenterZoomIcon" Drawing="{StaticResource ZoomOriginalSize}" Width="16" Height="16"/>
+        <DrawingPresenter x:Key="UniformZoomIcon" Drawing="{StaticResource ZoomToFit}" Width="16" Height="16"/>
         <!-- Tool -->
         <DrawingPresenter x:Key="NoneIcon" Drawing="{StaticResource DisplayNoneMark}" Width="16" Height="16"/>
         <DrawingPresenter x:Key="SelectionIcon" Drawing="{StaticResource Cursor}" Width="16" Height="16"/>
@@ -143,9 +146,9 @@
             <Grid Classes="thumb" Grid.Column="0"/>
             <StackPanel Classes="toolbar" Grid.Column="1">
                 <Button Classes="toolbar" ToolTip.Tip="Reset Zoom" Content="" Command="{Binding DocumentContainer.ContainerView.ZoomService.ResetZoom}" CommandParameter="True"/>
-                <Button Classes="toolbar" ToolTip.Tip="Center Zoom" Content="" Command="{Binding DocumentContainer.ContainerView.ZoomService.CenterZoom}" CommandParameter="True"/>
+                <Button Classes="toolbar" ToolTip.Tip="Center Zoom" Content="{StaticResource CenterZoomIcon}" Command="{Binding DocumentContainer.ContainerView.ZoomService.CenterZoom}" CommandParameter="True"/>
                 <Button Classes="toolbar" ToolTip.Tip="Fill Zoom" Content="" Command="{Binding DocumentContainer.ContainerView.ZoomService.FillZoom}" CommandParameter="True"/>
-                <Button Classes="toolbar" ToolTip.Tip="Uniform Zoom" Content="" Command="{Binding DocumentContainer.ContainerView.ZoomService.UniformZoom}" CommandParameter="True"/>
+                <Button Classes="toolbar" ToolTip.Tip="Uniform Zoom" Content="{StaticResource UniformZoomIcon}" Command="{Binding DocumentContainer.ContainerView.ZoomService.UniformZoom}" CommandParameter="True"/>
                 <Button Classes="toolbar" ToolTip.Tip="Uniform To Fill Zoom" Content="" Command="{Binding DocumentContainer.ContainerView.ZoomService.UniformToFillZoom}" CommandParameter="True"/>
             </StackPanel>
         </Grid>
