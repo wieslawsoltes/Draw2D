@@ -15,7 +15,7 @@
         <!-- Dark Theme -->
         <SolidColorBrush x:Key="icon-canvas-transparent" Color="#F6F6F6" Opacity="0"/>
         <SolidColorBrush x:Key="icon-vs-bg" Color="#C1C1C1"/>
-        <SolidColorBrush x:Key="icon-vs-fg" Color="#2B2B2B" Opacity="0"/>
+        <SolidColorBrush x:Key="icon-vs-fg" Color="#2B2B2B"/>
         <SolidColorBrush x:Key="icon-vs-out" Color="#2B2B2B"/>
         <SolidColorBrush x:Key="icon-vs-action-blue" Color="#00539C"/>
         <SolidColorBrush x:Key="icon-vs-action-red" Color="#A1260D"/>
