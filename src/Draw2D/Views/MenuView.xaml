@@ -28,6 +28,9 @@
         <DrawingPresenter x:Key="DeleteIcon" Drawing="{StaticResource Cancel}" Width="16" Height="16"/>
         <DrawingPresenter x:Key="SelectAllIcon" Drawing="{StaticResource SelectAllItems}" Width="16" Height="16"/>
         <DrawingPresenter x:Key="DeselectAllIcon" Drawing="{StaticResource SelectNoItems}" Width="16" Height="16"/>
+        <!-- Zoom -->
+        <DrawingPresenter x:Key="CenterZoomIcon" Drawing="{StaticResource ZoomOriginalSize}" Width="16" Height="16"/>
+        <DrawingPresenter x:Key="UniformZoomIcon" Drawing="{StaticResource ZoomToFit}" Width="16" Height="16"/>
         <!-- Tool -->
         <DrawingPresenter x:Key="NoneIcon" Drawing="{StaticResource DisplayNoneMark}" Width="16" Height="16"/>
         <DrawingPresenter x:Key="SelectionIcon" Drawing="{StaticResource Cursor}" Width="16" Height="16"/>
@@ -125,11 +128,11 @@
             <MenuItem Header="_Zoom">
                 <MenuItem Header="_Reset" Command="{Binding DocumentContainer.ContainerView.ZoomService.ResetZoom}" CommandParameter="True"/>
                 <Separator/>
-                <MenuItem Header="_Center" Command="{Binding DocumentContainer.ContainerView.ZoomService.CenterZoom}" CommandParameter="True"/>
+                <MenuItem Header="_Center" Icon="{StaticResource CenterZoomIcon}" Command="{Binding DocumentContainer.ContainerView.ZoomService.CenterZoom}" CommandParameter="True"/>
                 <Separator/>
                 <MenuItem Header="_Fill" Command="{Binding DocumentContainer.ContainerView.ZoomService.FillZoom}" CommandParameter="True"/>
                 <Separator/>
-                <MenuItem Header="_Uniform" Command="{Binding DocumentContainer.ContainerView.ZoomService.UniformZoom}" CommandParameter="True"/>
+                <MenuItem Header="_Uniform" Icon="{StaticResource UniformZoomIcon}" Command="{Binding DocumentContainer.ContainerView.ZoomService.UniformZoom}" CommandParameter="True"/>
                 <Separator/>
                 <MenuItem Header="Uniform _To Fill" Command="{Binding DocumentContainer.ContainerView.ZoomService.UniformToFillZoom}" CommandParameter="True"/>
             </MenuItem>
