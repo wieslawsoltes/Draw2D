@@ -298,7 +298,8 @@ namespace SvgDemo
 
             if (fragment.ViewBox != SvgViewBox.Empty)
             {
-                WriteLine($"{indent}{indentAttribute}[viewBox]={fragment.ViewBox}", ConsoleColor.Black);
+                var viewBox = fragment.ViewBox;
+                WriteLine($"{indent}{indentAttribute}[viewBox]={viewBox.MinX} {viewBox.MinY} {viewBox.Width} {viewBox.Height}", ConsoleColor.Black);
             }
 
             if (fragment.AspectRatio != null)
