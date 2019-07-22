@@ -17,9 +17,59 @@ namespace SvgDemo
             Console.ResetColor();
         }
 
-        static void Print(SvgElement element, string indent = "")
+        static void Print(SvgElement element, string indent = "", string indentAttribute = "    ")
         {
-            // Attributes
+            // Children
+
+            if (element.Children.Count > 0)
+            {
+                Console.ForegroundColor = ConsoleColor.Gray;
+                Console.WriteLine($"{indent}<Children>");
+            }
+
+            foreach (var child in element.Children)
+            {
+                Console.ForegroundColor = ConsoleColor.Blue;
+                Console.WriteLine($"{indent}{child}, [id]={child.ID}");
+
+                // Attributes
+
+                if (child.Fill != null && child.Fill != SvgPaintServer.None)
+                {
+                    Console.ForegroundColor = ConsoleColor.Black;
+                    Console.WriteLine($"{indent}{indentAttribute}[fill]={child.Fill.GetType()}");
+                }
+
+                if (child.Stroke != null && child.Stroke != SvgPaintServer.None)
+                {
+                    Console.ForegroundColor = ConsoleColor.Black;
+                    Console.WriteLine($"{indent}{indentAttribute}[stroke]={child.Stroke.GetType()}");
+                }
+
+                if (child.FillRule != SvgFillRule.NonZero)
+                {
+                    Console.ForegroundColor = ConsoleColor.Black;
+                    Console.WriteLine($"{indent}{indentAttribute}[fill-rule]={child.FillRule}");
+                }
+
+                if (child.FillOpacity != 1f)
+                {
+                    Console.ForegroundColor = ConsoleColor.Black;
+                    Console.WriteLine($"{indent}{indentAttribute}[fill-opacity]={child.FillOpacity}");
+                }
+
+                if (child.StrokeWidth != 1f)
+                {
+                    Console.ForegroundColor = ConsoleColor.Black;
+                    Console.WriteLine($"{indent}{indentAttribute}[stroke-width]={child.StrokeWidth}");
+                }
+
+                // ...
+
+                Print(child, indent + "    ");
+            }
+
+            // CustomAttributes
 
             if (element.CustomAttributes.Count > 0)
             {
@@ -29,7 +79,7 @@ namespace SvgDemo
 
             foreach (var attribute in element.CustomAttributes)
             {
-                Console.ForegroundColor = ConsoleColor.Green;
+                Console.ForegroundColor = ConsoleColor.Black;
                 Console.WriteLine($"{indent}[{attribute.Key}]={attribute.Value}");
             }
 
@@ -45,27 +95,6 @@ namespace SvgDemo
             {
                 Console.ForegroundColor = ConsoleColor.Blue;
                 Console.WriteLine($"{indent}{transform}");
-            }
-
-            // Children
-
-            if (element.Children.Count > 0)
-            {
-                Console.ForegroundColor = ConsoleColor.Gray;
-                Console.WriteLine($"{indent}<Children>");
-            }
-
-            foreach (var child in element.Children)
-            {
-                Console.ForegroundColor = ConsoleColor.Blue;
-                Console.WriteLine($"{indent}{child}, [id]={child.ID}");
-
-                //Console.WriteLine($"Fill: {child.Fill}");
-                //Console.WriteLine($"Color: {child.Color}");
-                //Console.WriteLine($"StopColor: {child.StopColor}");
-                //Console.WriteLine($"Stroke: {child.Stroke}");
-
-                Print(child, indent + "    ");
             }
 
             // Nodes
