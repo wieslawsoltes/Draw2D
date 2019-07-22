@@ -286,9 +286,13 @@ namespace SvgDemo
 
         internal static void PrintElement(SvgElement element, string indentLine, string indentAttribute)
         {
+            PrintElementAttributes(element, indentLine, indentAttribute);
+
             /// The <see cref="SvgElement"/> object graph.
             /// +---abstract class <see cref="SvgElement"/>
             /// |   +---class <see cref="SvgClipPath"/>
+            /// |   +---class <see cref="SvgFragment"/>
+            /// |       \---class <see cref="SvgDocument"/>
             /// |   +---class <see cref="SvgMask"/>
             /// |   +---class <see cref="SvgDefinitionList"/>
             /// |   +---class <see cref="SvgDescription"/>
@@ -352,7 +356,6 @@ namespace SvgDemo
                     break;
             }
 
-            PrintElementAttributes(element, indentLine, indentAttribute);
             PrintElementChildren(element, indentLine, indentAttribute);
             PrintElementNodes(element, indentLine, indentAttribute);
         }
