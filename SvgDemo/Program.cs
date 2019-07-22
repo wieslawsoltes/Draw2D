@@ -19,7 +19,7 @@ namespace SvgDemo
         {
             if (element.CustomAttributes.Count > 0)
             {
-                //Console.WriteLine($"{indent}[CustomAttributes]");
+                //Console.WriteLine($"{indent}<CustomAttributes>");
             }
 
             foreach (var attribute in element.CustomAttributes)
@@ -29,7 +29,7 @@ namespace SvgDemo
 
             if (element.Children.Count > 0)
             {
-                Console.WriteLine($"{indent}[Children]");
+                Console.WriteLine($"{indent}<Children>");
             }
 
             foreach (var child in element.Children)
@@ -46,7 +46,7 @@ namespace SvgDemo
 
             if (element.Nodes.Count > 0)
             {
-                Console.WriteLine($"{indent}[Nodes]");
+                Console.WriteLine($"{indent}<Nodes>");
             }
 
             foreach (var node in element.Nodes)
