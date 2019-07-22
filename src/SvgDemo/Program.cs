@@ -321,6 +321,7 @@ namespace SvgDemo
                 default:
                     break;
             }
+
             PrintElementAttributes(element, indentLine, indentAttribute);
             PrintElementChildren(element, indentLine, indentAttribute);
             PrintElementNodes(element, indentLine, indentAttribute);
