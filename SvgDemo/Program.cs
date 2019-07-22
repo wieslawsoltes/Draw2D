@@ -17,15 +17,31 @@ namespace SvgDemo
 
         static void Print(SvgElement element, string indent = "")
         {
+            // Attributes
+
             if (element.CustomAttributes.Count > 0)
             {
-                //Console.WriteLine($"{indent}<CustomAttributes>");
+                Console.WriteLine($"{indent}<CustomAttributes>");
             }
 
             foreach (var attribute in element.CustomAttributes)
             {
                 Console.WriteLine($"{indent}[{attribute.Key}]={attribute.Value}");
             }
+
+            // Transforms
+
+            if (element.Transforms.Count > 0)
+            {
+                Console.WriteLine($"{indent}<Transforms>");
+            }
+
+            foreach (var transform in element.Transforms)
+            {
+                Console.WriteLine($"{indent}{transform}");
+            }
+
+            // Children
 
             if (element.Children.Count > 0)
             {
@@ -34,7 +50,7 @@ namespace SvgDemo
 
             foreach (var child in element.Children)
             {
-                Console.WriteLine($"{indent}{child}");
+                Console.WriteLine($"{indent}{child}, [id]={child.ID}");
 
                 //Console.WriteLine($"Fill: {child.Fill}");
                 //Console.WriteLine($"Color: {child.Color}");
@@ -43,6 +59,8 @@ namespace SvgDemo
 
                 Print(child, indent + "    ");
             }
+
+            // Nodes
 
             if (element.Nodes.Count > 0)
             {
