@@ -2,6 +2,7 @@
 using Svg;
 using Svg.Document_Structure;
 using Svg.FilterEffects;
+using Svg.Pathing;
 
 namespace SvgDemo
 {
@@ -254,11 +255,38 @@ namespace SvgDemo
             }
         }
 
+        internal static void PrintSvgPathAttributes(SvgPath svgPath, string indentLine, string indentAttribute)
+        {
+            if (svgPath.PathData != null)
+            {
+                /// ----------------------------------------------------------------------------------------
+                /// The <see cref="SvgPathSegment"/> object graph.
+                /// ----------------------------------------------------------------------------------------
+                /// +---abstract class <see cref="SvgPathSegment"/>
+                ///     +---class <see cref="SvgArcSegment"/>
+                ///     +---class <see cref="SvgClosePathSegment"/>
+                ///     +---class <see cref="SvgCubicCurveSegment"/>
+                ///     +---class <see cref="SvgLineSegment"/>
+                ///     +---class <see cref="SvgMoveToSegment"/>
+                ///     \---class <see cref="SvgQuadraticCurveSegment"/>
+
+                WriteLine($"{indentLine}{indentAttribute}[d=", s_attributeColor);
+                foreach (var segment in svgPath.PathData)
+                {
+                    WriteLine($"{indentLine}{indentAttribute}   {segment}", s_attributeColor);
+                }
+                WriteLine($"{indentLine}{indentAttribute}]", s_attributeColor);
+            }
+
+            if (svgPath.PathLength != 0f)
+            {
+                WriteLine($"{indentLine}{indentAttribute}[pathLength]={svgPath.PathLength}", s_attributeColor);
+            }
+        }
+
         internal static void PrintElement(SvgElement element, string indentLine, string indentAttribute)
         {
-            /// ----------------------------------------------------------------------------------------
             /// The <see cref="SvgElement"/> object graph.
-            /// ----------------------------------------------------------------------------------------
             /// +---abstract class <see cref="SvgElement"/>
             /// |   +---class <see cref="SvgClipPath"/>
             /// |   +---class <see cref="SvgMask"/>
@@ -317,7 +345,9 @@ namespace SvgDemo
             switch (element)
             {
                 case SvgPath svgPath:
+                    PrintSvgPathAttributes(svgPath, indentLine, indentAttribute);
                     break;
+                // TODO:
                 default:
                     break;
             }
