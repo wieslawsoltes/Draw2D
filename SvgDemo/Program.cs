@@ -11,8 +11,10 @@ namespace SvgDemo
     {
         static void Print(SvgDocument doc)
         {
+            Console.ForegroundColor = ConsoleColor.Blue;
             Console.WriteLine($"{doc}");
             Print(doc, "    ");
+            Console.ResetColor();
         }
 
         static void Print(SvgElement element, string indent = "")
@@ -21,11 +23,13 @@ namespace SvgDemo
 
             if (element.CustomAttributes.Count > 0)
             {
+                Console.ForegroundColor = ConsoleColor.Gray;
                 Console.WriteLine($"{indent}<CustomAttributes>");
             }
 
             foreach (var attribute in element.CustomAttributes)
             {
+                Console.ForegroundColor = ConsoleColor.Green;
                 Console.WriteLine($"{indent}[{attribute.Key}]={attribute.Value}");
             }
 
@@ -33,11 +37,13 @@ namespace SvgDemo
 
             if (element.Transforms.Count > 0)
             {
+                Console.ForegroundColor = ConsoleColor.Gray;
                 Console.WriteLine($"{indent}<Transforms>");
             }
 
             foreach (var transform in element.Transforms)
             {
+                Console.ForegroundColor = ConsoleColor.Blue;
                 Console.WriteLine($"{indent}{transform}");
             }
 
@@ -45,11 +51,13 @@ namespace SvgDemo
 
             if (element.Children.Count > 0)
             {
+                Console.ForegroundColor = ConsoleColor.Gray;
                 Console.WriteLine($"{indent}<Children>");
             }
 
             foreach (var child in element.Children)
             {
+                Console.ForegroundColor = ConsoleColor.Blue;
                 Console.WriteLine($"{indent}{child}, [id]={child.ID}");
 
                 //Console.WriteLine($"Fill: {child.Fill}");
@@ -64,11 +72,13 @@ namespace SvgDemo
 
             if (element.Nodes.Count > 0)
             {
+                Console.ForegroundColor = ConsoleColor.Gray;
                 Console.WriteLine($"{indent}<Nodes>");
             }
 
             foreach (var node in element.Nodes)
             {
+                Console.ForegroundColor = ConsoleColor.Black;
                 Console.WriteLine($"{indent}{node.Content}");
             }
         }
