@@ -63,7 +63,7 @@ namespace SvgDemo
 
         internal static void PrintSvgElementAttributes(SvgElement element, string indentLine, string indentAttribute)
         {
-            // Transforms
+            // Transforms Attributes
 
             if (element.Transforms.Count > 0)
             {
@@ -93,7 +93,7 @@ namespace SvgDemo
                 PrintSvgPaintServerServer(element.Color, "color", indentLine, indentAttribute);
             }
 
-            // Style
+            // Style Attributes
 
             if (element.Fill != null && element.Fill != SvgColourServer.NotSet)
             {
@@ -214,9 +214,10 @@ namespace SvgDemo
             {
                 WriteLine($"{indentLine}{indentAttribute}[font]={element.Font}", s_attributeColor);
             }
+        }
 
-            // CustomAttributes
-
+        internal static void PrintSvgElementCustomAttributes(SvgElement element, string indentLine, string indentAttribute)
+        {
             if (element.CustomAttributes.Count > 0)
             {
                 WriteLine($"{indentLine}{indentAttribute}<CustomAttributes>", s_groupColor);
@@ -237,7 +238,7 @@ namespace SvgDemo
                 foreach (var child in element.Children)
                 {
                     WriteLine($"{indentLine}{child}", s_elementColor);
-                    PrintSvgElementElement(child, indentLine + "    ", indentAttribute);
+                    PrintSvgElement(child, indentLine + "    ", indentAttribute);
                 }
             }
         }
@@ -509,7 +510,7 @@ namespace SvgDemo
             // TODO:
         }
 
-        internal static void PrintSvgElementElement(SvgElement element, string indentLine, string indentAttribute)
+        internal static void PrintSvgElement(SvgElement element, string indentLine, string indentAttribute)
         {
             PrintSvgElementAttributes(element, indentLine, indentAttribute);
 
@@ -718,7 +719,10 @@ namespace SvgDemo
                     break;
             }
 
+            PrintSvgElementCustomAttributes(element, indentLine, indentAttribute);
+
             PrintSvgElementChildren(element, indentLine, indentAttribute);
+
             PrintSvgElementNodes(element, indentLine, indentAttribute);
         }
 
@@ -786,7 +790,7 @@ namespace SvgDemo
         {
             WriteLine($"{fragment}", s_elementColor);
             PrintSvgFragmentAttributes(fragment, indentLine, indentAttribute);
-            PrintSvgElementElement(fragment, indentLine, indentAttribute);
+            PrintSvgElement(fragment, indentLine, indentAttribute);
             ResetColor();
         }
 
