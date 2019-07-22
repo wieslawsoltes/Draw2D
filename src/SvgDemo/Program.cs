@@ -350,7 +350,7 @@ namespace SvgDemo
                 WriteLine($"Path: {path}", ConsoleColor.Black);
 
                 var document = SvgDocument.Open<SvgDocument>(path, null);
-                document.FlushStyles();
+                document.FlushStyles(true);
                 PrintFragment(document);
             }
         }
