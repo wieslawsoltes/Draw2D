@@ -20,7 +20,7 @@ namespace SvgDemo
             Console.WriteLine(value);
         }
 
-        internal static void Print(SvgPaintServer paintServer, string attribute, string indent, string indentAttribute)
+        internal static void PrintPaintServer(SvgPaintServer paintServer, string attribute, string indent, string indentAttribute)
         {
             switch (paintServer)
             {
@@ -70,7 +70,7 @@ namespace SvgDemo
             }
         }
 
-        internal static void PrintAttributes(SvgElement element, string indent = "", string indentAttribute = "")
+        internal static void PrintElementAttributes(SvgElement element, string indent = "", string indentAttribute = "")
         {
             // Transforms
 
@@ -99,19 +99,19 @@ namespace SvgDemo
 
             if (element.Color != null && element.Color != SvgColourServer.NotSet)
             {
-                Print(element.Color, "color", indent, indentAttribute);
+                PrintPaintServer(element.Color, "color", indent, indentAttribute);
             }
 
             // Style
 
             if (element.Fill != null && element.Fill != SvgColourServer.NotSet)
             {
-                Print(element.Fill, "fill", indent, indentAttribute);
+                PrintPaintServer(element.Fill, "fill", indent, indentAttribute);
             }
 
             if (element.Stroke != null)
             {
-                Print(element.Stroke, "stroke", indent, indentAttribute);
+                PrintPaintServer(element.Stroke, "stroke", indent, indentAttribute);
             }
 
             if (element.FillRule != SvgFillRule.NonZero)
@@ -161,7 +161,7 @@ namespace SvgDemo
 
             if (element.StopColor != null)
             {
-                Print(element.StopColor, "stop-color", indent, indentAttribute);
+                PrintPaintServer(element.StopColor, "stop-color", indent, indentAttribute);
             }
 
             if (element.Opacity != 1f)
@@ -241,7 +241,7 @@ namespace SvgDemo
         {
             // Attributes
 
-            PrintAttributes(element, indent, indentAttribute);
+            PrintElementAttributes(element, indent, indentAttribute);
 
             // Children
 
@@ -269,10 +269,10 @@ namespace SvgDemo
             }
         }
 
-        internal static void Print(SvgDocument doc)
+        internal static void Print(SvgDocument document)
         {
-            WriteLine($"{doc}", ConsoleColor.Blue);
-            Print(doc, "    ");
+            WriteLine($"{document}", ConsoleColor.Blue);
+            Print(document, "    ");
             ResetColor();
         }
 
@@ -288,8 +288,8 @@ namespace SvgDemo
                 string path = args[i];
                 WriteLine($"Path: {path}", ConsoleColor.Black);
 
-                var doc = SvgDocument.Open<SvgDocument>(path, null);
-                Print(doc);
+                var document = SvgDocument.Open<SvgDocument>(path, null);
+                Print(document);
             }
         }
 
