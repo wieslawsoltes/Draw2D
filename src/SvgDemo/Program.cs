@@ -400,9 +400,7 @@ namespace SvgDemo
         {
             if (svgPath.PathData != null)
             {
-                /// ----------------------------------------------------------------------------------------
                 /// The <see cref="SvgPathSegment"/> object graph.
-                /// ----------------------------------------------------------------------------------------
                 /// +---abstract class <see cref="SvgPathSegment"/>
                 ///     +---class <see cref="SvgArcSegment"/>
                 ///     +---class <see cref="SvgClosePathSegment"/>
@@ -410,12 +408,38 @@ namespace SvgDemo
                 ///     +---class <see cref="SvgLineSegment"/>
                 ///     +---class <see cref="SvgMoveToSegment"/>
                 ///     \---class <see cref="SvgQuadraticCurveSegment"/>
-
+   
                 WriteLine($"{indentLine}{indentAttribute}[d=", s_attributeColor);
+
                 foreach (var segment in svgPath.PathData)
                 {
+                    switch (segment)
+                    {
+                        case SvgArcSegment svgArcSegment:
+                            // TODO:
+                            break;
+                        case SvgClosePathSegment svgClosePathSegment:
+                            // TODO:
+                            break;
+                        case SvgCubicCurveSegment svgCubicCurveSegment:
+                            // TODO:
+                            break;
+                        case SvgLineSegment svgLineSegment:
+                            // TODO:
+                            break;
+                        case SvgMoveToSegment svgMoveToSegment:
+                            // TODO:
+                            break;
+                        case SvgQuadraticCurveSegment svgQuadraticCurveSegment:
+                            // TODO:
+                            break;
+                        default:
+                            break;
+                    }
+
                     WriteLine($"{indentLine}{indentAttribute}   {segment}", s_attributeColor);
                 }
+
                 WriteLine($"{indentLine}{indentAttribute}]", s_attributeColor);
             }
 
