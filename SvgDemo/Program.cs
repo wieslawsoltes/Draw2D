@@ -9,17 +9,49 @@ namespace SvgDemo
 {
     class Program
     {
-        static void Print(IEnumerable<SvgElement> nodes, string indent = "")
+        static void Print(SvgDocument doc)
         {
-            foreach (var node in nodes)
-            {
-                Console.WriteLine($"{node}");
-                //Console.WriteLine($"Fill: {node.Fill}");
-                //Console.WriteLine($"Color: {node.Color}");
-                //Console.WriteLine($"StopColor: {node.StopColor}");
-                //Console.WriteLine($"Stroke: {node.Stroke}");
+            Console.WriteLine($"{doc}");
+            Print(doc, "    ");
+        }
 
-                Print(node.Descendants(), indent + "    ");
+        static void Print(SvgElement element, string indent = "")
+        {
+            if (element.CustomAttributes.Count > 0)
+            {
+                //Console.WriteLine($"{indent}[CustomAttributes]");
+            }
+
+            foreach (var attribute in element.CustomAttributes)
+            {
+                Console.WriteLine($"{indent}[{attribute.Key}]={attribute.Value}");
+            }
+
+            if (element.Children.Count > 0)
+            {
+                Console.WriteLine($"{indent}[Children]");
+            }
+
+            foreach (var child in element.Children)
+            {
+                Console.WriteLine($"{indent}{child}");
+
+                //Console.WriteLine($"Fill: {child.Fill}");
+                //Console.WriteLine($"Color: {child.Color}");
+                //Console.WriteLine($"StopColor: {child.StopColor}");
+                //Console.WriteLine($"Stroke: {child.Stroke}");
+
+                Print(child, indent + "    ");
+            }
+
+            if (element.Nodes.Count > 0)
+            {
+                Console.WriteLine($"{indent}[Nodes]");
+            }
+
+            foreach (var node in element.Nodes)
+            {
+                Console.WriteLine($"{indent}{node.Content}");
             }
         }
 
@@ -32,7 +64,7 @@ namespace SvgDemo
             try
             {
                 var doc = SvgDocument.Open<SvgDocument>(path, null);
-                Print(doc.Descendants());
+                Print(doc);
             }
             catch (Exception ex)
             {
