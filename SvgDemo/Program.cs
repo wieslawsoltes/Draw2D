@@ -20,13 +20,6 @@ namespace SvgDemo
             Console.WriteLine(value);
         }
 
-        static void Print(SvgDocument doc)
-        {
-            WriteLine($"{doc}", ConsoleColor.Blue);
-            Print(doc, "    ");
-            ResetColor();
-        }
-
         static void PrintAttributes(SvgElement element, string indent = "", string indentAttribute = "")
         {
             if (!string.IsNullOrEmpty(element.ID))
@@ -120,6 +113,13 @@ namespace SvgDemo
                     WriteLine($"{indent}{node.Content}", ConsoleColor.Black);
                 }
             }
+        }
+
+        static void Print(SvgDocument doc)
+        {
+            WriteLine($"{doc}", ConsoleColor.Blue);
+            Print(doc, "    ");
+            ResetColor();
         }
 
         static void Run(string[] args)
