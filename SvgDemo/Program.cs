@@ -26,7 +26,7 @@ namespace SvgDemo
             {
                 case SvgColourServer colourServer:
                     {
-                        string value = "-";
+                        string value = "";
                         if (colourServer == SvgPaintServer.None)
                         {
                             value = "None";
@@ -92,7 +92,7 @@ namespace SvgDemo
                 WriteLine($"{indent}{indentAttribute}[id]={element.ID}", ConsoleColor.Black);
             }
 
-            if (element.SpaceHandling != XmlSpaceHandling.inherit)
+            if (element.SpaceHandling != XmlSpaceHandling.@default && element.SpaceHandling != XmlSpaceHandling.inherit)
             {
                 WriteLine($"{indent}{indentAttribute}[space]={element.SpaceHandling}", ConsoleColor.Black);
             }
@@ -237,7 +237,7 @@ namespace SvgDemo
             }
         }
 
-        internal static void Print(SvgElement element, string indent = "", string indentAttribute = "")
+        internal static void PrintElement(SvgElement element, string indent = "", string indentAttribute = "")
         {
             // Attributes
 
@@ -252,7 +252,7 @@ namespace SvgDemo
                 foreach (var child in element.Children)
                 {
                     WriteLine($"{indent}{child}", ConsoleColor.Blue);
-                    Print(child, indent + "    ", indentAttribute);
+                    PrintElement(child, indent + "    ", indentAttribute);
                 }
             }
 
@@ -269,10 +269,70 @@ namespace SvgDemo
             }
         }
 
-        internal static void Print(SvgDocument document)
+        internal static void PrintFragmentAttributes(SvgFragment fragment, string indent = "", string indentAttribute = "")
         {
-            WriteLine($"{document}", ConsoleColor.Blue);
-            Print(document, "    ");
+            if (fragment.X != 0f)
+            {
+                WriteLine($"{indent}{indentAttribute}[x]={fragment.X}", ConsoleColor.Black);
+            }
+
+            if (fragment.Y != 0f)
+            {
+                WriteLine($"{indent}{indentAttribute}[y]={fragment.Y}", ConsoleColor.Black);
+            }
+
+            if (fragment.Width != new SvgUnit(SvgUnitType.Percentage, 100f))
+            {
+                WriteLine($"{indent}{indentAttribute}[width]={fragment.Width}", ConsoleColor.Black);
+            }
+
+            if (fragment.Height != new SvgUnit(SvgUnitType.Percentage, 100f))
+            {
+                WriteLine($"{indent}{indentAttribute}[height]={fragment.Height}", ConsoleColor.Black);
+            }
+
+            if (fragment.Overflow != SvgOverflow.Inherit && fragment.Overflow != SvgOverflow.Hidden)
+            {
+                WriteLine($"{indent}{indentAttribute}[overflow]={fragment.Overflow}", ConsoleColor.Black);
+            }
+
+            if (fragment.ViewBox != SvgViewBox.Empty)
+            {
+                WriteLine($"{indent}{indentAttribute}[viewBox]={fragment.ViewBox}", ConsoleColor.Black);
+            }
+
+            if (fragment.AspectRatio != null)
+            {
+                var @default = new SvgAspectRatio(SvgPreserveAspectRatio.xMidYMid);
+                if (fragment.AspectRatio.Align != @default.Align
+                 || fragment.AspectRatio.Slice != @default.Slice
+                 || fragment.AspectRatio.Defer != @default.Defer)
+                {
+                    WriteLine($"{indent}{indentAttribute}[preserveAspectRatio]={fragment.AspectRatio}", ConsoleColor.Black);
+                }
+            }
+
+            if (fragment.FontSize != SvgUnit.Empty)
+            {
+                WriteLine($"{indent}{indentAttribute}[font-size]={fragment.FontSize}", ConsoleColor.Black);
+            }
+
+            if (!string.IsNullOrEmpty(fragment.FontFamily))
+            {
+                WriteLine($"{indent}{indentAttribute}[font-family]={fragment.FontFamily}", ConsoleColor.Black);
+            }
+
+            if (fragment.SpaceHandling != XmlSpaceHandling.@default && fragment.SpaceHandling != XmlSpaceHandling.inherit)
+            {
+                WriteLine($"{indent}{indentAttribute}[space]={fragment.SpaceHandling}", ConsoleColor.Black);
+            }
+        }
+
+        internal static void PrintFragment(SvgFragment fragment, string indent = "    ", string indentAttribute = "")
+        {
+            WriteLine($"{fragment}", ConsoleColor.Blue);
+            PrintFragmentAttributes(fragment, indent, indentAttribute);
+            PrintElement(fragment, indent, indentAttribute);
             ResetColor();
         }
 
@@ -289,7 +349,8 @@ namespace SvgDemo
                 WriteLine($"Path: {path}", ConsoleColor.Black);
 
                 var document = SvgDocument.Open<SvgDocument>(path, null);
-                Print(document);
+                document.FlushStyles();
+                PrintFragment(document);
             }
         }
 
