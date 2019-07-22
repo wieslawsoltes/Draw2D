@@ -26,20 +26,7 @@ namespace SvgDemo
             {
                 case SvgColourServer colourServer:
                     {
-                        string value = "";
-                        if (colourServer == SvgPaintServer.None)
-                        {
-                            value = "None";
-                        }
-                        else if (colourServer == SvgColourServer.NotSet)
-                        {
-                            value = "NotSet";
-                        }
-                        else if (colourServer == SvgColourServer.Inherit)
-                        {
-                            value = "Inherit";
-                        }
-                        WriteLine($"{indent}{indentAttribute}[{attribute}]={colourServer.ToString()} ({value})", ConsoleColor.DarkGray);
+                        WriteLine($"{indent}{indentAttribute}[{attribute}]={colourServer.ToString()}", ConsoleColor.DarkGray);
                     }
                     break;
                 case SvgDeferredPaintServer deferredPaintServer:
