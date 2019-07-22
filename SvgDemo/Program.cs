@@ -9,18 +9,17 @@ namespace SvgDemo
 {
     class Program
     {
-        static void Print(IEnumerable<SvgElement> nodes)
+        static void Print(IEnumerable<SvgElement> nodes, string indent = "")
         {
             foreach (var node in nodes)
             {
-                //node.Fill
-                //node.Color
-                //node.StopColor
-                //node.Stroke
-
                 Console.WriteLine($"{node}");
+                //Console.WriteLine($"Fill: {node.Fill}");
+                //Console.WriteLine($"Color: {node.Color}");
+                //Console.WriteLine($"StopColor: {node.StopColor}");
+                //Console.WriteLine($"Stroke: {node.Stroke}");
 
-                Print(node.Descendants());
+                Print(node.Descendants(), indent + "    ");
             }
         }
 
@@ -32,10 +31,6 @@ namespace SvgDemo
 
             try
             {
-                var d = new SvgDocument();
-
-                //SvgDocument.EnsureSystemIsGdiPlusCapable();
-
                 var doc = SvgDocument.Open<SvgDocument>(path, null);
                 Print(doc.Descendants());
             }
