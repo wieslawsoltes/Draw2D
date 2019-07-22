@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29102.190
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SvgDemo", "SvgDemo.csproj", "{CFDA440C-780A-4707-A42C-077DB68CC1B0}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Svg", "..\..\externals\SVG\Source\Svg.csproj", "{886A98C5-37C0-4E8B-885E-30C1D2F98B47}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CFDA440C-780A-4707-A42C-077DB68CC1B0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CFDA440C-780A-4707-A42C-077DB68CC1B0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CFDA440C-780A-4707-A42C-077DB68CC1B0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CFDA440C-780A-4707-A42C-077DB68CC1B0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{886A98C5-37C0-4E8B-885E-30C1D2F98B47}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{886A98C5-37C0-4E8B-885E-30C1D2F98B47}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{886A98C5-37C0-4E8B-885E-30C1D2F98B47}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{886A98C5-37C0-4E8B-885E-30C1D2F98B47}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {80852A31-1086-408E-9E02-B23DEFCAFFD5}
+	EndGlobalSection
+EndGlobal
