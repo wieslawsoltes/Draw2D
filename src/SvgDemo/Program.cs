@@ -59,7 +59,7 @@ namespace SvgDemo
                     break;
                 case SvgPatternServer patternServer:
                     {
-                        WriteLine($"{indent}{indentAttribute}[{attribute}]={patternServer.GetType()}", ConsoleColor.Black);  
+                        WriteLine($"{indent}{indentAttribute}[{attribute}]={patternServer.GetType()}", ConsoleColor.Black);
                     }
                     break;
                 default:
@@ -229,7 +229,7 @@ namespace SvgDemo
             if (element.CustomAttributes.Count > 0)
             {
                 WriteLine($"{indent}{indentAttribute}<CustomAttributes>", ConsoleColor.Gray);
-                
+
                 foreach (var attribute in element.CustomAttributes)
                 {
                     WriteLine($"{indent}{indentAttribute}[{attribute.Key}]={attribute.Value}", ConsoleColor.Black);
