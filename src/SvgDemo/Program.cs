@@ -348,8 +348,44 @@ namespace SvgDemo
 
             switch (element)
             {
+                case SvgCircle svgCircle:
+                    // TODO:
+                    break;
+                case SvgEllipse svgEllipse:
+                    // TODO:
+                    break;
+                case SvgRectangle svgRectangle:
+                    // TODO:
+                    break;
+                case SvgMarker svgMarker:
+                    // TODO:
+                    break;
+                case SvgGlyph svgGlyph:
+                    // TODO:
+                    break;
+                case SvgGroup svgGroup:
+                    // TODO:
+                    break;
+                case SvgLine svgLine:
+                    // TODO:
+                    break;
                 case SvgPath svgPath:
                     PrintSvgPathAttributes(svgPath, indentLine, indentAttribute);
+                    break;
+                case SvgPolygon svgPolygon:
+                    // TODO:
+                    break;
+                case SvgText svgText:
+                    // TODO:
+                    break;
+                case SvgTextPath svgTextPath:
+                    // TODO:
+                    break;
+                case SvgTextRef svgTextRef:
+                    // TODO:
+                    break;
+                case SvgTextSpan svgTextSpan:
+                    // TODO:
                     break;
                 // TODO:
                 default:
