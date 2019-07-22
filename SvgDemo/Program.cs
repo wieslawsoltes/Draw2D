@@ -85,23 +85,30 @@ namespace SvgDemo
 
         static void Main(string[] args)
         {
-            string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"../../../ExportFile_16x.svg");
-
-            Console.WriteLine($"Path: {path}");
-
-            try
+            if (args.Length < 1)
             {
-                var doc = SvgDocument.Open<SvgDocument>(path, null);
-                Print(doc);
+                return;
             }
-            catch (Exception ex)
+
+            for (int i = 0; i < args.Length; i++)
             {
-                Console.WriteLine(ex.Message);
-                Console.WriteLine(ex.StackTrace);
-                if (ex.InnerException != null)
+                try
                 {
-                    Console.WriteLine(ex.InnerException);
-                    Console.WriteLine(ex.InnerException.StackTrace);
+                    string path = args[i];
+                    Console.WriteLine($"Path: {path}");
+
+                    var doc = SvgDocument.Open<SvgDocument>(path, null);
+                    Print(doc);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                    Console.WriteLine(ex.StackTrace);
+                    if (ex.InnerException != null)
+                    {
+                        Console.WriteLine(ex.InnerException);
+                        Console.WriteLine(ex.InnerException.StackTrace);
+                    }
                 }
             }
         }
