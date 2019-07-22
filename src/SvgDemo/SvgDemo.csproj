@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>netcoreapp3.0</TargetFramework>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
@@ -11,6 +11,8 @@
 
   <ItemGroup>
     <PackageReference Include="System.Drawing.Common" Version="4.5.1"/>
+    <PackageReference Include="System.ObjectModel" Version="4.3.0"/>
+    <PackageReference Include="Microsoft.Win32.SystemEvents" Version="4.5.0"/>
   </ItemGroup>
 
 </Project>
