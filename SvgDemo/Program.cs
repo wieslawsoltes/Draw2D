@@ -7,20 +7,20 @@ using Svg;
 
 namespace SvgDemo
 {
-    class Program
+    class SvgDebug
     {
-        static void ResetColor()
+        internal static void ResetColor()
         {
             Console.ResetColor();
         }
 
-        static void WriteLine(string value, ConsoleColor color = ConsoleColor.Black)
+        internal static void WriteLine(string value, ConsoleColor color = ConsoleColor.Black)
         {
             Console.ForegroundColor = color;
             Console.WriteLine(value);
         }
 
-        static void PrintAttributes(SvgElement element, string indent = "", string indentAttribute = "")
+        internal static void PrintAttributes(SvgElement element, string indent = "", string indentAttribute = "")
         {
             if (!string.IsNullOrEmpty(element.ID))
             {
@@ -83,7 +83,7 @@ namespace SvgDemo
             }
         }
 
-        static void Print(SvgElement element, string indent = "", string indentAttribute = "")
+        internal static void Print(SvgElement element, string indent = "", string indentAttribute = "")
         {
             // Attributes
 
@@ -115,14 +115,14 @@ namespace SvgDemo
             }
         }
 
-        static void Print(SvgDocument doc)
+        internal static void Print(SvgDocument doc)
         {
             WriteLine($"{doc}", ConsoleColor.Blue);
             Print(doc, "    ");
             ResetColor();
         }
 
-        static void Run(string[] args)
+        internal static void Run(string[] args)
         {
             if (args.Length < 1)
             {
@@ -139,7 +139,7 @@ namespace SvgDemo
             }
         }
 
-        static void Error(Exception ex)
+        internal static void Error(Exception ex)
         {
             WriteLine($"{ex.Message}", ConsoleColor.Red);
             WriteLine($"{ex.StackTrace}", ConsoleColor.Black);
@@ -148,16 +148,19 @@ namespace SvgDemo
                 Error(ex.InnerException);
             }
         }
+    }
 
+    class Program
+    {
         static void Main(string[] args)
         {
             try
             {
-                Run(args);
+                SvgDebug.Run(args);
             }
             catch (Exception ex)
             {
-                Error(ex);
+                SvgDebug.Error(ex);
             }
         }
     }
