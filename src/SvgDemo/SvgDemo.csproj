@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
@@ -10,9 +10,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="System.Drawing.Common" Version="4.5.1"/>
-    <PackageReference Include="System.ObjectModel" Version="4.3.0"/>
-    <PackageReference Include="Microsoft.Win32.SystemEvents" Version="4.5.0"/>
+    <PackageReference Include="System.Drawing.Common" Version="4.6.0-preview6.19303.8" />
+    <PackageReference Include="System.ObjectModel" Version="4.3.0" />
+    <PackageReference Include="Microsoft.Win32.SystemEvents" Version="4.6.0-preview6.19303.8" />
   </ItemGroup>
 
 </Project>
