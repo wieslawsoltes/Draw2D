@@ -24,7 +24,7 @@ namespace SvgDemo
             Console.WriteLine(value);
         }
 
-        internal static void PrintPaintServer(SvgPaintServer paintServer, string attribute, string indentLine, string indentAttribute)
+        internal static void PrintSvgPaintServerServer(SvgPaintServer paintServer, string attribute, string indentLine, string indentAttribute)
         {
             switch (paintServer)
             {
@@ -61,7 +61,7 @@ namespace SvgDemo
             }
         }
 
-        internal static void PrintElementAttributes(SvgElement element, string indentLine, string indentAttribute)
+        internal static void PrintSvgElementAttributes(SvgElement element, string indentLine, string indentAttribute)
         {
             // Transforms
 
@@ -90,19 +90,19 @@ namespace SvgDemo
 
             if (element.Color != null && element.Color != SvgColourServer.NotSet)
             {
-                PrintPaintServer(element.Color, "color", indentLine, indentAttribute);
+                PrintSvgPaintServerServer(element.Color, "color", indentLine, indentAttribute);
             }
 
             // Style
 
             if (element.Fill != null && element.Fill != SvgColourServer.NotSet)
             {
-                PrintPaintServer(element.Fill, "fill", indentLine, indentAttribute);
+                PrintSvgPaintServerServer(element.Fill, "fill", indentLine, indentAttribute);
             }
 
             if (element.Stroke != null)
             {
-                PrintPaintServer(element.Stroke, "stroke", indentLine, indentAttribute);
+                PrintSvgPaintServerServer(element.Stroke, "stroke", indentLine, indentAttribute);
             }
 
             if (element.FillRule != SvgFillRule.NonZero)
@@ -152,7 +152,7 @@ namespace SvgDemo
 
             if (element.StopColor != null)
             {
-                PrintPaintServer(element.StopColor, "stop-color", indentLine, indentAttribute);
+                PrintSvgPaintServerServer(element.StopColor, "stop-color", indentLine, indentAttribute);
             }
 
             if (element.Opacity != 1f)
@@ -228,7 +228,7 @@ namespace SvgDemo
             }
         }
 
-        internal static void PrintElementChildren(SvgElement element, string indentLine, string indentAttribute)
+        internal static void PrintSvgElementChildren(SvgElement element, string indentLine, string indentAttribute)
         {
             if (element.Children.Count > 0)
             {
@@ -237,12 +237,12 @@ namespace SvgDemo
                 foreach (var child in element.Children)
                 {
                     WriteLine($"{indentLine}{child}", s_elementColor);
-                    PrintElement(child, indentLine + "    ", indentAttribute);
+                    PrintSvgElementElement(child, indentLine + "    ", indentAttribute);
                 }
             }
         }
 
-        internal static void PrintElementNodes(SvgElement element, string indentLine, string indentAttribute)
+        internal static void PrintSvgElementNodes(SvgElement element, string indentLine, string indentAttribute)
         {
             if (element.Nodes.Count > 0)
             {
@@ -255,7 +255,147 @@ namespace SvgDemo
             }
         }
 
-        internal static void PrintSvgPathAttributes(SvgPath svgPath, string indentLine, string indentAttribute)
+        internal static void PrintAttributes(SvgClipPath svgClipPath, string indentLine, string indentAttribute)
+        {
+            // TODO:
+        }
+
+        internal static void PrintAttributes(SvgFragment svgFragment, string indentLine, string indentAttribute)
+        {
+            // TODO:
+        }
+
+        internal static void PrintAttributes(SvgMask svgMask, string indentLine, string indentAttribute)
+        {
+            // TODO:
+        }
+
+        internal static void PrintAttributes(SvgDefinitionList svgDefinitionList, string indentLine, string indentAttribute)
+        {
+            // TODO:
+        }
+
+        internal static void PrintAttributes(SvgDescription svgDescription, string indentLine, string indentAttribute)
+        {
+            // TODO:
+        }
+
+        internal static void PrintAttributes(SvgDocumentMetadata svgDocumentMetadata, string indentLine, string indentAttribute)
+        {
+            // TODO:
+        }
+
+        internal static void PrintAttributes(SvgTitle svgTitle, string indentLine, string indentAttribute)
+        {
+            // TODO:
+        }
+
+        internal static void PrintAttributes(SvgMergeNode svgMergeNode, string indentLine, string indentAttribute)
+        {
+            // TODO:
+        }
+
+        internal static void PrintAttributes(SvgFilter svgFilter, string indentLine, string indentAttribute)
+        {
+            // TODO:
+        }
+
+        internal static void PrintAttributes(NonSvgElement nonSvgElement, string indentLine, string indentAttribute)
+        {
+            // TODO:
+        }
+
+        internal static void PrintAttributes(SvgGradientStop svgGradientStop, string indentLine, string indentAttribute)
+        {
+            // TODO:
+        }
+
+        internal static void PrintAttributes(SvgUnknownElement svgUnknownElement, string indentLine, string indentAttribute)
+        {
+            // TODO:
+        }
+
+        internal static void PrintAttributes(SvgFont svgFont, string indentLine, string indentAttribute)
+        {
+            // TODO:
+        }
+
+        internal static void PrintAttributes(SvgFontFace svgFontFace, string indentLine, string indentAttribute)
+        {
+            // TODO:
+        }
+
+        internal static void PrintAttributes(SvgFontFaceSrc svgFontFaceSrc, string indentLine, string indentAttribute)
+        {
+            // TODO:
+        }
+
+        internal static void PrintAttributes(SvgFontFaceUri svgFontFaceUri, string indentLine, string indentAttribute)
+        {
+            // TODO:
+        }
+
+        internal static void PrintAttributes(SvgImage svgImage, string indentLine, string indentAttribute)
+        {
+            // TODO:
+        }
+
+        internal static void PrintAttributes(SvgSwitch svgSwitch, string indentLine, string indentAttribute)
+        {
+            // TODO:
+        }
+
+        internal static void PrintAttributes(SvgSymbol svgSymbol, string indentLine, string indentAttribute)
+        {
+            // TODO:
+        }
+
+        internal static void PrintAttributes(SvgUse svgUse, string indentLine, string indentAttribute)
+        {
+            // TODO:
+        }
+
+        internal static void PrintAttributes(SvgForeignObject svgForeignObject, string indentLine, string indentAttribute)
+        {
+            // TODO:
+        }
+
+        internal static void PrintAttributes(SvgCircle svgCircle, string indentLine, string indentAttribute)
+        {
+            // TODO:
+        }
+
+        internal static void PrintAttributes(SvgEllipse svgEllipse, string indentLine, string indentAttribute)
+        {
+            // TODO:
+        }
+
+        internal static void PrintAttributes(SvgRectangle svgRectangle, string indentLine, string indentAttribute)
+        {
+            // TODO:
+        }
+
+        internal static void PrintAttributes(SvgMarker svgMarker, string indentLine, string indentAttribute)
+        {
+            // TODO:
+        }
+
+        internal static void PrintAttributes(SvgGlyph svgGlyph, string indentLine, string indentAttribute)
+        {
+            // TODO:
+        }
+
+        internal static void PrintAttributes(SvgGroup svgGroup, string indentLine, string indentAttribute)
+        {
+            // TODO:
+        }
+
+        internal static void PrintAttributes(SvgLine svgLine, string indentLine, string indentAttribute)
+        {
+            // TODO:
+        }
+
+        internal static void PrintAttributes(SvgPath svgPath, string indentLine, string indentAttribute)
         {
             if (svgPath.PathData != null)
             {
@@ -284,9 +424,94 @@ namespace SvgDemo
             }
         }
 
-        internal static void PrintElement(SvgElement element, string indentLine, string indentAttribute)
+        internal static void PrintAttributes(SvgPolygon svgPolygon, string indentLine, string indentAttribute)
         {
-            PrintElementAttributes(element, indentLine, indentAttribute);
+            // TODO:
+        }
+
+        internal static void PrintAttributes(SvgText svgText, string indentLine, string indentAttribute)
+        {
+            // TODO:
+        }
+
+        internal static void PrintAttributes(SvgTextPath svgTextPath, string indentLine, string indentAttribute)
+        {
+            // TODO:
+        }
+
+        internal static void PrintAttributes(SvgTextRef svgTextRef, string indentLine, string indentAttribute)
+        {
+            // TODO:
+        }
+
+        internal static void PrintAttributes(SvgTextSpan svgTextSpan, string indentLine, string indentAttribute)
+        {
+            // TODO:
+        }
+
+        internal static void PrintAttributes(SvgColourMatrix svgColourMatrix, string indentLine, string indentAttribute)
+        {
+            // TODO:
+        }
+
+        internal static void PrintAttributes(SvgGaussianBlur svgGaussianBlur, string indentLine, string indentAttribute)
+        {
+            // TODO:
+        }
+
+        internal static void PrintAttributes(SvgMerge svgMerge, string indentLine, string indentAttribute)
+        {
+            // TODO:
+        }
+
+        internal static void PrintAttributes(SvgOffset svgOffset, string indentLine, string indentAttribute)
+        {
+            // TODO:
+        }
+
+        internal static void PrintAttributes(SvgColourServer svgColourServer, string indentLine, string indentAttribute)
+        {
+            // TODO:
+        }
+
+        internal static void PrintAttributes(SvgDeferredPaintServer svgDeferredPaintServer, string indentLine, string indentAttribute)
+        {
+            // TODO:
+        }
+
+        internal static void PrintAttributes(SvgFallbackPaintServer svgFallbackPaintServer, string indentLine, string indentAttribute)
+        {
+            // TODO:
+        }
+
+        internal static void PrintAttributes(SvgPatternServer svgPatternServer, string indentLine, string indentAttribute)
+        {
+            // TODO:
+        }
+
+        internal static void PrintAttributes(SvgLinearGradientServer svgLinearGradientServer, string indentLine, string indentAttribute)
+        {
+            // TODO:
+        }
+
+        internal static void PrintAttributes(SvgRadialGradientServer svgRadialGradientServer, string indentLine, string indentAttribute)
+        {
+            // TODO:
+        }
+
+        internal static void PrintAttributes(SvgVerticalKern svgVerticalKern, string indentLine, string indentAttribute)
+        {
+            // TODO:
+        }
+
+        internal static void PrintAttributes(SvgHorizontalKern svgHorizontalKern, string indentLine, string indentAttribute)
+        {
+            // TODO:
+        }
+
+        internal static void PrintSvgElementElement(SvgElement element, string indentLine, string indentAttribute)
+        {
+            PrintSvgElementAttributes(element, indentLine, indentAttribute);
 
             /// The <see cref="SvgElement"/> object graph.
             /// +---abstract class <see cref="SvgElement"/>
@@ -348,55 +573,156 @@ namespace SvgDemo
 
             switch (element)
             {
+                case SvgClipPath svgClipPath:
+                    PrintAttributes(svgClipPath, indentLine, indentAttribute);
+                    break;
+                case SvgDocument svgDocument:
+                    PrintAttributes(svgDocument, indentLine, indentAttribute);
+                    break;
+                case SvgFragment svgFragment:
+                    PrintAttributes(svgFragment, indentLine, indentAttribute);
+                    break;
+                case SvgMask svgMask:
+                    PrintAttributes(svgMask, indentLine, indentAttribute);
+                    break;
+                case SvgDefinitionList svgDefinitionList:
+                    PrintAttributes(svgDefinitionList, indentLine, indentAttribute);
+                    break;
+                case SvgDescription svgDescription:
+                    PrintAttributes(svgDescription, indentLine, indentAttribute);
+                    break;
+                case SvgDocumentMetadata svgDocumentMetadata:
+                    PrintAttributes(svgDocumentMetadata, indentLine, indentAttribute);
+                    break;
+                case SvgTitle svgTitle:
+                    PrintAttributes(svgTitle, indentLine, indentAttribute);
+                    break;
+                case SvgMergeNode svgMergeNode:
+                    PrintAttributes(svgMergeNode, indentLine, indentAttribute);
+                    break;
+                case SvgFilter svgFilter:
+                    PrintAttributes(svgFilter, indentLine, indentAttribute);
+                    break;
+                case NonSvgElement nonSvgElement:
+                    PrintAttributes(nonSvgElement, indentLine, indentAttribute);
+                    break;
+                case SvgGradientStop svgGradientStop:
+                    PrintAttributes(svgGradientStop, indentLine, indentAttribute);
+                    break;
+                case SvgUnknownElement svgUnknownElement:
+                    PrintAttributes(svgUnknownElement, indentLine, indentAttribute);
+                    break;
+                case SvgFont svgFont:
+                    PrintAttributes(svgFont, indentLine, indentAttribute);
+                    break;
+                case SvgFontFace svgFontFace:
+                    PrintAttributes(svgFontFace, indentLine, indentAttribute);
+                    break;
+                case SvgFontFaceSrc svgFontFaceSrc:
+                    PrintAttributes(svgFontFaceSrc, indentLine, indentAttribute);
+                    break;
+                case SvgFontFaceUri svgFontFaceUri:
+                    PrintAttributes(svgFontFaceUri, indentLine, indentAttribute);
+                    break;
+                case SvgImage svgImage:
+                    PrintAttributes(svgImage, indentLine, indentAttribute);
+                    break;
+                case SvgSwitch svgSwitch:
+                    PrintAttributes(svgSwitch, indentLine, indentAttribute);
+                    break;
+                case SvgSymbol svgSymbol:
+                    PrintAttributes(svgSymbol, indentLine, indentAttribute);
+                    break;
+                case SvgUse svgUse:
+                    PrintAttributes(svgUse, indentLine, indentAttribute);
+                    break;
+                case SvgForeignObject svgForeignObject:
+                    PrintAttributes(svgForeignObject, indentLine, indentAttribute);
+                    break;
                 case SvgCircle svgCircle:
-                    // TODO:
+                    PrintAttributes(svgCircle, indentLine, indentAttribute);
                     break;
                 case SvgEllipse svgEllipse:
-                    // TODO:
+                    PrintAttributes(svgEllipse, indentLine, indentAttribute);
                     break;
                 case SvgRectangle svgRectangle:
-                    // TODO:
+                    PrintAttributes(svgRectangle, indentLine, indentAttribute);
                     break;
                 case SvgMarker svgMarker:
-                    // TODO:
+                    PrintAttributes(svgMarker, indentLine, indentAttribute);
                     break;
                 case SvgGlyph svgGlyph:
-                    // TODO:
+                    PrintAttributes(svgGlyph, indentLine, indentAttribute);
                     break;
                 case SvgGroup svgGroup:
-                    // TODO:
+                    PrintAttributes(svgGroup, indentLine, indentAttribute);
                     break;
                 case SvgLine svgLine:
-                    // TODO:
+                    PrintAttributes(svgLine, indentLine, indentAttribute);
                     break;
                 case SvgPath svgPath:
-                    PrintSvgPathAttributes(svgPath, indentLine, indentAttribute);
+                    PrintAttributes(svgPath, indentLine, indentAttribute);
                     break;
                 case SvgPolygon svgPolygon:
-                    // TODO:
+                    PrintAttributes(svgPolygon, indentLine, indentAttribute);
                     break;
                 case SvgText svgText:
-                    // TODO:
+                    PrintAttributes(svgText, indentLine, indentAttribute);
                     break;
                 case SvgTextPath svgTextPath:
-                    // TODO:
+                    PrintAttributes(svgTextPath, indentLine, indentAttribute);
                     break;
                 case SvgTextRef svgTextRef:
-                    // TODO:
+                    PrintAttributes(svgTextRef, indentLine, indentAttribute);
                     break;
                 case SvgTextSpan svgTextSpan:
-                    // TODO:
+                    PrintAttributes(svgTextSpan, indentLine, indentAttribute);
                     break;
-                // TODO:
+                case SvgColourMatrix svgColourMatrix:
+                    PrintAttributes(svgColourMatrix, indentLine, indentAttribute);
+                    break;
+                case SvgGaussianBlur svgGaussianBlur:
+                    PrintAttributes(svgGaussianBlur, indentLine, indentAttribute);
+                    break;
+                case SvgMerge svgMerge:
+                    PrintAttributes(svgMerge, indentLine, indentAttribute);
+                    break;
+                case SvgOffset svgOffset:
+                    PrintAttributes(svgOffset, indentLine, indentAttribute);
+                    break;
+                case SvgColourServer svgColourServer:
+                    PrintAttributes(svgColourServer, indentLine, indentAttribute);
+                    break;
+                case SvgDeferredPaintServer svgDeferredPaintServer:
+                    PrintAttributes(svgDeferredPaintServer, indentLine, indentAttribute);
+                    break;
+                case SvgFallbackPaintServer svgFallbackPaintServer:
+                    PrintAttributes(svgFallbackPaintServer, indentLine, indentAttribute);
+                    break;
+                case SvgPatternServer svgPatternServer:
+                    PrintAttributes(svgPatternServer, indentLine, indentAttribute);
+                    break;
+                case SvgLinearGradientServer svgLinearGradientServer:
+                    PrintAttributes(svgLinearGradientServer, indentLine, indentAttribute);
+                    break;
+                case SvgRadialGradientServer svgRadialGradientServer:
+                    PrintAttributes(svgRadialGradientServer, indentLine, indentAttribute);
+                    break;
+                case SvgVerticalKern svgVerticalKern:
+                    PrintAttributes(svgVerticalKern, indentLine, indentAttribute);
+                    break;
+                case SvgHorizontalKern svgHorizontalKern:
+                    PrintAttributes(svgHorizontalKern, indentLine, indentAttribute);
+                    break;
                 default:
                     break;
             }
 
-            PrintElementChildren(element, indentLine, indentAttribute);
-            PrintElementNodes(element, indentLine, indentAttribute);
+            PrintSvgElementChildren(element, indentLine, indentAttribute);
+            PrintSvgElementNodes(element, indentLine, indentAttribute);
         }
 
-        internal static void PrintFragmentAttributes(SvgFragment fragment, string indentLine, string indentAttribute)
+        internal static void PrintSvgFragmentAttributes(SvgFragment fragment, string indentLine, string indentAttribute)
         {
             if (fragment.X != 0f)
             {
@@ -456,11 +782,11 @@ namespace SvgDemo
             }
         }
 
-        internal static void PrintFragment(SvgFragment fragment, string indentLine, string indentAttribute)
+        internal static void PrintSvgFragment(SvgFragment fragment, string indentLine, string indentAttribute)
         {
             WriteLine($"{fragment}", s_elementColor);
-            PrintFragmentAttributes(fragment, indentLine, indentAttribute);
-            PrintElement(fragment, indentLine, indentAttribute);
+            PrintSvgFragmentAttributes(fragment, indentLine, indentAttribute);
+            PrintSvgElementElement(fragment, indentLine, indentAttribute);
             ResetColor();
         }
 
@@ -478,7 +804,7 @@ namespace SvgDemo
 
                 var document = SvgDocument.Open<SvgDocument>(path, null);
                 document.FlushStyles(true);
-                PrintFragment(document, "    ", "");
+                PrintSvgFragment(document, "    ", "");
             }
         }
 
