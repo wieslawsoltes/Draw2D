@@ -1,20 +1,21 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
 using Svg;
 
 namespace SvgDemo
 {
     class SvgDebug
     {
+        internal static ConsoleColor ErrorColor = ConsoleColor.Red;
+        internal static ConsoleColor ElementColor = ConsoleColor.Blue;
+        internal static ConsoleColor GroupColor = ConsoleColor.Gray;
+        internal static ConsoleColor AttributeColor = ConsoleColor.DarkRed;
+
         internal static void ResetColor()
         {
             Console.ResetColor();
         }
 
-        internal static void WriteLine(string value, ConsoleColor color = ConsoleColor.DarkGray)
+        internal static void WriteLine(string value, ConsoleColor color)
         {
             Console.ForegroundColor = color;
             Console.WriteLine(value);
@@ -26,32 +27,32 @@ namespace SvgDemo
             {
                 case SvgColourServer colourServer:
                     {
-                        WriteLine($"{indent}{indentAttribute}[{attribute}]={colourServer.ToString()}", ConsoleColor.DarkGray);
+                        WriteLine($"{indent}{indentAttribute}[{attribute}]={colourServer.ToString()}", AttributeColor);
                     }
                     break;
                 case SvgDeferredPaintServer deferredPaintServer:
                     {
-                        WriteLine($"{indent}{indentAttribute}[{attribute}]={deferredPaintServer.GetType()}", ConsoleColor.DarkGray);
+                        WriteLine($"{indent}{indentAttribute}[{attribute}]={deferredPaintServer.GetType()}", AttributeColor);
                     }
                     break;
                 case SvgFallbackPaintServer fallbackPaintServer:
                     {
-                        WriteLine($"{indent}{indentAttribute}[{attribute}]={fallbackPaintServer.GetType()}", ConsoleColor.DarkGray);
+                        WriteLine($"{indent}{indentAttribute}[{attribute}]={fallbackPaintServer.GetType()}", AttributeColor);
                     }
                     break;
                 case SvgGradientServer gradientServer:
                     {
-                        WriteLine($"{indent}{indentAttribute}[{attribute}]={gradientServer.GetType()}", ConsoleColor.DarkGray);
+                        WriteLine($"{indent}{indentAttribute}[{attribute}]={gradientServer.GetType()}", AttributeColor);
                     }
                     break;
                 case SvgPatternServer patternServer:
                     {
-                        WriteLine($"{indent}{indentAttribute}[{attribute}]={patternServer.GetType()}", ConsoleColor.DarkGray);
+                        WriteLine($"{indent}{indentAttribute}[{attribute}]={patternServer.GetType()}", AttributeColor);
                     }
                     break;
                 default:
                     {
-                        WriteLine($"{indent}{indentAttribute}[{attribute}]={paintServer.GetType()}", ConsoleColor.DarkGray);
+                        WriteLine($"{indent}{indentAttribute}[{attribute}]={paintServer.GetType()}", AttributeColor);
                     }
                     break;
             }
@@ -63,12 +64,12 @@ namespace SvgDemo
 
             if (element.Transforms.Count > 0)
             {
-                WriteLine($"{indent}{indentAttribute}<Transforms>", ConsoleColor.Gray);
-                WriteLine($"{indent}{indentAttribute}[transform]", ConsoleColor.DarkGray);
+                WriteLine($"{indent}{indentAttribute}<Transforms>", GroupColor);
+                WriteLine($"{indent}{indentAttribute}[transform]", AttributeColor);
 
                 foreach (var transform in element.Transforms)
                 {
-                    WriteLine($"{indent}{indentAttribute}{transform}", ConsoleColor.DarkGray);
+                    WriteLine($"{indent}{indentAttribute}{transform}", AttributeColor);
                 }
             }
 
@@ -76,12 +77,12 @@ namespace SvgDemo
 
             if (!string.IsNullOrEmpty(element.ID))
             {
-                WriteLine($"{indent}{indentAttribute}[id]={element.ID}", ConsoleColor.DarkGray);
+                WriteLine($"{indent}{indentAttribute}[id]={element.ID}", AttributeColor);
             }
 
             if (element.SpaceHandling != XmlSpaceHandling.@default && element.SpaceHandling != XmlSpaceHandling.inherit)
             {
-                WriteLine($"{indent}{indentAttribute}[space]={element.SpaceHandling}", ConsoleColor.DarkGray);
+                WriteLine($"{indent}{indentAttribute}[space]={element.SpaceHandling}", AttributeColor);
             }
 
             if (element.Color != null && element.Color != SvgColourServer.NotSet)
@@ -103,47 +104,47 @@ namespace SvgDemo
 
             if (element.FillRule != SvgFillRule.NonZero)
             {
-                WriteLine($"{indent}{indentAttribute}[fill-rule]={element.FillRule}", ConsoleColor.DarkGray);
+                WriteLine($"{indent}{indentAttribute}[fill-rule]={element.FillRule}", AttributeColor);
             }
 
             if (element.FillOpacity != 1f)
             {
-                WriteLine($"{indent}{indentAttribute}[fill-opacity]={element.FillOpacity}", ConsoleColor.DarkGray);
+                WriteLine($"{indent}{indentAttribute}[fill-opacity]={element.FillOpacity}", AttributeColor);
             }
 
             if (element.StrokeWidth != 1f)
             {
-                WriteLine($"{indent}{indentAttribute}[stroke-width]={element.StrokeWidth}", ConsoleColor.DarkGray);
+                WriteLine($"{indent}{indentAttribute}[stroke-width]={element.StrokeWidth}", AttributeColor);
             }
 
             if (element.StrokeLineCap != SvgStrokeLineCap.Butt)
             {
-                WriteLine($"{indent}{indentAttribute}[stroke-linecap]={element.StrokeLineCap}", ConsoleColor.DarkGray);
+                WriteLine($"{indent}{indentAttribute}[stroke-linecap]={element.StrokeLineCap}", AttributeColor);
             }
 
             if (element.StrokeLineJoin != SvgStrokeLineJoin.Miter)
             {
-                WriteLine($"{indent}{indentAttribute}[stroke-linejoin]={element.StrokeLineJoin}", ConsoleColor.DarkGray);
+                WriteLine($"{indent}{indentAttribute}[stroke-linejoin]={element.StrokeLineJoin}", AttributeColor);
             }
 
             if (element.StrokeMiterLimit != 4f)
             {
-                WriteLine($"{indent}{indentAttribute}[stroke-miterlimit]={element.StrokeMiterLimit}", ConsoleColor.DarkGray);
+                WriteLine($"{indent}{indentAttribute}[stroke-miterlimit]={element.StrokeMiterLimit}", AttributeColor);
             }
 
             if (element.StrokeDashArray != null)
             {
-                WriteLine($"{indent}{indentAttribute}[stroke-dasharray]={element.StrokeDashArray}", ConsoleColor.DarkGray);
+                WriteLine($"{indent}{indentAttribute}[stroke-dasharray]={element.StrokeDashArray}", AttributeColor);
             }
 
             if (element.StrokeDashOffset != SvgUnit.Empty)
             {
-                WriteLine($"{indent}{indentAttribute}[stroke-dashoffset]={element.StrokeDashOffset}", ConsoleColor.DarkGray);
+                WriteLine($"{indent}{indentAttribute}[stroke-dashoffset]={element.StrokeDashOffset}", AttributeColor);
             }
 
             if (element.StrokeOpacity != 1f)
             {
-                WriteLine($"{indent}{indentAttribute}[stroke-opacity]={element.StrokeOpacity}", ConsoleColor.DarkGray);
+                WriteLine($"{indent}{indentAttribute}[stroke-opacity]={element.StrokeOpacity}", AttributeColor);
             }
 
             if (element.StopColor != null)
@@ -153,73 +154,73 @@ namespace SvgDemo
 
             if (element.Opacity != 1f)
             {
-                WriteLine($"{indent}{indentAttribute}[opacity]={element.Opacity}", ConsoleColor.DarkGray);
+                WriteLine($"{indent}{indentAttribute}[opacity]={element.Opacity}", AttributeColor);
             }
 
             if (element.ShapeRendering != SvgShapeRendering.Inherit)
             {
-                WriteLine($"{indent}{indentAttribute}[shape-rendering]={element.ShapeRendering}", ConsoleColor.DarkGray);
+                WriteLine($"{indent}{indentAttribute}[shape-rendering]={element.ShapeRendering}", AttributeColor);
             }
 
             if (element.TextAnchor != SvgTextAnchor.Inherit)
             {
-                WriteLine($"{indent}{indentAttribute}[text-anchor]={element.TextAnchor}", ConsoleColor.DarkGray);
+                WriteLine($"{indent}{indentAttribute}[text-anchor]={element.TextAnchor}", AttributeColor);
             }
 
             if (!string.IsNullOrEmpty(element.BaselineShift))
             {
-                WriteLine($"{indent}{indentAttribute}[baseline-shift]={element.BaselineShift}", ConsoleColor.DarkGray);
+                WriteLine($"{indent}{indentAttribute}[baseline-shift]={element.BaselineShift}", AttributeColor);
             }
 
             if (!string.IsNullOrEmpty(element.FontFamily))
             {
-                WriteLine($"{indent}{indentAttribute}[font-family]={element.FontFamily}", ConsoleColor.DarkGray);
+                WriteLine($"{indent}{indentAttribute}[font-family]={element.FontFamily}", AttributeColor);
             }
 
             if (element.FontSize != SvgUnit.Empty)
             {
-                WriteLine($"{indent}{indentAttribute}[font-size]={element.FontSize}", ConsoleColor.DarkGray);
+                WriteLine($"{indent}{indentAttribute}[font-size]={element.FontSize}", AttributeColor);
             }
 
             if (element.FontStyle != SvgFontStyle.All)
             {
-                WriteLine($"{indent}{indentAttribute}[font-style]={element.FontStyle}", ConsoleColor.DarkGray);
+                WriteLine($"{indent}{indentAttribute}[font-style]={element.FontStyle}", AttributeColor);
             }
 
             if (element.FontVariant != SvgFontVariant.Inherit)
             {
-                WriteLine($"{indent}{indentAttribute}[font-variant]={element.FontVariant}", ConsoleColor.DarkGray);
+                WriteLine($"{indent}{indentAttribute}[font-variant]={element.FontVariant}", AttributeColor);
             }
 
             if (element.TextDecoration != SvgTextDecoration.Inherit)
             {
-                WriteLine($"{indent}{indentAttribute}[text-decoration]={element.TextDecoration}", ConsoleColor.DarkGray);
+                WriteLine($"{indent}{indentAttribute}[text-decoration]={element.TextDecoration}", AttributeColor);
             }
 
             if (element.FontWeight != SvgFontWeight.Inherit)
             {
-                WriteLine($"{indent}{indentAttribute}[font-weight]={element.FontWeight}", ConsoleColor.DarkGray);
+                WriteLine($"{indent}{indentAttribute}[font-weight]={element.FontWeight}", AttributeColor);
             }
 
             if (element.TextTransformation != SvgTextTransformation.Inherit)
             {
-                WriteLine($"{indent}{indentAttribute}[text-transform]={element.TextTransformation}", ConsoleColor.DarkGray);
+                WriteLine($"{indent}{indentAttribute}[text-transform]={element.TextTransformation}", AttributeColor);
             }
 
             if (!string.IsNullOrEmpty(element.Font))
             {
-                WriteLine($"{indent}{indentAttribute}[font]={element.Font}", ConsoleColor.DarkGray);
+                WriteLine($"{indent}{indentAttribute}[font]={element.Font}", AttributeColor);
             }
 
             // CustomAttributes
 
             if (element.CustomAttributes.Count > 0)
             {
-                WriteLine($"{indent}{indentAttribute}<CustomAttributes>", ConsoleColor.Gray);
+                WriteLine($"{indent}{indentAttribute}<CustomAttributes>", GroupColor);
 
                 foreach (var attribute in element.CustomAttributes)
                 {
-                    WriteLine($"{indent}{indentAttribute}[{attribute.Key}]={attribute.Value}", ConsoleColor.DarkGray);
+                    WriteLine($"{indent}{indentAttribute}[{attribute.Key}]={attribute.Value}", AttributeColor);
                 }
             }
         }
@@ -234,11 +235,11 @@ namespace SvgDemo
 
             if (element.Children.Count > 0)
             {
-                WriteLine($"{indent}<Children>", ConsoleColor.Gray);
+                WriteLine($"{indent}<Children>", GroupColor);
 
                 foreach (var child in element.Children)
                 {
-                    WriteLine($"{indent}{child}", ConsoleColor.Blue);
+                    WriteLine($"{indent}{child}", ElementColor);
                     PrintElement(child, indent + "    ", indentAttribute);
                 }
             }
@@ -247,11 +248,11 @@ namespace SvgDemo
 
             if (element.Nodes.Count > 0)
             {
-                WriteLine($"{indent}<Nodes>", ConsoleColor.Gray);
+                WriteLine($"{indent}<Nodes>", GroupColor);
 
                 foreach (var node in element.Nodes)
                 {
-                    WriteLine($"{indent}{node.Content}", ConsoleColor.DarkGray);
+                    WriteLine($"{indent}{node.Content}", AttributeColor);
                 }
             }
         }
@@ -260,33 +261,33 @@ namespace SvgDemo
         {
             if (fragment.X != 0f)
             {
-                WriteLine($"{indent}{indentAttribute}[x]={fragment.X}", ConsoleColor.DarkGray);
+                WriteLine($"{indent}{indentAttribute}[x]={fragment.X}", AttributeColor);
             }
 
             if (fragment.Y != 0f)
             {
-                WriteLine($"{indent}{indentAttribute}[y]={fragment.Y}", ConsoleColor.DarkGray);
+                WriteLine($"{indent}{indentAttribute}[y]={fragment.Y}", AttributeColor);
             }
 
             if (fragment.Width != new SvgUnit(SvgUnitType.Percentage, 100f))
             {
-                WriteLine($"{indent}{indentAttribute}[width]={fragment.Width}", ConsoleColor.DarkGray);
+                WriteLine($"{indent}{indentAttribute}[width]={fragment.Width}", AttributeColor);
             }
 
             if (fragment.Height != new SvgUnit(SvgUnitType.Percentage, 100f))
             {
-                WriteLine($"{indent}{indentAttribute}[height]={fragment.Height}", ConsoleColor.DarkGray);
+                WriteLine($"{indent}{indentAttribute}[height]={fragment.Height}", AttributeColor);
             }
 
             if (fragment.Overflow != SvgOverflow.Inherit && fragment.Overflow != SvgOverflow.Hidden)
             {
-                WriteLine($"{indent}{indentAttribute}[overflow]={fragment.Overflow}", ConsoleColor.DarkGray);
+                WriteLine($"{indent}{indentAttribute}[overflow]={fragment.Overflow}", AttributeColor);
             }
 
             if (fragment.ViewBox != SvgViewBox.Empty)
             {
                 var viewBox = fragment.ViewBox;
-                WriteLine($"{indent}{indentAttribute}[viewBox]={viewBox.MinX} {viewBox.MinY} {viewBox.Width} {viewBox.Height}", ConsoleColor.DarkGray);
+                WriteLine($"{indent}{indentAttribute}[viewBox]={viewBox.MinX} {viewBox.MinY} {viewBox.Width} {viewBox.Height}", AttributeColor);
             }
 
             if (fragment.AspectRatio != null)
@@ -296,29 +297,29 @@ namespace SvgDemo
                  || fragment.AspectRatio.Slice != @default.Slice
                  || fragment.AspectRatio.Defer != @default.Defer)
                 {
-                    WriteLine($"{indent}{indentAttribute}[preserveAspectRatio]={fragment.AspectRatio}", ConsoleColor.DarkGray);
+                    WriteLine($"{indent}{indentAttribute}[preserveAspectRatio]={fragment.AspectRatio}", AttributeColor);
                 }
             }
 
             if (fragment.FontSize != SvgUnit.Empty)
             {
-                WriteLine($"{indent}{indentAttribute}[font-size]={fragment.FontSize}", ConsoleColor.DarkGray);
+                WriteLine($"{indent}{indentAttribute}[font-size]={fragment.FontSize}", AttributeColor);
             }
 
             if (!string.IsNullOrEmpty(fragment.FontFamily))
             {
-                WriteLine($"{indent}{indentAttribute}[font-family]={fragment.FontFamily}", ConsoleColor.DarkGray);
+                WriteLine($"{indent}{indentAttribute}[font-family]={fragment.FontFamily}", AttributeColor);
             }
 
             if (fragment.SpaceHandling != XmlSpaceHandling.@default && fragment.SpaceHandling != XmlSpaceHandling.inherit)
             {
-                WriteLine($"{indent}{indentAttribute}[space]={fragment.SpaceHandling}", ConsoleColor.DarkGray);
+                WriteLine($"{indent}{indentAttribute}[space]={fragment.SpaceHandling}", AttributeColor);
             }
         }
 
         internal static void PrintFragment(SvgFragment fragment, string indent = "    ", string indentAttribute = "")
         {
-            WriteLine($"{fragment}", ConsoleColor.Blue);
+            WriteLine($"{fragment}", ElementColor);
             PrintFragmentAttributes(fragment, indent, indentAttribute);
             PrintElement(fragment, indent, indentAttribute);
             ResetColor();
@@ -334,7 +335,7 @@ namespace SvgDemo
             for (int i = 0; i < args.Length; i++)
             {
                 string path = args[i];
-                WriteLine($"Path: {path}", ConsoleColor.DarkGray);
+                WriteLine($"Path: {path}", AttributeColor);
 
                 var document = SvgDocument.Open<SvgDocument>(path, null);
                 document.FlushStyles(true);
@@ -344,8 +345,8 @@ namespace SvgDemo
 
         internal static void Error(Exception ex)
         {
-            WriteLine($"{ex.Message}", ConsoleColor.Red);
-            WriteLine($"{ex.StackTrace}", ConsoleColor.DarkGray);
+            WriteLine($"{ex.Message}", ErrorColor);
+            WriteLine($"{ex.StackTrace}", AttributeColor);
             if (ex.InnerException != null)
             {
                 Error(ex.InnerException);
@@ -360,6 +361,7 @@ namespace SvgDemo
             try
             {
                 SvgDebug.Run(args);
+                Console.ReadKey();
             }
             catch (Exception ex)
             {
