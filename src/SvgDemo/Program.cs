@@ -712,7 +712,7 @@ namespace SvgDemo
                             WriteLine($"{indentLine}{indentAttribute}{IndentTab}{svgQuadraticCurveSegment}", AttributeColor);
                             break;
                         default:
-                            WriteLine($"{indentLine}{indentAttribute}{IndentTab}Unknown path segment type: {svgSegment.GetType()}", ErrorColor);
+                            WriteLine($"ERROR: Unknown path segment type: {svgSegment.GetType()}", ErrorColor);
                             break;
                     }
                 }
@@ -869,78 +869,134 @@ namespace SvgDemo
         {
             PrintSvgFilterPrimitiveAttributes(svgColourMatrix, indentLine, indentAttribute);
 
-            // TODO:
+            WriteLine($"{indentLine}{indentAttribute}type: {svgColourMatrix.Type}", AttributeColor);
+
+            if (!string.IsNullOrEmpty(svgColourMatrix.Values))
+            {
+                WriteLine($"{indentLine}{indentAttribute}values: {svgColourMatrix.Values}", AttributeColor);
+            }
         }
 
         public void PrintAttributes(SvgGaussianBlur svgGaussianBlur, string indentLine, string indentAttribute)
         {
             PrintSvgFilterPrimitiveAttributes(svgGaussianBlur, indentLine, indentAttribute);
 
-            // TODO:
+            if (svgGaussianBlur.StdDeviation > 0f)
+            {
+                WriteLine($"{indentLine}{indentAttribute}stdDeviation: {Format(svgGaussianBlur.StdDeviation)}", AttributeColor);
+            }
         }
 
         public void PrintAttributes(SvgMerge svgMerge, string indentLine, string indentAttribute)
         {
             PrintSvgFilterPrimitiveAttributes(svgMerge, indentLine, indentAttribute);
-
-            // TODO:
         }
 
         public void PrintAttributes(SvgOffset svgOffset, string indentLine, string indentAttribute)
         {
             PrintSvgFilterPrimitiveAttributes(svgOffset, indentLine, indentAttribute);
 
-            // TODO:
+            if (svgOffset.Dx != SvgUnit.None)
+            {
+                WriteLine($"{indentLine}{indentAttribute}dx: {svgOffset.Dx}", AttributeColor);
+            }
+
+            if (svgOffset.Dy != SvgUnit.None)
+            {
+                WriteLine($"{indentLine}{indentAttribute}dy: {svgOffset.Dy}", AttributeColor);
+            }
         }
 
         public void PrintSvgPaintServerServer(SvgPaintServer svgPaintServer, string attribute, string indentLine, string indentAttribute)
         {
             switch (svgPaintServer)
             {
-                case SvgColourServer colourServer:
-                    // TODO:
-                    WriteLine($"{indentLine}{indentAttribute}{attribute}: {colourServer.ToString()}", AttributeColor);
+                case SvgColourServer svgColourServer:
+                    PrintAttributes(svgColourServer, indentLine, indentAttribute, attribute);
                     break;
-                case SvgDeferredPaintServer deferredPaintServer:
-                    // TODO:
-                    WriteLine($"{indentLine}{indentAttribute}{attribute}: {deferredPaintServer.GetType()}", AttributeColor);
+                case SvgDeferredPaintServer svgDeferredPaintServer:
+                    PrintAttributes(svgDeferredPaintServer, indentLine, indentAttribute, attribute);
                     break;
-                case SvgFallbackPaintServer fallbackPaintServer:
-                    // TODO:
-                    WriteLine($"{indentLine}{indentAttribute}{attribute}: {fallbackPaintServer.GetType()}", AttributeColor);
+                case SvgFallbackPaintServer svgFallbackPaintServer:
+                    PrintAttributes(svgFallbackPaintServer, indentLine, indentAttribute, attribute);
                     break;
-                case SvgGradientServer gradientServer:
-                    // TODO:
-                    WriteLine($"{indentLine}{indentAttribute}{attribute}: {gradientServer.GetType()}", AttributeColor);
+                case SvgPatternServer svgPatternServer:
+                    PrintAttributes(svgPatternServer, indentLine, indentAttribute);
                     break;
-                case SvgPatternServer patternServer:
-                    // TODO:
-                    WriteLine($"{indentLine}{indentAttribute}{attribute}: {patternServer.GetType()}", AttributeColor);
+                case SvgLinearGradientServer svgLinearGradientServer:
+                    PrintAttributes(svgLinearGradientServer, indentLine, indentAttribute);
+                    break;
+                case SvgRadialGradientServer svgRadialGradientServer:
+                    PrintAttributes(svgRadialGradientServer, indentLine, indentAttribute);
                     break;
                 default:
-                    WriteLine($"{indentLine}{indentAttribute}Unknown paint server type: {svgPaintServer.GetType()}", ErrorColor);
+                    WriteLine($"ERROR: Unknown paint server type: {svgPaintServer.GetType()}", ErrorColor);
                     break;
             }
         }
 
-        public void PrintAttributes(SvgColourServer svgColourServer, string indentLine, string indentAttribute)
+        public void PrintAttributes(SvgColourServer svgColourServer, string indentLine, string indentAttribute, string attribute)
         {
-            // TODO:
+            WriteLine($"{indentLine}{indentAttribute}{attribute}: {svgColourServer.ToString()}", AttributeColor);
         }
 
-        public void PrintAttributes(SvgDeferredPaintServer svgDeferredPaintServer, string indentLine, string indentAttribute)
+        public void PrintAttributes(SvgDeferredPaintServer svgDeferredPaintServer, string indentLine, string indentAttribute, string attribute)
         {
-            // TODO:
+            WriteLine($"{indentLine}{indentAttribute}{attribute}: {svgDeferredPaintServer.GetType()}", AttributeColor);
         }
 
-        public void PrintAttributes(SvgFallbackPaintServer svgFallbackPaintServer, string indentLine, string indentAttribute)
+        public void PrintAttributes(SvgFallbackPaintServer svgFallbackPaintServer, string indentLine, string indentAttribute, string attribute)
         {
-            // TODO:
+            WriteLine($"{indentLine}{indentAttribute}{attribute}: {svgFallbackPaintServer.GetType()}", AttributeColor);
         }
 
         public void PrintAttributes(SvgPatternServer svgPatternServer, string indentLine, string indentAttribute)
         {
-            // TODO:
+            if (svgPatternServer.Overflow != SvgOverflow.Inherit && svgPatternServer.Overflow != SvgOverflow.Hidden)
+            {
+                WriteLine($"{indentLine}{indentAttribute}overflow: {svgPatternServer.Overflow}", AttributeColor);
+            }
+
+            if (svgPatternServer.ViewBox != SvgViewBox.Empty)
+            {
+                var viewBox = svgPatternServer.ViewBox;
+                WriteLine($"{indentLine}{indentAttribute}viewBox: {Format(viewBox.MinX)} {Format(viewBox.MinY)} {Format(viewBox.Width)} {Format(viewBox.Height)}", AttributeColor);
+            }
+
+            if (svgPatternServer.AspectRatio != null)
+            {
+                var @default = new SvgAspectRatio(SvgPreserveAspectRatio.xMidYMid);
+                if (svgPatternServer.AspectRatio.Align != @default.Align
+                 || svgPatternServer.AspectRatio.Slice != @default.Slice
+                 || svgPatternServer.AspectRatio.Defer != @default.Defer)
+                {
+                    WriteLine($"{indentLine}{indentAttribute}preserveAspectRatio: {svgPatternServer.AspectRatio}", AttributeColor);
+                }
+            }
+
+            WriteLine($"{indentLine}{indentAttribute}width: {Format(svgPatternServer.Width)}", AttributeColor);
+
+            if (svgPatternServer.PatternUnits != SvgCoordinateUnits.Inherit)
+            {
+                WriteLine($"{indentLine}{indentAttribute}patternUnits: {svgPatternServer.PatternUnits}", AttributeColor);
+            }
+
+            if (svgPatternServer.PatternContentUnits != SvgCoordinateUnits.Inherit)
+            {
+                WriteLine($"{indentLine}{indentAttribute}patternContentUnits: {svgPatternServer.PatternContentUnits}", AttributeColor);
+            }
+
+            WriteLine($"{indentLine}{indentAttribute}height: {Format(svgPatternServer.Height)}", AttributeColor);
+
+            WriteLine($"{indentLine}{indentAttribute}x: {Format(svgPatternServer.X)}", AttributeColor);
+            WriteLine($"{indentLine}{indentAttribute}y: {Format(svgPatternServer.Y)}", AttributeColor);
+
+            if (svgPatternServer.InheritGradient != null)
+            {
+                WriteLine($"{indentLine}{indentAttribute}href: {svgPatternServer.InheritGradient}", AttributeColor);
+            }
+
+            PrintSvgTransformCollection(svgPatternServer.PatternTransform, indentLine, indentAttribute, "patternTransform");
         }
 
         public void PrintSvgGradientServerAttributes(SvgGradientServer svgGradientServer, string indentLine, string indentAttribute)
@@ -1051,8 +1107,21 @@ namespace SvgDemo
                     }
                     break;
                 default:
-                    WriteLine($"{indentLine}{indentAttribute}Unknown transform type: {svgTransform.GetType()}", ErrorColor);
+                    WriteLine($"ERROR: Unknown transform type: {svgTransform.GetType()}", ErrorColor);
                     break;
+            }
+        }
+
+        public void PrintSvgTransformCollection(SvgTransformCollection svgTransformCollection, string indentLine, string indentAttribute, string attribute)
+        {
+            if (svgTransformCollection != null && svgTransformCollection.Count > 0)
+            {
+                WriteLine($"{indentLine}{indentAttribute}{attribute}:", AttributeColor);
+
+                foreach (var svgTransform in svgTransformCollection)
+                {
+                    PrintSvgTransformAttributes(svgTransform, indentLine + indentAttribute + IndentTab, indentAttribute);
+                }
             }
         }
 
@@ -1071,15 +1140,7 @@ namespace SvgDemo
 
                 // Transforms Attributes
 
-                if (svgElement.Transforms.Count > 0)
-                {
-                    WriteLine($"{indentLine}{indentAttribute}transforms:", AttributeColor);
-
-                    foreach (var svgTransform in svgElement.Transforms)
-                    {
-                        PrintSvgTransformAttributes(svgTransform, indentLine + indentAttribute + IndentTab, indentAttribute);
-                    }
-                }
+                PrintSvgTransformCollection(svgElement.Transforms, indentLine, indentAttribute, "transforms");
 
                 // Attributes
 
@@ -1344,13 +1405,13 @@ namespace SvgDemo
                     PrintAttributes(svgOffset, indentLine, indentAttribute);
                     break;
                 case SvgColourServer svgColourServer:
-                    PrintAttributes(svgColourServer, indentLine, indentAttribute);
+                    PrintAttributes(svgColourServer, indentLine, indentAttribute, null);
                     break;
                 case SvgDeferredPaintServer svgDeferredPaintServer:
-                    PrintAttributes(svgDeferredPaintServer, indentLine, indentAttribute);
+                    PrintAttributes(svgDeferredPaintServer, indentLine, indentAttribute, null);
                     break;
                 case SvgFallbackPaintServer svgFallbackPaintServer:
-                    PrintAttributes(svgFallbackPaintServer, indentLine, indentAttribute);
+                    PrintAttributes(svgFallbackPaintServer, indentLine, indentAttribute, null);
                     break;
                 case SvgPatternServer svgPatternServer:
                     PrintAttributes(svgPatternServer, indentLine, indentAttribute);
@@ -1368,7 +1429,7 @@ namespace SvgDemo
                     PrintAttributes(svgHorizontalKern, indentLine, indentAttribute);
                     break;
                 default:
-                    WriteLine($"{indentLine}Unknown elemen type: {svgElement.GetType()}", ErrorColor);
+                    WriteLine($"ERROR: Unknown elemen type: {svgElement.GetType()}", ErrorColor);
                     break;
             }
 
