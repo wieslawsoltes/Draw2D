@@ -97,6 +97,21 @@ namespace SvgDemo
         public bool PrintSvgElementChildrenEnabled { get; set; } = true;
         public bool PrintSvgElementNodesEnabled { get; set; } = true;
 
+        private string GetElementName(SvgElement svgElement)
+        {
+            var attr = TypeDescriptor.GetAttributes(svgElement).OfType<SvgElementAttribute>().SingleOrDefault();
+            if (attr != null)
+            {
+                return attr.ElementName;
+            }
+            return "unknown";
+        }
+
+        private string Format(float value)
+        {
+            return string.Format(CultureInfo.InvariantCulture, "{0}", value);
+        }
+
         public void ResetColor()
         {
             Console.ResetColor();
@@ -897,18 +912,6 @@ namespace SvgDemo
                     break;
             }
         }
-
-        private string GetElementName(SvgElement svgElement)
-        {
-            var attr = TypeDescriptor.GetAttributes(svgElement).OfType<SvgElementAttribute>().SingleOrDefault();
-            if (attr != null)
-            {
-                return attr.ElementName;
-            }
-            return "unknown";
-        }
-
-        public string Format(float value) => string.Format(CultureInfo.InvariantCulture, "{0}", value);
 
         public void PrintSvgTransformAttributes(SvgTransform svgTransform, string indentLine, string indentAttribute)
         {
