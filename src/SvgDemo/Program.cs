@@ -409,9 +409,9 @@ namespace SvgDemo
             WriteLine($"{indentLine}{indentAttribute}[y2]={svgLine.EndY}", s_attributeColor);
         }
 
-        internal static void PrintAttributes(SvgPath svgPath, string indentLine, string indentAttribute)
+        internal static void PrintAttributes(SvgPathSegmentList pathSegmentList, string indentLine, string indentAttribute)
         {
-            if (svgPath.PathData != null)
+            if (pathSegmentList != null)
             {
                 /// The <see cref="SvgPathSegment"/> object graph.
                 /// +---abstract class <see cref="SvgPathSegment"/>
@@ -421,10 +421,10 @@ namespace SvgDemo
                 ///     +---class <see cref="SvgLineSegment"/>
                 ///     +---class <see cref="SvgMoveToSegment"/>
                 ///     \---class <see cref="SvgQuadraticCurveSegment"/>
-   
+
                 WriteLine($"{indentLine}{indentAttribute}[d=", s_attributeColor);
 
-                foreach (var segment in svgPath.PathData)
+                foreach (var segment in pathSegmentList)
                 {
                     switch (segment)
                     {
@@ -454,6 +454,14 @@ namespace SvgDemo
                 }
 
                 WriteLine($"{indentLine}{indentAttribute}]", s_attributeColor);
+            }
+        }
+
+        internal static void PrintAttributes(SvgPath svgPath, string indentLine, string indentAttribute)
+        {
+            if (svgPath.PathData != null)
+            {
+                PrintAttributes(svgPath.PathData, indentLine, indentAttribute);
             }
 
             if (svgPath.PathLength != 0f)
