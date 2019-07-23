@@ -262,7 +262,7 @@ namespace SvgDemo
 
             if (svgGradientStop.StopColor != null && svgGradientStop.StopColor != SvgColourServer.NotSet)
             {
-                PrintSvgPaintServerServer(svgGradientStop.StopColor, "stop-color", indentLine, indentAttribute);
+                WriteLine($"{indentLine}{indentAttribute}stop-color: {svgGradientStop.StopColor.ToString()}", AttributeColor);
             }
 
             if (svgGradientStop.Opacity != 1f)
@@ -907,18 +907,18 @@ namespace SvgDemo
             }
         }
 
-        public void PrintSvgPaintServerServer(SvgPaintServer svgPaintServer, string attribute, string indentLine, string indentAttribute)
+        public void PrintSvgPaintServerServer(SvgPaintServer svgPaintServer, string indentLine, string indentAttribute)
         {
             switch (svgPaintServer)
             {
                 case SvgColourServer svgColourServer:
-                    PrintAttributes(svgColourServer, indentLine, indentAttribute, attribute);
+                    PrintAttributes(svgColourServer, indentLine, indentAttribute);
                     break;
                 case SvgDeferredPaintServer svgDeferredPaintServer:
-                    PrintAttributes(svgDeferredPaintServer, indentLine, indentAttribute, attribute);
+                    PrintAttributes(svgDeferredPaintServer, indentLine, indentAttribute);
                     break;
                 case SvgFallbackPaintServer svgFallbackPaintServer:
-                    PrintAttributes(svgFallbackPaintServer, indentLine, indentAttribute, attribute);
+                    PrintAttributes(svgFallbackPaintServer, indentLine, indentAttribute);
                     break;
                 case SvgPatternServer svgPatternServer:
                     PrintAttributes(svgPatternServer, indentLine, indentAttribute);
@@ -935,19 +935,19 @@ namespace SvgDemo
             }
         }
 
-        public void PrintAttributes(SvgColourServer svgColourServer, string indentLine, string indentAttribute, string attribute)
+        public void PrintAttributes(SvgColourServer svgColourServer, string indentLine, string indentAttribute)
         {
-            WriteLine($"{indentLine}{indentAttribute}{attribute}: {svgColourServer.ToString()}", AttributeColor);
+            WriteLine($"{indentLine}{indentAttribute}: {svgColourServer.ToString()}", AttributeColor);
         }
 
-        public void PrintAttributes(SvgDeferredPaintServer svgDeferredPaintServer, string indentLine, string indentAttribute, string attribute)
+        public void PrintAttributes(SvgDeferredPaintServer svgDeferredPaintServer, string indentLine, string indentAttribute)
         {
-            WriteLine($"{indentLine}{indentAttribute}{attribute}: {svgDeferredPaintServer.GetType()}", AttributeColor);
+            WriteLine($"{indentLine}{indentAttribute}: {svgDeferredPaintServer.GetType()}", AttributeColor);
         }
 
-        public void PrintAttributes(SvgFallbackPaintServer svgFallbackPaintServer, string indentLine, string indentAttribute, string attribute)
+        public void PrintAttributes(SvgFallbackPaintServer svgFallbackPaintServer, string indentLine, string indentAttribute)
         {
-            WriteLine($"{indentLine}{indentAttribute}{attribute}: {svgFallbackPaintServer.GetType()}", AttributeColor);
+            WriteLine($"{indentLine}{indentAttribute}: {svgFallbackPaintServer.GetType()}", AttributeColor);
         }
 
         public void PrintAttributes(SvgPatternServer svgPatternServer, string indentLine, string indentAttribute)
@@ -1156,19 +1156,19 @@ namespace SvgDemo
 
                 if (svgElement.Color != null && svgElement.Color != SvgColourServer.NotSet)
                 {
-                    PrintSvgPaintServerServer(svgElement.Color, "color", indentLine, indentAttribute);
+                    WriteLine($"{indentLine}{indentAttribute}color: {svgElement.Color.ToString()}", AttributeColor);
                 }
 
                 // Style Attributes
 
                 if (svgElement.Fill != null && svgElement.Fill != SvgColourServer.NotSet)
                 {
-                    PrintSvgPaintServerServer(svgElement.Fill, "fill", indentLine, indentAttribute);
+                    WriteLine($"{indentLine}{indentAttribute}fill: {svgElement.Fill.ToString()}", AttributeColor);
                 }
 
                 if (svgElement.Stroke != null)
                 {
-                    PrintSvgPaintServerServer(svgElement.Stroke, "stroke", indentLine, indentAttribute);
+                    WriteLine($"{indentLine}{indentAttribute}stroke: {svgElement.Stroke.ToString()}", AttributeColor);
                 }
 
                 if (svgElement.FillRule != SvgFillRule.NonZero)
@@ -1218,7 +1218,7 @@ namespace SvgDemo
 
                 if (svgElement.StopColor != null)
                 {
-                    PrintSvgPaintServerServer(svgElement.StopColor, "stop-color", indentLine, indentAttribute);
+                    WriteLine($"{indentLine}{indentAttribute}stop-color: {svgElement.StopColor.ToString()}", AttributeColor);
                 }
 
                 if (svgElement.Opacity != 1f)
@@ -1405,13 +1405,13 @@ namespace SvgDemo
                     PrintAttributes(svgOffset, indentLine, indentAttribute);
                     break;
                 case SvgColourServer svgColourServer:
-                    PrintAttributes(svgColourServer, indentLine, indentAttribute, null);
+                    PrintAttributes(svgColourServer, indentLine, indentAttribute);
                     break;
                 case SvgDeferredPaintServer svgDeferredPaintServer:
-                    PrintAttributes(svgDeferredPaintServer, indentLine, indentAttribute, null);
+                    PrintAttributes(svgDeferredPaintServer, indentLine, indentAttribute);
                     break;
                 case SvgFallbackPaintServer svgFallbackPaintServer:
-                    PrintAttributes(svgFallbackPaintServer, indentLine, indentAttribute, null);
+                    PrintAttributes(svgFallbackPaintServer, indentLine, indentAttribute);
                     break;
                 case SvgPatternServer svgPatternServer:
                     PrintAttributes(svgPatternServer, indentLine, indentAttribute);
