@@ -250,7 +250,7 @@ namespace SvgDemo
 
         public void PrintAttributes(NonSvgElement nonSvgElement, string indentLine, string indentAttribute)
         {
-            // TODO:
+            WriteLine($"{indentLine}{indentAttribute}Name: {nonSvgElement.Name}", AttributeColor);
         }
 
         public void PrintAttributes(SvgGradientStop svgGradientStop, string indentLine, string indentAttribute)
