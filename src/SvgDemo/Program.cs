@@ -631,6 +631,8 @@ namespace SvgDemo
                             break;
                     }
                 }
+
+                WriteLine($"", AttributeColor);
             }
         }
 
@@ -880,12 +882,14 @@ namespace SvgDemo
 
                 if (svgElement.Transforms.Count > 0)
                 {
-                    WriteLine($"{indentLine}{indentAttribute}transform:", AttributeColor);
+                    WriteLine($"{indentLine}{indentAttribute}transform: |", AttributeColor);
 
                     foreach (var transform in svgElement.Transforms)
                     {
                         WriteLine($"{indentLine}{indentAttribute}{IndentTab}{transform}", AttributeColor);
                     }
+
+                    WriteLine($"", AttributeColor);
                 }
 
                 // Attributes
@@ -1197,6 +1201,8 @@ namespace SvgDemo
                 {
                     WriteLine($"{indentLine}{indentAttribute}{node.Content}", AttributeColor);
                 }
+
+                WriteLine($"", AttributeColor);
             }
 
             if (PrintSvgElementChildrenEnabled && svgElement.Children.Count > 0)
