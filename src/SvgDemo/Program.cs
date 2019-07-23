@@ -467,6 +467,11 @@ namespace SvgDemo
             // TODO:
         }
 
+        internal static void PrintAttributes(SvgPolyline svgPolyline, string indentLine, string indentAttribute)
+        {
+            // TODO:
+        }
+
         internal static void PrintAttributes(SvgText svgText, string indentLine, string indentAttribute)
         {
             // TODO:
@@ -587,6 +592,7 @@ namespace SvgDemo
             /// |       |       +---class <see cref="SvgLine"/>
             /// |       |       +---class <see cref="SvgPath"/>
             /// |       |       \---class <see cref="SvgPolygon"/>
+            /// |       |           \---class <see cref="SvgPolyline"/>
             /// |       \---abstract class <see cref="SvgTextBase"/>
             /// |           +----class <see cref="SvgText"/>
             /// |           +----class <see cref="SvgTextPath"/>
@@ -700,6 +706,9 @@ namespace SvgDemo
                     break;
                 case SvgPath svgPath:
                     PrintAttributes(svgPath, indentLine, indentAttribute);
+                    break;
+                case SvgPolyline svgPolyline:
+                    PrintAttributes(svgPolyline, indentLine, indentAttribute);
                     break;
                 case SvgPolygon svgPolygon:
                     PrintAttributes(svgPolygon, indentLine, indentAttribute);
