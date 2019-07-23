@@ -218,7 +218,14 @@ namespace SvgDemo
 
         public void PrintAttributes(SvgTitle svgTitle, string indentLine, string indentAttribute)
         {
-            // TODO:
+            if (!string.IsNullOrEmpty(svgTitle.Content))
+            {
+                if (svgTitle.Children.Count == 0)
+                {
+                    WriteLine($"{indentLine}{indentAttribute}Content: |", AttributeColor);
+                    WriteLine($"{indentLine}{indentAttribute}{IndentTab}{svgTitle.Content}", AttributeColor);
+                }
+            }
         }
 
         public void PrintAttributes(SvgMergeNode svgMergeNode, string indentLine, string indentAttribute)
