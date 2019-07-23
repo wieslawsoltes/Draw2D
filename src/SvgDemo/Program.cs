@@ -1,9 +1,16 @@
 ﻿using System;
 using Svg;
+using Svg.Css;
 using Svg.DataTypes;
+using Svg.ExCSS;
+using Svg.ExCSS.Model;
+using Svg.ExCSS.Model.Extensions;
+using Svg.Exceptions;
+using Svg.ExtensionMethods;
 using Svg.Document_Structure;
 using Svg.FilterEffects;
 using Svg.Pathing;
+using Svg.Transforms;
 
 namespace SvgDemo
 {
