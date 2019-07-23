@@ -854,7 +854,15 @@ namespace SvgDemo
 
         public void PrintSvgFilterPrimitiveAttributes(SvgFilterPrimitive svgFilterPrimitive, string indentLine, string indentAttribute)
         {
-            // TODO:
+            if (!string.IsNullOrEmpty(svgFilterPrimitive.Input))
+            {
+                WriteLine($"{indentLine}{indentAttribute}in: {svgFilterPrimitive.Input}", AttributeColor);
+            }
+
+            if (!string.IsNullOrEmpty(svgFilterPrimitive.Result))
+            {
+                WriteLine($"{indentLine}{indentAttribute}result: {svgFilterPrimitive.Result}", AttributeColor);
+            }
         }
 
         public void PrintAttributes(SvgColourMatrix svgColourMatrix, string indentLine, string indentAttribute)
