@@ -237,7 +237,15 @@ namespace SvgDemo
 
         public void PrintAttributes(SvgFilter svgFilter, string indentLine, string indentAttribute)
         {
-            // TODO:
+            WriteLine($"{indentLine}{indentAttribute}x: {Format(svgFilter.X)}", AttributeColor);
+            WriteLine($"{indentLine}{indentAttribute}y: {Format(svgFilter.Y)}", AttributeColor);
+            WriteLine($"{indentLine}{indentAttribute}width: {Format(svgFilter.Width)}", AttributeColor);
+            WriteLine($"{indentLine}{indentAttribute}height: {Format(svgFilter.Height)}", AttributeColor);
+
+            if (svgFilter.ColorInterpolationFilters != SvgColourInterpolation.Inherit)
+            {
+                WriteLine($"{indentLine}{indentAttribute}color-interpolation-filters: {svgFilter.ColorInterpolationFilters}", AttributeColor);
+            }
         }
 
         public void PrintAttributes(NonSvgElement nonSvgElement, string indentLine, string indentAttribute)
