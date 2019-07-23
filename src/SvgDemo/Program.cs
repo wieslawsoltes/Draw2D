@@ -239,7 +239,7 @@ namespace SvgDemo
 
                 foreach (var child in element.Children)
                 {
-                    WriteLine($"{indentLine}{child}", s_elementColor);
+                    WriteLine($"{indentLine}{child.GetType()}", s_elementColor);
                     PrintSvgElement(child, indentLine + "    ", indentAttribute);
                 }
             }
@@ -1107,7 +1107,7 @@ namespace SvgDemo
 
         internal static void PrintSvgFragment(SvgFragment fragment, string indentLine, string indentAttribute)
         {
-            WriteLine($"{fragment}", s_elementColor);
+            WriteLine($"{fragment.GetType()}", s_elementColor);
             PrintSvgFragmentAttributes(fragment, indentLine, indentAttribute);
             PrintSvgElement(fragment, indentLine, indentAttribute);
             ResetColor();
