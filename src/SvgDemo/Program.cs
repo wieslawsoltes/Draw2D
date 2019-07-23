@@ -255,7 +255,20 @@ namespace SvgDemo
 
         public void PrintAttributes(SvgGradientStop svgGradientStop, string indentLine, string indentAttribute)
         {
-            // TODO:
+            if (svgGradientStop.Offset != SvgUnit.None)
+            {
+                WriteLine($"{indentLine}{indentAttribute}offset: {svgGradientStop.Offset}", AttributeColor);
+            }
+
+            if (svgGradientStop.StopColor != null && svgGradientStop.StopColor != SvgColourServer.NotSet)
+            {
+                PrintSvgPaintServerServer(svgGradientStop.StopColor, "stop-color", indentLine, indentAttribute);
+            }
+
+            if (svgGradientStop.Opacity != 1f)
+            {
+                WriteLine($"{indentLine}{indentAttribute}stop-opacity: {Format(svgGradientStop.Opacity)}", AttributeColor);
+            }
         }
 
         public void PrintAttributes(SvgUnknownElement svgUnknownElement, string indentLine, string indentAttribute)
