@@ -1020,21 +1020,40 @@ namespace SvgDemo
 
         public void PrintSvgKernAttributes(SvgKern svgKern, string indentLine, string indentAttribute)
         {
-            // TODO:
+            if (!string.IsNullOrEmpty(svgKern.Glyph1))
+            {
+                WriteLine($"{indentLine}{indentAttribute}g1: {svgKern.Glyph1}", AttributeColor);
+            }
+
+            if (!string.IsNullOrEmpty(svgKern.Glyph2))
+            {
+                WriteLine($"{indentLine}{indentAttribute}g2: {svgKern.Glyph2}", AttributeColor);
+            }
+
+            if (!string.IsNullOrEmpty(svgKern.Unicode1))
+            {
+                WriteLine($"{indentLine}{indentAttribute}u1: {svgKern.Unicode1}", AttributeColor);
+            }
+
+            if (!string.IsNullOrEmpty(svgKern.Unicode2))
+            {
+                WriteLine($"{indentLine}{indentAttribute}u2: {svgKern.Unicode2}", AttributeColor);
+            }
+
+            if (svgKern.Kerning != 0f)
+            {
+                WriteLine($"{indentLine}{indentAttribute}k: {Format(svgKern.Kerning)}", AttributeColor);
+            }
         }
 
         public void PrintAttributes(SvgVerticalKern svgVerticalKern, string indentLine, string indentAttribute)
         {
             PrintSvgKernAttributes(svgVerticalKern, indentLine, indentAttribute);
-
-            // TODO:
         }
 
         public void PrintAttributes(SvgHorizontalKern svgHorizontalKern, string indentLine, string indentAttribute)
         {
             PrintSvgKernAttributes(svgHorizontalKern, indentLine, indentAttribute);
-
-            // TODO:
         }
 
         public void PrintSvgTransformAttributes(SvgTransform svgTransform, string indentLine, string indentAttribute)
