@@ -1219,9 +1219,12 @@ namespace SvgDemo
                 WriteLine($"Path: {path}", s_groupColor);
 
                 var svgDocument = SvgDocument.Open<SvgDocument>(path, null);
-                svgDocument.FlushStyles(true);
-                PrintSvgElement(svgDocument, s_indentTab, "");
-                ResetColor();
+                if (svgDocument != null)
+                {
+                    svgDocument.FlushStyles(true);
+                    PrintSvgElement(svgDocument, s_indentTab, "");
+                    ResetColor();
+                }
             }
         }
 
