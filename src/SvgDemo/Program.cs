@@ -596,9 +596,7 @@ namespace SvgDemo
         {
             if (svgPathSegmentList != null)
             {
-                WriteLine($"{indentLine}{indentAttribute}d:", AttributeColor);
-
-                string segmentIndent = "   ";
+                WriteLine($"{indentLine}{indentAttribute}d: [", AttributeColor);
 
                 foreach (var svgSegment in svgPathSegmentList)
                 {
@@ -606,33 +604,35 @@ namespace SvgDemo
                     {
                         case SvgArcSegment svgArcSegment:
                             // TODO:
-                            WriteLine($"{indentLine}{indentAttribute}{segmentIndent}{indentAttribute}", AttributeColor);
+                            WriteLine($"{indentLine}{indentAttribute}{IndentTab}{indentAttribute}", AttributeColor);
                             break;
                         case SvgClosePathSegment svgClosePathSegment:
                             // TODO:
-                            WriteLine($"{indentLine}{indentAttribute}{segmentIndent}{svgClosePathSegment}", AttributeColor);
+                            WriteLine($"{indentLine}{indentAttribute}{IndentTab}{svgClosePathSegment}", AttributeColor);
                             break;
                         case SvgCubicCurveSegment svgCubicCurveSegment:
                             // TODO:
-                            WriteLine($"{indentLine}{indentAttribute}{segmentIndent}{svgCubicCurveSegment}", AttributeColor);
+                            WriteLine($"{indentLine}{indentAttribute}{IndentTab}{svgCubicCurveSegment}", AttributeColor);
                             break;
                         case SvgLineSegment svgLineSegment:
                             // TODO:
-                            WriteLine($"{indentLine}{indentAttribute}{segmentIndent}{svgLineSegment}", AttributeColor);
+                            WriteLine($"{indentLine}{indentAttribute}{IndentTab}{svgLineSegment}", AttributeColor);
                             break;
                         case SvgMoveToSegment svgMoveToSegment:
                             // TODO:
-                            WriteLine($"{indentLine}{indentAttribute}{segmentIndent}{svgMoveToSegment}", AttributeColor);
+                            WriteLine($"{indentLine}{indentAttribute}{IndentTab}{svgMoveToSegment}", AttributeColor);
                             break;
                         case SvgQuadraticCurveSegment svgQuadraticCurveSegment:
                             // TODO:
-                            WriteLine($"{indentLine}{indentAttribute}{segmentIndent}{svgQuadraticCurveSegment}", AttributeColor);
+                            WriteLine($"{indentLine}{indentAttribute}{IndentTab}{svgQuadraticCurveSegment}", AttributeColor);
                             break;
                         default:
-                            WriteLine($"{indentLine}{indentAttribute}{segmentIndent}Unknown path segment type: {svgSegment.GetType()}", ErrorColor);
+                            WriteLine($"{indentLine}{indentAttribute}{IndentTab}Unknown path segment type: {svgSegment.GetType()}", ErrorColor);
                             break;
                     }
                 }
+
+                WriteLine($"{indentLine}{indentAttribute}]", AttributeColor);
             }
         }
 
@@ -862,33 +862,35 @@ namespace SvgDemo
             {
                 return attr.ElementName;
             }
-            return "??";
+            return "unknown";
         }
 
         public void PrintSvgElement(SvgElement svgElement, string indentLine, string indentAttribute)
         {
-            WriteLine($"{indentLine}{GetElementName(svgElement)}", ElementColor);
+            string elementIndent = indentLine;
+
+            WriteLine($"{elementIndent}{GetElementName(svgElement)}: {{", ElementColor);
             WriteLine($"{indentLine}{indentAttribute}type: {svgElement.GetType().Name}", AttributeColor);
 
             indentLine += IndentTab;
 
             if (PrintSvgElementAttributesEnabled)
             {
-                WriteLine($"{indentLine}Attributes {{", HeaderColor);
+                WriteLine($"{indentLine}Attributes: [", HeaderColor);
 
                 // Transforms Attributes
 
                 if (svgElement.Transforms.Count > 0)
                 {
                     WriteLine($"{indentLine}{indentAttribute}<Transforms>", HeaderColor);
-                    WriteLine($"{indentLine}{indentAttribute}transform:", AttributeColor);
-
-                    string transformIndent = "           ";
+                    WriteLine($"{indentLine}{indentAttribute}transform: [", AttributeColor);
 
                     foreach (var transform in svgElement.Transforms)
                     {
-                        WriteLine($"{indentLine}{indentAttribute}{transformIndent}{transform}", AttributeColor);
+                        WriteLine($"{indentLine}{indentAttribute}{IndentTab}{transform}", AttributeColor);
                     }
+
+                    WriteLine($"{indentLine}{indentAttribute}]", AttributeColor);
                 }
 
                 // Attributes
@@ -1184,44 +1186,46 @@ namespace SvgDemo
 
             if (PrintSvgElementAttributesEnabled)
             {
-                WriteLine($"{indentLine}}}", HeaderColor);
+                WriteLine($"{indentLine}]", HeaderColor);
             }
 
             if (PrintSvgElementCustomAttributesEnabled && svgElement.CustomAttributes.Count > 0)
             {
-                WriteLine($"{indentLine}CustomAttributes {{", HeaderColor);
+                WriteLine($"{indentLine}CustomAttributes: [", HeaderColor);
 
                 foreach (var attribute in svgElement.CustomAttributes)
                 {
                     WriteLine($"{indentLine}{indentAttribute}{attribute.Key}: {attribute.Value}", AttributeColor);
                 }
 
-                WriteLine($"{indentLine}}}", HeaderColor);
+                WriteLine($"{indentLine}]", HeaderColor);
             }
 
             if (PrintSvgElementNodesEnabled && svgElement.Nodes.Count > 0)
             {
-                WriteLine($"{indentLine}Nodes {{", HeaderColor);
+                WriteLine($"{indentLine}Nodes: [", HeaderColor);
 
                 foreach (var node in svgElement.Nodes)
                 {
                     WriteLine($"{indentLine}{indentAttribute}{node.Content}", AttributeColor);
                 }
 
-                WriteLine($"{indentLine}}}", HeaderColor);
+                WriteLine($"{indentLine}]", HeaderColor);
             }
 
             if (PrintSvgElementChildrenEnabled && svgElement.Children.Count > 0)
             {
-                WriteLine($"{indentLine}Children {{", HeaderColor);
+                WriteLine($"{indentLine}Children: [", HeaderColor);
 
                 foreach (var child in svgElement.Children)
                 {
                     PrintSvgElement(child, indentLine + IndentTab, indentAttribute);
                 }
 
-                WriteLine($"{indentLine}}}", HeaderColor);
+                WriteLine($"{indentLine}]", HeaderColor);
             }
+
+            WriteLine($"{elementIndent}}}", ElementColor);
         }
 
         public void Run(string[] args)
