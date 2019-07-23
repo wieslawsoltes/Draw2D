@@ -1149,13 +1149,14 @@ namespace SvgDemo
             string elementIndent = indentLine;
 
             WriteLine($"{elementIndent}{GetElementName(svgElement)}:", ElementColor);
-            WriteLine($"{indentLine}{indentAttribute}type: {svgElement.GetType().Name}", AttributeColor);
 
             indentLine += IndentTab;
 
+            WriteLine($"{indentLine}{indentAttribute}type: {svgElement.GetType().Name}", AttributeColor);
+
             if (PrintSvgElementAttributesEnabled)
             {
-                WriteLine($"{indentLine}Attributes:", HeaderColor);
+                // Attributes
 
                 // Transforms Attributes
 
@@ -1454,7 +1455,7 @@ namespace SvgDemo
 
             if (PrintSvgElementCustomAttributesEnabled && svgElement.CustomAttributes.Count > 0)
             {
-                WriteLine($"{indentLine}CustomAttributes:", HeaderColor);
+                // CustomAttributes
 
                 foreach (var attribute in svgElement.CustomAttributes)
                 {
@@ -1464,7 +1465,7 @@ namespace SvgDemo
 
             if (PrintSvgElementNodesEnabled && svgElement.Nodes.Count > 0)
             {
-                WriteLine($"{indentLine}Nodes: |", HeaderColor);
+                WriteLine($"{indentLine}nodes: |", HeaderColor);
 
                 foreach (var node in svgElement.Nodes)
                 {
@@ -1474,7 +1475,7 @@ namespace SvgDemo
 
             if (PrintSvgElementChildrenEnabled && svgElement.Children.Count > 0)
             {
-                WriteLine($"{indentLine}Children:", HeaderColor);
+                WriteLine($"{indentLine}children:", HeaderColor);
 
                 foreach (var child in svgElement.Children)
                 {
@@ -1499,7 +1500,7 @@ namespace SvgDemo
                 if (svgDocument != null)
                 {
                     svgDocument.FlushStyles(true);
-                    PrintSvgElement(svgDocument, "", IndentTab);
+                    PrintSvgElement(svgDocument, "", "");
                     ResetColor();
                 }
             }
