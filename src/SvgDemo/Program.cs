@@ -68,11 +68,13 @@ namespace SvgDemo
             if (element.Transforms.Count > 0)
             {
                 WriteLine($"{indentLine}{indentAttribute}<Transforms>", s_groupColor);
-                WriteLine($"{indentLine}{indentAttribute}[transform]", s_attributeColor);
+                WriteLine($"{indentLine}{indentAttribute}[transform]=", s_attributeColor);
+
+                string transformIndent = "            ";
 
                 foreach (var transform in element.Transforms)
                 {
-                    WriteLine($"{indentLine}{indentAttribute}{transform}", s_attributeColor);
+                    WriteLine($"{indentLine}{indentAttribute}{transformIndent}{transform}", s_attributeColor);
                 }
             }
 
@@ -336,33 +338,90 @@ namespace SvgDemo
             // TODO:
         }
 
+        internal static void PrintSvgVisualElementAttributes(SvgVisualElement svgVisualElement, string indentLine, string indentAttribute)
+        {
+            if (!string.IsNullOrEmpty(svgVisualElement.Clip))
+            {
+                WriteLine($"{indentLine}{indentAttribute}[clip]={svgVisualElement.Clip}", s_attributeColor);
+            }
+
+            if (svgVisualElement.ClipPath != null)
+            {
+                WriteLine($"{indentLine}{indentAttribute}[clip-path]={svgVisualElement.ClipPath}", s_attributeColor);
+            }
+
+            if (svgVisualElement.ClipRule != SvgClipRule.NonZero)
+            {
+                WriteLine($"{indentLine}{indentAttribute}[clip-rule]={svgVisualElement.ClipRule}", s_attributeColor);
+            }
+
+            if (svgVisualElement.Filter != null)
+            {
+                WriteLine($"{indentLine}{indentAttribute}[filter]={svgVisualElement.Filter}", s_attributeColor);
+            }
+
+            // Style
+
+            if (svgVisualElement.Visible != true)
+            {
+                WriteLine($"{indentLine}{indentAttribute}[visibility]={svgVisualElement.Visible}", s_attributeColor);
+            }
+
+            if (!string.IsNullOrEmpty(svgVisualElement.Display))
+            {
+                WriteLine($"{indentLine}{indentAttribute}[display]={svgVisualElement.Display}", s_attributeColor);
+            }
+
+            if (!string.IsNullOrEmpty(svgVisualElement.EnableBackground))
+            {
+                WriteLine($"{indentLine}{indentAttribute}[enable-background]={svgVisualElement.EnableBackground}", s_attributeColor);
+            }
+        }
+
         internal static void PrintAttributes(SvgImage svgImage, string indentLine, string indentAttribute)
         {
+            PrintSvgVisualElementAttributes(svgImage, indentLine, indentAttribute);
+
             // TODO:
         }
 
         internal static void PrintAttributes(SvgSwitch svgSwitch, string indentLine, string indentAttribute)
         {
+            PrintSvgVisualElementAttributes(svgSwitch, indentLine, indentAttribute);
+
             // TODO:
         }
 
         internal static void PrintAttributes(SvgSymbol svgSymbol, string indentLine, string indentAttribute)
         {
+            PrintSvgVisualElementAttributes(svgSymbol, indentLine, indentAttribute);
+
             // TODO:
         }
 
         internal static void PrintAttributes(SvgUse svgUse, string indentLine, string indentAttribute)
         {
+            PrintSvgVisualElementAttributes(svgUse, indentLine, indentAttribute);
+
             // TODO:
         }
 
         internal static void PrintAttributes(SvgForeignObject svgForeignObject, string indentLine, string indentAttribute)
         {
+            PrintSvgVisualElementAttributes(svgForeignObject, indentLine, indentAttribute);
+
             // TODO:
+        }
+
+        internal static void PrintSvgPathBasedElementAttributes(SvgPathBasedElement svgPathBasedElement, string indentLine, string indentAttribute)
+        {
+            PrintSvgVisualElementAttributes(svgPathBasedElement, indentLine, indentAttribute);
         }
 
         internal static void PrintAttributes(SvgCircle svgCircle, string indentLine, string indentAttribute)
         {
+            PrintSvgPathBasedElementAttributes(svgCircle, indentLine, indentAttribute);
+
             WriteLine($"{indentLine}{indentAttribute}[cx]={svgCircle.CenterX}", s_attributeColor);
             WriteLine($"{indentLine}{indentAttribute}[cy]={svgCircle.CenterY}", s_attributeColor);
             WriteLine($"{indentLine}{indentAttribute}[r]={svgCircle.Radius}", s_attributeColor);
@@ -370,6 +429,8 @@ namespace SvgDemo
 
         internal static void PrintAttributes(SvgEllipse svgEllipse, string indentLine, string indentAttribute)
         {
+            PrintSvgPathBasedElementAttributes(svgEllipse, indentLine, indentAttribute);
+
             WriteLine($"{indentLine}{indentAttribute}[cx]={svgEllipse.CenterX}", s_attributeColor);
             WriteLine($"{indentLine}{indentAttribute}[cy]={svgEllipse.CenterY}", s_attributeColor);
             WriteLine($"{indentLine}{indentAttribute}[rx]={svgEllipse.RadiusX}", s_attributeColor);
@@ -378,6 +439,8 @@ namespace SvgDemo
 
         internal static void PrintAttributes(SvgRectangle svgRectangle, string indentLine, string indentAttribute)
         {
+            PrintSvgPathBasedElementAttributes(svgRectangle, indentLine, indentAttribute);
+
             WriteLine($"{indentLine}{indentAttribute}[x]={svgRectangle.X}", s_attributeColor);
             WriteLine($"{indentLine}{indentAttribute}[y]={svgRectangle.Y}", s_attributeColor);
             WriteLine($"{indentLine}{indentAttribute}[width]={svgRectangle.Width}", s_attributeColor);
@@ -388,21 +451,49 @@ namespace SvgDemo
 
         internal static void PrintAttributes(SvgMarker svgMarker, string indentLine, string indentAttribute)
         {
+            PrintSvgPathBasedElementAttributes(svgMarker, indentLine, indentAttribute);
+
             // TODO:
         }
 
         internal static void PrintAttributes(SvgGlyph svgGlyph, string indentLine, string indentAttribute)
         {
+            PrintSvgPathBasedElementAttributes(svgGlyph, indentLine, indentAttribute);
+
             // TODO:
+        }
+
+        internal static void PrintSvgMarkerElementAttributes(SvgMarkerElement svgMarkerElement, string indentLine, string indentAttribute)
+        {
+            PrintSvgPathBasedElementAttributes(svgMarkerElement, indentLine, indentAttribute);
+
+            if (svgMarkerElement.MarkerEnd != null)
+            {
+                WriteLine($"{indentLine}{indentAttribute}[marker-end]={svgMarkerElement.MarkerEnd}", s_attributeColor);
+            }
+
+            if (svgMarkerElement.MarkerMid != null)
+            {
+                WriteLine($"{indentLine}{indentAttribute}[marker-mid]={svgMarkerElement.MarkerMid}", s_attributeColor);
+            }
+
+            if (svgMarkerElement.MarkerStart != null)
+            {
+                WriteLine($"{indentLine}{indentAttribute}[marker-start]={svgMarkerElement.MarkerStart}", s_attributeColor);
+            }
         }
 
         internal static void PrintAttributes(SvgGroup svgGroup, string indentLine, string indentAttribute)
         {
+            PrintSvgMarkerElementAttributes(svgGroup, indentLine, indentAttribute);
+
             // TODO:
         }
 
         internal static void PrintAttributes(SvgLine svgLine, string indentLine, string indentAttribute)
         {
+            PrintSvgMarkerElementAttributes(svgLine, indentLine, indentAttribute);
+
             WriteLine($"{indentLine}{indentAttribute}[x1]={svgLine.StartX}", s_attributeColor);
             WriteLine($"{indentLine}{indentAttribute}[y1]={svgLine.StartY}", s_attributeColor);
             WriteLine($"{indentLine}{indentAttribute}[x2]={svgLine.EndX}", s_attributeColor);
@@ -422,7 +513,9 @@ namespace SvgDemo
                 ///     +---class <see cref="SvgMoveToSegment"/>
                 ///     \---class <see cref="SvgQuadraticCurveSegment"/>
 
-                WriteLine($"{indentLine}{indentAttribute}[d=", s_attributeColor);
+                WriteLine($"{indentLine}{indentAttribute}[d]=", s_attributeColor);
+
+                string segmentIndent = "    ";
 
                 foreach (var segment in pathSegmentList)
                 {
@@ -450,15 +543,15 @@ namespace SvgDemo
                             break;
                     }
 
-                    WriteLine($"{indentLine}{indentAttribute}   {segment}", s_attributeColor);
+                    WriteLine($"{indentLine}{indentAttribute}{segmentIndent}{segment}", s_attributeColor);
                 }
-
-                WriteLine($"{indentLine}{indentAttribute}]", s_attributeColor);
             }
         }
 
         internal static void PrintAttributes(SvgPath svgPath, string indentLine, string indentAttribute)
         {
+            PrintSvgMarkerElementAttributes(svgPath, indentLine, indentAttribute);
+
             if (svgPath.PathData != null)
             {
                 PrintAttributes(svgPath.PathData, indentLine, indentAttribute);
@@ -472,32 +565,116 @@ namespace SvgDemo
 
         internal static void PrintAttributes(SvgPolygon svgPolygon, string indentLine, string indentAttribute)
         {
+            PrintSvgMarkerElementAttributes(svgPolygon, indentLine, indentAttribute);
+
             WriteLine($"{indentLine}{indentAttribute}[points]={svgPolygon.Points}", s_attributeColor);
         }
 
         internal static void PrintAttributes(SvgPolyline svgPolyline, string indentLine, string indentAttribute)
         {
+            PrintSvgMarkerElementAttributes(svgPolyline, indentLine, indentAttribute);
+
             WriteLine($"{indentLine}{indentAttribute}[points]={svgPolyline.Points}", s_attributeColor);
+        }
+
+        internal static void PrintSvgTextBaseAttributes(SvgTextBase svgTextBase, string indentLine, string indentAttribute)
+        {
+            PrintSvgVisualElementAttributes(svgTextBase, indentLine, indentAttribute);
+
+            if (!string.IsNullOrEmpty(svgTextBase.Text))
+            {
+                WriteLine($"{indentLine}{indentAttribute}[Content]={svgTextBase.Text}", s_attributeColor);
+            }
+
+            if (svgTextBase.X != null && svgTextBase.X.Count > 0)
+            {
+                WriteLine($"{indentLine}{indentAttribute}[x]={svgTextBase.X}", s_attributeColor);
+            }
+
+            if (svgTextBase.Dx != null && svgTextBase.Dx.Count > 0)
+            {
+                WriteLine($"{indentLine}{indentAttribute}[dx]={svgTextBase.Dx}", s_attributeColor);
+            }
+
+            if (svgTextBase.Y != null && svgTextBase.Y.Count > 0)
+            {
+                WriteLine($"{indentLine}{indentAttribute}[y]={svgTextBase.Y}", s_attributeColor);
+            }
+
+            if (svgTextBase.Dy != null && svgTextBase.Dy.Count > 0)
+            {
+                WriteLine($"{indentLine}{indentAttribute}[dy]={svgTextBase.Dy}", s_attributeColor);
+            }
+
+            if (!string.IsNullOrEmpty(svgTextBase.Rotate))
+            {
+                WriteLine($"{indentLine}{indentAttribute}[rotate]={svgTextBase.Rotate}", s_attributeColor);
+            }
+
+            if (svgTextBase.TextLength != SvgUnit.None)
+            {
+                WriteLine($"{indentLine}{indentAttribute}[textLength]={svgTextBase.TextLength}", s_attributeColor);
+            }
+
+            if (svgTextBase.LengthAdjust != SvgTextLengthAdjust.Spacing)
+            {
+                WriteLine($"{indentLine}{indentAttribute}[lengthAdjust]={svgTextBase.LengthAdjust}", s_attributeColor);
+            }
+
+            if (svgTextBase.LetterSpacing != SvgUnit.None)
+            {
+                WriteLine($"{indentLine}{indentAttribute}[letter-spacing]={svgTextBase.LetterSpacing}", s_attributeColor);
+            }
+
+            if (svgTextBase.WordSpacing != SvgUnit.None)
+            {
+                WriteLine($"{indentLine}{indentAttribute}[word-spacing]={svgTextBase.WordSpacing}", s_attributeColor);
+            }
         }
 
         internal static void PrintAttributes(SvgText svgText, string indentLine, string indentAttribute)
         {
-            // TODO:
+            PrintSvgTextBaseAttributes(svgText, indentLine, indentAttribute);
         }
 
         internal static void PrintAttributes(SvgTextPath svgTextPath, string indentLine, string indentAttribute)
         {
-            // TODO:
+            PrintSvgTextBaseAttributes(svgTextPath, indentLine, indentAttribute);
+
+            if (svgTextPath.StartOffset != SvgUnit.None)
+            {
+                WriteLine($"{indentLine}{indentAttribute}[startOffset]={svgTextPath.StartOffset}", s_attributeColor);
+            }
+
+            if (svgTextPath.Method != SvgTextPathMethod.Align)
+            {
+                WriteLine($"{indentLine}{indentAttribute}[method]={svgTextPath.Method}", s_attributeColor);
+            }
+
+            if (svgTextPath.Spacing != SvgTextPathSpacing.Exact)
+            {
+                WriteLine($"{indentLine}{indentAttribute}[spacing]={svgTextPath.Spacing}", s_attributeColor);
+            }
+
+            if (svgTextPath.ReferencedPath != null)
+            {
+                WriteLine($"{indentLine}{indentAttribute}[href]={svgTextPath.ReferencedPath}", s_attributeColor);
+            }
         }
 
         internal static void PrintAttributes(SvgTextRef svgTextRef, string indentLine, string indentAttribute)
         {
-            // TODO:
+            PrintSvgTextBaseAttributes(svgTextRef, indentLine, indentAttribute);
+
+            if (svgTextRef.ReferencedElement != null)
+            {
+                WriteLine($"{indentLine}{indentAttribute}[href]={svgTextRef.ReferencedElement}", s_attributeColor);
+            }
         }
 
         internal static void PrintAttributes(SvgTextSpan svgTextSpan, string indentLine, string indentAttribute)
         {
-            // TODO:
+            PrintSvgTextBaseAttributes(svgTextSpan, indentLine, indentAttribute);
         }
 
         internal static void PrintAttributes(SvgColourMatrix svgColourMatrix, string indentLine, string indentAttribute)
@@ -583,25 +760,25 @@ namespace SvgDemo
             /// |   +---class <see cref="SvgFontFace"/>
             /// |   +---class <see cref="SvgFontFaceSrc"/>
             /// |   +---class <see cref="SvgFontFaceUri"/>
-            /// |   \---abstract class <see cref="SvgVisualElement"/>
-            /// |       +---class <see cref="SvgImage"/>
-            /// |       +---class <see cref="SvgSwitch"/>
-            /// |       +---class <see cref="SvgSymbol"/>
-            /// |       +---class <see cref="SvgUse"/>
-            /// |       +---class <see cref="SvgForeignObject"/>
-            /// |       +---abstract class <see cref="SvgPathBasedElement"/>
-            /// |       |   +---<see cref="SvgCircle"/>
-            /// |       |   +---<see cref="SvgEllipse"/>
-            /// |       |   +---<see cref="SvgRectangle"/>
-            /// |       |   +---<see cref="SvgMarker"/>
-            /// |       |   +---<see cref="SvgGlyph"/>
-            /// |       |   +---abstract class <see cref="SvgMarkerElement"/>
-            /// |       |       +---class <see cref="SvgGroup"/>
-            /// |       |       +---class <see cref="SvgLine"/>
-            /// |       |       +---class <see cref="SvgPath"/>
-            /// |       |       \---class <see cref="SvgPolygon"/>
-            /// |       |           \---class <see cref="SvgPolyline"/>
-            /// |       \---abstract class <see cref="SvgTextBase"/>
+            /// |   +---abstract class <see cref="SvgVisualElement"/>
+            /// |   |   +---class <see cref="SvgImage"/>
+            /// |   |   +---class <see cref="SvgSwitch"/>
+            /// |   |   +---class <see cref="SvgSymbol"/>
+            /// |   |   +---class <see cref="SvgUse"/>
+            /// |   |   +---class <see cref="SvgForeignObject"/>
+            /// |   |   +---abstract class <see cref="SvgPathBasedElement"/>
+            /// |   |       +---<see cref="SvgCircle"/>
+            /// |   |       +---<see cref="SvgEllipse"/>
+            /// |   |       +---<see cref="SvgRectangle"/>
+            /// |   |       +---<see cref="SvgMarker"/>
+            /// |   |       +---<see cref="SvgGlyph"/>
+            /// |   |       +---abstract class <see cref="SvgMarkerElement"/>
+            /// |   |           +---class <see cref="SvgGroup"/>
+            /// |   |           +---class <see cref="SvgLine"/>
+            /// |   |           +---class <see cref="SvgPath"/>
+            /// |   |           \---class <see cref="SvgPolygon"/>
+            /// |   |               \---class <see cref="SvgPolyline"/>
+            /// |   \-------abstract class <see cref="SvgTextBase"/>
             /// |           +----class <see cref="SvgText"/>
             /// |           +----class <see cref="SvgTextPath"/>
             /// |           +----class <see cref="SvgTextRef"/>
