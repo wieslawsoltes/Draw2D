@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.ComponentModel;
 using System.Linq;
 using Svg;
@@ -671,7 +671,9 @@ namespace SvgDemo
 
             if (!string.IsNullOrEmpty(svgTextBase.Text))
             {
-                WriteLine($"{indentLine}{indentAttribute}Content: {svgTextBase.Text}", AttributeColor);
+                WriteLine($"{indentLine}{indentAttribute}Content: |", AttributeColor);
+                WriteLine($"{indentLine}{indentAttribute}{IndentTab}{svgTextBase.Text}", AttributeColor);
+                WriteLine($"", AttributeColor);
             }
 
             if (svgTextBase.X != null && svgTextBase.X.Count > 0)
@@ -869,7 +871,7 @@ namespace SvgDemo
         {
             string elementIndent = indentLine;
 
-            WriteLine($"{elementIndent}- {GetElementName(svgElement)}:", ElementColor);
+            WriteLine($"{elementIndent}{GetElementName(svgElement)}:", ElementColor);
             WriteLine($"{indentLine}{indentAttribute}type: {svgElement.GetType().Name}", AttributeColor);
 
             indentLine += IndentTab;
@@ -1199,7 +1201,7 @@ namespace SvgDemo
 
                 foreach (var node in svgElement.Nodes)
                 {
-                    WriteLine($"{indentLine}{indentAttribute}{node.Content}", AttributeColor);
+                    WriteLine($"{indentLine}{indentAttribute}{IndentTab}{node.Content}", AttributeColor);
                 }
 
                 WriteLine($"", AttributeColor);
