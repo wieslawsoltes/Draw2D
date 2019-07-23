@@ -596,7 +596,7 @@ namespace SvgDemo
         {
             if (svgPathSegmentList != null)
             {
-                WriteLine($"{indentLine}{indentAttribute}d: [", AttributeColor);
+                WriteLine($"{indentLine}{indentAttribute}d: |", AttributeColor);
 
                 foreach (var svgSegment in svgPathSegmentList)
                 {
@@ -631,8 +631,6 @@ namespace SvgDemo
                             break;
                     }
                 }
-
-                WriteLine($"{indentLine}{indentAttribute}]", AttributeColor);
             }
         }
 
