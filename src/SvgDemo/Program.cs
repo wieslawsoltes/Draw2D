@@ -229,7 +229,10 @@ namespace SvgDemo
 
         public void PrintAttributes(SvgMergeNode svgMergeNode, string indentLine, string indentAttribute)
         {
-            // TODO:
+            if (!string.IsNullOrEmpty(svgMergeNode.Input))
+            {
+                WriteLine($"{indentLine}{indentAttribute}in: {svgMergeNode.Input}", AttributeColor);
+            }
         }
 
         public void PrintAttributes(SvgFilter svgFilter, string indentLine, string indentAttribute)
