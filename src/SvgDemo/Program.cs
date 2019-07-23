@@ -375,7 +375,26 @@ namespace SvgDemo
         {
             PrintSvgVisualElementAttributes(svgImage, indentLine, indentAttribute);
 
-            // TODO:
+            if (svgImage.AspectRatio != null)
+            {
+                var @default = new SvgAspectRatio(SvgPreserveAspectRatio.xMidYMid);
+                if (svgImage.AspectRatio.Align != @default.Align
+                 || svgImage.AspectRatio.Slice != @default.Slice
+                 || svgImage.AspectRatio.Defer != @default.Defer)
+                {
+                    WriteLine($"{indentLine}{indentAttribute}preserveAspectRatio: {svgImage.AspectRatio}", AttributeColor);
+                }
+            }
+
+            WriteLine($"{indentLine}{indentAttribute}x: {Format(svgImage.X)}", AttributeColor);
+            WriteLine($"{indentLine}{indentAttribute}y: {Format(svgImage.Y)}", AttributeColor);
+            WriteLine($"{indentLine}{indentAttribute}width: {Format(svgImage.Width)}", AttributeColor);
+            WriteLine($"{indentLine}{indentAttribute}height: {Format(svgImage.Height)}", AttributeColor);
+
+            if (svgImage.Href != null)
+            {
+                WriteLine($"{indentLine}{indentAttribute}href: {svgImage.Href}", AttributeColor);
+            }
         }
 
         public void PrintAttributes(SvgSwitch svgSwitch, string indentLine, string indentAttribute)
