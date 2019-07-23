@@ -353,8 +353,6 @@ namespace SvgDemo
 
         internal static void PrintAttributes(SvgFontFace svgFontFace, string indentLine, string indentAttribute)
         {
-            // TODO:
-
             if (svgFontFace.Alphabetic != 0f)
             {
                 WriteLine($"{indentLine}{indentAttribute}[alphabetic]={svgFontFace.Alphabetic}", s_attributeColor);
