@@ -879,8 +879,8 @@ namespace SvgDemo
                         WriteLine($"{indentLine}matrix:", ElementColor);
                         WriteLine($"{indentLine}{indentAttribute}type: {svgMatrix.GetType().Name}", AttributeColor);
                         var points = string.Format(
-                                        CultureInfo.InvariantCulture, 
-                                        "{0}, {1}, {2}, {3}, {4}, {5}", 
+                                        CultureInfo.InvariantCulture,
+                                        "{0}, {1}, {2}, {3}, {4}, {5}",
                                         svgMatrix.Points[0],
                                         svgMatrix.Points[1],
                                         svgMatrix.Points[2],
@@ -921,13 +921,13 @@ namespace SvgDemo
                         {
                             WriteLine($"{indentLine}skewX:", ElementColor);
                             WriteLine($"{indentLine}{indentAttribute}type: {svgSkew.GetType().Name}", AttributeColor);
-                        WriteLine($"{indentLine}{indentAttribute}AngleX: {Format(svgSkew.AngleX)}", AttributeColor);
+                            WriteLine($"{indentLine}{indentAttribute}AngleX: {Format(svgSkew.AngleX)}", AttributeColor);
                         }
                         else
                         {
                             WriteLine($"{indentLine}skewY:", ElementColor);
                             WriteLine($"{indentLine}{indentAttribute}type: {svgSkew.GetType().Name}", AttributeColor);
-                        WriteLine($"{indentLine}{indentAttribute}AngleY: {Format(svgSkew.AngleY)}", AttributeColor);
+                            WriteLine($"{indentLine}{indentAttribute}AngleY: {Format(svgSkew.AngleY)}", AttributeColor);
                         }
                     }
                     break;
