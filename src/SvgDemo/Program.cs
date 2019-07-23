@@ -671,9 +671,12 @@ namespace SvgDemo
 
             if (!string.IsNullOrEmpty(svgTextBase.Text))
             {
-                WriteLine($"{indentLine}{indentAttribute}Content: |", AttributeColor);
-                WriteLine($"{indentLine}{indentAttribute}{IndentTab}{svgTextBase.Text}", AttributeColor);
-                WriteLine($"", AttributeColor);
+                if (svgTextBase.Children.Count == 0)
+                {
+                    WriteLine($"{indentLine}{indentAttribute}Content: |", AttributeColor);
+                    WriteLine($"{indentLine}{indentAttribute}{IndentTab}{svgTextBase.Text}", AttributeColor);
+                    WriteLine($"", AttributeColor);
+                }
             }
 
             if (svgTextBase.X != null && svgTextBase.X.Count > 0)
