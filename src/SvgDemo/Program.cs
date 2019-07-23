@@ -1,5 +1,6 @@
 using System;
 using System.ComponentModel;
+using System.Globalization;
 using System.Linq;
 using Svg;
 using Svg.Css;
@@ -631,8 +632,6 @@ namespace SvgDemo
                             break;
                     }
                 }
-
-                WriteLine($"", AttributeColor);
             }
         }
 
@@ -675,7 +674,6 @@ namespace SvgDemo
                 {
                     WriteLine($"{indentLine}{indentAttribute}Content: |", AttributeColor);
                     WriteLine($"{indentLine}{indentAttribute}{IndentTab}{svgTextBase.Text}", AttributeColor);
-                    WriteLine($"", AttributeColor);
                 }
             }
 
@@ -870,6 +868,83 @@ namespace SvgDemo
             return "unknown";
         }
 
+        public string Format(float value) => string.Format(CultureInfo.InvariantCulture, "{0}", value);
+
+        public void PrintSvgTransformAttributes(SvgTransform svgTransform, string indentLine, string indentAttribute)
+        {
+            switch (svgTransform)
+            {
+                case SvgMatrix svgMatrix:
+                    {
+                        WriteLine($"{indentLine}matrix:", ElementColor);
+                        WriteLine($"{indentLine}{indentAttribute}type: {svgMatrix.GetType().Name}", AttributeColor);
+                        var points = string.Format(
+                                        CultureInfo.InvariantCulture, 
+                                        "{0}, {1}, {2}, {3}, {4}, {5}", 
+                                        svgMatrix.Points[0],
+                                        svgMatrix.Points[1],
+                                        svgMatrix.Points[2],
+                                        svgMatrix.Points[3],
+                                        svgMatrix.Points[4],
+                                        svgMatrix.Points[5]);
+                        WriteLine($"{indentLine}{indentAttribute}points: {points}", AttributeColor);
+                    }
+                    break;
+                case SvgRotate svgRotate:
+                    {
+                        WriteLine($"{indentLine}rotate:", ElementColor);
+                        WriteLine($"{indentLine}{indentAttribute}type: {svgRotate.GetType().Name}", AttributeColor);
+                        WriteLine($"{indentLine}{indentAttribute}Angle: {Format(svgRotate.Angle)}", AttributeColor);
+                        WriteLine($"{indentLine}{indentAttribute}CenterX: {Format(svgRotate.CenterX)}", AttributeColor);
+                        WriteLine($"{indentLine}{indentAttribute}CenterY: {Format(svgRotate.CenterY)}", AttributeColor);
+                    }
+                    break;
+                case SvgScale svgScale:
+                    {
+                        WriteLine($"{indentLine}scale:", ElementColor);
+                        WriteLine($"{indentLine}{indentAttribute}type: {svgScale.GetType().Name}", AttributeColor);
+                        WriteLine($"{indentLine}{indentAttribute}X: {Format(svgScale.X)}", AttributeColor);
+                        WriteLine($"{indentLine}{indentAttribute}Y: {Format(svgScale.Y)}", AttributeColor);
+                    }
+                    break;
+                case SvgShear svgShear:
+                    {
+                        WriteLine($"{indentLine}shear:", ElementColor);
+                        WriteLine($"{indentLine}{indentAttribute}type: {svgShear.GetType().Name}", AttributeColor);
+                        WriteLine($"{indentLine}{indentAttribute}X: {Format(svgShear.X)}", AttributeColor);
+                        WriteLine($"{indentLine}{indentAttribute}Y: {Format(svgShear.Y)}", AttributeColor);
+                    }
+                    break;
+                case SvgSkew svgSkew:
+                    {
+                        if (svgSkew.AngleY == 0)
+                        {
+                            WriteLine($"{indentLine}skewX:", ElementColor);
+                            WriteLine($"{indentLine}{indentAttribute}type: {svgSkew.GetType().Name}", AttributeColor);
+                        WriteLine($"{indentLine}{indentAttribute}AngleX: {Format(svgSkew.AngleX)}", AttributeColor);
+                        }
+                        else
+                        {
+                            WriteLine($"{indentLine}skewY:", ElementColor);
+                            WriteLine($"{indentLine}{indentAttribute}type: {svgSkew.GetType().Name}", AttributeColor);
+                        WriteLine($"{indentLine}{indentAttribute}AngleY: {Format(svgSkew.AngleY)}", AttributeColor);
+                        }
+                    }
+                    break;
+                case SvgTranslate svgTranslate:
+                    {
+                        WriteLine($"{indentLine}translate:", ElementColor);
+                        WriteLine($"{indentLine}{indentAttribute}type: {svgTranslate.GetType().Name}", AttributeColor);
+                        WriteLine($"{indentLine}{indentAttribute}X: {Format(svgTranslate.X)}", AttributeColor);
+                        WriteLine($"{indentLine}{indentAttribute}Y: {Format(svgTranslate.Y)}", AttributeColor);
+                    }
+                    break;
+                default:
+                    WriteLine($"{indentLine}{indentAttribute}Unknown transform type: {svgTransform.GetType()}", ErrorColor);
+                    break;
+            }
+        }
+
         public void PrintSvgElement(SvgElement svgElement, string indentLine, string indentAttribute)
         {
             string elementIndent = indentLine;
@@ -887,14 +962,12 @@ namespace SvgDemo
 
                 if (svgElement.Transforms.Count > 0)
                 {
-                    WriteLine($"{indentLine}{indentAttribute}transform: |", AttributeColor);
+                    WriteLine($"{indentLine}{indentAttribute}transforms:", AttributeColor);
 
-                    foreach (var transform in svgElement.Transforms)
+                    foreach (var svgTransform in svgElement.Transforms)
                     {
-                        WriteLine($"{indentLine}{indentAttribute}{IndentTab}{transform}", AttributeColor);
+                        PrintSvgTransformAttributes(svgTransform, indentLine + indentAttribute + IndentTab, indentAttribute);
                     }
-
-                    WriteLine($"", AttributeColor);
                 }
 
                 // Attributes
@@ -1206,8 +1279,6 @@ namespace SvgDemo
                 {
                     WriteLine($"{indentLine}{indentAttribute}{IndentTab}{node.Content}", AttributeColor);
                 }
-
-                WriteLine($"", AttributeColor);
             }
 
             if (PrintSvgElementChildrenEnabled && svgElement.Children.Count > 0)
