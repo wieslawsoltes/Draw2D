@@ -464,12 +464,12 @@ namespace SvgDemo
 
         internal static void PrintAttributes(SvgPolygon svgPolygon, string indentLine, string indentAttribute)
         {
-            // TODO:
+            WriteLine($"{indentLine}{indentAttribute}[points]={svgPolygon.Points}", s_attributeColor);
         }
 
         internal static void PrintAttributes(SvgPolyline svgPolyline, string indentLine, string indentAttribute)
         {
-            // TODO:
+            WriteLine($"{indentLine}{indentAttribute}[points]={svgPolyline.Points}", s_attributeColor);
         }
 
         internal static void PrintAttributes(SvgText svgText, string indentLine, string indentAttribute)
