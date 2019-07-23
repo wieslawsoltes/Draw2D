@@ -403,7 +403,10 @@ namespace SvgDemo
 
         internal static void PrintAttributes(SvgLine svgLine, string indentLine, string indentAttribute)
         {
-            // TODO:
+            WriteLine($"{indentLine}{indentAttribute}[x1]={svgLine.StartX}", s_attributeColor);
+            WriteLine($"{indentLine}{indentAttribute}[y1]={svgLine.StartY}", s_attributeColor);
+            WriteLine($"{indentLine}{indentAttribute}[x2]={svgLine.EndX}", s_attributeColor);
+            WriteLine($"{indentLine}{indentAttribute}[y2]={svgLine.EndY}", s_attributeColor);
         }
 
         internal static void PrintAttributes(SvgPath svgPath, string indentLine, string indentAttribute)
