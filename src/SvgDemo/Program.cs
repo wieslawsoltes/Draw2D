@@ -400,8 +400,6 @@ namespace SvgDemo
         public void PrintAttributes(SvgSwitch svgSwitch, string indentLine, string indentAttribute)
         {
             PrintSvgVisualElementAttributes(svgSwitch, indentLine, indentAttribute);
-
-            // TODO:
         }
 
         public void PrintAttributes(SvgSymbol svgSymbol, string indentLine, string indentAttribute)
