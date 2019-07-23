@@ -1,5 +1,6 @@
 ﻿using System;
 using Svg;
+using Svg.DataTypes;
 using Svg.Document_Structure;
 using Svg.FilterEffects;
 using Svg.Pathing;
@@ -541,14 +542,108 @@ namespace SvgDemo
         {
             PrintSvgPathBasedElementAttributes(svgMarker, indentLine, indentAttribute);
 
-            // TODO:
+            if (svgMarker.RefX != SvgUnit.None)
+            {
+                WriteLine($"{indentLine}{indentAttribute}[refX]={svgMarker.RefX}", s_attributeColor);
+            }
+
+            if (svgMarker.RefY != SvgUnit.None)
+            {
+                WriteLine($"{indentLine}{indentAttribute}[refY]={svgMarker.RefY}", s_attributeColor);
+            }
+
+            if (svgMarker.Orient != null)
+            {
+                var orient = svgMarker.Orient;
+                if (orient.IsAuto == false)
+                {
+                    if (orient.Angle != 0f)
+                    {
+                        WriteLine($"{indentLine}{indentAttribute}[orient]={orient.Angle}", s_attributeColor);
+                    }
+                }
+                else
+                {
+                    WriteLine($"{indentLine}{indentAttribute}[orient]={(orient.IsAutoStartReverse ? "auto-start-reverse" : "auto")}", s_attributeColor);
+                }
+            }
+
+            if (svgMarker.Overflow != SvgOverflow.Hidden)
+            {
+                WriteLine($"{indentLine}{indentAttribute}[overflow]={svgMarker.Overflow}", s_attributeColor);
+            }
+
+            if (svgMarker.ViewBox != SvgViewBox.Empty)
+            {
+                var viewBox = svgMarker.ViewBox;
+                WriteLine($"{indentLine}{indentAttribute}[viewBox]={viewBox.MinX} {viewBox.MinY} {viewBox.Width} {viewBox.Height}", s_attributeColor);
+            }
+
+            if (svgMarker.AspectRatio != null)
+            {
+                var @default = new SvgAspectRatio(SvgPreserveAspectRatio.xMidYMid);
+                if (svgMarker.AspectRatio.Align != @default.Align
+                 || svgMarker.AspectRatio.Slice != @default.Slice
+                 || svgMarker.AspectRatio.Defer != @default.Defer)
+                {
+                    WriteLine($"{indentLine}{indentAttribute}[preserveAspectRatio]={svgMarker.AspectRatio}", s_attributeColor);
+                }
+            }
+
+            if (svgMarker.MarkerWidth != 3f)
+            {
+                WriteLine($"{indentLine}{indentAttribute}[markerWidth]={svgMarker.MarkerWidth}", s_attributeColor);
+            }
+
+            if (svgMarker.MarkerHeight != 3f)
+            {
+                WriteLine($"{indentLine}{indentAttribute}[markerHeight]={svgMarker.MarkerHeight}", s_attributeColor);
+            }
+
+            if (svgMarker.MarkerUnits != SvgMarkerUnits.StrokeWidth)
+            {
+                WriteLine($"{indentLine}{indentAttribute}[markerUnits]={svgMarker.MarkerUnits}", s_attributeColor);
+            }
         }
 
         internal static void PrintAttributes(SvgGlyph svgGlyph, string indentLine, string indentAttribute)
         {
             PrintSvgPathBasedElementAttributes(svgGlyph, indentLine, indentAttribute);
 
-            // TODO:
+            if (svgGlyph.PathData != null)
+            {
+                PrintAttributes(svgGlyph.PathData, indentLine, indentAttribute);
+            }
+
+            if (!string.IsNullOrEmpty(svgGlyph.GlyphName))
+            {
+                WriteLine($"{indentLine}{indentAttribute}[glyph-name]={svgGlyph.GlyphName}", s_attributeColor);
+            }
+
+            if (svgGlyph.HorizAdvX != 0f)
+            {
+                WriteLine($"{indentLine}{indentAttribute}[horiz-adv-x]={svgGlyph.HorizAdvX}", s_attributeColor);
+            }
+
+            if (!string.IsNullOrEmpty(svgGlyph.Unicode))
+            {
+                WriteLine($"{indentLine}{indentAttribute}[unicode]={svgGlyph.Unicode}", s_attributeColor);
+            }
+
+            if (svgGlyph.VertAdvY != 0f)
+            {
+                WriteLine($"{indentLine}{indentAttribute}[vert-adv-y]={svgGlyph.VertAdvY}", s_attributeColor);
+            }
+
+            if (svgGlyph.VertOriginX != 0f)
+            {
+                WriteLine($"{indentLine}{indentAttribute}[vert-origin-x]={svgGlyph.VertOriginX}", s_attributeColor);
+            }
+
+            if (svgGlyph.VertOriginY != 0f)
+            {
+                WriteLine($"{indentLine}{indentAttribute}[vert-origin-y]={svgGlyph.VertOriginY}", s_attributeColor);
+            }
         }
 
         internal static void PrintSvgMarkerElementAttributes(SvgMarkerElement svgMarkerElement, string indentLine, string indentAttribute)
@@ -574,8 +669,6 @@ namespace SvgDemo
         internal static void PrintAttributes(SvgGroup svgGroup, string indentLine, string indentAttribute)
         {
             PrintSvgMarkerElementAttributes(svgGroup, indentLine, indentAttribute);
-
-            // TODO:
         }
 
         internal static void PrintAttributes(SvgLine svgLine, string indentLine, string indentAttribute)
