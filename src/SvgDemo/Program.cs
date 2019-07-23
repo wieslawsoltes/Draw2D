@@ -213,7 +213,6 @@ namespace SvgDemo
 
         public void PrintAttributes(SvgDocumentMetadata svgDocumentMetadata, string indentLine, string indentAttribute)
         {
-            // TODO:
         }
 
         public void PrintAttributes(SvgTitle svgTitle, string indentLine, string indentAttribute)
