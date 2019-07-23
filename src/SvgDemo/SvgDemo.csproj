@@ -6,6 +6,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="*.svg" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\..\externals\SVG\Source\Svg.csproj" />
   </ItemGroup>
 
