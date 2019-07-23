@@ -406,7 +406,22 @@ namespace SvgDemo
         {
             PrintSvgVisualElementAttributes(svgSymbol, indentLine, indentAttribute);
 
-            // TODO:
+            if (svgSymbol.ViewBox != SvgViewBox.Empty)
+            {
+                var viewBox = svgSymbol.ViewBox;
+                WriteLine($"{indentLine}{indentAttribute}viewBox: {viewBox.MinX} {viewBox.MinY} {viewBox.Width} {viewBox.Height}", AttributeColor);
+            }
+
+            if (svgSymbol.AspectRatio != null)
+            {
+                var @default = new SvgAspectRatio(SvgPreserveAspectRatio.xMidYMid);
+                if (svgSymbol.AspectRatio.Align != @default.Align
+                 || svgSymbol.AspectRatio.Slice != @default.Slice
+                 || svgSymbol.AspectRatio.Defer != @default.Defer)
+                {
+                    WriteLine($"{indentLine}{indentAttribute}preserveAspectRatio: {svgSymbol.AspectRatio}", AttributeColor);
+                }
+            }
         }
 
         public void PrintAttributes(SvgUse svgUse, string indentLine, string indentAttribute)
