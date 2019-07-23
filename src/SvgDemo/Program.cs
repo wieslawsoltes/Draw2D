@@ -852,63 +852,36 @@ namespace SvgDemo
             PrintSvgTextBaseAttributes(svgTextSpan, indentLine, indentAttribute);
         }
 
+        public void PrintSvgFilterPrimitiveAttributes(SvgFilterPrimitive svgFilterPrimitive, string indentLine, string indentAttribute)
+        {
+            // TODO:
+        }
+
         public void PrintAttributes(SvgColourMatrix svgColourMatrix, string indentLine, string indentAttribute)
         {
+            PrintSvgFilterPrimitiveAttributes(svgColourMatrix, indentLine, indentAttribute);
+
             // TODO:
         }
 
         public void PrintAttributes(SvgGaussianBlur svgGaussianBlur, string indentLine, string indentAttribute)
         {
+            PrintSvgFilterPrimitiveAttributes(svgGaussianBlur, indentLine, indentAttribute);
+
             // TODO:
         }
 
         public void PrintAttributes(SvgMerge svgMerge, string indentLine, string indentAttribute)
         {
+            PrintSvgFilterPrimitiveAttributes(svgMerge, indentLine, indentAttribute);
+
             // TODO:
         }
 
         public void PrintAttributes(SvgOffset svgOffset, string indentLine, string indentAttribute)
         {
-            // TODO:
-        }
+            PrintSvgFilterPrimitiveAttributes(svgOffset, indentLine, indentAttribute);
 
-        public void PrintAttributes(SvgColourServer svgColourServer, string indentLine, string indentAttribute)
-        {
-            // TODO:
-        }
-
-        public void PrintAttributes(SvgDeferredPaintServer svgDeferredPaintServer, string indentLine, string indentAttribute)
-        {
-            // TODO:
-        }
-
-        public void PrintAttributes(SvgFallbackPaintServer svgFallbackPaintServer, string indentLine, string indentAttribute)
-        {
-            // TODO:
-        }
-
-        public void PrintAttributes(SvgPatternServer svgPatternServer, string indentLine, string indentAttribute)
-        {
-            // TODO:
-        }
-
-        public void PrintAttributes(SvgLinearGradientServer svgLinearGradientServer, string indentLine, string indentAttribute)
-        {
-            // TODO:
-        }
-
-        public void PrintAttributes(SvgRadialGradientServer svgRadialGradientServer, string indentLine, string indentAttribute)
-        {
-            // TODO:
-        }
-
-        public void PrintAttributes(SvgVerticalKern svgVerticalKern, string indentLine, string indentAttribute)
-        {
-            // TODO:
-        }
-
-        public void PrintAttributes(SvgHorizontalKern svgHorizontalKern, string indentLine, string indentAttribute)
-        {
             // TODO:
         }
 
@@ -940,6 +913,64 @@ namespace SvgDemo
                     WriteLine($"{indentLine}{indentAttribute}Unknown paint server type: {svgPaintServer.GetType()}", ErrorColor);
                     break;
             }
+        }
+
+        public void PrintAttributes(SvgColourServer svgColourServer, string indentLine, string indentAttribute)
+        {
+            // TODO:
+        }
+
+        public void PrintAttributes(SvgDeferredPaintServer svgDeferredPaintServer, string indentLine, string indentAttribute)
+        {
+            // TODO:
+        }
+
+        public void PrintAttributes(SvgFallbackPaintServer svgFallbackPaintServer, string indentLine, string indentAttribute)
+        {
+            // TODO:
+        }
+
+        public void PrintAttributes(SvgPatternServer svgPatternServer, string indentLine, string indentAttribute)
+        {
+            // TODO:
+        }
+
+        public void PrintSvgGradientServerAttributes(SvgGradientServer svgGradientServer, string indentLine, string indentAttribute)
+        {
+            // TODO:
+        }
+
+        public void PrintAttributes(SvgLinearGradientServer svgLinearGradientServer, string indentLine, string indentAttribute)
+        {
+            PrintSvgGradientServerAttributes(svgLinearGradientServer, indentLine, indentAttribute);
+
+            // TODO:
+        }
+
+        public void PrintAttributes(SvgRadialGradientServer svgRadialGradientServer, string indentLine, string indentAttribute)
+        {
+            PrintSvgGradientServerAttributes(svgRadialGradientServer, indentLine, indentAttribute);
+
+            // TODO:
+        }
+
+        public void PrintSvgKernAttributes(SvgKern svgKern, string indentLine, string indentAttribute)
+        {
+            // TODO:
+        }
+
+        public void PrintAttributes(SvgVerticalKern svgVerticalKern, string indentLine, string indentAttribute)
+        {
+            PrintSvgKernAttributes(svgVerticalKern, indentLine, indentAttribute);
+
+            // TODO:
+        }
+
+        public void PrintAttributes(SvgHorizontalKern svgHorizontalKern, string indentLine, string indentAttribute)
+        {
+            PrintSvgKernAttributes(svgHorizontalKern, indentLine, indentAttribute);
+
+            // TODO:
         }
 
         public void PrintSvgTransformAttributes(SvgTransform svgTransform, string indentLine, string indentAttribute)
