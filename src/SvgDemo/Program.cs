@@ -7,263 +7,65 @@ using Svg.Pathing;
 
 namespace SvgDemo
 {
-    class SvgDebug
+    public static class SvgDebug
     {
-        internal static ConsoleColor s_errorColor = ConsoleColor.Yellow;
-        internal static ConsoleColor s_elementColor = ConsoleColor.Red;
-        internal static ConsoleColor s_groupColor = ConsoleColor.White;
-        internal static ConsoleColor s_attributeColor = ConsoleColor.Blue;
+        public static ConsoleColor s_errorColor = ConsoleColor.Yellow;
 
-        internal static void ResetColor()
+        public static ConsoleColor s_elementColor = ConsoleColor.Red;
+
+        public static ConsoleColor s_groupColor = ConsoleColor.White;
+
+        public static ConsoleColor s_attributeColor = ConsoleColor.Blue;
+
+        public static string s_indentTab = "    ";
+
+        public static void ResetColor()
         {
             Console.ResetColor();
         }
 
-        internal static void WriteLine(string value, ConsoleColor color)
+        public static void WriteLine(string value, ConsoleColor color)
         {
             Console.ForegroundColor = color;
             Console.WriteLine(value);
         }
 
-        internal static void PrintSvgPaintServerServer(SvgPaintServer paintServer, string attribute, string indentLine, string indentAttribute)
+        public static void PrintSvgPaintServerServer(SvgPaintServer svgPaintServer, string attribute, string indentLine, string indentAttribute)
         {
-            switch (paintServer)
+            switch (svgPaintServer)
             {
                 case SvgColourServer colourServer:
-                    {
-                        WriteLine($"{indentLine}{indentAttribute}[{attribute}]={colourServer.ToString()}", s_attributeColor);
-                    }
+                    // TODO:
+                    WriteLine($"{indentLine}{indentAttribute}[{attribute}]={colourServer.ToString()}", s_attributeColor);
                     break;
                 case SvgDeferredPaintServer deferredPaintServer:
-                    {
-                        WriteLine($"{indentLine}{indentAttribute}[{attribute}]={deferredPaintServer.GetType()}", s_attributeColor);
-                    }
+                    // TODO:
+                    WriteLine($"{indentLine}{indentAttribute}[{attribute}]={deferredPaintServer.GetType()}", s_attributeColor);
                     break;
                 case SvgFallbackPaintServer fallbackPaintServer:
-                    {
-                        WriteLine($"{indentLine}{indentAttribute}[{attribute}]={fallbackPaintServer.GetType()}", s_attributeColor);
-                    }
+                    // TODO:
+                    WriteLine($"{indentLine}{indentAttribute}[{attribute}]={fallbackPaintServer.GetType()}", s_attributeColor);
                     break;
                 case SvgGradientServer gradientServer:
-                    {
-                        WriteLine($"{indentLine}{indentAttribute}[{attribute}]={gradientServer.GetType()}", s_attributeColor);
-                    }
+                    // TODO:
+                    WriteLine($"{indentLine}{indentAttribute}[{attribute}]={gradientServer.GetType()}", s_attributeColor);
                     break;
                 case SvgPatternServer patternServer:
-                    {
-                        WriteLine($"{indentLine}{indentAttribute}[{attribute}]={patternServer.GetType()}", s_attributeColor);
-                    }
+                    // TODO:
+                    WriteLine($"{indentLine}{indentAttribute}[{attribute}]={patternServer.GetType()}", s_attributeColor);
                     break;
                 default:
-                    {
-                        WriteLine($"{indentLine}{indentAttribute}[{attribute}]={paintServer.GetType()}", s_attributeColor);
-                    }
+                    WriteLine($"{indentLine}{indentAttribute}Unknown paint server type: {svgPaintServer.GetType()}", s_errorColor);
                     break;
             }
         }
 
-        internal static void PrintSvgElementAttributes(SvgElement element, string indentLine, string indentAttribute)
-        {
-            // Transforms Attributes
-
-            if (element.Transforms.Count > 0)
-            {
-                WriteLine($"{indentLine}{indentAttribute}<Transforms>", s_groupColor);
-                WriteLine($"{indentLine}{indentAttribute}[transform]=", s_attributeColor);
-
-                string transformIndent = "            ";
-
-                foreach (var transform in element.Transforms)
-                {
-                    WriteLine($"{indentLine}{indentAttribute}{transformIndent}{transform}", s_attributeColor);
-                }
-            }
-
-            // Attributes
-
-            if (!string.IsNullOrEmpty(element.ID))
-            {
-                WriteLine($"{indentLine}{indentAttribute}[id]={element.ID}", s_attributeColor);
-            }
-
-            if (element.SpaceHandling != XmlSpaceHandling.@default && element.SpaceHandling != XmlSpaceHandling.inherit)
-            {
-                WriteLine($"{indentLine}{indentAttribute}[space]={element.SpaceHandling}", s_attributeColor);
-            }
-
-            if (element.Color != null && element.Color != SvgColourServer.NotSet)
-            {
-                PrintSvgPaintServerServer(element.Color, "color", indentLine, indentAttribute);
-            }
-
-            // Style Attributes
-
-            if (element.Fill != null && element.Fill != SvgColourServer.NotSet)
-            {
-                PrintSvgPaintServerServer(element.Fill, "fill", indentLine, indentAttribute);
-            }
-
-            if (element.Stroke != null)
-            {
-                PrintSvgPaintServerServer(element.Stroke, "stroke", indentLine, indentAttribute);
-            }
-
-            if (element.FillRule != SvgFillRule.NonZero)
-            {
-                WriteLine($"{indentLine}{indentAttribute}[fill-rule]={element.FillRule}", s_attributeColor);
-            }
-
-            if (element.FillOpacity != 1f)
-            {
-                WriteLine($"{indentLine}{indentAttribute}[fill-opacity]={element.FillOpacity}", s_attributeColor);
-            }
-
-            if (element.StrokeWidth != 1f)
-            {
-                WriteLine($"{indentLine}{indentAttribute}[stroke-width]={element.StrokeWidth}", s_attributeColor);
-            }
-
-            if (element.StrokeLineCap != SvgStrokeLineCap.Butt)
-            {
-                WriteLine($"{indentLine}{indentAttribute}[stroke-linecap]={element.StrokeLineCap}", s_attributeColor);
-            }
-
-            if (element.StrokeLineJoin != SvgStrokeLineJoin.Miter)
-            {
-                WriteLine($"{indentLine}{indentAttribute}[stroke-linejoin]={element.StrokeLineJoin}", s_attributeColor);
-            }
-
-            if (element.StrokeMiterLimit != 4f)
-            {
-                WriteLine($"{indentLine}{indentAttribute}[stroke-miterlimit]={element.StrokeMiterLimit}", s_attributeColor);
-            }
-
-            if (element.StrokeDashArray != null && element.StrokeDashArray.Count > 0)
-            {
-                WriteLine($"{indentLine}{indentAttribute}[stroke-dasharray]={element.StrokeDashArray}", s_attributeColor);
-            }
-
-            if (element.StrokeDashOffset != SvgUnit.Empty)
-            {
-                WriteLine($"{indentLine}{indentAttribute}[stroke-dashoffset]={element.StrokeDashOffset}", s_attributeColor);
-            }
-
-            if (element.StrokeOpacity != 1f)
-            {
-                WriteLine($"{indentLine}{indentAttribute}[stroke-opacity]={element.StrokeOpacity}", s_attributeColor);
-            }
-
-            if (element.StopColor != null)
-            {
-                PrintSvgPaintServerServer(element.StopColor, "stop-color", indentLine, indentAttribute);
-            }
-
-            if (element.Opacity != 1f)
-            {
-                WriteLine($"{indentLine}{indentAttribute}[opacity]={element.Opacity}", s_attributeColor);
-            }
-
-            if (element.ShapeRendering != SvgShapeRendering.Inherit)
-            {
-                WriteLine($"{indentLine}{indentAttribute}[shape-rendering]={element.ShapeRendering}", s_attributeColor);
-            }
-
-            if (element.TextAnchor != SvgTextAnchor.Inherit)
-            {
-                WriteLine($"{indentLine}{indentAttribute}[text-anchor]={element.TextAnchor}", s_attributeColor);
-            }
-
-            if (!string.IsNullOrEmpty(element.BaselineShift))
-            {
-                WriteLine($"{indentLine}{indentAttribute}[baseline-shift]={element.BaselineShift}", s_attributeColor);
-            }
-
-            if (!string.IsNullOrEmpty(element.FontFamily))
-            {
-                WriteLine($"{indentLine}{indentAttribute}[font-family]={element.FontFamily}", s_attributeColor);
-            }
-
-            if (element.FontSize != SvgUnit.Empty)
-            {
-                WriteLine($"{indentLine}{indentAttribute}[font-size]={element.FontSize}", s_attributeColor);
-            }
-
-            if (element.FontStyle != SvgFontStyle.All)
-            {
-                WriteLine($"{indentLine}{indentAttribute}[font-style]={element.FontStyle}", s_attributeColor);
-            }
-
-            if (element.FontVariant != SvgFontVariant.Inherit)
-            {
-                WriteLine($"{indentLine}{indentAttribute}[font-variant]={element.FontVariant}", s_attributeColor);
-            }
-
-            if (element.TextDecoration != SvgTextDecoration.Inherit)
-            {
-                WriteLine($"{indentLine}{indentAttribute}[text-decoration]={element.TextDecoration}", s_attributeColor);
-            }
-
-            if (element.FontWeight != SvgFontWeight.Inherit)
-            {
-                WriteLine($"{indentLine}{indentAttribute}[font-weight]={element.FontWeight}", s_attributeColor);
-            }
-
-            if (element.TextTransformation != SvgTextTransformation.Inherit)
-            {
-                WriteLine($"{indentLine}{indentAttribute}[text-transform]={element.TextTransformation}", s_attributeColor);
-            }
-
-            if (!string.IsNullOrEmpty(element.Font))
-            {
-                WriteLine($"{indentLine}{indentAttribute}[font]={element.Font}", s_attributeColor);
-            }
-        }
-
-        internal static void PrintSvgElementCustomAttributes(SvgElement element, string indentLine, string indentAttribute)
-        {
-            if (element.CustomAttributes.Count > 0)
-            {
-                WriteLine($"{indentLine}{indentAttribute}<CustomAttributes>", s_groupColor);
-
-                foreach (var attribute in element.CustomAttributes)
-                {
-                    WriteLine($"{indentLine}{indentAttribute}[{attribute.Key}]={attribute.Value}", s_attributeColor);
-                }
-            }
-        }
-
-        internal static void PrintSvgElementChildren(SvgElement element, string indentLine, string indentAttribute)
-        {
-            if (element.Children.Count > 0)
-            {
-                WriteLine($"{indentLine}<Children>", s_groupColor);
-
-                foreach (var child in element.Children)
-                {
-                    PrintSvgElement(child, indentLine + "    ", indentAttribute);
-                }
-            }
-        }
-
-        internal static void PrintSvgElementNodes(SvgElement element, string indentLine, string indentAttribute)
-        {
-            if (element.Nodes.Count > 0)
-            {
-                WriteLine($"{indentLine}<Nodes>", s_groupColor);
-
-                foreach (var node in element.Nodes)
-                {
-                    WriteLine($"{indentLine}{node.Content}", s_attributeColor);
-                }
-            }
-        }
-
-        internal static void PrintAttributes(SvgClipPath svgClipPath, string indentLine, string indentAttribute)
+        public static void PrintAttributes(SvgClipPath svgClipPath, string indentLine, string indentAttribute)
         {
             // TODO:
         }
 
-        internal static void PrintAttributes(SvgFragment svgFragment, string indentLine, string indentAttribute)
+        public static void PrintAttributes(SvgFragment svgFragment, string indentLine, string indentAttribute)
         {
             if (svgFragment.X != 0f)
             {
@@ -323,57 +125,57 @@ namespace SvgDemo
             }
         }
 
-        internal static void PrintAttributes(SvgMask svgMask, string indentLine, string indentAttribute)
+        public static void PrintAttributes(SvgMask svgMask, string indentLine, string indentAttribute)
         {
             // TODO:
         }
 
-        internal static void PrintAttributes(SvgDefinitionList svgDefinitionList, string indentLine, string indentAttribute)
+        public static void PrintAttributes(SvgDefinitionList svgDefinitionList, string indentLine, string indentAttribute)
         {
             // TODO:
         }
 
-        internal static void PrintAttributes(SvgDescription svgDescription, string indentLine, string indentAttribute)
+        public static void PrintAttributes(SvgDescription svgDescription, string indentLine, string indentAttribute)
         {
             // TODO:
         }
 
-        internal static void PrintAttributes(SvgDocumentMetadata svgDocumentMetadata, string indentLine, string indentAttribute)
+        public static void PrintAttributes(SvgDocumentMetadata svgDocumentMetadata, string indentLine, string indentAttribute)
         {
             // TODO:
         }
 
-        internal static void PrintAttributes(SvgTitle svgTitle, string indentLine, string indentAttribute)
+        public static void PrintAttributes(SvgTitle svgTitle, string indentLine, string indentAttribute)
         {
             // TODO:
         }
 
-        internal static void PrintAttributes(SvgMergeNode svgMergeNode, string indentLine, string indentAttribute)
+        public static void PrintAttributes(SvgMergeNode svgMergeNode, string indentLine, string indentAttribute)
         {
             // TODO:
         }
 
-        internal static void PrintAttributes(SvgFilter svgFilter, string indentLine, string indentAttribute)
+        public static void PrintAttributes(SvgFilter svgFilter, string indentLine, string indentAttribute)
         {
             // TODO:
         }
 
-        internal static void PrintAttributes(NonSvgElement nonSvgElement, string indentLine, string indentAttribute)
+        public static void PrintAttributes(NonSvgElement nonSvgElement, string indentLine, string indentAttribute)
         {
             // TODO:
         }
 
-        internal static void PrintAttributes(SvgGradientStop svgGradientStop, string indentLine, string indentAttribute)
+        public static void PrintAttributes(SvgGradientStop svgGradientStop, string indentLine, string indentAttribute)
         {
             // TODO:
         }
 
-        internal static void PrintAttributes(SvgUnknownElement svgUnknownElement, string indentLine, string indentAttribute)
+        public static void PrintAttributes(SvgUnknownElement svgUnknownElement, string indentLine, string indentAttribute)
         {
             // TODO:
         }
 
-        internal static void PrintAttributes(SvgFont svgFont, string indentLine, string indentAttribute)
+        public static void PrintAttributes(SvgFont svgFont, string indentLine, string indentAttribute)
         {
             if (svgFont.HorizAdvX != 0f)
             {
@@ -406,7 +208,7 @@ namespace SvgDemo
             }
         }
 
-        internal static void PrintAttributes(SvgFontFace svgFontFace, string indentLine, string indentAttribute)
+        public static void PrintAttributes(SvgFontFace svgFontFace, string indentLine, string indentAttribute)
         {
             if (svgFontFace.Alphabetic != 0f)
             {
@@ -469,11 +271,11 @@ namespace SvgDemo
             }
         }
 
-        internal static void PrintAttributes(SvgFontFaceSrc svgFontFaceSrc, string indentLine, string indentAttribute)
+        public static void PrintAttributes(SvgFontFaceSrc svgFontFaceSrc, string indentLine, string indentAttribute)
         {
         }
 
-        internal static void PrintAttributes(SvgFontFaceUri svgFontFaceUri, string indentLine, string indentAttribute)
+        public static void PrintAttributes(SvgFontFaceUri svgFontFaceUri, string indentLine, string indentAttribute)
         {
             if (svgFontFaceUri.ReferencedElement != null)
             {
@@ -481,7 +283,7 @@ namespace SvgDemo
             }
         }
 
-        internal static void PrintSvgVisualElementAttributes(SvgVisualElement svgVisualElement, string indentLine, string indentAttribute)
+        public static void PrintSvgVisualElementAttributes(SvgVisualElement svgVisualElement, string indentLine, string indentAttribute)
         {
             if (!string.IsNullOrEmpty(svgVisualElement.Clip))
             {
@@ -521,47 +323,47 @@ namespace SvgDemo
             }
         }
 
-        internal static void PrintAttributes(SvgImage svgImage, string indentLine, string indentAttribute)
+        public static void PrintAttributes(SvgImage svgImage, string indentLine, string indentAttribute)
         {
             PrintSvgVisualElementAttributes(svgImage, indentLine, indentAttribute);
 
             // TODO:
         }
 
-        internal static void PrintAttributes(SvgSwitch svgSwitch, string indentLine, string indentAttribute)
+        public static void PrintAttributes(SvgSwitch svgSwitch, string indentLine, string indentAttribute)
         {
             PrintSvgVisualElementAttributes(svgSwitch, indentLine, indentAttribute);
 
             // TODO:
         }
 
-        internal static void PrintAttributes(SvgSymbol svgSymbol, string indentLine, string indentAttribute)
+        public static void PrintAttributes(SvgSymbol svgSymbol, string indentLine, string indentAttribute)
         {
             PrintSvgVisualElementAttributes(svgSymbol, indentLine, indentAttribute);
 
             // TODO:
         }
 
-        internal static void PrintAttributes(SvgUse svgUse, string indentLine, string indentAttribute)
+        public static void PrintAttributes(SvgUse svgUse, string indentLine, string indentAttribute)
         {
             PrintSvgVisualElementAttributes(svgUse, indentLine, indentAttribute);
 
             // TODO:
         }
 
-        internal static void PrintAttributes(SvgForeignObject svgForeignObject, string indentLine, string indentAttribute)
+        public static void PrintAttributes(SvgForeignObject svgForeignObject, string indentLine, string indentAttribute)
         {
             PrintSvgVisualElementAttributes(svgForeignObject, indentLine, indentAttribute);
 
             // TODO:
         }
 
-        internal static void PrintSvgPathBasedElementAttributes(SvgPathBasedElement svgPathBasedElement, string indentLine, string indentAttribute)
+        public static void PrintSvgPathBasedElementAttributes(SvgPathBasedElement svgPathBasedElement, string indentLine, string indentAttribute)
         {
             PrintSvgVisualElementAttributes(svgPathBasedElement, indentLine, indentAttribute);
         }
 
-        internal static void PrintAttributes(SvgCircle svgCircle, string indentLine, string indentAttribute)
+        public static void PrintAttributes(SvgCircle svgCircle, string indentLine, string indentAttribute)
         {
             PrintSvgPathBasedElementAttributes(svgCircle, indentLine, indentAttribute);
 
@@ -570,7 +372,7 @@ namespace SvgDemo
             WriteLine($"{indentLine}{indentAttribute}[r]={svgCircle.Radius}", s_attributeColor);
         }
 
-        internal static void PrintAttributes(SvgEllipse svgEllipse, string indentLine, string indentAttribute)
+        public static void PrintAttributes(SvgEllipse svgEllipse, string indentLine, string indentAttribute)
         {
             PrintSvgPathBasedElementAttributes(svgEllipse, indentLine, indentAttribute);
 
@@ -580,7 +382,7 @@ namespace SvgDemo
             WriteLine($"{indentLine}{indentAttribute}[ry]={svgEllipse.RadiusY}", s_attributeColor);
         }
 
-        internal static void PrintAttributes(SvgRectangle svgRectangle, string indentLine, string indentAttribute)
+        public static void PrintAttributes(SvgRectangle svgRectangle, string indentLine, string indentAttribute)
         {
             PrintSvgPathBasedElementAttributes(svgRectangle, indentLine, indentAttribute);
 
@@ -600,7 +402,7 @@ namespace SvgDemo
             }
         }
 
-        internal static void PrintAttributes(SvgMarker svgMarker, string indentLine, string indentAttribute)
+        public static void PrintAttributes(SvgMarker svgMarker, string indentLine, string indentAttribute)
         {
             PrintSvgPathBasedElementAttributes(svgMarker, indentLine, indentAttribute);
 
@@ -668,7 +470,7 @@ namespace SvgDemo
             }
         }
 
-        internal static void PrintAttributes(SvgGlyph svgGlyph, string indentLine, string indentAttribute)
+        public static void PrintAttributes(SvgGlyph svgGlyph, string indentLine, string indentAttribute)
         {
             PrintSvgPathBasedElementAttributes(svgGlyph, indentLine, indentAttribute);
 
@@ -708,7 +510,7 @@ namespace SvgDemo
             }
         }
 
-        internal static void PrintSvgMarkerElementAttributes(SvgMarkerElement svgMarkerElement, string indentLine, string indentAttribute)
+        public static void PrintSvgMarkerElementAttributes(SvgMarkerElement svgMarkerElement, string indentLine, string indentAttribute)
         {
             PrintSvgPathBasedElementAttributes(svgMarkerElement, indentLine, indentAttribute);
 
@@ -728,12 +530,12 @@ namespace SvgDemo
             }
         }
 
-        internal static void PrintAttributes(SvgGroup svgGroup, string indentLine, string indentAttribute)
+        public static void PrintAttributes(SvgGroup svgGroup, string indentLine, string indentAttribute)
         {
             PrintSvgMarkerElementAttributes(svgGroup, indentLine, indentAttribute);
         }
 
-        internal static void PrintAttributes(SvgLine svgLine, string indentLine, string indentAttribute)
+        public static void PrintAttributes(SvgLine svgLine, string indentLine, string indentAttribute)
         {
             PrintSvgMarkerElementAttributes(svgLine, indentLine, indentAttribute);
 
@@ -743,9 +545,9 @@ namespace SvgDemo
             WriteLine($"{indentLine}{indentAttribute}[y2]={svgLine.EndY}", s_attributeColor);
         }
 
-        internal static void PrintAttributes(SvgPathSegmentList pathSegmentList, string indentLine, string indentAttribute)
+        public static void PrintAttributes(SvgPathSegmentList svgPathSegmentList, string indentLine, string indentAttribute)
         {
-            if (pathSegmentList != null)
+            if (svgPathSegmentList != null)
             {
                 /// The <see cref="SvgPathSegment"/> object graph.
                 /// +---abstract class <see cref="SvgPathSegment"/>
@@ -760,38 +562,43 @@ namespace SvgDemo
 
                 string segmentIndent = "    ";
 
-                foreach (var segment in pathSegmentList)
+                foreach (var svgSegment in svgPathSegmentList)
                 {
-                    switch (segment)
+                    switch (svgSegment)
                     {
                         case SvgArcSegment svgArcSegment:
                             // TODO:
+                            WriteLine($"{indentLine}{indentAttribute}{segmentIndent}{indentAttribute}", s_attributeColor);
                             break;
                         case SvgClosePathSegment svgClosePathSegment:
                             // TODO:
+                            WriteLine($"{indentLine}{indentAttribute}{segmentIndent}{svgClosePathSegment}", s_attributeColor);
                             break;
                         case SvgCubicCurveSegment svgCubicCurveSegment:
                             // TODO:
+                            WriteLine($"{indentLine}{indentAttribute}{segmentIndent}{svgCubicCurveSegment}", s_attributeColor);
                             break;
                         case SvgLineSegment svgLineSegment:
                             // TODO:
+                            WriteLine($"{indentLine}{indentAttribute}{segmentIndent}{svgLineSegment}", s_attributeColor);
                             break;
                         case SvgMoveToSegment svgMoveToSegment:
                             // TODO:
+                            WriteLine($"{indentLine}{indentAttribute}{segmentIndent}{svgMoveToSegment}", s_attributeColor);
                             break;
                         case SvgQuadraticCurveSegment svgQuadraticCurveSegment:
                             // TODO:
+                            WriteLine($"{indentLine}{indentAttribute}{segmentIndent}{svgQuadraticCurveSegment}", s_attributeColor);
                             break;
                         default:
+                            WriteLine($"{indentLine}{indentAttribute}{segmentIndent}Unknown path segment type: {svgSegment.GetType()}", s_errorColor);
                             break;
                     }
-
-                    WriteLine($"{indentLine}{indentAttribute}{segmentIndent}{segment}", s_attributeColor);
                 }
             }
         }
 
-        internal static void PrintAttributes(SvgPath svgPath, string indentLine, string indentAttribute)
+        public static void PrintAttributes(SvgPath svgPath, string indentLine, string indentAttribute)
         {
             PrintSvgMarkerElementAttributes(svgPath, indentLine, indentAttribute);
 
@@ -806,21 +613,21 @@ namespace SvgDemo
             }
         }
 
-        internal static void PrintAttributes(SvgPolygon svgPolygon, string indentLine, string indentAttribute)
+        public static void PrintAttributes(SvgPolygon svgPolygon, string indentLine, string indentAttribute)
         {
             PrintSvgMarkerElementAttributes(svgPolygon, indentLine, indentAttribute);
 
             WriteLine($"{indentLine}{indentAttribute}[points]={svgPolygon.Points}", s_attributeColor);
         }
 
-        internal static void PrintAttributes(SvgPolyline svgPolyline, string indentLine, string indentAttribute)
+        public static void PrintAttributes(SvgPolyline svgPolyline, string indentLine, string indentAttribute)
         {
             PrintSvgMarkerElementAttributes(svgPolyline, indentLine, indentAttribute);
 
             WriteLine($"{indentLine}{indentAttribute}[points]={svgPolyline.Points}", s_attributeColor);
         }
 
-        internal static void PrintSvgTextBaseAttributes(SvgTextBase svgTextBase, string indentLine, string indentAttribute)
+        public static void PrintSvgTextBaseAttributes(SvgTextBase svgTextBase, string indentLine, string indentAttribute)
         {
             PrintSvgVisualElementAttributes(svgTextBase, indentLine, indentAttribute);
 
@@ -875,12 +682,12 @@ namespace SvgDemo
             }
         }
 
-        internal static void PrintAttributes(SvgText svgText, string indentLine, string indentAttribute)
+        public static void PrintAttributes(SvgText svgText, string indentLine, string indentAttribute)
         {
             PrintSvgTextBaseAttributes(svgText, indentLine, indentAttribute);
         }
 
-        internal static void PrintAttributes(SvgTextPath svgTextPath, string indentLine, string indentAttribute)
+        public static void PrintAttributes(SvgTextPath svgTextPath, string indentLine, string indentAttribute)
         {
             PrintSvgTextBaseAttributes(svgTextPath, indentLine, indentAttribute);
 
@@ -905,7 +712,7 @@ namespace SvgDemo
             }
         }
 
-        internal static void PrintAttributes(SvgTextRef svgTextRef, string indentLine, string indentAttribute)
+        public static void PrintAttributes(SvgTextRef svgTextRef, string indentLine, string indentAttribute)
         {
             PrintSvgTextBaseAttributes(svgTextRef, indentLine, indentAttribute);
 
@@ -915,72 +722,268 @@ namespace SvgDemo
             }
         }
 
-        internal static void PrintAttributes(SvgTextSpan svgTextSpan, string indentLine, string indentAttribute)
+        public static void PrintAttributes(SvgTextSpan svgTextSpan, string indentLine, string indentAttribute)
         {
             PrintSvgTextBaseAttributes(svgTextSpan, indentLine, indentAttribute);
         }
 
-        internal static void PrintAttributes(SvgColourMatrix svgColourMatrix, string indentLine, string indentAttribute)
+        public static void PrintAttributes(SvgColourMatrix svgColourMatrix, string indentLine, string indentAttribute)
         {
             // TODO:
         }
 
-        internal static void PrintAttributes(SvgGaussianBlur svgGaussianBlur, string indentLine, string indentAttribute)
+        public static void PrintAttributes(SvgGaussianBlur svgGaussianBlur, string indentLine, string indentAttribute)
         {
             // TODO:
         }
 
-        internal static void PrintAttributes(SvgMerge svgMerge, string indentLine, string indentAttribute)
+        public static void PrintAttributes(SvgMerge svgMerge, string indentLine, string indentAttribute)
         {
             // TODO:
         }
 
-        internal static void PrintAttributes(SvgOffset svgOffset, string indentLine, string indentAttribute)
+        public static void PrintAttributes(SvgOffset svgOffset, string indentLine, string indentAttribute)
         {
             // TODO:
         }
 
-        internal static void PrintAttributes(SvgColourServer svgColourServer, string indentLine, string indentAttribute)
+        public static void PrintAttributes(SvgColourServer svgColourServer, string indentLine, string indentAttribute)
         {
             // TODO:
         }
 
-        internal static void PrintAttributes(SvgDeferredPaintServer svgDeferredPaintServer, string indentLine, string indentAttribute)
+        public static void PrintAttributes(SvgDeferredPaintServer svgDeferredPaintServer, string indentLine, string indentAttribute)
         {
             // TODO:
         }
 
-        internal static void PrintAttributes(SvgFallbackPaintServer svgFallbackPaintServer, string indentLine, string indentAttribute)
+        public static void PrintAttributes(SvgFallbackPaintServer svgFallbackPaintServer, string indentLine, string indentAttribute)
         {
             // TODO:
         }
 
-        internal static void PrintAttributes(SvgPatternServer svgPatternServer, string indentLine, string indentAttribute)
+        public static void PrintAttributes(SvgPatternServer svgPatternServer, string indentLine, string indentAttribute)
         {
             // TODO:
         }
 
-        internal static void PrintAttributes(SvgLinearGradientServer svgLinearGradientServer, string indentLine, string indentAttribute)
+        public static void PrintAttributes(SvgLinearGradientServer svgLinearGradientServer, string indentLine, string indentAttribute)
         {
             // TODO:
         }
 
-        internal static void PrintAttributes(SvgRadialGradientServer svgRadialGradientServer, string indentLine, string indentAttribute)
+        public static void PrintAttributes(SvgRadialGradientServer svgRadialGradientServer, string indentLine, string indentAttribute)
         {
             // TODO:
         }
 
-        internal static void PrintAttributes(SvgVerticalKern svgVerticalKern, string indentLine, string indentAttribute)
+        public static void PrintAttributes(SvgVerticalKern svgVerticalKern, string indentLine, string indentAttribute)
         {
             // TODO:
         }
 
-        internal static void PrintAttributes(SvgHorizontalKern svgHorizontalKern, string indentLine, string indentAttribute)
+        public static void PrintAttributes(SvgHorizontalKern svgHorizontalKern, string indentLine, string indentAttribute)
         {
             // TODO:
         }
 
-        internal static void PrintSvgElement(SvgElement svgElement, string indentLine, string indentAttribute)
+        public static void PrintSvgElementAttributes(SvgElement svgElement, string indentLine, string indentAttribute)
+        {
+            // Transforms Attributes
+
+            if (svgElement.Transforms.Count > 0)
+            {
+                WriteLine($"{indentLine}{indentAttribute}<Transforms>", s_groupColor);
+                WriteLine($"{indentLine}{indentAttribute}[transform]=", s_attributeColor);
+
+                string transformIndent = "            ";
+
+                foreach (var transform in svgElement.Transforms)
+                {
+                    WriteLine($"{indentLine}{indentAttribute}{transformIndent}{transform}", s_attributeColor);
+                }
+            }
+
+            // Attributes
+
+            if (!string.IsNullOrEmpty(svgElement.ID))
+            {
+                WriteLine($"{indentLine}{indentAttribute}[id]={svgElement.ID}", s_attributeColor);
+            }
+
+            if (svgElement.SpaceHandling != XmlSpaceHandling.@default && svgElement.SpaceHandling != XmlSpaceHandling.inherit)
+            {
+                WriteLine($"{indentLine}{indentAttribute}[space]={svgElement.SpaceHandling}", s_attributeColor);
+            }
+
+            if (svgElement.Color != null && svgElement.Color != SvgColourServer.NotSet)
+            {
+                PrintSvgPaintServerServer(svgElement.Color, "color", indentLine, indentAttribute);
+            }
+
+            // Style Attributes
+
+            if (svgElement.Fill != null && svgElement.Fill != SvgColourServer.NotSet)
+            {
+                PrintSvgPaintServerServer(svgElement.Fill, "fill", indentLine, indentAttribute);
+            }
+
+            if (svgElement.Stroke != null)
+            {
+                PrintSvgPaintServerServer(svgElement.Stroke, "stroke", indentLine, indentAttribute);
+            }
+
+            if (svgElement.FillRule != SvgFillRule.NonZero)
+            {
+                WriteLine($"{indentLine}{indentAttribute}[fill-rule]={svgElement.FillRule}", s_attributeColor);
+            }
+
+            if (svgElement.FillOpacity != 1f)
+            {
+                WriteLine($"{indentLine}{indentAttribute}[fill-opacity]={svgElement.FillOpacity}", s_attributeColor);
+            }
+
+            if (svgElement.StrokeWidth != 1f)
+            {
+                WriteLine($"{indentLine}{indentAttribute}[stroke-width]={svgElement.StrokeWidth}", s_attributeColor);
+            }
+
+            if (svgElement.StrokeLineCap != SvgStrokeLineCap.Butt)
+            {
+                WriteLine($"{indentLine}{indentAttribute}[stroke-linecap]={svgElement.StrokeLineCap}", s_attributeColor);
+            }
+
+            if (svgElement.StrokeLineJoin != SvgStrokeLineJoin.Miter)
+            {
+                WriteLine($"{indentLine}{indentAttribute}[stroke-linejoin]={svgElement.StrokeLineJoin}", s_attributeColor);
+            }
+
+            if (svgElement.StrokeMiterLimit != 4f)
+            {
+                WriteLine($"{indentLine}{indentAttribute}[stroke-miterlimit]={svgElement.StrokeMiterLimit}", s_attributeColor);
+            }
+
+            if (svgElement.StrokeDashArray != null && svgElement.StrokeDashArray.Count > 0)
+            {
+                WriteLine($"{indentLine}{indentAttribute}[stroke-dasharray]={svgElement.StrokeDashArray}", s_attributeColor);
+            }
+
+            if (svgElement.StrokeDashOffset != SvgUnit.Empty)
+            {
+                WriteLine($"{indentLine}{indentAttribute}[stroke-dashoffset]={svgElement.StrokeDashOffset}", s_attributeColor);
+            }
+
+            if (svgElement.StrokeOpacity != 1f)
+            {
+                WriteLine($"{indentLine}{indentAttribute}[stroke-opacity]={svgElement.StrokeOpacity}", s_attributeColor);
+            }
+
+            if (svgElement.StopColor != null)
+            {
+                PrintSvgPaintServerServer(svgElement.StopColor, "stop-color", indentLine, indentAttribute);
+            }
+
+            if (svgElement.Opacity != 1f)
+            {
+                WriteLine($"{indentLine}{indentAttribute}[opacity]={svgElement.Opacity}", s_attributeColor);
+            }
+
+            if (svgElement.ShapeRendering != SvgShapeRendering.Inherit)
+            {
+                WriteLine($"{indentLine}{indentAttribute}[shape-rendering]={svgElement.ShapeRendering}", s_attributeColor);
+            }
+
+            if (svgElement.TextAnchor != SvgTextAnchor.Inherit)
+            {
+                WriteLine($"{indentLine}{indentAttribute}[text-anchor]={svgElement.TextAnchor}", s_attributeColor);
+            }
+
+            if (!string.IsNullOrEmpty(svgElement.BaselineShift))
+            {
+                WriteLine($"{indentLine}{indentAttribute}[baseline-shift]={svgElement.BaselineShift}", s_attributeColor);
+            }
+
+            if (!string.IsNullOrEmpty(svgElement.FontFamily))
+            {
+                WriteLine($"{indentLine}{indentAttribute}[font-family]={svgElement.FontFamily}", s_attributeColor);
+            }
+
+            if (svgElement.FontSize != SvgUnit.Empty)
+            {
+                WriteLine($"{indentLine}{indentAttribute}[font-size]={svgElement.FontSize}", s_attributeColor);
+            }
+
+            if (svgElement.FontStyle != SvgFontStyle.All)
+            {
+                WriteLine($"{indentLine}{indentAttribute}[font-style]={svgElement.FontStyle}", s_attributeColor);
+            }
+
+            if (svgElement.FontVariant != SvgFontVariant.Inherit)
+            {
+                WriteLine($"{indentLine}{indentAttribute}[font-variant]={svgElement.FontVariant}", s_attributeColor);
+            }
+
+            if (svgElement.TextDecoration != SvgTextDecoration.Inherit)
+            {
+                WriteLine($"{indentLine}{indentAttribute}[text-decoration]={svgElement.TextDecoration}", s_attributeColor);
+            }
+
+            if (svgElement.FontWeight != SvgFontWeight.Inherit)
+            {
+                WriteLine($"{indentLine}{indentAttribute}[font-weight]={svgElement.FontWeight}", s_attributeColor);
+            }
+
+            if (svgElement.TextTransformation != SvgTextTransformation.Inherit)
+            {
+                WriteLine($"{indentLine}{indentAttribute}[text-transform]={svgElement.TextTransformation}", s_attributeColor);
+            }
+
+            if (!string.IsNullOrEmpty(svgElement.Font))
+            {
+                WriteLine($"{indentLine}{indentAttribute}[font]={svgElement.Font}", s_attributeColor);
+            }
+        }
+
+        public static void PrintSvgElementCustomAttributes(SvgElement svgElement, string indentLine, string indentAttribute)
+        {
+            if (svgElement.CustomAttributes.Count > 0)
+            {
+                WriteLine($"{indentLine}{indentAttribute}<CustomAttributes>", s_groupColor);
+
+                foreach (var attribute in svgElement.CustomAttributes)
+                {
+                    WriteLine($"{indentLine}{indentAttribute}[{attribute.Key}]={attribute.Value}", s_attributeColor);
+                }
+            }
+        }
+
+        public static void PrintSvgElementChildren(SvgElement svgElement, string indentLine, string indentAttribute)
+        {
+            if (svgElement.Children.Count > 0)
+            {
+                WriteLine($"{indentLine}<Children>", s_groupColor);
+
+                foreach (var child in svgElement.Children)
+                {
+                    PrintSvgElement(child, indentLine + s_indentTab, indentAttribute);
+                }
+            }
+        }
+
+        public static void PrintSvgElementNodes(SvgElement svgElement, string indentLine, string indentAttribute)
+        {
+            if (svgElement.Nodes.Count > 0)
+            {
+                WriteLine($"{indentLine}<Nodes>", s_groupColor);
+
+                foreach (var node in svgElement.Nodes)
+                {
+                    WriteLine($"{indentLine}{node.Content}", s_attributeColor);
+                }
+            }
+        }
+
+        public static void PrintSvgElement(SvgElement svgElement, string indentLine, string indentAttribute)
         {
             WriteLine($"{indentLine}{svgElement.GetType()}", s_elementColor);
 
@@ -1192,6 +1195,7 @@ namespace SvgDemo
                     PrintAttributes(svgHorizontalKern, indentLine, indentAttribute);
                     break;
                 default:
+                    WriteLine($"{indentLine}Unknown elemen type: {svgElement.GetType()}", s_errorColor);
                     break;
             }
 
@@ -1202,7 +1206,7 @@ namespace SvgDemo
             PrintSvgElementNodes(svgElement, indentLine, indentAttribute);
         }
 
-        internal static void Run(string[] args)
+        public static void Run(string[] args)
         {
             if (args.Length < 1)
             {
@@ -1216,12 +1220,12 @@ namespace SvgDemo
 
                 var svgDocument = SvgDocument.Open<SvgDocument>(path, null);
                 svgDocument.FlushStyles(true);
-                PrintSvgElement(svgDocument, "    ", "");
+                PrintSvgElement(svgDocument, s_indentTab, "");
                 ResetColor();
             }
         }
 
-        internal static void Error(Exception ex)
+        public static void Error(Exception ex)
         {
             WriteLine($"{ex.Message}", s_errorColor);
             WriteLine($"{ex.StackTrace}", s_attributeColor);
