@@ -110,7 +110,10 @@ namespace SvgDemo
 
         public void PrintAttributes(SvgClipPath svgClipPath, string indentLine, string indentAttribute)
         {
-            // TODO:
+            if (svgClipPath.ClipPathUnits != SvgCoordinateUnits.Inherit)
+            {
+                WriteLine($"{indentLine}{indentAttribute}clipPathUnits: {svgClipPath.ClipPathUnits}", AttributeColor);
+            }
         }
 
         public void PrintAttributes(SvgFragment svgFragment, string indentLine, string indentAttribute)
@@ -175,17 +178,22 @@ namespace SvgDemo
 
         public void PrintAttributes(SvgMask svgMask, string indentLine, string indentAttribute)
         {
-            // TODO:
         }
 
         public void PrintAttributes(SvgDefinitionList svgDefinitionList, string indentLine, string indentAttribute)
         {
-            // TODO:
         }
 
         public void PrintAttributes(SvgDescription svgDescription, string indentLine, string indentAttribute)
         {
-            // TODO:
+            if (!string.IsNullOrEmpty(svgDescription.Content))
+            {
+                if (svgDescription.Children.Count == 0)
+                {
+                    WriteLine($"{indentLine}{indentAttribute}Content: |", AttributeColor);
+                    WriteLine($"{indentLine}{indentAttribute}{IndentTab}{svgDescription.Content}", AttributeColor);
+                }
+            }
         }
 
         public void PrintAttributes(SvgDocumentMetadata svgDocumentMetadata, string indentLine, string indentAttribute)
