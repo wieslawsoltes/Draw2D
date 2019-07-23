@@ -428,7 +428,15 @@ namespace SvgDemo
         {
             PrintSvgVisualElementAttributes(svgUse, indentLine, indentAttribute);
 
-            // TODO:
+            if (svgUse.ReferencedElement != null)
+            {
+                WriteLine($"{indentLine}{indentAttribute}href: {svgUse.ReferencedElement}", AttributeColor);
+            }
+
+            WriteLine($"{indentLine}{indentAttribute}x: {Format(svgUse.X)}", AttributeColor);
+            WriteLine($"{indentLine}{indentAttribute}y: {Format(svgUse.Y)}", AttributeColor);
+            WriteLine($"{indentLine}{indentAttribute}width: {Format(svgUse.Width)}", AttributeColor);
+            WriteLine($"{indentLine}{indentAttribute}height: {Format(svgUse.Height)}", AttributeColor);
         }
 
         public void PrintAttributes(SvgForeignObject svgForeignObject, string indentLine, string indentAttribute)
