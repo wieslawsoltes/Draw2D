@@ -534,8 +534,16 @@ namespace SvgDemo
             WriteLine($"{indentLine}{indentAttribute}[y]={svgRectangle.Y}", s_attributeColor);
             WriteLine($"{indentLine}{indentAttribute}[width]={svgRectangle.Width}", s_attributeColor);
             WriteLine($"{indentLine}{indentAttribute}[height]={svgRectangle.Height}", s_attributeColor);
-            WriteLine($"{indentLine}{indentAttribute}[rx]={svgRectangle.CornerRadiusX}", s_attributeColor);
-            WriteLine($"{indentLine}{indentAttribute}[ry]={svgRectangle.CornerRadiusY}", s_attributeColor);
+
+            if (svgRectangle.CornerRadiusX != 0f)
+            {
+                WriteLine($"{indentLine}{indentAttribute}[rx]={svgRectangle.CornerRadiusX}", s_attributeColor);
+            }
+
+            if (svgRectangle.CornerRadiusY != 0f)
+            {
+                WriteLine($"{indentLine}{indentAttribute}[ry]={svgRectangle.CornerRadiusY}", s_attributeColor);
+            }
         }
 
         internal static void PrintAttributes(SvgMarker svgMarker, string indentLine, string indentAttribute)
