@@ -135,7 +135,7 @@ namespace SvgDemo
                 WriteLine($"{indentLine}{indentAttribute}[stroke-miterlimit]={element.StrokeMiterLimit}", s_attributeColor);
             }
 
-            if (element.StrokeDashArray != null)
+            if (element.StrokeDashArray != null && element.StrokeDashArray.Count > 0)
             {
                 WriteLine($"{indentLine}{indentAttribute}[stroke-dasharray]={element.StrokeDashArray}", s_attributeColor);
             }
@@ -363,17 +363,27 @@ namespace SvgDemo
 
         internal static void PrintAttributes(SvgCircle svgCircle, string indentLine, string indentAttribute)
         {
-            // TODO:
+            WriteLine($"{indentLine}{indentAttribute}[cx]={svgCircle.CenterX}", s_attributeColor);
+            WriteLine($"{indentLine}{indentAttribute}[cy]={svgCircle.CenterY}", s_attributeColor);
+            WriteLine($"{indentLine}{indentAttribute}[r]={svgCircle.Radius}", s_attributeColor);
         }
 
         internal static void PrintAttributes(SvgEllipse svgEllipse, string indentLine, string indentAttribute)
         {
-            // TODO:
+            WriteLine($"{indentLine}{indentAttribute}[cx]={svgEllipse.CenterX}", s_attributeColor);
+            WriteLine($"{indentLine}{indentAttribute}[cy]={svgEllipse.CenterY}", s_attributeColor);
+            WriteLine($"{indentLine}{indentAttribute}[rx]={svgEllipse.RadiusX}", s_attributeColor);
+            WriteLine($"{indentLine}{indentAttribute}[ry]={svgEllipse.RadiusY}", s_attributeColor);
         }
 
         internal static void PrintAttributes(SvgRectangle svgRectangle, string indentLine, string indentAttribute)
         {
-            // TODO:
+            WriteLine($"{indentLine}{indentAttribute}[x]={svgRectangle.X}", s_attributeColor);
+            WriteLine($"{indentLine}{indentAttribute}[y]={svgRectangle.Y}", s_attributeColor);
+            WriteLine($"{indentLine}{indentAttribute}[width]={svgRectangle.Width}", s_attributeColor);
+            WriteLine($"{indentLine}{indentAttribute}[height]={svgRectangle.Height}", s_attributeColor);
+            WriteLine($"{indentLine}{indentAttribute}[rx]={svgRectangle.CornerRadiusX}", s_attributeColor);
+            WriteLine($"{indentLine}{indentAttribute}[ry]={svgRectangle.CornerRadiusY}", s_attributeColor);
         }
 
         internal static void PrintAttributes(SvgMarker svgMarker, string indentLine, string indentAttribute)
