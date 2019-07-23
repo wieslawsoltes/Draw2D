@@ -90,7 +90,7 @@ namespace SvgDemo
         public ConsoleColor ElementColor { get; set; } = ConsoleColor.Red;
         public ConsoleColor HeaderColor { get; set; } = ConsoleColor.White;
         public ConsoleColor AttributeColor { get; set; } = ConsoleColor.Blue;
-        public string IndentTab { get; set; } = "    ";
+        public string IndentTab { get; set; } = "  ";
         public bool PrintSvgElementAttributesEnabled { get; set; } = true;
         public bool PrintSvgElementCustomAttributesEnabled { get; set; } = true;
         public bool PrintSvgElementChildrenEnabled { get; set; } = true;
@@ -604,7 +604,7 @@ namespace SvgDemo
                     {
                         case SvgArcSegment svgArcSegment:
                             // TODO:
-                            WriteLine($"{indentLine}{indentAttribute}{IndentTab}{indentAttribute}", AttributeColor);
+                            WriteLine($"{indentLine}{indentAttribute}{IndentTab}{svgArcSegment}", AttributeColor);
                             break;
                         case SvgClosePathSegment svgClosePathSegment:
                             // TODO:
@@ -869,28 +869,25 @@ namespace SvgDemo
         {
             string elementIndent = indentLine;
 
-            WriteLine($"{elementIndent}{GetElementName(svgElement)}: {{", ElementColor);
+            WriteLine($"{elementIndent}- {GetElementName(svgElement)}:", ElementColor);
             WriteLine($"{indentLine}{indentAttribute}type: {svgElement.GetType().Name}", AttributeColor);
 
             indentLine += IndentTab;
 
             if (PrintSvgElementAttributesEnabled)
             {
-                WriteLine($"{indentLine}Attributes: [", HeaderColor);
+                WriteLine($"{indentLine}Attributes:", HeaderColor);
 
                 // Transforms Attributes
 
                 if (svgElement.Transforms.Count > 0)
                 {
-                    WriteLine($"{indentLine}{indentAttribute}<Transforms>", HeaderColor);
-                    WriteLine($"{indentLine}{indentAttribute}transform: [", AttributeColor);
+                    WriteLine($"{indentLine}{indentAttribute}transform:", AttributeColor);
 
                     foreach (var transform in svgElement.Transforms)
                     {
                         WriteLine($"{indentLine}{indentAttribute}{IndentTab}{transform}", AttributeColor);
                     }
-
-                    WriteLine($"{indentLine}{indentAttribute}]", AttributeColor);
                 }
 
                 // Attributes
@@ -1184,48 +1181,35 @@ namespace SvgDemo
                     break;
             }
 
-            if (PrintSvgElementAttributesEnabled)
-            {
-                WriteLine($"{indentLine}]", HeaderColor);
-            }
-
             if (PrintSvgElementCustomAttributesEnabled && svgElement.CustomAttributes.Count > 0)
             {
-                WriteLine($"{indentLine}CustomAttributes: [", HeaderColor);
+                WriteLine($"{indentLine}CustomAttributes:", HeaderColor);
 
                 foreach (var attribute in svgElement.CustomAttributes)
                 {
                     WriteLine($"{indentLine}{indentAttribute}{attribute.Key}: {attribute.Value}", AttributeColor);
                 }
-
-                WriteLine($"{indentLine}]", HeaderColor);
             }
 
             if (PrintSvgElementNodesEnabled && svgElement.Nodes.Count > 0)
             {
-                WriteLine($"{indentLine}Nodes: [", HeaderColor);
+                WriteLine($"{indentLine}Nodes: |", HeaderColor);
 
                 foreach (var node in svgElement.Nodes)
                 {
                     WriteLine($"{indentLine}{indentAttribute}{node.Content}", AttributeColor);
                 }
-
-                WriteLine($"{indentLine}]", HeaderColor);
             }
 
             if (PrintSvgElementChildrenEnabled && svgElement.Children.Count > 0)
             {
-                WriteLine($"{indentLine}Children: [", HeaderColor);
+                WriteLine($"{indentLine}Children:", HeaderColor);
 
                 foreach (var child in svgElement.Children)
                 {
                     PrintSvgElement(child, indentLine + IndentTab, indentAttribute);
                 }
-
-                WriteLine($"{indentLine}]", HeaderColor);
             }
-
-            WriteLine($"{elementIndent}}}", ElementColor);
         }
 
         public void Run(string[] args)
@@ -1238,7 +1222,7 @@ namespace SvgDemo
             for (int i = 0; i < args.Length; i++)
             {
                 string path = args[i];
-                WriteLine($"Path: {path}", HeaderColor);
+                WriteLine($"# {path}", HeaderColor);
 
                 var svgDocument = SvgDocument.Open<SvgDocument>(path, null);
                 if (svgDocument != null)
@@ -1273,11 +1257,11 @@ namespace SvgDemo
                     ElementColor = ConsoleColor.Red,
                     HeaderColor = ConsoleColor.White,
                     AttributeColor = ConsoleColor.Blue,
-                    IndentTab = "    ",
+                    IndentTab = "  ",
                     PrintSvgElementAttributesEnabled = true,
                     PrintSvgElementCustomAttributesEnabled = true,
                     PrintSvgElementChildrenEnabled = true,
-                    PrintSvgElementNodesEnabled = true
+                    PrintSvgElementNodesEnabled = false
                 }
                 .Run(args);
             }
