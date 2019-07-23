@@ -252,7 +252,6 @@ namespace SvgDemo
 
         public void PrintAttributes(SvgUnknownElement svgUnknownElement, string indentLine, string indentAttribute)
         {
-            // TODO:
         }
 
         public void PrintAttributes(SvgFont svgFont, string indentLine, string indentAttribute)
