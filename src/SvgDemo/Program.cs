@@ -1418,7 +1418,7 @@ namespace SvgDemo
                 var svgDocument = SvgDocument.Open<SvgDocument>(path, null);
                 if (svgDocument != null)
                 {
-                    //svgDocument.FlushStyles(true);
+                    svgDocument.FlushStyles(true);
                     PrintSvgElement(svgDocument, "", IndentTab);
                     ResetColor();
                 }
