@@ -320,22 +320,112 @@ namespace SvgDemo
 
         internal static void PrintAttributes(SvgFont svgFont, string indentLine, string indentAttribute)
         {
-            // TODO:
+            if (svgFont.HorizAdvX != 0f)
+            {
+                WriteLine($"{indentLine}{indentAttribute}[horiz-adv-x]={svgFont.HorizAdvX}", s_attributeColor);
+            }
+
+            if (svgFont.HorizOriginX != 0f)
+            {
+                WriteLine($"{indentLine}{indentAttribute}[horiz-origin-x]={svgFont.HorizOriginX}", s_attributeColor);
+            }
+
+            if (svgFont.HorizOriginY != 0f)
+            {
+                WriteLine($"{indentLine}{indentAttribute}[horiz-origin-y]={svgFont.HorizOriginY}", s_attributeColor);
+            }
+
+            if (svgFont.VertAdvY != 0f)
+            {
+                WriteLine($"{indentLine}{indentAttribute}[vert-adv-y]={svgFont.VertAdvY}", s_attributeColor);
+            }
+
+            if (svgFont.VertOriginX != 0f)
+            {
+                WriteLine($"{indentLine}{indentAttribute}[vert-origin-x]={svgFont.VertOriginX}", s_attributeColor);
+            }
+
+            if (svgFont.VertOriginY != 0f)
+            {
+                WriteLine($"{indentLine}{indentAttribute}[vert-origin-y]={svgFont.VertOriginY}", s_attributeColor);
+            }
         }
 
         internal static void PrintAttributes(SvgFontFace svgFontFace, string indentLine, string indentAttribute)
         {
             // TODO:
+
+            if (svgFontFace.Alphabetic != 0f)
+            {
+                WriteLine($"{indentLine}{indentAttribute}[alphabetic]={svgFontFace.Alphabetic}", s_attributeColor);
+            }
+
+            if (svgFontFace.Ascent != 0f)
+            {
+                WriteLine($"{indentLine}{indentAttribute}[ascent]={svgFontFace.Ascent}", s_attributeColor);
+            }
+
+            if (svgFontFace.AscentHeight != 0f)
+            {
+                WriteLine($"{indentLine}{indentAttribute}[ascent-height]={svgFontFace.AscentHeight}", s_attributeColor);
+            }
+
+            if (svgFontFace.Descent != 0f)
+            {
+                WriteLine($"{indentLine}{indentAttribute}[descent]={svgFontFace.Descent}", s_attributeColor);
+            }
+
+            if (!string.IsNullOrEmpty(svgFontFace.FontFamily))
+            {
+                WriteLine($"{indentLine}{indentAttribute}[font-family]={svgFontFace.FontFamily}", s_attributeColor);
+            }
+
+            if (svgFontFace.FontSize != SvgUnit.Empty)
+            {
+                WriteLine($"{indentLine}{indentAttribute}[font-size]={svgFontFace.FontSize}", s_attributeColor);
+            }
+
+            if (svgFontFace.FontStyle != SvgFontStyle.All)
+            {
+                WriteLine($"{indentLine}{indentAttribute}[font-style]={svgFontFace.FontStyle}", s_attributeColor);
+            }
+
+            if (svgFontFace.FontVariant != SvgFontVariant.Inherit)
+            {
+                WriteLine($"{indentLine}{indentAttribute}[font-variant]={svgFontFace.FontVariant}", s_attributeColor);
+            }
+
+            if (svgFontFace.FontWeight != SvgFontWeight.Inherit)
+            {
+                WriteLine($"{indentLine}{indentAttribute}[font-weight]={svgFontFace.FontWeight}", s_attributeColor);
+            }
+
+            if (!string.IsNullOrEmpty(svgFontFace.Panose1))
+            {
+                WriteLine($"{indentLine}{indentAttribute}[panose-1]={svgFontFace.Panose1}", s_attributeColor);
+            }
+
+            if (svgFontFace.UnitsPerEm != 1000f)
+            {
+                WriteLine($"{indentLine}{indentAttribute}[units-per-em]={svgFontFace.UnitsPerEm}", s_attributeColor);
+            }
+
+            if (svgFontFace.XHeight != float.MinValue)
+            {
+                WriteLine($"{indentLine}{indentAttribute}[x-height]={svgFontFace.XHeight}", s_attributeColor);
+            }
         }
 
         internal static void PrintAttributes(SvgFontFaceSrc svgFontFaceSrc, string indentLine, string indentAttribute)
         {
-            // TODO:
         }
 
         internal static void PrintAttributes(SvgFontFaceUri svgFontFaceUri, string indentLine, string indentAttribute)
         {
-            // TODO:
+            if (svgFontFaceUri.ReferencedElement != null)
+            {
+                WriteLine($"{indentLine}{indentAttribute}[href]={svgFontFaceUri.ReferencedElement}", s_attributeColor);
+            }
         }
 
         internal static void PrintSvgVisualElementAttributes(SvgVisualElement svgVisualElement, string indentLine, string indentAttribute)
