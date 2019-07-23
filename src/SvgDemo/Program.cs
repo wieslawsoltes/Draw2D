@@ -240,7 +240,6 @@ namespace SvgDemo
 
                 foreach (var child in element.Children)
                 {
-                    WriteLine($"{indentLine}{child.GetType()}", s_elementColor);
                     PrintSvgElement(child, indentLine + "    ", indentAttribute);
                 }
             }
@@ -266,7 +265,62 @@ namespace SvgDemo
 
         internal static void PrintAttributes(SvgFragment svgFragment, string indentLine, string indentAttribute)
         {
-            // TODO:
+            if (svgFragment.X != 0f)
+            {
+                WriteLine($"{indentLine}{indentAttribute}[x]={svgFragment.X}", s_attributeColor);
+            }
+
+            if (svgFragment.Y != 0f)
+            {
+                WriteLine($"{indentLine}{indentAttribute}[y]={svgFragment.Y}", s_attributeColor);
+            }
+
+            if (svgFragment.Width != new SvgUnit(SvgUnitType.Percentage, 100f))
+            {
+                WriteLine($"{indentLine}{indentAttribute}[width]={svgFragment.Width}", s_attributeColor);
+            }
+
+            if (svgFragment.Height != new SvgUnit(SvgUnitType.Percentage, 100f))
+            {
+                WriteLine($"{indentLine}{indentAttribute}[height]={svgFragment.Height}", s_attributeColor);
+            }
+
+            if (svgFragment.Overflow != SvgOverflow.Inherit && svgFragment.Overflow != SvgOverflow.Hidden)
+            {
+                WriteLine($"{indentLine}{indentAttribute}[overflow]={svgFragment.Overflow}", s_attributeColor);
+            }
+
+            if (svgFragment.ViewBox != SvgViewBox.Empty)
+            {
+                var viewBox = svgFragment.ViewBox;
+                WriteLine($"{indentLine}{indentAttribute}[viewBox]={viewBox.MinX} {viewBox.MinY} {viewBox.Width} {viewBox.Height}", s_attributeColor);
+            }
+
+            if (svgFragment.AspectRatio != null)
+            {
+                var @default = new SvgAspectRatio(SvgPreserveAspectRatio.xMidYMid);
+                if (svgFragment.AspectRatio.Align != @default.Align
+                 || svgFragment.AspectRatio.Slice != @default.Slice
+                 || svgFragment.AspectRatio.Defer != @default.Defer)
+                {
+                    WriteLine($"{indentLine}{indentAttribute}[preserveAspectRatio]={svgFragment.AspectRatio}", s_attributeColor);
+                }
+            }
+
+            if (svgFragment.FontSize != SvgUnit.Empty)
+            {
+                WriteLine($"{indentLine}{indentAttribute}[font-size]={svgFragment.FontSize}", s_attributeColor);
+            }
+
+            if (!string.IsNullOrEmpty(svgFragment.FontFamily))
+            {
+                WriteLine($"{indentLine}{indentAttribute}[font-family]={svgFragment.FontFamily}", s_attributeColor);
+            }
+
+            if (svgFragment.SpaceHandling != XmlSpaceHandling.@default && svgFragment.SpaceHandling != XmlSpaceHandling.inherit)
+            {
+                WriteLine($"{indentLine}{indentAttribute}[space]={svgFragment.SpaceHandling}", s_attributeColor);
+            }
         }
 
         internal static void PrintAttributes(SvgMask svgMask, string indentLine, string indentAttribute)
@@ -926,9 +980,11 @@ namespace SvgDemo
             // TODO:
         }
 
-        internal static void PrintSvgElement(SvgElement element, string indentLine, string indentAttribute)
+        internal static void PrintSvgElement(SvgElement svgElement, string indentLine, string indentAttribute)
         {
-            PrintSvgElementAttributes(element, indentLine, indentAttribute);
+            WriteLine($"{indentLine}{svgElement.GetType()}", s_elementColor);
+
+            PrintSvgElementAttributes(svgElement, indentLine, indentAttribute);
 
             /// The <see cref="SvgElement"/> object graph.
             /// +---abstract class <see cref="SvgElement"/>
@@ -989,7 +1045,7 @@ namespace SvgDemo
             ///     +---class <see cref="SvgVerticalKern"/>
             ///     \---class <see cref="SvgHorizontalKern"/>
 
-            switch (element)
+            switch (svgElement)
             {
                 case SvgClipPath svgClipPath:
                     PrintAttributes(svgClipPath, indentLine, indentAttribute);
@@ -1139,79 +1195,11 @@ namespace SvgDemo
                     break;
             }
 
-            PrintSvgElementCustomAttributes(element, indentLine, indentAttribute);
+            PrintSvgElementCustomAttributes(svgElement, indentLine, indentAttribute);
 
-            PrintSvgElementChildren(element, indentLine, indentAttribute);
+            PrintSvgElementChildren(svgElement, indentLine, indentAttribute);
 
-            PrintSvgElementNodes(element, indentLine, indentAttribute);
-        }
-
-        internal static void PrintSvgFragmentAttributes(SvgFragment fragment, string indentLine, string indentAttribute)
-        {
-            if (fragment.X != 0f)
-            {
-                WriteLine($"{indentLine}{indentAttribute}[x]={fragment.X}", s_attributeColor);
-            }
-
-            if (fragment.Y != 0f)
-            {
-                WriteLine($"{indentLine}{indentAttribute}[y]={fragment.Y}", s_attributeColor);
-            }
-
-            if (fragment.Width != new SvgUnit(SvgUnitType.Percentage, 100f))
-            {
-                WriteLine($"{indentLine}{indentAttribute}[width]={fragment.Width}", s_attributeColor);
-            }
-
-            if (fragment.Height != new SvgUnit(SvgUnitType.Percentage, 100f))
-            {
-                WriteLine($"{indentLine}{indentAttribute}[height]={fragment.Height}", s_attributeColor);
-            }
-
-            if (fragment.Overflow != SvgOverflow.Inherit && fragment.Overflow != SvgOverflow.Hidden)
-            {
-                WriteLine($"{indentLine}{indentAttribute}[overflow]={fragment.Overflow}", s_attributeColor);
-            }
-
-            if (fragment.ViewBox != SvgViewBox.Empty)
-            {
-                var viewBox = fragment.ViewBox;
-                WriteLine($"{indentLine}{indentAttribute}[viewBox]={viewBox.MinX} {viewBox.MinY} {viewBox.Width} {viewBox.Height}", s_attributeColor);
-            }
-
-            if (fragment.AspectRatio != null)
-            {
-                var @default = new SvgAspectRatio(SvgPreserveAspectRatio.xMidYMid);
-                if (fragment.AspectRatio.Align != @default.Align
-                 || fragment.AspectRatio.Slice != @default.Slice
-                 || fragment.AspectRatio.Defer != @default.Defer)
-                {
-                    WriteLine($"{indentLine}{indentAttribute}[preserveAspectRatio]={fragment.AspectRatio}", s_attributeColor);
-                }
-            }
-
-            if (fragment.FontSize != SvgUnit.Empty)
-            {
-                WriteLine($"{indentLine}{indentAttribute}[font-size]={fragment.FontSize}", s_attributeColor);
-            }
-
-            if (!string.IsNullOrEmpty(fragment.FontFamily))
-            {
-                WriteLine($"{indentLine}{indentAttribute}[font-family]={fragment.FontFamily}", s_attributeColor);
-            }
-
-            if (fragment.SpaceHandling != XmlSpaceHandling.@default && fragment.SpaceHandling != XmlSpaceHandling.inherit)
-            {
-                WriteLine($"{indentLine}{indentAttribute}[space]={fragment.SpaceHandling}", s_attributeColor);
-            }
-        }
-
-        internal static void PrintSvgFragment(SvgFragment fragment, string indentLine, string indentAttribute)
-        {
-            WriteLine($"{fragment.GetType()}", s_elementColor);
-            PrintSvgFragmentAttributes(fragment, indentLine, indentAttribute);
-            PrintSvgElement(fragment, indentLine, indentAttribute);
-            ResetColor();
+            PrintSvgElementNodes(svgElement, indentLine, indentAttribute);
         }
 
         internal static void Run(string[] args)
@@ -1226,9 +1214,10 @@ namespace SvgDemo
                 string path = args[i];
                 WriteLine($"Path: {path}", s_groupColor);
 
-                var document = SvgDocument.Open<SvgDocument>(path, null);
-                document.FlushStyles(true);
-                PrintSvgFragment(document, "    ", "");
+                var svgDocument = SvgDocument.Open<SvgDocument>(path, null);
+                svgDocument.FlushStyles(true);
+                PrintSvgElement(svgDocument, "    ", "");
+                ResetColor();
             }
         }
 
