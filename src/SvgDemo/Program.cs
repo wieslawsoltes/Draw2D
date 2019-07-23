@@ -442,8 +442,6 @@ namespace SvgDemo
         public void PrintAttributes(SvgForeignObject svgForeignObject, string indentLine, string indentAttribute)
         {
             PrintSvgVisualElementAttributes(svgForeignObject, indentLine, indentAttribute);
-
-            // TODO:
         }
 
         public void PrintSvgPathBasedElementAttributes(SvgPathBasedElement svgPathBasedElement, string indentLine, string indentAttribute)
