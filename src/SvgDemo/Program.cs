@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
+using System.Text;
 using Svg;
 using Svg.Css;
 using Svg.DataTypes;
@@ -43,30 +44,17 @@ namespace SvgDemo
 {
     public class SvgDebug
     {
-        public ConsoleColor ErrorColor { get; set; } = ConsoleColor.Yellow;
+        public StringBuilder Builder { get; set; }
 
-        public ConsoleColor ElementColor { get; set; } = ConsoleColor.Red;
+        public string IndentTab { get; set; }
 
-        public ConsoleColor HeaderColor { get; set; } = ConsoleColor.White;
+        public bool PrintSvgElementAttributesEnabled { get; set; }
 
-        public ConsoleColor AttributeColor { get; set; } = ConsoleColor.Blue;
+        public bool PrintSvgElementCustomAttributesEnabled { get; set; }
 
-        public string IndentTab { get; set; } = "  ";
+        public bool PrintSvgElementChildrenEnabled { get; set; }
 
-        public bool PrintSvgElementAttributesEnabled { get; set; } = true;
-
-        public bool PrintSvgElementCustomAttributesEnabled { get; set; } = true;
-
-        public bool PrintSvgElementChildrenEnabled { get; set; } = true;
-
-        public bool PrintSvgElementNodesEnabled { get; set; } = true;
-
-        public Element Document { get; set; }
-
-        public SvgDebug()
-        {
-            Document = new Element();
-        }
+        public bool PrintSvgElementNodesEnabled { get; set; }
 
         private string GetElementName(SvgElement svgElement)
         {
@@ -83,22 +71,16 @@ namespace SvgDemo
             return string.Format(CultureInfo.InvariantCulture, "{0}", value);
         }
 
-        public void ResetColor()
+        public void WriteLine(string value)
         {
-            Console.ResetColor();
-        }
-
-        public void WriteLine(string value, ConsoleColor color)
-        {
-            Console.ForegroundColor = color;
-            Console.WriteLine(value);
+            Builder?.AppendLine(value);
         }
 
         public void PrintAttributes(SvgClipPath svgClipPath, string indentLine, string indentAttribute)
         {
             if (svgClipPath.ClipPathUnits != SvgCoordinateUnits.Inherit)
             {
-                WriteLine($"{indentLine}{indentAttribute}clipPathUnits: {svgClipPath.ClipPathUnits}", AttributeColor);
+                WriteLine($"{indentLine}{indentAttribute}clipPathUnits: {svgClipPath.ClipPathUnits}");
             }
         }
 
@@ -106,33 +88,33 @@ namespace SvgDemo
         {
             if (svgFragment.X != 0f)
             {
-                WriteLine($"{indentLine}{indentAttribute}x: {Format(svgFragment.X)}", AttributeColor);
+                WriteLine($"{indentLine}{indentAttribute}x: {Format(svgFragment.X)}");
             }
 
             if (svgFragment.Y != 0f)
             {
-                WriteLine($"{indentLine}{indentAttribute}y: {Format(svgFragment.Y)}", AttributeColor);
+                WriteLine($"{indentLine}{indentAttribute}y: {Format(svgFragment.Y)}");
             }
 
             if (svgFragment.Width != new SvgUnit(SvgUnitType.Percentage, 100f))
             {
-                WriteLine($"{indentLine}{indentAttribute}width: {Format(svgFragment.Width)}", AttributeColor);
+                WriteLine($"{indentLine}{indentAttribute}width: {Format(svgFragment.Width)}");
             }
 
             if (svgFragment.Height != new SvgUnit(SvgUnitType.Percentage, 100f))
             {
-                WriteLine($"{indentLine}{indentAttribute}height: {Format(svgFragment.Height)}", AttributeColor);
+                WriteLine($"{indentLine}{indentAttribute}height: {Format(svgFragment.Height)}");
             }
 
             if (svgFragment.Overflow != SvgOverflow.Inherit && svgFragment.Overflow != SvgOverflow.Hidden)
             {
-                WriteLine($"{indentLine}{indentAttribute}overflow: {svgFragment.Overflow}", AttributeColor);
+                WriteLine($"{indentLine}{indentAttribute}overflow: {svgFragment.Overflow}");
             }
 
             if (svgFragment.ViewBox != SvgViewBox.Empty)
             {
                 var viewBox = svgFragment.ViewBox;
-                WriteLine($"{indentLine}{indentAttribute}viewBox: {Format(viewBox.MinX)} {Format(viewBox.MinY)} {Format(viewBox.Width)} {Format(viewBox.Height)}", AttributeColor);
+                WriteLine($"{indentLine}{indentAttribute}viewBox: {Format(viewBox.MinX)} {Format(viewBox.MinY)} {Format(viewBox.Width)} {Format(viewBox.Height)}");
             }
 
             if (svgFragment.AspectRatio != null)
@@ -142,23 +124,23 @@ namespace SvgDemo
                  || svgFragment.AspectRatio.Slice != @default.Slice
                  || svgFragment.AspectRatio.Defer != @default.Defer)
                 {
-                    WriteLine($"{indentLine}{indentAttribute}preserveAspectRatio: {svgFragment.AspectRatio}", AttributeColor);
+                    WriteLine($"{indentLine}{indentAttribute}preserveAspectRatio: {svgFragment.AspectRatio}");
                 }
             }
 
             if (svgFragment.FontSize != SvgUnit.Empty)
             {
-                WriteLine($"{indentLine}{indentAttribute}font-size: {svgFragment.FontSize}", AttributeColor);
+                WriteLine($"{indentLine}{indentAttribute}font-size: {svgFragment.FontSize}");
             }
 
             if (!string.IsNullOrEmpty(svgFragment.FontFamily))
             {
-                WriteLine($"{indentLine}{indentAttribute}font-family: {svgFragment.FontFamily}", AttributeColor);
+                WriteLine($"{indentLine}{indentAttribute}font-family: {svgFragment.FontFamily}");
             }
 
             if (svgFragment.SpaceHandling != XmlSpaceHandling.@default && svgFragment.SpaceHandling != XmlSpaceHandling.inherit)
             {
-                WriteLine($"{indentLine}{indentAttribute}space: {svgFragment.SpaceHandling}", AttributeColor);
+                WriteLine($"{indentLine}{indentAttribute}space: {svgFragment.SpaceHandling}");
             }
         }
 
@@ -176,8 +158,8 @@ namespace SvgDemo
             {
                 if (svgDescription.Children.Count == 0)
                 {
-                    WriteLine($"{indentLine}{indentAttribute}Content: |", AttributeColor);
-                    WriteLine($"{indentLine}{indentAttribute}{IndentTab}{svgDescription.Content}", AttributeColor);
+                    WriteLine($"{indentLine}{indentAttribute}Content: |");
+                    WriteLine($"{indentLine}{indentAttribute}{IndentTab}{svgDescription.Content}");
                 }
             }
         }
@@ -192,8 +174,8 @@ namespace SvgDemo
             {
                 if (svgTitle.Children.Count == 0)
                 {
-                    WriteLine($"{indentLine}{indentAttribute}Content: |", AttributeColor);
-                    WriteLine($"{indentLine}{indentAttribute}{IndentTab}{svgTitle.Content}", AttributeColor);
+                    WriteLine($"{indentLine}{indentAttribute}Content: |");
+                    WriteLine($"{indentLine}{indentAttribute}{IndentTab}{svgTitle.Content}");
                 }
             }
         }
@@ -202,43 +184,43 @@ namespace SvgDemo
         {
             if (!string.IsNullOrEmpty(svgMergeNode.Input))
             {
-                WriteLine($"{indentLine}{indentAttribute}in: {svgMergeNode.Input}", AttributeColor);
+                WriteLine($"{indentLine}{indentAttribute}in: {svgMergeNode.Input}");
             }
         }
 
         public void PrintAttributes(SvgFilter svgFilter, string indentLine, string indentAttribute)
         {
-            WriteLine($"{indentLine}{indentAttribute}x: {Format(svgFilter.X)}", AttributeColor);
-            WriteLine($"{indentLine}{indentAttribute}y: {Format(svgFilter.Y)}", AttributeColor);
-            WriteLine($"{indentLine}{indentAttribute}width: {Format(svgFilter.Width)}", AttributeColor);
-            WriteLine($"{indentLine}{indentAttribute}height: {Format(svgFilter.Height)}", AttributeColor);
+            WriteLine($"{indentLine}{indentAttribute}x: {Format(svgFilter.X)}");
+            WriteLine($"{indentLine}{indentAttribute}y: {Format(svgFilter.Y)}");
+            WriteLine($"{indentLine}{indentAttribute}width: {Format(svgFilter.Width)}");
+            WriteLine($"{indentLine}{indentAttribute}height: {Format(svgFilter.Height)}");
 
             if (svgFilter.ColorInterpolationFilters != SvgColourInterpolation.Inherit)
             {
-                WriteLine($"{indentLine}{indentAttribute}color-interpolation-filters: {svgFilter.ColorInterpolationFilters}", AttributeColor);
+                WriteLine($"{indentLine}{indentAttribute}color-interpolation-filters: {svgFilter.ColorInterpolationFilters}");
             }
         }
 
         public void PrintAttributes(NonSvgElement nonSvgElement, string indentLine, string indentAttribute)
         {
-            WriteLine($"{indentLine}{indentAttribute}Name: {nonSvgElement.Name}", AttributeColor);
+            WriteLine($"{indentLine}{indentAttribute}Name: {nonSvgElement.Name}");
         }
 
         public void PrintAttributes(SvgGradientStop svgGradientStop, string indentLine, string indentAttribute)
         {
             if (svgGradientStop.Offset != SvgUnit.None)
             {
-                WriteLine($"{indentLine}{indentAttribute}offset: {svgGradientStop.Offset}", AttributeColor);
+                WriteLine($"{indentLine}{indentAttribute}offset: {svgGradientStop.Offset}");
             }
 
             if (svgGradientStop.StopColor != null && svgGradientStop.StopColor != SvgColourServer.NotSet)
             {
-                WriteLine($"{indentLine}{indentAttribute}stop-color: {svgGradientStop.StopColor.ToString()}", AttributeColor);
+                WriteLine($"{indentLine}{indentAttribute}stop-color: {svgGradientStop.StopColor.ToString()}");
             }
 
             if (svgGradientStop.Opacity != 1f)
             {
-                WriteLine($"{indentLine}{indentAttribute}stop-opacity: {Format(svgGradientStop.Opacity)}", AttributeColor);
+                WriteLine($"{indentLine}{indentAttribute}stop-opacity: {Format(svgGradientStop.Opacity)}");
             }
         }
 
@@ -250,32 +232,32 @@ namespace SvgDemo
         {
             if (svgFont.HorizAdvX != 0f)
             {
-                WriteLine($"{indentLine}{indentAttribute}horiz-adv-x: {Format(svgFont.HorizAdvX)}", AttributeColor);
+                WriteLine($"{indentLine}{indentAttribute}horiz-adv-x: {Format(svgFont.HorizAdvX)}");
             }
 
             if (svgFont.HorizOriginX != 0f)
             {
-                WriteLine($"{indentLine}{indentAttribute}horiz-origin-x: {Format(svgFont.HorizOriginX)}", AttributeColor);
+                WriteLine($"{indentLine}{indentAttribute}horiz-origin-x: {Format(svgFont.HorizOriginX)}");
             }
 
             if (svgFont.HorizOriginY != 0f)
             {
-                WriteLine($"{indentLine}{indentAttribute}horiz-origin-y: {Format(svgFont.HorizOriginY)}", AttributeColor);
+                WriteLine($"{indentLine}{indentAttribute}horiz-origin-y: {Format(svgFont.HorizOriginY)}");
             }
 
             if (svgFont.VertAdvY != 0f)
             {
-                WriteLine($"{indentLine}{indentAttribute}vert-adv-y: {Format(svgFont.VertAdvY)}", AttributeColor);
+                WriteLine($"{indentLine}{indentAttribute}vert-adv-y: {Format(svgFont.VertAdvY)}");
             }
 
             if (svgFont.VertOriginX != 0f)
             {
-                WriteLine($"{indentLine}{indentAttribute}vert-origin-x: {Format(svgFont.VertOriginX)}", AttributeColor);
+                WriteLine($"{indentLine}{indentAttribute}vert-origin-x: {Format(svgFont.VertOriginX)}");
             }
 
             if (svgFont.VertOriginY != 0f)
             {
-                WriteLine($"{indentLine}{indentAttribute}vert-origin-y: {Format(svgFont.VertOriginY)}", AttributeColor);
+                WriteLine($"{indentLine}{indentAttribute}vert-origin-y: {Format(svgFont.VertOriginY)}");
             }
         }
 
@@ -283,62 +265,62 @@ namespace SvgDemo
         {
             if (svgFontFace.Alphabetic != 0f)
             {
-                WriteLine($"{indentLine}{indentAttribute}alphabetic: {Format(svgFontFace.Alphabetic)}", AttributeColor);
+                WriteLine($"{indentLine}{indentAttribute}alphabetic: {Format(svgFontFace.Alphabetic)}");
             }
 
             if (svgFontFace.Ascent != 0f)
             {
-                WriteLine($"{indentLine}{indentAttribute}ascent: {Format(svgFontFace.Ascent)}", AttributeColor);
+                WriteLine($"{indentLine}{indentAttribute}ascent: {Format(svgFontFace.Ascent)}");
             }
 
             if (svgFontFace.AscentHeight != 0f)
             {
-                WriteLine($"{indentLine}{indentAttribute}ascent-height: {Format(svgFontFace.AscentHeight)}", AttributeColor);
+                WriteLine($"{indentLine}{indentAttribute}ascent-height: {Format(svgFontFace.AscentHeight)}");
             }
 
             if (svgFontFace.Descent != 0f)
             {
-                WriteLine($"{indentLine}{indentAttribute}descent: {Format(svgFontFace.Descent)}", AttributeColor);
+                WriteLine($"{indentLine}{indentAttribute}descent: {Format(svgFontFace.Descent)}");
             }
 
             if (!string.IsNullOrEmpty(svgFontFace.FontFamily))
             {
-                WriteLine($"{indentLine}{indentAttribute}font-family: {svgFontFace.FontFamily}", AttributeColor);
+                WriteLine($"{indentLine}{indentAttribute}font-family: {svgFontFace.FontFamily}");
             }
 
             if (svgFontFace.FontSize != SvgUnit.Empty)
             {
-                WriteLine($"{indentLine}{indentAttribute}font-size: {svgFontFace.FontSize}", AttributeColor);
+                WriteLine($"{indentLine}{indentAttribute}font-size: {svgFontFace.FontSize}");
             }
 
             if (svgFontFace.FontStyle != SvgFontStyle.All)
             {
-                WriteLine($"{indentLine}{indentAttribute}font-style: {svgFontFace.FontStyle}", AttributeColor);
+                WriteLine($"{indentLine}{indentAttribute}font-style: {svgFontFace.FontStyle}");
             }
 
             if (svgFontFace.FontVariant != SvgFontVariant.Inherit)
             {
-                WriteLine($"{indentLine}{indentAttribute}font-variant: {svgFontFace.FontVariant}", AttributeColor);
+                WriteLine($"{indentLine}{indentAttribute}font-variant: {svgFontFace.FontVariant}");
             }
 
             if (svgFontFace.FontWeight != SvgFontWeight.Inherit)
             {
-                WriteLine($"{indentLine}{indentAttribute}font-weight: {svgFontFace.FontWeight}", AttributeColor);
+                WriteLine($"{indentLine}{indentAttribute}font-weight: {svgFontFace.FontWeight}");
             }
 
             if (!string.IsNullOrEmpty(svgFontFace.Panose1))
             {
-                WriteLine($"{indentLine}{indentAttribute}panose-1: {svgFontFace.Panose1}", AttributeColor);
+                WriteLine($"{indentLine}{indentAttribute}panose-1: {svgFontFace.Panose1}");
             }
 
             if (svgFontFace.UnitsPerEm != 1000f)
             {
-                WriteLine($"{indentLine}{indentAttribute}units-per-em: {Format(svgFontFace.UnitsPerEm)}", AttributeColor);
+                WriteLine($"{indentLine}{indentAttribute}units-per-em: {Format(svgFontFace.UnitsPerEm)}");
             }
 
             if (svgFontFace.XHeight != float.MinValue)
             {
-                WriteLine($"{indentLine}{indentAttribute}x-height: {Format(svgFontFace.XHeight)}", AttributeColor);
+                WriteLine($"{indentLine}{indentAttribute}x-height: {Format(svgFontFace.XHeight)}");
             }
         }
 
@@ -350,7 +332,7 @@ namespace SvgDemo
         {
             if (svgFontFaceUri.ReferencedElement != null)
             {
-                WriteLine($"{indentLine}{indentAttribute}href: {svgFontFaceUri.ReferencedElement}", AttributeColor);
+                WriteLine($"{indentLine}{indentAttribute}href: {svgFontFaceUri.ReferencedElement}");
             }
         }
 
@@ -358,39 +340,39 @@ namespace SvgDemo
         {
             if (!string.IsNullOrEmpty(svgVisualElement.Clip))
             {
-                WriteLine($"{indentLine}{indentAttribute}clip: {svgVisualElement.Clip}", AttributeColor);
+                WriteLine($"{indentLine}{indentAttribute}clip: {svgVisualElement.Clip}");
             }
 
             if (svgVisualElement.ClipPath != null)
             {
-                WriteLine($"{indentLine}{indentAttribute}clip-path: {svgVisualElement.ClipPath}", AttributeColor);
+                WriteLine($"{indentLine}{indentAttribute}clip-path: {svgVisualElement.ClipPath}");
             }
 
             if (svgVisualElement.ClipRule != SvgClipRule.NonZero)
             {
-                WriteLine($"{indentLine}{indentAttribute}clip-rule: {svgVisualElement.ClipRule}", AttributeColor);
+                WriteLine($"{indentLine}{indentAttribute}clip-rule: {svgVisualElement.ClipRule}");
             }
 
             if (svgVisualElement.Filter != null)
             {
-                WriteLine($"{indentLine}{indentAttribute}filter: {svgVisualElement.Filter}", AttributeColor);
+                WriteLine($"{indentLine}{indentAttribute}filter: {svgVisualElement.Filter}");
             }
 
             // Style
 
             if (svgVisualElement.Visible != true)
             {
-                WriteLine($"{indentLine}{indentAttribute}visibility: {svgVisualElement.Visible}", AttributeColor);
+                WriteLine($"{indentLine}{indentAttribute}visibility: {svgVisualElement.Visible}");
             }
 
             if (!string.IsNullOrEmpty(svgVisualElement.Display))
             {
-                WriteLine($"{indentLine}{indentAttribute}display: {svgVisualElement.Display}", AttributeColor);
+                WriteLine($"{indentLine}{indentAttribute}display: {svgVisualElement.Display}");
             }
 
             if (!string.IsNullOrEmpty(svgVisualElement.EnableBackground))
             {
-                WriteLine($"{indentLine}{indentAttribute}enable-background: {svgVisualElement.EnableBackground}", AttributeColor);
+                WriteLine($"{indentLine}{indentAttribute}enable-background: {svgVisualElement.EnableBackground}");
             }
         }
 
@@ -405,18 +387,18 @@ namespace SvgDemo
                  || svgImage.AspectRatio.Slice != @default.Slice
                  || svgImage.AspectRatio.Defer != @default.Defer)
                 {
-                    WriteLine($"{indentLine}{indentAttribute}preserveAspectRatio: {svgImage.AspectRatio}", AttributeColor);
+                    WriteLine($"{indentLine}{indentAttribute}preserveAspectRatio: {svgImage.AspectRatio}");
                 }
             }
 
-            WriteLine($"{indentLine}{indentAttribute}x: {Format(svgImage.X)}", AttributeColor);
-            WriteLine($"{indentLine}{indentAttribute}y: {Format(svgImage.Y)}", AttributeColor);
-            WriteLine($"{indentLine}{indentAttribute}width: {Format(svgImage.Width)}", AttributeColor);
-            WriteLine($"{indentLine}{indentAttribute}height: {Format(svgImage.Height)}", AttributeColor);
+            WriteLine($"{indentLine}{indentAttribute}x: {Format(svgImage.X)}");
+            WriteLine($"{indentLine}{indentAttribute}y: {Format(svgImage.Y)}");
+            WriteLine($"{indentLine}{indentAttribute}width: {Format(svgImage.Width)}");
+            WriteLine($"{indentLine}{indentAttribute}height: {Format(svgImage.Height)}");
 
             if (svgImage.Href != null)
             {
-                WriteLine($"{indentLine}{indentAttribute}href: {svgImage.Href}", AttributeColor);
+                WriteLine($"{indentLine}{indentAttribute}href: {svgImage.Href}");
             }
         }
 
@@ -432,7 +414,7 @@ namespace SvgDemo
             if (svgSymbol.ViewBox != SvgViewBox.Empty)
             {
                 var viewBox = svgSymbol.ViewBox;
-                WriteLine($"{indentLine}{indentAttribute}viewBox: {viewBox.MinX} {viewBox.MinY} {viewBox.Width} {viewBox.Height}", AttributeColor);
+                WriteLine($"{indentLine}{indentAttribute}viewBox: {viewBox.MinX} {viewBox.MinY} {viewBox.Width} {viewBox.Height}");
             }
 
             if (svgSymbol.AspectRatio != null)
@@ -442,7 +424,7 @@ namespace SvgDemo
                  || svgSymbol.AspectRatio.Slice != @default.Slice
                  || svgSymbol.AspectRatio.Defer != @default.Defer)
                 {
-                    WriteLine($"{indentLine}{indentAttribute}preserveAspectRatio: {svgSymbol.AspectRatio}", AttributeColor);
+                    WriteLine($"{indentLine}{indentAttribute}preserveAspectRatio: {svgSymbol.AspectRatio}");
                 }
             }
         }
@@ -453,13 +435,13 @@ namespace SvgDemo
 
             if (svgUse.ReferencedElement != null)
             {
-                WriteLine($"{indentLine}{indentAttribute}href: {svgUse.ReferencedElement}", AttributeColor);
+                WriteLine($"{indentLine}{indentAttribute}href: {svgUse.ReferencedElement}");
             }
 
-            WriteLine($"{indentLine}{indentAttribute}x: {Format(svgUse.X)}", AttributeColor);
-            WriteLine($"{indentLine}{indentAttribute}y: {Format(svgUse.Y)}", AttributeColor);
-            WriteLine($"{indentLine}{indentAttribute}width: {Format(svgUse.Width)}", AttributeColor);
-            WriteLine($"{indentLine}{indentAttribute}height: {Format(svgUse.Height)}", AttributeColor);
+            WriteLine($"{indentLine}{indentAttribute}x: {Format(svgUse.X)}");
+            WriteLine($"{indentLine}{indentAttribute}y: {Format(svgUse.Y)}");
+            WriteLine($"{indentLine}{indentAttribute}width: {Format(svgUse.Width)}");
+            WriteLine($"{indentLine}{indentAttribute}height: {Format(svgUse.Height)}");
         }
 
         public void PrintAttributes(SvgForeignObject svgForeignObject, string indentLine, string indentAttribute)
@@ -476,38 +458,38 @@ namespace SvgDemo
         {
             PrintSvgPathBasedElementAttributes(svgCircle, indentLine, indentAttribute);
 
-            WriteLine($"{indentLine}{indentAttribute}cx: {Format(svgCircle.CenterX)}", AttributeColor);
-            WriteLine($"{indentLine}{indentAttribute}cy: {Format(svgCircle.CenterY)}", AttributeColor);
-            WriteLine($"{indentLine}{indentAttribute}r: {Format(svgCircle.Radius)}", AttributeColor);
+            WriteLine($"{indentLine}{indentAttribute}cx: {Format(svgCircle.CenterX)}");
+            WriteLine($"{indentLine}{indentAttribute}cy: {Format(svgCircle.CenterY)}");
+            WriteLine($"{indentLine}{indentAttribute}r: {Format(svgCircle.Radius)}");
         }
 
         public void PrintAttributes(SvgEllipse svgEllipse, string indentLine, string indentAttribute)
         {
             PrintSvgPathBasedElementAttributes(svgEllipse, indentLine, indentAttribute);
 
-            WriteLine($"{indentLine}{indentAttribute}cx: {Format(svgEllipse.CenterX)}", AttributeColor);
-            WriteLine($"{indentLine}{indentAttribute}cy: {Format(svgEllipse.CenterY)}", AttributeColor);
-            WriteLine($"{indentLine}{indentAttribute}rx: {Format(svgEllipse.RadiusX)}", AttributeColor);
-            WriteLine($"{indentLine}{indentAttribute}ry: {Format(svgEllipse.RadiusY)}", AttributeColor);
+            WriteLine($"{indentLine}{indentAttribute}cx: {Format(svgEllipse.CenterX)}");
+            WriteLine($"{indentLine}{indentAttribute}cy: {Format(svgEllipse.CenterY)}");
+            WriteLine($"{indentLine}{indentAttribute}rx: {Format(svgEllipse.RadiusX)}");
+            WriteLine($"{indentLine}{indentAttribute}ry: {Format(svgEllipse.RadiusY)}");
         }
 
         public void PrintAttributes(SvgRectangle svgRectangle, string indentLine, string indentAttribute)
         {
             PrintSvgPathBasedElementAttributes(svgRectangle, indentLine, indentAttribute);
 
-            WriteLine($"{indentLine}{indentAttribute}x: {Format(svgRectangle.X)}", AttributeColor);
-            WriteLine($"{indentLine}{indentAttribute}y: {Format(svgRectangle.Y)}", AttributeColor);
-            WriteLine($"{indentLine}{indentAttribute}width: {Format(svgRectangle.Width)}", AttributeColor);
-            WriteLine($"{indentLine}{indentAttribute}height: {Format(svgRectangle.Height)}", AttributeColor);
+            WriteLine($"{indentLine}{indentAttribute}x: {Format(svgRectangle.X)}");
+            WriteLine($"{indentLine}{indentAttribute}y: {Format(svgRectangle.Y)}");
+            WriteLine($"{indentLine}{indentAttribute}width: {Format(svgRectangle.Width)}");
+            WriteLine($"{indentLine}{indentAttribute}height: {Format(svgRectangle.Height)}");
 
             if (svgRectangle.CornerRadiusX != 0f)
             {
-                WriteLine($"{indentLine}{indentAttribute}rx: {Format(svgRectangle.CornerRadiusX)}", AttributeColor);
+                WriteLine($"{indentLine}{indentAttribute}rx: {Format(svgRectangle.CornerRadiusX)}");
             }
 
             if (svgRectangle.CornerRadiusY != 0f)
             {
-                WriteLine($"{indentLine}{indentAttribute}ry: {Format(svgRectangle.CornerRadiusY)}", AttributeColor);
+                WriteLine($"{indentLine}{indentAttribute}ry: {Format(svgRectangle.CornerRadiusY)}");
             }
         }
 
@@ -517,12 +499,12 @@ namespace SvgDemo
 
             if (svgMarker.RefX != SvgUnit.None)
             {
-                WriteLine($"{indentLine}{indentAttribute}refX: {svgMarker.RefX}", AttributeColor);
+                WriteLine($"{indentLine}{indentAttribute}refX: {svgMarker.RefX}");
             }
 
             if (svgMarker.RefY != SvgUnit.None)
             {
-                WriteLine($"{indentLine}{indentAttribute}refY: {svgMarker.RefY}", AttributeColor);
+                WriteLine($"{indentLine}{indentAttribute}refY: {svgMarker.RefY}");
             }
 
             if (svgMarker.Orient != null)
@@ -532,24 +514,24 @@ namespace SvgDemo
                 {
                     if (orient.Angle != 0f)
                     {
-                        WriteLine($"{indentLine}{indentAttribute}orient: {Format(orient.Angle)}", AttributeColor);
+                        WriteLine($"{indentLine}{indentAttribute}orient: {Format(orient.Angle)}");
                     }
                 }
                 else
                 {
-                    WriteLine($"{indentLine}{indentAttribute}orient: {(orient.IsAutoStartReverse ? "auto-start-reverse" : "auto")}", AttributeColor);
+                    WriteLine($"{indentLine}{indentAttribute}orient: {(orient.IsAutoStartReverse ? "auto-start-reverse" : "auto")}");
                 }
             }
 
             if (svgMarker.Overflow != SvgOverflow.Hidden)
             {
-                WriteLine($"{indentLine}{indentAttribute}overflow: {svgMarker.Overflow}", AttributeColor);
+                WriteLine($"{indentLine}{indentAttribute}overflow: {svgMarker.Overflow}");
             }
 
             if (svgMarker.ViewBox != SvgViewBox.Empty)
             {
                 var viewBox = svgMarker.ViewBox;
-                WriteLine($"{indentLine}{indentAttribute}viewBox: {viewBox.MinX} {viewBox.MinY} {viewBox.Width} {viewBox.Height}", AttributeColor);
+                WriteLine($"{indentLine}{indentAttribute}viewBox: {viewBox.MinX} {viewBox.MinY} {viewBox.Width} {viewBox.Height}");
             }
 
             if (svgMarker.AspectRatio != null)
@@ -559,23 +541,23 @@ namespace SvgDemo
                  || svgMarker.AspectRatio.Slice != @default.Slice
                  || svgMarker.AspectRatio.Defer != @default.Defer)
                 {
-                    WriteLine($"{indentLine}{indentAttribute}preserveAspectRatio: {svgMarker.AspectRatio}", AttributeColor);
+                    WriteLine($"{indentLine}{indentAttribute}preserveAspectRatio: {svgMarker.AspectRatio}");
                 }
             }
 
             if (svgMarker.MarkerWidth != 3f)
             {
-                WriteLine($"{indentLine}{indentAttribute}markerWidth: {svgMarker.MarkerWidth}", AttributeColor);
+                WriteLine($"{indentLine}{indentAttribute}markerWidth: {svgMarker.MarkerWidth}");
             }
 
             if (svgMarker.MarkerHeight != 3f)
             {
-                WriteLine($"{indentLine}{indentAttribute}markerHeight: {svgMarker.MarkerHeight}", AttributeColor);
+                WriteLine($"{indentLine}{indentAttribute}markerHeight: {svgMarker.MarkerHeight}");
             }
 
             if (svgMarker.MarkerUnits != SvgMarkerUnits.StrokeWidth)
             {
-                WriteLine($"{indentLine}{indentAttribute}markerUnits: {svgMarker.MarkerUnits}", AttributeColor);
+                WriteLine($"{indentLine}{indentAttribute}markerUnits: {svgMarker.MarkerUnits}");
             }
         }
 
@@ -590,32 +572,32 @@ namespace SvgDemo
 
             if (!string.IsNullOrEmpty(svgGlyph.GlyphName))
             {
-                WriteLine($"{indentLine}{indentAttribute}glyph-name: {svgGlyph.GlyphName}", AttributeColor);
+                WriteLine($"{indentLine}{indentAttribute}glyph-name: {svgGlyph.GlyphName}");
             }
 
             if (svgGlyph.HorizAdvX != 0f)
             {
-                WriteLine($"{indentLine}{indentAttribute}horiz-adv-x: {Format(svgGlyph.HorizAdvX)}", AttributeColor);
+                WriteLine($"{indentLine}{indentAttribute}horiz-adv-x: {Format(svgGlyph.HorizAdvX)}");
             }
 
             if (!string.IsNullOrEmpty(svgGlyph.Unicode))
             {
-                WriteLine($"{indentLine}{indentAttribute}unicode: {svgGlyph.Unicode}", AttributeColor);
+                WriteLine($"{indentLine}{indentAttribute}unicode: {svgGlyph.Unicode}");
             }
 
             if (svgGlyph.VertAdvY != 0f)
             {
-                WriteLine($"{indentLine}{indentAttribute}vert-adv-y: {Format(svgGlyph.VertAdvY)}", AttributeColor);
+                WriteLine($"{indentLine}{indentAttribute}vert-adv-y: {Format(svgGlyph.VertAdvY)}");
             }
 
             if (svgGlyph.VertOriginX != 0f)
             {
-                WriteLine($"{indentLine}{indentAttribute}vert-origin-x: {Format(svgGlyph.VertOriginX)}", AttributeColor);
+                WriteLine($"{indentLine}{indentAttribute}vert-origin-x: {Format(svgGlyph.VertOriginX)}");
             }
 
             if (svgGlyph.VertOriginY != 0f)
             {
-                WriteLine($"{indentLine}{indentAttribute}vert-origin-y: {Format(svgGlyph.VertOriginY)}", AttributeColor);
+                WriteLine($"{indentLine}{indentAttribute}vert-origin-y: {Format(svgGlyph.VertOriginY)}");
             }
         }
 
@@ -625,17 +607,17 @@ namespace SvgDemo
 
             if (svgMarkerElement.MarkerEnd != null)
             {
-                WriteLine($"{indentLine}{indentAttribute}marker-end: {svgMarkerElement.MarkerEnd}", AttributeColor);
+                WriteLine($"{indentLine}{indentAttribute}marker-end: {svgMarkerElement.MarkerEnd}");
             }
 
             if (svgMarkerElement.MarkerMid != null)
             {
-                WriteLine($"{indentLine}{indentAttribute}marker-mid: {svgMarkerElement.MarkerMid}", AttributeColor);
+                WriteLine($"{indentLine}{indentAttribute}marker-mid: {svgMarkerElement.MarkerMid}");
             }
 
             if (svgMarkerElement.MarkerStart != null)
             {
-                WriteLine($"{indentLine}{indentAttribute}marker-start: {svgMarkerElement.MarkerStart}", AttributeColor);
+                WriteLine($"{indentLine}{indentAttribute}marker-start: {svgMarkerElement.MarkerStart}");
             }
         }
 
@@ -648,42 +630,42 @@ namespace SvgDemo
         {
             PrintSvgMarkerElementAttributes(svgLine, indentLine, indentAttribute);
 
-            WriteLine($"{indentLine}{indentAttribute}x1: {svgLine.StartX}", AttributeColor);
-            WriteLine($"{indentLine}{indentAttribute}y1: {svgLine.StartY}", AttributeColor);
-            WriteLine($"{indentLine}{indentAttribute}x2: {svgLine.EndX}", AttributeColor);
-            WriteLine($"{indentLine}{indentAttribute}y2: {svgLine.EndY}", AttributeColor);
+            WriteLine($"{indentLine}{indentAttribute}x1: {svgLine.StartX}");
+            WriteLine($"{indentLine}{indentAttribute}y1: {svgLine.StartY}");
+            WriteLine($"{indentLine}{indentAttribute}x2: {svgLine.EndX}");
+            WriteLine($"{indentLine}{indentAttribute}y2: {svgLine.EndY}");
         }
 
         public void PrintAttributes(SvgPathSegmentList svgPathSegmentList, string indentLine, string indentAttribute)
         {
             if (svgPathSegmentList != null)
             {
-                WriteLine($"{indentLine}{indentAttribute}d: |", AttributeColor);
+                WriteLine($"{indentLine}{indentAttribute}d: |");
 
                 foreach (var svgSegment in svgPathSegmentList)
                 {
                     switch (svgSegment)
                     {
                         case SvgArcSegment svgArcSegment:
-                            WriteLine($"{indentLine}{indentAttribute}{IndentTab}{svgArcSegment}", AttributeColor);
+                            WriteLine($"{indentLine}{indentAttribute}{IndentTab}{svgArcSegment}");
                             break;
                         case SvgClosePathSegment svgClosePathSegment:
-                            WriteLine($"{indentLine}{indentAttribute}{IndentTab}{svgClosePathSegment}", AttributeColor);
+                            WriteLine($"{indentLine}{indentAttribute}{IndentTab}{svgClosePathSegment}");
                             break;
                         case SvgCubicCurveSegment svgCubicCurveSegment:
-                            WriteLine($"{indentLine}{indentAttribute}{IndentTab}{svgCubicCurveSegment}", AttributeColor);
+                            WriteLine($"{indentLine}{indentAttribute}{IndentTab}{svgCubicCurveSegment}");
                             break;
                         case SvgLineSegment svgLineSegment:
-                            WriteLine($"{indentLine}{indentAttribute}{IndentTab}{svgLineSegment}", AttributeColor);
+                            WriteLine($"{indentLine}{indentAttribute}{IndentTab}{svgLineSegment}");
                             break;
                         case SvgMoveToSegment svgMoveToSegment:
-                            WriteLine($"{indentLine}{indentAttribute}{IndentTab}{svgMoveToSegment}", AttributeColor);
+                            WriteLine($"{indentLine}{indentAttribute}{IndentTab}{svgMoveToSegment}");
                             break;
                         case SvgQuadraticCurveSegment svgQuadraticCurveSegment:
-                            WriteLine($"{indentLine}{indentAttribute}{IndentTab}{svgQuadraticCurveSegment}", AttributeColor);
+                            WriteLine($"{indentLine}{indentAttribute}{IndentTab}{svgQuadraticCurveSegment}");
                             break;
                         default:
-                            WriteLine($"ERROR: Unknown path segment type: {svgSegment.GetType()}", ErrorColor);
+                            WriteLine($"ERROR: Unknown path segment type: {svgSegment.GetType()}");
                             break;
                     }
                 }
@@ -701,7 +683,7 @@ namespace SvgDemo
 
             if (svgPath.PathLength != 0f)
             {
-                WriteLine($"{indentLine}{indentAttribute}pathLength: {Format(svgPath.PathLength)}", AttributeColor);
+                WriteLine($"{indentLine}{indentAttribute}pathLength: {Format(svgPath.PathLength)}");
             }
         }
 
@@ -709,14 +691,14 @@ namespace SvgDemo
         {
             PrintSvgMarkerElementAttributes(svgPolygon, indentLine, indentAttribute);
 
-            WriteLine($"{indentLine}{indentAttribute}points: {svgPolygon.Points}", AttributeColor);
+            WriteLine($"{indentLine}{indentAttribute}points: {svgPolygon.Points}");
         }
 
         public void PrintAttributes(SvgPolyline svgPolyline, string indentLine, string indentAttribute)
         {
             PrintSvgMarkerElementAttributes(svgPolyline, indentLine, indentAttribute);
 
-            WriteLine($"{indentLine}{indentAttribute}points: {svgPolyline.Points}", AttributeColor);
+            WriteLine($"{indentLine}{indentAttribute}points: {svgPolyline.Points}");
         }
 
         public void PrintSvgTextBaseAttributes(SvgTextBase svgTextBase, string indentLine, string indentAttribute)
@@ -727,54 +709,54 @@ namespace SvgDemo
             {
                 if (svgTextBase.Children.Count == 0)
                 {
-                    WriteLine($"{indentLine}{indentAttribute}Content: |", AttributeColor);
-                    WriteLine($"{indentLine}{indentAttribute}{IndentTab}{svgTextBase.Text}", AttributeColor);
+                    WriteLine($"{indentLine}{indentAttribute}Content: |");
+                    WriteLine($"{indentLine}{indentAttribute}{IndentTab}{svgTextBase.Text}");
                 }
             }
 
             if (svgTextBase.X != null && svgTextBase.X.Count > 0)
             {
-                WriteLine($"{indentLine}{indentAttribute}x: {svgTextBase.X}", AttributeColor);
+                WriteLine($"{indentLine}{indentAttribute}x: {svgTextBase.X}");
             }
 
             if (svgTextBase.Dx != null && svgTextBase.Dx.Count > 0)
             {
-                WriteLine($"{indentLine}{indentAttribute}dx: {svgTextBase.Dx}", AttributeColor);
+                WriteLine($"{indentLine}{indentAttribute}dx: {svgTextBase.Dx}");
             }
 
             if (svgTextBase.Y != null && svgTextBase.Y.Count > 0)
             {
-                WriteLine($"{indentLine}{indentAttribute}y: {svgTextBase.Y}", AttributeColor);
+                WriteLine($"{indentLine}{indentAttribute}y: {svgTextBase.Y}");
             }
 
             if (svgTextBase.Dy != null && svgTextBase.Dy.Count > 0)
             {
-                WriteLine($"{indentLine}{indentAttribute}dy: {svgTextBase.Dy}", AttributeColor);
+                WriteLine($"{indentLine}{indentAttribute}dy: {svgTextBase.Dy}");
             }
 
             if (!string.IsNullOrEmpty(svgTextBase.Rotate))
             {
-                WriteLine($"{indentLine}{indentAttribute}rotate: {svgTextBase.Rotate}", AttributeColor);
+                WriteLine($"{indentLine}{indentAttribute}rotate: {svgTextBase.Rotate}");
             }
 
             if (svgTextBase.TextLength != SvgUnit.None)
             {
-                WriteLine($"{indentLine}{indentAttribute}textLength: {svgTextBase.TextLength}", AttributeColor);
+                WriteLine($"{indentLine}{indentAttribute}textLength: {svgTextBase.TextLength}");
             }
 
             if (svgTextBase.LengthAdjust != SvgTextLengthAdjust.Spacing)
             {
-                WriteLine($"{indentLine}{indentAttribute}lengthAdjust: {svgTextBase.LengthAdjust}", AttributeColor);
+                WriteLine($"{indentLine}{indentAttribute}lengthAdjust: {svgTextBase.LengthAdjust}");
             }
 
             if (svgTextBase.LetterSpacing != SvgUnit.None)
             {
-                WriteLine($"{indentLine}{indentAttribute}letter-spacing: {svgTextBase.LetterSpacing}", AttributeColor);
+                WriteLine($"{indentLine}{indentAttribute}letter-spacing: {svgTextBase.LetterSpacing}");
             }
 
             if (svgTextBase.WordSpacing != SvgUnit.None)
             {
-                WriteLine($"{indentLine}{indentAttribute}word-spacing: {svgTextBase.WordSpacing}", AttributeColor);
+                WriteLine($"{indentLine}{indentAttribute}word-spacing: {svgTextBase.WordSpacing}");
             }
         }
 
@@ -789,22 +771,22 @@ namespace SvgDemo
 
             if (svgTextPath.StartOffset != SvgUnit.None)
             {
-                WriteLine($"{indentLine}{indentAttribute}startOffset: {svgTextPath.StartOffset}", AttributeColor);
+                WriteLine($"{indentLine}{indentAttribute}startOffset: {svgTextPath.StartOffset}");
             }
 
             if (svgTextPath.Method != SvgTextPathMethod.Align)
             {
-                WriteLine($"{indentLine}{indentAttribute}method: {svgTextPath.Method}", AttributeColor);
+                WriteLine($"{indentLine}{indentAttribute}method: {svgTextPath.Method}");
             }
 
             if (svgTextPath.Spacing != SvgTextPathSpacing.Exact)
             {
-                WriteLine($"{indentLine}{indentAttribute}spacing: {svgTextPath.Spacing}", AttributeColor);
+                WriteLine($"{indentLine}{indentAttribute}spacing: {svgTextPath.Spacing}");
             }
 
             if (svgTextPath.ReferencedPath != null)
             {
-                WriteLine($"{indentLine}{indentAttribute}href: {svgTextPath.ReferencedPath}", AttributeColor);
+                WriteLine($"{indentLine}{indentAttribute}href: {svgTextPath.ReferencedPath}");
             }
         }
 
@@ -814,7 +796,7 @@ namespace SvgDemo
 
             if (svgTextRef.ReferencedElement != null)
             {
-                WriteLine($"{indentLine}{indentAttribute}href: {svgTextRef.ReferencedElement}", AttributeColor);
+                WriteLine($"{indentLine}{indentAttribute}href: {svgTextRef.ReferencedElement}");
             }
         }
 
@@ -827,12 +809,12 @@ namespace SvgDemo
         {
             if (!string.IsNullOrEmpty(svgFilterPrimitive.Input))
             {
-                WriteLine($"{indentLine}{indentAttribute}in: {svgFilterPrimitive.Input}", AttributeColor);
+                WriteLine($"{indentLine}{indentAttribute}in: {svgFilterPrimitive.Input}");
             }
 
             if (!string.IsNullOrEmpty(svgFilterPrimitive.Result))
             {
-                WriteLine($"{indentLine}{indentAttribute}result: {svgFilterPrimitive.Result}", AttributeColor);
+                WriteLine($"{indentLine}{indentAttribute}result: {svgFilterPrimitive.Result}");
             }
         }
 
@@ -840,11 +822,11 @@ namespace SvgDemo
         {
             PrintSvgFilterPrimitiveAttributes(svgColourMatrix, indentLine, indentAttribute);
 
-            WriteLine($"{indentLine}{indentAttribute}type: {svgColourMatrix.Type}", AttributeColor);
+            WriteLine($"{indentLine}{indentAttribute}type: {svgColourMatrix.Type}");
 
             if (!string.IsNullOrEmpty(svgColourMatrix.Values))
             {
-                WriteLine($"{indentLine}{indentAttribute}values: {svgColourMatrix.Values}", AttributeColor);
+                WriteLine($"{indentLine}{indentAttribute}values: {svgColourMatrix.Values}");
             }
         }
 
@@ -854,7 +836,7 @@ namespace SvgDemo
 
             if (svgGaussianBlur.StdDeviation > 0f)
             {
-                WriteLine($"{indentLine}{indentAttribute}stdDeviation: {Format(svgGaussianBlur.StdDeviation)}", AttributeColor);
+                WriteLine($"{indentLine}{indentAttribute}stdDeviation: {Format(svgGaussianBlur.StdDeviation)}");
             }
         }
 
@@ -869,12 +851,12 @@ namespace SvgDemo
 
             if (svgOffset.Dx != SvgUnit.None)
             {
-                WriteLine($"{indentLine}{indentAttribute}dx: {svgOffset.Dx}", AttributeColor);
+                WriteLine($"{indentLine}{indentAttribute}dx: {svgOffset.Dx}");
             }
 
             if (svgOffset.Dy != SvgUnit.None)
             {
-                WriteLine($"{indentLine}{indentAttribute}dy: {svgOffset.Dy}", AttributeColor);
+                WriteLine($"{indentLine}{indentAttribute}dy: {svgOffset.Dy}");
             }
         }
 
@@ -901,37 +883,37 @@ namespace SvgDemo
                     PrintAttributes(svgRadialGradientServer, indentLine, indentAttribute);
                     break;
                 default:
-                    WriteLine($"ERROR: Unknown paint server type: {svgPaintServer.GetType()}", ErrorColor);
+                    WriteLine($"ERROR: Unknown paint server type: {svgPaintServer.GetType()}");
                     break;
             }
         }
 
         public void PrintAttributes(SvgColourServer svgColourServer, string indentLine, string indentAttribute)
         {
-            WriteLine($"{indentLine}{indentAttribute}: {svgColourServer.ToString()}", AttributeColor);
+            WriteLine($"{indentLine}{indentAttribute}: {svgColourServer.ToString()}");
         }
 
         public void PrintAttributes(SvgDeferredPaintServer svgDeferredPaintServer, string indentLine, string indentAttribute)
         {
-            WriteLine($"{indentLine}{indentAttribute}: {svgDeferredPaintServer.GetType()}", AttributeColor);
+            WriteLine($"{indentLine}{indentAttribute}: {svgDeferredPaintServer.GetType()}");
         }
 
         public void PrintAttributes(SvgFallbackPaintServer svgFallbackPaintServer, string indentLine, string indentAttribute)
         {
-            WriteLine($"{indentLine}{indentAttribute}: {svgFallbackPaintServer.GetType()}", AttributeColor);
+            WriteLine($"{indentLine}{indentAttribute}: {svgFallbackPaintServer.GetType()}");
         }
 
         public void PrintAttributes(SvgPatternServer svgPatternServer, string indentLine, string indentAttribute)
         {
             if (svgPatternServer.Overflow != SvgOverflow.Inherit && svgPatternServer.Overflow != SvgOverflow.Hidden)
             {
-                WriteLine($"{indentLine}{indentAttribute}overflow: {svgPatternServer.Overflow}", AttributeColor);
+                WriteLine($"{indentLine}{indentAttribute}overflow: {svgPatternServer.Overflow}");
             }
 
             if (svgPatternServer.ViewBox != SvgViewBox.Empty)
             {
                 var viewBox = svgPatternServer.ViewBox;
-                WriteLine($"{indentLine}{indentAttribute}viewBox: {Format(viewBox.MinX)} {Format(viewBox.MinY)} {Format(viewBox.Width)} {Format(viewBox.Height)}", AttributeColor);
+                WriteLine($"{indentLine}{indentAttribute}viewBox: {Format(viewBox.MinX)} {Format(viewBox.MinY)} {Format(viewBox.Width)} {Format(viewBox.Height)}");
             }
 
             if (svgPatternServer.AspectRatio != null)
@@ -941,30 +923,30 @@ namespace SvgDemo
                  || svgPatternServer.AspectRatio.Slice != @default.Slice
                  || svgPatternServer.AspectRatio.Defer != @default.Defer)
                 {
-                    WriteLine($"{indentLine}{indentAttribute}preserveAspectRatio: {svgPatternServer.AspectRatio}", AttributeColor);
+                    WriteLine($"{indentLine}{indentAttribute}preserveAspectRatio: {svgPatternServer.AspectRatio}");
                 }
             }
 
-            WriteLine($"{indentLine}{indentAttribute}width: {Format(svgPatternServer.Width)}", AttributeColor);
+            WriteLine($"{indentLine}{indentAttribute}width: {Format(svgPatternServer.Width)}");
 
             if (svgPatternServer.PatternUnits != SvgCoordinateUnits.Inherit)
             {
-                WriteLine($"{indentLine}{indentAttribute}patternUnits: {svgPatternServer.PatternUnits}", AttributeColor);
+                WriteLine($"{indentLine}{indentAttribute}patternUnits: {svgPatternServer.PatternUnits}");
             }
 
             if (svgPatternServer.PatternContentUnits != SvgCoordinateUnits.Inherit)
             {
-                WriteLine($"{indentLine}{indentAttribute}patternContentUnits: {svgPatternServer.PatternContentUnits}", AttributeColor);
+                WriteLine($"{indentLine}{indentAttribute}patternContentUnits: {svgPatternServer.PatternContentUnits}");
             }
 
-            WriteLine($"{indentLine}{indentAttribute}height: {Format(svgPatternServer.Height)}", AttributeColor);
+            WriteLine($"{indentLine}{indentAttribute}height: {Format(svgPatternServer.Height)}");
 
-            WriteLine($"{indentLine}{indentAttribute}x: {Format(svgPatternServer.X)}", AttributeColor);
-            WriteLine($"{indentLine}{indentAttribute}y: {Format(svgPatternServer.Y)}", AttributeColor);
+            WriteLine($"{indentLine}{indentAttribute}x: {Format(svgPatternServer.X)}");
+            WriteLine($"{indentLine}{indentAttribute}y: {Format(svgPatternServer.Y)}");
 
             if (svgPatternServer.InheritGradient != null)
             {
-                WriteLine($"{indentLine}{indentAttribute}href: {svgPatternServer.InheritGradient}", AttributeColor);
+                WriteLine($"{indentLine}{indentAttribute}href: {svgPatternServer.InheritGradient}");
             }
 
             PrintSvgTransformCollection(svgPatternServer.PatternTransform, indentLine, indentAttribute, "patternTransform");
@@ -993,27 +975,27 @@ namespace SvgDemo
         {
             if (!string.IsNullOrEmpty(svgKern.Glyph1))
             {
-                WriteLine($"{indentLine}{indentAttribute}g1: {svgKern.Glyph1}", AttributeColor);
+                WriteLine($"{indentLine}{indentAttribute}g1: {svgKern.Glyph1}");
             }
 
             if (!string.IsNullOrEmpty(svgKern.Glyph2))
             {
-                WriteLine($"{indentLine}{indentAttribute}g2: {svgKern.Glyph2}", AttributeColor);
+                WriteLine($"{indentLine}{indentAttribute}g2: {svgKern.Glyph2}");
             }
 
             if (!string.IsNullOrEmpty(svgKern.Unicode1))
             {
-                WriteLine($"{indentLine}{indentAttribute}u1: {svgKern.Unicode1}", AttributeColor);
+                WriteLine($"{indentLine}{indentAttribute}u1: {svgKern.Unicode1}");
             }
 
             if (!string.IsNullOrEmpty(svgKern.Unicode2))
             {
-                WriteLine($"{indentLine}{indentAttribute}u2: {svgKern.Unicode2}", AttributeColor);
+                WriteLine($"{indentLine}{indentAttribute}u2: {svgKern.Unicode2}");
             }
 
             if (svgKern.Kerning != 0f)
             {
-                WriteLine($"{indentLine}{indentAttribute}k: {Format(svgKern.Kerning)}", AttributeColor);
+                WriteLine($"{indentLine}{indentAttribute}k: {Format(svgKern.Kerning)}");
             }
         }
 
@@ -1033,8 +1015,8 @@ namespace SvgDemo
             {
                 case SvgMatrix svgMatrix:
                     {
-                        WriteLine($"{indentLine}matrix:", ElementColor);
-                        WriteLine($"{indentLine}{indentAttribute}type: {svgMatrix.GetType().Name}", AttributeColor);
+                        WriteLine($"{indentLine}matrix:");
+                        WriteLine($"{indentLine}{indentAttribute}type: {svgMatrix.GetType().Name}");
                         var points = string.Format(
                                         CultureInfo.InvariantCulture,
                                         "{0}, {1}, {2}, {3}, {4}, {5}",
@@ -1044,60 +1026,60 @@ namespace SvgDemo
                                         svgMatrix.Points[3],
                                         svgMatrix.Points[4],
                                         svgMatrix.Points[5]);
-                        WriteLine($"{indentLine}{indentAttribute}points: {points}", AttributeColor);
+                        WriteLine($"{indentLine}{indentAttribute}points: {points}");
                     }
                     break;
                 case SvgRotate svgRotate:
                     {
-                        WriteLine($"{indentLine}rotate:", ElementColor);
-                        WriteLine($"{indentLine}{indentAttribute}type: {svgRotate.GetType().Name}", AttributeColor);
-                        WriteLine($"{indentLine}{indentAttribute}Angle: {Format(svgRotate.Angle)}", AttributeColor);
-                        WriteLine($"{indentLine}{indentAttribute}CenterX: {Format(svgRotate.CenterX)}", AttributeColor);
-                        WriteLine($"{indentLine}{indentAttribute}CenterY: {Format(svgRotate.CenterY)}", AttributeColor);
+                        WriteLine($"{indentLine}rotate:");
+                        WriteLine($"{indentLine}{indentAttribute}type: {svgRotate.GetType().Name}");
+                        WriteLine($"{indentLine}{indentAttribute}Angle: {Format(svgRotate.Angle)}");
+                        WriteLine($"{indentLine}{indentAttribute}CenterX: {Format(svgRotate.CenterX)}");
+                        WriteLine($"{indentLine}{indentAttribute}CenterY: {Format(svgRotate.CenterY)}");
                     }
                     break;
                 case SvgScale svgScale:
                     {
-                        WriteLine($"{indentLine}scale:", ElementColor);
-                        WriteLine($"{indentLine}{indentAttribute}type: {svgScale.GetType().Name}", AttributeColor);
-                        WriteLine($"{indentLine}{indentAttribute}X: {Format(svgScale.X)}", AttributeColor);
-                        WriteLine($"{indentLine}{indentAttribute}Y: {Format(svgScale.Y)}", AttributeColor);
+                        WriteLine($"{indentLine}scale:");
+                        WriteLine($"{indentLine}{indentAttribute}type: {svgScale.GetType().Name}");
+                        WriteLine($"{indentLine}{indentAttribute}X: {Format(svgScale.X)}");
+                        WriteLine($"{indentLine}{indentAttribute}Y: {Format(svgScale.Y)}");
                     }
                     break;
                 case SvgShear svgShear:
                     {
-                        WriteLine($"{indentLine}shear:", ElementColor);
-                        WriteLine($"{indentLine}{indentAttribute}type: {svgShear.GetType().Name}", AttributeColor);
-                        WriteLine($"{indentLine}{indentAttribute}X: {Format(svgShear.X)}", AttributeColor);
-                        WriteLine($"{indentLine}{indentAttribute}Y: {Format(svgShear.Y)}", AttributeColor);
+                        WriteLine($"{indentLine}shear:");
+                        WriteLine($"{indentLine}{indentAttribute}type: {svgShear.GetType().Name}");
+                        WriteLine($"{indentLine}{indentAttribute}X: {Format(svgShear.X)}");
+                        WriteLine($"{indentLine}{indentAttribute}Y: {Format(svgShear.Y)}");
                     }
                     break;
                 case SvgSkew svgSkew:
                     {
                         if (svgSkew.AngleY == 0)
                         {
-                            WriteLine($"{indentLine}skewX:", ElementColor);
-                            WriteLine($"{indentLine}{indentAttribute}type: {svgSkew.GetType().Name}", AttributeColor);
-                            WriteLine($"{indentLine}{indentAttribute}AngleX: {Format(svgSkew.AngleX)}", AttributeColor);
+                            WriteLine($"{indentLine}skewX:");
+                            WriteLine($"{indentLine}{indentAttribute}type: {svgSkew.GetType().Name}");
+                            WriteLine($"{indentLine}{indentAttribute}AngleX: {Format(svgSkew.AngleX)}");
                         }
                         else
                         {
-                            WriteLine($"{indentLine}skewY:", ElementColor);
-                            WriteLine($"{indentLine}{indentAttribute}type: {svgSkew.GetType().Name}", AttributeColor);
-                            WriteLine($"{indentLine}{indentAttribute}AngleY: {Format(svgSkew.AngleY)}", AttributeColor);
+                            WriteLine($"{indentLine}skewY:");
+                            WriteLine($"{indentLine}{indentAttribute}type: {svgSkew.GetType().Name}");
+                            WriteLine($"{indentLine}{indentAttribute}AngleY: {Format(svgSkew.AngleY)}");
                         }
                     }
                     break;
                 case SvgTranslate svgTranslate:
                     {
-                        WriteLine($"{indentLine}translate:", ElementColor);
-                        WriteLine($"{indentLine}{indentAttribute}type: {svgTranslate.GetType().Name}", AttributeColor);
-                        WriteLine($"{indentLine}{indentAttribute}X: {Format(svgTranslate.X)}", AttributeColor);
-                        WriteLine($"{indentLine}{indentAttribute}Y: {Format(svgTranslate.Y)}", AttributeColor);
+                        WriteLine($"{indentLine}translate:");
+                        WriteLine($"{indentLine}{indentAttribute}type: {svgTranslate.GetType().Name}");
+                        WriteLine($"{indentLine}{indentAttribute}X: {Format(svgTranslate.X)}");
+                        WriteLine($"{indentLine}{indentAttribute}Y: {Format(svgTranslate.Y)}");
                     }
                     break;
                 default:
-                    WriteLine($"ERROR: Unknown transform type: {svgTransform.GetType()}", ErrorColor);
+                    WriteLine($"ERROR: Unknown transform type: {svgTransform.GetType()}");
                     break;
             }
         }
@@ -1106,7 +1088,7 @@ namespace SvgDemo
         {
             if (svgTransformCollection != null && svgTransformCollection.Count > 0)
             {
-                WriteLine($"{indentLine}{indentAttribute}{attribute}:", AttributeColor);
+                WriteLine($"{indentLine}{indentAttribute}{attribute}:");
 
                 foreach (var svgTransform in svgTransformCollection)
                 {
@@ -1119,139 +1101,139 @@ namespace SvgDemo
         {
             if (!string.IsNullOrEmpty(svgElement.ID))
             {
-                WriteLine($"{indentLine}{indentAttribute}id: {svgElement.ID}", AttributeColor);
+                WriteLine($"{indentLine}{indentAttribute}id: {svgElement.ID}");
             }
 
             if (svgElement.SpaceHandling != XmlSpaceHandling.@default && svgElement.SpaceHandling != XmlSpaceHandling.inherit)
             {
-                WriteLine($"{indentLine}{indentAttribute}space: {svgElement.SpaceHandling}", AttributeColor);
+                WriteLine($"{indentLine}{indentAttribute}space: {svgElement.SpaceHandling}");
             }
 
             if (svgElement.Color != null && svgElement.Color != SvgColourServer.NotSet)
             {
-                WriteLine($"{indentLine}{indentAttribute}color: {svgElement.Color.ToString()}", AttributeColor);
+                WriteLine($"{indentLine}{indentAttribute}color: {svgElement.Color.ToString()}");
             }
 
             // Style Attributes
 
             if (svgElement.Fill != null && svgElement.Fill != SvgColourServer.NotSet)
             {
-                WriteLine($"{indentLine}{indentAttribute}fill: {svgElement.Fill.ToString()}", AttributeColor);
+                WriteLine($"{indentLine}{indentAttribute}fill: {svgElement.Fill.ToString()}");
             }
 
             if (svgElement.Stroke != null)
             {
-                WriteLine($"{indentLine}{indentAttribute}stroke: {svgElement.Stroke.ToString()}", AttributeColor);
+                WriteLine($"{indentLine}{indentAttribute}stroke: {svgElement.Stroke.ToString()}");
             }
 
             if (svgElement.FillRule != SvgFillRule.NonZero)
             {
-                WriteLine($"{indentLine}{indentAttribute}fill-rule: {svgElement.FillRule}", AttributeColor);
+                WriteLine($"{indentLine}{indentAttribute}fill-rule: {svgElement.FillRule}");
             }
 
             if (svgElement.FillOpacity != 1f)
             {
-                WriteLine($"{indentLine}{indentAttribute}fill-opacity: {Format(svgElement.FillOpacity)}", AttributeColor);
+                WriteLine($"{indentLine}{indentAttribute}fill-opacity: {Format(svgElement.FillOpacity)}");
             }
 
             if (svgElement.StrokeWidth != 1f)
             {
-                WriteLine($"{indentLine}{indentAttribute}stroke-width: {Format(svgElement.StrokeWidth)}", AttributeColor);
+                WriteLine($"{indentLine}{indentAttribute}stroke-width: {Format(svgElement.StrokeWidth)}");
             }
 
             if (svgElement.StrokeLineCap != SvgStrokeLineCap.Butt)
             {
-                WriteLine($"{indentLine}{indentAttribute}stroke-linecap: {svgElement.StrokeLineCap}", AttributeColor);
+                WriteLine($"{indentLine}{indentAttribute}stroke-linecap: {svgElement.StrokeLineCap}");
             }
 
             if (svgElement.StrokeLineJoin != SvgStrokeLineJoin.Miter)
             {
-                WriteLine($"{indentLine}{indentAttribute}stroke-linejoin: {svgElement.StrokeLineJoin}", AttributeColor);
+                WriteLine($"{indentLine}{indentAttribute}stroke-linejoin: {svgElement.StrokeLineJoin}");
             }
 
             if (svgElement.StrokeMiterLimit != 4f)
             {
-                WriteLine($"{indentLine}{indentAttribute}stroke-miterlimit: {Format(svgElement.StrokeMiterLimit)}", AttributeColor);
+                WriteLine($"{indentLine}{indentAttribute}stroke-miterlimit: {Format(svgElement.StrokeMiterLimit)}");
             }
 
             if (svgElement.StrokeDashArray != null && svgElement.StrokeDashArray.Count > 0)
             {
-                WriteLine($"{indentLine}{indentAttribute}stroke-dasharray: {svgElement.StrokeDashArray}", AttributeColor);
+                WriteLine($"{indentLine}{indentAttribute}stroke-dasharray: {svgElement.StrokeDashArray}");
             }
 
             if (svgElement.StrokeDashOffset != SvgUnit.Empty)
             {
-                WriteLine($"{indentLine}{indentAttribute}stroke-dashoffset: {svgElement.StrokeDashOffset}", AttributeColor);
+                WriteLine($"{indentLine}{indentAttribute}stroke-dashoffset: {svgElement.StrokeDashOffset}");
             }
 
             if (svgElement.StrokeOpacity != 1f)
             {
-                WriteLine($"{indentLine}{indentAttribute}stroke-opacity: {Format(svgElement.StrokeOpacity)}", AttributeColor);
+                WriteLine($"{indentLine}{indentAttribute}stroke-opacity: {Format(svgElement.StrokeOpacity)}");
             }
 
             if (svgElement.StopColor != null)
             {
-                WriteLine($"{indentLine}{indentAttribute}stop-color: {svgElement.StopColor.ToString()}", AttributeColor);
+                WriteLine($"{indentLine}{indentAttribute}stop-color: {svgElement.StopColor.ToString()}");
             }
 
             if (svgElement.Opacity != 1f)
             {
-                WriteLine($"{indentLine}{indentAttribute}opacity: {Format(svgElement.Opacity)}", AttributeColor);
+                WriteLine($"{indentLine}{indentAttribute}opacity: {Format(svgElement.Opacity)}");
             }
 
             if (svgElement.ShapeRendering != SvgShapeRendering.Inherit)
             {
-                WriteLine($"{indentLine}{indentAttribute}shape-rendering: {svgElement.ShapeRendering}", AttributeColor);
+                WriteLine($"{indentLine}{indentAttribute}shape-rendering: {svgElement.ShapeRendering}");
             }
 
             if (svgElement.TextAnchor != SvgTextAnchor.Inherit)
             {
-                WriteLine($"{indentLine}{indentAttribute}text-anchor: {svgElement.TextAnchor}", AttributeColor);
+                WriteLine($"{indentLine}{indentAttribute}text-anchor: {svgElement.TextAnchor}");
             }
 
             if (!string.IsNullOrEmpty(svgElement.BaselineShift))
             {
-                WriteLine($"{indentLine}{indentAttribute}baseline-shift: {svgElement.BaselineShift}", AttributeColor);
+                WriteLine($"{indentLine}{indentAttribute}baseline-shift: {svgElement.BaselineShift}");
             }
 
             if (!string.IsNullOrEmpty(svgElement.FontFamily))
             {
-                WriteLine($"{indentLine}{indentAttribute}font-family: {svgElement.FontFamily}", AttributeColor);
+                WriteLine($"{indentLine}{indentAttribute}font-family: {svgElement.FontFamily}");
             }
 
             if (svgElement.FontSize != SvgUnit.Empty)
             {
-                WriteLine($"{indentLine}{indentAttribute}font-size: {svgElement.FontSize}", AttributeColor);
+                WriteLine($"{indentLine}{indentAttribute}font-size: {svgElement.FontSize}");
             }
 
             if (svgElement.FontStyle != SvgFontStyle.All)
             {
-                WriteLine($"{indentLine}{indentAttribute}font-style: {svgElement.FontStyle}", AttributeColor);
+                WriteLine($"{indentLine}{indentAttribute}font-style: {svgElement.FontStyle}");
             }
 
             if (svgElement.FontVariant != SvgFontVariant.Inherit)
             {
-                WriteLine($"{indentLine}{indentAttribute}font-variant: {svgElement.FontVariant}", AttributeColor);
+                WriteLine($"{indentLine}{indentAttribute}font-variant: {svgElement.FontVariant}");
             }
 
             if (svgElement.TextDecoration != SvgTextDecoration.Inherit)
             {
-                WriteLine($"{indentLine}{indentAttribute}text-decoration: {svgElement.TextDecoration}", AttributeColor);
+                WriteLine($"{indentLine}{indentAttribute}text-decoration: {svgElement.TextDecoration}");
             }
 
             if (svgElement.FontWeight != SvgFontWeight.Inherit)
             {
-                WriteLine($"{indentLine}{indentAttribute}font-weight: {svgElement.FontWeight}", AttributeColor);
+                WriteLine($"{indentLine}{indentAttribute}font-weight: {svgElement.FontWeight}");
             }
 
             if (svgElement.TextTransformation != SvgTextTransformation.Inherit)
             {
-                WriteLine($"{indentLine}{indentAttribute}text-transform: {svgElement.TextTransformation}", AttributeColor);
+                WriteLine($"{indentLine}{indentAttribute}text-transform: {svgElement.TextTransformation}");
             }
 
             if (!string.IsNullOrEmpty(svgElement.Font))
             {
-                WriteLine($"{indentLine}{indentAttribute}font: {svgElement.Font}", AttributeColor);
+                WriteLine($"{indentLine}{indentAttribute}font: {svgElement.Font}");
             }
         }
 
@@ -1261,12 +1243,12 @@ namespace SvgDemo
             var type = svgElement.GetType();
             var element = new Element(svgElement, parent, name, type);
 
-            WriteLine($"{indentLine}-", ElementColor);
+            WriteLine($"{indentLine}-");
 
             indentLine += IndentTab;
 
-            WriteLine($"{indentLine}{indentAttribute}name: {name}", AttributeColor);
-            WriteLine($"{indentLine}{indentAttribute}type: {type}", AttributeColor);
+            WriteLine($"{indentLine}{indentAttribute}name: {name}");
+            WriteLine($"{indentLine}{indentAttribute}type: {type}");
 
             if (PrintSvgElementAttributesEnabled)
             {
@@ -1421,7 +1403,7 @@ namespace SvgDemo
                     PrintAttributes(svgHorizontalKern, indentLine, indentAttribute);
                     break;
                 default:
-                    WriteLine($"ERROR: Unknown elemen type: {svgElement.GetType()}", ErrorColor);
+                    WriteLine($"ERROR: Unknown elemen type: {svgElement.GetType()}");
                     break;
             }
 
@@ -1429,23 +1411,23 @@ namespace SvgDemo
             {
                 foreach (var attribute in svgElement.CustomAttributes)
                 {
-                    WriteLine($"{indentLine}{indentAttribute}{attribute.Key}: {attribute.Value}", AttributeColor);
+                    WriteLine($"{indentLine}{indentAttribute}{attribute.Key}: {attribute.Value}");
                 }
             }
 
             if (PrintSvgElementNodesEnabled && svgElement.Nodes.Count > 0)
             {
-                WriteLine($"{indentLine}nodes: |", HeaderColor);
+                WriteLine($"{indentLine}nodes: |");
 
                 foreach (var node in svgElement.Nodes)
                 {
-                    WriteLine($"{indentLine}{indentAttribute}{IndentTab}{node.Content}", AttributeColor);
+                    WriteLine($"{indentLine}{indentAttribute}{IndentTab}{node.Content}");
                 }
             }
 
             if (PrintSvgElementChildrenEnabled && svgElement.Children.Count > 0)
             {
-                WriteLine($"{indentLine}{indentAttribute}children:", HeaderColor);
+                WriteLine($"{indentLine}{indentAttribute}children:");
 
                 foreach (var child in svgElement.Children)
                 {
@@ -1470,7 +1452,7 @@ namespace SvgDemo
             for (int i = 0; i < args.Length; i++)
             {
                 string path = args[i];
-                WriteLine($"# {path}", HeaderColor);
+                WriteLine($"# {path}");
 
                 var svgDocument = SvgDocument.Open<SvgDocument>(path, null);
                 if (svgDocument != null)
@@ -1479,9 +1461,12 @@ namespace SvgDemo
                     var document = PrintSvgElement(svgDocument, "", "", null);
                     if (document != null)
                     {
-                        // TODO:
+                        if (Builder != null)
+                        {
+                            var yaml = Builder.ToString();
+                            Console.WriteLine(yaml);
+                        }
                     }
-                    ResetColor();
                 }
             }
         }
@@ -1505,10 +1490,7 @@ namespace SvgDemo
             {
                 new SvgDebug()
                 {
-                    ErrorColor = ConsoleColor.Yellow,
-                    ElementColor = ConsoleColor.Red,
-                    HeaderColor = ConsoleColor.White,
-                    AttributeColor = ConsoleColor.Blue,
+                    Builder = new StringBuilder(),
                     IndentTab = "  ",
                     PrintSvgElementAttributesEnabled = true,
                     PrintSvgElementCustomAttributesEnabled = true,
