@@ -1446,7 +1446,7 @@ namespace SvgDemo
 
             if (PrintSvgElementChildrenEnabled && svgElement.Children.Count > 0)
             {
-                WriteLine($"{indentLine}children:", HeaderColor);
+                WriteLine($"{indentLine}{indentAttribute}children:", HeaderColor);
 
                 foreach (var child in svgElement.Children)
                 {
