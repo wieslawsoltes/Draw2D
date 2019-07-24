@@ -1265,7 +1265,7 @@ namespace SvgDemo
 
             indentLine += IndentTab;
 
-            WriteLine($"{indentLine}{indentAttribute}name: {name}:", AttributeColor);
+            WriteLine($"{indentLine}{indentAttribute}name: {name}", AttributeColor);
             WriteLine($"{indentLine}{indentAttribute}type: {type}", AttributeColor);
 
             if (PrintSvgElementAttributesEnabled)
