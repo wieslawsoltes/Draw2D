@@ -32,7 +32,7 @@ namespace SvgDemo
 
                 var paths = new List<string>();
 
-                if (args[0] == "-f" && args.Length == 1)
+                if (args[0] == "-f" && args.Length == 2)
                 {
                     paths.Add(args[1]);
                 }
