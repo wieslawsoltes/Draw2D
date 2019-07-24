@@ -93,7 +93,7 @@ namespace SvgDemo
                 Persp2 = 1
             };
         }
-        
+
         private static void Transform(SKCanvas canvas, SvgTransformCollection transforms)
         {
             canvas.Save();
@@ -109,7 +109,7 @@ namespace SvgDemo
             canvas.SetMatrix(totalMatrix);
         }
 
-        private static void Transform(SKCanvas canvas, SvgViewBox viewBox, SvgAspectRatio aspectRatio,  SvgFragment svgFragment)
+        private static void Transform(SKCanvas canvas, SvgViewBox viewBox, SvgAspectRatio aspectRatio, SvgFragment svgFragment)
         {
             float x = svgFragment == null ? 0f : (float)svgFragment.X;
             float y = svgFragment == null ? 0f : (float)svgFragment.Y;
@@ -195,6 +195,7 @@ namespace SvgDemo
             canvas.Translate(fMinX, fMinY);
             canvas.Scale(fScaleX, fScaleY);
         }
+
         private static SKPaint GetFillSKPaint(SvgElement svgElement)
         {
             var paint = new SKPaint();
@@ -444,6 +445,5 @@ namespace SvgDemo
                 }
             }
         }
-
     }
 }
