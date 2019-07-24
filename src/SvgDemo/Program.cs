@@ -34,8 +34,13 @@ namespace SvgDemo
             Children = new List<Element>();
         }
 
-        public Element(SvgElement original, Element parent, string name, Type type) : this()
+        public Element(SvgElement original, Element parent, string name, Type type)
+            : this()
         {
+            Original = original;
+            Parent = parent;
+            Name = name;
+            Type = type;
         }
     }
 }
