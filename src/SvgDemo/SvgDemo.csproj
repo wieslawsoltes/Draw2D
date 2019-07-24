@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="*.svg;*.yml" />
+    <None Remove="*.svg;*.yml;*.png" />
   </ItemGroup>
 
   <ItemGroup>
