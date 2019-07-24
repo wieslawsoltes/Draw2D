@@ -21,7 +21,7 @@ namespace SvgDemo
 {
     public class Element
     {
-        SvgElement Original { get; set; }
+        public SvgElement Original { get; set; }
         public Element Parent { get; set; }
         public string Name { get; set; }
         public Type Type { get; set; }
