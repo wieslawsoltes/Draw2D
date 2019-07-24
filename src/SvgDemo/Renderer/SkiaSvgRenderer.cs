@@ -5,6 +5,7 @@ using System.IO;
 using System.Text;
 using SkiaSharp;
 using Svg;
+using Svg.Document_Structure;
 using Svg.Pathing;
 using Svg.Transforms;
 
@@ -93,9 +94,9 @@ namespace SvgDemo
             };
         }
         
-        private static int Transform(SKCanvas canvas, SvgTransformCollection transforms)
+        private static void Transform(SKCanvas canvas, SvgTransformCollection transforms)
         {
-            int count = canvas.Save();
+            canvas.Save();
 
             var totalMatrix = canvas.TotalMatrix;
 
@@ -106,10 +107,94 @@ namespace SvgDemo
             }
 
             canvas.SetMatrix(totalMatrix);
-
-            return count;
         }
 
+        private static void Transform(SKCanvas canvas, SvgViewBox viewBox, SvgAspectRatio aspectRatio,  SvgFragment svgFragment)
+        {
+            float x = svgFragment == null ? 0f : (float)svgFragment.X;
+            float y = svgFragment == null ? 0f : (float)svgFragment.Y;
+
+            if (viewBox.Equals(SvgViewBox.Empty))
+            {
+                canvas.Save();
+                canvas.Translate(x, y);
+                return;
+            }
+
+            float width = svgFragment == null ? (float)viewBox.Width : (float)svgFragment.Width;
+            float height = svgFragment == null ? (float)viewBox.Height : (float)svgFragment.Height;
+
+            float fScaleX = width / viewBox.Width;
+            float fScaleY = height / viewBox.Height;
+            float fMinX = -viewBox.MinX * fScaleX;
+            float fMinY = -viewBox.MinY * fScaleY;
+
+            if (aspectRatio == null)
+            {
+                aspectRatio = new SvgAspectRatio(SvgPreserveAspectRatio.xMidYMid, false);
+            }
+
+            if (aspectRatio.Align != SvgPreserveAspectRatio.none)
+            {
+                if (aspectRatio.Slice)
+                {
+                    fScaleX = Math.Max(fScaleX, fScaleY);
+                    fScaleY = Math.Max(fScaleX, fScaleY);
+                }
+                else
+                {
+                    fScaleX = Math.Min(fScaleX, fScaleY);
+                    fScaleY = Math.Min(fScaleX, fScaleY);
+                }
+                float fViewMidX = (viewBox.Width / 2) * fScaleX;
+                float fViewMidY = (viewBox.Height / 2) * fScaleY;
+                float fMidX = width / 2;
+                float fMidY = height / 2;
+                fMinX = -viewBox.MinX * fScaleX;
+                fMinY = -viewBox.MinY * fScaleY;
+
+                switch (aspectRatio.Align)
+                {
+                    case SvgPreserveAspectRatio.xMinYMin:
+                        break;
+                    case SvgPreserveAspectRatio.xMidYMin:
+                        fMinX += fMidX - fViewMidX;
+                        break;
+                    case SvgPreserveAspectRatio.xMaxYMin:
+                        fMinX += width - viewBox.Width * fScaleX;
+                        break;
+                    case SvgPreserveAspectRatio.xMinYMid:
+                        fMinY += fMidY - fViewMidY;
+                        break;
+                    case SvgPreserveAspectRatio.xMidYMid:
+                        fMinX += fMidX - fViewMidX;
+                        fMinY += fMidY - fViewMidY;
+                        break;
+                    case SvgPreserveAspectRatio.xMaxYMid:
+                        fMinX += width - viewBox.Width * fScaleX;
+                        fMinY += fMidY - fViewMidY;
+                        break;
+                    case SvgPreserveAspectRatio.xMinYMax:
+                        fMinY += height - viewBox.Height * fScaleY;
+                        break;
+                    case SvgPreserveAspectRatio.xMidYMax:
+                        fMinX += fMidX - fViewMidX;
+                        fMinY += height - viewBox.Height * fScaleY;
+                        break;
+                    case SvgPreserveAspectRatio.xMaxYMax:
+                        fMinX += width - viewBox.Width * fScaleX;
+                        fMinY += height - viewBox.Height * fScaleY;
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            canvas.Save();
+            canvas.Translate(x, y);
+            canvas.Translate(fMinX, fMinY);
+            canvas.Scale(fScaleX, fScaleY);
+        }
         private static SKPaint GetFillSKPaint(SvgElement svgElement)
         {
             var paint = new SKPaint();
@@ -139,13 +224,34 @@ namespace SvgDemo
 
         private static void Draw(SKCanvas canvas, Element element)
         {
-            int count = Transform(canvas, element.Original.Transforms);
+            Transform(canvas, element.Original.Transforms);
 
             switch (element.Original)
             {
                 case SvgFragment svgFragment:
                     {
+                        Transform(canvas, svgFragment.ViewBox, svgFragment.AspectRatio, svgFragment);
+
                         Draw(canvas, element.Children);
+
+                        canvas.Restore();
+                    }
+                    break;
+                case SvgSymbol svgSymbol:
+                    {
+                        if (svgSymbol.Parent is SvgUse)
+                        {
+                            Transform(canvas, svgSymbol.ViewBox, svgSymbol.AspectRatio, null);
+
+                            Draw(canvas, element.Children);
+
+                            canvas.Restore();
+                        }
+                    }
+                    break;
+                case SvgUse svgUse:
+                    {
+                        // TODO:
                     }
                     break;
                 case SvgCircle svgCircle:
@@ -296,7 +402,7 @@ namespace SvgDemo
                     break;
             }
 
-            canvas.RestoreToCount(count);
+            canvas.Restore();
         }
 
         private static void Draw(SKCanvas canvas, List<Element> elements)
