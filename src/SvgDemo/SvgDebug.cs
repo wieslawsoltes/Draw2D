@@ -1283,7 +1283,7 @@ namespace SvgDemo
         {
             var name = GetElementName(svgElement);
             var type = svgElement.GetType();
-            var element = new Element(svgElement, parent, name, type);
+            var element = new Element(svgElement, parent, name);
 
             WriteLine($"{indentLine}-");
 
