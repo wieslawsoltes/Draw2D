@@ -2,16 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Text;
+using SkiaSharp;
 using Svg;
-using Svg.Css;
 using Svg.DataTypes;
-using Svg.ExCSS;
-using Svg.ExCSS.Model;
-using Svg.ExCSS.Model.Extensions;
-using Svg.Exceptions;
-using Svg.ExtensionMethods;
 using Svg.Document_Structure;
 using Svg.FilterEffects;
 using Svg.Pathing;
@@ -1518,30 +1514,21 @@ namespace SvgDemo
             return element;
         }
 
-        public void Run(string[] args)
+        public void Run(string path)
         {
-            if (args.Length < 1)
-            {
-                return;
-            }
+            WriteLine($"# {path}");
 
-            for (int i = 0; i < args.Length; i++)
+            var svgDocument = SvgDocument.Open<SvgDocument>(path, null);
+            if (svgDocument != null)
             {
-                string path = args[i];
-                WriteLine($"# {path}");
-
-                var svgDocument = SvgDocument.Open<SvgDocument>(path, null);
-                if (svgDocument != null)
+                svgDocument.FlushStyles(true);
+                var document = PrintSvgElement(svgDocument, "", "", null);
+                if (document != null)
                 {
-                    svgDocument.FlushStyles(true);
-                    var document = PrintSvgElement(svgDocument, "", "", null);
-                    if (document != null)
+                    if (Builder != null)
                     {
-                        if (Builder != null)
-                        {
-                            var yaml = Builder.ToString();
-                            Console.WriteLine(yaml);
-                        }
+                        var yaml = Builder.ToString();
+                        File.WriteAllText(path + ".yml", yaml);
                     }
                 }
             }
@@ -1564,6 +1551,12 @@ namespace SvgDemo
         {
             try
             {
+                if (args.Length != 1)
+                {
+                    Console.WriteLine($"Usage: SvgDemo <filename.svg>");
+                    return;
+                }
+
                 new SvgDebug()
                 {
                     Builder = new StringBuilder(),
@@ -1573,7 +1566,7 @@ namespace SvgDemo
                     PrintSvgElementChildrenEnabled = true,
                     PrintSvgElementNodesEnabled = false
                 }
-                .Run(args);
+                .Run(args[0]);
             }
             catch (Exception ex)
             {
