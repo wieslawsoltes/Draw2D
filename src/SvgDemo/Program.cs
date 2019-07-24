@@ -1261,12 +1261,11 @@ namespace SvgDemo
             var type = svgElement.GetType();
             var element = new Element(svgElement, parent, name, type);
 
-            string elementIndent = indentLine;
-
-            WriteLine($"{elementIndent}- {name}:", ElementColor);
+            WriteLine($"{indentLine}-", ElementColor);
 
             indentLine += IndentTab;
 
+            WriteLine($"{indentLine}{indentAttribute}name: {name}:", AttributeColor);
             WriteLine($"{indentLine}{indentAttribute}type: {type}", AttributeColor);
 
             if (PrintSvgElementAttributesEnabled)
