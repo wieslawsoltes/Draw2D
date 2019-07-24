@@ -190,12 +190,27 @@ namespace SvgDemo
 
         public void PrintAttributes(SvgFilter svgFilter, string indentLine, string indentAttribute)
         {
-            WriteLine($"{indentLine}{indentAttribute}x: {Format(svgFilter.X)}");
-            WriteLine($"{indentLine}{indentAttribute}y: {Format(svgFilter.Y)}");
-            WriteLine($"{indentLine}{indentAttribute}width: {Format(svgFilter.Width)}");
-            WriteLine($"{indentLine}{indentAttribute}height: {Format(svgFilter.Height)}");
+            if (svgFilter.X != 0f)
+            {
+                WriteLine($"{indentLine}{indentAttribute}x: {Format(svgFilter.X)}");
+            }
 
-            if (svgFilter.ColorInterpolationFilters != SvgColourInterpolation.Inherit)
+            if (svgFilter.Y != 0f)
+            {
+                WriteLine($"{indentLine}{indentAttribute}y: {Format(svgFilter.Y)}");
+            }
+
+            if (svgFilter.Width != 0f)
+            {
+                WriteLine($"{indentLine}{indentAttribute}width: {Format(svgFilter.Width)}");
+            }
+
+            if (svgFilter.Height != 0f)
+            {
+                WriteLine($"{indentLine}{indentAttribute}height: {Format(svgFilter.Height)}");
+            }
+
+            if (svgFilter.ColorInterpolationFilters != SvgColourInterpolation.Inherit && svgFilter.ColorInterpolationFilters != SvgColourInterpolation.Auto)
             {
                 WriteLine($"{indentLine}{indentAttribute}color-interpolation-filters: {svgFilter.ColorInterpolationFilters}");
             }
@@ -954,21 +969,77 @@ namespace SvgDemo
 
         public void PrintSvgGradientServerAttributes(SvgGradientServer svgGradientServer, string indentLine, string indentAttribute)
         {
-            // TODO:
+            if (svgGradientServer.SpreadMethod != SvgGradientSpreadMethod.Pad)
+            {
+                WriteLine($"{indentLine}{indentAttribute}spreadMethod: {svgGradientServer.SpreadMethod}");
+            }
+
+            if (svgGradientServer.GradientUnits != SvgCoordinateUnits.ObjectBoundingBox)
+            {
+                WriteLine($"{indentLine}{indentAttribute}gradientUnits: {svgGradientServer.GradientUnits}");
+            }
+
+            if (svgGradientServer.InheritGradient != null)
+            {
+                WriteLine($"{indentLine}{indentAttribute}href: {svgGradientServer.InheritGradient}");
+            }
+
+            PrintSvgTransformCollection(svgGradientServer.GradientTransform, indentLine, indentAttribute, "gradientTransform");
         }
 
         public void PrintAttributes(SvgLinearGradientServer svgLinearGradientServer, string indentLine, string indentAttribute)
         {
             PrintSvgGradientServerAttributes(svgLinearGradientServer, indentLine, indentAttribute);
 
-            // TODO:
+            if (svgLinearGradientServer.X1 != new SvgUnit(SvgUnitType.Percentage, 0f))
+            {
+                WriteLine($"{indentLine}{indentAttribute}x1: {svgLinearGradientServer.X1}");
+            }
+
+            if (svgLinearGradientServer.Y1 != new SvgUnit(SvgUnitType.Percentage, 0f))
+            {
+                WriteLine($"{indentLine}{indentAttribute}y1: {svgLinearGradientServer.Y1}");
+            }
+
+            if (svgLinearGradientServer.X2 != new SvgUnit(SvgUnitType.Percentage, 100f))
+            {
+                WriteLine($"{indentLine}{indentAttribute}x2: {svgLinearGradientServer.X2}");
+            }
+
+            if (svgLinearGradientServer.Y2 != new SvgUnit(SvgUnitType.Percentage, 0f))
+            {
+                WriteLine($"{indentLine}{indentAttribute}y2: {svgLinearGradientServer.Y2}");
+            }
         }
 
         public void PrintAttributes(SvgRadialGradientServer svgRadialGradientServer, string indentLine, string indentAttribute)
         {
             PrintSvgGradientServerAttributes(svgRadialGradientServer, indentLine, indentAttribute);
 
-            // TODO:
+            if (svgRadialGradientServer.CenterX != new SvgUnit(SvgUnitType.Percentage, 50f))
+            {
+                WriteLine($"{indentLine}{indentAttribute}cx: {svgRadialGradientServer.CenterX}");
+            }
+
+            if (svgRadialGradientServer.CenterY != new SvgUnit(SvgUnitType.Percentage, 50f))
+            {
+                WriteLine($"{indentLine}{indentAttribute}cy: {svgRadialGradientServer.CenterY}");
+            }
+
+            if (svgRadialGradientServer.Radius != new SvgUnit(SvgUnitType.Percentage, 50f))
+            {
+                WriteLine($"{indentLine}{indentAttribute}r: {svgRadialGradientServer.Radius}");
+            }
+
+            if (svgRadialGradientServer.FocalX != SvgUnit.None)
+            {
+                WriteLine($"{indentLine}{indentAttribute}fx: {svgRadialGradientServer.FocalX}");
+            }
+
+            if (svgRadialGradientServer.FocalY != SvgUnit.None)
+            {
+                WriteLine($"{indentLine}{indentAttribute}fy: {svgRadialGradientServer.FocalY}");
+            }
         }
 
         public void PrintSvgKernAttributes(SvgKern svgKern, string indentLine, string indentAttribute)
@@ -1176,7 +1247,7 @@ namespace SvgDemo
                 WriteLine($"{indentLine}{indentAttribute}stop-color: {svgElement.StopColor.ToString()}");
             }
 
-            if (svgElement.Opacity != 1f)
+            if (svgElement.Opacity != 1f) // TODO: check attribute name, confilit with `stop-opacity` Svg.SvgGradientStop. Use always SvgAttribute name for validation.
             {
                 WriteLine($"{indentLine}{indentAttribute}opacity: {Format(svgElement.Opacity)}");
             }
