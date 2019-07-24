@@ -7,6 +7,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SvgDemo", "SvgDemo.csproj",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Svg", "..\..\externals\SVG\Source\Svg.csproj", "{886A98C5-37C0-4E8B-885E-30C1D2F98B47}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "externals", "externals", "{599E3AD6-0450-4FE8-93EB-1C8247DD5628}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{166B662D-8F4E-47D1-851B-2C69A52FF866}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,6 +28,10 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{CFDA440C-780A-4707-A42C-077DB68CC1B0} = {166B662D-8F4E-47D1-851B-2C69A52FF866}
+		{886A98C5-37C0-4E8B-885E-30C1D2F98B47} = {599E3AD6-0450-4FE8-93EB-1C8247DD5628}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {80852A31-1086-408E-9E02-B23DEFCAFFD5}
