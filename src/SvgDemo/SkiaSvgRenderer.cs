@@ -5,13 +5,14 @@ using System.IO;
 using System.Text;
 using SkiaSharp;
 using Svg;
+using Svg.Pathing;
 using Svg.Transforms;
 
 namespace SvgDemo
 {
     public static class SkiaSvgRenderer
     {
-        public static SKColor GetColor(SvgColourServer svgColourServer, float opacity, bool forStroke = false)
+        private static SKColor GetColor(SvgColourServer svgColourServer, float opacity, bool forStroke = false)
         {
             if (svgColourServer == SvgPaintServer.None)
             {
@@ -29,11 +30,11 @@ namespace SvgDemo
             return new SKColor(colour.R, colour.G, colour.B, alpha);
         }
 
-        public static SKPath ToSKPath(SvgPath svgPath)
+        private static SKPath ToSKPath(SvgPathSegmentList svgPathSegmentList)
         {
             var sb = new StringBuilder();
 
-            foreach (var svgSegment in svgPath.PathData)
+            foreach (var svgSegment in svgPathSegmentList)
             {
                 sb.AppendLine(svgSegment.ToString());
             }
@@ -43,7 +44,24 @@ namespace SvgDemo
             return SKPath.ParseSvgPathData(pathData);
         }
 
-        public static SKMatrix Multiply(ref SKMatrix value1, ref SKMatrix value2)
+        private static SKPath ToSKPath(SvgPointCollection svgPointCollection)
+        {
+            var path = new SKPath();
+            var points = new SKPoint[svgPointCollection.Count / 2];
+
+            for (int i = 0; (i + 1) < svgPointCollection.Count; i += 2)
+            {
+                float x = (float)svgPointCollection[i];
+                float y = (float)svgPointCollection[i + 1];
+                points[i / 2] = new SKPoint(x, y);
+            }
+
+            path.AddPoly(points, false);
+
+            return path;
+        }
+
+        private static SKMatrix Multiply(ref SKMatrix value1, ref SKMatrix value2)
         {
             return new SKMatrix()
             {
@@ -59,7 +77,7 @@ namespace SvgDemo
             };
         }
 
-        public static SKMatrix ToSKmatrix(Matrix matrix)
+        private static SKMatrix ToSKmatrix(Matrix matrix)
         {
             return new SKMatrix()
             {
@@ -92,7 +110,34 @@ namespace SvgDemo
             return count;
         }
 
-        public static void Draw(SKCanvas canvas, Element element)
+        private static SKPaint GetFillSKPaint(SvgElement svgElement)
+        {
+            var paint = new SKPaint();
+
+            if (svgElement.Fill is SvgColourServer svgColourServer)
+            {
+                paint.Color = paint.Color = GetColor(svgColourServer, svgElement.StrokeOpacity, false);
+                paint.Style = SKPaintStyle.Fill;
+            }
+
+            return paint;
+        }
+
+        private static SKPaint GetStrokeSKPaint(SvgElement svgElement)
+        {
+            var paint = new SKPaint();
+
+            if (svgElement.Stroke is SvgColourServer svgColourServer)
+            {
+                paint.Color = paint.Color = GetColor(svgColourServer, svgElement.StrokeOpacity, true);
+                paint.StrokeWidth = svgElement.StrokeWidth;
+                paint.Style = SKPaintStyle.Stroke;
+            }
+
+            return paint;
+        }
+
+        private static void Draw(SKCanvas canvas, Element element)
         {
             int count = Transform(canvas, element.Original.Transforms);
 
@@ -101,6 +146,89 @@ namespace SvgDemo
                 case SvgFragment svgFragment:
                     {
                         Draw(canvas, element.Children);
+                    }
+                    break;
+                case SvgCircle svgCircle:
+                    {
+                        float cx = svgCircle.CenterX;
+                        float cy = svgCircle.CenterY;
+                        float radius = svgCircle.Radius;
+
+                        if (svgCircle.Fill != null && svgCircle.Fill != SvgColourServer.NotSet)
+                        {
+                            var paint = GetFillSKPaint(svgCircle);
+
+                            canvas.DrawCircle(cx, cy, radius, paint);
+                        }
+
+                        if (svgCircle.Stroke != null && svgCircle.Stroke != SvgColourServer.NotSet)
+                        {
+                            var paint = GetStrokeSKPaint(svgCircle);
+
+                            canvas.DrawCircle(cx, cy, radius, paint);
+                        }
+                    }
+                    break;
+                case SvgEllipse svgEllipse:
+                    {
+                        float cx = svgEllipse.CenterX;
+                        float cy = svgEllipse.CenterY;
+                        float rx = svgEllipse.RadiusX;
+                        float ry = svgEllipse.RadiusY;
+
+                        if (svgEllipse.Fill != null && svgEllipse.Fill != SvgColourServer.NotSet)
+                        {
+                            var paint = GetFillSKPaint(svgEllipse);
+
+                            canvas.DrawOval(cx, cy, rx, ry, paint);
+                        }
+
+                        if (svgEllipse.Stroke != null && svgEllipse.Stroke != SvgColourServer.NotSet)
+                        {
+                            var paint = GetStrokeSKPaint(svgEllipse);
+
+                            canvas.DrawOval(cx, cy, rx, ry, paint);
+                        }
+                    }
+                    break;
+                case SvgRectangle svgRectangle:
+                    {
+                        float x = svgRectangle.X;
+                        float y = svgRectangle.Y;
+                        float width = svgRectangle.Width;
+                        float height = svgRectangle.Height;
+                        float rx = svgRectangle.CornerRadiusX;
+                        float ry = svgRectangle.CornerRadiusY;
+
+                        var rect = new SKRect(x, y, x + width, y + height);
+
+                        if (svgRectangle.Fill != null && svgRectangle.Fill != SvgColourServer.NotSet)
+                        {
+                            var paint = GetFillSKPaint(svgRectangle);
+
+                            if (rx > 0f && ry > 0f)
+                            {
+                                canvas.DrawRoundRect(rect, rx, ry, paint);
+                            }
+                            else
+                            {
+                                canvas.DrawRect(rect, paint);
+                            }
+                        }
+
+                        if (svgRectangle.Stroke != null && svgRectangle.Stroke != SvgColourServer.NotSet)
+                        {
+                            var paint = GetStrokeSKPaint(svgRectangle);
+
+                            if (rx > 0f && ry > 0f)
+                            {
+                                canvas.DrawRoundRect(rect, rx, ry, paint);
+                            }
+                            else
+                            {
+                                canvas.DrawRect(rect, paint);
+                            }
+                        }
                     }
                     break;
                 case SvgGroup svgGroup:
@@ -117,11 +245,7 @@ namespace SvgDemo
                         {
                             if (svgLine.Stroke is SvgColourServer svgColourServer)
                             {
-                                var paint = new SKPaint();
-
-                                paint.Color = GetColor(svgColourServer, svgLine.StrokeOpacity, true);
-                                paint.StrokeWidth = svgLine.StrokeWidth;
-                                paint.Style = SKPaintStyle.Stroke;
+                                var paint = GetStrokeSKPaint(svgLine);
 
                                 canvas.DrawLine(p0, p1, paint);
                             }
@@ -130,7 +254,7 @@ namespace SvgDemo
                     break;
                 case SvgPath svgPath:
                     {
-                        var path = ToSKPath(svgPath);
+                        var path = ToSKPath(svgPath.PathData);
                         if (path == null || path.IsEmpty)
                         {
                             break;
@@ -138,27 +262,33 @@ namespace SvgDemo
 
                         if (svgPath.Fill != null && svgPath.Fill != SvgColourServer.NotSet)
                         {
-                            var paint = new SKPaint();
-
-                            if (svgPath.Fill is SvgColourServer svgColourServer)
-                            {
-                                paint.Color = paint.Color = GetColor(svgColourServer, svgPath.StrokeOpacity, false);
-                                paint.Style = SKPaintStyle.Fill;
-                            }
+                            var paint = GetFillSKPaint(svgPath);
 
                             canvas.DrawPath(path, paint);
                         }
 
                         if (svgPath.Stroke != null && svgPath.Stroke != SvgColourServer.NotSet)
                         {
-                            var paint = new SKPaint();
+                            var paint = GetStrokeSKPaint(svgPath);
 
-                            if (svgPath.Stroke is SvgColourServer svgColourServer)
-                            {
-                                paint.Color = paint.Color = GetColor(svgColourServer, svgPath.StrokeOpacity, true);
-                                paint.StrokeWidth = svgPath.StrokeWidth;
-                                paint.Style = SKPaintStyle.Stroke;
-                            }
+                            canvas.DrawPath(path, paint);
+                        }
+                    }
+                    break;
+                case SvgPolygon svgPolygon:
+                    {
+                        var path = ToSKPath(svgPolygon.Points);
+
+                        if (svgPolygon.Fill != null && svgPolygon.Fill != SvgColourServer.NotSet)
+                        {
+                            var paint = GetFillSKPaint(svgPolygon);
+
+                            canvas.DrawPath(path, paint);
+                        }
+
+                        if (svgPolygon.Stroke != null && svgPolygon.Stroke != SvgColourServer.NotSet)
+                        {
+                            var paint = GetStrokeSKPaint(svgPolygon);
 
                             canvas.DrawPath(path, paint);
                         }
@@ -169,7 +299,7 @@ namespace SvgDemo
             canvas.RestoreToCount(count);
         }
 
-        public static void Draw(SKCanvas canvas, List<Element> elements)
+        private static void Draw(SKCanvas canvas, List<Element> elements)
         {
             foreach (var element in elements)
             {
