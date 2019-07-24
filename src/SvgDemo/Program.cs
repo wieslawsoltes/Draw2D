@@ -1263,7 +1263,7 @@ namespace SvgDemo
 
             string elementIndent = indentLine;
 
-            WriteLine($"{elementIndent}{name}:", ElementColor);
+            WriteLine($"{elementIndent}- {name}:", ElementColor);
 
             indentLine += IndentTab;
 
