@@ -71,13 +71,15 @@ namespace SvgDemo
                         var document = svgDebug.PrintSvgElement(svgDocument, "", "", null);
                         if (document != null)
                         {
+                            var extension = Path.GetExtension(path).ToCharArray();
+
                             if (svgDebug.Builder != null)
                             {
                                 var yaml = svgDebug.Builder.ToString();
-                                File.WriteAllText(path + ".yml", yaml);
+                                File.WriteAllText(path.TrimEnd(extension) + ".yml", yaml);
                             }
 
-                            SkiaSvgRenderer.SaveImage(path + ".png", document, SKEncodedImageFormat.Png, 100);
+                            SkiaSvgRenderer.SaveImage(path.TrimEnd(extension) + ".png", document, SKEncodedImageFormat.Png, 100);
                         }
                     }
                 }
