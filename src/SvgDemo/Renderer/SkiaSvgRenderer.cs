@@ -69,7 +69,7 @@ namespace SvgDemo
                             float y1 = (float)svgCubicCurveSegment.SecondControlPoint.Y;
                             float x2 = (float)svgCubicCurveSegment.End.X;
                             float y2 = (float)svgCubicCurveSegment.End.Y;
-                            path.CubicTo(x0, x0, x1, x1, x2, x2);
+                            path.CubicTo(x0, y0, x1, y1, x2, y2);
                         }
                         break;
                     case SvgQuadraticCurveSegment svgQuadraticCurveSegment:
@@ -78,7 +78,7 @@ namespace SvgDemo
                             float y0 = (float)svgQuadraticCurveSegment.ControlPoint.Y;
                             float x1 = (float)svgQuadraticCurveSegment.End.X;
                             float y1 = (float)svgQuadraticCurveSegment.End.Y;
-                            path.QuadTo(x0, x0, x1, x1);
+                            path.QuadTo(x0, y0, x1, y1);
                         }
                         break;
                     case SvgArcSegment svgArcSegment:
