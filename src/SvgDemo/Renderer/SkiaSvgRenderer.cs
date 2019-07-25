@@ -171,7 +171,10 @@ namespace SvgDemo
 
         private static SKPaint GetFillSKPaint(SvgElement svgElement)
         {
-            var paint = new SKPaint();
+            var paint = new SKPaint()
+            {
+                IsAntialias = true
+            };
 
             if (svgElement.Fill is SvgColourServer svgColourServer)
             {
@@ -184,7 +187,10 @@ namespace SvgDemo
 
         private static SKPaint GetStrokeSKPaint(SvgElement svgElement)
         {
-            var paint = new SKPaint();
+            var paint = new SKPaint()
+            {
+                IsAntialias = true
+            };
 
             if (svgElement.Stroke is SvgColourServer svgColourServer)
             {
