@@ -54,8 +54,6 @@ namespace SvgDemo
 
                 foreach (var path in paths)
                 {
-
-
                     var svgDocument = SvgDocument.Open<SvgDocument>(path, null);
                     if (svgDocument != null)
                     {
@@ -76,10 +74,12 @@ namespace SvgDemo
                         //if (svgDebug.Builder != null)
                         //{
                         //    var yaml = svgDebug.Builder.ToString();
-                        //    File.WriteAllText(path.TrimEnd(extension) + ".yml", yaml);
+                        //    string ymlPath = path.TrimEnd(extension) + ".yml";
+                        //    File.WriteAllText(ymlPath, yaml);
                         //}
 
-                        SkiaSvgRenderer.SaveImage(path.TrimEnd(extension) + ".png", svgDocument, SKEncodedImageFormat.Png, 100);
+                        string pngPath = path.TrimEnd(extension) + ".png";
+                        SkiaSvgRenderer.SaveImage(svgDocument, pngPath, SKEncodedImageFormat.Png, 100, 1, 1);
                     }
                 }
             }
