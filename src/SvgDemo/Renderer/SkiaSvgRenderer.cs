@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing.Drawing2D;
 using System.IO;
+using System.Reflection;
 using System.Text;
 using SkiaSharp;
 using Svg;
@@ -347,9 +348,11 @@ namespace SvgDemo
                         var svgVisualElement = GetReference<SvgVisualElement>(svgUse, svgUse.ReferencedElement);
                         if (svgVisualElement != null)
                         {
-                            //var parent = svgUse.Parent;
+                            var parent = svgUse.Parent;
                             //svgVisualElement.Parent = svgUse;
-                            //svgVisualElement.InvalidateChildPaths();
+                            var _parent = svgUse.GetType().GetField("_parent", BindingFlags.NonPublic | BindingFlags.Instance);
+                            _parent.SetValue(svgVisualElement, svgUse);
+                            svgVisualElement.InvalidateChildPaths();
 
                             canvas.Save();
 
@@ -367,6 +370,7 @@ namespace SvgDemo
                             }
 
                             //svgVisualElement.Parent = parent;
+                            _parent.SetValue(svgVisualElement, parent);
 
                             canvas.Restore();
                         }
