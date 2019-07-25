@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing.Drawing2D;
 using System.IO;
 using System.Text;
@@ -13,6 +12,11 @@ namespace SvgDemo
 {
     public static class SkiaSvgRenderer
     {
+        private static T GetReference<T>(SvgElement svgElement, Uri uri) where T : SvgElement
+        {
+            return svgElement.OwnerDocument.GetElementById(uri.ToString()) as T;
+        }
+
         private static SKColor GetColor(SvgColourServer svgColourServer, float opacity, bool forStroke = false)
         {
             if (svgColourServer == SvgPaintServer.None)
@@ -303,8 +307,6 @@ namespace SvgDemo
             float width = svgSymbol.ViewBox.Width;
             float height = svgSymbol.ViewBox.Height;
 
-Console.WriteLine($"svgSymbol: {svgSymbol.ViewBox.Width} {svgSymbol.ViewBox.Height}");
-
             Transform(canvas, svgSymbol.ViewBox, svgSymbol.AspectRatio, x, y, width, height);
 
             Draw(canvas, svgSymbol.Children);
@@ -342,7 +344,7 @@ Console.WriteLine($"svgSymbol: {svgSymbol.ViewBox.Width} {svgSymbol.ViewBox.Heig
                     break;
                 case SvgUse svgUse:
                     {
-                        var svgVisualElement = svgUse.OwnerDocument.GetElementById(svgUse.ReferencedElement.ToString()) as SvgVisualElement;
+                        var svgVisualElement = GetReference<SvgVisualElement>(svgUse, svgUse.ReferencedElement);
                         if (svgVisualElement != null)
                         {
                             //var parent = svgUse.Parent;
@@ -577,21 +579,24 @@ Console.WriteLine($"svgSymbol: {svgSymbol.ViewBox.Width} {svgSymbol.ViewBox.Heig
             }
         }
 
-        public static void SaveImage(string path, SvgElement svgElement, SKEncodedImageFormat format = SKEncodedImageFormat.Png, int quality = 100)
+        public static void SaveImage(SvgElement svgElement, string path, SKEncodedImageFormat format = SKEncodedImageFormat.Png, int quality = 100, float scaleX = 1f, float scaleY = 1f)
         {
             if (svgElement is SvgFragment svgFragment)
             {
                 float width = svgFragment.Width.ToDeviceValue(null, UnitRenderingType.Horizontal, svgFragment);
                 float height = svgFragment.Height.ToDeviceValue(null, UnitRenderingType.Vertical, svgFragment);
 
-                var info = new SKImageInfo((int)width, (int)height);
+                var info = new SKImageInfo((int)(width * scaleX), (int)(height * scaleY));
                 using (var bitmap = new SKBitmap(info))
                 {
                     using (var canvas = new SKCanvas(bitmap))
                     {
+                        canvas.Scale(scaleX, scaleY);
                         canvas.Clear(SKColors.Transparent);
 
                         Draw(canvas, svgFragment);
+
+                        canvas.Restore();
 
                         using (var image = SKImage.FromBitmap(bitmap))
                         using (var data = image.Encode(format, quality))
