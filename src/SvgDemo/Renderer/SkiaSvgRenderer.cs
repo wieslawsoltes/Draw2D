@@ -31,15 +31,19 @@ namespace SvgDemo
             return new SKColor(colour.R, colour.G, colour.B, alpha);
         }
 
+        private static string ToSvgPathData(SvgPathSegmentList svgPathSegmentList)
+        {
+            var sb = new StringBuilder();
+            foreach (var svgSegment in svgPathSegmentList)
+            {
+                sb.AppendLine(svgSegment.ToString());
+            }
+            return sb.ToString();
+        }
+
         private static SKPath ToSKPath(SvgPathSegmentList svgPathSegmentList)
         {
-            //var sb = new StringBuilder();
-            //foreach (var svgSegment in svgPathSegmentList)
-            //{
-            //    sb.AppendLine(svgSegment.ToString());
-            //}
-            //var pathData = sb.ToString();
-            //return SKPath.ParseSvgPathData(pathData);
+            //return SKPath.ParseSvgPathData(ToSvgPathData(svgPathSegmentList));
 
             var path = new SKPath();
 
