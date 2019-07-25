@@ -1279,11 +1279,10 @@ namespace SvgDemo
             }
         }
 
-        public Element PrintSvgElement(SvgElement svgElement, string indentLine, string indentAttribute, Element parent)
+        public void PrintSvgElement(SvgElement svgElement, string indentLine, string indentAttribute)
         {
             var name = GetElementName(svgElement);
             var type = svgElement.GetType();
-            var element = new Element(svgElement, parent, name);
 
             WriteLine($"{indentLine}-");
 
@@ -1473,15 +1472,9 @@ namespace SvgDemo
 
                 foreach (var child in svgElement.Children)
                 {
-                    var childElement = PrintSvgElement(child, indentLine + IndentTab, indentAttribute, element);
-                    if (childElement != null)
-                    {
-                        element.Children.Add(childElement);
-                    }
+                    PrintSvgElement(child, indentLine + IndentTab, indentAttribute);
                 }
             }
-
-            return element;
         }
     }
 }
