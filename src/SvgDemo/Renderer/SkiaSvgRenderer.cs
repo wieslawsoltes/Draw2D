@@ -315,15 +315,25 @@ namespace SvgDemo
             canvas.SetMatrix(totalMatrix);
         }
 
-        private static void DrawOpacity(SKCanvas canvas, SvgElement svgElement)
+        private static SKPaint DrawOpacity(SKCanvas canvas, SvgElement svgElement)
         {
             float opacity = AdjustOpacity(svgElement.Opacity);
-            SKPaint opacityPaint = null; // TODO: Dispose.
-            if (opacity < 1f)
+            bool setOpacity = true;
+
+            if (svgElement.Parent != null)
             {
-                opacityPaint = GetOpacitySKPaint(opacity);
-                canvas.SaveLayer(opacityPaint);
+                float parentOpacity = AdjustOpacity(svgElement.Parent.Opacity);
+                setOpacity = opacity != parentOpacity;
             }
+
+            if (opacity < 1f && setOpacity)
+            {
+                var paint = GetOpacitySKPaint(opacity);
+                canvas.SaveLayer(paint);
+                return paint; // TODO: Dispose;
+            }
+
+            return null;
         }
 
         private static void DrawSymbol(SKCanvas canvas, SvgSymbol svgSymbol)
@@ -509,6 +519,11 @@ namespace SvgDemo
                     break;
                 case SvgRectangle svgRectangle:
                     {
+                        canvas.Save();
+                        DrawOpacity(canvas, svgElement);
+                        canvas.Save();
+                        Transform(canvas, svgElement.Transforms);
+
                         float x = svgRectangle.X.ToDeviceValue(null, UnitRenderingType.Horizontal, svgRectangle);
                         float y = svgRectangle.Y.ToDeviceValue(null, UnitRenderingType.Vertical, svgRectangle);
                         float width = svgRectangle.Width.ToDeviceValue(null, UnitRenderingType.Horizontal, svgRectangle);
@@ -517,11 +532,6 @@ namespace SvgDemo
                         float ry = svgRectangle.CornerRadiusY.ToDeviceValue(null, UnitRenderingType.Vertical, svgRectangle);
                         var rect = new SKRect(x, y, x + width, y + height);
                         bool isRound = rx > 0f && ry > 0f;
-
-                        canvas.Save();
-                        DrawOpacity(canvas, svgElement);
-                        canvas.Save();
-                        Transform(canvas, svgElement.Transforms);
 
                         if (svgRectangle.Fill != null)
                         {
@@ -572,15 +582,15 @@ namespace SvgDemo
                     break;
                 case SvgLine svgLine:
                     {
-                        float x0 = svgLine.StartX.ToDeviceValue(null, UnitRenderingType.Horizontal, svgLine);
-                        float y0 = svgLine.StartY.ToDeviceValue(null, UnitRenderingType.Vertical, svgLine);
-                        float x1 = svgLine.EndX.ToDeviceValue(null, UnitRenderingType.Horizontal, svgLine);
-                        float y1 = svgLine.EndY.ToDeviceValue(null, UnitRenderingType.Vertical, svgLine);
-
                         canvas.Save();
                         DrawOpacity(canvas, svgElement);
                         canvas.Save();
                         Transform(canvas, svgElement.Transforms);
+
+                        float x0 = svgLine.StartX.ToDeviceValue(null, UnitRenderingType.Horizontal, svgLine);
+                        float y0 = svgLine.StartY.ToDeviceValue(null, UnitRenderingType.Vertical, svgLine);
+                        float x1 = svgLine.EndX.ToDeviceValue(null, UnitRenderingType.Horizontal, svgLine);
+                        float y1 = svgLine.EndY.ToDeviceValue(null, UnitRenderingType.Vertical, svgLine);
 
                         if (svgLine.Stroke != null)
                         {
@@ -599,17 +609,17 @@ namespace SvgDemo
                     break;
                 case SvgPath svgPath:
                     {
+                        canvas.Save();
+                        DrawOpacity(canvas, svgElement);
+                        canvas.Save();
+                        Transform(canvas, svgElement.Transforms);
+
                         using (var path = ToSKPath(svgPath.PathData, svgPath.FillRule))
                         {
                             if (path == null || path.IsEmpty)
                             {
                                 break;
                             }
-
-                            canvas.Save();
-                            DrawOpacity(canvas, svgElement);
-                            canvas.Save();
-                            Transform(canvas, svgElement.Transforms);
 
                             if (svgPath.Fill != null)
                             {
@@ -626,25 +636,25 @@ namespace SvgDemo
                                     canvas.DrawPath(path, paint);
                                 }
                             }
-
-                            canvas.Restore();
-                            canvas.Restore();
                         }
+
+                        canvas.Restore();
+                        canvas.Restore();
                     }
                     break;
                 case SvgPolyline svgPolyline:
                     {
+                        canvas.Save();
+                        DrawOpacity(canvas, svgElement);
+                        canvas.Save();
+                        Transform(canvas, svgElement.Transforms);
+
                         using (var path = ToSKPath(svgPolyline.Points, svgPolyline.FillRule, false))
                         {
                             if (path == null || path.IsEmpty)
                             {
                                 break;
                             }
-
-                            canvas.Save();
-                            DrawOpacity(canvas, svgElement);
-                            canvas.Save();
-                            Transform(canvas, svgElement.Transforms);
 
                             if (svgPolyline.Fill != null)
                             {
@@ -661,25 +671,25 @@ namespace SvgDemo
                                     canvas.DrawPath(path, paint);
                                 }
                             }
-
-                            canvas.Restore();
-                            canvas.Restore();
                         }
+
+                        canvas.Restore();
+                        canvas.Restore();
                     }
                     break;
                 case SvgPolygon svgPolygon:
                     {
+                        canvas.Save();
+                        DrawOpacity(canvas, svgElement);
+                        canvas.Save();
+                        Transform(canvas, svgElement.Transforms);
+
                         using (var path = ToSKPath(svgPolygon.Points, svgPolygon.FillRule, true))
                         {
                             if (path == null || path.IsEmpty)
                             {
                                 break;
                             }
-
-                            canvas.Save();
-                            DrawOpacity(canvas, svgElement);
-                            canvas.Save();
-                            Transform(canvas, svgElement.Transforms);
 
                             if (svgPolygon.Fill != null)
                             {
@@ -696,10 +706,10 @@ namespace SvgDemo
                                     canvas.DrawPath(path, paint);
                                 }
                             }
-
-                            canvas.Restore();
-                            canvas.Restore();
                         }
+
+                        canvas.Restore();
+                        canvas.Restore();
                     }
                     break;
             }
