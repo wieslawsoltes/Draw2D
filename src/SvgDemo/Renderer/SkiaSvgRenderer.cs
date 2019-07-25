@@ -172,6 +172,11 @@ namespace SvgDemo
             };
         }
 
+        private static float AdjustOpacity(float opacity)
+        {
+            return Math.Min(Math.Max(opacity, 0), 1);
+        }
+
         private static SKPaint GetFillSKPaint(SvgElement svgElement)
         {
             var paint = new SKPaint()
@@ -181,7 +186,7 @@ namespace SvgDemo
 
             if (svgElement.Fill is SvgColourServer svgColourServer)
             {
-                paint.Color = paint.Color = GetColor(svgColourServer, svgElement.StrokeOpacity, false);
+                paint.Color = paint.Color = GetColor(svgColourServer, AdjustOpacity(svgElement.StrokeOpacity), false);
                 paint.Style = SKPaintStyle.Fill;
             }
 
@@ -197,7 +202,7 @@ namespace SvgDemo
 
             if (svgElement.Stroke is SvgColourServer svgColourServer)
             {
-                paint.Color = paint.Color = GetColor(svgColourServer, svgElement.StrokeOpacity, true);
+                paint.Color = paint.Color = GetColor(svgColourServer, AdjustOpacity(svgElement.StrokeOpacity), true);
                 paint.StrokeWidth = svgElement.StrokeWidth.ToDeviceValue(null, UnitRenderingType.Other, svgElement);
                 paint.Style = SKPaintStyle.Stroke;
             }
@@ -308,6 +313,22 @@ namespace SvgDemo
             float width = svgSymbol.ViewBox.Width;
             float height = svgSymbol.ViewBox.Height;
 
+            if (svgSymbol.CustomAttributes.TryGetValue("width", out string _widthString))
+            {
+                if (new SvgUnitConverter().ConvertFrom(_widthString) is SvgUnit _width)
+                {
+                    width = _width.ToDeviceValue(null, UnitRenderingType.Horizontal, svgSymbol);
+                }
+            }
+
+            if (svgSymbol.CustomAttributes.TryGetValue("height", out string heightString))
+            {
+                if (new SvgUnitConverter().ConvertFrom(heightString) is SvgUnit _height)
+                {
+                    height = _height.ToDeviceValue(null, UnitRenderingType.Vertical, svgSymbol);
+                }
+            }
+
             Transform(canvas, svgSymbol.ViewBox, svgSymbol.AspectRatio, x, y, width, height);
 
             Draw(canvas, svgSymbol.Children);
@@ -341,6 +362,7 @@ namespace SvgDemo
                     break;
                 case SvgSymbol svgSymbol:
                     {
+                        // The symbol defs are not rendered.
                     }
                     break;
                 case SvgUse svgUse:
@@ -359,6 +381,22 @@ namespace SvgDemo
                             float x = svgUse.X.ToDeviceValue(null, UnitRenderingType.Horizontal, svgUse);
                             float y = svgUse.Y.ToDeviceValue(null, UnitRenderingType.Vertical, svgUse);
                             canvas.Translate(x, y);
+
+                            var ew = svgUse.Width.ToDeviceValue(null, UnitRenderingType.Horizontal, svgUse);
+                            var eh = svgUse.Height.ToDeviceValue(null, UnitRenderingType.Vertical, svgUse);
+                            if (ew > 0 && eh > 0)
+                            {
+                                var _attributes = svgVisualElement.GetType().GetField("_attributes", BindingFlags.NonPublic | BindingFlags.Instance);
+                                var attributes = _attributes.GetValue(_attributes) as SvgAttributeCollection;
+                                var viewBox = attributes.GetAttribute<SvgViewBox>("viewBox");
+                                //var viewBox = svgVisualElement.Attributes.GetAttribute<SvgViewBox>("viewBox");
+                                if (viewBox != SvgViewBox.Empty && Math.Abs(ew - viewBox.Width) > float.Epsilon && Math.Abs(eh - viewBox.Height) > float.Epsilon)
+                                {
+                                    var sw = ew / viewBox.Width;
+                                    var sh = eh / viewBox.Height;
+                                    canvas.Translate(sw, sh);
+                                }
+                            }
 
                             if (svgVisualElement is SvgSymbol)
                             {
