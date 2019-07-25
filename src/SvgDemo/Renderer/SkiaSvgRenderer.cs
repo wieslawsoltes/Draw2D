@@ -186,7 +186,7 @@ namespace SvgDemo
 
             if (svgElement.Fill is SvgColourServer svgColourServer)
             {
-                paint.Color = paint.Color = GetColor(svgColourServer, AdjustOpacity(svgElement.StrokeOpacity), false);
+                paint.Color = paint.Color = GetColor(svgColourServer, AdjustOpacity(svgElement.FillOpacity), false);
                 paint.Style = SKPaintStyle.Fill;
             }
 
