@@ -376,7 +376,7 @@ Console.WriteLine($"svgSymbol: {svgSymbol.ViewBox.Width} {svgSymbol.ViewBox.Heig
                         float cy = svgCircle.CenterY.ToDeviceValue(null, UnitRenderingType.Vertical, svgCircle);
                         float radius = svgCircle.Radius.ToDeviceValue(null, UnitRenderingType.Other, svgCircle);
 
-                        if (svgCircle.Fill != null && svgCircle.Fill != SvgColourServer.NotSet)
+                        if (svgCircle.Fill != null)
                         {
                             using (var paint = GetFillSKPaint(svgCircle))
                             {
@@ -384,7 +384,7 @@ Console.WriteLine($"svgSymbol: {svgSymbol.ViewBox.Width} {svgSymbol.ViewBox.Heig
                             }
                         }
 
-                        if (svgCircle.Stroke != null && svgCircle.Stroke != SvgColourServer.NotSet)
+                        if (svgCircle.Stroke != null)
                         {
                             using (var paint = GetStrokeSKPaint(svgCircle))
                             {
@@ -400,7 +400,7 @@ Console.WriteLine($"svgSymbol: {svgSymbol.ViewBox.Width} {svgSymbol.ViewBox.Heig
                         float rx = svgEllipse.RadiusX.ToDeviceValue(null, UnitRenderingType.Other, svgEllipse);
                         float ry = svgEllipse.RadiusY.ToDeviceValue(null, UnitRenderingType.Other, svgEllipse);
 
-                        if (svgEllipse.Fill != null && svgEllipse.Fill != SvgColourServer.NotSet)
+                        if (svgEllipse.Fill != null)
                         {
                             using (var paint = GetFillSKPaint(svgEllipse))
                             {
@@ -408,7 +408,7 @@ Console.WriteLine($"svgSymbol: {svgSymbol.ViewBox.Width} {svgSymbol.ViewBox.Heig
                             }
                         }
 
-                        if (svgEllipse.Stroke != null && svgEllipse.Stroke != SvgColourServer.NotSet)
+                        if (svgEllipse.Stroke != null)
                         {
                             using (var paint = GetStrokeSKPaint(svgEllipse))
                             {
@@ -428,7 +428,7 @@ Console.WriteLine($"svgSymbol: {svgSymbol.ViewBox.Width} {svgSymbol.ViewBox.Heig
                         var rect = new SKRect(x, y, x + width, y + height);
                         bool isRound = rx > 0f && ry > 0f;
 
-                        if (svgRectangle.Fill != null && svgRectangle.Fill != SvgColourServer.NotSet)
+                        if (svgRectangle.Fill != null)
                         {
                             using (var paint = GetFillSKPaint(svgRectangle))
                             {
@@ -443,7 +443,7 @@ Console.WriteLine($"svgSymbol: {svgSymbol.ViewBox.Width} {svgSymbol.ViewBox.Heig
                             }
                         }
 
-                        if (svgRectangle.Stroke != null && svgRectangle.Stroke != SvgColourServer.NotSet)
+                        if (svgRectangle.Stroke != null)
                         {
                             using (var paint = GetStrokeSKPaint(svgRectangle))
                             {
@@ -471,7 +471,7 @@ Console.WriteLine($"svgSymbol: {svgSymbol.ViewBox.Width} {svgSymbol.ViewBox.Heig
                         float x1 = svgLine.EndX.ToDeviceValue(null, UnitRenderingType.Horizontal, svgLine);
                         float y1 = svgLine.EndY.ToDeviceValue(null, UnitRenderingType.Vertical, svgLine);
 
-                        if (svgLine.Stroke != null && svgLine.Stroke != SvgColourServer.NotSet)
+                        if (svgLine.Stroke != null)
                         {
                             if (svgLine.Stroke is SvgColourServer svgColourServer)
                             {
@@ -492,7 +492,7 @@ Console.WriteLine($"svgSymbol: {svgSymbol.ViewBox.Width} {svgSymbol.ViewBox.Heig
                                 break;
                             }
 
-                            if (svgPath.Fill != null && svgPath.Fill != SvgColourServer.NotSet)
+                            if (svgPath.Fill != null)
                             {
                                 using (var paint = GetFillSKPaint(svgPath))
                                 {
@@ -500,7 +500,7 @@ Console.WriteLine($"svgSymbol: {svgSymbol.ViewBox.Width} {svgSymbol.ViewBox.Heig
                                 }
                             }
 
-                            if (svgPath.Stroke != null && svgPath.Stroke != SvgColourServer.NotSet)
+                            if (svgPath.Stroke != null)
                             {
                                 using (var paint = GetStrokeSKPaint(svgPath))
                                 {
@@ -519,7 +519,7 @@ Console.WriteLine($"svgSymbol: {svgSymbol.ViewBox.Width} {svgSymbol.ViewBox.Heig
                                 break;
                             }
 
-                            if (svgPolyline.Fill != null && svgPolyline.Fill != SvgColourServer.NotSet)
+                            if (svgPolyline.Fill != null)
                             {
                                 using (var paint = GetFillSKPaint(svgPolyline))
                                 {
@@ -527,7 +527,7 @@ Console.WriteLine($"svgSymbol: {svgSymbol.ViewBox.Width} {svgSymbol.ViewBox.Heig
                                 }
                             }
 
-                            if (svgPolyline.Stroke != null && svgPolyline.Stroke != SvgColourServer.NotSet)
+                            if (svgPolyline.Stroke != null)
                             {
                                 using (var paint = GetStrokeSKPaint(svgPolyline))
                                 {
@@ -546,7 +546,7 @@ Console.WriteLine($"svgSymbol: {svgSymbol.ViewBox.Width} {svgSymbol.ViewBox.Heig
                                 break;
                             }
 
-                            if (svgPolygon.Fill != null && svgPolygon.Fill != SvgColourServer.NotSet)
+                            if (svgPolygon.Fill != null)
                             {
                                 using (var paint = GetFillSKPaint(svgPolygon))
                                 {
@@ -554,7 +554,7 @@ Console.WriteLine($"svgSymbol: {svgSymbol.ViewBox.Width} {svgSymbol.ViewBox.Heig
                                 }
                             }
 
-                            if (svgPolygon.Stroke != null && svgPolygon.Stroke != SvgColourServer.NotSet)
+                            if (svgPolygon.Stroke != null)
                             {
                                 using (var paint = GetStrokeSKPaint(svgPolygon))
                                 {
