@@ -54,33 +54,32 @@ namespace SvgDemo
 
                 foreach (var path in paths)
                 {
-                    var svgDebug = new SvgDebug()
-                    {
-                        Builder = new StringBuilder(),
-                        IndentTab = "  ",
-                        PrintSvgElementAttributesEnabled = true,
-                        PrintSvgElementCustomAttributesEnabled = true,
-                        PrintSvgElementChildrenEnabled = true,
-                        PrintSvgElementNodesEnabled = false
-                    };
+
 
                     var svgDocument = SvgDocument.Open<SvgDocument>(path, null);
                     if (svgDocument != null)
                     {
                         svgDocument.FlushStyles(true);
-                        var document = svgDebug.PrintSvgElement(svgDocument, "", "", null);
-                        if (document != null)
-                        {
-                            var extension = Path.GetExtension(path).ToCharArray();
 
-                            //if (svgDebug.Builder != null)
-                            //{
-                            //    var yaml = svgDebug.Builder.ToString();
-                            //    File.WriteAllText(path.TrimEnd(extension) + ".yml", yaml);
-                            //}
+                        var extension = Path.GetExtension(path).ToCharArray();
 
-                            SkiaSvgRenderer.SaveImage(path.TrimEnd(extension) + ".png", svgDocument, SKEncodedImageFormat.Png, 100);
-                        }
+                        //var svgDebug = new SvgDebug()
+                        //{
+                        //    Builder = new StringBuilder(),
+                        //    IndentTab = "  ",
+                        //    PrintSvgElementAttributesEnabled = true,
+                        //    PrintSvgElementCustomAttributesEnabled = true,
+                        //    PrintSvgElementChildrenEnabled = true,
+                        //    PrintSvgElementNodesEnabled = false
+                        //};
+                        //svgDebug.PrintSvgElement(svgDocument, "", "");
+                        //if (svgDebug.Builder != null)
+                        //{
+                        //    var yaml = svgDebug.Builder.ToString();
+                        //    File.WriteAllText(path.TrimEnd(extension) + ".yml", yaml);
+                        //}
+
+                        SkiaSvgRenderer.SaveImage(path.TrimEnd(extension) + ".png", svgDocument, SKEncodedImageFormat.Png, 100);
                     }
                 }
             }
