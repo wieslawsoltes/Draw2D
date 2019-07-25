@@ -79,7 +79,7 @@ namespace SvgDemo
                                 File.WriteAllText(path.TrimEnd(extension) + ".yml", yaml);
                             }
 
-                            SkiaSvgRenderer.SaveImage(path.TrimEnd(extension) + ".png", document, SKEncodedImageFormat.Png, 100);
+                            SkiaSvgRenderer.SaveImage(path.TrimEnd(extension) + ".png", svgDocument, SKEncodedImageFormat.Png, 100);
                         }
                     }
                 }

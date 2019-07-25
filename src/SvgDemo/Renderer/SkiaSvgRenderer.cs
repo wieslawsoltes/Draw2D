@@ -43,8 +43,6 @@ namespace SvgDemo
 
         private static SKPath ToSKPath(SvgPathSegmentList svgPathSegmentList, SvgFillRule svgFillRule)
         {
-            //return SKPath.ParseSvgPathData(ToSvgPathData(svgPathSegmentList));
-
             var path = new SKPath()
             {
                 FillType = (svgFillRule == SvgFillRule.EvenOdd) ? SKPathFillType.EvenOdd : SKPathFillType.Winding
@@ -195,26 +193,20 @@ namespace SvgDemo
             if (svgElement.Stroke is SvgColourServer svgColourServer)
             {
                 paint.Color = paint.Color = GetColor(svgColourServer, svgElement.StrokeOpacity, true);
-                paint.StrokeWidth = svgElement.StrokeWidth;
+                paint.StrokeWidth = svgElement.StrokeWidth.ToDeviceValue(null, UnitRenderingType.Other, svgElement);
                 paint.Style = SKPaintStyle.Stroke;
             }
 
             return paint;
         }
 
-        private static void Transform(SKCanvas canvas, SvgViewBox viewBox, SvgAspectRatio aspectRatio, SvgFragment svgFragment)
+        private static void Transform(SKCanvas canvas, SvgViewBox viewBox, SvgAspectRatio aspectRatio, float x, float y, float width, float height)
         {
-            float x = svgFragment == null ? 0f : (float)svgFragment.X;
-            float y = svgFragment == null ? 0f : (float)svgFragment.Y;
-
             if (viewBox.Equals(SvgViewBox.Empty))
             {
                 canvas.Translate(x, y);
                 return;
             }
-
-            float width = svgFragment == null ? (float)viewBox.Width : (float)svgFragment.Width;
-            float height = svgFragment == null ? (float)viewBox.Height : (float)svgFragment.Height;
 
             float fScaleX = width / viewBox.Width;
             float fScaleY = height / viewBox.Height;
@@ -300,49 +292,89 @@ namespace SvgDemo
             canvas.SetMatrix(totalMatrix);
         }
 
-        private static void Draw(SKCanvas canvas, Element element)
+        private static void DrawSymbol(SKCanvas canvas, SvgSymbol svgSymbol)
         {
             canvas.Save();
 
-            Transform(canvas, element.Original.Transforms);
+            Transform(canvas, svgSymbol.Transforms);
 
-            switch (element.Original)
+            float x = 0f;
+            float y = 0f;
+            float width = svgSymbol.ViewBox.Width;
+            float height = svgSymbol.ViewBox.Height;
+
+Console.WriteLine($"svgSymbol: {svgSymbol.ViewBox.Width} {svgSymbol.ViewBox.Height}");
+
+            Transform(canvas, svgSymbol.ViewBox, svgSymbol.AspectRatio, x, y, width, height);
+
+            Draw(canvas, svgSymbol.Children);
+
+            canvas.Restore();
+        }
+
+        private static void Draw(SKCanvas canvas, SvgElement svgElement)
+        {
+            canvas.Save();
+
+            Transform(canvas, svgElement.Transforms);
+
+            switch (svgElement)
             {
                 case SvgFragment svgFragment:
                     {
                         canvas.Save();
 
-                        Transform(canvas, svgFragment.ViewBox, svgFragment.AspectRatio, svgFragment);
+                        float x = svgFragment.X.ToDeviceValue(null, UnitRenderingType.Horizontal, svgFragment);
+                        float y = svgFragment.Y.ToDeviceValue(null, UnitRenderingType.Vertical, svgFragment);
+                        float width = svgFragment.Width.ToDeviceValue(null, UnitRenderingType.Horizontal, svgFragment);
+                        float height = svgFragment.Height.ToDeviceValue(null, UnitRenderingType.Vertical, svgFragment);
 
-                        Draw(canvas, element.Children);
+                        Transform(canvas, svgFragment.ViewBox, svgFragment.AspectRatio, x, y, width, height);
+
+                        Draw(canvas, svgFragment.Children);
 
                         canvas.Restore();
                     }
                     break;
                 case SvgSymbol svgSymbol:
                     {
-                        if (svgSymbol.Parent is SvgUse)
+                    }
+                    break;
+                case SvgUse svgUse:
+                    {
+                        var svgVisualElement = svgUse.OwnerDocument.GetElementById(svgUse.ReferencedElement.ToString()) as SvgVisualElement;
+                        if (svgVisualElement != null)
                         {
+                            //var parent = svgUse.Parent;
+                            //svgVisualElement.Parent = svgUse;
+                            //svgVisualElement.InvalidateChildPaths();
+
                             canvas.Save();
 
-                            Transform(canvas, svgSymbol.ViewBox, svgSymbol.AspectRatio, null);
+                            float x = svgUse.X.ToDeviceValue(null, UnitRenderingType.Horizontal, svgUse);
+                            float y = svgUse.Y.ToDeviceValue(null, UnitRenderingType.Vertical, svgUse);
+                            canvas.Translate(x, y);
 
-                            Draw(canvas, element.Children);
+                            if (svgVisualElement is SvgSymbol)
+                            {
+                                DrawSymbol(canvas, svgVisualElement as SvgSymbol);
+                            }
+                            else
+                            {
+                                Draw(canvas, svgVisualElement);
+                            }
+
+                            //svgVisualElement.Parent = parent;
 
                             canvas.Restore();
                         }
                     }
                     break;
-                case SvgUse svgUse:
-                    {
-                        // TODO:
-                    }
-                    break;
                 case SvgCircle svgCircle:
                     {
-                        float cx = svgCircle.CenterX;
-                        float cy = svgCircle.CenterY;
-                        float radius = svgCircle.Radius;
+                        float cx = svgCircle.CenterX.ToDeviceValue(null, UnitRenderingType.Horizontal, svgCircle);
+                        float cy = svgCircle.CenterY.ToDeviceValue(null, UnitRenderingType.Vertical, svgCircle);
+                        float radius = svgCircle.Radius.ToDeviceValue(null, UnitRenderingType.Other, svgCircle);
 
                         if (svgCircle.Fill != null && svgCircle.Fill != SvgColourServer.NotSet)
                         {
@@ -363,10 +395,10 @@ namespace SvgDemo
                     break;
                 case SvgEllipse svgEllipse:
                     {
-                        float cx = svgEllipse.CenterX;
-                        float cy = svgEllipse.CenterY;
-                        float rx = svgEllipse.RadiusX;
-                        float ry = svgEllipse.RadiusY;
+                        float cx = svgEllipse.CenterX.ToDeviceValue(null, UnitRenderingType.Horizontal, svgEllipse);
+                        float cy = svgEllipse.CenterY.ToDeviceValue(null, UnitRenderingType.Vertical, svgEllipse);
+                        float rx = svgEllipse.RadiusX.ToDeviceValue(null, UnitRenderingType.Other, svgEllipse);
+                        float ry = svgEllipse.RadiusY.ToDeviceValue(null, UnitRenderingType.Other, svgEllipse);
 
                         if (svgEllipse.Fill != null && svgEllipse.Fill != SvgColourServer.NotSet)
                         {
@@ -387,12 +419,12 @@ namespace SvgDemo
                     break;
                 case SvgRectangle svgRectangle:
                     {
-                        float x = svgRectangle.X;
-                        float y = svgRectangle.Y;
-                        float width = svgRectangle.Width;
-                        float height = svgRectangle.Height;
-                        float rx = svgRectangle.CornerRadiusX;
-                        float ry = svgRectangle.CornerRadiusY;
+                        float x = svgRectangle.X.ToDeviceValue(null, UnitRenderingType.Horizontal, svgRectangle);
+                        float y = svgRectangle.Y.ToDeviceValue(null, UnitRenderingType.Vertical, svgRectangle);
+                        float width = svgRectangle.Width.ToDeviceValue(null, UnitRenderingType.Horizontal, svgRectangle);
+                        float height = svgRectangle.Height.ToDeviceValue(null, UnitRenderingType.Vertical, svgRectangle);
+                        float rx = svgRectangle.CornerRadiusX.ToDeviceValue(null, UnitRenderingType.Horizontal, svgRectangle);
+                        float ry = svgRectangle.CornerRadiusY.ToDeviceValue(null, UnitRenderingType.Vertical, svgRectangle);
                         var rect = new SKRect(x, y, x + width, y + height);
                         bool isRound = rx > 0f && ry > 0f;
 
@@ -429,13 +461,15 @@ namespace SvgDemo
                     break;
                 case SvgGroup svgGroup:
                     {
-                        Draw(canvas, element.Children);
+                        Draw(canvas, svgGroup.Children);
                     }
                     break;
                 case SvgLine svgLine:
                     {
-                        var p0 = new SKPoint((float)svgLine.StartX, (float)svgLine.StartY);
-                        var p1 = new SKPoint((float)svgLine.EndX, (float)svgLine.EndY);
+                        float x0 = svgLine.StartX.ToDeviceValue(null, UnitRenderingType.Horizontal, svgLine);
+                        float y0 = svgLine.StartY.ToDeviceValue(null, UnitRenderingType.Vertical, svgLine);
+                        float x1 = svgLine.EndX.ToDeviceValue(null, UnitRenderingType.Horizontal, svgLine);
+                        float y1 = svgLine.EndY.ToDeviceValue(null, UnitRenderingType.Vertical, svgLine);
 
                         if (svgLine.Stroke != null && svgLine.Stroke != SvgColourServer.NotSet)
                         {
@@ -443,7 +477,7 @@ namespace SvgDemo
                             {
                                 using (var paint = GetStrokeSKPaint(svgLine))
                                 {
-                                    canvas.DrawLine(p0, p1, paint);
+                                    canvas.DrawLine(x0, y0, x1, y1, paint);
                                 }
                             }
                         }
@@ -535,29 +569,29 @@ namespace SvgDemo
             canvas.Restore();
         }
 
-        private static void Draw(SKCanvas canvas, List<Element> elements)
+        private static void Draw(SKCanvas canvas, SvgElementCollection svgElementCollection)
         {
-            foreach (var element in elements)
+            foreach (var svgElement in svgElementCollection)
             {
-                Draw(canvas, element);
+                Draw(canvas, svgElement);
             }
         }
 
-        public static void SaveImage(string path, Element element, SKEncodedImageFormat format = SKEncodedImageFormat.Png, int quality = 100)
+        public static void SaveImage(string path, SvgElement svgElement, SKEncodedImageFormat format = SKEncodedImageFormat.Png, int quality = 100)
         {
-            if (element.Original is SvgFragment svgFragment)
+            if (svgElement is SvgFragment svgFragment)
             {
-                float width = svgFragment.Width;
-                float Height = svgFragment.Height;
+                float width = svgFragment.Width.ToDeviceValue(null, UnitRenderingType.Horizontal, svgFragment);
+                float height = svgFragment.Height.ToDeviceValue(null, UnitRenderingType.Vertical, svgFragment);
 
-                var info = new SKImageInfo((int)width, (int)Height);
+                var info = new SKImageInfo((int)width, (int)height);
                 using (var bitmap = new SKBitmap(info))
                 {
                     using (var canvas = new SKCanvas(bitmap))
                     {
                         canvas.Clear(SKColors.Transparent);
 
-                        Draw(canvas, element);
+                        Draw(canvas, svgFragment);
 
                         using (var image = SKImage.FromBitmap(bitmap))
                         using (var data = image.Encode(format, quality))
