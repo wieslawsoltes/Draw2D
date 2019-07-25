@@ -41,11 +41,14 @@ namespace SvgDemo
             return sb.ToString();
         }
 
-        private static SKPath ToSKPath(SvgPathSegmentList svgPathSegmentList)
+        private static SKPath ToSKPath(SvgPathSegmentList svgPathSegmentList, SvgFillRule svgFillRule)
         {
             //return SKPath.ParseSvgPathData(ToSvgPathData(svgPathSegmentList));
 
-            var path = new SKPath();
+            var path = new SKPath()
+            {
+                FillType = (svgFillRule == SvgFillRule.EvenOdd) ? SKPathFillType.EvenOdd : SKPathFillType.Winding
+            };
 
             foreach (var svgSegment in svgPathSegmentList)
             {
@@ -108,9 +111,13 @@ namespace SvgDemo
             return path;
         }
 
-        private static SKPath ToSKPath(SvgPointCollection svgPointCollection)
+        private static SKPath ToSKPath(SvgPointCollection svgPointCollection, SvgFillRule svgFillRule, bool isClosed)
         {
-            var path = new SKPath();
+            var path = new SKPath()
+            {
+                FillType = (svgFillRule == SvgFillRule.EvenOdd) ? SKPathFillType.EvenOdd : SKPathFillType.Winding
+            };
+
             var points = new SKPoint[svgPointCollection.Count / 2];
 
             for (int i = 0; (i + 1) < svgPointCollection.Count; i += 2)
@@ -121,6 +128,11 @@ namespace SvgDemo
             }
 
             path.AddPoly(points, false);
+
+            if (isClosed)
+            {
+                path.Close();
+            }
 
             return path;
         }
@@ -433,7 +445,7 @@ namespace SvgDemo
                     break;
                 case SvgPath svgPath:
                     {
-                        using (var path = ToSKPath(svgPath.PathData))
+                        using (var path = ToSKPath(svgPath.PathData, svgPath.FillRule))
                         {
                             if (path == null || path.IsEmpty)
                             {
@@ -458,9 +470,36 @@ namespace SvgDemo
                         }
                     }
                     break;
+                case SvgPolyline svgPolyline:
+                    {
+                        using (var path = ToSKPath(svgPolyline.Points, svgPolyline.FillRule, false))
+                        {
+                            if (path == null || path.IsEmpty)
+                            {
+                                break;
+                            }
+
+                            if (svgPolyline.Fill != null && svgPolyline.Fill != SvgColourServer.NotSet)
+                            {
+                                using (var paint = GetFillSKPaint(svgPolyline))
+                                {
+                                    canvas.DrawPath(path, paint);
+                                }
+                            }
+
+                            if (svgPolyline.Stroke != null && svgPolyline.Stroke != SvgColourServer.NotSet)
+                            {
+                                using (var paint = GetStrokeSKPaint(svgPolyline))
+                                {
+                                    canvas.DrawPath(path, paint);
+                                }
+                            }
+                        }
+                    }
+                    break;
                 case SvgPolygon svgPolygon:
                     {
-                        using (var path = ToSKPath(svgPolygon.Points))
+                        using (var path = ToSKPath(svgPolygon.Points, svgPolygon.FillRule, true))
                         {
                             if (path == null || path.IsEmpty)
                             {
