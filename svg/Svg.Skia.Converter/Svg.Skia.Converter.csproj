@@ -11,6 +11,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\externals\SVG\Source\Svg.csproj" />
     <ProjectReference Include="..\Svg.Skia\Svg.Skia.csproj" />
   </ItemGroup>
 
