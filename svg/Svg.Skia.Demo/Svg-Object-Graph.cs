@@ -15,7 +15,7 @@ using Svg.FilterEffects;
 using Svg.Pathing;
 using Svg.Transforms;
 
-namespace SvgDemo
+namespace Svg.Skia.Demo
 {
     /// The <see cref="SvgElement"/> object graph.
     /// +---abstract class <see cref="SvgElement"/>

@@ -9,7 +9,7 @@ using Svg.Document_Structure;
 using Svg.Pathing;
 using Svg.Transforms;
 
-namespace SvgDemo
+namespace Svg.Skia
 {
     public static class SkiaSvgRenderer
     {

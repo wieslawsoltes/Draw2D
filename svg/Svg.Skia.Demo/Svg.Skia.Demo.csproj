@@ -10,6 +10,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Svg.Skia\Svg.Skia.csproj" />
     <ProjectReference Include="..\..\externals\SVG\Source\Svg.csproj" />
   </ItemGroup>
 

@@ -5,7 +5,7 @@ using System.Text;
 using SkiaSharp;
 using Svg;
 
-namespace SvgDemo
+namespace Svg.Skia.Demo
 {
     class Program
     {

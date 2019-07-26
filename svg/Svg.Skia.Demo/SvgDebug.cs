@@ -11,7 +11,7 @@ using Svg.FilterEffects;
 using Svg.Pathing;
 using Svg.Transforms;
 
-namespace SvgDemo
+namespace Svg.Skia.Demo
 {
     public class SvgDebug
     {
