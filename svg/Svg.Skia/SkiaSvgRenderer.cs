@@ -529,7 +529,6 @@ namespace Svg.Skia
         {
             canvas.Save();
             SetOpacity(canvas, svgFragment);
-            canvas.Save();
             SetTransform(canvas, svgFragment.Transforms);
 
             float x = svgFragment.X.ToDeviceValue(null, UnitRenderingType.Horizontal, svgFragment);
@@ -542,14 +541,12 @@ namespace Svg.Skia
             DrawSvgElementCollection(canvas, svgFragment.Children, size);
 
             canvas.Restore();
-            canvas.Restore();
         }
 
         private static void DrawSvgSymbol(SKCanvas skCanvas, SKSize skSize, SvgSymbol svgSymbol)
         {
             skCanvas.Save();
             SetOpacity(skCanvas, svgSymbol);
-            skCanvas.Save();
             SetTransform(skCanvas, svgSymbol.Transforms);
 
             float x = 0f;
@@ -578,7 +575,6 @@ namespace Svg.Skia
             DrawSvgElementCollection(skCanvas, svgSymbol.Children, skSize);
 
             skCanvas.Restore();
-            skCanvas.Restore();
         }
 
         private static void DrawSvgUse(SKCanvas skCanvas, SKSize skSize, SvgUse svgUse)
@@ -594,7 +590,6 @@ namespace Svg.Skia
 
                 skCanvas.Save();
                 SetOpacity(skCanvas, svgUse);
-                skCanvas.Save();
                 SetTransform(skCanvas, svgUse.Transforms);
 
                 float x = svgUse.X.ToDeviceValue(null, UnitRenderingType.Horizontal, svgUse);
@@ -630,7 +625,6 @@ namespace Svg.Skia
                 _parent.SetValue(svgVisualElement, parent);
 
                 skCanvas.Restore();
-                skCanvas.Restore();
             }
         }
 
@@ -642,7 +636,6 @@ namespace Svg.Skia
 
             skCanvas.Save();
             SetOpacity(skCanvas, svgCircle);
-            skCanvas.Save();
             SetTransform(skCanvas, svgCircle.Transforms);
 
             var skBounds = SKRect.Create(cx - radius, cy - radius, radius + radius, radius + radius);
@@ -664,7 +657,6 @@ namespace Svg.Skia
             }
 
             skCanvas.Restore();
-            skCanvas.Restore();
         }
 
         private static void DrawSvgEllipse(SKCanvas skCanvas, SKSize skSize, SvgEllipse svgEllipse)
@@ -676,7 +668,6 @@ namespace Svg.Skia
 
             skCanvas.Save();
             SetOpacity(skCanvas, svgEllipse);
-            skCanvas.Save();
             SetTransform(skCanvas, svgEllipse.Transforms);
 
             var skBounds = SKRect.Create(cx - rx, cy - ry, rx + rx, ry + ry);
@@ -698,14 +689,12 @@ namespace Svg.Skia
             }
 
             skCanvas.Restore();
-            skCanvas.Restore();
         }
 
         private static void DrawSvgRectangle(SKCanvas skCanvas, SKSize skSize, SvgRectangle svgRectangle)
         {
             skCanvas.Save();
             SetOpacity(skCanvas, svgRectangle);
-            skCanvas.Save();
             SetTransform(skCanvas, svgRectangle.Transforms);
 
             float x = svgRectangle.X.ToDeviceValue(null, UnitRenderingType.Horizontal, svgRectangle);
@@ -749,19 +738,16 @@ namespace Svg.Skia
             }
 
             skCanvas.Restore();
-            skCanvas.Restore();
         }
 
         private static void DrawSvgGroup(SKCanvas skCanvas, SKSize skSize, SvgGroup svgGroup)
         {
             skCanvas.Save();
             SetOpacity(skCanvas, svgGroup);
-            skCanvas.Save();
             SetTransform(skCanvas, svgGroup.Transforms);
 
             DrawSvgElementCollection(skCanvas, svgGroup.Children, skSize);
 
-            skCanvas.Restore();
             skCanvas.Restore();
         }
 
@@ -769,7 +755,6 @@ namespace Svg.Skia
         {
             skCanvas.Save();
             SetOpacity(skCanvas, svgLine);
-            skCanvas.Save();
             SetTransform(skCanvas, svgLine.Transforms);
 
             float x0 = svgLine.StartX.ToDeviceValue(null, UnitRenderingType.Horizontal, svgLine);
@@ -792,14 +777,12 @@ namespace Svg.Skia
             }
 
             skCanvas.Restore();
-            skCanvas.Restore();
         }
 
         private static void DrawSvgPath(SKCanvas skCanvas, SKSize skSize, SvgPath svgPath)
         {
             skCanvas.Save();
             SetOpacity(skCanvas, svgPath);
-            skCanvas.Save();
             SetTransform(skCanvas, svgPath.Transforms);
 
             using (var skPath = ToSKPath(svgPath.PathData, svgPath.FillRule))
@@ -827,14 +810,12 @@ namespace Svg.Skia
             }
 
             skCanvas.Restore();
-            skCanvas.Restore();
         }
 
         private static void DrawSvgPolyline(SKCanvas skCanvas, SKSize skSize, SvgPolyline svgPolyline)
         {
             skCanvas.Save();
             SetOpacity(skCanvas, svgPolyline);
-            skCanvas.Save();
             SetTransform(skCanvas, svgPolyline.Transforms);
 
             using (var skPath = ToSKPath(svgPolyline.Points, svgPolyline.FillRule, false))
@@ -862,14 +843,12 @@ namespace Svg.Skia
             }
 
             skCanvas.Restore();
-            skCanvas.Restore();
         }
 
         private static void DrawSvgPolygon(SKCanvas skCanvas, SKSize skSize, SvgPolygon svgPolygon)
         {
             skCanvas.Save();
             SetOpacity(skCanvas, svgPolygon);
-            skCanvas.Save();
             SetTransform(skCanvas, svgPolygon.Transforms);
 
             using (var skPath = ToSKPath(svgPolygon.Points, svgPolygon.FillRule, true))
@@ -896,7 +875,6 @@ namespace Svg.Skia
                 }
             }
 
-            skCanvas.Restore();
             skCanvas.Restore();
         }
 
