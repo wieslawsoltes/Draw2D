@@ -201,7 +201,7 @@ namespace Svg.Skia
         public static SKShader CreateLinearGradient(SvgLinearGradientServer svgLinearGradientServer, SKSize size)
         {
             // TODO:
-            Console.WriteLine($"CreateLinearGradient: {svgLinearGradientServer}");
+
             var start = SvgUnit.GetDevicePoint(
                 NormalizeSvgUnit(svgLinearGradientServer.X1, svgLinearGradientServer.GradientUnits),
                 NormalizeSvgUnit(svgLinearGradientServer.Y1, svgLinearGradientServer.GradientUnits),
@@ -222,8 +222,6 @@ namespace Svg.Skia
                 {
                     var stopColor = GetColor(svgGradientStop.StopColor as SvgColourServer, AdjustOpacity(svgGradientStop.Opacity), false);
                     float offset = svgGradientStop.Offset.ToDeviceValue(null, UnitRenderingType.Horizontal, svgLinearGradientServer) / size.Width;
-                    //offset = (float)Math.Round(offset, 1, MidpointRounding.AwayFromZero);
-                    Console.WriteLine($"stop-color: {stopColor}, offset: {offset} ({svgGradientStop.Offset})");
                     colors.Add(stopColor);
                     colorPos.Add(offset);
                 }
@@ -280,8 +278,6 @@ namespace Svg.Skia
                 IsAntialias = true
             };
 
-            Console.WriteLine($"Fill: {svgElement.Fill}, {svgElement.Fill.GetType()}");
-
             switch (svgElement.Fill)
             {
                 case SvgColourServer svgColourServer:
@@ -324,8 +320,6 @@ namespace Svg.Skia
             {
                 IsAntialias = true
             };
-
-            Console.WriteLine($"Stroke: {svgElement.Stroke}, {svgElement.Stroke.GetType()}");
 
             switch (svgElement.Stroke)
             {
@@ -607,7 +601,7 @@ namespace Svg.Skia
                         Transform(canvas, svgElement.Transforms);
 
                         var bounds = SKRect.Create(cx - radius, cy - radius, radius + radius, radius + radius);
-                        Console.WriteLine($"circle: {cx}, {cy}, {radius}, {bounds}");
+
                         if (svgCircle.Fill != null)
                         {
                             using (var paint = GetFillSKPaint(svgCircle, size))
