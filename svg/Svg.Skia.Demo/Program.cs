@@ -32,24 +32,28 @@ namespace Svg.Skia.Demo
                 }
 
                 var paths = new List<string>();
+                var output = default(string);
 
                 if (args[0] == "-f" && args.Length == 2)
                 {
                     paths.Add(args[1]);
                 }
-                else if (args[0] == "-d" && args.Length == 2)
-                {
-                    paths.AddRange(Directory.EnumerateFiles(".", args[1]));
-                }
-                else if (args[0] == "-d" && args.Length == 3)
+                else if (args[0] == "-d" && (args.Length == 3 || args.Length == 4))
                 {
                     paths.AddRange(Directory.EnumerateFiles(args[1], args[2]));
+
+                    if (args.Length == 4)
+                    {
+                        output = args[3];
+                    }
                 }
                 else
                 {
-                    Console.WriteLine($"Usage: SvgDemo -f <filename.svg>");
-                    Console.WriteLine($"       SvgDemo -d *.svg");
-                    Console.WriteLine($"       SvgDemo -d . *.svg");
+                    Console.WriteLine($"Usage: Svg.Skia.Demo -f <file.svg>");
+                    Console.WriteLine($"       Svg.Skia.Demo -d <indir> *.svg");
+                    Console.WriteLine($"       Svg.Skia.Demo -d <indir> *.svg <outdir>");
+                    Console.WriteLine($"       Svg.Skia.Demo -d . *.svg");
+                    Console.WriteLine($"       Svg.Skia.Demo -d . *.svg <outdir>");
                     return;
                 }
 
@@ -78,10 +82,19 @@ namespace Svg.Skia.Demo
                         {
                             var yaml = svgDebug.Builder.ToString();
                             string ymlPath = path.Remove(path.Length - extension.Length) + ".yml";
+                            if (!string.IsNullOrEmpty(output))
+                            {
+                                ymlPath = Path.Combine(output, Path.GetFileName(ymlPath));
+                            }
                             File.WriteAllText(ymlPath, yaml);
                         }
 #endif
                         string pngPath = path.Remove(path.Length - extension.Length) + ".png";
+                        if (!string.IsNullOrEmpty(output))
+                        {
+                            pngPath = Path.Combine(output, Path.GetFileName(pngPath));
+                        }
+
                         SkiaSvgRenderer.SaveImage(svgDocument, pngPath, SKEncodedImageFormat.Png, 100, 1, 1);
                     }
                 }
