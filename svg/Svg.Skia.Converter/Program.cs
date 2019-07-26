@@ -69,12 +69,14 @@ namespace Svg.Skia.Demo
 
                 foreach (var path in paths)
                 {
-                    var svgDocument = SvgDocument.Open<SvgDocument>(path, null);
-                    if (svgDocument != null)
+                    try
                     {
-                        svgDocument.FlushStyles(true);
+                        var svgDocument = SvgDocument.Open<SvgDocument>(path, null);
+                        if (svgDocument != null)
+                        {
+                            svgDocument.FlushStyles(true);
 
-                        var extension = Path.GetExtension(path);
+                            var extension = Path.GetExtension(path);
 #if false
                         var svgDebug = new SvgDebug()
                         {
@@ -97,13 +99,18 @@ namespace Svg.Skia.Demo
                             File.WriteAllText(ymlPath, yaml);
                         }
 #endif
-                        string pngPath = path.Remove(path.Length - extension.Length) + ".png";
-                        if (!string.IsNullOrEmpty(output))
-                        {
-                            pngPath = Path.Combine(output, Path.GetFileName(pngPath));
-                        }
+                            string pngPath = path.Remove(path.Length - extension.Length) + ".png";
+                            if (!string.IsNullOrEmpty(output))
+                            {
+                                pngPath = Path.Combine(output, Path.GetFileName(pngPath));
+                            }
 
-                        SkiaSvgRenderer.SaveImage(svgDocument, pngPath, SKEncodedImageFormat.Png, 100, 1, 1);
+                            SkiaSvgRenderer.SaveImage(svgDocument, pngPath, SKEncodedImageFormat.Png, 100, 1, 1);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Error(ex);
                     }
                 }
 
@@ -113,7 +120,6 @@ namespace Svg.Skia.Demo
             catch (Exception ex)
             {
                 Error(ex);
-                Console.ResetColor();
             }
         }
     }
