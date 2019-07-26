@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.29102.190
 MinimumVisualStudioVersion = 15.0.26124.0
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Svg.Skia", "Svg.Skia\Svg.Skia.csproj", "{3E4E8B64-FF8F-4B07-AE82-81E5FC2DDE59}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Svg.Skia.Demo", "Svg.Skia.Demo\Svg.Skia.Demo.csproj", "{B9021AAD-9788-4C21-A563-AEF4A82C2A50}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Svg.Skia.Converter", "Svg.Skia.Converter\Svg.Skia.Converter.csproj", "{B9021AAD-9788-4C21-A563-AEF4A82C2A50}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{4C42912C-9F8C-43D9-A4B5-4427F7EC8F18}"
 EndProject
