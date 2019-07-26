@@ -255,12 +255,7 @@ namespace Svg.Skia
                     break;
             }
 
-            var gradientTransform = SKMatrix.MakeIdentity();
-            foreach (var svgTransform in svgLinearGradientServer.GradientTransform)
-            {
-                var matrix = ToSKmatrix(svgTransform.Matrix);
-                gradientTransform = Multiply(ref gradientTransform, ref matrix);
-            }
+            var gradientTransform = GetSKMatrix(svgLinearGradientServer.GradientTransform);
 
             return SKShader.CreateLinearGradient(
                     new SKPoint(start.X, start.Y),
@@ -358,6 +353,66 @@ namespace Svg.Skia
             return paint;
         }
 
+        private static SKMatrix GetSKMatrix(SvgTransformCollection svgTransformCollection)
+        {
+            var totalMatrix = SKMatrix.MakeIdentity();
+
+            foreach (var svgTransform in svgTransformCollection)
+            {
+                switch (svgTransform)
+                {
+                    case SvgMatrix svgMatrix:
+                        {
+                            var matrix = new SKMatrix()
+                            {
+                                ScaleX = svgMatrix.Points[0],
+                                SkewY = svgMatrix.Points[1],
+                                SkewX = svgMatrix.Points[2],
+                                ScaleY = svgMatrix.Points[3],
+                                TransX = svgMatrix.Points[4],
+                                TransY = svgMatrix.Points[5],
+                                Persp0 = 0,
+                                Persp1 = 0,
+                                Persp2 = 1
+                            };
+                            totalMatrix = Multiply(ref totalMatrix, ref matrix);
+                        }
+                        break;
+                    case SvgRotate svgRotate:
+                        {
+                            var matrix = SKMatrix.MakeRotationDegrees(svgRotate.Angle, svgRotate.CenterX, svgRotate.CenterY);
+                            totalMatrix = Multiply(ref totalMatrix, ref matrix);
+                        }
+                        break;
+                    case SvgScale svgScale:
+                        {
+                            var matrix = SKMatrix.MakeScale(svgScale.X, svgScale.Y);
+                            totalMatrix = Multiply(ref totalMatrix, ref matrix);
+                        }
+                        break;
+                    case SvgShear svgShear:
+                        {
+                            // TODO:
+                        }
+                        break;
+                    case SvgSkew svgSkew:
+                        {
+                            var matrix = SKMatrix.MakeSkew(svgSkew.AngleX, svgSkew.AngleY);
+                            totalMatrix = Multiply(ref totalMatrix, ref matrix);
+                        }
+                        break;
+                    case SvgTranslate svgTranslate:
+                        {
+                            var matrix = SKMatrix.MakeTranslation(svgTranslate.X, svgTranslate.Y);
+                            totalMatrix = Multiply(ref totalMatrix, ref matrix);
+                        }
+                        break;
+                }
+            }
+
+            return totalMatrix;
+        }
+
         private static void Transform(SKCanvas canvas, SvgViewBox viewBox, SvgAspectRatio aspectRatio, float x, float y, float width, float height)
         {
             if (viewBox.Equals(SvgViewBox.Empty))
@@ -439,61 +494,9 @@ namespace Svg.Skia
 
         private static void Transform(SKCanvas canvas, SvgTransformCollection svgTransformCollection)
         {
+            var matrix = GetSKMatrix(svgTransformCollection);
             var totalMatrix = canvas.TotalMatrix;
-
-            foreach (var svgTransform in svgTransformCollection)
-            {
-                switch (svgTransform)
-                {
-                    case SvgMatrix svgMatrix:
-                        {
-                            var matrix = new SKMatrix()
-                            {
-                                ScaleX = svgMatrix.Points[0],
-                                SkewY = svgMatrix.Points[1],
-                                SkewX = svgMatrix.Points[2],
-                                ScaleY = svgMatrix.Points[3],
-                                TransX = svgMatrix.Points[4],
-                                TransY = svgMatrix.Points[5],
-                                Persp0 = 0,
-                                Persp1 = 0,
-                                Persp2 = 1
-                            };
-                            totalMatrix = Multiply(ref totalMatrix, ref matrix);
-                        }
-                        break;
-                    case SvgRotate svgRotate:
-                        {
-                            var matrix = SKMatrix.MakeRotationDegrees(svgRotate.Angle, svgRotate.CenterX, svgRotate.CenterY);
-                            totalMatrix = Multiply(ref totalMatrix, ref matrix);
-                        }
-                        break;
-                    case SvgScale svgScale:
-                        {
-                            var matrix = SKMatrix.MakeScale(svgScale.X, svgScale.Y);
-                            totalMatrix = Multiply(ref totalMatrix, ref matrix);
-                        }
-                        break;
-                    case SvgShear svgShear:
-                        {
-                            // TODO:
-                        }
-                        break;
-                    case SvgSkew svgSkew:
-                        {
-                            var matrix = SKMatrix.MakeSkew(svgSkew.AngleX, svgSkew.AngleY);
-                            totalMatrix = Multiply(ref totalMatrix, ref matrix);
-                        }
-                        break;
-                    case SvgTranslate svgTranslate:
-                        {
-                            var matrix = SKMatrix.MakeTranslation(svgTranslate.X, svgTranslate.Y);
-                            totalMatrix = Multiply(ref totalMatrix, ref matrix);
-                        }
-                        break;
-                }
-            }
-
+            totalMatrix = Multiply(ref totalMatrix, ref matrix);
             canvas.SetMatrix(totalMatrix);
         }
 
