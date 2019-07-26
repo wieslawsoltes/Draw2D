@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Text;
 using SkiaSharp;
@@ -52,6 +53,8 @@ namespace Svg.Skia.Demo
                     return;
                 }
 
+                var sw = Stopwatch.StartNew();
+
                 foreach (var path in paths)
                 {
                     var svgDocument = SvgDocument.Open<SvgDocument>(path, null);
@@ -82,6 +85,9 @@ namespace Svg.Skia.Demo
                         SkiaSvgRenderer.SaveImage(svgDocument, pngPath, SKEncodedImageFormat.Png, 100, 1, 1);
                     }
                 }
+
+                sw.Stop();
+                Console.WriteLine($"Done: {sw.Elapsed}");
             }
             catch (Exception ex)
             {
