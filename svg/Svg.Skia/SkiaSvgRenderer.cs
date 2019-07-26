@@ -201,7 +201,7 @@ namespace Svg.Skia
         public static SKShader CreateLinearGradient(SvgLinearGradientServer svgLinearGradientServer, SKSize size)
         {
             // TODO:
-Console.WriteLine($"CreateLinearGradient: {svgLinearGradientServer}");
+            Console.WriteLine($"CreateLinearGradient: {svgLinearGradientServer}");
             var start = SvgUnit.GetDevicePoint(
                 NormalizeSvgUnit(svgLinearGradientServer.X1, svgLinearGradientServer.GradientUnits),
                 NormalizeSvgUnit(svgLinearGradientServer.Y1, svgLinearGradientServer.GradientUnits),
@@ -223,7 +223,7 @@ Console.WriteLine($"CreateLinearGradient: {svgLinearGradientServer}");
                     var stopColor = GetColor(svgGradientStop.StopColor as SvgColourServer, AdjustOpacity(svgGradientStop.Opacity), false);
                     float offset = svgGradientStop.Offset.ToDeviceValue(null, UnitRenderingType.Horizontal, svgLinearGradientServer) / size.Width;
                     //offset = (float)Math.Round(offset, 1, MidpointRounding.AwayFromZero);
-Console.WriteLine($"stop-color: {stopColor}, offset: {offset} ({svgGradientStop.Offset})");
+                    Console.WriteLine($"stop-color: {stopColor}, offset: {offset} ({svgGradientStop.Offset})");
                     colors.Add(stopColor);
                     colorPos.Add(offset);
                 }
@@ -280,7 +280,7 @@ Console.WriteLine($"stop-color: {stopColor}, offset: {offset} ({svgGradientStop.
                 IsAntialias = true
             };
 
-Console.WriteLine($"Fill: {svgElement.Fill}, {svgElement.Fill.GetType()}");
+            Console.WriteLine($"Fill: {svgElement.Fill}, {svgElement.Fill.GetType()}");
 
             switch (svgElement.Fill)
             {
@@ -325,7 +325,7 @@ Console.WriteLine($"Fill: {svgElement.Fill}, {svgElement.Fill.GetType()}");
                 IsAntialias = true
             };
 
-Console.WriteLine($"Stroke: {svgElement.Stroke}, {svgElement.Stroke.GetType()}");
+            Console.WriteLine($"Stroke: {svgElement.Stroke}, {svgElement.Stroke.GetType()}");
 
             switch (svgElement.Stroke)
             {
@@ -607,7 +607,7 @@ Console.WriteLine($"Stroke: {svgElement.Stroke}, {svgElement.Stroke.GetType()}")
                         Transform(canvas, svgElement.Transforms);
 
                         var bounds = SKRect.Create(cx - radius, cy - radius, radius + radius, radius + radius);
-Console.WriteLine($"circle: {cx}, {cy}, {radius}, {bounds}");
+                        Console.WriteLine($"circle: {cx}, {cy}, {radius}, {bounds}");
                         if (svgCircle.Fill != null)
                         {
                             using (var paint = GetFillSKPaint(svgCircle, size))
