@@ -69,6 +69,7 @@ namespace Svg.Skia.Demo
 
                 foreach (var path in paths)
                 {
+                    Console.WriteLine($"File: {path}");
                     var svgDocument = SvgDocument.Open<SvgDocument>(path, null);
                     if (svgDocument != null)
                     {
