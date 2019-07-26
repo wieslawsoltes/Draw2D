@@ -62,7 +62,7 @@ namespace Svg.Skia.Demo
                     {
                         svgDocument.FlushStyles(true);
 
-                        var extension = Path.GetExtension(path).ToCharArray();
+                        var extension = Path.GetExtension(path);
 #if false
                         var svgDebug = new SvgDebug()
                         {
