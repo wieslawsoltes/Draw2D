@@ -22,14 +22,22 @@ namespace Svg.Skia.Demo
             }
         }
 
+        static void Usage()
+        {
+            Console.WriteLine($"Usage: Svg.Skia.Demo -f <file.svg>");
+            Console.WriteLine($"       Svg.Skia.Demo -d <indir> *.svg");
+            Console.WriteLine($"       Svg.Skia.Demo -d <indir> *.svg <outdir>");
+            Console.WriteLine($"       Svg.Skia.Demo -d . *.svg");
+            Console.WriteLine($"       Svg.Skia.Demo -d . *.svg <outdir>");
+        }
+
         static void Main(string[] args)
         {
             try
             {
                 if (args.Length < 1)
                 {
-                    Console.WriteLine($"Usage: SvgDemo -f <filename.svg>");
-                    Console.WriteLine($"       SvgDemo -d ./ *.svg");
+                    Usage();
                     return;
                 }
 
@@ -42,7 +50,9 @@ namespace Svg.Skia.Demo
                 }
                 else if (args[0] == "-d" && (args.Length == 3 || args.Length == 4))
                 {
-                    paths.AddRange(Directory.EnumerateFiles(args[1], args[2]));
+                    var files = Directory.EnumerateFiles(args[1], args[2]);
+
+                    paths.AddRange(files);
 
                     if (args.Length == 4)
                     {
@@ -51,11 +61,7 @@ namespace Svg.Skia.Demo
                 }
                 else
                 {
-                    Console.WriteLine($"Usage: Svg.Skia.Demo -f <file.svg>");
-                    Console.WriteLine($"       Svg.Skia.Demo -d <indir> *.svg");
-                    Console.WriteLine($"       Svg.Skia.Demo -d <indir> *.svg <outdir>");
-                    Console.WriteLine($"       Svg.Skia.Demo -d . *.svg");
-                    Console.WriteLine($"       Svg.Skia.Demo -d . *.svg <outdir>");
+                    Usage();
                     return;
                 }
 
