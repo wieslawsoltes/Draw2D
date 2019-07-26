@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing.Drawing2D;
 using System.IO;
 using System.Reflection;
@@ -190,35 +191,175 @@ namespace Svg.Skia
             return paint;
         }
 
-        private static SKPaint GetFillSKPaint(SvgElement svgElement)
+        private static SvgUnit NormalizeSvgUnit(SvgUnit svgUnit, SvgCoordinateUnits svgCoordinateUnits)
+        {
+            return (svgUnit.Type == SvgUnitType.Percentage && svgCoordinateUnits == SvgCoordinateUnits.ObjectBoundingBox ?
+                    new SvgUnit(SvgUnitType.User, svgUnit.Value / 100) :
+                    svgUnit);
+        }
+
+        public static SKShader CreateLinearGradient(SvgLinearGradientServer svgLinearGradientServer, SKSize size)
+        {
+            // TODO:
+Console.WriteLine($"CreateLinearGradient: {svgLinearGradientServer}");
+            var start = SvgUnit.GetDevicePoint(
+                NormalizeSvgUnit(svgLinearGradientServer.X1, svgLinearGradientServer.GradientUnits),
+                NormalizeSvgUnit(svgLinearGradientServer.Y1, svgLinearGradientServer.GradientUnits),
+                null,
+                svgLinearGradientServer);
+            var end = SvgUnit.GetDevicePoint(
+                NormalizeSvgUnit(svgLinearGradientServer.X2, svgLinearGradientServer.GradientUnits),
+                NormalizeSvgUnit(svgLinearGradientServer.Y2, svgLinearGradientServer.GradientUnits),
+                null,
+                svgLinearGradientServer);
+
+            var colors = new List<SKColor>();
+            var colorPos = new List<float>();
+
+            foreach (var child in svgLinearGradientServer.Children)
+            {
+                if (child is SvgGradientStop svgGradientStop)
+                {
+                    var stopColor = GetColor(svgGradientStop.StopColor as SvgColourServer, AdjustOpacity(svgGradientStop.Opacity), false);
+                    float offset = svgGradientStop.Offset.ToDeviceValue(null, UnitRenderingType.Horizontal, svgLinearGradientServer) / size.Width;
+                    //offset = (float)Math.Round(offset, 1, MidpointRounding.AwayFromZero);
+Console.WriteLine($"stop-color: {stopColor}, offset: {offset} ({svgGradientStop.Offset})");
+                    colors.Add(stopColor);
+                    colorPos.Add(offset);
+                }
+            }
+
+            // TODO: GradientUnits
+
+            switch (svgLinearGradientServer.GradientUnits)
+            {
+                default:
+                case SvgCoordinateUnits.ObjectBoundingBox:
+                    // TODO:
+                    break;
+                case SvgCoordinateUnits.UserSpaceOnUse:
+                    // TODO:
+                    break;
+            }
+
+            SKShaderTileMode shaderTileMode;
+            switch (svgLinearGradientServer.SpreadMethod)
+            {
+                default:
+                case SvgGradientSpreadMethod.Pad:
+                    shaderTileMode = SKShaderTileMode.Clamp;
+                    break;
+                case SvgGradientSpreadMethod.Reflect:
+                    shaderTileMode = SKShaderTileMode.Mirror;
+                    break;
+                case SvgGradientSpreadMethod.Repeat:
+                    shaderTileMode = SKShaderTileMode.Repeat;
+                    break;
+            }
+
+            var gradientTransform = SKMatrix.MakeIdentity();
+            foreach (var svgTransform in svgLinearGradientServer.GradientTransform)
+            {
+                var matrix = ToSKmatrix(svgTransform.Matrix);
+                gradientTransform = Multiply(ref gradientTransform, ref matrix);
+            }
+
+            return SKShader.CreateLinearGradient(
+                    new SKPoint(start.X, start.Y),
+                    new SKPoint(end.X, end.Y),
+                    colors.ToArray(),
+                    colorPos.ToArray(),
+                    shaderTileMode,
+                    gradientTransform);
+        }
+
+        private static SKPaint GetFillSKPaint(SvgElement svgElement, SKSize size)
         {
             var paint = new SKPaint()
             {
                 IsAntialias = true
             };
 
-            if (svgElement.Fill is SvgColourServer svgColourServer)
+Console.WriteLine($"Fill: {svgElement.Fill}, {svgElement.Fill.GetType()}");
+
+            switch (svgElement.Fill)
             {
-                paint.Color = GetColor(svgColourServer, AdjustOpacity(svgElement.FillOpacity), false);
-                paint.Style = SKPaintStyle.Fill;
+                case SvgColourServer svgColourServer:
+                    {
+                        paint.Color = GetColor(svgColourServer, AdjustOpacity(svgElement.FillOpacity), false);
+                    }
+                    break;
+                case SvgDeferredPaintServer svgDeferredPaintServer:
+                    break;
+                case SvgFallbackPaintServer svgFallbackPaintServer:
+                    break;
+                case SvgPatternServer svgPatternServer:
+                    {
+                        // TODO:
+                    }
+                    break;
+                case SvgLinearGradientServer svgLinearGradientServer:
+                    {
+                        // TODO: Dispose SKShader.
+                        paint.Shader = CreateLinearGradient(svgLinearGradientServer, size);
+                    }
+                    break;
+                case SvgRadialGradientServer svgRadialGradientServer:
+                    {
+                        // TODO:
+                    }
+                    break;
+                default:
+                    break;
             }
+
+            paint.Style = SKPaintStyle.Fill;
 
             return paint;
         }
 
-        private static SKPaint GetStrokeSKPaint(SvgElement svgElement)
+        private static SKPaint GetStrokeSKPaint(SvgElement svgElement, SKSize size)
         {
             var paint = new SKPaint()
             {
                 IsAntialias = true
             };
 
-            if (svgElement.Stroke is SvgColourServer svgColourServer)
+Console.WriteLine($"Stroke: {svgElement.Stroke}, {svgElement.Stroke.GetType()}");
+
+            switch (svgElement.Stroke)
             {
-                paint.Color = GetColor(svgColourServer, AdjustOpacity(svgElement.StrokeOpacity), true);
-                paint.StrokeWidth = svgElement.StrokeWidth.ToDeviceValue(null, UnitRenderingType.Other, svgElement);
-                paint.Style = SKPaintStyle.Stroke;
+                case SvgColourServer svgColourServer:
+                    {
+                        paint.Color = GetColor(svgColourServer, AdjustOpacity(svgElement.StrokeOpacity), true);
+                    }
+                    break;
+                case SvgDeferredPaintServer svgDeferredPaintServer:
+                    break;
+                case SvgFallbackPaintServer svgFallbackPaintServer:
+                    break;
+                case SvgPatternServer svgPatternServer:
+                    {
+                        // TODO:
+                    }
+                    break;
+                case SvgLinearGradientServer svgLinearGradientServer:
+                    {
+                        // TODO: Dispose SKShader.
+                        paint.Shader = CreateLinearGradient(svgLinearGradientServer, size);
+                    }
+                    break;
+                case SvgRadialGradientServer svgRadialGradientServer:
+                    {
+                        // TODO:
+                    }
+                    break;
+                default:
+                    break;
             }
+
+            paint.StrokeWidth = svgElement.StrokeWidth.ToDeviceValue(null, UnitRenderingType.Other, svgElement);
+            paint.Style = SKPaintStyle.Stroke;
 
             return paint;
         }
@@ -315,7 +456,7 @@ namespace Svg.Skia
             canvas.SetMatrix(totalMatrix);
         }
 
-        private static SKPaint DrawOpacity(SKCanvas canvas, SvgElement svgElement)
+        private static SKPaint DrawOpacity(SKCanvas canvas, SvgElement svgElement, SKSize size)
         {
             float opacity = AdjustOpacity(svgElement.Opacity);
             bool setOpacity = true;
@@ -336,10 +477,10 @@ namespace Svg.Skia
             return null;
         }
 
-        private static void DrawSymbol(SKCanvas canvas, SvgSymbol svgSymbol)
+        private static void DrawSymbol(SKCanvas canvas, SvgSymbol svgSymbol, SKSize size)
         {
             canvas.Save();
-            DrawOpacity(canvas, svgSymbol);
+            DrawOpacity(canvas, svgSymbol, size);
             canvas.Save();
             Transform(canvas, svgSymbol.Transforms);
 
@@ -366,20 +507,20 @@ namespace Svg.Skia
 
             Transform(canvas, svgSymbol.ViewBox, svgSymbol.AspectRatio, x, y, width, height);
 
-            Draw(canvas, svgSymbol.Children);
+            Draw(canvas, svgSymbol.Children, size);
 
             canvas.Restore();
             canvas.Restore();
         }
 
-        private static void Draw(SKCanvas canvas, SvgElement svgElement)
+        private static void Draw(SKCanvas canvas, SvgElement svgElement, SKSize size)
         {
             switch (svgElement)
             {
                 case SvgFragment svgFragment:
                     {
                         canvas.Save();
-                        DrawOpacity(canvas, svgElement);
+                        DrawOpacity(canvas, svgElement, size);
                         canvas.Save();
                         Transform(canvas, svgElement.Transforms);
 
@@ -390,7 +531,7 @@ namespace Svg.Skia
 
                         Transform(canvas, svgFragment.ViewBox, svgFragment.AspectRatio, x, y, width, height);
 
-                        Draw(canvas, svgFragment.Children);
+                        Draw(canvas, svgFragment.Children, size);
 
                         canvas.Restore();
                         canvas.Restore();
@@ -413,7 +554,7 @@ namespace Svg.Skia
                             svgVisualElement.InvalidateChildPaths();
 
                             canvas.Save();
-                            DrawOpacity(canvas, svgElement);
+                            DrawOpacity(canvas, svgElement, size);
                             canvas.Save();
                             Transform(canvas, svgElement.Transforms);
 
@@ -439,11 +580,11 @@ namespace Svg.Skia
 
                             if (svgVisualElement is SvgSymbol)
                             {
-                                DrawSymbol(canvas, svgVisualElement as SvgSymbol);
+                                DrawSymbol(canvas, svgVisualElement as SvgSymbol, size);
                             }
                             else
                             {
-                                Draw(canvas, svgVisualElement);
+                                Draw(canvas, svgVisualElement, size);
                             }
 
                             //svgVisualElement.Parent = parent;
@@ -461,13 +602,15 @@ namespace Svg.Skia
                         float radius = svgCircle.Radius.ToDeviceValue(null, UnitRenderingType.Other, svgCircle);
 
                         canvas.Save();
-                        DrawOpacity(canvas, svgElement);
+                        DrawOpacity(canvas, svgElement, size);
                         canvas.Save();
                         Transform(canvas, svgElement.Transforms);
 
+                        var bounds = SKRect.Create(cx - radius, cy - radius, radius + radius, radius + radius);
+Console.WriteLine($"circle: {cx}, {cy}, {radius}, {bounds}");
                         if (svgCircle.Fill != null)
                         {
-                            using (var paint = GetFillSKPaint(svgCircle))
+                            using (var paint = GetFillSKPaint(svgCircle, size))
                             {
                                 canvas.DrawCircle(cx, cy, radius, paint);
                             }
@@ -475,7 +618,7 @@ namespace Svg.Skia
 
                         if (svgCircle.Stroke != null)
                         {
-                            using (var paint = GetStrokeSKPaint(svgCircle))
+                            using (var paint = GetStrokeSKPaint(svgCircle, size))
                             {
                                 canvas.DrawCircle(cx, cy, radius, paint);
                             }
@@ -493,13 +636,15 @@ namespace Svg.Skia
                         float ry = svgEllipse.RadiusY.ToDeviceValue(null, UnitRenderingType.Other, svgEllipse);
 
                         canvas.Save();
-                        DrawOpacity(canvas, svgElement);
+                        DrawOpacity(canvas, svgElement, size);
                         canvas.Save();
                         Transform(canvas, svgElement.Transforms);
 
+                        var bounds = SKRect.Create(cx - rx, cy - ry, rx + rx, ry + ry);
+
                         if (svgEllipse.Fill != null)
                         {
-                            using (var paint = GetFillSKPaint(svgEllipse))
+                            using (var paint = GetFillSKPaint(svgEllipse, size))
                             {
                                 canvas.DrawOval(cx, cy, rx, ry, paint);
                             }
@@ -507,7 +652,7 @@ namespace Svg.Skia
 
                         if (svgEllipse.Stroke != null)
                         {
-                            using (var paint = GetStrokeSKPaint(svgEllipse))
+                            using (var paint = GetStrokeSKPaint(svgEllipse, size))
                             {
                                 canvas.DrawOval(cx, cy, rx, ry, paint);
                             }
@@ -520,7 +665,7 @@ namespace Svg.Skia
                 case SvgRectangle svgRectangle:
                     {
                         canvas.Save();
-                        DrawOpacity(canvas, svgElement);
+                        DrawOpacity(canvas, svgElement, size);
                         canvas.Save();
                         Transform(canvas, svgElement.Transforms);
 
@@ -530,35 +675,36 @@ namespace Svg.Skia
                         float height = svgRectangle.Height.ToDeviceValue(null, UnitRenderingType.Vertical, svgRectangle);
                         float rx = svgRectangle.CornerRadiusX.ToDeviceValue(null, UnitRenderingType.Horizontal, svgRectangle);
                         float ry = svgRectangle.CornerRadiusY.ToDeviceValue(null, UnitRenderingType.Vertical, svgRectangle);
-                        var rect = new SKRect(x, y, x + width, y + height);
                         bool isRound = rx > 0f && ry > 0f;
+
+                        var bounds = SKRect.Create(x, y, width, height);
 
                         if (svgRectangle.Fill != null)
                         {
-                            using (var paint = GetFillSKPaint(svgRectangle))
+                            using (var paint = GetFillSKPaint(svgRectangle, size))
                             {
                                 if (isRound)
                                 {
-                                    canvas.DrawRoundRect(rect, rx, ry, paint);
+                                    canvas.DrawRoundRect(bounds, rx, ry, paint);
                                 }
                                 else
                                 {
-                                    canvas.DrawRect(rect, paint);
+                                    canvas.DrawRect(bounds, paint);
                                 }
                             }
                         }
 
                         if (svgRectangle.Stroke != null)
                         {
-                            using (var paint = GetStrokeSKPaint(svgRectangle))
+                            using (var paint = GetStrokeSKPaint(svgRectangle, size))
                             {
                                 if (isRound)
                                 {
-                                    canvas.DrawRoundRect(rect, rx, ry, paint);
+                                    canvas.DrawRoundRect(bounds, rx, ry, paint);
                                 }
                                 else
                                 {
-                                    canvas.DrawRect(rect, paint);
+                                    canvas.DrawRect(bounds, paint);
                                 }
                             }
                         }
@@ -570,11 +716,11 @@ namespace Svg.Skia
                 case SvgGroup svgGroup:
                     {
                         canvas.Save();
-                        DrawOpacity(canvas, svgElement);
+                        DrawOpacity(canvas, svgElement, size);
                         canvas.Save();
                         Transform(canvas, svgElement.Transforms);
 
-                        Draw(canvas, svgGroup.Children);
+                        Draw(canvas, svgGroup.Children, size);
 
                         canvas.Restore();
                         canvas.Restore();
@@ -583,7 +729,7 @@ namespace Svg.Skia
                 case SvgLine svgLine:
                     {
                         canvas.Save();
-                        DrawOpacity(canvas, svgElement);
+                        DrawOpacity(canvas, svgElement, size);
                         canvas.Save();
                         Transform(canvas, svgElement.Transforms);
 
@@ -592,11 +738,17 @@ namespace Svg.Skia
                         float x1 = svgLine.EndX.ToDeviceValue(null, UnitRenderingType.Horizontal, svgLine);
                         float y1 = svgLine.EndY.ToDeviceValue(null, UnitRenderingType.Vertical, svgLine);
 
+                        float x = Math.Min(x0, x1);
+                        float y = Math.Min(y0, y1);
+                        float width = Math.Abs(x0 - x1);
+                        float height = Math.Abs(y0 - y1);
+                        var bounds = SKRect.Create(x, y, width, height);
+
                         if (svgLine.Stroke != null)
                         {
                             if (svgLine.Stroke is SvgColourServer svgColourServer)
                             {
-                                using (var paint = GetStrokeSKPaint(svgLine))
+                                using (var paint = GetStrokeSKPaint(svgLine, size))
                                 {
                                     canvas.DrawLine(x0, y0, x1, y1, paint);
                                 }
@@ -610,7 +762,7 @@ namespace Svg.Skia
                 case SvgPath svgPath:
                     {
                         canvas.Save();
-                        DrawOpacity(canvas, svgElement);
+                        DrawOpacity(canvas, svgElement, size);
                         canvas.Save();
                         Transform(canvas, svgElement.Transforms);
 
@@ -621,9 +773,11 @@ namespace Svg.Skia
                                 break;
                             }
 
+                            var bounds = path.Bounds;
+
                             if (svgPath.Fill != null)
                             {
-                                using (var paint = GetFillSKPaint(svgPath))
+                                using (var paint = GetFillSKPaint(svgPath, size))
                                 {
                                     canvas.DrawPath(path, paint);
                                 }
@@ -631,7 +785,7 @@ namespace Svg.Skia
 
                             if (svgPath.Stroke != null)
                             {
-                                using (var paint = GetStrokeSKPaint(svgPath))
+                                using (var paint = GetStrokeSKPaint(svgPath, size))
                                 {
                                     canvas.DrawPath(path, paint);
                                 }
@@ -645,7 +799,7 @@ namespace Svg.Skia
                 case SvgPolyline svgPolyline:
                     {
                         canvas.Save();
-                        DrawOpacity(canvas, svgElement);
+                        DrawOpacity(canvas, svgElement, size);
                         canvas.Save();
                         Transform(canvas, svgElement.Transforms);
 
@@ -656,9 +810,11 @@ namespace Svg.Skia
                                 break;
                             }
 
+                            var bounds = path.Bounds;
+
                             if (svgPolyline.Fill != null)
                             {
-                                using (var paint = GetFillSKPaint(svgPolyline))
+                                using (var paint = GetFillSKPaint(svgPolyline, size))
                                 {
                                     canvas.DrawPath(path, paint);
                                 }
@@ -666,7 +822,7 @@ namespace Svg.Skia
 
                             if (svgPolyline.Stroke != null)
                             {
-                                using (var paint = GetStrokeSKPaint(svgPolyline))
+                                using (var paint = GetStrokeSKPaint(svgPolyline, size))
                                 {
                                     canvas.DrawPath(path, paint);
                                 }
@@ -680,7 +836,7 @@ namespace Svg.Skia
                 case SvgPolygon svgPolygon:
                     {
                         canvas.Save();
-                        DrawOpacity(canvas, svgElement);
+                        DrawOpacity(canvas, svgElement, size);
                         canvas.Save();
                         Transform(canvas, svgElement.Transforms);
 
@@ -691,9 +847,11 @@ namespace Svg.Skia
                                 break;
                             }
 
+                            var bounds = path.Bounds;
+
                             if (svgPolygon.Fill != null)
                             {
-                                using (var paint = GetFillSKPaint(svgPolygon))
+                                using (var paint = GetFillSKPaint(svgPolygon, size))
                                 {
                                     canvas.DrawPath(path, paint);
                                 }
@@ -701,7 +859,7 @@ namespace Svg.Skia
 
                             if (svgPolygon.Stroke != null)
                             {
-                                using (var paint = GetStrokeSKPaint(svgPolygon))
+                                using (var paint = GetStrokeSKPaint(svgPolygon, size))
                                 {
                                     canvas.DrawPath(path, paint);
                                 }
@@ -715,11 +873,11 @@ namespace Svg.Skia
             }
         }
 
-        private static void Draw(SKCanvas canvas, SvgElementCollection svgElementCollection)
+        private static void Draw(SKCanvas canvas, SvgElementCollection svgElementCollection, SKSize size)
         {
             foreach (var svgElement in svgElementCollection)
             {
-                Draw(canvas, svgElement);
+                Draw(canvas, svgElement, size);
             }
         }
 
@@ -730,6 +888,8 @@ namespace Svg.Skia
                 float width = svgFragment.Width.ToDeviceValue(null, UnitRenderingType.Horizontal, svgFragment);
                 float height = svgFragment.Height.ToDeviceValue(null, UnitRenderingType.Vertical, svgFragment);
 
+                var size = new SKSize(width, height);
+
                 var info = new SKImageInfo((int)(width * scaleX), (int)(height * scaleY));
                 using (var bitmap = new SKBitmap(info))
                 {
@@ -739,7 +899,7 @@ namespace Svg.Skia
                         canvas.Scale(scaleX, scaleY);
                         canvas.Clear(SKColors.Transparent);
 
-                        Draw(canvas, svgFragment);
+                        Draw(canvas, svgFragment, size);
 
                         canvas.Restore();
 
