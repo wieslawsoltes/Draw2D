@@ -7,3 +7,7 @@ Usage: Svg.Skia.Demo -f <file.svg>
        Svg.Skia.Demo -d . *.svg
        Svg.Skia.Demo -d . *.svg <outdir>
 ```
+
+# Externals
+
+https://github.com/vvvv/SVG

@@ -1,4 +1,6 @@
-﻿using System;
+﻿// Parts of this source file are adapted from the https://github.com/vvvv/SVG
+// 
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
@@ -8,6 +10,8 @@ using Svg;
 using Svg.Document_Structure;
 using Svg.Pathing;
 using Svg.Transforms;
+
+[assembly: CLSCompliant(false)]
 
 namespace Svg.Skia
 {
@@ -181,7 +185,7 @@ namespace Svg.Skia
                     svgUnit);
         }
 
-        public static SKShader CreateLinearGradient(SvgLinearGradientServer svgLinearGradientServer, SKSize size)
+        public static SKShader CreateLinearGradient(SvgLinearGradientServer svgLinearGradientServer, SKSize skSize)
         {
             // TODO:
 
@@ -207,7 +211,7 @@ namespace Svg.Skia
                     {
                         var stopColor = GetColor(stopColorSvgColourServer, AdjustSvgOpacity(svgGradientStop.Opacity), false);
                         float offset = svgGradientStop.Offset.ToDeviceValue(null, UnitRenderingType.Horizontal, svgLinearGradientServer);
-                        offset /= size.Width;
+                        offset /= skSize.Width;
                         colors.Add(stopColor);
                         colorPos.Add(offset);
                     }
@@ -247,15 +251,19 @@ namespace Svg.Skia
             var skColors = colors.ToArray();
             float[] skColorPos = colorPos.ToArray();
 
+            SKShader sKShader;
+
             if (svgLinearGradientServer.GradientTransform.Count > 0)
             {
                 var gradientTransform = GetSKMatrix(svgLinearGradientServer.GradientTransform);
-                return SKShader.CreateLinearGradient(skStart, skEnd, skColors, skColorPos, shaderTileMode, gradientTransform);
+                sKShader = SKShader.CreateLinearGradient(skStart, skEnd, skColors, skColorPos, shaderTileMode, gradientTransform);
             }
             else
             {
-                return SKShader.CreateLinearGradient(skStart, skEnd, skColors, skColorPos, shaderTileMode);
+                sKShader = SKShader.CreateLinearGradient(skStart, skEnd, skColors, skColorPos, shaderTileMode);
             }
+
+            return sKShader;
         }
 
         private static SKPaint GetFillSKPaint(SvgElement svgElement, SKSize skSize)
