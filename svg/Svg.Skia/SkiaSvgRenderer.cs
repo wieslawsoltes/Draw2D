@@ -443,8 +443,55 @@ namespace Svg.Skia
 
             foreach (var svgTransform in svgTransformCollection)
             {
-                var matrix = ToSKmatrix(svgTransform.Matrix);
-                totalMatrix = Multiply(ref totalMatrix, ref matrix);
+                switch (svgTransform)
+                {
+                    case SvgMatrix svgMatrix:
+                        {
+                            var matrix = new SKMatrix()
+                            {
+                                ScaleX = svgMatrix.Points[0],
+                                SkewY = svgMatrix.Points[1],
+                                SkewX = svgMatrix.Points[2],
+                                ScaleY = svgMatrix.Points[3],
+                                TransX = svgMatrix.Points[4],
+                                TransY = svgMatrix.Points[5],
+                                Persp0 = 0,
+                                Persp1 = 0,
+                                Persp2 = 1
+                            };
+                            totalMatrix = Multiply(ref totalMatrix, ref matrix);
+                        }
+                        break;
+                    case SvgRotate svgRotate:
+                        {
+                            var matrix = SKMatrix.MakeRotationDegrees(svgRotate.Angle, svgRotate.CenterX, svgRotate.CenterY);
+                            totalMatrix = Multiply(ref totalMatrix, ref matrix);
+                        }
+                        break;
+                    case SvgScale svgScale:
+                        {
+                            var matrix = SKMatrix.MakeScale(svgScale.X, svgScale.Y);
+                            totalMatrix = Multiply(ref totalMatrix, ref matrix);
+                        }
+                        break;
+                    case SvgShear svgShear:
+                        {
+                            // TODO:
+                        }
+                        break;
+                    case SvgSkew svgSkew:
+                        {
+                            var matrix = SKMatrix.MakeSkew(svgSkew.AngleX, svgSkew.AngleY);
+                            totalMatrix = Multiply(ref totalMatrix, ref matrix);
+                        }
+                        break;
+                    case SvgTranslate svgTranslate:
+                        {
+                            var matrix = SKMatrix.MakeTranslation(svgTranslate.X, svgTranslate.Y);
+                            totalMatrix = Multiply(ref totalMatrix, ref matrix);
+                        }
+                        break;
+                }
             }
 
             canvas.SetMatrix(totalMatrix);
