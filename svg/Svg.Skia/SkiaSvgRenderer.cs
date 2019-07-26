@@ -521,7 +521,7 @@ namespace Svg.Skia
             return null;
         }
 
-        private static void DrawSymbol(SKCanvas canvas, SvgSymbol svgSymbol, SKSize size)
+        private static void DrawSvgSymbol(SKCanvas canvas, SvgSymbol svgSymbol, SKSize size)
         {
             canvas.Save();
             DrawOpacity(canvas, svgSymbol, size);
@@ -624,7 +624,7 @@ namespace Svg.Skia
 
                             if (svgVisualElement is SvgSymbol)
                             {
-                                DrawSymbol(canvas, svgVisualElement as SvgSymbol, size);
+                                DrawSvgSymbol(canvas, svgVisualElement as SvgSymbol, size);
                             }
                             else
                             {
@@ -812,26 +812,24 @@ namespace Svg.Skia
 
                         using (var path = ToSKPath(svgPath.PathData, svgPath.FillRule))
                         {
-                            if (path == null || path.IsEmpty)
+                            if (path != null && !path.IsEmpty)
                             {
-                                break;
-                            }
+                                var bounds = path.Bounds;
 
-                            var bounds = path.Bounds;
-
-                            if (svgPath.Fill != null)
-                            {
-                                using (var paint = GetFillSKPaint(svgPath, size))
+                                if (svgPath.Fill != null)
                                 {
-                                    canvas.DrawPath(path, paint);
+                                    using (var paint = GetFillSKPaint(svgPath, size))
+                                    {
+                                        canvas.DrawPath(path, paint);
+                                    }
                                 }
-                            }
 
-                            if (svgPath.Stroke != null)
-                            {
-                                using (var paint = GetStrokeSKPaint(svgPath, size))
+                                if (svgPath.Stroke != null)
                                 {
-                                    canvas.DrawPath(path, paint);
+                                    using (var paint = GetStrokeSKPaint(svgPath, size))
+                                    {
+                                        canvas.DrawPath(path, paint);
+                                    }
                                 }
                             }
                         }
@@ -849,26 +847,24 @@ namespace Svg.Skia
 
                         using (var path = ToSKPath(svgPolyline.Points, svgPolyline.FillRule, false))
                         {
-                            if (path == null || path.IsEmpty)
+                            if (path != null && !path.IsEmpty)
                             {
-                                break;
-                            }
+                                var bounds = path.Bounds;
 
-                            var bounds = path.Bounds;
-
-                            if (svgPolyline.Fill != null)
-                            {
-                                using (var paint = GetFillSKPaint(svgPolyline, size))
+                                if (svgPolyline.Fill != null)
                                 {
-                                    canvas.DrawPath(path, paint);
+                                    using (var paint = GetFillSKPaint(svgPolyline, size))
+                                    {
+                                        canvas.DrawPath(path, paint);
+                                    }
                                 }
-                            }
 
-                            if (svgPolyline.Stroke != null)
-                            {
-                                using (var paint = GetStrokeSKPaint(svgPolyline, size))
+                                if (svgPolyline.Stroke != null)
                                 {
-                                    canvas.DrawPath(path, paint);
+                                    using (var paint = GetStrokeSKPaint(svgPolyline, size))
+                                    {
+                                        canvas.DrawPath(path, paint);
+                                    }
                                 }
                             }
                         }
@@ -886,26 +882,24 @@ namespace Svg.Skia
 
                         using (var path = ToSKPath(svgPolygon.Points, svgPolygon.FillRule, true))
                         {
-                            if (path == null || path.IsEmpty)
+                            if (path != null && !path.IsEmpty)
                             {
-                                break;
-                            }
+                                var bounds = path.Bounds;
 
-                            var bounds = path.Bounds;
-
-                            if (svgPolygon.Fill != null)
-                            {
-                                using (var paint = GetFillSKPaint(svgPolygon, size))
+                                if (svgPolygon.Fill != null)
                                 {
-                                    canvas.DrawPath(path, paint);
+                                    using (var paint = GetFillSKPaint(svgPolygon, size))
+                                    {
+                                        canvas.DrawPath(path, paint);
+                                    }
                                 }
-                            }
 
-                            if (svgPolygon.Stroke != null)
-                            {
-                                using (var paint = GetStrokeSKPaint(svgPolygon, size))
+                                if (svgPolygon.Stroke != null)
                                 {
-                                    canvas.DrawPath(path, paint);
+                                    using (var paint = GetStrokeSKPaint(svgPolygon, size))
+                                    {
+                                        canvas.DrawPath(path, paint);
+                                    }
                                 }
                             }
                         }
