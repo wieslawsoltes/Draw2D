@@ -113,7 +113,6 @@ namespace Svg.Skia.Demo
             catch (Exception ex)
             {
                 Error(ex);
-                Console.ResetColor();
             }
         }
     }
