@@ -3,15 +3,19 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp3.0</TargetFramework>
+    <EnableDefaultCompileItems>False</EnableDefaultCompileItems>
+    <EnableDefaultItems>False</EnableDefaultItems>
+    <NoWarn>CS1591</NoWarn>
+    <IsPackable>True</IsPackable>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="*.svg;*.yml;*.png" />
+    <ProjectReference Include="..\Svg.Skia\Svg.Skia.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Svg.Skia\Svg.Skia.csproj" />
-    <!--<ProjectReference Include="..\..\externals\SVG\Source\Svg.csproj" />-->
+    <Compile Include="**\*.cs" Exclude="obj\**" />
   </ItemGroup>
 
   <ItemGroup>
