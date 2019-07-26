@@ -437,11 +437,11 @@ namespace Svg.Skia
             canvas.Scale(fScaleX, fScaleY);
         }
 
-        private static void Transform(SKCanvas canvas, SvgTransformCollection transforms)
+        private static void Transform(SKCanvas canvas, SvgTransformCollection svgTransformCollection)
         {
             var totalMatrix = canvas.TotalMatrix;
 
-            foreach (var svgTransform in transforms)
+            foreach (var svgTransform in svgTransformCollection)
             {
                 var matrix = ToSKmatrix(svgTransform.Matrix);
                 totalMatrix = Multiply(ref totalMatrix, ref matrix);
