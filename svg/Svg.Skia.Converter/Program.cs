@@ -73,11 +73,10 @@ namespace Svg.Skia.Demo
                     {
                         Console.WriteLine($"File: {path}");
 
-                        var svgDocument = SvgDocument.Open<SvgDocument>(path, null);
-                        if (svgDocument != null)
+                        var svg = new Svg();
+                        var picture = svg.Load(path);
+                        if (picture != null)
                         {
-                            svgDocument.FlushStyles(true);
-
                             var extension = Path.GetExtension(path);
 #if false
                         var svgDebug = new SvgDebug()
@@ -107,7 +106,7 @@ namespace Svg.Skia.Demo
                                 pngPath = Path.Combine(output, Path.GetFileName(pngPath));
                             }
 
-                            SkiaSvgRenderer.SaveImage(svgDocument, pngPath, SKEncodedImageFormat.Png, 100, 1, 1);
+                            svg.Save(pngPath, SKEncodedImageFormat.Png, 100, 1, 1);
                         }
                     }
                     catch (Exception)

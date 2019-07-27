@@ -17,8 +17,10 @@ using Svg.Transforms;
 
 namespace Svg.Skia
 {
-    public static class SkiaSvgRenderer
+    public class Svg
     {
+        public SKPicture Picture { get; set; }
+
         private static T GetReference<T>(SvgElement svgElement, Uri uri) where T : SvgElement
         {
             return svgElement.OwnerDocument.GetElementById(uri.ToString()) as T;
@@ -187,7 +189,7 @@ namespace Svg.Skia
                     svgUnit);
         }
 
-        public static SKShader CreateLinearGradient(SvgLinearGradientServer svgLinearGradientServer, SKSize skSize)
+        private static SKShader CreateLinearGradient(SvgLinearGradientServer svgLinearGradientServer, SKSize skSize)
         {
             // TODO:
 
@@ -980,37 +982,63 @@ namespace Svg.Skia
             }
         }
 
-        public static void SaveImage(SvgElement svgElement, string path, SKEncodedImageFormat format = SKEncodedImageFormat.Png, int quality = 100, float scaleX = 1f, float scaleY = 1f)
+        public static SKPicture Load(SvgFragment svgFragment)
         {
-            if (svgElement is SvgFragment svgFragment)
+            float width = svgFragment.Width.ToDeviceValue(null, UnitRenderingType.Horizontal, svgFragment);
+            float height = svgFragment.Height.ToDeviceValue(null, UnitRenderingType.Vertical, svgFragment);
+            var skSize = new SKSize(width, height);
+            var skSizeScaled = new SKSize(width, height);
+            using (var skPictureRecorder = new SKPictureRecorder())
+            using (var skCanvas = skPictureRecorder.BeginRecording(SKRect.Create(skSizeScaled)))
             {
-                float width = svgFragment.Width.ToDeviceValue(null, UnitRenderingType.Horizontal, svgFragment);
-                float height = svgFragment.Height.ToDeviceValue(null, UnitRenderingType.Vertical, svgFragment);
-                var skSize = new SKSize(width, height);
-                var skImageInfo = new SKImageInfo((int)(width * scaleX), (int)(height * scaleY));
+                skCanvas.Clear(SKColors.Transparent);
+                DrawSvgElement(skCanvas, skSize, svgFragment);
+                return skPictureRecorder.EndRecording();
+            }
+        }
 
-                using (var skBitmap = new SKBitmap(skImageInfo))
+        public SKPicture Load(string path)
+        {
+            var svgDocument = SvgDocument.Open<SvgDocument>(path, null);
+            if (svgDocument != null)
+            {
+                svgDocument.FlushStyles(true);
+                Picture = Load(svgDocument);
+            }
+            return Picture;
+        }
+
+        public SKPicture Load(Stream stream)
+        {
+            var svgDocument = SvgDocument.Open<SvgDocument>(stream, null);
+            if (svgDocument != null)
+            {
+                svgDocument.FlushStyles(true);
+                Picture = Load(svgDocument);
+            }
+            return Picture;
+        }
+
+        public void Save(string path, SKEncodedImageFormat format = SKEncodedImageFormat.Png, int quality = 100, float scaleX = 1f, float scaleY = 1f)
+        {
+            float width = Picture.CullRect.Width * scaleX;
+            float height = Picture.CullRect.Height * scaleY;
+            var skImageInfo = new SKImageInfo((int)width, (int)height);
+            using (var skBitmap = new SKBitmap(skImageInfo))
+            using (var skCanvas = new SKCanvas(skBitmap))
+            {
+                skCanvas.Save();
+                skCanvas.Scale(scaleX, scaleY);
+                skCanvas.DrawPicture(Picture);
+                skCanvas.Restore();
+                using (var skImage = SKImage.FromBitmap(skBitmap))
+                using (var skData = skImage.Encode(format, quality))
                 {
-                    using (var skCanvas = new SKCanvas(skBitmap))
+                    if (skData != null)
                     {
-                        skCanvas.Save();
-                        skCanvas.Scale(scaleX, scaleY);
-                        skCanvas.Clear(SKColors.Transparent);
-
-                        DrawSvgElement(skCanvas, skSize, svgFragment);
-
-                        skCanvas.Restore();
-
-                        using (var skImage = SKImage.FromBitmap(skBitmap))
-                        using (var skData = skImage.Encode(format, quality))
+                        using (var stream = File.OpenWrite(path))
                         {
-                            if (skData != null)
-                            {
-                                using (var stream = File.OpenWrite(path))
-                                {
-                                    skData.SaveTo(stream);
-                                }
-                            }
+                            skData.SaveTo(stream);
                         }
                     }
                 }
