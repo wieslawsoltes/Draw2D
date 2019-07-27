@@ -593,10 +593,50 @@ namespace Svg.Skia
             skCanvas.Restore();
         }
 
+        private static bool ElementReferencesUri(SvgUse svgUse, SvgElement element, List<Uri> elementUris)
+        {
+            if (element is SvgUse useElement)
+            {
+                if (elementUris.Contains(useElement.ReferencedElement))
+                {
+                    return true;
+                }
+                if (svgUse.OwnerDocument.GetElementById(useElement.ReferencedElement.ToString()) is SvgUse refElement)
+                {
+                    elementUris.Add(useElement.ReferencedElement);
+                }
+                return ReferencedElementReferencesUri(useElement, elementUris);
+            }
+            if (element is SvgGroup groupElement)
+            {
+                foreach (var child in groupElement.Children)
+                {
+                    if (ElementReferencesUri(svgUse, child, elementUris))
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
+        private static bool ReferencedElementReferencesUri(SvgUse svgUse, List<Uri> elementUris)
+        {
+            var refElement = svgUse.OwnerDocument.GetElementById(svgUse.ReferencedElement.ToString());
+            return ElementReferencesUri(svgUse, refElement, elementUris);
+        }
+
+        private static bool HasRecursiveReference(SvgUse svgUse)
+        {
+            var refElement = svgUse.OwnerDocument.GetElementById(svgUse.ReferencedElement.ToString());
+            var uris = new List<Uri>() { svgUse.ReferencedElement };
+            return ElementReferencesUri(svgUse, refElement, uris);
+        }
+
         private static void DrawSvgUse(SKCanvas skCanvas, SKSize skSize, SvgUse svgUse)
         {
             var svgVisualElement = GetReference<SvgVisualElement>(svgUse, svgUse.ReferencedElement);
-            if (svgVisualElement != null)
+            if (svgVisualElement != null && !HasRecursiveReference(svgUse))
             {
                 var parent = svgUse.Parent;
                 //svgVisualElement.Parent = svgUse;
