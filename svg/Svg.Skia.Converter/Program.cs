@@ -67,10 +67,14 @@ namespace Svg.Skia.Demo
 
                 var sw = Stopwatch.StartNew();
 
+                int success = 0;
+                int errors = 0;
+
                 foreach (var path in paths)
                 {
                     try
                     {
+                        Console.ForegroundColor = ConsoleColor.DarkGray;
                         Console.WriteLine($"File: {path}");
 
                         var svg = new Svg();
@@ -108,20 +112,28 @@ namespace Svg.Skia.Demo
 
                             svg.Save(pngPath, SKEncodedImageFormat.Png, 100, 1, 1);
                         }
+
+                        Console.ForegroundColor = ConsoleColor.Green;
+                        Console.WriteLine($"Succes: {path}");
+                        success++;
                     }
                     catch (Exception)
                     {
+                        Console.ForegroundColor = ConsoleColor.Red;
                         Console.WriteLine($"Error: {path}");
+                        errors++;
                     }
                 }
 
                 sw.Stop();
-                Console.WriteLine($"Done: {sw.Elapsed}");
+                Console.WriteLine($"Done: {sw.Elapsed} ({success}/{paths.Count}, Errors: {errors})");
             }
             catch (Exception ex)
             {
+                Console.ResetColor();
                 Error(ex);
             }
+            Console.ResetColor();
         }
     }
 }
