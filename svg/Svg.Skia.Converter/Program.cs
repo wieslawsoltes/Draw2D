@@ -13,9 +13,9 @@ using Svg;
 
 namespace Svg.Skia.Converter
 {
-    class Program
+    public class Program
     {
-        static void Error(Exception ex)
+        public static void Error(Exception ex)
         {
             Console.WriteLine($"{ex.Message}", ConsoleColor.Yellow);
             Console.WriteLine($"{ex.StackTrace}", ConsoleColor.Black);
@@ -25,7 +25,116 @@ namespace Svg.Skia.Converter
             }
         }
 
-        static async Task<int> Main(string[] args)
+        public static void Execute(string file, string directory, string output, string pattern, string format, int quality, float scaleX, float scaleY)
+        {
+            try
+            {
+                var paths = new List<string>();
+
+                if (file != null)
+                {
+                    paths.Add(file);
+                }
+
+                if (directory != null)
+                {
+                    var files = Directory.EnumerateFiles(directory, pattern);
+                    if (files != null)
+                    {
+                        paths.AddRange(files);
+                    }
+                }
+
+                if (!string.IsNullOrEmpty(output))
+                {
+                    if (!Directory.Exists(output))
+                    {
+                        Directory.CreateDirectory(output);
+                    }    
+                }
+
+                var sw = Stopwatch.StartNew();
+
+                int success = 0;
+
+                foreach (var path in paths)
+                {
+                    try
+                    {
+                        Console.ForegroundColor = ConsoleColor.Black;
+                        Console.WriteLine($"File: {path}");
+
+                        var svg = new Svg();
+                        var picture = svg.Load(path);
+                        if (picture != null)
+                        {
+                            var extension = Path.GetExtension(path);
+#if false
+                        var svgDebug = new SvgDebug()
+                        {
+                            Builder = new StringBuilder(),
+                            IndentTab = "  ",
+                            PrintSvgElementAttributesEnabled = true,
+                            PrintSvgElementCustomAttributesEnabled = true,
+                            PrintSvgElementChildrenEnabled = true,
+                            PrintSvgElementNodesEnabled = false
+                        };
+                        svgDebug.PrintSvgElement(svgDocument, "", "");
+                        if (svgDebug.Builder != null)
+                        {
+                            var yaml = svgDebug.Builder.ToString();
+                            string ymlPath = path.Remove(path.Length - extension.Length) + ".yml";
+                            if (!string.IsNullOrEmpty(output))
+                            {
+                                ymlPath = Path.Combine(output, Path.GetFileName(ymlPath));
+                            }
+                            File.WriteAllText(ymlPath, yaml);
+                        }
+#endif
+                            string pngPath = path.Remove(path.Length - extension.Length) + "." + "format";
+                            if (!string.IsNullOrEmpty(output))
+                            {
+                                pngPath = Path.Combine(output, Path.GetFileName(pngPath));
+                            }
+
+                            if (Enum.TryParse<SKEncodedImageFormat>(format, true, out var skEncodedImageFormat))
+                            {
+                                svg.Save(pngPath, skEncodedImageFormat, quality, scaleX, scaleY);
+                            }
+                            else
+                            {
+                                throw new ArgumentException($"Invalid output image format.", nameof(format));
+                            }
+                        }
+
+                        Console.ForegroundColor = ConsoleColor.Green;
+                        Console.WriteLine($"Succes: {path}");
+                        success++;
+                    }
+                    catch (Exception)
+                    {
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine($"Error: {path}");
+                    }
+                }
+
+                sw.Stop();
+
+                if (paths.Count > 0)
+                {
+                    Console.ForegroundColor = ConsoleColor.Black;
+                    Console.WriteLine($"Done: {sw.Elapsed} ({success}/{paths.Count})");
+                    Console.ResetColor();
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.ResetColor();
+                Error(ex);
+            }
+        }
+
+        public static async Task<int> Main(string[] args)
         {
             var optionFile = new Option(new [] { "--file", "-f" }, "The relative or absolute path to the input file")
             {
@@ -42,17 +151,27 @@ namespace Svg.Skia.Converter
                 Argument = new Argument<string>(defaultValue: () => null)
             };
 
-            var optionPattern = new Option(new [] { "--pattern", "-p" }, "The search string to match against the names of files in the input path.")
+            var optionPattern = new Option(new [] { "--pattern", "-p" }, "The search string to match against the names of files in the input path")
             {
                 Argument = new Argument<string>(defaultValue: () => "*.svg")
             };
 
-            var optionScaleX = new Option(new [] { "--scaleX", "-sx" }, "The output image horizontal scaling factor")
+            var optionFormat = new Option(new [] { "--format" }, "The output image format")
+            {
+                Argument = new Argument<string>(defaultValue: () => "png")
+            };
+
+            var optionQuality = new Option(new [] { "--quality" }, "The output image quality")
+            {
+                Argument = new Argument<int>(defaultValue: () => 100)
+            };
+
+            var optionScaleX = new Option(new [] { "--scaleX" }, "The output image horizontal scaling factor")
             {
                 Argument = new Argument<float>(defaultValue: () => 1f)
             };
 
-            var optionScaleY = new Option(new [] { "--scaleY", "-sY" }, "The output image vertical scaling factor")
+            var optionScaleY = new Option(new [] { "--scaleY" }, "The output image vertical scaling factor")
             {
                 Argument = new Argument<float>(defaultValue: () => 1f)
             };
@@ -63,110 +182,13 @@ namespace Svg.Skia.Converter
             rootCommand.AddOption(optionDirectory);
             rootCommand.AddOption(optionOutput);
             rootCommand.AddOption(optionPattern);
+            rootCommand.AddOption(optionFormat);
+            rootCommand.AddOption(optionQuality);
             rootCommand.AddOption(optionScaleX);
             rootCommand.AddOption(optionScaleY);
 
-            rootCommand.Handler = CommandHandler.Create<string, string, string, string, float, float>((file, directory, output, pattern, scaleX, scaleY) =>
-            {
-                try
-                {
-                    var paths = new List<string>();
-
-                    if (file != null)
-                    {
-                        paths.Add(file);
-                    }
-
-                    if (directory != null)
-                    {
-                        var files = Directory.EnumerateFiles(directory, pattern);
-                        if (files != null)
-                        {
-                            paths.AddRange(files);
-                        }
-                    }
-
-                    if (!string.IsNullOrEmpty(output))
-                    {
-                        if (!Directory.Exists(output))
-                        {
-                            Directory.CreateDirectory(output);
-                        }    
-                    }
-
-                    var sw = Stopwatch.StartNew();
-
-                    int success = 0;
-
-                    foreach (var path in paths)
-                    {
-                        try
-                        {
-                            Console.ForegroundColor = ConsoleColor.Black;
-                            Console.WriteLine($"File: {path}");
-
-                            var svg = new Svg();
-                            var picture = svg.Load(path);
-                            if (picture != null)
-                            {
-                                var extension = Path.GetExtension(path);
-#if false
-                            var svgDebug = new SvgDebug()
-                            {
-                                Builder = new StringBuilder(),
-                                IndentTab = "  ",
-                                PrintSvgElementAttributesEnabled = true,
-                                PrintSvgElementCustomAttributesEnabled = true,
-                                PrintSvgElementChildrenEnabled = true,
-                                PrintSvgElementNodesEnabled = false
-                            };
-                            svgDebug.PrintSvgElement(svgDocument, "", "");
-                            if (svgDebug.Builder != null)
-                            {
-                                var yaml = svgDebug.Builder.ToString();
-                                string ymlPath = path.Remove(path.Length - extension.Length) + ".yml";
-                                if (!string.IsNullOrEmpty(output))
-                                {
-                                    ymlPath = Path.Combine(output, Path.GetFileName(ymlPath));
-                                }
-                                File.WriteAllText(ymlPath, yaml);
-                            }
-#endif
-                                string pngPath = path.Remove(path.Length - extension.Length) + ".png";
-                                if (!string.IsNullOrEmpty(output))
-                                {
-                                    pngPath = Path.Combine(output, Path.GetFileName(pngPath));
-                                }
-
-                                svg.Save(pngPath, SKEncodedImageFormat.Png, 100, scaleX, scaleY);
-                            }
-
-                            Console.ForegroundColor = ConsoleColor.Green;
-                            Console.WriteLine($"Succes: {path}");
-                            success++;
-                        }
-                        catch (Exception)
-                        {
-                            Console.ForegroundColor = ConsoleColor.Red;
-                            Console.WriteLine($"Error: {path}");
-                        }
-                    }
-
-                    sw.Stop();
-
-                    if (paths.Count > 0)
-                    {
-                        Console.ForegroundColor = ConsoleColor.Black;
-                        Console.WriteLine($"Done: {sw.Elapsed} ({success}/{paths.Count})");
-                        Console.ResetColor();
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Console.ResetColor();
-                    Error(ex);
-                }
-            });
+            //rootCommand.Handler = CommandHandler.Create<string, string, string, string, string, int, float, float>(Execute);
+            rootCommand.Handler = CommandHandler.Create(typeof(Program).GetMethod(nameof(Execute)));
 
             return await rootCommand.InvokeAsync(args);
         }

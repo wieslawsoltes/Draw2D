@@ -4,9 +4,46 @@ SkiaSharp SVG Rendering Library
 
 ## Usage
 
+### Tool
+
 ```
-Usage: Svg.Skia.Converter -f path [-o path]
-       Svg.Skia.Converter -d path [-o path]
+dotnet tool install -g Svg.Skia.Converter
+```
+
+```
+Usage:
+  Svg.Skia.Converter [options]
+
+Options:
+  -f, --file <file>              The relative or absolute path to the input file
+  -d, --directory <directory>    The relative or absolute path to the input directory
+  -o, --output <output>          The relative or absolute path to the output directory
+  -p, --pattern <pattern>        The search string to match against the names of files in the input path
+  --format <format>              The output image format
+  --quality <quality>            The output image quality
+  --scaleX <scalex>              The output image horizontal scaling factor
+  --scaleY <scaley>              The output image vertical scaling factor
+  --version                      Display version information
+```
+
+### Library
+
+```
+dotnet add package Svg.Skia
+```
+
+```C#
+using SkiaSharp;
+using Svg.Skia;
+```
+```C#
+var path = "image.svg";
+var svg = new Svg();
+var picture = svg.Load(path);
+if (picture != null)
+{
+    svg.Save("image.png", SKEncodedImageFormat.Png, 100, 1f, 1f);
+}
 ```
 
 ## Externals
