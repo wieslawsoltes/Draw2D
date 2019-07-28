@@ -243,7 +243,7 @@ namespace Svg.Skia
 
             SKShader sKShader;
 
-            if (svgLinearGradientServer.GradientTransform.Count > 0)
+            if (svgLinearGradientServer.GradientTransform != null && svgLinearGradientServer.GradientTransform.Count > 0)
             {
                 var gradientTransform = GetSKMatrix(svgLinearGradientServer.GradientTransform);
                 sKShader = SKShader.CreateLinearGradient(skStart, skEnd, skColors, skColorPos, shaderTileMode, gradientTransform);
@@ -627,7 +627,15 @@ namespace Svg.Skia
                 var parent = svgUse.Parent;
                 //svgVisualElement.Parent = svgUse;
                 var _parent = svgUse.GetType().GetField("_parent", BindingFlags.NonPublic | BindingFlags.Instance);
-                _parent.SetValue(svgVisualElement, svgUse);
+                if (_parent != null)
+                {
+                    _parent.SetValue(svgVisualElement, svgUse);
+                }
+                else
+                {
+                    throw new Exception("Can not set 'use' referenced element parent.");
+                }
+
                 svgVisualElement.InvalidateChildPaths();
 
                 if (SetOpacity(skCanvas, svgUse) == null)
@@ -645,14 +653,21 @@ namespace Svg.Skia
                 if (ew > 0 && eh > 0)
                 {
                     var _attributes = svgVisualElement.GetType().GetField("_attributes", BindingFlags.NonPublic | BindingFlags.Instance);
-                    var attributes = _attributes.GetValue(_attributes) as SvgAttributeCollection;
-                    var viewBox = attributes.GetAttribute<SvgViewBox>("viewBox");
-                    //var viewBox = svgVisualElement.Attributes.GetAttribute<SvgViewBox>("viewBox");
-                    if (viewBox != SvgViewBox.Empty && Math.Abs(ew - viewBox.Width) > float.Epsilon && Math.Abs(eh - viewBox.Height) > float.Epsilon)
+                    if (_attributes != null)
                     {
-                        var sw = ew / viewBox.Width;
-                        var sh = eh / viewBox.Height;
-                        skCanvas.Translate(sw, sh);
+                        var attributes = _attributes.GetValue(svgVisualElement) as SvgAttributeCollection;
+                        var viewBox = attributes.GetAttribute<SvgViewBox>("viewBox");
+                        //var viewBox = svgVisualElement.Attributes.GetAttribute<SvgViewBox>("viewBox");
+                        if (viewBox != SvgViewBox.Empty && Math.Abs(ew - viewBox.Width) > float.Epsilon && Math.Abs(eh - viewBox.Height) > float.Epsilon)
+                        {
+                            var sw = ew / viewBox.Width;
+                            var sh = eh / viewBox.Height;
+                            skCanvas.Translate(sw, sh);
+                        }
+                    }
+                    else
+                    {
+                        throw new Exception("Can not get 'use' referenced element transform.");
                     }
                 }
 
