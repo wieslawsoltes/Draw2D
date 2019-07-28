@@ -381,25 +381,25 @@ namespace Svg.Skia
                 {
                     case SvgMatrix svgMatrix:
                         {
-                            var skMatrix = SKMatrix.MakeIdentity();
-                            //var skMatrix = new SKMatrix()
+                            var skMatrix = new SKMatrix()
+                            {
+                                ScaleX = svgMatrix.Points[0],
+                                SkewY = svgMatrix.Points[1],
+                                SkewX = svgMatrix.Points[2],
+                                ScaleY = svgMatrix.Points[3],
+                                TransX = svgMatrix.Points[4],
+                                TransY = svgMatrix.Points[5],
+                                Persp0 = 0,
+                                Persp1 = 0,
+                                Persp2 = 1
+                            };
+                            //var skMatrix = SKMatrix.MakeIdentity();
+                            //skMatrix.Values = new float[]
                             //{
-                            //    ScaleX = svgMatrix.Points[0],
-                            //    SkewY = svgMatrix.Points[1],
-                            //    SkewX = svgMatrix.Points[2],
-                            //    ScaleY = svgMatrix.Points[3],
-                            //    TransX = svgMatrix.Points[4],
-                            //    TransY = svgMatrix.Points[5],
-                            //    Persp0 = 0,
-                            //    Persp1 = 0,
-                            //    Persp2 = 1
+                            //	/* ScaleX */ svgMatrix.Points[0], /* SkewX */  svgMatrix.Points[2], /* TransX */ svgMatrix.Points[4],
+                            //	/* SkewY */  svgMatrix.Points[1], /* ScaleY */ svgMatrix.Points[3], /* TransY */ svgMatrix.Points[5],
+                            //	/* Persp0 */ 0,                   /* Persp1 */ 0,                   /* Persp2 */ 1
                             //};
-							skMatrix.Values = new float[]
-							{
-								/* ScaleX */ svgMatrix.Points[0], /* SkewX */  svgMatrix.Points[2], /* TransX */ svgMatrix.Points[4],
-								/* SkewY */  svgMatrix.Points[1], /* ScaleY */ svgMatrix.Points[3], /* TransY */ svgMatrix.Points[5],
-								/* Persp0 */ 0,                   /* Persp1 */ 0,                   /* Persp2 */ 1
-							};
                             totalSKMatrix = Multiply(ref totalSKMatrix, ref skMatrix);
                         }
                         break;
