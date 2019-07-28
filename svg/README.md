@@ -12,7 +12,7 @@ dotnet tool install -g Svg.Skia.Converter
 
 ```
 Svg.Skia.Converter:
-  Converts a svg file to an encoded image.
+  Converts a svg file to an encoded bitmap image.
 
 Usage:
   Svg.Skia.Converter [options]
