@@ -267,18 +267,22 @@ namespace Svg.Skia
             return sKShader;
         }
 
-        private static SKPaint GetFillSKPaint(SvgElement svgElement, SKSize skSize)
+        private static SKPaint GetFillSKPaint(SvgVisualElement svgVisualElement, SKSize skSize)
         {
             var skPaint = new SKPaint()
             {
                 IsAntialias = true
             };
 
-            switch (svgElement.Fill)
+            // TODO: SvgElement
+
+            // TODO: SvgElementStyle
+
+            switch (svgVisualElement.Fill)
             {
                 case SvgColourServer svgColourServer:
                     {
-                        skPaint.Color = GetColor(svgColourServer, AdjustSvgOpacity(svgElement.FillOpacity), false);
+                        skPaint.Color = GetColor(svgColourServer, AdjustSvgOpacity(svgVisualElement.FillOpacity), false);
                     }
                     break;
                 case SvgPatternServer svgPatternServer:
@@ -310,24 +314,32 @@ namespace Svg.Skia
                 default:
                     break;
             }
+
+            // TODO: SvgVisualElement
+
+            // TODO: SvgVisualElementStyle
 
             skPaint.Style = SKPaintStyle.Fill;
 
             return skPaint;
         }
 
-        private static SKPaint GetStrokeSKPaint(SvgElement svgElement, SKSize skSize)
+        private static SKPaint GetStrokeSKPaint(SvgVisualElement svgVisualElement, SKSize skSize)
         {
             var skPaint = new SKPaint()
             {
                 IsAntialias = true
             };
 
-            switch (svgElement.Stroke)
+            // TODO: SvgElement
+
+            // TODO: SvgElementStyle
+
+            switch (svgVisualElement.Stroke)
             {
                 case SvgColourServer svgColourServer:
                     {
-                        skPaint.Color = GetColor(svgColourServer, AdjustSvgOpacity(svgElement.StrokeOpacity), true);
+                        skPaint.Color = GetColor(svgColourServer, AdjustSvgOpacity(svgVisualElement.StrokeOpacity), true);
                     }
                     break;
                 case SvgPatternServer svgPatternServer:
@@ -360,7 +372,12 @@ namespace Svg.Skia
                     break;
             }
 
-            skPaint.StrokeWidth = svgElement.StrokeWidth.ToDeviceValue(null, UnitRenderingType.Other, svgElement);
+            skPaint.StrokeWidth = svgVisualElement.StrokeWidth.ToDeviceValue(null, UnitRenderingType.Other, svgVisualElement);
+
+            // TODO: SvgVisualElement
+
+            // TODO: SvgVisualElementStyle
+
             skPaint.Style = SKPaintStyle.Stroke;
 
             return skPaint;
