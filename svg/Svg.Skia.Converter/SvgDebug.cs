@@ -1478,5 +1478,27 @@ namespace Svg.Skia.Converter
                 }
             }
         }
+
+        public static void Print(SvgElement svgElement, string path)
+        {
+            var svgDebug = new SvgDebug()
+            {
+                Builder = new StringBuilder(),
+                IndentTab = "  ",
+                PrintSvgElementAttributesEnabled = true,
+                PrintSvgElementCustomAttributesEnabled = true,
+                PrintSvgElementChildrenEnabled = true,
+                PrintSvgElementNodesEnabled = false
+            };
+            svgDebug.PrintSvgElement(svgElement, "", "");
+            if (svgDebug.Builder != null)
+            {
+                var yaml = svgDebug.Builder.ToString();
+                if (!string.IsNullOrEmpty(yaml))
+                {
+                    File.WriteAllText(path, yaml);
+                }
+            }
+        }
     }
 }

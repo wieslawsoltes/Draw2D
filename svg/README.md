@@ -12,7 +12,7 @@ dotnet tool install -g Svg.Skia.Converter
 
 ```
 Svg.Skia.Converter:
-  Converts an svg file to an encoded image.
+  Converts a svg file to an encoded image.
 
 Usage:
   Svg.Skia.Converter [options]
@@ -26,6 +26,7 @@ Options:
   --quality <quality>            The output image quality
   --scaleX <scalex>              The output image horizontal scaling factor
   --scaleY <scaley>              The output image vertical scaling factor
+  --debug                        The flag indicating whether to produce debug output to a file
   --version                      Display version information
 ```
 

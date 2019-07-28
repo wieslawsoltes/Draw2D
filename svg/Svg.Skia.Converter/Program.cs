@@ -25,7 +25,7 @@ namespace Svg.Skia.Converter
             }
         }
 
-        public static void Execute(string file, string directory, string output, string pattern, string format, int quality, float scaleX, float scaleY)
+        public static void Execute(string file, string directory, string output, string pattern, string format, int quality, float scaleX, float scaleY, bool debug)
         {
             try
             {
@@ -75,28 +75,16 @@ namespace Svg.Skia.Converter
                         var picture = svg.Load(path);
                         if (picture != null)
                         {
-#if false
-                            var svgDebug = new SvgDebug()
+                            if (debug == true && svg.Document != null)
                             {
-                                Builder = new StringBuilder(),
-                                IndentTab = "  ",
-                                PrintSvgElementAttributesEnabled = true,
-                                PrintSvgElementCustomAttributesEnabled = true,
-                                PrintSvgElementChildrenEnabled = true,
-                                PrintSvgElementNodesEnabled = false
-                            };
-                            svgDebug.PrintSvgElement(svg.Document, "", "");
-                            if (svgDebug.Builder != null)
-                            {
-                                var yaml = svgDebug.Builder.ToString();
                                 string ymlPath = path.Remove(path.Length - extension.Length) + ".yml";
                                 if (!string.IsNullOrEmpty(output))
                                 {
                                     ymlPath = Path.Combine(output, Path.GetFileName(ymlPath));
                                 }
-                                File.WriteAllText(ymlPath, yaml);
+                                SvgDebug.Print(svg.Document, ymlPath);
                             }
-#endif
+
                             if (Enum.TryParse<SKEncodedImageFormat>(format, true, out var skEncodedImageFormat))
                             {
                                 svg.Save(imagePath, skEncodedImageFormat, quality, scaleX, scaleY);
@@ -176,6 +164,11 @@ namespace Svg.Skia.Converter
                 Argument = new Argument<float>(defaultValue: () => 1f)
             };
 
+            var optionDebug = new Option(new [] { "--debug" }, "The flag indicating whether to produce debug output to a file")
+            {
+                Argument = new Argument<bool>()
+            };
+
             var rootCommand = new RootCommand()
             {
                 Description = "Converts a svg file to an encoded image."
@@ -189,6 +182,7 @@ namespace Svg.Skia.Converter
             rootCommand.AddOption(optionQuality);
             rootCommand.AddOption(optionScaleX);
             rootCommand.AddOption(optionScaleY);
+            rootCommand.AddOption(optionDebug);
 
             rootCommand.Handler = CommandHandler.Create(typeof(Program).GetMethod(nameof(Execute)));
 
