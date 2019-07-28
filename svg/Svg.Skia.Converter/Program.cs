@@ -2,13 +2,15 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using System;
 using System.Collections.Generic;
+using System.CommandLine;
+using System.CommandLine.Invocation;
 using System.Diagnostics;
 using System.IO;
 using System.Text;
 using SkiaSharp;
 using Svg;
 
-namespace Svg.Skia.Demo
+namespace Svg.Skia.Converter
 {
     class Program
     {
@@ -24,18 +26,15 @@ namespace Svg.Skia.Demo
 
         static void Usage()
         {
-            Console.WriteLine($"Usage: Svg.Skia.Converter -f <file.svg>");
-            Console.WriteLine($"       Svg.Skia.Converter -d <indir> *.svg");
-            Console.WriteLine($"       Svg.Skia.Converter -d <indir> *.svg <outdir>");
-            Console.WriteLine($"       Svg.Skia.Converter -d . *.svg");
-            Console.WriteLine($"       Svg.Skia.Converter -d . *.svg <outdir>");
+            Console.WriteLine($"Usage: Svg.Skia.Converter -f path [-o path]");
+            Console.WriteLine($"       Svg.Skia.Converter -d path [-o path]");
         }
 
         static void Main(string[] args)
         {
             try
             {
-                if (args.Length < 1)
+                if (args.Length != 2 && args.Length != 4)
                 {
                     Usage();
                     return;
@@ -44,31 +43,54 @@ namespace Svg.Skia.Demo
                 var paths = new List<string>();
                 var output = default(string);
 
-                if (args[0] == "-f" && args.Length == 2)
+                if (args.Length == 4)
                 {
-                    paths.Add(args[1]);
-                }
-                else if (args[0] == "-d" && (args.Length == 3 || args.Length == 4))
-                {
-                    var files = Directory.EnumerateFiles(args[1], args[2]);
-
-                    paths.AddRange(files);
-
-                    if (args.Length == 4)
+                    if (args[2] == "-o")
                     {
                         output = args[3];
                     }
+                    else
+                    {
+                        Usage();
+                        return; 
+                    }
                 }
-                else
+
+                switch (args[0])
                 {
-                    Usage();
-                    return;
+                    case "-f":
+                        {
+                            paths.Add(args[1]);
+                        }
+                        break;
+                        case "-d":
+                        {
+                            var files = Directory.EnumerateFiles(args[1], "*.svg");
+                            if (files != null)
+                            {
+                                paths.AddRange(files);
+                            }
+                        }
+                        break;
+                    default:
+                        {
+                            Usage();
+                            return;
+                        }
                 }
 
                 var sw = Stopwatch.StartNew();
 
                 int success = 0;
                 int errors = 0;
+
+                if (!string.IsNullOrEmpty(output))
+                {
+                    if (!Directory.Exists(output))
+                    {
+                        Directory.CreateDirectory(output);
+                    }    
+                }
 
                 foreach (var path in paths)
                 {
@@ -109,7 +131,6 @@ namespace Svg.Skia.Demo
                             {
                                 pngPath = Path.Combine(output, Path.GetFileName(pngPath));
                             }
-
                             svg.Save(pngPath, SKEncodedImageFormat.Png, 100, 1, 1);
                         }
 
@@ -126,14 +147,15 @@ namespace Svg.Skia.Demo
                 }
 
                 sw.Stop();
-                Console.WriteLine($"Done: {sw.Elapsed} ({success}/{paths.Count}, Errors: {errors})");
+                Console.ForegroundColor = ConsoleColor.DarkGray;
+                Console.WriteLine($"Done: {sw.Elapsed} ({success}/{paths.Count})");
+                Console.ResetColor();
             }
             catch (Exception ex)
             {
                 Console.ResetColor();
                 Error(ex);
             }
-            Console.ResetColor();
         }
     }
 }

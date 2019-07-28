@@ -13,7 +13,7 @@ using Svg.FilterEffects;
 using Svg.Pathing;
 using Svg.Transforms;
 
-namespace Svg.Skia.Demo
+namespace Svg.Skia.Converter
 {
     public class SvgDebug
     {

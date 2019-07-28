@@ -5,11 +5,8 @@ SkiaSharp SVG Rendering Library
 ## Usage
 
 ```
-Usage: Svg.Skia.Converter -f <file.svg>
-       Svg.Skia.Converter -d <indir> *.svg
-       Svg.Skia.Converter -d <indir> *.svg <outdir>
-       Svg.Skia.Converter -d . *.svg
-       Svg.Skia.Converter -d . *.svg <outdir>
+Usage: Svg.Skia.Converter -f path [-o path]
+       Svg.Skia.Converter -d path [-o path]
 ```
 
 ## Externals
