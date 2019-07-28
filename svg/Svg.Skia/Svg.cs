@@ -268,17 +268,8 @@ namespace Svg.Skia
             return sKShader;
         }
 
-        private static SKPaint GetFillSKPaint(SvgVisualElement svgVisualElement, SKSize skSize)
+        private static void SetFill(SvgVisualElement svgVisualElement, SKSize skSize, SKPaint skPaint)
         {
-            var skPaint = new SKPaint()
-            {
-                IsAntialias = true
-            };
-
-            // TODO: SvgElement
-
-            // TODO: SvgElementStyle
-
             switch (svgVisualElement.Fill)
             {
                 case SvgColourServer svgColourServer:
@@ -315,37 +306,10 @@ namespace Svg.Skia
                 default:
                     break;
             }
-
-            // TODO: SvgVisualElement
-
-            //var svgFilter = GetReference<SvgFilter>(svgVisualElement, svgVisualElement.Filter);
-            //if (svgFilter != null)
-            //{
-            //    Console.WriteLine($"[Fill] {svgFilter}");
-            //    foreach (var svgFilterPrimitive in svgFilter.Children)
-            //    {
-            //        Console.WriteLine($"- [Effect] {svgFilterPrimitive}");
-            //    }
-            //}
-
-            // TODO: SvgVisualElementStyle
-
-            skPaint.Style = SKPaintStyle.Fill;
-
-            return skPaint;
         }
 
-        private static SKPaint GetStrokeSKPaint(SvgVisualElement svgVisualElement, SKSize skSize)
+        private static void SetStroke(SvgVisualElement svgVisualElement, SKSize skSize, SKPaint skPaint)
         {
-            var skPaint = new SKPaint()
-            {
-                IsAntialias = true
-            };
-
-            // TODO: SvgElement
-
-            // TODO: SvgElementStyle
-
             switch (svgVisualElement.Stroke)
             {
                 case SvgColourServer svgColourServer:
@@ -382,20 +346,109 @@ namespace Svg.Skia
                 default:
                     break;
             }
+        }
+
+        private static void SetFilter(SvgVisualElement svgVisualElement, SKPaint skPaint)
+        {
+            var svgFilter = GetReference<SvgFilter>(svgVisualElement, svgVisualElement.Filter);
+            if (svgFilter == null)
+            {
+                return;
+            }
+
+            foreach (var child in svgFilter.Children)
+            {
+                if (child is SvgFilterPrimitive svgFilterPrimitive)
+                {
+                    switch (svgFilterPrimitive)
+                    {
+                        case SvgColourMatrix svgColourMatrix:
+                            {
+                                // TODO:
+                            }
+                            break;
+                        case SvgGaussianBlur svgGaussianBlur:
+                            {
+                                
+                                // TODO:
+                                var sigma = svgGaussianBlur.StdDeviation;
+                                var skImageFilter = SKImageFilter.CreateBlur(sigma, sigma);
+                                skPaint.ImageFilter = skImageFilter; // TODO: Dispose.
+                            }
+                            break;
+                        case SvgMerge svgMerge:
+                            {
+                                // TODO:
+                            }
+                            break;
+                        case SvgOffset svgOffset:
+                            {
+                                // TODO:
+                            }
+                            break;
+                        default:
+                            {
+                                // TODO:
+                            }
+                            break;
+                    }
+                }
+            }
+        }
+
+        private static SKPaint GetFillSKPaint(SvgVisualElement svgVisualElement, SKSize skSize)
+        {
+            var skPaint = new SKPaint()
+            {
+                IsAntialias = true
+            };
+
+            // TODO: SvgElement
+
+            // TODO: SvgElementStyle
+
+            if (svgVisualElement.Fill != null)
+            {
+                SetFill(svgVisualElement, skSize, skPaint);
+            }
+
+            // TODO: SvgVisualElement
+
+            if (svgVisualElement.Filter != null)
+            {
+                SetFilter(svgVisualElement, skPaint);
+            }
+
+            // TODO: SvgVisualElementStyle
+
+            skPaint.Style = SKPaintStyle.Fill;
+
+            return skPaint;
+        }
+
+        private static SKPaint GetStrokeSKPaint(SvgVisualElement svgVisualElement, SKSize skSize)
+        {
+            var skPaint = new SKPaint()
+            {
+                IsAntialias = true
+            };
+
+            // TODO: SvgElement
+
+            // TODO: SvgElementStyle
+            if (svgVisualElement.Stroke != null)
+            {
+                SetStroke(svgVisualElement, skSize, skPaint);
+            }
 
             skPaint.StrokeWidth = svgVisualElement.StrokeWidth.ToDeviceValue(null, UnitRenderingType.Other, svgVisualElement);
 
             // TODO: SvgVisualElement
 
-            //var svgFilter = GetReference<SvgFilter>(svgVisualElement, svgVisualElement.Filter);
-            //if (svgFilter != null)
-            //{
-            //    Console.WriteLine($"[Stroke] {svgFilter}");
-            //    foreach (var svgFilterPrimitive in svgFilter.Children)
-            //    {
-            //        Console.WriteLine($"- [Effect] {svgFilterPrimitive}");
-            //    }
-            //}
+            if (svgVisualElement.Filter != null)
+            {
+                SetFilter(svgVisualElement, skPaint);
+            }
 
             // TODO: SvgVisualElementStyle
 
