@@ -10,6 +10,7 @@ using System.Text;
 using SkiaSharp;
 using Svg;
 using Svg.Document_Structure;
+using Svg.FilterEffects;
 using Svg.Pathing;
 using Svg.Transforms;
 
@@ -317,6 +318,16 @@ namespace Svg.Skia
 
             // TODO: SvgVisualElement
 
+            //var svgFilter = GetReference<SvgFilter>(svgVisualElement, svgVisualElement.Filter);
+            //if (svgFilter != null)
+            //{
+            //    Console.WriteLine($"[Fill] {svgFilter}");
+            //    foreach (var svgFilterPrimitive in svgFilter.Children)
+            //    {
+            //        Console.WriteLine($"- [Effect] {svgFilterPrimitive}");
+            //    }
+            //}
+
             // TODO: SvgVisualElementStyle
 
             skPaint.Style = SKPaintStyle.Fill;
@@ -375,6 +386,16 @@ namespace Svg.Skia
             skPaint.StrokeWidth = svgVisualElement.StrokeWidth.ToDeviceValue(null, UnitRenderingType.Other, svgVisualElement);
 
             // TODO: SvgVisualElement
+
+            //var svgFilter = GetReference<SvgFilter>(svgVisualElement, svgVisualElement.Filter);
+            //if (svgFilter != null)
+            //{
+            //    Console.WriteLine($"[Stroke] {svgFilter}");
+            //    foreach (var svgFilterPrimitive in svgFilter.Children)
+            //    {
+            //        Console.WriteLine($"- [Effect] {svgFilterPrimitive}");
+            //    }
+            //}
 
             // TODO: SvgVisualElementStyle
 
