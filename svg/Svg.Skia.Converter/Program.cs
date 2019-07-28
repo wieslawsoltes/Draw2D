@@ -176,7 +176,10 @@ namespace Svg.Skia.Converter
                 Argument = new Argument<float>(defaultValue: () => 1f)
             };
 
-            var rootCommand = new RootCommand();
+            var rootCommand = new RootCommand()
+            {
+                Description = "Converts an svg file to an encoded image."
+            };
 
             rootCommand.AddOption(optionFile);
             rootCommand.AddOption(optionDirectory);

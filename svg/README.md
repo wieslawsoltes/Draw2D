@@ -1,6 +1,6 @@
 # Svg.Skia
 
-SkiaSharp SVG Rendering Library
+Skia SVG rendering library.
 
 ## Usage
 
@@ -11,6 +11,9 @@ dotnet tool install -g Svg.Skia.Converter
 ```
 
 ```
+Svg.Skia.Converter:
+  Converts an svg file to an encoded image.
+
 Usage:
   Svg.Skia.Converter [options]
 
