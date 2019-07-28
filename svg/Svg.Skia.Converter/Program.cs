@@ -64,42 +64,42 @@ namespace Svg.Skia.Converter
                         Console.ForegroundColor = ConsoleColor.Black;
                         Console.WriteLine($"File: {path}");
 
+                        var extension = Path.GetExtension(path);
+                        string imagePath = path.Remove(path.Length - extension.Length) + "." + format.ToLower();
+                        if (!string.IsNullOrEmpty(output))
+                        {
+                            imagePath = Path.Combine(output, Path.GetFileName(imagePath));
+                        }
+
                         var svg = new Svg();
                         var picture = svg.Load(path);
                         if (picture != null)
                         {
-                            var extension = Path.GetExtension(path);
 #if false
-                        var svgDebug = new SvgDebug()
-                        {
-                            Builder = new StringBuilder(),
-                            IndentTab = "  ",
-                            PrintSvgElementAttributesEnabled = true,
-                            PrintSvgElementCustomAttributesEnabled = true,
-                            PrintSvgElementChildrenEnabled = true,
-                            PrintSvgElementNodesEnabled = false
-                        };
-                        svgDebug.PrintSvgElement(svgDocument, "", "");
-                        if (svgDebug.Builder != null)
-                        {
-                            var yaml = svgDebug.Builder.ToString();
-                            string ymlPath = path.Remove(path.Length - extension.Length) + ".yml";
-                            if (!string.IsNullOrEmpty(output))
+                            var svgDebug = new SvgDebug()
                             {
-                                ymlPath = Path.Combine(output, Path.GetFileName(ymlPath));
+                                Builder = new StringBuilder(),
+                                IndentTab = "  ",
+                                PrintSvgElementAttributesEnabled = true,
+                                PrintSvgElementCustomAttributesEnabled = true,
+                                PrintSvgElementChildrenEnabled = true,
+                                PrintSvgElementNodesEnabled = false
+                            };
+                            svgDebug.PrintSvgElement(svg.Document, "", "");
+                            if (svgDebug.Builder != null)
+                            {
+                                var yaml = svgDebug.Builder.ToString();
+                                string ymlPath = path.Remove(path.Length - extension.Length) + ".yml";
+                                if (!string.IsNullOrEmpty(output))
+                                {
+                                    ymlPath = Path.Combine(output, Path.GetFileName(ymlPath));
+                                }
+                                File.WriteAllText(ymlPath, yaml);
                             }
-                            File.WriteAllText(ymlPath, yaml);
-                        }
 #endif
-                            string pngPath = path.Remove(path.Length - extension.Length) + "." + "format";
-                            if (!string.IsNullOrEmpty(output))
-                            {
-                                pngPath = Path.Combine(output, Path.GetFileName(pngPath));
-                            }
-
                             if (Enum.TryParse<SKEncodedImageFormat>(format, true, out var skEncodedImageFormat))
                             {
-                                svg.Save(pngPath, skEncodedImageFormat, quality, scaleX, scaleY);
+                                svg.Save(imagePath, skEncodedImageFormat, quality, scaleX, scaleY);
                             }
                             else
                             {
@@ -108,7 +108,7 @@ namespace Svg.Skia.Converter
                         }
 
                         Console.ForegroundColor = ConsoleColor.Green;
-                        Console.WriteLine($"Succes: {path}");
+                        Console.WriteLine($"Succes: {imagePath}");
                         success++;
                     }
                     catch (Exception)

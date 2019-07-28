@@ -21,6 +21,8 @@ namespace Svg.Skia
     {
         public SKPicture Picture { get; set; }
 
+        public SvgDocument Document { get; set; }
+
         private static T GetReference<T>(SvgElement svgElement, Uri uri) where T : SvgElement
         {
             return svgElement.OwnerDocument.GetElementById(uri.ToString()) as T;
@@ -1044,6 +1046,7 @@ namespace Svg.Skia
             {
                 svgDocument.FlushStyles(true);
                 Picture = Load(svgDocument);
+                Document = svgDocument;
             }
             return Picture;
         }
@@ -1055,6 +1058,7 @@ namespace Svg.Skia
             {
                 svgDocument.FlushStyles(true);
                 Picture = Load(svgDocument);
+                Document = svgDocument;
             }
             return Picture;
         }
