@@ -17,7 +17,7 @@ namespace Svg.Skia.Converter
         public static void Error(Exception ex)
         {
             Console.WriteLine($"{ex.Message}", ConsoleColor.Yellow);
-            Console.WriteLine($"{ex.StackTrace}", ConsoleColor.Black);
+            Console.WriteLine($"{ex.StackTrace}", ConsoleColor.White);
             if (ex.InnerException != null)
             {
                 Error(ex.InnerException);
@@ -61,7 +61,7 @@ namespace Svg.Skia.Converter
                     var path = paths[i];
                     try
                     {
-                        Console.ForegroundColor = ConsoleColor.Black;
+                        Console.ForegroundColor = ConsoleColor.White;
                         Console.WriteLine($"[{i}] File: {path}");
 
                         var extension = Path.GetExtension(path);
@@ -111,7 +111,7 @@ namespace Svg.Skia.Converter
 
                 if (paths.Count > 0)
                 {
-                    Console.ForegroundColor = ConsoleColor.Black;
+                    Console.ForegroundColor = ConsoleColor.White;
                     Console.WriteLine($"Done: {sw.Elapsed} ({success}/{paths.Count})");
                     Console.ResetColor();
                 }
