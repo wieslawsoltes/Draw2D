@@ -150,22 +150,6 @@ namespace Svg.Skia
             return skPath;
         }
 
-        private static SKMatrix Multiply(ref SKMatrix skMatrix1, ref SKMatrix skMatrix2)
-        {
-            return new SKMatrix()
-            {
-                ScaleX = (skMatrix1.ScaleX * skMatrix2.ScaleX) + (skMatrix1.SkewY * skMatrix2.SkewX),
-                SkewY = (skMatrix1.ScaleX * skMatrix2.SkewY) + (skMatrix1.SkewY * skMatrix2.ScaleY),
-                SkewX = (skMatrix1.SkewX * skMatrix2.ScaleX) + (skMatrix1.ScaleY * skMatrix2.SkewX),
-                ScaleY = (skMatrix1.SkewX * skMatrix2.SkewY) + (skMatrix1.ScaleY * skMatrix2.ScaleY),
-                TransX = (skMatrix1.TransX * skMatrix2.ScaleX) + (skMatrix1.TransY * skMatrix2.SkewX) + skMatrix2.TransX,
-                TransY = (skMatrix1.TransX * skMatrix2.SkewY) + (skMatrix1.TransY * skMatrix2.ScaleY) + skMatrix2.TransY,
-                Persp0 = 0,
-                Persp1 = 0,
-                Persp2 = 1
-            };
-        }
-
         private static float AdjustSvgOpacity(float opacity)
         {
             return Math.Min(Math.Max(opacity, 0), 1);
@@ -393,26 +377,19 @@ namespace Svg.Skia
                                 Persp1 = 0,
                                 Persp2 = 1
                             };
-                            //var skMatrix = SKMatrix.MakeIdentity();
-                            //skMatrix.Values = new float[]
-                            //{
-                            //	/* ScaleX */ svgMatrix.Points[0], /* SkewX */  svgMatrix.Points[2], /* TransX */ svgMatrix.Points[4],
-                            //	/* SkewY */  svgMatrix.Points[1], /* ScaleY */ svgMatrix.Points[3], /* TransY */ svgMatrix.Points[5],
-                            //	/* Persp0 */ 0,                   /* Persp1 */ 0,                   /* Persp2 */ 1
-                            //};
-                            totalSKMatrix = Multiply(ref totalSKMatrix, ref skMatrix);
+                            SKMatrix.Concat(ref totalSKMatrix, ref totalSKMatrix, ref skMatrix);
                         }
                         break;
                     case SvgRotate svgRotate:
                         {
                             var skMatrix = SKMatrix.MakeRotationDegrees(svgRotate.Angle, svgRotate.CenterX, svgRotate.CenterY);
-                            totalSKMatrix = Multiply(ref totalSKMatrix, ref skMatrix);
+                            SKMatrix.Concat(ref totalSKMatrix, ref totalSKMatrix, ref skMatrix);
                         }
                         break;
                     case SvgScale svgScale:
                         {
                             var skMatrix = SKMatrix.MakeScale(svgScale.X, svgScale.Y);
-                            totalSKMatrix = Multiply(ref totalSKMatrix, ref skMatrix);
+                            SKMatrix.Concat(ref totalSKMatrix, ref totalSKMatrix, ref skMatrix);
                         }
                         break;
                     case SvgShear svgShear:
@@ -423,13 +400,13 @@ namespace Svg.Skia
                     case SvgSkew svgSkew:
                         {
                             var skMatrix = SKMatrix.MakeSkew(svgSkew.AngleX, svgSkew.AngleY);
-                            totalSKMatrix = Multiply(ref totalSKMatrix, ref skMatrix);
+                            SKMatrix.Concat(ref totalSKMatrix, ref totalSKMatrix, ref skMatrix);
                         }
                         break;
                     case SvgTranslate svgTranslate:
                         {
                             var skMatrix = SKMatrix.MakeTranslation(svgTranslate.X, svgTranslate.Y);
-                            totalSKMatrix = Multiply(ref totalSKMatrix, ref skMatrix);
+                            SKMatrix.Concat(ref totalSKMatrix, ref totalSKMatrix, ref skMatrix);
                         }
                         break;
                 }
@@ -521,7 +498,7 @@ namespace Svg.Skia
         {
             var skMatrix = GetSKMatrix(svgTransformCollection);
             var totalSKMatrix = skCanvas.TotalMatrix;
-            totalSKMatrix = Multiply(ref totalSKMatrix, ref skMatrix);
+            SKMatrix.Concat(ref totalSKMatrix, ref totalSKMatrix, ref skMatrix);
             skCanvas.SetMatrix(totalSKMatrix);
         }
 
