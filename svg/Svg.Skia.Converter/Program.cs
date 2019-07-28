@@ -187,7 +187,6 @@ namespace Svg.Skia.Converter
             rootCommand.AddOption(optionScaleX);
             rootCommand.AddOption(optionScaleY);
 
-            //rootCommand.Handler = CommandHandler.Create<string, string, string, string, string, int, float, float>(Execute);
             rootCommand.Handler = CommandHandler.Create(typeof(Program).GetMethod(nameof(Execute)));
 
             return await rootCommand.InvokeAsync(args);
