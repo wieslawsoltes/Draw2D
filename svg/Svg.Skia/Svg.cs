@@ -630,6 +630,16 @@ namespace Svg.Skia
             skCanvas.Restore();
         }
 
+        private static void DrawSvgImage(SKCanvas skCanvas, SKSize skSize, SvgImage svgImage)
+        {
+            // TODO:
+        }
+
+        private static void DrawSvgSwitch(SKCanvas skCanvas, SKSize skSize, SvgSwitch svgSwitch)
+        {
+            // TODO:
+        }
+
         private static void DrawSvgUse(SKCanvas skCanvas, SKSize skSize, SvgUse svgUse)
         {
             var svgVisualElement = GetReference<SvgVisualElement>(svgUse, svgUse.ReferencedElement);
@@ -706,6 +716,11 @@ namespace Svg.Skia
 
                 skCanvas.Restore();
             }
+        }
+
+        private static void DrawSvgForeignObject(SKCanvas skCanvas, SKSize skSize, SvgForeignObject svgForeignObject)
+        {
+            // TODO:
         }
 
         private static void DrawSvgCircle(SKCanvas skCanvas, SKSize skSize, SvgCircle svgCircle)
@@ -824,6 +839,16 @@ namespace Svg.Skia
             }
 
             skCanvas.Restore();
+        }
+
+        private static void DrawSvgMarker(SKCanvas skCanvas, SKSize skSize, SvgMarker svgMarker)
+        {
+            // TODO:
+        }
+
+        private static void DrawSvgGlyph(SKCanvas skCanvas, SKSize skSize, SvgGlyph svgGlyph)
+        {
+            // TODO:
         }
 
         private static void DrawSvgGroup(SKCanvas skCanvas, SKSize skSize, SvgGroup svgGroup)
@@ -974,6 +999,26 @@ namespace Svg.Skia
             skCanvas.Restore();
         }
 
+        private static void DrawSvgText(SKCanvas skCanvas, SKSize skSize, SvgText svgText)
+        {
+            // TODO:
+        }
+
+        private static void DrawSvgTextPath(SKCanvas skCanvas, SKSize skSize, SvgTextPath svgTextPath)
+        {
+            // TODO:
+        }
+
+        private static void DrawSvgTextRef(SKCanvas skCanvas, SKSize skSize, SvgTextRef svgTextRef)
+        {
+            // TODO:
+        }
+
+        private static void DrawSvgTextSpan(SKCanvas skCanvas, SKSize skSize, SvgTextSpan svgTextSpan)
+        {
+            // TODO:
+        }
+
         private static void DrawSvgElement(SKCanvas skCanvas, SKSize skSize, SvgElement svgElement)
         {
             switch (svgElement)
@@ -983,14 +1028,29 @@ namespace Svg.Skia
                         DrawSvgFragment(skCanvas, skSize, svgFragment);
                     }
                     break;
-                case SvgSymbol svgSymbol:
+                case SvgImage svgImage:
                     {
-                        // The symbol defs are not rendered.
+                        DrawSvgImage(skCanvas, skSize, svgImage);
+                    }
+                    break;
+                case SvgSwitch svgSwitch:
+                    {
+                        DrawSvgSwitch(skCanvas, skSize, svgSwitch);
+                    }
+                    break;
+                case SvgSymbol _:
+                    {
+                        // The symbol included inside 'defs' are not rendered.
                     }
                     break;
                 case SvgUse svgUse:
                     {
                         DrawSvgUse(skCanvas, skSize, svgUse);
+                    }
+                    break;
+                case SvgForeignObject svgForeignObject:
+                    {
+                        DrawSvgForeignObject(skCanvas, skSize, svgForeignObject);
                     }
                     break;
                 case SvgCircle svgCircle:
@@ -1006,6 +1066,16 @@ namespace Svg.Skia
                 case SvgRectangle svgRectangle:
                     {
                         DrawSvgRectangle(skCanvas, skSize, svgRectangle);
+                    }
+                    break;
+                case SvgMarker svgMarker:
+                    {
+                        DrawSvgMarker(skCanvas, skSize, svgMarker);
+                    }
+                    break;
+                case SvgGlyph svgGlyph:
+                    {
+                        DrawSvgGlyph(skCanvas, skSize, svgGlyph);
                     }
                     break;
                 case SvgGroup svgGroup:
@@ -1031,6 +1101,26 @@ namespace Svg.Skia
                 case SvgPolygon svgPolygon:
                     {
                         DrawSvgPolygon(skCanvas, skSize, svgPolygon);
+                    }
+                    break;
+                case SvgText svgText:
+                    {
+                        DrawSvgText(skCanvas, skSize, svgText);
+                    }
+                    break;
+                case SvgTextPath svgTextPath:
+                    {
+                        DrawSvgTextPath(skCanvas, skSize, svgTextPath);
+                    }
+                    break;
+                case SvgTextRef svgTextRef:
+                    {
+                        DrawSvgTextRef(skCanvas, skSize, svgTextRef);
+                    }
+                    break;
+                case SvgTextSpan svgTextSpan:
+                    {
+                        DrawSvgTextSpan(skCanvas, skSize, svgTextSpan);
                     }
                     break;
             }
