@@ -534,62 +534,6 @@ namespace Svg.Skia
             return null;
         }
 
-        private static void DrawSvgFragment(SKCanvas skCanvas, SKSize skSize, SvgFragment svgFragment)
-        {
-            if (SetOpacity(skCanvas, svgFragment) == null)
-            {
-                skCanvas.Save();
-            }
-            SetTransform(skCanvas, svgFragment.Transforms);
-
-            float x = svgFragment.X.ToDeviceValue(null, UnitRenderingType.Horizontal, svgFragment);
-            float y = svgFragment.Y.ToDeviceValue(null, UnitRenderingType.Vertical, svgFragment);
-            float width = svgFragment.Width.ToDeviceValue(null, UnitRenderingType.Horizontal, svgFragment);
-            float height = svgFragment.Height.ToDeviceValue(null, UnitRenderingType.Vertical, svgFragment);
-
-            SetSvgViewBoxTransform(skCanvas, svgFragment.ViewBox, svgFragment.AspectRatio, x, y, width, height);
-
-            DrawSvgElementCollection(skCanvas, svgFragment.Children, skSize);
-
-            skCanvas.Restore();
-        }
-
-        private static void DrawSvgSymbol(SKCanvas skCanvas, SKSize skSize, SvgSymbol svgSymbol)
-        {
-            if (SetOpacity(skCanvas, svgSymbol) == null)
-            {
-                skCanvas.Save();
-            }
-            SetTransform(skCanvas, svgSymbol.Transforms);
-
-            float x = 0f;
-            float y = 0f;
-            float width = svgSymbol.ViewBox.Width;
-            float height = svgSymbol.ViewBox.Height;
-
-            if (svgSymbol.CustomAttributes.TryGetValue("width", out string _widthString))
-            {
-                if (new SvgUnitConverter().ConvertFrom(_widthString) is SvgUnit _width)
-                {
-                    width = _width.ToDeviceValue(null, UnitRenderingType.Horizontal, svgSymbol);
-                }
-            }
-
-            if (svgSymbol.CustomAttributes.TryGetValue("height", out string heightString))
-            {
-                if (new SvgUnitConverter().ConvertFrom(heightString) is SvgUnit _height)
-                {
-                    height = _height.ToDeviceValue(null, UnitRenderingType.Vertical, svgSymbol);
-                }
-            }
-
-            SetSvgViewBoxTransform(skCanvas, svgSymbol.ViewBox, svgSymbol.AspectRatio, x, y, width, height);
-
-            DrawSvgElementCollection(skCanvas, svgSymbol.Children, skSize);
-
-            skCanvas.Restore();
-        }
-
         private static bool ElementReferencesUri(SvgUse svgUse, SvgElement element, List<Uri> elementUris)
         {
             if (element is SvgUse useElement)
@@ -628,6 +572,62 @@ namespace Svg.Skia
             var refElement = svgUse.OwnerDocument.GetElementById(svgUse.ReferencedElement.ToString());
             var uris = new List<Uri>() { svgUse.ReferencedElement };
             return ElementReferencesUri(svgUse, refElement, uris);
+        }
+
+        private static void DrawSvgFragment(SKCanvas skCanvas, SKSize skSize, SvgFragment svgFragment)
+        {
+            if (SetOpacity(skCanvas, svgFragment) == null)
+            {
+                skCanvas.Save();
+            }
+            SetTransform(skCanvas, svgFragment.Transforms);
+
+            float x = svgFragment.X.ToDeviceValue(null, UnitRenderingType.Horizontal, svgFragment);
+            float y = svgFragment.Y.ToDeviceValue(null, UnitRenderingType.Vertical, svgFragment);
+            float width = svgFragment.Width.ToDeviceValue(null, UnitRenderingType.Horizontal, svgFragment);
+            float height = svgFragment.Height.ToDeviceValue(null, UnitRenderingType.Vertical, svgFragment);
+
+            SetSvgViewBoxTransform(skCanvas, svgFragment.ViewBox, svgFragment.AspectRatio, x, y, width, height);
+
+            DrawSvgElementCollection(skCanvas, skSize, svgFragment.Children);
+
+            skCanvas.Restore();
+        }
+
+        private static void DrawSvgSymbol(SKCanvas skCanvas, SKSize skSize, SvgSymbol svgSymbol)
+        {
+            if (SetOpacity(skCanvas, svgSymbol) == null)
+            {
+                skCanvas.Save();
+            }
+            SetTransform(skCanvas, svgSymbol.Transforms);
+
+            float x = 0f;
+            float y = 0f;
+            float width = svgSymbol.ViewBox.Width;
+            float height = svgSymbol.ViewBox.Height;
+
+            if (svgSymbol.CustomAttributes.TryGetValue("width", out string _widthString))
+            {
+                if (new SvgUnitConverter().ConvertFrom(_widthString) is SvgUnit _width)
+                {
+                    width = _width.ToDeviceValue(null, UnitRenderingType.Horizontal, svgSymbol);
+                }
+            }
+
+            if (svgSymbol.CustomAttributes.TryGetValue("height", out string heightString))
+            {
+                if (new SvgUnitConverter().ConvertFrom(heightString) is SvgUnit _height)
+                {
+                    height = _height.ToDeviceValue(null, UnitRenderingType.Vertical, svgSymbol);
+                }
+            }
+
+            SetSvgViewBoxTransform(skCanvas, svgSymbol.ViewBox, svgSymbol.AspectRatio, x, y, width, height);
+
+            DrawSvgElementCollection(skCanvas, skSize, svgSymbol.Children);
+
+            skCanvas.Restore();
         }
 
         private static void DrawSvgUse(SKCanvas skCanvas, SKSize skSize, SvgUse svgUse)
@@ -834,7 +834,7 @@ namespace Svg.Skia
             }
             SetTransform(skCanvas, svgGroup.Transforms);
 
-            DrawSvgElementCollection(skCanvas, svgGroup.Children, skSize);
+            DrawSvgElementCollection(skCanvas, skSize, svgGroup.Children);
 
             skCanvas.Restore();
         }
@@ -1036,7 +1036,7 @@ namespace Svg.Skia
             }
         }
 
-        private static void DrawSvgElementCollection(SKCanvas canvas, SvgElementCollection svgElementCollection, SKSize skSize)
+        private static void DrawSvgElementCollection(SKCanvas canvas, SKSize skSize, SvgElementCollection svgElementCollection)
         {
             foreach (var svgElement in svgElementCollection)
             {
