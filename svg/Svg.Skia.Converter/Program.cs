@@ -6,7 +6,6 @@ using System.CommandLine;
 using System.CommandLine.Invocation;
 using System.Diagnostics;
 using System.IO;
-using System.Text;
 using System.Threading.Tasks;
 using SkiaSharp;
 using Svg;
@@ -50,7 +49,7 @@ namespace Svg.Skia.Converter
                     if (!Directory.Exists(output))
                     {
                         Directory.CreateDirectory(output);
-                    }    
+                    }
                 }
 
                 var sw = Stopwatch.StartNew();
@@ -126,47 +125,47 @@ namespace Svg.Skia.Converter
 
         public static async Task<int> Main(string[] args)
         {
-            var optionFile = new Option(new [] { "--file", "-f" }, "The relative or absolute path to the input file")
+            var optionFile = new Option(new[] { "--file", "-f" }, "The relative or absolute path to the input file")
             {
                 Argument = new Argument<string>(defaultValue: () => null)
             };
 
-            var optionDirectory = new Option(new [] { "--directory", "-d" }, "The relative or absolute path to the input directory")
+            var optionDirectory = new Option(new[] { "--directory", "-d" }, "The relative or absolute path to the input directory")
             {
                 Argument = new Argument<string>(defaultValue: () => null)
             };
 
-            var optionOutput = new Option(new [] { "--output", "-o" }, "The relative or absolute path to the output directory")
+            var optionOutput = new Option(new[] { "--output", "-o" }, "The relative or absolute path to the output directory")
             {
                 Argument = new Argument<string>(defaultValue: () => null)
             };
 
-            var optionPattern = new Option(new [] { "--pattern", "-p" }, "The search string to match against the names of files in the input path")
+            var optionPattern = new Option(new[] { "--pattern", "-p" }, "The search string to match against the names of files in the input path")
             {
                 Argument = new Argument<string>(defaultValue: () => "*.svg")
             };
 
-            var optionFormat = new Option(new [] { "--format" }, "The output image format")
+            var optionFormat = new Option(new[] { "--format" }, "The output image format")
             {
                 Argument = new Argument<string>(defaultValue: () => "png")
             };
 
-            var optionQuality = new Option(new [] { "--quality" }, "The output image quality")
+            var optionQuality = new Option(new[] { "--quality" }, "The output image quality")
             {
                 Argument = new Argument<int>(defaultValue: () => 100)
             };
 
-            var optionScaleX = new Option(new [] { "--scaleX" }, "The output image horizontal scaling factor")
+            var optionScaleX = new Option(new[] { "--scaleX" }, "The output image horizontal scaling factor")
             {
                 Argument = new Argument<float>(defaultValue: () => 1f)
             };
 
-            var optionScaleY = new Option(new [] { "--scaleY" }, "The output image vertical scaling factor")
+            var optionScaleY = new Option(new[] { "--scaleY" }, "The output image vertical scaling factor")
             {
                 Argument = new Argument<float>(defaultValue: () => 1f)
             };
 
-            var optionDebug = new Option(new [] { "--debug" }, "The flag indicating whether to produce debug output to a file")
+            var optionDebug = new Option(new[] { "--debug" }, "The flag indicating whether to produce debug output to a file")
             {
                 Argument = new Argument<bool>()
             };
