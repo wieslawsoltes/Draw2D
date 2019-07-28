@@ -1083,30 +1083,35 @@ namespace Svg.Skia
             return Picture;
         }
 
-        public void Save(string path, SKEncodedImageFormat format = SKEncodedImageFormat.Png, int quality = 100, float scaleX = 1f, float scaleY = 1f)
+        public bool Save(string path, SKEncodedImageFormat format = SKEncodedImageFormat.Png, int quality = 100, float scaleX = 1f, float scaleY = 1f)
         {
             float width = Picture.CullRect.Width * scaleX;
             float height = Picture.CullRect.Height * scaleY;
-            var skImageInfo = new SKImageInfo((int)width, (int)height);
-            using (var skBitmap = new SKBitmap(skImageInfo))
-            using (var skCanvas = new SKCanvas(skBitmap))
+            if (width > 0 && height > 0)
             {
-                skCanvas.Save();
-                skCanvas.Scale(scaleX, scaleY);
-                skCanvas.DrawPicture(Picture);
-                skCanvas.Restore();
-                using (var skImage = SKImage.FromBitmap(skBitmap))
-                using (var skData = skImage.Encode(format, quality))
+                var skImageInfo = new SKImageInfo((int)width, (int)height);
+                using (var skBitmap = new SKBitmap(skImageInfo))
+                using (var skCanvas = new SKCanvas(skBitmap))
                 {
-                    if (skData != null)
+                    skCanvas.Save();
+                    skCanvas.Scale(scaleX, scaleY);
+                    skCanvas.DrawPicture(Picture);
+                    skCanvas.Restore();
+                    using (var skImage = SKImage.FromBitmap(skBitmap))
+                    using (var skData = skImage.Encode(format, quality))
                     {
-                        using (var stream = File.OpenWrite(path))
+                        if (skData != null)
                         {
-                            skData.SaveTo(stream);
+                            using (var stream = File.OpenWrite(path))
+                            {
+                                skData.SaveTo(stream);
+                                return true;
+                            }
                         }
                     }
                 }
             }
+            return false;
         }
     }
 }
