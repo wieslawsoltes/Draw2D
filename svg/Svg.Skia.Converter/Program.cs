@@ -24,11 +24,11 @@ namespace Svg.Skia.Demo
 
         static void Usage()
         {
-            Console.WriteLine($"Usage: Svg.Skia.Demo -f <file.svg>");
-            Console.WriteLine($"       Svg.Skia.Demo -d <indir> *.svg");
-            Console.WriteLine($"       Svg.Skia.Demo -d <indir> *.svg <outdir>");
-            Console.WriteLine($"       Svg.Skia.Demo -d . *.svg");
-            Console.WriteLine($"       Svg.Skia.Demo -d . *.svg <outdir>");
+            Console.WriteLine($"Usage: Svg.Skia.Converter -f <file.svg>");
+            Console.WriteLine($"       Svg.Skia.Converter -d <indir> *.svg");
+            Console.WriteLine($"       Svg.Skia.Converter -d <indir> *.svg <outdir>");
+            Console.WriteLine($"       Svg.Skia.Converter -d . *.svg");
+            Console.WriteLine($"       Svg.Skia.Converter -d . *.svg <outdir>");
         }
 
         static void Main(string[] args)
