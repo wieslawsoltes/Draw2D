@@ -57,12 +57,13 @@ namespace Svg.Skia.Converter
 
                 int success = 0;
 
-                foreach (var path in paths)
+                for (int i = 0; i < paths.Count; i++)
                 {
+                    var path = paths[i];
                     try
                     {
                         Console.ForegroundColor = ConsoleColor.Black;
-                        Console.WriteLine($"File: {path}");
+                        Console.WriteLine($"[{i}] File: {path}");
 
                         var extension = Path.GetExtension(path);
                         string imagePath = path.Remove(path.Length - extension.Length) + "." + format.ToLower();
@@ -96,13 +97,14 @@ namespace Svg.Skia.Converter
                         }
 
                         Console.ForegroundColor = ConsoleColor.Green;
-                        Console.WriteLine($"Succes: {imagePath}");
+                        Console.WriteLine($"[{i}] Succes: {imagePath}");
                         success++;
                     }
-                    catch (Exception)
+                    catch (Exception ex)
                     {
                         Console.ForegroundColor = ConsoleColor.Red;
-                        Console.WriteLine($"Error: {path}");
+                        Console.WriteLine($"[{i}] Error: {path}");
+                        Error(ex);
                     }
                 }
 
