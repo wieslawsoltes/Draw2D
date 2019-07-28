@@ -25,7 +25,18 @@ namespace Svg.Skia
 
         private static T GetReference<T>(SvgElement svgElement, Uri uri) where T : SvgElement
         {
-            return svgElement.OwnerDocument.GetElementById(uri.ToString()) as T;
+            if (uri == null)
+            {
+                return null;
+            }
+
+            var svgElementById = svgElement.OwnerDocument?.GetElementById(uri.ToString());
+            if (svgElementById != null)
+            {
+                return svgElementById as T;
+            }
+
+            return null;
         }
 
         private static SKColor GetColor(SvgColourServer svgColourServer, float opacity, bool forStroke = false)
@@ -631,10 +642,10 @@ namespace Svg.Skia
                 {
                     _parent.SetValue(svgVisualElement, svgUse);
                 }
-                else
-                {
-                    throw new Exception("Can not set 'use' referenced element parent.");
-                }
+                //else
+                //{
+                //    throw new Exception("Can not set 'use' referenced element parent.");
+                //}
 
                 svgVisualElement.InvalidateChildPaths();
 
@@ -656,19 +667,22 @@ namespace Svg.Skia
                     if (_attributes != null)
                     {
                         var attributes = _attributes.GetValue(svgVisualElement) as SvgAttributeCollection;
-                        var viewBox = attributes.GetAttribute<SvgViewBox>("viewBox");
-                        //var viewBox = svgVisualElement.Attributes.GetAttribute<SvgViewBox>("viewBox");
-                        if (viewBox != SvgViewBox.Empty && Math.Abs(ew - viewBox.Width) > float.Epsilon && Math.Abs(eh - viewBox.Height) > float.Epsilon)
+                        if (attributes != null)
                         {
-                            var sw = ew / viewBox.Width;
-                            var sh = eh / viewBox.Height;
-                            skCanvas.Translate(sw, sh);
+                            var viewBox = attributes.GetAttribute<SvgViewBox>("viewBox");
+                            //var viewBox = svgVisualElement.Attributes.GetAttribute<SvgViewBox>("viewBox");
+                            if (viewBox != SvgViewBox.Empty && Math.Abs(ew - viewBox.Width) > float.Epsilon && Math.Abs(eh - viewBox.Height) > float.Epsilon)
+                            {
+                                var sw = ew / viewBox.Width;
+                                var sh = eh / viewBox.Height;
+                                skCanvas.Translate(sw, sh);
+                            }
                         }
                     }
-                    else
-                    {
-                        throw new Exception("Can not get 'use' referenced element transform.");
-                    }
+                    //else
+                    //{
+                    //    throw new Exception("Can not get 'use' referenced element transform.");
+                    //}
                 }
 
                 if (svgVisualElement is SvgSymbol)
@@ -681,7 +695,14 @@ namespace Svg.Skia
                 }
 
                 //svgVisualElement.Parent = parent;
-                _parent.SetValue(svgVisualElement, parent);
+                if (_parent != null)
+                {
+                    _parent.SetValue(svgVisualElement, parent);
+                }
+                //else
+                //{
+                //    throw new Exception("Can not set 'use' referenced element parent.");
+                //}
 
                 skCanvas.Restore();
             }
