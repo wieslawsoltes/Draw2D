@@ -24,7 +24,7 @@ namespace Svg.Skia.Converter
             }
         }
 
-        public static void Execute(string file, string directory, string output, string pattern, string format, int quality, float scaleX, float scaleY, bool debug)
+        public static void Execute(string file, string directory, string output, string pattern, string format, int quality, float scaleX, float scaleY, bool debug, bool quiet)
         {
             try
             {
@@ -61,8 +61,11 @@ namespace Svg.Skia.Converter
                     var path = paths[i];
                     try
                     {
-                        Console.ForegroundColor = ConsoleColor.White;
-                        Console.WriteLine($"[{i}] File: {path}");
+                        if (quiet == false)
+                        {
+                            Console.ForegroundColor = ConsoleColor.White;
+                            Console.WriteLine($"[{i}] File: {path}"); 
+                        }
 
                         var extension = Path.GetExtension(path);
                         string imagePath = path.Remove(path.Length - extension.Length) + "." + format.ToLower();
@@ -95,21 +98,27 @@ namespace Svg.Skia.Converter
                             }
                         }
 
-                        Console.ForegroundColor = ConsoleColor.Green;
-                        Console.WriteLine($"[{i}] Succes: {imagePath}");
+                        if (quiet == false)
+                        {
+                            Console.ForegroundColor = ConsoleColor.Green;
+                            Console.WriteLine($"[{i}] Succes: {imagePath}"); 
+                        }
                         success++;
                     }
                     catch (Exception ex)
                     {
-                        Console.ForegroundColor = ConsoleColor.Red;
-                        Console.WriteLine($"[{i}] Error: {path}");
+                        if (quiet == false)
+                        {
+                            Console.ForegroundColor = ConsoleColor.Red;
+                            Console.WriteLine($"[{i}] Error: {path}"); 
+                        }
                         Error(ex);
                     }
                 }
 
                 sw.Stop();
 
-                if (paths.Count > 0)
+                if (quiet == false && paths.Count > 0)
                 {
                     Console.ForegroundColor = ConsoleColor.White;
                     Console.WriteLine($"Done: {sw.Elapsed} ({success}/{paths.Count})");
@@ -118,8 +127,11 @@ namespace Svg.Skia.Converter
             }
             catch (Exception ex)
             {
-                Console.ResetColor();
-                Error(ex);
+                if (quiet == false)
+                {
+                    Console.ResetColor();
+                    Error(ex); 
+                }
             }
         }
 
@@ -165,7 +177,12 @@ namespace Svg.Skia.Converter
                 Argument = new Argument<float>(defaultValue: () => 1f)
             };
 
-            var optionDebug = new Option(new[] { "--debug" }, "The flag indicating whether to produce debug output to a file")
+            var optionDebug = new Option(new[] { "--debug" }, "Write debug output to a file")
+            {
+                Argument = new Argument<bool>()
+            };
+
+            var optionQuiet = new Option(new[] { "--quiet" }, "Set verbosity level to quiet")
             {
                 Argument = new Argument<bool>()
             };
@@ -184,6 +201,7 @@ namespace Svg.Skia.Converter
             rootCommand.AddOption(optionScaleX);
             rootCommand.AddOption(optionScaleY);
             rootCommand.AddOption(optionDebug);
+            rootCommand.AddOption(optionQuiet);
 
             rootCommand.Handler = CommandHandler.Create(typeof(Program).GetMethod(nameof(Execute)));
 
