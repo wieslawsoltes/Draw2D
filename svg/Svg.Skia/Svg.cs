@@ -211,6 +211,34 @@ namespace Svg.Skia
                     svgUnit);
         }
 
+        private static SKPathEffect CreateDash(SvgElement svgElement, float strokeWidth)
+        {
+            var strokeDashArray = svgElement.StrokeDashArray;
+
+            if (strokeDashArray != null && strokeDashArray.Count >= 2 && strokeDashArray.Count % 2 == 0)
+            {
+                float[] intervals = new float[strokeDashArray.Count];
+                for (int i = 0; i < strokeDashArray.Count; i++)
+                {
+                    var dash = strokeDashArray[i].ToDeviceValue(null, UnitRenderingType.Other, svgElement);
+                    var interval = (dash <= 0) ? 1 : dash;
+                    intervals[i] = interval * strokeWidth;
+                }
+
+                var dashOffset = svgElement.StrokeDashOffset != null ? svgElement.StrokeDashOffset : 0;
+                var phase = 0f;
+                if (dashOffset != 0)
+                {
+                    var dashOffsetValue = dashOffset.ToDeviceValue(null, UnitRenderingType.Other, svgElement);
+                    phase = (dashOffsetValue <= 0) ? 1 : dashOffsetValue * strokeWidth;
+                }
+
+                return SKPathEffect.CreateDash(intervals, phase);
+            }
+
+            return null;
+        }
+
         private static SKShader CreateLinearGradient(SvgLinearGradientServer svgLinearGradientServer, SKSize skSize)
         {
             // TODO:
@@ -459,6 +487,16 @@ namespace Svg.Skia
             }
         }
 
+        private static void SetDash(SvgVisualElement svgVisualElement, SKPaint skPaint, CompositeDisposable disposable)
+        {
+            var dash = CreateDash(svgVisualElement, skPaint.StrokeWidth);
+            if (dash != null)
+            {
+                disposable.Disposables.Add(dash);
+                skPaint.PathEffect = dash;
+            }
+        }
+
         private static void SetFilter(SvgVisualElement svgVisualElement, SKPaint skPaint, CompositeDisposable disposable)
         {
             var svgFilter = GetReference<SvgFilter>(svgVisualElement, svgVisualElement.Filter);
@@ -510,11 +548,26 @@ namespace Svg.Skia
             }
         }
 
+        private static bool IsAntialias(SvgElement svgElement)
+        {
+            switch (svgElement.ShapeRendering)
+            {
+                case SvgShapeRendering.Inherit:
+                case SvgShapeRendering.Auto:
+                default:
+                    return true;
+                case SvgShapeRendering.OptimizeSpeed:
+                case SvgShapeRendering.CrispEdges:
+                case SvgShapeRendering.GeometricPrecision:
+                    return false;
+            }
+        }
+
         private static SKPaint GetFillSKPaint(SvgVisualElement svgVisualElement, SKSize skSize, CompositeDisposable disposable)
         {
             var skPaint = new SKPaint()
             {
-                IsAntialias = true
+                IsAntialias = IsAntialias(svgVisualElement)
             };
 
             // TODO: SvgElement
@@ -544,18 +597,52 @@ namespace Svg.Skia
         {
             var skPaint = new SKPaint()
             {
-                IsAntialias = true
+                IsAntialias = IsAntialias(svgVisualElement)
             };
 
             // TODO: SvgElement
 
             // TODO: SvgElementStyle
+
             if (svgVisualElement.Stroke != null)
             {
                 SetStroke(svgVisualElement, skSize, skPaint, disposable);
             }
 
+            switch (svgVisualElement.StrokeLineCap)
+            {
+                case SvgStrokeLineCap.Butt:
+                    skPaint.StrokeCap = SKStrokeCap.Butt;
+                    break;
+                case SvgStrokeLineCap.Round:
+                    skPaint.StrokeCap = SKStrokeCap.Round;
+                    break;
+                case SvgStrokeLineCap.Square:
+                    skPaint.StrokeCap = SKStrokeCap.Square;
+                    break;
+            }
+
+            switch (svgVisualElement.StrokeLineJoin)
+            {
+                case SvgStrokeLineJoin.Miter:
+                    skPaint.StrokeJoin = SKStrokeJoin.Miter;
+                    break;
+                case SvgStrokeLineJoin.Round:
+                    skPaint.StrokeJoin = SKStrokeJoin.Round;
+                    break;
+                case SvgStrokeLineJoin.Bevel:
+                    skPaint.StrokeJoin = SKStrokeJoin.Bevel;
+                    break;
+            }
+
+            skPaint.StrokeMiter = svgVisualElement.StrokeMiterLimit;
+
             skPaint.StrokeWidth = svgVisualElement.StrokeWidth.ToDeviceValue(null, UnitRenderingType.Other, svgVisualElement);
+
+            if (svgVisualElement.StrokeDashArray != null)
+            {
+                SetDash(svgVisualElement, skPaint, disposable);
+            }
 
             // TODO: SvgVisualElement
 
