@@ -1365,10 +1365,16 @@ namespace Svg.Skia
 
         public SKPicture Load(string path)
         {
-            using (var stream = File.OpenRead(path))
+            Reset();
+            var svgDocument = SvgDocument.Open<SvgDocument>(path, null);
+            if (svgDocument != null)
             {
-                return Load(stream);
+                svgDocument.FlushStyles(true);
+                Picture = Load(svgDocument);
+                Document = svgDocument;
+                return Picture;
             }
+            return null;
         }
 
         public bool Save(Stream stream, SKEncodedImageFormat format = SKEncodedImageFormat.Png, int quality = 100, float scaleX = 1f, float scaleY = 1f)
