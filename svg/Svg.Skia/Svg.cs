@@ -18,7 +18,26 @@ using Svg.Transforms;
 
 namespace Svg.Skia
 {
-    public class Svg
+    internal class CompositeDisposable : IDisposable
+    {
+        public IList<IDisposable> Disposables { get; private set; }
+
+        public CompositeDisposable()
+        {
+            Disposables = new List<IDisposable>();
+        }
+
+        public void Dispose()
+        {
+            foreach (var disposable in Disposables)
+            {
+                disposable?.Dispose();
+            }
+            Disposables = null;
+        }
+    }
+
+    public class Svg : IDisposable
     {
         public SKPicture Picture { get; set; }
 
@@ -346,7 +365,7 @@ namespace Svg.Skia
             return sKShader;
         }
 
-        private static void SetFill(SvgVisualElement svgVisualElement, SKSize skSize, SKPaint skPaint)
+        private static void SetFill(SvgVisualElement svgVisualElement, SKSize skSize, SKPaint skPaint, CompositeDisposable disposable)
         {
             switch (svgVisualElement.Fill)
             {
@@ -362,14 +381,22 @@ namespace Svg.Skia
                     break;
                 case SvgLinearGradientServer svgLinearGradientServer:
                     {
-                        // TODO: Dispose SKShader.
-                        skPaint.Shader = CreateLinearGradient(svgLinearGradientServer, skSize);
+                        var skShader = CreateLinearGradient(svgLinearGradientServer, skSize);
+                        if (skShader != null)
+                        {
+                            disposable.Disposables.Add(skShader);
+                            skPaint.Shader = skShader;
+                        }
                     }
                     break;
                 case SvgRadialGradientServer svgRadialGradientServer:
                     {
-                        // TODO: Dispose SKShader.
-                        skPaint.Shader = CreateTwoPointConicalGradient(svgRadialGradientServer, skSize);
+                        var skShader = CreateTwoPointConicalGradient(svgRadialGradientServer, skSize);
+                        if (skShader != null)
+                        {
+                            disposable.Disposables.Add(skShader);
+                            skPaint.Shader = skShader;
+                        }
                     }
                     break;
                 case SvgDeferredPaintServer svgDeferredPaintServer:
@@ -387,7 +414,7 @@ namespace Svg.Skia
             }
         }
 
-        private static void SetStroke(SvgVisualElement svgVisualElement, SKSize skSize, SKPaint skPaint)
+        private static void SetStroke(SvgVisualElement svgVisualElement, SKSize skSize, SKPaint skPaint, CompositeDisposable disposable)
         {
             switch (svgVisualElement.Stroke)
             {
@@ -427,7 +454,7 @@ namespace Svg.Skia
             }
         }
 
-        private static void SetFilter(SvgVisualElement svgVisualElement, SKPaint skPaint)
+        private static void SetFilter(SvgVisualElement svgVisualElement, SKPaint skPaint, CompositeDisposable disposable)
         {
             var svgFilter = GetReference<SvgFilter>(svgVisualElement, svgVisualElement.Filter);
             if (svgFilter == null)
@@ -451,7 +478,11 @@ namespace Svg.Skia
                                 // TODO:
                                 var sigma = svgGaussianBlur.StdDeviation;
                                 var skImageFilter = SKImageFilter.CreateBlur(sigma, sigma);
-                                skPaint.ImageFilter = skImageFilter; // TODO: Dispose.
+                                if (skImageFilter != null)
+                                {
+                                    disposable.Disposables.Add(skImageFilter);
+                                    skPaint.ImageFilter = skImageFilter;
+                                }
                             }
                             break;
                         case SvgMerge svgMerge:
@@ -474,7 +505,7 @@ namespace Svg.Skia
             }
         }
 
-        private static SKPaint GetFillSKPaint(SvgVisualElement svgVisualElement, SKSize skSize)
+        private static SKPaint GetFillSKPaint(SvgVisualElement svgVisualElement, SKSize skSize, CompositeDisposable disposable)
         {
             var skPaint = new SKPaint()
             {
@@ -487,14 +518,14 @@ namespace Svg.Skia
 
             if (svgVisualElement.Fill != null)
             {
-                SetFill(svgVisualElement, skSize, skPaint);
+                SetFill(svgVisualElement, skSize, skPaint, disposable);
             }
 
             // TODO: SvgVisualElement
 
             if (svgVisualElement.Filter != null)
             {
-                SetFilter(svgVisualElement, skPaint);
+                SetFilter(svgVisualElement, skPaint, disposable);
             }
 
             // TODO: SvgVisualElementStyle
@@ -504,7 +535,7 @@ namespace Svg.Skia
             return skPaint;
         }
 
-        private static SKPaint GetStrokeSKPaint(SvgVisualElement svgVisualElement, SKSize skSize)
+        private static SKPaint GetStrokeSKPaint(SvgVisualElement svgVisualElement, SKSize skSize, CompositeDisposable disposable)
         {
             var skPaint = new SKPaint()
             {
@@ -516,7 +547,7 @@ namespace Svg.Skia
             // TODO: SvgElementStyle
             if (svgVisualElement.Stroke != null)
             {
-                SetStroke(svgVisualElement, skSize, skPaint);
+                SetStroke(svgVisualElement, skSize, skPaint, disposable);
             }
 
             skPaint.StrokeWidth = svgVisualElement.StrokeWidth.ToDeviceValue(null, UnitRenderingType.Other, svgVisualElement);
@@ -525,7 +556,7 @@ namespace Svg.Skia
 
             if (svgVisualElement.Filter != null)
             {
-                SetFilter(svgVisualElement, skPaint);
+                SetFilter(svgVisualElement, skPaint, disposable);
             }
 
             // TODO: SvgVisualElementStyle
@@ -682,7 +713,7 @@ namespace Svg.Skia
             skCanvas.SetMatrix(totalSKMatrix);
         }
 
-        private static SKPaint SetOpacity(SKCanvas skCanvas, SvgElement svgElement)
+        private static SKPaint SetOpacity(SKCanvas skCanvas, SvgElement svgElement, CompositeDisposable disposable)
         {
             float opacity = AdjustSvgOpacity(svgElement.Opacity);
             bool canSetOpacity = true;
@@ -696,8 +727,8 @@ namespace Svg.Skia
             if (opacity < 1f && canSetOpacity)
             {
                 var paint = GetSKPaintOpacity(opacity);
-                skCanvas.SaveLayer(paint);
-                return paint; // TODO: Dispose;
+                disposable.Disposables.Add(paint);
+                return paint;
             }
 
             return null;
@@ -743,9 +774,9 @@ namespace Svg.Skia
             return ElementReferencesUri(svgUse, refElement, uris);
         }
 
-        private static void DrawSvgFragment(SKCanvas skCanvas, SKSize skSize, SvgFragment svgFragment)
+        private static void DrawSvgFragment(SKCanvas skCanvas, SKSize skSize, SvgFragment svgFragment, CompositeDisposable disposable)
         {
-            if (SetOpacity(skCanvas, svgFragment) == null)
+            if (SetOpacity(skCanvas, svgFragment, disposable) == null)
             {
                 skCanvas.Save();
             }
@@ -758,14 +789,14 @@ namespace Svg.Skia
 
             SetSvgViewBoxTransform(skCanvas, svgFragment.ViewBox, svgFragment.AspectRatio, x, y, width, height);
 
-            DrawSvgElementCollection(skCanvas, skSize, svgFragment.Children);
+            DrawSvgElementCollection(skCanvas, skSize, svgFragment.Children, disposable);
 
             skCanvas.Restore();
         }
 
-        private static void DrawSvgSymbol(SKCanvas skCanvas, SKSize skSize, SvgSymbol svgSymbol)
+        private static void DrawSvgSymbol(SKCanvas skCanvas, SKSize skSize, SvgSymbol svgSymbol, CompositeDisposable disposable)
         {
-            if (SetOpacity(skCanvas, svgSymbol) == null)
+            if (SetOpacity(skCanvas, svgSymbol, disposable) == null)
             {
                 skCanvas.Save();
             }
@@ -794,22 +825,22 @@ namespace Svg.Skia
 
             SetSvgViewBoxTransform(skCanvas, svgSymbol.ViewBox, svgSymbol.AspectRatio, x, y, width, height);
 
-            DrawSvgElementCollection(skCanvas, skSize, svgSymbol.Children);
+            DrawSvgElementCollection(skCanvas, skSize, svgSymbol.Children, disposable);
 
             skCanvas.Restore();
         }
 
-        private static void DrawSvgImage(SKCanvas skCanvas, SKSize skSize, SvgImage svgImage)
+        private static void DrawSvgImage(SKCanvas skCanvas, SKSize skSize, SvgImage svgImage, CompositeDisposable disposable)
         {
             // TODO:
         }
 
-        private static void DrawSvgSwitch(SKCanvas skCanvas, SKSize skSize, SvgSwitch svgSwitch)
+        private static void DrawSvgSwitch(SKCanvas skCanvas, SKSize skSize, SvgSwitch svgSwitch, CompositeDisposable disposable)
         {
             // TODO:
         }
 
-        private static void DrawSvgUse(SKCanvas skCanvas, SKSize skSize, SvgUse svgUse)
+        private static void DrawSvgUse(SKCanvas skCanvas, SKSize skSize, SvgUse svgUse, CompositeDisposable disposable)
         {
             var svgVisualElement = GetReference<SvgVisualElement>(svgUse, svgUse.ReferencedElement);
             if (svgVisualElement != null && !HasRecursiveReference(svgUse))
@@ -828,7 +859,7 @@ namespace Svg.Skia
 
                 svgVisualElement.InvalidateChildPaths();
 
-                if (SetOpacity(skCanvas, svgUse) == null)
+                if (SetOpacity(skCanvas, svgUse, disposable) == null)
                 {
                     skCanvas.Save();
                 }
@@ -866,11 +897,11 @@ namespace Svg.Skia
 
                 if (svgVisualElement is SvgSymbol)
                 {
-                    DrawSvgSymbol(skCanvas, skSize, svgVisualElement as SvgSymbol);
+                    DrawSvgSymbol(skCanvas, skSize, svgVisualElement as SvgSymbol, disposable);
                 }
                 else
                 {
-                    DrawSvgElement(skCanvas, skSize, svgVisualElement);
+                    DrawSvgElement(skCanvas, skSize, svgVisualElement, disposable);
                 }
 
                 //svgVisualElement.Parent = parent;
@@ -887,14 +918,14 @@ namespace Svg.Skia
             }
         }
 
-        private static void DrawSvgForeignObject(SKCanvas skCanvas, SKSize skSize, SvgForeignObject svgForeignObject)
+        private static void DrawSvgForeignObject(SKCanvas skCanvas, SKSize skSize, SvgForeignObject svgForeignObject, CompositeDisposable disposable)
         {
             // TODO:
         }
 
-        private static void DrawSvgCircle(SKCanvas skCanvas, SKSize skSize, SvgCircle svgCircle)
+        private static void DrawSvgCircle(SKCanvas skCanvas, SKSize skSize, SvgCircle svgCircle, CompositeDisposable disposable)
         {
-            if (SetOpacity(skCanvas, svgCircle) == null)
+            if (SetOpacity(skCanvas, svgCircle, disposable) == null)
             {
                 skCanvas.Save();
             }
@@ -908,7 +939,7 @@ namespace Svg.Skia
 
             if (svgCircle.Fill != null)
             {
-                using (var skPaint = GetFillSKPaint(svgCircle, skSize))
+                using (var skPaint = GetFillSKPaint(svgCircle, skSize, disposable))
                 {
                     skCanvas.DrawCircle(cx, cy, radius, skPaint);
                 }
@@ -916,7 +947,7 @@ namespace Svg.Skia
 
             if (svgCircle.Stroke != null)
             {
-                using (var skPaint = GetStrokeSKPaint(svgCircle, skSize))
+                using (var skPaint = GetStrokeSKPaint(svgCircle, skSize, disposable))
                 {
                     skCanvas.DrawCircle(cx, cy, radius, skPaint);
                 }
@@ -925,9 +956,9 @@ namespace Svg.Skia
             skCanvas.Restore();
         }
 
-        private static void DrawSvgEllipse(SKCanvas skCanvas, SKSize skSize, SvgEllipse svgEllipse)
+        private static void DrawSvgEllipse(SKCanvas skCanvas, SKSize skSize, SvgEllipse svgEllipse, CompositeDisposable disposable)
         {
-            if (SetOpacity(skCanvas, svgEllipse) == null)
+            if (SetOpacity(skCanvas, svgEllipse, disposable) == null)
             {
                 skCanvas.Save();
             }
@@ -942,7 +973,7 @@ namespace Svg.Skia
 
             if (svgEllipse.Fill != null)
             {
-                using (var skPaint = GetFillSKPaint(svgEllipse, skSize))
+                using (var skPaint = GetFillSKPaint(svgEllipse, skSize, disposable))
                 {
                     skCanvas.DrawOval(cx, cy, rx, ry, skPaint);
                 }
@@ -950,7 +981,7 @@ namespace Svg.Skia
 
             if (svgEllipse.Stroke != null)
             {
-                using (var skPaint = GetStrokeSKPaint(svgEllipse, skSize))
+                using (var skPaint = GetStrokeSKPaint(svgEllipse, skSize, disposable))
                 {
                     skCanvas.DrawOval(cx, cy, rx, ry, skPaint);
                 }
@@ -959,9 +990,9 @@ namespace Svg.Skia
             skCanvas.Restore();
         }
 
-        private static void DrawSvgRectangle(SKCanvas skCanvas, SKSize skSize, SvgRectangle svgRectangle)
+        private static void DrawSvgRectangle(SKCanvas skCanvas, SKSize skSize, SvgRectangle svgRectangle, CompositeDisposable disposable)
         {
-            if (SetOpacity(skCanvas, svgRectangle) == null)
+            if (SetOpacity(skCanvas, svgRectangle, disposable) == null)
             {
                 skCanvas.Save();
             }
@@ -979,7 +1010,7 @@ namespace Svg.Skia
 
             if (svgRectangle.Fill != null)
             {
-                using (var skPaint = GetFillSKPaint(svgRectangle, skSize))
+                using (var skPaint = GetFillSKPaint(svgRectangle, skSize, disposable))
                 {
                     if (isRound)
                     {
@@ -994,7 +1025,7 @@ namespace Svg.Skia
 
             if (svgRectangle.Stroke != null)
             {
-                using (var skPaint = GetStrokeSKPaint(svgRectangle, skSize))
+                using (var skPaint = GetStrokeSKPaint(svgRectangle, skSize, disposable))
                 {
                     if (isRound)
                     {
@@ -1010,32 +1041,32 @@ namespace Svg.Skia
             skCanvas.Restore();
         }
 
-        private static void DrawSvgMarker(SKCanvas skCanvas, SKSize skSize, SvgMarker svgMarker)
+        private static void DrawSvgMarker(SKCanvas skCanvas, SKSize skSize, SvgMarker svgMarker, CompositeDisposable disposable)
         {
             // TODO:
         }
 
-        private static void DrawSvgGlyph(SKCanvas skCanvas, SKSize skSize, SvgGlyph svgGlyph)
+        private static void DrawSvgGlyph(SKCanvas skCanvas, SKSize skSize, SvgGlyph svgGlyph, CompositeDisposable disposable)
         {
             // TODO:
         }
 
-        private static void DrawSvgGroup(SKCanvas skCanvas, SKSize skSize, SvgGroup svgGroup)
+        private static void DrawSvgGroup(SKCanvas skCanvas, SKSize skSize, SvgGroup svgGroup, CompositeDisposable disposable)
         {
-            if (SetOpacity(skCanvas, svgGroup) == null)
+            if (SetOpacity(skCanvas, svgGroup, disposable) == null)
             {
                 skCanvas.Save();
             }
             SetTransform(skCanvas, svgGroup.Transforms);
 
-            DrawSvgElementCollection(skCanvas, skSize, svgGroup.Children);
+            DrawSvgElementCollection(skCanvas, skSize, svgGroup.Children, disposable);
 
             skCanvas.Restore();
         }
 
-        private static void DrawSvgLine(SKCanvas skCanvas, SKSize skSize, SvgLine svgLine)
+        private static void DrawSvgLine(SKCanvas skCanvas, SKSize skSize, SvgLine svgLine, CompositeDisposable disposable)
         {
-            if (SetOpacity(skCanvas, svgLine) == null)
+            if (SetOpacity(skCanvas, svgLine, disposable) == null)
             {
                 skCanvas.Save();
             }
@@ -1054,7 +1085,7 @@ namespace Svg.Skia
 
             if (svgLine.Stroke != null)
             {
-                using (var skPaint = GetStrokeSKPaint(svgLine, skSize))
+                using (var skPaint = GetStrokeSKPaint(svgLine, skSize, disposable))
                 {
                     skCanvas.DrawLine(x0, y0, x1, y1, skPaint);
                 }
@@ -1063,9 +1094,9 @@ namespace Svg.Skia
             skCanvas.Restore();
         }
 
-        private static void DrawSvgPath(SKCanvas skCanvas, SKSize skSize, SvgPath svgPath)
+        private static void DrawSvgPath(SKCanvas skCanvas, SKSize skSize, SvgPath svgPath, CompositeDisposable disposable)
         {
-            if (SetOpacity(skCanvas, svgPath) == null)
+            if (SetOpacity(skCanvas, svgPath, disposable) == null)
             {
                 skCanvas.Save();
             }
@@ -1079,7 +1110,7 @@ namespace Svg.Skia
 
                     if (svgPath.Fill != null)
                     {
-                        using (var skPaint = GetFillSKPaint(svgPath, skSize))
+                        using (var skPaint = GetFillSKPaint(svgPath, skSize, disposable))
                         {
                             skCanvas.DrawPath(skPath, skPaint);
                         }
@@ -1087,7 +1118,7 @@ namespace Svg.Skia
 
                     if (svgPath.Stroke != null)
                     {
-                        using (var skPaint = GetStrokeSKPaint(svgPath, skSize))
+                        using (var skPaint = GetStrokeSKPaint(svgPath, skSize, disposable))
                         {
                             skCanvas.DrawPath(skPath, skPaint);
                         }
@@ -1098,9 +1129,9 @@ namespace Svg.Skia
             skCanvas.Restore();
         }
 
-        private static void DrawSvgPolyline(SKCanvas skCanvas, SKSize skSize, SvgPolyline svgPolyline)
+        private static void DrawSvgPolyline(SKCanvas skCanvas, SKSize skSize, SvgPolyline svgPolyline, CompositeDisposable disposable)
         {
-            if (SetOpacity(skCanvas, svgPolyline) == null)
+            if (SetOpacity(skCanvas, svgPolyline, disposable) == null)
             {
                 skCanvas.Save();
             }
@@ -1114,7 +1145,7 @@ namespace Svg.Skia
 
                     if (svgPolyline.Fill != null)
                     {
-                        using (var skPaint = GetFillSKPaint(svgPolyline, skSize))
+                        using (var skPaint = GetFillSKPaint(svgPolyline, skSize, disposable))
                         {
                             skCanvas.DrawPath(skPath, skPaint);
                         }
@@ -1122,7 +1153,7 @@ namespace Svg.Skia
 
                     if (svgPolyline.Stroke != null)
                     {
-                        using (var skPaint = GetStrokeSKPaint(svgPolyline, skSize))
+                        using (var skPaint = GetStrokeSKPaint(svgPolyline, skSize, disposable))
                         {
                             skCanvas.DrawPath(skPath, skPaint);
                         }
@@ -1133,9 +1164,9 @@ namespace Svg.Skia
             skCanvas.Restore();
         }
 
-        private static void DrawSvgPolygon(SKCanvas skCanvas, SKSize skSize, SvgPolygon svgPolygon)
+        private static void DrawSvgPolygon(SKCanvas skCanvas, SKSize skSize, SvgPolygon svgPolygon, CompositeDisposable disposable)
         {
-            if (SetOpacity(skCanvas, svgPolygon) == null)
+            if (SetOpacity(skCanvas, svgPolygon, disposable) == null)
             {
                 skCanvas.Save();
             }
@@ -1149,7 +1180,7 @@ namespace Svg.Skia
 
                     if (svgPolygon.Fill != null)
                     {
-                        using (var skPaint = GetFillSKPaint(svgPolygon, skSize))
+                        using (var skPaint = GetFillSKPaint(svgPolygon, skSize, disposable))
                         {
                             skCanvas.DrawPath(skPath, skPaint);
                         }
@@ -1157,7 +1188,7 @@ namespace Svg.Skia
 
                     if (svgPolygon.Stroke != null)
                     {
-                        using (var skPaint = GetStrokeSKPaint(svgPolygon, skSize))
+                        using (var skPaint = GetStrokeSKPaint(svgPolygon, skSize, disposable))
                         {
                             skCanvas.DrawPath(skPath, skPaint);
                         }
@@ -1168,123 +1199,123 @@ namespace Svg.Skia
             skCanvas.Restore();
         }
 
-        private static void DrawSvgText(SKCanvas skCanvas, SKSize skSize, SvgText svgText)
+        private static void DrawSvgText(SKCanvas skCanvas, SKSize skSize, SvgText svgText, CompositeDisposable disposable)
         {
             // TODO:
         }
 
-        private static void DrawSvgTextPath(SKCanvas skCanvas, SKSize skSize, SvgTextPath svgTextPath)
+        private static void DrawSvgTextPath(SKCanvas skCanvas, SKSize skSize, SvgTextPath svgTextPath, CompositeDisposable disposable)
         {
             // TODO:
         }
 
-        private static void DrawSvgTextRef(SKCanvas skCanvas, SKSize skSize, SvgTextRef svgTextRef)
+        private static void DrawSvgTextRef(SKCanvas skCanvas, SKSize skSize, SvgTextRef svgTextRef, CompositeDisposable disposable)
         {
             // TODO:
         }
 
-        private static void DrawSvgTextSpan(SKCanvas skCanvas, SKSize skSize, SvgTextSpan svgTextSpan)
+        private static void DrawSvgTextSpan(SKCanvas skCanvas, SKSize skSize, SvgTextSpan svgTextSpan, CompositeDisposable disposable)
         {
             // TODO:
         }
 
-        private static void DrawSvgElement(SKCanvas skCanvas, SKSize skSize, SvgElement svgElement)
+        private static void DrawSvgElement(SKCanvas skCanvas, SKSize skSize, SvgElement svgElement, CompositeDisposable disposable)
         {
             switch (svgElement)
             {
                 case SvgFragment svgFragment:
                     {
-                        DrawSvgFragment(skCanvas, skSize, svgFragment);
+                        DrawSvgFragment(skCanvas, skSize, svgFragment, disposable);
                     }
                     break;
                 case SvgImage svgImage:
                     {
-                        DrawSvgImage(skCanvas, skSize, svgImage);
+                        DrawSvgImage(skCanvas, skSize, svgImage, disposable);
                     }
                     break;
                 case SvgSwitch svgSwitch:
                     {
-                        DrawSvgSwitch(skCanvas, skSize, svgSwitch);
+                        DrawSvgSwitch(skCanvas, skSize, svgSwitch, disposable);
                     }
                     break;
                 case SvgUse svgUse:
                     {
-                        DrawSvgUse(skCanvas, skSize, svgUse);
+                        DrawSvgUse(skCanvas, skSize, svgUse, disposable);
                     }
                     break;
                 case SvgForeignObject svgForeignObject:
                     {
-                        DrawSvgForeignObject(skCanvas, skSize, svgForeignObject);
+                        DrawSvgForeignObject(skCanvas, skSize, svgForeignObject, disposable);
                     }
                     break;
                 case SvgCircle svgCircle:
                     {
-                        DrawSvgCircle(skCanvas, skSize, svgCircle);
+                        DrawSvgCircle(skCanvas, skSize, svgCircle, disposable);
                     }
                     break;
                 case SvgEllipse svgEllipse:
                     {
-                        DrawSvgEllipse(skCanvas, skSize, svgEllipse);
+                        DrawSvgEllipse(skCanvas, skSize, svgEllipse, disposable);
                     }
                     break;
                 case SvgRectangle svgRectangle:
                     {
-                        DrawSvgRectangle(skCanvas, skSize, svgRectangle);
+                        DrawSvgRectangle(skCanvas, skSize, svgRectangle, disposable);
                     }
                     break;
                 case SvgMarker svgMarker:
                     {
-                        DrawSvgMarker(skCanvas, skSize, svgMarker);
+                        DrawSvgMarker(skCanvas, skSize, svgMarker, disposable);
                     }
                     break;
                 case SvgGlyph svgGlyph:
                     {
-                        DrawSvgGlyph(skCanvas, skSize, svgGlyph);
+                        DrawSvgGlyph(skCanvas, skSize, svgGlyph, disposable);
                     }
                     break;
                 case SvgGroup svgGroup:
                     {
-                        DrawSvgGroup(skCanvas, skSize, svgGroup);
+                        DrawSvgGroup(skCanvas, skSize, svgGroup, disposable);
                     }
                     break;
                 case SvgLine svgLine:
                     {
-                        DrawSvgLine(skCanvas, skSize, svgLine);
+                        DrawSvgLine(skCanvas, skSize, svgLine, disposable);
                     }
                     break;
                 case SvgPath svgPath:
                     {
-                        DrawSvgPath(skCanvas, skSize, svgPath);
+                        DrawSvgPath(skCanvas, skSize, svgPath, disposable);
                     }
                     break;
                 case SvgPolyline svgPolyline:
                     {
-                        DrawSvgPolyline(skCanvas, skSize, svgPolyline);
+                        DrawSvgPolyline(skCanvas, skSize, svgPolyline, disposable);
                     }
                     break;
                 case SvgPolygon svgPolygon:
                     {
-                        DrawSvgPolygon(skCanvas, skSize, svgPolygon);
+                        DrawSvgPolygon(skCanvas, skSize, svgPolygon, disposable);
                     }
                     break;
                 case SvgText svgText:
                     {
-                        DrawSvgText(skCanvas, skSize, svgText);
+                        DrawSvgText(skCanvas, skSize, svgText, disposable);
                     }
                     break;
                 case SvgTextPath svgTextPath:
                     {
-                        DrawSvgTextPath(skCanvas, skSize, svgTextPath);
+                        DrawSvgTextPath(skCanvas, skSize, svgTextPath, disposable);
                     }
                     break;
                 case SvgTextRef svgTextRef:
                     {
-                        DrawSvgTextRef(skCanvas, skSize, svgTextRef);
+                        DrawSvgTextRef(skCanvas, skSize, svgTextRef, disposable);
                     }
                     break;
                 case SvgTextSpan svgTextSpan:
                     {
-                        DrawSvgTextSpan(skCanvas, skSize, svgTextSpan);
+                        DrawSvgTextSpan(skCanvas, skSize, svgTextSpan, disposable);
                     }
                     break;
                 default:
@@ -1292,57 +1323,64 @@ namespace Svg.Skia
             }
         }
 
-        private static void DrawSvgElementCollection(SKCanvas canvas, SKSize skSize, SvgElementCollection svgElementCollection)
+        private static void DrawSvgElementCollection(SKCanvas canvas, SKSize skSize, SvgElementCollection svgElementCollection, CompositeDisposable disposable)
         {
             foreach (var svgElement in svgElementCollection)
             {
-                DrawSvgElement(canvas, skSize, svgElement);
+                DrawSvgElement(canvas, skSize, svgElement, disposable);
             }
         }
 
-        public static SKPicture Load(SvgFragment svgFragment)
+        private static SKPicture Load(SvgFragment svgFragment)
         {
-            float width = svgFragment.Width.ToDeviceValue(null, UnitRenderingType.Horizontal, svgFragment);
-            float height = svgFragment.Height.ToDeviceValue(null, UnitRenderingType.Vertical, svgFragment);
-            var skSize = new SKSize(width, height);
-            var skSizeScaled = new SKSize(width, height);
-            using (var skPictureRecorder = new SKPictureRecorder())
-            using (var skCanvas = skPictureRecorder.BeginRecording(SKRect.Create(skSizeScaled)))
+            using (var disposable = new CompositeDisposable())
             {
-                skCanvas.Clear(SKColors.Transparent);
-                DrawSvgElement(skCanvas, skSize, svgFragment);
-                return skPictureRecorder.EndRecording();
+                float width = svgFragment.Width.ToDeviceValue(null, UnitRenderingType.Horizontal, svgFragment);
+                float height = svgFragment.Height.ToDeviceValue(null, UnitRenderingType.Vertical, svgFragment);
+                var skSize = new SKSize(width, height);
+                var cullRect = SKRect.Create(skSize);
+                using (var skPictureRecorder = new SKPictureRecorder())
+                using (var skCanvas = skPictureRecorder.BeginRecording(cullRect))
+                {
+                    skCanvas.Clear(SKColors.Transparent);
+                    DrawSvgElement(skCanvas, skSize, svgFragment, disposable);
+                    return skPictureRecorder.EndRecording();
+                }
             }
-        }
-
-        public SKPicture Load(string path)
-        {
-            var svgDocument = SvgDocument.Open<SvgDocument>(path, null);
-            if (svgDocument != null)
-            {
-                svgDocument.FlushStyles(true);
-                Picture = Load(svgDocument);
-                Document = svgDocument;
-            }
-            return Picture;
         }
 
         public SKPicture Load(Stream stream)
         {
+            Reset();
             var svgDocument = SvgDocument.Open<SvgDocument>(stream, null);
             if (svgDocument != null)
             {
                 svgDocument.FlushStyles(true);
                 Picture = Load(svgDocument);
                 Document = svgDocument;
+                return Picture;
             }
-            return Picture;
+            return null;
         }
 
-        public bool Save(string path, SKEncodedImageFormat format = SKEncodedImageFormat.Png, int quality = 100, float scaleX = 1f, float scaleY = 1f)
+        public SKPicture Load(string path)
         {
+            using (var stream = File.OpenRead(path))
+            {
+                return Load(stream);
+            }
+        }
+
+        public bool Save(Stream stream, SKEncodedImageFormat format = SKEncodedImageFormat.Png, int quality = 100, float scaleX = 1f, float scaleY = 1f)
+        {
+            if (Picture == null)
+            {
+                return false;
+            }
+
             float width = Picture.CullRect.Width * scaleX;
             float height = Picture.CullRect.Height * scaleY;
+
             if (width > 0 && height > 0)
             {
                 var skImageInfo = new SKImageInfo((int)width, (int)height);
@@ -1358,16 +1396,41 @@ namespace Svg.Skia
                     {
                         if (skData != null)
                         {
-                            using (var stream = File.OpenWrite(path))
-                            {
-                                skData.SaveTo(stream);
-                                return true;
-                            }
+                            skData.SaveTo(stream);
+                            return true;
                         }
                     }
                 }
             }
+
             return false;
+        }
+
+        public bool Save(string path, SKEncodedImageFormat format = SKEncodedImageFormat.Png, int quality = 100, float scaleX = 1f, float scaleY = 1f)
+        {
+            using (var stream = File.OpenWrite(path))
+            {
+                return Save(stream, format, quality, scaleX, scaleY);
+            }
+        }
+
+        public void Reset()
+        {
+            if (Picture != null)
+            {
+                Picture.Dispose();
+                Picture = null;
+            }
+
+            if (Document != null)
+            {
+                Document = null;
+            }
+        }
+
+        public void Dispose()
+        {
+            Reset();
         }
     }
 }
