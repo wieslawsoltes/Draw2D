@@ -26,7 +26,8 @@ Options:
   --quality <quality>            The output image quality
   --scaleX <scalex>              The output image horizontal scaling factor
   --scaleY <scaley>              The output image vertical scaling factor
-  --debug                        The flag indicating whether to produce debug output to a file
+  --debug                        Write debug output to a file
+  --quiet                        Set verbosity level to quiet
   --version                      Display version information
 ```
 
