@@ -87,6 +87,11 @@ namespace Svg.Skia
             return sb.ToString();
         }
 
+        private static SKPath ToSKPath(string svgPath)
+        {
+            return SKPath.ParseSvgPathData(svgPath);
+        }
+
         private static SKPath ToSKPath(SvgPathSegmentList svgPathSegmentList, SvgFillRule svgFillRule)
         {
             var skPath = new SKPath()
