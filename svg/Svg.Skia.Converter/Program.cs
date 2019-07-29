@@ -24,7 +24,7 @@ namespace Svg.Skia.Converter
             }
         }
 
-        public static bool Save(string path, string output, string format, int quality, float scaleX, float scaleY, bool debug, bool quiet)
+        public static bool Save(string path, string output, string format, int quality, float scaleX, float scaleY, bool debug, bool quiet, int i)
         {
             try
             {
@@ -122,7 +122,7 @@ namespace Svg.Skia.Converter
                 {
                     var path = paths[i];
 
-                    if (Save(path, output, format, quality, scaleX, scaleY, debug, quiet))
+                    if (Save(path, output, format, quality, scaleX, scaleY, debug, quiet, i))
                     {
                         success++;
                     }
