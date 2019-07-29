@@ -448,7 +448,6 @@ namespace Svg.Skia
                             break;
                         case SvgGaussianBlur svgGaussianBlur:
                             {
-                                
                                 // TODO:
                                 var sigma = svgGaussianBlur.StdDeviation;
                                 var skImageFilter = SKImageFilter.CreateBlur(sigma, sigma);
