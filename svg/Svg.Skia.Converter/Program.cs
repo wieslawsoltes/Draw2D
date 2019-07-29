@@ -24,7 +24,69 @@ namespace Svg.Skia.Converter
             }
         }
 
-        public static void Execute(string file, string directory, string output, string pattern, string format, int quality, float scaleX, float scaleY, bool debug, bool quiet)
+        public static bool Save(string path, string output, string format, int quality, float scaleX, float scaleY, bool debug, bool quiet)
+        {
+            try
+            {
+                if (quiet == false)
+                {
+                    Console.ForegroundColor = ConsoleColor.White;
+                    Console.WriteLine($"[{i}] File: {path}");
+                }
+
+                var extension = Path.GetExtension(path);
+                string imagePath = path.Remove(path.Length - extension.Length) + "." + format.ToLower();
+                if (!string.IsNullOrEmpty(output))
+                {
+                    imagePath = Path.Combine(output, Path.GetFileName(imagePath));
+                }
+
+                var svg = new Svg();
+                var picture = svg.Load(path);
+                if (picture != null)
+                {
+                    if (debug == true && svg.Document != null)
+                    {
+                        string ymlPath = path.Remove(path.Length - extension.Length) + ".yml";
+                        if (!string.IsNullOrEmpty(output))
+                        {
+                            ymlPath = Path.Combine(output, Path.GetFileName(ymlPath));
+                        }
+                        SvgDebug.Print(svg.Document, ymlPath);
+                    }
+
+                    if (Enum.TryParse<SKEncodedImageFormat>(format, true, out var skEncodedImageFormat))
+                    {
+                        svg.Save(imagePath, skEncodedImageFormat, quality, scaleX, scaleY);
+                    }
+                    else
+                    {
+                        throw new ArgumentException($"Invalid output image format.", nameof(format));
+                    }
+                }
+
+                if (quiet == false)
+                {
+                    Console.ForegroundColor = ConsoleColor.Green;
+                    Console.WriteLine($"[{i}] Succes: {imagePath}");
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                if (quiet == false)
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine($"[{i}] Error: {path}");
+                    Error(ex);
+                }
+            }
+
+            return false;
+        }
+
+        public static void Run(string file, string directory, string output, string pattern, string format, int quality, float scaleX, float scaleY, bool debug, bool quiet)
         {
             try
             {
@@ -59,60 +121,10 @@ namespace Svg.Skia.Converter
                 for (int i = 0; i < paths.Count; i++)
                 {
                     var path = paths[i];
-                    try
+
+                    if (Save(path, output, format, quality, scaleX, scaleY, debug, quiet))
                     {
-                        if (quiet == false)
-                        {
-                            Console.ForegroundColor = ConsoleColor.White;
-                            Console.WriteLine($"[{i}] File: {path}");
-                        }
-
-                        var extension = Path.GetExtension(path);
-                        string imagePath = path.Remove(path.Length - extension.Length) + "." + format.ToLower();
-                        if (!string.IsNullOrEmpty(output))
-                        {
-                            imagePath = Path.Combine(output, Path.GetFileName(imagePath));
-                        }
-
-                        var svg = new Svg();
-                        var picture = svg.Load(path);
-                        if (picture != null)
-                        {
-                            if (debug == true && svg.Document != null)
-                            {
-                                string ymlPath = path.Remove(path.Length - extension.Length) + ".yml";
-                                if (!string.IsNullOrEmpty(output))
-                                {
-                                    ymlPath = Path.Combine(output, Path.GetFileName(ymlPath));
-                                }
-                                SvgDebug.Print(svg.Document, ymlPath);
-                            }
-
-                            if (Enum.TryParse<SKEncodedImageFormat>(format, true, out var skEncodedImageFormat))
-                            {
-                                svg.Save(imagePath, skEncodedImageFormat, quality, scaleX, scaleY);
-                            }
-                            else
-                            {
-                                throw new ArgumentException($"Invalid output image format.", nameof(format));
-                            }
-                        }
-
-                        if (quiet == false)
-                        {
-                            Console.ForegroundColor = ConsoleColor.Green;
-                            Console.WriteLine($"[{i}] Succes: {imagePath}");
-                        }
                         success++;
-                    }
-                    catch (Exception ex)
-                    {
-                        if (quiet == false)
-                        {
-                            Console.ForegroundColor = ConsoleColor.Red;
-                            Console.WriteLine($"[{i}] Error: {path}");
-                        }
-                        Error(ex);
                     }
                 }
 
@@ -203,7 +215,7 @@ namespace Svg.Skia.Converter
             rootCommand.AddOption(optionDebug);
             rootCommand.AddOption(optionQuiet);
 
-            rootCommand.Handler = CommandHandler.Create(typeof(Program).GetMethod(nameof(Execute)));
+            rootCommand.Handler = CommandHandler.Create(typeof(Program).GetMethod(nameof(Run)));
 
             return await rootCommand.InvokeAsync(args);
         }
