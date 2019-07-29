@@ -64,7 +64,7 @@ namespace Svg.Skia.Converter
                         if (quiet == false)
                         {
                             Console.ForegroundColor = ConsoleColor.White;
-                            Console.WriteLine($"[{i}] File: {path}"); 
+                            Console.WriteLine($"[{i}] File: {path}");
                         }
 
                         var extension = Path.GetExtension(path);
@@ -101,7 +101,7 @@ namespace Svg.Skia.Converter
                         if (quiet == false)
                         {
                             Console.ForegroundColor = ConsoleColor.Green;
-                            Console.WriteLine($"[{i}] Succes: {imagePath}"); 
+                            Console.WriteLine($"[{i}] Succes: {imagePath}");
                         }
                         success++;
                     }
@@ -110,7 +110,7 @@ namespace Svg.Skia.Converter
                         if (quiet == false)
                         {
                             Console.ForegroundColor = ConsoleColor.Red;
-                            Console.WriteLine($"[{i}] Error: {path}"); 
+                            Console.WriteLine($"[{i}] Error: {path}");
                         }
                         Error(ex);
                     }
@@ -130,7 +130,7 @@ namespace Svg.Skia.Converter
                 if (quiet == false)
                 {
                     Console.ResetColor();
-                    Error(ex); 
+                    Error(ex);
                 }
             }
         }
