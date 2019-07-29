@@ -41,28 +41,30 @@ namespace Svg.Skia.Converter
                     imagePath = Path.Combine(output, Path.GetFileName(imagePath));
                 }
 
-                var svg = new Svg();
-                var picture = svg.Load(path);
-                if (picture != null)
+                using (var svg = new Svg())
                 {
-                    if (debug == true && svg.Document != null)
+                    var picture = svg.Load(path);
+                    if (picture != null)
                     {
-                        string ymlPath = path.Remove(path.Length - extension.Length) + ".yml";
-                        if (!string.IsNullOrEmpty(output))
+                        if (debug == true && svg.Document != null)
                         {
-                            ymlPath = Path.Combine(output, Path.GetFileName(ymlPath));
+                            string ymlPath = path.Remove(path.Length - extension.Length) + ".yml";
+                            if (!string.IsNullOrEmpty(output))
+                            {
+                                ymlPath = Path.Combine(output, Path.GetFileName(ymlPath));
+                            }
+                            SvgDebug.Print(svg.Document, ymlPath);
                         }
-                        SvgDebug.Print(svg.Document, ymlPath);
-                    }
 
-                    if (Enum.TryParse<SKEncodedImageFormat>(format, true, out var skEncodedImageFormat))
-                    {
-                        svg.Save(imagePath, skEncodedImageFormat, quality, scaleX, scaleY);
-                    }
-                    else
-                    {
-                        throw new ArgumentException($"Invalid output image format.", nameof(format));
-                    }
+                        if (Enum.TryParse<SKEncodedImageFormat>(format, true, out var skEncodedImageFormat))
+                        {
+                            svg.Save(imagePath, skEncodedImageFormat, quality, scaleX, scaleY);
+                        }
+                        else
+                        {
+                            throw new ArgumentException($"Invalid output image format.", nameof(format));
+                        }
+                    } 
                 }
 
                 if (quiet == false)
