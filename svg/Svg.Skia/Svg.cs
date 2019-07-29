@@ -268,6 +268,84 @@ namespace Svg.Skia
             return sKShader;
         }
 
+        private static SKShader CreateTwoPointConicalGradient(SvgRadialGradientServer svgRadialGradientServer, SKSize skSize)
+        {
+            // TODO:
+
+            var skStart = new SKPoint(
+                NormalizeSvgUnit(svgRadialGradientServer.CenterX, svgRadialGradientServer.GradientUnits).ToDeviceValue(null, UnitRenderingType.Horizontal, svgRadialGradientServer),
+                NormalizeSvgUnit(svgRadialGradientServer.CenterY, svgRadialGradientServer.GradientUnits).ToDeviceValue(null, UnitRenderingType.Vertical, svgRadialGradientServer));
+            var skEnd = new SKPoint(
+                NormalizeSvgUnit(svgRadialGradientServer.FocalX, svgRadialGradientServer.GradientUnits).ToDeviceValue(null, UnitRenderingType.Horizontal, svgRadialGradientServer),
+                NormalizeSvgUnit(svgRadialGradientServer.FocalY, svgRadialGradientServer.GradientUnits).ToDeviceValue(null, UnitRenderingType.Vertical, svgRadialGradientServer));
+
+            var startRadius = 0f;
+            var endRadius = NormalizeSvgUnit(svgRadialGradientServer.Radius, svgRadialGradientServer.GradientUnits).ToDeviceValue(null, UnitRenderingType.Other, svgRadialGradientServer);
+
+            var colors = new List<SKColor>();
+            var colorPos = new List<float>();
+
+            foreach (var child in svgRadialGradientServer.Children)
+            {
+                if (child is SvgGradientStop svgGradientStop)
+                {
+                    if (svgGradientStop.StopColor is SvgColourServer stopColorSvgColourServer)
+                    {
+                        var stopColor = GetColor(stopColorSvgColourServer, AdjustSvgOpacity(svgGradientStop.Opacity), false);
+                        float offset = svgGradientStop.Offset.ToDeviceValue(null, UnitRenderingType.Horizontal, svgRadialGradientServer);
+                        offset /= skSize.Width;
+                        colors.Add(stopColor);
+                        colorPos.Add(offset);
+                    }
+                }
+            }
+
+            // TODO: Handle correctly all GradientUnits modes.
+
+            switch (svgRadialGradientServer.GradientUnits)
+            {
+                default:
+                case SvgCoordinateUnits.ObjectBoundingBox:
+                    // TODO:
+                    break;
+                case SvgCoordinateUnits.UserSpaceOnUse:
+                    // TODO:
+                    break;
+            }
+
+            SKShaderTileMode shaderTileMode;
+            switch (svgRadialGradientServer.SpreadMethod)
+            {
+                default:
+                case SvgGradientSpreadMethod.Pad:
+                    shaderTileMode = SKShaderTileMode.Clamp;
+                    break;
+                case SvgGradientSpreadMethod.Reflect:
+                    shaderTileMode = SKShaderTileMode.Mirror;
+                    break;
+                case SvgGradientSpreadMethod.Repeat:
+                    shaderTileMode = SKShaderTileMode.Repeat;
+                    break;
+            }
+
+            var skColors = colors.ToArray();
+            float[] skColorPos = colorPos.ToArray();
+
+            SKShader sKShader;
+
+            if (svgRadialGradientServer.GradientTransform != null && svgRadialGradientServer.GradientTransform.Count > 0)
+            {
+                var gradientTransform = GetSKMatrix(svgRadialGradientServer.GradientTransform);
+                sKShader = SKShader.CreateTwoPointConicalGradient(skStart, startRadius, skEnd, endRadius, skColors, skColorPos, shaderTileMode, gradientTransform);
+            }
+            else
+            {
+                sKShader = SKShader.CreateTwoPointConicalGradient(skStart, startRadius, skEnd, endRadius, skColors, skColorPos, shaderTileMode);
+            }
+
+            return sKShader;
+        }
+
         private static void SetFill(SvgVisualElement svgVisualElement, SKSize skSize, SKPaint skPaint)
         {
             switch (svgVisualElement.Fill)
@@ -290,7 +368,8 @@ namespace Svg.Skia
                     break;
                 case SvgRadialGradientServer svgRadialGradientServer:
                     {
-                        // TODO:
+                        // TODO: Dispose SKShader.
+                        skPaint.Shader = CreateTwoPointConicalGradient(svgRadialGradientServer, skSize);
                     }
                     break;
                 case SvgDeferredPaintServer svgDeferredPaintServer:
