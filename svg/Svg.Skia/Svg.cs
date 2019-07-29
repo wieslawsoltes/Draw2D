@@ -214,15 +214,28 @@ namespace Svg.Skia
         private static SKPathEffect CreateDash(SvgElement svgElement, float strokeWidth)
         {
             var strokeDashArray = svgElement.StrokeDashArray;
+            var count = strokeDashArray.Count;
 
-            if (strokeDashArray != null && strokeDashArray.Count >= 2 && strokeDashArray.Count % 2 == 0)
+            if (strokeDashArray != null && count > 0)
             {
-                float[] intervals = new float[strokeDashArray.Count];
-                for (int i = 0; i < strokeDashArray.Count; i++)
+                bool isOdd = count % 2 != 0;
+
+                strokeWidth = strokeWidth <= 0 ? 1 : strokeWidth;
+
+                float[] intervals = new float[isOdd ? count * 2 : count];
+                for (int i = 0; i < count; i++)
                 {
                     var dash = strokeDashArray[i].ToDeviceValue(null, UnitRenderingType.Other, svgElement);
                     var interval = (dash <= 0) ? 1 : dash;
-                    intervals[i] = interval * strokeWidth;
+                    intervals[i] = interval / strokeWidth;
+                }
+
+                if (isOdd)
+                {
+                    for (int i = 0; i < count; i++)
+                    {
+                        intervals[i + count] = intervals[i];
+                    }
                 }
 
                 var dashOffset = svgElement.StrokeDashOffset != null ? svgElement.StrokeDashOffset : 0;
@@ -230,7 +243,7 @@ namespace Svg.Skia
                 if (dashOffset != 0)
                 {
                     var dashOffsetValue = dashOffset.ToDeviceValue(null, UnitRenderingType.Other, svgElement);
-                    phase = (dashOffsetValue <= 0) ? 1 : dashOffsetValue * strokeWidth;
+                    phase = (dashOffsetValue <= 0) ? 1 : dashOffsetValue / strokeWidth;
                 }
 
                 return SKPathEffect.CreateDash(intervals, phase);
