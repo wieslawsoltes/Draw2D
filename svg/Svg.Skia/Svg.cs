@@ -1207,11 +1207,6 @@ namespace Svg.Skia
                         DrawSvgSwitch(skCanvas, skSize, svgSwitch);
                     }
                     break;
-                case SvgSymbol _:
-                    {
-                        // The symbol included inside 'defs' are not rendered.
-                    }
-                    break;
                 case SvgUse svgUse:
                     {
                         DrawSvgUse(skCanvas, skSize, svgUse);
@@ -1291,6 +1286,8 @@ namespace Svg.Skia
                     {
                         DrawSvgTextSpan(skCanvas, skSize, svgTextSpan);
                     }
+                    break;
+                default:
                     break;
             }
         }
