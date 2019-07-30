@@ -251,10 +251,34 @@ namespace Svg.Skia
             return null;
         }
 
-        private static SKShader CreateLinearGradient(SvgLinearGradientServer svgLinearGradientServer, SKSize skSize, SKRect skBounds)
+        private static void GetStops(SvgGradientServer svgGradientServer, SKSize skSize, List<SKColor> colors, List<float> colorPos, SvgVisualElement svgVisualElement)
         {
-            // TODO:
+            foreach (var child in svgGradientServer.Children)
+            {
+                if (child is SvgGradientStop svgGradientStop)
+                {
+                    if (svgGradientStop.StopColor is SvgColourServer stopColorSvgColourServer)
+                    {
+                        var stopColor = GetColor(stopColorSvgColourServer, AdjustSvgOpacity(svgGradientStop.Opacity), false);
+                        float offset = svgGradientStop.Offset.ToDeviceValue(null, UnitRenderingType.Horizontal, svgGradientServer);
+                        offset /= skSize.Width;
+                        colors.Add(stopColor);
+                        colorPos.Add(offset);
+                    }
+                }
+            }
 
+
+            var inheritGradient = SvgDeferredPaintServer.TryGet<SvgGradientServer>(svgGradientServer.InheritGradient, svgVisualElement);
+            if (colors.Count == 0 && inheritGradient != null)
+            {
+                GetStops(inheritGradient, skSize, colors, colorPos, svgVisualElement);
+            }
+
+        }
+
+        private static SKShader CreateLinearGradient(SvgLinearGradientServer svgLinearGradientServer, SKSize skSize, SKRect skBounds, SvgVisualElement svgVisualElement)
+        {
             var start = SvgUnit.GetDevicePoint(
                 NormalizeSvgUnit(svgLinearGradientServer.X1, svgLinearGradientServer.GradientUnits),
                 NormalizeSvgUnit(svgLinearGradientServer.Y1, svgLinearGradientServer.GradientUnits),
@@ -269,20 +293,7 @@ namespace Svg.Skia
             var colors = new List<SKColor>();
             var colorPos = new List<float>();
 
-            foreach (var child in svgLinearGradientServer.Children)
-            {
-                if (child is SvgGradientStop svgGradientStop)
-                {
-                    if (svgGradientStop.StopColor is SvgColourServer stopColorSvgColourServer)
-                    {
-                        var stopColor = GetColor(stopColorSvgColourServer, AdjustSvgOpacity(svgGradientStop.Opacity), false);
-                        float offset = svgGradientStop.Offset.ToDeviceValue(null, UnitRenderingType.Horizontal, svgLinearGradientServer);
-                        offset /= skSize.Width;
-                        colors.Add(stopColor);
-                        colorPos.Add(offset);
-                    }
-                }
-            }
+            GetStops(svgLinearGradientServer, skSize, colors, colorPos, svgVisualElement);
 
             SKShaderTileMode shaderTileMode;
             switch (svgLinearGradientServer.SpreadMethod)
@@ -345,37 +356,28 @@ namespace Svg.Skia
             return sKShader;
         }
 
-        private static SKShader CreateTwoPointConicalGradient(SvgRadialGradientServer svgRadialGradientServer, SKSize skSize, SKRect skBounds)
+        private static SKShader CreateTwoPointConicalGradient(SvgRadialGradientServer svgRadialGradientServer, SKSize skSize, SKRect skBounds, SvgVisualElement svgVisualElement)
         {
-            // TODO:
-
             var skStart = new SKPoint(
-                NormalizeSvgUnit(svgRadialGradientServer.CenterX, svgRadialGradientServer.GradientUnits).ToDeviceValue(null, UnitRenderingType.Horizontal, svgRadialGradientServer),
-                NormalizeSvgUnit(svgRadialGradientServer.CenterY, svgRadialGradientServer.GradientUnits).ToDeviceValue(null, UnitRenderingType.Vertical, svgRadialGradientServer));
+                NormalizeSvgUnit(svgRadialGradientServer.CenterX, svgRadialGradientServer.GradientUnits)
+                    .ToDeviceValue(null, UnitRenderingType.Horizontal, svgRadialGradientServer),
+                NormalizeSvgUnit(svgRadialGradientServer.CenterY, svgRadialGradientServer.GradientUnits)
+                    .ToDeviceValue(null, UnitRenderingType.Vertical, svgRadialGradientServer));
             var skEnd = new SKPoint(
-                NormalizeSvgUnit(svgRadialGradientServer.FocalX, svgRadialGradientServer.GradientUnits).ToDeviceValue(null, UnitRenderingType.Horizontal, svgRadialGradientServer),
-                NormalizeSvgUnit(svgRadialGradientServer.FocalY, svgRadialGradientServer.GradientUnits).ToDeviceValue(null, UnitRenderingType.Vertical, svgRadialGradientServer));
+                NormalizeSvgUnit(svgRadialGradientServer.FocalX, svgRadialGradientServer.GradientUnits)
+                    .ToDeviceValue(null, UnitRenderingType.Horizontal, svgRadialGradientServer),
+                NormalizeSvgUnit(svgRadialGradientServer.FocalY, svgRadialGradientServer.GradientUnits)
+                    .ToDeviceValue(null, UnitRenderingType.Vertical, svgRadialGradientServer));
 
             var startRadius = 0f;
-            var endRadius = NormalizeSvgUnit(svgRadialGradientServer.Radius, svgRadialGradientServer.GradientUnits).ToDeviceValue(null, UnitRenderingType.Other, svgRadialGradientServer);
+            var endRadius = 
+                NormalizeSvgUnit(svgRadialGradientServer.Radius, svgRadialGradientServer.GradientUnits)
+                    .ToDeviceValue(null, UnitRenderingType.Other, svgRadialGradientServer);
 
             var colors = new List<SKColor>();
             var colorPos = new List<float>();
 
-            foreach (var child in svgRadialGradientServer.Children)
-            {
-                if (child is SvgGradientStop svgGradientStop)
-                {
-                    if (svgGradientStop.StopColor is SvgColourServer stopColorSvgColourServer)
-                    {
-                        var stopColor = GetColor(stopColorSvgColourServer, AdjustSvgOpacity(svgGradientStop.Opacity), false);
-                        float offset = svgGradientStop.Offset.ToDeviceValue(null, UnitRenderingType.Horizontal, svgRadialGradientServer);
-                        offset /= skSize.Width;
-                        colors.Add(stopColor);
-                        colorPos.Add(offset);
-                    }
-                }
-            }
+            GetStops(svgRadialGradientServer, skSize, colors, colorPos, svgVisualElement);
 
             SKShaderTileMode shaderTileMode;
             switch (svgRadialGradientServer.SpreadMethod)
@@ -452,7 +454,7 @@ namespace Svg.Skia
                     break;
                 case SvgLinearGradientServer svgLinearGradientServer:
                     {
-                        var skShader = CreateLinearGradient(svgLinearGradientServer, skSize, skBounds);
+                        var skShader = CreateLinearGradient(svgLinearGradientServer, skSize, skBounds, svgVisualElement);
                         if (skShader != null)
                         {
                             disposable.Disposables.Add(skShader);
@@ -462,7 +464,7 @@ namespace Svg.Skia
                     break;
                 case SvgRadialGradientServer svgRadialGradientServer:
                     {
-                        var skShader = CreateTwoPointConicalGradient(svgRadialGradientServer, skSize, skBounds);
+                        var skShader = CreateTwoPointConicalGradient(svgRadialGradientServer, skSize, skBounds, svgVisualElement);
                         if (skShader != null)
                         {
                             disposable.Disposables.Add(skShader);
@@ -498,12 +500,12 @@ namespace Svg.Skia
                 case SvgLinearGradientServer svgLinearGradientServer:
                     {
                         // TODO: Dispose SKShader.
-                        skPaint.Shader = CreateLinearGradient(svgLinearGradientServer, skSize, skBounds);
+                        skPaint.Shader = CreateLinearGradient(svgLinearGradientServer, skSize, skBounds, svgVisualElement);
                     }
                     break;
                 case SvgRadialGradientServer svgRadialGradientServer:
                     {
-                        var skShader = CreateTwoPointConicalGradient(svgRadialGradientServer, skSize, skBounds);
+                        var skShader = CreateTwoPointConicalGradient(svgRadialGradientServer, skSize, skBounds, svgVisualElement);
                         if (skShader != null)
                         {
                             disposable.Disposables.Add(skShader);
