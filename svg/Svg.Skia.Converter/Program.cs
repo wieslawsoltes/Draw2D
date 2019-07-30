@@ -6,6 +6,7 @@ using System.CommandLine;
 using System.CommandLine.Invocation;
 using System.Diagnostics;
 using System.IO;
+using System.IO.Compression;
 using System.Threading.Tasks;
 using SkiaSharp;
 using Svg;
@@ -14,6 +15,7 @@ namespace Svg.Skia.Converter
 {
     public class Program
     {
+
         public static void Error(Exception ex)
         {
             Console.WriteLine($"{ex.Message}", ConsoleColor.Yellow);
@@ -24,7 +26,7 @@ namespace Svg.Skia.Converter
             }
         }
 
-        public static bool Save(string path, string output, string format, int quality, float scaleX, float scaleY, bool debug, bool quiet, int i)
+        public static bool Save(FileInfo path, DirectoryInfo output, string format, int quality, float scaleX, float scaleY, bool debug, bool quiet, int i)
         {
             try
             {
@@ -34,24 +36,47 @@ namespace Svg.Skia.Converter
                     Console.WriteLine($"[{i}] File: {path}");
                 }
 
-                var extension = Path.GetExtension(path);
-                string imagePath = path.Remove(path.Length - extension.Length) + "." + format.ToLower();
-                if (!string.IsNullOrEmpty(output))
+                var extension = path.Extension;
+                string imagePath = path.FullName.Remove(path.FullName.Length - extension.Length) + "." + format.ToLower();
+                if (!string.IsNullOrEmpty(output.FullName))
                 {
-                    imagePath = Path.Combine(output, Path.GetFileName(imagePath));
+                    imagePath = Path.Combine(output.FullName, Path.GetFileName(imagePath));
                 }
 
                 using (var svg = new Svg())
                 {
-                    var picture = svg.Load(path);
+                    SKPicture picture;
+
+                    switch (path.Extension.ToLower())
+                    {
+                        default:
+                        case ".svg":
+                            {
+                                picture = svg.Load(path.FullName);
+                            }
+                            break;
+                        case ".svgz":
+                            {
+                                using (var fileStream = path.OpenRead())
+                                using (var memoryStream = new MemoryStream())
+                                using (var gzipStream = new GZipStream(fileStream, CompressionMode.Decompress))
+                                {
+                                    gzipStream.CopyTo(memoryStream);
+                                    memoryStream.Position = 0;
+                                    picture = svg.Load(memoryStream);
+                                }
+                            }
+                            break;
+                    }
+
                     if (picture != null)
                     {
                         if (debug == true && svg.Document != null)
                         {
-                            string ymlPath = path.Remove(path.Length - extension.Length) + ".yml";
-                            if (!string.IsNullOrEmpty(output))
+                            string ymlPath = path.FullName.Remove(path.FullName.Length - extension.Length) + ".yml";
+                            if (!string.IsNullOrEmpty(output.FullName))
                             {
-                                ymlPath = Path.Combine(output, Path.GetFileName(ymlPath));
+                                ymlPath = Path.Combine(output.FullName, Path.GetFileName(ymlPath));
                             }
                             SvgDebug.Print(svg.Document, ymlPath);
                         }
@@ -88,11 +113,23 @@ namespace Svg.Skia.Converter
             return false;
         }
 
-        public static void Run(string file, string directory, string output, string pattern, string format, int quality, float scaleX, float scaleY, bool debug, bool quiet)
+        private static void GetFiles(DirectoryInfo directory, string pattern, List<FileInfo> paths)
+        {
+            var files = Directory.EnumerateFiles(directory.FullName, pattern);
+            if (files != null)
+            {
+                foreach (var path in files)
+                {
+                    paths.Add(new FileInfo(path));
+                }
+            }
+        }
+
+        public static void Run(FileInfo file, DirectoryInfo directory, DirectoryInfo output, string pattern, string format, int quality, float scaleX, float scaleY, bool debug, bool quiet)
         {
             try
             {
-                var paths = new List<string>();
+                var paths = new List<FileInfo>();
 
                 if (file != null)
                 {
@@ -101,18 +138,22 @@ namespace Svg.Skia.Converter
 
                 if (directory != null)
                 {
-                    var files = Directory.EnumerateFiles(directory, pattern);
-                    if (files != null)
+                    if (pattern == null)
                     {
-                        paths.AddRange(files);
+                        GetFiles(directory, "*.svg", paths);
+                        GetFiles(directory, "*.svgz", paths);
+                    }
+                    else
+                    {
+                        GetFiles(directory, pattern, paths);
                     }
                 }
 
-                if (!string.IsNullOrEmpty(output))
+                if (!string.IsNullOrEmpty(output.FullName))
                 {
-                    if (!Directory.Exists(output))
+                    if (!Directory.Exists(output.FullName))
                     {
-                        Directory.CreateDirectory(output);
+                        Directory.CreateDirectory(output.FullName);
                     }
                 }
 
@@ -153,22 +194,22 @@ namespace Svg.Skia.Converter
         {
             var optionFile = new Option(new[] { "--file", "-f" }, "The relative or absolute path to the input file")
             {
-                Argument = new Argument<string>(defaultValue: () => null)
+                Argument = new Argument<FileInfo>(defaultValue: () => null)
             };
 
             var optionDirectory = new Option(new[] { "--directory", "-d" }, "The relative or absolute path to the input directory")
             {
-                Argument = new Argument<string>(defaultValue: () => null)
+                Argument = new Argument<DirectoryInfo>(defaultValue: () => null)
             };
 
             var optionOutput = new Option(new[] { "--output", "-o" }, "The relative or absolute path to the output directory")
             {
-                Argument = new Argument<string>(defaultValue: () => null)
+                Argument = new Argument<DirectoryInfo>(defaultValue: () => null)
             };
 
             var optionPattern = new Option(new[] { "--pattern", "-p" }, "The search string to match against the names of files in the input path")
             {
-                Argument = new Argument<string>(defaultValue: () => "*.svg")
+                Argument = new Argument<string>(defaultValue: () => null)
             };
 
             var optionFormat = new Option(new[] { "--format" }, "The output image format")
