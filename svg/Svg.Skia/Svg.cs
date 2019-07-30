@@ -206,9 +206,8 @@ namespace Svg.Skia
 
         private static SvgUnit NormalizeSvgUnit(SvgUnit svgUnit, SvgCoordinateUnits svgCoordinateUnits)
         {
-            return (svgUnit.Type == SvgUnitType.Percentage && svgCoordinateUnits == SvgCoordinateUnits.ObjectBoundingBox ?
-                    new SvgUnit(SvgUnitType.User, svgUnit.Value / 100) :
-                    svgUnit);
+            return svgUnit.Type == SvgUnitType.Percentage && svgCoordinateUnits == SvgCoordinateUnits.ObjectBoundingBox ?
+                    new SvgUnit(SvgUnitType.User, svgUnit.Value / 100) : svgUnit;
         }
 
         private static SKPathEffect CreateDash(SvgElement svgElement, float strokeWidth)
