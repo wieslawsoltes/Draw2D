@@ -846,6 +846,13 @@ namespace Svg.Skia
             skCanvas.SetMatrix(totalSKMatrix);
         }
 
+        private static void SetTransform(SKCanvas skCanvas, SKMatrix skMatrix)
+        {
+            var totalSKMatrix = skCanvas.TotalMatrix;
+            SKMatrix.Concat(ref totalSKMatrix, ref totalSKMatrix, ref skMatrix);
+            skCanvas.SetMatrix(totalSKMatrix);
+        }
+
         private static SKPaint SetOpacity(SKCanvas skCanvas, SvgElement svgElement, CompositeDisposable disposable)
         {
             float opacity = AdjustSvgOpacity(svgElement.Opacity);
@@ -1056,37 +1063,72 @@ namespace Svg.Skia
             // TODO:
         }
 
+        public struct Circle
+        {
+            public float cx;
+            public float cy;
+            public float radius;
+            public SKRect bounds;
+            public SKMatrix matrix;
+
+            public Circle(SvgCircle svgCircle)
+            {
+                cx = svgCircle.CenterX.ToDeviceValue(null, UnitRenderingType.Horizontal, svgCircle);
+                cy = svgCircle.CenterY.ToDeviceValue(null, UnitRenderingType.Vertical, svgCircle);
+                radius = svgCircle.Radius.ToDeviceValue(null, UnitRenderingType.Other, svgCircle);
+                bounds = SKRect.Create(cx - radius, cy - radius, radius + radius, radius + radius);
+                matrix = GetSKMatrix(svgCircle.Transforms);
+            }
+        }
+
         private static void DrawSvgCircle(SKCanvas skCanvas, SKSize skSize, SvgCircle svgCircle, CompositeDisposable disposable)
         {
             if (SetOpacity(skCanvas, svgCircle, disposable) == null)
             {
                 skCanvas.Save();
             }
-            SetTransform(skCanvas, svgCircle.Transforms);
 
-            float cx = svgCircle.CenterX.ToDeviceValue(null, UnitRenderingType.Horizontal, svgCircle);
-            float cy = svgCircle.CenterY.ToDeviceValue(null, UnitRenderingType.Vertical, svgCircle);
-            float radius = svgCircle.Radius.ToDeviceValue(null, UnitRenderingType.Other, svgCircle);
+            var circle = new Circle(svgCircle);
 
-            var skBounds = SKRect.Create(cx - radius, cy - radius, radius + radius, radius + radius);
+            SetTransform(skCanvas, circle.matrix);
 
             if (svgCircle.Fill != null)
             {
-                using (var skPaint = GetFillSKPaint(svgCircle, skSize, skBounds, disposable))
+                using (var skPaint = GetFillSKPaint(svgCircle, skSize, circle.bounds, disposable))
                 {
-                    skCanvas.DrawCircle(cx, cy, radius, skPaint);
+                    skCanvas.DrawCircle(circle.cx, circle.cy, circle.radius, skPaint);
                 }
             }
 
             if (svgCircle.Stroke != null)
             {
-                using (var skPaint = GetStrokeSKPaint(svgCircle, skSize, skBounds, disposable))
+                using (var skPaint = GetStrokeSKPaint(svgCircle, skSize, circle.bounds, disposable))
                 {
-                    skCanvas.DrawCircle(cx, cy, radius, skPaint);
+                    skCanvas.DrawCircle(circle.cx, circle.cy, circle.radius, skPaint);
                 }
             }
 
             skCanvas.Restore();
+        }
+
+        public struct Ellipse
+        {
+            public float cx;
+            public float cy;
+            public float rx;
+            public float ry;
+            public SKRect bounds;
+            public SKMatrix matrix;
+
+            public Ellipse(SvgEllipse svgEllipse)
+            {
+                cx = svgEllipse.CenterX.ToDeviceValue(null, UnitRenderingType.Horizontal, svgEllipse);
+                cy = svgEllipse.CenterY.ToDeviceValue(null, UnitRenderingType.Vertical, svgEllipse);
+                rx = svgEllipse.RadiusX.ToDeviceValue(null, UnitRenderingType.Other, svgEllipse);
+                ry = svgEllipse.RadiusY.ToDeviceValue(null, UnitRenderingType.Other, svgEllipse);
+                bounds = SKRect.Create(cx - rx, cy - ry, rx + rx, ry + ry);
+                matrix = GetSKMatrix(svgEllipse.Transforms);
+            }
         }
 
         private static void DrawSvgEllipse(SKCanvas skCanvas, SKSize skSize, SvgEllipse svgEllipse, CompositeDisposable disposable)
@@ -1095,32 +1137,54 @@ namespace Svg.Skia
             {
                 skCanvas.Save();
             }
-            SetTransform(skCanvas, svgEllipse.Transforms);
 
-            float cx = svgEllipse.CenterX.ToDeviceValue(null, UnitRenderingType.Horizontal, svgEllipse);
-            float cy = svgEllipse.CenterY.ToDeviceValue(null, UnitRenderingType.Vertical, svgEllipse);
-            float rx = svgEllipse.RadiusX.ToDeviceValue(null, UnitRenderingType.Other, svgEllipse);
-            float ry = svgEllipse.RadiusY.ToDeviceValue(null, UnitRenderingType.Other, svgEllipse);
+            var ellipse = new Ellipse(svgEllipse);
 
-            var skBounds = SKRect.Create(cx - rx, cy - ry, rx + rx, ry + ry);
+            SetTransform(skCanvas, ellipse.matrix);
 
             if (svgEllipse.Fill != null)
             {
-                using (var skPaint = GetFillSKPaint(svgEllipse, skSize, skBounds, disposable))
+                using (var skPaint = GetFillSKPaint(svgEllipse, skSize, ellipse.bounds, disposable))
                 {
-                    skCanvas.DrawOval(cx, cy, rx, ry, skPaint);
+                    skCanvas.DrawOval(ellipse.cx, ellipse.cy, ellipse.rx, ellipse.ry, skPaint);
                 }
             }
 
             if (svgEllipse.Stroke != null)
             {
-                using (var skPaint = GetStrokeSKPaint(svgEllipse, skSize, skBounds, disposable))
+                using (var skPaint = GetStrokeSKPaint(svgEllipse, skSize, ellipse.bounds, disposable))
                 {
-                    skCanvas.DrawOval(cx, cy, rx, ry, skPaint);
+                    skCanvas.DrawOval(ellipse.cx, ellipse.cy, ellipse.rx, ellipse.ry, skPaint);
                 }
             }
 
             skCanvas.Restore();
+        }
+
+        public struct Rectangle
+        {
+            public float x;
+            public float y;
+            public float width;
+            public float height;
+            public float rx;
+            public float ry;
+            public bool isRound;
+            public SKRect bounds;
+            public SKMatrix matrix;
+
+            public Rectangle(SvgRectangle svgRectangle)
+            {
+                x = svgRectangle.X.ToDeviceValue(null, UnitRenderingType.Horizontal, svgRectangle);
+                y = svgRectangle.Y.ToDeviceValue(null, UnitRenderingType.Vertical, svgRectangle);
+                width = svgRectangle.Width.ToDeviceValue(null, UnitRenderingType.Horizontal, svgRectangle);
+                height = svgRectangle.Height.ToDeviceValue(null, UnitRenderingType.Vertical, svgRectangle);
+                rx = svgRectangle.CornerRadiusX.ToDeviceValue(null, UnitRenderingType.Horizontal, svgRectangle);
+                ry = svgRectangle.CornerRadiusY.ToDeviceValue(null, UnitRenderingType.Vertical, svgRectangle);
+                isRound = rx > 0f && ry > 0f;
+                bounds = SKRect.Create(x, y, width, height);
+                matrix = GetSKMatrix(svgRectangle.Transforms);
+            }
         }
 
         private static void DrawSvgRectangle(SKCanvas skCanvas, SKSize skSize, SvgRectangle svgRectangle, CompositeDisposable disposable)
@@ -1129,44 +1193,37 @@ namespace Svg.Skia
             {
                 skCanvas.Save();
             }
-            SetTransform(skCanvas, svgRectangle.Transforms);
 
-            float x = svgRectangle.X.ToDeviceValue(null, UnitRenderingType.Horizontal, svgRectangle);
-            float y = svgRectangle.Y.ToDeviceValue(null, UnitRenderingType.Vertical, svgRectangle);
-            float width = svgRectangle.Width.ToDeviceValue(null, UnitRenderingType.Horizontal, svgRectangle);
-            float height = svgRectangle.Height.ToDeviceValue(null, UnitRenderingType.Vertical, svgRectangle);
-            float rx = svgRectangle.CornerRadiusX.ToDeviceValue(null, UnitRenderingType.Horizontal, svgRectangle);
-            float ry = svgRectangle.CornerRadiusY.ToDeviceValue(null, UnitRenderingType.Vertical, svgRectangle);
-            bool isRound = rx > 0f && ry > 0f;
+            var rectangle = new Rectangle(svgRectangle);
 
-            var skBounds = SKRect.Create(x, y, width, height);
+            SetTransform(skCanvas, rectangle.matrix);
 
             if (svgRectangle.Fill != null)
             {
-                using (var skPaint = GetFillSKPaint(svgRectangle, skSize, skBounds, disposable))
+                using (var skPaint = GetFillSKPaint(svgRectangle, skSize, rectangle.bounds, disposable))
                 {
-                    if (isRound)
+                    if (rectangle.isRound)
                     {
-                        skCanvas.DrawRoundRect(skBounds, rx, ry, skPaint);
+                        skCanvas.DrawRoundRect(rectangle.bounds, rectangle.rx, rectangle.ry, skPaint);
                     }
                     else
                     {
-                        skCanvas.DrawRect(skBounds, skPaint);
+                        skCanvas.DrawRect(rectangle.bounds, skPaint);
                     }
                 }
             }
 
             if (svgRectangle.Stroke != null)
             {
-                using (var skPaint = GetStrokeSKPaint(svgRectangle, skSize, skBounds, disposable))
+                using (var skPaint = GetStrokeSKPaint(svgRectangle, skSize, rectangle.bounds, disposable))
                 {
-                    if (isRound)
+                    if (rectangle.isRound)
                     {
-                        skCanvas.DrawRoundRect(skBounds, rx, ry, skPaint);
+                        skCanvas.DrawRoundRect(rectangle.bounds, rectangle.rx, rectangle.ry, skPaint);
                     }
                     else
                     {
-                        skCanvas.DrawRect(skBounds, skPaint);
+                        skCanvas.DrawRect(rectangle.bounds, skPaint);
                     }
                 }
             }
@@ -1197,30 +1254,46 @@ namespace Svg.Skia
             skCanvas.Restore();
         }
 
+        public struct Line
+        {
+            public float x0;
+            public float y0;
+            public float x1;
+            public float y1;
+            public SKRect bounds;
+            public SKMatrix matrix;
+
+            public Line(SvgLine svgLine)
+            {
+                x0 = svgLine.StartX.ToDeviceValue(null, UnitRenderingType.Horizontal, svgLine);
+                y0 = svgLine.StartY.ToDeviceValue(null, UnitRenderingType.Vertical, svgLine);
+                x1 = svgLine.EndX.ToDeviceValue(null, UnitRenderingType.Horizontal, svgLine);
+                y1 = svgLine.EndY.ToDeviceValue(null, UnitRenderingType.Vertical, svgLine);
+                float x = Math.Min(x0, x1);
+                float y = Math.Min(y0, y1);
+                float width = Math.Abs(x0 - x1);
+                float height = Math.Abs(y0 - y1);
+                bounds = SKRect.Create(x, y, width, height);
+                matrix = GetSKMatrix(svgLine.Transforms);
+            }
+        }
+
         private static void DrawSvgLine(SKCanvas skCanvas, SKSize skSize, SvgLine svgLine, CompositeDisposable disposable)
         {
             if (SetOpacity(skCanvas, svgLine, disposable) == null)
             {
                 skCanvas.Save();
             }
-            SetTransform(skCanvas, svgLine.Transforms);
 
-            float x0 = svgLine.StartX.ToDeviceValue(null, UnitRenderingType.Horizontal, svgLine);
-            float y0 = svgLine.StartY.ToDeviceValue(null, UnitRenderingType.Vertical, svgLine);
-            float x1 = svgLine.EndX.ToDeviceValue(null, UnitRenderingType.Horizontal, svgLine);
-            float y1 = svgLine.EndY.ToDeviceValue(null, UnitRenderingType.Vertical, svgLine);
+            var line = new Line(svgLine);
 
-            float x = Math.Min(x0, x1);
-            float y = Math.Min(y0, y1);
-            float width = Math.Abs(x0 - x1);
-            float height = Math.Abs(y0 - y1);
-            var skBounds = SKRect.Create(x, y, width, height);
+            SetTransform(skCanvas, line.matrix);
 
             if (svgLine.Stroke != null)
             {
-                using (var skPaint = GetStrokeSKPaint(svgLine, skSize, skBounds, disposable))
+                using (var skPaint = GetStrokeSKPaint(svgLine, skSize, line.bounds, disposable))
                 {
-                    skCanvas.DrawLine(x0, y0, x1, y1, skPaint);
+                    skCanvas.DrawLine(line.x0, line.y0, line.x1, line.y1, skPaint);
                 }
             }
 
