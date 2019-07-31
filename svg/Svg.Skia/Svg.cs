@@ -1035,6 +1035,24 @@ namespace Svg.Skia
                     //}
                 }
 
+                /*
+                if (svgUse.ClipPath != null)
+                {
+                    var svgClipPath = svgVisualElement.OwnerDocument.GetElementById<SvgClipPath>(svgUse.ClipPath.ToString());
+                    if (svgClipPath != null && svgClipPath.Children != null)
+                    {
+                        foreach (var child in svgClipPath.Children)
+                        {
+                            var skPath = new SKPath();
+                        }
+
+                        // TODO:
+
+                        Console.WriteLine($"clip-path: {svgClipPath}");
+                    }
+                }
+                */
+
                 if (svgVisualElement is SvgSymbol)
                 {
                     DrawSvgSymbol(skCanvas, skSize, svgVisualElement as SvgSymbol, disposable);
