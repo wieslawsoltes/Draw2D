@@ -26,8 +26,8 @@ namespace Svg.Skia
             height = svgFragment.Height.ToDeviceValue(null, UnitRenderingType.Vertical, svgFragment);
             bounds = SKRect.Create(x, y, width, height);
 
-            matrix = Svg.GetSKMatrix(svgFragment.Transforms);
-            var viewBoxMatrix = Svg.GetSvgViewBoxTransform(svgFragment.ViewBox, svgFragment.AspectRatio, x, y, width, height);
+            matrix = SvgHelper.GetSKMatrix(svgFragment.Transforms);
+            var viewBoxMatrix = SvgHelper.GetSvgViewBoxTransform(svgFragment.ViewBox, svgFragment.AspectRatio, x, y, width, height);
             SKMatrix.Concat(ref matrix, ref matrix, ref viewBoxMatrix);
         }
     }
@@ -66,8 +66,8 @@ namespace Svg.Skia
 
             bounds = SKRect.Create(x, y, width, height);
 
-            matrix = Svg.GetSKMatrix(svgSymbol.Transforms);
-            var viewBoxMatrix = Svg.GetSvgViewBoxTransform(svgSymbol.ViewBox, svgSymbol.AspectRatio, x, y, width, height);
+            matrix = SvgHelper.GetSKMatrix(svgSymbol.Transforms);
+            var viewBoxMatrix = SvgHelper.GetSvgViewBoxTransform(svgSymbol.ViewBox, svgSymbol.AspectRatio, x, y, width, height);
             SKMatrix.Concat(ref matrix, ref matrix, ref viewBoxMatrix);
         }
     }
@@ -78,7 +78,7 @@ namespace Svg.Skia
 
         public Image(SvgImage svgImage)
         {
-            matrix = Svg.GetSKMatrix(svgImage.Transforms);
+            matrix = SvgHelper.GetSKMatrix(svgImage.Transforms);
         }
     }
 
@@ -88,7 +88,7 @@ namespace Svg.Skia
 
         public Switch(SvgSwitch svgSwitch)
         {
-            matrix = Svg.GetSKMatrix(svgSwitch.Transforms);
+            matrix = SvgHelper.GetSKMatrix(svgSwitch.Transforms);
         }
     }
 
@@ -98,7 +98,7 @@ namespace Svg.Skia
 
         public Use(SvgUse svgUse)
         {
-            matrix = Svg.GetSKMatrix(svgUse.Transforms);
+            matrix = SvgHelper.GetSKMatrix(svgUse.Transforms);
         }
     }
 
@@ -108,7 +108,7 @@ namespace Svg.Skia
 
         public ForeignObject(SvgForeignObject svgForeignObject)
         {
-            matrix = Svg.GetSKMatrix(svgForeignObject.Transforms);
+            matrix = SvgHelper.GetSKMatrix(svgForeignObject.Transforms);
         }
     }
 
@@ -126,7 +126,7 @@ namespace Svg.Skia
             cy = svgCircle.CenterY.ToDeviceValue(null, UnitRenderingType.Vertical, svgCircle);
             radius = svgCircle.Radius.ToDeviceValue(null, UnitRenderingType.Other, svgCircle);
             bounds = SKRect.Create(cx - radius, cy - radius, radius + radius, radius + radius);
-            matrix = Svg.GetSKMatrix(svgCircle.Transforms);
+            matrix = SvgHelper.GetSKMatrix(svgCircle.Transforms);
         }
     }
 
@@ -146,7 +146,7 @@ namespace Svg.Skia
             rx = svgEllipse.RadiusX.ToDeviceValue(null, UnitRenderingType.Other, svgEllipse);
             ry = svgEllipse.RadiusY.ToDeviceValue(null, UnitRenderingType.Other, svgEllipse);
             bounds = SKRect.Create(cx - rx, cy - ry, rx + rx, ry + ry);
-            matrix = Svg.GetSKMatrix(svgEllipse.Transforms);
+            matrix = SvgHelper.GetSKMatrix(svgEllipse.Transforms);
         }
     }
 
@@ -172,7 +172,7 @@ namespace Svg.Skia
             ry = svgRectangle.CornerRadiusY.ToDeviceValue(null, UnitRenderingType.Vertical, svgRectangle);
             isRound = rx > 0f && ry > 0f;
             bounds = SKRect.Create(x, y, width, height);
-            matrix = Svg.GetSKMatrix(svgRectangle.Transforms);
+            matrix = SvgHelper.GetSKMatrix(svgRectangle.Transforms);
         }
     }
 
@@ -182,7 +182,7 @@ namespace Svg.Skia
 
         public Marker(SvgMarker svgMarker)
         {
-            matrix = Svg.GetSKMatrix(svgMarker.Transforms);
+            matrix = SvgHelper.GetSKMatrix(svgMarker.Transforms);
         }
     }
 
@@ -192,7 +192,7 @@ namespace Svg.Skia
 
         public Glyph(SvgGlyph svgGlyph)
         {
-            matrix = Svg.GetSKMatrix(svgGlyph.Transforms);
+            matrix = SvgHelper.GetSKMatrix(svgGlyph.Transforms);
         }
     }
 
@@ -202,7 +202,7 @@ namespace Svg.Skia
 
         public Group(SvgGroup svgGroup)
         {
-            matrix = Svg.GetSKMatrix(svgGroup.Transforms);
+            matrix = SvgHelper.GetSKMatrix(svgGroup.Transforms);
         }
     }
 
@@ -226,7 +226,7 @@ namespace Svg.Skia
             float width = Math.Abs(x0 - x1);
             float height = Math.Abs(y0 - y1);
             bounds = SKRect.Create(x, y, width, height);
-            matrix = Svg.GetSKMatrix(svgLine.Transforms);
+            matrix = SvgHelper.GetSKMatrix(svgLine.Transforms);
         }
     }
 
@@ -236,7 +236,7 @@ namespace Svg.Skia
 
         public Path(SvgPath svgPath)
         {
-            matrix = Svg.GetSKMatrix(svgPath.Transforms);
+            matrix = SvgHelper.GetSKMatrix(svgPath.Transforms);
         }
     }
 
@@ -246,7 +246,7 @@ namespace Svg.Skia
 
         public Polyline(SvgPolyline svgPolyline)
         {
-            matrix = Svg.GetSKMatrix(svgPolyline.Transforms);
+            matrix = SvgHelper.GetSKMatrix(svgPolyline.Transforms);
         }
     }
 
@@ -256,7 +256,7 @@ namespace Svg.Skia
 
         public Polygon(SvgPolygon svgPolygon)
         {
-            matrix = Svg.GetSKMatrix(svgPolygon.Transforms);
+            matrix = SvgHelper.GetSKMatrix(svgPolygon.Transforms);
         }
     }
 
@@ -266,7 +266,7 @@ namespace Svg.Skia
 
         public Text(SvgText svgText)
         {
-            matrix = Svg.GetSKMatrix(svgText.Transforms);
+            matrix = SvgHelper.GetSKMatrix(svgText.Transforms);
         }
     }
 
@@ -276,7 +276,7 @@ namespace Svg.Skia
 
         public TextPath(SvgTextPath svgTextPath)
         {
-            matrix = Svg.GetSKMatrix(svgTextPath.Transforms);
+            matrix = SvgHelper.GetSKMatrix(svgTextPath.Transforms);
         }
     }
 
@@ -286,7 +286,7 @@ namespace Svg.Skia
 
         public TextRef(SvgTextRef svgTextRef)
         {
-            matrix = Svg.GetSKMatrix(svgTextRef.Transforms);
+            matrix = SvgHelper.GetSKMatrix(svgTextRef.Transforms);
         }
     }
 
@@ -296,7 +296,7 @@ namespace Svg.Skia
 
         public TextSpan(SvgTextSpan svgTextSpan)
         {
-            matrix = Svg.GetSKMatrix(svgTextSpan.Transforms);
+            matrix = SvgHelper.GetSKMatrix(svgTextSpan.Transforms);
         }
     }
 }
