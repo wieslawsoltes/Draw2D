@@ -370,7 +370,7 @@ namespace Svg.Skia
                     .ToDeviceValue(null, UnitRenderingType.Vertical, svgRadialGradientServer));
 
             var startRadius = 0f;
-            var endRadius = 
+            var endRadius =
                 NormalizeSvgUnit(svgRadialGradientServer.Radius, svgRadialGradientServer.GradientUnits)
                     .ToDeviceValue(null, UnitRenderingType.Other, svgRadialGradientServer);
 
@@ -915,24 +915,78 @@ namespace Svg.Skia
             return ElementReferencesUri(svgUse, refElement, uris);
         }
 
+        public struct Fragment
+        {
+            public float x;
+            public float y;
+            public float width;
+            public float height;
+            public SKRect bounds;
+            public SKMatrix matrix;
+
+            public Fragment(SvgFragment svgFragment)
+            {
+                x = svgFragment.X.ToDeviceValue(null, UnitRenderingType.Horizontal, svgFragment);
+                y = svgFragment.Y.ToDeviceValue(null, UnitRenderingType.Vertical, svgFragment);
+                width = svgFragment.Width.ToDeviceValue(null, UnitRenderingType.Horizontal, svgFragment);
+                height = svgFragment.Height.ToDeviceValue(null, UnitRenderingType.Vertical, svgFragment);
+                bounds = SKRect.Create(x, y, width, height);
+                matrix = GetSKMatrix(svgFragment.Transforms);
+            }
+        }
+
         private static void DrawSvgFragment(SKCanvas skCanvas, SKSize skSize, SvgFragment svgFragment, CompositeDisposable disposable)
         {
             if (SetOpacity(skCanvas, svgFragment, disposable) == null)
             {
                 skCanvas.Save();
             }
-            SetTransform(skCanvas, svgFragment.Transforms);
 
-            float x = svgFragment.X.ToDeviceValue(null, UnitRenderingType.Horizontal, svgFragment);
-            float y = svgFragment.Y.ToDeviceValue(null, UnitRenderingType.Vertical, svgFragment);
-            float width = svgFragment.Width.ToDeviceValue(null, UnitRenderingType.Horizontal, svgFragment);
-            float height = svgFragment.Height.ToDeviceValue(null, UnitRenderingType.Vertical, svgFragment);
+            var fragment = new Fragment(svgFragment);
 
-            SetSvgViewBoxTransform(skCanvas, svgFragment.ViewBox, svgFragment.AspectRatio, x, y, width, height);
+            SetTransform(skCanvas, fragment.matrix);
+            SetSvgViewBoxTransform(skCanvas, svgFragment.ViewBox, svgFragment.AspectRatio, fragment.x, fragment.y, fragment.width, fragment.height);
 
             DrawSvgElementCollection(skCanvas, skSize, svgFragment.Children, disposable);
 
             skCanvas.Restore();
+        }
+
+        public struct Symbol
+        {
+            public float x;
+            public float y;
+            public float width;
+            public float height;
+            public SKRect bounds;
+            public SKMatrix matrix;
+
+            public Symbol(SvgSymbol svgSymbol)
+            {
+                x = 0f;
+                y = 0f;
+                width = svgSymbol.ViewBox.Width;
+                height = svgSymbol.ViewBox.Height;
+
+                if (svgSymbol.CustomAttributes.TryGetValue("width", out string _widthString))
+                {
+                    if (new SvgUnitConverter().ConvertFrom(_widthString) is SvgUnit _width)
+                    {
+                        width = _width.ToDeviceValue(null, UnitRenderingType.Horizontal, svgSymbol);
+                    }
+                }
+
+                if (svgSymbol.CustomAttributes.TryGetValue("height", out string heightString))
+                {
+                    if (new SvgUnitConverter().ConvertFrom(heightString) is SvgUnit _height)
+                    {
+                        height = _height.ToDeviceValue(null, UnitRenderingType.Vertical, svgSymbol);
+                    }
+                }
+
+                bounds = SKRect.Create(x, y, width, height);
+                matrix = GetSKMatrix(svgSymbol.Transforms);
+            }
         }
 
         private static void DrawSvgSymbol(SKCanvas skCanvas, SKSize skSize, SvgSymbol svgSymbol, CompositeDisposable disposable)
@@ -941,44 +995,77 @@ namespace Svg.Skia
             {
                 skCanvas.Save();
             }
-            SetTransform(skCanvas, svgSymbol.Transforms);
 
-            float x = 0f;
-            float y = 0f;
-            float width = svgSymbol.ViewBox.Width;
-            float height = svgSymbol.ViewBox.Height;
+            var symbol = new Symbol(svgSymbol);
 
-            if (svgSymbol.CustomAttributes.TryGetValue("width", out string _widthString))
-            {
-                if (new SvgUnitConverter().ConvertFrom(_widthString) is SvgUnit _width)
-                {
-                    width = _width.ToDeviceValue(null, UnitRenderingType.Horizontal, svgSymbol);
-                }
-            }
-
-            if (svgSymbol.CustomAttributes.TryGetValue("height", out string heightString))
-            {
-                if (new SvgUnitConverter().ConvertFrom(heightString) is SvgUnit _height)
-                {
-                    height = _height.ToDeviceValue(null, UnitRenderingType.Vertical, svgSymbol);
-                }
-            }
-
-            SetSvgViewBoxTransform(skCanvas, svgSymbol.ViewBox, svgSymbol.AspectRatio, x, y, width, height);
+            SetTransform(skCanvas, symbol.matrix);
+            SetSvgViewBoxTransform(skCanvas, svgSymbol.ViewBox, svgSymbol.AspectRatio, symbol.x, symbol.y, symbol.width, symbol.height);
 
             DrawSvgElementCollection(skCanvas, skSize, svgSymbol.Children, disposable);
 
             skCanvas.Restore();
         }
 
+        public struct Image
+        {
+            public SKMatrix matrix;
+
+            public Image(SvgImage svgImage)
+            {
+                matrix = GetSKMatrix(svgImage.Transforms);
+            }
+        }
+
         private static void DrawSvgImage(SKCanvas skCanvas, SKSize skSize, SvgImage svgImage, CompositeDisposable disposable)
         {
+            if (SetOpacity(skCanvas, svgImage, disposable) == null)
+            {
+                skCanvas.Save();
+            }
+
+            var image = new Image(svgImage);
+
+            SetTransform(skCanvas, image.matrix);
+
             // TODO:
+
+            skCanvas.Restore();
+        }
+
+        public struct Switch
+        {
+            public SKMatrix matrix;
+
+            public Switch(SvgSwitch svgSwitch)
+            {
+                matrix = GetSKMatrix(svgSwitch.Transforms);
+            }
         }
 
         private static void DrawSvgSwitch(SKCanvas skCanvas, SKSize skSize, SvgSwitch svgSwitch, CompositeDisposable disposable)
         {
+            if (SetOpacity(skCanvas, svgSwitch, disposable) == null)
+            {
+                skCanvas.Save();
+            }
+
+            var @switch = new Switch(svgSwitch);
+
+            SetTransform(skCanvas, @switch.matrix);
+
             // TODO:
+
+            skCanvas.Restore();
+        }
+
+        public struct Use
+        {
+            public SKMatrix matrix;
+
+            public Use(SvgUse svgUse)
+            {
+                matrix = GetSKMatrix(svgUse.Transforms);
+            }
         }
 
         private static void DrawSvgUse(SKCanvas skCanvas, SKSize skSize, SvgUse svgUse, CompositeDisposable disposable)
@@ -1004,7 +1091,10 @@ namespace Svg.Skia
                 {
                     skCanvas.Save();
                 }
-                SetTransform(skCanvas, svgUse.Transforms);
+
+                var use = new Use(svgUse);
+
+                SetTransform(skCanvas, use.matrix);
 
                 float x = svgUse.X.ToDeviceValue(null, UnitRenderingType.Horizontal, svgUse);
                 float y = svgUse.Y.ToDeviceValue(null, UnitRenderingType.Vertical, svgUse);
@@ -1036,27 +1126,24 @@ namespace Svg.Skia
                     //}
                 }
 
-                /*
-                if (svgUse.ClipPath != null)
+                // TODO:
+                //if (svgUse.ClipPath != null)
+                //{
+                //    var svgClipPath = svgVisualElement.OwnerDocument.GetElementById<SvgClipPath>(svgUse.ClipPath.ToString());
+                //    if (svgClipPath != null && svgClipPath.Children != null)
+                //    {
+                //        foreach (var child in svgClipPath.Children)
+                //        {
+                //            var skPath = new SKPath();
+                //        }
+                //        // TODO:
+                //        Console.WriteLine($"clip-path: {svgClipPath}");
+                //    }
+                //}
+
+                if (svgVisualElement is SvgSymbol svgSymbol)
                 {
-                    var svgClipPath = svgVisualElement.OwnerDocument.GetElementById<SvgClipPath>(svgUse.ClipPath.ToString());
-                    if (svgClipPath != null && svgClipPath.Children != null)
-                    {
-                        foreach (var child in svgClipPath.Children)
-                        {
-                            var skPath = new SKPath();
-                        }
-
-                        // TODO:
-
-                        Console.WriteLine($"clip-path: {svgClipPath}");
-                    }
-                }
-                */
-
-                if (svgVisualElement is SvgSymbol)
-                {
-                    DrawSvgSymbol(skCanvas, skSize, svgVisualElement as SvgSymbol, disposable);
+                    DrawSvgSymbol(skCanvas, skSize, svgSymbol, disposable);
                 }
                 else
                 {
@@ -1077,9 +1164,30 @@ namespace Svg.Skia
             }
         }
 
+        public struct ForeignObject
+        {
+            public SKMatrix matrix;
+
+            public ForeignObject(SvgForeignObject svgForeignObject)
+            {
+                matrix = GetSKMatrix(svgForeignObject.Transforms);
+            }
+        }
+
         private static void DrawSvgForeignObject(SKCanvas skCanvas, SKSize skSize, SvgForeignObject svgForeignObject, CompositeDisposable disposable)
         {
+            if (SetOpacity(skCanvas, svgForeignObject, disposable) == null)
+            {
+                skCanvas.Save();
+            }
+
+            var foreignObject = new ForeignObject(svgForeignObject);
+
+            SetTransform(skCanvas, foreignObject.matrix);
+
             // TODO:
+
+            skCanvas.Restore();
         }
 
         public struct Circle
@@ -1250,14 +1358,66 @@ namespace Svg.Skia
             skCanvas.Restore();
         }
 
+        public struct Marker
+        {
+            public SKMatrix matrix;
+
+            public Marker(SvgMarker svgMarker)
+            {
+                matrix = GetSKMatrix(svgMarker.Transforms);
+            }
+        }
+
         private static void DrawSvgMarker(SKCanvas skCanvas, SKSize skSize, SvgMarker svgMarker, CompositeDisposable disposable)
         {
+            if (SetOpacity(skCanvas, svgMarker, disposable) == null)
+            {
+                skCanvas.Save();
+            }
+
+            var marker = new Marker(svgMarker);
+
+            SetTransform(skCanvas, marker.matrix);
+
             // TODO:
+
+            skCanvas.Restore();
+        }
+
+        public struct Glyph
+        {
+            public SKMatrix matrix;
+
+            public Glyph(SvgGlyph svgGlyph)
+            {
+                matrix = GetSKMatrix(svgGlyph.Transforms);
+            }
         }
 
         private static void DrawSvgGlyph(SKCanvas skCanvas, SKSize skSize, SvgGlyph svgGlyph, CompositeDisposable disposable)
         {
+            if (SetOpacity(skCanvas, svgGlyph, disposable) == null)
+            {
+                skCanvas.Save();
+            }
+
+            var glyph = new Glyph(svgGlyph);
+
+            SetTransform(skCanvas, glyph.matrix);
+
             // TODO:
+
+            skCanvas.Restore();
+        }
+
+        public struct Group
+        {
+            public SKMatrix matrix;
+
+            public Group(SvgGroup svgGroup)
+            {
+                matrix = GetSKMatrix(svgGroup.Transforms);
+            }
         }
 
         private static void DrawSvgGroup(SKCanvas skCanvas, SKSize skSize, SvgGroup svgGroup, CompositeDisposable disposable)
@@ -1266,7 +1426,10 @@ namespace Svg.Skia
             {
                 skCanvas.Save();
             }
-            SetTransform(skCanvas, svgGroup.Transforms);
+
+            var group = new Group(svgGroup);
+
+            SetTransform(skCanvas, group.matrix);
 
             DrawSvgElementCollection(skCanvas, skSize, svgGroup.Children, disposable);
 
@@ -1319,13 +1482,26 @@ namespace Svg.Skia
             skCanvas.Restore();
         }
 
+        public struct Path
+        {
+            public SKMatrix matrix;
+
+            public Path(SvgPath svgPath)
+            {
+                matrix = GetSKMatrix(svgPath.Transforms);
+            }
+        }
+
         private static void DrawSvgPath(SKCanvas skCanvas, SKSize skSize, SvgPath svgPath, CompositeDisposable disposable)
         {
             if (SetOpacity(skCanvas, svgPath, disposable) == null)
             {
                 skCanvas.Save();
             }
-            SetTransform(skCanvas, svgPath.Transforms);
+
+            var path = new Path(svgPath);
+
+            SetTransform(skCanvas, path.matrix);
 
             using (var skPath = ToSKPath(svgPath.PathData, svgPath.FillRule))
             {
@@ -1354,13 +1530,26 @@ namespace Svg.Skia
             skCanvas.Restore();
         }
 
+        public struct Polyline
+        {
+            public SKMatrix matrix;
+
+            public Polyline(SvgPolyline svgPolyline)
+            {
+                matrix = GetSKMatrix(svgPolyline.Transforms);
+            }
+        }
+
         private static void DrawSvgPolyline(SKCanvas skCanvas, SKSize skSize, SvgPolyline svgPolyline, CompositeDisposable disposable)
         {
             if (SetOpacity(skCanvas, svgPolyline, disposable) == null)
             {
                 skCanvas.Save();
             }
-            SetTransform(skCanvas, svgPolyline.Transforms);
+
+            var polyline = new Polyline(svgPolyline);
+
+            SetTransform(skCanvas, polyline.matrix);
 
             using (var skPath = ToSKPath(svgPolyline.Points, svgPolyline.FillRule, false))
             {
@@ -1389,13 +1578,26 @@ namespace Svg.Skia
             skCanvas.Restore();
         }
 
+        public struct Polygon
+        {
+            public SKMatrix matrix;
+
+            public Polygon(SvgPolygon svgPolygon)
+            {
+                matrix = GetSKMatrix(svgPolygon.Transforms);
+            }
+        }
+
         private static void DrawSvgPolygon(SKCanvas skCanvas, SKSize skSize, SvgPolygon svgPolygon, CompositeDisposable disposable)
         {
             if (SetOpacity(skCanvas, svgPolygon, disposable) == null)
             {
                 skCanvas.Save();
             }
-            SetTransform(skCanvas, svgPolygon.Transforms);
+
+            var polygon = new Polygon(svgPolygon);
+
+            SetTransform(skCanvas, polygon.matrix);
 
             using (var skPath = ToSKPath(svgPolygon.Points, svgPolygon.FillRule, true))
             {
@@ -1424,24 +1626,108 @@ namespace Svg.Skia
             skCanvas.Restore();
         }
 
+        public struct Text
+        {
+            public SKMatrix matrix;
+
+            public Text(SvgText svgText)
+            {
+                matrix = GetSKMatrix(svgText.Transforms);
+            }
+        }
+
         private static void DrawSvgText(SKCanvas skCanvas, SKSize skSize, SvgText svgText, CompositeDisposable disposable)
         {
+            if (SetOpacity(skCanvas, svgText, disposable) == null)
+            {
+                skCanvas.Save();
+            }
+
+            var text = new Text(svgText);
+
+            SetTransform(skCanvas, text.matrix);
+
             // TODO:
+
+            skCanvas.Restore();
+        }
+
+        public struct TextPath
+        {
+            public SKMatrix matrix;
+
+            public TextPath(SvgTextPath svgTextPath)
+            {
+                matrix = GetSKMatrix(svgTextPath.Transforms);
+            }
         }
 
         private static void DrawSvgTextPath(SKCanvas skCanvas, SKSize skSize, SvgTextPath svgTextPath, CompositeDisposable disposable)
         {
+            if (SetOpacity(skCanvas, svgTextPath, disposable) == null)
+            {
+                skCanvas.Save();
+            }
+
+            var textPath = new TextPath(svgTextPath);
+
+            SetTransform(skCanvas, textPath.matrix);
+
             // TODO:
+
+            skCanvas.Restore();
+        }
+
+        public struct TextRef
+        {
+            public SKMatrix matrix;
+
+            public TextRef(SvgTextRef svgTextRef)
+            {
+                matrix = GetSKMatrix(svgTextRef.Transforms);
+            }
         }
 
         private static void DrawSvgTextRef(SKCanvas skCanvas, SKSize skSize, SvgTextRef svgTextRef, CompositeDisposable disposable)
         {
+            if (SetOpacity(skCanvas, svgTextRef, disposable) == null)
+            {
+                skCanvas.Save();
+            }
+
+            var textRef = new TextRef(svgTextRef);
+
+            SetTransform(skCanvas, textRef.matrix);
+
             // TODO:
+
+            skCanvas.Restore();
+        }
+
+        public struct TextSpan
+        {
+            public SKMatrix matrix;
+
+            public TextSpan(SvgTextSpan svgTextSpan)
+            {
+                matrix = GetSKMatrix(svgTextSpan.Transforms);
+            }
         }
 
         private static void DrawSvgTextSpan(SKCanvas skCanvas, SKSize skSize, SvgTextSpan svgTextSpan, CompositeDisposable disposable)
         {
+            if (SetOpacity(skCanvas, svgTextSpan, disposable) == null)
+            {
+                skCanvas.Save();
+            }
+
+            var textSpan = new TextSpan(svgTextSpan);
+
+            SetTransform(skCanvas, textSpan.matrix);
+
             // TODO:
+
+            skCanvas.Restore();
         }
 
         private static void DrawSvgElement(SKCanvas skCanvas, SKSize skSize, SvgElement svgElement, CompositeDisposable disposable)
