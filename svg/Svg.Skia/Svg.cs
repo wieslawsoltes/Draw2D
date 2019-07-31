@@ -1222,11 +1222,11 @@ namespace Svg.Skia
                 {
                     if (rectangle.isRound)
                     {
-                        skCanvas.DrawRoundRect(rectangle.bounds, rectangle.rx, rectangle.ry, skPaint);
+                        skCanvas.DrawRoundRect(rectangle.x, rectangle.y, rectangle.width, rectangle.height, rectangle.rx, rectangle.ry, skPaint);
                     }
                     else
                     {
-                        skCanvas.DrawRect(rectangle.bounds, skPaint);
+                        skCanvas.DrawRect(rectangle.x, rectangle.y, rectangle.width, rectangle.height, skPaint);
                     }
                 }
             }
