@@ -867,6 +867,7 @@ namespace Svg.Skia
             if (opacity < 1f && canSetOpacity)
             {
                 var paint = GetSKPaintOpacity(opacity);
+                skCanvas.SaveLayer(paint);
                 disposable.Disposables.Add(paint);
                 return paint;
             }
