@@ -2,12 +2,14 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>netcoreapp3.0</TargetFramework>
+    <TargetFrameworks>netcoreapp2.2;netcoreapp3.0</TargetFrameworks>
     <EnableDefaultCompileItems>False</EnableDefaultCompileItems>
     <EnableDefaultItems>False</EnableDefaultItems>
     <NoWarn>CS1591</NoWarn>
     <IsPackable>True</IsPackable>
     <IsTool>True</IsTool>
+    <PackAsTool>True</PackAsTool>
+    <ToolCommandName>Svg.Skia.Converter</ToolCommandName>
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
@@ -25,7 +27,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\externals\SVG\Source\Svg.csproj" />
+    <ProjectReference Include="..\..\externals\SVG\Source\Svg.csproj" PrivateAssets="all" />
     <ProjectReference Include="..\Svg.Skia\Svg.Skia.csproj" />
   </ItemGroup>
 

@@ -4,6 +4,27 @@ Skia SVG rendering library.
 
 ## Usage
 
+### Library
+
+```
+dotnet add package Svg.Skia
+```
+
+```C#
+using SkiaSharp;
+using Svg.Skia;
+```
+
+```C#
+var path = "image.svg"; // You can also load `image.svgz` images.
+var svg = new Svg();
+var picture = svg.Load(path);
+if (picture != null)
+{
+    svg.Save("image.png", SKEncodedImageFormat.Png, 100, 1f, 1f);
+}
+```
+
 ### Tool
 
 ```
@@ -31,24 +52,59 @@ Options:
   --version                      Display version information
 ```
 
+## Build
+
 ### Library
 
 ```
-dotnet add package Svg.Skia
+git clone git@github.com:wieslawsoltes/Draw2D.git
+cd Draw2D
+git submodule update --init --recursive
+dotnet build -c Release ./svg/Svg.Skia.Converter/Svg.Skia.Converter.csproj
 ```
 
-```C#
-using SkiaSharp;
-using Svg.Skia;
+### Tool
+
 ```
-```C#
-var path = "image.svg";
-var svg = new Svg();
-var picture = svg.Load(path);
-if (picture != null)
-{
-    svg.Save("image.png", SKEncodedImageFormat.Png, 100, 1f, 1f);
-}
+git clone git@github.com:wieslawsoltes/Draw2D.git
+cd Draw2D
+git submodule update --init --recursive
+export LANG=en-US.UTF-8
+dotnet build -c Release ./svg/Svg.Skia/Svg.Skia.csproj
+```
+
+## Publish
+
+### Library
+
+```
+git clone git@github.com:wieslawsoltes/Draw2D.git
+cd Draw2D
+git submodule update --init --recursive
+export LANG=en-US.UTF-8
+dotnet pack -c Release -o ./artifacts ./svg/Svg.Skia/Svg.Skia.csproj
+```
+
+### Tool
+
+```
+git clone git@github.com:wieslawsoltes/Draw2D.git
+cd Draw2D
+git submodule update --init --recursive
+export LANG=en-US.UTF-8
+dotnet pack -c Release -o ./artifacts ./svg/Svg.Skia.Converter/Svg.Skia.Converter.csproj
+```
+
+## Testing
+
+```
+dotnet tool install --global --add-source ./artifacts Svg.Skia.Converter
+export DOTNET_ROOT=$HOME/dotnet
+```
+
+```
+dotnet tool uninstall -g Svg.Skia.Converter
+Svg.Skia.Converter --help
 ```
 
 ## Externals
