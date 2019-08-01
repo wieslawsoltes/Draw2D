@@ -27,7 +27,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Svg\Svg.csproj" PrivateAssets="all" />
+    <ProjectReference Include="..\Svg\Svg.csproj" />
     <ProjectReference Include="..\Svg.Skia\Svg.Skia.csproj" />
   </ItemGroup>
 
