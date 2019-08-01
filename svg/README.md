@@ -61,6 +61,8 @@ Options:
 
 ## Build
 
+To build `Svg.Skia` library and `Svg.Skia.Converter` tool you need to install [.NET Core 3.0](https://dotnet.microsoft.com/download/dotnet-core/3.0) version `SDK 3.0.100-preview6-012264`.
+
 ### Library
 
 ```
