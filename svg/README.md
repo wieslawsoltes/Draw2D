@@ -82,7 +82,7 @@ git clone git@github.com:wieslawsoltes/Draw2D.git
 cd Draw2D
 git submodule update --init --recursive
 export LANG=en-US.UTF-8
-dotnet pack -c Release -o ./artifacts ./svg/Svg.Skia/Svg.Skia.csproj
+dotnet pack -c Release -o ./artifacts --version-suffix "preview1" ./svg/Svg.Skia/Svg.Skia.csproj
 ```
 
 ### Tool
@@ -92,7 +92,7 @@ git clone git@github.com:wieslawsoltes/Draw2D.git
 cd Draw2D
 git submodule update --init --recursive
 export LANG=en-US.UTF-8
-dotnet pack -c Release -o ./artifacts ./svg/Svg.Skia.Converter/Svg.Skia.Converter.csproj
+dotnet pack -c Release -o ./artifacts --version-suffix "preview1" ./svg/Svg.Skia.Converter/Svg.Skia.Converter.csproj
 ```
 
 ## Testing
