@@ -85,6 +85,10 @@ export LANG=en-US.UTF-8
 dotnet pack -c Release -o ./artifacts --version-suffix "preview1" ./svg/Svg.Skia/Svg.Skia.csproj
 ```
 
+```
+dotnet nuget push ./artifacts/Svg.Skia.0.0.1-preview1.nupkg -k <key> -s https://api.nuget.org/v3/index.json
+```
+
 ### Tool
 
 ```
@@ -93,6 +97,10 @@ cd Draw2D
 git submodule update --init --recursive
 export LANG=en-US.UTF-8
 dotnet pack -c Release -o ./artifacts --version-suffix "preview1" ./svg/Svg.Skia.Converter/Svg.Skia.Converter.csproj
+```
+
+```
+dotnet nuget push ./artifacts/Svg.Skia.Converter.0.0.1-preview1.nupkg -k <key> -s https://api.nuget.org/v3/index.json
 ```
 
 ## Testing
