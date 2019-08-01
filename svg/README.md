@@ -6,6 +6,7 @@ Skia SVG rendering library.
 
 | Package              | Version                                                                                                                 |
 |----------------------|-------------------------------------------------------------------------------------------------------------------------|
+| Svg.Custom           | [![NuGet](https://img.shields.io/nuget/v/Svg.Skia.svg)](https://www.nuget.org/packages/Svg.Custom)                      |
 | Svg.Skia             | [![NuGet](https://img.shields.io/nuget/v/Svg.Skia.svg)](https://www.nuget.org/packages/Svg.Skia)                        |
 | Svg.Skia.Converter   | [![NuGet](https://img.shields.io/nuget/v/Svg.Skia.Converter.svg)](https://www.nuget.org/packages/Svg.Skia.Converter)    |
 
@@ -91,11 +92,13 @@ git clone git@github.com:wieslawsoltes/Draw2D.git
 cd Draw2D
 git submodule update --init --recursive
 export LANG=en-US.UTF-8
-dotnet pack -c Release -o ./artifacts --version-suffix "preview1" ./svg/Svg.Skia/Svg.Skia.csproj
+dotnet pack -c Release -o ./artifacts --version-suffix "preview2" ./svg/Svg.Custom/Svg.Custom.csproj
+dotnet pack -c Release -o ./artifacts --version-suffix "preview2" ./svg/Svg.Skia/Svg.Skia.csproj
 ```
 
 ```
-dotnet nuget push ./artifacts/Svg.Skia.0.0.1-preview1.nupkg -k <key> -s https://api.nuget.org/v3/index.json
+dotnet nuget push ./artifacts/Svg.Custom.0.0.1-preview2.nupkg -k <key> -s https://api.nuget.org/v3/index.json
+dotnet nuget push ./artifacts/Svg.Skia.0.0.1-preview2.nupkg -k <key> -s https://api.nuget.org/v3/index.json
 ```
 
 ### Tool
@@ -105,11 +108,11 @@ git clone git@github.com:wieslawsoltes/Draw2D.git
 cd Draw2D
 git submodule update --init --recursive
 export LANG=en-US.UTF-8
-dotnet pack -c Release -o ./artifacts --version-suffix "preview1" ./svg/Svg.Skia.Converter/Svg.Skia.Converter.csproj
+dotnet pack -c Release -o ./artifacts --version-suffix "preview2" ./svg/Svg.Skia.Converter/Svg.Skia.Converter.csproj
 ```
 
 ```
-dotnet nuget push ./artifacts/Svg.Skia.Converter.0.0.1-preview1.nupkg -k <key> -s https://api.nuget.org/v3/index.json
+dotnet nuget push ./artifacts/Svg.Skia.Converter.0.0.1-preview2.nupkg -k <key> -s https://api.nuget.org/v3/index.json
 ```
 
 ## Testing

@@ -7,13 +7,26 @@
     <EnableDefaultItems>False</EnableDefaultItems>
     <GenerateAssemblyInfo>False</GenerateAssemblyInfo>
     <NoWarn>CS1591</NoWarn>
-    <IsPackable>False</IsPackable>
+    <IsPackable>True</IsPackable>
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
   <PropertyGroup>
-    <PackageId>Svg</PackageId>
+    <VersionPrefix>0.0.1</VersionPrefix>
+    <VersionSuffix></VersionSuffix>
+    <Authors>Wiesław Šoltés</Authors>
+    <Company>Wiesław Šoltés</Company>
+    <Description>Custom build of the SVG rendering library.</Description>
+    <Copyright>Copyright © Wiesław Šoltés 2019</Copyright>
+    <PackageId>Svg.Custom</PackageId>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/wieslawsoltes/Draw2D</PackageProjectUrl>
+    <PackageTags>svg;vector graphics;rendering;2d;graphics;geometry;shapes</PackageTags>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="**\*.cs" Exclude="obj\**" />
+  </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="..\..\externals\SVG\Source\Resources\svg11.dtd" />
@@ -22,6 +35,10 @@
 
   <ItemGroup>
     <Compile Include="..\..\externals\SVG\Source\**\*.cs" Exclude="obj\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="..\..\externals\SVG\Source\Properties\AssemblyInfo.cs" />
   </ItemGroup>
 
   <ItemGroup>
