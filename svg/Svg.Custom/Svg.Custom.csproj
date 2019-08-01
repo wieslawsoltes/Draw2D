@@ -26,37 +26,25 @@
 
   <ItemGroup>
     <Compile Include="**\*.cs" Exclude="obj\**" />
-  </ItemGroup>
-
-  <ItemGroup>
     <EmbeddedResource Include="..\..\externals\SVG\Source\Resources\svg11.dtd" />
     <Folder Include="..\..\externals\SVG\Source\Web\Resources\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Compile Include="..\..\externals\SVG\Source\**\*.cs" Exclude="obj\**" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Compile Remove="..\..\externals\SVG\Source\Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Compile Remove="..\..\externals\SVG\Source\External\ExCSS\Parser.generated.cs" />
     <Compile Remove="..\..\externals\SVG\Source\External\ExCSS\ParserX.cs" />
     <Compile Remove="..\..\externals\SVG\Source\Resources\svg11.dtd" />
   </ItemGroup>
 
+  <PropertyGroup Condition="'$(TargetFramework)'=='netstandard2.0'">
+    <DefineConstants>$(DefineConstants);NETSTANDARD;NETSTANDARD20</DefineConstants>
+  </PropertyGroup>
+
   <PropertyGroup Condition="'$(TargetFramework)'=='netcoreapp2.2'">
     <DefineConstants>$(DefineConstants);NETCORE;NETCORE22</DefineConstants>
   </PropertyGroup>
-  
+
   <PropertyGroup Condition="'$(TargetFramework)'=='netcoreapp3.0'">
     <DefineConstants>$(DefineConstants);NETCORE;NETCORE30</DefineConstants>
-  </PropertyGroup>
-  
-  <PropertyGroup Condition="'$(TargetFramework)'=='netstandard2.0'">
-    <DefineConstants>$(DefineConstants);NETSTANDARD;NETSTANDARD20</DefineConstants>
   </PropertyGroup>
 
   <ItemGroup>
