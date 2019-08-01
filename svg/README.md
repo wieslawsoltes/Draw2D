@@ -1,7 +1,9 @@
 # Svg.Skia
 
-[![NuGet](https://img.shields.io/nuget/v/Svg.Skia.svg)](https://www.nuget.org/packages/Svg.Skia)
-[![NuGet](https://img.shields.io/nuget/v/Svg.Skia.Converter.svg)](https://www.nuget.org/packages/Svg.Skia.Converter)
+| Package              | Version                                                                                                                 |
+|----------------------|-------------------------------------------------------------------------------------------------------------------------|
+| Svg.Skia             | [![NuGet](https://img.shields.io/nuget/v/Svg.Skia.svg)](https://www.nuget.org/packages/Svg.Skia)                        |
+| Svg.Skia.Converter   | [![NuGet](https://img.shields.io/nuget/v/Svg.Skia.Converter.svg)](https://www.nuget.org/packages/Svg.Skia.Converter)    |
 
 Skia SVG rendering library.
 
