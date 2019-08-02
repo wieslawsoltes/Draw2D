@@ -9,6 +9,22 @@ using Svg;
 
 namespace Svg.Skia.Converter
 {
+    public class ConverterSettings
+    {
+        public FileInfo[] Files { get; set; }
+        public DirectoryInfo[] Directories { get; set; }
+        public DirectoryInfo Output { get; set; }
+        public string Pattern { get; set; }
+        public string Format { get; set; }
+        public int Quality { get; set; }
+        public string Background { get; set; }
+        public float Scale { get; set; }
+        public float ScaleX { get; set; }
+        public float ScaleY { get; set; }
+        public bool Debug { get; set; }
+        public bool Quiet { get; set; }
+    }
+
     public class Converter
     {
         public static void Log(string message)
@@ -26,7 +42,7 @@ namespace Svg.Skia.Converter
             }
         }
 
-        public static bool Save(FileInfo path, DirectoryInfo output, string format, int quality, float scaleX, float scaleY, bool debug, bool quiet, int i)
+        public static bool Save(FileInfo path, DirectoryInfo output, string format, int quality, string background, float scale, float scaleX, float scaleY, bool debug, bool quiet, int i)
         {
             try
             {
@@ -58,7 +74,21 @@ namespace Svg.Skia.Converter
 
                         if (Enum.TryParse<SKEncodedImageFormat>(format, true, out var skEncodedImageFormat))
                         {
-                            svg.Save(imagePath, skEncodedImageFormat, quality, scaleX, scaleY);
+                            if (SKColor.TryParse(background, out var skBackgroundColor))
+                            {
+                                if (scale != 1f)
+                                {
+                                    svg.Save(imagePath, skBackgroundColor, skEncodedImageFormat, quality, scale, scale);
+                                }
+                                else
+                                {
+                                    svg.Save(imagePath, skBackgroundColor, skEncodedImageFormat, quality, scaleX, scaleY);
+                                }
+                            }
+                            else
+                            {
+                                throw new ArgumentException($"Invalid output image background.", nameof(background));
+                            }
                         }
                         else
                         {
@@ -98,35 +128,41 @@ namespace Svg.Skia.Converter
             }
         }
 
-        public static void Convert(FileInfo file, DirectoryInfo directory, DirectoryInfo output, string pattern, string format, int quality, float scaleX, float scaleY, bool debug, bool quiet)
+        public static void Convert(ConverterSettings settings)
         {
             try
             {
                 var paths = new List<FileInfo>();
 
-                if (file != null)
+                if (settings.Files != null)
                 {
-                    paths.Add(file);
-                }
-
-                if (directory != null)
-                {
-                    if (pattern == null)
+                    foreach (var file in settings.Files)
                     {
-                        GetFiles(directory, "*.svg", paths);
-                        GetFiles(directory, "*.svgz", paths);
-                    }
-                    else
-                    {
-                        GetFiles(directory, pattern, paths);
+                        paths.Add(file);
                     }
                 }
 
-                if (!string.IsNullOrEmpty(output.FullName))
+                if (settings.Directories != null)
                 {
-                    if (!Directory.Exists(output.FullName))
+                    foreach (var directory in settings.Directories)
                     {
-                        Directory.CreateDirectory(output.FullName);
+                        if (settings.Pattern == null)
+                        {
+                            GetFiles(directory, "*.svg", paths);
+                            GetFiles(directory, "*.svgz", paths);
+                        }
+                        else
+                        {
+                            GetFiles(directory, settings.Pattern, paths);
+                        }
+                    }
+                }
+
+                if (!string.IsNullOrEmpty(settings.Output.FullName))
+                {
+                    if (!Directory.Exists(settings.Output.FullName))
+                    {
+                        Directory.CreateDirectory(settings.Output.FullName);
                     }
                 }
 
@@ -138,7 +174,7 @@ namespace Svg.Skia.Converter
                 {
                     var path = paths[i];
 
-                    if (Save(path, output, format, quality, scaleX, scaleY, debug, quiet, i))
+                    if (Save(path, settings.Output, settings.Format, settings.Quality, settings.Background, settings.Scale, settings.ScaleX, settings.ScaleY, settings.Debug, settings.Quiet, i))
                     {
                         processed++;
                     }
@@ -146,14 +182,14 @@ namespace Svg.Skia.Converter
 
                 sw.Stop();
 
-                if (quiet == false && paths.Count > 0)
+                if (settings.Quiet == false && paths.Count > 0)
                 {
                     Log($"Done: {sw.Elapsed} ({processed}/{paths.Count})");
                 }
             }
             catch (Exception ex)
             {
-                if (quiet == false)
+                if (settings.Quiet == false)
                 {
                     Error(ex);
                 }

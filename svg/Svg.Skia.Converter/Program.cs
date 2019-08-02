@@ -12,14 +12,14 @@ namespace Svg.Skia.Converter
     {
         public static async Task<int> Main(string[] args)
         {
-            var optionFile = new Option(new[] { "--file", "-f" }, "The relative or absolute path to the input file")
+            var optionFile = new Option(new[] { "--files", "-f" }, "The relative or absolute path to the input files")
             {
-                Argument = new Argument<FileInfo>(defaultValue: () => null)
+                Argument = new Argument<FileInfo[]>(defaultValue: () => null)
             };
 
-            var optionDirectory = new Option(new[] { "--directory", "-d" }, "The relative or absolute path to the input directory")
+            var optionDirectory = new Option(new[] { "--directories", "-d" }, "The relative or absolute path to the input directories")
             {
-                Argument = new Argument<DirectoryInfo>(defaultValue: () => null)
+                Argument = new Argument<DirectoryInfo[]>(defaultValue: () => null)
             };
 
             var optionOutput = new Option(new[] { "--output", "-o" }, "The relative or absolute path to the output directory")
@@ -27,7 +27,7 @@ namespace Svg.Skia.Converter
                 Argument = new Argument<DirectoryInfo>(defaultValue: () => null)
             };
 
-            var optionPattern = new Option(new[] { "--pattern", "-p" }, "The search string to match against the names of files in the input path")
+            var optionPattern = new Option(new[] { "--pattern", "-p" }, "The search string to match against the names of files in the input directory")
             {
                 Argument = new Argument<string>(defaultValue: () => null)
             };
@@ -37,17 +37,27 @@ namespace Svg.Skia.Converter
                 Argument = new Argument<string>(defaultValue: () => "png")
             };
 
-            var optionQuality = new Option(new[] { "--quality" }, "The output image quality")
+            var optionQuality = new Option(new[] { "--quality", "-q" }, "The output image quality")
             {
                 Argument = new Argument<int>(defaultValue: () => 100)
             };
 
-            var optionScaleX = new Option(new[] { "--scaleX" }, "The output image horizontal scaling factor")
+            var optionBackground = new Option(new[] { "--background", "-b" }, "The output image background")
+            {
+                Argument = new Argument<string>(defaultValue: () => "#00000000")
+            };
+
+            var optionScale = new Option(new[] { "--scale", "-s" }, "The output image horizontal and vertical scaling factor")
             {
                 Argument = new Argument<float>(defaultValue: () => 1f)
             };
 
-            var optionScaleY = new Option(new[] { "--scaleY" }, "The output image vertical scaling factor")
+            var optionScaleX = new Option(new[] { "--scaleX", "-sx" }, "The output image horizontal scaling factor")
+            {
+                Argument = new Argument<float>(defaultValue: () => 1f)
+            };
+
+            var optionScaleY = new Option(new[] { "--scaleY", "-sy" }, "The output image vertical scaling factor")
             {
                 Argument = new Argument<float>(defaultValue: () => 1f)
             };
@@ -73,12 +83,14 @@ namespace Svg.Skia.Converter
             rootCommand.AddOption(optionPattern);
             rootCommand.AddOption(optionFormat);
             rootCommand.AddOption(optionQuality);
+            rootCommand.AddOption(optionBackground);
+            rootCommand.AddOption(optionScale);
             rootCommand.AddOption(optionScaleX);
             rootCommand.AddOption(optionScaleY);
             rootCommand.AddOption(optionDebug);
             rootCommand.AddOption(optionQuiet);
 
-            rootCommand.Handler = CommandHandler.Create(typeof(Converter).GetMethod(nameof(Convert)));
+            rootCommand.Handler = CommandHandler.Create((ConverterSettings settings) => Converter.Convert(settings));
 
             return await rootCommand.InvokeAsync(args);
         }

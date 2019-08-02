@@ -58,17 +58,19 @@ Usage:
   Svg.Skia.Converter [options]
 
 Options:
-  -f, --file <file>              The relative or absolute path to the input file
-  -d, --directory <directory>    The relative or absolute path to the input directory
-  -o, --output <output>          The relative or absolute path to the output directory
-  -p, --pattern <pattern>        The search string to match against the names of files in the input path
-  --format <format>              The output image format
-  --quality <quality>            The output image quality
-  --scaleX <scalex>              The output image horizontal scaling factor
-  --scaleY <scaley>              The output image vertical scaling factor
-  --debug                        Write debug output to a file
-  --quiet                        Set verbosity level to quiet
-  --version                      Display version information
+  -f, --files <files>                The relative or absolute path to the input files
+  -d, --directories <directories>    The relative or absolute path to the input directories
+  -o, --output <output>              The relative or absolute path to the output directory
+  -p, --pattern <pattern>            The search string to match against the names of files in the input directory
+  --format <format>                  The output image format
+  -q, --quality <quality>            The output image quality
+  -b, --background <background>      The output image background
+  -s, --scale <scale>                The output image horizontal and vertical scaling factor
+  -sx, --scaleX <scalex>             The output image horizontal scaling factor
+  -sy, --scaleY <scaley>             The output image vertical scaling factor
+  --debug                            Write debug output to a file
+  --quiet                            Set verbosity level to quiet
+  --version                          Display version information
 ```
 
 ## Build

@@ -23,7 +23,6 @@ namespace Svg.Skia
                 using (var skPictureRecorder = new SKPictureRecorder())
                 using (var skCanvas = skPictureRecorder.BeginRecording(cullRect))
                 {
-                    skCanvas.Clear(SKColors.Transparent);
                     SvgHelper.DrawSvgElement(skCanvas, skSize, svgFragment, disposable);
                     return skPictureRecorder.EndRecording();
                 }
@@ -77,7 +76,7 @@ namespace Svg.Skia
             }
         }
 
-        public bool Save(System.IO.Stream stream, SKEncodedImageFormat format = SKEncodedImageFormat.Png, int quality = 100, float scaleX = 1f, float scaleY = 1f)
+        public bool Save(System.IO.Stream stream, SKColor background, SKEncodedImageFormat format = SKEncodedImageFormat.Png, int quality = 100, float scaleX = 1f, float scaleY = 1f)
         {
             if (Picture == null)
             {
@@ -93,6 +92,11 @@ namespace Svg.Skia
                 using (var skBitmap = new SKBitmap(skImageInfo))
                 using (var skCanvas = new SKCanvas(skBitmap))
                 {
+                    skCanvas.Clear(SKColors.Transparent);
+                    if (background != SKColor.Empty)
+                    {
+                        skCanvas.DrawColor(background);
+                    }
                     skCanvas.Save();
                     skCanvas.Scale(scaleX, scaleY);
                     skCanvas.DrawPicture(Picture);
@@ -112,11 +116,11 @@ namespace Svg.Skia
             return false;
         }
 
-        public bool Save(string path, SKEncodedImageFormat format = SKEncodedImageFormat.Png, int quality = 100, float scaleX = 1f, float scaleY = 1f)
+        public bool Save(string path, SKColor background, SKEncodedImageFormat format = SKEncodedImageFormat.Png, int quality = 100, float scaleX = 1f, float scaleY = 1f)
         {
             using (var stream = System.IO.File.OpenWrite(path))
             {
-                return Save(stream, format, quality, scaleX, scaleY);
+                return Save(stream, background, format, quality, scaleX, scaleY);
             }
         }
 
