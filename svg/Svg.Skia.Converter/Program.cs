@@ -15,11 +15,15 @@ namespace Svg.Skia.Converter
 {
     public class Program
     {
+        private static void Log(string message)
+        {
+            Console.WriteLine(message);
+        }
 
         public static void Error(Exception ex)
         {
-            Console.WriteLine($"{ex.Message}", ConsoleColor.Yellow);
-            Console.WriteLine($"{ex.StackTrace}", ConsoleColor.White);
+            Log($"{ex.Message}");
+            Log($"{ex.StackTrace}");
             if (ex.InnerException != null)
             {
                 Error(ex.InnerException);
@@ -32,8 +36,7 @@ namespace Svg.Skia.Converter
             {
                 if (quiet == false)
                 {
-                    Console.ForegroundColor = ConsoleColor.White;
-                    Console.WriteLine($"[{i}] File: {path}");
+                    Log($"[{i}] File: {path}");
                 }
 
                 var extension = path.Extension;
@@ -94,8 +97,7 @@ namespace Svg.Skia.Converter
 
                 if (quiet == false)
                 {
-                    Console.ForegroundColor = ConsoleColor.Green;
-                    Console.WriteLine($"[{i}] Succes: {imagePath}");
+                    Log($"[{i}] Success: {imagePath}");
                 }
 
                 return true;
@@ -104,8 +106,7 @@ namespace Svg.Skia.Converter
             {
                 if (quiet == false)
                 {
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine($"[{i}] Error: {path}");
+                    Log($"[{i}] Error: {path}");
                     Error(ex);
                 }
             }
@@ -159,7 +160,7 @@ namespace Svg.Skia.Converter
 
                 var sw = Stopwatch.StartNew();
 
-                int success = 0;
+                int processed = 0;
 
                 for (int i = 0; i < paths.Count; i++)
                 {
@@ -167,7 +168,7 @@ namespace Svg.Skia.Converter
 
                     if (Save(path, output, format, quality, scaleX, scaleY, debug, quiet, i))
                     {
-                        success++;
+                        processed++;
                     }
                 }
 
@@ -175,16 +176,13 @@ namespace Svg.Skia.Converter
 
                 if (quiet == false && paths.Count > 0)
                 {
-                    Console.ForegroundColor = ConsoleColor.White;
-                    Console.WriteLine($"Done: {sw.Elapsed} ({success}/{paths.Count})");
-                    Console.ResetColor();
+                    Log($"Done: {sw.Elapsed} ({processed}/{paths.Count})");
                 }
             }
             catch (Exception ex)
             {
                 if (quiet == false)
                 {
-                    Console.ResetColor();
                     Error(ex);
                 }
             }
