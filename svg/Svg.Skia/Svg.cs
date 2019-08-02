@@ -1,8 +1,6 @@
 ﻿// Copyright (c) Wiesław Šoltés. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using System;
-using System.IO;
-using System.IO.Compression;
 using SkiaSharp;
 using Svg;
 
@@ -32,7 +30,7 @@ namespace Svg.Skia
             }
         }
 
-        public SKPicture Load(Stream stream)
+        public SKPicture Load(System.IO.Stream stream)
         {
             Reset();
             var svgDocument = SvgDocument.Open<SvgDocument>(stream, null);
@@ -49,30 +47,37 @@ namespace Svg.Skia
         public SKPicture Load(string path)
         {
             Reset();
-            var svgDocument = SvgDocument.Open<SvgDocument>(path, null);
-            if (svgDocument != null)
+            var extension = System.IO.Path.GetExtension(path);
+            switch (extension.ToLower())
             {
-                svgDocument.FlushStyles(true);
-                Picture = Load(svgDocument);
-                Document = svgDocument;
-                return Picture;
+                default:
+                case ".svg":
+                    {
+                        var svgDocument = SvgDocument.Open<SvgDocument>(path, null);
+                        if (svgDocument != null)
+                        {
+                            svgDocument.FlushStyles(true);
+                            Picture = Load(svgDocument);
+                            Document = svgDocument;
+                            return Picture;
+                        }
+                        return null;
+                    }
+                case ".svgz":
+                    {
+                        using (var fileStream = System.IO.File.OpenRead(path))
+                        using (var gzipStream = new System.IO.Compression.GZipStream(fileStream, System.IO.Compression.CompressionMode.Decompress))
+                        using (var memoryStream = new System.IO.MemoryStream())
+                        {
+                            gzipStream.CopyTo(memoryStream);
+                            memoryStream.Position = 0;
+                            return Load(memoryStream);
+                        }
+                    }
             }
-            return null;
         }
 
-        public SKPicture LoadSvgz(string path)
-        {
-            using (var fileStream = File.OpenRead(path))
-            using (var gzipStream = new GZipStream(fileStream, CompressionMode.Decompress))
-            using (var memoryStream = new MemoryStream())
-            {
-                gzipStream.CopyTo(memoryStream);
-                memoryStream.Position = 0;
-                return Load(memoryStream);
-            }
-        }
-
-        public bool Save(Stream stream, SKEncodedImageFormat format = SKEncodedImageFormat.Png, int quality = 100, float scaleX = 1f, float scaleY = 1f)
+        public bool Save(System.IO.Stream stream, SKEncodedImageFormat format = SKEncodedImageFormat.Png, int quality = 100, float scaleX = 1f, float scaleY = 1f)
         {
             if (Picture == null)
             {
@@ -109,7 +114,7 @@ namespace Svg.Skia
 
         public bool Save(string path, SKEncodedImageFormat format = SKEncodedImageFormat.Png, int quality = 100, float scaleX = 1f, float scaleY = 1f)
         {
-            using (var stream = File.OpenWrite(path))
+            using (var stream = System.IO.File.OpenWrite(path))
             {
                 return Save(stream, format, quality, scaleX, scaleY);
             }

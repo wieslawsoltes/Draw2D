@@ -37,7 +37,7 @@ using Svg.Skia;
 
 using (var svg = new Svg())
 {
-    if (svg.LoadSvgz("image.svgz") != null)
+    if (svg.Load("image.svgz") != null)
     {
         svg.Save("image.png", SKEncodedImageFormat.Png, 100, 1f, 1f);
     }

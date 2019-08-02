@@ -47,20 +47,7 @@ namespace Svg.Skia.Converter
 
                 using (var svg = new Svg())
                 {
-                    SKPicture picture;
-
-                    switch (path.Extension.ToLower())
-                    {
-                        default:
-                        case ".svg":
-                            picture = svg.Load(path.FullName);
-                            break;
-                        case ".svgz":
-                            picture = svg.LoadSvgz(path.FullName);
-                            break;
-                    }
-
-                    if (picture != null)
+                    if (svg.Load(path.FullName) != null)
                     {
                         if (debug == true && svg.Document != null)
                         {
