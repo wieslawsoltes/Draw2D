@@ -13,9 +13,9 @@ using Svg;
 
 namespace Svg.Skia.Converter
 {
-    public class Program
+    public class Converter
     {
-        private static void Log(string message)
+        public static void Log(string message)
         {
             Console.WriteLine(message);
         }
@@ -114,7 +114,7 @@ namespace Svg.Skia.Converter
             return false;
         }
 
-        private static void GetFiles(DirectoryInfo directory, string pattern, List<FileInfo> paths)
+        public static void GetFiles(DirectoryInfo directory, string pattern, List<FileInfo> paths)
         {
             var files = Directory.EnumerateFiles(directory.FullName, pattern);
             if (files != null)
@@ -126,7 +126,7 @@ namespace Svg.Skia.Converter
             }
         }
 
-        public static void Run(FileInfo file, DirectoryInfo directory, DirectoryInfo output, string pattern, string format, int quality, float scaleX, float scaleY, bool debug, bool quiet)
+        public static void Convert(FileInfo file, DirectoryInfo directory, DirectoryInfo output, string pattern, string format, int quality, float scaleX, float scaleY, bool debug, bool quiet)
         {
             try
             {
@@ -187,7 +187,10 @@ namespace Svg.Skia.Converter
                 }
             }
         }
+    }
 
+    public class Program
+    {
         public static async Task<int> Main(string[] args)
         {
             var optionFile = new Option(new[] { "--file", "-f" }, "The relative or absolute path to the input file")
@@ -256,7 +259,7 @@ namespace Svg.Skia.Converter
             rootCommand.AddOption(optionDebug);
             rootCommand.AddOption(optionQuiet);
 
-            rootCommand.Handler = CommandHandler.Create(typeof(Program).GetMethod(nameof(Run)));
+            rootCommand.Handler = CommandHandler.Create(typeof(Converter).GetMethod(nameof(Convert)));
 
             return await rootCommand.InvokeAsync(args);
         }
