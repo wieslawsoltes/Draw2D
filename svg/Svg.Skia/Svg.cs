@@ -2,6 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using System;
 using System.IO;
+using System.IO.Compression;
 using SkiaSharp;
 using Svg;
 
@@ -57,6 +58,18 @@ namespace Svg.Skia
                 return Picture;
             }
             return null;
+        }
+
+        public SKPicture LoadSvgz(string path)
+        {
+            using (var fileStream = File.OpenRead(path))
+            using (var gzipStream = new GZipStream(fileStream, CompressionMode.Decompress))
+            using (var memoryStream = new MemoryStream())
+            {
+                gzipStream.CopyTo(memoryStream);
+                memoryStream.Position = 0;
+                return Load(memoryStream);
+            }
         }
 
         public bool Save(Stream stream, SKEncodedImageFormat format = SKEncodedImageFormat.Png, int quality = 100, float scaleX = 1f, float scaleY = 1f)

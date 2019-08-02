@@ -6,7 +6,6 @@ using System.CommandLine;
 using System.CommandLine.Invocation;
 using System.Diagnostics;
 using System.IO;
-using System.IO.Compression;
 using System.Threading.Tasks;
 using SkiaSharp;
 using Svg;
@@ -54,21 +53,10 @@ namespace Svg.Skia.Converter
                     {
                         default:
                         case ".svg":
-                            {
-                                picture = svg.Load(path.FullName);
-                            }
+                            picture = svg.Load(path.FullName);
                             break;
                         case ".svgz":
-                            {
-                                using (var fileStream = path.OpenRead())
-                                using (var memoryStream = new MemoryStream())
-                                using (var gzipStream = new GZipStream(fileStream, CompressionMode.Decompress))
-                                {
-                                    gzipStream.CopyTo(memoryStream);
-                                    memoryStream.Position = 0;
-                                    picture = svg.Load(memoryStream);
-                                }
-                            }
+                            picture = svg.LoadSvgz(path.FullName);
                             break;
                     }
 
