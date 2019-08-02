@@ -21,15 +21,38 @@ dotnet add package Svg.Skia
 ```C#
 using SkiaSharp;
 using Svg.Skia;
+
+var path = "image.svg";
+
+using (var svg = new Svg())
+{
+    if (svg.Load(path) != null)
+    {
+      svg.Save("image.png", SKEncodedImageFormat.Png, 100, 1f, 1f);
+    }
+}
 ```
 
 ```C#
-var path = "image.svg"; // You can also load `image.svgz` images.
-var svg = new Svg();
-var picture = svg.Load(path);
-if (picture != null)
+using System.IO;
+using System.IO.Compression;
+using SkiaSharp;
+using Svg.Skia;
+
+var path = new FileInfo("image.svgz");
+
+using (var fileStream = path.OpenRead())
+using (var memoryStream = new MemoryStream())
+using (var gzipStream = new GZipStream(fileStream, CompressionMode.Decompress))
 {
-    svg.Save("image.png", SKEncodedImageFormat.Png, 100, 1f, 1f);
+    var svg = new Svg();
+    gzipStream.CopyTo(memoryStream);
+    memoryStream.Position = 0;
+
+    if (svg.Load(memoryStream) != null)
+    {
+        svg.Save("image.png", SKEncodedImageFormat.Png, 100, 1f, 1f);
+    }
 }
 ```
 
