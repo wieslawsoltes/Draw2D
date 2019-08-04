@@ -26,7 +26,9 @@
 
   <ItemGroup>
     <EmbeddedResource Include="..\..\externals\SVG\Source\Resources\svg11.dtd" />
-    <Folder Include="..\..\externals\SVG\Source\Web\Resources\" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Include="**\*.cs" Exclude="obj\**" />
     <Compile Include="..\..\externals\SVG\Source\**\*.cs" Exclude="..\..\externals\SVG\Source\obj\**" />
     <Compile Remove="..\..\externals\SVG\Source\Properties\AssemblyInfo.cs" />
