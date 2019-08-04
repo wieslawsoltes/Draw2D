@@ -472,8 +472,12 @@ namespace Svg.Skia
                     break;
                 case SvgLinearGradientServer svgLinearGradientServer:
                     {
-                        // TODO: Dispose SKShader.
-                        skPaint.Shader = CreateLinearGradient(svgLinearGradientServer, skSize, skBounds, svgVisualElement);
+                        var skShader = CreateLinearGradient(svgLinearGradientServer, skSize, skBounds, svgVisualElement);
+                        if (skShader != null)
+                        {
+                            disposable.Add(skShader);
+                            skPaint.Shader = skShader;
+                        }
                     }
                     break;
                 case SvgRadialGradientServer svgRadialGradientServer:
