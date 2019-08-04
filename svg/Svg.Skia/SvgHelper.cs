@@ -4,6 +4,7 @@
 // Parts of this source file are adapted from the https://github.com/vvvv/SVG
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Reflection;
 using System.Text;
 using SkiaSharp;
@@ -531,7 +532,80 @@ namespace Svg.Skia
                     {
                         case SvgColourMatrix svgColourMatrix:
                             {
+                                // var identity = new float[]
+                                // {
+                                //     1, 0, 0, 0, 0,
+                                //     0, 1, 0, 0, 0,
+                                //     0, 0, 1, 0, 0,
+                                //     0, 0, 0, 1, 0
+                                // };
+                                float[] matrix;
+                                float value;
+
                                 // TODO:
+
+                                switch (svgColourMatrix.Type)
+                                {
+                                    case SvgColourMatrixType.HueRotate:
+                                        {
+                                            value = (string.IsNullOrEmpty(svgColourMatrix.Values) ? 0 : float.Parse(svgColourMatrix.Values, NumberStyles.Any, CultureInfo.InvariantCulture));
+                                            matrix = new float[]
+                                            {
+                                                (float)(0.213 + Math.Cos(value) * +0.787 + Math.Sin(value) * -0.213),
+                                                (float)(0.715 + Math.Cos(value) * -0.715 + Math.Sin(value) * -0.715),
+                                                (float)(0.072 + Math.Cos(value) * -0.072 + Math.Sin(value) * +0.928), 0, 0,
+                                                (float)(0.213 + Math.Cos(value) * -0.213 + Math.Sin(value) * +0.143),
+                                                (float)(0.715 + Math.Cos(value) * +0.285 + Math.Sin(value) * +0.140),
+                                                (float)(0.072 + Math.Cos(value) * -0.072 + Math.Sin(value) * -0.283), 0, 0,
+                                                (float)(0.213 + Math.Cos(value) * -0.213 + Math.Sin(value) * -0.787),
+                                                (float)(0.715 + Math.Cos(value) * -0.715 + Math.Sin(value) * +0.715),
+                                                (float)(0.072 + Math.Cos(value) * +0.928 + Math.Sin(value) * +0.072), 0, 0,
+                                                0, 0, 0, 1, 0
+                                            };
+                                        }
+                                        break;
+                                    case SvgColourMatrixType.LuminanceToAlpha:
+                                        {
+                                            matrix = new float[]
+                                            {
+                                                0, 0, 0, 0, 0,
+                                                0, 0, 0, 0, 0,
+                                                0, 0, 0, 0, 0,
+                                                0.2125f, 0.7154f, 0.0721f, 0, 0
+                                            };
+                                        }
+                                        break;
+                                    case SvgColourMatrixType.Saturate:
+                                        {
+                                            value = (string.IsNullOrEmpty(svgColourMatrix.Values) ? 1 : float.Parse(svgColourMatrix.Values, NumberStyles.Any, CultureInfo.InvariantCulture));
+                                            matrix = new float[]
+                                            {
+                                                (float)(0.213+0.787*value), (float)(0.715-0.715*value), (float)(0.072-0.072*value), 0, 0,
+                                                (float)(0.213-0.213*value), (float)(0.715+0.285*value), (float)(0.072-0.072*value), 0, 0,
+                                                (float)(0.213-0.213*value), (float)(0.715-0.715*value), (float)(0.072+0.928*value), 0, 0,
+                                                0, 0, 0, 1, 0
+                                            };
+                                        };
+                                        break;
+                                    default:
+                                    case SvgColourMatrixType.Matrix:
+                                        {
+                                            var parts = svgColourMatrix.Values.Replace("  ", " ").Split(new char[] { ' ', '\t', '\n', '\r', ',' });
+                                            matrix = new float[20];
+                                            for (int i = 0; i < 20; i++)
+                                            {
+                                                matrix[i] = float.Parse(parts[i], NumberStyles.Any, CultureInfo.InvariantCulture);
+                                            }
+                                        }
+                                        break;
+                                }
+
+                                var skColorFilter = SKColorFilter.CreateColorMatrix(matrix);
+                                if (skColorFilter != null)
+                                {
+                                    disposable.Add(skColorFilter);
+                                    skPaint.ColorFilter = skColorFilter;
+                                }
                             }
                             break;
                         case SvgGaussianBlur svgGaussianBlur:
