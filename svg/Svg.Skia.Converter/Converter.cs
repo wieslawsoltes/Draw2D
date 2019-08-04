@@ -94,7 +94,7 @@ namespace Svg.Skia.Converter
                         {
                             throw new ArgumentException($"Invalid output image format.", nameof(format));
                         }
-                    } 
+                    }
                 }
 
                 if (quiet == false)
