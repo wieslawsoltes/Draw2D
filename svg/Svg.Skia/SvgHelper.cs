@@ -532,21 +532,13 @@ namespace Svg.Skia
                     {
                         case SvgColourMatrix svgColourMatrix:
                             {
-                                //var identity = new float[]
-                                //{
-                                //    1, 0, 0, 0, 0,
-                                //    0, 1, 0, 0, 0,
-                                //    0, 0, 1, 0, 0,
-                                //    0, 0, 0, 1, 0
-                                //};
                                 float[] matrix;
-                                float value;
 
                                 switch (svgColourMatrix.Type)
                                 {
                                     case SvgColourMatrixType.HueRotate:
                                         {
-                                            value = (string.IsNullOrEmpty(svgColourMatrix.Values) ? 0 : float.Parse(svgColourMatrix.Values, NumberStyles.Any, CultureInfo.InvariantCulture));
+                                            float value = (string.IsNullOrEmpty(svgColourMatrix.Values) ? 0 : float.Parse(svgColourMatrix.Values, NumberStyles.Any, CultureInfo.InvariantCulture));
                                             // TODO:
                                             matrix = new float[]
                                             {
@@ -577,7 +569,7 @@ namespace Svg.Skia
                                         break;
                                     case SvgColourMatrixType.Saturate:
                                         {
-                                            value = (string.IsNullOrEmpty(svgColourMatrix.Values) ? 1 : float.Parse(svgColourMatrix.Values, NumberStyles.Any, CultureInfo.InvariantCulture));
+                                            float value = (string.IsNullOrEmpty(svgColourMatrix.Values) ? 1 : float.Parse(svgColourMatrix.Values, NumberStyles.Any, CultureInfo.InvariantCulture));
                                             // TODO:
                                             matrix = new float[]
                                             {
@@ -593,10 +585,8 @@ namespace Svg.Skia
                                         {
                                             var parts = svgColourMatrix.Values.Replace("  ", " ").Split(new char[] { ' ', '\t', '\n', '\r', ',' }, StringSplitOptions.RemoveEmptyEntries);
                                             matrix = new float[20];
-                                            Console.WriteLine($"parts.Length={parts.Length}");
                                             for (int i = 0; i < 20; i++)
                                             {
-                                                Console.WriteLine($"part[{i}]={parts[i]}");
                                                 matrix[i] = float.Parse(parts[i], NumberStyles.Any, CultureInfo.InvariantCulture);
                                             }
                                         }
