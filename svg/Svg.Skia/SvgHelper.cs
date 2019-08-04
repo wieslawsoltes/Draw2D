@@ -633,6 +633,20 @@ namespace Svg.Skia
             }
         }
 
+        internal static SKPaint SetFilter(SKCanvas skCanvas, SvgVisualElement svgVisualElement, CompositeDisposable disposable)
+        {
+            if (svgVisualElement.Filter != null)
+            {
+                var paint = new SKPaint();
+                paint.Style = SKPaintStyle.StrokeAndFill;
+                SetFilter(svgVisualElement, paint, disposable);
+                skCanvas.SaveLayer(paint);
+                disposable.Add(paint);
+                return paint;
+            }
+            return null;
+        }
+
         internal static bool IsAntialias(SvgElement svgElement)
         {
             switch (svgElement.ShapeRendering)
@@ -1052,6 +1066,11 @@ namespace Svg.Skia
                     skCanvas.Save();
                 }
 
+                if (SetFilter(skCanvas, svgUse, disposable) == null)
+                {
+                    skCanvas.Save();
+                }
+
                 var use = new Use(svgUse, svgVisualElement);
 
                 SetTransform(skCanvas, use.matrix);
@@ -1249,6 +1268,11 @@ namespace Svg.Skia
         internal static void DrawSvgGroup(SKCanvas skCanvas, SKSize skSize, SvgGroup svgGroup, CompositeDisposable disposable)
         {
             if (SetOpacity(skCanvas, svgGroup, disposable) == null)
+            {
+                skCanvas.Save();
+            }
+
+            if (SetFilter(skCanvas, svgGroup, disposable) == null)
             {
                 skCanvas.Save();
             }
