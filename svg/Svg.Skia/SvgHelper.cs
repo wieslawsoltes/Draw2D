@@ -672,6 +672,22 @@ namespace Svg.Skia
             return skPaint;
         }
 
+        internal static SKMatrix GetSKMatrix(SvgMatrix svgMatrix)
+        {
+            return new SKMatrix()
+            {
+                ScaleX = svgMatrix.Points[0],
+                SkewY = svgMatrix.Points[1],
+                SkewX = svgMatrix.Points[2],
+                ScaleY = svgMatrix.Points[3],
+                TransX = svgMatrix.Points[4],
+                TransY = svgMatrix.Points[5],
+                Persp0 = 0,
+                Persp1 = 0,
+                Persp2 = 1
+            };
+        }
+
         internal static SKMatrix GetSKMatrix(SvgTransformCollection svgTransformCollection)
         {
             var skMatrixTotal = SKMatrix.MakeIdentity();
@@ -682,31 +698,20 @@ namespace Svg.Skia
                 {
                     case SvgMatrix svgMatrix:
                         {
-                            var skMatrix = new SKMatrix()
-                            {
-                                ScaleX = svgMatrix.Points[0],
-                                SkewY = svgMatrix.Points[1],
-                                SkewX = svgMatrix.Points[2],
-                                ScaleY = svgMatrix.Points[3],
-                                TransX = svgMatrix.Points[4],
-                                TransY = svgMatrix.Points[5],
-                                Persp0 = 0,
-                                Persp1 = 0,
-                                Persp2 = 1
-                            };
+                            var skMatrix = GetSKMatrix(svgMatrix);
                             SKMatrix.Concat(ref skMatrixTotal, ref skMatrixTotal, ref skMatrix);
                         }
                         break;
                     case SvgRotate svgRotate:
                         {
-                            var skMatrix = SKMatrix.MakeRotationDegrees(svgRotate.Angle, svgRotate.CenterX, svgRotate.CenterY);
-                            SKMatrix.Concat(ref skMatrixTotal, ref skMatrixTotal, ref skMatrix);
+                            var skMatrixRotate = SKMatrix.MakeRotationDegrees(svgRotate.Angle, svgRotate.CenterX, svgRotate.CenterY);
+                            SKMatrix.Concat(ref skMatrixTotal, ref skMatrixTotal, ref skMatrixRotate);
                         }
                         break;
                     case SvgScale svgScale:
                         {
-                            var skMatrix = SKMatrix.MakeScale(svgScale.X, svgScale.Y);
-                            SKMatrix.Concat(ref skMatrixTotal, ref skMatrixTotal, ref skMatrix);
+                            var skMatrixScale = SKMatrix.MakeScale(svgScale.X, svgScale.Y);
+                            SKMatrix.Concat(ref skMatrixTotal, ref skMatrixTotal, ref skMatrixScale);
                         }
                         break;
                     case SvgShear svgShear:
@@ -716,14 +721,14 @@ namespace Svg.Skia
                         break;
                     case SvgSkew svgSkew:
                         {
-                            var skMatrix = SKMatrix.MakeSkew(svgSkew.AngleX, svgSkew.AngleY);
-                            SKMatrix.Concat(ref skMatrixTotal, ref skMatrixTotal, ref skMatrix);
+                            var skMatrixSkew = SKMatrix.MakeSkew(svgSkew.AngleX, svgSkew.AngleY);
+                            SKMatrix.Concat(ref skMatrixTotal, ref skMatrixTotal, ref skMatrixSkew);
                         }
                         break;
                     case SvgTranslate svgTranslate:
                         {
-                            var skMatrix = SKMatrix.MakeTranslation(svgTranslate.X, svgTranslate.Y);
-                            SKMatrix.Concat(ref skMatrixTotal, ref skMatrixTotal, ref skMatrix);
+                            var skMatrixTranslate = SKMatrix.MakeTranslation(svgTranslate.X, svgTranslate.Y);
+                            SKMatrix.Concat(ref skMatrixTotal, ref skMatrixTotal, ref skMatrixTranslate);
                         }
                         break;
                 }
@@ -976,39 +981,9 @@ namespace Svg.Skia
                     skCanvas.Save();
                 }
 
-                var use = new Use(svgUse);
+                var use = new Use(svgUse, svgVisualElement);
 
                 SetTransform(skCanvas, use.matrix);
-
-                float x = svgUse.X.ToDeviceValue(null, UnitRenderingType.Horizontal, svgUse);
-                float y = svgUse.Y.ToDeviceValue(null, UnitRenderingType.Vertical, svgUse);
-                skCanvas.Translate(x, y);
-
-                var ew = svgUse.Width.ToDeviceValue(null, UnitRenderingType.Horizontal, svgUse);
-                var eh = svgUse.Height.ToDeviceValue(null, UnitRenderingType.Vertical, svgUse);
-                if (ew > 0 && eh > 0)
-                {
-                    var _attributes = svgVisualElement.GetType().GetField("_attributes", BindingFlags.NonPublic | BindingFlags.Instance);
-                    if (_attributes != null)
-                    {
-                        var attributes = _attributes.GetValue(svgVisualElement) as SvgAttributeCollection;
-                        if (attributes != null)
-                        {
-                            var viewBox = attributes.GetAttribute<SvgViewBox>("viewBox");
-                            //var viewBox = svgVisualElement.Attributes.GetAttribute<SvgViewBox>("viewBox");
-                            if (viewBox != SvgViewBox.Empty && Math.Abs(ew - viewBox.Width) > float.Epsilon && Math.Abs(eh - viewBox.Height) > float.Epsilon)
-                            {
-                                var sw = ew / viewBox.Width;
-                                var sh = eh / viewBox.Height;
-                                skCanvas.Translate(sw, sh);
-                            }
-                        }
-                    }
-                    //else
-                    //{
-                    //    throw new Exception("Can not get 'use' referenced element transform.");
-                    //}
-                }
 
                 // TODO:
                 //if (svgUse.ClipPath != null)
