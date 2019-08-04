@@ -583,7 +583,7 @@ namespace Svg.Skia
                                     default:
                                     case SvgColourMatrixType.Matrix:
                                         {
-                                            var parts = svgColourMatrix.Values.Replace("  ", " ").Split(new char[] { ' ', '\t', '\n', '\r', ',' }, StringSplitOptions.RemoveEmptyEntries);
+                                            var parts = svgColourMatrix.Values.Split(new char[] { ' ', '\t', '\n', '\r', ',' }, StringSplitOptions.RemoveEmptyEntries);
                                             matrix = new float[20];
                                             for (int i = 0; i < 20; i++)
                                             {
