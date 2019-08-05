@@ -165,19 +165,6 @@ namespace Svg.Skia
             return Math.Min(Math.Max(opacity, 0), 1);
         }
 
-        internal static SKPaint GetSKPaintOpacity(float opacity)
-        {
-            var paint = new SKPaint()
-            {
-                IsAntialias = true,
-            };
-
-            paint.Color = new SKColor(255, 255, 255, (byte)Math.Round(opacity * 255));
-            paint.Style = SKPaintStyle.Fill;
-
-            return paint;
-        }
-
         internal static SvgUnit NormalizeSvgUnit(SvgUnit svgUnit, SvgCoordinateUnits svgCoordinateUnits)
         {
             return svgUnit.Type == SvgUnitType.Percentage && svgCoordinateUnits == SvgCoordinateUnits.ObjectBoundingBox ?
@@ -516,6 +503,79 @@ namespace Svg.Skia
             }
         }
 
+        internal static SKColorFilter CreateColorMatrix(SvgColourMatrix svgColourMatrix, SvgVisualElement svgVisualElement)
+        {
+            float[] matrix;
+
+            switch (svgColourMatrix.Type)
+            {
+                case SvgColourMatrixType.HueRotate:
+                    {
+                        float value = (string.IsNullOrEmpty(svgColourMatrix.Values) ? 0 : float.Parse(svgColourMatrix.Values, NumberStyles.Any, CultureInfo.InvariantCulture));
+                        // TODO:
+                        matrix = new float[]
+                        {
+                            (float)(0.213 + Math.Cos(value) * +0.787 + Math.Sin(value) * -0.213),
+                            (float)(0.715 + Math.Cos(value) * -0.715 + Math.Sin(value) * -0.715),
+                            (float)(0.072 + Math.Cos(value) * -0.072 + Math.Sin(value) * +0.928), 0, 0,
+                            (float)(0.213 + Math.Cos(value) * -0.213 + Math.Sin(value) * +0.143),
+                            (float)(0.715 + Math.Cos(value) * +0.285 + Math.Sin(value) * +0.140),
+                            (float)(0.072 + Math.Cos(value) * -0.072 + Math.Sin(value) * -0.283), 0, 0,
+                            (float)(0.213 + Math.Cos(value) * -0.213 + Math.Sin(value) * -0.787),
+                            (float)(0.715 + Math.Cos(value) * -0.715 + Math.Sin(value) * +0.715),
+                            (float)(0.072 + Math.Cos(value) * +0.928 + Math.Sin(value) * +0.072), 0, 0,
+                            0, 0, 0, 1, 0
+                        };
+                    }
+                    break;
+                case SvgColourMatrixType.LuminanceToAlpha:
+                    {
+                        // TODO:
+                        matrix = new float[]
+                        {
+                            0, 0, 0, 0, 0,
+                            0, 0, 0, 0, 0,
+                            0, 0, 0, 0, 0,
+                            0.2125f, 0.7154f, 0.0721f, 0, 0
+                        };
+                    }
+                    break;
+                case SvgColourMatrixType.Saturate:
+                    {
+                        float value = (string.IsNullOrEmpty(svgColourMatrix.Values) ? 1 : float.Parse(svgColourMatrix.Values, NumberStyles.Any, CultureInfo.InvariantCulture));
+                        // TODO:
+                        matrix = new float[]
+                        {
+                            (float)(0.213+0.787*value), (float)(0.715-0.715*value), (float)(0.072-0.072*value), 0, 0,
+                            (float)(0.213-0.213*value), (float)(0.715+0.285*value), (float)(0.072-0.072*value), 0, 0,
+                            (float)(0.213-0.213*value), (float)(0.715-0.715*value), (float)(0.072+0.928*value), 0, 0,
+                            0, 0, 0, 1, 0
+                        };
+                    };
+                    break;
+                default:
+                case SvgColourMatrixType.Matrix:
+                    {
+                        var parts = svgColourMatrix.Values.Split(new char[] { ' ', '\t', '\n', '\r', ',' }, StringSplitOptions.RemoveEmptyEntries);
+                        matrix = new float[20];
+                        for (int i = 0; i < 20; i++)
+                        {
+                            matrix[i] = float.Parse(parts[i], NumberStyles.Any, CultureInfo.InvariantCulture);
+                        }
+                    }
+                    break;
+            }
+
+            return SKColorFilter.CreateColorMatrix(matrix);
+        }
+
+        internal static SKImageFilter CreateBlur(SvgGaussianBlur svgGaussianBlur, SvgVisualElement svgVisualElement)
+        {
+            // TODO:
+            var sigma = svgGaussianBlur.StdDeviation;
+            return SKImageFilter.CreateBlur(sigma, sigma);
+        }
+
         internal static void SetFilter(SvgVisualElement svgVisualElement, SKPaint skPaint, CompositeDisposable disposable)
         {
             var svgFilter = GetReference<SvgFilter>(svgVisualElement, svgVisualElement.Filter);
@@ -532,68 +592,7 @@ namespace Svg.Skia
                     {
                         case SvgColourMatrix svgColourMatrix:
                             {
-                                float[] matrix;
-
-                                switch (svgColourMatrix.Type)
-                                {
-                                    case SvgColourMatrixType.HueRotate:
-                                        {
-                                            float value = (string.IsNullOrEmpty(svgColourMatrix.Values) ? 0 : float.Parse(svgColourMatrix.Values, NumberStyles.Any, CultureInfo.InvariantCulture));
-                                            // TODO:
-                                            matrix = new float[]
-                                            {
-                                                (float)(0.213 + Math.Cos(value) * +0.787 + Math.Sin(value) * -0.213),
-                                                (float)(0.715 + Math.Cos(value) * -0.715 + Math.Sin(value) * -0.715),
-                                                (float)(0.072 + Math.Cos(value) * -0.072 + Math.Sin(value) * +0.928), 0, 0,
-                                                (float)(0.213 + Math.Cos(value) * -0.213 + Math.Sin(value) * +0.143),
-                                                (float)(0.715 + Math.Cos(value) * +0.285 + Math.Sin(value) * +0.140),
-                                                (float)(0.072 + Math.Cos(value) * -0.072 + Math.Sin(value) * -0.283), 0, 0,
-                                                (float)(0.213 + Math.Cos(value) * -0.213 + Math.Sin(value) * -0.787),
-                                                (float)(0.715 + Math.Cos(value) * -0.715 + Math.Sin(value) * +0.715),
-                                                (float)(0.072 + Math.Cos(value) * +0.928 + Math.Sin(value) * +0.072), 0, 0,
-                                                0, 0, 0, 1, 0
-                                            };
-                                        }
-                                        break;
-                                    case SvgColourMatrixType.LuminanceToAlpha:
-                                        {
-                                            // TODO:
-                                            matrix = new float[]
-                                            {
-                                                0, 0, 0, 0, 0,
-                                                0, 0, 0, 0, 0,
-                                                0, 0, 0, 0, 0,
-                                                0.2125f, 0.7154f, 0.0721f, 0, 0
-                                            };
-                                        }
-                                        break;
-                                    case SvgColourMatrixType.Saturate:
-                                        {
-                                            float value = (string.IsNullOrEmpty(svgColourMatrix.Values) ? 1 : float.Parse(svgColourMatrix.Values, NumberStyles.Any, CultureInfo.InvariantCulture));
-                                            // TODO:
-                                            matrix = new float[]
-                                            {
-                                                (float)(0.213+0.787*value), (float)(0.715-0.715*value), (float)(0.072-0.072*value), 0, 0,
-                                                (float)(0.213-0.213*value), (float)(0.715+0.285*value), (float)(0.072-0.072*value), 0, 0,
-                                                (float)(0.213-0.213*value), (float)(0.715-0.715*value), (float)(0.072+0.928*value), 0, 0,
-                                                0, 0, 0, 1, 0
-                                            };
-                                        };
-                                        break;
-                                    default:
-                                    case SvgColourMatrixType.Matrix:
-                                        {
-                                            var parts = svgColourMatrix.Values.Split(new char[] { ' ', '\t', '\n', '\r', ',' }, StringSplitOptions.RemoveEmptyEntries);
-                                            matrix = new float[20];
-                                            for (int i = 0; i < 20; i++)
-                                            {
-                                                matrix[i] = float.Parse(parts[i], NumberStyles.Any, CultureInfo.InvariantCulture);
-                                            }
-                                        }
-                                        break;
-                                }
-
-                                var skColorFilter = SKColorFilter.CreateColorMatrix(matrix);
+                                var skColorFilter = CreateColorMatrix(svgColourMatrix, svgVisualElement);
                                 if (skColorFilter != null)
                                 {
                                     disposable.Add(skColorFilter);
@@ -603,9 +602,7 @@ namespace Svg.Skia
                             break;
                         case SvgGaussianBlur svgGaussianBlur:
                             {
-                                // TODO:
-                                var sigma = svgGaussianBlur.StdDeviation;
-                                var skImageFilter = SKImageFilter.CreateBlur(sigma, sigma);
+                                var skImageFilter = CreateBlur(svgGaussianBlur, svgVisualElement);
                                 if (skImageFilter != null)
                                 {
                                     disposable.Add(skImageFilter);
@@ -919,22 +916,18 @@ namespace Svg.Skia
         internal static SKPaint SetOpacity(SKCanvas skCanvas, SvgElement svgElement, CompositeDisposable disposable)
         {
             float opacity = AdjustSvgOpacity(svgElement.Opacity);
-            bool canSetOpacity = true;
-
-            if (svgElement.Parent != null)
+            if (opacity < 1f)
             {
-                float parentOpacity = AdjustSvgOpacity(svgElement.Parent.Opacity);
-                canSetOpacity = opacity != parentOpacity;
-            }
-
-            if (opacity < 1f && canSetOpacity)
-            {
-                var paint = GetSKPaintOpacity(opacity);
+                var paint = new SKPaint()
+                {
+                    IsAntialias = true,
+                };
+                paint.Color = new SKColor(255, 255, 255, (byte)Math.Round(opacity * 255));
+                paint.Style = SKPaintStyle.StrokeAndFill;
                 skCanvas.SaveLayer(paint);
                 disposable.Add(paint);
                 return paint;
             }
-
             return null;
         }
 
@@ -980,13 +973,11 @@ namespace Svg.Skia
 
         internal static void DrawSvgFragment(SKCanvas skCanvas, SKSize skSize, SvgFragment svgFragment, CompositeDisposable disposable)
         {
-            if (SetOpacity(skCanvas, svgFragment, disposable) == null)
-            {
-                skCanvas.Save();
-            }
+            skCanvas.Save();
 
             var fragment = new Fragment(svgFragment);
 
+            SetOpacity(skCanvas, svgFragment, disposable);
             SetTransform(skCanvas, fragment.matrix);
 
             DrawSvgElementCollection(skCanvas, skSize, svgFragment.Children, disposable);
@@ -996,13 +987,11 @@ namespace Svg.Skia
 
         internal static void DrawSvgSymbol(SKCanvas skCanvas, SKSize skSize, SvgSymbol svgSymbol, CompositeDisposable disposable)
         {
-            if (SetOpacity(skCanvas, svgSymbol, disposable) == null)
-            {
-                skCanvas.Save();
-            }
+            skCanvas.Save();
 
             var symbol = new Symbol(svgSymbol);
 
+            SetOpacity(skCanvas, svgSymbol, disposable);
             SetTransform(skCanvas, symbol.matrix);
 
             DrawSvgElementCollection(skCanvas, skSize, svgSymbol.Children, disposable);
@@ -1012,13 +1001,11 @@ namespace Svg.Skia
 
         internal static void DrawSvgImage(SKCanvas skCanvas, SKSize skSize, SvgImage svgImage, CompositeDisposable disposable)
         {
-            if (SetOpacity(skCanvas, svgImage, disposable) == null)
-            {
-                skCanvas.Save();
-            }
+            skCanvas.Save();
 
             var image = new Image(svgImage);
 
+            SetOpacity(skCanvas, svgImage, disposable);
             SetTransform(skCanvas, image.matrix);
 
             // TODO:
@@ -1028,13 +1015,11 @@ namespace Svg.Skia
 
         internal static void DrawSvgSwitch(SKCanvas skCanvas, SKSize skSize, SvgSwitch svgSwitch, CompositeDisposable disposable)
         {
-            if (SetOpacity(skCanvas, svgSwitch, disposable) == null)
-            {
-                skCanvas.Save();
-            }
+            skCanvas.Save();
 
             var @switch = new Switch(svgSwitch);
 
+            SetOpacity(skCanvas, svgSwitch, disposable);
             SetTransform(skCanvas, @switch.matrix);
 
             // TODO:
@@ -1047,6 +1032,8 @@ namespace Svg.Skia
             var svgVisualElement = GetReference<SvgVisualElement>(svgUse, svgUse.ReferencedElement);
             if (svgVisualElement != null && !HasRecursiveReference(svgUse))
             {
+                skCanvas.Save();
+
                 var parent = svgUse.Parent;
                 //svgVisualElement.Parent = svgUse;
                 var _parent = svgUse.GetType().GetField("_parent", BindingFlags.NonPublic | BindingFlags.Instance);
@@ -1061,18 +1048,10 @@ namespace Svg.Skia
 
                 svgVisualElement.InvalidateChildPaths();
 
-                if (SetOpacity(skCanvas, svgUse, disposable) == null)
-                {
-                    skCanvas.Save();
-                }
-
-                if (SetFilter(skCanvas, svgUse, disposable) == null)
-                {
-                    skCanvas.Save();
-                }
-
                 var use = new Use(svgUse, svgVisualElement);
 
+                SetOpacity(skCanvas, svgUse, disposable);
+                SetFilter(skCanvas, svgUse, disposable);
                 SetTransform(skCanvas, use.matrix);
 
                 // TODO:
@@ -1115,13 +1094,11 @@ namespace Svg.Skia
 
         internal static void DrawSvgForeignObject(SKCanvas skCanvas, SKSize skSize, SvgForeignObject svgForeignObject, CompositeDisposable disposable)
         {
-            if (SetOpacity(skCanvas, svgForeignObject, disposable) == null)
-            {
-                skCanvas.Save();
-            }
+            skCanvas.Save();
 
             var foreignObject = new ForeignObject(svgForeignObject);
 
+            SetOpacity(skCanvas, svgForeignObject, disposable);
             SetTransform(skCanvas, foreignObject.matrix);
 
             // TODO:
@@ -1131,13 +1108,11 @@ namespace Svg.Skia
 
         internal static void DrawSvgCircle(SKCanvas skCanvas, SKSize skSize, SvgCircle svgCircle, CompositeDisposable disposable)
         {
-            if (SetOpacity(skCanvas, svgCircle, disposable) == null)
-            {
-                skCanvas.Save();
-            }
+            skCanvas.Save();
 
             var circle = new Circle(svgCircle);
 
+            SetOpacity(skCanvas, svgCircle, disposable);
             SetTransform(skCanvas, circle.matrix);
 
             if (svgCircle.Fill != null)
@@ -1161,13 +1136,11 @@ namespace Svg.Skia
 
         internal static void DrawSvgEllipse(SKCanvas skCanvas, SKSize skSize, SvgEllipse svgEllipse, CompositeDisposable disposable)
         {
-            if (SetOpacity(skCanvas, svgEllipse, disposable) == null)
-            {
-                skCanvas.Save();
-            }
+            skCanvas.Save();
 
             var ellipse = new Ellipse(svgEllipse);
 
+            SetOpacity(skCanvas, svgEllipse, disposable);
             SetTransform(skCanvas, ellipse.matrix);
 
             if (svgEllipse.Fill != null)
@@ -1191,13 +1164,11 @@ namespace Svg.Skia
 
         internal static void DrawSvgRectangle(SKCanvas skCanvas, SKSize skSize, SvgRectangle svgRectangle, CompositeDisposable disposable)
         {
-            if (SetOpacity(skCanvas, svgRectangle, disposable) == null)
-            {
-                skCanvas.Save();
-            }
+            skCanvas.Save();
 
             var rectangle = new Rectangle(svgRectangle);
 
+            SetOpacity(skCanvas, svgRectangle, disposable);
             SetTransform(skCanvas, rectangle.matrix);
 
             if (svgRectangle.Fill != null)
@@ -1235,13 +1206,11 @@ namespace Svg.Skia
 
         internal static void DrawSvgMarker(SKCanvas skCanvas, SKSize skSize, SvgMarker svgMarker, CompositeDisposable disposable)
         {
-            if (SetOpacity(skCanvas, svgMarker, disposable) == null)
-            {
-                skCanvas.Save();
-            }
+            skCanvas.Save();
 
             var marker = new Marker(svgMarker);
 
+            SetOpacity(skCanvas, svgMarker, disposable);
             SetTransform(skCanvas, marker.matrix);
 
             // TODO:
@@ -1251,13 +1220,11 @@ namespace Svg.Skia
 
         internal static void DrawSvgGlyph(SKCanvas skCanvas, SKSize skSize, SvgGlyph svgGlyph, CompositeDisposable disposable)
         {
-            if (SetOpacity(skCanvas, svgGlyph, disposable) == null)
-            {
-                skCanvas.Save();
-            }
+            skCanvas.Save();
 
             var glyph = new Glyph(svgGlyph);
 
+            SetOpacity(skCanvas, svgGlyph, disposable);
             SetTransform(skCanvas, glyph.matrix);
 
             // TODO:
@@ -1267,18 +1234,12 @@ namespace Svg.Skia
 
         internal static void DrawSvgGroup(SKCanvas skCanvas, SKSize skSize, SvgGroup svgGroup, CompositeDisposable disposable)
         {
-            if (SetOpacity(skCanvas, svgGroup, disposable) == null)
-            {
-                skCanvas.Save();
-            }
-
-            if (SetFilter(skCanvas, svgGroup, disposable) == null)
-            {
-                skCanvas.Save();
-            }
+            skCanvas.Save();
 
             var group = new Group(svgGroup);
 
+            SetOpacity(skCanvas, svgGroup, disposable);
+            SetFilter(skCanvas, svgGroup, disposable);
             SetTransform(skCanvas, group.matrix);
 
             DrawSvgElementCollection(skCanvas, skSize, svgGroup.Children, disposable);
@@ -1288,13 +1249,11 @@ namespace Svg.Skia
 
         internal static void DrawSvgLine(SKCanvas skCanvas, SKSize skSize, SvgLine svgLine, CompositeDisposable disposable)
         {
-            if (SetOpacity(skCanvas, svgLine, disposable) == null)
-            {
-                skCanvas.Save();
-            }
+            skCanvas.Save();
 
             var line = new Line(svgLine);
 
+            SetOpacity(skCanvas, svgLine, disposable);
             SetTransform(skCanvas, line.matrix);
 
             if (svgLine.Stroke != null)
@@ -1310,13 +1269,11 @@ namespace Svg.Skia
 
         internal static void DrawSvgPath(SKCanvas skCanvas, SKSize skSize, SvgPath svgPath, CompositeDisposable disposable)
         {
-            if (SetOpacity(skCanvas, svgPath, disposable) == null)
-            {
-                skCanvas.Save();
-            }
+            skCanvas.Save();
 
             var path = new Path(svgPath);
 
+            SetOpacity(skCanvas, svgPath, disposable);
             SetTransform(skCanvas, path.matrix);
 
             using (var skPath = ToSKPath(svgPath.PathData, svgPath.FillRule))
@@ -1348,13 +1305,11 @@ namespace Svg.Skia
 
         internal static void DrawSvgPolyline(SKCanvas skCanvas, SKSize skSize, SvgPolyline svgPolyline, CompositeDisposable disposable)
         {
-            if (SetOpacity(skCanvas, svgPolyline, disposable) == null)
-            {
-                skCanvas.Save();
-            }
+            skCanvas.Save();
 
             var polyline = new Polyline(svgPolyline);
 
+            SetOpacity(skCanvas, svgPolyline, disposable);
             SetTransform(skCanvas, polyline.matrix);
 
             using (var skPath = ToSKPath(svgPolyline.Points, svgPolyline.FillRule, false))
@@ -1386,13 +1341,11 @@ namespace Svg.Skia
 
         internal static void DrawSvgPolygon(SKCanvas skCanvas, SKSize skSize, SvgPolygon svgPolygon, CompositeDisposable disposable)
         {
-            if (SetOpacity(skCanvas, svgPolygon, disposable) == null)
-            {
-                skCanvas.Save();
-            }
+            skCanvas.Save();
 
             var polygon = new Polygon(svgPolygon);
 
+            SetOpacity(skCanvas, svgPolygon, disposable);
             SetTransform(skCanvas, polygon.matrix);
 
             using (var skPath = ToSKPath(svgPolygon.Points, svgPolygon.FillRule, true))
@@ -1424,13 +1377,11 @@ namespace Svg.Skia
 
         internal static void DrawSvgText(SKCanvas skCanvas, SKSize skSize, SvgText svgText, CompositeDisposable disposable)
         {
-            if (SetOpacity(skCanvas, svgText, disposable) == null)
-            {
-                skCanvas.Save();
-            }
+            skCanvas.Save();
 
             var text = new Text(svgText);
 
+            SetOpacity(skCanvas, svgText, disposable);
             SetTransform(skCanvas, text.matrix);
 
             // TODO:
@@ -1440,13 +1391,11 @@ namespace Svg.Skia
 
         internal static void DrawSvgTextPath(SKCanvas skCanvas, SKSize skSize, SvgTextPath svgTextPath, CompositeDisposable disposable)
         {
-            if (SetOpacity(skCanvas, svgTextPath, disposable) == null)
-            {
-                skCanvas.Save();
-            }
+            skCanvas.Save();
 
             var textPath = new TextPath(svgTextPath);
 
+            SetOpacity(skCanvas, svgTextPath, disposable);
             SetTransform(skCanvas, textPath.matrix);
 
             // TODO:
@@ -1456,13 +1405,11 @@ namespace Svg.Skia
 
         internal static void DrawSvgTextRef(SKCanvas skCanvas, SKSize skSize, SvgTextRef svgTextRef, CompositeDisposable disposable)
         {
-            if (SetOpacity(skCanvas, svgTextRef, disposable) == null)
-            {
-                skCanvas.Save();
-            }
+            skCanvas.Save();
 
             var textRef = new TextRef(svgTextRef);
 
+            SetOpacity(skCanvas, svgTextRef, disposable);
             SetTransform(skCanvas, textRef.matrix);
 
             // TODO:
@@ -1472,13 +1419,11 @@ namespace Svg.Skia
 
         internal static void DrawSvgTextSpan(SKCanvas skCanvas, SKSize skSize, SvgTextSpan svgTextSpan, CompositeDisposable disposable)
         {
-            if (SetOpacity(skCanvas, svgTextSpan, disposable) == null)
-            {
-                skCanvas.Save();
-            }
+            skCanvas.Save();
 
             var textSpan = new TextSpan(svgTextSpan);
 
+            SetOpacity(skCanvas, svgTextSpan, disposable);
             SetTransform(skCanvas, textSpan.matrix);
 
             // TODO:
