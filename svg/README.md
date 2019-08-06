@@ -70,6 +70,8 @@ Options:
   -sy, --scaleY <scaley>             The output image vertical scaling factor
   --debug                            Write debug output to a file
   --quiet                            Set verbosity level to quiet
+  -c, --load-config <load-config>    The relative or absolute path to the config file
+  --save-config <save-config>        The relative or absolute path to the config file
   --version                          Display version information
 ```
 

@@ -5,9 +5,62 @@ using System.CommandLine;
 using System.CommandLine.Invocation;
 using System.IO;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace Svg.Skia.Converter
 {
+    internal class FileInfoJsonConverter : JsonConverter
+    {
+        public override bool CanConvert(Type objectType)
+        {
+            return objectType == typeof(FileInfo);
+        }
+
+        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+        {
+            if (reader.Value is string s)
+            {
+                return new FileInfo(s);
+            }
+            throw new ArgumentOutOfRangeException(nameof(reader));
+        }
+
+        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+        {
+            if (!(value is FileInfo fileInfo))
+            {
+                throw new ArgumentOutOfRangeException(nameof(value));
+            }
+            writer.WriteValue(fileInfo.FullName);
+        }
+    }
+
+    internal class DirectoryInfoJsonConverter : JsonConverter
+    {
+        public override bool CanConvert(Type objectType)
+        {
+            return objectType == typeof(DirectoryInfo);
+        }
+
+        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+        {
+            if (reader.Value is string s)
+            {
+                return new DirectoryInfo(s);
+            }
+            throw new ArgumentOutOfRangeException(nameof(reader));
+        }
+
+        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+        {
+            if (!(value is DirectoryInfo directoryInfo))
+            {
+                throw new ArgumentOutOfRangeException(nameof(value));
+            }
+            writer.WriteValue(directoryInfo.FullName);
+        }
+    }
+
     public class Program
     {
         public static async Task<int> Main(string[] args)
@@ -72,6 +125,16 @@ namespace Svg.Skia.Converter
                 Argument = new Argument<bool>()
             };
 
+            var optionLoadConfig = new Option(new[] { "--load-config", "-c" }, "The relative or absolute path to the config file")
+            {
+                Argument = new Argument<FileInfo>(defaultValue: () => null)
+            };
+
+            var optionSaveConfig = new Option(new[] { "--save-config" }, "The relative or absolute path to the config file")
+            {
+                Argument = new Argument<FileInfo>(defaultValue: () => null)
+            };
+
             var rootCommand = new RootCommand()
             {
                 Description = "Converts a svg file to an encoded bitmap image."
@@ -89,8 +152,50 @@ namespace Svg.Skia.Converter
             rootCommand.AddOption(optionScaleY);
             rootCommand.AddOption(optionDebug);
             rootCommand.AddOption(optionQuiet);
+            rootCommand.AddOption(optionLoadConfig);
+            rootCommand.AddOption(optionSaveConfig);
 
-            rootCommand.Handler = CommandHandler.Create((ConverterSettings settings) => Converter.Convert(settings));
+            rootCommand.Handler = CommandHandler.Create((ConverterSettings converterSettings, FileInfo loadConfig, FileInfo saveConfig) => 
+            {
+                if (loadConfig != null)
+                {
+                    var jsonSerializerSettings = new JsonSerializerSettings()
+                    {
+                        Formatting = Formatting.Indented,
+                        NullValueHandling = NullValueHandling.Ignore,
+                        Converters =
+                        {
+                            new FileInfoJsonConverter(),
+                            new DirectoryInfoJsonConverter()
+                        }
+                    };
+                    var json = File.ReadAllText(loadConfig.FullName);
+                    var loadedConverterSettings = JsonConvert.DeserializeObject<ConverterSettings>(json, jsonSerializerSettings);
+                    if (loadedConverterSettings != null)
+                    {
+                        Converter.Convert(loadedConverterSettings);
+                    }
+                }
+                else
+                {
+                    if (saveConfig != null)
+                    {
+                        var jsonSerializerSettings = new JsonSerializerSettings()
+                        {
+                            Formatting = Formatting.Indented,
+                            NullValueHandling = NullValueHandling.Ignore,
+                            Converters =
+                            {
+                                new FileInfoJsonConverter(),
+                                new DirectoryInfoJsonConverter()
+                            }
+                        };
+                        string json = JsonConvert.SerializeObject(converterSettings, jsonSerializerSettings);
+                        File.WriteAllText(saveConfig.FullName, json);
+                    }
+                    Converter.Convert(converterSettings);
+                }
+            });
 
             return await rootCommand.InvokeAsync(args);
         }
