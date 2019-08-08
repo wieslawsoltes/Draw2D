@@ -2,8 +2,10 @@
 
   <PropertyGroup>
     <OutputType>Library</OutputType>
-    <TargetFrameworks>netstandard2.0;net461</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;netcoreapp2.2;netcoreapp3.0;net461</TargetFrameworks>
     <EnableDefaultCompileItems>False</EnableDefaultCompileItems>
+    <EnableDefaultItems>False</EnableDefaultItems>
+    <NoWarn>CS1591</NoWarn>
     <IsPackable>True</IsPackable>
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
@@ -13,19 +15,28 @@
     <VersionSuffix></VersionSuffix>
     <Authors>Wiesław Šoltés</Authors>
     <Company>Wiesław Šoltés</Company>
-    <Description>A multi-platform 2D diagram editor.</Description>
+    <Description>Skia SVG rendering library.</Description>
     <Copyright>Copyright © Wiesław Šoltés 2019</Copyright>
-    <PackageId>Draw2D.Input</PackageId>
+    <PackageId>Svg.Skia</PackageId>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/wieslawsoltes/Draw2D</PackageProjectUrl>
-    <PackageTags>2d;editor;data;diagram;graphics;geometry;data;shapes;wysiwyg-editor</PackageTags>
+    <PackageTags>svg;vector graphics;rendering;2d;graphics;geometry;shapes</PackageTags>
   </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Svg.Custom\Svg.Custom.csproj" />
+  </ItemGroup>
 
   <ItemGroup>
     <Compile Include="**\*.cs" Exclude="obj\**" />
   </ItemGroup>
 
-  <ItemGroup Condition="$(TargetFramework.StartsWith('net4'))">
+  <ItemGroup>
+    <PackageReference Include="SkiaSharp" Version="1.68.0" />
+    <PackageReference Include="SkiaSharp.NativeAssets.Linux" Version="1.68.0" />
+    <PackageReference Include="System.Drawing.Common" Version="4.6.0-preview6.19303.8" />
+    <PackageReference Include="System.ObjectModel" Version="4.3.0" />
+    <PackageReference Include="Microsoft.Win32.SystemEvents" Version="4.6.0-preview6.19303.8" />
     <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.0-preview.2" PrivateAssets="All" />
   </ItemGroup>
 
