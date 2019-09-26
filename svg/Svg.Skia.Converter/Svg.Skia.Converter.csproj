@@ -10,7 +10,8 @@
     <IsTool>True</IsTool>
     <PackAsTool>True</PackAsTool>
     <ToolCommandName>Svg.Skia.Converter</ToolCommandName>
-    <LangVersion>latest</LangVersion>
+    <LangVersion>8.0</LangVersion>
+    <Nullable>disable</Nullable>
   </PropertyGroup>
 
   <PropertyGroup>

@@ -5,7 +5,8 @@
     <TargetFrameworks>netcoreapp3.0;net461</TargetFrameworks>
     <EnableDefaultCompileItems>False</EnableDefaultCompileItems>
     <IsPackable>False</IsPackable>
-    <LangVersion>latest</LangVersion>
+    <LangVersion>8.0</LangVersion>
+    <Nullable>disable</Nullable>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -34,8 +35,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Avalonia" Version="0.8.999-cibuild0004069-beta" />
-    <PackageReference Include="Avalonia.Desktop" Version="0.8.999-cibuild0004069-beta" />
+    <PackageReference Include="Avalonia" Version="0.8.999-cibuild0004115-beta" />
+    <PackageReference Include="Avalonia.Desktop" Version="0.8.999-cibuild0004115-beta" />
     <PackageReference Include="Avalonia.Angle.Windows.Natives" Version="2.1.0.2019013001" />
   </ItemGroup>
 
