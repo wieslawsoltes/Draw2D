@@ -27,7 +27,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Math.Spatial" Version="1.0.6" />
+    <PackageReference Include="Math.Spatial" Version="1.1.0-build20190925-01" />
   </ItemGroup>
 
   <ItemGroup Condition="$(TargetFramework.StartsWith('net4'))">
