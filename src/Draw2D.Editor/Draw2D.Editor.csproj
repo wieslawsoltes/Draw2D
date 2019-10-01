@@ -27,8 +27,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Avalonia" Version="0.8.999-cibuild0004115-beta" />
-    <PackageReference Include="Avalonia.Skia" Version="0.8.999-cibuild0004115-beta" />
+    <PackageReference Include="Avalonia" Version="0.8.999-cibuild0004342-beta" />
+    <PackageReference Include="Avalonia.Skia" Version="0.8.999-cibuild0004342-beta" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
   </ItemGroup>
 
