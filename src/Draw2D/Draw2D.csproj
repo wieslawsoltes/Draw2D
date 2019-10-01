@@ -34,15 +34,10 @@
     </AvaloniaResource>
   </ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Avalonia" Version="0.8.999-cibuild0004342-beta" />
-    <PackageReference Include="Avalonia.Skia" Version="0.8.999-cibuild0004342-beta" />
-    <PackageReference Include="Avalonia.Controls.DataGrid" Version="0.8.999-cibuild0004342-beta" />
-  </ItemGroup>
-
-  <ItemGroup Condition="$(TargetFramework.StartsWith('net4'))">
-    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.0-preview.2" PrivateAssets="All" />
-  </ItemGroup>
+  <Import Project="..\..\build\ReferenceAssemblies.props" />
+  <Import Project="..\..\build\Avalonia.props" />
+  <Import Project="..\..\build\Avalonia.Skia.props" />
+  <Import Project="..\..\build\Avalonia.DataGrid.props" />
 
   <ItemGroup>
     <ProjectReference Include="..\Draw2D.Input\Draw2D.Input.csproj" />

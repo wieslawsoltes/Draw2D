@@ -26,8 +26,6 @@
     <Compile Include="**\*.cs" Exclude="obj\**" />
   </ItemGroup>
 
-  <ItemGroup Condition="$(TargetFramework.StartsWith('net4'))">
-    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.0-preview.2" PrivateAssets="All" />
-  </ItemGroup>
+  <Import Project="..\..\build\ReferenceAssemblies.props" />
 
 </Project>

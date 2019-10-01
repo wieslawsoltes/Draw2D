@@ -26,13 +26,8 @@
     <Compile Include="**\*.cs" Exclude="obj\**" />
   </ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Math.Spatial" Version="1.1.0-build20190925-01" />
-  </ItemGroup>
-
-  <ItemGroup Condition="$(TargetFramework.StartsWith('net4'))">
-    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.0-preview.2" PrivateAssets="All" />
-  </ItemGroup>
+  <Import Project="..\..\build\ReferenceAssemblies.props" />
+  <Import Project="..\..\build\Math.Spatial.props" />
 
   <ItemGroup>
     <ProjectReference Include="..\Draw2D.Input\Draw2D.Input.csproj" />

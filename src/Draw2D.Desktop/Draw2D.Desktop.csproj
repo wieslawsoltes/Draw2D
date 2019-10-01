@@ -34,15 +34,9 @@
     </AvaloniaResource>
   </ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Avalonia" Version="0.8.999-cibuild0004342-beta" />
-    <PackageReference Include="Avalonia.Desktop" Version="0.8.999-cibuild0004342-beta" />
-    <PackageReference Include="Avalonia.Angle.Windows.Natives" Version="2.1.0.2019013001" />
-  </ItemGroup>
-
-  <ItemGroup Condition="$(TargetFramework.StartsWith('net4'))">
-    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.0-preview.2" PrivateAssets="All" />
-  </ItemGroup>
+  <Import Project="..\..\build\ReferenceAssemblies.props" />
+  <Import Project="..\..\build\Avalonia.props" />
+  <Import Project="..\..\build\Avalonia.Desktop.props" />
 
   <PropertyGroup Condition="'$(RuntimeIdentifier)' == 'win-x64' or '$(RuntimeIdentifier)' == 'linux-x64' or '$(RuntimeIdentifier)' == 'osx-x64'">
     <CoreRT>True</CoreRT>

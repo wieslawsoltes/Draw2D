@@ -26,14 +26,9 @@
     <Compile Include="**\*.cs" Exclude="obj\**" />
   </ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="SkiaSharp" Version="1.68.0" />
-    <PackageReference Include="SkiaSharp.Svg" Version="1.60.0" />
-  </ItemGroup>
-
-  <ItemGroup Condition="$(TargetFramework.StartsWith('net4'))">
-    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.0-preview.2" PrivateAssets="All" />
-  </ItemGroup>
+  <Import Project="..\..\build\ReferenceAssemblies.props" />
+  <Import Project="..\..\build\SkiaSharp.props" />
+  <Import Project="..\..\build\SkiaSharp.Svg.props" />
 
   <ItemGroup>
     <ProjectReference Include="..\Draw2D.Input\Draw2D.Input.csproj" />
