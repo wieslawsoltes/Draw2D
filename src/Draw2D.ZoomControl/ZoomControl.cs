@@ -20,9 +20,9 @@ namespace Draw2D.ZoomControl
         private IZoomServiceState _zoomServiceState;
         private IInputTarget _inputTarget;
         private IDrawTarget _drawTarget;
-        private Dictionary<IPointer, (IPointer Pointer, Point Point, InputModifiers InputModifiers)> _pointers;
+        private Dictionary<IPointer, (IPointer Pointer, Point Point, KeyModifiers InputModifiers)> _pointers;
         private bool _isCaptured;
-        private InputModifiers _capturedInputModifiers;
+        private KeyModifiers _capturedInputModifiers;
         private Matrix _currentMatrix;
         private Point _panPosition;
 
@@ -66,9 +66,9 @@ namespace Draw2D.ZoomControl
             _zoomServiceState = null;
             _inputTarget = null;
             _drawTarget = null;
-            _pointers = new Dictionary<IPointer, (IPointer, Point, InputModifiers)>();
+            _pointers = new Dictionary<IPointer, (IPointer, Point, KeyModifiers)>();
             _isCaptured = false;
-            _capturedInputModifiers = InputModifiers.None;
+            _capturedInputModifiers = KeyModifiers.None;
         }
 
         private void GetOffset(out double dx, out double dy, out double zx, out double zy)
@@ -106,7 +106,7 @@ namespace Draw2D.ZoomControl
                     return;
                 }
             }
-            _pointers[e.Pointer] = (e.Pointer, e.GetPosition(this), e.InputModifiers);
+            _pointers[e.Pointer] = (e.Pointer, e.GetPosition(this), e.KeyModifiers);
         }
 
         private void GetPointerPressedType(PointerPressedEventArgs e, out bool isLeft)
@@ -115,14 +115,14 @@ namespace Draw2D.ZoomControl
 
             if (e.Pointer.Type == PointerType.Mouse)
             {
-                isLeft = e.InputModifiers.HasFlag(InputModifiers.LeftMouseButton);
+                isLeft = e.GetCurrentPoint(this).Properties.IsLeftButtonPressed;
             }
             else if (e.Pointer.Type == PointerType.Touch)
             {
                 isLeft = e.Pointer.IsPrimary;
             }
 
-            _capturedInputModifiers = e.InputModifiers;
+            _capturedInputModifiers = e.KeyModifiers;
 #if DEBUG_POINTER_EVENTS
             System.Diagnostics.Debug.WriteLine(
                 $"[Pressed] type: {e.Pointer.Type}, " +
@@ -140,7 +140,7 @@ namespace Draw2D.ZoomControl
 
             if (e.Pointer.Type == PointerType.Mouse)
             {
-                isLeft = _capturedInputModifiers.HasFlag(InputModifiers.LeftMouseButton);
+                isLeft = e.InitialPressMouseButton == MouseButton.Left;
             }
             else if (e.Pointer.Type == PointerType.Touch)
             {
@@ -155,7 +155,7 @@ namespace Draw2D.ZoomControl
                 $"point: {e.GetPosition(this)}, " +
                 $"Captured: {e.Pointer.Captured}");
 #endif
-            _capturedInputModifiers = InputModifiers.None;
+            _capturedInputModifiers = KeyModifiers.None;
         }
 
         private void GetPointerMovedType(PointerEventArgs e, out bool isLeft)
@@ -164,7 +164,7 @@ namespace Draw2D.ZoomControl
 
             if (e.Pointer.Type == PointerType.Mouse)
             {
-                isLeft = e.InputModifiers.HasFlag(InputModifiers.LeftMouseButton);
+                isLeft = e.GetCurrentPoint(this).Properties.IsLeftButtonPressed;
             }
             else if (e.Pointer.Type == PointerType.Touch)
             {
@@ -200,7 +200,7 @@ namespace Draw2D.ZoomControl
                 if (isLeft == true)
                 {
                     var tpoint = AdjustTargetPoint(e.GetPosition(this));
-                    _inputTarget.LeftDown(tpoint.X, tpoint.Y, GetModifier(e.InputModifiers));
+                    _inputTarget.LeftDown(tpoint.X, tpoint.Y, GetModifier(e.KeyModifiers));
                 }
                 else
                 {
@@ -213,7 +213,7 @@ namespace Draw2D.ZoomControl
                     if (_zoomServiceState.IsPanning == false)
                     {
                         var tpoint = AdjustTargetPoint(e.GetPosition(this));
-                        _inputTarget.RightDown(tpoint.X, tpoint.Y, GetModifier(e.InputModifiers));
+                        _inputTarget.RightDown(tpoint.X, tpoint.Y, GetModifier(e.KeyModifiers));
                     }
                 }
             }
@@ -228,7 +228,7 @@ namespace Draw2D.ZoomControl
                 if (isLeft == true)
                 {
                     var tpoint = AdjustTargetPoint(e.GetPosition(this));
-                    _inputTarget.LeftUp(tpoint.X, tpoint.Y, GetModifier(e.InputModifiers));
+                    _inputTarget.LeftUp(tpoint.X, tpoint.Y, GetModifier(e.KeyModifiers));
                 }
                 else
                 {
@@ -241,7 +241,7 @@ namespace Draw2D.ZoomControl
                     if (_zoomServiceState.IsPanning == false)
                     {
                         var tpoint = AdjustTargetPoint(e.GetPosition(this));
-                        _inputTarget.RightUp(tpoint.X, tpoint.Y, GetModifier(e.InputModifiers));
+                        _inputTarget.RightUp(tpoint.X, tpoint.Y, GetModifier(e.KeyModifiers));
                     }
                 }
             }
@@ -265,26 +265,26 @@ namespace Draw2D.ZoomControl
                 if (_zoomServiceState.IsPanning == false)
                 {
                     var tpoint = AdjustTargetPoint(e.GetPosition(this));
-                    _inputTarget.Move(tpoint.X, tpoint.Y, GetModifier(e.InputModifiers));
+                    _inputTarget.Move(tpoint.X, tpoint.Y, GetModifier(e.KeyModifiers));
                 }
             }
         }
 
-        private Modifier GetModifier(InputModifiers inputModifiers)
+        private Modifier GetModifier(KeyModifiers inputModifiers)
         {
             var modifier = Modifier.None;
 
-            if (inputModifiers.HasFlag(InputModifiers.Alt))
+            if (inputModifiers.HasFlag(KeyModifiers.Alt))
             {
                 modifier |= Modifier.Alt;
             }
 
-            if (inputModifiers.HasFlag(InputModifiers.Control))
+            if (inputModifiers.HasFlag(KeyModifiers.Control))
             {
                 modifier |= Modifier.Control;
             }
 
-            if (inputModifiers.HasFlag(InputModifiers.Shift))
+            if (inputModifiers.HasFlag(KeyModifiers.Shift))
             {
                 modifier |= Modifier.Shift;
             }
