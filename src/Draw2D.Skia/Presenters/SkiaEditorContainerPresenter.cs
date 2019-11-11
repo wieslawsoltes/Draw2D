@@ -90,12 +90,12 @@ namespace Draw2D.Presenters
             if (fillPaint.IsTreeDirty() || !_paintCache.TryGetValue(fillPaint, out var brushCached))
             {
                 fillPaint.Invalidate();
-                brushCached = SkiaHelper.ToSKPaint(fillPaint, effects, scale, _disposable.Disposables);
+                brushCached = SkiaUtil.ToSKPaint(fillPaint, effects, scale, _disposable.Disposables);
                 _paintCache[fillPaint] = brushCached;
             }
             else
             {
-                SkiaHelper.ToSKPaintUpdate(brushCached, fillPaint, effects, scale, _disposable.Disposables);
+                SkiaUtil.ToSKPaintUpdate(brushCached, fillPaint, effects, scale, _disposable.Disposables);
             }
 
             brush = brushCached;
@@ -268,7 +268,7 @@ namespace Draw2D.Presenters
 
             if (_view.InputBackground?.Color != null)
             {
-                canvas.Clear(SkiaHelper.ToSKColor(_view.InputBackground.Color));
+                canvas.Clear(SkiaUtil.ToSKColor(_view.InputBackground.Color));
             }
             else
             {
@@ -281,7 +281,7 @@ namespace Draw2D.Presenters
                 canvas.Save();
                 canvas.Translate((float)dx, (float)dy);
                 canvas.Scale((float)zx, (float)zy);
-                canvas.DrawRect(SkiaHelper.ToSKRect(0.0, 0.0, _view.Width, _view.Height), brush);
+                canvas.DrawRect(SkiaUtil.ToSKRect(0.0, 0.0, _view.Width, _view.Height), brush);
                 canvas.Restore();
             }
 

@@ -15,7 +15,7 @@ namespace Draw2D.Export
         {
             try
             {
-                var picture = SkiaHelper.ToSKPicture(path);
+                var picture = SkiaUtil.ToSKPicture(path);
                 if (picture != null)
                 {
                     var image = new ImageShape()

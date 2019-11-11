@@ -51,10 +51,10 @@ namespace Draw2D.Export
                 var fillType = SKPathFillType.Winding;
                 if (shapes[i] is PathShape pathShape)
                 {
-                    fillType = SkiaHelper.ToSKPathFillType(pathShape.FillType);
+                    fillType = SkiaUtil.ToSKPathFillType(pathShape.FillType);
                 }
                 var path = new SKPath() { FillType = fillType };
-                var result = SkiaHelper.AddShape(context, shapes[i], 0.0, 0.0, path);
+                var result = SkiaUtil.AddShape(context, shapes[i], 0.0, 0.0, path);
                 if (result == true && path.IsEmpty == false)
                 {
                     paths.Add(path);
@@ -73,12 +73,12 @@ namespace Draw2D.Export
             var fillType = SKPathFillType.Winding;
             if (shape is PathShape pathShape)
             {
-                fillType = SkiaHelper.ToSKPathFillType(pathShape.FillType);
+                fillType = SkiaUtil.ToSKPathFillType(pathShape.FillType);
             }
 
             var geometry = new SKPath() { FillType = fillType };
 
-            if (SkiaHelper.AddShape(context, shape, 0.0, 0.0, geometry) == true)
+            if (SkiaUtil.AddShape(context, shape, 0.0, 0.0, geometry) == true)
             {
                 return geometry;
             }
@@ -101,7 +101,7 @@ namespace Draw2D.Export
                     {
                         style = context.DocumentContainer?.StyleLibrary?.CurrentItem;
                     }
-                    return SkiaHelper.ToPathShape(context, geometry, style, context?.DocumentContainer?.PointTemplate);
+                    return SkiaUtil.ToPathShape(context, geometry, style, context?.DocumentContainer?.PointTemplate);
                 }
             }
             return null;
@@ -121,15 +121,15 @@ namespace Draw2D.Export
 
                     using (var disposable = new CompositeDisposable())
                     {
-                        var path = SkiaHelper.ToStrokePath(context, style.StrokePaint, shape.Effects, geometry, disposable.Disposables);
+                        var path = SkiaUtil.ToStrokePath(context, style.StrokePaint, shape.Effects, geometry, disposable.Disposables);
                         if (path != null)
                         {
                             disposable.Disposables.Add(path);
-                            var union = SkiaHelper.Op(SKPathOp.Union, new[] { path, path });
+                            var union = SkiaUtil.Op(SKPathOp.Union, new[] { path, path });
                             if (union != null && !union.IsEmpty)
                             {
                                 disposable.Disposables.Add(union);
-                                return SkiaHelper.ToPathShape(context, union, context.DocumentContainer?.StyleLibrary?.CurrentItem, context?.DocumentContainer?.PointTemplate);
+                                return SkiaUtil.ToPathShape(context, union, context.DocumentContainer?.StyleLibrary?.CurrentItem, context?.DocumentContainer?.PointTemplate);
                             }
                         }
                     }
@@ -152,15 +152,15 @@ namespace Draw2D.Export
 
                     using (var disposable = new CompositeDisposable())
                     {
-                        var path = SkiaHelper.ToFillPath(context, style.FillPaint, shape.Effects, geometry, disposable.Disposables);
+                        var path = SkiaUtil.ToFillPath(context, style.FillPaint, shape.Effects, geometry, disposable.Disposables);
                         if (path != null)
                         {
                             disposable.Disposables.Add(path);
-                            var union = SkiaHelper.Op(SKPathOp.Union, new[] { path, path });
+                            var union = SkiaUtil.Op(SKPathOp.Union, new[] { path, path });
                             if (union != null && !union.IsEmpty)
                             {
                                 disposable.Disposables.Add(union);
-                                return SkiaHelper.ToPathShape(context, union, context.DocumentContainer?.StyleLibrary?.CurrentItem, context?.DocumentContainer?.PointTemplate);
+                                return SkiaUtil.ToPathShape(context, union, context.DocumentContainer?.StyleLibrary?.CurrentItem, context?.DocumentContainer?.PointTemplate);
                             }
     
                         }
@@ -179,7 +179,7 @@ namespace Draw2D.Export
                 var paths = ToPaths(context, shapes);
                 if (paths != null && paths.Count > 0)
                 {
-                    var result = SkiaHelper.Op(SkiaHelper.ToSKPathOp(op), paths);
+                    var result = SkiaUtil.Op(SkiaUtil.ToSKPathOp(op), paths);
                     if (result != null)
                     {
                         if (!result.IsEmpty)
@@ -189,7 +189,7 @@ namespace Draw2D.Export
                             {
                                 style = context.DocumentContainer?.StyleLibrary?.CurrentItem;
                             }
-                            path = SkiaHelper.ToPathShape(context, result, style, context?.DocumentContainer?.PointTemplate);
+                            path = SkiaUtil.ToPathShape(context, result, style, context?.DocumentContainer?.PointTemplate);
                         }
                         result.Dispose();
                     }
@@ -207,9 +207,9 @@ namespace Draw2D.Export
         {
             if (!string.IsNullOrWhiteSpace(svgPathData))
             {
-                using (var path = SkiaHelper.ToPath(svgPathData))
+                using (var path = SkiaUtil.ToPath(svgPathData))
                 {
-                    return SkiaHelper.ToPathShape(context, path, context.DocumentContainer?.StyleLibrary?.CurrentItem, context?.DocumentContainer?.PointTemplate);
+                    return SkiaUtil.ToPathShape(context, path, context.DocumentContainer?.StyleLibrary?.CurrentItem, context?.DocumentContainer?.PointTemplate);
                 }
             }
             return null;
@@ -223,7 +223,7 @@ namespace Draw2D.Export
             {
                 foreach (var shape in shapes)
                 {
-                    SkiaHelper.ToSvgPathData(context, shape, sb);
+                    SkiaUtil.ToSvgPathData(context, shape, sb);
                 }
             }
             return sb.ToString();

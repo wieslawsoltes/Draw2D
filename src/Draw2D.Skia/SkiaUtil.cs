@@ -20,7 +20,7 @@ using SkiaSharp;
 
 namespace Draw2D
 {
-    internal class SkiaHelper
+    internal class SkiaUtil
     {
         internal static SKPaintStyle ToSKPaintStyle(PaintStyle paintStyle)
         {
@@ -1493,7 +1493,7 @@ namespace Draw2D
                     break;
                 case PathShape pathShape:
                     {
-                        using (var geometry = new SKPath() { FillType = SkiaHelper.ToSKPathFillType(pathShape.FillType) })
+                        using (var geometry = new SKPath() { FillType = SkiaUtil.ToSKPathFillType(pathShape.FillType) })
                         {
                             AddPath(context, pathShape, 0.0, 0.0, geometry);
                             sb.AppendLine(geometry.ToSvgPathData());

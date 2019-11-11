@@ -34,10 +34,10 @@ namespace Draw2D.Presenters
         {
             using (var renderer = new SkiaShapeRenderer(_context, _view, _view.SelectionState))
             using (var disposable = new CompositeDisposable())
-            using (var background = SkiaHelper.ToSKPaint(_view.PrintBackground, null, zx, disposable.Disposables))
+            using (var background = SkiaUtil.ToSKPaint(_view.PrintBackground, null, zx, disposable.Disposables))
             {
                 var canvas = context as SKCanvas;
-                canvas.DrawRect(SkiaHelper.ToSKRect(dx, dy, _view.Width + dx, _view.Height + dy), background);
+                canvas.DrawRect(SkiaUtil.ToSKRect(dx, dy, _view.Width + dx, _view.Height + dy), background);
 
                 var selected = new List<IBaseShape>(_view.SelectionState?.Shapes);
                 foreach (var shape in selected)
