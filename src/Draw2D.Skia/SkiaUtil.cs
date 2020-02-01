@@ -1584,12 +1584,8 @@ namespace Draw2D
         {
             if (!string.IsNullOrEmpty(xml))
             {
-                using (var stream = new StringReader(xml))
-                using (var reader = XmlReader.Create(stream))
-                {
-                    var svg = new SkiaSharp.Extended.Svg.SKSvg();
-                    return svg.Load(reader);
-                }
+                var svg = new Svg.Skia.SKSvg();
+                return svg.FromSvg(xml);
             }
             return null;
         }
