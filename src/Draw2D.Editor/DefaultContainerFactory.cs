@@ -1272,7 +1272,7 @@ namespace Draw2D.Editor
                 Height = 630,
                 PrintBackground = new Paint(
                     paintStyle: PaintStyle.Fill,
-                    color: new ArgbColor(0, 255, 255, 255),
+                    color: new ArgbColor(255, 255, 255, 255),
                     isAntialias: false,
                     effects: PaintEffects.MakeEffects()),
                 WorkBackground = new Paint(
