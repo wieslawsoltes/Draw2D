@@ -73,7 +73,7 @@ namespace Draw2D.Export
 
         internal static void ExportImage(IToolContext context, string path, IContainerView containerView, SKEncodedImageFormat format, int quality)
         {
-            var info = new SKImageInfo((int)containerView.Width, (int)containerView.Height);
+            var info = new SKImageInfo((int)containerView.Width, (int)containerView.Height, SKImageInfo.PlatformColorType, SKAlphaType.Unpremul);
             using (var bitmap = new SKBitmap(info))
             {
                 using (var canvas = new SKCanvas(bitmap))
