@@ -1,8 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <OutputType>Library</OutputType>
-    <TargetFrameworks>netstandard2.0;netstandard2.1;net461</TargetFrameworks>
+    <OutputType>WinExe</OutputType>
+    <TargetFrameworks>netcoreapp3.1;net461</TargetFrameworks>
     <EnableDefaultCompileItems>False</EnableDefaultCompileItems>
     <IsPackable>False</IsPackable>
     <LangVersion>8.0</LangVersion>
@@ -16,15 +16,11 @@
     <Company>Wiesław Šoltés</Company>
     <Description>A multi-platform 2D diagram editor.</Description>
     <Copyright>Copyright © Wiesław Šoltés 2019</Copyright>
-    <PackageId>Draw2D</PackageId>
-    <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <PackageProjectUrl>https://github.com/wieslawsoltes/Draw2D</PackageProjectUrl>
-    <PackageTags>2d;editor;data;diagram;graphics;geometry;data;shapes;wysiwyg-editor</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>
     <Compile Include="**\*.cs" Exclude="obj\**" />
-    <AvaloniaResource Include="Assets\**" />
+    <AvaloniaResource Include="Assets\*" />
     <Compile Update="**\*.xaml.cs">
       <DependentUpon>%(Filename)</DependentUpon>
       <SubType>Code</SubType>
@@ -35,16 +31,34 @@
   </ItemGroup>
 
   <Import Project="..\..\build\ReferenceAssemblies.props" />
+  <Import Project="..\..\build\Math.Spatial.props" />
+  <Import Project="..\..\build\SkiaSharp.props" />
+  <Import Project="..\..\build\SkiaSharp.Svg.props" />
+  <Import Project="..\..\build\Newtonsoft.Json.props" />
   <Import Project="..\..\build\Avalonia.props" />
   <Import Project="..\..\build\Avalonia.Skia.props" />
   <Import Project="..\..\build\Avalonia.DataGrid.props" />
+  <Import Project="..\..\build\Avalonia.Desktop.props" />
 
-  <ItemGroup>
-    <ProjectReference Include="..\Draw2D.Input\Draw2D.Input.csproj" />
-    <ProjectReference Include="..\Draw2D.Skia\Draw2D.Skia.csproj" />
-    <ProjectReference Include="..\Draw2D.ViewModels\Draw2D.ViewModels.csproj" />
-    <ProjectReference Include="..\Draw2D.Editor\Draw2D.Editor.csproj" />
-    <ProjectReference Include="..\Draw2D.ZoomControl\Draw2D.ZoomControl.csproj" />
+  <PropertyGroup Condition="'$(RuntimeIdentifier)' == 'win-x64' or '$(RuntimeIdentifier)' == 'linux-x64' or '$(RuntimeIdentifier)' == 'osx-x64'">
+    <CoreRT>True</CoreRT>
+  </PropertyGroup>
+
+  <ItemGroup Condition="'$(CoreRT)' == 'True'">
+    <RdXmlFile Include="Draw2D.rd.xml" />
+    <PackageReference Include="Microsoft.DotNet.ILCompiler" Version="1.0.0-alpha-*" />
   </ItemGroup>
+
+  <PropertyGroup Condition="'$(CoreRT)' == 'True'">
+    <RootAllApplicationAssemblies>False</RootAllApplicationAssemblies>
+    <IlcGenerateCompleteTypeMetadata>False</IlcGenerateCompleteTypeMetadata>
+    <IlcGenerateStackTraceData>False</IlcGenerateStackTraceData>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(CoreRT)' != 'True'">
+    <PublishTrimmed>False</PublishTrimmed>
+    <PublishSingleFile>False</PublishSingleFile>
+    <PublishReadyToRun>True</PublishReadyToRun>
+  </PropertyGroup>
 
 </Project>

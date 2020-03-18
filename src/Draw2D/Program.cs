@@ -4,7 +4,7 @@ using System;
 using Avalonia;
 using Avalonia.Logging.Serilog;
 
-namespace Draw2D.Desktop
+namespace Draw2D
 {
     class Program
     {
