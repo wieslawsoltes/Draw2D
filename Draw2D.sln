@@ -1,53 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29020.237
+# Visual Studio 15
+VisualStudioVersion = 15.0.26124.0
 MinimumVisualStudioVersion = 15.0.26124.0
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{0A6C444A-1F68-4421-9DB2-FCBDD1F2993C}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Draw2D", "src\Draw2D\Draw2D.csproj", "{00EC6083-A7DB-45D6-9F05-F3EE48203ADA}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{FE0F17B0-CEC8-443B-9101-B0A7B09348BA}"
-	ProjectSection(SolutionItems) = preProject
-		.editorconfig = .editorconfig
-		.nuke = .nuke
-		build.ps1 = build.ps1
-		build.sh = build.sh
-		global.json = global.json
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{BF0A1AA3-2ED5-4EC1-B61E-1E67479FBACE}"
-	ProjectSection(SolutionItems) = preProject
-		LICENSE.TXT = LICENSE.TXT
-		README.md = README.md
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "git", "git", "{D4CF09AA-975E-48A0-B0B7-3D4CD91757FD}"
-	ProjectSection(SolutionItems) = preProject
-		.gitattributes = .gitattributes
-		.gitignore = .gitignore
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "nuget", "nuget", "{48EEE901-AA4D-42F6-B643-1B9793D6555B}"
-	ProjectSection(SolutionItems) = preProject
-		NuGet.Config = NuGet.Config
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "props", "props", "{5541D397-BF27-4B59-9082-876031E1B811}"
-	ProjectSection(SolutionItems) = preProject
-		build\Avalonia.DataGrid.props = build\Avalonia.DataGrid.props
-		build\Avalonia.Desktop.props = build\Avalonia.Desktop.props
-		build\Avalonia.props = build\Avalonia.props
-		build\Avalonia.Skia.props = build\Avalonia.Skia.props
-		build\Math.Spatial.props = build\Math.Spatial.props
-		build\Newtonsoft.Json.props = build\Newtonsoft.Json.props
-		build\ReferenceAssemblies.props = build\ReferenceAssemblies.props
-		build\SkiaSharp.props = build\SkiaSharp.props
-		build\SkiaSharp.Svg.props = build\SkiaSharp.Svg.props
-	EndProjectSection
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "_build", "build\build\_build.csproj", "{FD8CF0CB-4E58-44F0-A06E-84FD66BE73F5}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -57,43 +12,7 @@ Global
 		Release|x64 = Release|x64
 		Release|x86 = Release|x86
 	EndGlobalSection
-	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{00EC6083-A7DB-45D6-9F05-F3EE48203ADA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{00EC6083-A7DB-45D6-9F05-F3EE48203ADA}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{00EC6083-A7DB-45D6-9F05-F3EE48203ADA}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{00EC6083-A7DB-45D6-9F05-F3EE48203ADA}.Debug|x64.Build.0 = Debug|Any CPU
-		{00EC6083-A7DB-45D6-9F05-F3EE48203ADA}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{00EC6083-A7DB-45D6-9F05-F3EE48203ADA}.Debug|x86.Build.0 = Debug|Any CPU
-		{00EC6083-A7DB-45D6-9F05-F3EE48203ADA}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{00EC6083-A7DB-45D6-9F05-F3EE48203ADA}.Release|Any CPU.Build.0 = Release|Any CPU
-		{00EC6083-A7DB-45D6-9F05-F3EE48203ADA}.Release|x64.ActiveCfg = Release|Any CPU
-		{00EC6083-A7DB-45D6-9F05-F3EE48203ADA}.Release|x64.Build.0 = Release|Any CPU
-		{00EC6083-A7DB-45D6-9F05-F3EE48203ADA}.Release|x86.ActiveCfg = Release|Any CPU
-		{00EC6083-A7DB-45D6-9F05-F3EE48203ADA}.Release|x86.Build.0 = Release|Any CPU
-		{FD8CF0CB-4E58-44F0-A06E-84FD66BE73F5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FD8CF0CB-4E58-44F0-A06E-84FD66BE73F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FD8CF0CB-4E58-44F0-A06E-84FD66BE73F5}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{FD8CF0CB-4E58-44F0-A06E-84FD66BE73F5}.Debug|x64.Build.0 = Debug|Any CPU
-		{FD8CF0CB-4E58-44F0-A06E-84FD66BE73F5}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{FD8CF0CB-4E58-44F0-A06E-84FD66BE73F5}.Debug|x86.Build.0 = Debug|Any CPU
-		{FD8CF0CB-4E58-44F0-A06E-84FD66BE73F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FD8CF0CB-4E58-44F0-A06E-84FD66BE73F5}.Release|Any CPU.Build.0 = Release|Any CPU
-		{FD8CF0CB-4E58-44F0-A06E-84FD66BE73F5}.Release|x64.ActiveCfg = Release|Any CPU
-		{FD8CF0CB-4E58-44F0-A06E-84FD66BE73F5}.Release|x64.Build.0 = Release|Any CPU
-		{FD8CF0CB-4E58-44F0-A06E-84FD66BE73F5}.Release|x86.ActiveCfg = Release|Any CPU
-		{FD8CF0CB-4E58-44F0-A06E-84FD66BE73F5}.Release|x86.Build.0 = Release|Any CPU
-	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{00EC6083-A7DB-45D6-9F05-F3EE48203ADA} = {0A6C444A-1F68-4421-9DB2-FCBDD1F2993C}
-		{D4CF09AA-975E-48A0-B0B7-3D4CD91757FD} = {FE0F17B0-CEC8-443B-9101-B0A7B09348BA}
-		{48EEE901-AA4D-42F6-B643-1B9793D6555B} = {FE0F17B0-CEC8-443B-9101-B0A7B09348BA}
-		{5541D397-BF27-4B59-9082-876031E1B811} = {FE0F17B0-CEC8-443B-9101-B0A7B09348BA}
-		{FD8CF0CB-4E58-44F0-A06E-84FD66BE73F5} = {FE0F17B0-CEC8-443B-9101-B0A7B09348BA}
-	EndGlobalSection
-	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {0E3023FE-CCDB-41C4-9123-CF58AE914702}
 	EndGlobalSection
 EndGlobal
