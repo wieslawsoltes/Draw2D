@@ -59,7 +59,7 @@ namespace Draw2D.Presenters
 
                     _editorContainerPresenter.Draw(skiaDrawingContextImpl.SkCanvas, width, height, dx, dy, zx, zy);
 
-                    drawingContext.DrawImage(_renderTarget, 1.0,
+                    drawingContext.DrawImage(_renderTarget,
                         new Rect(0, 0, _renderTarget.PixelSize.Width, _renderTarget.PixelSize.Height),
                         new Rect(0, 0, width, height));
                 }
