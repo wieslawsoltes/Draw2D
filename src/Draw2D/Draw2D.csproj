@@ -34,14 +34,15 @@
     <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.0" PrivateAssets="All" />
     <PackageReference Include="Math.Spatial" Version="1.1.0" />
     <PackageReference Include="SkiaSharp" Version="1.68.1" />
+    <PackageReference Include="SkiaSharp.NativeAssets.Linux" Version="1.68.1" />
     <PackageReference Include="Svg.Skia" Version="0.1.6" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
-    <PackageReference Include="Avalonia" Version="0.9.4" />
-    <PackageReference Include="Avalonia.Skia" Version="0.9.4" />
-    <PackageReference Include="Avalonia.Controls.DataGrid" Version="0.9.4" />
-    <PackageReference Include="Avalonia.Desktop" Version="0.9.4" />
+    <PackageReference Include="Avalonia" Version="0.9.999-cibuild*" />
+    <PackageReference Include="Avalonia.Skia" Version="0.9.999-cibuild*" />
+    <PackageReference Include="Avalonia.Controls.DataGrid" Version="0.9.999-cibuild*" />
+    <PackageReference Include="Avalonia.Desktop" Version="0.9.999-cibuild*" />
+    <PackageReference Include="Avalonia.Diagnostics" Version="0.9.999-cibuild*" />
     <PackageReference Include="Avalonia.Angle.Windows.Natives" Version="2.1.0.2019013001" />
-    <PackageReference Include="SkiaSharp.NativeAssets.Linux" Version="1.68.1" />
   </ItemGroup>
 
   <PropertyGroup Condition="'$(RuntimeIdentifier)' == 'win-x64' or '$(RuntimeIdentifier)' == 'linux-x64' or '$(RuntimeIdentifier)' == 'osx-x64'">
