@@ -1,6 +1,4 @@
-﻿// Copyright (c) Wiesław Šoltés. All rights reserved.
-// Licensed under the MIT license. See LICENSE file in the project root for full license information.
-using System;
+﻿using System;
 using System.Runtime.Serialization;
 using Draw2D.Input;
 using Draw2D.ViewModels.Shapes;
