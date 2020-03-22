@@ -64,7 +64,7 @@
             <Setter Property="Width" Value="8"/>
             <Setter Property="Template">
                 <ControlTemplate>
-                    <Border Background="{TemplateBinding Background}"/>
+                    <Border Background="Transparent"/>
                 </ControlTemplate>
             </Setter>
         </Style>
@@ -72,7 +72,7 @@
             <Setter Property="Height" Value="8"/>
             <Setter Property="Template">
                 <ControlTemplate>
-                    <Border Background="{TemplateBinding Background}"/>
+                    <Border Background="Transparent"/>
                 </ControlTemplate>
             </Setter>
         </Style>
