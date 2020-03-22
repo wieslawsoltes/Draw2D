@@ -62,7 +62,7 @@
                 </TabControl>
             </TabItem>
         </TabControl>
-        <GridSplitter Grid.Row="1"/>
+        <GridSplitter Classes="horizontal" Grid.Row="1"/>
         <ContentControl Content="{Binding DocumentContainer}" Grid.Row="2"/>
     </Grid>
 </UserControl>

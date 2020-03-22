@@ -39,7 +39,7 @@
                 <ContentControl Content="{Binding CurrentTool}"/>
             </TabItem>
         </TabControl>
-        <GridSplitter Grid.Row="1"/>
+        <GridSplitter Classes="horizontal" Grid.Row="1"/>
         <TabControl Classes="default" Grid.Row="2" TabStripPlacement="Top">
             <TabItem Classes="default" Header="Selected">
                 <ContentControl Content="{Binding DocumentContainer.ContainerView.SelectionState.Selected}"/>

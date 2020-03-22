@@ -68,6 +68,8 @@
                 </ControlTemplate>
             </Setter>
         </Style>
+        <Style Selector="GridSplitter.vertical">
+        </Style>
         <Style Selector="GridSplitter:horizontal">
             <Setter Property="Height" Value="8"/>
             <Setter Property="Template">
@@ -75,6 +77,8 @@
                     <Border Background="Transparent"/>
                 </ControlTemplate>
             </Setter>
+        </Style>
+        <Style Selector="GridSplitter.horizontal">
         </Style>
         <Style Selector="ListBox.default">
             <Setter Property="Padding" Value="2"/>
