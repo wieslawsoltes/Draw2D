@@ -64,21 +64,23 @@
             <Setter Property="Width" Value="8"/>
             <Setter Property="Template">
                 <ControlTemplate>
-                    <Border Background="Transparent"/>
+                    <Border Background="{TemplateBinding Background}"/>
                 </ControlTemplate>
             </Setter>
         </Style>
         <Style Selector="GridSplitter.vertical">
+            <Setter Property="Background" Value="Transparent"/>
         </Style>
         <Style Selector="GridSplitter:horizontal">
             <Setter Property="Height" Value="8"/>
             <Setter Property="Template">
                 <ControlTemplate>
-                    <Border Background="Transparent"/>
+                    <Border Background="{TemplateBinding Background}"/>
                 </ControlTemplate>
             </Setter>
         </Style>
         <Style Selector="GridSplitter.horizontal">
+            <Setter Property="Background" Value="Transparent"/>
         </Style>
         <Style Selector="ListBox.default">
             <Setter Property="Padding" Value="2"/>
