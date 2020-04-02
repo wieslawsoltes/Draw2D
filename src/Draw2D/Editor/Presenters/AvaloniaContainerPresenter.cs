@@ -51,16 +51,14 @@ namespace Draw2D.Presenters
                     _renderTarget = new RenderTargetBitmap(new PixelSize((int)width, (int)height), new Vector(96, 96));
                 }
 
-                using (var drawingContextImpl = _renderTarget.CreateDrawingContext(null))
-                {
-                    var skiaDrawingContextImpl = drawingContextImpl as ISkiaDrawingContextImpl;
+                using var drawingContextImpl = _renderTarget.CreateDrawingContext(null);
+                var skiaDrawingContextImpl = drawingContextImpl as ISkiaDrawingContextImpl;
 
-                    _editorContainerPresenter.Draw(skiaDrawingContextImpl.SkCanvas, width, height, dx, dy, zx, zy);
+                _editorContainerPresenter.Draw(skiaDrawingContextImpl.SkCanvas, width, height, dx, dy, zx, zy);
 
-                    drawingContext.DrawImage(_renderTarget,
-                        new Rect(0, 0, _renderTarget.PixelSize.Width, _renderTarget.PixelSize.Height),
-                        new Rect(0, 0, width, height));
-                }
+                drawingContext.DrawImage(_renderTarget,
+                    new Rect(0, 0, _renderTarget.PixelSize.Width, _renderTarget.PixelSize.Height),
+                    new Rect(0, 0, width, height));
             }
         }
     }

@@ -314,17 +314,15 @@ namespace Draw2D.Renderers
             if (style.IsStroked || style.IsText)
             {
                 var canvas = dc as SKCanvas;
-                using (var geometry = new SKPath() { FillType = SKPathFillType.Winding })
+                using var geometry = new SKPath() { FillType = SKPathFillType.Winding };
+                SkiaUtil.AddLine(null, line, dx, dy, geometry);
+                if (style.IsStroked)
                 {
-                    SkiaUtil.AddLine(null, line, dx, dy, geometry);
-                    if (style.IsStroked)
-                    {
-                        DrawStrokedPath(canvas, geometry, style.StrokePaint, line.Effects, scale);
-                    }
-                    if (style.IsText && !string.IsNullOrEmpty(line.Text?.Value))
-                    {
-                        DrawTextOnPath(canvas, geometry, line.Text, style.TextPaint, line.Effects, scale);
-                    }
+                    DrawStrokedPath(canvas, geometry, style.StrokePaint, line.Effects, scale);
+                }
+                if (style.IsText && !string.IsNullOrEmpty(line.Text?.Value))
+                {
+                    DrawTextOnPath(canvas, geometry, line.Text, style.TextPaint, line.Effects, scale);
                 }
             }
         }
@@ -339,21 +337,19 @@ namespace Draw2D.Renderers
             if (style.IsFilled || style.IsStroked || style.IsText)
             {
                 var canvas = dc as SKCanvas;
-                using (var geometry = new SKPath() { FillType = SKPathFillType.Winding })
+                using var geometry = new SKPath() { FillType = SKPathFillType.Winding };
+                SkiaUtil.AddCubic(null, cubicBezier, dx, dy, geometry);
+                if (style.IsFilled)
                 {
-                    SkiaUtil.AddCubic(null, cubicBezier, dx, dy, geometry);
-                    if (style.IsFilled)
-                    {
-                        DrawFilledPath(canvas, geometry, style.FillPaint, cubicBezier.Effects, scale);
-                    }
-                    if (style.IsStroked)
-                    {
-                        DrawStrokedPath(canvas, geometry, style.StrokePaint, cubicBezier.Effects, scale);
-                    }
-                    if (style.IsText && !string.IsNullOrEmpty(cubicBezier.Text?.Value))
-                    {
-                        DrawTextOnPath(canvas, geometry, cubicBezier.Text, style.TextPaint, cubicBezier.Effects, scale);
-                    }
+                    DrawFilledPath(canvas, geometry, style.FillPaint, cubicBezier.Effects, scale);
+                }
+                if (style.IsStroked)
+                {
+                    DrawStrokedPath(canvas, geometry, style.StrokePaint, cubicBezier.Effects, scale);
+                }
+                if (style.IsText && !string.IsNullOrEmpty(cubicBezier.Text?.Value))
+                {
+                    DrawTextOnPath(canvas, geometry, cubicBezier.Text, style.TextPaint, cubicBezier.Effects, scale);
                 }
             }
         }
@@ -368,21 +364,19 @@ namespace Draw2D.Renderers
             if (style.IsFilled || style.IsStroked || style.IsText)
             {
                 var canvas = dc as SKCanvas;
-                using (var geometry = new SKPath() { FillType = SKPathFillType.Winding })
+                using var geometry = new SKPath() { FillType = SKPathFillType.Winding };
+                SkiaUtil.AddQuad(null, quadraticBezier, dx, dy, geometry);
+                if (style.IsFilled)
                 {
-                    SkiaUtil.AddQuad(null, quadraticBezier, dx, dy, geometry);
-                    if (style.IsFilled)
-                    {
-                        DrawFilledPath(canvas, geometry, style.FillPaint, quadraticBezier.Effects, scale);
-                    }
-                    if (style.IsStroked)
-                    {
-                        DrawStrokedPath(canvas, geometry, style.StrokePaint, quadraticBezier.Effects, scale);
-                    }
-                    if (style.IsText && !string.IsNullOrEmpty(quadraticBezier.Text?.Value))
-                    {
-                        DrawTextOnPath(canvas, geometry, quadraticBezier.Text, style.TextPaint, quadraticBezier.Effects, scale);
-                    }
+                    DrawFilledPath(canvas, geometry, style.FillPaint, quadraticBezier.Effects, scale);
+                }
+                if (style.IsStroked)
+                {
+                    DrawStrokedPath(canvas, geometry, style.StrokePaint, quadraticBezier.Effects, scale);
+                }
+                if (style.IsText && !string.IsNullOrEmpty(quadraticBezier.Text?.Value))
+                {
+                    DrawTextOnPath(canvas, geometry, quadraticBezier.Text, style.TextPaint, quadraticBezier.Effects, scale);
                 }
             }
         }
@@ -397,21 +391,19 @@ namespace Draw2D.Renderers
             if (style.IsFilled || style.IsStroked || style.IsText)
             {
                 var canvas = dc as SKCanvas;
-                using (var geometry = new SKPath() { FillType = SKPathFillType.Winding })
+                using var geometry = new SKPath() { FillType = SKPathFillType.Winding };
+                SkiaUtil.AddConic(null, conic, dx, dy, geometry);
+                if (style.IsFilled)
                 {
-                    SkiaUtil.AddConic(null, conic, dx, dy, geometry);
-                    if (style.IsFilled)
-                    {
-                        DrawFilledPath(canvas, geometry, style.FillPaint, conic.Effects, scale);
-                    }
-                    if (style.IsStroked)
-                    {
-                        DrawStrokedPath(canvas, geometry, style.StrokePaint, conic.Effects, scale);
-                    }
-                    if (style.IsText && !string.IsNullOrEmpty(conic.Text?.Value))
-                    {
-                        DrawTextOnPath(canvas, geometry, conic.Text, style.TextPaint, conic.Effects, scale);
-                    }
+                    DrawFilledPath(canvas, geometry, style.FillPaint, conic.Effects, scale);
+                }
+                if (style.IsStroked)
+                {
+                    DrawStrokedPath(canvas, geometry, style.StrokePaint, conic.Effects, scale);
+                }
+                if (style.IsText && !string.IsNullOrEmpty(conic.Text?.Value))
+                {
+                    DrawTextOnPath(canvas, geometry, conic.Text, style.TextPaint, conic.Effects, scale);
                 }
             }
         }
@@ -426,21 +418,19 @@ namespace Draw2D.Renderers
             if (style.IsFilled || style.IsStroked || style.IsText)
             {
                 var canvas = dc as SKCanvas;
-                using (var geometry = new SKPath() { FillType = SkiaUtil.ToSKPathFillType(path.FillType) })
+                using var geometry = new SKPath() { FillType = SkiaUtil.ToSKPathFillType(path.FillType) };
+                SkiaUtil.AddPath(null, path, dx, dy, geometry);
+                if (style.IsFilled)
                 {
-                    SkiaUtil.AddPath(null, path, dx, dy, geometry);
-                    if (style.IsFilled)
-                    {
-                        DrawFilledPath(canvas, geometry, style.FillPaint, path.Effects, scale);
-                    }
-                    if (style.IsStroked)
-                    {
-                        DrawStrokedPath(canvas, geometry, style.StrokePaint, path.Effects, scale);
-                    }
-                    if (style.IsText && !string.IsNullOrEmpty(path.Text?.Value))
-                    {
-                        DrawTextOnPath(canvas, geometry, path.Text, style.TextPaint, path.Effects, scale);
-                    }
+                    DrawFilledPath(canvas, geometry, style.FillPaint, path.Effects, scale);
+                }
+                if (style.IsStroked)
+                {
+                    DrawStrokedPath(canvas, geometry, style.StrokePaint, path.Effects, scale);
+                }
+                if (style.IsText && !string.IsNullOrEmpty(path.Text?.Value))
+                {
+                    DrawTextOnPath(canvas, geometry, path.Text, style.TextPaint, path.Effects, scale);
                 }
             }
         }
@@ -455,22 +445,20 @@ namespace Draw2D.Renderers
             if (style.IsFilled || style.IsStroked || style.IsText)
             {
                 var canvas = dc as SKCanvas;
-                using (var geometry = new SKPath() { FillType = SKPathFillType.Winding })
+                using var geometry = new SKPath() { FillType = SKPathFillType.Winding };
+                SkiaUtil.AddRect(null, rectangle, dx, dy, geometry);
+                if (style.IsFilled)
                 {
-                    SkiaUtil.AddRect(null, rectangle, dx, dy, geometry);
-                    if (style.IsFilled)
-                    {
-                        DrawFilledPath(canvas, geometry, style.FillPaint, rectangle.Effects, scale);
-                    }
-                    if (style.IsStroked)
-                    {
-                        DrawStrokedPath(canvas, geometry, style.StrokePaint, rectangle.Effects, scale);
-                    }
-                    if (style.IsText && !string.IsNullOrEmpty(rectangle.Text?.Value))
-                    {
-                        var rect = SkiaUtil.ToSKRect(rectangle.StartPoint, rectangle.Point, dx, dy);
-                        DrawText(canvas, rectangle.Text, rect, style, rectangle.Effects, dx, dy, scale);
-                    }
+                    DrawFilledPath(canvas, geometry, style.FillPaint, rectangle.Effects, scale);
+                }
+                if (style.IsStroked)
+                {
+                    DrawStrokedPath(canvas, geometry, style.StrokePaint, rectangle.Effects, scale);
+                }
+                if (style.IsText && !string.IsNullOrEmpty(rectangle.Text?.Value))
+                {
+                    var rect = SkiaUtil.ToSKRect(rectangle.StartPoint, rectangle.Point, dx, dy);
+                    DrawText(canvas, rectangle.Text, rect, style, rectangle.Effects, dx, dy, scale);
                 }
             }
         }
@@ -485,23 +473,21 @@ namespace Draw2D.Renderers
             if (style.IsFilled || style.IsStroked || style.IsText)
             {
                 var canvas = dc as SKCanvas;
-                using (var geometry = new SKPath() { FillType = SKPathFillType.Winding })
+                using var geometry = new SKPath() { FillType = SKPathFillType.Winding };
+                SkiaUtil.AddCircle(null, circle, dx, dy, geometry);
+                if (style.IsFilled)
                 {
-                    SkiaUtil.AddCircle(null, circle, dx, dy, geometry);
-                    if (style.IsFilled)
-                    {
-                        DrawFilledPath(canvas, geometry, style.FillPaint, circle.Effects, scale);
-                    }
-                    if (style.IsStroked)
-                    {
-                        DrawStrokedPath(canvas, geometry, style.StrokePaint, circle.Effects, scale);
-                    }
-                    if (style.IsText && !string.IsNullOrEmpty(circle.Text?.Value))
-                    {
-                        var distance = circle.StartPoint.DistanceTo(circle.Point);
-                        var rect = SkiaUtil.ToSKRect(circle.StartPoint, distance, dx, dy);
-                        DrawText(canvas, circle.Text, rect, style, circle.Effects, dx, dy, scale);
-                    }
+                    DrawFilledPath(canvas, geometry, style.FillPaint, circle.Effects, scale);
+                }
+                if (style.IsStroked)
+                {
+                    DrawStrokedPath(canvas, geometry, style.StrokePaint, circle.Effects, scale);
+                }
+                if (style.IsText && !string.IsNullOrEmpty(circle.Text?.Value))
+                {
+                    var distance = circle.StartPoint.DistanceTo(circle.Point);
+                    var rect = SkiaUtil.ToSKRect(circle.StartPoint, distance, dx, dy);
+                    DrawText(canvas, circle.Text, rect, style, circle.Effects, dx, dy, scale);
                 }
             }
         }
@@ -516,23 +502,21 @@ namespace Draw2D.Renderers
             if (style.IsFilled || style.IsStroked || style.IsText)
             {
                 var canvas = dc as SKCanvas;
-                using (var geometry = new SKPath() { FillType = SKPathFillType.Winding })
+                using var geometry = new SKPath() { FillType = SKPathFillType.Winding };
+                SkiaUtil.AddArc(null, arc, dx, dy, geometry);
+                if (style.IsFilled)
                 {
-                    SkiaUtil.AddArc(null, arc, dx, dy, geometry);
-                    if (style.IsFilled)
-                    {
-                        DrawFilledPath(canvas, geometry, style.FillPaint, arc.Effects, scale);
-                    }
-                    if (style.IsStroked)
-                    {
-                        DrawStrokedPath(canvas, geometry, style.StrokePaint, arc.Effects, scale);
-                    }
-                    if (style.IsText && !string.IsNullOrEmpty(arc.Text?.Value))
-                    {
-                        var distance = arc.StartPoint.DistanceTo(arc.Point);
-                        var rect = SkiaUtil.ToSKRect(arc.StartPoint, distance, dx, dy);
-                        DrawText(canvas, arc.Text, rect, style, arc.Effects, dx, dy, scale);
-                    }
+                    DrawFilledPath(canvas, geometry, style.FillPaint, arc.Effects, scale);
+                }
+                if (style.IsStroked)
+                {
+                    DrawStrokedPath(canvas, geometry, style.StrokePaint, arc.Effects, scale);
+                }
+                if (style.IsText && !string.IsNullOrEmpty(arc.Text?.Value))
+                {
+                    var distance = arc.StartPoint.DistanceTo(arc.Point);
+                    var rect = SkiaUtil.ToSKRect(arc.StartPoint, distance, dx, dy);
+                    DrawText(canvas, arc.Text, rect, style, arc.Effects, dx, dy, scale);
                 }
             }
         }
@@ -547,22 +531,20 @@ namespace Draw2D.Renderers
             if (style.IsFilled || style.IsStroked || style.IsText)
             {
                 var canvas = dc as SKCanvas;
-                using (var geometry = new SKPath() { FillType = SKPathFillType.Winding })
+                using var geometry = new SKPath() { FillType = SKPathFillType.Winding };
+                SkiaUtil.AddOval(null, oval, dx, dy, geometry);
+                if (style.IsFilled)
                 {
-                    SkiaUtil.AddOval(null, oval, dx, dy, geometry);
-                    if (style.IsFilled)
-                    {
-                        DrawFilledPath(canvas, geometry, style.FillPaint, oval.Effects, scale);
-                    }
-                    if (style.IsStroked)
-                    {
-                        DrawStrokedPath(canvas, geometry, style.StrokePaint, oval.Effects, scale);
-                    }
-                    if (style.IsText && !string.IsNullOrEmpty(oval.Text?.Value))
-                    {
-                        var rect = SkiaUtil.ToSKRect(oval.StartPoint, oval.Point, dx, dy);
-                        DrawText(canvas, oval.Text, rect, style, oval.Effects, dx, dy, scale);
-                    }
+                    DrawFilledPath(canvas, geometry, style.FillPaint, oval.Effects, scale);
+                }
+                if (style.IsStroked)
+                {
+                    DrawStrokedPath(canvas, geometry, style.StrokePaint, oval.Effects, scale);
+                }
+                if (style.IsText && !string.IsNullOrEmpty(oval.Text?.Value))
+                {
+                    var rect = SkiaUtil.ToSKRect(oval.StartPoint, oval.Point, dx, dy);
+                    DrawText(canvas, oval.Text, rect, style, oval.Effects, dx, dy, scale);
                 }
             }
         }

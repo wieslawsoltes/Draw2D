@@ -969,71 +969,67 @@ namespace Draw2D
 
         internal static void AddText(IToolContext context, Text text, IPointShape startPoint, IPointShape point, IPaint paint, double dx, double dy, SKPath geometry)
         {
-            using (var typeface = ToSKTypeface(paint.Typeface))
-            using (var disposable = new CompositeDisposable())
-            using (var skPaint = ToSKPaint(paint, null, 1.0, disposable.Disposables))
+            using var typeface = ToSKTypeface(paint.Typeface);
+            using var disposable = new CompositeDisposable();
+            using var skPaint = ToSKPaint(paint, null, 1.0, disposable.Disposables);
+            skPaint.Typeface = typeface;
+            skPaint.TextEncoding = SKTextEncoding.Utf16;
+            skPaint.TextSize = (float)paint.FontSize;
+
+            switch (paint.HAlign)
             {
-                skPaint.Typeface = typeface;
-                skPaint.TextEncoding = SKTextEncoding.Utf16;
-                skPaint.TextSize = (float)paint.FontSize;
-
-                switch (paint.HAlign)
-                {
-                    default:
-                    case HAlign.Left:
-                        skPaint.TextAlign = SKTextAlign.Left;
-                        break;
-                    case HAlign.Center:
-                        skPaint.TextAlign = SKTextAlign.Center;
-                        break;
-                    case HAlign.Right:
-                        skPaint.TextAlign = SKTextAlign.Right;
-                        break;
-                }
-
-                var metrics = skPaint.FontMetrics;
-                var mAscent = metrics.Ascent;
-                var mDescent = metrics.Descent;
-                var rect = ToSKRect(startPoint, point, dx, dy);
-                float x = rect.Left;
-                float y = rect.Top;
-                float width = rect.Width;
-                float height = rect.Height;
-
-                switch (paint.VAlign)
-                {
-                    default:
-                    case VAlign.Top:
-                        y -= mAscent;
-                        break;
-                    case VAlign.Center:
-                        y += (height / 2.0f) - (mAscent / 2.0f) - mDescent / 2.0f;
-                        break;
-                    case VAlign.Bottom:
-                        y += height - mDescent;
-                        break;
-                }
-
-                switch (paint.HAlign)
-                {
-                    default:
-                    case HAlign.Left:
-                        // x = x;
-                        break;
-                    case HAlign.Center:
-                        x += width / 2.0f;
-                        break;
-                    case HAlign.Right:
-                        x += width;
-                        break;
-                }
-
-                using (var outlineGeometry = skPaint.GetTextPath(text.Value, x, y))
-                using (var fillGeometry = skPaint.GetFillPath(outlineGeometry))
-                {
-                    geometry.AddPath(fillGeometry, SKPathAddMode.Append);
-                }
+                default:
+                case HAlign.Left:
+                    skPaint.TextAlign = SKTextAlign.Left;
+                    break;
+                case HAlign.Center:
+                    skPaint.TextAlign = SKTextAlign.Center;
+                    break;
+                case HAlign.Right:
+                    skPaint.TextAlign = SKTextAlign.Right;
+                    break;
             }
+
+            var metrics = skPaint.FontMetrics;
+            var mAscent = metrics.Ascent;
+            var mDescent = metrics.Descent;
+            var rect = ToSKRect(startPoint, point, dx, dy);
+            float x = rect.Left;
+            float y = rect.Top;
+            float width = rect.Width;
+            float height = rect.Height;
+
+            switch (paint.VAlign)
+            {
+                default:
+                case VAlign.Top:
+                    y -= mAscent;
+                    break;
+                case VAlign.Center:
+                    y += (height / 2.0f) - (mAscent / 2.0f) - mDescent / 2.0f;
+                    break;
+                case VAlign.Bottom:
+                    y += height - mDescent;
+                    break;
+            }
+
+            switch (paint.HAlign)
+            {
+                default:
+                case HAlign.Left:
+                    // x = x;
+                    break;
+                case HAlign.Center:
+                    x += width / 2.0f;
+                    break;
+                case HAlign.Right:
+                    x += width;
+                    break;
+            }
+
+            using var outlineGeometry = skPaint.GetTextPath(text.Value, x, y);
+            using var fillGeometry = skPaint.GetFillPath(outlineGeometry);
+            geometry.AddPath(fillGeometry, SKPathAddMode.Append);
         }
 
         internal static void AddText(IToolContext context, TextShape text, double dx, double dy, SKPath geometry)
@@ -1199,41 +1195,37 @@ namespace Draw2D
 
         internal static SKPath ToStrokePath(IToolContext context, IPaint paint, IPaintEffects effects, SKPath geometry, IList<IDisposable> disposables)
         {
-            using (var skPaint = ToSKPaint(paint, null, 1.0, disposables))
+            using var skPaint = ToSKPaint(paint, null, 1.0, disposables);
+            bool isClipPath = GetInflateOffset(effects?.PathEffect != null ? effects.PathEffect : paint.Effects?.PathEffect, out var inflateX, out var inflateY);
+            if (isClipPath)
             {
-                bool isClipPath = GetInflateOffset(effects?.PathEffect != null ? effects.PathEffect : paint.Effects?.PathEffect, out var inflateX, out var inflateY);
-                if (isClipPath)
-                {
-                    var bounds = geometry.Bounds;
-                    var rect = SKRect.Inflate(bounds, (float)inflateX, (float)inflateY);
-                    // TODO: Clip path.
-                    var path = skPaint.GetFillPath(geometry, 1.0f);
-                    return path;
-                }
-                else
-                {
-                    return skPaint.GetFillPath(geometry, 1.0f);
-                }
+                var bounds = geometry.Bounds;
+                var rect = SKRect.Inflate(bounds, (float)inflateX, (float)inflateY);
+                // TODO: Clip path.
+                var path = skPaint.GetFillPath(geometry, 1.0f);
+                return path;
+            }
+            else
+            {
+                return skPaint.GetFillPath(geometry, 1.0f);
             }
         }
 
         internal static SKPath ToFillPath(IToolContext context, IPaint paint, IPaintEffects effects, SKPath geometry, IList<IDisposable> disposables)
         {
-            using (var skPaint = ToSKPaint(paint, null, 1.0, disposables))
+            using var skPaint = ToSKPaint(paint, null, 1.0, disposables);
+            bool isClipPath = GetInflateOffset(effects?.PathEffect != null ? effects.PathEffect : paint.Effects?.PathEffect, out var inflateX, out var inflateY);
+            if (isClipPath)
             {
-                bool isClipPath = GetInflateOffset(effects?.PathEffect != null ? effects.PathEffect : paint.Effects?.PathEffect, out var inflateX, out var inflateY);
-                if (isClipPath)
-                {
-                    var bounds = geometry.Bounds;
-                    var rect = SKRect.Inflate(bounds, (float)inflateX, (float)inflateY);
-                    // TODO: Clip path.
-                    var path = skPaint.GetFillPath(geometry, 1.0f);
-                    return path;
-                }
-                else
-                {
-                    return skPaint.GetFillPath(geometry, 1.0f);
-                }
+                var bounds = geometry.Bounds;
+                var rect = SKRect.Inflate(bounds, (float)inflateX, (float)inflateY);
+                // TODO: Clip path.
+                var path = skPaint.GetFillPath(geometry, 1.0f);
+                return path;
+            }
+            else
+            {
+                return skPaint.GetFillPath(geometry, 1.0f);
             }
         }
 
@@ -1251,10 +1243,8 @@ namespace Draw2D
 
             if (paths.Count == 1)
             {
-                using (var empty = new SKPath() { FillType = paths[0].FillType })
-                {
-                    return empty.Op(paths[0], op);
-                }
+                using var empty = new SKPath() { FillType = paths[0].FillType };
+                return empty.Op(paths[0], op);
             }
             else
             {
@@ -1441,11 +1431,9 @@ namespace Draw2D
         {
             if (!string.IsNullOrEmpty(text?.Value))
             {
-                using (var geometry = new SKPath() { FillType = fillType })
-                {
-                    AddText(context, text, startPoint, point, paint, 0.0, 0.0, geometry);
-                    sb.AppendLine(geometry.ToSvgPathData());
-                }
+                using var geometry = new SKPath() { FillType = fillType };
+                AddText(context, text, startPoint, point, paint, 0.0, 0.0, geometry);
+                sb.AppendLine(geometry.ToSvgPathData());
             }
         }
 
@@ -1455,106 +1443,88 @@ namespace Draw2D
             {
                 case LineShape line:
                     {
-                        using (var geometry = new SKPath() { FillType = fillType })
-                        {
-                            AddLine(context, line, 0.0, 0.0, geometry);
-                            sb.AppendLine(geometry.ToSvgPathData());
-                        }
+                        using var geometry = new SKPath() { FillType = fillType };
+                        AddLine(context, line, 0.0, 0.0, geometry);
+                        sb.AppendLine(geometry.ToSvgPathData());
                     }
                     break;
                 case CubicBezierShape cubicBezier:
                     {
-                        using (var geometry = new SKPath() { FillType = fillType })
-                        {
-                            AddCubic(context, cubicBezier, 0.0, 0.0, geometry);
-                            sb.AppendLine(geometry.ToSvgPathData());
-                        }
+                        using var geometry = new SKPath() { FillType = fillType };
+                        AddCubic(context, cubicBezier, 0.0, 0.0, geometry);
+                        sb.AppendLine(geometry.ToSvgPathData());
                     }
                     break;
                 case QuadraticBezierShape quadraticBezier:
                     {
-                        using (var geometry = new SKPath() { FillType = fillType })
-                        {
-                            AddQuad(context, quadraticBezier, 0.0, 0.0, geometry);
-                            sb.AppendLine(geometry.ToSvgPathData());
-                        }
+                        using var geometry = new SKPath() { FillType = fillType };
+                        AddQuad(context, quadraticBezier, 0.0, 0.0, geometry);
+                        sb.AppendLine(geometry.ToSvgPathData());
                     }
                     break;
                 case ConicShape conic:
                     {
-                        using (var geometry = new SKPath() { FillType = fillType })
-                        {
-                            AddConic(context, conic, 0.0, 0.0, geometry);
-                            sb.AppendLine(geometry.ToSvgPathData());
-                        }
+                        using var geometry = new SKPath() { FillType = fillType };
+                        AddConic(context, conic, 0.0, 0.0, geometry);
+                        sb.AppendLine(geometry.ToSvgPathData());
                     }
                     break;
                 case PathShape pathShape:
                     {
-                        using (var geometry = new SKPath() { FillType = SkiaUtil.ToSKPathFillType(pathShape.FillType) })
-                        {
-                            AddPath(context, pathShape, 0.0, 0.0, geometry);
-                            sb.AppendLine(geometry.ToSvgPathData());
-                        }
+                        using var geometry = new SKPath() { FillType = SkiaUtil.ToSKPathFillType(pathShape.FillType) };
+                        AddPath(context, pathShape, 0.0, 0.0, geometry);
+                        sb.AppendLine(geometry.ToSvgPathData());
                     }
                     break;
                 case RectangleShape rectangle:
                     {
-                        using (var geometry = new SKPath() { FillType = fillType })
-                        {
-                            AddRect(context, rectangle, 0.0, 0.0, geometry);
-                            sb.AppendLine(geometry.ToSvgPathData());
+                        using var geometry = new SKPath() { FillType = fillType };
+                        AddRect(context, rectangle, 0.0, 0.0, geometry);
+                        sb.AppendLine(geometry.ToSvgPathData());
 
-                            var style = context?.DocumentContainer?.StyleLibrary?.Get(rectangle.StyleId);
-                            if (style != null)
-                            {
-                                ToSvgPathData(context, rectangle.Text, rectangle.StartPoint, rectangle.Point, style.TextPaint, sb, fillType);
-                            }
+                        var style = context?.DocumentContainer?.StyleLibrary?.Get(rectangle.StyleId);
+                        if (style != null)
+                        {
+                            ToSvgPathData(context, rectangle.Text, rectangle.StartPoint, rectangle.Point, style.TextPaint, sb, fillType);
                         }
                     }
                     break;
                 case CircleShape circle:
                     {
-                        using (var geometry = new SKPath() { FillType = fillType })
-                        {
-                            AddCircle(context, circle, 0.0, 0.0, geometry);
-                            sb.AppendLine(geometry.ToSvgPathData());
+                        using var geometry = new SKPath() { FillType = fillType };
+                        AddCircle(context, circle, 0.0, 0.0, geometry);
+                        sb.AppendLine(geometry.ToSvgPathData());
 
-                            var style = context?.DocumentContainer?.StyleLibrary?.Get(circle.StyleId);
-                            if (style != null)
-                            {
-                                ToSvgPathData(context, circle.Text, circle.StartPoint, circle.Point, style.TextPaint, sb, fillType);
-                            }
+                        var style = context?.DocumentContainer?.StyleLibrary?.Get(circle.StyleId);
+                        if (style != null)
+                        {
+                            ToSvgPathData(context, circle.Text, circle.StartPoint, circle.Point, style.TextPaint, sb, fillType);
                         }
                     }
                     break;
                 case ArcShape arc:
                     {
-                        using (var geometry = new SKPath() { FillType = fillType })
-                        {
-                            AddArc(context, arc, 0.0, 0.0, geometry);
-                            sb.AppendLine(geometry.ToSvgPathData());
+                        using var geometry = new SKPath() { FillType = fillType };
+                        AddArc(context, arc, 0.0, 0.0, geometry);
+                        sb.AppendLine(geometry.ToSvgPathData());
 
-                            var style = context?.DocumentContainer?.StyleLibrary?.Get(arc.StyleId);
-                            if (style != null)
-                            {
-                                ToSvgPathData(context, arc.Text, arc.StartPoint, arc.Point, style.TextPaint, sb, fillType);
-                            }
+                        var style = context?.DocumentContainer?.StyleLibrary?.Get(arc.StyleId);
+                        if (style != null)
+                        {
+                            ToSvgPathData(context, arc.Text, arc.StartPoint, arc.Point, style.TextPaint, sb, fillType);
                         }
                     }
                     break;
                 case OvalShape oval:
                     {
-                        using (var geometry = new SKPath() { FillType = fillType })
-                        {
-                            AddOval(context, oval, 0.0, 0.0, geometry);
-                            sb.AppendLine(geometry.ToSvgPathData());
+                        using var geometry = new SKPath() { FillType = fillType };
+                        AddOval(context, oval, 0.0, 0.0, geometry);
+                        sb.AppendLine(geometry.ToSvgPathData());
 
-                            var style = context?.DocumentContainer?.StyleLibrary?.Get(oval.StyleId);
-                            if (style != null)
-                            {
-                                ToSvgPathData(context, oval.Text, oval.StartPoint, oval.Point, style.TextPaint, sb, fillType);
-                            }
+                        var style = context?.DocumentContainer?.StyleLibrary?.Get(oval.StyleId);
+                        if (style != null)
+                        {
+                            ToSvgPathData(context, oval.Text, oval.StartPoint, oval.Point, style.TextPaint, sb, fillType);
                         }
                     }
                     break;
@@ -1602,14 +1572,12 @@ namespace Draw2D
                 return null;
             }
 
-            using (var recorder = new SKPictureRecorder())
-            {
-                var image = SKImage.FromEncodedData(path);
-                var rect = new SKRect(0f, 0f, (float)image.Width, (float)image.Height);
-                var canvas = recorder.BeginRecording(rect);
-                canvas.DrawImage(image, rect);
-                return recorder.EndRecording();
-            }
+            using var recorder = new SKPictureRecorder();
+            var image = SKImage.FromEncodedData(path);
+            var rect = new SKRect(0f, 0f, (float)image.Width, (float)image.Height);
+            var canvas = recorder.BeginRecording(rect);
+            canvas.DrawImage(image, rect);
+            return recorder.EndRecording();
         }
 
         internal static bool GetInflateOffset(IPathEffect pathEffect, out double inflateX, out double inflateY)

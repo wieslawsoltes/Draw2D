@@ -117,18 +117,16 @@ namespace Draw2D.Export
                         style = context.DocumentContainer?.StyleLibrary?.CurrentItem;
                     }
 
-                    using (var disposable = new CompositeDisposable())
+                    using var disposable = new CompositeDisposable();
+                    var path = SkiaUtil.ToStrokePath(context, style.StrokePaint, shape.Effects, geometry, disposable.Disposables);
+                    if (path != null)
                     {
-                        var path = SkiaUtil.ToStrokePath(context, style.StrokePaint, shape.Effects, geometry, disposable.Disposables);
-                        if (path != null)
+                        disposable.Disposables.Add(path);
+                        var union = SkiaUtil.Op(SKPathOp.Union, new[] { path, path });
+                        if (union != null && !union.IsEmpty)
                         {
-                            disposable.Disposables.Add(path);
-                            var union = SkiaUtil.Op(SKPathOp.Union, new[] { path, path });
-                            if (union != null && !union.IsEmpty)
-                            {
-                                disposable.Disposables.Add(union);
-                                return SkiaUtil.ToPathShape(context, union, context.DocumentContainer?.StyleLibrary?.CurrentItem, context?.DocumentContainer?.PointTemplate);
-                            }
+                            disposable.Disposables.Add(union);
+                            return SkiaUtil.ToPathShape(context, union, context.DocumentContainer?.StyleLibrary?.CurrentItem, context?.DocumentContainer?.PointTemplate);
                         }
                     }
                 }
@@ -148,20 +146,18 @@ namespace Draw2D.Export
                         style = context.DocumentContainer?.StyleLibrary?.CurrentItem;
                     }
 
-                    using (var disposable = new CompositeDisposable())
+                    using var disposable = new CompositeDisposable();
+                    var path = SkiaUtil.ToFillPath(context, style.FillPaint, shape.Effects, geometry, disposable.Disposables);
+                    if (path != null)
                     {
-                        var path = SkiaUtil.ToFillPath(context, style.FillPaint, shape.Effects, geometry, disposable.Disposables);
-                        if (path != null)
+                        disposable.Disposables.Add(path);
+                        var union = SkiaUtil.Op(SKPathOp.Union, new[] { path, path });
+                        if (union != null && !union.IsEmpty)
                         {
-                            disposable.Disposables.Add(path);
-                            var union = SkiaUtil.Op(SKPathOp.Union, new[] { path, path });
-                            if (union != null && !union.IsEmpty)
-                            {
-                                disposable.Disposables.Add(union);
-                                return SkiaUtil.ToPathShape(context, union, context.DocumentContainer?.StyleLibrary?.CurrentItem, context?.DocumentContainer?.PointTemplate);
-                            }
-    
+                            disposable.Disposables.Add(union);
+                            return SkiaUtil.ToPathShape(context, union, context.DocumentContainer?.StyleLibrary?.CurrentItem, context?.DocumentContainer?.PointTemplate);
                         }
+
                     }
                 }
             }
@@ -205,10 +201,8 @@ namespace Draw2D.Export
         {
             if (!string.IsNullOrWhiteSpace(svgPathData))
             {
-                using (var path = SkiaUtil.ToPath(svgPathData))
-                {
-                    return SkiaUtil.ToPathShape(context, path, context.DocumentContainer?.StyleLibrary?.CurrentItem, context?.DocumentContainer?.PointTemplate);
-                }
+                using var path = SkiaUtil.ToPath(svgPathData);
+                return SkiaUtil.ToPathShape(context, path, context.DocumentContainer?.StyleLibrary?.CurrentItem, context?.DocumentContainer?.PointTemplate);
             }
             return null;
         }

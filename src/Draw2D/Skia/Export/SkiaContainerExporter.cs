@@ -11,37 +11,31 @@ namespace Draw2D.Export
     {
         internal static void ExportSvg(IToolContext context, string path, IContainerView containerView)
         {
-            using (var stream = new SKFileWStream(path))
-            using (var writer = new SKXmlStreamWriter(stream))
-            using (var canvas = SKSvgCanvas.Create(SKRect.Create(0, 0, (int)containerView.Width, (int)containerView.Height), writer))
-            using (var skiaContainerPresenter = new SkiaExportContainerPresenter(context, containerView))
-            {
-                skiaContainerPresenter.Draw(canvas, containerView.Width, containerView.Height, 0, 0, 1.0, 1.0);
-            }
+            using var stream = new SKFileWStream(path);
+            using var writer = new SKXmlStreamWriter(stream);
+            using var canvas = SKSvgCanvas.Create(SKRect.Create(0, 0, (int)containerView.Width, (int)containerView.Height), writer);
+            using var skiaContainerPresenter = new SkiaExportContainerPresenter(context, containerView);
+            skiaContainerPresenter.Draw(canvas, containerView.Width, containerView.Height, 0, 0, 1.0, 1.0);
         }
 
         internal static void ExportPdf(IToolContext context, string path, IContainerView containerView)
         {
-            using (var stream = new SKFileWStream(path))
-            using (var pdf = SKDocument.CreatePdf(stream, SKDocument.DefaultRasterDpi))
-            using (var canvas = pdf.BeginPage((float)containerView.Width, (float)containerView.Height))
-            using (var skiaContainerPresenter = new SkiaExportContainerPresenter(context, containerView))
-            {
-                skiaContainerPresenter.Draw(canvas, containerView.Width, containerView.Height, 0, 0, 1.0, 1.0);
-                pdf.Close();
-            }
+            using var stream = new SKFileWStream(path);
+            using var pdf = SKDocument.CreatePdf(stream, SKDocument.DefaultRasterDpi);
+            using var canvas = pdf.BeginPage((float)containerView.Width, (float)containerView.Height);
+            using var skiaContainerPresenter = new SkiaExportContainerPresenter(context, containerView);
+            skiaContainerPresenter.Draw(canvas, containerView.Width, containerView.Height, 0, 0, 1.0, 1.0);
+            pdf.Close();
         }
 
         internal static void ExportXps(IToolContext context, string path, IContainerView containerView)
         {
-            using (var stream = new SKFileWStream(path))
-            using (var xps = SKDocument.CreateXps(stream, SKDocument.DefaultRasterDpi))
-            using (var canvas = xps.BeginPage((float)containerView.Width, (float)containerView.Height))
-            using (var skiaContainerPresenter = new SkiaExportContainerPresenter(context, containerView))
-            {
-                skiaContainerPresenter.Draw(canvas, containerView.Width, containerView.Height, 0, 0, 1.0, 1.0);
-                xps.Close();
-            }
+            using var stream = new SKFileWStream(path);
+            using var xps = SKDocument.CreateXps(stream, SKDocument.DefaultRasterDpi);
+            using var canvas = xps.BeginPage((float)containerView.Width, (float)containerView.Height);
+            using var skiaContainerPresenter = new SkiaExportContainerPresenter(context, containerView);
+            skiaContainerPresenter.Draw(canvas, containerView.Width, containerView.Height, 0, 0, 1.0, 1.0);
+            xps.Close();
         }
 
         internal static void ExportSkp(IToolContext context, string path, IContainerView containerView)
@@ -60,10 +54,8 @@ namespace Draw2D.Export
                 var data = image.EncodedData;
                 if (data != null)
                 {
-                    using (var stream = File.OpenWrite(path))
-                    {
-                        data.SaveTo(stream);
-                    }
+                    using var stream = File.OpenWrite(path);
+                    data.SaveTo(stream);
                 }
             }
             picture.Dispose();
@@ -72,24 +64,18 @@ namespace Draw2D.Export
         internal static void ExportImage(IToolContext context, string path, IContainerView containerView, SKEncodedImageFormat format, int quality)
         {
             var info = new SKImageInfo((int)containerView.Width, (int)containerView.Height, SKImageInfo.PlatformColorType, SKAlphaType.Unpremul);
-            using (var bitmap = new SKBitmap(info))
+            using var bitmap = new SKBitmap(info);
+            using (var canvas = new SKCanvas(bitmap))
+            using (var skiaContainerPresenter = new SkiaExportContainerPresenter(context, containerView))
             {
-                using (var canvas = new SKCanvas(bitmap))
-                using (var skiaContainerPresenter = new SkiaExportContainerPresenter(context, containerView))
-                {
-                    skiaContainerPresenter.Draw(canvas, containerView.Width, containerView.Height, 0, 0, 1.0, 1.0);
-                }
-                using (var image = SKImage.FromBitmap(bitmap))
-                using (var data = image.Encode(format, quality))
-                {
-                    if (data != null)
-                    {
-                        using (var stream = File.OpenWrite(path))
-                        {
-                            data.SaveTo(stream);
-                        }
-                    }
-                }
+                skiaContainerPresenter.Draw(canvas, containerView.Width, containerView.Height, 0, 0, 1.0, 1.0);
+            }
+            using var image = SKImage.FromBitmap(bitmap);
+            using var data = image.Encode(format, quality);
+            if (data != null)
+            {
+                using var stream = File.OpenWrite(path);
+                data.SaveTo(stream);
             }
         }
 

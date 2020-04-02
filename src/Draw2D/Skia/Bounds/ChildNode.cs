@@ -40,10 +40,8 @@ namespace Draw2D.Bounds
 
         public bool Intersects(SKPath geometry)
         {
-            using (var result = this.Geometry.Op(geometry, SKPathOp.Intersect))
-            {
-                return result?.IsEmpty == false;
-            }
+            using var result = this.Geometry.Op(geometry, SKPathOp.Intersect);
+            return result?.IsEmpty == false;
         }
 
         public bool Intersects(ref SKRect rect)
