@@ -7,7 +7,6 @@ namespace Draw2D.ViewModels.Tools
     {
         private bool _connectPoints;
         private double _hitTestRadius;
-        private bool _splitIntersections;
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public bool ConnectPoints
@@ -21,13 +20,6 @@ namespace Draw2D.ViewModels.Tools
         {
             get => _hitTestRadius;
             set => Update(ref _hitTestRadius, value);
-        }
-
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public bool SplitIntersections
-        {
-            get => _splitIntersections;
-            set => Update(ref _splitIntersections, value);
         }
     }
 }

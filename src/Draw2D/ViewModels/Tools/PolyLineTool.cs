@@ -127,7 +127,6 @@ namespace Draw2D.ViewModels.Tools
             context.DocumentContainer?.ContainerView?.SelectionState?.Select(_line);
             context.DocumentContainer?.ContainerView?.SelectionState?.Select(_line.Point);
 
-            IntersectionsClear(context);
             FiltersClear(context);
 
             context.DocumentContainer?.ContainerView?.InputService?.Redraw?.Invoke();
@@ -149,15 +148,11 @@ namespace Draw2D.ViewModels.Tools
             _line.Point.X = x;
             _line.Point.Y = y;
 
-            IntersectionsClear(context);
-            IntersectionsFind(context, _line);
-
             context.DocumentContainer?.ContainerView?.InputService?.Redraw?.Invoke();
         }
 
         private void CleanInternal(IToolContext context)
         {
-            IntersectionsClear(context);
             FiltersClear(context);
 
             CurrentState = State.StartPoint;

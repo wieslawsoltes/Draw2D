@@ -33,38 +33,6 @@ namespace Draw2D.ViewModels.Tools
             set => Update(ref _settings, value);
         }
 
-        public static IList<LineShape> SplitByIntersections(IToolContext context, IEnumerable<IPointIntersection> intersections, LineShape target)
-        {
-            var points = new List<IPointShape>(intersections.SelectMany(i => i.Intersections));
-            points.Insert(0, target.StartPoint);
-            points.Insert(points.Count, target.Point);
-
-            var unique = new List<IPointShape>(
-                points.Select(p => new Point2(p.X, p.Y)).Distinct().OrderBy(p => p)
-                      .Select(p => new PointShape(p.X, p.Y, context?.DocumentContainer?.PointTemplate)));
-
-            var lines = new ObservableCollection<LineShape>();
-            for (int i = 0; i < unique.Count - 1; i++)
-            {
-                var startPoint = unique[i];
-                var point = unique[i + 1];
-                var line = new LineShape(startPoint, point)
-                {
-                    Points = new ObservableCollection<IPointShape>(),
-                    StyleId = context.DocumentContainer?.StyleLibrary?.CurrentItem?.Title
-                };
-                line.Owner = context.DocumentContainer?.ContainerView?.CurrentContainer;
-                line.StartPoint.Owner = line;
-                line.Point.Owner = line;
-                context.DocumentContainer?.ContainerView?.CurrentContainer.Shapes.Add(line);
-                context.DocumentContainer?.ContainerView?.CurrentContainer.MarkAsDirty(true);
-                context.DocumentContainer?.ContainerView?.CurrentContainer.MarkAsDirty(true);
-                lines.Add(line);
-            }
-
-            return lines;
-        }
-
         private void StartPointInternal(IToolContext context, double x, double y, Modifier modifier)
         {
             FiltersProcess(context, ref x, ref y);
@@ -127,23 +95,13 @@ namespace Draw2D.ViewModels.Tools
                 _line.Point.Owner = _line;
             }
 
-            IntersectionsClear(context);
-            IntersectionsFind(context, _line);
 
-            if ((Settings?.SplitIntersections ?? false) && HaveIntersections())
-            {
-                SplitByIntersections(context, Intersections, _line);
-            }
-            else
-            {
-                _line.Owner = context.DocumentContainer?.ContainerView?.CurrentContainer;
-                context.DocumentContainer?.ContainerView?.CurrentContainer.Shapes.Add(_line);
-                context.DocumentContainer?.ContainerView?.CurrentContainer.MarkAsDirty(true);
-            }
+            _line.Owner = context.DocumentContainer?.ContainerView?.CurrentContainer;
+            context.DocumentContainer?.ContainerView?.CurrentContainer.Shapes.Add(_line);
+            context.DocumentContainer?.ContainerView?.CurrentContainer.MarkAsDirty(true);
 
             _line = null;
 
-            IntersectionsClear(context);
             FiltersClear(context);
 
             context.DocumentContainer?.ContainerView?.InputService?.Release?.Invoke();
@@ -166,15 +124,11 @@ namespace Draw2D.ViewModels.Tools
             _line.Point.X = x;
             _line.Point.Y = y;
 
-            IntersectionsClear(context);
-            IntersectionsFind(context, _line);
-
             context.DocumentContainer?.ContainerView?.InputService?.Redraw?.Invoke();
         }
 
         private void CleanInternal(IToolContext context)
         {
-            IntersectionsClear(context);
             FiltersClear(context);
 
             CurrentState = State.StartPoint;

@@ -6,8 +6,6 @@ namespace Draw2D.ViewModels.Tools
     public interface ITool
     {
         string Title { get; }
-        IList<IPointIntersection> Intersections { get; set; }
-        IPointIntersection CurrentIntersection { get; set; }
         IList<IPointFilter> Filters { get; set; }
         IPointFilter CurrentFilter { get; set; }
         void LeftDown(IToolContext context, double x, double y, Modifier modifier);

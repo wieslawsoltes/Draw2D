@@ -10,20 +10,6 @@
         <TabItem Classes="default" Header="Path">
             <ContentControl Content="{Binding Settings}"/>
         </TabItem>
-        <TabItem Classes="default" Header="Intersections">
-            <ScrollViewer>
-                <Grid RowDefinitions="Auto,*" IsVisible="{Binding !!Intersections.Count}">
-                    <ComboBox Classes="default" Grid.Row="0" x:Name="intersections" Items="{Binding Intersections}" SelectedItem="{Binding CurrentIntersection, Mode=TwoWay}">
-                        <ComboBox.DataTemplates>
-                            <DataTemplate>
-                                <TextBlock Classes="default" Text="{Binding Title}"/>
-                            </DataTemplate>
-                        </ComboBox.DataTemplates>
-                    </ComboBox>
-                    <ContentControl Grid.Row="1" Content="{Binding CurrentIntersection.Settings}"/>
-                </Grid>
-            </ScrollViewer>
-        </TabItem>
         <TabItem Classes="default" Header="Filters">
             <ScrollViewer>
                 <Grid RowDefinitions="Auto,*" IsVisible="{Binding !!Filters.Count}">

@@ -5,7 +5,6 @@ using Draw2D.ViewModels;
 using Draw2D.ViewModels.Bounds;
 using Draw2D.ViewModels.Containers;
 using Draw2D.ViewModels.Filters;
-using Draw2D.ViewModels.Intersections;
 using Draw2D.ViewModels.Shapes;
 using Draw2D.ViewModels.Style;
 using Draw2D.ViewModels.Style.PathEffects;
@@ -232,7 +231,6 @@ namespace Draw2D.Editor
 
             var noneTool = new NoneTool()
             {
-                Intersections = new ObservableCollection<IPointIntersection>(),
                 Filters = new ObservableCollection<IPointFilter>
                 {
                     new LineSnapPointFilter()
@@ -272,7 +270,6 @@ namespace Draw2D.Editor
 
             var selectionTool = new SelectionTool()
             {
-                Intersections = new ObservableCollection<IPointIntersection>(),
                 Filters = new ObservableCollection<IPointFilter>
                 {
                     new GridSnapPointFilter()
@@ -326,7 +323,6 @@ namespace Draw2D.Editor
 
             var pointTool = new PointTool()
             {
-                Intersections = new ObservableCollection<IPointIntersection>(),
                 Filters = new ObservableCollection<IPointFilter>
                 {
                     new GridSnapPointFilter()
@@ -370,41 +366,6 @@ namespace Draw2D.Editor
 
             var lineTool = new LineTool()
             {
-                Intersections = new ObservableCollection<IPointIntersection>
-                {
-                    new LineLineIntersection()
-                    {
-                        Intersections = new ObservableCollection<IPointShape>(),
-                        Settings = new LineLineSettings()
-                        {
-                            IsEnabled = true
-                        }
-                    },
-                    new RectangleLineIntersection()
-                    {
-                        Intersections = new ObservableCollection<IPointShape>(),
-                        Settings = new RectangleLineSettings()
-                        {
-                            IsEnabled = true
-                        }
-                    },
-                    new CircleLineIntersection()
-                    {
-                        Intersections = new ObservableCollection<IPointShape>(),
-                        Settings = new CircleLineSettings()
-                        {
-                            IsEnabled = true
-                        }
-                    },
-                    new OvalLineIntersection()
-                    {
-                        Intersections = new ObservableCollection<IPointShape>(),
-                        Settings = new OvalLineSettings()
-                        {
-                            IsEnabled = true
-                        }
-                    }
-                },
                 Filters = new ObservableCollection<IPointFilter>
                 {
                     new GridSnapPointFilter()
@@ -442,48 +403,12 @@ namespace Draw2D.Editor
                 Settings = new LineToolSettings()
                 {
                     ConnectPoints = true,
-                    HitTestRadius = 7.0,
-                    SplitIntersections = false
+                    HitTestRadius = 7.0
                 }
             };
 
             var polyLineTool = new PolyLineTool()
             {
-                Intersections = new ObservableCollection<IPointIntersection>
-                {
-                    new LineLineIntersection()
-                    {
-                        Intersections = new ObservableCollection<IPointShape>(),
-                        Settings = new LineLineSettings()
-                        {
-                            IsEnabled = true
-                        }
-                    },
-                    new RectangleLineIntersection()
-                    {
-                        Intersections = new ObservableCollection<IPointShape>(),
-                        Settings = new RectangleLineSettings()
-                        {
-                            IsEnabled = true
-                        }
-                    },
-                    new CircleLineIntersection()
-                    {
-                        Intersections = new ObservableCollection<IPointShape>(),
-                        Settings = new CircleLineSettings()
-                        {
-                            IsEnabled = true
-                        }
-                    },
-                    new OvalLineIntersection()
-                    {
-                        Intersections = new ObservableCollection<IPointShape>(),
-                        Settings = new OvalLineSettings()
-                        {
-                            IsEnabled = true
-                        }
-                    }
-                },
                 Filters = new ObservableCollection<IPointFilter>
                 {
                     new GridSnapPointFilter()
@@ -527,7 +452,6 @@ namespace Draw2D.Editor
 
             var cubicBezierTool = new CubicBezierTool()
             {
-                Intersections = new ObservableCollection<IPointIntersection>(),
                 Filters = new ObservableCollection<IPointFilter>
                 {
                     new GridSnapPointFilter()
@@ -571,7 +495,6 @@ namespace Draw2D.Editor
 
             var quadraticBezierTool = new QuadraticBezierTool()
             {
-                Intersections = new ObservableCollection<IPointIntersection>(),
                 Filters = new ObservableCollection<IPointFilter>
                 {
                     new GridSnapPointFilter()
@@ -615,7 +538,6 @@ namespace Draw2D.Editor
 
             var conicTool = new ConicTool()
             {
-                Intersections = new ObservableCollection<IPointIntersection>(),
                 Filters = new ObservableCollection<IPointFilter>
                 {
                     new GridSnapPointFilter()
@@ -660,7 +582,6 @@ namespace Draw2D.Editor
 
             var pathTool = new PathTool()
             {
-                Intersections = new ObservableCollection<IPointIntersection>(),
                 Filters = new ObservableCollection<IPointFilter>
                 {
                     new GridSnapPointFilter()
@@ -709,41 +630,6 @@ namespace Draw2D.Editor
 
             var pathLineTool = new LineTool()
             {
-                Intersections = new ObservableCollection<IPointIntersection>
-                    {
-                        new LineLineIntersection()
-                        {
-                            Intersections = new ObservableCollection<IPointShape>(),
-                            Settings = new LineLineSettings()
-                            {
-                                IsEnabled = true
-                            }
-                        },
-                        new RectangleLineIntersection()
-                        {
-                            Intersections = new ObservableCollection<IPointShape>(),
-                            Settings = new RectangleLineSettings()
-                            {
-                                IsEnabled = true
-                            }
-                        },
-                        new CircleLineIntersection()
-                        {
-                            Intersections = new ObservableCollection<IPointShape>(),
-                            Settings = new CircleLineSettings()
-                            {
-                                IsEnabled = true
-                            }
-                        },
-                        new OvalLineIntersection()
-                        {
-                            Intersections = new ObservableCollection<IPointShape>(),
-                            Settings = new OvalLineSettings()
-                            {
-                                IsEnabled = true
-                            }
-                        }
-                    },
                 Filters = new ObservableCollection<IPointFilter>
                     {
                         new GridSnapPointFilter()
@@ -781,14 +667,12 @@ namespace Draw2D.Editor
                 Settings = new LineToolSettings()
                 {
                     ConnectPoints = true,
-                    HitTestRadius = 7.0,
-                    SplitIntersections = false
+                    HitTestRadius = 7.0
                 }
             };
 
             var pathCubicBezierTool = new CubicBezierTool()
             {
-                Intersections = new ObservableCollection<IPointIntersection>(),
                 Filters = new ObservableCollection<IPointFilter>
                 {
                     new GridSnapPointFilter()
@@ -832,7 +716,6 @@ namespace Draw2D.Editor
 
             var pathQuadraticBezierTool = new QuadraticBezierTool()
             {
-                Intersections = new ObservableCollection<IPointIntersection>(),
                 Filters = new ObservableCollection<IPointFilter>
                 {
                     new GridSnapPointFilter()
@@ -876,7 +759,6 @@ namespace Draw2D.Editor
 
             var pathConicTool = new ConicTool()
             {
-                Intersections = new ObservableCollection<IPointIntersection>(),
                 Filters = new ObservableCollection<IPointFilter>
                 {
                     new GridSnapPointFilter()
@@ -921,14 +803,12 @@ namespace Draw2D.Editor
 
             var pathMoveTool = new MoveTool(pathTool)
             {
-                Intersections = new ObservableCollection<IPointIntersection>(),
                 Filters = new ObservableCollection<IPointFilter>(),
                 Settings = new MoveToolSettings()
             };
 
             var scribbleTool = new ScribbleTool()
             {
-                Intersections = new ObservableCollection<IPointIntersection>(),
                 Filters = new ObservableCollection<IPointFilter>
                 {
                     new GridSnapPointFilter()
@@ -975,7 +855,6 @@ namespace Draw2D.Editor
 
             var rectangleTool = new RectangleTool()
             {
-                Intersections = new ObservableCollection<IPointIntersection>(),
                 Filters = new ObservableCollection<IPointFilter>
                 {
                     new GridSnapPointFilter()
@@ -1019,7 +898,6 @@ namespace Draw2D.Editor
 
             var circleTool = new CircleTool()
             {
-                Intersections = new ObservableCollection<IPointIntersection>(),
                 Filters = new ObservableCollection<IPointFilter>
                 {
                     new GridSnapPointFilter()
@@ -1063,7 +941,6 @@ namespace Draw2D.Editor
 
             var arcTool = new ArcTool()
             {
-                Intersections = new ObservableCollection<IPointIntersection>(),
                 Filters = new ObservableCollection<IPointFilter>
                 {
                     new GridSnapPointFilter()
@@ -1109,7 +986,6 @@ namespace Draw2D.Editor
 
             var ovalTool = new OvalTool()
             {
-                Intersections = new ObservableCollection<IPointIntersection>(),
                 Filters = new ObservableCollection<IPointFilter>
                 {
                     new GridSnapPointFilter()
@@ -1153,7 +1029,6 @@ namespace Draw2D.Editor
 
             var textTool = new TextTool()
             {
-                Intersections = new ObservableCollection<IPointIntersection>(),
                 Filters = new ObservableCollection<IPointFilter>
                 {
                     new GridSnapPointFilter()
@@ -1197,7 +1072,6 @@ namespace Draw2D.Editor
 
             void SetToolDefaults(ITool tool)
             {
-                tool.CurrentIntersection = tool.Intersections.Count > 0 ? tool.Intersections[0] : null;
                 tool.CurrentFilter = tool.Filters.Count > 0 ? tool.Filters[0] : null;
             }
 

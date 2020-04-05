@@ -6,24 +6,8 @@ namespace Draw2D.ViewModels.Tools
     [DataContract(IsReference = true)]
     public abstract class BaseTool : ViewModelBase
     {
-        private IList<IPointIntersection> _intersections;
-        private IPointIntersection _currentIntersection;
         private IList<IPointFilter> _filters;
         private IPointFilter _currentFilter;
-
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public IList<IPointIntersection> Intersections
-        {
-            get => _intersections;
-            set => Update(ref _intersections, value);
-        }
-
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public IPointIntersection CurrentIntersection
-        {
-            get => _currentIntersection;
-            set => Update(ref _currentIntersection, value);
-        }
 
         [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public IList<IPointFilter> Filters
@@ -62,43 +46,6 @@ namespace Draw2D.ViewModels.Tools
                     filter.Clear(context);
                 }
             }
-        }
-
-        internal void IntersectionsFind(IToolContext context, IBaseShape shape)
-        {
-            if (_intersections != null)
-            {
-                foreach (var intersection in _intersections)
-                {
-                    intersection.Find(context, shape);
-                }
-            }
-        }
-
-        internal void IntersectionsClear(IToolContext context)
-        {
-            if (_intersections != null)
-            {
-                foreach (var intersection in _intersections)
-                {
-                    intersection.Clear(context);
-                }
-            }
-        }
-
-        internal bool HaveIntersections()
-        {
-            if (_intersections != null)
-            {
-                foreach (var intersection in _intersections)
-                {
-                    if (intersection.Intersections.Count > 0)
-                    {
-                        return true;
-                    }
-                }
-            }
-            return false;
         }
     }
 }
