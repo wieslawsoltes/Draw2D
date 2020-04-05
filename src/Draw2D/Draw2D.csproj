@@ -45,22 +45,7 @@
     <PackageReference Include="Avalonia.Angle.Windows.Natives" Version="2.1.0.2019013001" />
   </ItemGroup>
 
-  <PropertyGroup Condition="'$(RuntimeIdentifier)' == 'win-x64' or '$(RuntimeIdentifier)' == 'linux-x64' or '$(RuntimeIdentifier)' == 'osx-x64'">
-    <CoreRT>True</CoreRT>
-  </PropertyGroup>
-
-  <ItemGroup Condition="'$(CoreRT)' == 'True'">
-    <RdXmlFile Include="Draw2D.rd.xml" />
-    <PackageReference Include="Microsoft.DotNet.ILCompiler" Version="1.0.0-alpha-*" />
-  </ItemGroup>
-
-  <PropertyGroup Condition="'$(CoreRT)' == 'True'">
-    <RootAllApplicationAssemblies>False</RootAllApplicationAssemblies>
-    <IlcGenerateCompleteTypeMetadata>False</IlcGenerateCompleteTypeMetadata>
-    <IlcGenerateStackTraceData>False</IlcGenerateStackTraceData>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(CoreRT)' != 'True'">
+  <PropertyGroup>
     <PublishTrimmed>False</PublishTrimmed>
     <PublishSingleFile>False</PublishSingleFile>
     <PublishReadyToRun>False</PublishReadyToRun>
