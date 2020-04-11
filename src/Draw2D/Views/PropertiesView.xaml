@@ -11,58 +11,57 @@
              d:DesignWidth="500" d:DesignHeight="400">
     <Grid RowDefinitions="55*,Auto,45*">
         <TabControl Classes="default" Grid.Row="0" TabStripPlacement="Top">
-            <TabItem Classes="default" Header="Tools">
-                <TabControl Classes="default" TabStripPlacement="Top">
-                    <TabItem Classes="default" Header="Current">
-                        <ContentControl Content="{Binding CurrentTool}"/>
-                    </TabItem>
-                    <TabItem Classes="default" Header="Tools">
-                        <ListBox Classes="default" Items="{Binding Tools}" SelectedItem="{Binding CurrentTool}">
-                            <ListBox.DataTemplates>
-                                <DataTemplate>
-                                    <TextBlock Classes="list" Text="{Binding Title}"/>
-                                </DataTemplate>
-                            </ListBox.DataTemplates>
-                        </ListBox>
-                    </TabItem>
-                </TabControl>
+            <TabItem Classes="default" Header="Tool">
+                <ContentControl Content="{Binding CurrentTool}"/>
             </TabItem>
-            <TabItem Classes="default" Header="Files">
-                <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,*,Auto,Auto" ColumnDefinitions="50*,50*">
-                    <TextBlock Classes="default" Text="Path:" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"/>
-                    <TextBox x:Name="path" Classes="default" Text="{Binding #files.SelectedItem, Mode=OneWay, FallbackValue=View.json}" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"/>
-                    <Button Classes="default" Content="Save Document" Command="{Binding SaveDocument}" CommandParameter="{Binding #path.Text}" Grid.Row="2" Grid.Column="0"/>
-                    <Button Classes="default" Content="Open Document" Command="{Binding OpenDocument}" CommandParameter="{Binding #path.Text}" Grid.Row="2" Grid.Column="1"/>
-                    <Button Classes="default" Content="Save Styles" Command="{Binding SaveStyles}" CommandParameter="{Binding #path.Text}" Grid.Row="3" Grid.Column="0"/>
-                    <Button Classes="default" Content="Open Styles" Command="{Binding OpenStyles}" CommandParameter="{Binding #path.Text}" Grid.Row="3" Grid.Column="1"/>
-                    <Button Classes="default" Content="Save Groups" Command="{Binding SaveGroups}" CommandParameter="{Binding #path.Text}" Grid.Row="4" Grid.Column="0"/>
-                    <Button Classes="default" Content="Open Groups" Command="{Binding OpenGroups}" CommandParameter="{Binding #path.Text}" Grid.Row="4" Grid.Column="1"/>
-                    <ListBox x:Name="files" Classes="default" Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" Items="{Binding Files}">
-                        <ListBox.DataTemplates>
+            <TabItem Classes="default" Header="Tools">
+                <ListBox Classes="default" Items="{Binding Tools}" SelectedItem="{Binding CurrentTool}">
+                    <ListBox.DataTemplates>
+                        <DataTemplate>
+                            <TextBlock Classes="list" Text="{Binding Title}"/>
+                        </DataTemplate>
+                    </ListBox.DataTemplates>
+                </ListBox>
+            </TabItem>
+            <TabItem Classes="default" Header="Style">
+                <Grid RowDefinitions="Auto,*">
+                    <ComboBox Classes="default" Grid.Row="0" Items="{Binding DocumentContainer.StyleLibrary.Items}" SelectedItem="{Binding DocumentContainer.StyleLibrary.CurrentItem, Mode=TwoWay}" IsVisible="{Binding !!DocumentContainer.StyleLibrary.CurrentItem}">
+                        <ComboBox.DataTemplates>
                             <DataTemplate>
-                                <TextBlock Classes="list" Text="{Binding}"/>
+                                <TextBlock Classes="default" Text="{Binding Title}"/>
                             </DataTemplate>
-                        </ListBox.DataTemplates>
-                    </ListBox>
-                    <Button Classes="default" Content="Clear Files" Command="{Binding ClearFiles}" Grid.Row="6" Grid.Column="0"/>
-                    <Button Classes="default" Content="Add Files" Command="{Binding AddFiles}" CommandParameter="{Binding CurrentDirectory}" Grid.Row="6" Grid.Column="1"/>
-                    <TextBox Classes="default" Text="{Binding CurrentDirectory}" Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="2"/>
+                        </ComboBox.DataTemplates>
+                    </ComboBox>
+                    <ContentControl Grid.Row="1" Content="{Binding DocumentContainer.StyleLibrary.CurrentItem}"/>
                 </Grid>
             </TabItem>
-            <TabItem Classes="default" Header="Options">
-                <TabControl Classes="default" TabStripPlacement="Top">
-                    <TabItem Classes="default" Header="Settings">
-                        <ScrollViewer>
-                            <Grid RowDefinitions="Auto" ColumnDefinitions="Auto,*">
-                                <TextBlock Classes="default" Grid.Column="0" Grid.Row="0" Text="EditMode"/>
-                                <ComboBox Classes="default" Grid.Column="1" Grid.Row="0" Items="{Binding EditModeValues}" SelectedItem="{Binding EditMode, Mode=TwoWay}"/>
-                            </Grid>
-                        </ScrollViewer>
-                    </TabItem>
-                </TabControl>
+            <TabItem Classes="default" Header="Group">
+                <Grid RowDefinitions="Auto,*">
+                    <ComboBox Classes="default" Grid.Row="0" Items="{Binding DocumentContainer.GroupLibrary.Items}" SelectedItem="{Binding DocumentContainer.GroupLibrary.CurrentItem, Mode=TwoWay}" IsVisible="{Binding !!DocumentContainer.GroupLibrary.CurrentItem}">
+                        <ComboBox.DataTemplates>
+                            <DataTemplate>
+                                <TextBlock Classes="default" Text="{Binding Title}"/>
+                            </DataTemplate>
+                        </ComboBox.DataTemplates>
+                    </ComboBox>
+                    <ContentControl Grid.Row="1" Content="{Binding DocumentContainer.GroupLibrary.CurrentItemm}"/>
+                </Grid>
             </TabItem>
         </TabControl>
         <GridSplitter Classes="horizontal" Grid.Row="1"/>
-        <ContentControl Content="{Binding DocumentContainer}" Grid.Row="2"/>
+        <TabControl Classes="default" Grid.Row="2" TabStripPlacement="Top">
+            <TabItem Classes="default" Header="Document">
+                <ContentControl Content="{Binding DocumentContainer}"/>
+            </TabItem>
+            <TabItem Classes="default" Header="Selected">
+                <ContentControl Content="{Binding DocumentContainer.ContainerView.SelectionState.Selected}"/>
+            </TabItem>
+            <TabItem Classes="default" Header="Container">
+                <ContentControl Content="{Binding DocumentContainer.ContainerView.CurrentContainer}"/>
+            </TabItem>
+            <TabItem Classes="default" Header="View">
+                <ContentControl Content="{Binding DocumentContainer.ContainerView}"/>
+            </TabItem>
+        </TabControl>
     </Grid>
 </UserControl>
