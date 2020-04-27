@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Runtime.Serialization;
-using Draw2D.Input;
+using Core2D.UI.Zoom.Input;
 using Draw2D.ViewModels.Shapes;
 using Spatial;
 using Spatial.DouglasPeucker;

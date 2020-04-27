@@ -1,4 +1,4 @@
-﻿using Draw2D.Input;
+﻿using Core2D.UI.Zoom.Input;
 using Draw2D.ViewModels.Style;
 
 namespace Draw2D.ViewModels.Containers

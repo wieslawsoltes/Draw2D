@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:Draw2D.Views"
              xmlns:app="clr-namespace:Draw2D"
-             xmlns:zc="clr-namespace:Draw2D.ZoomControl"
+             xmlns:zc="clr-namespace:Core2D.UI.Zoom"
              Focusable="True"
              mc:Ignorable="d"
              d:DataContext="{x:Static app:App.ToolContext.DocumentContainer}"

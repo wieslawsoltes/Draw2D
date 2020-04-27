@@ -1,4 +1,4 @@
-﻿using Draw2D.Input;
+﻿using Core2D.UI.Zoom.Input;
 using Spatial;
 
 namespace Draw2D.ViewModels

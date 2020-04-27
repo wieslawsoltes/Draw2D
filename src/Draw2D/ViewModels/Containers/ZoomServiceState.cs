@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Runtime.Serialization;
-using Draw2D.Input;
+using Core2D.UI.Zoom.Input;
 
 namespace Draw2D.ViewModels.Containers
 {
