@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Draw2D.Input
+namespace Core2D.UI.Zoom.Input
 {
     [Flags]
     public enum Modifier

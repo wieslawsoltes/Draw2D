@@ -1,5 +1,5 @@
 ﻿
-namespace Draw2D.Input
+namespace Core2D.UI.Zoom.Input
 {
     public enum FitMode
     {

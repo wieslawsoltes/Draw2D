@@ -5,13 +5,10 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Media;
-#if DEBUG_POINTER_EVENTS
-using Avalonia.Media.Immutable;
-#endif
 using Avalonia.VisualTree;
-using Draw2D.Input;
+using Core2D.UI.Zoom.Input;
 
-namespace Draw2D.ZoomControl
+namespace Core2D.UI.Zoom
 {
     public class ZoomControl : Border, IInputService, IZoomService
     {
@@ -660,7 +657,7 @@ namespace Draw2D.ZoomControl
                 }
             }
 #if DEBUG_POINTER_EVENTS
-            var brush = new ImmutableSolidColorBrush(Colors.Magenta);
+            var brush = new Avalonia.Media.Immutable.ImmutableSolidColorBrush(Colors.Magenta);
             foreach (var value in _pointers.Values)
             {
                 context.DrawGeometry(brush, null, new EllipseGeometry(new Rect(value.Point.X - 25, value.Point.Y - 25, 50, 50)));
