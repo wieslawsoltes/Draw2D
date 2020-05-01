@@ -171,10 +171,10 @@ namespace Draw2D.Presenters
             canvas.Scale((float)zx, (float)zy);
 
             var hlattice = SKMatrix.MakeScale(cw, ch);
-            SKMatrix.PreConcat(ref hlattice, SKMatrix.MakeRotation((float)(Math.PI * 0.0 / 180.0)));
+            hlattice = hlattice.PreConcat(SKMatrix.MakeRotation((float)(Math.PI * 0.0 / 180.0)));
 
             var vlattice = SKMatrix.MakeScale(cw, ch);
-            SKMatrix.PreConcat(ref vlattice, SKMatrix.MakeRotation((float)(Math.PI * 90.0 / 180.0)));
+            vlattice = vlattice.PreConcat(SKMatrix.MakeRotation((float)(Math.PI * 90.0 / 180.0)));
 
             using (var heffect = SKPathEffect.Create2DLine((float)(1.0 / zx), hlattice))
             using (var veffect = SKPathEffect.Create2DLine((float)(1.0 / zx), vlattice))

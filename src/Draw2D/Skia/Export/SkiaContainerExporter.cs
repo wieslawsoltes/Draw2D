@@ -11,9 +11,8 @@ namespace Draw2D.Export
     {
         internal static void ExportSvg(IToolContext context, string path, IContainerView containerView)
         {
-            using var stream = new SKFileWStream(path);
-            using var writer = new SKXmlStreamWriter(stream);
-            using var canvas = SKSvgCanvas.Create(SKRect.Create(0, 0, (int)containerView.Width, (int)containerView.Height), writer);
+            using var wstream = new SKFileWStream(path);
+            using var canvas = SKSvgCanvas.Create(SKRect.Create(0, 0, (int)containerView.Width, (int)containerView.Height), wstream);
             using var skiaContainerPresenter = new SkiaExportContainerPresenter(context, containerView);
             skiaContainerPresenter.Draw(canvas, containerView.Width, containerView.Height, 0, 0, 1.0, 1.0);
         }

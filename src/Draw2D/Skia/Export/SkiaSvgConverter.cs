@@ -32,8 +32,7 @@ namespace Draw2D.Export
         {
             using var stream = new MemoryStream();
             using (var wstream = new SKManagedWStream(stream))
-            using (var writer = new SKXmlStreamWriter(wstream))
-            using (var canvas = SKSvgCanvas.Create(SKRect.Create(0, 0, (int)containerView.Width, (int)containerView.Height), writer))
+            using (var canvas = SKSvgCanvas.Create(SKRect.Create(0, 0, (int)containerView.Width, (int)containerView.Height), wstream))
             {
                 if (containerView.SelectionState?.Shapes?.Count > 0)
                 {
