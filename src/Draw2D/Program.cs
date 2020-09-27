@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using Avalonia;
+using Avalonia.OpenGL;
 
 namespace Draw2D
 {
@@ -20,12 +22,24 @@ namespace Draw2D
             return 0;
         }
 
+        private static AngleOptions GetAngleOptions()
+        {
+            return new AngleOptions()
+            {
+                AllowedPlatformApis = new List<AngleOptions.PlatformApi>
+                {
+                    AngleOptions.PlatformApi.DirectX11
+                }
+            };
+        }
+
         private static Win32PlatformOptions GetWin32PlatformOptions()
         {
             return new Win32PlatformOptions
             {
                 EnableMultitouch = true,
-                AllowEglInitialization = false
+                AllowEglInitialization = true,
+                UseDeferredRendering = true
             };
         }
 
@@ -35,7 +49,8 @@ namespace Draw2D
             {
                 EnableMultiTouch = true,
                 UseGpu = true,
-                UseEGL = true
+                UseEGL = true,
+                UseDeferredRendering = true
             };
         }
 
@@ -43,7 +58,8 @@ namespace Draw2D
         {
             return new AvaloniaNativePlatformOptions
             {
-                UseGpu = true
+                UseGpu = true,
+                UseDeferredRendering = true
             };
         }
 
@@ -51,6 +67,7 @@ namespace Draw2D
             => AppBuilder.Configure<App>()
                          .UsePlatformDetect()
                          .With(GetWin32PlatformOptions())
+                         .With(GetAngleOptions())
                          .With(GetX11PlatformOptions())
                          .With(GetAvaloniaNativePlatformOptions())
                          .UseSkia()
