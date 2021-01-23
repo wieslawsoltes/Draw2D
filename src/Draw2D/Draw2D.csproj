@@ -2,23 +2,14 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFrameworks>netcoreapp3.1;net461</TargetFrameworks>
-    <EnableDefaultCompileItems>False</EnableDefaultCompileItems>
+    <TargetFrameworks>net5.0;net461</TargetFrameworks>
     <IsPackable>False</IsPackable>
-    <LangVersion>8.0</LangVersion>
+    <LangVersion>latest</LangVersion>
     <Nullable>disable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="**\*.cs" Exclude="obj\**" />
     <AvaloniaResource Include="Assets\*" />
-    <Compile Update="**\*.xaml.cs">
-      <DependentUpon>%(Filename)</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <AvaloniaResource Include="**\*.xaml">
-      <SubType>Designer</SubType>
-    </AvaloniaResource>
   </ItemGroup>
 
   <ItemGroup>
@@ -28,11 +19,11 @@
     <PackageReference Include="SkiaSharp.NativeAssets.Linux" Version="2.80.2" />
     <PackageReference Include="Svg.Skia" Version="0.4.2-preview7" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
-    <PackageReference Include="Avalonia" Version="0.10.0-preview5" />
-    <PackageReference Include="Avalonia.Skia" Version="0.10.0-preview5" />
-    <PackageReference Include="Avalonia.Controls.DataGrid" Version="0.10.0-preview5" />
-    <PackageReference Include="Avalonia.Desktop" Version="0.10.0-preview5" />
-    <PackageReference Include="Avalonia.Diagnostics" Version="0.10.0-preview5" />
+    <PackageReference Include="Avalonia" Version="0.10.0" />
+    <PackageReference Include="Avalonia.Skia" Version="0.10.0" />
+    <PackageReference Include="Avalonia.Controls.DataGrid" Version="0.10.0" />
+    <PackageReference Include="Avalonia.Desktop" Version="0.10.0" />
+    <PackageReference Include="Avalonia.Diagnostics" Version="0.10.0" />
   </ItemGroup>
 
 </Project>

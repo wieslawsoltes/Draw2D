@@ -71,6 +71,6 @@ namespace Draw2D
                          .With(GetX11PlatformOptions())
                          .With(GetAvaloniaNativePlatformOptions())
                          .UseSkia()
-                         .LogToDebug();
+                         .LogToTrace();
     }
 }
