@@ -8,7 +8,7 @@
              xmlns:zc="clr-namespace:Core2D.UI.Zoom"
              Focusable="True"
              mc:Ignorable="d"
-             d:DataContext="{x:Static app:App.ToolContext.DocumentContainer}"
+             d:DataContext="{x:Static app:App.ToolContext}"
              d:DesignWidth="810" d:DesignHeight="720">
     <DockPanel Classes="views">
         <TabStrip Items="{Binding DocumentContainer.ContainerViews}" SelectedItem="{Binding DocumentContainer.ContainerView, Mode=TwoWay}" Focusable="false" DockPanel.Dock="Top">
