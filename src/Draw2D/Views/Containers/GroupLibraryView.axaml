@@ -6,34 +6,34 @@
              xmlns:local="clr-namespace:Draw2D.Views.Containers"
              mc:Ignorable="d"
              d:DesignWidth="500" d:DesignHeight="400">
-    <TabControl Classes="default" TabStripPlacement="Top">
-        <TabItem Classes="default" Header="Groups">
-            <ListBox x:Name="groups"  Classes="default" Items="{Binding Items}" SelectedItem="{Binding CurrentItem}">
-                <ListBox.DataTemplates>
-                    <DataTemplate>
-                        <TextBlock Classes="list" Text="{Binding Title}"/>
-                    </DataTemplate>
-                </ListBox.DataTemplates>
-            </ListBox>
-            <!--
-            <DataGrid x:Name="groups" Items="{Binding Items}" SelectedItem="{Binding CurrentItem}">
-                <DataGrid.Styles>
-                    <Style Selector="DataGrid">
-                        <Setter Property="RowBackground" Value="Transparent"/>
-                        <Setter Property="AlternatingRowBackground" Value="Transparent"/>
-                        <Setter Property="CanUserResizeColumns" Value="True"/>
-                        <Setter Property="CanUserReorderColumns" Value="True"/>
-                        <Setter Property="AutoGenerateColumns" Value="False"/>
-                    </Style>
-                </DataGrid.Styles>
-                <DataGrid.Columns>
-                    <DataGridTextColumn Header="Title" Binding="{Binding Title}"/>
-                </DataGrid.Columns>
-            </DataGrid>
-            -->
-        </TabItem>
-        <TabItem Classes="default" Header="Selected">
-            <ContentControl Content="{Binding #groups.SelectedItem}"/>
-        </TabItem>
-    </TabControl>
+  <TabControl Classes="default" TabStripPlacement="Top">
+    <TabItem Classes="default" Header="Groups">
+      <ListBox x:Name="groups" Classes="default" Items="{Binding Items}" SelectedItem="{Binding CurrentItem}">
+        <ListBox.DataTemplates>
+          <DataTemplate>
+            <TextBlock Classes="list" Text="{Binding Title}" />
+          </DataTemplate>
+        </ListBox.DataTemplates>
+      </ListBox>
+      <!--
+      <DataGrid x:Name="groups" Items="{Binding Items}" SelectedItem="{Binding CurrentItem}">
+        <DataGrid.Styles>
+          <Style Selector="DataGrid">
+            <Setter Property="RowBackground" Value="Transparent" />
+            <Setter Property="AlternatingRowBackground" Value="Transparent" />
+            <Setter Property="CanUserResizeColumns" Value="True" />
+            <Setter Property="CanUserReorderColumns" Value="True" />
+            <Setter Property="AutoGenerateColumns" Value="False" />
+          </Style>
+        </DataGrid.Styles>
+        <DataGrid.Columns>
+          <DataGridTextColumn Header="Title" Binding="{Binding Title}" />
+        </DataGrid.Columns>
+      </DataGrid>
+      -->
+    </TabItem>
+    <TabItem Classes="default" Header="Selected">
+      <ContentControl Content="{Binding #groups.SelectedItem}" />
+    </TabItem>
+  </TabControl>
 </UserControl>

@@ -6,30 +6,30 @@
              xmlns:local="clr-namespace:Draw2D.Views.Containers"
              mc:Ignorable="d"
              d:DesignWidth="500" d:DesignHeight="400">
-    <TabControl Classes="default" TabStripPlacement="Top">
-        <TabItem Classes="default" Header="Container">
-            <ScrollViewer>
-                <Grid Grid.Row="0" RowDefinitions="Auto" ColumnDefinitions="Auto,*,50">
-                    <TextBlock Classes="default" Grid.Column="0" Grid.Row="0" Text="Shapes"/>
-                    <TextBlock Classes="default" Grid.Column="1" Grid.Row="0" Text="{Binding Shapes.Count, Mode=OneWay}"/>
-                </Grid>
-            </ScrollViewer>
-        </TabItem>
+  <TabControl Classes="default" TabStripPlacement="Top">
+    <TabItem Classes="default" Header="Container">
+      <ScrollViewer>
+        <Grid Grid.Row="0" RowDefinitions="Auto" ColumnDefinitions="Auto,*,50">
+          <TextBlock Classes="default" Grid.Column="0" Grid.Row="0" Text="Shapes" />
+          <TextBlock Classes="default" Grid.Column="1" Grid.Row="0" Text="{Binding Shapes.Count, Mode=OneWay}" />
+        </Grid>
+      </ScrollViewer>
+    </TabItem>
+    <TabItem Classes="default" Header="Shapes">
+      <TabControl Classes="default" TabStripPlacement="Top">
         <TabItem Classes="default" Header="Shapes">
-            <TabControl Classes="default" TabStripPlacement="Top">
-                <TabItem Classes="default" Header="Shapes">
-                    <ListBox x:Name="shapes" Classes="default" Items="{Binding Shapes}">
-                        <ListBox.DataTemplates>
-                            <DataTemplate>
-                                <TextBlock Classes="list" Text="{Binding}"/>
-                            </DataTemplate>
-                        </ListBox.DataTemplates>
-                    </ListBox>
-                </TabItem>
-                <TabItem Classes="default" Header="Selected">
-                    <ContentControl Content="{Binding #shapes.SelectedItem}"/>
-                </TabItem>
-            </TabControl>
+          <ListBox x:Name="shapes" Classes="default" Items="{Binding Shapes}">
+            <ListBox.DataTemplates>
+              <DataTemplate>
+                <TextBlock Classes="list" Text="{Binding}" />
+              </DataTemplate>
+            </ListBox.DataTemplates>
+          </ListBox>
         </TabItem>
-    </TabControl>
+        <TabItem Classes="default" Header="Selected">
+          <ContentControl Content="{Binding #shapes.SelectedItem}" />
+        </TabItem>
+      </TabControl>
+    </TabItem>
+  </TabControl>
 </UserControl>

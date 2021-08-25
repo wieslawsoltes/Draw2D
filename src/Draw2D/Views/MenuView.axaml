@@ -10,153 +10,168 @@
              mc:Ignorable="d"
              d:DataContext="{x:Static app:App.ToolContext}"
              d:DesignWidth="500" d:DesignHeight="24">
-    <UserControl.Resources>
-        <converters:IsEqualStringConverter x:Key="IsEqualStringConverter"/>
-    </UserControl.Resources>
-    <Menu Background="Transparent">
-        <MenuItem Header="_File">
-            <MenuItem Header="_New View" Command="{Binding NewContainerView}" CommandParameter="View"/>
-            <Separator/>
-            <MenuItem Header="_Close View" Command="{Binding CloseContainerView}" CommandParameter="{Binding DocumentContainer.ContainerView, FallbackValue={x:Null}}"/>
-            <Separator/>
-            <MenuItem Header="_Open Document..." Command="{Binding OpenDocumentContainer}"/>
-            <Separator/>
-            <MenuItem Header="Save Document _As..." Command="{Binding SaveDocumentContainerAs}"/>
-            <Separator/>
-            <MenuItem Header="S_tyles">
-                <MenuItem Header="_Open..." Command="{Binding OpenStyleLibrary}"/>
-                <Separator/>
-                <MenuItem Header="Save _As..." Command="{Binding SaveStyleLibraryAs}"/>
-            </MenuItem>
-            <Separator/>
-            <MenuItem Header="_Groups">
-                <MenuItem Header="Open..." Command="{Binding OpenGroupLibrary}"/>
-                <Separator/>
-                <MenuItem Header="Save _As..." Command="{Binding SaveGroupLibraryAs}"/>
-            </MenuItem>
-            <Separator/>
-            <MenuItem Header="_Import..." Command="{Binding ImportFile}"/>
-            <Separator/>
-            <MenuItem Header="_Export..." Command="{Binding ExportFile}"/>
-            <Separator/>
-            <MenuItem Header="E_xit" Command="{Binding Exit}"/>
+  <UserControl.Resources>
+    <converters:IsEqualStringConverter x:Key="IsEqualStringConverter" />
+  </UserControl.Resources>
+  <Menu Background="Transparent">
+    <MenuItem Header="_File">
+      <MenuItem Header="_New View" Command="{Binding NewContainerView}" CommandParameter="View" />
+      <Separator />
+      <MenuItem Header="_Close View" Command="{Binding CloseContainerView}"
+                CommandParameter="{Binding DocumentContainer.ContainerView, FallbackValue={x:Null}}" />
+      <Separator />
+      <MenuItem Header="_Open Document..." Command="{Binding OpenDocumentContainer}" />
+      <Separator />
+      <MenuItem Header="Save Document _As..." Command="{Binding SaveDocumentContainerAs}" />
+      <Separator />
+      <MenuItem Header="S_tyles">
+        <MenuItem Header="_Open..." Command="{Binding OpenStyleLibrary}" />
+        <Separator />
+        <MenuItem Header="Save _As..." Command="{Binding SaveStyleLibraryAs}" />
+      </MenuItem>
+      <Separator />
+      <MenuItem Header="_Groups">
+        <MenuItem Header="Open..." Command="{Binding OpenGroupLibrary}" />
+        <Separator />
+        <MenuItem Header="Save _As..." Command="{Binding SaveGroupLibraryAs}" />
+      </MenuItem>
+      <Separator />
+      <MenuItem Header="_Import..." Command="{Binding ImportFile}" />
+      <Separator />
+      <MenuItem Header="_Export..." Command="{Binding ExportFile}" />
+      <Separator />
+      <MenuItem Header="E_xit" Command="{Binding Exit}" />
+    </MenuItem>
+    <MenuItem Header="_Edit">
+      <MenuItem Header="Cu_t" Command="{Binding Selection.Cut}" CommandParameter="{Binding}" />
+      <MenuItem Header="_Copy" Command="{Binding Selection.Copy}" CommandParameter="{Binding}" />
+      <MenuItem Header="_Paste" Command="{Binding Selection.Paste}" CommandParameter="{Binding}" />
+      <MenuItem Header="_Delete" Command="{Binding Selection.Delete}" CommandParameter="{Binding}" />
+      <Separator />
+      <MenuItem Header="Copy _Special">
+        <MenuItem Header="_Svg">
+          <MenuItem Header="_Path Data" Command="{Binding CopySvgPathData}" />
+          <MenuItem Header="_Document" Command="{Binding CopySvgDocument}" />
         </MenuItem>
-        <MenuItem Header="_Edit">
-            <MenuItem Header="Cu_t" Command="{Binding Selection.Cut}" CommandParameter="{Binding}"/>
-            <MenuItem Header="_Copy" Command="{Binding Selection.Copy}" CommandParameter="{Binding}"/>
-            <MenuItem Header="_Paste" Command="{Binding Selection.Paste}" CommandParameter="{Binding}"/>
-            <MenuItem Header="_Delete" Command="{Binding Selection.Delete}" CommandParameter="{Binding}"/>
-            <Separator/>
-            <MenuItem Header="Copy _Special">
-                <MenuItem Header="_Svg">
-                    <MenuItem Header="_Path Data" Command="{Binding CopySvgPathData}"/>
-                    <MenuItem Header="_Document" Command="{Binding CopySvgDocument}"/>
-                </MenuItem>
-                <MenuItem Header="_Xaml">
-                    <MenuItem Header="_Drawing" Command="{Binding CopyGeometryDrawing}"/>
-                    <MenuItem Header="_Group" Command="{Binding CopyDrawingGroup}"/>
-                    <MenuItem Header="_Presenter" Command="{Binding CopyDrawingPresenter}"/>
-                    <Separator/>
-                    <MenuItem Header="P_ath" Command="{Binding CopyPath}"/>
-                    <MenuItem Header="_Canvas" Command="{Binding CopyCanvas}"/>
-                </MenuItem>
-            </MenuItem>
-            <MenuItem Header="Paste Sp_ecial">
-                <MenuItem Header="_Svg">
-                    <MenuItem Header="Svg _Path Data" Command="{Binding PasteSvgPathData}"/>
-                </MenuItem>
-            </MenuItem>
-            <Separator/>
-            <MenuItem Header="Select _All" Command="{Binding Selection.SelectAll}" CommandParameter="{Binding}"/>
-            <MenuItem Header="Deselect A_ll" Command="{Binding Selection.DeselectAll}" CommandParameter="{Binding}"/>
+        <MenuItem Header="_Xaml">
+          <MenuItem Header="_Drawing" Command="{Binding CopyGeometryDrawing}" />
+          <MenuItem Header="_Group" Command="{Binding CopyDrawingGroup}" />
+          <MenuItem Header="_Presenter" Command="{Binding CopyDrawingPresenter}" />
+          <Separator />
+          <MenuItem Header="P_ath" Command="{Binding CopyPath}" />
+          <MenuItem Header="_Canvas" Command="{Binding CopyCanvas}" />
         </MenuItem>
-        <MenuItem Header="_View">
-            <MenuItem Header="_Zoom">
-                <MenuItem Header="_Center" Command="{Binding DocumentContainer.ContainerView.ZoomService.CenterZoom}" CommandParameter="True"/>
-                <Separator/>
-                <MenuItem Header="_Fill" Command="{Binding DocumentContainer.ContainerView.ZoomService.FillZoom}" CommandParameter="True"/>
-                <Separator/>
-                <MenuItem Header="_Uniform" Command="{Binding DocumentContainer.ContainerView.ZoomService.UniformZoom}" CommandParameter="True"/>
-                <Separator/>
-                <MenuItem Header="Uniform _To Fill" Command="{Binding DocumentContainer.ContainerView.ZoomService.UniformToFillZoom}" CommandParameter="True"/>
-            </MenuItem>
+      </MenuItem>
+      <MenuItem Header="Paste Sp_ecial">
+        <MenuItem Header="_Svg">
+          <MenuItem Header="Svg _Path Data" Command="{Binding PasteSvgPathData}" />
         </MenuItem>
-        <MenuItem Header="_Tool">
-            <MenuItem Header="_None" Command="{Binding SetTool}" CommandParameter="None"/>
-            <Separator/>
-            <MenuItem Header="_Selection" Command="{Binding SetTool}" CommandParameter="Selection"/>
-            <Separator/>
-            <MenuItem Header="_Point" Command="{Binding SetTool}" CommandParameter="Point"/>
-            <Separator/>
-            <MenuItem Header="_Line" Command="{Binding SetTool}" CommandParameter="Line"/>
-            <MenuItem Header="Pol_y Line" Command="{Binding SetTool}" CommandParameter="PolyLine"/>
-            <MenuItem Header="Cubic _Bezier" Command="{Binding SetTool}" CommandParameter="CubicBezier"/>
-            <MenuItem Header="_Quadratic Bezier" Command="{Binding SetTool}" CommandParameter="QuadraticBezier"/>
-            <MenuItem Header="Con_ic" Command="{Binding SetTool}" CommandParameter="Conic"/>
-            <Separator/>
-            <MenuItem Header="Pat_h" Command="{Binding SetTool}" CommandParameter="Path"/>
-            <MenuItem Header="Path T_ools" IsEnabled="{Binding CurrentTool.Title, Converter={StaticResource IsEqualStringConverter}, ConverterParameter=Path, Mode=OneWay}">
-                <MenuItem Header="_Line" Command="{Binding SetTool}" CommandParameter="Line"/>
-                <MenuItem Header="Cubic _Bezier" Command="{Binding SetTool}" CommandParameter="CubicBezier"/>
-                <MenuItem Header="_Quadratic Bezier" Command="{Binding SetTool}" CommandParameter="QuadraticBezier"/>
-                <MenuItem Header="Con_ic" Command="{Binding SetTool}" CommandParameter="Conic"/>
-                <MenuItem Header="_Move" Command="{Binding SetTool}" CommandParameter="Move"/>
-            </MenuItem>
-            <Separator/>
-            <MenuItem Header="Scr_ibble" Command="{Binding SetTool}" CommandParameter="Scribble"/>
-            <Separator/>
-            <MenuItem Header="_Rectangle" Command="{Binding SetTool}" CommandParameter="Rectangle"/>
-            <MenuItem Header="_Circle" Command="{Binding SetTool}" CommandParameter="Circle"/>
-            <MenuItem Header="_Arc" Command="{Binding SetTool}" CommandParameter="Arc"/>
-            <MenuItem Header="O_val" Command="{Binding SetTool}" CommandParameter="Oval"/>
-            <Separator/>
-            <MenuItem Header="_Text" Command="{Binding SetTool}" CommandParameter="Text"/>
-        </MenuItem>
-        <MenuItem Header="_Shape">
-            <MenuItem Header="Du_plicate" Command="{Binding Selection.Duplicate}" CommandParameter="{Binding}"/>
-            <Separator/>
-            <MenuItem Header="Create _Group" Command="{Binding Selection.CreateGroup}" CommandParameter="{Binding}"/>
-            <Separator/>
-            <MenuItem Header="Create R_eference" Command="{Binding Selection.CreateReference}" CommandParameter="{Binding}"/>
-            <Separator/>
-            <MenuItem Header="Create Pat_h" Command="{Binding Selection.CreatePath}" CommandParameter="{Binding}"/>
-            <MenuItem Header="Create Str_oke Path" Command="{Binding Selection.CreateStrokePath}" CommandParameter="{Binding}"/>
-            <MenuItem Header="Create _Fill Path" Command="{Binding Selection.CreateFillPath}" CommandParameter="{Binding}"/>
-            <Separator/>
-            <MenuItem Header="Stac_k">
-                <MenuItem Header="_Horizontally" Command="{Binding Selection.StackHorizontally}" CommandParameter="{Binding}"/>
-                <MenuItem Header="_Vertically" Command="{Binding Selection.StackVertically}" CommandParameter="{Binding}"/>
-            </MenuItem>
-            <MenuItem Header="Dis_tribute">
-                <MenuItem Header="_Horizontally" Command="{Binding Selection.DistributeHorizontally}" CommandParameter="{Binding}"/>
-                <MenuItem Header="_Vertically" Command="{Binding Selection.DistributeVertically}" CommandParameter="{Binding}"/>
-            </MenuItem>
-            <MenuItem Header="Alig_n">
-                <MenuItem Header="_Left" Command="{Binding Selection.AlignLeft}" CommandParameter="{Binding}"/>
-                <MenuItem Header="_Centered" Command="{Binding Selection.AlignCentered}" CommandParameter="{Binding}"/>
-                <MenuItem Header="_Right" Command="{Binding Selection.AlignRight}" CommandParameter="{Binding}"/>
-                <Separator/>
-                <MenuItem Header="_Top" Command="{Binding Selection.AlignTop}" CommandParameter="{Binding}"/>
-                <MenuItem Header="C_enter" Command="{Binding Selection.AlignCenter}" CommandParameter="{Binding}"/>
-                <MenuItem Header="_Bottom" Command="{Binding Selection.AlignBottom}" CommandParameter="{Binding}"/>
-            </MenuItem>
-            <MenuItem Header="_Arange">
-                <MenuItem Header="_Bring to Front" Command="{Binding Selection.ArangeBringToFront}" CommandParameter="{Binding}"/>
-                <MenuItem Header="Bring _Forward" Command="{Binding Selection.ArangeBringForward}" CommandParameter="{Binding}"/>
-                <MenuItem Header="Send Back_ward" Command="{Binding Selection.ArangeSendBackward}" CommandParameter="{Binding}"/>
-                <MenuItem Header="_Send to Back" Command="{Binding Selection.ArangeSendToBack}" CommandParameter="{Binding}"/>
-            </MenuItem>
-            <Separator/>
-            <MenuItem Header="_Difference" ToolTip.Tip="Subtract the op path from the current path." Command="{Binding PathOp}" CommandParameter="Difference"/>
-            <MenuItem Header="_Intersect" ToolTip.Tip="Intersect the two paths." Command="{Binding PathOp}" CommandParameter="Intersect"/>
-            <MenuItem Header="_Union" ToolTip.Tip="Union (inclusive-or) the two paths." Command="{Binding PathOp}" CommandParameter="Union"/>
-            <MenuItem Header="_Xor" ToolTip.Tip="Exclusive-or the two paths." Command="{Binding PathOp}" CommandParameter="Xor"/>
-            <MenuItem Header="_Reverse Difference" ToolTip.Tip="Subtract the current path from the op path." Command="{Binding PathOp}" CommandParameter="ReverseDifference"/>
-            <Separator/>
-            <MenuItem Header="_Break" Command="{Binding Selection.Break}" CommandParameter="{Binding}"/>
-            <Separator/>
-            <MenuItem Header="_Connect" Command="{Binding Selection.Connect}" CommandParameter="{Binding}"/>
-            <MenuItem Header="Di_sconnect" Command="{Binding Selection.Disconnect}" CommandParameter="{Binding}"/>
-        </MenuItem>
-    </Menu>
+      </MenuItem>
+      <Separator />
+      <MenuItem Header="Select _All" Command="{Binding Selection.SelectAll}" CommandParameter="{Binding}" />
+      <MenuItem Header="Deselect A_ll" Command="{Binding Selection.DeselectAll}" CommandParameter="{Binding}" />
+    </MenuItem>
+    <MenuItem Header="_View">
+      <MenuItem Header="_Zoom">
+        <MenuItem Header="_Center" Command="{Binding DocumentContainer.ContainerView.ZoomService.CenterZoom}"
+                  CommandParameter="True" />
+        <Separator />
+        <MenuItem Header="_Fill" Command="{Binding DocumentContainer.ContainerView.ZoomService.FillZoom}"
+                  CommandParameter="True" />
+        <Separator />
+        <MenuItem Header="_Uniform" Command="{Binding DocumentContainer.ContainerView.ZoomService.UniformZoom}"
+                  CommandParameter="True" />
+        <Separator />
+        <MenuItem Header="Uniform _To Fill"
+                  Command="{Binding DocumentContainer.ContainerView.ZoomService.UniformToFillZoom}"
+                  CommandParameter="True" />
+      </MenuItem>
+    </MenuItem>
+    <MenuItem Header="_Tool">
+      <MenuItem Header="_None" Command="{Binding SetTool}" CommandParameter="None" />
+      <Separator />
+      <MenuItem Header="_Selection" Command="{Binding SetTool}" CommandParameter="Selection" />
+      <Separator />
+      <MenuItem Header="_Point" Command="{Binding SetTool}" CommandParameter="Point" />
+      <Separator />
+      <MenuItem Header="_Line" Command="{Binding SetTool}" CommandParameter="Line" />
+      <MenuItem Header="Pol_y Line" Command="{Binding SetTool}" CommandParameter="PolyLine" />
+      <MenuItem Header="Cubic _Bezier" Command="{Binding SetTool}" CommandParameter="CubicBezier" />
+      <MenuItem Header="_Quadratic Bezier" Command="{Binding SetTool}" CommandParameter="QuadraticBezier" />
+      <MenuItem Header="Con_ic" Command="{Binding SetTool}" CommandParameter="Conic" />
+      <Separator />
+      <MenuItem Header="Pat_h" Command="{Binding SetTool}" CommandParameter="Path" />
+      <MenuItem Header="Path T_ools"
+                IsEnabled="{Binding CurrentTool.Title, Converter={StaticResource IsEqualStringConverter}, ConverterParameter=Path, Mode=OneWay}">
+        <MenuItem Header="_Line" Command="{Binding SetTool}" CommandParameter="Line" />
+        <MenuItem Header="Cubic _Bezier" Command="{Binding SetTool}" CommandParameter="CubicBezier" />
+        <MenuItem Header="_Quadratic Bezier" Command="{Binding SetTool}" CommandParameter="QuadraticBezier" />
+        <MenuItem Header="Con_ic" Command="{Binding SetTool}" CommandParameter="Conic" />
+        <MenuItem Header="_Move" Command="{Binding SetTool}" CommandParameter="Move" />
+      </MenuItem>
+      <Separator />
+      <MenuItem Header="Scr_ibble" Command="{Binding SetTool}" CommandParameter="Scribble" />
+      <Separator />
+      <MenuItem Header="_Rectangle" Command="{Binding SetTool}" CommandParameter="Rectangle" />
+      <MenuItem Header="_Circle" Command="{Binding SetTool}" CommandParameter="Circle" />
+      <MenuItem Header="_Arc" Command="{Binding SetTool}" CommandParameter="Arc" />
+      <MenuItem Header="O_val" Command="{Binding SetTool}" CommandParameter="Oval" />
+      <Separator />
+      <MenuItem Header="_Text" Command="{Binding SetTool}" CommandParameter="Text" />
+    </MenuItem>
+    <MenuItem Header="_Shape">
+      <MenuItem Header="Du_plicate" Command="{Binding Selection.Duplicate}" CommandParameter="{Binding}" />
+      <Separator />
+      <MenuItem Header="Create _Group" Command="{Binding Selection.CreateGroup}" CommandParameter="{Binding}" />
+      <Separator />
+      <MenuItem Header="Create R_eference" Command="{Binding Selection.CreateReference}" CommandParameter="{Binding}" />
+      <Separator />
+      <MenuItem Header="Create Pat_h" Command="{Binding Selection.CreatePath}" CommandParameter="{Binding}" />
+      <MenuItem Header="Create Str_oke Path" Command="{Binding Selection.CreateStrokePath}"
+                CommandParameter="{Binding}" />
+      <MenuItem Header="Create _Fill Path" Command="{Binding Selection.CreateFillPath}" CommandParameter="{Binding}" />
+      <Separator />
+      <MenuItem Header="Stac_k">
+        <MenuItem Header="_Horizontally" Command="{Binding Selection.StackHorizontally}" CommandParameter="{Binding}" />
+        <MenuItem Header="_Vertically" Command="{Binding Selection.StackVertically}" CommandParameter="{Binding}" />
+      </MenuItem>
+      <MenuItem Header="Dis_tribute">
+        <MenuItem Header="_Horizontally" Command="{Binding Selection.DistributeHorizontally}"
+                  CommandParameter="{Binding}" />
+        <MenuItem Header="_Vertically" Command="{Binding Selection.DistributeVertically}" CommandParameter="{Binding}" />
+      </MenuItem>
+      <MenuItem Header="Alig_n">
+        <MenuItem Header="_Left" Command="{Binding Selection.AlignLeft}" CommandParameter="{Binding}" />
+        <MenuItem Header="_Centered" Command="{Binding Selection.AlignCentered}" CommandParameter="{Binding}" />
+        <MenuItem Header="_Right" Command="{Binding Selection.AlignRight}" CommandParameter="{Binding}" />
+        <Separator />
+        <MenuItem Header="_Top" Command="{Binding Selection.AlignTop}" CommandParameter="{Binding}" />
+        <MenuItem Header="C_enter" Command="{Binding Selection.AlignCenter}" CommandParameter="{Binding}" />
+        <MenuItem Header="_Bottom" Command="{Binding Selection.AlignBottom}" CommandParameter="{Binding}" />
+      </MenuItem>
+      <MenuItem Header="_Arange">
+        <MenuItem Header="_Bring to Front" Command="{Binding Selection.ArangeBringToFront}"
+                  CommandParameter="{Binding}" />
+        <MenuItem Header="Bring _Forward" Command="{Binding Selection.ArangeBringForward}" CommandParameter="{Binding}" />
+        <MenuItem Header="Send Back_ward" Command="{Binding Selection.ArangeSendBackward}" CommandParameter="{Binding}" />
+        <MenuItem Header="_Send to Back" Command="{Binding Selection.ArangeSendToBack}" CommandParameter="{Binding}" />
+      </MenuItem>
+      <Separator />
+      <MenuItem Header="_Difference" ToolTip.Tip="Subtract the op path from the current path."
+                Command="{Binding PathOp}" CommandParameter="Difference" />
+      <MenuItem Header="_Intersect" ToolTip.Tip="Intersect the two paths." Command="{Binding PathOp}"
+                CommandParameter="Intersect" />
+      <MenuItem Header="_Union" ToolTip.Tip="Union (inclusive-or) the two paths." Command="{Binding PathOp}"
+                CommandParameter="Union" />
+      <MenuItem Header="_Xor" ToolTip.Tip="Exclusive-or the two paths." Command="{Binding PathOp}"
+                CommandParameter="Xor" />
+      <MenuItem Header="_Reverse Difference" ToolTip.Tip="Subtract the current path from the op path."
+                Command="{Binding PathOp}" CommandParameter="ReverseDifference" />
+      <Separator />
+      <MenuItem Header="_Break" Command="{Binding Selection.Break}" CommandParameter="{Binding}" />
+      <Separator />
+      <MenuItem Header="_Connect" Command="{Binding Selection.Connect}" CommandParameter="{Binding}" />
+      <MenuItem Header="Di_sconnect" Command="{Binding Selection.Disconnect}" CommandParameter="{Binding}" />
+    </MenuItem>
+  </Menu>
 </UserControl>

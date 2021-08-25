@@ -7,43 +7,45 @@
              xmlns:converters="clr-namespace:Draw2D.Converters"
              mc:Ignorable="d"
              d:DesignWidth="500" d:DesignHeight="400">
-    <UserControl.Resources>
-        <converters:StyleIdToStyleConverter x:Key="StyleIdToStyleConverter"/>
-    </UserControl.Resources>
-    <TabControl Classes="default" TabStripPlacement="Top">
-        <TabItem Classes="default" Header="Point">
-            <ScrollViewer>
-            <Grid RowDefinitions="Auto,Auto,Auto,Auto" ColumnDefinitions="Auto,*">
-                <TextBlock Classes="default" Grid.Column="0" Grid.Row="0" Text="X"/>
-                <TextBox Classes="default" Grid.Column="1" Grid.Row="0" Text="{Binding X}"/>
-                <TextBlock Classes="default" Grid.Column="0" Grid.Row="1" Text="Y"/>
-                <TextBox Classes="default" Grid.Column="1" Grid.Row="1" Text="{Binding Y}"/>
-                <TextBlock Classes="default" Grid.Column="0" Grid.Row="2" Text="HAlign"/>
-                <ComboBox Classes="default" Grid.Column="1" Grid.Row="2" Items="{Binding HAlignValues}" SelectedItem="{Binding HAlign, Mode=TwoWay}"/>
-                <TextBlock Classes="default" Grid.Column="0" Grid.Row="3" Text="VAlign"/>
-                <ComboBox Classes="default" Grid.Column="1" Grid.Row="3" Items="{Binding VAlignValues}" SelectedItem="{Binding VAlign, Mode=TwoWay}"/>
-            </Grid>
-            </ScrollViewer>
-        </TabItem>
-        <TabItem Classes="default" Header="Template">
-            <ContentControl Content="{Binding Template}"/>
-        </TabItem>
-        <TabItem Classes="default" Header="Style">
-            <Grid RowDefinitions="Auto,*" ColumnDefinitions="Auto,*">
-                <TextBlock Classes="default" Grid.Column="0" Grid.Row="0" Text="StyleId"/>
-                <TextBox Classes="default" Grid.Column="1" Grid.Row="0" Text="{Binding StyleId}"/>
-                <ContentControl Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="1">
-                    <ContentControl.Content>
-                        <MultiBinding Mode="OneWay" Converter="{StaticResource StyleIdToStyleConverter}">
-                            <Binding Path="StyleId" Mode="OneWay"/>
-                            <Binding Path="$parent[Window].DataContext.DocumentContainer.StyleLibrary" Mode="OneWay"/>
-                        </MultiBinding>
-                    </ContentControl.Content>
-                </ContentControl>
-            </Grid>
-        </TabItem>
-        <TabItem Classes="default" Header="Effects">
-            <ContentControl Content="{Binding Effects}"/>
-        </TabItem>
-    </TabControl>
+  <UserControl.Resources>
+    <converters:StyleIdToStyleConverter x:Key="StyleIdToStyleConverter" />
+  </UserControl.Resources>
+  <TabControl Classes="default" TabStripPlacement="Top">
+    <TabItem Classes="default" Header="Point">
+      <ScrollViewer>
+        <Grid RowDefinitions="Auto,Auto,Auto,Auto" ColumnDefinitions="Auto,*">
+          <TextBlock Classes="default" Grid.Column="0" Grid.Row="0" Text="X" />
+          <TextBox Classes="default" Grid.Column="1" Grid.Row="0" Text="{Binding X}" />
+          <TextBlock Classes="default" Grid.Column="0" Grid.Row="1" Text="Y" />
+          <TextBox Classes="default" Grid.Column="1" Grid.Row="1" Text="{Binding Y}" />
+          <TextBlock Classes="default" Grid.Column="0" Grid.Row="2" Text="HAlign" />
+          <ComboBox Classes="default" Grid.Column="1" Grid.Row="2" Items="{Binding HAlignValues}"
+                    SelectedItem="{Binding HAlign, Mode=TwoWay}" />
+          <TextBlock Classes="default" Grid.Column="0" Grid.Row="3" Text="VAlign" />
+          <ComboBox Classes="default" Grid.Column="1" Grid.Row="3" Items="{Binding VAlignValues}"
+                    SelectedItem="{Binding VAlign, Mode=TwoWay}" />
+        </Grid>
+      </ScrollViewer>
+    </TabItem>
+    <TabItem Classes="default" Header="Template">
+      <ContentControl Content="{Binding Template}" />
+    </TabItem>
+    <TabItem Classes="default" Header="Style">
+      <Grid RowDefinitions="Auto,*" ColumnDefinitions="Auto,*">
+        <TextBlock Classes="default" Grid.Column="0" Grid.Row="0" Text="StyleId" />
+        <TextBox Classes="default" Grid.Column="1" Grid.Row="0" Text="{Binding StyleId}" />
+        <ContentControl Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="1">
+          <ContentControl.Content>
+            <MultiBinding Mode="OneWay" Converter="{StaticResource StyleIdToStyleConverter}">
+              <Binding Path="StyleId" Mode="OneWay" />
+              <Binding Path="$parent[Window].DataContext.DocumentContainer.StyleLibrary" Mode="OneWay" />
+            </MultiBinding>
+          </ContentControl.Content>
+        </ContentControl>
+      </Grid>
+    </TabItem>
+    <TabItem Classes="default" Header="Effects">
+      <ContentControl Content="{Binding Effects}" />
+    </TabItem>
+  </TabControl>
 </UserControl>

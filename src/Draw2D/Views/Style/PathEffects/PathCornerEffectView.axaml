@@ -6,16 +6,16 @@
              xmlns:local="clr-namespace:Draw2D.Views.Style.PathEffects"
              mc:Ignorable="d"
              d:DesignWidth="500" d:DesignHeight="400">
-    <TabControl Classes="default" TabStripPlacement="Top">
-        <TabItem Classes="default" Header="Corner">
-            <ScrollViewer>
-                <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="Auto,*">
-                    <TextBlock Classes="default" Grid.Column="0" Grid.Row="0" Text="Title"/>
-                    <TextBox Classes="default" Grid.Column="1" Grid.Row="0" Text="{Binding Title}"/>
-                    <TextBlock Classes="default" Grid.Column="0" Grid.Row="1" Text="Radius"/>
-                    <TextBox Classes="default" Grid.Column="1" Grid.Row="1" Text="{Binding Radius}"/>
-                </Grid>
-            </ScrollViewer>
-        </TabItem>
-    </TabControl>
+  <TabControl Classes="default" TabStripPlacement="Top">
+    <TabItem Classes="default" Header="Corner">
+      <ScrollViewer>
+        <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="Auto,*">
+          <TextBlock Classes="default" Grid.Column="0" Grid.Row="0" Text="Title" />
+          <TextBox Classes="default" Grid.Column="1" Grid.Row="0" Text="{Binding Title}" />
+          <TextBlock Classes="default" Grid.Column="0" Grid.Row="1" Text="Radius" />
+          <TextBox Classes="default" Grid.Column="1" Grid.Row="1" Text="{Binding Radius}" />
+        </Grid>
+      </ScrollViewer>
+    </TabItem>
+  </TabControl>
 </UserControl>

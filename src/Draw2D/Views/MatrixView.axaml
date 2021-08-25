@@ -6,30 +6,30 @@
              xmlns:local="clr-namespace:Draw2D.Views"
              mc:Ignorable="d"
              d:DesignWidth="500" d:DesignHeight="400">
-    <TabControl Classes="default" TabStripPlacement="Top">
-        <TabItem Classes="default" Header="Matrix">
-            <ScrollViewer>
-                <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="Auto,*">
-                    <TextBlock Classes="default" Grid.Column="0" Grid.Row="0" Text="ScaleX"/>
-                    <TextBox Classes="default" Grid.Column="1" Grid.Row="0" Text="{Binding ScaleX}"/>
-                    <TextBlock Classes="default" Grid.Column="0" Grid.Row="1" Text="SkewX"/>
-                    <TextBox Classes="default" Grid.Column="1" Grid.Row="1" Text="{Binding SkewX}"/>
-                    <TextBlock Classes="default" Grid.Column="0" Grid.Row="2" Text="TransX"/>
-                    <TextBox Classes="default" Grid.Column="1" Grid.Row="2" Text="{Binding TransX}"/>
-                    <TextBlock Classes="default" Grid.Column="0" Grid.Row="3" Text="SkewY"/>
-                    <TextBox Classes="default" Grid.Column="1" Grid.Row="3" Text="{Binding SkewY}"/>
-                    <TextBlock Classes="default" Grid.Column="0" Grid.Row="4" Text="ScaleY"/>
-                    <TextBox Classes="default" Grid.Column="1" Grid.Row="4" Text="{Binding ScaleY}"/>
-                    <TextBlock Classes="default" Grid.Column="0" Grid.Row="5" Text="TransY"/>
-                    <TextBox Classes="default" Grid.Column="1" Grid.Row="5" Text="{Binding TransY}"/>
-                    <TextBlock Classes="default" Grid.Column="0" Grid.Row="6" Text="Persp0"/>
-                    <TextBox Classes="default" Grid.Column="1" Grid.Row="6" Text="{Binding Persp0}"/>
-                    <TextBlock Classes="default" Grid.Column="0" Grid.Row="7" Text="Persp1"/>
-                    <TextBox Classes="default" Grid.Column="1" Grid.Row="7" Text="{Binding Persp1}"/>
-                    <TextBlock Classes="default" Grid.Column="0" Grid.Row="8" Text="Persp2"/>
-                    <TextBox Classes="default" Grid.Column="1" Grid.Row="8" Text="{Binding Persp2}"/>
-                </Grid>
-            </ScrollViewer>
-        </TabItem>
-    </TabControl>
+  <TabControl Classes="default" TabStripPlacement="Top">
+    <TabItem Classes="default" Header="Matrix">
+      <ScrollViewer>
+        <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="Auto,*">
+          <TextBlock Classes="default" Grid.Column="0" Grid.Row="0" Text="ScaleX" />
+          <TextBox Classes="default" Grid.Column="1" Grid.Row="0" Text="{Binding ScaleX}" />
+          <TextBlock Classes="default" Grid.Column="0" Grid.Row="1" Text="SkewX" />
+          <TextBox Classes="default" Grid.Column="1" Grid.Row="1" Text="{Binding SkewX}" />
+          <TextBlock Classes="default" Grid.Column="0" Grid.Row="2" Text="TransX" />
+          <TextBox Classes="default" Grid.Column="1" Grid.Row="2" Text="{Binding TransX}" />
+          <TextBlock Classes="default" Grid.Column="0" Grid.Row="3" Text="SkewY" />
+          <TextBox Classes="default" Grid.Column="1" Grid.Row="3" Text="{Binding SkewY}" />
+          <TextBlock Classes="default" Grid.Column="0" Grid.Row="4" Text="ScaleY" />
+          <TextBox Classes="default" Grid.Column="1" Grid.Row="4" Text="{Binding ScaleY}" />
+          <TextBlock Classes="default" Grid.Column="0" Grid.Row="5" Text="TransY" />
+          <TextBox Classes="default" Grid.Column="1" Grid.Row="5" Text="{Binding TransY}" />
+          <TextBlock Classes="default" Grid.Column="0" Grid.Row="6" Text="Persp0" />
+          <TextBox Classes="default" Grid.Column="1" Grid.Row="6" Text="{Binding Persp0}" />
+          <TextBlock Classes="default" Grid.Column="0" Grid.Row="7" Text="Persp1" />
+          <TextBox Classes="default" Grid.Column="1" Grid.Row="7" Text="{Binding Persp1}" />
+          <TextBlock Classes="default" Grid.Column="0" Grid.Row="8" Text="Persp2" />
+          <TextBox Classes="default" Grid.Column="1" Grid.Row="8" Text="{Binding Persp2}" />
+        </Grid>
+      </ScrollViewer>
+    </TabItem>
+  </TabControl>
 </UserControl>

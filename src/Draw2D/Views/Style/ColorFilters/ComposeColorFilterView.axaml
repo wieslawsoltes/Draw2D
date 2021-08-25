@@ -6,15 +6,15 @@
              xmlns:local="clr-namespace:Draw2D.Views.Style.ColorFilters"
              mc:Ignorable="d"
              d:DesignWidth="500" d:DesignHeight="400">
-    <TabControl Classes="default" TabStripPlacement="Top">
-        <TabItem Classes="default" Header="Compose">
-            <ScrollViewer>
-                <Grid RowDefinitions="Auto" ColumnDefinitions="Auto,*">
-                    <TextBlock Classes="default" Grid.Column="0" Grid.Row="0" Text="Title"/>
-                    <TextBox Classes="default" Grid.Column="1" Grid.Row="0" Text="{Binding Title}"/>
-                    <!-- TODO: -->
-                </Grid>
-            </ScrollViewer>
-        </TabItem>
-    </TabControl>
+  <TabControl Classes="default" TabStripPlacement="Top">
+    <TabItem Classes="default" Header="Compose">
+      <ScrollViewer>
+        <Grid RowDefinitions="Auto" ColumnDefinitions="Auto,*">
+          <TextBlock Classes="default" Grid.Column="0" Grid.Row="0" Text="Title" />
+          <TextBox Classes="default" Grid.Column="1" Grid.Row="0" Text="{Binding Title}" />
+          <!-- TODO: -->
+        </Grid>
+      </ScrollViewer>
+    </TabItem>
+  </TabControl>
 </UserControl>

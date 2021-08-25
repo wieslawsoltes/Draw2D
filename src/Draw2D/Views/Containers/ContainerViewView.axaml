@@ -6,51 +6,53 @@
              xmlns:local="clr-namespace:Draw2D.Views.Containers"
              mc:Ignorable="d"
              d:DesignWidth="500" d:DesignHeight="400">
-    <TabControl Classes="default" TabStripPlacement="Top">
-        <TabItem Classes="default" Header="View">
-            <ScrollViewer>
-                <Grid Grid.Row="0" RowDefinitions="Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="Auto,*,50">
-                    <TextBlock Classes="default" Grid.Column="0" Grid.Row="0" Text="Title"/>
-                    <TextBox Classes="default" Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="0" Text="{Binding Title}"/>
-                    <TextBlock Classes="default" Grid.Column="0" Grid.Row="1" Text="Width"/>
-                    <TextBox Classes="default" Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="1" Text="{Binding Width}"/>
-                    <TextBlock Classes="default" Grid.Column="0" Grid.Row="2" Text="Height"/>
-                    <TextBox Classes="default" Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="2" Text="{Binding Height}"/>
-                    <TextBlock Classes="default" Grid.Column="0" Grid.Row="3" Text="Shapes Current"/>
-                    <TextBlock Classes="default" Grid.Column="1" Grid.Row="3" Text="{Binding CurrentContainer.Shapes.Count, Mode=OneWay}"/>
-                    <TextBlock Classes="default" Grid.Column="0" Grid.Row="4" Text="Shapes Working"/>
-                    <TextBlock Classes="default" Grid.Column="1" Grid.Row="4" Text="{Binding WorkingContainer.Shapes.Count, Mode=OneWay}"/>
-                </Grid>
-            </ScrollViewer>
+  <TabControl Classes="default" TabStripPlacement="Top">
+    <TabItem Classes="default" Header="View">
+      <ScrollViewer>
+        <Grid Grid.Row="0" RowDefinitions="Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="Auto,*,50">
+          <TextBlock Classes="default" Grid.Column="0" Grid.Row="0" Text="Title" />
+          <TextBox Classes="default" Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="0" Text="{Binding Title}" />
+          <TextBlock Classes="default" Grid.Column="0" Grid.Row="1" Text="Width" />
+          <TextBox Classes="default" Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="1" Text="{Binding Width}" />
+          <TextBlock Classes="default" Grid.Column="0" Grid.Row="2" Text="Height" />
+          <TextBox Classes="default" Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="2" Text="{Binding Height}" />
+          <TextBlock Classes="default" Grid.Column="0" Grid.Row="3" Text="Shapes Current" />
+          <TextBlock Classes="default" Grid.Column="1" Grid.Row="3"
+                     Text="{Binding CurrentContainer.Shapes.Count, Mode=OneWay}" />
+          <TextBlock Classes="default" Grid.Column="0" Grid.Row="4" Text="Shapes Working" />
+          <TextBlock Classes="default" Grid.Column="1" Grid.Row="4"
+                     Text="{Binding WorkingContainer.Shapes.Count, Mode=OneWay}" />
+        </Grid>
+      </ScrollViewer>
+    </TabItem>
+    <TabItem Classes="default" Header="Selection">
+      <ContentControl Content="{Binding SelectionState}" />
+    </TabItem>
+    <TabItem Classes="default" Header="Zoom">
+      <ContentControl Content="{Binding ZoomServiceState}" />
+    </TabItem>
+    <TabItem Classes="default" Header="Shapes">
+      <TabControl Classes="default" TabStripPlacement="Top">
+        <TabItem Classes="default" Header="Current">
+          <ContentControl Content="{Binding CurrentContainer}" />
         </TabItem>
-        <TabItem Classes="default" Header="Selection">
-            <ContentControl Content="{Binding SelectionState}"/>
+        <TabItem Classes="default" Header="Working">
+          <ContentControl Content="{Binding WorkingContainer}" />
         </TabItem>
-        <TabItem Classes="default" Header="Zoom">
-            <ContentControl Content="{Binding ZoomServiceState}"/>
+      </TabControl>
+    </TabItem>
+    <TabItem Classes="default" Header="Background">
+      <TabControl Classes="default" Grid.Row="1" TabStripPlacement="Top">
+        <TabItem Classes="default" Header="Print">
+          <ContentControl Content="{Binding PrintBackground}" />
         </TabItem>
-        <TabItem Classes="default" Header="Shapes">
-            <TabControl Classes="default" TabStripPlacement="Top">
-                <TabItem Classes="default" Header="Current">
-                    <ContentControl Content="{Binding CurrentContainer}"/>
-                </TabItem>
-                <TabItem Classes="default" Header="Working">
-                    <ContentControl Content="{Binding WorkingContainer}"/>
-                </TabItem>
-            </TabControl>
+        <TabItem Classes="default" Header="Work">
+          <ContentControl Content="{Binding WorkBackground}" />
         </TabItem>
-        <TabItem Classes="default" Header="Background">
-            <TabControl Classes="default" Grid.Row="1" TabStripPlacement="Top">
-                <TabItem Classes="default" Header="Print">
-                    <ContentControl Content="{Binding PrintBackground}"/>
-                </TabItem>
-                <TabItem Classes="default" Header="Work">
-                    <ContentControl Content="{Binding WorkBackground}"/>
-                </TabItem>
-                <TabItem Classes="default" Header="Input">
-                    <ContentControl Content="{Binding InputBackground}"/>
-                </TabItem>
-            </TabControl>
+        <TabItem Classes="default" Header="Input">
+          <ContentControl Content="{Binding InputBackground}" />
         </TabItem>
-    </TabControl>
+      </TabControl>
+    </TabItem>
+  </TabControl>
 </UserControl>

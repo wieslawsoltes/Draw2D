@@ -7,32 +7,32 @@
              xmlns:converters="clr-namespace:Draw2D.Converters"
              mc:Ignorable="d"
              d:DesignWidth="500" d:DesignHeight="400">
-    <UserControl.Resources>
-        <converters:StyleIdToStyleConverter x:Key="StyleIdToStyleConverter"/>
-    </UserControl.Resources>
-    <TabControl Classes="default" TabStripPlacement="Top">
-        <TabItem Classes="default" Header="Point">
-            <ContentControl Content="{Binding Point}"/>
-        </TabItem>
-        <TabItem Classes="default" Header="Reference">
-            <ContentControl Content="{Binding Reference}"/>
-        </TabItem>
-        <TabItem Classes="default" Header="Style">
-            <Grid RowDefinitions="Auto,*" ColumnDefinitions="Auto,*">
-                <TextBlock Classes="default" Grid.Column="0" Grid.Row="0" Text="StyleId"/>
-                <TextBox Classes="default" Grid.Column="1" Grid.Row="0" Text="{Binding StyleId}"/>
-                <ContentControl Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="1">
-                    <ContentControl.Content>
-                        <MultiBinding Mode="OneWay" Converter="{StaticResource StyleIdToStyleConverter}">
-                            <Binding Path="StyleId" Mode="OneWay"/>
-                            <Binding Path="$parent[Window].DataContext.DocumentContainer.StyleLibrary" Mode="OneWay"/>
-                        </MultiBinding>
-                    </ContentControl.Content>
-                </ContentControl>
-            </Grid>
-        </TabItem>
-        <TabItem Classes="default" Header="Effects">
-            <ContentControl Content="{Binding Effects}"/>
-        </TabItem>
-    </TabControl>
+  <UserControl.Resources>
+    <converters:StyleIdToStyleConverter x:Key="StyleIdToStyleConverter" />
+  </UserControl.Resources>
+  <TabControl Classes="default" TabStripPlacement="Top">
+    <TabItem Classes="default" Header="Point">
+      <ContentControl Content="{Binding Point}" />
+    </TabItem>
+    <TabItem Classes="default" Header="Reference">
+      <ContentControl Content="{Binding Reference}" />
+    </TabItem>
+    <TabItem Classes="default" Header="Style">
+      <Grid RowDefinitions="Auto,*" ColumnDefinitions="Auto,*">
+        <TextBlock Classes="default" Grid.Column="0" Grid.Row="0" Text="StyleId" />
+        <TextBox Classes="default" Grid.Column="1" Grid.Row="0" Text="{Binding StyleId}" />
+        <ContentControl Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="1">
+          <ContentControl.Content>
+            <MultiBinding Mode="OneWay" Converter="{StaticResource StyleIdToStyleConverter}">
+              <Binding Path="StyleId" Mode="OneWay" />
+              <Binding Path="$parent[Window].DataContext.DocumentContainer.StyleLibrary" Mode="OneWay" />
+            </MultiBinding>
+          </ContentControl.Content>
+        </ContentControl>
+      </Grid>
+    </TabItem>
+    <TabItem Classes="default" Header="Effects">
+      <ContentControl Content="{Binding Effects}" />
+    </TabItem>
+  </TabControl>
 </UserControl>

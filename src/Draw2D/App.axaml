@@ -2,175 +2,177 @@
              xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:Draw2D">
-    <Application.DataTemplates>
-        <local:ViewLocator/>
-    </Application.DataTemplates>
-    <Application.Styles>
-        <StyleInclude Source="avares://Avalonia.Themes.Default/DefaultTheme.xaml"/>
-        <StyleInclude Source="avares://Avalonia.Themes.Default/Accents/BaseLight.xaml"/>
-        <StyleInclude Source="avares://Avalonia.Controls.DataGrid/Themes/Default.xaml"/>
-        <!-- <StyleInclude Source="avares://Avalonia.Themes.Fluent/FluentLight.xaml" /> -->
-        <!-- <StyleInclude Source="avares://Avalonia.Themes.Fluent/DensityStyles/Compact.xaml" /> -->
-        <!-- <StyleInclude Source="avares://Avalonia.Controls.DataGrid/Themes/Fluent.xaml" /> -->
-        <Style Selector="Border.default">
-            <Setter Property="Padding" Value="0"/>
-            <Setter Property="Margin" Value="0"/>
-            <Setter Property="BorderThickness" Value="0"/>
-        </Style>
-        <Style Selector="Border.zoom">
-            <Setter Property="Padding" Value="0"/>
-            <Setter Property="Margin" Value="0"/>
-            <Setter Property="Background" Value="{DynamicResource DarkCheckerBoard}"/>
-            <Setter Property="BorderThickness" Value="0"/>
-        </Style>
-        <Style Selector="Border.clip">
-            <Setter Property="Padding" Value="0"/>
-            <Setter Property="Margin" Value="0"/>
-            <Setter Property="BorderThickness" Value="0"/>
-        </Style>
-        <Style Selector="Button.default">
-            <Setter Property="Padding" Value="1"/>
-            <Setter Property="Margin" Value="2"/>
-            <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="FontSize" Value="{DynamicResource FontSizeNormal}"/>
-            <Setter Property="BorderThickness" Value="1"/>
-        </Style>
-        <Style Selector="Button.default:pointerover /template/ ContentPresenter">
-            <Setter Property="Background" Value="{DynamicResource ThemeControlMidBrush}"/>
-        </Style>
-        <Style Selector="Button.default:pressed /template/ ContentPresenter">
-            <Setter Property="Background" Value="{DynamicResource ThemeControlDarkBrush}"/>
-        </Style>
-        <Style Selector="CheckBox.default">
-            <Setter Property="Padding" Value="2"/>
-            <Setter Property="Margin" Value="2"/>
-            <Setter Property="FontSize" Value="{DynamicResource FontSizeNormal}"/>
-            <Setter Property="BorderThickness" Value="1"/>
-        </Style>
-        <Style Selector="ComboBox.default">
-            <Setter Property="Padding" Value="2"/>
-            <Setter Property="Margin" Value="2"/>
-            <Setter Property="FontSize" Value="{DynamicResource FontSizeNormal}"/>
-            <Setter Property="BorderThickness" Value="1"/>
-        </Style>
-        <Style Selector="ComboBox.default:pointerover /template/ Border#border">
-            <Setter Property="BorderThickness" Value="1"/>
-        </Style>
-        <Style Selector="ComboBox.default:focus /template/ Border#border">
-            <Setter Property="BorderThickness" Value="1"/>
-        </Style>
-        <Style Selector="DockPanel.views">
-            <Setter Property="Margin" Value="5"/>
-        </Style>
-        <Style Selector="GridSplitter:vertical">
-            <Setter Property="Width" Value="8"/>
-            <Setter Property="Template">
-                <ControlTemplate>
-                    <Border Background="{TemplateBinding Background}"/>
-                </ControlTemplate>
-            </Setter>
-        </Style>
-        <Style Selector="GridSplitter.vertical">
-            <Setter Property="Background" Value="Transparent"/>
-        </Style>
-        <Style Selector="GridSplitter:horizontal">
-            <Setter Property="Height" Value="8"/>
-            <Setter Property="Template">
-                <ControlTemplate>
-                    <Border Background="{TemplateBinding Background}"/>
-                </ControlTemplate>
-            </Setter>
-        </Style>
-        <Style Selector="GridSplitter.horizontal">
-            <Setter Property="Background" Value="Transparent"/>
-        </Style>
-        <Style Selector="ListBox.default">
-            <Setter Property="Padding" Value="2"/>
-            <Setter Property="Margin" Value="2"/>
-            <Setter Property="BorderThickness" Value="1"/>
-            <Setter Property="AutoScrollToSelectedItem" Value="True"/>
-        </Style>
-        <Style Selector="Slider.default">
-            <Setter Property="Padding" Value="2"/>
-            <Setter Property="Margin" Value="2"/>
-            <Setter Property="Orientation" Value="Horizontal"/>
-            <Setter Property="HorizontalAlignment" Value="Stretch"/>
-            <Setter Property="VerticalAlignment" Value="Stretch"/>
-            <Setter Property="IsSnapToTickEnabled" Value="True"/>
-            <Setter Property="TickFrequency" Value="0.1"/>
-        </Style>
-        <Style Selector="TabControl.default">
-            <Setter Property="ItemsPanel">
-                <ItemsPanelTemplate>
-                    <WrapPanel ClipToBounds="False"/>
-                </ItemsPanelTemplate>
-            </Setter>
-            <Setter Property="Padding" Value="0"/>
-            <Setter Property="Margin" Value="0"/>
-        </Style>
-        <Style Selector="TabItem.default">
-            <Setter Property="Padding" Value="4"/>
-            <Setter Property="Margin" Value="0"/>
-            <Setter Property="FontSize" Value="{DynamicResource FontSizeNormal}"/>
-            <Setter Property="FontWeight" Value="Normal"/>
-        </Style>
-        <Style Selector="TextBlock.default">
-            <Setter Property="Margin" Value="2"/>
-            <Setter Property="FontSize" Value="{DynamicResource FontSizeNormal}"/>
-            <Setter Property="VerticalAlignment" Value="Center"/>
-            <Setter Property="TextWrapping" Value="Wrap"/>
-        </Style>
-        <Style Selector="TextBlock.list">
-            <Setter Property="Margin" Value="2"/>
-            <Setter Property="FontSize" Value="{DynamicResource FontSizeNormal}"/>
-            <Setter Property="VerticalAlignment" Value="Center"/>
-            <Setter Property="TextWrapping" Value="Wrap"/>
-        </Style>
-        <Style Selector="TextBox.default">
-            <Setter Property="Padding" Value="2"/>
-            <Setter Property="Margin" Value="2"/>
-            <Setter Property="FontSize" Value="{DynamicResource FontSizeNormal}"/>
-            <Setter Property="BorderThickness" Value="1"/>
-        </Style>
-        <Style Selector="ToolTip.default">
-            <Setter Property="BorderThickness" Value="1"/>
-        </Style>
-        <Style Selector="TreeView.default">
-            <Setter Property="Padding" Value="2"/>
-            <Setter Property="Margin" Value="2"/>
-            <Setter Property="BorderThickness" Value="1"/>
-            <Setter Property="AutoScrollToSelectedItem" Value="True"/>
-        </Style>
-    </Application.Styles>
-    <Application.Resources>
-        <SolidColorBrush x:Key="TransparentBrush" Opacity="0" Color="#FFFFFF"/>
-        <VisualBrush x:Key="LightCheckerBoard" TileMode="Tile" Stretch="None" AlignmentX="Left" AlignmentY="Top" SourceRect="0,0,20,20" DestinationRect="0,0,20,20">
-            <VisualBrush.Visual>
-                <StackPanel Orientation="Horizontal">
-                    <StackPanel Orientation="Vertical">
-                        <Rectangle Width="10" Height="10" Fill="#FFF0F0F0"/>
-                        <Rectangle Width="10" Height="10" Fill="#FFF5F5F5"/>
-                    </StackPanel>
-                    <StackPanel Orientation="Vertical">
-                        <Rectangle Width="10" Height="10" Fill="#FFF5F5F5"/>
-                        <Rectangle Width="10" Height="10" Fill="#FFF0F0F0"/>
-                    </StackPanel>
-                </StackPanel>
-            </VisualBrush.Visual>
-        </VisualBrush>
-        <VisualBrush x:Key="DarkCheckerBoard" TileMode="Tile" Stretch="None" AlignmentX="Left" AlignmentY="Top" SourceRect="0,0,20,20" DestinationRect="0,0,20,20">
-            <VisualBrush.Visual>
-                <StackPanel Orientation="Horizontal">
-                    <StackPanel Orientation="Vertical">
-                        <Rectangle Width="10" Height="10" Fill="DarkGray"/>
-                        <Rectangle Width="10" Height="10" Fill="LightGray"/>
-                    </StackPanel>
-                    <StackPanel Orientation="Vertical">
-                        <Rectangle Width="10" Height="10" Fill="LightGray"/>
-                        <Rectangle Width="10" Height="10" Fill="DarkGray"/>
-                    </StackPanel>
-                </StackPanel>
-            </VisualBrush.Visual>
-        </VisualBrush>
-    </Application.Resources>
+  <Application.DataTemplates>
+    <local:ViewLocator />
+  </Application.DataTemplates>
+  <Application.Styles>
+    <StyleInclude Source="avares://Avalonia.Themes.Default/DefaultTheme.xaml" />
+    <StyleInclude Source="avares://Avalonia.Themes.Default/Accents/BaseLight.xaml" />
+    <StyleInclude Source="avares://Avalonia.Controls.DataGrid/Themes/Default.xaml" />
+    <!-- <StyleInclude Source="avares://Avalonia.Themes.Fluent/FluentLight.xaml" /> -->
+    <!-- <StyleInclude Source="avares://Avalonia.Themes.Fluent/DensityStyles/Compact.xaml" /> -->
+    <!-- <StyleInclude Source="avares://Avalonia.Controls.DataGrid/Themes/Fluent.xaml" /> -->
+    <Style Selector="Border.default">
+      <Setter Property="Padding" Value="0" />
+      <Setter Property="Margin" Value="0" />
+      <Setter Property="BorderThickness" Value="0" />
+    </Style>
+    <Style Selector="Border.zoom">
+      <Setter Property="Padding" Value="0" />
+      <Setter Property="Margin" Value="0" />
+      <Setter Property="Background" Value="{DynamicResource DarkCheckerBoard}" />
+      <Setter Property="BorderThickness" Value="0" />
+    </Style>
+    <Style Selector="Border.clip">
+      <Setter Property="Padding" Value="0" />
+      <Setter Property="Margin" Value="0" />
+      <Setter Property="BorderThickness" Value="0" />
+    </Style>
+    <Style Selector="Button.default">
+      <Setter Property="Padding" Value="1" />
+      <Setter Property="Margin" Value="2" />
+      <Setter Property="Background" Value="Transparent" />
+      <Setter Property="FontSize" Value="{DynamicResource FontSizeNormal}" />
+      <Setter Property="BorderThickness" Value="1" />
+    </Style>
+    <Style Selector="Button.default:pointerover /template/ ContentPresenter">
+      <Setter Property="Background" Value="{DynamicResource ThemeControlMidBrush}" />
+    </Style>
+    <Style Selector="Button.default:pressed /template/ ContentPresenter">
+      <Setter Property="Background" Value="{DynamicResource ThemeControlDarkBrush}" />
+    </Style>
+    <Style Selector="CheckBox.default">
+      <Setter Property="Padding" Value="2" />
+      <Setter Property="Margin" Value="2" />
+      <Setter Property="FontSize" Value="{DynamicResource FontSizeNormal}" />
+      <Setter Property="BorderThickness" Value="1" />
+    </Style>
+    <Style Selector="ComboBox.default">
+      <Setter Property="Padding" Value="2" />
+      <Setter Property="Margin" Value="2" />
+      <Setter Property="FontSize" Value="{DynamicResource FontSizeNormal}" />
+      <Setter Property="BorderThickness" Value="1" />
+    </Style>
+    <Style Selector="ComboBox.default:pointerover /template/ Border#border">
+      <Setter Property="BorderThickness" Value="1" />
+    </Style>
+    <Style Selector="ComboBox.default:focus /template/ Border#border">
+      <Setter Property="BorderThickness" Value="1" />
+    </Style>
+    <Style Selector="DockPanel.views">
+      <Setter Property="Margin" Value="5" />
+    </Style>
+    <Style Selector="GridSplitter:vertical">
+      <Setter Property="Width" Value="8" />
+      <Setter Property="Template">
+        <ControlTemplate>
+          <Border Background="{TemplateBinding Background}" />
+        </ControlTemplate>
+      </Setter>
+    </Style>
+    <Style Selector="GridSplitter.vertical">
+      <Setter Property="Background" Value="Transparent" />
+    </Style>
+    <Style Selector="GridSplitter:horizontal">
+      <Setter Property="Height" Value="8" />
+      <Setter Property="Template">
+        <ControlTemplate>
+          <Border Background="{TemplateBinding Background}" />
+        </ControlTemplate>
+      </Setter>
+    </Style>
+    <Style Selector="GridSplitter.horizontal">
+      <Setter Property="Background" Value="Transparent" />
+    </Style>
+    <Style Selector="ListBox.default">
+      <Setter Property="Padding" Value="2" />
+      <Setter Property="Margin" Value="2" />
+      <Setter Property="BorderThickness" Value="1" />
+      <Setter Property="AutoScrollToSelectedItem" Value="True" />
+    </Style>
+    <Style Selector="Slider.default">
+      <Setter Property="Padding" Value="2" />
+      <Setter Property="Margin" Value="2" />
+      <Setter Property="Orientation" Value="Horizontal" />
+      <Setter Property="HorizontalAlignment" Value="Stretch" />
+      <Setter Property="VerticalAlignment" Value="Stretch" />
+      <Setter Property="IsSnapToTickEnabled" Value="True" />
+      <Setter Property="TickFrequency" Value="0.1" />
+    </Style>
+    <Style Selector="TabControl.default">
+      <Setter Property="ItemsPanel">
+        <ItemsPanelTemplate>
+          <WrapPanel ClipToBounds="False" />
+        </ItemsPanelTemplate>
+      </Setter>
+      <Setter Property="Padding" Value="0" />
+      <Setter Property="Margin" Value="0" />
+    </Style>
+    <Style Selector="TabItem.default">
+      <Setter Property="Padding" Value="4" />
+      <Setter Property="Margin" Value="0" />
+      <Setter Property="FontSize" Value="{DynamicResource FontSizeNormal}" />
+      <Setter Property="FontWeight" Value="Normal" />
+    </Style>
+    <Style Selector="TextBlock.default">
+      <Setter Property="Margin" Value="2" />
+      <Setter Property="FontSize" Value="{DynamicResource FontSizeNormal}" />
+      <Setter Property="VerticalAlignment" Value="Center" />
+      <Setter Property="TextWrapping" Value="Wrap" />
+    </Style>
+    <Style Selector="TextBlock.list">
+      <Setter Property="Margin" Value="2" />
+      <Setter Property="FontSize" Value="{DynamicResource FontSizeNormal}" />
+      <Setter Property="VerticalAlignment" Value="Center" />
+      <Setter Property="TextWrapping" Value="Wrap" />
+    </Style>
+    <Style Selector="TextBox.default">
+      <Setter Property="Padding" Value="2" />
+      <Setter Property="Margin" Value="2" />
+      <Setter Property="FontSize" Value="{DynamicResource FontSizeNormal}" />
+      <Setter Property="BorderThickness" Value="1" />
+    </Style>
+    <Style Selector="ToolTip.default">
+      <Setter Property="BorderThickness" Value="1" />
+    </Style>
+    <Style Selector="TreeView.default">
+      <Setter Property="Padding" Value="2" />
+      <Setter Property="Margin" Value="2" />
+      <Setter Property="BorderThickness" Value="1" />
+      <Setter Property="AutoScrollToSelectedItem" Value="True" />
+    </Style>
+  </Application.Styles>
+  <Application.Resources>
+    <SolidColorBrush x:Key="TransparentBrush" Opacity="0" Color="#FFFFFF" />
+    <VisualBrush x:Key="LightCheckerBoard" TileMode="Tile" Stretch="None" AlignmentX="Left" AlignmentY="Top"
+                 SourceRect="0,0,20,20" DestinationRect="0,0,20,20">
+      <VisualBrush.Visual>
+        <StackPanel Orientation="Horizontal">
+          <StackPanel Orientation="Vertical">
+            <Rectangle Width="10" Height="10" Fill="#FFF0F0F0" />
+            <Rectangle Width="10" Height="10" Fill="#FFF5F5F5" />
+          </StackPanel>
+          <StackPanel Orientation="Vertical">
+            <Rectangle Width="10" Height="10" Fill="#FFF5F5F5" />
+            <Rectangle Width="10" Height="10" Fill="#FFF0F0F0" />
+          </StackPanel>
+        </StackPanel>
+      </VisualBrush.Visual>
+    </VisualBrush>
+    <VisualBrush x:Key="DarkCheckerBoard" TileMode="Tile" Stretch="None" AlignmentX="Left" AlignmentY="Top"
+                 SourceRect="0,0,20,20" DestinationRect="0,0,20,20">
+      <VisualBrush.Visual>
+        <StackPanel Orientation="Horizontal">
+          <StackPanel Orientation="Vertical">
+            <Rectangle Width="10" Height="10" Fill="DarkGray" />
+            <Rectangle Width="10" Height="10" Fill="LightGray" />
+          </StackPanel>
+          <StackPanel Orientation="Vertical">
+            <Rectangle Width="10" Height="10" Fill="LightGray" />
+            <Rectangle Width="10" Height="10" Fill="DarkGray" />
+          </StackPanel>
+        </StackPanel>
+      </VisualBrush.Visual>
+    </VisualBrush>
+  </Application.Resources>
 </Application>

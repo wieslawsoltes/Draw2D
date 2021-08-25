@@ -12,5 +12,5 @@
         mc:Ignorable="d"
         d:DataContext="{x:Static app:App.ToolContext}"
         d:DesignWidth="1320" d:DesignHeight="690">
-    <local:MainView/>
+  <local:MainView />
 </Window>

@@ -6,29 +6,29 @@
              xmlns:local="clr-namespace:Draw2D.Views.Style"
              mc:Ignorable="d"
              d:DesignWidth="500" d:DesignHeight="400">
-    <TabControl Classes="default" TabStripPlacement="Top">
-        <TabItem Classes="default" Header="Style">
-            <ScrollViewer>
-                <Grid RowDefinitions="Auto,Auto,Auto,Auto" ColumnDefinitions="Auto,*">
-                    <TextBlock Classes="default" Grid.Column="0" Grid.Row="0" Text="Title"/>
-                    <TextBox Classes="default" Grid.Column="1" Grid.Row="0" Text="{Binding Title, Mode=TwoWay}"/>
-                    <TextBlock Classes="default" Grid.Column="0" Grid.Row="1" Text="IsStroked"/>
-                    <CheckBox Classes="default" Grid.Column="1" Grid.Row="1" IsChecked="{Binding IsStroked}"/>
-                    <TextBlock Classes="default" Grid.Column="0" Grid.Row="2" Text="IsFilled"/>
-                    <CheckBox Classes="default" Grid.Column="1" Grid.Row="2" IsChecked="{Binding IsFilled}"/>
-                    <TextBlock Classes="default" Grid.Column="0" Grid.Row="3" Text="IsText"/>
-                    <CheckBox Classes="default" Grid.Column="1" Grid.Row="3" IsChecked="{Binding IsText}"/>
-                </Grid>
-            </ScrollViewer>
-        </TabItem>
-        <TabItem Classes="default" Header="StrokePaint">
-            <ContentControl Content="{Binding StrokePaint}"/>
-        </TabItem>
-        <TabItem Classes="default" Header="FillPaint">
-            <ContentControl Content="{Binding FillPaint}"/>
-        </TabItem>
-        <TabItem Classes="default" Header="TextPaint">
-            <ContentControl Content="{Binding TextPaint}"/>
-        </TabItem>
-    </TabControl>
+  <TabControl Classes="default" TabStripPlacement="Top">
+    <TabItem Classes="default" Header="Style">
+      <ScrollViewer>
+        <Grid RowDefinitions="Auto,Auto,Auto,Auto" ColumnDefinitions="Auto,*">
+          <TextBlock Classes="default" Grid.Column="0" Grid.Row="0" Text="Title" />
+          <TextBox Classes="default" Grid.Column="1" Grid.Row="0" Text="{Binding Title, Mode=TwoWay}" />
+          <TextBlock Classes="default" Grid.Column="0" Grid.Row="1" Text="IsStroked" />
+          <CheckBox Classes="default" Grid.Column="1" Grid.Row="1" IsChecked="{Binding IsStroked}" />
+          <TextBlock Classes="default" Grid.Column="0" Grid.Row="2" Text="IsFilled" />
+          <CheckBox Classes="default" Grid.Column="1" Grid.Row="2" IsChecked="{Binding IsFilled}" />
+          <TextBlock Classes="default" Grid.Column="0" Grid.Row="3" Text="IsText" />
+          <CheckBox Classes="default" Grid.Column="1" Grid.Row="3" IsChecked="{Binding IsText}" />
+        </Grid>
+      </ScrollViewer>
+    </TabItem>
+    <TabItem Classes="default" Header="StrokePaint">
+      <ContentControl Content="{Binding StrokePaint}" />
+    </TabItem>
+    <TabItem Classes="default" Header="FillPaint">
+      <ContentControl Content="{Binding FillPaint}" />
+    </TabItem>
+    <TabItem Classes="default" Header="TextPaint">
+      <ContentControl Content="{Binding TextPaint}" />
+    </TabItem>
+  </TabControl>
 </UserControl>

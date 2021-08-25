@@ -6,23 +6,24 @@
              xmlns:local="clr-namespace:Draw2D.Views.Tools"
              mc:Ignorable="d"
              d:DesignWidth="500" d:DesignHeight="400">
-    <TabControl Classes="default" TabStripPlacement="Top">
-        <TabItem Classes="default" Header="Move">
-            <ContentControl Content="{Binding Settings}"/>
-        </TabItem>
-        <TabItem Classes="default" Header="Filters">
-            <ScrollViewer>
-                <Grid RowDefinitions="Auto,*" IsVisible="{Binding !!Filters.Count}">
-                    <ComboBox Classes="default" Grid.Row="0" x:Name="filters" Items="{Binding Filters}" SelectedItem="{Binding CurrentFilter, Mode=TwoWay}">
-                        <ComboBox.DataTemplates>
-                            <DataTemplate>
-                                <TextBlock Classes="default" Text="{Binding Title}"/>
-                            </DataTemplate>
-                        </ComboBox.DataTemplates>
-                    </ComboBox>
-                    <ContentControl Grid.Row="1" Content="{Binding CurrentFilter.Settings}"/>
-                </Grid>
-            </ScrollViewer>
-        </TabItem>
-    </TabControl>
+  <TabControl Classes="default" TabStripPlacement="Top">
+    <TabItem Classes="default" Header="Move">
+      <ContentControl Content="{Binding Settings}" />
+    </TabItem>
+    <TabItem Classes="default" Header="Filters">
+      <ScrollViewer>
+        <Grid RowDefinitions="Auto,*" IsVisible="{Binding !!Filters.Count}">
+          <ComboBox Classes="default" Grid.Row="0" x:Name="filters" Items="{Binding Filters}"
+                    SelectedItem="{Binding CurrentFilter, Mode=TwoWay}">
+            <ComboBox.DataTemplates>
+              <DataTemplate>
+                <TextBlock Classes="default" Text="{Binding Title}" />
+              </DataTemplate>
+            </ComboBox.DataTemplates>
+          </ComboBox>
+          <ContentControl Grid.Row="1" Content="{Binding CurrentFilter.Settings}" />
+        </Grid>
+      </ScrollViewer>
+    </TabItem>
+  </TabControl>
 </UserControl>

@@ -6,22 +6,23 @@
              xmlns:local="clr-namespace:Draw2D.Views.Tools"
              mc:Ignorable="d"
              d:DesignWidth="500" d:DesignHeight="400">
-    <TabControl Classes="default" TabStripPlacement="Top">
-        <TabItem Classes="default" Header="Settings">
-            <ScrollViewer>
-                <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="Auto,*">
-                    <TextBlock Classes="default" Grid.Column="0" Grid.Row="0" Text="Simplify"/>
-                    <CheckBox Classes="default" Grid.Column="1" Grid.Row="0" IsChecked="{Binding Simplify}"/>
-                    <TextBlock Classes="default" Grid.Column="0" Grid.Row="1" Text="Epsilon"/>
-                    <TextBox Classes="default" Grid.Column="1" Grid.Row="1" Text="{Binding Epsilon}"/>
-                    <TextBlock Classes="default" Grid.Column="0" Grid.Row="2" Text="FillType"/>
-                    <ComboBox Classes="default" Grid.Column="1" Grid.Row="2" Items="{Binding PathFillTypeValues}" SelectedItem="{Binding FillType, Mode=TwoWay}"/>
-                    <TextBlock Classes="default" Grid.Column="0" Grid.Row="3" Text="IsFilled"/>
-                    <CheckBox Classes="default" Grid.Column="1" Grid.Row="3" IsChecked="{Binding IsFilled}"/>
-                    <TextBlock Classes="default" Grid.Column="0" Grid.Row="4" Text="IsClosed"/>
-                    <CheckBox Classes="default" Grid.Column="1" Grid.Row="4" IsChecked="{Binding IsClosed}"/>
-                </Grid>
-            </ScrollViewer>
-        </TabItem>
-    </TabControl>
+  <TabControl Classes="default" TabStripPlacement="Top">
+    <TabItem Classes="default" Header="Settings">
+      <ScrollViewer>
+        <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="Auto,*">
+          <TextBlock Classes="default" Grid.Column="0" Grid.Row="0" Text="Simplify" />
+          <CheckBox Classes="default" Grid.Column="1" Grid.Row="0" IsChecked="{Binding Simplify}" />
+          <TextBlock Classes="default" Grid.Column="0" Grid.Row="1" Text="Epsilon" />
+          <TextBox Classes="default" Grid.Column="1" Grid.Row="1" Text="{Binding Epsilon}" />
+          <TextBlock Classes="default" Grid.Column="0" Grid.Row="2" Text="FillType" />
+          <ComboBox Classes="default" Grid.Column="1" Grid.Row="2" Items="{Binding PathFillTypeValues}"
+                    SelectedItem="{Binding FillType, Mode=TwoWay}" />
+          <TextBlock Classes="default" Grid.Column="0" Grid.Row="3" Text="IsFilled" />
+          <CheckBox Classes="default" Grid.Column="1" Grid.Row="3" IsChecked="{Binding IsFilled}" />
+          <TextBlock Classes="default" Grid.Column="0" Grid.Row="4" Text="IsClosed" />
+          <CheckBox Classes="default" Grid.Column="1" Grid.Row="4" IsChecked="{Binding IsClosed}" />
+        </Grid>
+      </ScrollViewer>
+    </TabItem>
+  </TabControl>
 </UserControl>

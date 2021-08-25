@@ -7,66 +7,66 @@
              xmlns:converters="clr-namespace:Draw2D.Converters"
              mc:Ignorable="d"
              d:DesignWidth="500" d:DesignHeight="400">
-    <UserControl.Resources>
-        <converters:StyleIdToStyleConverter x:Key="StyleIdToStyleConverter"/>
-    </UserControl.Resources>
-    <TabControl Classes="default" TabStripPlacement="Top">
-        <TabItem Classes="default" Header="Group">
-            <ScrollViewer>
-                <Grid RowDefinitions="Auto" ColumnDefinitions="Auto,*">
-                    <TextBlock Classes="default" Grid.Column="0" Grid.Row="0" Text="Title"/>
-                    <TextBox Classes="default" Grid.Column="1" Grid.Row="0" Text="{Binding Title}"/>
-                </Grid>
-            </ScrollViewer>
-        </TabItem>
+  <UserControl.Resources>
+    <converters:StyleIdToStyleConverter x:Key="StyleIdToStyleConverter" />
+  </UserControl.Resources>
+  <TabControl Classes="default" TabStripPlacement="Top">
+    <TabItem Classes="default" Header="Group">
+      <ScrollViewer>
+        <Grid RowDefinitions="Auto" ColumnDefinitions="Auto,*">
+          <TextBlock Classes="default" Grid.Column="0" Grid.Row="0" Text="Title" />
+          <TextBox Classes="default" Grid.Column="1" Grid.Row="0" Text="{Binding Title}" />
+        </Grid>
+      </ScrollViewer>
+    </TabItem>
+    <TabItem Classes="default" Header="Shapes">
+      <TabControl Classes="default" TabStripPlacement="Top">
         <TabItem Classes="default" Header="Shapes">
-            <TabControl Classes="default" TabStripPlacement="Top">
-                <TabItem Classes="default" Header="Shapes">
-                    <ListBox x:Name="shapes" Classes="default" Items="{Binding Shapes}">
-                        <ListBox.DataTemplates>
-                            <DataTemplate>
-                                <TextBlock Classes="list" Text="{Binding}"/>
-                            </DataTemplate>
-                        </ListBox.DataTemplates>
-                    </ListBox>
-                </TabItem>
-                <TabItem Classes="default" Header="Selected">
-                    <ContentControl Content="{Binding #shapes.SelectedItem}"/>
-                </TabItem>
-            </TabControl>
+          <ListBox x:Name="shapes" Classes="default" Items="{Binding Shapes}">
+            <ListBox.DataTemplates>
+              <DataTemplate>
+                <TextBlock Classes="list" Text="{Binding}" />
+              </DataTemplate>
+            </ListBox.DataTemplates>
+          </ListBox>
         </TabItem>
+        <TabItem Classes="default" Header="Selected">
+          <ContentControl Content="{Binding #shapes.SelectedItem}" />
+        </TabItem>
+      </TabControl>
+    </TabItem>
+    <TabItem Classes="default" Header="Points">
+      <TabControl Classes="default" TabStripPlacement="Top">
         <TabItem Classes="default" Header="Points">
-            <TabControl Classes="default" TabStripPlacement="Top">
-                <TabItem Classes="default" Header="Points">
-                    <ListBox x:Name="points" Classes="default" Items="{Binding Points}">
-                        <ListBox.DataTemplates>
-                            <DataTemplate>
-                                <TextBlock Classes="list" Text="{Binding}"/>
-                            </DataTemplate>
-                        </ListBox.DataTemplates>
-                    </ListBox>
-                </TabItem>
-                <TabItem Classes="default" Header="Selected">
-                    <ContentControl Content="{Binding #points.SelectedItem}"/>
-                </TabItem>
-            </TabControl>
+          <ListBox x:Name="points" Classes="default" Items="{Binding Points}">
+            <ListBox.DataTemplates>
+              <DataTemplate>
+                <TextBlock Classes="list" Text="{Binding}" />
+              </DataTemplate>
+            </ListBox.DataTemplates>
+          </ListBox>
         </TabItem>
-        <TabItem Classes="default" Header="Style">
-            <Grid RowDefinitions="Auto,*" ColumnDefinitions="Auto,*">
-                <TextBlock Classes="default" Grid.Column="0" Grid.Row="0" Text="StyleId"/>
-                <TextBox Classes="default" Grid.Column="1" Grid.Row="0" Text="{Binding StyleId}"/>
-                <ContentControl Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="1">
-                    <ContentControl.Content>
-                        <MultiBinding Mode="OneWay" Converter="{StaticResource StyleIdToStyleConverter}">
-                            <Binding Path="StyleId" Mode="OneWay"/>
-                            <Binding Path="$parent[Window].DataContext.DocumentContainer.StyleLibrary" Mode="OneWay"/>
-                        </MultiBinding>
-                    </ContentControl.Content>
-                </ContentControl>
-            </Grid>
+        <TabItem Classes="default" Header="Selected">
+          <ContentControl Content="{Binding #points.SelectedItem}" />
         </TabItem>
-        <TabItem Classes="default" Header="Effects">
-            <ContentControl Content="{Binding Effects}"/>
-        </TabItem>
-    </TabControl>
+      </TabControl>
+    </TabItem>
+    <TabItem Classes="default" Header="Style">
+      <Grid RowDefinitions="Auto,*" ColumnDefinitions="Auto,*">
+        <TextBlock Classes="default" Grid.Column="0" Grid.Row="0" Text="StyleId" />
+        <TextBox Classes="default" Grid.Column="1" Grid.Row="0" Text="{Binding StyleId}" />
+        <ContentControl Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="1">
+          <ContentControl.Content>
+            <MultiBinding Mode="OneWay" Converter="{StaticResource StyleIdToStyleConverter}">
+              <Binding Path="StyleId" Mode="OneWay" />
+              <Binding Path="$parent[Window].DataContext.DocumentContainer.StyleLibrary" Mode="OneWay" />
+            </MultiBinding>
+          </ContentControl.Content>
+        </ContentControl>
+      </Grid>
+    </TabItem>
+    <TabItem Classes="default" Header="Effects">
+      <ContentControl Content="{Binding Effects}" />
+    </TabItem>
+  </TabControl>
 </UserControl>

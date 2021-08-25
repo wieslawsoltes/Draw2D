@@ -86,27 +86,34 @@
       <TabControl Grid.Row="2" Classes="default" TabStripPlacement="Top">
         <TabItem Classes="default" Header="Styles">
           <Grid RowDefinitions="Auto,*" ColumnDefinitions="3*,3*,3*" DataContext="{Binding DocumentContainer}">
-            <Button Classes="default" Content="Remove" Command="{Binding StyleLibrary.Remove}" CommandParameter="{Binding StyleLibrary.CurrentItem}" Grid.Row="0" Grid.Column="0"/>
-            <Button Classes="default" Content="Add" Command="{Binding StyleLibrary.Add}" CommandParameter="{x:Null}" Grid.Row="0" Grid.Column="1"/>
-            <Button Classes="default" Content="Set" Command="{Binding ContainerView.Style}" CommandParameter="{Binding StyleLibrary.CurrentItem.Title}" Grid.Row="0" Grid.Column="2"/>
-            <ContentControl Content="{Binding StyleLibrary}" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3"/>
+            <Button Classes="default" Content="Remove" Command="{Binding StyleLibrary.Remove}"
+                    CommandParameter="{Binding StyleLibrary.CurrentItem}" Grid.Row="0" Grid.Column="0" />
+            <Button Classes="default" Content="Add" Command="{Binding StyleLibrary.Add}" CommandParameter="{x:Null}"
+                    Grid.Row="0" Grid.Column="1" />
+            <Button Classes="default" Content="Set" Command="{Binding ContainerView.Style}"
+                    CommandParameter="{Binding StyleLibrary.CurrentItem.Title}" Grid.Row="0" Grid.Column="2" />
+            <ContentControl Content="{Binding StyleLibrary}" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" />
           </Grid>
         </TabItem>
         <TabItem Classes="default" Header="Views">
-          <ListBox Classes="default" Items="{Binding ContainerViews}" SelectedItem="{Binding ContainerView}" DataContext="{Binding DocumentContainer}">
+          <ListBox Classes="default" Items="{Binding ContainerViews}" SelectedItem="{Binding ContainerView}"
+                   DataContext="{Binding DocumentContainer}">
             <ListBox.DataTemplates>
               <DataTemplate>
-                <TextBlock Classes="list" Text="{Binding Title}"/>
+                <TextBlock Classes="list" Text="{Binding Title}" />
               </DataTemplate>
             </ListBox.DataTemplates>
           </ListBox>
         </TabItem>
         <TabItem Classes="default" Header="Groups">
           <Grid RowDefinitions="Auto,*" ColumnDefinitions="3*,3*,3*" DataContext="{Binding DocumentContainer}">
-            <Button Classes="default" Content="Remove" Command="{Binding GroupLibrary.Remove}" CommandParameter="{Binding GroupLibrary.CurrentItem}" Grid.Row="0" Grid.Column="0"/>
-            <Button Classes="default" Content="Add" Command="{Binding GroupLibrary.Add}" CommandParameter="{Binding ContainerView.SelectionState.Selected}" Grid.Row="0" Grid.Column="1"/>
-            <Button Classes="default" Content="Insert" Command="{Binding ContainerView.Reference}" CommandParameter="{Binding GroupLibrary.CurrentItem}" Grid.Row="0" Grid.Column="2"/>
-            <ContentControl Content="{Binding GroupLibrary}" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3"/>
+            <Button Classes="default" Content="Remove" Command="{Binding GroupLibrary.Remove}"
+                    CommandParameter="{Binding GroupLibrary.CurrentItem}" Grid.Row="0" Grid.Column="0" />
+            <Button Classes="default" Content="Add" Command="{Binding GroupLibrary.Add}"
+                    CommandParameter="{Binding ContainerView.SelectionState.Selected}" Grid.Row="0" Grid.Column="1" />
+            <Button Classes="default" Content="Insert" Command="{Binding ContainerView.Reference}"
+                    CommandParameter="{Binding GroupLibrary.CurrentItem}" Grid.Row="0" Grid.Column="2" />
+            <ContentControl Content="{Binding GroupLibrary}" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" />
           </Grid>
         </TabItem>
         <TabItem Classes="default" Header="Document">

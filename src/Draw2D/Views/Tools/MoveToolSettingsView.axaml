@@ -6,12 +6,11 @@
              xmlns:local="clr-namespace:Draw2D.Views.Tools"
              mc:Ignorable="d"
              d:DesignWidth="500" d:DesignHeight="400">
-    <TabControl Classes="default" TabStripPlacement="Top">
-        <TabItem Classes="default" Header="Settings">
-            <ScrollViewer>
-                <Grid>
-                </Grid>
-            </ScrollViewer>
-        </TabItem>
-    </TabControl>
+  <TabControl Classes="default" TabStripPlacement="Top">
+    <TabItem Classes="default" Header="Settings">
+      <ScrollViewer>
+        <Grid />
+      </ScrollViewer>
+    </TabItem>
+  </TabControl>
 </UserControl>
