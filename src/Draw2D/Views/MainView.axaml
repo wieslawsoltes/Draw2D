@@ -10,18 +10,109 @@
              mc:Ignorable="d"
              d:DataContext="{x:Static app:App.ToolContext}"
              d:DesignWidth="1320" d:DesignHeight="690">
-    <UserControl.KeyBindings>
-        <KeyBinding Command="{Binding NewContainerView}" CommandParameter="View" Gesture="Ctrl+N"/>
-        <KeyBinding Command="{Binding OpenDocumentContainer}" Gesture="Ctrl+O"/>
-        <KeyBinding Command="{Binding SaveDocumentContainerAs}" Gesture="Ctrl+S"/>
-        <KeyBinding Command="{Binding ImportFile}" Gesture="Ctrl+I"/>
-        <KeyBinding Command="{Binding ExportFile}" Gesture="Ctrl+E"/>
-        <KeyBinding Command="{Binding Exit}" Gesture="Alt+F4"/>
-    </UserControl.KeyBindings>
-    <Grid RowDefinitions="Auto,5,*,5" ColumnDefinitions="320,Auto,*">
-        <local:MenuView Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="5"/>
-        <local:PropertiesView Grid.Row="2" Grid.Column="0"/>
-        <GridSplitter Classes="vertical" Grid.Row="2" Grid.Column="1"/>
-        <local:ContainersView Grid.Row="2" Grid.Column="2"/>
+  <UserControl.KeyBindings>
+    <KeyBinding Command="{Binding NewContainerView}" CommandParameter="View" Gesture="Ctrl+N" />
+    <KeyBinding Command="{Binding OpenDocumentContainer}" Gesture="Ctrl+O" />
+    <KeyBinding Command="{Binding SaveDocumentContainerAs}" Gesture="Ctrl+S" />
+    <KeyBinding Command="{Binding ImportFile}" Gesture="Ctrl+I" />
+    <KeyBinding Command="{Binding ExportFile}" Gesture="Ctrl+E" />
+    <KeyBinding Command="{Binding Exit}" Gesture="Alt+F4" />
+  </UserControl.KeyBindings>
+  <Grid RowDefinitions="Auto,5,*,5" ColumnDefinitions="250,Auto,*,Auto,250">
+    <local:MenuView Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="5" />
+    <Grid RowDefinitions="*,5,*" Grid.Row="2" Grid.Column="0">
+      <TabControl Grid.Row="0" Classes="default" TabStripPlacement="Top">
+        <TabItem Classes="default" Header="View">
+          <ContentControl Content="{Binding DocumentContainer.ContainerView}" />
+        </TabItem>
+        <TabItem Classes="default" Header="Container">
+          <ContentControl Content="{Binding DocumentContainer.ContainerView.CurrentContainer}" />
+        </TabItem>
+      </TabControl>
+      <GridSplitter Classes="horizontal" Grid.Row="1" />
+      <TabControl Grid.Row="2" Classes="default" TabStripPlacement="Top">
+        <TabItem Classes="default" Header="Style">
+          <Grid RowDefinitions="Auto,*">
+            <ComboBox Classes="default" Grid.Row="0" Items="{Binding DocumentContainer.StyleLibrary.Items}"
+                      SelectedItem="{Binding DocumentContainer.StyleLibrary.CurrentItem, Mode=TwoWay}"
+                      IsVisible="{Binding !!DocumentContainer.StyleLibrary.CurrentItem}">
+              <ComboBox.DataTemplates>
+                <DataTemplate>
+                  <TextBlock Classes="default" Text="{Binding Title}" />
+                </DataTemplate>
+              </ComboBox.DataTemplates>
+            </ComboBox>
+            <ContentControl Grid.Row="1" Content="{Binding DocumentContainer.StyleLibrary.CurrentItem}" />
+          </Grid>
+        </TabItem>
+        <TabItem Classes="default" Header="Group">
+          <Grid RowDefinitions="Auto,*">
+            <ComboBox Classes="default" Grid.Row="0" Items="{Binding DocumentContainer.GroupLibrary.Items}"
+                      SelectedItem="{Binding DocumentContainer.GroupLibrary.CurrentItem, Mode=TwoWay}"
+                      IsVisible="{Binding !!DocumentContainer.GroupLibrary.CurrentItem}">
+              <ComboBox.DataTemplates>
+                <DataTemplate>
+                  <TextBlock Classes="default" Text="{Binding Title}" />
+                </DataTemplate>
+              </ComboBox.DataTemplates>
+            </ComboBox>
+            <ContentControl Grid.Row="1" Content="{Binding DocumentContainer.GroupLibrary.CurrentItemm}" />
+          </Grid>
+        </TabItem>
+      </TabControl>
     </Grid>
+    <GridSplitter Classes="vertical" Grid.Row="2" Grid.Column="1" />
+    <local:ContainersView Grid.Row="2" Grid.Column="2" />
+    <GridSplitter Classes="vertical" Grid.Row="2" Grid.Column="3" />
+    <Grid RowDefinitions="*,5,*" Grid.Row="2" Grid.Column="4">
+      <TabControl Grid.Row="0" Classes="default" TabStripPlacement="Top">
+        <TabItem Classes="default" Header="Selected">
+          <ContentControl Content="{Binding DocumentContainer.ContainerView.SelectionState.Selected}" />
+        </TabItem>
+        <TabItem Classes="default" Header="Tool">
+          <ContentControl Content="{Binding CurrentTool}" />
+        </TabItem>
+        <TabItem Classes="default" Header="Tools">
+          <ListBox Classes="default" Items="{Binding Tools}" SelectedItem="{Binding CurrentTool}">
+            <ListBox.DataTemplates>
+              <DataTemplate>
+                <TextBlock Classes="list" Text="{Binding Title}" />
+              </DataTemplate>
+            </ListBox.DataTemplates>
+          </ListBox>
+        </TabItem>
+      </TabControl>
+      <GridSplitter Classes="horizontal" Grid.Row="1" />
+      <TabControl Grid.Row="2" Classes="default" TabStripPlacement="Top">
+        <TabItem Classes="default" Header="Styles">
+          <Grid RowDefinitions="Auto,*" ColumnDefinitions="3*,3*,3*" DataContext="{Binding DocumentContainer}">
+            <Button Classes="default" Content="Remove" Command="{Binding StyleLibrary.Remove}" CommandParameter="{Binding StyleLibrary.CurrentItem}" Grid.Row="0" Grid.Column="0"/>
+            <Button Classes="default" Content="Add" Command="{Binding StyleLibrary.Add}" CommandParameter="{x:Null}" Grid.Row="0" Grid.Column="1"/>
+            <Button Classes="default" Content="Set" Command="{Binding ContainerView.Style}" CommandParameter="{Binding StyleLibrary.CurrentItem.Title}" Grid.Row="0" Grid.Column="2"/>
+            <ContentControl Content="{Binding StyleLibrary}" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3"/>
+          </Grid>
+        </TabItem>
+        <TabItem Classes="default" Header="Views">
+          <ListBox Classes="default" Items="{Binding ContainerViews}" SelectedItem="{Binding ContainerView}" DataContext="{Binding DocumentContainer}">
+            <ListBox.DataTemplates>
+              <DataTemplate>
+                <TextBlock Classes="list" Text="{Binding Title}"/>
+              </DataTemplate>
+            </ListBox.DataTemplates>
+          </ListBox>
+        </TabItem>
+        <TabItem Classes="default" Header="Groups">
+          <Grid RowDefinitions="Auto,*" ColumnDefinitions="3*,3*,3*" DataContext="{Binding DocumentContainer}">
+            <Button Classes="default" Content="Remove" Command="{Binding GroupLibrary.Remove}" CommandParameter="{Binding GroupLibrary.CurrentItem}" Grid.Row="0" Grid.Column="0"/>
+            <Button Classes="default" Content="Add" Command="{Binding GroupLibrary.Add}" CommandParameter="{Binding ContainerView.SelectionState.Selected}" Grid.Row="0" Grid.Column="1"/>
+            <Button Classes="default" Content="Insert" Command="{Binding ContainerView.Reference}" CommandParameter="{Binding GroupLibrary.CurrentItem}" Grid.Row="0" Grid.Column="2"/>
+            <ContentControl Content="{Binding GroupLibrary}" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3"/>
+          </Grid>
+        </TabItem>
+        <TabItem Classes="default" Header="Document">
+          <ContentControl Content="{Binding DocumentContainer}" />
+        </TabItem>
+      </TabControl>
+    </Grid>
+  </Grid>
 </UserControl>
