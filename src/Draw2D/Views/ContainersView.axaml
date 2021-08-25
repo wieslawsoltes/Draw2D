@@ -23,27 +23,10 @@
           </Setter>
         </Style>
         <Style Selector="TabStripItem">
-          <Setter Property="Background" Value="{DynamicResource ThemeBackgroundBrush}" />
-          <Setter Property="FontSize" Value="{DynamicResource FontSizeNormal}" />
-          <Setter Property="Foreground" Value="{DynamicResource ThemeForegroundLowBrush}" />
           <Setter Property="HorizontalContentAlignment" Value="Left" />
-          <Setter Property="Padding" Value="2" />
+          <Setter Property="Padding" Value="4,4,4,4" />
           <Setter Property="Margin" Value="0" />
-        </Style>
-        <Style Selector="TabStripItem:pointerover">
-          <Setter Property="Background" Value="{DynamicResource ThemeAccentBrush3}" />
-        </Style>
-        <Style Selector="TabStripItem:selected">
-          <Setter Property="Background" Value="{DynamicResource ThemeAccentBrush2}" />
-        </Style>
-        <Style Selector="TabStripItem:selected:focus">
-          <Setter Property="Background" Value="{DynamicResource ThemeAccentBrush2}" />
-        </Style>
-        <Style Selector="TabStripItem:selected:pointerover">
-          <Setter Property="Background" Value="{DynamicResource ThemeAccentBrush2}" />
-        </Style>
-        <Style Selector="TabStripItem:selected:focus:pointerover">
-          <Setter Property="Background" Value="{DynamicResource ThemeAccentBrush2}" />
+          <Setter Property="MinHeight" Value="0" />
         </Style>
         <Style Selector="Button.tab">
           <Setter Property="Background" Value="Transparent" />
@@ -51,14 +34,14 @@
           <Setter Property="Padding" Value="0" />
           <Setter Property="Margin" Value="0" />
         </Style>
-        <Style Selector="Button.tab:pointerover">
-          <Setter Property="Background" Value="{DynamicResource ThemeAccentBrush3}" />
+        <Style Selector="TabStripItem Button.tab Path">
+          <Setter Property="Fill" Value="{DynamicResource SystemChromeDisabledLowColor}" />
         </Style>
-        <Style Selector="TabStripItem:selected Button.tab Path">
-          <Setter Property="Fill" Value="{DynamicResource ThemeForegroundLowBrush}" />
+        <Style Selector="TabStripItem Button:pointerover.tab Path">
+          <Setter Property="Fill" Value="{DynamicResource SystemAccentColorDark1}" />
         </Style>
-        <Style Selector="TabStripItem:pointerover Button.tab Path">
-          <Setter Property="Fill" Value="{DynamicResource ThemeForegroundLowBrush}" />
+        <Style Selector="TabStripItem Button:pressed.tab Path">
+          <Setter Property="Fill" Value="{DynamicResource SystemAccentColorLight1}" />
         </Style>
       </TabStrip.Styles>
       <TabStrip.DataTemplates>
