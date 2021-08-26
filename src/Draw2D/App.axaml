@@ -91,7 +91,7 @@
       <Setter Property="Margin" Value="4" />
       <Setter Property="BorderThickness" Value="0" />
       <Setter Property="AutoScrollToSelectedItem" Value="True" />
-      <Setter Property="Background" Value="Transparent" />
+      <Setter Property="Background" Value="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}" />
     </Style>
     <Style Selector="ListBox.default ListBoxItem">
       <Setter Property="Padding" Value="4" />
@@ -122,6 +122,12 @@
       </Setter>
       <Setter Property="Padding" Value="0" />
       <Setter Property="Margin" Value="0" />
+    </Style>
+    <Style Selector="TabControl.default /template/ ItemsPresenter#PART_ItemsPresenter > WrapPanel">
+      <Setter Property="Background" Value="{DynamicResource SystemControlBackgroundAltHighBrush}"/>
+    </Style>
+    <Style Selector="TabControl.default /template/ ContentPresenter">
+      <Setter Property="Background" Value="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}"/>
     </Style>
     <Style Selector="TabItem.default">
       <Setter Property="MinHeight" Value="0" />
@@ -155,6 +161,9 @@
       <Setter Property="Margin" Value="4" />
       <Setter Property="BorderThickness" Value="1" />
       <Setter Property="AutoScrollToSelectedItem" Value="True" />
+    </Style>
+    <Style Selector="Window.default">
+      <Setter Property="Background" Value="{DynamicResource SystemControlBackgroundAltHighBrush}"/>
     </Style>
   </Application.Styles>
   <Application.Resources>
