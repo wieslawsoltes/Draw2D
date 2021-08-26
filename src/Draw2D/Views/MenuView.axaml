@@ -13,7 +13,7 @@
   <UserControl.Resources>
     <converters:IsEqualStringConverter x:Key="IsEqualStringConverter" />
   </UserControl.Resources>
-  <Menu Background="Transparent">
+  <Menu>
     <MenuItem Header="_File">
       <MenuItem Header="_New View" Command="{Binding NewContainerView}" CommandParameter="View" />
       <Separator />
