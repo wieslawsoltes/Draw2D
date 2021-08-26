@@ -8,6 +8,7 @@
         WindowState="Maximized" WindowStartupLocation="CenterScreen"
         UseLayoutRounding="True" RenderOptions.BitmapInterpolationMode="HighQuality"
         Title="Draw2D" Height="690" Width="1320"
+        Classes="default"
         mc:Ignorable="d"
         d:DataContext="{x:Static app:App.ToolContext}"
         d:DesignWidth="1320" d:DesignHeight="690">
