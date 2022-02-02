@@ -5,6 +5,7 @@ using Avalonia.Media.Imaging;
 using Avalonia.Skia;
 using Draw2D.ViewModels.Containers;
 using Draw2D.ViewModels.Tools;
+using SkiaSharp;
 
 namespace Draw2D.Presenters
 {
@@ -47,23 +48,37 @@ namespace Draw2D.Presenters
                 if (_renderTarget == null)
                 {
                     _renderScaling = renderScaling;
-                    _renderTarget = new RenderTargetBitmap(new PixelSize((int)width, (int)height), new Vector(96 * _renderScaling, 96 * _renderScaling));
+                    _renderTarget = new RenderTargetBitmap(
+                        new PixelSize((int)(width / _renderScaling), (int)(height / _renderScaling)), 
+                        new Vector(96, 96 ));
                 }
                 else if (_renderTarget.PixelSize.Width != (int)width || _renderTarget.PixelSize.Height != (int)height || Math.Abs(_renderScaling - renderScaling) > double.Epsilon)
                 {
                     _renderScaling = renderScaling;
                     _renderTarget.Dispose();
-                    _renderTarget = new RenderTargetBitmap(new PixelSize((int)width, (int)height), new Vector(96* _renderScaling, 96 * _renderScaling));
+                    _renderTarget = new RenderTargetBitmap(
+                        new PixelSize((int)(width / _renderScaling), (int)(height / _renderScaling)), 
+                        new Vector(96, 96));
                 }
 
                 using var drawingContextImpl = _renderTarget.CreateDrawingContext(null);
                 var skiaDrawingContextImpl = drawingContextImpl as ISkiaDrawingContextImpl;
 
-                _editorContainerPresenter.Draw(skiaDrawingContextImpl.SkCanvas, width, height, dx, dy, zx, zy, renderScaling);
+                if (skiaDrawingContextImpl?.SkCanvas is { } skCanvas)
+                {
+                    var skMatrix = SKMatrix.CreateScale((float)(1.0 / renderScaling), (float)(1.0 / renderScaling));
+
+                    skCanvas.Save();
+                    skCanvas.SetMatrix(skMatrix);
+ 
+                    _editorContainerPresenter.Draw(skCanvas, width, height, dx, dy, zx, zy, renderScaling);
+
+                    skCanvas.Restore();
+                }
 
                 drawingContext.DrawImage(_renderTarget,
                     new Rect(0, 0, _renderTarget.PixelSize.Width, _renderTarget.PixelSize.Height),
-                    new Rect(0, 0, width, height));
+                    new Rect(0, 0, _renderTarget.PixelSize.Width, _renderTarget.PixelSize.Height));
             }
         }
     }
