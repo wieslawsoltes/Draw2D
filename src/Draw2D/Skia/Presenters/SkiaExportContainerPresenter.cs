@@ -20,7 +20,7 @@ namespace Draw2D.Presenters
         {
         }
 
-        public void Draw(object context, double width, double height, double dx, double dy, double zx, double zy)
+        public void Draw(object context, double width, double height, double dx, double dy, double zx, double zy, double renderScaling)
         {
             using var renderer = new SkiaShapeRenderer(_context, _view, _view.SelectionState);
             using var disposable = new CompositeDisposable();

@@ -5,6 +5,6 @@ namespace Core2D.UI.Zoom.Input
     {
         IInputService InputService { get; set; }
         IZoomService ZoomService { get; set; }
-        void Draw(object context, double width, double height, double dx, double dy, double zx, double zy);
+        void Draw(object context, double width, double height, double dx, double dy, double zx, double zy, double renderScaling);
     }
 }

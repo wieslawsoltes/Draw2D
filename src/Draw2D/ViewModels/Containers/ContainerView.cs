@@ -126,9 +126,9 @@ namespace Draw2D.ViewModels.Containers
             return new PointShape(x, y, context?.DocumentContainer?.PointTemplate);
         }
 
-        public void Draw(object context, double width, double height, double dx, double dy, double zx, double zy)
+        public void Draw(object context, double width, double height, double dx, double dy, double zx, double zy, double renderScaling)
         {
-            _containerPresenter?.Draw(context, width, height, dx, dy, zx, zy);
+            _containerPresenter?.Draw(context, width, height, dx, dy, zx, zy, renderScaling);
         }
 
         public void Add(IBaseShape shape)

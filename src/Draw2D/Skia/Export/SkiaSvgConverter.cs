@@ -37,12 +37,12 @@ namespace Draw2D.Export
                 if (containerView.SelectionState?.Shapes?.Count > 0)
                 {
                     using var skiaSelectedPresenter = new SkiaExportSelectedPresenter(context, containerView);
-                    skiaSelectedPresenter.Draw(canvas, containerView.Width, containerView.Height, 0, 0, 1.0, 1.0);
+                    skiaSelectedPresenter.Draw(canvas, containerView.Width, containerView.Height, 0, 0, 1.0, 1.0, 1.0);
                 }
                 else
                 {
                     using var skiaContainerPresenter = new SkiaExportContainerPresenter(context, containerView);
-                    skiaContainerPresenter.Draw(canvas, containerView.Width, containerView.Height, 0, 0, 1.0, 1.0);
+                    skiaContainerPresenter.Draw(canvas, containerView.Width, containerView.Height, 0, 0, 1.0, 1.0, 1.0);
                 }
             }
 

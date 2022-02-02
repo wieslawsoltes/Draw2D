@@ -110,9 +110,9 @@ namespace Draw2D.ViewModels.Tools
             return _context.DocumentContainer.ContainerView.GetNextPoint(_context, x, y, connect, radius, scale, modifier);
         }
 
-        public void Draw(object context, double width, double height, double dx, double dy, double zx, double zy)
+        public void Draw(object context, double width, double height, double dx, double dy, double zx, double zy, double renderScaling)
         {
-            _context.DocumentContainer.ContainerView.Draw(context, width, height, dx, dy, zx, zy);
+            _context.DocumentContainer.ContainerView.Draw(context, width, height, dx, dy, zx, zy, renderScaling);
         }
 
         public void Add(IBaseShape shape)

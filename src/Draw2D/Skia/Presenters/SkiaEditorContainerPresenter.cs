@@ -203,7 +203,7 @@ namespace Draw2D.Presenters
             canvas.Restore();
         }
 
-        public void Draw(object context, double width, double height, double dx, double dy, double zx, double zy)
+        public void Draw(object context, double width, double height, double dx, double dy, double zx, double zy, double renderScaling)
         {
             bool isStyleLibraryDirty = _context.DocumentContainer.StyleLibrary.IsTreeDirty();
             bool isCurrentContainerDirty = _view.CurrentContainer.IsTreeDirty();

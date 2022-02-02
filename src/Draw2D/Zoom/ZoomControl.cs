@@ -5,6 +5,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Media;
+using Avalonia.Rendering;
 using Avalonia.VisualTree;
 using Core2D.UI.Zoom.Input;
 
@@ -649,7 +650,9 @@ namespace Core2D.UI.Zoom
 
                 GetOffset(out double dx, out double dy, out double zx, out double zy);
 
-                _drawTarget.Draw(context, Bounds.Width, Bounds.Height, dx, dy, zx, zy);
+                var renderScaling = this.GetVisualRoot().RenderScaling;
+
+                _drawTarget.Draw(context, Bounds.Width, Bounds.Height, dx, dy, zx, zy, renderScaling);
 
                 if (_zoomServiceState.IsZooming == true)
                 {
