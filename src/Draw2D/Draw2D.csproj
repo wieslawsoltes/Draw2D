@@ -1,11 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <OutputType>WinExe</OutputType>
+    <OutputType>Library</OutputType>
     <TargetFramework>net6.0</TargetFramework>
     <IsPackable>False</IsPackable>
     <LangVersion>latest</LangVersion>
     <Nullable>disable</Nullable>
+    <RootNamespace>Draw2D</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

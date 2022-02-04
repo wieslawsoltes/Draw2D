@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Avalonia;
 using Avalonia.OpenGL;
 
-namespace Draw2D
+namespace Draw2D.Desktop
 {
     class Program
     {

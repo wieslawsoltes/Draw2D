@@ -212,6 +212,8 @@ namespace Draw2D
             }
             else if (ApplicationLifetime is ISingleViewApplicationLifetime singleViewLifetime)
             {
+                App.Load();
+
                 var view = new MainView
                 {
                     DataContext = App.ToolContext
@@ -219,7 +221,6 @@ namespace Draw2D
 
                 view.Initialized += (sennder, e) =>
                 {
-                    App.Load();
                 };
 
                 singleViewLifetime.MainView = view;
