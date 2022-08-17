@@ -44,7 +44,7 @@
           <Setter Property="Fill" Value="{DynamicResource SystemAccentColorLight1}" />
         </Style>
       </TabStrip.Styles>
-      <TabStrip.DataTemplates>
+      <TabStrip.ItemTemplate>
         <DataTemplate>
           <StackPanel Orientation="Horizontal" Margin="4,0,4,0" Spacing="2">
             <StackPanel Orientation="Horizontal" Margin="2">
@@ -58,11 +58,11 @@
             </Button>
           </StackPanel>
         </DataTemplate>
-      </TabStrip.DataTemplates>
+      </TabStrip.ItemTemplate>
     </TabStrip>
     <Carousel Items="{Binding DocumentContainer.ContainerViews}"
               SelectedItem="{Binding DocumentContainer.ContainerView, Mode=TwoWay}" IsVirtualized="False">
-      <Carousel.DataTemplates>
+      <Carousel.ItemTemplate>
         <DataTemplate>
           <Border Classes="background">
             <Border Classes="zoom">
@@ -174,7 +174,7 @@
             </Border>
           </Border>
         </DataTemplate>
-      </Carousel.DataTemplates>
+      </Carousel.ItemTemplate>
     </Carousel>
   </DockPanel>
 </UserControl>

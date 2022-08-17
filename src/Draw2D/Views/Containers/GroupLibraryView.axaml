@@ -9,11 +9,11 @@
   <TabControl Classes="default" TabStripPlacement="Top">
     <TabItem Classes="default" Header="Groups">
       <ListBox x:Name="groups" Classes="default" Items="{Binding Items}" SelectedItem="{Binding CurrentItem}">
-        <ListBox.DataTemplates>
+        <ListBox.ItemTemplate>
           <DataTemplate>
             <TextBlock Classes="list" Text="{Binding Title}" />
           </DataTemplate>
-        </ListBox.DataTemplates>
+        </ListBox.ItemTemplate>
       </ListBox>
       <!--
       <DataGrid x:Name="groups" Items="{Binding Items}" SelectedItem="{Binding CurrentItem}">

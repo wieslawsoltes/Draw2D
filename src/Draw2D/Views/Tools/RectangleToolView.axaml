@@ -15,11 +15,11 @@
         <Grid RowDefinitions="Auto,*" IsVisible="{Binding !!Filters.Count}">
           <ComboBox Classes="default" Grid.Row="0" x:Name="filters" Items="{Binding Filters}"
                     SelectedItem="{Binding CurrentFilter, Mode=TwoWay}">
-            <ComboBox.DataTemplates>
+            <ComboBox.ItemTemplate>
               <DataTemplate>
                 <TextBlock Classes="default" Text="{Binding Title}" />
               </DataTemplate>
-            </ComboBox.DataTemplates>
+            </ComboBox.ItemTemplate>
           </ComboBox>
           <ContentControl Grid.Row="1" Content="{Binding CurrentFilter.Settings}" />
         </Grid>

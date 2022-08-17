@@ -37,7 +37,6 @@ namespace Draw2D.Desktop
         {
             return new Win32PlatformOptions
             {
-                EnableMultitouch = true,
                 AllowEglInitialization = true,
                 UseDeferredRendering = true
             };

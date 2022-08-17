@@ -2,6 +2,7 @@
 using Avalonia;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
+using Avalonia.Platform;
 using Avalonia.Skia;
 using Draw2D.ViewModels.Containers;
 using Draw2D.ViewModels.Tools;
@@ -62,9 +63,14 @@ namespace Draw2D.Presenters
                 }
 
                 using var drawingContextImpl = _renderTarget.CreateDrawingContext(null);
-                var skiaDrawingContextImpl = drawingContextImpl as ISkiaDrawingContextImpl;
+                var leaseFeature = drawingContextImpl.GetFeature<ISkiaSharpApiLeaseFeature>();
+                if (leaseFeature is null)
+                {
+                    return;
+                }
+                using var lease = leaseFeature.Lease();
 
-                if (skiaDrawingContextImpl?.SkCanvas is { } skCanvas)
+                if (lease?.SkCanvas is { } skCanvas)
                 {
                     var skMatrix = SKMatrix.CreateScale((float)(1.0 / renderScaling), (float)(1.0 / renderScaling));
 

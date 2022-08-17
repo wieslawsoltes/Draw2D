@@ -24,11 +24,11 @@
           <TextBlock Classes="default" Grid.Column="0" Grid.Row="5" Text="CurrentTool" />
           <ComboBox Classes="default" Grid.Column="1" Grid.Row="5" Items="{Binding Tools}"
                     SelectedItem="{Binding CurrentTool, Mode=OneWay}">
-            <ComboBox.DataTemplates>
+            <ComboBox.ItemTemplate>
               <DataTemplate>
                 <TextBlock Classes="default" Text="{Binding Title}" />
               </DataTemplate>
-            </ComboBox.DataTemplates>
+            </ComboBox.ItemTemplate>
           </ComboBox>
         </Grid>
       </ScrollViewer>
@@ -43,11 +43,11 @@
         </TabItem>
         <TabItem Classes="default" Header="Tools">
           <ListBox Classes="default" Items="{Binding Tools}" SelectedItem="{Binding CurrentTool}">
-            <ListBox.DataTemplates>
+            <ListBox.ItemTemplate>
               <DataTemplate>
                 <TextBlock Classes="list" Text="{Binding Title}" />
               </DataTemplate>
-            </ListBox.DataTemplates>
+            </ListBox.ItemTemplate>
           </ListBox>
         </TabItem>
       </TabControl>

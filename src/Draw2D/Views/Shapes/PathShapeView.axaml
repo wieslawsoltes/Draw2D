@@ -28,11 +28,11 @@
       <TabControl Classes="default" TabStripPlacement="Top">
         <TabItem Classes="default" Header="Shapes">
           <ListBox x:Name="shapes" Classes="default" Items="{Binding Shapes}">
-            <ListBox.DataTemplates>
+            <ListBox.ItemTemplate>
               <DataTemplate>
                 <TextBlock Classes="list" Text="{Binding}" />
               </DataTemplate>
-            </ListBox.DataTemplates>
+            </ListBox.ItemTemplate>
           </ListBox>
         </TabItem>
         <TabItem Classes="default" Header="Selected">
@@ -44,11 +44,11 @@
       <TabControl Classes="default" TabStripPlacement="Top">
         <TabItem Classes="default" Header="Points">
           <ListBox x:Name="points" Classes="default" Items="{Binding Points}">
-            <ListBox.DataTemplates>
+            <ListBox.ItemTemplate>
               <DataTemplate>
                 <TextBlock Classes="list" Text="{Binding}" />
               </DataTemplate>
-            </ListBox.DataTemplates>
+            </ListBox.ItemTemplate>
           </ListBox>
         </TabItem>
         <TabItem Classes="default" Header="Selected">

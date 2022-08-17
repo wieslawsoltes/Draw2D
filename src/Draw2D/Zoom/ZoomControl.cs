@@ -531,39 +531,35 @@ namespace Core2D.UI.Zoom
         protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e)
         {
             base.OnAttachedToVisualTree(e);
-
-            var md = (this.GetVisualRoot() as IInputRoot)?.MouseDevice;
-            if (md != null)
+            
+            this.Capture = () =>
             {
-                this.Capture = () =>
-                {
 #if DEBUG_POINTER_EVENTS
-                    System.Diagnostics.Debug.WriteLine($"[Capture] {_isCaptured}");
+                System.Diagnostics.Debug.WriteLine($"[Capture] {_isCaptured}");
 #endif
-                    _isCaptured = true;
-                };
+                _isCaptured = true;
+            };
 
-                this.Release = () =>
-                {
+            this.Release = () =>
+            {
 #if DEBUG_POINTER_EVENTS
-                    System.Diagnostics.Debug.WriteLine($"[Release] {_isCaptured}");
+                System.Diagnostics.Debug.WriteLine($"[Release] {_isCaptured}");
 #endif
-                    _isCaptured = false;
-                };
+                _isCaptured = false;
+            };
 
-                this.IsCaptured = () =>
-                {
+            this.IsCaptured = () =>
+            {
 #if DEBUG_POINTER_EVENTS
-                    System.Diagnostics.Debug.WriteLine($"[IsCaptured] {_isCaptured}");
+                System.Diagnostics.Debug.WriteLine($"[IsCaptured] {_isCaptured}");
 #endif
-                    return _isCaptured;
-                };
+                return _isCaptured;
+            };
 
-                this.Redraw = () =>
-                {
-                    this.InvalidateVisual();
-                };
-            }
+            this.Redraw = () =>
+            {
+                this.InvalidateVisual();
+            };
 
             if (_inputTarget != null && _drawTarget != null)
             {
@@ -583,9 +579,9 @@ namespace Core2D.UI.Zoom
             }
         }
 
-        protected override void OnPointerEnter(PointerEventArgs e)
+        protected override void OnPointerEntered(PointerEventArgs e)
         {
-            base.OnPointerEnter(e);
+            base.OnPointerEntered(e);
             this.Focus();
         }
 

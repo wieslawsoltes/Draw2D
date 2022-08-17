@@ -36,11 +36,11 @@
             <ComboBox Classes="default" Grid.Row="0" Items="{Binding DocumentContainer.StyleLibrary.Items}"
                       SelectedItem="{Binding DocumentContainer.StyleLibrary.CurrentItem, Mode=TwoWay}"
                       IsVisible="{Binding !!DocumentContainer.StyleLibrary.CurrentItem}">
-              <ComboBox.DataTemplates>
+              <ComboBox.ItemTemplate>
                 <DataTemplate>
                   <TextBlock Classes="default" Text="{Binding Title}" />
                 </DataTemplate>
-              </ComboBox.DataTemplates>
+              </ComboBox.ItemTemplate>
             </ComboBox>
             <ContentControl Grid.Row="1" Content="{Binding DocumentContainer.StyleLibrary.CurrentItem}" />
           </Grid>
@@ -50,11 +50,11 @@
             <ComboBox Classes="default" Grid.Row="0" Items="{Binding DocumentContainer.GroupLibrary.Items}"
                       SelectedItem="{Binding DocumentContainer.GroupLibrary.CurrentItem, Mode=TwoWay}"
                       IsVisible="{Binding !!DocumentContainer.GroupLibrary.CurrentItem}">
-              <ComboBox.DataTemplates>
+              <ComboBox.ItemTemplate>
                 <DataTemplate>
                   <TextBlock Classes="default" Text="{Binding Title}" />
                 </DataTemplate>
-              </ComboBox.DataTemplates>
+              </ComboBox.ItemTemplate>
             </ComboBox>
             <ContentControl Grid.Row="1" Content="{Binding DocumentContainer.GroupLibrary.CurrentItemm}" />
           </Grid>
@@ -74,11 +74,11 @@
         </TabItem>
         <TabItem Classes="default" Header="Tools">
           <ListBox Classes="default" Items="{Binding Tools}" SelectedItem="{Binding CurrentTool}">
-            <ListBox.DataTemplates>
+            <ListBox.ItemTemplate>
               <DataTemplate>
                 <TextBlock Classes="list" Text="{Binding Title}" />
               </DataTemplate>
-            </ListBox.DataTemplates>
+            </ListBox.ItemTemplate>
           </ListBox>
         </TabItem>
       </TabControl>
@@ -98,11 +98,11 @@
         <TabItem Classes="default" Header="Views">
           <ListBox Classes="default" Items="{Binding ContainerViews}" SelectedItem="{Binding ContainerView}"
                    DataContext="{Binding DocumentContainer}">
-            <ListBox.DataTemplates>
+            <ListBox.ItemTemplate>
               <DataTemplate>
                 <TextBlock Classes="list" Text="{Binding Title}" />
               </DataTemplate>
-            </ListBox.DataTemplates>
+            </ListBox.ItemTemplate>
           </ListBox>
         </TabItem>
         <TabItem Classes="default" Header="Groups">
