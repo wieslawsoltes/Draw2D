@@ -7,7 +7,7 @@
     <LangVersion>latest</LangVersion>
     <Nullable>disable</Nullable>
     <RootNamespace>Draw2D.Desktop</RootNamespace>
-    <AvaloniaVersion>0.10.999-cibuild0023228-beta</AvaloniaVersion>
+    <AvaloniaVersion>11.0.0-preview1</AvaloniaVersion>
   </PropertyGroup>
 
   <ItemGroup>
