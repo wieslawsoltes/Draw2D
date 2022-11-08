@@ -4,6 +4,7 @@
 
   <assembly fullname="Draw2D" preserve="All" />
   <assembly fullname="Draw2D.Web" preserve="All" />
+  <assembly fullname="Avalonia.Controls.DataGrid" preserve="All" />
 
   <!-- Avalonia Themes -->
 
