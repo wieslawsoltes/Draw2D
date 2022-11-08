@@ -7,7 +7,7 @@
     <EmccTotalMemory>16777216</EmccTotalMemory>
     <BlazorEnableTimeZoneSupport>false</BlazorEnableTimeZoneSupport>
     <BlazorWebAssemblyPreserveCollationData>false</BlazorWebAssemblyPreserveCollationData>
-    <AvaloniaVersion>11.0.0-preview1</AvaloniaVersion>
+    <AvaloniaVersion>11.0.0-preview3</AvaloniaVersion>
   </PropertyGroup>
 
   <!-- In debug, make builds faster by reducing optimizations -->
