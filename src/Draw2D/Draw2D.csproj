@@ -7,7 +7,7 @@
     <LangVersion>latest</LangVersion>
     <Nullable>disable</Nullable>
     <RootNamespace>Draw2D</RootNamespace>
-    <AvaloniaVersion>11.0.0-preview1</AvaloniaVersion>
+    <AvaloniaVersion>11.0.0-preview3</AvaloniaVersion>
   </PropertyGroup>
 
   <ItemGroup>
