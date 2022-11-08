@@ -1,0 +1,12 @@
+<linker>
+
+  <!-- App -->
+
+  <assembly fullname="Draw2D" preserve="All" />
+  <assembly fullname="Draw2D.Web" preserve="All" />
+
+  <!-- Avalonia Themes -->
+
+  <assembly fullname="Avalonia.Themes.Fluent" preserve="All" />
+
+</linker>
