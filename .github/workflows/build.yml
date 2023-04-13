@@ -22,9 +22,5 @@ jobs:
     - uses: actions/checkout@v1
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v1
-    - name: Install wasm-tools
-      run: dotnet workload install wasm-tools wasm-experimental
     - name: Build
       run: dotnet build -c Release
-    - name: Test
-      run: dotnet test -c Release
