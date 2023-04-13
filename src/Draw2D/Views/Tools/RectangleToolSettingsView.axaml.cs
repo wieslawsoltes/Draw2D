@@ -1,18 +1,11 @@
 ﻿using Avalonia.Controls;
-using Avalonia.Markup.Xaml;
 
-namespace Draw2D.Views.Tools
+namespace Draw2D.Views.Tools;
+
+public partial class RectangleToolSettingsView : UserControl
 {
-    public class RectangleToolSettingsView : UserControl
+    public RectangleToolSettingsView()
     {
-        public RectangleToolSettingsView()
-        {
-            InitializeComponent();
-        }
-
-        private void InitializeComponent()
-        {
-            AvaloniaXamlLoader.Load(this);
-        }
+        InitializeComponent();
     }
 }

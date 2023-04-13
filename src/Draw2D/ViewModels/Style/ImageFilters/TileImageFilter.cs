@@ -1,23 +1,22 @@
 ﻿using System.Collections.Generic;
 using System.Runtime.Serialization;
 
-namespace Draw2D.ViewModels.Style.ImageFilters
+namespace Draw2D.ViewModels.Style.ImageFilters;
+
+[DataContract(IsReference = true)]
+public class TileImageFilter : ViewModelBase, IImageFilter
 {
-    [DataContract(IsReference = true)]
-    public class TileImageFilter : ViewModelBase, IImageFilter
+    // TODO:
+
+    public TileImageFilter()
     {
-        // TODO:
+    }
 
-        public TileImageFilter()
+    public object Copy(Dictionary<object, object> shared)
+    {
+        return new TileImageFilter()
         {
-        }
-
-        public object Copy(Dictionary<object, object> shared)
-        {
-            return new TileImageFilter()
-            {
-                Title = this.Title
-            };
-        }
+            Title = this.Title
+        };
     }
 }

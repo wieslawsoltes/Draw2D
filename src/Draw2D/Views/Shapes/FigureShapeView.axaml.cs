@@ -1,18 +1,11 @@
 ﻿using Avalonia.Controls;
-using Avalonia.Markup.Xaml;
 
-namespace Draw2D.Views.Shapes
+namespace Draw2D.Views.Shapes;
+
+public partial class FigureShapeView : UserControl
 {
-    public class FigureShapeView : UserControl
+    public FigureShapeView()
     {
-        public FigureShapeView()
-        {
-            InitializeComponent();
-        }
-
-        private void InitializeComponent()
-        {
-            AvaloniaXamlLoader.Load(this);
-        }
+        InitializeComponent();
     }
 }

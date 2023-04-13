@@ -1,18 +1,11 @@
 ﻿using Avalonia.Controls;
-using Avalonia.Markup.Xaml;
 
-namespace Draw2D.Views.Style.ImageFilters
+namespace Draw2D.Views.Style.ImageFilters;
+
+public partial class PointLitSpecularImageFilterView : UserControl
 {
-    public class PointLitSpecularImageFilterView : UserControl
+    public PointLitSpecularImageFilterView()
     {
-        public PointLitSpecularImageFilterView()
-        {
-            InitializeComponent();
-        }
-
-        private void InitializeComponent()
-        {
-            AvaloniaXamlLoader.Load(this);
-        }
+        InitializeComponent();
     }
 }

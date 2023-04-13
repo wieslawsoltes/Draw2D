@@ -1,18 +1,11 @@
 ﻿using Avalonia.Controls;
-using Avalonia.Markup.Xaml;
 
-namespace Draw2D.Views.Tools
+namespace Draw2D.Views.Tools;
+
+public partial class TextToolView : UserControl
 {
-    public class TextToolView : UserControl
+    public TextToolView()
     {
-        public TextToolView()
-        {
-            InitializeComponent();
-        }
-
-        private void InitializeComponent()
-        {
-            AvaloniaXamlLoader.Load(this);
-        }
+        InitializeComponent();
     }
 }

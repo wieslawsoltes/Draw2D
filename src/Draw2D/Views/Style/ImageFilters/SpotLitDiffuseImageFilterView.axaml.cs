@@ -1,18 +1,11 @@
 ﻿using Avalonia.Controls;
-using Avalonia.Markup.Xaml;
 
-namespace Draw2D.Views.Style.ImageFilters
+namespace Draw2D.Views.Style.ImageFilters;
+
+public partial class SpotLitDiffuseImageFilterView : UserControl
 {
-    public class SpotLitDiffuseImageFilterView : UserControl
+    public SpotLitDiffuseImageFilterView()
     {
-        public SpotLitDiffuseImageFilterView()
-        {
-            InitializeComponent();
-        }
-
-        private void InitializeComponent()
-        {
-            AvaloniaXamlLoader.Load(this);
-        }
+        InitializeComponent();
     }
 }

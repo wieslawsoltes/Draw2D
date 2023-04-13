@@ -1,18 +1,11 @@
 ﻿using Avalonia.Controls;
-using Avalonia.Markup.Xaml;
 
-namespace Draw2D.Views.Containers
+namespace Draw2D.Views.Containers;
+
+public partial class CanvasContainerView : UserControl
 {
-    public class CanvasContainerView : UserControl
+    public CanvasContainerView()
     {
-        public CanvasContainerView()
-        {
-            InitializeComponent();
-        }
-
-        private void InitializeComponent()
-        {
-            AvaloniaXamlLoader.Load(this);
-        }
+        InitializeComponent();
     }
 }

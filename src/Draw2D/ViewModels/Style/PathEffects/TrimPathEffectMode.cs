@@ -1,9 +1,8 @@
 ﻿
-namespace Draw2D.ViewModels.Style.PathEffects
+namespace Draw2D.ViewModels.Style.PathEffects;
+
+public enum TrimPathEffectMode
 {
-    public enum TrimPathEffectMode
-    {
-        Normal = 0,
-        Inverted = 1
-    }
+    Normal = 0,
+    Inverted = 1
 }

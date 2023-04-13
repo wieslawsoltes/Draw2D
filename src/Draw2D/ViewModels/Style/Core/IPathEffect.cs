@@ -1,7 +1,6 @@
 ﻿
-namespace Draw2D.ViewModels.Style
+namespace Draw2D.ViewModels.Style;
+
+public interface IPathEffect : INode, IDirty, ICopyable
 {
-    public interface IPathEffect : INode, IDirty, ICopyable
-    {
-    }
 }

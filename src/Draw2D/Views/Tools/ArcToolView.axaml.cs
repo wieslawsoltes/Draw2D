@@ -1,18 +1,11 @@
 ﻿using Avalonia.Controls;
-using Avalonia.Markup.Xaml;
 
-namespace Draw2D.Views.Tools
+namespace Draw2D.Views.Tools;
+
+public partial class ArcToolView : UserControl
 {
-    public class ArcToolView : UserControl
+    public ArcToolView()
     {
-        public ArcToolView()
-        {
-            InitializeComponent();
-        }
-
-        private void InitializeComponent()
-        {
-            AvaloniaXamlLoader.Load(this);
-        }
+        InitializeComponent();
     }
 }

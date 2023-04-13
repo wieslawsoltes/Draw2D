@@ -1,18 +1,11 @@
 ﻿using Avalonia.Controls;
-using Avalonia.Markup.Xaml;
 
-namespace Draw2D.Views.Style.MaskFilters
+namespace Draw2D.Views.Style.MaskFilters;
+
+public partial class ClipMaskFilterView : UserControl
 {
-    public class ClipMaskFilterView : UserControl
+    public ClipMaskFilterView()
     {
-        public ClipMaskFilterView()
-        {
-            InitializeComponent();
-        }
-
-        private void InitializeComponent()
-        {
-            AvaloniaXamlLoader.Load(this);
-        }
+        InitializeComponent();
     }
 }

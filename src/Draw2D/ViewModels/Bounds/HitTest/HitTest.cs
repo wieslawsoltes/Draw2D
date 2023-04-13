@@ -4,54 +4,53 @@ using System.Runtime.Serialization;
 using Core2D.UI.Zoom.Input;
 using Spatial;
 
-namespace Draw2D.ViewModels.Bounds
+namespace Draw2D.ViewModels.Bounds;
+
+[DataContract(IsReference = true)]
+public class HitTest : ViewModelBase, IHitTest
 {
-    [DataContract(IsReference = true)]
-    public class HitTest : ViewModelBase, IHitTest
+    public IPointShape TryToGetPoint(IBaseShape shape, Point2 target, double radius, double scale, Modifier modifier)
     {
-        public IPointShape TryToGetPoint(IBaseShape shape, Point2 target, double radius, double scale, Modifier modifier)
-        {
-            return shape.Bounds?.TryToGetPoint(shape, target, radius / scale, this, modifier);
-        }
+        return shape.Bounds?.TryToGetPoint(shape, target, radius / scale, this, modifier);
+    }
 
-        public IPointShape TryToGetPoint(IEnumerable<IBaseShape> shapes, Point2 target, double radius, double scale, Modifier modifier, IPointShape exclude)
+    public IPointShape TryToGetPoint(IEnumerable<IBaseShape> shapes, Point2 target, double radius, double scale, Modifier modifier, IPointShape exclude)
+    {
+        foreach (var shape in shapes.Reverse())
         {
-            foreach (var shape in shapes.Reverse())
+            var result = TryToGetPoint(shape, target, radius, scale, modifier);
+            if (result != null && result != exclude)
             {
-                var result = TryToGetPoint(shape, target, radius, scale, modifier);
-                if (result != null && result != exclude)
-                {
-                    return result;
-                }
+                return result;
             }
-            return null;
         }
+        return null;
+    }
 
-        public IBaseShape TryToGetShape(IEnumerable<IBaseShape> shapes, Point2 target, double radius, double scale, Modifier modifier)
+    public IBaseShape TryToGetShape(IEnumerable<IBaseShape> shapes, Point2 target, double radius, double scale, Modifier modifier)
+    {
+        foreach (var shape in shapes.Reverse())
         {
-            foreach (var shape in shapes.Reverse())
+            var result = shape.Bounds?.Contains(shape, target, radius / scale, this, modifier);
+            if (result != null)
             {
-                var result = shape.Bounds?.Contains(shape, target, radius / scale, this, modifier);
-                if (result != null)
-                {
-                    return result;
-                }
+                return result;
             }
-            return null;
         }
+        return null;
+    }
 
-        public ISet<IBaseShape> TryToGetShapes(IEnumerable<IBaseShape> shapes, Rect2 target, double radius, double scale, Modifier modifier)
+    public ISet<IBaseShape> TryToGetShapes(IEnumerable<IBaseShape> shapes, Rect2 target, double radius, double scale, Modifier modifier)
+    {
+        var selected = new HashSet<IBaseShape>();
+        foreach (var shape in shapes.Reverse())
         {
-            var selected = new HashSet<IBaseShape>();
-            foreach (var shape in shapes.Reverse())
+            var result = shape.Bounds?.Overlaps(shape, target, radius / scale, this, modifier);
+            if (result != null)
             {
-                var result = shape.Bounds?.Overlaps(shape, target, radius / scale, this, modifier);
-                if (result != null)
-                {
-                    selected.Add(shape);
-                }
+                selected.Add(shape);
             }
-            return selected.Count > 0 ? selected : null;
         }
+        return selected.Count > 0 ? selected : null;
     }
 }

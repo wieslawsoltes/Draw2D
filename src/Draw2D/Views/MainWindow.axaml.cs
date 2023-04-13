@@ -1,20 +1,13 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Markup.Xaml;
 
-namespace Draw2D.Views
+namespace Draw2D.Views;
+
+public partial class MainWindow : Window
 {
-    public class MainWindow : Window
+    public MainWindow()
     {
-        public MainWindow()
-        {
-            this.InitializeComponent();
-            this.AttachDevTools();
-        }
-
-        private void InitializeComponent()
-        {
-            AvaloniaXamlLoader.Load(this);
-        }
+        this.InitializeComponent();
+        this.AttachDevTools();
     }
 }

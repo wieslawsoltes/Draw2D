@@ -1,10 +1,9 @@
 ﻿
-namespace Draw2D.ViewModels.Style.Shaders
+namespace Draw2D.ViewModels.Style.Shaders;
+
+public enum ShaderTileMode
 {
-    public enum ShaderTileMode
-    {
-        Clamp = 0,
-        Repeat = 1,
-        Mirror = 2
-    }
+    Clamp = 0,
+    Repeat = 1,
+    Mirror = 2
 }

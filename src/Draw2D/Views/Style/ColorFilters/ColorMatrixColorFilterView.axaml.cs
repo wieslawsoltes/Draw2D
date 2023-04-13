@@ -1,18 +1,11 @@
 ﻿using Avalonia.Controls;
-using Avalonia.Markup.Xaml;
 
-namespace Draw2D.Views.Style.ColorFilters
+namespace Draw2D.Views.Style.ColorFilters;
+
+public partial class ColorMatrixColorFilterView : UserControl
 {
-    public class ColorMatrixColorFilterView : UserControl
+    public ColorMatrixColorFilterView()
     {
-        public ColorMatrixColorFilterView()
-        {
-            InitializeComponent();
-        }
-
-        private void InitializeComponent()
-        {
-            AvaloniaXamlLoader.Load(this);
-        }
+        InitializeComponent();
     }
 }

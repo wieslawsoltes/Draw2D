@@ -1,18 +1,11 @@
 ﻿using Avalonia.Controls;
-using Avalonia.Markup.Xaml;
 
-namespace Draw2D.Views.Style.ImageFilters
+namespace Draw2D.Views.Style.ImageFilters;
+
+public partial class DisplacementMapEffectImageFilterView : UserControl
 {
-    public class DisplacementMapEffectImageFilterView : UserControl
+    public DisplacementMapEffectImageFilterView()
     {
-        public DisplacementMapEffectImageFilterView()
-        {
-            InitializeComponent();
-        }
-
-        private void InitializeComponent()
-        {
-            AvaloniaXamlLoader.Load(this);
-        }
+        InitializeComponent();
     }
 }

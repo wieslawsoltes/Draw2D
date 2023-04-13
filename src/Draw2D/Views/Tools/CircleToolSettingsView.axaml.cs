@@ -1,18 +1,11 @@
 ﻿using Avalonia.Controls;
-using Avalonia.Markup.Xaml;
 
-namespace Draw2D.Views.Tools
+namespace Draw2D.Views.Tools;
+
+public partial class CircleToolSettingsView : UserControl
 {
-    public class CircleToolSettingsView : UserControl
+    public CircleToolSettingsView()
     {
-        public CircleToolSettingsView()
-        {
-            InitializeComponent();
-        }
-
-        private void InitializeComponent()
-        {
-            AvaloniaXamlLoader.Load(this);
-        }
+        InitializeComponent();
     }
 }

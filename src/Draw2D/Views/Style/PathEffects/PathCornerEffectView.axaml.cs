@@ -1,18 +1,11 @@
 ﻿using Avalonia.Controls;
-using Avalonia.Markup.Xaml;
 
-namespace Draw2D.Views.Style.PathEffects
+namespace Draw2D.Views.Style.PathEffects;
+
+public partial class PathCornerEffectView : UserControl
 {
-    public class PathCornerEffectView : UserControl
+    public PathCornerEffectView()
     {
-        public PathCornerEffectView()
-        {
-            InitializeComponent();
-        }
-
-        private void InitializeComponent()
-        {
-            AvaloniaXamlLoader.Load(this);
-        }
+        InitializeComponent();
     }
 }

@@ -1,23 +1,22 @@
 ﻿using System.Collections.Generic;
 using System.Runtime.Serialization;
 
-namespace Draw2D.ViewModels.Style.Shaders
+namespace Draw2D.ViewModels.Style.Shaders;
+
+[DataContract(IsReference = true)]
+public class ComposeShader : ViewModelBase, IShader
 {
-    [DataContract(IsReference = true)]
-    public class ComposeShader : ViewModelBase, IShader
+    // TODO:
+
+    public ComposeShader()
     {
-        // TODO:
+    }
 
-        public ComposeShader()
+    public object Copy(Dictionary<object, object> shared)
+    {
+        return new ComposeShader()
         {
-        }
-
-        public object Copy(Dictionary<object, object> shared)
-        {
-            return new ComposeShader()
-            {
-                Title = this.Title
-            };
-        }
+            Title = this.Title
+        };
     }
 }

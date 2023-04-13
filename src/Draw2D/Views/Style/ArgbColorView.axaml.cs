@@ -1,18 +1,11 @@
 ﻿using Avalonia.Controls;
-using Avalonia.Markup.Xaml;
 
-namespace Draw2D.Views.Style
+namespace Draw2D.Views.Style;
+
+public partial class ArgbColorView : UserControl
 {
-    public class ArgbColorView : UserControl
+    public ArgbColorView()
     {
-        public ArgbColorView()
-        {
-            InitializeComponent();
-        }
-
-        private void InitializeComponent()
-        {
-            AvaloniaXamlLoader.Load(this);
-        }
+        InitializeComponent();
     }
 }

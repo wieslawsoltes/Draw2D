@@ -1,18 +1,11 @@
 ﻿using Avalonia.Controls;
-using Avalonia.Markup.Xaml;
 
-namespace Draw2D.Views.Style.ColorFilters
+namespace Draw2D.Views.Style.ColorFilters;
+
+public partial class BlendModeColorFilterView : UserControl
 {
-    public class BlendModeColorFilterView : UserControl
+    public BlendModeColorFilterView()
     {
-        public BlendModeColorFilterView()
-        {
-            InitializeComponent();
-        }
-
-        private void InitializeComponent()
-        {
-            AvaloniaXamlLoader.Load(this);
-        }
+        InitializeComponent();
     }
 }

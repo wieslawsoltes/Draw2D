@@ -2,74 +2,73 @@
 using System.Runtime.Serialization;
 using Draw2D.ViewModels.Tools;
 
-namespace Draw2D.ViewModels.Containers
+namespace Draw2D.ViewModels.Containers;
+
+[DataContract(IsReference = true)]
+public class DocumentContainer : ViewModelBase, IDocumentContainer
 {
-    [DataContract(IsReference = true)]
-    public class DocumentContainer : ViewModelBase, IDocumentContainer
+    private IStyleLibrary _styleLibrary;
+    private IGroupLibrary _groupLibrary;
+    private IBaseShape _pointTemplate;
+    private IList<IContainerView> _containerViews;
+    private IContainerView _containerView;
+
+    [DataMember(IsRequired = false, EmitDefaultValue = false)]
+    public IStyleLibrary StyleLibrary
     {
-        private IStyleLibrary _styleLibrary;
-        private IGroupLibrary _groupLibrary;
-        private IBaseShape _pointTemplate;
-        private IList<IContainerView> _containerViews;
-        private IContainerView _containerView;
+        get => _styleLibrary;
+        set => Update(ref _styleLibrary, value);
+    }
 
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public IStyleLibrary StyleLibrary
-        {
-            get => _styleLibrary;
-            set => Update(ref _styleLibrary, value);
-        }
+    [DataMember(IsRequired = false, EmitDefaultValue = false)]
+    public IGroupLibrary GroupLibrary
+    {
+        get => _groupLibrary;
+        set => Update(ref _groupLibrary, value);
+    }
 
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public IGroupLibrary GroupLibrary
-        {
-            get => _groupLibrary;
-            set => Update(ref _groupLibrary, value);
-        }
+    [DataMember(IsRequired = false, EmitDefaultValue = false)]
+    public IBaseShape PointTemplate
+    {
+        get => _pointTemplate;
+        set => Update(ref _pointTemplate, value);
+    }
 
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public IBaseShape PointTemplate
-        {
-            get => _pointTemplate;
-            set => Update(ref _pointTemplate, value);
-        }
+    [DataMember(IsRequired = false, EmitDefaultValue = false)]
+    public IList<IContainerView> ContainerViews
+    {
+        get => _containerViews;
+        set => Update(ref _containerViews, value);
+    }
 
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public IList<IContainerView> ContainerViews
-        {
-            get => _containerViews;
-            set => Update(ref _containerViews, value);
-        }
+    [DataMember(IsRequired = false, EmitDefaultValue = false)]
+    public IContainerView ContainerView
+    {
+        get => _containerView;
+        set => Update(ref _containerView, value);
+    }
 
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public IContainerView ContainerView
+    public void Dispose()
+    {
+        if (_containerViews != null)
         {
-            get => _containerView;
-            set => Update(ref _containerView, value);
-        }
-
-        public void Dispose()
-        {
-            if (_containerViews != null)
+            foreach (var containerView in _containerViews)
             {
-                foreach (var containerView in _containerViews)
-                {
-                    containerView.ContainerPresenter?.Dispose();
-                    containerView.ContainerPresenter = null;
-                    containerView.SelectionState = null;
-                    containerView.WorkingContainer = null;
-                }
+                containerView.ContainerPresenter?.Dispose();
+                containerView.ContainerPresenter = null;
+                containerView.SelectionState = null;
+                containerView.WorkingContainer = null;
             }
         }
+    }
 
-        public virtual object Copy(Dictionary<object, object> shared)
+    public virtual object Copy(Dictionary<object, object> shared)
+    {
+        var copy = new ToolContext()
         {
-            var copy = new ToolContext()
-            {
-                Name = this.Name
-            };
+            Name = this.Name
+        };
 
-            return copy;
-        }
+        return copy;
     }
 }

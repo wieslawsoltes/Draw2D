@@ -2,68 +2,67 @@
 using System.Runtime.Serialization;
 using Spatial;
 
-namespace Draw2D.ViewModels.Style.PathEffects
+namespace Draw2D.ViewModels.Style.PathEffects;
+
+[DataContract(IsReference = true)]
+public class Path2DPathEffect : ViewModelBase, IPathEffect
 {
-    [DataContract(IsReference = true)]
-    public class Path2DPathEffect : ViewModelBase, IPathEffect
+    private Matrix _matrix;
+    private string _path;
+
+    [DataMember(IsRequired = false, EmitDefaultValue = false)]
+    public Matrix Matrix
     {
-        private Matrix _matrix;
-        private string _path;
+        get => _matrix;
+        set => Update(ref _matrix, value);
+    }
 
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public Matrix Matrix
+    [DataMember(IsRequired = false, EmitDefaultValue = false)]
+    public string Path
+    {
+        get => _path;
+        set => Update(ref _path, value);
+    }
+
+    public Path2DPathEffect()
+    {
+    }
+
+    public Path2DPathEffect(Matrix matrix, string path)
+    {
+        this.Matrix = matrix;
+        this.Path = path;
+    }
+
+    public static IPathEffect MakeTile()
+    {
+        var matrix = Matrix.MakeFrom(Matrix2.Scale(30, 30));
+        var path = "M-15 -15L15 -15L15 15L-15 15L-15 -15Z";
+        return new Path2DPathEffect(matrix, path) { Title = "2DPathTile" };
+    }
+
+    public override bool IsTreeDirty()
+    {
+        if (base.IsTreeDirty())
         {
-            get => _matrix;
-            set => Update(ref _matrix, value);
+            return true;
         }
 
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public string Path
+        if (_matrix?.IsTreeDirty() ?? false)
         {
-            get => _path;
-            set => Update(ref _path, value);
+            return true;
         }
 
-        public Path2DPathEffect()
+        return false;
+    }
+
+    public object Copy(Dictionary<object, object> shared)
+    {
+        return new Path2DPathEffect()
         {
-        }
-
-        public Path2DPathEffect(Matrix matrix, string path)
-        {
-            this.Matrix = matrix;
-            this.Path = path;
-        }
-
-        public static IPathEffect MakeTile()
-        {
-            var matrix = Matrix.MakeFrom(Matrix2.Scale(30, 30));
-            var path = "M-15 -15L15 -15L15 15L-15 15L-15 -15Z";
-            return new Path2DPathEffect(matrix, path) { Title = "2DPathTile" };
-        }
-
-        public override bool IsTreeDirty()
-        {
-            if (base.IsTreeDirty())
-            {
-                return true;
-            }
-
-            if (_matrix?.IsTreeDirty() ?? false)
-            {
-                return true;
-            }
-
-            return false;
-        }
-
-        public object Copy(Dictionary<object, object> shared)
-        {
-            return new Path2DPathEffect()
-            {
-                Title = this.Title,
-                Matrix = (Matrix)this.Matrix.Copy(shared),
-                Path = this.Path
-            };
-        }
+            Title = this.Title,
+            Matrix = (Matrix)this.Matrix.Copy(shared),
+            Path = this.Path
+        };
     }
 }

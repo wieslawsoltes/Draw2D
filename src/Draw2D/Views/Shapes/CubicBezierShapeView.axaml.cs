@@ -1,18 +1,11 @@
 ﻿using Avalonia.Controls;
-using Avalonia.Markup.Xaml;
 
-namespace Draw2D.Views.Shapes
+namespace Draw2D.Views.Shapes;
+
+public partial class CubicBezierShapeView : UserControl
 {
-    public class CubicBezierShapeView : UserControl
+    public CubicBezierShapeView()
     {
-        public CubicBezierShapeView()
-        {
-            InitializeComponent();
-        }
-
-        private void InitializeComponent()
-        {
-            AvaloniaXamlLoader.Load(this);
-        }
+        InitializeComponent();
     }
 }

@@ -1,18 +1,11 @@
 ﻿using Avalonia.Controls;
-using Avalonia.Markup.Xaml;
 
-namespace Draw2D.Views.Style.ColorFilters
+namespace Draw2D.Views.Style.ColorFilters;
+
+public partial class ComposeColorFilterView : UserControl
 {
-    public class ComposeColorFilterView : UserControl
+    public ComposeColorFilterView()
     {
-        public ComposeColorFilterView()
-        {
-            InitializeComponent();
-        }
-
-        private void InitializeComponent()
-        {
-            AvaloniaXamlLoader.Load(this);
-        }
+        InitializeComponent();
     }
 }

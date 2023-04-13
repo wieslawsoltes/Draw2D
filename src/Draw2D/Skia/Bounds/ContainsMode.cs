@@ -1,9 +1,8 @@
 ﻿
-namespace Draw2D.Bounds
+namespace Draw2D.Bounds;
+
+public enum ContainsMode
 {
-    public enum ContainsMode
-    {
-        Geometry,
-        Bounds
-    }
+    Geometry,
+    Bounds
 }

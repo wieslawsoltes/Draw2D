@@ -1,18 +1,11 @@
 ﻿using Avalonia.Controls;
-using Avalonia.Markup.Xaml;
 
-namespace Draw2D.Views.Style
+namespace Draw2D.Views.Style;
+
+public partial class TypefaceView : UserControl
 {
-    public class TypefaceView : UserControl
+    public TypefaceView()
     {
-        public TypefaceView()
-        {
-            InitializeComponent();
-        }
-
-        private void InitializeComponent()
-        {
-            AvaloniaXamlLoader.Load(this);
-        }
+        InitializeComponent();
     }
 }

@@ -1,10 +1,9 @@
 ﻿
-namespace Draw2D.ViewModels.Style
+namespace Draw2D.ViewModels.Style;
+
+public enum FontStyleSlant
 {
-    public enum FontStyleSlant
-    {
-        Upright = 0,
-        Italic = 1,
-        Oblique = 2
-    }
+    Upright = 0,
+    Italic = 1,
+    Oblique = 2
 }

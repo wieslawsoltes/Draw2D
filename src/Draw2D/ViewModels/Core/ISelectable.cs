@@ -1,10 +1,9 @@
 ﻿
-namespace Draw2D.ViewModels
+namespace Draw2D.ViewModels;
+
+public interface ISelectable
 {
-    public interface ISelectable
-    {
-        void Move(ISelectionState selectionState, double dx, double dy);
-        void Select(ISelectionState selectionState);
-        void Deselect(ISelectionState selectionState);
-    }
+    void Move(ISelectionState selectionState, double dx, double dy);
+    void Select(ISelectionState selectionState);
+    void Deselect(ISelectionState selectionState);
 }

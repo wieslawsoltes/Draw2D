@@ -5,72 +5,71 @@ using Core2D.UI.Zoom.Input;
 using Draw2D.ViewModels.Containers;
 using Spatial;
 
-namespace Draw2D.ViewModels.Bounds
+namespace Draw2D.ViewModels.Bounds;
+
+[DataContract(IsReference = true)]
+public class ContainerBounds : ViewModelBase, IBounds
 {
-    [DataContract(IsReference = true)]
-    public class ContainerBounds : ViewModelBase, IBounds
+    public IPointShape TryToGetPoint(IBaseShape shape, Point2 target, double radius, IHitTest hitTest, Modifier modifier)
     {
-        public IPointShape TryToGetPoint(IBaseShape shape, Point2 target, double radius, IHitTest hitTest, Modifier modifier)
+        if (!(shape is CanvasContainer container))
         {
-            if (!(shape is CanvasContainer container))
-            {
-                throw new ArgumentNullException("shape");
-            }
+            throw new ArgumentNullException("shape");
+        }
 
-            foreach (var containerPoint in container.Points)
+        foreach (var containerPoint in container.Points)
+        {
+            if (containerPoint.Bounds?.TryToGetPoint(containerPoint, target, radius, hitTest, modifier) != null)
             {
-                if (containerPoint.Bounds?.TryToGetPoint(containerPoint, target, radius, hitTest, modifier) != null)
-                {
-                    return containerPoint;
-                }
+                return containerPoint;
             }
+        }
 
+        return null;
+    }
+
+    public IBaseShape Contains(IBaseShape shape, Point2 target, double radius, IHitTest hitTest, Modifier modifier)
+    {
+        if (!(shape is CanvasContainer container))
+        {
+            throw new ArgumentNullException("shape");
+        }
+
+        foreach (var containerShape in container.Shapes)
+        {
+            var result = containerShape.Bounds?.Contains(containerShape, target, radius, hitTest, modifier);
+            if (result != null)
+            {
+                return container;
+            }
+        }
+
+        var points = new List<IPointShape>();
+        container.GetPoints(points);
+
+        if (points.Count == 0)
+        {
             return null;
         }
 
-        public IBaseShape Contains(IBaseShape shape, Point2 target, double radius, IHitTest hitTest, Modifier modifier)
+        return HitTestHelper.Contains(points, target) ? shape : null;
+    }
+
+    public IBaseShape Overlaps(IBaseShape shape, Rect2 target, double radius, IHitTest hitTest, Modifier modifier)
+    {
+        if (!(shape is CanvasContainer container))
         {
-            if (!(shape is CanvasContainer container))
-            {
-                throw new ArgumentNullException("shape");
-            }
-
-            foreach (var containerShape in container.Shapes)
-            {
-                var result = containerShape.Bounds?.Contains(containerShape, target, radius, hitTest, modifier);
-                if (result != null)
-                {
-                    return container;
-                }
-            }
-
-            var points = new List<IPointShape>();
-            container.GetPoints(points);
-
-            if (points.Count == 0)
-            {
-                return null;
-            }
-
-            return HitTestHelper.Contains(points, target) ? shape : null;
+            throw new ArgumentNullException("shape");
         }
 
-        public IBaseShape Overlaps(IBaseShape shape, Rect2 target, double radius, IHitTest hitTest, Modifier modifier)
+        foreach (var containerShape in container.Shapes)
         {
-            if (!(shape is CanvasContainer container))
+            var result = containerShape.Bounds?.Overlaps(containerShape, target, radius, hitTest, modifier);
+            if (result != null)
             {
-                throw new ArgumentNullException("shape");
+                return container;
             }
-
-            foreach (var containerShape in container.Shapes)
-            {
-                var result = containerShape.Bounds?.Overlaps(containerShape, target, radius, hitTest, modifier);
-                if (result != null)
-                {
-                    return container;
-                }
-            }
-            return null;
         }
+        return null;
     }
 }

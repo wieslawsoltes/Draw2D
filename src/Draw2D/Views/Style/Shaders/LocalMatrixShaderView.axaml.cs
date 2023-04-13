@@ -1,18 +1,11 @@
 ﻿using Avalonia.Controls;
-using Avalonia.Markup.Xaml;
 
-namespace Draw2D.Views.Style.Shaders
+namespace Draw2D.Views.Style.Shaders;
+
+public partial class LocalMatrixShaderView : UserControl
 {
-    public class LocalMatrixShaderView : UserControl
+    public LocalMatrixShaderView()
     {
-        public LocalMatrixShaderView()
-        {
-            InitializeComponent();
-        }
-
-        private void InitializeComponent()
-        {
-            AvaloniaXamlLoader.Load(this);
-        }
+        InitializeComponent();
     }
 }

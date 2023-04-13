@@ -1,18 +1,11 @@
 ﻿using Avalonia.Controls;
-using Avalonia.Markup.Xaml;
 
-namespace Draw2D.Views.Shapes
+namespace Draw2D.Views.Shapes;
+
+public partial class PathShapeView : UserControl
 {
-    public class PathShapeView : UserControl
+    public PathShapeView()
     {
-        public PathShapeView()
-        {
-            InitializeComponent();
-        }
-
-        private void InitializeComponent()
-        {
-            AvaloniaXamlLoader.Load(this);
-        }
+        InitializeComponent();
     }
 }

@@ -1,18 +1,11 @@
 ﻿using Avalonia.Controls;
-using Avalonia.Markup.Xaml;
 
-namespace Draw2D.Views.Containers
+namespace Draw2D.Views.Containers;
+
+public partial class ZoomServiceStateView : UserControl
 {
-    public class ZoomServiceStateView : UserControl
+    public ZoomServiceStateView()
     {
-        public ZoomServiceStateView()
-        {
-            InitializeComponent();
-        }
-
-        private void InitializeComponent()
-        {
-            AvaloniaXamlLoader.Load(this);
-        }
+        InitializeComponent();
     }
 }

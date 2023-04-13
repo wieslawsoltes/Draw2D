@@ -1,18 +1,11 @@
 ﻿using Avalonia.Controls;
-using Avalonia.Markup.Xaml;
 
-namespace Draw2D.Views.Shapes
+namespace Draw2D.Views.Shapes;
+
+public partial class ArcShapeView : UserControl
 {
-    public class ArcShapeView : UserControl
+    public ArcShapeView()
     {
-        public ArcShapeView()
-        {
-            InitializeComponent();
-        }
-
-        private void InitializeComponent()
-        {
-            AvaloniaXamlLoader.Load(this);
-        }
+        InitializeComponent();
     }
 }

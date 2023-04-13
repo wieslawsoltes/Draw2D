@@ -2,22 +2,21 @@
 using System.Globalization;
 using Avalonia.Data.Converters;
 
-namespace Draw2D.Converters
-{
-    public class IsEqualStringConverter : IValueConverter
-    {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            if (value is string str1 && parameter is string str2)
-            {
-                return str1 == str2;
-            }
-            return false;
-        }
+namespace Draw2D.Converters;
 
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+public class IsEqualStringConverter : IValueConverter
+{
+    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        if (value is string str1 && parameter is string str2)
         {
-            throw new NotImplementedException();
+            return str1 == str2;
         }
+        return false;
+    }
+
+    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        throw new NotImplementedException();
     }
 }

@@ -2,174 +2,173 @@
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 
-namespace Draw2D.ViewModels.Style
+namespace Draw2D.ViewModels.Style;
+
+[DataContract(IsReference = true)]
+public class PaintEffects : ViewModelBase, IPaintEffects
 {
-    [DataContract(IsReference = true)]
-    public class PaintEffects : ViewModelBase, IPaintEffects
+    public static IPathEffectFactory PathEffectFactory { get; } = Style.PathEffectFactory.Instance;
+    public static BlendMode[] BlendModeValues { get; } = (BlendMode[])Enum.GetValues(typeof(BlendMode));
+
+    private BlendMode _blendMode;
+    private IColorFilter _colorFilter;
+    private IImageFilter _imageFilter;
+    private IMaskFilter _maskFilter;
+    private IPathEffect _pathEffect;
+    private IShader _shader;
+
+    [DataMember(IsRequired = false, EmitDefaultValue = false)]
+    public BlendMode BlendMode
     {
-        public static IPathEffectFactory PathEffectFactory { get; } = Style.PathEffectFactory.Instance;
-        public static BlendMode[] BlendModeValues { get; } = (BlendMode[])Enum.GetValues(typeof(BlendMode));
+        get => _blendMode;
+        set => Update(ref _blendMode, value);
+    }
 
-        private BlendMode _blendMode;
-        private IColorFilter _colorFilter;
-        private IImageFilter _imageFilter;
-        private IMaskFilter _maskFilter;
-        private IPathEffect _pathEffect;
-        private IShader _shader;
+    [DataMember(IsRequired = false, EmitDefaultValue = false)]
+    public IColorFilter ColorFilter
+    {
+        get => _colorFilter;
+        set => Update(ref _colorFilter, value);
+    }
 
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public BlendMode BlendMode
+    [DataMember(IsRequired = false, EmitDefaultValue = false)]
+    public IImageFilter ImageFilter
+    {
+        get => _imageFilter;
+        set => Update(ref _imageFilter, value);
+    }
+
+    [DataMember(IsRequired = false, EmitDefaultValue = false)]
+    public IMaskFilter MaskFilter
+    {
+        get => _maskFilter;
+        set => Update(ref _maskFilter, value);
+    }
+
+    [DataMember(IsRequired = false, EmitDefaultValue = false)]
+    public IPathEffect PathEffect
+    {
+        get => _pathEffect;
+        set => Update(ref _pathEffect, value);
+    }
+
+    [DataMember(IsRequired = false, EmitDefaultValue = false)]
+    public IShader Shader
+    {
+        get => _shader;
+        set => Update(ref _shader, value);
+    }
+
+    public void SetColorFilter(IColorFilter colorFilter)
+    {
+        this.ColorFilter = colorFilter;
+    }
+
+    public void SetImageFilter(IImageFilter imageFilter)
+    {
+        this.ImageFilter = imageFilter;
+    }
+
+    public void SetMaskFilter(IMaskFilter maskFilter)
+    {
+        this.MaskFilter = maskFilter;
+    }
+
+    public void SetPathEffect(IPathEffect pathEffect)
+    {
+        this.PathEffect = pathEffect;
+    }
+
+    public void SetShader(IShader shader)
+    {
+        this.Shader = shader;
+    }
+
+    public PaintEffects()
+    {
+    }
+
+    public PaintEffects(
+        BlendMode blendMode = BlendMode.SrcOver,
+        IColorFilter colorFilter = null,
+        IImageFilter imageFilter = null,
+        IMaskFilter maskFilter = null,
+        IPathEffect pathEffect = null,
+        IShader shader = null)
+    {
+        this.BlendMode = blendMode;
+        this.ColorFilter = colorFilter;
+        this.ImageFilter = imageFilter;
+        this.MaskFilter = maskFilter;
+        this.PathEffect = pathEffect;
+        this.Shader = shader;
+    }
+
+    public static IPaintEffects MakeEffects()
+    {
+        return new PaintEffects(blendMode: BlendMode.SrcOver);
+    }
+
+    public override bool IsTreeDirty()
+    {
+        if (base.IsTreeDirty())
         {
-            get => _blendMode;
-            set => Update(ref _blendMode, value);
+            return true;
         }
 
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public IColorFilter ColorFilter
+        if (_colorFilter?.IsTreeDirty() ?? false)
         {
-            get => _colorFilter;
-            set => Update(ref _colorFilter, value);
+            return true;
         }
 
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public IImageFilter ImageFilter
+        if (_imageFilter?.IsTreeDirty() ?? false)
         {
-            get => _imageFilter;
-            set => Update(ref _imageFilter, value);
+            return true;
         }
 
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public IMaskFilter MaskFilter
+        if (_maskFilter?.IsTreeDirty() ?? false)
         {
-            get => _maskFilter;
-            set => Update(ref _maskFilter, value);
+            return true;
         }
 
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public IPathEffect PathEffect
+        if (_pathEffect?.IsTreeDirty() ?? false)
         {
-            get => _pathEffect;
-            set => Update(ref _pathEffect, value);
+            return true;
         }
 
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public IShader Shader
+        if (_shader?.IsTreeDirty() ?? false)
         {
-            get => _shader;
-            set => Update(ref _shader, value);
+            return true;
         }
 
-        public void SetColorFilter(IColorFilter colorFilter)
+        return false;
+    }
+
+    public override void Invalidate()
+    {
+        _colorFilter?.Invalidate();
+
+        _maskFilter?.Invalidate();
+
+        _pathEffect?.Invalidate();
+
+        _shader?.Invalidate();
+
+        base.Invalidate();
+    }
+
+    public object Copy(Dictionary<object, object> shared)
+    {
+        return new PaintEffects()
         {
-            this.ColorFilter = colorFilter;
-        }
-
-        public void SetImageFilter(IImageFilter imageFilter)
-        {
-            this.ImageFilter = imageFilter;
-        }
-
-        public void SetMaskFilter(IMaskFilter maskFilter)
-        {
-            this.MaskFilter = maskFilter;
-        }
-
-        public void SetPathEffect(IPathEffect pathEffect)
-        {
-            this.PathEffect = pathEffect;
-        }
-
-        public void SetShader(IShader shader)
-        {
-            this.Shader = shader;
-        }
-
-        public PaintEffects()
-        {
-        }
-
-        public PaintEffects(
-            BlendMode blendMode = BlendMode.SrcOver,
-            IColorFilter colorFilter = null,
-            IImageFilter imageFilter = null,
-            IMaskFilter maskFilter = null,
-            IPathEffect pathEffect = null,
-            IShader shader = null)
-        {
-            this.BlendMode = blendMode;
-            this.ColorFilter = colorFilter;
-            this.ImageFilter = imageFilter;
-            this.MaskFilter = maskFilter;
-            this.PathEffect = pathEffect;
-            this.Shader = shader;
-        }
-
-        public static IPaintEffects MakeEffects()
-        {
-            return new PaintEffects(blendMode: BlendMode.SrcOver);
-        }
-
-        public override bool IsTreeDirty()
-        {
-            if (base.IsTreeDirty())
-            {
-                return true;
-            }
-
-            if (_colorFilter?.IsTreeDirty() ?? false)
-            {
-                return true;
-            }
-
-            if (_imageFilter?.IsTreeDirty() ?? false)
-            {
-                return true;
-            }
-
-            if (_maskFilter?.IsTreeDirty() ?? false)
-            {
-                return true;
-            }
-
-            if (_pathEffect?.IsTreeDirty() ?? false)
-            {
-                return true;
-            }
-
-            if (_shader?.IsTreeDirty() ?? false)
-            {
-                return true;
-            }
-
-            return false;
-        }
-
-        public override void Invalidate()
-        {
-            _colorFilter?.Invalidate();
-
-            _maskFilter?.Invalidate();
-
-            _pathEffect?.Invalidate();
-
-            _shader?.Invalidate();
-
-            base.Invalidate();
-        }
-
-        public object Copy(Dictionary<object, object> shared)
-        {
-            return new PaintEffects()
-            {
-                Name = this.Name,
-                Title = this.Title,
-                BlendMode = this.BlendMode,
-                ColorFilter = (IColorFilter)this.ColorFilter.Copy(shared),
-                ImageFilter = (IImageFilter)this.ImageFilter.Copy(shared),
-                MaskFilter = (IMaskFilter)this.MaskFilter.Copy(shared),
-                PathEffect = (IPathEffect)this.PathEffect.Copy(shared),
-                Shader = (IShader)this.Shader.Copy(shared)
-            };
-        }
+            Name = this.Name,
+            Title = this.Title,
+            BlendMode = this.BlendMode,
+            ColorFilter = (IColorFilter)this.ColorFilter.Copy(shared),
+            ImageFilter = (IImageFilter)this.ImageFilter.Copy(shared),
+            MaskFilter = (IMaskFilter)this.MaskFilter.Copy(shared),
+            PathEffect = (IPathEffect)this.PathEffect.Copy(shared),
+            Shader = (IShader)this.Shader.Copy(shared)
+        };
     }
 }

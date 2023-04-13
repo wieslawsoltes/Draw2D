@@ -1,18 +1,11 @@
 ﻿using Avalonia.Controls;
-using Avalonia.Markup.Xaml;
 
-namespace Draw2D.Views
+namespace Draw2D.Views;
+
+public partial class MatrixView : UserControl
 {
-    public class MatrixView : UserControl
+    public MatrixView()
     {
-        public MatrixView()
-        {
-            InitializeComponent();
-        }
-
-        private void InitializeComponent()
-        {
-            AvaloniaXamlLoader.Load(this);
-        }
+        InitializeComponent();
     }
 }

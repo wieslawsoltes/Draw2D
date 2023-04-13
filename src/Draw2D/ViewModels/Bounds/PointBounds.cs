@@ -3,44 +3,43 @@ using System.Runtime.Serialization;
 using Core2D.UI.Zoom.Input;
 using Spatial;
 
-namespace Draw2D.ViewModels.Bounds
+namespace Draw2D.ViewModels.Bounds;
+
+[DataContract(IsReference = true)]
+public class PointBounds : ViewModelBase, IBounds
 {
-    [DataContract(IsReference = true)]
-    public class PointBounds : ViewModelBase, IBounds
+    public IPointShape TryToGetPoint(IBaseShape shape, Point2 target, double radius, IHitTest hitTest, Modifier modifier)
     {
-        public IPointShape TryToGetPoint(IBaseShape shape, Point2 target, double radius, IHitTest hitTest, Modifier modifier)
+        if (!(shape is IPointShape point))
         {
-            if (!(shape is IPointShape point))
-            {
-                throw new ArgumentNullException("shape");
-            }
-
-            if (Point2.FromXY(point.X, point.Y).ExpandToRect(radius).Contains(target.X, target.Y))
-            {
-                return point;
-            }
-
-            return null;
+            throw new ArgumentNullException("shape");
         }
 
-        public IBaseShape Contains(IBaseShape shape, Point2 target, double radius, IHitTest hitTest, Modifier modifier)
+        if (Point2.FromXY(point.X, point.Y).ExpandToRect(radius).Contains(target.X, target.Y))
         {
-            if (!(shape is IPointShape point))
-            {
-                throw new ArgumentNullException("shape");
-            }
-
-            return Point2.FromXY(point.X, point.Y).ExpandToRect(radius).Contains(target.X, target.Y) ? shape : null;
+            return point;
         }
 
-        public IBaseShape Overlaps(IBaseShape shape, Rect2 target, double radius, IHitTest hitTest, Modifier modifier)
-        {
-            if (!(shape is IPointShape point))
-            {
-                throw new ArgumentNullException("shape");
-            }
+        return null;
+    }
 
-            return Point2.FromXY(point.X, point.Y).ExpandToRect(radius).IntersectsWith(target) ? shape : null;
+    public IBaseShape Contains(IBaseShape shape, Point2 target, double radius, IHitTest hitTest, Modifier modifier)
+    {
+        if (!(shape is IPointShape point))
+        {
+            throw new ArgumentNullException("shape");
         }
+
+        return Point2.FromXY(point.X, point.Y).ExpandToRect(radius).Contains(target.X, target.Y) ? shape : null;
+    }
+
+    public IBaseShape Overlaps(IBaseShape shape, Rect2 target, double radius, IHitTest hitTest, Modifier modifier)
+    {
+        if (!(shape is IPointShape point))
+        {
+            throw new ArgumentNullException("shape");
+        }
+
+        return Point2.FromXY(point.X, point.Y).ExpandToRect(radius).IntersectsWith(target) ? shape : null;
     }
 }

@@ -1,23 +1,22 @@
 ﻿using System.Collections.Generic;
 using System.Runtime.Serialization;
 
-namespace Draw2D.ViewModels.Style.Shaders
+namespace Draw2D.ViewModels.Style.Shaders;
+
+[DataContract(IsReference = true)]
+public class SweepGradientShader : ViewModelBase, IShader
 {
-    [DataContract(IsReference = true)]
-    public class SweepGradientShader : ViewModelBase, IShader
+    // TODO:
+
+    public SweepGradientShader()
     {
-        // TODO:
+    }
 
-        public SweepGradientShader()
+    public object Copy(Dictionary<object, object> shared)
+    {
+        return new SweepGradientShader()
         {
-        }
-
-        public object Copy(Dictionary<object, object> shared)
-        {
-            return new SweepGradientShader()
-            {
-                Title = this.Title
-            };
-        }
+            Title = this.Title
+        };
     }
 }

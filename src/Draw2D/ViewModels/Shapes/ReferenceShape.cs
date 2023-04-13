@@ -5,145 +5,144 @@ using Draw2D.ViewModels.Bounds;
 using Draw2D.ViewModels.Decorators;
 using Draw2D.ViewModels.Style;
 
-namespace Draw2D.ViewModels.Shapes
+namespace Draw2D.ViewModels.Shapes;
+
+[DataContract(IsReference = true)]
+public class ReferenceShape : BaseShape
 {
-    [DataContract(IsReference = true)]
-    public class ReferenceShape : BaseShape
+    internal static new IBounds s_bounds = new ReferenceBounds();
+    internal static new IShapeDecorator s_decorator = new ReferenceDecorator();
+
+    private double _x;
+    private double _y;
+    private IBaseShape _template;
+
+    [IgnoreDataMember]
+    public override IBounds Bounds { get; } = s_bounds;
+
+    [IgnoreDataMember]
+    public override IShapeDecorator Decorator { get; } = s_decorator;
+
+    [DataMember(IsRequired = false, EmitDefaultValue = false)]
+    public double X
     {
-        internal static new IBounds s_bounds = new ReferenceBounds();
-        internal static new IShapeDecorator s_decorator = new ReferenceDecorator();
+        get => _x;
+        set => Update(ref _x, value);
+    }
 
-        private double _x;
-        private double _y;
-        private IBaseShape _template;
+    [DataMember(IsRequired = false, EmitDefaultValue = false)]
+    public double Y
+    {
+        get => _y;
+        set => Update(ref _y, value);
+    }
 
-        [IgnoreDataMember]
-        public override IBounds Bounds { get; } = s_bounds;
+    [DataMember(IsRequired = false, EmitDefaultValue = false)]
+    public IBaseShape Template
+    {
+        get => _template;
+        set => Update(ref _template, value);
+    }
 
-        [IgnoreDataMember]
-        public override IShapeDecorator Decorator { get; } = s_decorator;
+    public ReferenceShape()
+    {
+    }
 
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public double X
+    public ReferenceShape(string title, double x, double y, IBaseShape template)
+    {
+        this.Title = title;
+        this.X = x;
+        this.Y = y;
+        this.Template = template;
+        this.Points = new ObservableCollection<IPointShape>();
+
+        if (template is IConnectable connectable)
         {
-            get => _x;
-            set => Update(ref _x, value);
-        }
-
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public double Y
-        {
-            get => _y;
-            set => Update(ref _y, value);
-        }
-
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public IBaseShape Template
-        {
-            get => _template;
-            set => Update(ref _template, value);
-        }
-
-        public ReferenceShape()
-        {
-        }
-
-        public ReferenceShape(string title, double x, double y, IBaseShape template)
-        {
-            this.Title = title;
-            this.X = x;
-            this.Y = y;
-            this.Template = template;
-            this.Points = new ObservableCollection<IPointShape>();
-
-            if (template is IConnectable connectable)
+            foreach (var point in connectable.Points)
             {
-                foreach (var point in connectable.Points)
+                Points.Add(new ReferencePointShape(point, this));
+            }
+        }
+    }
+
+    public override bool IsTreeDirty()
+    {
+        if (base.IsTreeDirty())
+        {
+            return true;
+        }
+
+        if (_template?.IsTreeDirty() ?? false)
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    public override void Invalidate()
+    {
+        if (_template != null)
+        {
+            _template.Invalidate();
+        }
+
+        base.Invalidate();
+    }
+
+    public override void Draw(object dc, IShapeRenderer renderer, double dx, double dy, double scale, object db, object r)
+    {
+        if (_template != null)
+        {
+            double offsetX = X;
+            double offsetY = Y;
+            _template.Draw(dc, renderer, dx + offsetX, dy + offsetY, scale, db, r);
+        }
+    }
+
+    public override void Move(ISelectionState selectionState, double dx, double dy)
+    {
+        X += dx;
+        Y += dy;
+    }
+
+    public override object Copy(Dictionary<object, object> shared)
+    {
+        var copy = new ReferenceShape()
+        {
+            StyleId = this.StyleId,
+            Effects = (IPaintEffects)this.Effects?.Copy(shared),
+            Owner = this.Owner,
+            Title = this.Title,
+            X = this.X,
+            Y = this.Y,
+            Template = this.Template,
+            Points = new ObservableCollection<IPointShape>()
+        };
+
+        if (shared != null)
+        {
+            foreach (var point in this.Points)
+            {
+                if (point is ReferencePointShape referencePoint)
                 {
-                    Points.Add(new ReferencePointShape(point, this));
+                    var referencePointCopy = (ReferencePointShape)shared[referencePoint];
+                    referencePointCopy.Owner = copy;
+                    referencePointCopy.Reference = copy;
+                    copy.Points.Add(referencePointCopy);
+                }
+                else
+                {
+                    var pointCopy = (IPointShape)shared[point];
+                    pointCopy.Owner = copy;
+                    copy.Points.Add(pointCopy);
                 }
             }
+
+            shared[this] = copy;
+            shared[copy] = this;
         }
 
-        public override bool IsTreeDirty()
-        {
-            if (base.IsTreeDirty())
-            {
-                return true;
-            }
-
-            if (_template?.IsTreeDirty() ?? false)
-            {
-                return true;
-            }
-
-            return false;
-        }
-
-        public override void Invalidate()
-        {
-            if (_template != null)
-            {
-                _template.Invalidate();
-            }
-
-            base.Invalidate();
-        }
-
-        public override void Draw(object dc, IShapeRenderer renderer, double dx, double dy, double scale, object db, object r)
-        {
-            if (_template != null)
-            {
-                double offsetX = X;
-                double offsetY = Y;
-                _template.Draw(dc, renderer, dx + offsetX, dy + offsetY, scale, db, r);
-            }
-        }
-
-        public override void Move(ISelectionState selectionState, double dx, double dy)
-        {
-            X += dx;
-            Y += dy;
-        }
-
-        public override object Copy(Dictionary<object, object> shared)
-        {
-            var copy = new ReferenceShape()
-            {
-                StyleId = this.StyleId,
-                Effects = (IPaintEffects)this.Effects?.Copy(shared),
-                Owner = this.Owner,
-                Title = this.Title,
-                X = this.X,
-                Y = this.Y,
-                Template = this.Template,
-                Points = new ObservableCollection<IPointShape>()
-            };
-
-            if (shared != null)
-            {
-                foreach (var point in this.Points)
-                {
-                    if (point is ReferencePointShape referencePoint)
-                    {
-                        var referencePointCopy = (ReferencePointShape)shared[referencePoint];
-                        referencePointCopy.Owner = copy;
-                        referencePointCopy.Reference = copy;
-                        copy.Points.Add(referencePointCopy);
-                    }
-                    else
-                    {
-                        var pointCopy = (IPointShape)shared[point];
-                        pointCopy.Owner = copy;
-                        copy.Points.Add(pointCopy);
-                    }
-                }
-
-                shared[this] = copy;
-                shared[copy] = this;
-            }
-
-            return copy;
-        }
+        return copy;
     }
 }

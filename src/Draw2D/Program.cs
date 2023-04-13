@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Avalonia;
 using Avalonia.OpenGL;
+using Avalonia.Win32;
 
 namespace Draw2D;
 
@@ -37,8 +38,7 @@ internal class Program
     {
         return new Win32PlatformOptions
         {
-            AllowEglInitialization = true,
-            UseDeferredRendering = true
+            AllowEglInitialization = true
         };
     }
 
@@ -48,8 +48,7 @@ internal class Program
         {
             EnableMultiTouch = true,
             UseGpu = true,
-            UseEGL = true,
-            UseDeferredRendering = true
+            UseEGL = true
         };
     }
 
@@ -58,7 +57,6 @@ internal class Program
         return new AvaloniaNativePlatformOptions
         {
             UseGpu = true,
-            UseDeferredRendering = true
         };
     }
 

@@ -1,13 +1,12 @@
 ﻿
-namespace Core2D.UI.Zoom.Input
+namespace Core2D.UI.Zoom.Input;
+
+public enum FitMode
 {
-    public enum FitMode
-    {
-        None,
-        Reset,
-        Center,
-        Fill,
-        Uniform,
-        UniformToFill
-    }
+    None,
+    Reset,
+    Center,
+    Fill,
+    Uniform,
+    UniformToFill
 }

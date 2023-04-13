@@ -1,18 +1,11 @@
 ﻿using Avalonia.Controls;
-using Avalonia.Markup.Xaml;
 
-namespace Draw2D.Views.Filters
+namespace Draw2D.Views.Filters;
+
+public partial class LineSnapSettingsView : UserControl
 {
-    public class LineSnapSettingsView : UserControl
+    public LineSnapSettingsView()
     {
-        public LineSnapSettingsView()
-        {
-            InitializeComponent();
-        }
-
-        private void InitializeComponent()
-        {
-            AvaloniaXamlLoader.Load(this);
-        }
+        InitializeComponent();
     }
 }

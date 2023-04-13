@@ -1,18 +1,11 @@
 ﻿using Avalonia.Controls;
-using Avalonia.Markup.Xaml;
 
-namespace Draw2D.Views.Style.MaskFilters
+namespace Draw2D.Views.Style.MaskFilters;
+
+public partial class TableMaskFilterView : UserControl
 {
-    public class TableMaskFilterView : UserControl
+    public TableMaskFilterView()
     {
-        public TableMaskFilterView()
-        {
-            InitializeComponent();
-        }
-
-        private void InitializeComponent()
-        {
-            AvaloniaXamlLoader.Load(this);
-        }
+        InitializeComponent();
     }
 }

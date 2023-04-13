@@ -1,18 +1,11 @@
 ﻿using Avalonia.Controls;
-using Avalonia.Markup.Xaml;
 
-namespace Draw2D.Views.Style.Shaders
+namespace Draw2D.Views.Style.Shaders;
+
+public partial class EmptyShaderView : UserControl
 {
-    public class EmptyShaderView : UserControl
+    public EmptyShaderView()
     {
-        public EmptyShaderView()
-        {
-            InitializeComponent();
-        }
-
-        private void InitializeComponent()
-        {
-            AvaloniaXamlLoader.Load(this);
-        }
+        InitializeComponent();
     }
 }

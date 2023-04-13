@@ -6,122 +6,121 @@ using Draw2D.ViewModels.Containers;
 using Draw2D.ViewModels.Decorators;
 using Draw2D.ViewModels.Style;
 
-namespace Draw2D.ViewModels.Shapes
+namespace Draw2D.ViewModels.Shapes;
+
+[DataContract(IsReference = true)]
+public class FigureShape : GroupShape, ICanvasContainer
 {
-    [DataContract(IsReference = true)]
-    public class FigureShape : GroupShape, ICanvasContainer
+    internal static new IBounds s_bounds = new FigureBounds();
+    internal static new IShapeDecorator s_decorator = new FigureDecorator();
+
+    private bool _isFilled;
+    private bool _isClosed;
+
+    [IgnoreDataMember]
+    public override IBounds Bounds { get; } = s_bounds;
+
+    [IgnoreDataMember]
+    public override IShapeDecorator Decorator { get; } = s_decorator;
+
+    [DataMember(IsRequired = false, EmitDefaultValue = false)]
+    public bool IsFilled
     {
-        internal static new IBounds s_bounds = new FigureBounds();
-        internal static new IShapeDecorator s_decorator = new FigureDecorator();
+        get => _isFilled;
+        set => Update(ref _isFilled, value);
+    }
 
-        private bool _isFilled;
-        private bool _isClosed;
+    [DataMember(IsRequired = false, EmitDefaultValue = false)]
+    public bool IsClosed
+    {
+        get => _isClosed;
+        set => Update(ref _isClosed, value);
+    }
 
-        [IgnoreDataMember]
-        public override IBounds Bounds { get; } = s_bounds;
+    public FigureShape()
+        : base()
+    {
+    }
 
-        [IgnoreDataMember]
-        public override IShapeDecorator Decorator { get; } = s_decorator;
+    public FigureShape(IList<IBaseShape> shapes)
+        : base()
+    {
+        this.Shapes = shapes;
+    }
 
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public bool IsFilled
+    public FigureShape(string title)
+        : this()
+    {
+        this.Title = title;
+    }
+
+    public FigureShape(string title, IList<IBaseShape> shapes)
+        : base()
+    {
+        this.Title = title;
+        this.Shapes = shapes;
+    }
+
+    public override void Select(ISelectionState selectionState)
+    {
+        base.Select(selectionState);
+
+        var points = new List<IPointShape>();
+        GetPoints(points);
+
+        foreach (var point in points)
         {
-            get => _isFilled;
-            set => Update(ref _isFilled, value);
+            point.Select(selectionState);
         }
+    }
 
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public bool IsClosed
+    public override void Deselect(ISelectionState selectionState)
+    {
+        base.Deselect(selectionState);
+
+        var points = new List<IPointShape>();
+        GetPoints(points);
+
+        foreach (var point in points)
         {
-            get => _isClosed;
-            set => Update(ref _isClosed, value);
+            point.Deselect(selectionState);
         }
+    }
 
-        public FigureShape()
-            : base()
+    public override object Copy(Dictionary<object, object> shared)
+    {
+        var copy = new FigureShape()
         {
-        }
+            Name = this.Name,
+            Title = this.Title,
+            Points = new ObservableCollection<IPointShape>(),
+            Shapes = new ObservableCollection<IBaseShape>(),
+            StyleId = this.StyleId,
+            Effects = (IPaintEffects)this.Effects?.Copy(shared),
+            IsFilled = this.IsFilled,
+            IsClosed = this.IsClosed
+        };
 
-        public FigureShape(IList<IBaseShape> shapes)
-            : base()
+        if (shared != null)
         {
-            this.Shapes = shapes;
-        }
-
-        public FigureShape(string title)
-            : this()
-        {
-            this.Title = title;
-        }
-
-        public FigureShape(string title, IList<IBaseShape> shapes)
-            : base()
-        {
-            this.Title = title;
-            this.Shapes = shapes;
-        }
-
-        public override void Select(ISelectionState selectionState)
-        {
-            base.Select(selectionState);
-
-            var points = new List<IPointShape>();
-            GetPoints(points);
-
-            foreach (var point in points)
+            foreach (var point in this.Points)
             {
-                point.Select(selectionState);
-            }
-        }
-
-        public override void Deselect(ISelectionState selectionState)
-        {
-            base.Deselect(selectionState);
-
-            var points = new List<IPointShape>();
-            GetPoints(points);
-
-            foreach (var point in points)
-            {
-                point.Deselect(selectionState);
-            }
-        }
-
-        public override object Copy(Dictionary<object, object> shared)
-        {
-            var copy = new FigureShape()
-            {
-                Name = this.Name,
-                Title = this.Title,
-                Points = new ObservableCollection<IPointShape>(),
-                Shapes = new ObservableCollection<IBaseShape>(),
-                StyleId = this.StyleId,
-                Effects = (IPaintEffects)this.Effects?.Copy(shared),
-                IsFilled = this.IsFilled,
-                IsClosed = this.IsClosed
-            };
-
-            if (shared != null)
-            {
-                foreach (var point in this.Points)
-                {
-                    var pointCopy = (IPointShape)shared[point];
-                    pointCopy.Owner = copy;
-                    copy.Points.Add(pointCopy);
-                }
-
-                foreach (var shape in this.Shapes)
-                {
-                    var shapeCopy = (IBaseShape)(shape.Copy(shared));
-                    shapeCopy.Owner = copy;
-                    copy.Shapes.Add(shapeCopy);
-                }
-
-                shared[this] = copy;
-                shared[copy] = this;
+                var pointCopy = (IPointShape)shared[point];
+                pointCopy.Owner = copy;
+                copy.Points.Add(pointCopy);
             }
 
-            return copy;
+            foreach (var shape in this.Shapes)
+            {
+                var shapeCopy = (IBaseShape)(shape.Copy(shared));
+                shapeCopy.Owner = copy;
+                copy.Shapes.Add(shapeCopy);
+            }
+
+            shared[this] = copy;
+            shared[copy] = this;
         }
+
+        return copy;
     }
 }

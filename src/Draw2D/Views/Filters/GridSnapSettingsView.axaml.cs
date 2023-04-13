@@ -1,18 +1,11 @@
 ﻿using Avalonia.Controls;
-using Avalonia.Markup.Xaml;
 
-namespace Draw2D.Views.Filters
+namespace Draw2D.Views.Filters;
+
+public partial class GridSnapSettingsView : UserControl
 {
-    public class GridSnapSettingsView : UserControl
+    public GridSnapSettingsView()
     {
-        public GridSnapSettingsView()
-        {
-            InitializeComponent();
-        }
-
-        private void InitializeComponent()
-        {
-            AvaloniaXamlLoader.Load(this);
-        }
+        InitializeComponent();
     }
 }

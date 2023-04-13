@@ -1,11 +1,10 @@
 ﻿
-namespace Draw2D.ViewModels
+namespace Draw2D.ViewModels;
+
+public enum HAlign
 {
-    public enum HAlign
-    {
-        Auto = 0,
-        Left = 1,
-        Center = 2,
-        Right = 3
-    }
+    Auto = 0,
+    Left = 1,
+    Center = 2,
+    Right = 3
 }

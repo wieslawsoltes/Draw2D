@@ -1,18 +1,11 @@
 ﻿using Avalonia.Controls;
-using Avalonia.Markup.Xaml;
 
-namespace Draw2D.Views.Shapes
+namespace Draw2D.Views.Shapes;
+
+public partial class GroupShapeView : UserControl
 {
-    public class GroupShapeView : UserControl
+    public GroupShapeView()
     {
-        public GroupShapeView()
-        {
-            InitializeComponent();
-        }
-
-        private void InitializeComponent()
-        {
-            AvaloniaXamlLoader.Load(this);
-        }
+        InitializeComponent();
     }
 }

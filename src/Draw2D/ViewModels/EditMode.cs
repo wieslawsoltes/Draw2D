@@ -1,9 +1,8 @@
 ﻿
-namespace Draw2D.ViewModels
+namespace Draw2D.ViewModels;
+
+public enum EditMode
 {
-    public enum EditMode
-    {
-        Touch,
-        Mouse
-    }
+    Touch,
+    Mouse
 }

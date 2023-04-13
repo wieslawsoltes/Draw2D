@@ -1,12 +1,11 @@
 ﻿
-namespace Draw2D.ViewModels.Shapes
+namespace Draw2D.ViewModels.Shapes;
+
+public enum StretchMode
 {
-    public enum StretchMode
-    {
-        None,
-        Center,
-        Fill,
-        Uniform,
-        UniformToFill
-    }
+    None,
+    Center,
+    Fill,
+    Uniform,
+    UniformToFill
 }

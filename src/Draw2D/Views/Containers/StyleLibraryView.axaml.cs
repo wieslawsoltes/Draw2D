@@ -1,18 +1,11 @@
 ﻿using Avalonia.Controls;
-using Avalonia.Markup.Xaml;
 
-namespace Draw2D.Views.Containers
+namespace Draw2D.Views.Containers;
+
+public partial class StyleLibraryView : UserControl
 {
-    public class StyleLibraryView : UserControl
+    public StyleLibraryView()
     {
-        public StyleLibraryView()
-        {
-            InitializeComponent();
-        }
-
-        private void InitializeComponent()
-        {
-            AvaloniaXamlLoader.Load(this);
-        }
+        InitializeComponent();
     }
 }

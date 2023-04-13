@@ -1,18 +1,11 @@
 ﻿using Avalonia.Controls;
-using Avalonia.Markup.Xaml;
 
-namespace Draw2D.Views.Style
+namespace Draw2D.Views.Style;
+
+public partial class PaintView : UserControl
 {
-    public class PaintView : UserControl
+    public PaintView()
     {
-        public PaintView()
-        {
-            InitializeComponent();
-        }
-
-        private void InitializeComponent()
-        {
-            AvaloniaXamlLoader.Load(this);
-        }
+        InitializeComponent();
     }
 }

@@ -1,7 +1,6 @@
 ﻿
-namespace Draw2D.ViewModels.Style
+namespace Draw2D.ViewModels.Style;
+
+public interface IImageFilter : INode, IDirty, ICopyable
 {
-    public interface IImageFilter : INode, IDirty, ICopyable
-    {
-    }
 }

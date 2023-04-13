@@ -1,23 +1,22 @@
 ﻿using System.Collections.Generic;
 using System.Runtime.Serialization;
 
-namespace Draw2D.ViewModels.Style.ImageFilters
+namespace Draw2D.ViewModels.Style.ImageFilters;
+
+[DataContract(IsReference = true)]
+public class ComposeImageFilter : ViewModelBase, IImageFilter
 {
-    [DataContract(IsReference = true)]
-    public class ComposeImageFilter : ViewModelBase, IImageFilter
+    // TODO:
+
+    public ComposeImageFilter()
     {
-        // TODO:
+    }
 
-        public ComposeImageFilter()
+    public object Copy(Dictionary<object, object> shared)
+    {
+        return new ComposeImageFilter()
         {
-        }
-
-        public object Copy(Dictionary<object, object> shared)
-        {
-            return new ComposeImageFilter()
-            {
-                Title = this.Title
-            };
-        }
+            Title = this.Title
+        };
     }
 }

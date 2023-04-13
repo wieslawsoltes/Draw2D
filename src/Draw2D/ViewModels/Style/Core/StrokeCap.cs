@@ -1,10 +1,9 @@
 ﻿
-namespace Draw2D.ViewModels.Style
+namespace Draw2D.ViewModels.Style;
+
+public enum StrokeCap
 {
-    public enum StrokeCap
-    {
-        Butt = 0,
-        Round = 1,
-        Square = 2
-    }
+    Butt = 0,
+    Round = 1,
+    Square = 2
 }

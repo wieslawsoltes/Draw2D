@@ -1,83 +1,82 @@
 ﻿using System.Collections.Generic;
 using System.Runtime.Serialization;
 
-namespace Draw2D.ViewModels.Style.PathEffects
+namespace Draw2D.ViewModels.Style.PathEffects;
+
+[DataContract(IsReference = true)]
+public class PathSumEffect : ViewModelBase, IPathEffect
 {
-    [DataContract(IsReference = true)]
-    public class PathSumEffect : ViewModelBase, IPathEffect
+    public static IPathEffectFactory PathEffectFactory { get; } = Style.PathEffectFactory.Instance;
+
+    private IPathEffect _first;
+    private IPathEffect _second;
+
+    [DataMember(IsRequired = false, EmitDefaultValue = false)]
+    public IPathEffect First
     {
-        public static IPathEffectFactory PathEffectFactory { get; } = Style.PathEffectFactory.Instance;
+        get => _first;
+        set => Update(ref _first, value);
+    }
 
-        private IPathEffect _first;
-        private IPathEffect _second;
+    [DataMember(IsRequired = false, EmitDefaultValue = false)]
+    public IPathEffect Second
+    {
+        get => _second;
+        set => Update(ref _second, value);
+    }
 
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public IPathEffect First
+    public PathSumEffect()
+    {
+    }
+
+    public PathSumEffect(IPathEffect first, IPathEffect second)
+    {
+        this.First = first;
+        this.Second = second;
+    }
+
+    public static IPathEffect MakeSum()
+    {
+        return new PathSumEffect() { Title = "Sum" };
+    }
+
+    public void SetFirstPathEffect(IPathEffect pathEffect)
+    {
+        this.First = pathEffect;
+    }
+
+    public void SetSecondPathEffect(IPathEffect pathEffect)
+    {
+        this.Second = pathEffect;
+    }
+
+    public override bool IsTreeDirty()
+    {
+        if (base.IsTreeDirty())
         {
-            get => _first;
-            set => Update(ref _first, value);
+            return true;
         }
 
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public IPathEffect Second
+        if (_first?.IsTreeDirty() ?? false)
         {
-            get => _second;
-            set => Update(ref _second, value);
+            return true;
         }
 
-        public PathSumEffect()
+        if (_second?.IsTreeDirty() ?? false)
         {
+            return true;
         }
 
-        public PathSumEffect(IPathEffect first, IPathEffect second)
+        return false;
+    }
+
+    public object Copy(Dictionary<object, object> shared)
+    {
+        return new PathSumEffect()
         {
-            this.First = first;
-            this.Second = second;
-        }
-
-        public static IPathEffect MakeSum()
-        {
-            return new PathSumEffect() { Title = "Sum" };
-        }
-
-        public void SetFirstPathEffect(IPathEffect pathEffect)
-        {
-            this.First = pathEffect;
-        }
-
-        public void SetSecondPathEffect(IPathEffect pathEffect)
-        {
-            this.Second = pathEffect;
-        }
-
-        public override bool IsTreeDirty()
-        {
-            if (base.IsTreeDirty())
-            {
-                return true;
-            }
-
-            if (_first?.IsTreeDirty() ?? false)
-            {
-                return true;
-            }
-
-            if (_second?.IsTreeDirty() ?? false)
-            {
-                return true;
-            }
-
-            return false;
-        }
-
-        public object Copy(Dictionary<object, object> shared)
-        {
-            return new PathSumEffect()
-            {
-                Title = this.Title,
-                First = (IPathEffect)this.First.Copy(shared),
-                Second = (IPathEffect)this.Second.Copy(shared)
-            };
-        }
+            Title = this.Title,
+            First = (IPathEffect)this.First.Copy(shared),
+            Second = (IPathEffect)this.Second.Copy(shared)
+        };
     }
 }

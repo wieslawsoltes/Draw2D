@@ -1,18 +1,11 @@
 ﻿using Avalonia.Controls;
-using Avalonia.Markup.Xaml;
 
-namespace Draw2D.Views.Style.ImageFilters
+namespace Draw2D.Views.Style.ImageFilters;
+
+public partial class MatrixConvolutionImageFilterView : UserControl
 {
-    public class MatrixConvolutionImageFilterView : UserControl
+    public MatrixConvolutionImageFilterView()
     {
-        public MatrixConvolutionImageFilterView()
-        {
-            InitializeComponent();
-        }
-
-        private void InitializeComponent()
-        {
-            AvaloniaXamlLoader.Load(this);
-        }
+        InitializeComponent();
     }
 }

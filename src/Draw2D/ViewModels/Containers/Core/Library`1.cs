@@ -1,139 +1,138 @@
 ﻿using System.Collections.Generic;
 using System.Runtime.Serialization;
 
-namespace Draw2D.ViewModels.Containers
+namespace Draw2D.ViewModels.Containers;
+
+[DataContract(IsReference = true)]
+public abstract class Library<T> : ViewModelBase, ILibrary<T> where T : INode, ICopyable, IDirty
 {
-    [DataContract(IsReference = true)]
-    public abstract class Library<T> : ViewModelBase, ILibrary<T> where T : INode, ICopyable, IDirty
+    private Dictionary<string, T> _itemsCache;
+    private IList<T> _items;
+    private T _currentItem;
+
+    [DataMember(IsRequired = false, EmitDefaultValue = false)]
+    public IList<T> Items
     {
-        private Dictionary<string, T> _itemsCache;
-        private IList<T> _items;
-        private T _currentItem;
+        get => _items;
+        set => Update(ref _items, value);
+    }
 
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public IList<T> Items
+    [DataMember(IsRequired = false, EmitDefaultValue = false)]
+    public T CurrentItem
+    {
+        get => _currentItem;
+        set => Update(ref _currentItem, value);
+    }
+
+    public override bool IsTreeDirty()
+    {
+        if (base.IsTreeDirty())
         {
-            get => _items;
-            set => Update(ref _items, value);
+            return true;
         }
 
-        [DataMember(IsRequired = false, EmitDefaultValue = false)]
-        public T CurrentItem
+        if (_items != null)
         {
-            get => _currentItem;
-            set => Update(ref _currentItem, value);
-        }
-
-        public override bool IsTreeDirty()
-        {
-            if (base.IsTreeDirty())
+            foreach (var item in _items)
             {
-                return true;
-            }
-
-            if (_items != null)
-            {
-                foreach (var item in _items)
+                if (item?.IsTreeDirty() ?? false)
                 {
-                    if (item?.IsTreeDirty() ?? false)
-                    {
-                        return true;
-                    }
-                }
-            }
-
-            return false;
-        }
-
-        public override void Invalidate()
-        {
-            if (_items != null)
-            {
-                foreach (var item in _items)
-                {
-                    item.Invalidate();
-                }
-            }
-
-            _currentItem?.Invalidate();
-
-            base.Invalidate();
-        }
-
-        public void UpdateCache()
-        {
-            if (_items != null)
-            {
-                if (_itemsCache == null)
-                {
-                    _itemsCache = new Dictionary<string, T>();
-                }
-                else
-                {
-                    _itemsCache.Clear();
-                }
-
-                foreach (var item in _items)
-                {
-                    _itemsCache[item.Title] = item;
+                    return true;
                 }
             }
         }
 
-        public void Add(T value)
+        return false;
+    }
+
+    public override void Invalidate()
+    {
+        if (_items != null)
         {
-            if (value != null)
+            foreach (var item in _items)
             {
-                _items.Add(value);
-
-                if (_itemsCache == null)
-                {
-                    _itemsCache = new Dictionary<string, T>();
-                }
-
-                _itemsCache[value.Title] = value;
+                item.Invalidate();
             }
         }
 
-        public void Remove(T value)
-        {
-            if (value != null)
-            {
-                _items.Remove(value);
+        _currentItem?.Invalidate();
 
-                if (_itemsCache != null)
-                {
-                    _itemsCache.Remove(value.Title);
-                }
+        base.Invalidate();
+    }
+
+    public void UpdateCache()
+    {
+        if (_items != null)
+        {
+            if (_itemsCache == null)
+            {
+                _itemsCache = new Dictionary<string, T>();
+            }
+            else
+            {
+                _itemsCache.Clear();
+            }
+
+            foreach (var item in _items)
+            {
+                _itemsCache[item.Title] = item;
             }
         }
+    }
 
-        public T Get(string title)
+    public void Add(T value)
+    {
+        if (value != null)
         {
-            if (title == null)
-            {
-                return default;
-            }
+            _items.Add(value);
 
             if (_itemsCache == null)
             {
-                UpdateCache();
+                _itemsCache = new Dictionary<string, T>();
             }
 
-            if (!_itemsCache.TryGetValue(title, out var value))
-            {
-                foreach (var item in _items)
-                {
-                    if (item.Title == title)
-                    {
-                        _itemsCache[item.Title] = item;
-                        return item;
-                    }
-                }
-                return default;
-            }
-
-            return value;
+            _itemsCache[value.Title] = value;
         }
+    }
+
+    public void Remove(T value)
+    {
+        if (value != null)
+        {
+            _items.Remove(value);
+
+            if (_itemsCache != null)
+            {
+                _itemsCache.Remove(value.Title);
+            }
+        }
+    }
+
+    public T Get(string title)
+    {
+        if (title == null)
+        {
+            return default;
+        }
+
+        if (_itemsCache == null)
+        {
+            UpdateCache();
+        }
+
+        if (!_itemsCache.TryGetValue(title, out var value))
+        {
+            foreach (var item in _items)
+            {
+                if (item.Title == title)
+                {
+                    _itemsCache[item.Title] = item;
+                    return item;
+                }
+            }
+            return default;
+        }
+
+        return value;
     }
 }

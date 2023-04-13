@@ -1,10 +1,9 @@
 ﻿
-namespace Draw2D.ViewModels.Style
+namespace Draw2D.ViewModels.Style;
+
+public enum PaintStyle
 {
-    public enum PaintStyle
-    {
-        Fill = 0,
-        Stroke = 1,
-        StrokeAndFill = 2
-    }
+    Fill = 0,
+    Stroke = 1,
+    StrokeAndFill = 2
 }

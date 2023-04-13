@@ -6,223 +6,222 @@ using Draw2D.ViewModels.Shapes;
 using Draw2D.ViewModels.Tools;
 using SkiaSharp;
 
-namespace Draw2D.Export
+namespace Draw2D.Export;
+
+public class SkiaPathConverter : IPathConverter
 {
-    public class SkiaPathConverter : IPathConverter
+    private bool IsAcceptedShape(IBaseShape shape)
     {
-        private bool IsAcceptedShape(IBaseShape shape)
+        return !(shape is IPointShape || shape is FigureShape);
+    }
+
+    private IList<IBaseShape> GetShapes(ICollection<IBaseShape> selected)
+    {
+        if (selected == null || selected.Count <= 0)
         {
-            return !(shape is IPointShape || shape is FigureShape);
+            return null;
         }
 
-        private IList<IBaseShape> GetShapes(ICollection<IBaseShape> selected)
+        var shapes = new List<IBaseShape>();
+
+        foreach (var shape in selected)
         {
-            if (selected == null || selected.Count <= 0)
+            if (IsAcceptedShape(shape))
             {
-                return null;
+                shapes.Add(shape);
             }
-
-            var shapes = new List<IBaseShape>();
-
-            foreach (var shape in selected)
-            {
-                if (IsAcceptedShape(shape))
-                {
-                    shapes.Add(shape);
-                }
-            }
-
-            return shapes;
         }
 
-        private IList<SKPath> ToPaths(IToolContext context, IList<IBaseShape> shapes)
+        return shapes;
+    }
+
+    private IList<SKPath> ToPaths(IToolContext context, IList<IBaseShape> shapes)
+    {
+        if (shapes == null || shapes.Count <= 0)
         {
-            if (shapes == null || shapes.Count <= 0)
-            {
-                return null;
-            }
-
-            var paths = new List<SKPath>();
-
-            for (int i = 0; i < shapes.Count; i++)
-            {
-                var fillType = SKPathFillType.Winding;
-                if (shapes[i] is PathShape pathShape)
-                {
-                    fillType = SkiaUtil.ToSKPathFillType(pathShape.FillType);
-                }
-                var path = new SKPath() { FillType = fillType };
-                var result = SkiaUtil.AddShape(context, shapes[i], 0.0, 0.0, path);
-                if (result == true && path.IsEmpty == false)
-                {
-                    paths.Add(path);
-                }
-                else
-                {
-                    path.Dispose();
-                }
-            }
-
-            return paths;
+            return null;
         }
 
-        private SKPath ToPath(IToolContext context, IBaseShape shape)
+        var paths = new List<SKPath>();
+
+        for (int i = 0; i < shapes.Count; i++)
         {
             var fillType = SKPathFillType.Winding;
-            if (shape is PathShape pathShape)
+            if (shapes[i] is PathShape pathShape)
             {
                 fillType = SkiaUtil.ToSKPathFillType(pathShape.FillType);
             }
-
-            var geometry = new SKPath() { FillType = fillType };
-
-            if (SkiaUtil.AddShape(context, shape, 0.0, 0.0, geometry) == true)
+            var path = new SKPath() { FillType = fillType };
+            var result = SkiaUtil.AddShape(context, shapes[i], 0.0, 0.0, path);
+            if (result == true && path.IsEmpty == false)
             {
-                return geometry;
+                paths.Add(path);
             }
             else
             {
-                geometry.Dispose();
+                path.Dispose();
             }
-
-            return null;
         }
 
-        public PathShape ToPathShape(IToolContext context, IBaseShape shape)
+        return paths;
+    }
+
+    private SKPath ToPath(IToolContext context, IBaseShape shape)
+    {
+        var fillType = SKPathFillType.Winding;
+        if (shape is PathShape pathShape)
         {
-            using (var geometry = ToPath(context, shape))
+            fillType = SkiaUtil.ToSKPathFillType(pathShape.FillType);
+        }
+
+        var geometry = new SKPath() { FillType = fillType };
+
+        if (SkiaUtil.AddShape(context, shape, 0.0, 0.0, geometry) == true)
+        {
+            return geometry;
+        }
+        else
+        {
+            geometry.Dispose();
+        }
+
+        return null;
+    }
+
+    public PathShape ToPathShape(IToolContext context, IBaseShape shape)
+    {
+        using (var geometry = ToPath(context, shape))
+        {
+            if (geometry != null)
             {
-                if (geometry != null)
+                var style = context.DocumentContainer?.StyleLibrary?.Get(shape.StyleId);
+                if (style == null)
                 {
-                    var style = context.DocumentContainer?.StyleLibrary?.Get(shape.StyleId);
-                    if (style == null)
+                    style = context.DocumentContainer?.StyleLibrary?.CurrentItem;
+                }
+                return SkiaUtil.ToPathShape(context, geometry, style, context?.DocumentContainer?.PointTemplate);
+            }
+        }
+        return null;
+    }
+
+    public PathShape ToStrokePathShape(IToolContext context, IBaseShape shape)
+    {
+        using (var geometry = ToPath(context, shape))
+        {
+            if (geometry != null)
+            {
+                var style = context.DocumentContainer?.StyleLibrary?.Get(shape.StyleId);
+                if (style == null)
+                {
+                    style = context.DocumentContainer?.StyleLibrary?.CurrentItem;
+                }
+
+                using var disposable = new CompositeDisposable();
+                var path = SkiaUtil.ToStrokePath(context, style.StrokePaint, shape.Effects, geometry, disposable.Disposables);
+                if (path != null)
+                {
+                    disposable.Disposables.Add(path);
+                    var union = SkiaUtil.Op(SKPathOp.Union, new[] { path, path });
+                    if (union != null && !union.IsEmpty)
                     {
-                        style = context.DocumentContainer?.StyleLibrary?.CurrentItem;
+                        disposable.Disposables.Add(union);
+                        return SkiaUtil.ToPathShape(context, union, context.DocumentContainer?.StyleLibrary?.CurrentItem, context?.DocumentContainer?.PointTemplate);
                     }
-                    return SkiaUtil.ToPathShape(context, geometry, style, context?.DocumentContainer?.PointTemplate);
                 }
             }
-            return null;
         }
+        return null;
+    }
 
-        public PathShape ToStrokePathShape(IToolContext context, IBaseShape shape)
+    public PathShape ToFillPathShape(IToolContext context, IBaseShape shape)
+    {
+        using (var geometry = ToPath(context, shape))
         {
-            using (var geometry = ToPath(context, shape))
+            if (geometry != null)
             {
-                if (geometry != null)
+                var style = context.DocumentContainer?.StyleLibrary?.Get(shape.StyleId);
+                if (style == null)
                 {
-                    var style = context.DocumentContainer?.StyleLibrary?.Get(shape.StyleId);
-                    if (style == null)
+                    style = context.DocumentContainer?.StyleLibrary?.CurrentItem;
+                }
+
+                using var disposable = new CompositeDisposable();
+                var path = SkiaUtil.ToFillPath(context, style.FillPaint, shape.Effects, geometry, disposable.Disposables);
+                if (path != null)
+                {
+                    disposable.Disposables.Add(path);
+                    var union = SkiaUtil.Op(SKPathOp.Union, new[] { path, path });
+                    if (union != null && !union.IsEmpty)
                     {
-                        style = context.DocumentContainer?.StyleLibrary?.CurrentItem;
+                        disposable.Disposables.Add(union);
+                        return SkiaUtil.ToPathShape(context, union, context.DocumentContainer?.StyleLibrary?.CurrentItem, context?.DocumentContainer?.PointTemplate);
                     }
 
-                    using var disposable = new CompositeDisposable();
-                    var path = SkiaUtil.ToStrokePath(context, style.StrokePaint, shape.Effects, geometry, disposable.Disposables);
-                    if (path != null)
+                }
+            }
+        }
+        return null;
+    }
+
+    public PathShape Op(IToolContext context, PathOp op, ICollection<IBaseShape> selected)
+    {
+        var path = default(PathShape);
+        var shapes = GetShapes(selected);
+        if (shapes != null && shapes.Count > 0)
+        {
+            var paths = ToPaths(context, shapes);
+            if (paths != null && paths.Count > 0)
+            {
+                var result = SkiaUtil.Op(SkiaUtil.ToSKPathOp(op), paths);
+                if (result != null)
+                {
+                    if (!result.IsEmpty)
                     {
-                        disposable.Disposables.Add(path);
-                        var union = SkiaUtil.Op(SKPathOp.Union, new[] { path, path });
-                        if (union != null && !union.IsEmpty)
+                        var style = context.DocumentContainer?.StyleLibrary?.Get(shapes[0].StyleId);
+                        if (style == null)
                         {
-                            disposable.Disposables.Add(union);
-                            return SkiaUtil.ToPathShape(context, union, context.DocumentContainer?.StyleLibrary?.CurrentItem, context?.DocumentContainer?.PointTemplate);
+                            style = context.DocumentContainer?.StyleLibrary?.CurrentItem;
                         }
+                        path = SkiaUtil.ToPathShape(context, result, style, context?.DocumentContainer?.PointTemplate);
                     }
+                    result.Dispose();
                 }
-            }
-            return null;
-        }
 
-        public PathShape ToFillPathShape(IToolContext context, IBaseShape shape)
-        {
-            using (var geometry = ToPath(context, shape))
-            {
-                if (geometry != null)
+                for (int i = 0; i < paths.Count; i++)
                 {
-                    var style = context.DocumentContainer?.StyleLibrary?.Get(shape.StyleId);
-                    if (style == null)
-                    {
-                        style = context.DocumentContainer?.StyleLibrary?.CurrentItem;
-                    }
-
-                    using var disposable = new CompositeDisposable();
-                    var path = SkiaUtil.ToFillPath(context, style.FillPaint, shape.Effects, geometry, disposable.Disposables);
-                    if (path != null)
-                    {
-                        disposable.Disposables.Add(path);
-                        var union = SkiaUtil.Op(SKPathOp.Union, new[] { path, path });
-                        if (union != null && !union.IsEmpty)
-                        {
-                            disposable.Disposables.Add(union);
-                            return SkiaUtil.ToPathShape(context, union, context.DocumentContainer?.StyleLibrary?.CurrentItem, context?.DocumentContainer?.PointTemplate);
-                        }
-
-                    }
+                    paths[i].Dispose();
                 }
             }
-            return null;
         }
+        return path;
+    }
 
-        public PathShape Op(IToolContext context, PathOp op, ICollection<IBaseShape> selected)
+    public PathShape ToPathShape(IToolContext context, string svgPathData)
+    {
+        if (!string.IsNullOrWhiteSpace(svgPathData))
         {
-            var path = default(PathShape);
-            var shapes = GetShapes(selected);
-            if (shapes != null && shapes.Count > 0)
+            using var path = SkiaUtil.ToPath(svgPathData);
+            return SkiaUtil.ToPathShape(context, path, context.DocumentContainer?.StyleLibrary?.CurrentItem, context?.DocumentContainer?.PointTemplate);
+        }
+        return null;
+    }
+
+    public string ToSvgPathData(IToolContext context, ICollection<IBaseShape> selected)
+    {
+        var sb = new StringBuilder();
+        var shapes = GetShapes(selected);
+        if (shapes != null && shapes.Count > 0)
+        {
+            foreach (var shape in shapes)
             {
-                var paths = ToPaths(context, shapes);
-                if (paths != null && paths.Count > 0)
-                {
-                    var result = SkiaUtil.Op(SkiaUtil.ToSKPathOp(op), paths);
-                    if (result != null)
-                    {
-                        if (!result.IsEmpty)
-                        {
-                            var style = context.DocumentContainer?.StyleLibrary?.Get(shapes[0].StyleId);
-                            if (style == null)
-                            {
-                                style = context.DocumentContainer?.StyleLibrary?.CurrentItem;
-                            }
-                            path = SkiaUtil.ToPathShape(context, result, style, context?.DocumentContainer?.PointTemplate);
-                        }
-                        result.Dispose();
-                    }
-
-                    for (int i = 0; i < paths.Count; i++)
-                    {
-                        paths[i].Dispose();
-                    }
-                }
+                SkiaUtil.ToSvgPathData(context, shape, sb);
             }
-            return path;
         }
+        return sb.ToString();
+    }
 
-        public PathShape ToPathShape(IToolContext context, string svgPathData)
-        {
-            if (!string.IsNullOrWhiteSpace(svgPathData))
-            {
-                using var path = SkiaUtil.ToPath(svgPathData);
-                return SkiaUtil.ToPathShape(context, path, context.DocumentContainer?.StyleLibrary?.CurrentItem, context?.DocumentContainer?.PointTemplate);
-            }
-            return null;
-        }
-
-        public string ToSvgPathData(IToolContext context, ICollection<IBaseShape> selected)
-        {
-            var sb = new StringBuilder();
-            var shapes = GetShapes(selected);
-            if (shapes != null && shapes.Count > 0)
-            {
-                foreach (var shape in shapes)
-                {
-                    SkiaUtil.ToSvgPathData(context, shape, sb);
-                }
-            }
-            return sb.ToString();
-        }
-
-        public void Dispose()
-        {
-        }
+    public void Dispose()
+    {
     }
 }

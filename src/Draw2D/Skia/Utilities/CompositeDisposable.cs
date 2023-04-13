@@ -1,24 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Draw2D
+namespace Draw2D;
+
+internal class CompositeDisposable : IDisposable
 {
-    internal class CompositeDisposable : IDisposable
+    public IList<IDisposable> Disposables { get; private set; }
+
+    public CompositeDisposable()
     {
-        public IList<IDisposable> Disposables { get; private set; }
+        Disposables = new List<IDisposable>();
+    }
 
-        public CompositeDisposable()
+    public void Dispose()
+    {
+        foreach (var disposable in Disposables)
         {
-            Disposables = new List<IDisposable>();
+            disposable?.Dispose();
         }
-
-        public void Dispose()
-        {
-            foreach (var disposable in Disposables)
-            {
-                disposable?.Dispose();
-            }
-            Disposables = null;
-        }
+        Disposables = null;
     }
 }

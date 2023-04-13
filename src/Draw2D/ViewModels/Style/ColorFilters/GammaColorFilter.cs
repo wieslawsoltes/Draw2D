@@ -1,23 +1,22 @@
 ﻿using System.Collections.Generic;
 using System.Runtime.Serialization;
 
-namespace Draw2D.ViewModels.Style.ColorFilters
+namespace Draw2D.ViewModels.Style.ColorFilters;
+
+[DataContract(IsReference = true)]
+public class GammaColorFilter : ViewModelBase, IColorFilter
 {
-    [DataContract(IsReference = true)]
-    public class GammaColorFilter : ViewModelBase, IColorFilter
+    // TODO:
+
+    public GammaColorFilter()
     {
-        // TODO:
+    }
 
-        public GammaColorFilter()
+    public object Copy(Dictionary<object, object> shared)
+    {
+        return new GammaColorFilter()
         {
-        }
-
-        public object Copy(Dictionary<object, object> shared)
-        {
-            return new GammaColorFilter()
-            {
-                Title = this.Title
-            };
-        }
+            Title = this.Title
+        };
     }
 }

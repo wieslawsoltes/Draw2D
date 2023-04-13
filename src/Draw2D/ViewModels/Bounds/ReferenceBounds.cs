@@ -4,67 +4,66 @@ using Core2D.UI.Zoom.Input;
 using Draw2D.ViewModels.Shapes;
 using Spatial;
 
-namespace Draw2D.ViewModels.Bounds
+namespace Draw2D.ViewModels.Bounds;
+
+[DataContract(IsReference = true)]
+public class ReferenceBounds : ViewModelBase, IBounds
 {
-    [DataContract(IsReference = true)]
-    public class ReferenceBounds : ViewModelBase, IBounds
+    public IPointShape TryToGetPoint(IBaseShape shape, Point2 target, double radius, IHitTest hitTest, Modifier modifier)
     {
-        public IPointShape TryToGetPoint(IBaseShape shape, Point2 target, double radius, IHitTest hitTest, Modifier modifier)
+        if (!(shape is ReferenceShape reference))
         {
-            if (!(shape is ReferenceShape reference))
-            {
-                throw new ArgumentNullException("shape");
-            }
-
-            foreach (var point in reference.Points)
-            {
-                if (point.Bounds?.TryToGetPoint(point, target, radius, hitTest, modifier) != null)
-                {
-                    return point;
-                }
-            }
-
-            return null;
+            throw new ArgumentNullException("shape");
         }
 
-        public IBaseShape Contains(IBaseShape shape, Point2 target, double radius, IHitTest hitTest, Modifier modifier)
+        foreach (var point in reference.Points)
         {
-            if (!(shape is ReferenceShape reference))
+            if (point.Bounds?.TryToGetPoint(point, target, radius, hitTest, modifier) != null)
             {
-                throw new ArgumentNullException("shape");
+                return point;
             }
-
-            if (reference.Template?.Bounds != null)
-            {
-                var adjustedTarget = new Point2(target.X - reference.X, target.Y - reference.Y);
-                var result = reference.Template.Bounds.Contains(reference.Template, adjustedTarget, radius, hitTest, modifier);
-                if (result != null)
-                {
-                    return reference;
-                }
-            }
-
-            return null;
         }
 
-        public IBaseShape Overlaps(IBaseShape shape, Rect2 target, double radius, IHitTest hitTest, Modifier modifier)
+        return null;
+    }
+
+    public IBaseShape Contains(IBaseShape shape, Point2 target, double radius, IHitTest hitTest, Modifier modifier)
+    {
+        if (!(shape is ReferenceShape reference))
         {
-            if (!(shape is ReferenceShape reference))
-            {
-                throw new ArgumentNullException("shape");
-            }
-
-            if (reference.Template?.Bounds != null)
-            {
-                var adjustedTarget = new Rect2(target.X - reference.X, target.Y - reference.Y, target.Width, target.Height);
-                var result = reference.Template.Bounds.Overlaps(reference.Template, adjustedTarget, radius, hitTest, modifier);
-                if (result != null)
-                {
-                    return reference;
-                }
-            }
-
-            return null;
+            throw new ArgumentNullException("shape");
         }
+
+        if (reference.Template?.Bounds != null)
+        {
+            var adjustedTarget = new Point2(target.X - reference.X, target.Y - reference.Y);
+            var result = reference.Template.Bounds.Contains(reference.Template, adjustedTarget, radius, hitTest, modifier);
+            if (result != null)
+            {
+                return reference;
+            }
+        }
+
+        return null;
+    }
+
+    public IBaseShape Overlaps(IBaseShape shape, Rect2 target, double radius, IHitTest hitTest, Modifier modifier)
+    {
+        if (!(shape is ReferenceShape reference))
+        {
+            throw new ArgumentNullException("shape");
+        }
+
+        if (reference.Template?.Bounds != null)
+        {
+            var adjustedTarget = new Rect2(target.X - reference.X, target.Y - reference.Y, target.Width, target.Height);
+            var result = reference.Template.Bounds.Overlaps(reference.Template, adjustedTarget, radius, hitTest, modifier);
+            if (result != null)
+            {
+                return reference;
+            }
+        }
+
+        return null;
     }
 }

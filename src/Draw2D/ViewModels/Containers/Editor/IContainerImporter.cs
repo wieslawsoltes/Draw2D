@@ -1,9 +1,8 @@
 ﻿using Draw2D.ViewModels.Tools;
 
-namespace Draw2D.ViewModels.Containers
+namespace Draw2D.ViewModels.Containers;
+
+public interface IContainerImporter
 {
-    public interface IContainerImporter
-    {
-        void Import(IToolContext context, string path, IContainerView containerView);
-    }
+    void Import(IToolContext context, string path, IContainerView containerView);
 }

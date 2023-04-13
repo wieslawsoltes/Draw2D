@@ -1,11 +1,10 @@
 ﻿
-namespace Draw2D.ViewModels
+namespace Draw2D.ViewModels;
+
+public interface IDirty
 {
-    public interface IDirty
-    {
-        bool IsDirty { get; set; }
-        void MarkAsDirty(bool isDirty);
-        bool IsTreeDirty();
-        void Invalidate();
-    }
+    bool IsDirty { get; set; }
+    void MarkAsDirty(bool isDirty);
+    bool IsTreeDirty();
+    void Invalidate();
 }

@@ -9,116 +9,125 @@ using Avalonia.Rendering;
 using Avalonia.VisualTree;
 using Core2D.UI.Zoom.Input;
 
-namespace Core2D.UI.Zoom
+namespace Core2D.UI.Zoom;
+
+public class ZoomControl : Control, IInputService, IZoomService
 {
-    public class ZoomControl : Border, IInputService, IZoomService
+    private IZoomServiceState _zoomServiceState;
+    private IInputTarget _inputTarget;
+    private IDrawTarget _drawTarget;
+    private Dictionary<IPointer, (IPointer Pointer, Point Point, KeyModifiers InputModifiers)> _pointers;
+    private bool _isCaptured;
+    private KeyModifiers _capturedInputModifiers;
+    private Matrix _currentMatrix;
+    private Point _panPosition;
+
+    public static readonly StyledProperty<IBrush> BackgroundProperty =
+        AvaloniaProperty.Register<ZoomControl, IBrush>(nameof(Background));
+
+    public static readonly DirectProperty<ZoomControl, IZoomServiceState> ZoomServiceStateProperty =
+        AvaloniaProperty.RegisterDirect<ZoomControl, IZoomServiceState>(nameof(ZoomServiceState), o => o.ZoomServiceState, (o, v) => o.ZoomServiceState = v);
+
+    public static readonly DirectProperty<ZoomControl, IInputTarget> InputTargetProperty =
+        AvaloniaProperty.RegisterDirect<ZoomControl, IInputTarget>(nameof(InputTarget), o => o.InputTarget, (o, v) => o.InputTarget = v);
+
+    public static readonly DirectProperty<ZoomControl, IDrawTarget> DrawTargetProperty =
+        AvaloniaProperty.RegisterDirect<ZoomControl, IDrawTarget>(nameof(DrawTarget), o => o.DrawTarget, (o, v) => o.DrawTarget = v);
+
+    public IBrush Background
     {
-        private IZoomServiceState _zoomServiceState;
-        private IInputTarget _inputTarget;
-        private IDrawTarget _drawTarget;
-        private Dictionary<IPointer, (IPointer Pointer, Point Point, KeyModifiers InputModifiers)> _pointers;
-        private bool _isCaptured;
-        private KeyModifiers _capturedInputModifiers;
-        private Matrix _currentMatrix;
-        private Point _panPosition;
+        get => GetValue(BackgroundProperty);
+        set => SetValue(BackgroundProperty, value);
+    }
 
-        public static readonly DirectProperty<ZoomControl, IZoomServiceState> ZoomServiceStateProperty =
-           AvaloniaProperty.RegisterDirect<ZoomControl, IZoomServiceState>(nameof(ZoomServiceState), o => o.ZoomServiceState, (o, v) => o.ZoomServiceState = v);
+    public IZoomServiceState ZoomServiceState
+    {
+        get { return _zoomServiceState; }
+        set { SetAndRaise(ZoomServiceStateProperty, ref _zoomServiceState, value); }
+    }
 
-        public static readonly DirectProperty<ZoomControl, IInputTarget> InputTargetProperty =
-           AvaloniaProperty.RegisterDirect<ZoomControl, IInputTarget>(nameof(InputTarget), o => o.InputTarget, (o, v) => o.InputTarget = v);
+    public IInputTarget InputTarget
+    {
+        get { return _inputTarget; }
+        set { SetAndRaise(InputTargetProperty, ref _inputTarget, value); }
+    }
 
-        public static readonly DirectProperty<ZoomControl, IDrawTarget> DrawTargetProperty =
-           AvaloniaProperty.RegisterDirect<ZoomControl, IDrawTarget>(nameof(DrawTarget), o => o.DrawTarget, (o, v) => o.DrawTarget = v);
+    public IDrawTarget DrawTarget
+    {
+        get { return _drawTarget; }
+        set { SetAndRaise(DrawTargetProperty, ref _drawTarget, value); }
+    }
 
-        public IZoomServiceState ZoomServiceState
+    public Action Capture { get; set; }
+
+    public Action Release { get; set; }
+
+    public Func<bool> IsCaptured { get; set; }
+
+    public Action Redraw { get; set; }
+
+    public ZoomControl()
+    {
+        _zoomServiceState = null;
+        _inputTarget = null;
+        _drawTarget = null;
+        _pointers = new Dictionary<IPointer, (IPointer, Point, KeyModifiers)>();
+        _isCaptured = false;
+        _capturedInputModifiers = KeyModifiers.None;
+    }
+
+    private void GetOffset(out double dx, out double dy, out double zx, out double zy)
+    {
+        dx = _zoomServiceState.OffsetX;
+        dy = _zoomServiceState.OffsetY;
+        zx = _zoomServiceState.ZoomX;
+        zy = _zoomServiceState.ZoomY;
+    }
+
+    private Point AdjustPanPoint(Point point)
+    {
+        GetOffset(out double dx, out double dy, out double zx, out double zy);
+        return new Point(point.X / zx, point.Y / zy);
+    }
+
+    private Point AdjustZoomPoint(Point point)
+    {
+        GetOffset(out double dx, out double dy, out double zx, out double zy);
+        return new Point((point.X - dx) / zx, (point.Y - dy) / zy);
+    }
+
+    private Point AdjustTargetPoint(Point point)
+    {
+        GetOffset(out double dx, out double dy, out double zx, out double zy);
+        return new Point((point.X - dx) / zx, (point.Y - dy) / zy);
+    }
+
+    private void UpdatePointer(PointerEventArgs e)
+    {
+        if (!_pointers.TryGetValue(e.Pointer, out var _))
         {
-            get { return _zoomServiceState; }
-            set { SetAndRaise(ZoomServiceStateProperty, ref _zoomServiceState, value); }
-        }
-
-        public IInputTarget InputTarget
-        {
-            get { return _inputTarget; }
-            set { SetAndRaise(InputTargetProperty, ref _inputTarget, value); }
-        }
-
-        public IDrawTarget DrawTarget
-        {
-            get { return _drawTarget; }
-            set { SetAndRaise(DrawTargetProperty, ref _drawTarget, value); }
-        }
-
-        public Action Capture { get; set; }
-
-        public Action Release { get; set; }
-
-        public Func<bool> IsCaptured { get; set; }
-
-        public Action Redraw { get; set; }
-
-        public ZoomControl()
-        {
-            _zoomServiceState = null;
-            _inputTarget = null;
-            _drawTarget = null;
-            _pointers = new Dictionary<IPointer, (IPointer, Point, KeyModifiers)>();
-            _isCaptured = false;
-            _capturedInputModifiers = KeyModifiers.None;
-        }
-
-        private void GetOffset(out double dx, out double dy, out double zx, out double zy)
-        {
-            dx = _zoomServiceState.OffsetX;
-            dy = _zoomServiceState.OffsetY;
-            zx = _zoomServiceState.ZoomX;
-            zy = _zoomServiceState.ZoomY;
-        }
-
-        private Point AdjustPanPoint(Point point)
-        {
-            GetOffset(out double dx, out double dy, out double zx, out double zy);
-            return new Point(point.X / zx, point.Y / zy);
-        }
-
-        private Point AdjustZoomPoint(Point point)
-        {
-            GetOffset(out double dx, out double dy, out double zx, out double zy);
-            return new Point((point.X - dx) / zx, (point.Y - dy) / zy);
-        }
-
-        private Point AdjustTargetPoint(Point point)
-        {
-            GetOffset(out double dx, out double dy, out double zx, out double zy);
-            return new Point((point.X - dx) / zx, (point.Y - dy) / zy);
-        }
-
-        private void UpdatePointer(PointerEventArgs e)
-        {
-            if (!_pointers.TryGetValue(e.Pointer, out var _))
+            if (e.RoutedEvent == PointerMovedEvent)
             {
-                if (e.RoutedEvent == PointerMovedEvent)
-                {
-                    return;
-                }
+                return;
             }
-            _pointers[e.Pointer] = (e.Pointer, e.GetPosition(this), e.KeyModifiers);
+        }
+        _pointers[e.Pointer] = (e.Pointer, e.GetPosition(this), e.KeyModifiers);
+    }
+
+    private void GetPointerPressedType(PointerPressedEventArgs e, out bool isLeft)
+    {
+        isLeft = false;
+
+        if (e.Pointer.Type == PointerType.Mouse)
+        {
+            isLeft = e.GetCurrentPoint(this).Properties.IsLeftButtonPressed;
+        }
+        else if (e.Pointer.Type == PointerType.Touch)
+        {
+            isLeft = e.Pointer.IsPrimary;
         }
 
-        private void GetPointerPressedType(PointerPressedEventArgs e, out bool isLeft)
-        {
-            isLeft = false;
-
-            if (e.Pointer.Type == PointerType.Mouse)
-            {
-                isLeft = e.GetCurrentPoint(this).Properties.IsLeftButtonPressed;
-            }
-            else if (e.Pointer.Type == PointerType.Touch)
-            {
-                isLeft = e.Pointer.IsPrimary;
-            }
-
-            _capturedInputModifiers = e.KeyModifiers;
+        _capturedInputModifiers = e.KeyModifiers;
 #if DEBUG_POINTER_EVENTS
             System.Diagnostics.Debug.WriteLine(
                 $"[Pressed] type: {e.Pointer.Type}, " +
@@ -128,20 +137,20 @@ namespace Core2D.UI.Zoom
                 $"point: {e.GetPosition(this)}, " +
                 $"Captured: {e.Pointer.Captured}");
 #endif
-        }
+    }
 
-        private void GetPointerReleasedType(PointerReleasedEventArgs e, out bool isLeft)
+    private void GetPointerReleasedType(PointerReleasedEventArgs e, out bool isLeft)
+    {
+        isLeft = false;
+
+        if (e.Pointer.Type == PointerType.Mouse)
         {
-            isLeft = false;
-
-            if (e.Pointer.Type == PointerType.Mouse)
-            {
-                isLeft = e.InitialPressMouseButton == MouseButton.Left;
-            }
-            else if (e.Pointer.Type == PointerType.Touch)
-            {
-                isLeft = e.Pointer.IsPrimary;
-            }
+            isLeft = e.InitialPressMouseButton == MouseButton.Left;
+        }
+        else if (e.Pointer.Type == PointerType.Touch)
+        {
+            isLeft = e.Pointer.IsPrimary;
+        }
 #if DEBUG_POINTER_EVENTS
             System.Diagnostics.Debug.WriteLine(
                 $"[Released] type: {e.Pointer.Type}, " +
@@ -151,21 +160,21 @@ namespace Core2D.UI.Zoom
                 $"point: {e.GetPosition(this)}, " +
                 $"Captured: {e.Pointer.Captured}");
 #endif
-            _capturedInputModifiers = KeyModifiers.None;
-        }
+        _capturedInputModifiers = KeyModifiers.None;
+    }
 
-        private void GetPointerMovedType(PointerEventArgs e, out bool isLeft)
+    private void GetPointerMovedType(PointerEventArgs e, out bool isLeft)
+    {
+        isLeft = false;
+
+        if (e.Pointer.Type == PointerType.Mouse)
         {
-            isLeft = false;
-
-            if (e.Pointer.Type == PointerType.Mouse)
-            {
-                isLeft = e.GetCurrentPoint(this).Properties.IsLeftButtonPressed;
-            }
-            else if (e.Pointer.Type == PointerType.Touch)
-            {
-                isLeft = e.Pointer.IsPrimary;
-            }
+            isLeft = e.GetCurrentPoint(this).Properties.IsLeftButtonPressed;
+        }
+        else if (e.Pointer.Type == PointerType.Touch)
+        {
+            isLeft = e.Pointer.IsPrimary;
+        }
 #if DEBUG_POINTER_EVENTS
             System.Diagnostics.Debug.WriteLine(
                 $"[Moved] type: {e.Pointer.Type}, " +
@@ -175,486 +184,493 @@ namespace Core2D.UI.Zoom
                 $"point: {e.GetPosition(this)}, " +
                 $"Captured: {e.Pointer.Captured}");
 #endif
-        }
+    }
 
-        private void HandlePointerWheelChanged(PointerWheelEventArgs e)
+    private void HandlePointerWheelChanged(PointerWheelEventArgs e)
+    {
+        if (_zoomServiceState != null)
         {
-            if (_zoomServiceState != null)
+            var zpoint = AdjustZoomPoint(e.GetPosition(this));
+            Wheel(e.Delta.Y, zpoint.X, zpoint.Y);
+        }
+    }
+
+    private void HandlePointerPressed(PointerPressedEventArgs e)
+    {
+        UpdatePointer(e);
+        GetPointerPressedType(e, out var isLeft);
+
+        if (_zoomServiceState != null && _inputTarget != null)
+        {
+            if (isLeft == true)
             {
-                var zpoint = AdjustZoomPoint(e.GetPosition(this));
-                Wheel(e.Delta.Y, zpoint.X, zpoint.Y);
+                var tpoint = AdjustTargetPoint(e.GetPosition(this));
+                _inputTarget.LeftDown(tpoint.X, tpoint.Y, GetModifier(e.KeyModifiers));
             }
-        }
-
-        private void HandlePointerPressed(PointerPressedEventArgs e)
-        {
-            UpdatePointer(e);
-            GetPointerPressedType(e, out var isLeft);
-
-            if (_zoomServiceState != null && _inputTarget != null)
+            else
             {
-                if (isLeft == true)
-                {
-                    var tpoint = AdjustTargetPoint(e.GetPosition(this));
-                    _inputTarget.LeftDown(tpoint.X, tpoint.Y, GetModifier(e.KeyModifiers));
-                }
-                else
-                {
-                    if (_isCaptured == false)
-                    {
-                        var zpoint = AdjustPanPoint(e.GetPosition(this));
-                        Pressed(zpoint.X, zpoint.Y);
-                    }
-
-                    if (_zoomServiceState.IsPanning == false)
-                    {
-                        var tpoint = AdjustTargetPoint(e.GetPosition(this));
-                        _inputTarget.RightDown(tpoint.X, tpoint.Y, GetModifier(e.KeyModifiers));
-                    }
-                }
-            }
-        }
-
-        private void HandlePointerReleased(PointerReleasedEventArgs e)
-        {
-            GetPointerReleasedType(e, out var isLeft);
-
-            if (_zoomServiceState != null && _inputTarget != null)
-            {
-                if (isLeft == true)
-                {
-                    var tpoint = AdjustTargetPoint(e.GetPosition(this));
-                    _inputTarget.LeftUp(tpoint.X, tpoint.Y, GetModifier(e.KeyModifiers));
-                }
-                else
-                {
-                    if (_isCaptured == false)
-                    {
-                        var zpoint = AdjustPanPoint(e.GetPosition(this));
-                        Released(zpoint.X, zpoint.Y);
-                    }
-
-                    if (_zoomServiceState.IsPanning == false)
-                    {
-                        var tpoint = AdjustTargetPoint(e.GetPosition(this));
-                        _inputTarget.RightUp(tpoint.X, tpoint.Y, GetModifier(e.KeyModifiers));
-                    }
-                }
-            }
-
-            _pointers.Remove(e.Pointer);
-        }
-
-        private void HandlePointerMoved(PointerEventArgs e)
-        {
-            UpdatePointer(e);
-            GetPointerMovedType(e, out var isLeft);
-
-            if (_zoomServiceState != null && _inputTarget != null)
-            {
-                if (isLeft == false)
+                if (_isCaptured == false)
                 {
                     var zpoint = AdjustPanPoint(e.GetPosition(this));
-                    Moved(zpoint.X, zpoint.Y);
+                    Pressed(zpoint.X, zpoint.Y);
                 }
 
                 if (_zoomServiceState.IsPanning == false)
                 {
                     var tpoint = AdjustTargetPoint(e.GetPosition(this));
-                    _inputTarget.Move(tpoint.X, tpoint.Y, GetModifier(e.KeyModifiers));
+                    _inputTarget.RightDown(tpoint.X, tpoint.Y, GetModifier(e.KeyModifiers));
                 }
             }
         }
+    }
 
-        private Modifier GetModifier(KeyModifiers inputModifiers)
+    private void HandlePointerReleased(PointerReleasedEventArgs e)
+    {
+        GetPointerReleasedType(e, out var isLeft);
+
+        if (_zoomServiceState != null && _inputTarget != null)
         {
-            var modifier = Modifier.None;
-
-            if (inputModifiers.HasFlag(KeyModifiers.Alt))
+            if (isLeft == true)
             {
-                modifier |= Modifier.Alt;
+                var tpoint = AdjustTargetPoint(e.GetPosition(this));
+                _inputTarget.LeftUp(tpoint.X, tpoint.Y, GetModifier(e.KeyModifiers));
             }
-
-            if (inputModifiers.HasFlag(KeyModifiers.Control))
+            else
             {
-                modifier |= Modifier.Control;
-            }
-
-            if (inputModifiers.HasFlag(KeyModifiers.Shift))
-            {
-                modifier |= Modifier.Shift;
-            }
-
-            return modifier;
-        }
-
-        public void Wheel(double delta, double x, double y)
-        {
-            if (_zoomServiceState != null && _inputTarget != null)
-            {
-                _zoomServiceState.IsZooming = true;
-                _zoomServiceState.AutoFitMode = FitMode.None;
-                ZoomDeltaTo(delta, x, y);
-                Invalidate(true);
-            }
-        }
-
-        public void Pressed(double x, double y)
-        {
-            if (_zoomServiceState != null && _inputTarget != null && _zoomServiceState.IsPanning == false)
-            {
-                _zoomServiceState.IsPanning = true;
-                _zoomServiceState.AutoFitMode = FitMode.None;
-                StartPan(x, y);
-                Invalidate(true);
-            }
-        }
-
-        public void Released(double x, double y)
-        {
-            if (_zoomServiceState != null && _inputTarget != null && _zoomServiceState.IsPanning == true)
-            {
-                Invalidate(true);
-                _zoomServiceState.IsPanning = false;
-            }
-        }
-
-        public void Moved(double x, double y)
-        {
-            if (_zoomServiceState != null && _inputTarget != null && _zoomServiceState.IsPanning == true)
-            {
-                PanTo(x, y);
-                Invalidate(true);
-            }
-        }
-
-        public void Invalidate(bool redraw)
-        {
-            if (_zoomServiceState != null && _inputTarget != null)
-            {
-                if (redraw)
+                if (_isCaptured == false)
                 {
-                    Redraw?.Invoke();
+                    var zpoint = AdjustPanPoint(e.GetPosition(this));
+                    Released(zpoint.X, zpoint.Y);
+                }
+
+                if (_zoomServiceState.IsPanning == false)
+                {
+                    var tpoint = AdjustTargetPoint(e.GetPosition(this));
+                    _inputTarget.RightUp(tpoint.X, tpoint.Y, GetModifier(e.KeyModifiers));
                 }
             }
         }
 
-        private void UpdateCurrentMatrix()
-        {
-            _currentMatrix = new Matrix(
-                _zoomServiceState.ZoomX,
-                0,
-                0,
-                _zoomServiceState.ZoomY,
-                _zoomServiceState.OffsetX,
-                _zoomServiceState.OffsetY);
-        }
+        _pointers.Remove(e.Pointer);
+    }
 
-        private void UpdateZoomServiceState()
-        {
-            _zoomServiceState.ZoomX = _currentMatrix.M11;
-            _zoomServiceState.ZoomY = _currentMatrix.M22;
-            _zoomServiceState.OffsetX = _currentMatrix.M31;
-            _zoomServiceState.OffsetY = _currentMatrix.M32;
-        }
+    private void HandlePointerMoved(PointerEventArgs e)
+    {
+        UpdatePointer(e);
+        GetPointerMovedType(e, out var isLeft);
 
-        public void ZoomTo(double zoom, double x, double y)
+        if (_zoomServiceState != null && _inputTarget != null)
         {
-            if (_zoomServiceState != null && _inputTarget != null)
+            if (isLeft == false)
             {
-                UpdateCurrentMatrix();
-                _currentMatrix = new Matrix(zoom, 0, 0, zoom, x - (zoom * x), y - (zoom * y)) * _currentMatrix;
-                UpdateZoomServiceState();
+                var zpoint = AdjustPanPoint(e.GetPosition(this));
+                Moved(zpoint.X, zpoint.Y);
+            }
+
+            if (_zoomServiceState.IsPanning == false)
+            {
+                var tpoint = AdjustTargetPoint(e.GetPosition(this));
+                _inputTarget.Move(tpoint.X, tpoint.Y, GetModifier(e.KeyModifiers));
             }
         }
+    }
 
-        public void ZoomDeltaTo(double delta, double x, double y)
+    private Modifier GetModifier(KeyModifiers inputModifiers)
+    {
+        var modifier = Modifier.None;
+
+        if (inputModifiers.HasFlag(KeyModifiers.Alt))
         {
-            if (_zoomServiceState != null && _inputTarget != null)
+            modifier |= Modifier.Alt;
+        }
+
+        if (inputModifiers.HasFlag(KeyModifiers.Control))
+        {
+            modifier |= Modifier.Control;
+        }
+
+        if (inputModifiers.HasFlag(KeyModifiers.Shift))
+        {
+            modifier |= Modifier.Shift;
+        }
+
+        return modifier;
+    }
+
+    public void Wheel(double delta, double x, double y)
+    {
+        if (_zoomServiceState != null && _inputTarget != null)
+        {
+            _zoomServiceState.IsZooming = true;
+            _zoomServiceState.AutoFitMode = FitMode.None;
+            ZoomDeltaTo(delta, x, y);
+            Invalidate(true);
+        }
+    }
+
+    public void Pressed(double x, double y)
+    {
+        if (_zoomServiceState != null && _inputTarget != null && _zoomServiceState.IsPanning == false)
+        {
+            _zoomServiceState.IsPanning = true;
+            _zoomServiceState.AutoFitMode = FitMode.None;
+            StartPan(x, y);
+            Invalidate(true);
+        }
+    }
+
+    public void Released(double x, double y)
+    {
+        if (_zoomServiceState != null && _inputTarget != null && _zoomServiceState.IsPanning == true)
+        {
+            Invalidate(true);
+            _zoomServiceState.IsPanning = false;
+        }
+    }
+
+    public void Moved(double x, double y)
+    {
+        if (_zoomServiceState != null && _inputTarget != null && _zoomServiceState.IsPanning == true)
+        {
+            PanTo(x, y);
+            Invalidate(true);
+        }
+    }
+
+    public void Invalidate(bool redraw)
+    {
+        if (_zoomServiceState != null && _inputTarget != null)
+        {
+            if (redraw)
             {
-                ZoomTo(delta > 0 ? _zoomServiceState.ZoomSpeed : 1 / _zoomServiceState.ZoomSpeed, x, y);
+                Redraw?.Invoke();
             }
         }
+    }
 
-        public void StartPan(double x, double y)
+    private void UpdateCurrentMatrix()
+    {
+        _currentMatrix = new Matrix(
+            _zoomServiceState.ZoomX,
+            0,
+            0,
+            _zoomServiceState.ZoomY,
+            _zoomServiceState.OffsetX,
+            _zoomServiceState.OffsetY);
+    }
+
+    private void UpdateZoomServiceState()
+    {
+        _zoomServiceState.ZoomX = _currentMatrix.M11;
+        _zoomServiceState.ZoomY = _currentMatrix.M22;
+        _zoomServiceState.OffsetX = _currentMatrix.M31;
+        _zoomServiceState.OffsetY = _currentMatrix.M32;
+    }
+
+    public void ZoomTo(double zoom, double x, double y)
+    {
+        if (_zoomServiceState != null && _inputTarget != null)
         {
-            if (_zoomServiceState != null && _inputTarget != null)
-            {
-                _panPosition = new Point(x, y);
-            }
+            UpdateCurrentMatrix();
+            _currentMatrix = new Matrix(zoom, 0, 0, zoom, x - (zoom * x), y - (zoom * y)) * _currentMatrix;
+            UpdateZoomServiceState();
         }
+    }
 
-        public void PanTo(double x, double y)
+    public void ZoomDeltaTo(double delta, double x, double y)
+    {
+        if (_zoomServiceState != null && _inputTarget != null)
         {
-            if (_zoomServiceState != null && _inputTarget != null)
-            {
-                double dx = x - _panPosition.X;
-                double dy = y - _panPosition.Y;
-                Point delta = new Point(dx, dy);
-                _panPosition = new Point(x, y);
-                UpdateCurrentMatrix();
-                _currentMatrix = new Matrix(1.0, 0.0, 0.0, 1.0, delta.X, delta.Y) * _currentMatrix;
-                UpdateZoomServiceState();
-            }
+            ZoomTo(delta > 0 ? _zoomServiceState.ZoomSpeed : 1 / _zoomServiceState.ZoomSpeed, x, y);
         }
+    }
 
-        public void Reset()
+    public void StartPan(double x, double y)
+    {
+        if (_zoomServiceState != null && _inputTarget != null)
         {
-            if (_zoomServiceState != null && _inputTarget != null)
-            {
-                _currentMatrix = new Matrix(1.0, 0.0, 0.0, 1.0, 0.0, 0.0);
-                UpdateZoomServiceState();
-            }
+            _panPosition = new Point(x, y);
         }
+    }
 
-        public void Center(double panelWidth, double panelHeight, double elementWidth, double elementHeight)
+    public void PanTo(double x, double y)
+    {
+        if (_zoomServiceState != null && _inputTarget != null)
         {
-            if (_zoomServiceState != null && _inputTarget != null)
-            {
-                double ox = (panelWidth - elementWidth) / 2;
-                double oy = (panelHeight - elementHeight) / 2;
-                _currentMatrix = new Matrix(1.0, 0.0, 0.0, 1.0, ox, oy);
-                UpdateZoomServiceState();
-            }
+            double dx = x - _panPosition.X;
+            double dy = y - _panPosition.Y;
+            Point delta = new Point(dx, dy);
+            _panPosition = new Point(x, y);
+            UpdateCurrentMatrix();
+            _currentMatrix = new Matrix(1.0, 0.0, 0.0, 1.0, delta.X, delta.Y) * _currentMatrix;
+            UpdateZoomServiceState();
         }
+    }
 
-        public void Fill(double panelWidth, double panelHeight, double elementWidth, double elementHeight)
+    public void Reset()
+    {
+        if (_zoomServiceState != null && _inputTarget != null)
         {
-            if (_zoomServiceState != null && _inputTarget != null)
-            {
-                double zx = panelWidth / elementWidth;
-                double zy = panelHeight / elementHeight;
-                double ox = (panelWidth - elementWidth * zx) / 2;
-                double oy = (panelHeight - elementHeight * zy) / 2;
-                _currentMatrix = new Matrix(zx, 0.0, 0.0, zy, ox, oy);
-                UpdateZoomServiceState();
-            }
+            _currentMatrix = new Matrix(1.0, 0.0, 0.0, 1.0, 0.0, 0.0);
+            UpdateZoomServiceState();
         }
+    }
 
-        public void Uniform(double panelWidth, double panelHeight, double elementWidth, double elementHeight)
+    public void Center(double panelWidth, double panelHeight, double elementWidth, double elementHeight)
+    {
+        if (_zoomServiceState != null && _inputTarget != null)
         {
-            if (_zoomServiceState != null && _inputTarget != null)
-            {
-                double zx = panelWidth / elementWidth;
-                double zy = panelHeight / elementHeight;
-                double zoom = Math.Min(zx, zy);
-                double ox = (panelWidth - elementWidth * zoom) / 2;
-                double oy = (panelHeight - elementHeight * zoom) / 2;
-                _currentMatrix = new Matrix(zoom, 0.0, 0.0, zoom, ox, oy);
-                UpdateZoomServiceState();
-            }
+            double ox = (panelWidth - elementWidth) / 2;
+            double oy = (panelHeight - elementHeight) / 2;
+            _currentMatrix = new Matrix(1.0, 0.0, 0.0, 1.0, ox, oy);
+            UpdateZoomServiceState();
         }
+    }
 
-        public void UniformToFill(double panelWidth, double panelHeight, double elementWidth, double elementHeight)
+    public void Fill(double panelWidth, double panelHeight, double elementWidth, double elementHeight)
+    {
+        if (_zoomServiceState != null && _inputTarget != null)
         {
-            if (_zoomServiceState != null && _inputTarget != null)
-            {
-                double zx = panelWidth / elementWidth;
-                double zy = panelHeight / elementHeight;
-                double zoom = Math.Max(zx, zy);
-                double ox = (panelWidth - elementWidth * zoom) / 2;
-                double oy = (panelHeight - elementHeight * zoom) / 2;
-                _currentMatrix = new Matrix(zoom, 0.0, 0.0, zoom, ox, oy);
-                UpdateZoomServiceState();
-            }
+            double zx = panelWidth / elementWidth;
+            double zy = panelHeight / elementHeight;
+            double ox = (panelWidth - elementWidth * zx) / 2;
+            double oy = (panelHeight - elementHeight * zy) / 2;
+            _currentMatrix = new Matrix(zx, 0.0, 0.0, zy, ox, oy);
+            UpdateZoomServiceState();
         }
+    }
 
-        public void ResetZoom(bool redraw)
+    public void Uniform(double panelWidth, double panelHeight, double elementWidth, double elementHeight)
+    {
+        if (_zoomServiceState != null && _inputTarget != null)
         {
-            if (_zoomServiceState != null && _inputTarget != null)
-            {
-                Reset();
-                Invalidate(redraw);
-            }
+            double zx = panelWidth / elementWidth;
+            double zy = panelHeight / elementHeight;
+            double zoom = Math.Min(zx, zy);
+            double ox = (panelWidth - elementWidth * zoom) / 2;
+            double oy = (panelHeight - elementHeight * zoom) / 2;
+            _currentMatrix = new Matrix(zoom, 0.0, 0.0, zoom, ox, oy);
+            UpdateZoomServiceState();
         }
+    }
 
-        public void CenterZoom(bool redraw)
+    public void UniformToFill(double panelWidth, double panelHeight, double elementWidth, double elementHeight)
+    {
+        if (_zoomServiceState != null && _inputTarget != null)
         {
-            if (_zoomServiceState != null && _inputTarget != null)
-            {
-                Center(Bounds.Width, Bounds.Height, _inputTarget.GetWidth(), _inputTarget.GetHeight());
-                Invalidate(redraw);
-            }
+            double zx = panelWidth / elementWidth;
+            double zy = panelHeight / elementHeight;
+            double zoom = Math.Max(zx, zy);
+            double ox = (panelWidth - elementWidth * zoom) / 2;
+            double oy = (panelHeight - elementHeight * zoom) / 2;
+            _currentMatrix = new Matrix(zoom, 0.0, 0.0, zoom, ox, oy);
+            UpdateZoomServiceState();
         }
+    }
 
-        public void FillZoom(bool redraw)
+    public void ResetZoom(bool redraw)
+    {
+        if (_zoomServiceState != null && _inputTarget != null)
         {
-            if (_zoomServiceState != null && _inputTarget != null)
-            {
-                Fill(Bounds.Width, Bounds.Height, _inputTarget.GetWidth(), _inputTarget.GetHeight());
-                Invalidate(redraw);
-            }
+            Reset();
+            Invalidate(redraw);
         }
+    }
 
-        public void UniformZoom(bool redraw)
+    public void CenterZoom(bool redraw)
+    {
+        if (_zoomServiceState != null && _inputTarget != null)
         {
-            if (_zoomServiceState != null && _inputTarget != null)
-            {
-                Uniform(Bounds.Width, Bounds.Height, _inputTarget.GetWidth(), _inputTarget.GetHeight());
-                Invalidate(redraw);
-            }
+            Center(Bounds.Width, Bounds.Height, _inputTarget.GetWidth(), _inputTarget.GetHeight());
+            Invalidate(redraw);
         }
+    }
 
-        public void UniformToFillZoom(bool redraw)
+    public void FillZoom(bool redraw)
+    {
+        if (_zoomServiceState != null && _inputTarget != null)
         {
-            if (_zoomServiceState != null && _inputTarget != null)
-            {
-                UniformToFill(Bounds.Width, Bounds.Height, _inputTarget.GetWidth(), _inputTarget.GetHeight());
-                Invalidate(redraw);
-            }
+            Fill(Bounds.Width, Bounds.Height, _inputTarget.GetWidth(), _inputTarget.GetHeight());
+            Invalidate(redraw);
         }
+    }
 
-        protected override void OnPointerWheelChanged(PointerWheelEventArgs e)
+    public void UniformZoom(bool redraw)
+    {
+        if (_zoomServiceState != null && _inputTarget != null)
         {
-            base.OnPointerWheelChanged(e);
-            HandlePointerWheelChanged(e);
+            Uniform(Bounds.Width, Bounds.Height, _inputTarget.GetWidth(), _inputTarget.GetHeight());
+            Invalidate(redraw);
         }
+    }
 
-        protected override void OnPointerPressed(PointerPressedEventArgs e)
+    public void UniformToFillZoom(bool redraw)
+    {
+        if (_zoomServiceState != null && _inputTarget != null)
         {
-            base.OnPointerPressed(e);
-            HandlePointerPressed(e);
+            UniformToFill(Bounds.Width, Bounds.Height, _inputTarget.GetWidth(), _inputTarget.GetHeight());
+            Invalidate(redraw);
         }
+    }
 
-        protected override void OnPointerReleased(PointerReleasedEventArgs e)
-        {
-            base.OnPointerReleased(e);
-            HandlePointerReleased(e);
-        }
+    protected override void OnPointerWheelChanged(PointerWheelEventArgs e)
+    {
+        base.OnPointerWheelChanged(e);
+        HandlePointerWheelChanged(e);
+    }
 
-        protected override void OnPointerMoved(PointerEventArgs e)
-        {
-            base.OnPointerMoved(e);
-            HandlePointerMoved(e);
-        }
+    protected override void OnPointerPressed(PointerPressedEventArgs e)
+    {
+        base.OnPointerPressed(e);
+        HandlePointerPressed(e);
+    }
 
-        protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e)
-        {
-            base.OnAttachedToVisualTree(e);
+    protected override void OnPointerReleased(PointerReleasedEventArgs e)
+    {
+        base.OnPointerReleased(e);
+        HandlePointerReleased(e);
+    }
+
+    protected override void OnPointerMoved(PointerEventArgs e)
+    {
+        base.OnPointerMoved(e);
+        HandlePointerMoved(e);
+    }
+
+    protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e)
+    {
+        base.OnAttachedToVisualTree(e);
             
-            this.Capture = () =>
-            {
+        this.Capture = () =>
+        {
 #if DEBUG_POINTER_EVENTS
                 System.Diagnostics.Debug.WriteLine($"[Capture] {_isCaptured}");
 #endif
-                _isCaptured = true;
-            };
+            _isCaptured = true;
+        };
 
-            this.Release = () =>
-            {
+        this.Release = () =>
+        {
 #if DEBUG_POINTER_EVENTS
                 System.Diagnostics.Debug.WriteLine($"[Release] {_isCaptured}");
 #endif
-                _isCaptured = false;
-            };
+            _isCaptured = false;
+        };
 
-            this.IsCaptured = () =>
-            {
+        this.IsCaptured = () =>
+        {
 #if DEBUG_POINTER_EVENTS
                 System.Diagnostics.Debug.WriteLine($"[IsCaptured] {_isCaptured}");
 #endif
-                return _isCaptured;
-            };
+            return _isCaptured;
+        };
 
-            this.Redraw = () =>
-            {
-                this.InvalidateVisual();
-            };
+        this.Redraw = () =>
+        {
+            this.InvalidateVisual();
+        };
 
-            if (_inputTarget != null && _drawTarget != null)
-            {
-                _drawTarget.InputService = this;
-                _drawTarget.ZoomService = this;
-            }
+        if (_inputTarget != null && _drawTarget != null)
+        {
+            _drawTarget.InputService = this;
+            _drawTarget.ZoomService = this;
+        }
+    }
+
+    protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
+    {
+        base.OnDetachedFromVisualTree(e);
+
+        if (_inputTarget != null && _drawTarget != null)
+        {
+            _drawTarget.InputService = null;
+            _drawTarget.ZoomService = null;
+        }
+    }
+
+    protected override void OnPointerEntered(PointerEventArgs e)
+    {
+        base.OnPointerEntered(e);
+        this.Focus();
+    }
+
+    public override void Render(DrawingContext context)
+    {
+        var background = Background;
+        if (background != null)
+        {
+            var renderSize = Bounds.Size;
+            context.FillRectangle(background, new Rect(renderSize));
         }
 
-        protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
-        {
-            base.OnDetachedFromVisualTree(e);
+        base.Render(context);
 
-            if (_inputTarget != null && _drawTarget != null)
+        if (_zoomServiceState != null && _inputTarget != null && _drawTarget != null)
+        {
+            bool initializeZoom =
+                double.IsNaN(_zoomServiceState.ZoomX)
+                || double.IsNaN(_zoomServiceState.ZoomY)
+                || double.IsNaN(_zoomServiceState.OffsetX)
+                || double.IsNaN(_zoomServiceState.OffsetY);
+
+            if (initializeZoom == true)
             {
-                _drawTarget.InputService = null;
-                _drawTarget.ZoomService = null;
-            }
-        }
-
-        protected override void OnPointerEntered(PointerEventArgs e)
-        {
-            base.OnPointerEntered(e);
-            this.Focus();
-        }
-
-        public override void Render(DrawingContext context)
-        {
-            base.Render(context);
-
-            if (_zoomServiceState != null && _inputTarget != null && _drawTarget != null)
-            {
-                bool initializeZoom =
-                    double.IsNaN(_zoomServiceState.ZoomX)
-                    || double.IsNaN(_zoomServiceState.ZoomY)
-                    || double.IsNaN(_zoomServiceState.OffsetX)
-                    || double.IsNaN(_zoomServiceState.OffsetY);
-
-                if (initializeZoom == true)
+                switch (_zoomServiceState.InitFitMode)
                 {
-                    switch (_zoomServiceState.InitFitMode)
-                    {
-                        case FitMode.None:
-                        case FitMode.Reset:
-                            ResetZoom(false);
-                            break;
-                        case FitMode.Center:
-                            CenterZoom(false);
-                            break;
-                        case FitMode.Fill:
-                            FillZoom(false);
-                            break;
-                        case FitMode.Uniform:
-                            UniformZoom(false);
-                            break;
-                        case FitMode.UniformToFill:
-                            UniformToFillZoom(false);
-                            break;
-                    }
-                }
-
-                if (initializeZoom == false && _zoomServiceState.IsPanning == false && _zoomServiceState.IsZooming == false)
-                {
-                    switch (_zoomServiceState.AutoFitMode)
-                    {
-                        case FitMode.None:
-                            break;
-                        case FitMode.Reset:
-                            ResetZoom(false);
-                            break;
-                        case FitMode.Center:
-                            CenterZoom(false);
-                            break;
-                        case FitMode.Fill:
-                            FillZoom(false);
-                            break;
-                        case FitMode.Uniform:
-                            UniformZoom(false);
-                            break;
-                        case FitMode.UniformToFill:
-                            UniformToFillZoom(false);
-                            break;
-                    }
-                }
-
-                GetOffset(out double dx, out double dy, out double zx, out double zy);
-
-                var renderScaling = this.GetVisualRoot().RenderScaling;
-
-                _drawTarget.Draw(context, Bounds.Width, Bounds.Height, dx, dy, zx, zy, renderScaling);
-
-                if (_zoomServiceState.IsZooming == true)
-                {
-                    _zoomServiceState.IsZooming = false;
+                    case FitMode.None:
+                    case FitMode.Reset:
+                        ResetZoom(false);
+                        break;
+                    case FitMode.Center:
+                        CenterZoom(false);
+                        break;
+                    case FitMode.Fill:
+                        FillZoom(false);
+                        break;
+                    case FitMode.Uniform:
+                        UniformZoom(false);
+                        break;
+                    case FitMode.UniformToFill:
+                        UniformToFillZoom(false);
+                        break;
                 }
             }
+
+            if (initializeZoom == false && _zoomServiceState.IsPanning == false && _zoomServiceState.IsZooming == false)
+            {
+                switch (_zoomServiceState.AutoFitMode)
+                {
+                    case FitMode.None:
+                        break;
+                    case FitMode.Reset:
+                        ResetZoom(false);
+                        break;
+                    case FitMode.Center:
+                        CenterZoom(false);
+                        break;
+                    case FitMode.Fill:
+                        FillZoom(false);
+                        break;
+                    case FitMode.Uniform:
+                        UniformZoom(false);
+                        break;
+                    case FitMode.UniformToFill:
+                        UniformToFillZoom(false);
+                        break;
+                }
+            }
+
+            GetOffset(out double dx, out double dy, out double zx, out double zy);
+
+            var renderScaling = this.GetVisualRoot().RenderScaling;
+
+            _drawTarget.Draw(context, Bounds.Width, Bounds.Height, dx, dy, zx, zy, renderScaling);
+
+            if (_zoomServiceState.IsZooming == true)
+            {
+                _zoomServiceState.IsZooming = false;
+            }
+        }
 #if DEBUG_POINTER_EVENTS
             var brush = new Avalonia.Media.Immutable.ImmutableSolidColorBrush(Colors.Magenta);
             foreach (var value in _pointers.Values)
@@ -662,6 +678,5 @@ namespace Core2D.UI.Zoom
                 context.DrawGeometry(brush, null, new EllipseGeometry(new Rect(value.Point.X - 25, value.Point.Y - 25, 50, 50)));
             }
 #endif
-        }
     }
 }

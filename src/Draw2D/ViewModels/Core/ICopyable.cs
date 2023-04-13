@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
 
-namespace Draw2D.ViewModels
+namespace Draw2D.ViewModels;
+
+public interface ICopyable
 {
-    public interface ICopyable
-    {
-        object Copy(Dictionary<object, object> shared);
-    }
+    object Copy(Dictionary<object, object> shared);
 }

@@ -1,25 +1,24 @@
 ﻿using System.Runtime.Serialization;
 using Draw2D.ViewModels.Shapes;
 
-namespace Draw2D.ViewModels.Decorators
-{
-    [DataContract(IsReference = true)]
-    public class GroupDecorator : CommonDecorator
-    {
-        public void Draw(object dc, IShapeRenderer renderer, GroupShape group, ISelectionState selectionState, double dx, double dy, double scale)
-        {
-            if (selectionState.IsSelected(group))
-            {
-                DrawBoxFromPoints(dc, renderer, group, dx, dy, scale);
-            }
-        }
+namespace Draw2D.ViewModels.Decorators;
 
-        public override void Draw(object dc, IBaseShape shape, IShapeRenderer renderer, ISelectionState selectionState, double dx, double dy, double scale)
+[DataContract(IsReference = true)]
+public class GroupDecorator : CommonDecorator
+{
+    public void Draw(object dc, IShapeRenderer renderer, GroupShape group, ISelectionState selectionState, double dx, double dy, double scale)
+    {
+        if (selectionState.IsSelected(group))
         {
-            if (shape is GroupShape group)
-            {
-                Draw(dc, renderer, group, selectionState, dx, dy, scale);
-            }
+            DrawBoxFromPoints(dc, renderer, group, dx, dy, scale);
+        }
+    }
+
+    public override void Draw(object dc, IBaseShape shape, IShapeRenderer renderer, ISelectionState selectionState, double dx, double dy, double scale)
+    {
+        if (shape is GroupShape group)
+        {
+            Draw(dc, renderer, group, selectionState, dx, dy, scale);
         }
     }
 }

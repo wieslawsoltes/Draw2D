@@ -1,18 +1,11 @@
 ﻿using Avalonia.Controls;
-using Avalonia.Markup.Xaml;
 
-namespace Draw2D.Views.Style.MaskFilters
+namespace Draw2D.Views.Style.MaskFilters;
+
+public partial class BlurMaskFilterView : UserControl
 {
-    public class BlurMaskFilterView : UserControl
+    public BlurMaskFilterView()
     {
-        public BlurMaskFilterView()
-        {
-            InitializeComponent();
-        }
-
-        private void InitializeComponent()
-        {
-            AvaloniaXamlLoader.Load(this);
-        }
+        InitializeComponent();
     }
 }

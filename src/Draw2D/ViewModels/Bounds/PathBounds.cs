@@ -6,130 +6,129 @@ using Core2D.UI.Zoom.Input;
 using Draw2D.ViewModels.Shapes;
 using Spatial;
 
-namespace Draw2D.ViewModels.Bounds
+namespace Draw2D.ViewModels.Bounds;
+
+[DataContract(IsReference = true)]
+public class PathBounds : ViewModelBase, IBounds
 {
-    [DataContract(IsReference = true)]
-    public class PathBounds : ViewModelBase, IBounds
+    public IPointShape TryToGetPoint(IBaseShape shape, Point2 target, double radius, IHitTest hitTest, Modifier modifier)
     {
-        public IPointShape TryToGetPoint(IBaseShape shape, Point2 target, double radius, IHitTest hitTest, Modifier modifier)
+        if (!(shape is PathShape path))
         {
-            if (!(shape is PathShape path))
-            {
-                throw new ArgumentNullException("shape");
-            }
-
-            foreach (var pathShape in path.Shapes.Reverse())
-            {
-                var result = pathShape.Bounds?.TryToGetPoint(pathShape, target, radius, hitTest, modifier);
-                if (result != null)
-                {
-                    return result;
-                }
-            }
-
-            foreach (var pathPoint in path.Points)
-            {
-                if (pathPoint.Bounds?.TryToGetPoint(pathPoint, target, radius, hitTest, modifier) != null)
-                {
-                    return pathPoint;
-                }
-            }
-
-            return null;
+            throw new ArgumentNullException("shape");
         }
 
-        public IBaseShape Contains(IBaseShape shape, Point2 target, double radius, IHitTest hitTest, Modifier modifier)
+        foreach (var pathShape in path.Shapes.Reverse())
         {
-            if (!(shape is PathShape path))
+            var result = pathShape.Bounds?.TryToGetPoint(pathShape, target, radius, hitTest, modifier);
+            if (result != null)
             {
-                throw new ArgumentNullException("shape");
+                return result;
             }
+        }
 
-            if (modifier.HasFlag(Modifier.Shift))
+        foreach (var pathPoint in path.Points)
+        {
+            if (pathPoint.Bounds?.TryToGetPoint(pathPoint, target, radius, hitTest, modifier) != null)
             {
-                if (path.Shapes.Count >= 1)
-                {
-                    foreach (var pathShape in path.Shapes.Reverse())
-                    {
-                        var pathShapePoints = new List<IPointShape>();
-                        pathShape.GetPoints(pathShapePoints);
-
-                        if (pathShapePoints.Count == 0)
-                        {
-                            continue;
-                        }
-
-                        if (HitTestHelper.Contains(pathShapePoints, target))
-                        {
-                            if (modifier.HasFlag(Modifier.Alt))
-                            {
-                                var result = pathShape.Bounds?.Contains(pathShape, target, radius, hitTest, modifier);
-                                if (result != null)
-                                {
-                                    return result;
-                                }
-                            }
-                            return pathShape;
-                        }
-                    }
-                }
+                return pathPoint;
             }
-            else
+        }
+
+        return null;
+    }
+
+    public IBaseShape Contains(IBaseShape shape, Point2 target, double radius, IHitTest hitTest, Modifier modifier)
+    {
+        if (!(shape is PathShape path))
+        {
+            throw new ArgumentNullException("shape");
+        }
+
+        if (modifier.HasFlag(Modifier.Shift))
+        {
+            if (path.Shapes.Count >= 1)
             {
                 foreach (var pathShape in path.Shapes.Reverse())
                 {
-                    var result = pathShape.Bounds?.Contains(pathShape, target, radius, hitTest, modifier);
-                    if (result != null)
+                    var pathShapePoints = new List<IPointShape>();
+                    pathShape.GetPoints(pathShapePoints);
+
+                    if (pathShapePoints.Count == 0)
+                    {
+                        continue;
+                    }
+
+                    if (HitTestHelper.Contains(pathShapePoints, target))
                     {
                         if (modifier.HasFlag(Modifier.Alt))
                         {
-                            var subResult = result.Bounds?.Contains(result, target, radius, hitTest, Modifier.Shift);
-                            if (subResult != null)
+                            var result = pathShape.Bounds?.Contains(pathShape, target, radius, hitTest, modifier);
+                            if (result != null)
                             {
-                                return subResult;
+                                return result;
                             }
                         }
-                        return path;
+                        return pathShape;
                     }
                 }
             }
-
-            var points = new List<IPointShape>();
-            path.GetPoints(points);
-
-            if (points.Count == 0)
-            {
-                return null;
-            }
-
-            return HitTestHelper.Contains(points, target) ? shape : null;
         }
-
-        public IBaseShape Overlaps(IBaseShape shape, Rect2 target, double radius, IHitTest hitTest, Modifier modifier)
+        else
         {
-            if (!(shape is PathShape path))
+            foreach (var pathShape in path.Shapes.Reverse())
             {
-                throw new ArgumentNullException("shape");
-            }
-
-            foreach (var pathShape in path.Shapes)
-            {
-                var result = pathShape.Bounds?.Overlaps(pathShape, target, radius, hitTest, modifier);
+                var result = pathShape.Bounds?.Contains(pathShape, target, radius, hitTest, modifier);
                 if (result != null)
                 {
-                    return result;
+                    if (modifier.HasFlag(Modifier.Alt))
+                    {
+                        var subResult = result.Bounds?.Contains(result, target, radius, hitTest, Modifier.Shift);
+                        if (subResult != null)
+                        {
+                            return subResult;
+                        }
+                    }
+                    return path;
                 }
             }
-
-            var points = new List<IPointShape>();
-            path.GetPoints(points);
-
-            if (points.Count == 0)
-            {
-                return null;
-            }
-
-            return HitTestHelper.Overlap(points, target) ? shape : null;
         }
+
+        var points = new List<IPointShape>();
+        path.GetPoints(points);
+
+        if (points.Count == 0)
+        {
+            return null;
+        }
+
+        return HitTestHelper.Contains(points, target) ? shape : null;
+    }
+
+    public IBaseShape Overlaps(IBaseShape shape, Rect2 target, double radius, IHitTest hitTest, Modifier modifier)
+    {
+        if (!(shape is PathShape path))
+        {
+            throw new ArgumentNullException("shape");
+        }
+
+        foreach (var pathShape in path.Shapes)
+        {
+            var result = pathShape.Bounds?.Overlaps(pathShape, target, radius, hitTest, modifier);
+            if (result != null)
+            {
+                return result;
+            }
+        }
+
+        var points = new List<IPointShape>();
+        path.GetPoints(points);
+
+        if (points.Count == 0)
+        {
+            return null;
+        }
+
+        return HitTestHelper.Overlap(points, target) ? shape : null;
     }
 }

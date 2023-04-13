@@ -1,18 +1,11 @@
 ﻿using Avalonia.Controls;
-using Avalonia.Markup.Xaml;
 
-namespace Draw2D.Views.Tools
+namespace Draw2D.Views.Tools;
+
+public partial class QuadraticBezierToolSettingsView : UserControl
 {
-    public class QuadraticBezierToolSettingsView : UserControl
+    public QuadraticBezierToolSettingsView()
     {
-        public QuadraticBezierToolSettingsView()
-        {
-            InitializeComponent();
-        }
-
-        private void InitializeComponent()
-        {
-            AvaloniaXamlLoader.Load(this);
-        }
+        InitializeComponent();
     }
 }

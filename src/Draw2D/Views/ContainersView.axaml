@@ -61,7 +61,7 @@
       </TabStrip.ItemTemplate>
     </TabStrip>
     <Carousel Items="{Binding DocumentContainer.ContainerViews}"
-              SelectedItem="{Binding DocumentContainer.ContainerView, Mode=TwoWay}" IsVirtualized="False">
+              SelectedItem="{Binding DocumentContainer.ContainerView, Mode=TwoWay}">
       <Carousel.ItemTemplate>
         <DataTemplate>
           <Border Classes="background">

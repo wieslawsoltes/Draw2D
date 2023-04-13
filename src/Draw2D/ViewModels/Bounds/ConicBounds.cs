@@ -5,78 +5,77 @@ using Core2D.UI.Zoom.Input;
 using Draw2D.ViewModels.Shapes;
 using Spatial;
 
-namespace Draw2D.ViewModels.Bounds
+namespace Draw2D.ViewModels.Bounds;
+
+[DataContract(IsReference = true)]
+public class ConicBounds : ViewModelBase, IBounds
 {
-    [DataContract(IsReference = true)]
-    public class ConicBounds : ViewModelBase, IBounds
+    public IPointShape TryToGetPoint(IBaseShape shape, Point2 target, double radius, IHitTest hitTest, Modifier modifier)
     {
-        public IPointShape TryToGetPoint(IBaseShape shape, Point2 target, double radius, IHitTest hitTest, Modifier modifier)
+        if (!(shape is ConicShape conic))
         {
-            if (!(shape is ConicShape conic))
-            {
-                throw new ArgumentNullException("shape");
-            }
+            throw new ArgumentNullException("shape");
+        }
 
-            if (conic.StartPoint.Bounds?.TryToGetPoint(conic.StartPoint, target, radius, hitTest, modifier) != null)
-            {
-                return conic.StartPoint;
-            }
+        if (conic.StartPoint.Bounds?.TryToGetPoint(conic.StartPoint, target, radius, hitTest, modifier) != null)
+        {
+            return conic.StartPoint;
+        }
 
-            if (conic.Point1.Bounds?.TryToGetPoint(conic.Point1, target, radius, hitTest, modifier) != null)
-            {
-                return conic.Point1;
-            }
+        if (conic.Point1.Bounds?.TryToGetPoint(conic.Point1, target, radius, hitTest, modifier) != null)
+        {
+            return conic.Point1;
+        }
 
-            if (conic.Point2.Bounds?.TryToGetPoint(conic.Point2, target, radius, hitTest, modifier) != null)
-            {
-                return conic.Point2;
-            }
+        if (conic.Point2.Bounds?.TryToGetPoint(conic.Point2, target, radius, hitTest, modifier) != null)
+        {
+            return conic.Point2;
+        }
 
-            foreach (var point in conic.Points)
+        foreach (var point in conic.Points)
+        {
+            if (point.Bounds?.TryToGetPoint(point, target, radius, hitTest, modifier) != null)
             {
-                if (point.Bounds?.TryToGetPoint(point, target, radius, hitTest, modifier) != null)
-                {
-                    return point;
-                }
+                return point;
             }
+        }
 
+        return null;
+    }
+
+    public IBaseShape Contains(IBaseShape shape, Point2 target, double radius, IHitTest hitTest, Modifier modifier)
+    {
+        if (!(shape is ConicShape conic))
+        {
+            throw new ArgumentNullException("shape");
+        }
+
+        var points = new List<IPointShape>();
+        conic.GetPoints(points);
+            
+        if (points.Count == 0)
+        {
             return null;
         }
 
-        public IBaseShape Contains(IBaseShape shape, Point2 target, double radius, IHitTest hitTest, Modifier modifier)
+        return HitTestHelper.Contains(points, target) ? shape : null;
+    }
+
+    public IBaseShape Overlaps(IBaseShape shape, Rect2 target, double radius, IHitTest hitTest, Modifier modifier)
+    {
+        if (!(shape is ConicShape conic))
         {
-            if (!(shape is ConicShape conic))
-            {
-                throw new ArgumentNullException("shape");
-            }
-
-            var points = new List<IPointShape>();
-            conic.GetPoints(points);
-            
-            if (points.Count == 0)
-            {
-                return null;
-            }
-
-            return HitTestHelper.Contains(points, target) ? shape : null;
+            throw new ArgumentNullException("shape");
         }
 
-        public IBaseShape Overlaps(IBaseShape shape, Rect2 target, double radius, IHitTest hitTest, Modifier modifier)
+        var points = new List<IPointShape>();
+        conic.GetPoints(points);
+
+        if (points.Count == 0)
         {
-            if (!(shape is ConicShape conic))
-            {
-                throw new ArgumentNullException("shape");
-            }
-
-            var points = new List<IPointShape>();
-            conic.GetPoints(points);
-
-            if (points.Count == 0)
-            {
-                return null;
-            }
-
-            return HitTestHelper.Overlap(points, target) ? shape : null;
+            return null;
         }
+
+        return HitTestHelper.Overlap(points, target) ? shape : null;
     }
 }

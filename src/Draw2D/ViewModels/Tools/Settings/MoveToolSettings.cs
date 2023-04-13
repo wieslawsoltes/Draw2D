@@ -1,9 +1,8 @@
 ﻿using System.Runtime.Serialization;
 
-namespace Draw2D.ViewModels.Tools
+namespace Draw2D.ViewModels.Tools;
+
+[DataContract(IsReference = true)]
+public class MoveToolSettings : SettingsBase
 {
-    [DataContract(IsReference = true)]
-    public class MoveToolSettings : SettingsBase
-    {
-    }
 }
