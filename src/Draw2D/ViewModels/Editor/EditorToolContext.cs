@@ -385,7 +385,7 @@ public class EditorToolContext : ToolContext, IEditorToolContext
             var text = SvgConverter?.ConvertToSvgDocument(this, DocumentContainer.ContainerView);
             if (!string.IsNullOrEmpty(text))
             {
-                await Application.Current.Clipboard.SetTextAsync(text);
+                await GetWindow().Clipboard.SetTextAsync(text);
             }
         }
         catch (Exception ex)
@@ -404,7 +404,7 @@ public class EditorToolContext : ToolContext, IEditorToolContext
                 var text = PathConverter?.ToSvgPathData(this, DocumentContainer.ContainerView.SelectionState?.Shapes);
                 if (!string.IsNullOrEmpty(text))
                 {
-                    await Application.Current.Clipboard.SetTextAsync(text);
+                    await GetWindow().Clipboard.SetTextAsync(text);
                 }
             }
         }
@@ -419,7 +419,7 @@ public class EditorToolContext : ToolContext, IEditorToolContext
     {
         try
         {
-            var text = await Application.Current.Clipboard.GetTextAsync();
+            var text = await GetWindow().Clipboard.GetTextAsync();
             if (!string.IsNullOrEmpty(text))
             {
                 var path = PathConverter?.ToPathShape(this, text);
@@ -454,7 +454,7 @@ public class EditorToolContext : ToolContext, IEditorToolContext
             var text = sb.ToString();
             if (!string.IsNullOrEmpty(text))
             {
-                await Application.Current.Clipboard.SetTextAsync(text);
+                await GetWindow().Clipboard.SetTextAsync(text);
             }
         }
         catch (Exception ex)
@@ -473,7 +473,7 @@ public class EditorToolContext : ToolContext, IEditorToolContext
             var text = sb.ToString();
             if (!string.IsNullOrEmpty(text))
             {
-                await Application.Current.Clipboard.SetTextAsync(text);
+                await GetWindow().Clipboard.SetTextAsync(text);
             }
         }
         catch (Exception ex)
@@ -492,7 +492,7 @@ public class EditorToolContext : ToolContext, IEditorToolContext
             var text = sb.ToString();
             if (!string.IsNullOrEmpty(text))
             {
-                await Application.Current.Clipboard.SetTextAsync(text);
+                await GetWindow().Clipboard.SetTextAsync(text);
             }
         }
         catch (Exception ex)
@@ -511,7 +511,7 @@ public class EditorToolContext : ToolContext, IEditorToolContext
             var text = sb.ToString();
             if (!string.IsNullOrEmpty(text))
             {
-                await Application.Current.Clipboard.SetTextAsync(text);
+                await GetWindow().Clipboard.SetTextAsync(text);
             }
         }
         catch (Exception ex)
@@ -530,7 +530,7 @@ public class EditorToolContext : ToolContext, IEditorToolContext
             var text = sb.ToString();
             if (!string.IsNullOrEmpty(text))
             {
-                await Application.Current.Clipboard.SetTextAsync(text);
+                await GetWindow().Clipboard.SetTextAsync(text);
             }
         }
         catch (Exception ex)

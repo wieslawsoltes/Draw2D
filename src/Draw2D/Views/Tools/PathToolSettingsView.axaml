@@ -15,14 +15,14 @@
           <TextBlock Classes="default" Grid.Column="0" Grid.Row="1" Text="HitTestRadius" />
           <TextBox Classes="default" Grid.Column="1" Grid.Row="1" Text="{Binding HitTestRadius}" />
           <TextBlock Classes="default" Grid.Column="0" Grid.Row="2" Text="FillType" />
-          <ComboBox Classes="default" Grid.Column="1" Grid.Row="2" Items="{Binding PathFillTypeValues}"
+          <ComboBox Classes="default" Grid.Column="1" Grid.Row="2" ItemsSource="{Binding PathFillTypeValues}"
                     SelectedItem="{Binding FillType, Mode=TwoWay}" />
           <TextBlock Classes="default" Grid.Column="0" Grid.Row="3" Text="IsFilled" />
           <CheckBox Classes="default" Grid.Column="1" Grid.Row="3" IsChecked="{Binding IsFilled}" />
           <TextBlock Classes="default" Grid.Column="0" Grid.Row="4" Text="IsClosed" />
           <CheckBox Classes="default" Grid.Column="1" Grid.Row="4" IsChecked="{Binding IsClosed}" />
           <TextBlock Classes="default" Grid.Column="0" Grid.Row="5" Text="CurrentTool" />
-          <ComboBox Classes="default" Grid.Column="1" Grid.Row="5" Items="{Binding Tools}"
+          <ComboBox Classes="default" Grid.Column="1" Grid.Row="5" ItemsSource="{Binding Tools}"
                     SelectedItem="{Binding CurrentTool, Mode=OneWay}">
             <ComboBox.ItemTemplate>
               <DataTemplate>
@@ -42,7 +42,7 @@
           <ContentControl Content="{Binding PreviousTool}" />
         </TabItem>
         <TabItem Classes="default" Header="Tools">
-          <ListBox Classes="default" Items="{Binding Tools}" SelectedItem="{Binding CurrentTool}">
+          <ListBox Classes="default" ItemsSource="{Binding Tools}" SelectedItem="{Binding CurrentTool}">
             <ListBox.ItemTemplate>
               <DataTemplate>
                 <TextBlock Classes="list" Text="{Binding Title}" />

@@ -1,7 +1,6 @@
 ﻿using System;
 using Avalonia;
 using Avalonia.Media;
-using Avalonia.Media.Imaging;
 using Avalonia.Platform;
 using Avalonia.Rendering.SceneGraph;
 using Avalonia.Skia;
@@ -54,9 +53,9 @@ public class AvaloniaContainerPresenter : IContainerPresenter
             return false;
         }
 
-        public void Render(IDrawingContextImpl context)
+        public void Render(ImmediateDrawingContext context)
         {
-            using var lease = context.GetFeature<ISkiaSharpApiLeaseFeature>()?.Lease();
+            using var lease = context.TryGetFeature<ISkiaSharpApiLeaseFeature>()?.Lease();
             if (lease?.SkCanvas is { } skCanvas)
             {
                 _draw.Invoke(skCanvas);

@@ -13,7 +13,7 @@
     <TabItem Classes="default" Header="Filters">
       <ScrollViewer>
         <Grid RowDefinitions="Auto,*" IsVisible="{Binding !!Filters.Count}">
-          <ComboBox Classes="default" Grid.Row="0" x:Name="filters" Items="{Binding Filters}"
+          <ComboBox Classes="default" Grid.Row="0" x:Name="filters" ItemsSource="{Binding Filters}"
                     SelectedItem="{Binding CurrentFilter, Mode=TwoWay}">
             <ComboBox.ItemTemplate>
               <DataTemplate>

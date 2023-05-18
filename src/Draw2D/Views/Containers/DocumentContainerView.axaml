@@ -18,7 +18,7 @@
     <TabItem Classes="default" Header="Views">
       <TabControl Classes="default" TabStripPlacement="Top">
         <TabItem Classes="default" Header="Views">
-          <ListBox Classes="default" Items="{Binding ContainerViews}" SelectedItem="{Binding ContainerView}">
+          <ListBox Classes="default" ItemsSource="{Binding ContainerViews}" SelectedItem="{Binding ContainerView}">
             <ListBox.ItemTemplate>
               <DataTemplate>
                 <TextBlock Classes="list" Text="{Binding Title}" />

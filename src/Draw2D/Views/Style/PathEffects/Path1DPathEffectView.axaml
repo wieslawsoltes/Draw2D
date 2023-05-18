@@ -17,7 +17,7 @@
           <TextBlock Classes="default" Grid.Column="0" Grid.Row="2" Text="Phase" />
           <TextBox Classes="default" Grid.Column="1" Grid.Row="2" Text="{Binding Phase}" />
           <TextBlock Classes="default" Grid.Column="0" Grid.Row="3" Text="Style" />
-          <ComboBox Classes="default" Grid.Column="1" Grid.Row="3" Items="{Binding Path1DPathEffectStyleValues}"
+          <ComboBox Classes="default" Grid.Column="1" Grid.Row="3" ItemsSource="{Binding Path1DPathEffectStyleValues}"
                     SelectedItem="{Binding Style, Mode=TwoWay}" />
         </Grid>
       </ScrollViewer>

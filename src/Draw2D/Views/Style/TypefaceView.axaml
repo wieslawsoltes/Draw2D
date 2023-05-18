@@ -17,7 +17,7 @@
           <TextBlock Classes="default" Grid.Column="0" Grid.Row="2" Text="FontWidth" />
           <TextBox Classes="default" Grid.Column="1" Grid.Row="2" Text="{Binding FontWidth}" />
           <TextBlock Classes="default" Grid.Column="0" Grid.Row="3" Text="FontSlant" />
-          <ComboBox Classes="default" Grid.Column="1" Grid.Row="3" Items="{Binding FontStyleSlantValues}"
+          <ComboBox Classes="default" Grid.Column="1" Grid.Row="3" ItemsSource="{Binding FontStyleSlantValues}"
                     SelectedItem="{Binding FontSlant, Mode=TwoWay}" />
         </Grid>
       </ScrollViewer>

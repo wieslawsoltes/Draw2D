@@ -19,10 +19,10 @@
           <TextBlock Classes="default" Grid.Column="0" Grid.Row="1" Text="Y" />
           <TextBox Classes="default" Grid.Column="1" Grid.Row="1" Text="{Binding Y}" />
           <TextBlock Classes="default" Grid.Column="0" Grid.Row="2" Text="HAlign" />
-          <ComboBox Classes="default" Grid.Column="1" Grid.Row="2" Items="{Binding HAlignValues}"
+          <ComboBox Classes="default" Grid.Column="1" Grid.Row="2" ItemsSource="{Binding HAlignValues}"
                     SelectedItem="{Binding HAlign, Mode=TwoWay}" />
           <TextBlock Classes="default" Grid.Column="0" Grid.Row="3" Text="VAlign" />
-          <ComboBox Classes="default" Grid.Column="1" Grid.Row="3" Items="{Binding VAlignValues}"
+          <ComboBox Classes="default" Grid.Column="1" Grid.Row="3" ItemsSource="{Binding VAlignValues}"
                     SelectedItem="{Binding VAlign, Mode=TwoWay}" />
         </Grid>
       </ScrollViewer>

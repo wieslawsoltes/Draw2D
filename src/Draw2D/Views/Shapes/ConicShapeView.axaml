@@ -33,7 +33,7 @@
     <TabItem Classes="default" Header="Points">
       <TabControl Classes="default" TabStripPlacement="Top">
         <TabItem Classes="default" Header="Points">
-          <ListBox x:Name="points" Classes="default" Items="{Binding Points}">
+          <ListBox x:Name="points" Classes="default" ItemsSource="{Binding Points}">
             <ListBox.ItemTemplate>
               <DataTemplate>
                 <TextBlock Classes="list" Text="{Binding}" />

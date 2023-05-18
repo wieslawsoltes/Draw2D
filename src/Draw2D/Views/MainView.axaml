@@ -33,7 +33,7 @@
       <TabControl Grid.Row="2" Classes="default" TabStripPlacement="Top">
         <TabItem Classes="default" Header="Style">
           <Grid RowDefinitions="Auto,*">
-            <ComboBox Classes="default" Grid.Row="0" Items="{Binding DocumentContainer.StyleLibrary.Items}"
+            <ComboBox Classes="default" Grid.Row="0" ItemsSource="{Binding DocumentContainer.StyleLibrary.Items}"
                       SelectedItem="{Binding DocumentContainer.StyleLibrary.CurrentItem, Mode=TwoWay}"
                       IsVisible="{Binding !!DocumentContainer.StyleLibrary.CurrentItem}">
               <ComboBox.ItemTemplate>
@@ -47,7 +47,7 @@
         </TabItem>
         <TabItem Classes="default" Header="Group">
           <Grid RowDefinitions="Auto,*">
-            <ComboBox Classes="default" Grid.Row="0" Items="{Binding DocumentContainer.GroupLibrary.Items}"
+            <ComboBox Classes="default" Grid.Row="0" ItemsSource="{Binding DocumentContainer.GroupLibrary.Items}"
                       SelectedItem="{Binding DocumentContainer.GroupLibrary.CurrentItem, Mode=TwoWay}"
                       IsVisible="{Binding !!DocumentContainer.GroupLibrary.CurrentItem}">
               <ComboBox.ItemTemplate>
@@ -73,7 +73,7 @@
           <ContentControl Content="{Binding CurrentTool}" />
         </TabItem>
         <TabItem Classes="default" Header="Tools">
-          <ListBox Classes="default" Items="{Binding Tools}" SelectedItem="{Binding CurrentTool}">
+          <ListBox Classes="default" ItemsSource="{Binding Tools}" SelectedItem="{Binding CurrentTool}">
             <ListBox.ItemTemplate>
               <DataTemplate>
                 <TextBlock Classes="list" Text="{Binding Title}" />
@@ -96,7 +96,7 @@
           </Grid>
         </TabItem>
         <TabItem Classes="default" Header="Views">
-          <ListBox Classes="default" Items="{Binding ContainerViews}" SelectedItem="{Binding ContainerView}"
+          <ListBox Classes="default" ItemsSource="{Binding ContainerViews}" SelectedItem="{Binding ContainerView}"
                    DataContext="{Binding DocumentContainer}">
             <ListBox.ItemTemplate>
               <DataTemplate>

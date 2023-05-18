@@ -11,7 +11,7 @@
       <ScrollViewer>
         <Grid RowDefinitions="Auto" ColumnDefinitions="Auto,*">
           <TextBlock Classes="default" Grid.Column="0" Grid.Row="0" Text="BlendMode" />
-          <ComboBox Classes="default" Grid.Column="1" Grid.Row="0" Items="{Binding BlendModeValues}"
+          <ComboBox Classes="default" Grid.Column="1" Grid.Row="0" ItemsSource="{Binding BlendModeValues}"
                     SelectedItem="{Binding BlendMode, Mode=TwoWay}" />
         </Grid>
       </ScrollViewer>

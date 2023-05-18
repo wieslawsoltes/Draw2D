@@ -17,7 +17,7 @@
           <TextBlock Classes="default" Grid.Column="0" Grid.Row="2" Text="Stop" />
           <TextBox Classes="default" Grid.Column="1" Grid.Row="2" Text="{Binding Stop}" />
           <TextBlock Classes="default" Grid.Column="0" Grid.Row="3" Text="Mode" />
-          <ComboBox Classes="default" Grid.Column="1" Grid.Row="3" Items="{Binding TrimPathEffectModeValues}"
+          <ComboBox Classes="default" Grid.Column="1" Grid.Row="3" ItemsSource="{Binding TrimPathEffectModeValues}"
                     SelectedItem="{Binding Mode, Mode=TwoWay}" />
         </Grid>
       </ScrollViewer>

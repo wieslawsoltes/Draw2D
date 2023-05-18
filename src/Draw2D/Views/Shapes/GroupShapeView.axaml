@@ -22,7 +22,7 @@
     <TabItem Classes="default" Header="Shapes">
       <TabControl Classes="default" TabStripPlacement="Top">
         <TabItem Classes="default" Header="Shapes">
-          <ListBox x:Name="shapes" Classes="default" Items="{Binding Shapes}">
+          <ListBox x:Name="shapes" Classes="default" ItemsSource="{Binding Shapes}">
             <ListBox.ItemTemplate>
               <DataTemplate>
                 <TextBlock Classes="list" Text="{Binding}" />
@@ -38,7 +38,7 @@
     <TabItem Classes="default" Header="Points">
       <TabControl Classes="default" TabStripPlacement="Top">
         <TabItem Classes="default" Header="Points">
-          <ListBox x:Name="points" Classes="default" Items="{Binding Points}">
+          <ListBox x:Name="points" Classes="default" ItemsSource="{Binding Points}">
             <ListBox.ItemTemplate>
               <DataTemplate>
                 <TextBlock Classes="list" Text="{Binding}" />

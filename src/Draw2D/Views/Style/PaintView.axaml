@@ -15,7 +15,7 @@
           <TextBlock Classes="default" Grid.Column="0" Grid.Row="1" Text="IsAntialias" />
           <CheckBox Classes="default" Grid.Column="1" Grid.Row="1" IsChecked="{Binding IsAntialias}" />
           <TextBlock Classes="default" Grid.Column="0" Grid.Row="2" Text="PaintStyle" />
-          <ComboBox Classes="default" Grid.Column="1" Grid.Row="2" Items="{Binding PaintStyleValues}"
+          <ComboBox Classes="default" Grid.Column="1" Grid.Row="2" ItemsSource="{Binding PaintStyleValues}"
                     SelectedItem="{Binding PaintStyle, Mode=TwoWay}" />
         </Grid>
       </ScrollViewer>
@@ -32,10 +32,10 @@
           <TextBlock Classes="default" Grid.Column="0" Grid.Row="0" Text="StrokeWidth" />
           <TextBox Classes="default" Grid.Column="1" Grid.Row="0" Text="{Binding StrokeWidth}" />
           <TextBlock Classes="default" Grid.Column="0" Grid.Row="1" Text="StrokeCap" />
-          <ComboBox Classes="default" Grid.Column="1" Grid.Row="1" Items="{Binding StrokeCapValues}"
+          <ComboBox Classes="default" Grid.Column="1" Grid.Row="1" ItemsSource="{Binding StrokeCapValues}"
                     SelectedItem="{Binding StrokeCap, Mode=TwoWay}" />
           <TextBlock Classes="default" Grid.Column="0" Grid.Row="2" Text="StrokeJoin" />
-          <ComboBox Classes="default" Grid.Column="1" Grid.Row="2" Items="{Binding StrokeJoinValues}"
+          <ComboBox Classes="default" Grid.Column="1" Grid.Row="2" ItemsSource="{Binding StrokeJoinValues}"
                     SelectedItem="{Binding StrokeJoin, Mode=TwoWay}" />
           <TextBlock Classes="default" Grid.Column="0" Grid.Row="3" Text="StrokeMiter" />
           <TextBox Classes="default" Grid.Column="1" Grid.Row="3" Text="{Binding StrokeMiter}" />
@@ -54,10 +54,10 @@
           <TextBlock Classes="default" Grid.Column="0" Grid.Row="2" Text="SubpixelText" />
           <CheckBox Classes="default" Grid.Column="1" Grid.Row="2" IsChecked="{Binding SubpixelText}" />
           <TextBlock Classes="default" Grid.Column="0" Grid.Row="3" Text="HAlign" />
-          <ComboBox Classes="default" Grid.Column="1" Grid.Row="3" Items="{Binding HAlignValues}"
+          <ComboBox Classes="default" Grid.Column="1" Grid.Row="3" ItemsSource="{Binding HAlignValues}"
                     SelectedItem="{Binding HAlign, Mode=TwoWay}" />
           <TextBlock Classes="default" Grid.Column="0" Grid.Row="4" Text="VAlign" />
-          <ComboBox Classes="default" Grid.Column="1" Grid.Row="4" Items="{Binding VAlignValues}"
+          <ComboBox Classes="default" Grid.Column="1" Grid.Row="4" ItemsSource="{Binding VAlignValues}"
                     SelectedItem="{Binding VAlign, Mode=TwoWay}" />
         </Grid>
       </ScrollViewer>

@@ -16,7 +16,7 @@
     <TabItem Classes="default" Header="Shapes">
       <TabControl Classes="default" TabStripPlacement="Top">
         <TabItem Classes="default" Header="Shapes">
-          <ListBox x:Name="shapes" Classes="default" Items="{Binding Shapes, Mode=OneWay}">
+          <ListBox x:Name="shapes" Classes="default" ItemsSource="{Binding Shapes, Mode=OneWay}">
             <ListBox.ItemTemplate>
               <DataTemplate>
                 <TextBlock Classes="list" Text="{Binding}" />

@@ -27,10 +27,10 @@
           <CheckBox Classes="default" Grid.Column="1" Grid.Row="6" IsEnabled="False"
                     IsChecked="{Binding IsZooming, Mode=OneWay}" />
           <TextBlock Classes="default" Grid.Column="0" Grid.Row="7" Text="InitFitMode" />
-          <ComboBox Classes="default" Grid.Column="1" Grid.Row="7" Items="{Binding FitModeValues}"
+          <ComboBox Classes="default" Grid.Column="1" Grid.Row="7" ItemsSource="{Binding FitModeValues}"
                     SelectedItem="{Binding InitFitMode, Mode=TwoWay}" />
           <TextBlock Classes="default" Grid.Column="0" Grid.Row="8" Text="AutoFitMode" />
-          <ComboBox Classes="default" Grid.Column="1" Grid.Row="8" Items="{Binding FitModeValues}"
+          <ComboBox Classes="default" Grid.Column="1" Grid.Row="8" ItemsSource="{Binding FitModeValues}"
                     SelectedItem="{Binding AutoFitMode, Mode=TwoWay}" />
         </Grid>
       </ScrollViewer>

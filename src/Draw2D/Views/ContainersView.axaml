@@ -11,7 +11,7 @@
              d:DataContext="{x:Static app:App.ToolContext}"
              d:DesignWidth="810" d:DesignHeight="720">
   <DockPanel Classes="views">
-    <TabStrip Items="{Binding DocumentContainer.ContainerViews}"
+    <TabStrip ItemsSource="{Binding DocumentContainer.ContainerViews}"
               SelectedItem="{Binding DocumentContainer.ContainerView, Mode=TwoWay}" Focusable="false"
               DockPanel.Dock="Top">
       <TabStrip.Styles>
@@ -60,7 +60,7 @@
         </DataTemplate>
       </TabStrip.ItemTemplate>
     </TabStrip>
-    <Carousel Items="{Binding DocumentContainer.ContainerViews}"
+    <Carousel ItemsSource="{Binding DocumentContainer.ContainerViews}"
               SelectedItem="{Binding DocumentContainer.ContainerView, Mode=TwoWay}">
       <Carousel.ItemTemplate>
         <DataTemplate>

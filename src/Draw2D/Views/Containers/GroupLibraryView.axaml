@@ -8,7 +8,7 @@
              d:DesignWidth="500" d:DesignHeight="400">
   <TabControl Classes="default" TabStripPlacement="Top">
     <TabItem Classes="default" Header="Groups">
-      <ListBox x:Name="groups" Classes="default" Items="{Binding Items}" SelectedItem="{Binding CurrentItem}">
+      <ListBox x:Name="groups" Classes="default" ItemsSource="{Binding Items}" SelectedItem="{Binding CurrentItem}">
         <ListBox.ItemTemplate>
           <DataTemplate>
             <TextBlock Classes="list" Text="{Binding Title}" />
@@ -16,7 +16,7 @@
         </ListBox.ItemTemplate>
       </ListBox>
       <!--
-      <DataGrid x:Name="groups" Items="{Binding Items}" SelectedItem="{Binding CurrentItem}">
+      <DataGrid x:Name="groups" ItemsSource="{Binding Items}" SelectedItem="{Binding CurrentItem}">
         <DataGrid.Styles>
           <Style Selector="DataGrid">
             <Setter Property="RowBackground" Value="Transparent" />
