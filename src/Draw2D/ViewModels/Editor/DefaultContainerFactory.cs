@@ -1154,7 +1154,7 @@ public class DefaultContainerFactory : IContainerFactory
                 effects: PaintEffects.MakeEffects()),
             InputBackground = new Paint(
                 paintStyle: PaintStyle.Fill,
-                color: new ArgbColor(0, 255, 255, 255),
+                color: new ArgbColor(255, 255, 255, 255),
                 isAntialias: false,
                 effects: PaintEffects.MakeEffects()),
             CurrentContainer = new CanvasContainer()
