@@ -7,11 +7,12 @@ using Avalonia.Input;
 using Avalonia.Media;
 using Avalonia.Rendering;
 using Avalonia.VisualTree;
+using CommunityToolkit.Mvvm.Input;
 using Core2D.UI.Zoom.Input;
 
 namespace Core2D.UI.Zoom;
 
-public class ZoomControl : Control, IInputService, IZoomService
+public partial class ZoomControl : Control, IInputService, IZoomService
 {
     private IZoomServiceState _zoomServiceState;
     private IInputTarget _inputTarget;
@@ -468,6 +469,7 @@ public class ZoomControl : Control, IInputService, IZoomService
         }
     }
 
+    [RelayCommand]
     public void ResetZoom(bool redraw)
     {
         if (_zoomServiceState != null && _inputTarget != null)
@@ -477,6 +479,7 @@ public class ZoomControl : Control, IInputService, IZoomService
         }
     }
 
+    [RelayCommand]
     public void CenterZoom(bool redraw)
     {
         if (_zoomServiceState != null && _inputTarget != null)
@@ -486,6 +489,7 @@ public class ZoomControl : Control, IInputService, IZoomService
         }
     }
 
+    [RelayCommand]
     public void FillZoom(bool redraw)
     {
         if (_zoomServiceState != null && _inputTarget != null)
@@ -495,6 +499,7 @@ public class ZoomControl : Control, IInputService, IZoomService
         }
     }
 
+    [RelayCommand]
     public void UniformZoom(bool redraw)
     {
         if (_zoomServiceState != null && _inputTarget != null)
@@ -504,6 +509,7 @@ public class ZoomControl : Control, IInputService, IZoomService
         }
     }
 
+    [RelayCommand]
     public void UniformToFillZoom(bool redraw)
     {
         if (_zoomServiceState != null && _inputTarget != null)

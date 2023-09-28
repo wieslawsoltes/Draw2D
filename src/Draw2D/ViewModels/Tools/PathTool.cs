@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Runtime.Serialization;
+using CommunityToolkit.Mvvm.Input;
 using Core2D.UI.Zoom.Input;
 using Draw2D.ViewModels.Containers;
 using Draw2D.ViewModels.Shapes;
@@ -255,6 +256,7 @@ public partial class PathTool : IToolContext
 
     private void SetContext(IToolContext context) => _context = context;
 
+    [RelayCommand]
     public void SetTool(string title) => _context.SetTool(title);
 
     public double GetWidth() => _context.GetWidth();

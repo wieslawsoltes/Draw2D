@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Runtime.Serialization;
+using CommunityToolkit.Mvvm.Input;
 using Core2D.UI.Zoom.Input;
 using Draw2D.ViewModels.Containers;
 using Draw2D.ViewModels.Shapes;
@@ -11,7 +12,7 @@ using Spatial;
 namespace Draw2D.ViewModels.Tools;
 
 [DataContract(IsReference = true)]
-public class SelectionTool : BaseTool, ITool, ISelection
+public partial class SelectionTool : BaseTool, ITool, ISelection
 {
     private SelectionToolSettings _settings;
     private RectangleShape _rectangle;
@@ -422,12 +423,14 @@ public class SelectionTool : BaseTool, ITool, ISelection
         CleanInternal(context);
     }
 
+    [RelayCommand]
     public void Cut(IToolContext context)
     {
         Copy(context);
         DeleteOnlyAccepted(context);
     }
 
+    [RelayCommand]
     public void Copy(IToolContext context)
     {
         if (context.DocumentContainer?.ContainerView?.SelectionState != null)
@@ -439,6 +442,7 @@ public class SelectionTool : BaseTool, ITool, ISelection
         }
     }
 
+    [RelayCommand]
     public void Paste(IToolContext context)
     {
         if (context.DocumentContainer?.ContainerView?.SelectionState != null)
@@ -460,6 +464,7 @@ public class SelectionTool : BaseTool, ITool, ISelection
         }
     }
 
+    [RelayCommand]
     private void DeleteOnlyAccepted(IToolContext context)
     {
         if (context.DocumentContainer?.ContainerView?.SelectionState != null)
@@ -478,6 +483,7 @@ public class SelectionTool : BaseTool, ITool, ISelection
         }
     }
 
+    [RelayCommand]
     public void Delete(IToolContext context)
     {
         if (context.DocumentContainer?.ContainerView?.SelectionState != null)
@@ -496,6 +502,7 @@ public class SelectionTool : BaseTool, ITool, ISelection
         }
     }
 
+    [RelayCommand]
     public void Duplicate(IToolContext context)
     {
         if (context.DocumentContainer?.ContainerView?.SelectionState != null)
@@ -519,6 +526,7 @@ public class SelectionTool : BaseTool, ITool, ISelection
         }
     }
 
+    [RelayCommand]
     public void CreateGroup(IToolContext context)
     {
         if (context.DocumentContainer?.ContainerView?.SelectionState != null)
@@ -564,6 +572,7 @@ public class SelectionTool : BaseTool, ITool, ISelection
         }
     }
 
+    [RelayCommand]
     public void CreateReference(IToolContext context)
     {
         if (context.DocumentContainer?.ContainerView?.SelectionState != null)
@@ -591,6 +600,7 @@ public class SelectionTool : BaseTool, ITool, ISelection
         }
     }
 
+    [RelayCommand]
     public void CreatePath(IToolContext context)
     {
         if (context.DocumentContainer?.ContainerView?.SelectionState != null)
@@ -636,6 +646,7 @@ public class SelectionTool : BaseTool, ITool, ISelection
         }
     }
 
+    [RelayCommand]
     public void CreateStrokePath(IToolContext context)
     {
         if (context.DocumentContainer?.ContainerView?.SelectionState != null)
@@ -682,6 +693,7 @@ public class SelectionTool : BaseTool, ITool, ISelection
         }
     }
 
+    [RelayCommand]
     public void CreateFillPath(IToolContext context)
     {
         if (context.DocumentContainer?.ContainerView?.SelectionState != null)
@@ -728,56 +740,67 @@ public class SelectionTool : BaseTool, ITool, ISelection
         }
     }
 
+    [RelayCommand]
     public void StackHorizontally(IToolContext context)
     {
         Layout.Stack(context, StackMode.Horizontal);
     }
 
+    [RelayCommand]
     public void StackVertically(IToolContext context)
     {
         Layout.Stack(context, StackMode.Vertical);
     }
 
+    [RelayCommand]
     public void DistributeHorizontally(IToolContext context)
     {
         Layout.Distribute(context, DistributeMode.Horizontal);
     }
 
+    [RelayCommand]
     public void DistributeVertically(IToolContext context)
     {
         Layout.Distribute(context, DistributeMode.Vertical);
     }
 
+    [RelayCommand]
     public void AlignLeft(IToolContext context)
     {
         Layout.Align(context, AlignMode.Left);
     }
 
+    [RelayCommand]
     public void AlignCentered(IToolContext context)
     {
         Layout.Align(context, AlignMode.Centered);
     }
 
+    [RelayCommand]
     public void AlignRight(IToolContext context)
     {
         Layout.Align(context, AlignMode.Right);
     }
 
+    [RelayCommand]
     public void AlignTop(IToolContext context)
     {
         Layout.Align(context, AlignMode.Top);
     }
 
+    [RelayCommand]
     public void AlignCenter(IToolContext context)
     {
         Layout.Align(context, AlignMode.Center);
     }
 
+    [RelayCommand]
     public void AlignBottom(IToolContext context)
     {
         Layout.Align(context, AlignMode.Bottom);
     }
 
+    [RelayCommand]
     public void ArangeBringToFront(IToolContext context)
     {
         if (context.DocumentContainer?.ContainerView?.SelectionState != null)
@@ -797,6 +820,7 @@ public class SelectionTool : BaseTool, ITool, ISelection
         }
     }
 
+    [RelayCommand]
     public void ArangeBringForward(IToolContext context)
     {
         if (context.DocumentContainer?.ContainerView?.SelectionState != null)
@@ -816,6 +840,7 @@ public class SelectionTool : BaseTool, ITool, ISelection
         }
     }
 
+    [RelayCommand]
     public void ArangeSendBackward(IToolContext context)
     {
         if (context.DocumentContainer?.ContainerView?.SelectionState != null)
@@ -835,6 +860,7 @@ public class SelectionTool : BaseTool, ITool, ISelection
         }
     }
 
+    [RelayCommand]
     public void ArangeSendToBack(IToolContext context)
     {
         if (context.DocumentContainer?.ContainerView?.SelectionState != null)
@@ -939,6 +965,7 @@ public class SelectionTool : BaseTool, ITool, ISelection
         }
     }
 
+    [RelayCommand]
     public void Break(IToolContext context)
     {
         if (context.DocumentContainer?.ContainerView?.SelectionState != null)
@@ -1057,6 +1084,7 @@ public class SelectionTool : BaseTool, ITool, ISelection
         }
     }
 
+    [RelayCommand]
     public void Connect(IToolContext context)
     {
         if (context.DocumentContainer?.ContainerView?.SelectionState != null)
@@ -1101,6 +1129,7 @@ public class SelectionTool : BaseTool, ITool, ISelection
         }
     }
 
+    [RelayCommand]
     public void Disconnect(IToolContext context)
     {
         if (context.DocumentContainer?.ContainerView?.SelectionState != null)
@@ -1133,6 +1162,7 @@ public class SelectionTool : BaseTool, ITool, ISelection
         }
     }
 
+    [RelayCommand]
     public void SelectAll(IToolContext context)
     {
         if (context.DocumentContainer?.ContainerView?.SelectionState != null)
@@ -1154,6 +1184,7 @@ public class SelectionTool : BaseTool, ITool, ISelection
         }
     }
 
+    [RelayCommand]
     public void DeselectAll(IToolContext context)
     {
         if (context.DocumentContainer?.ContainerView?.SelectionState != null)

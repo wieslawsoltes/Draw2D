@@ -11,12 +11,12 @@
              d:DataContext="{x:Static app:App.ToolContext}"
              d:DesignWidth="1320" d:DesignHeight="690">
   <UserControl.KeyBindings>
-    <KeyBinding Command="{Binding NewContainerView}" CommandParameter="View" Gesture="Ctrl+N" />
-    <KeyBinding Command="{Binding OpenDocumentContainer}" Gesture="Ctrl+O" />
-    <KeyBinding Command="{Binding SaveDocumentContainerAs}" Gesture="Ctrl+S" />
-    <KeyBinding Command="{Binding ImportFile}" Gesture="Ctrl+I" />
-    <KeyBinding Command="{Binding ExportFile}" Gesture="Ctrl+E" />
-    <KeyBinding Command="{Binding Exit}" Gesture="Alt+F4" />
+    <KeyBinding Command="{Binding NewContainerViewCommand}" CommandParameter="View" Gesture="Ctrl+N" />
+    <KeyBinding Command="{Binding OpenDocumentContainerCommand}" Gesture="Ctrl+O" />
+    <KeyBinding Command="{Binding SaveDocumentContainerAsCommand}" Gesture="Ctrl+S" />
+    <KeyBinding Command="{Binding ImportFileCommand}" Gesture="Ctrl+I" />
+    <KeyBinding Command="{Binding ExportFileCommand}" Gesture="Ctrl+E" />
+    <KeyBinding Command="{Binding ExitCommand}" Gesture="Alt+F4" />
   </UserControl.KeyBindings>
   <Grid RowDefinitions="Auto,5,*,5" ColumnDefinitions="250,Auto,*,Auto,250">
     <local:MenuView Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="5" />

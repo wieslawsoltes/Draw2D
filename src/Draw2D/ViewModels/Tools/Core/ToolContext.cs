@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
+using CommunityToolkit.Mvvm.Input;
 using Core2D.UI.Zoom.Input;
 using Draw2D.ViewModels.Containers;
 
 namespace Draw2D.ViewModels.Tools;
 
 [DataContract(IsReference = true)]
-public class ToolContext : ViewModelBase, IToolContext
+public partial class ToolContext : ViewModelBase, IToolContext
 {
     public static EditMode[] EditModeValues { get; } = (EditMode[])Enum.GetValues(typeof(EditMode));
 
@@ -79,6 +80,7 @@ public class ToolContext : ViewModelBase, IToolContext
         return string.Compare(tool.Title, title, StringComparison.OrdinalIgnoreCase) == 0;
     }
 
+    [RelayCommand]
     public void SetTool(string title)
     {
         if (CurrentTool is PathTool pathTool && !CompareToolTitle(pathTool.Settings.CurrentTool, title))

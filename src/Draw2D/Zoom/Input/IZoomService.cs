@@ -1,8 +1,15 @@
 ﻿
+using CommunityToolkit.Mvvm.Input;
+
 namespace Core2D.UI.Zoom.Input;
 
 public interface IZoomService
 {
+    IRelayCommand<bool> ResetZoomCommand { get; }
+    IRelayCommand<bool> CenterZoomCommand { get; }
+    IRelayCommand<bool> FillZoomCommand { get; }
+    IRelayCommand<bool> UniformZoomCommand { get; }
+    IRelayCommand<bool> UniformToFillZoomCommand { get; }
     IZoomServiceState ZoomServiceState { get; set; }
     void Wheel(double delta, double x, double y);
     void Pressed(double x, double y);

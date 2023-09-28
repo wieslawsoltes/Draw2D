@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using CommunityToolkit.Mvvm.Input;
 using Draw2D.ViewModels.Containers;
 using Draw2D.ViewModels.Tools;
 
@@ -6,6 +7,36 @@ namespace Draw2D.Editor;
 
 public interface IEditorToolContext : IToolContext
 {
+    IRelayCommand<IContainerView> InitContainerViewCommand { get; }
+    IRelayCommand<IContainerView> AddContainerViewCommand { get; }
+    IRelayCommand<IContainerView> CloseContainerViewCommand { get; }
+    IRelayCommand<string> NewContainerViewCommand { get; }
+    IRelayCommand<string> OpenDocumentCommand { get; }
+    IRelayCommand<string> SaveDocumentCommand { get; }
+    IRelayCommand<string> OpenStylesCommand { get; }
+    IRelayCommand<string> SaveStylesCommand { get; }
+    IRelayCommand<string> OpenGroupsCommand { get; }
+    IRelayCommand<string> SaveGroupsCommand { get; }
+    IRelayCommand OpenDocumentContainerCommand { get; }
+    IRelayCommand SaveDocumentContainerAsCommand { get; }
+    IRelayCommand OpenStyleLibraryCommand { get; }
+    IRelayCommand SaveStyleLibraryAsCommand { get; }
+    IRelayCommand OpenGroupLibraryCommand { get; }
+    IRelayCommand SaveGroupLibraryAsCommand { get; }
+    IRelayCommand<string> AddFilesCommand { get; }
+    IRelayCommand ClearFilesCommand { get; }
+    IRelayCommand ImportFileCommand { get; }
+    IRelayCommand ExportFileCommand { get; }
+    IRelayCommand CopySvgDocumentCommand { get; }
+    IRelayCommand CopySvgPathDataCommand { get; }
+    IRelayCommand PasteSvgPathDataCommand { get; }
+    IRelayCommand CopyGeometryDrawingCommand { get; }
+    IRelayCommand CopyDrawingGroupCommand { get; }
+    IRelayCommand CopyDrawingPresenterCommand { get; }
+    IRelayCommand CopyPathCommand { get; }
+    IRelayCommand CopyCanvasCommand { get; }
+    IRelayCommand<string> PathOpCommand { get; }
+    IRelayCommand ExitCommand { get; }
     IContainerFactory ContainerFactory { get; set; }
     IAvaloniaXamlConverter AvaloniaXamlConverter { get; set; }
     IContainerImporter ContainerImporter { get; set; }

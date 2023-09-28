@@ -1,8 +1,39 @@
 ﻿
+using CommunityToolkit.Mvvm.Input;
+
 namespace Draw2D.ViewModels.Tools;
 
 public interface ISelection : IDirty
 {
+    IRelayCommand<IToolContext> CutCommand { get; }
+    IRelayCommand<IToolContext> CopyCommand { get; }
+    IRelayCommand<IToolContext> PasteCommand { get; }
+    IRelayCommand<IToolContext> DeleteCommand { get; }
+    IRelayCommand<IToolContext> DuplicateCommand { get; }
+    IRelayCommand<IToolContext> CreateGroupCommand { get; }
+    IRelayCommand<IToolContext> CreateReferenceCommand { get; }
+    IRelayCommand<IToolContext> CreatePathCommand { get; }
+    IRelayCommand<IToolContext> CreateStrokePathCommand { get; }
+    IRelayCommand<IToolContext> CreateFillPathCommand { get; }
+    IRelayCommand<IToolContext> StackHorizontallyCommand { get; }
+    IRelayCommand<IToolContext> StackVerticallyCommand { get; }
+    IRelayCommand<IToolContext> DistributeHorizontallyCommand { get; }
+    IRelayCommand<IToolContext> DistributeVerticallyCommand { get; }
+    IRelayCommand<IToolContext> AlignLeftCommand { get; }
+    IRelayCommand<IToolContext> AlignCenteredCommand { get; }
+    IRelayCommand<IToolContext> AlignRightCommand { get; }
+    IRelayCommand<IToolContext> AlignTopCommand { get; }
+    IRelayCommand<IToolContext> AlignCenterCommand { get; }
+    IRelayCommand<IToolContext> AlignBottomCommand { get; }
+    IRelayCommand<IToolContext> ArangeBringToFrontCommand { get; }
+    IRelayCommand<IToolContext> ArangeBringForwardCommand { get; }
+    IRelayCommand<IToolContext> ArangeSendBackwardCommand { get; }
+    IRelayCommand<IToolContext> ArangeSendToBackCommand { get; }
+    IRelayCommand<IToolContext> BreakCommand { get; }
+    IRelayCommand<IToolContext> ConnectCommand { get; }
+    IRelayCommand<IToolContext> DisconnectCommand { get; }
+    IRelayCommand<IToolContext> SelectAllCommand { get; }
+    IRelayCommand<IToolContext> DeselectAllCommand { get; }
     void Cut(IToolContext context);
     void Copy(IToolContext context);
     void Paste(IToolContext context);

@@ -7,6 +7,7 @@ using System.Text;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
+using CommunityToolkit.Mvvm.Input;
 using Draw2D.Presenters;
 using Draw2D.Serializer;
 using Draw2D.ViewModels;
@@ -16,7 +17,7 @@ using Draw2D.ViewModels.Tools;
 namespace Draw2D.Editor;
 
 [DataContract(IsReference = true)]
-public class EditorToolContext : ToolContext, IEditorToolContext
+public partial class EditorToolContext : ToolContext, IEditorToolContext
 {
     public new static EditMode[] EditModeValues { get; } = (EditMode[])Enum.GetValues(typeof(EditMode));
 
@@ -94,6 +95,7 @@ public class EditorToolContext : ToolContext, IEditorToolContext
         return null;
     }
 
+    [RelayCommand]
     public void InitContainerView(IContainerView containerView)
     {
         containerView.ContainerPresenter = new AvaloniaContainerPresenter(this, containerView);
@@ -105,6 +107,7 @@ public class EditorToolContext : ToolContext, IEditorToolContext
         };
     }
 
+    [RelayCommand]
     public void AddContainerView(IContainerView containerView)
     {
         if (containerView != null)
@@ -119,6 +122,7 @@ public class EditorToolContext : ToolContext, IEditorToolContext
         }
     }
 
+    [RelayCommand]
     public void CloseContainerView(IContainerView containerView)
     {
         if (containerView != null)
@@ -147,6 +151,7 @@ public class EditorToolContext : ToolContext, IEditorToolContext
         }
     }
 
+    [RelayCommand]
     public void NewContainerView(string title)
     {
         var containerView = _containerFactory?.CreateContainerView(title);
@@ -157,6 +162,7 @@ public class EditorToolContext : ToolContext, IEditorToolContext
         }
     }
 
+    [RelayCommand]
     public void OpenDocument(string path)
     {
         var documentContainer = JsonSerializer.FromJsonFile<IDocumentContainer>(path);
@@ -170,6 +176,7 @@ public class EditorToolContext : ToolContext, IEditorToolContext
         }
     }
 
+    [RelayCommand]
     public void SaveDocument(string path)
     {
         if (DocumentContainer != null)
@@ -178,6 +185,7 @@ public class EditorToolContext : ToolContext, IEditorToolContext
         }
     }
 
+    [RelayCommand]
     public void OpenStyles(string path)
     {
         var styleLibrary = JsonSerializer.FromJsonFile<IStyleLibrary>(path);
@@ -188,6 +196,7 @@ public class EditorToolContext : ToolContext, IEditorToolContext
         }
     }
 
+    [RelayCommand]
     public void SaveStyles(string path)
     {
         if (DocumentContainer.StyleLibrary != null)
@@ -196,6 +205,7 @@ public class EditorToolContext : ToolContext, IEditorToolContext
         }
     }
 
+    [RelayCommand]
     public void OpenGroups(string path)
     {
         var groupLibrary = JsonSerializer.FromJsonFile<IGroupLibrary>(path);
@@ -206,6 +216,7 @@ public class EditorToolContext : ToolContext, IEditorToolContext
         }
     }
 
+    [RelayCommand]
     public void SaveGroups(string path)
     {
         if (DocumentContainer.GroupLibrary != null)
@@ -214,6 +225,7 @@ public class EditorToolContext : ToolContext, IEditorToolContext
         }
     }
 
+    [RelayCommand]
     public async void OpenDocumentContainer()
     {
         var dlg = new OpenFileDialog();
@@ -230,6 +242,7 @@ public class EditorToolContext : ToolContext, IEditorToolContext
         }
     }
 
+    [RelayCommand]
     public async void SaveDocumentContainerAs()
     {
         var dlg = new SaveFileDialog();
@@ -245,6 +258,7 @@ public class EditorToolContext : ToolContext, IEditorToolContext
         }
     }
 
+    [RelayCommand]
     public async void OpenStyleLibrary()
     {
         var dlg = new OpenFileDialog();
@@ -261,6 +275,7 @@ public class EditorToolContext : ToolContext, IEditorToolContext
         }
     }
 
+    [RelayCommand]
     public async void SaveStyleLibraryAs()
     {
         var dlg = new SaveFileDialog();
@@ -276,6 +291,7 @@ public class EditorToolContext : ToolContext, IEditorToolContext
         }
     }
 
+    [RelayCommand]
     public async void OpenGroupLibrary()
     {
         var dlg = new OpenFileDialog();
@@ -292,6 +308,7 @@ public class EditorToolContext : ToolContext, IEditorToolContext
         }
     }
 
+    [RelayCommand]
     public async void SaveGroupLibraryAs()
     {
         var dlg = new SaveFileDialog();
@@ -307,6 +324,7 @@ public class EditorToolContext : ToolContext, IEditorToolContext
         }
     }
 
+    [RelayCommand]
     public void AddFiles(string path)
     {
         foreach (var file in Directory.EnumerateFiles(path, "*.json"))
@@ -315,11 +333,13 @@ public class EditorToolContext : ToolContext, IEditorToolContext
         }
     }
 
+    [RelayCommand]
     public void ClearFiles()
     {
         Files.Clear();
     }
 
+    [RelayCommand]
     public async void ImportFile()
     {
         var dlg = new OpenFileDialog();
@@ -349,6 +369,7 @@ public class EditorToolContext : ToolContext, IEditorToolContext
         }
     }
 
+    [RelayCommand]
     public async void ExportFile()
     {
         var dlg = new SaveFileDialog();
@@ -378,6 +399,7 @@ public class EditorToolContext : ToolContext, IEditorToolContext
         }
     }
 
+    [RelayCommand]
     public async void CopySvgDocument()
     {
         try
@@ -395,6 +417,7 @@ public class EditorToolContext : ToolContext, IEditorToolContext
         }
     }
 
+    [RelayCommand]
     public async void CopySvgPathData()
     {
         try
@@ -415,6 +438,7 @@ public class EditorToolContext : ToolContext, IEditorToolContext
         }
     }
 
+    [RelayCommand]
     public async void PasteSvgPathData()
     {
         try
@@ -445,6 +469,7 @@ public class EditorToolContext : ToolContext, IEditorToolContext
         }
     }
 
+    [RelayCommand]
     public async void CopyGeometryDrawing()
     {
         try
@@ -464,6 +489,7 @@ public class EditorToolContext : ToolContext, IEditorToolContext
         }
     }
 
+    [RelayCommand]
     public async void CopyDrawingGroup()
     {
         try
@@ -483,6 +509,7 @@ public class EditorToolContext : ToolContext, IEditorToolContext
         }
     }
 
+    [RelayCommand]
     public async void CopyDrawingPresenter()
     {
         try
@@ -502,6 +529,7 @@ public class EditorToolContext : ToolContext, IEditorToolContext
         }
     }
 
+    [RelayCommand]
     public async void CopyPath()
     {
         try
@@ -521,6 +549,7 @@ public class EditorToolContext : ToolContext, IEditorToolContext
         }
     }
 
+    [RelayCommand]
     public async void CopyCanvas()
     {
         try
@@ -540,6 +569,7 @@ public class EditorToolContext : ToolContext, IEditorToolContext
         }
     }
 
+    [RelayCommand]
     public void PathOp(string parameter)
     {
         if (Enum.TryParse<PathOp>(parameter, true, out var op) == true)
@@ -563,6 +593,7 @@ public class EditorToolContext : ToolContext, IEditorToolContext
         }
     }
 
+    [RelayCommand]
     public void Exit()
     {
         if (Application.Current.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktopLifetime)
