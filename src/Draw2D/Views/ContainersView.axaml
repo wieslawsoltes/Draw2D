@@ -3,7 +3,6 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:local="clr-namespace:Draw2D.Views"
              xmlns:app="clr-namespace:Draw2D"
              xmlns:zc="clr-namespace:Core2D.UI.Zoom"
              Focusable="True"
@@ -11,171 +10,114 @@
              d:DataContext="{x:Static app:App.ToolContext}"
              d:DesignWidth="810" d:DesignHeight="720">
   <DockPanel Classes="views">
-    <TabStrip ItemsSource="{Binding DocumentContainer.ContainerViews}"
-              SelectedItem="{Binding DocumentContainer.ContainerView, Mode=TwoWay}" Focusable="false"
-              DockPanel.Dock="Top">
-      <TabStrip.Styles>
-        <Style Selector="TabStrip">
-          <Setter Property="ItemsPanel">
-            <ItemsPanelTemplate>
-              <WrapPanel ClipToBounds="False" />
-            </ItemsPanelTemplate>
-          </Setter>
-        </Style>
-        <Style Selector="TabStripItem">
-          <Setter Property="HorizontalContentAlignment" Value="Left" />
-          <Setter Property="Padding" Value="4,4,4,4" />
-          <Setter Property="Margin" Value="0" />
-          <Setter Property="MinHeight" Value="0" />
-          <Setter Property="FontSize" Value="14" />
-        </Style>
-        <Style Selector="Button.tab">
-          <Setter Property="Background" Value="Transparent" />
-          <Setter Property="BorderThickness" Value="0" />
-          <Setter Property="Padding" Value="0" />
-          <Setter Property="Margin" Value="0" />
-        </Style>
-        <Style Selector="TabStripItem Button.tab Path">
-          <Setter Property="Fill" Value="{DynamicResource SystemChromeDisabledLowColor}" />
-        </Style>
-        <Style Selector="TabStripItem Button:pointerover.tab Path">
-          <Setter Property="Fill" Value="{DynamicResource SystemAccentColorDark1}" />
-        </Style>
-        <Style Selector="TabStripItem Button:pressed.tab Path">
-          <Setter Property="Fill" Value="{DynamicResource SystemAccentColorLight1}" />
-        </Style>
-      </TabStrip.Styles>
-      <TabStrip.ItemTemplate>
-        <DataTemplate>
-          <StackPanel Orientation="Horizontal" Margin="4,0,4,0" Spacing="2">
-            <StackPanel Orientation="Horizontal" Margin="2">
-              <TextBlock Classes="default" Text="{Binding Title}" />
-            </StackPanel>
-            <Button Classes="tab" Height="14" Width="14"
-                    Command="{Binding $parent[UserControl].DataContext.CloseContainerView}"
-                    CommandParameter="{Binding}">
-              <Path Margin="2" Stretch="Uniform" UseLayoutRounding="False"
-                    Data="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z" />
-            </Button>
-          </StackPanel>
-        </DataTemplate>
-      </TabStrip.ItemTemplate>
-    </TabStrip>
-    <Carousel ItemsSource="{Binding DocumentContainer.ContainerViews}"
-              SelectedItem="{Binding DocumentContainer.ContainerView, Mode=TwoWay}">
-      <Carousel.ItemTemplate>
-        <DataTemplate>
-          <Border Classes="background">
-            <Border Classes="zoom">
-              <Border Classes="clip" ClipToBounds="True" Background="Transparent" Focusable="True">
-                <Border.KeyBindings>
-                  <KeyBinding Command="{Binding $parent[UserControl].DataContext.Selection.CutCommand}"
-                              CommandParameter="{Binding $parent[UserControl].DataContext}" Gesture="Ctrl+X" />
-                  <KeyBinding Command="{Binding $parent[UserControl].DataContext.Selection.CopyCommand}"
-                              CommandParameter="{Binding $parent[UserControl].DataContext}" Gesture="Ctrl+C" />
-                  <KeyBinding Command="{Binding $parent[UserControl].DataContext.Selection.PasteCommand}"
-                              CommandParameter="{Binding $parent[UserControl].DataContext}" Gesture="Ctrl+V" />
-                  <KeyBinding Command="{Binding $parent[UserControl].DataContext.Selection.DeleteCommand}"
-                              CommandParameter="{Binding $parent[UserControl].DataContext}" Gesture="Delete" />
-                  <KeyBinding Command="{Binding $parent[UserControl].DataContext.Selection.DuplicateCommand}"
-                              CommandParameter="{Binding $parent[UserControl].DataContext}" Gesture="Ctrl+D" />
-                  <KeyBinding Command="{Binding $parent[UserControl].DataContext.Selection.CreateGroupCommand}"
-                              CommandParameter="{Binding $parent[UserControl].DataContext}" Gesture="Ctrl+G" />
-                  <KeyBinding Command="{Binding $parent[UserControl].DataContext.Selection.CreateReferenceCommand}"
-                              CommandParameter="{Binding $parent[UserControl].DataContext}" Gesture="Ctrl+R" />
-                  <KeyBinding Command="{Binding $parent[UserControl].DataContext.Selection.CreatePathCommand}"
-                              CommandParameter="{Binding $parent[UserControl].DataContext}" Gesture="Ctrl+H" />
-                  <KeyBinding Command="{Binding $parent[UserControl].DataContext.Selection.CreateStrokePathCommand}"
-                              CommandParameter="{Binding $parent[UserControl].DataContext}" Gesture="Ctrl+J" />
-                  <KeyBinding Command="{Binding $parent[UserControl].DataContext.Selection.CreateFillPathCommand}"
-                              CommandParameter="{Binding $parent[UserControl].DataContext}" Gesture="Ctrl+K" />
-                  <KeyBinding Command="{Binding $parent[UserControl].DataContext.Selection.DistributeHorizontallyCommand}"
-                              CommandParameter="{Binding $parent[UserControl].DataContext}" Gesture="Ctrl+Shift+H" />
-                  <KeyBinding Command="{Binding $parent[UserControl].DataContext.Selection.DistributeVerticallyCommand}"
-                              CommandParameter="{Binding $parent[UserControl].DataContext}" Gesture="Ctrl+Shift+V" />
-                  <KeyBinding Command="{Binding $parent[UserControl].DataContext.Selection.AlignLeftCommand}"
-                              CommandParameter="{Binding $parent[UserControl].DataContext}" Gesture="Ctrl+Shift+Left" />
-                  <KeyBinding Command="{Binding $parent[UserControl].DataContext.Selection.AlignCenteredCommand}"
-                              CommandParameter="{Binding $parent[UserControl].DataContext}" Gesture="Ctrl+Shift+OemMinus" />
-                  <KeyBinding Command="{Binding $parent[UserControl].DataContext.Selection.AlignCenteredCommand}"
-                              CommandParameter="{Binding $parent[UserControl].DataContext}" Gesture="Ctrl+Shift+Subtract" />
-                  <KeyBinding Command="{Binding $parent[UserControl].DataContext.Selection.AlignRightCommand}"
-                              CommandParameter="{Binding $parent[UserControl].DataContext}" Gesture="Ctrl+Shift+Right" />
-                  <KeyBinding Command="{Binding $parent[UserControl].DataContext.Selection.AlignTopCommand}"
-                              CommandParameter="{Binding $parent[UserControl].DataContext}" Gesture="Ctrl+Shift+Up" />
-                  <KeyBinding Command="{Binding $parent[UserControl].DataContext.Selection.AlignCenterCommand}"
-                              CommandParameter="{Binding $parent[UserControl].DataContext}" Gesture="Ctrl+Shift+OemPipe" />
-                  <KeyBinding Command="{Binding $parent[UserControl].DataContext.Selection.AlignBottomCommand}"
-                              CommandParameter="{Binding $parent[UserControl].DataContext}" Gesture="Ctrl+Shift+Down" />
-                  <KeyBinding Command="{Binding $parent[UserControl].DataContext.Selection.ArangeBringToFrontCommand}"
-                              CommandParameter="{Binding $parent[UserControl].DataContext}"
-                              Gesture="Ctrl+Shift+OemCloseBrackets" />
-                  <KeyBinding Command="{Binding $parent[UserControl].DataContext.Selection.ArangeBringForwardCommand}"
-                              CommandParameter="{Binding $parent[UserControl].DataContext}"
-                              Gesture="Ctrl+OemCloseBrackets" />
-                  <KeyBinding Command="{Binding $parent[UserControl].DataContext.Selection.ArangeSendBackwardCommand}"
-                              CommandParameter="{Binding $parent[UserControl].DataContext}"
-                              Gesture="Ctrl+OemOpenBrackets" />
-                  <KeyBinding Command="{Binding $parent[UserControl].DataContext.Selection.ArangeSendToBackCommand}"
-                              CommandParameter="{Binding $parent[UserControl].DataContext}"
-                              Gesture="Ctrl+Shift+OemOpenBrackets" />
-                  <KeyBinding Command="{Binding $parent[UserControl].DataContext.Selection.BreakCommand}"
-                              CommandParameter="{Binding $parent[UserControl].DataContext}" Gesture="Ctrl+B" />
-                  <KeyBinding Command="{Binding $parent[UserControl].DataContext.Selection.ConnectCommand}"
-                              CommandParameter="{Binding $parent[UserControl].DataContext}" Gesture="Ctrl+OemComma" />
-                  <KeyBinding Command="{Binding $parent[UserControl].DataContext.Selection.DisconnectCommand}"
-                              CommandParameter="{Binding $parent[UserControl].DataContext}" Gesture="Ctrl+." />
-                  <KeyBinding Command="{Binding $parent[UserControl].DataContext.Selection.SelectAllCommand}"
-                              CommandParameter="{Binding $parent[UserControl].DataContext}" Gesture="Ctrl+A" />
-                  <KeyBinding Command="{Binding $parent[UserControl].DataContext.Selection.DeselectAllCommand}"
-                              CommandParameter="{Binding $parent[UserControl].DataContext}" Gesture="Ctrl+Shift+A" />
-                  <KeyBinding Command="{Binding $parent[UserControl].DataContext.Selection.DeselectAllCommand}"
-                              CommandParameter="{Binding $parent[UserControl].DataContext}" Gesture="Escape" />
-                  <KeyBinding Command="{Binding $parent[UserControl].DataContext.PathOpCommand}" CommandParameter="Difference"
-                              Gesture="Ctrl+Shift+D" />
-                  <KeyBinding Command="{Binding $parent[UserControl].DataContext.PathOpCommand}" CommandParameter="Intersect"
-                              Gesture="Ctrl+Shift+I" />
-                  <KeyBinding Command="{Binding $parent[UserControl].DataContext.PathOpCommand}" CommandParameter="Union"
-                              Gesture="Ctrl+Shift+U" />
-                  <KeyBinding Command="{Binding $parent[UserControl].DataContext.PathOpCommand}" CommandParameter="Xor"
-                              Gesture="Ctrl+Shift+X" />
-                  <KeyBinding Command="{Binding $parent[UserControl].DataContext.PathOpCommand}"
-                              CommandParameter="ReverseDifference" Gesture="Ctrl+Shift+R" />
-                  <KeyBinding Command="{Binding $parent[UserControl].DataContext.SetToolCommand}" CommandParameter="None"
-                              Gesture="N" />
-                  <KeyBinding Command="{Binding $parent[UserControl].DataContext.SetToolCommand}" CommandParameter="Selection"
-                              Gesture="S" />
-                  <KeyBinding Command="{Binding $parent[UserControl].DataContext.SetToolCommand}" CommandParameter="Line"
-                              Gesture="L" />
-                  <KeyBinding Command="{Binding $parent[UserControl].DataContext.SetToolCommand}" CommandParameter="Point"
-                              Gesture="P" />
-                  <KeyBinding Command="{Binding $parent[UserControl].DataContext.SetToolCommand}" CommandParameter="CubicBezier"
-                              Gesture="B" />
-                  <KeyBinding Command="{Binding $parent[UserControl].DataContext.SetToolCommand}"
-                              CommandParameter="QuadraticBezier" Gesture="Q" />
-                  <KeyBinding Command="{Binding $parent[UserControl].DataContext.SetToolCommand}" CommandParameter="Path"
-                              Gesture="H" />
-                  <KeyBinding Command="{Binding $parent[UserControl].DataContext.SetToolCommand}" CommandParameter="Move"
-                              Gesture="M" />
-                  <KeyBinding Command="{Binding $parent[UserControl].DataContext.SetToolCommand}" CommandParameter="Rectangle"
-                              Gesture="R" />
-                  <KeyBinding Command="{Binding $parent[UserControl].DataContext.SetToolCommand}" CommandParameter="Circle"
-                              Gesture="C" />
-                  <KeyBinding Command="{Binding $parent[UserControl].DataContext.SetToolCommand}" CommandParameter="Arc"
-                              Gesture="A" />
-                  <KeyBinding Command="{Binding $parent[UserControl].DataContext.SetToolCommand}" CommandParameter="Oval"
-                              Gesture="O" />
-                  <KeyBinding Command="{Binding $parent[UserControl].DataContext.SetToolCommand}" CommandParameter="Text"
-                              Gesture="T" />
-                </Border.KeyBindings>
-                <zc:ZoomControl InputTarget="{Binding $parent[UserControl].DataContext}"
-                                ZoomServiceState="{Binding ZoomServiceState}" DrawTarget="{Binding}"
-                                Background="Transparent" ClipToBounds="False" />
-              </Border>
-            </Border>
+      <Border Classes="background" DataContext="{Binding DocumentContainer.ContainerView}">
+        <Border Classes="zoom">
+          <Border Classes="clip" ClipToBounds="True" Background="Transparent" Focusable="True">
+            <Border.KeyBindings>
+              <KeyBinding Command="{Binding $parent[UserControl].DataContext.Selection.CutCommand}"
+                          CommandParameter="{Binding $parent[UserControl].DataContext}" Gesture="Ctrl+X" />
+              <KeyBinding Command="{Binding $parent[UserControl].DataContext.Selection.CopyCommand}"
+                          CommandParameter="{Binding $parent[UserControl].DataContext}" Gesture="Ctrl+C" />
+              <KeyBinding Command="{Binding $parent[UserControl].DataContext.Selection.PasteCommand}"
+                          CommandParameter="{Binding $parent[UserControl].DataContext}" Gesture="Ctrl+V" />
+              <KeyBinding Command="{Binding $parent[UserControl].DataContext.Selection.DeleteCommand}"
+                          CommandParameter="{Binding $parent[UserControl].DataContext}" Gesture="Delete" />
+              <KeyBinding Command="{Binding $parent[UserControl].DataContext.Selection.DuplicateCommand}"
+                          CommandParameter="{Binding $parent[UserControl].DataContext}" Gesture="Ctrl+D" />
+              <KeyBinding Command="{Binding $parent[UserControl].DataContext.Selection.CreateGroupCommand}"
+                          CommandParameter="{Binding $parent[UserControl].DataContext}" Gesture="Ctrl+G" />
+              <KeyBinding Command="{Binding $parent[UserControl].DataContext.Selection.CreateReferenceCommand}"
+                          CommandParameter="{Binding $parent[UserControl].DataContext}" Gesture="Ctrl+R" />
+              <KeyBinding Command="{Binding $parent[UserControl].DataContext.Selection.CreatePathCommand}"
+                          CommandParameter="{Binding $parent[UserControl].DataContext}" Gesture="Ctrl+H" />
+              <KeyBinding Command="{Binding $parent[UserControl].DataContext.Selection.CreateStrokePathCommand}"
+                          CommandParameter="{Binding $parent[UserControl].DataContext}" Gesture="Ctrl+J" />
+              <KeyBinding Command="{Binding $parent[UserControl].DataContext.Selection.CreateFillPathCommand}"
+                          CommandParameter="{Binding $parent[UserControl].DataContext}" Gesture="Ctrl+K" />
+              <KeyBinding Command="{Binding $parent[UserControl].DataContext.Selection.DistributeHorizontallyCommand}"
+                          CommandParameter="{Binding $parent[UserControl].DataContext}" Gesture="Ctrl+Shift+H" />
+              <KeyBinding Command="{Binding $parent[UserControl].DataContext.Selection.DistributeVerticallyCommand}"
+                          CommandParameter="{Binding $parent[UserControl].DataContext}" Gesture="Ctrl+Shift+V" />
+              <KeyBinding Command="{Binding $parent[UserControl].DataContext.Selection.AlignLeftCommand}"
+                          CommandParameter="{Binding $parent[UserControl].DataContext}" Gesture="Ctrl+Shift+Left" />
+              <KeyBinding Command="{Binding $parent[UserControl].DataContext.Selection.AlignCenteredCommand}"
+                          CommandParameter="{Binding $parent[UserControl].DataContext}" Gesture="Ctrl+Shift+OemMinus" />
+              <KeyBinding Command="{Binding $parent[UserControl].DataContext.Selection.AlignCenteredCommand}"
+                          CommandParameter="{Binding $parent[UserControl].DataContext}" Gesture="Ctrl+Shift+Subtract" />
+              <KeyBinding Command="{Binding $parent[UserControl].DataContext.Selection.AlignRightCommand}"
+                          CommandParameter="{Binding $parent[UserControl].DataContext}" Gesture="Ctrl+Shift+Right" />
+              <KeyBinding Command="{Binding $parent[UserControl].DataContext.Selection.AlignTopCommand}"
+                          CommandParameter="{Binding $parent[UserControl].DataContext}" Gesture="Ctrl+Shift+Up" />
+              <KeyBinding Command="{Binding $parent[UserControl].DataContext.Selection.AlignCenterCommand}"
+                          CommandParameter="{Binding $parent[UserControl].DataContext}" Gesture="Ctrl+Shift+OemPipe" />
+              <KeyBinding Command="{Binding $parent[UserControl].DataContext.Selection.AlignBottomCommand}"
+                          CommandParameter="{Binding $parent[UserControl].DataContext}" Gesture="Ctrl+Shift+Down" />
+              <KeyBinding Command="{Binding $parent[UserControl].DataContext.Selection.ArangeBringToFrontCommand}"
+                          CommandParameter="{Binding $parent[UserControl].DataContext}"
+                          Gesture="Ctrl+Shift+OemCloseBrackets" />
+              <KeyBinding Command="{Binding $parent[UserControl].DataContext.Selection.ArangeBringForwardCommand}"
+                          CommandParameter="{Binding $parent[UserControl].DataContext}"
+                          Gesture="Ctrl+OemCloseBrackets" />
+              <KeyBinding Command="{Binding $parent[UserControl].DataContext.Selection.ArangeSendBackwardCommand}"
+                          CommandParameter="{Binding $parent[UserControl].DataContext}"
+                          Gesture="Ctrl+OemOpenBrackets" />
+              <KeyBinding Command="{Binding $parent[UserControl].DataContext.Selection.ArangeSendToBackCommand}"
+                          CommandParameter="{Binding $parent[UserControl].DataContext}"
+                          Gesture="Ctrl+Shift+OemOpenBrackets" />
+              <KeyBinding Command="{Binding $parent[UserControl].DataContext.Selection.BreakCommand}"
+                          CommandParameter="{Binding $parent[UserControl].DataContext}" Gesture="Ctrl+B" />
+              <KeyBinding Command="{Binding $parent[UserControl].DataContext.Selection.ConnectCommand}"
+                          CommandParameter="{Binding $parent[UserControl].DataContext}" Gesture="Ctrl+OemComma" />
+              <KeyBinding Command="{Binding $parent[UserControl].DataContext.Selection.DisconnectCommand}"
+                          CommandParameter="{Binding $parent[UserControl].DataContext}" Gesture="Ctrl+." />
+              <KeyBinding Command="{Binding $parent[UserControl].DataContext.Selection.SelectAllCommand}"
+                          CommandParameter="{Binding $parent[UserControl].DataContext}" Gesture="Ctrl+A" />
+              <KeyBinding Command="{Binding $parent[UserControl].DataContext.Selection.DeselectAllCommand}"
+                          CommandParameter="{Binding $parent[UserControl].DataContext}" Gesture="Ctrl+Shift+A" />
+              <KeyBinding Command="{Binding $parent[UserControl].DataContext.Selection.DeselectAllCommand}"
+                          CommandParameter="{Binding $parent[UserControl].DataContext}" Gesture="Escape" />
+              <KeyBinding Command="{Binding $parent[UserControl].DataContext.PathOpCommand}" CommandParameter="Difference"
+                          Gesture="Ctrl+Shift+D" />
+              <KeyBinding Command="{Binding $parent[UserControl].DataContext.PathOpCommand}" CommandParameter="Intersect"
+                          Gesture="Ctrl+Shift+I" />
+              <KeyBinding Command="{Binding $parent[UserControl].DataContext.PathOpCommand}" CommandParameter="Union"
+                          Gesture="Ctrl+Shift+U" />
+              <KeyBinding Command="{Binding $parent[UserControl].DataContext.PathOpCommand}" CommandParameter="Xor"
+                          Gesture="Ctrl+Shift+X" />
+              <KeyBinding Command="{Binding $parent[UserControl].DataContext.PathOpCommand}"
+                          CommandParameter="ReverseDifference" Gesture="Ctrl+Shift+R" />
+              <KeyBinding Command="{Binding $parent[UserControl].DataContext.SetToolCommand}" CommandParameter="None"
+                          Gesture="N" />
+              <KeyBinding Command="{Binding $parent[UserControl].DataContext.SetToolCommand}" CommandParameter="Selection"
+                          Gesture="S" />
+              <KeyBinding Command="{Binding $parent[UserControl].DataContext.SetToolCommand}" CommandParameter="Line"
+                          Gesture="L" />
+              <KeyBinding Command="{Binding $parent[UserControl].DataContext.SetToolCommand}" CommandParameter="Point"
+                          Gesture="P" />
+              <KeyBinding Command="{Binding $parent[UserControl].DataContext.SetToolCommand}" CommandParameter="CubicBezier"
+                          Gesture="B" />
+              <KeyBinding Command="{Binding $parent[UserControl].DataContext.SetToolCommand}"
+                          CommandParameter="QuadraticBezier" Gesture="Q" />
+              <KeyBinding Command="{Binding $parent[UserControl].DataContext.SetToolCommand}" CommandParameter="Path"
+                          Gesture="H" />
+              <KeyBinding Command="{Binding $parent[UserControl].DataContext.SetToolCommand}" CommandParameter="Move"
+                          Gesture="M" />
+              <KeyBinding Command="{Binding $parent[UserControl].DataContext.SetToolCommand}" CommandParameter="Rectangle"
+                          Gesture="R" />
+              <KeyBinding Command="{Binding $parent[UserControl].DataContext.SetToolCommand}" CommandParameter="Circle"
+                          Gesture="C" />
+              <KeyBinding Command="{Binding $parent[UserControl].DataContext.SetToolCommand}" CommandParameter="Arc"
+                          Gesture="A" />
+              <KeyBinding Command="{Binding $parent[UserControl].DataContext.SetToolCommand}" CommandParameter="Oval"
+                          Gesture="O" />
+              <KeyBinding Command="{Binding $parent[UserControl].DataContext.SetToolCommand}" CommandParameter="Text"
+                          Gesture="T" />
+            </Border.KeyBindings>
+            <zc:ZoomControl InputTarget="{Binding $parent[UserControl].DataContext}"
+                            ZoomServiceState="{Binding ZoomServiceState}" DrawTarget="{Binding}"
+                            Background="Transparent" ClipToBounds="False" />
           </Border>
-        </DataTemplate>
-      </Carousel.ItemTemplate>
-    </Carousel>
+        </Border>
+      </Border>
   </DockPanel>
 </UserControl>
